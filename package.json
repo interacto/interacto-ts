@@ -1,7 +1,7 @@
 {
   "name": "interacto",
   "description": "A novel user interaction library",
-  "version": "3.1.0-alpha.1.2.8",
+  "version": "3.4.0-alpha.1",
   "author": "Arnaud Blouin",
   "contributors": [
     "Gwendal Didot <didotgwendal@gmail.com>"
@@ -13,15 +13,15 @@
   "devDependencies": {
     "@types/jest": "^22.2.3",
     "barrelsby": "^1.0.1",
-    "jest": "^22.4.3",
+    "jest": "^22.4.4",
     "rollup": "^1.19.4",
     "rollup-plugin-commonjs": "^10.0.2",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-typescript2": "^0.22.1",
     "ts-jest": "^22.4.6",
     "ts-node": "^5.0.1",
-    "tslint": "^5.9.1",
-    "typescript": "^2.8.1"
+    "tslint": "^5.18.0",
+    "typescript": "^2.9.2"
   },
   "scripts": {
     "lib-build": "npm run pre-build && npm run build && npm run clean_after",
@@ -40,7 +40,7 @@
     "lib"
   ],
   "dependencies": {
-    "npm": "^6.1.0",
+    "npm": "^6.10.3",
     "typescript-logging": "0.6.2"
   },
   "jest": {
