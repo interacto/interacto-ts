@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "module": "ESnext",
+    "outDir": "compiled_inter",
+    "pretty": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "removeComments": true,
+    "noImplicitReturns": true,
+    "declaration": true,
+    "types": [
+      "jest"
+    ]
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "test",
+    "lib"
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "name": "interacto",
+  "description": "A novel user interaction library",
+  "version": "3.1.0-alpha.1.2.8",
+  "author": "Arnaud Blouin",
+  "contributors": [
+    "Gwendal Didot <didotgwendal@gmail.com>"
+  ],
+  "repository": "https://github.com/interacto/interacto-ts-api.git",
+  "license": "GPL3",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "devDependencies": {
+    "@types/jest": "^22.2.3",
+    "barrelsby": "^1.0.1",
+    "jest": "^22.4.3",
+    "rollup": "^1.19.4",
+    "rollup-plugin-commonjs": "^10.0.2",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-typescript2": "^0.22.1",
+    "ts-jest": "^22.4.6",
+    "ts-node": "^5.0.1",
+    "tslint": "^5.9.1",
+    "typescript": "^2.8.1"
+  },
+  "scripts": {
+    "lib-build": "npm run pre-build && npm run build && npm run clean_after",
+    "build": "rollup -c",
+    "generates-barrels": "barrelsby -c ./barrelsby-config.json --delete",
+    "compile": "tsc",
+    "pre-build": "npm run clean && npm run lint && npm run compile && npm run coverage",
+    "clean": "rm -rf coverage/* lib/*",
+    "clean_after": "rm -rf compiled_inter",
+    "test": "jest",
+    "lint": "tslint --project tsconfig.json --config tslint.json",
+    "coverage": "jest --coverage --collectCoverageFrom=src*/**/*.ts",
+    "clear-all": "npm run clean && npm run clean_after"
+  },
+  "files": [
+    "lib"
+  ],
+  "dependencies": {
+    "npm": "^6.1.0",
+    "typescript-logging": "0.6.2"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ],
+    "modulePathIgnorePatterns": [
+      "<rootDir>/compiled_inter"
+    ]
+  }
+}

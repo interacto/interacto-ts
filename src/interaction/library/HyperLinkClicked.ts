@@ -1,0 +1,103 @@
+/*
+ * This file is part of Interacto.
+ * Interacto is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * Interacto is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+import {TSFSM} from "../TSFSM";
+import {TerminalState} from "../../src-core/fsm/TerminalState";
+import {isHyperLink} from "../Events";
+import {FSMDataHandler} from "../FSMDataHandler";
+import {TSInteraction} from "../TSInteraction";
+import {WidgetData} from "../../src-core/interaction/WidgetData";
+import {HyperLinkTransition} from "../HyperLinkTransition";
+
+export class HyperLinkClickedFSM extends TSFSM<HyperLinkClickedFSMHandler> {
+    public constructor() {
+        super();
+    }
+
+    public buildFSM(dataHandler?: HyperLinkClickedFSMHandler): void {
+        if (this.states.length > 1) {
+            return ;
+        }
+
+        super.buildFSM(dataHandler);
+        const clicked: TerminalState<Event> = new TerminalState<Event>(this, "clicked");
+        this.addState(clicked);
+
+        new class extends HyperLinkTransition {
+            public action(event: Event): void {
+                if (event.target !== null && isHyperLink(event.target) && dataHandler !== undefined) {
+                    dataHandler.initToClickedHandler(event);
+                }
+            }
+        }(this.initState, clicked);
+    }
+}
+
+
+export interface HyperLinkClickedFSMHandler extends FSMDataHandler {
+    initToClickedHandler(event: Event): void;
+}
+
+/**
+ * A user interaction for CheckBox
+ * @author Gwendal DIDOT
+ */
+
+export class HyperLinkClicked extends TSInteraction<WidgetData<Element>, HyperLinkClickedFSM, Element> {
+    private readonly handler: HyperLinkClickedFSMHandler;
+
+    /**
+     * Creates the interaction.
+     */
+    public constructor() {
+        super(new HyperLinkClickedFSM());
+
+        this.handler = new class implements HyperLinkClickedFSMHandler {
+            private readonly _parent: HyperLinkClicked;
+
+            constructor(parent: HyperLinkClicked) {
+                this._parent = parent;
+            }
+
+            public initToClickedHandler(event: Event): void {
+                if (event.target !== null && isHyperLink(event.target)) {
+                    this._parent._widget = event.currentTarget as Element;
+                }
+            }
+
+            public reinitData(): void {
+                this._parent.reinitData();
+            }
+
+        }(this);
+
+        this.fsm.buildFSM(this.handler);
+    }
+
+    public onNewNodeRegistered(node: EventTarget): void {
+        if (isHyperLink(node)) {
+            this.registerActionHandlerInput(node);
+        }
+    }
+
+    public onNodeUnregistered(node: EventTarget): void {
+        if (isHyperLink(node)) {
+            this.unregisterActionHandlerInput(node);
+        }
+    }
+
+    public getData(): WidgetData<Element> {
+        return this;
+    }
+}

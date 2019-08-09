@@ -1,0 +1,8 @@
+node_modules/
+.idea/
+*.iml
+.tscache/
+coverage/
+.rpt2_cache/
+lib/
+compiled_inter/
