@@ -12,15 +12,15 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {TSFSM} from "../TSFSM";
-import {TerminalState} from "../../src-core/fsm/TerminalState";
-import {isComboBox} from "../Events";
-import {FSMDataHandler} from "../FSMDataHandler";
-import {TSInteraction} from "../TSInteraction";
-import {WidgetData} from "../../src-core/interaction/WidgetData";
-import {ComboBoxTransition} from "../ComboBoxTransition";
+import {TerminalState} from "../../fsm/TerminalState";
+import {isComboBox} from "../../fsm/Events";
+import {FSMDataHandler} from "../../fsm/FSMDataHandler";
+import {WidgetData} from "../WidgetData";
+import {ComboBoxTransition} from "../../fsm/ComboBoxTransition";
+import { FSM } from "../../fsm/FSM";
+import { InteractionImpl } from "../InteractionImpl";
 
-export class ComboBoxSelectedFSM extends TSFSM<ComboBoxSelectedHandler> {
+export class ComboBoxSelectedFSM extends FSM {
     public constructor() {
         super();
     }
@@ -31,7 +31,7 @@ export class ComboBoxSelectedFSM extends TSFSM<ComboBoxSelectedHandler> {
         }
 
         super.buildFSM(dataHandler);
-        const selected: TerminalState<Event> = new TerminalState<Event>(this, "selected");
+        const selected: TerminalState = new TerminalState(this, "selected");
         this.addState(selected);
 
         new class extends ComboBoxTransition {
@@ -54,7 +54,7 @@ export interface ComboBoxSelectedHandler  extends FSMDataHandler {
  * @author Gwendal DIDOT
  */
 
-export class ComboBoxSelected extends TSInteraction<WidgetData<Element>, ComboBoxSelectedFSM, Element> {
+export class ComboBoxSelected extends InteractionImpl<WidgetData<Element>, ComboBoxSelectedFSM, Element> {
     private readonly handler: ComboBoxSelectedHandler;
 
     /**

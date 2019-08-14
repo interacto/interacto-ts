@@ -14,16 +14,16 @@
 
 import {ButtonBinder} from "../../src/binding/ButtonBinder";
 import {StubFSMHandler} from "../fsm/StubFSMHandler";
-import {TSWidgetBinding} from "../../src/binding/TSWidgetBinding";
 import {ButtonPressed} from "../../src/interaction/library/ButtonPressed";
 import {StubCmd} from "../command/StubCmd";
-import {WidgetData} from "../../src/src-core/interaction/WidgetData";
+import {WidgetData} from "../../src/interaction/WidgetData";
+import { WidgetBindingImpl } from "../../src";
 
 jest.mock("../fsm/StubFSMHandler");
 jest.mock("../command/StubCmd");
 
 let button: HTMLElement;
-let binding: TSWidgetBinding<StubCmd, ButtonPressed, WidgetData<Element>>;
+let binding: WidgetBindingImpl<StubCmd, ButtonPressed, WidgetData<Element>>;
 
 beforeEach(() => {
     jest.clearAllMocks();

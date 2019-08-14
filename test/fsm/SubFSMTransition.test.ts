@@ -13,15 +13,15 @@
  */
 
 import {StubEvent, StubSubEvent1, StubSubEvent2} from "./StubEvent";
-import {TerminalState} from "../../src/src-core/fsm/TerminalState";
-import {StdState} from "../../src/src-core/fsm/StdState";
-import {FSM} from "../../src/src-core/fsm/FSM";
-import {SubFSMTransition} from "../../src/src-core/fsm/SubFSMTransition";
+import {TerminalState} from "../../src/fsm/TerminalState";
+import {StdState} from "../../src/fsm/StdState";
+import {FSM} from "../../src/fsm/FSM";
+import {SubFSMTransition} from "../../src/fsm/SubFSMTransition";
 import {SubStubTransition1} from "./StubTransitionOK";
-import {InputState} from "../../src/src-core/fsm/InputState";
+import {InputState} from "../../src/fsm/InputState";
 import {Optional} from "../../src/util/Optional";
 
-jest.mock("../../src/src-core/fsm/StdState");
+jest.mock("../../src/fsm/StdState");
 
 let tr: SubFSMTransition<StubEvent>;
 let fsm: FSM<StubEvent>;

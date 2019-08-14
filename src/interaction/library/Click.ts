@@ -12,16 +12,16 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {TSFSM} from "../TSFSM";
-import {FSMDataHandler} from "../FSMDataHandler";
-import {TerminalState} from "../../src-core/fsm/TerminalState";
-import {ClickTransition} from "../ClickTransition";
-import {InputState} from "../../src-core/fsm/InputState";
-import {OutputState} from "../../src-core/fsm/OutputState";
+import {FSMDataHandler} from "../../fsm/FSMDataHandler";
+import {TerminalState} from "../../fsm/TerminalState";
+import {ClickTransition} from "../../fsm/ClickTransition";
+import {InputState} from "../../fsm/InputState";
+import {OutputState} from "../../fsm/OutputState";
 import {PointInteraction} from "./PointInteraction";
 import {PointData} from "./PointData";
+import { FSM } from "../../fsm/FSM";
 
-export class ClickFSM extends TSFSM<ClickFSMHandler> {
+export class ClickFSM extends FSM {
     private checkButton: number | undefined;
 
     public constructor() {
@@ -34,13 +34,13 @@ export class ClickFSM extends TSFSM<ClickFSMHandler> {
         }
 
         super.buildFSM(dataHandler);
-        const clicked = new TerminalState<Event>(this, "clicked");
+        const clicked = new TerminalState(this, "clicked");
         this.addState(clicked);
 
         new class extends ClickTransition {
             private readonly _parent: ClickFSM;
 
-            public constructor(parent: ClickFSM, srcState: OutputState<Event>, tgtState: InputState<Event>) {
+            public constructor(parent: ClickFSM, srcState: OutputState, tgtState: InputState) {
                 super(srcState, tgtState);
                 this._parent = parent;
             }

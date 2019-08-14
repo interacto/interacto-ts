@@ -12,16 +12,16 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSMDataHandler} from "../FSMDataHandler";
-import {TSFSM} from "../TSFSM";
-import {ButtonPressedTransition} from "../ButtonPressedTransition";
-import {TerminalState} from "../../src-core/fsm/TerminalState";
-import {isButton} from "../Events";
-import {TSInteraction} from "../TSInteraction";
-import {WidgetData} from "../../src-core/interaction/WidgetData";
+import {FSMDataHandler} from "../../fsm/FSMDataHandler";
+import {ButtonPressedTransition} from "../../fsm/ButtonPressedTransition";
+import {TerminalState} from "../../fsm/TerminalState";
+import {isButton} from "../../fsm/Events";
+import {WidgetData} from "../WidgetData";
+import { FSM } from "../../fsm/FSM";
+import { InteractionImpl } from "../InteractionImpl";
 
 
-export class ButtonPressedFSM extends TSFSM<ButtonPressedFSMHandler> {
+export class ButtonPressedFSM extends FSM {
     public constructor() {
         super();
     }
@@ -31,7 +31,7 @@ export class ButtonPressedFSM extends TSFSM<ButtonPressedFSMHandler> {
             return;
         }
         super.buildFSM(dataHandler);
-        const pressed: TerminalState<Event> = new TerminalState<Event>(this, "pressed");
+        const pressed: TerminalState = new TerminalState(this, "pressed");
         this.addState(pressed);
 
         new class extends ButtonPressedTransition {
@@ -52,7 +52,7 @@ export interface ButtonPressedFSMHandler extends FSMDataHandler {
  * A user interaction for buttons.
  * @author Arnaud BLOUIN
  */
-export class ButtonPressed extends TSInteraction<WidgetData<Element>, ButtonPressedFSM, Element> {
+export class ButtonPressed extends InteractionImpl<WidgetData<Element>, ButtonPressedFSM, Element> {
     private readonly handler: ButtonPressedFSMHandler;
 
     /**

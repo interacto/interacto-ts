@@ -12,15 +12,15 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {TSFSM} from "../TSFSM";
-import {TerminalState} from "../../src-core/fsm/TerminalState";
-import {BoxCheckPressedTransition} from "../BoxCheckPressedTransition";
-import {isCheckBox} from "../Events";
-import {FSMDataHandler} from "../FSMDataHandler";
-import {TSInteraction} from "../TSInteraction";
-import {WidgetData} from "../../src-core/interaction/WidgetData";
+import {TerminalState} from "../../fsm/TerminalState";
+import {BoxCheckPressedTransition} from "../../fsm/BoxCheckPressedTransition";
+import {isCheckBox} from "../../fsm/Events";
+import {FSMDataHandler} from "../../fsm/FSMDataHandler";
+import {WidgetData} from "../WidgetData";
+import { FSM } from "../../fsm/FSM";
+import { InteractionImpl } from "../InteractionImpl";
 
-export class BoxCheckedFSM extends TSFSM<BoxCheckedHandler> {
+export class BoxCheckedFSM extends FSM {
 
     public constructor() {
         super();
@@ -32,7 +32,7 @@ export class BoxCheckedFSM extends TSFSM<BoxCheckedHandler> {
         }
 
         super.buildFSM(dataHandler);
-        const checked: TerminalState<Event> = new TerminalState<Event>(this, "checked");
+        const checked: TerminalState = new TerminalState(this, "checked");
         this.addState(checked);
 
         new class extends BoxCheckPressedTransition {
@@ -54,7 +54,7 @@ export interface BoxCheckedHandler extends FSMDataHandler {
  * A user interaction for CheckBox.
  * @author Gwendal DIDOT
  */
-export class BoxChecked extends TSInteraction<WidgetData<Element>, BoxCheckedFSM, Element> {
+export class BoxChecked extends InteractionImpl<WidgetData<Element>, BoxCheckedFSM, Element> {
     private readonly handler: BoxCheckedHandler;
 
     /**

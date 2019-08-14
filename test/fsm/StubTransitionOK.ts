@@ -12,10 +12,10 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {Transition} from "../../src/src-core/fsm/Transition";
+import {Transition} from "../../src/fsm/Transition";
 import {StubEvent, StubSubEvent1, StubSubEvent2, StubSubEvent3} from "./StubEvent";
-import {InputState} from "../../src/src-core/fsm/InputState";
-import {OutputState} from "../../src/src-core/fsm/OutputState";
+import {InputState} from "../../src/fsm/InputState";
+import {OutputState} from "../../src/fsm/OutputState";
 
 export class StubTransitionOK extends Transition<StubEvent> {
     public guard: boolean;

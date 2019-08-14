@@ -12,14 +12,14 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {TSInteraction} from "../interaction/TSInteraction";
 import {MArray} from "../util/ArrayUtil";
-import {LogLevel} from "../src-core/logging/LogLevel";
-import {TSWidgetBinding} from "./TSWidgetBinding";
+import {LogLevel} from "../logging/LogLevel";
 import {AnonNodeBinding} from "./AnonNodeBinding";
-import {FSM} from "../src-core/fsm/FSM";
-import {CommandImpl} from "../src-core/command/CommandImpl";
-import {InteractionData} from "../src-core/interaction/InteractionData";
+import {FSM} from "../fsm/FSM";
+import {CommandImpl} from "../command/CommandImpl";
+import {InteractionData} from "../interaction/InteractionData";
+import { WidgetBindingImpl } from "./WidgetBindingImpl";
+import { InteractionImpl } from "../interaction/InteractionImpl";
 
 /**
  * The base class that defines the concept of binding builder (called binder).
@@ -28,7 +28,7 @@ import {InteractionData} from "../src-core/interaction/InteractionData";
  * @param <I> The type of the user interaction to bind.
  * @author Arnaud Blouin
  */
-export abstract class Binder<C extends CommandImpl, I extends TSInteraction<D, FSM<Event>, {}>, D extends InteractionData,
+export abstract class Binder<C extends CommandImpl, I extends InteractionImpl<D, FSM, {}>, D extends InteractionData,
             B extends Binder<C, I, D, B>> {
 
     protected initCmd: (i: D, c: C | undefined) => void;
@@ -133,7 +133,7 @@ export abstract class Binder<C extends CommandImpl, I extends TSInteraction<D, F
      * @throws IllegalArgumentException On issues while creating the commands.
      * @throws InstantiationException On issues while creating the commands.
      */
-    public bind(): TSWidgetBinding<C, I, D> {
+    public bind(): WidgetBindingImpl<C, I, D> {
         return new AnonNodeBinding<C, I, D>(false, this.interaction, this.cmdProducer, this.initCmd, (d: D) => {},
             this.checkConditions, this.onEnd, () => {}, () => {}, () => {},
             this.widgets, this.additionalWidgets, this.targetWidgets, this._async, false, this.logLevels);

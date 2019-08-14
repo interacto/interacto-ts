@@ -12,15 +12,15 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {TSFSM} from "../TSFSM";
-import {FSMDataHandler} from "../FSMDataHandler";
-import {TerminalState} from "../../src-core/fsm/TerminalState";
-import {isScrollEvent} from "../Events";
+import {FSMDataHandler} from "../../fsm/FSMDataHandler";
+import {TerminalState} from "../../fsm/TerminalState";
+import {isScrollEvent} from "../../fsm/Events";
 import {ScrollInteraction} from "./ScrollInteraction";
-import {ScrollTransition} from "../ScrollTransition";
+import {ScrollTransition} from "../../fsm/ScrollTransition";
 import {ScrollData} from "./ScrollData";
+import { FSM } from "../../fsm/FSM";
 
-export class ScrollFSM extends TSFSM<ScrollFSMHandler> {
+export class ScrollFSM extends FSM {
 
     public constructor() {
         super();
@@ -31,7 +31,7 @@ export class ScrollFSM extends TSFSM<ScrollFSMHandler> {
             return;
         }
         super.buildFSM(dataHandler);
-        const scrolled: TerminalState<Event> = new TerminalState<Event>(this, "scrolled");
+        const scrolled: TerminalState = new TerminalState(this, "scrolled");
         this.addState(scrolled);
 
         new class extends ScrollTransition {

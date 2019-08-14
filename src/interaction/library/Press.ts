@@ -12,15 +12,15 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {TSFSM} from "../TSFSM";
-import {FSMDataHandler} from "../FSMDataHandler";
-import {TerminalState} from "../../src-core/fsm/TerminalState";
-import {PressureTransition} from "../PressureTransition";
-import {isMouseDownEvent} from "../Events";
+import {FSMDataHandler} from "../../fsm/FSMDataHandler";
+import {TerminalState} from "../../fsm/TerminalState";
+import {PressureTransition} from "../../fsm/PressureTransition";
+import {isMouseDownEvent} from "../../fsm/Events";
 import {PointInteraction} from "./PointInteraction";
 import {PointData} from "./PointData";
+import { FSM } from "../../fsm/FSM";
 
-export class PressFSM extends TSFSM<PressFSMHandler> {
+export class PressFSM extends FSM {
     private checkButton: number | undefined;
 
     public constructor() {
@@ -32,7 +32,7 @@ export class PressFSM extends TSFSM<PressFSMHandler> {
             return;
         }
         super.buildFSM(dataHandler);
-        const pressed: TerminalState<Event> = new TerminalState<Event>(this, "pressed");
+        const pressed: TerminalState = new TerminalState(this, "pressed");
         this.addState(pressed);
 
         new class extends PressureTransition {

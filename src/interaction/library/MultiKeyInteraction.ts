@@ -12,13 +12,14 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSM} from "../../src-core/fsm/FSM";
-import {Optional} from "../../util/Optional";
-import {TSInteraction} from "../TSInteraction";
-import {KeysData} from "./KeysData";
-import {KeysDataImpl} from "./KeysDataImpl";
+import { FSM } from "../../fsm/FSM";
+import { Optional } from "../../util/Optional";
+import { KeysData } from "./KeysData";
+import { KeysDataImpl } from "./KeysDataImpl";
+import { InteractionImpl } from "../InteractionImpl";
 
-export abstract class MultiKeyInteraction<D extends KeysData, F extends FSM<Event>> extends TSInteraction<D, F, Event> implements KeysData {
+export abstract class MultiKeyInteraction<D extends KeysData, F extends FSM> extends InteractionImpl<D, F, Event>
+                    implements KeysData {
     public readonly keysData: KeysDataImpl;
 
     protected constructor(fsm: F) {

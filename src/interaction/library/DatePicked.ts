@@ -12,15 +12,15 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {TSFSM} from "../TSFSM";
-import {TerminalState} from "../../src-core/fsm/TerminalState";
-import {isDatePicker} from "../Events";
-import {FSMDataHandler} from "../FSMDataHandler";
-import {TSInteraction} from "../TSInteraction";
-import {WidgetData} from "../../src-core/interaction/WidgetData";
-import {DatePickedTransition} from "../DatePickedTransition";
+import {TerminalState} from "../../fsm/TerminalState";
+import {isDatePicker} from "../../fsm/Events";
+import {FSMDataHandler} from "../../fsm/FSMDataHandler";
+import {WidgetData} from "../WidgetData";
+import {DatePickedTransition} from "../../fsm/DatePickedTransition";
+import { FSM } from "../../fsm/FSM";
+import { InteractionImpl } from "../InteractionImpl";
 
-export class DatePickedFSM extends TSFSM<DatePickedHandler> {
+export class DatePickedFSM extends FSM {
     public constructor() {
         super();
     }
@@ -31,7 +31,7 @@ export class DatePickedFSM extends TSFSM<DatePickedHandler> {
         }
 
         super.buildFSM(dataHandler);
-        const picked: TerminalState<Event> = new TerminalState<Event>(this, "picked");
+        const picked: TerminalState = new TerminalState(this, "picked");
         this.addState(picked);
 
         new class extends DatePickedTransition {
@@ -54,7 +54,7 @@ export interface DatePickedHandler  extends FSMDataHandler {
  * @author Gwendal DIDOT
  */
 
-export class DatePicked extends TSInteraction<WidgetData<Element>, DatePickedFSM, Element> {
+export class DatePicked extends InteractionImpl<WidgetData<Element>, DatePickedFSM, Element> {
     private readonly handler: DatePickedHandler;
 
     /**

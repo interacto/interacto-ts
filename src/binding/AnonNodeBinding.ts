@@ -12,16 +12,16 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {TSWidgetBinding} from "./TSWidgetBinding";
-import {TSInteraction} from "../interaction/TSInteraction";
-import {FSM} from "../src-core/fsm/FSM";
-import {CommandImpl} from "../src-core/command/CommandImpl";
-import {InteractionData} from "../src-core/interaction/InteractionData";
+import {FSM} from "../fsm/FSM";
+import {CommandImpl} from "../command/CommandImpl";
+import {InteractionData} from "../interaction/InteractionData";
 import {MArray} from "../util/ArrayUtil";
-import {LogLevel} from "../src-core/logging/LogLevel";
+import {LogLevel} from "../logging/LogLevel";
+import { WidgetBindingImpl } from "./WidgetBindingImpl";
+import { InteractionImpl } from "../interaction/InteractionImpl";
 
-export class AnonNodeBinding<C extends CommandImpl, I extends TSInteraction<D, FSM<Event>, {}>, D extends InteractionData>
-    extends TSWidgetBinding<C, I, D> {
+export class AnonNodeBinding<C extends CommandImpl, I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>
+    extends WidgetBindingImpl<C, I, D> {
 
     private readonly execInitCmd: (i: D, c: C | undefined) => void;
     private readonly execUpdateCmd: (i: D, c: C | undefined) => void;

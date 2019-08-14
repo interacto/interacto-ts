@@ -13,9 +13,9 @@
  */
 
 import {StubFSMHandler} from "../fsm/StubFSMHandler";
-import {EventRegistrationToken} from "../../src/interaction/Events";
+import {EventRegistrationToken} from "../../src/fsm/Events";
 import {createKeyEvent} from "./StubEvents";
-import {FSMHandler} from "../../src/src-core/fsm/FSMHandler";
+import {FSMHandler} from "../../src/fsm/FSMHandler";
 import {KeyTyped} from "../../src/interaction/library/KeyTyped";
 
 jest.mock("../fsm/StubFSMHandler");

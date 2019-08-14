@@ -12,20 +12,20 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {TSFSM} from "../TSFSM";
-import {FSMDataHandler} from "../FSMDataHandler";
-import {TerminalState} from "../../src-core/fsm/TerminalState";
-import {KeyPressureTransition} from "../KeyPressureTransition";
+import {FSMDataHandler} from "../../fsm/FSMDataHandler";
+import {TerminalState} from "../../fsm/TerminalState";
+import {KeyPressureTransition} from "../../fsm/KeyPressureTransition";
 import {KeyData} from "./KeyData";
 import {KeyInteraction} from "./KeyInteraction";
-import {StdState} from "../../src-core/fsm/StdState";
-import {KeyReleaseTransition} from "../KeyReleaseTransition";
-import {CancellingState} from "../../src-core/fsm/CancellingState";
-import {TimeoutTransition} from "../../src-core/fsm/TimeoutTransition";
-import {OutputState} from "../../src-core/fsm/OutputState";
-import {InputState} from "../../src-core/fsm/InputState";
+import {StdState} from "../../fsm/StdState";
+import {KeyReleaseTransition} from "../../fsm/KeyReleaseTransition";
+import {CancellingState} from "../../fsm/CancellingState";
+import {TimeoutTransition} from "../../fsm/TimeoutTransition";
+import {OutputState} from "../../fsm/OutputState";
+import {InputState} from "../../fsm/InputState";
+import { FSM } from "../../fsm/FSM";
 
-export class KeyTypedFSM extends TSFSM<KeyTypedFSMHandler> {
+export class KeyTypedFSM extends FSM {
     private checkKey: string | undefined;
 
     /** The time gap between the two spinner events. */
@@ -43,9 +43,9 @@ export class KeyTypedFSM extends TSFSM<KeyTypedFSMHandler> {
         }
 
         super.buildFSM(dataHandler);
-        const pressed: StdState<Event> = new StdState<Event>(this, "pressed");
-        const typed: TerminalState<Event> = new TerminalState<Event>(this, "typed");
-        const cancel: CancellingState<Event> = new CancellingState<Event>(this, "cancel");
+        const pressed: StdState = new StdState(this, "pressed");
+        const typed: TerminalState = new TerminalState(this, "typed");
+        const cancel: CancellingState = new CancellingState(this, "cancel");
 
         this.addState(pressed);
         this.addState(typed);
@@ -54,7 +54,7 @@ export class KeyTypedFSM extends TSFSM<KeyTypedFSMHandler> {
         new  class extends KeyPressureTransition {
             private readonly _parent: KeyTypedFSM;
 
-            public constructor(parent: KeyTypedFSM, srcState: OutputState<Event>, tgtState: InputState<Event>) {
+            public constructor(parent: KeyTypedFSM, srcState: OutputState, tgtState: InputState) {
                 super(srcState, tgtState);
                 this._parent = parent;
             }
@@ -70,7 +70,7 @@ export class KeyTypedFSM extends TSFSM<KeyTypedFSMHandler> {
         new class extends KeyReleaseTransition {
             private readonly _parent: KeyTypedFSM;
 
-            public constructor(parent: KeyTypedFSM, srcState: OutputState<Event>, tgtState: InputState<Event>) {
+            public constructor(parent: KeyTypedFSM, srcState: OutputState, tgtState: InputState) {
                 super(srcState, tgtState);
                 this._parent = parent;
             }

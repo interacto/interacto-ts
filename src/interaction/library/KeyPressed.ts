@@ -12,16 +12,16 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {TSFSM} from "../TSFSM";
-import {FSMDataHandler} from "../FSMDataHandler";
-import {TerminalState} from "../../src-core/fsm/TerminalState";
-import {KeyPressureTransition} from "../KeyPressureTransition";
-import {OutputState} from "../../src-core/fsm/OutputState";
-import {InputState} from "../../src-core/fsm/InputState";
+import {FSMDataHandler} from "../../fsm/FSMDataHandler";
+import {TerminalState} from "../../fsm/TerminalState";
+import {KeyPressureTransition} from "../../fsm/KeyPressureTransition";
+import {OutputState} from "../../fsm/OutputState";
+import {InputState} from "../../fsm/InputState";
 import {KeyData} from "./KeyData";
 import {KeyInteraction} from "./KeyInteraction";
+import { FSM } from "../../fsm/FSM";
 
-export class KeyPressedFSM extends TSFSM<KeyPressedFSMHandler> {
+export class KeyPressedFSM extends FSM {
     private readonly modifiersAccepted: boolean;
 
     public constructor(modifierAccepted: boolean) {
@@ -35,14 +35,14 @@ export class KeyPressedFSM extends TSFSM<KeyPressedFSMHandler> {
         }
 
         super.buildFSM(dataHandler);
-        const pressed: TerminalState<Event> = new TerminalState<Event>(this, "pressed");
+        const pressed: TerminalState = new TerminalState(this, "pressed");
 
         this.addState(pressed);
 
         new class extends KeyPressureTransition {
             private readonly _parent: KeyPressedFSM;
 
-            public constructor(parent: KeyPressedFSM, srcState: OutputState<Event>, tgtState: InputState<Event>) {
+            public constructor(parent: KeyPressedFSM, srcState: OutputState, tgtState: InputState) {
                 super(srcState, tgtState);
                 this._parent = parent;
             }

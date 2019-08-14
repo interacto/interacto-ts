@@ -12,22 +12,22 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {TSInteraction} from "../interaction/TSInteraction";
-import {FSM} from "../src-core/fsm/FSM";
+import {FSM} from "../fsm/FSM";
 import {Binder} from "./Binder";
-import {TSWidgetBinding} from "./TSWidgetBinding";
 import {AnonNodeBinding} from "./AnonNodeBinding";
-import {AnonCmd} from "../src-core/command/AnonCmd";
-import {InteractionData} from "../src-core/interaction/InteractionData";
+import {AnonCmd} from "../command/AnonCmd";
+import {InteractionData} from "../interaction/InteractionData";
+import { WidgetBindingImpl } from "./WidgetBindingImpl";
+import { InteractionImpl } from "../interaction/InteractionImpl";
 
-export class AnonCmdBinder<I extends TSInteraction<D, FSM<Event>, {}>, D extends InteractionData>
+export class AnonCmdBinder<I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>
             extends Binder<AnonCmd, I, D, AnonCmdBinder<I, D>> {
 
     public constructor(interaction: I, anonCmd: () => void) {
         super(interaction, () => new AnonCmd(anonCmd));
     }
 
-    public bind(): TSWidgetBinding<AnonCmd, I, D> {
+    public bind(): WidgetBindingImpl<AnonCmd, I, D> {
         return new AnonNodeBinding(false, this.interaction, this.cmdProducer, () => {},
             () => {}, this.checkConditions, this.onEnd, () => {}, () => {}, () => {},
             this.widgets, this.additionalWidgets, this.targetWidgets, this._async, false, new Array(...this.logLevels));

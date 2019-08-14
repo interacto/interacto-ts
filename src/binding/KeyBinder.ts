@@ -14,7 +14,7 @@
 
 import {KeysPressed} from "../interaction/library/KeysPressed";
 import {KeysData} from "../interaction/library/KeysData";
-import {CommandImpl} from "../src-core/command/CommandImpl";
+import {CommandImpl} from "../command/CommandImpl";
 import {Binder} from "./Binder";
 
 /**

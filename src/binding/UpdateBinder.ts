@@ -12,20 +12,20 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {TSInteraction} from "../interaction/TSInteraction";
-import {FSM} from "../src-core/fsm/FSM";
+import {FSM} from "../fsm/FSM";
 import {Binder} from "./Binder";
-import {TSWidgetBinding} from "./TSWidgetBinding";
 import {AnonNodeBinding} from "./AnonNodeBinding";
-import {CommandImpl} from "../src-core/command/CommandImpl";
-import {InteractionData} from "../src-core/interaction/InteractionData";
+import {CommandImpl} from "../command/CommandImpl";
+import {InteractionData} from "../interaction/InteractionData";
+import { WidgetBindingImpl } from "./WidgetBindingImpl";
+import { InteractionImpl } from "../interaction/InteractionImpl";
 
 /**
  * The base binding builder for bindings where actions can be updated while the user interaction is running.
  * @param <A> The type of the command to produce.
  * @author Arnaud Blouin
  */
-export abstract class UpdateBinder<C extends CommandImpl, I extends TSInteraction<D, FSM<Event>, {}>, D extends InteractionData,
+export abstract class UpdateBinder<C extends CommandImpl, I extends InteractionImpl<D, FSM, {}>, D extends InteractionData,
     B extends UpdateBinder<C, I, D, B>> extends Binder<C, I, D, B> {
 
     protected updateFct: (i: D, c: C | undefined) => void;
@@ -107,7 +107,7 @@ export abstract class UpdateBinder<C extends CommandImpl, I extends TSInteractio
         return this as {} as B;
     }
 
-    public bind(): TSWidgetBinding<C, I, D> {
+    public bind(): WidgetBindingImpl<C, I, D> {
         return new AnonNodeBinding(this.execOnChanges, this.interaction, this.cmdProducer, this.initCmd, this.updateFct,
             this.checkConditions, this.onEnd, this.cancelFct, this.endOrCancelFct, this.feedbackFct, this.widgets,
             this.additionalWidgets, this.targetWidgets, this._async,

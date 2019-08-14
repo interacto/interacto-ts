@@ -13,14 +13,13 @@
  */
 
 import {ButtonBinder} from "./ButtonBinder";
-import {TSInteraction} from "../interaction/TSInteraction";
-import {FSM} from "../src-core/fsm/FSM";
+import {FSM} from "../fsm/FSM";
 import {KeysPressedBinder} from "./KeysPressedBinder";
 import {NodeBinder} from "./NodeBinder";
-import {CommandImpl} from "../src-core/command/CommandImpl";
+import {CommandImpl} from "../command/CommandImpl";
 import {AnonCmdBinder} from "./AnonCmdBinder";
-import {InteractionData} from "../src-core/interaction/InteractionData";
-import {WidgetData} from "../src-core/interaction/WidgetData";
+import {InteractionData} from "../interaction/InteractionData";
+import {WidgetData} from "../interaction/WidgetData";
 import {CheckBoxBinder} from "./CheckBoxBinder";
 import {ColorPickerBinder} from "./ColorPickerBinder";
 import {ComboBoxBinder} from "./ComboBoxBinder";
@@ -29,6 +28,7 @@ import {KeyNodeBinder} from "./KeyNodeBinder";
 import {DnDBinder} from "./DnDBinder";
 import {SrcTgtPointsData} from "../interaction/library/SrcTgtPointsData";
 import {DragLockBinder} from "./DragLockBinder";
+import { InteractionImpl } from "../interaction/InteractionImpl";
 
 /**
  * Creates binding builder to build a binding between a given interaction and the given command type.
@@ -39,7 +39,7 @@ import {DragLockBinder} from "./DragLockBinder";
  * @return The binding builder. Cannot be null.
  * @throws NullPointerException If the given class is null.
  */
-export function nodeBinder<D extends InteractionData, C extends CommandImpl, I extends TSInteraction<D, FSM<Event>, {}>>
+export function nodeBinder<D extends InteractionData, C extends CommandImpl, I extends InteractionImpl<D, FSM, {}>>
         (interaction: I, cmdProducer: (i?: D) => C): NodeBinder<C, I, D> {
     return new NodeBinder(interaction, cmdProducer);
 }
@@ -62,7 +62,7 @@ export function buttonBinder<C extends CommandImpl>(cmdProducer: (i?: WidgetData
  * @return The binding builder. Cannot be null.
  * @throws NullPointerException If the given class is null.
  */
-export function anonCmdBinder<D extends InteractionData, I extends TSInteraction<D, FSM<Event>, {}>>
+export function anonCmdBinder<D extends InteractionData, I extends InteractionImpl<D, FSM, {}>>
         (interaction: I, cmd: () => void): AnonCmdBinder<I, D> {
     return new AnonCmdBinder(interaction, cmd);
 }

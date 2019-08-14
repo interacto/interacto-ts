@@ -12,13 +12,14 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSM} from "../../src-core/fsm/FSM";
-import {TSInteraction} from "../TSInteraction";
+import {FSM} from "../../fsm/FSM";
 import {PointData} from "./PointData";
 import {PointDataImpl} from "./PointDataImpl";
 import {Optional} from "../../util/Optional";
+import { InteractionImpl } from "../InteractionImpl";
 
-export abstract class PointInteraction<D extends PointData, F extends FSM<Event>, T> extends TSInteraction<D, F, T> implements PointData {
+export abstract class PointInteraction<D extends PointData, F extends FSM, T> extends InteractionImpl<D, F, T>
+                        implements PointData {
     public readonly pointData: PointDataImpl;
 
     protected constructor(fsm: F) {

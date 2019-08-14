@@ -12,15 +12,15 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {TSFSM} from "../TSFSM";
-import {TerminalState} from "../../src-core/fsm/TerminalState";
-import {isChoiceBox} from "../Events";
-import {FSMDataHandler} from "../FSMDataHandler";
-import {TSInteraction} from "../TSInteraction";
-import {WidgetData} from "../../src-core/interaction/WidgetData";
-import {ChoiceBoxTransition} from "../ChoiceBoxTransition";
+import {TerminalState} from "../../fsm/TerminalState";
+import {isChoiceBox} from "../../fsm/Events";
+import {FSMDataHandler} from "../../fsm/FSMDataHandler";
+import {WidgetData} from "../WidgetData";
+import {ChoiceBoxTransition} from "../../fsm/ChoiceBoxTransition";
+import { FSM } from "../../fsm/FSM";
+import { InteractionImpl } from "../InteractionImpl";
 
-export class ChoiceBoxSelectedSFM extends TSFSM<ChoiceBoxSelectedHandler> {
+export class ChoiceBoxSelectedSFM extends FSM {
     public constructor() {
         super();
     }
@@ -31,7 +31,7 @@ export class ChoiceBoxSelectedSFM extends TSFSM<ChoiceBoxSelectedHandler> {
         }
 
         super.buildFSM(dataHandler);
-        const selected: TerminalState<Event> = new TerminalState<Event>(this, "selected");
+        const selected: TerminalState = new TerminalState(this, "selected");
         this.addState(selected);
 
         new class extends ChoiceBoxTransition {
@@ -53,7 +53,7 @@ export interface ChoiceBoxSelectedHandler  extends FSMDataHandler {
  * A user interaction for CheckBox
  * @author Gwendal DIDOT
  */
-export class ChoiceBoxSelected extends TSInteraction<WidgetData<Element>, ChoiceBoxSelectedSFM, Element> {
+export class ChoiceBoxSelected extends InteractionImpl<WidgetData<Element>, ChoiceBoxSelectedSFM, Element> {
     private readonly handler: ChoiceBoxSelectedHandler;
 
     /**

@@ -12,13 +12,14 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSM} from "../../src-core/fsm/FSM";
-import {TSInteraction} from "../TSInteraction";
+import {FSM} from "../../fsm/FSM";
 import {Optional} from "../../util/Optional";
 import {ScrollData} from "./ScrollData";
 import {ScrollDataImpl} from "./ScrollDataImpl";
+import { InteractionImpl } from "../InteractionImpl";
 
-export abstract class ScrollInteraction<D extends ScrollData, F extends FSM<Event>, T>extends TSInteraction<D, F, T> implements ScrollData {
+export abstract class ScrollInteraction<D extends ScrollData, F extends FSM, T> extends InteractionImpl<D, F, T>
+                        implements ScrollData {
     public readonly scrollData: ScrollDataImpl;
 
     protected constructor(fsm: F) {

@@ -12,12 +12,12 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {CommandImpl} from "../src-core/command/CommandImpl";
+import {CommandImpl} from "../command/CommandImpl";
 import {AnonNodeBinding} from "./AnonNodeBinding";
 import {KeyBinder} from "./KeyBinder";
 import {KeysData} from "../interaction/library/KeysData";
 import {KeysPressed} from "../interaction/library/KeysPressed";
-import {TSWidgetBinding} from "./TSWidgetBinding";
+import { WidgetBindingImpl } from "./WidgetBindingImpl";
 
 export class KeyNodeBinder<C extends CommandImpl> extends KeyBinder<C, KeyNodeBinder<C>> {
 
@@ -25,7 +25,7 @@ export class KeyNodeBinder<C extends CommandImpl> extends KeyBinder<C, KeyNodeBi
         super(cmdPoducer);
     }
 
-    public bind(): TSWidgetBinding<C, KeysPressed, KeysData> {
+    public bind(): WidgetBindingImpl<C, KeysPressed, KeysData> {
         return new AnonNodeBinding(false, this.interaction, this.cmdProducer,
             this.initCmd,
             () => {},

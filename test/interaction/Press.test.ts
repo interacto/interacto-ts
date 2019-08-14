@@ -13,10 +13,10 @@
  */
 
 import {Press} from "../../src/interaction/library/Press";
-import {FSMHandler} from "../../src/src-core/fsm/FSMHandler";
+import {FSMHandler} from "../../src/fsm/FSMHandler";
 import {StubFSMHandler} from "../fsm/StubFSMHandler";
 import {createMouseEvent} from "./StubEvents";
-import {EventRegistrationToken} from "../../src/interaction/Events";
+import {EventRegistrationToken} from "../../src/fsm/Events";
 
 jest.mock("../fsm/StubFSMHandler");
 

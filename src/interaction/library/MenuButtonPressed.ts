@@ -15,16 +15,16 @@
 // IMPORTANT : this interaction is not fully supported by Web browsers yet.
 // see https://developer.mozilla.org/fr/docs/Web/HTML/Element/menu for more information.
 
-import {FSMDataHandler} from "../FSMDataHandler";
-import {TSFSM} from "../TSFSM";
-import {TerminalState} from "../../src-core/fsm/TerminalState";
-import {isMenuButton} from "../Events";
-import {TSInteraction} from "../TSInteraction";
-import {WidgetData} from "../../src-core/interaction/WidgetData";
-import {MenuButtonPressedTransition} from "../MenuButtonPressedTransition";
+import {FSMDataHandler} from "../../fsm/FSMDataHandler";
+import {TerminalState} from "../../fsm/TerminalState";
+import {isMenuButton} from "../../fsm/Events";
+import {WidgetData} from "../WidgetData";
+import {MenuButtonPressedTransition} from "../../fsm/MenuButtonPressedTransition";
+import { FSM } from "../../fsm/FSM";
+import { InteractionImpl } from "../InteractionImpl";
 
 
-export class MenuButtonPressedFSM extends TSFSM<MenuButtonPressedFSMHandler> {
+export class MenuButtonPressedFSM extends FSM {
     public constructor() {
         super();
     }
@@ -34,7 +34,7 @@ export class MenuButtonPressedFSM extends TSFSM<MenuButtonPressedFSMHandler> {
             return;
         }
         super.buildFSM(dataHandler);
-        const pressed: TerminalState<Event> = new TerminalState<Event>(this, "pressed");
+        const pressed: TerminalState = new TerminalState(this, "pressed");
         this.addState(pressed);
 
         new class extends MenuButtonPressedTransition {
@@ -55,7 +55,7 @@ export interface MenuButtonPressedFSMHandler extends FSMDataHandler {
  * A user interaction for menu buttons.
  * @author Gwendal Didot
  */
-export class MenuButtonPressed extends TSInteraction<WidgetData<Element>, MenuButtonPressedFSM, Element> {
+export class MenuButtonPressed extends InteractionImpl<WidgetData<Element>, MenuButtonPressedFSM, Element> {
     private readonly handler: MenuButtonPressedFSMHandler;
 
     /**

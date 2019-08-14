@@ -13,13 +13,13 @@
  */
 
 import {StubEvent, StubSubEvent1, StubSubEvent2, StubSubEvent3} from "./StubEvent";
-import {StdState} from "../../src/src-core/fsm/StdState";
-import {TerminalState} from "../../src/src-core/fsm/TerminalState";
-import {CancellingState} from "../../src/src-core/fsm/CancellingState";
+import {StdState} from "../../src/fsm/StdState";
+import {TerminalState} from "../../src/fsm/TerminalState";
+import {CancellingState} from "../../src/fsm/CancellingState";
 import {StubTransitionOK, SubStubTransition1, SubStubTransition2, SubStubTransition3} from "./StubTransitionOK";
-import {FSMHandler} from "../../src/src-core/fsm/FSMHandler";
+import {FSMHandler} from "../../src/fsm/FSMHandler";
 import {StubFSMHandler} from "./StubFSMHandler";
-import {FSM} from "../../src/src-core/fsm/FSM";
+import {FSM} from "../../src/fsm/FSM";
 
 jest.mock("./StubFSMHandler");
 

@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {CommandImpl} from "../../src/src-core/command/CommandImpl";
+import {CommandImpl} from "../../src/command/CommandImpl";
 
 export class StubCmd extends CommandImpl {
     public constructor() {

@@ -12,22 +12,22 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {TSFSM} from "../TSFSM";
-import {FSMDataHandler} from "../FSMDataHandler";
-import {StdState} from "../../../src/src-core/fsm/StdState";
-import {TerminalState} from "../../../src/src-core/fsm/TerminalState";
-import {CancellingState} from "../../../src/src-core/fsm/CancellingState";
-import {PressureTransition} from "../PressureTransition";
-import {OutputState} from "../../../src/src-core/fsm/OutputState";
-import {InputState} from "../../../src/src-core/fsm/InputState";
-import {ReleaseTransition} from "../ReleaseTransition";
-import {MoveTransition} from "../MoveTransition";
-import {EscapeKeyPressureTransition} from "../EscapeKeyPressureTransition";
+import {FSMDataHandler} from "../../fsm/FSMDataHandler";
+import {StdState} from "../../../src/fsm/StdState";
+import {TerminalState} from "../../../src/fsm/TerminalState";
+import {CancellingState} from "../../../src/fsm/CancellingState";
+import {OutputState} from "../../../src/fsm/OutputState";
+import {InputState} from "../../../src/fsm/InputState";
+import {MoveTransition} from "../../fsm/MoveTransition";
+import {EscapeKeyPressureTransition} from "../../fsm/EscapeKeyPressureTransition";
 import {PointInteraction} from "./PointInteraction";
 import {SrcTgtPointsData} from "./SrcTgtPointsData";
 import {Optional} from "../../util/Optional";
+import { FSM } from "../../fsm/FSM";
+import { PressureTransition } from "../../fsm/PressureTransition";
+import { ReleaseTransition } from "../../fsm/ReleaseTransition";
 
-export class DnDFSM extends TSFSM<DnDFSMHandler> {
+export class DnDFSM extends FSM {
     private readonly cancellable: boolean;
     private buttonToCheck: number | undefined;
 
@@ -42,10 +42,10 @@ export class DnDFSM extends TSFSM<DnDFSMHandler> {
         }
         super.buildFSM(dataHandler);
 
-        const pressed: StdState<Event> = new StdState<Event>(this, "pressed");
-        const dragged: StdState<Event> = new  StdState<Event>(this, "dragged");
-        const released: TerminalState<Event> = new TerminalState<Event>(this, "released");
-        const cancelled: CancellingState<Event> = new CancellingState<Event>(this, "cancelled");
+        const pressed: StdState = new StdState(this, "pressed");
+        const dragged: StdState = new  StdState(this, "dragged");
+        const released: TerminalState = new TerminalState(this, "released");
+        const cancelled: CancellingState = new CancellingState(this, "cancelled");
 
         this.addState(pressed);
         this.addState(dragged);
@@ -57,7 +57,7 @@ export class DnDFSM extends TSFSM<DnDFSMHandler> {
         new class extends PressureTransition {
             private readonly _parent: DnDFSM;
 
-            public constructor(parent: DnDFSM, srcState: OutputState<Event>, tgtState: InputState<Event>) {
+            public constructor(parent: DnDFSM, srcState: OutputState, tgtState: InputState) {
                 super(srcState, tgtState);
                 this._parent = parent;
             }
@@ -77,7 +77,7 @@ export class DnDFSM extends TSFSM<DnDFSMHandler> {
         new class extends ReleaseTransition {
             private readonly _parent: DnDFSM;
 
-            public constructor(parent: DnDFSM, srcState: OutputState<Event>, tgtState: InputState<Event>) {
+            public constructor(parent: DnDFSM, srcState: OutputState, tgtState: InputState) {
                 super(srcState, tgtState);
                 this._parent = parent;
             }
@@ -90,7 +90,7 @@ export class DnDFSM extends TSFSM<DnDFSMHandler> {
         new class extends MoveTransition {
             private readonly _parent: DnDFSM;
 
-            public constructor(parent: DnDFSM, srcState: OutputState<Event>, tgtState: InputState<Event>) {
+            public constructor(parent: DnDFSM, srcState: OutputState, tgtState: InputState) {
                 super(srcState, tgtState);
                 this._parent = parent;
             }
@@ -109,7 +109,7 @@ export class DnDFSM extends TSFSM<DnDFSMHandler> {
         new class extends MoveTransition {
             private readonly _parent: DnDFSM;
 
-            public constructor(parent: DnDFSM, srcState: OutputState<Event>, tgtState: InputState<Event>) {
+            public constructor(parent: DnDFSM, srcState: OutputState, tgtState: InputState) {
                 super(srcState, tgtState);
                 this._parent = parent;
             }
@@ -128,7 +128,7 @@ export class DnDFSM extends TSFSM<DnDFSMHandler> {
         new class extends ReleaseTransition {
             private readonly _parent: DnDFSM;
 
-            public constructor(parent: DnDFSM, srcState: OutputState<Event>, tgtState: InputState<Event>) {
+            public constructor(parent: DnDFSM, srcState: OutputState, tgtState: InputState) {
                 super(srcState, tgtState);
                 this._parent = parent;
             }

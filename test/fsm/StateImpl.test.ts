@@ -12,9 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSM} from "../../src/src-core/fsm/FSM";
-import {StateImpl} from "../../src/src-core/fsm/StateImpl";
-import {StdState} from "../../src/src-core/fsm/StdState";
+import {FSM} from "../../src/fsm/FSM";
+import {StateImpl} from "../../src/fsm/StateImpl";
+import {StdState} from "../../src/fsm/StdState";
 import {StubEvent} from "./StubEvent";
 import "jest";
 

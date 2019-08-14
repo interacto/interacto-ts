@@ -12,23 +12,22 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSMDataHandler} from "../FSMDataHandler";
-import {TSFSM} from "../TSFSM";
-import {TSInteraction} from "../TSInteraction";
+import {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {DoubleClick, DoubleClickFSM} from "./DoubleClick";
-import {TerminalState} from "../../src-core/fsm/TerminalState";
-import {CancellingState} from "../../src-core/fsm/CancellingState";
-import {StdState} from "../../src-core/fsm/StdState";
-import {SubFSMTransition} from "../../src-core/fsm/SubFSMTransition";
-import {InputState} from "../../src-core/fsm/InputState";
-import {FSM} from "../../src-core/fsm/FSM";
-import {OutputState} from "../../src-core/fsm/OutputState";
-import {MoveTransition} from "../MoveTransition";
-import {EscapeKeyPressureTransition} from "../EscapeKeyPressureTransition";
+import {TerminalState} from "../../fsm/TerminalState";
+import {CancellingState} from "../../fsm/CancellingState";
+import {StdState} from "../../fsm/StdState";
+import {SubFSMTransition} from "../../fsm/SubFSMTransition";
+import {InputState} from "../../fsm/InputState";
+import {FSM} from "../../fsm/FSM";
+import {OutputState} from "../../fsm/OutputState";
+import {MoveTransition} from "../../fsm/MoveTransition";
+import {EscapeKeyPressureTransition} from "../../fsm/EscapeKeyPressureTransition";
 import {SrcTgtPointsData} from "./SrcTgtPointsData";
 import {Optional} from "../../util/Optional";
+import { InteractionImpl } from "../InteractionImpl";
 
-export class DragLockFSM extends TSFSM<DragLockFSMHandler> {
+export class DragLockFSM extends FSM {
     public readonly firstDbleClick: DoubleClickFSM;
     public readonly sndDbleClick: DoubleClickFSM;
     protected checkButton: number | undefined;
@@ -37,6 +36,10 @@ export class DragLockFSM extends TSFSM<DragLockFSMHandler> {
         super();
         this.firstDbleClick = new DoubleClickFSM();
         this.sndDbleClick = new DoubleClickFSM();
+    }
+
+    public getDataHandler(): DragLockFSMHandler | undefined {
+        return this.dataHandler as DragLockFSMHandler;
     }
 
     public buildFSM(dataHandler: DragLockFSMHandler): void {
@@ -49,20 +52,20 @@ export class DragLockFSM extends TSFSM<DragLockFSMHandler> {
         this.firstDbleClick.buildFSM();
         this.sndDbleClick.buildFSM();
         cancelDbleClick.buildFSM();
-        const dropped = new TerminalState<Event>(this, "dropped");
-        const cancelled = new CancellingState<Event>(this, "cancelled");
-        const locked = new StdState<Event>(this, "locked");
-        const moved = new StdState<Event>(this, "moved");
+        const dropped = new TerminalState(this, "dropped");
+        const cancelled = new CancellingState(this, "cancelled");
+        const locked = new StdState(this, "locked");
+        const moved = new StdState(this, "moved");
 
         this.addState(dropped);
         this.addState(cancelled);
         this.addState(locked);
         this.addState(moved);
 
-        new class extends SubFSMTransition<Event> {
+        new class extends SubFSMTransition {
             private readonly _parent: DragLockFSM;
 
-            public constructor(parent: DragLockFSM, srcState: OutputState<Event>, tgtState: InputState<Event>, fsm: FSM<Event>) {
+            public constructor(parent: DragLockFSM, srcState: OutputState, tgtState: InputState, fsm: FSM) {
                 super(srcState, tgtState, fsm);
                 this._parent = parent;
             }
@@ -74,12 +77,12 @@ export class DragLockFSM extends TSFSM<DragLockFSMHandler> {
             }
         }(this, this.initState, locked, this.firstDbleClick);
 
-        new SubFSMTransition<Event>(locked, cancelled, cancelDbleClick);
+        new SubFSMTransition(locked, cancelled, cancelDbleClick);
 
         new class extends MoveTransition {
             private readonly _parent: DragLockFSM;
 
-            public constructor(parent: DragLockFSM, srcState: OutputState<Event>, tgtState: InputState<Event>) {
+            public constructor(parent: DragLockFSM, srcState: OutputState, tgtState: InputState) {
                 super(srcState, tgtState);
                 this._parent = parent;
             }
@@ -90,15 +93,16 @@ export class DragLockFSM extends TSFSM<DragLockFSMHandler> {
             }
 
             protected action(event: Event): void {
-                if (this._parent.dataHandler !== undefined && event instanceof MouseEvent) {
-                    this._parent.dataHandler.onMove(event);
+                const handler = this._parent.getDataHandler();
+                if (handler !== undefined && event instanceof MouseEvent) {
+                    handler.onMove(event);
                 }
             }
         }(this, locked, moved);
 
         new EscapeKeyPressureTransition(locked, cancelled);
         new EscapeKeyPressureTransition(moved, cancelled);
-        new SubFSMTransition<Event>(moved, dropped, this.sndDbleClick);
+        new SubFSMTransition(moved, dropped, this.sndDbleClick);
     }
 }
 
@@ -106,7 +110,7 @@ export interface DragLockFSMHandler extends FSMDataHandler {
     onMove(event: MouseEvent): void;
 }
 
-export class DragLock extends TSInteraction<SrcTgtPointsData, DragLockFSM, Event> implements SrcTgtPointsData {
+export class DragLock extends InteractionImpl<SrcTgtPointsData, DragLockFSM, Event> implements SrcTgtPointsData {
     private readonly handler: DragLockFSMHandler;
     private readonly firstClick: DoubleClick;
     private readonly sndClick: DoubleClick;

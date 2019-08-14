@@ -13,8 +13,8 @@
  */
 
 import {ButtonPressed} from "../interaction/library/ButtonPressed";
-import {CommandImpl} from "../src-core/command/CommandImpl";
-import {WidgetData} from "../src-core/interaction/WidgetData";
+import {CommandImpl} from "../command/CommandImpl";
+import {WidgetData} from "../interaction/WidgetData";
 import {Binder} from "./Binder";
 
 

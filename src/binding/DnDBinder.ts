@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {CommandImpl} from "../src-core/command/CommandImpl";
+import {CommandImpl} from "../command/CommandImpl";
 import {DnD} from "../interaction/library/DnD";
 import {SrcTgtPointsData} from "../interaction/library/SrcTgtPointsData";
 import {SourceTargetBinder} from "./SourceTargetBinder";

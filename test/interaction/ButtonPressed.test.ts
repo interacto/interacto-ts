@@ -13,7 +13,7 @@
  */
 
 import {ButtonPressed} from "../../src/interaction/library/ButtonPressed";
-import {FSMHandler} from "../../src/src-core/fsm/FSMHandler";
+import {FSMHandler} from "../../src/fsm/FSMHandler";
 import {StubFSMHandler} from "../fsm/StubFSMHandler";
 
 jest.mock("../fsm/StubFSMHandler");

@@ -12,15 +12,15 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {TSFSM} from "../TSFSM";
-import {TerminalState} from "../../src-core/fsm/TerminalState";
-import {isHyperLink} from "../Events";
-import {FSMDataHandler} from "../FSMDataHandler";
-import {TSInteraction} from "../TSInteraction";
-import {WidgetData} from "../../src-core/interaction/WidgetData";
-import {HyperLinkTransition} from "../HyperLinkTransition";
+import {TerminalState} from "../../fsm/TerminalState";
+import {isHyperLink} from "../../fsm/Events";
+import {FSMDataHandler} from "../../fsm/FSMDataHandler";
+import {WidgetData} from "../WidgetData";
+import {HyperLinkTransition} from "../../fsm/HyperLinkTransition";
+import { FSM } from "../../fsm/FSM";
+import { InteractionImpl } from "../InteractionImpl";
 
-export class HyperLinkClickedFSM extends TSFSM<HyperLinkClickedFSMHandler> {
+export class HyperLinkClickedFSM extends FSM {
     public constructor() {
         super();
     }
@@ -31,7 +31,7 @@ export class HyperLinkClickedFSM extends TSFSM<HyperLinkClickedFSMHandler> {
         }
 
         super.buildFSM(dataHandler);
-        const clicked: TerminalState<Event> = new TerminalState<Event>(this, "clicked");
+        const clicked: TerminalState = new TerminalState(this, "clicked");
         this.addState(clicked);
 
         new class extends HyperLinkTransition {
@@ -54,7 +54,7 @@ export interface HyperLinkClickedFSMHandler extends FSMDataHandler {
  * @author Gwendal DIDOT
  */
 
-export class HyperLinkClicked extends TSInteraction<WidgetData<Element>, HyperLinkClickedFSM, Element> {
+export class HyperLinkClicked extends InteractionImpl<WidgetData<Element>, HyperLinkClickedFSM, Element> {
     private readonly handler: HyperLinkClickedFSMHandler;
 
     /**

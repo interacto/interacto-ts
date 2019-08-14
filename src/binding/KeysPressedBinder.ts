@@ -13,7 +13,7 @@
  */
 
 import {KeysData} from "../interaction/library/KeysData";
-import {CommandImpl} from "../src-core/command/CommandImpl";
+import {CommandImpl} from "../command/CommandImpl";
 import {KeyBinder} from "./KeyBinder";
 
 export class KeysPressedBinder<C extends CommandImpl> extends KeyBinder<C, KeysPressedBinder<C>> {

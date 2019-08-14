@@ -13,13 +13,13 @@
  */
 
 import {UpdateBinder} from "./UpdateBinder";
-import {CommandImpl} from "../src-core/command/CommandImpl";
-import {TSInteraction} from "../interaction/TSInteraction";
-import {FSM} from "../src-core/fsm/FSM";
-import {InteractionData} from "../src-core/interaction/InteractionData";
+import {CommandImpl} from "../command/CommandImpl";
+import {FSM} from "../fsm/FSM";
+import {InteractionData} from "../interaction/InteractionData";
 import {MArray} from "../util/ArrayUtil";
+import { InteractionImpl } from "../interaction/InteractionImpl";
 
-export class SourceTargetBinder<C extends CommandImpl, I extends TSInteraction<D, FSM<Event>, {}>, D extends InteractionData,
+export class SourceTargetBinder<C extends CommandImpl, I extends InteractionImpl<D, FSM, {}>, D extends InteractionData,
     B extends SourceTargetBinder<C, I, D, B>> extends UpdateBinder<C, I, D, B> {
 
     public constructor(interaction: I, cmdProducer: (i?: D) => C) {

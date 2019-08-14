@@ -12,19 +12,19 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {TSFSM} from "../TSFSM";
-import {TerminalState} from "../../src-core/fsm/TerminalState";
-import {isTextInput} from "../Events";
-import {FSMDataHandler} from "../FSMDataHandler";
-import {TSInteraction} from "../TSInteraction";
-import {WidgetData} from "../../src-core/interaction/WidgetData";
-import {StdState} from "../../src-core/fsm/StdState";
-import {TextInputChangedTransition} from "../TextInputChangedTransition";
-import {TimeoutTransition} from "../../src-core/fsm/TimeoutTransition";
-import {OutputState} from "../../src-core/fsm/OutputState";
-import {InputState} from "../../src-core/fsm/InputState";
+import {TerminalState} from "../../fsm/TerminalState";
+import {isTextInput} from "../../fsm/Events";
+import {FSMDataHandler} from "../../fsm/FSMDataHandler";
+import {WidgetData} from "../WidgetData";
+import {StdState} from "../../fsm/StdState";
+import {TextInputChangedTransition} from "../../fsm/TextInputChangedTransition";
+import {TimeoutTransition} from "../../fsm/TimeoutTransition";
+import {OutputState} from "../../fsm/OutputState";
+import {InputState} from "../../fsm/InputState";
+import { FSM } from "../../fsm/FSM";
+import { InteractionImpl } from "../InteractionImpl";
 
-export class TextInputChangedFSM extends TSFSM<TextInputChangedHandler> {
+export class TextInputChangedFSM extends FSM {
     /** The time gap between the two spinner events. */
     private readonly _timeGap: number = 1000;
     /** The supplier that provides the time gap. */
@@ -50,14 +50,14 @@ export class TextInputChangedFSM extends TSFSM<TextInputChangedHandler> {
         }
 
         super.buildFSM(dataHandler);
-        const changed: StdState<Event> = new StdState<Event>(this, "changed");
-        const ended: TerminalState<Event> = new TerminalState<Event>(this, "ended");
+        const changed: StdState = new StdState(this, "changed");
+        const ended: TerminalState = new TerminalState(this, "ended");
         this.addState(changed);
         this.addState(ended);
 
         new class extends TextInputChangedTransition {
 
-            public constructor(srcState: OutputState<Event>, tgtState: InputState<Event>) {
+            public constructor(srcState: OutputState, tgtState: InputState) {
                 super(srcState, tgtState);
             }
 
@@ -70,7 +70,7 @@ export class TextInputChangedFSM extends TSFSM<TextInputChangedHandler> {
 
         new class extends TextInputChangedTransition {
 
-            public constructor(srcState: OutputState<Event>, tgtState: InputState<Event>) {
+            public constructor(srcState: OutputState, tgtState: InputState) {
                 super(srcState, tgtState);
             }
 
@@ -95,7 +95,7 @@ export interface TextInputChangedHandler  extends FSMDataHandler {
  * @author Gwendal DIDOT
  */
 
-export class TextInputChanged extends TSInteraction<WidgetData<Element>, TextInputChangedFSM, Element> {
+export class TextInputChanged extends InteractionImpl<WidgetData<Element>, TextInputChangedFSM, Element> {
     private readonly handler: TextInputChangedHandler;
 
     public constructor(timeGap?: number) {

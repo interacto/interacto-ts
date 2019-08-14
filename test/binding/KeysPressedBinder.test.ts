@@ -13,19 +13,19 @@
  */
 
 import {KeysPressedBinder} from "../../src/binding/KeysPressedBinder";
-import {TSWidgetBinding} from "../../src/binding/TSWidgetBinding";
-import {EventRegistrationToken} from "../../src/interaction/Events";
+import {EventRegistrationToken} from "../../src/fsm/Events";
 import {KeysData} from "../../src/interaction/library/KeysData";
 import {KeysPressed} from "../../src/interaction/library/KeysPressed";
 import {StubCmd} from "../command/StubCmd";
 import {StubFSMHandler} from "../fsm/StubFSMHandler";
 import {createKeyEvent} from "../interaction/StubEvents";
+import { WidgetBindingImpl } from "../../src";
 
 jest.mock("../fsm/StubFSMHandler");
 jest.mock("../command/StubCmd");
 
 let div: HTMLElement;
-let binding: TSWidgetBinding<StubCmd, KeysPressed, KeysData>;
+let binding: WidgetBindingImpl<StubCmd, KeysPressed, KeysData>;
 
 beforeEach(() => {
     jest.clearAllMocks();

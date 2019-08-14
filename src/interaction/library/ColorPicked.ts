@@ -11,15 +11,15 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import {TSFSM} from "../TSFSM";
-import {TerminalState} from "../../src-core/fsm/TerminalState";
-import {isColorChoice} from "../Events";
-import {FSMDataHandler} from "../FSMDataHandler";
-import {TSInteraction} from "../TSInteraction";
-import {WidgetData} from "../../src-core/interaction/WidgetData";
-import {ColorPickedTransition} from "../ColorPickedTransition";
+import {TerminalState} from "../../fsm/TerminalState";
+import {isColorChoice} from "../../fsm/Events";
+import {FSMDataHandler} from "../../fsm/FSMDataHandler";
+import {WidgetData} from "../WidgetData";
+import {ColorPickedTransition} from "../../fsm/ColorPickedTransition";
+import { FSM } from "../../fsm/FSM";
+import { InteractionImpl } from "../InteractionImpl";
 
-export class ColorPickedFSM extends TSFSM<ColorPickedHandler> {
+export class ColorPickedFSM extends FSM {
     public constructor() {
         super();
     }
@@ -30,7 +30,7 @@ export class ColorPickedFSM extends TSFSM<ColorPickedHandler> {
         }
 
         super.buildFSM(dataHandler);
-        const picked: TerminalState<Event> = new TerminalState<Event>(this, "picked");
+        const picked: TerminalState = new TerminalState(this, "picked");
         this.addState(picked);
 
         new class extends ColorPickedTransition {
@@ -53,7 +53,7 @@ export interface ColorPickedHandler  extends FSMDataHandler {
  * @author Gwendal DIDOT
  */
 
-export class ColorPicked extends TSInteraction<WidgetData<Element>, ColorPickedFSM, Element> {
+export class ColorPicked extends InteractionImpl<WidgetData<Element>, ColorPickedFSM, Element> {
     private readonly handler: ColorPickedHandler;
 
     /**

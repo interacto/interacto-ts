@@ -12,18 +12,18 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {InputState} from "../../src-core/fsm/InputState";
-import {OutputState} from "../../src-core/fsm/OutputState";
-import {StdState} from "../../src-core/fsm/StdState";
-import {TerminalState} from "../../src-core/fsm/TerminalState";
-import {KeyPressureTransition} from "../KeyPressureTransition";
-import {KeyReleaseTransition} from "../KeyReleaseTransition";
-import {TSFSM} from "../TSFSM";
-import {FSMDataHandler} from "../FSMDataHandler";
+import {InputState} from "../../fsm/InputState";
+import {OutputState} from "../../fsm/OutputState";
+import {StdState} from "../../fsm/StdState";
+import {TerminalState} from "../../fsm/TerminalState";
+import {KeyPressureTransition} from "../../fsm/KeyPressureTransition";
+import {KeyReleaseTransition} from "../../fsm/KeyReleaseTransition";
+import {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {MultiKeyInteraction} from "./MultiKeyInteraction";
 import {KeysData} from "./KeysData";
+import { FSM } from "../../fsm/FSM";
 
-export class KeysPressedFSM extends TSFSM<KeysPressedFSMHandler> {
+export class KeysPressedFSM extends FSM {
     private readonly currentCodes: Array<String>;
 
     public constructor() {
@@ -37,15 +37,15 @@ export class KeysPressedFSM extends TSFSM<KeysPressedFSMHandler> {
         }
 
         super.buildFSM(dataHandler);
-        const pressed: StdState<Event> = new StdState<Event>(this, "pressed");
-        const ended: TerminalState<Event> = new TerminalState<Event>(this, "ended");
+        const pressed: StdState = new StdState(this, "pressed");
+        const ended: TerminalState = new TerminalState(this, "ended");
         this.addState(pressed);
         this.addState(ended);
 
         new class extends KeyPressureTransition {
             private readonly _parent: KeysPressedFSM;
 
-            public constructor(parent: KeysPressedFSM, srcState: OutputState<Event>, tgtState: InputState<Event>) {
+            public constructor(parent: KeysPressedFSM, srcState: OutputState, tgtState: InputState) {
                 super(srcState, tgtState);
                 this._parent = parent;
             }
@@ -63,7 +63,7 @@ export class KeysPressedFSM extends TSFSM<KeysPressedFSMHandler> {
         new class extends KeyPressureTransition {
             private readonly _parent: KeysPressedFSM;
 
-            public constructor(parent: KeysPressedFSM, srcState: OutputState<Event>, tgtState: InputState<Event>) {
+            public constructor(parent: KeysPressedFSM, srcState: OutputState, tgtState: InputState) {
                 super(srcState, tgtState);
                 this._parent = parent;
             }
@@ -82,7 +82,7 @@ export class KeysPressedFSM extends TSFSM<KeysPressedFSMHandler> {
         new class extends KeyReleaseTransition {
             private readonly _parent: KeysPressedFSM;
 
-            public constructor(parent: KeysPressedFSM, srcState: OutputState<Event>, tgtState: InputState<Event>) {
+            public constructor(parent: KeysPressedFSM, srcState: OutputState, tgtState: InputState) {
                 super(srcState, tgtState);
                 this._parent = parent;
             }

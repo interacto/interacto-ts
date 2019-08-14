@@ -12,15 +12,15 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {TSFSM} from "../TSFSM";
-import {TerminalState} from "../../src-core/fsm/TerminalState";
-import {isSpinner} from "../Events";
-import {FSMDataHandler} from "../FSMDataHandler";
-import {TSInteraction} from "../TSInteraction";
-import {WidgetData} from "../../src-core/interaction/WidgetData";
-import {SpinnerChangedTransition} from "../SpinnerChangedTransition";
+import {TerminalState} from "../../fsm/TerminalState";
+import {isSpinner} from "../../fsm/Events";
+import {FSMDataHandler} from "../../fsm/FSMDataHandler";
+import {WidgetData} from "../WidgetData";
+import {SpinnerChangedTransition} from "../../fsm/SpinnerChangedTransition";
+import { FSM } from "../../fsm/FSM";
+import { InteractionImpl } from "../InteractionImpl";
 
-export class SpinnerChangedFSM extends TSFSM<SpinnerChangedHandler> {
+export class SpinnerChangedFSM extends FSM {
     public constructor() {
         super();
     }
@@ -31,7 +31,7 @@ export class SpinnerChangedFSM extends TSFSM<SpinnerChangedHandler> {
         }
 
         super.buildFSM(dataHandler);
-        const picked: TerminalState<Event> = new TerminalState<Event>(this, "picked");
+        const picked: TerminalState = new TerminalState(this, "picked");
         this.addState(picked);
 
         new class extends SpinnerChangedTransition {
@@ -52,7 +52,7 @@ export interface SpinnerChangedHandler  extends FSMDataHandler {
  * A user interaction for Number input.
  * @author Gwendal DIDOT
  */
-export class SpinnerChanged extends TSInteraction<WidgetData<Element>, SpinnerChangedFSM, Element> {
+export class SpinnerChanged extends InteractionImpl<WidgetData<Element>, SpinnerChangedFSM, Element> {
     private readonly handler: SpinnerChangedHandler;
 
     /**

@@ -13,12 +13,13 @@
  */
 
 import {KeyData} from "./KeyData";
-import {FSM} from "../../src-core/fsm/FSM";
-import {TSInteraction} from "../TSInteraction";
+import {FSM} from "../../fsm/FSM";
 import {Optional} from "../../util/Optional";
 import {KeyDataImpl} from "./KeyDataImpl";
+import { InteractionImpl } from "../InteractionImpl";
 
-export abstract class KeyInteraction<D extends KeyData, F extends FSM<Event>, T> extends TSInteraction<D, F, T> implements KeyData {
+export abstract class KeyInteraction<D extends KeyData, F extends FSM, T> extends InteractionImpl<D, F, T>
+                        implements KeyData {
     public readonly keyData: KeyDataImpl;
 
     protected constructor(fsm: F) {
