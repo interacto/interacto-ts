@@ -125,6 +125,5 @@ export * from "./undo/EmptyUndoHandler";
 export * from "./undo/UndoCollector";
 export * from "./undo/UndoHandler";
 export * from "./undo/Undoable";
-export * from "./utils/ObsValue";
 export * from "./util/ArrayUtil";
 export * from "./util/Optional";

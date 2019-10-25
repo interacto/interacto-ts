@@ -13,6 +13,7 @@
   "devDependencies": {
     "@types/jest": "^22.2.3",
     "@types/rx": "^4.1.1",
+    "rxjs": "^6.5.3",
     "barrelsby": "^1.0.1",
     "jest": "^22.4.4",
     "rollup": "^1.25.2",

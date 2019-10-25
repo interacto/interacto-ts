@@ -21,24 +21,25 @@ import {StubTransitionOK} from "./StubTransitionOK";
 import {FSMHandler} from "../../src/fsm/FSMHandler";
 import {StubFSMHandler} from "./StubFSMHandler";
 import {CancelFSMException} from "../../src/fsm/CancelFSMException";
+import { OutputState } from "../../src/fsm/OutputState";
 
 jest.mock("./StubFSMHandler");
 
-let fsm: FSM<StubEvent>;
-let std: StdState<StubEvent>;
-let terminal: TerminalState<StubEvent>;
-let cancelling: CancellingState<StubEvent>;
+let fsm: FSM;
+let std: StdState;
+let terminal: TerminalState;
+let cancelling: CancellingState;
 let handler: FSMHandler;
 
 beforeEach(() => {
     jest.clearAllMocks();
-    fsm = new FSM<StubEvent>();
+    fsm = new FSM();
     handler = new StubFSMHandler();
     fsm.addHandler(handler);
     fsm.log(true);
-    std = new StdState<StubEvent>(fsm, "s1");
-    terminal = new TerminalState<StubEvent>(fsm, "t1");
-    cancelling = new CancellingState<StubEvent>(fsm, "c1");
+    std = new StdState(fsm, "s1");
+    terminal = new TerminalState(fsm, "t1");
+    cancelling = new CancellingState(fsm, "c1");
     new StubTransitionOK(fsm.initState, std);
     new StubTransitionOK(std, terminal);
     fsm.addState(std);
@@ -50,8 +51,8 @@ test("testGetStates", () => {
     expect(fsm.getStates()).toEqual([fsm.initState, std, terminal, cancelling]);
 });
 
-test("testcurrentStateProp", () => {
-    expect(fsm.currentStateProp()).not.toBeNull();
+test("testcurrentStateObservable", () => {
+    expect(fsm.currentStateObservable()).not.toBeNull();
 });
 
 test("testFireEventKO", () => {
@@ -64,8 +65,12 @@ test("testFireEventChangeState", () => {
 });
 
 test("testGetterCurrentState", () => {
+    const states = [];
+    const dispo = fsm.currentStateObservable().subscribe(elt => states.push(elt[1]));
     fsm.process(new StubEvent());
-    expect(fsm.currentState).toEqual(fsm.currentStateProp().get());
+    dispo.unsubscribe();
+    expect(states.length).toBe(1);
+    expect(fsm.currentState).toEqual(states[0]);
 });
 
 test("testFireEventTriggerFSMStartUpdate", () => {

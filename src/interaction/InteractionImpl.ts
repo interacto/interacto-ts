@@ -21,6 +21,7 @@ import {InteractionData} from "./InteractionData";
 import { MArray } from "../util/ArrayUtil";
 import { EventRegistrationToken } from "../fsm/Events";
 import { WidgetData } from "./WidgetData";
+import { Subscription } from "rxjs";
 
 export abstract class InteractionImpl<D extends InteractionData, F extends FSM, T> implements WidgetData<T> {
     protected logger: Logger | undefined;
@@ -36,6 +37,7 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM, 
     private keyHandler: ((e: KeyboardEvent) => void) | undefined;
     private uiHandler: ((e: UIEvent) => void) | undefined;
     private actionHandler: EventListener | undefined;
+    private readonly disposable : Subscription;
 
     /**
      * Defines if the interaction is activated or not. If not, the interaction will not
@@ -46,7 +48,7 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM, 
     protected constructor(fsm: F) {
         this.activated = false;
         this.fsm = fsm;
-        fsm.currentStateProp().obs((oldValue, newValue) => this.updateEventsRegistered(newValue, oldValue));
+        this.disposable = this.fsm.currentStateObservable().subscribe(current => this.updateEventsRegistered(current[1], current[0]));
         this.activated = true;
         this.asLog = false;
         this._registeredNodes = new Set<EventTarget>();
@@ -315,6 +317,7 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM, 
 
     public uninstall(): void {
         this._widget = undefined;
+        this.disposable.unsubscribe();
         this._registeredNodes.clear();
         this._additionalNodes.clear();
         this._registeredTargetNode.clear();

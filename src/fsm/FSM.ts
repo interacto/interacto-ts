@@ -14,7 +14,6 @@
 
 import {State} from "./State";
 import {InitState} from "./InitState";
-import {ObsValue} from "../utils/ObsValue";
 import {OutputState} from "./OutputState";
 import {FSMHandler} from "./FSMHandler";
 import {TimeoutTransition} from "./TimeoutTransition";
@@ -25,6 +24,7 @@ import {OutputStateImpl} from "./OutputStateImpl";
 import {catFSM} from "../logging/ConfigLog";
 import { FSMDataHandler } from "./FSMDataHandler";
 import {isKeyDownEvent} from "./Events";
+import { Subject, Observable } from "rxjs";
 
 export class FSM {
     protected dataHandler: FSMDataHandler | undefined;
@@ -51,10 +51,12 @@ export class FSM {
 
     public readonly initState: InitState;
 
-    protected readonly _currentState: ObsValue<OutputState>;
+    protected _currentState: OutputState;
+
+    protected readonly currentStatePublisher: Subject<[OutputState, OutputState]>;
 
     /**
-     * The states that compose the finite state machine.
+     * The tes that compose the finite state machine.
      */
     protected readonly states: MArray<State>;
 
@@ -86,7 +88,8 @@ export class FSM {
         this.initState = new InitState(this, "init");
         this.states = new MArray<State>(this.initState);
         this._startingState = this.initState;
-        this._currentState = new ObsValue<OutputState>(this.initState);
+        this._currentState = this.initState;
+        this.currentStatePublisher = new Subject();
         this.handlers = new MArray();
         this.eventsToProcess = new MArray();
         this.asLogFSM = false;
@@ -105,8 +108,12 @@ export class FSM {
     }
 
     public get currentState(): OutputState {
-        return this._currentState.get();
+        return this._currentState;
     }
+
+    public currentStateObservable() : Observable<[OutputState, OutputState]> {
+		return this.currentStatePublisher;
+	}
 
     public set inner(inner: boolean) {
         this._inner = inner;
@@ -141,7 +148,7 @@ export class FSM {
         if (this.currentSubFSM !== undefined) {
             return this.currentSubFSM.process(event);
         }
-        return this._currentState.get().process(event);
+        return this.currentState.process(event);
     }
 
 
@@ -179,11 +186,13 @@ export class FSM {
     }
 
     public set currentState(state: OutputState) {
-        this._currentState.set(state);
+        const old = this.currentState;
+        this._currentState = state;
+        this.currentStatePublisher.next([old, this.currentState]);
     }
 
     /**
-     * At the end of the FSM execution, the events still (eg keyPress) in process must be recycled to be reused in the FSM.
+     * the end of the FSM execution, the events still (eg keyPress) in process must be recycled to be reused in the FSM.
      */
     protected processRemainingEvents(): void {
         const list: MArray<Event> = new MArray(...this.eventsToProcess);
@@ -277,7 +286,7 @@ export class FSM {
             this.currentTimeout.stopTimeout();
         }
         this.started = false;
-        this._currentState.set(this.initState);
+        this.currentState = this.initState;
         this.currentTimeout = undefined;
 
         if (this.currentSubFSM !== undefined) {
@@ -304,7 +313,7 @@ export class FSM {
             }
             const state = this.currentTimeout.execute().get();
             if (state instanceof OutputStateImpl) {
-                this._currentState.set(state);
+                this.currentState = state;
                 this.checkTimeoutTransition();
             }
         }
@@ -328,7 +337,7 @@ export class FSM {
      * If it is the case, the timeout transition is launched.
      */
     protected checkTimeoutTransition(): void {
-        const tr = this._currentState.get().getTransitions().find(t => t instanceof TimeoutTransition) as TimeoutTransition | undefined;
+        const tr = this.currentState.getTransitions().find(t => t instanceof TimeoutTransition) as TimeoutTransition | undefined;
 
         if (tr !== undefined) {
             if (this.asLogFSM) {
@@ -394,10 +403,6 @@ export class FSM {
         return [...this.states];
     }
 
-    public currentStateProp(): ObsValue<OutputState> {
-        return this._currentState;
-    }
-
     public get startingState(): State {
         return this._startingState;
     }
@@ -413,7 +418,7 @@ export class FSM {
     public uninstall(): void {
         this.fullReinit();
         this.asLogFSM = false;
-        this._currentState.unobsAll();
+        this.currentStatePublisher.complete();
         this.currentSubFSM = undefined;
         this.states.forEach(state => state.uninstall());
         this.states.clear();
