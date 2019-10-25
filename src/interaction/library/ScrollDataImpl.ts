@@ -52,10 +52,13 @@ export class ScrollDataImpl implements ScrollData {
 
     public setScrollData(event: UIEvent) {
         this.scrolledNode = event.target === null ? undefined : event.target;
-        this.increment = this.getIncrement() + (event.view.scrollY === undefined
-        || event.view.scrollY < this.getIncrement() ? 0 : event.view.scrollY
-            - (this.py === undefined || event.view.scrollY  < this.getIncrement() ? 0 : this.py));
-        this.px = event.view.scrollX;
-        this.py = event.view.scrollY;
+
+        if (event.view !== null) {
+            this.increment = this.getIncrement() + (event.view.scrollY === undefined
+                || event.view.scrollY < this.getIncrement() ? 0 :
+                event.view.scrollY - (this.py === undefined || event.view.scrollY  < this.getIncrement() ? 0 : this.py));
+            this.px = event.view.scrollX;
+            this.py = event.view.scrollY;
+        }
     }
 }

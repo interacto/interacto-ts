@@ -1,5 +1,8 @@
 {
   "rules": {
+    "no-promise-as-boolean": true,
+    "no-for-in": true,
+    "invalid-void": true,
     "class-name": true,
     "curly": true,
     "eofline": true,
