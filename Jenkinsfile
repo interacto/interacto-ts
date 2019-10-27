@@ -21,10 +21,18 @@ pipeline {
             }
         }
 
+        stage('Node config') {
+            steps {
+                nodejs(nodeJSInstallationName: 'node10') {
+                    sh 'npm -v'
+                }
+            }
+        }
+
         stage ('Tools Info') {
             steps {
                 sh '''
-                    npm -v
+                    git --version
                     mvn -v
                 '''
             }
