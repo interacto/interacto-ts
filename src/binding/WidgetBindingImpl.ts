@@ -17,7 +17,6 @@ import {CancelFSMException} from "../fsm/CancelFSMException";
 import {isUndoableType} from "../undo/Undoable";
 import {catBinder, catCommand} from "../logging/ConfigLog";
 import {FSM} from "../fsm/FSM";
-import {CommandImpl} from "../command/CommandImpl";
 import {MustBeUndoableCmdException} from "./MustBeUndoableCmdException";
 import {Command, RegistrationPolicy} from "../command/Command";
 import {CommandsRegistry} from "../command/CommandsRegistry";
@@ -26,11 +25,11 @@ import { InteractionImpl } from "../interaction/InteractionImpl";
 
 /**
  * The base class to do widget bindings, i.e. bindings between user interactions and (undoable) commands.
- * @param <A> The type of the command that will produce this widget binding.
+ * @param <C> The type of the command that will produce this widget binding.
  * @param <I> The type of the interaction that will use this widget binding.
  * @author Arnaud BLOUIN
  */
-export abstract class WidgetBindingImpl<C extends CommandImpl, I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>
+export abstract class WidgetBindingImpl<C extends Command, I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>
             implements WidgetBinding {
 
     protected asLogBinding: boolean;
