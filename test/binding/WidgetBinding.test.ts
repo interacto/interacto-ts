@@ -21,8 +21,8 @@ export class WidgetBindingStub extends WidgetBindingImpl<StubCmd, InteractionStu
     public mustCancel: boolean;
 
 
-    public constructor(exec: boolean, cmdCreation: (i?: InteractionData) => StubCmd, interaction: InteractionStub) {
-        super(exec, interaction, cmdCreation, []);
+    public constructor(continuous: boolean, cmdCreation: (i?: InteractionData) => StubCmd, interaction: InteractionStub) {
+        super(continuous, interaction, cmdCreation, []);
         this.conditionRespected = false;
         this.mustCancel = false;
     }
@@ -70,12 +70,12 @@ test("testLinkActivation", () => {
 });
 
 test("testExecuteNope", () => {
-	expect(binding.isExecute()).toBeFalsy();
+	expect(binding.isContinuousCmdExec()).toBeFalsy();
 });
 
 test("testExecuteOK", () => {
 	binding = new WidgetBindingStub(true, () => new StubCmd(), new InteractionStub(new FSM()));
-	expect(binding.isExecute()).toBeTruthy();
+	expect(binding.isContinuousCmdExec()).toBeTruthy();
 });
 
 test("testIsInteractionMustBeCancelled", () => {

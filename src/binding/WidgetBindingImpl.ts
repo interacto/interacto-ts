@@ -50,9 +50,9 @@ export abstract class WidgetBindingImpl<C extends CommandImpl, I extends Interac
     protected cmd: C | undefined;
 
     /**
-     * Specifies if the command must be execute or update * on each evolution of the interaction.
+     * Specifies whether the command must be executed on each step of the interaction.
      */
-    protected execute: boolean;
+    protected continuousCmdExec: boolean;
 
     /**
      * Defines whether the command must be executed in a specific thread.
@@ -66,21 +66,21 @@ export abstract class WidgetBindingImpl<C extends CommandImpl, I extends Interac
 
      /**
      * Creates a widget binding. This constructor must initialise the interaction.
-     * @param exec Specifies whether the command must be execute or update on each evolution of the interaction.
+     * @param continuousExecution Specifies whether the command must be executed on each step of the interaction.
      * @param cmdProducer The type of the command that will be created. Used to instantiate the command by reflexivity.
      * The class must be public and must have a constructor with no parameter.
      * @param interaction The user interaction of the binding.
      * @param widgets The widgets concerned by the binding. Cannot be null.
      */
-    protected constructor(exec: boolean, interaction: I, cmdProducer: (i?: D) => C, widgets: Array<EventTarget>) {
+    protected constructor(continuousExecution: boolean, interaction: I, cmdProducer: (i?: D) => C, widgets: Array<EventTarget>) {
         this.asLogBinding = false;
         this.asLogCmd = false;
-        this.execute = false;
+        this.continuousCmdExec = false;
         this.async = false;
         this.cmdProducer = cmdProducer;
         this.interaction = interaction;
         this.cmd = undefined;
-        this.execute = exec;
+        this.continuousCmdExec = continuousExecution;
         this.interaction.getFsm().addHandler(this);
         this.setActivated(true);
         interaction.registerToNodes(widgets);
@@ -201,7 +201,7 @@ export abstract class WidgetBindingImpl<C extends CommandImpl, I extends Interac
             }
             this.unbindCmdAttributes();
 
-            if (this.isExecute() && this.cmd.hadEffect()) {
+            if (this.isContinuousCmdExec() && this.cmd.hadEffect()) {
                 if (isUndoableType(this.cmd)) {
                     this.cmd.undo();
                     if (this.asLogCmd) {
@@ -266,7 +266,7 @@ export abstract class WidgetBindingImpl<C extends CommandImpl, I extends Interac
                     catCommand.info(`Command created and init: ${this.cmd.constructor.name}`);
                 }
             }
-            if (!this.execute) {
+            if (!this.continuousCmdExec) {
                 this.then();
                 if (this.asLogCmd) {
                     catCommand.info(`Command ${this.cmd.constructor.name} is updated`);
@@ -343,7 +343,7 @@ export abstract class WidgetBindingImpl<C extends CommandImpl, I extends Interac
                 catCommand.info(`Command ${this.cmd.constructor.name} updated`);
             }
             this.then();
-            if (this.execute && this.cmd.canDo()) {
+            if (this.continuousCmdExec && this.cmd.canDo()) {
                 this.cmd.doIt();
                 if (this.asLogCmd) {
                     catCommand.info(`Command ${this.cmd.constructor.name} executed`);
@@ -362,8 +362,8 @@ export abstract class WidgetBindingImpl<C extends CommandImpl, I extends Interac
      *
      * @return {boolean}
      */
-    public isExecute(): boolean {
-        return this.execute;
+    public isContinuousCmdExec(): boolean {
+        return this.continuousCmdExec;
     }
 
 
