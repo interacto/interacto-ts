@@ -104,7 +104,7 @@ export class CommandsRegistry {
      * already added. Handlers are notified of the add of the given command. If Undoable, the command is
      * added to the undo collector as well.
      * @param {*} cmd The command to add. If null, nothing is done.
-     * @param {*} cmdHandler The handler that produced or is associated to the command. If null, nothing is done.
+     * @param {*} cmdHandler The handler that produced or is associated to the command.
      */
     public addCommand(cmd: Command, cmdHandler?: CommandHandler): void {
         if (this.cmds.indexOf(cmd) < 0 &&

@@ -95,7 +95,6 @@ export * from "./command/library/Redo";
 export * from "./command/library/Undo";
 export * from "./command/library/Zoom";
 export * from "./error/ErrorCatcher";
-export * from "./error/ErrorNotifier";
 export * from "./fsm/CancelFSMException";
 export * from "./fsm/CancellingState";
 export * from "./fsm/EpsilonTransition";

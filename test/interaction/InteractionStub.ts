@@ -11,19 +11,28 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
+import { InteractionImpl, InteractionData, FSM, OutputState } from "../../src";
 
-/**
- * This interface must be used by objects that want to be notified about the exceptions collected by the ErrorCatcher.
- * @author Arnaud BLOUIN
- * @since 0.2
- * @class
- */
-export interface ErrorNotifier {
-    /**
-     * Notifies that an exception has been thrown.
-     * @param {Error} exception The thrown exception.
-     * @since 0.2
-     */
-    onException(exception: Error): void;
+export class DataStub implements InteractionData {
+}
+
+export class InteractionStub extends InteractionImpl<InteractionData, FSM, Object> {
+	public constructor(fsm: FSM) {
+		super(fsm);
+	}
+
+	public getData(): InteractionData {
+		return new DataStub();
+	}
+
+	public updateEventsRegistered(newState: OutputState, oldState: OutputState): void {
+	}
+
+	public isEventsOfSameType(evt1: Object, evt2: Object): boolean {
+		return false;
+	}
+
+	public reinitData(): void {
+	}
 }
 

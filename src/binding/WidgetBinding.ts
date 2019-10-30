@@ -28,7 +28,7 @@ export interface WidgetBinding extends FSMHandler {
     clearEvents(): void;
 
     /**
-     * After being created by method map, the command must be initialised by this method.
+     * After being created by method createCommand, the command can be initialised by this method.
      */
     first(): void;
 
@@ -36,6 +36,21 @@ export interface WidgetBinding extends FSMHandler {
      * Updates the current command. To override.
      */
     then(): void;
+
+    /**
+	 * On end
+	 */
+	end(): void;
+
+	/**
+	 * On cancellation
+	 */
+	cancel(): void;
+
+	/**
+	 * On end or cancellation
+	 */
+	endOrCancel(): void;
 
     /**
      * @return {boolean} True if the condition of the widget binding is respected.
@@ -59,9 +74,9 @@ export interface WidgetBinding extends FSMHandler {
 
     /**
      * Activates the widget binding.
-     * @param {boolean} activ True: the widget binding is activated. Otherwise, it is desactivated.
+     * @param {boolean} activated True: the widget binding is activated. Otherwise, it is desactivated.
      */
-    setActivated(activ: boolean): void;
+    setActivated(activated: boolean): void;
 
     /**
      * @return {boolean} True: if the widget binding is currently used.
@@ -78,12 +93,6 @@ export interface WidgetBinding extends FSMHandler {
      * @return {boolean} True if the command is executed on each evolution of the interaction.
      */
     isExecute(): boolean;
-
-    /**
-     * Defines the interim feedback of the widget binding. If overridden, the interim
-     * feedback of its instrument should be define too.
-     */
-    feedback(): void;
 
     uninstallBinding(): void;
 }

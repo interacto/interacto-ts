@@ -25,15 +25,9 @@ import {InteractionData} from "../interaction/InteractionData";
 import { InteractionImpl } from "../interaction/InteractionImpl";
 
 /**
- * Creates a widget binding. This constructor must initialise the interaction. The widget binding is (de-)activated if the given
- * instrument is (de-)activated.
- * @param {*} ins The instrument that contains the widget binding.
- * @param {boolean} exec Specifies if the command must be execute or update on each evolution of the interaction.
- * @param {*} actionClass The type of the command that will be created. Used to instantiate the command by reflexivity.
- * The class must be public and must have a constructor with no parameter.
- * @param {InteractionImpl} interaction The user interaction of the binding.
- * @throws IllegalArgumentException If the given interaction or instrument is null.
- * @class
+ * The base class to do widget bindings, i.e. bindings between user interactions and (undoable) commands.
+ * @param <A> The type of the command that will produce this widget binding.
+ * @param <I> The type of the interaction that will use this widget binding.
  * @author Arnaud BLOUIN
  */
 export abstract class WidgetBindingImpl<C extends CommandImpl, I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>
@@ -42,6 +36,8 @@ export abstract class WidgetBindingImpl<C extends CommandImpl, I extends Interac
     protected asLogBinding: boolean;
 
     protected asLogCmd: boolean;
+
+    protected activated: boolean;
 
     /**
      * The source interaction.
@@ -69,14 +65,12 @@ export abstract class WidgetBindingImpl<C extends CommandImpl, I extends Interac
     protected readonly cmdProducer: (i?: D) => C;
 
      /**
-     * Creates a widget binding. This constructor must initialise the interaction. The binding is (de-)activated if the given
-     * instrument is (de-)activated.
+     * Creates a widget binding. This constructor must initialise the interaction.
      * @param exec Specifies whether the command must be execute or update on each evolution of the interaction.
      * @param cmdProducer The type of the command that will be created. Used to instantiate the command by reflexivity.
      * The class must be public and must have a constructor with no parameter.
      * @param interaction The user interaction of the binding.
      * @param widgets The widgets concerned by the binding. Cannot be null.
-     * @throws IllegalArgumentException If the given interaction or instrument is null.
      */
     protected constructor(exec: boolean, interaction: I, cmdProducer: (i?: D) => C, widgets: Array<EventTarget>) {
         this.asLogBinding = false;
@@ -86,7 +80,6 @@ export abstract class WidgetBindingImpl<C extends CommandImpl, I extends Interac
         this.cmdProducer = cmdProducer;
         this.interaction = interaction;
         this.cmd = undefined;
-        // this.instrument = ins;
         this.execute = exec;
         this.interaction.getFsm().addHandler(this);
         this.setActivated(true);
@@ -124,14 +117,29 @@ export abstract class WidgetBindingImpl<C extends CommandImpl, I extends Interac
      * creates the command of the widget binding. If the attribute 'cmd' is not null, nothing will be done.
      * @return {CommandImpl} The created command.
      */
-    protected map(): C {
+    protected createCommand(): C {
         return this.cmdProducer(this.interaction.getData());
     }
 
-    public abstract first(): void;
+    public first(): void {
+		// to override.
+	}
 
     public then(): void {
+        // to override.
     }
+
+	public end(): void {
+		// to override.
+	}
+
+	public cancel(): void {
+		// to override.
+	}
+
+	public endOrCancel(): void {
+		// to override.
+	}
 
     public getInteraction(): I {
         return this.interaction;
@@ -148,7 +156,7 @@ export abstract class WidgetBindingImpl<C extends CommandImpl, I extends Interac
      * @return {boolean}
      */
     public isActivated(): boolean {
-        return true; //this.instrument.isActivated();
+        return this.activated;
     }
 
     /**
@@ -177,23 +185,6 @@ export abstract class WidgetBindingImpl<C extends CommandImpl, I extends Interac
 
     private unbindCmdAttributesClass(clazz: Object): void {
         //FIXME
-        // java.util.Arrays.stream<any>(clazz.getDeclaredFields()).filter((field) =>
-        // field.isAnnotationPresent("AutoUnbind") && "javafx.beans.property.Property".isAssignableFrom(field.getType())).
-        // forEach((field) => {
-        //     try {
-        //         let access : boolean = field.isAccessible();
-        //         let o : any = /* get */this.cmd[field.name];
-        //         if(o instanceof Property) {
-        //             (<javafx.beans.property.Property<any>><any>o).unbind();
-        //         }
-        //     } catch(ex) {
-        //         console.error(ex.message, ex);
-        //     };
-        // });
-        // let superClass : any = clazz.getSuperclass();
-        // if(superClass !== undefined && superClass !== ActionImpl && ActionImpl.isAssignableFrom(superClass)) {
-        //     this.unbindActionAttributesClass(<any>superClass);
-        // }
     }
 
     /**
@@ -209,7 +200,7 @@ export abstract class WidgetBindingImpl<C extends CommandImpl, I extends Interac
                 catCommand.info(`Command ${this.cmd.constructor.name} cancelled`);
             }
             this.unbindCmdAttributes();
-            // this.instrument.onCmdCancelled(this.cmd);
+
             if (this.isExecute() && this.cmd.hadEffect()) {
                 if (isUndoableType(this.cmd)) {
                     this.cmd.undo();
@@ -221,7 +212,8 @@ export abstract class WidgetBindingImpl<C extends CommandImpl, I extends Interac
                 }
             }
             this.cmd = undefined;
-            // this.instrument.interimFeedback();
+            this.cancel();
+            this.endOrCancel();
         }
     }
 
@@ -229,17 +221,21 @@ export abstract class WidgetBindingImpl<C extends CommandImpl, I extends Interac
      *
      */
     public fsmStarts(): void {
-        const ok: boolean = this.cmd === undefined && this.isActivated() && this.when();
+        if (!this.isActivated()) {
+			return;
+        }
+
+        const ok: boolean = this.when();
+
         if (this.asLogBinding) {
             catBinder.info(`Starting binding: ${ok}`);
         }
         if (ok) {
-            this.cmd = this.map();
+            this.cmd = this.createCommand();
             this.first();
             if (this.asLogCmd) {
                 catCommand.info(`Command created and init: ${this.cmd.constructor.name}`);
             }
-            this.feedback();
         } else {
             if (this.isStrictStart()) {
                 if (this.asLogBinding) {
@@ -254,13 +250,17 @@ export abstract class WidgetBindingImpl<C extends CommandImpl, I extends Interac
      *
      */
     public fsmStops(): void {
+        if (!this.isActivated()) {
+			return;
+        }
+
         const ok: boolean = this.when();
         if (this.asLogBinding) {
             catBinder.info(`Binding stops with condition: ${ok}`);
         }
         if (ok) {
             if (this.cmd === undefined) {
-                this.cmd = this.map();
+                this.cmd = this.createCommand();
                 this.first();
                 if (this.asLogCmd) {
                     catCommand.info(`Command created and init: ${this.cmd.constructor.name}`);
@@ -275,7 +275,6 @@ export abstract class WidgetBindingImpl<C extends CommandImpl, I extends Interac
             this.executeCmd(this.cmd, this.async);
             this.unbindCmdAttributes();
             this.cmd = undefined;
-            // this.instrument.interimFeedback();
         } else {
             if (this.cmd !== undefined) {
                 if (this.asLogCmd) {
@@ -283,9 +282,7 @@ export abstract class WidgetBindingImpl<C extends CommandImpl, I extends Interac
                 }
                 this.cmd.cancel();
                 this.unbindCmdAttributes();
-                // this.instrument.onCmdCancelled(this.cmd);
                 this.cmd = undefined;
-                // this.instrument.interimFeedback();
             }
         }
     }
@@ -307,9 +304,9 @@ export abstract class WidgetBindingImpl<C extends CommandImpl, I extends Interac
             catCommand.info(`Command execution did it: ${ok}`);
         }
         if (ok) {
-            // this.instrument.onCmdExecuted(cmd);
             cmd.done();
-            // this.instrument.onCmdDone(cmd);
+            this.end();
+            this.endOrCancel();
         }
         const hadEffect: boolean = cmd.hadEffect();
         if (this.asLogCmd) {
@@ -317,8 +314,7 @@ export abstract class WidgetBindingImpl<C extends CommandImpl, I extends Interac
         }
         if (hadEffect) {
             if (cmd.getRegistrationPolicy() !== RegistrationPolicy.NONE) {
-                CommandsRegistry.INSTANCE.addCommand(cmd); //, this.instrument
-                // this.instrument.onCmdAdded(cmd);
+                CommandsRegistry.INSTANCE.addCommand(cmd);
             } else {
                 CommandsRegistry.INSTANCE.unregisterCmd(cmd);
             }
@@ -327,13 +323,17 @@ export abstract class WidgetBindingImpl<C extends CommandImpl, I extends Interac
     }
 
     public fsmUpdates(): void {
+        if (!this.isActivated()) {
+			return;
+        }
+
         const ok: boolean = this.when();
         if (this.asLogBinding) {
             catBinder.info(`Binding updates with condition: ${ok}`);
         }
         if (ok) {
             if (this.cmd === undefined) {
-                this.cmd = this.map();
+                this.cmd = this.createCommand();
                 if (this.asLogCmd) {
                     catCommand.info(`Creation of command : ${this.cmd.constructor.name}`);
                 }
@@ -348,9 +348,7 @@ export abstract class WidgetBindingImpl<C extends CommandImpl, I extends Interac
                 if (this.asLogCmd) {
                     catCommand.info(`Command ${this.cmd.constructor.name} executed`);
                 }
-                // this.instrument.onCmdExecuted(this.cmd);
             }
-            this.feedback();
         }
     }
 
@@ -368,21 +366,22 @@ export abstract class WidgetBindingImpl<C extends CommandImpl, I extends Interac
         return this.execute;
     }
 
-    /**
-     *
-     */
-    public feedback(): void {
-    }
 
     /**
      *
-     * @param {boolean} active
+     * @param {boolean} activated
      */
-    public setActivated(active: boolean): void {
+    public setActivated(activated: boolean): void {
         if (this.asLogBinding) {
-            catBinder.info(`Binding Activated: ${active}`);
+            catBinder.info(`Binding Activated: ${activated}`);
         }
-        this.interaction.setActivated(active);
+        this.activated = activated;
+        this.interaction.setActivated(activated);
+        if (!this.activated && this.cmd !== undefined) {
+            this.unbindCmdAttributes();
+            this.cmd.flush();
+            this.cmd = undefined;
+		}
     }
 
     public setLogBinding(log: boolean) {

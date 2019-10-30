@@ -12,13 +12,11 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {ErrorNotifier} from "./ErrorNotifier";
 
 /**
  * The singleton ErrorCatcher collects errors.
  * The ErrorCatcher sends the gathered exception to an ErrorNotifier (if one is defined).
  * @author Arnaud BLOUIN
- * @since 0.2
  */
 export class ErrorCatcher {
     /**
@@ -29,36 +27,33 @@ export class ErrorCatcher {
     /**
      * The notifier object.
      */
-    private notifier: ErrorNotifier | undefined;
+    private notifier: ((err: Error) => void) | undefined;
 
     private constructor() {
     }
 
     /**
      * Sets the notifier that will be notified about the collected exceptions.
-     * @param {*} newNotifier The notifier that will be notified the collected exceptions. Can be null.
-     * @since 0.2
+     * @param {*} newNotifier The notifier that will be notified the collected exceptions. Can be undefined.
      */
-    public setNotifier(newNotifier: ErrorNotifier): void {
+    public setNotifier(newNotifier: ((err: Error) => void) | undefined): void {
         this.notifier = newNotifier;
     }
 
     /**
      * @return {*} The notifier that is notified about the collected exceptions.
-     * @since 0.2
      */
-    public getErrorNotifier(): ErrorNotifier | undefined {
+    public getErrorNotifier(): ((err: Error) => void) | undefined {
         return this.notifier;
     }
 
     /**
      * Gathers exceptions. The notifier is then notified of the exceptions (if defined).
      * @param {Error} exception The errors to gather.
-     * @since 0.1
      */
     public reportError(exception: Error): void {
         if (this.notifier !== undefined) {
-            this.notifier.onException(exception);
+            this.notifier(exception);
         }
     }
 }

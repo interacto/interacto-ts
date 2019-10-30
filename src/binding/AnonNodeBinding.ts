@@ -88,8 +88,9 @@ export class AnonNodeBinding<C extends CommandImpl, I extends InteractionImpl<D,
         }
     }
 
-    public map(): C {
-        this.cmdProducer === undefined ? this.currentCmd = super.map() : this.currentCmd = this.cmdProducer(this.interaction.getData());
+    public createCommand(): C {
+        this.cmdProducer === undefined ? this.currentCmd = super.createCommand() :
+            this.currentCmd = this.cmdProducer(this.interaction.getData());
         return this.currentCmd;
     }
 
