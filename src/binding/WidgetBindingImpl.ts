@@ -64,7 +64,7 @@ export abstract class WidgetBindingImpl<C extends Command, I extends Interaction
     protected readonly cmdProducer: (i?: D) => C;
 
      /**
-     * Creates a widget binding. This constructor must initialise the interaction.
+     * Creates a widget binding.
      * @param continuousExecution Specifies whether the command must be executed on each step of the interaction.
      * @param cmdProducer The type of the command that will be created. Used to instantiate the command by reflexivity.
      * The class must be public and must have a constructor with no parameter.
@@ -80,8 +80,8 @@ export abstract class WidgetBindingImpl<C extends Command, I extends Interaction
         this.interaction = interaction;
         this.cmd = undefined;
         this.continuousCmdExec = continuousExecution;
+        this.activated = true;
         this.interaction.getFsm().addHandler(this);
-        this.setActivated(true);
         interaction.registerToNodes(widgets);
     }
 
