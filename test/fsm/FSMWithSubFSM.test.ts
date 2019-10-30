@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {StubEvent, StubSubEvent1, StubSubEvent2} from "./StubEvent";
+import {StubSubEvent1, StubSubEvent2} from "./StubEvent";
 import {FSM} from "../../src/fsm/FSM";
 import {CancellingState} from "../../src/fsm/CancellingState";
 import {SubStubTransition1, SubStubTransition2} from "./StubTransitionOK";
@@ -25,14 +25,14 @@ import {SubFSMTransition} from "../../src/fsm/SubFSMTransition";
 jest.mock("./StubFSMHandler");
 
 
-let fsm: FSM<StubEvent>;
+let fsm: FSM;
 let handler: FSMHandler;
-let mainfsm: FSM<StubEvent>;
-let s1: StdState<StubEvent>;
-let subS1: StdState<StubEvent>;
-let subS2: StdState<StubEvent>;
-let subT: TerminalState<StubEvent>;
-let subC: CancellingState<StubEvent>;
+let mainfsm: FSM;
+let s1: StdState;
+let subS1: StdState;
+let subS2: StdState;
+let subT: TerminalState;
+let subC: CancellingState;
 
 beforeEach(() => {
     jest.clearAllMocks();
@@ -100,7 +100,7 @@ test("testReinitAlsoSubFSM", () => {
 });
 
 test("testExitSubGoIntoCancelling", () => {
-    const cancel: CancellingState<StubEvent> = new CancellingState(mainfsm, "cancel1");
+    const cancel: CancellingState = new CancellingState(mainfsm, "cancel1");
     mainfsm.addState(cancel);
     mainfsm.initState.clearTransitions();
     new SubFSMTransition(mainfsm.initState, cancel, fsm);
@@ -113,7 +113,7 @@ test("testExitSubGoIntoCancelling", () => {
 });
 
 test("testExitSubGoIntoTerminal", () => {
-    const terminal: TerminalState<StubEvent> = new TerminalState(mainfsm, "terminal1");
+    const terminal: TerminalState = new TerminalState(mainfsm, "terminal1");
     mainfsm.addState(terminal);
     mainfsm.initState.clearTransitions();
     new SubFSMTransition(mainfsm.initState, terminal, fsm);

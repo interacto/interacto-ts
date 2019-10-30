@@ -23,16 +23,16 @@ import {FSM} from "../../src/fsm/FSM";
 
 jest.mock("./StubFSMHandler");
 
-let fsm: FSM<StubEvent>;
-let std: StdState<StubEvent>;
-let terminal: TerminalState<StubEvent>;
-let cancel: CancellingState<StubEvent>;
+let fsm: FSM;
+let std: StdState;
+let terminal: TerminalState;
+let cancel: CancellingState;
 let iToS: StubTransitionOK;
 let handler: FSMHandler;
 
 beforeEach(() => {
     jest.clearAllMocks();
-    fsm = new FSM<StubEvent>();
+    fsm = new FSM();
     handler = new StubFSMHandler();
     fsm.addHandler(handler);
     fsm.log(true);

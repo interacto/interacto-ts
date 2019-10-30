@@ -15,15 +15,14 @@
 import {FSM} from "../../src/fsm/FSM";
 import {StateImpl} from "../../src/fsm/StateImpl";
 import {StdState} from "../../src/fsm/StdState";
-import {StubEvent} from "./StubEvent";
 import "jest";
 
-let state: StateImpl<StubEvent>;
-let fsm: FSM<StubEvent>;
+let state: StateImpl;
+let fsm: FSM;
 
 beforeEach(() => {
-    fsm = new FSM<StubEvent>();
-    state = new StdState<StubEvent>(fsm, "s1");
+    fsm = new FSM();
+    state = new StdState(fsm, "s1");
 });
 
 test("testFSM", () => {

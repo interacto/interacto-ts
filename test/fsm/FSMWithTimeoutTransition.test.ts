@@ -24,11 +24,11 @@ import {CancelFSMException} from "../../src/fsm/CancelFSMException";
 
 jest.mock("./StubFSMHandler");
 
-let fsm: FSM<StubEvent>;
+let fsm: FSM;
 let handler: FSMHandler;
-let std: StdState<StubEvent>;
-let std2: StdState<StubEvent>;
-let terminal: TerminalState<StubEvent>;
+let std: StdState;
+let std2: StdState;
+let terminal: TerminalState;
 
 beforeEach(() => {
     jest.clearAllMocks();

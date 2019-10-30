@@ -17,10 +17,10 @@ import {StubEvent, StubSubEvent1, StubSubEvent2, StubSubEvent3} from "./StubEven
 import {InputState} from "../../src/fsm/InputState";
 import {OutputState} from "../../src/fsm/OutputState";
 
-export class StubTransitionOK extends Transition<StubEvent> {
+export class StubTransitionOK extends Transition {
     public guard: boolean;
 
-    public constructor(srcState: OutputState<StubEvent>, tgtState: InputState<StubEvent>, guard ?: boolean) {
+    public constructor(srcState: OutputState, tgtState: InputState, guard ?: boolean) {
         super(srcState, tgtState);
         this.guard = guard === undefined ? true : guard;
     }
@@ -39,7 +39,7 @@ export class StubTransitionOK extends Transition<StubEvent> {
 }
 
 export class SubStubTransition1 extends StubTransitionOK {
-    public constructor(srcState: OutputState<StubEvent>, tgtState: InputState<StubEvent>, guard ?: boolean) {
+    public constructor(srcState: OutputState, tgtState: InputState, guard ?: boolean) {
         super(srcState, tgtState, guard);
     }
 
@@ -53,7 +53,7 @@ export class SubStubTransition1 extends StubTransitionOK {
 }
 
 export class SubStubTransition2 extends StubTransitionOK {
-    public constructor(srcState: OutputState<StubEvent>, tgtState: InputState<StubEvent>, guard ?: boolean) {
+    public constructor(srcState: OutputState, tgtState: InputState, guard ?: boolean) {
         super(srcState, tgtState, guard);
     }
 
@@ -67,7 +67,7 @@ export class SubStubTransition2 extends StubTransitionOK {
 }
 
 export class SubStubTransition3 extends StubTransitionOK {
-    public constructor(srcState: OutputState<StubEvent>, tgtState: InputState<StubEvent>, guard ?: boolean) {
+    public constructor(srcState: OutputState, tgtState: InputState, guard ?: boolean) {
         super(srcState, tgtState, guard);
     }
 

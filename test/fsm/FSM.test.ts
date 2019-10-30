@@ -12,16 +12,15 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {StubEvent} from "./StubEvent";
 import {FSM} from "../../src/fsm/FSM";
 import {InitState} from "../../src/fsm/InitState";
 import "jest";
 import {StdState} from "../../src/fsm/StdState";
 
-let fsm : FSM<StubEvent>;
+let fsm : FSM;
 
 beforeEach(() => {
-    fsm = new FSM<StubEvent>();
+    fsm = new FSM();
 });
 
 test("testInitState", () => {
@@ -42,7 +41,7 @@ test("testCurrentStateAtStart", () => {
 });
 
 test("testAddState", () => {
-    const state : StdState<StubEvent> = new StdState<StubEvent>(fsm, "s1");
+    const state : StdState = new StdState(fsm, "s1");
     fsm.addState(state);
     expect(fsm.getStates().length).toBe(2);
 });

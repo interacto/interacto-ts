@@ -12,7 +12,6 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {StubEvent} from "./StubEvent";
 import {FSM} from "../../src/fsm/FSM";
 import {InputState} from "../../src/fsm/InputState";
 import {OutputState} from "../../src/fsm/OutputState";
@@ -22,20 +21,20 @@ import {StdState} from "../../src/fsm/StdState";
 jest.mock("../../src/fsm/FSM");
 jest.mock("../../src/fsm/StdState");
 
-let evt: TimeoutTransition<StubEvent>;
-let src: OutputState<StubEvent>;
-let tgt: InputState<StubEvent>;
-let fsm: FSM<StubEvent>;
+let evt: TimeoutTransition;
+let src: OutputState;
+let tgt: InputState;
+let fsm: FSM;
 
 beforeEach(() => {
     jest.clearAllMocks();
     jest.useFakeTimers();
-    fsm = new FSM<StubEvent>();
-    src = new StdState<StubEvent>(fsm, "src");
-    tgt = new StdState<StubEvent>(fsm, "tgt");
+    fsm = new FSM();
+    src = new StdState(fsm, "src");
+    tgt = new StdState(fsm, "tgt");
     src.getFSM = jest.fn().mockReturnValue(fsm);
     tgt.getFSM = jest.fn().mockReturnValue(fsm);
-    evt = new TimeoutTransition<StubEvent>(src, tgt, () => 500);
+    evt = new TimeoutTransition(src, tgt, () => 500);
 });
 
 test("testIsGuardOKAfterTimeout", () => {

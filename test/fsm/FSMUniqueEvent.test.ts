@@ -21,7 +21,7 @@ import {StubTransitionOK} from "./StubTransitionOK";
 import {FSMHandler} from "../../src/fsm/FSMHandler";
 import {StubFSMHandler} from "./StubFSMHandler";
 import {CancelFSMException} from "../../src/fsm/CancelFSMException";
-import { OutputState } from "../../src/fsm/OutputState";
+import { OutputState } from "../../src";
 
 jest.mock("./StubFSMHandler");
 
@@ -65,7 +65,7 @@ test("testFireEventChangeState", () => {
 });
 
 test("testGetterCurrentState", () => {
-    const states = [];
+    const states = Array<OutputState>();
     const dispo = fsm.currentStateObservable().subscribe(elt => states.push(elt[1]));
     fsm.process(new StubEvent());
     dispo.unsubscribe();

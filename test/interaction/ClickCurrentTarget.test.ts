@@ -34,7 +34,7 @@ beforeEach(() => {
     document.documentElement.innerHTML = "<html><svg><g id='gro'><circle r=\"1\" id='circle'></circle><text></text></g></svg></html>";
     const elt = document.getElementById("gro");
     const elt2 = document.getElementById("circle");
-    if (elt && elt2 !== null) {
+    if (elt !== null && elt2 !== null) {
         groupe = elt;
         circle = elt2;
     }

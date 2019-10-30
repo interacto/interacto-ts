@@ -12,7 +12,10 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export class StubEvent {
+export class StubEvent extends Event {
+    constructor() {
+        super("stubevent");
+    }
 }
 
 export class StubSubEvent1 extends StubEvent {

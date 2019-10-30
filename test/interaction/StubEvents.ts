@@ -53,7 +53,6 @@ export function createUIEvent(type: string): UIEvent {
         detail : 0,
         bubbles: true,
         cancelable: false,
-        scoped: true,
         view: window
     });
 }

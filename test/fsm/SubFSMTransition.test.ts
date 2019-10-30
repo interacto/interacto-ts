@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {StubEvent, StubSubEvent1, StubSubEvent2} from "./StubEvent";
+import {StubSubEvent1, StubSubEvent2} from "./StubEvent";
 import {TerminalState} from "../../src/fsm/TerminalState";
 import {StdState} from "../../src/fsm/StdState";
 import {FSM} from "../../src/fsm/FSM";
@@ -23,19 +23,19 @@ import {Optional} from "../../src/util/Optional";
 
 jest.mock("../../src/fsm/StdState");
 
-let tr: SubFSMTransition<StubEvent>;
-let fsm: FSM<StubEvent>;
-let mainfsm: FSM<StubEvent>;
-let s1: StdState<StubEvent>;
-let s2: StdState<StubEvent>;
-let subS: TerminalState<StubEvent>;
+let tr: SubFSMTransition;
+let fsm: FSM;
+let mainfsm: FSM;
+let s1: StdState;
+let s2: StdState;
+let subS: TerminalState;
 
 beforeEach(() => {
     jest.clearAllMocks();
     fsm = new FSM();
     mainfsm = new FSM();
-    s1 = new StdState<StubEvent>(mainfsm, "s1");
-    s2 = new StdState<StubEvent>(mainfsm, "s2");
+    s1 = new StdState(mainfsm, "s1");
+    s2 = new StdState(mainfsm, "s2");
     s1.getFSM = jest.fn().mockReturnValue(mainfsm);
     s2.getFSM = jest.fn().mockReturnValue(mainfsm);
     mainfsm.addState(s1);
@@ -69,13 +69,13 @@ test("testGuardKOFirstEvent", () => {
 });
 
 test("testExecuteFirstEventReturnsSubState", () => {
-    const state : Optional<InputState<StubEvent>> = tr.execute(new StubSubEvent1());
+    const state : Optional<InputState> = tr.execute(new StubSubEvent1());
     expect(state.isPresent()).toBeTruthy();
     expect(state.get()).toEqual(subS);
 });
 
 test("testExecuteFirstEventKO", () => {
-    const state : Optional<InputState<StubEvent>> = tr.execute(new StubSubEvent2());
+    const state : Optional<InputState> = tr.execute(new StubSubEvent2());
     expect(state.isPresent()).toBeFalsy();
 });
 

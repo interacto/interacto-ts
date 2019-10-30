@@ -15,19 +15,18 @@
 import {StdState} from "../../src/fsm/StdState";
 import {Transition} from "../../src/fsm/Transition";
 import {FSM} from "../../src/fsm/FSM";
-import {StubEvent} from "./StubEvent";
 import {StubTransitionOK} from "./StubTransitionOK";
 import "jest";
 
-let tr: Transition<StubEvent>;
-let state1: StdState<StubEvent>;
-let state2: StdState<StubEvent>;
+let tr: Transition;
+let state1: StdState;
+let state2: StdState;
 
 
 beforeEach(() => {
-    const fsm: FSM<StubEvent> = new FSM<StubEvent>();
-    state1 = new StdState<StubEvent>(fsm, "s1");
-    state2 = new StdState<StubEvent>(fsm, "s2");
+    const fsm: FSM = new FSM();
+    state1 = new StdState(fsm, "s1");
+    state2 = new StdState(fsm, "s2");
     tr = new StubTransitionOK(state1, state2);
 });
 
