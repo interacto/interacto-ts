@@ -24,6 +24,17 @@ import {CommandsRegistry} from "./CommandsRegistry";
  */
 export abstract class CommandImpl implements Command {
     /**
+	 * Execute if possible (canDo) the given command (if not null) and flush it.
+	 * @param cmd The command to execute. Nothing done if null.
+	 */
+	public static executeAndFlush(cmd: Command): void {
+		if (cmd.canDo()) {
+			cmd.doIt();
+		}
+		cmd.flush();
+    }
+
+    /**
      * The state of the command.
      */
     protected status: CmdStatus;

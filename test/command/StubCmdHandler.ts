@@ -11,20 +11,23 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
+import { CommandHandler } from "../../src";
 
-import {CommandImpl} from "../../src/command/CommandImpl";
-
-export class StubCmd extends CommandImpl {
-    public candoValue = false;
-
-    public constructor() {
-        super();
+export class StubCmdHandler implements CommandHandler {
+    public onCmdAdded(cmd: import("../../src").Command): void {
     }
-
-    protected doCmdBody(): void {
+    public onCmdCancelled(cmd: import("../../src").Command): void {
     }
-
-    public canDo(): boolean {
-        return this.candoValue;
+    public onCmdExecuted(cmd: import("../../src").Command): void {
+    }
+    public onCmdDone(cmd: import("../../src").Command): void {
+    }
+    public onUndoableCleared(): void {
+    }
+    public onUndoableAdded(undoable: import("../../src").Undoable): void {
+    }
+    public onUndoableUndo(undoable: import("../../src").Undoable): void {
+    }
+    public onUndoableRedo(undoable: import("../../src").Undoable): void {
     }
 }
