@@ -21,13 +21,13 @@ import {CommandImpl} from "../CommandImpl";
  * @extends CommandImpl
  * @author Arnaud Blouin
  */
-export abstract class ModifyValue extends CommandImpl {
+export abstract class ModifyValue<T> extends CommandImpl {
     /**
      * The new value of the property.
      */
-    protected value: Object | undefined;
+    protected value: T | undefined;
 
-    protected constructor(value?: Object) {
+    protected constructor(value?: T) {
         super();
         this.value = value;
     }
@@ -52,7 +52,7 @@ export abstract class ModifyValue extends CommandImpl {
      * Sets the new value of the parameter to change.
      * @param {*} newValue The new value.
      */
-    public setValue(newValue: Object): void {
+    public setValue(newValue: T): void {
         this.value = newValue;
     }
 
@@ -61,7 +61,7 @@ export abstract class ModifyValue extends CommandImpl {
      * @param {*} obj The value to set. Must not be null.
      * @throws NullPointerException If the given value is null.
      */
-    public abstract applyValue(obj: Object): void;
+    public abstract applyValue(obj: T): void;
 
     /**
      * @return {boolean} True: the object to modified supports the selected property.
