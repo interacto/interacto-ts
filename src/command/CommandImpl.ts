@@ -135,9 +135,5 @@ export abstract class CommandImpl implements Command {
         return this.status;
     }
 
-    public followingCmds(): Array<Command> {
-        return [];
-    }
-
     public abstract canDo(): boolean;
 }

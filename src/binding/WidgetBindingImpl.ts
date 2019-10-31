@@ -317,7 +317,6 @@ export abstract class WidgetBindingImpl<C extends Command, I extends Interaction
             } else {
                 CommandsRegistry.INSTANCE.unregisterCmd(cmd);
             }
-            cmd.followingCmds().forEach(cmdFollow => this.executeCmd(cmdFollow, false));
         }
     }
 

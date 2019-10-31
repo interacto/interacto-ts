@@ -85,16 +85,6 @@ export interface Command {
      * @since 0.2
      */
     getStatus(): CmdStatus;
-
-    /**
-     * The execution of the command may provoke the execution of other commands.
-     * For instance with a drawing editor, one may want that after having pasted shapes, the new shapes must be selected.
-     * So, the command PasteShapes will be followed by a command SelectShapes.
-     * This is the goal of the operation.
-     * This operation creates and initialises the command that will be executed after each final execution of the current command.
-     * @return {*[]} A list of commands that must be executed afterward. Cannot be null.
-     */
-    followingCmds(): Array<Command>;
 }
 
 /**
