@@ -1,4 +1,4 @@
-[![Build Status](https://ci.inria.fr/malai/job/malai_typescript/badge/icon)](https://ci.inria.fr/malai/job/malai_typescript/) 
+[![Build Status](https://ci.inria.fr/malai/buildStatus/icon?job=interacto-ts-api)](https://ci.inria.fr/malai/view/Latexdraw/job/interacto-ts-api) 
 # Interacto :
 The TypeScript implementation of [Interacto](https://github.com/interacto/interacto-ts-api).
 
