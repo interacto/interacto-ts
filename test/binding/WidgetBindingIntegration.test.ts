@@ -147,3 +147,32 @@ test("testWhenOKCanDoButNoEffect", () => {
     expect(noEffect).toEqual(1);
     expect(cannotExec).toEqual(0);
 });
+
+test("testProducedNone", () => {
+    cmd.candoValue = false;
+    const cmds = new Array<StubCmd>();
+    binding.produces().subscribe(elt => cmds.push(elt));
+
+    fsm.process(new StubSubEvent1());
+    expect(cmds.length).toEqual(0);
+});
+
+test("testProducedOne", () => {
+    const cmds = new Array<StubCmd>();
+    binding.produces().subscribe(elt => cmds.push(elt));
+
+    fsm.process(new StubSubEvent1());
+    expect(cmds.length).toEqual(1);
+});
+
+test("testProducedTwo", () => {
+    const cmds = new Array<StubCmd>();
+    binding.produces().subscribe(elt => cmds.push(elt));
+
+    fsm.process(new StubSubEvent1());
+    cmd = new StubCmd();
+    cmd.candoValue = true;
+    fsm.process(new StubSubEvent1());
+    expect(cmds.length).toEqual(2);
+    expect(cmds[0]).not.toBe(cmds[1]);
+});

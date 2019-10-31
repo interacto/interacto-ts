@@ -22,6 +22,7 @@ import {Command, RegistrationPolicy, CmdStatus} from "../command/Command";
 import {CommandsRegistry} from "../command/CommandsRegistry";
 import {InteractionData} from "../interaction/InteractionData";
 import { InteractionImpl } from "../interaction/InteractionImpl";
+import { Subject, Observable } from "rxjs";
 
 /**
  * The base class to do widget bindings, i.e. bindings between user interactions and (undoable) commands.
@@ -30,7 +31,7 @@ import { InteractionImpl } from "../interaction/InteractionImpl";
  * @author Arnaud BLOUIN
  */
 export abstract class WidgetBindingImpl<C extends Command, I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>
-            implements WidgetBinding {
+            implements WidgetBinding<C> {
 
     protected asLogBinding: boolean;
 
@@ -63,6 +64,8 @@ export abstract class WidgetBindingImpl<C extends Command, I extends Interaction
      */
     protected readonly cmdProducer: (i?: D) => C;
 
+    protected readonly cmdsProduced: Subject<C>;
+
      /**
      * Creates a widget binding.
      * @param continuousExecution Specifies whether the command must be executed on each step of the interaction.
@@ -76,6 +79,7 @@ export abstract class WidgetBindingImpl<C extends Command, I extends Interaction
         this.asLogCmd = false;
         this.continuousCmdExec = false;
         this.async = false;
+        this.cmdsProduced = new Subject();
         this.cmdProducer = cmdProducer;
         this.interaction = interaction;
         this.cmd = undefined;
@@ -353,7 +357,7 @@ export abstract class WidgetBindingImpl<C extends Command, I extends Interaction
 		return ok;
 	}
 
-    private executeCmd(cmd: Command, async: boolean): void {
+    private executeCmd(cmd: C, async: boolean): void {
         if (async) {
             this.executeCmdAsync(cmd);
         } else {
@@ -361,11 +365,11 @@ export abstract class WidgetBindingImpl<C extends Command, I extends Interaction
         }
     }
 
-    protected executeCmdAsync(cmd: Command): void {
+    protected executeCmdAsync(cmd: C): void {
         //TODO
     }
 
-    protected afterCmdExecuted(cmd: Command, ok: boolean): void {
+    protected afterCmdExecuted(cmd: C, ok: boolean): void {
         if ( this.cmd === undefined) {
             return;
         }
@@ -387,6 +391,7 @@ export abstract class WidgetBindingImpl<C extends Command, I extends Interaction
 
 		// For commands executed at least one time
         this.cmd.done();
+        this.cmdsProduced.next(cmd);
 
         const hadEffect: boolean = cmd.hadEffect();
 
@@ -408,6 +413,7 @@ export abstract class WidgetBindingImpl<C extends Command, I extends Interaction
 
     public uninstallBinding(): void {
         this.setActivated(false);
+        this.cmdsProduced.complete();
         this.asLogBinding = false;
         this.asLogCmd = false;
     }
@@ -446,4 +452,7 @@ export abstract class WidgetBindingImpl<C extends Command, I extends Interaction
         this.asLogCmd = log;
     }
 
+    public produces(): Observable<C> {
+		return this.cmdsProduced;
+	}
 }

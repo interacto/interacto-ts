@@ -17,6 +17,7 @@ import {UndoCollector} from "../undo/UndoCollector";
 import {MArray} from "../util/ArrayUtil";
 import {Command, RegistrationPolicy} from "./Command";
 import {CommandHandler} from "./CommandHandler";
+import { Subject, Observable } from "rxjs";
 
 /**
  * A register of commands.
@@ -47,11 +48,19 @@ export class CommandsRegistry {
      */
     private sizeMax: number;
 
+    private readonly cmdPublisher: Subject<Command>;
+
     constructor() {
         this.cmds = new MArray();
         this.handlers = new MArray();
         this.sizeMax = 50;
+        this.cmdPublisher = new Subject();
     }
+
+    /** An RX observable objects that will provide the commands produced by the binding. */
+	public commands(): Observable<Command> {
+		return this.cmdPublisher;
+	}
 
     public getHandlers(): Array<CommandHandler> {
         return [...this.handlers];
@@ -76,7 +85,7 @@ export class CommandsRegistry {
     /**
      * @return {*[]} The stored commands. Cannot be null. Because of concurrency, you should not modify this list.
      */
-    public getActions(): Array<Command> {
+    public getCommands(): Array<Command> {
         return this.cmds;
     }
 
@@ -122,6 +131,7 @@ export class CommandsRegistry {
             }
 
             this.cmds.push(cmd);
+            this.cmdPublisher.next(cmd);
 
             this.handlers.forEach(handler => handler.onCmdAdded(cmd));
 
