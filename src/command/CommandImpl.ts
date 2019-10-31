@@ -135,5 +135,7 @@ export abstract class CommandImpl implements Command {
         return this.status;
     }
 
-    public abstract canDo(): boolean;
+    public canDo(): boolean {
+		return true;
+	}
 }
