@@ -39,7 +39,7 @@ export class KeysDataImpl implements KeysData {
     }
 
     public getTarget(): Optional<EventTarget> {
-        return Optional.ofNullable(this.target);
+        return Optional.of(this.target);
     }
 
     public setKeysDataTarget(event: KeyboardEvent) {

@@ -27,7 +27,6 @@
     "no-conditional-assignment": true,
     "no-for-in-array": true,
     "no-inferred-empty-object-type": true,
-    "no-use-before-declare": true,
     "no-var-keyword": true,
     "restrict-plus-operands": true,
     "strict-boolean-expressions": true,

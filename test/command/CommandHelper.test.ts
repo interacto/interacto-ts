@@ -23,7 +23,6 @@ afterEach(() => {
     jest.clearAllMocks();
     CommandsRegistry.INSTANCE.clear();
     UndoCollector.INSTANCE.clear();
-    UndoCollector.INSTANCE.clearHandlers();
 });
 
 test("testExecuteAndFlushCannotDo", () => {

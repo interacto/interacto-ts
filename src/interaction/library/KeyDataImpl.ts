@@ -34,7 +34,7 @@ export class KeyDataImpl implements KeyData {
     }
 
     public getTarget(): Optional<EventTarget> {
-        return Optional.ofNullable(this.target);
+        return Optional.of(this.target);
     }
 
     public getKey(): String {

@@ -16,7 +16,6 @@ import {isUndoableType} from "../undo/Undoable";
 import {UndoCollector} from "../undo/UndoCollector";
 import {MArray} from "../util/ArrayUtil";
 import {Command, RegistrationPolicy} from "./Command";
-import {CommandHandler} from "./CommandHandler";
 import { Subject, Observable } from "rxjs";
 
 /**
@@ -39,11 +38,6 @@ export class CommandsRegistry {
     private readonly cmds: MArray<Command>;
 
     /**
-     * The commands handler.
-     */
-    private readonly handlers: MArray<CommandHandler>;
-
-    /**
      * The max number of cleanable commands (cf. Action::getRegistrationPolicy) that can contain the register.
      */
     private sizeMax: number;
@@ -52,7 +46,6 @@ export class CommandsRegistry {
 
     constructor() {
         this.cmds = new MArray();
-        this.handlers = new MArray();
         this.sizeMax = 50;
         this.cmdPublisher = new Subject();
     }
@@ -61,26 +54,6 @@ export class CommandsRegistry {
 	public commands(): Observable<Command> {
 		return this.cmdPublisher;
 	}
-
-    public getHandlers(): Array<CommandHandler> {
-        return [...this.handlers];
-    }
-
-    /**
-     * Notifies handler that a command has been executed.
-     * @param {*} cmd The executed command.
-     */
-    public onActionExecuted(cmd: Command): void {
-        this.handlers.forEach(handler => handler.onCmdExecuted(cmd));
-    }
-
-    /**
-     * Notifies handler that a command ends.
-     * @param {*} cmd The ending command.
-     */
-    public onActionDone(cmd: Command): void {
-        this.handlers.forEach(handler => handler.onCmdDone(cmd));
-    }
 
     /**
      * @return {*[]} The stored commands. Cannot be null. Because of concurrency, you should not modify this list.
@@ -113,9 +86,8 @@ export class CommandsRegistry {
      * already added. Handlers are notified of the add of the given command. If Undoable, the command is
      * added to the undo collector as well.
      * @param {*} cmd The command to add. If null, nothing is done.
-     * @param {*} cmdHandler The handler that produced or is associated to the command.
      */
-    public addCommand(cmd: Command, cmdHandler?: CommandHandler): void {
+    public addCommand(cmd: Command): void {
         if (this.cmds.indexOf(cmd) < 0 &&
             (this.sizeMax > 0 || cmd.getRegistrationPolicy() === RegistrationPolicy.UNLIMITED)) {
             this.unregisterCmd(cmd);
@@ -133,10 +105,8 @@ export class CommandsRegistry {
             this.cmds.push(cmd);
             this.cmdPublisher.next(cmd);
 
-            this.handlers.forEach(handler => handler.onCmdAdded(cmd));
-
             if (isUndoableType(cmd)) {
-                UndoCollector.INSTANCE.add(cmd, cmdHandler);
+                UndoCollector.INSTANCE.add(cmd);
             }
         }
     }
@@ -150,28 +120,6 @@ export class CommandsRegistry {
         cmd.flush();
     }
 
-    /**
-     * Adds a command handler.
-     * @param {*} handler The handler to add.
-     */
-    public addHandler(handler: CommandHandler): void {
-        this.handlers.push(handler);
-    }
-
-    /**
-     * Removes the given handler.
-     * @param {*} handler The handler to remove.
-     */
-    public removeHandler(handler: CommandHandler): void {
-        this.handlers.push(handler);
-    }
-
-    /**
-     * Removes all the command handler.
-     */
-    public removeAllHandlers(): void {
-        this.handlers.clear();
-    }
 
     /**
      * Flushes and removes all the stored commands.
@@ -189,7 +137,6 @@ export class CommandsRegistry {
     public cancelAction(cmd: Command): void {
         cmd.cancel();
         this.cmds.remove(cmd);
-        this.handlers.forEach(handler => handler.onCmdCancelled(cmd));
         cmd.flush();
     }
 

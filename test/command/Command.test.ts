@@ -11,25 +11,17 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { CommandsRegistry, UndoCollector, CmdStatus, CommandHandler } from "../../src";
+import { CommandsRegistry, UndoCollector, CmdStatus } from "../../src";
 import { StubCmd } from "./StubCmd";
-import { StubCmdHandler } from "./StubCmdHandler";
-
-jest.mock("./StubCmdHandler");
 
 let cmd: StubCmd;
-let handler: CommandHandler;
 
 
 beforeEach(() => {
-    jest.clearAllMocks();
-    handler = new StubCmdHandler();
     cmd = new StubCmd();
     cmd.candoValue = true;
-    CommandsRegistry.INSTANCE.removeAllHandlers();
     CommandsRegistry.INSTANCE.clear();
     UndoCollector.INSTANCE.clear();
-    UndoCollector.INSTANCE.clearHandlers();
 });
 
 
@@ -69,13 +61,6 @@ test("testCommandCanDoItWhenCanDo", () => {
 test("testCommandCanDoItWhenCanDo", () => {
     cmd.doIt();
     expect(cmd.getStatus()).toEqual(CmdStatus.EXECUTED);
-});
-
-test("testNotifiedOnCommandExecuted", () => {
-    CommandsRegistry.INSTANCE.addHandler(handler);
-    cmd.doIt();
-    expect(handler.onCmdExecuted).toHaveBeenCalledTimes(1);
-    expect(handler.onCmdExecuted).toHaveBeenCalledWith(cmd);
 });
 
 test("testCommandHadEffectWhenDone", () => {
@@ -119,26 +104,15 @@ test("testCommandNotDoneWhenCancelled", () => {
     expect(cmd.getStatus()).toEqual(CmdStatus.CANCELLED);
 });
 
-test("testCommandNotDoneWhenDone", () => {
-    cmd.done();
-    CommandsRegistry.INSTANCE.addHandler(handler);
-    cmd.done();
-    expect(handler.onCmdDone).not.toBeCalled();
-});
-
 test("testCommandDoneWhenCreated", () => {
-    CommandsRegistry.INSTANCE.addHandler(handler);
     cmd.done();
     expect(cmd.getStatus()).toEqual(CmdStatus.DONE);
-    expect(handler.onCmdDone).toHaveBeenCalledTimes(1);
 });
 
 test("testCommandDoneWhenExecuted", () => {
     cmd.doIt();
-    CommandsRegistry.INSTANCE.addHandler(handler);
     cmd.done();
     expect(cmd.getStatus()).toEqual(CmdStatus.DONE);
-    expect(handler.onCmdDone).toHaveBeenCalledTimes(1);
 });
 
 test("testIsDoneWhenCreated", () => {

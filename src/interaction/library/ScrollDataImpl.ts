@@ -47,7 +47,7 @@ export class ScrollDataImpl implements ScrollData {
     }
 
     public getScrolledNode(): Optional<EventTarget> {
-        return Optional.ofNullable(this.scrolledNode);
+        return Optional.of(this.scrolledNode);
     }
 
     public setScrollData(event: UIEvent) {

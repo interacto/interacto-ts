@@ -73,7 +73,7 @@ export class PointDataImpl implements PointData {
     }
 
     public getSrcObject(): Optional<EventTarget> {
-        return Optional.ofNullable(this.srcObject);
+        return Optional.of(this.srcObject);
     }
 
     public getSrcScreenY(): number {
@@ -110,6 +110,6 @@ export class PointDataImpl implements PointData {
         this.setModifiersData(event);
     }
     public getCurrentTarget(): Optional<EventTarget> {
-        return Optional.ofNullable(this.currentTarget);
+        return Optional.of(this.currentTarget);
     }
 }

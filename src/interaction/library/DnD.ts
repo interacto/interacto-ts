@@ -255,7 +255,7 @@ export class DnD extends PointInteraction<SrcTgtPointsData, DnDFSM, Node> implem
     }
 
     public getTgtObject(): Optional<EventTarget> {
-        return Optional.ofNullable(this.tgtObject);
+        return Optional.of(this.tgtObject);
     }
 
 }

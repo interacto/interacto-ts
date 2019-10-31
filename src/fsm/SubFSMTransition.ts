@@ -83,7 +83,7 @@ export class SubFSMTransition extends Transition {
                 this.subFSM.addHandler(this.subFSMHandler);
                 this.src.getFSM().setCurrentSubFSM(this.subFSM);
                 this.subFSM.process(event);
-                return Optional.ofNullable(transition.get()).map(t => t.tgt);
+                return Optional.of(transition.get()).map(t => t.tgt);
             }
         }
         return Optional.empty<InputState>();
@@ -108,7 +108,7 @@ export class SubFSMTransition extends Transition {
     }
 
     private findTransition(event: Event): Optional<Transition> {
-        return Optional.ofNullable(this.subFSM.initState.getTransitions().find(tr => tr.accept(event)));
+        return Optional.of(this.subFSM.initState.getTransitions().find(tr => tr.accept(event)));
     }
 
     /**

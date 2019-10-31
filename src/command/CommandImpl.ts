@@ -14,7 +14,6 @@
 
 
 import {CmdStatus, Command, RegistrationPolicy} from "./Command";
-import {CommandsRegistry} from "./CommandsRegistry";
 
 /**
  * The default constructor.
@@ -71,7 +70,6 @@ export abstract class CommandImpl implements Command {
             ok = true;
             this.doCmdBody();
             this.status = CmdStatus.EXECUTED;
-            CommandsRegistry.INSTANCE.onActionExecuted(this);
         } else {
             ok = false;
         }
@@ -112,7 +110,6 @@ export abstract class CommandImpl implements Command {
     public done(): void {
         if (this.status === CmdStatus.CREATED || this.status === CmdStatus.EXECUTED) {
             this.status = CmdStatus.DONE;
-            CommandsRegistry.INSTANCE.onActionDone(this);
         }
     }
 
