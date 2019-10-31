@@ -98,7 +98,7 @@
     "prefer-object-spread": true,
     "array-type": [true, "generic"],
     "arrow-parens": [true, "ban-single-arg-parens"],
-    "cyclomatic-complexity": [true, 10],
+    "cyclomatic-complexity": [true, 11],
     "align": [true, "parameters", "statements"],
     "no-duplicate-imports": true,
     "prefer-const": true,

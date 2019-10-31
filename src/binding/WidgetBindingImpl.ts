@@ -18,7 +18,7 @@ import {isUndoableType} from "../undo/Undoable";
 import {catBinder, catCommand} from "../logging/ConfigLog";
 import {FSM} from "../fsm/FSM";
 import {MustBeUndoableCmdException} from "./MustBeUndoableCmdException";
-import {Command, RegistrationPolicy} from "../command/Command";
+import {Command, RegistrationPolicy, CmdStatus} from "../command/Command";
 import {CommandsRegistry} from "../command/CommandsRegistry";
 import {InteractionData} from "../interaction/InteractionData";
 import { InteractionImpl } from "../interaction/InteractionImpl";
@@ -138,6 +138,18 @@ export abstract class WidgetBindingImpl<C extends Command, I extends Interaction
 
 	public endOrCancel(): void {
 		// to override.
+    }
+
+    public ifCmdHadNoEffect(): void {
+		// to override.
+	}
+
+	public ifCmdHadEffects(): void {
+		// to override.
+	}
+
+	public ifCannotExecuteCmd(): void {
+		// to override.
 	}
 
     public getInteraction(): I {
@@ -245,6 +257,39 @@ export abstract class WidgetBindingImpl<C extends Command, I extends Interaction
         }
     }
 
+    public fsmUpdates(): void {
+        if (!this.isActivated()) {
+			return;
+        }
+
+        if (this.asLogBinding) {
+            catBinder.info("Binding updates");
+        }
+
+        if (this.createAndInitCommand()) {
+            if (this.asLogCmd) {
+                catCommand.info("Command update");
+            }
+
+            this.then();
+
+            if (this.continuousCmdExec) {
+				if (this.asLogCmd) {
+					catCommand.info("Try to execute command (continuous execution)");
+				}
+				const ok = this.cmd === undefined ? false : this.cmd.doIt();
+
+				if (this.asLogCmd) {
+					catCommand.info(`Continuous command execution had this result: ${ok}`);
+				}
+
+				if (!ok) {
+					this.ifCannotExecuteCmd();
+				}
+			}
+        }
+    }
+
     /**
      *
      */
@@ -253,11 +298,11 @@ export abstract class WidgetBindingImpl<C extends Command, I extends Interaction
 			return;
         }
 
-        const ok: boolean = this.when();
         if (this.asLogBinding) {
-            catBinder.info(`Binding stops with condition: ${ok}`);
+            catBinder.info("Binding stops");
         }
-        if (ok) {
+
+        if (this.createAndInitCommand()) {
             if (this.cmd === undefined) {
                 this.cmd = this.createCommand();
                 this.first();
@@ -265,12 +310,14 @@ export abstract class WidgetBindingImpl<C extends Command, I extends Interaction
                     catCommand.info(`Command created and init: ${this.cmd.constructor.name}`);
                 }
             }
+
             if (!this.continuousCmdExec) {
                 this.then();
                 if (this.asLogCmd) {
                     catCommand.info(`Command ${this.cmd.constructor.name} is updated`);
                 }
             }
+
             this.executeCmd(this.cmd, this.async);
             this.unbindCmdAttributes();
             this.cmd = undefined;
@@ -286,6 +333,26 @@ export abstract class WidgetBindingImpl<C extends Command, I extends Interaction
         }
     }
 
+	protected createAndInitCommand(): boolean {
+		const ok = this.when();
+
+		if (this.asLogBinding) {
+            catBinder.info(`when predicate is ${ok}`);
+		}
+
+		if (ok) {
+			if (this.cmd === undefined) {
+				if (this.asLogCmd) {
+					catCommand.info("Command creation");
+				}
+				this.cmd = this.createCommand();
+				this.first();
+			}
+		}
+
+		return ok;
+	}
+
     private executeCmd(cmd: Command, async: boolean): void {
         if (async) {
             this.executeCmdAsync(cmd);
@@ -299,54 +366,43 @@ export abstract class WidgetBindingImpl<C extends Command, I extends Interaction
     }
 
     protected afterCmdExecuted(cmd: Command, ok: boolean): void {
+        if ( this.cmd === undefined) {
+            return;
+        }
+
         if (this.asLogCmd) {
-            catCommand.info(`Command execution did it: ${ok}`);
+            catCommand.info(`Command execution had this result: ${ok}`);
         }
         if (ok) {
-            cmd.done();
             this.end();
             this.endOrCancel();
+        } else {
+			this.ifCannotExecuteCmd();
         }
+
+        // In continuous mode, a command may have been executed in the update routine
+        if (this.cmd.getStatus() !== CmdStatus.EXECUTED) {
+			return;
+		}
+
+		// For commands executed at least one time
+        this.cmd.done();
+
         const hadEffect: boolean = cmd.hadEffect();
+
         if (this.asLogCmd) {
             catCommand.info(`Command execution had effect: ${hadEffect}`);
         }
+
         if (hadEffect) {
             if (cmd.getRegistrationPolicy() !== RegistrationPolicy.NONE) {
                 CommandsRegistry.INSTANCE.addCommand(cmd);
             } else {
                 CommandsRegistry.INSTANCE.unregisterCmd(cmd);
             }
-        }
-    }
-
-    public fsmUpdates(): void {
-        if (!this.isActivated()) {
-			return;
-        }
-
-        const ok: boolean = this.when();
-        if (this.asLogBinding) {
-            catBinder.info(`Binding updates with condition: ${ok}`);
-        }
-        if (ok) {
-            if (this.cmd === undefined) {
-                this.cmd = this.createCommand();
-                if (this.asLogCmd) {
-                    catCommand.info(`Creation of command : ${this.cmd.constructor.name}`);
-                }
-                this.first();
-            }
-            if (this.asLogCmd) {
-                catCommand.info(`Command ${this.cmd.constructor.name} updated`);
-            }
-            this.then();
-            if (this.continuousCmdExec && this.cmd.canDo()) {
-                this.cmd.doIt();
-                if (this.asLogCmd) {
-                    catCommand.info(`Command ${this.cmd.constructor.name} executed`);
-                }
-            }
+            this.ifCmdHadEffects();
+        } else {
+            this.ifCmdHadNoEffect();
         }
     }
 

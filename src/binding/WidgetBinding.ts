@@ -50,7 +50,22 @@ export interface WidgetBinding extends FSMHandler {
 	/**
 	 * On end or cancellation
 	 */
-	endOrCancel(): void;
+    endOrCancel(): void;
+
+    /**
+	 * Called when an executed command did not had effect
+	 */
+	ifCmdHadNoEffect(): void;
+
+	/**
+	 * Called when an executed command had effects
+	 */
+	ifCmdHadEffects(): void;
+
+	/**
+	 * Called when an ongoing command cannot be executed
+	 */
+	ifCannotExecuteCmd(): void;
 
     /**
      * @return {boolean} True if the condition of the widget binding is respected.
