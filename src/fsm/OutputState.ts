@@ -31,6 +31,6 @@ export interface OutputState extends State {
 }
 
 export function isOutputStateType<E>(obj: OutputState | Object): obj is OutputState {
-    return (<OutputState>obj).exit !== undefined && (<OutputState>obj).addTransition !== undefined &&
-        (<OutputState>obj).process !== undefined && (<OutputState>obj).getTransitions !== undefined;
+    return (<OutputState> obj).exit !== undefined && (<OutputState> obj).addTransition !== undefined &&
+        (<OutputState> obj).process !== undefined && (<OutputState> obj).getTransitions !== undefined;
 }

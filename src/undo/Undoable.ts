@@ -39,6 +39,6 @@ export interface Undoable {
 }
 
 export function isUndoableType(obj: Undoable | Object): obj is Undoable {
-    return (<Undoable>obj).undo !== undefined && (<Undoable>obj).redo !== undefined && (<Undoable>obj).getUndoName !== undefined;
+    return (<Undoable> obj).undo !== undefined && (<Undoable> obj).redo !== undefined && (<Undoable> obj).getUndoName !== undefined;
 }
 

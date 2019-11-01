@@ -80,7 +80,8 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM, 
             eventsToAdd.forEach(type => this.registerEventToNode(type, n));
         });
         this._additionalNodes.forEach(n => {
-            n.childNodes.forEach(child => {// update the content of the additionalNode
+            n.childNodes.forEach(child => {
+                // update the content of the additionalNode
                 eventsToRemove.forEach(type => this.unregisterEventToNode(type, child));
                 eventsToAdd.forEach(type => this.registerEventToNode(type, child));
             });

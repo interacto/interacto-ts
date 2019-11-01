@@ -26,40 +26,40 @@ export enum EventRegistrationToken {
 }
 
 export function isButton(target: EventTarget): target is Element {
-    return (<Element>target).tagName === "BUTTON" && !(<Element>target).hasAttribute("type");
+    return (<Element> target).tagName === "BUTTON" && !(<Element> target).hasAttribute("type");
 }
 
 export function isCheckBox(target: EventTarget): target is Element {
-    return (<Element>target).tagName === "INPUT" && (<Element>target).getAttribute("type") === "checkbox";
+    return (<Element> target).tagName === "INPUT" && (<Element> target).getAttribute("type") === "checkbox";
 }
 
 export function isColorChoice(target: EventTarget): target is Element {
-    return (<Element>target).tagName === "INPUT" && (<Element>target).getAttribute("type") === "color";
+    return (<Element> target).tagName === "INPUT" && (<Element> target).getAttribute("type") === "color";
 }
 
 export function isComboBox(target: EventTarget): target is Element {
-    return (<Element>target).tagName === "INPUT" && (<Element>target).getAttribute("list") !== undefined;
+    return (<Element> target).tagName === "INPUT" && (<Element> target).getAttribute("list") !== undefined;
 }
 
 export function isDatePicker(target: EventTarget): target is Element {
-    return (<Element>target).tagName === "INPUT" && (<Element>target).getAttribute("type") === "date";
+    return (<Element> target).tagName === "INPUT" && (<Element> target).getAttribute("type") === "date";
 }
 
 export function isSpinner(target: EventTarget): target is Element {
-    return (<Element>target).tagName === "INPUT" && (<Element>target).getAttribute("type") === "number";
+    return (<Element> target).tagName === "INPUT" && (<Element> target).getAttribute("type") === "number";
 }
 
 export function isHyperLink(target: EventTarget): target is Element {
-    return (<Element>target).getAttribute("href") !== undefined;
+    return (<Element> target).getAttribute("href") !== undefined;
 }
 
 export function isChoiceBox(target: EventTarget): target is Element {
-    return (<Element>target).tagName === "SELECT";
+    return (<Element> target).tagName === "SELECT";
 }
 
 export function isTextInput(target: EventTarget): target is Element {
-    return (<Element>target).tagName === "TEXTAREA" || ((<Element>target).tagName === "INPUT"
-        && (<Element>target).getAttribute("type") === "text");
+    return (<Element> target).tagName === "TEXTAREA" || ((<Element> target).tagName === "INPUT"
+        && (<Element> target).getAttribute("type") === "text");
 }
 
 export function isWindowClosed(event: Event): boolean {
@@ -85,7 +85,7 @@ export function isScrollEvent(event: Event): event is UIEvent {
 export function isMenuButton(target: EventTarget): target is Element {
     //Not yet implemented in Web browser, is present to follow the
     // feature of the javaFX version of Interacto
-    return(<Element>target).tagName === "BUTTON" && (<Element>target).getAttribute("type") === "menu";
+    return(<Element> target).tagName === "BUTTON" && (<Element> target).getAttribute("type") === "menu";
 }
 
 export enum KeyCode {

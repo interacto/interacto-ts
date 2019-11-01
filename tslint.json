@@ -106,7 +106,10 @@
       "check-decl",
       "check-operator",
       "check-separator",
-      "check-type", 
+      "check-type",
+      "check-typecast",
+      "check-type-operator",
+      "check-preblock",
       "check-module"
     ]
   }

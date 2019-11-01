@@ -91,7 +91,7 @@ test("Test data of the press and drag part of the interaction", () => {
             expect(interaction.getData().getTgtClientX()).toBe(16);
             expect(interaction.getData().getTgtClientY()).toBe(21);
             expect(interaction.getData().getButton()).toBe(0);
-            const tgtElem: HTMLCanvasElement = <HTMLCanvasElement>interaction.getData().getTgtObject().get();
+            const tgtElem: HTMLCanvasElement = <HTMLCanvasElement> interaction.getData().getTgtObject().get();
             expect(tgtElem).toBe(canvas);
         }
     }());
