@@ -12,9 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {OutputStateImpl} from "./OutputStateImpl";
-import {InputState} from "./InputState";
-import {FSM} from "./FSM";
+import { OutputStateImpl } from "./OutputStateImpl";
+import { InputState } from "./InputState";
+import { FSM } from "./FSM";
 
 export class StdState extends OutputStateImpl implements InputState {
     public constructor(stateMachine: FSM, stateName: string) {

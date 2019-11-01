@@ -12,10 +12,10 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSMHandler} from "../fsm/FSMHandler";
-import {InteractionImpl} from "../interaction/InteractionImpl";
-import {FSM} from "../fsm/FSM";
-import {Command} from "../command/Command";
+import { FSMHandler } from "../fsm/FSMHandler";
+import { InteractionImpl } from "../interaction/InteractionImpl";
+import { FSM } from "../fsm/FSM";
+import { Command } from "../command/Command";
 import { Observable } from "rxjs";
 
 /**
@@ -41,12 +41,12 @@ export interface WidgetBinding<C extends Command> extends FSMHandler {
     /**
 	 * On end
 	 */
-	end(): void;
+    end(): void;
 
 	/**
 	 * On cancellation
 	 */
-	cancel(): void;
+    cancel(): void;
 
 	/**
 	 * On end or cancellation
@@ -56,17 +56,17 @@ export interface WidgetBinding<C extends Command> extends FSMHandler {
     /**
 	 * Called when an executed command did not had effect
 	 */
-	ifCmdHadNoEffect(): void;
+    ifCmdHadNoEffect(): void;
 
 	/**
 	 * Called when an executed command had effects
 	 */
-	ifCmdHadEffects(): void;
+    ifCmdHadEffects(): void;
 
 	/**
 	 * Called when an ongoing command cannot be executed
 	 */
-	ifCannotExecuteCmd(): void;
+    ifCannotExecuteCmd(): void;
 
     /**
      * @return {boolean} True if the condition of the widget binding is respected.
@@ -113,5 +113,5 @@ export interface WidgetBinding<C extends Command> extends FSMHandler {
     uninstallBinding(): void;
 
     /** An RX observable objects that will provide the commands produced by the binding. */
-	produces(): Observable<C>;
+    produces(): Observable<C>;
 }

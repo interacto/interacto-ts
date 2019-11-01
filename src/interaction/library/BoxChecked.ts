@@ -12,11 +12,11 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {TerminalState} from "../../fsm/TerminalState";
-import {BoxCheckPressedTransition} from "../../fsm/BoxCheckPressedTransition";
-import {isCheckBox} from "../../fsm/Events";
-import {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import {WidgetData} from "../WidgetData";
+import { TerminalState } from "../../fsm/TerminalState";
+import { BoxCheckPressedTransition } from "../../fsm/BoxCheckPressedTransition";
+import { isCheckBox } from "../../fsm/Events";
+import { FSMDataHandler } from "../../fsm/FSMDataHandler";
+import { WidgetData } from "../WidgetData";
 import { FSM } from "../../fsm/FSM";
 import { InteractionImpl } from "../InteractionImpl";
 
@@ -28,7 +28,7 @@ export class BoxCheckedFSM extends FSM {
 
     public buildFSM(dataHandler?: BoxCheckedHandler): void {
         if (this.states.length > 1) {
-            return ;
+            return;
         }
 
         super.buildFSM(dataHandler);
@@ -61,43 +61,43 @@ export class BoxChecked extends InteractionImpl<WidgetData<Element>, BoxCheckedF
      * Creates the interaction.
      */
     public constructor() {
-            super(new BoxCheckedFSM());
+        super(new BoxCheckedFSM());
 
-            this.handler = new class implements BoxCheckedHandler {
-                private readonly _parent: BoxChecked;
+        this.handler = new class implements BoxCheckedHandler {
+            private readonly _parent: BoxChecked;
 
-                constructor(parent: BoxChecked) {
-                    this._parent = parent;
-                }
-
-                public initToCheckHandler(event: Event): void {
-                    if (event.target !== null && isCheckBox(event.target)) {
-                        this._parent._widget = event.currentTarget as Element;
-                    }
-                }
-
-                public reinitData(): void {
-                    this._parent.reinitData();
-                }
-
-            }(this);
-
-            this.fsm.buildFSM(this.handler);
-        }
-
-        public onNewNodeRegistered(node: EventTarget): void {
-            if (isCheckBox(node)) {
-                this.registerActionHandlerInput(node);
+            constructor(parent: BoxChecked) {
+                this._parent = parent;
             }
-        }
 
-        public onNodeUnregistered(node: EventTarget): void {
-            if (isCheckBox(node)) {
-                this.unregisterActionHandlerInput(node);
+            public initToCheckHandler(event: Event): void {
+                if (event.target !== null && isCheckBox(event.target)) {
+                    this._parent._widget = event.currentTarget as Element;
+                }
             }
-        }
 
-        public getData(): WidgetData<Element> {
-            return this;
+            public reinitData(): void {
+                this._parent.reinitData();
+            }
+
+        }(this);
+
+        this.fsm.buildFSM(this.handler);
+    }
+
+    public onNewNodeRegistered(node: EventTarget): void {
+        if (isCheckBox(node)) {
+            this.registerActionHandlerInput(node);
         }
+    }
+
+    public onNodeUnregistered(node: EventTarget): void {
+        if (isCheckBox(node)) {
+            this.unregisterActionHandlerInput(node);
+        }
+    }
+
+    public getData(): WidgetData<Element> {
+        return this;
+    }
 }

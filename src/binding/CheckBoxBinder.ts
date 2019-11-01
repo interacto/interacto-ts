@@ -12,10 +12,10 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {BoxChecked} from "../interaction/library/BoxChecked";
-import {CommandImpl} from "../command/CommandImpl";
-import {WidgetData} from "../interaction/WidgetData";
-import {Binder} from "./Binder";
+import { BoxChecked } from "../interaction/library/BoxChecked";
+import { CommandImpl } from "../command/CommandImpl";
+import { WidgetData } from "../interaction/WidgetData";
+import { Binder } from "./Binder";
 
 /**
  * The binding builder to create bindings between a checkbox interaction and a given command.
@@ -24,7 +24,7 @@ import {Binder} from "./Binder";
  */
 
 export class CheckBoxBinder<C extends CommandImpl> extends Binder<C, BoxChecked, WidgetData<Element>, CheckBoxBinder<C>> {
-    public constructor (cmd: (i ?: WidgetData<Element>) => C) {
+    public constructor(cmd: (i?: WidgetData<Element>) => C) {
         super(new BoxChecked(), cmd);
     }
 }

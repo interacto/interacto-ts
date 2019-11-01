@@ -13,7 +13,7 @@
  */
 
 
-import {CmdStatus, Command, RegistrationPolicy} from "./Command";
+import { CmdStatus, Command, RegistrationPolicy } from "./Command";
 
 /**
  * The default constructor.
@@ -26,11 +26,11 @@ export abstract class CommandImpl implements Command {
 	 * Execute if possible (canDo) the given command (if not null) and flush it.
 	 * @param cmd The command to execute. Nothing done if null.
 	 */
-	public static executeAndFlush(cmd: Command): void {
-		if (cmd.canDo()) {
-			cmd.doIt();
-		}
-		cmd.flush();
+    public static executeAndFlush(cmd: Command): void {
+        if (cmd.canDo()) {
+            cmd.doIt();
+        }
+        cmd.flush();
     }
 
     /**
@@ -133,6 +133,6 @@ export abstract class CommandImpl implements Command {
     }
 
     public canDo(): boolean {
-		return true;
-	}
+        return true;
+    }
 }

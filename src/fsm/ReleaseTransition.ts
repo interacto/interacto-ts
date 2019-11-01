@@ -12,9 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {OutputState} from "./OutputState";
-import {InputState} from "./InputState";
-import {EventRegistrationToken} from "./Events";
+import { OutputState } from "./OutputState";
+import { InputState } from "./InputState";
+import { EventRegistrationToken } from "./Events";
 import { Transition } from "./Transition";
 
 /**
@@ -33,7 +33,7 @@ export class ReleaseTransition extends Transition {
     }
 
     public accept(e: Event): boolean {
-        return e instanceof MouseEvent && e.type === EventRegistrationToken.MouseUp ;
+        return e instanceof MouseEvent && e.type === EventRegistrationToken.MouseUp;
     }
 
     public getAcceptedEvents(): Set<string> {

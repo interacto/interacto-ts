@@ -12,12 +12,12 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {MArray} from "../util/ArrayUtil";
-import {LogLevel} from "../logging/LogLevel";
-import {AnonNodeBinding} from "./AnonNodeBinding";
-import {FSM} from "../fsm/FSM";
-import {CommandImpl} from "../command/CommandImpl";
-import {InteractionData} from "../interaction/InteractionData";
+import { MArray } from "../util/ArrayUtil";
+import { LogLevel } from "../logging/LogLevel";
+import { AnonNodeBinding } from "./AnonNodeBinding";
+import { FSM } from "../fsm/FSM";
+import { CommandImpl } from "../command/CommandImpl";
+import { InteractionData } from "../interaction/InteractionData";
 import { WidgetBindingImpl } from "./WidgetBindingImpl";
 import { InteractionImpl } from "../interaction/InteractionImpl";
 
@@ -29,7 +29,7 @@ import { InteractionImpl } from "../interaction/InteractionImpl";
  * @author Arnaud Blouin
  */
 export abstract class Binder<C extends CommandImpl, I extends InteractionImpl<D, FSM, {}>, D extends InteractionData,
-            B extends Binder<C, I, D, B>> {
+    B extends Binder<C, I, D, B>> {
 
     protected initCmd: (i: D, c: C | undefined) => void;
     protected checkConditions: (i: D) => boolean;
@@ -48,8 +48,8 @@ export abstract class Binder<C extends CommandImpl, I extends InteractionImpl<D,
         this.widgets = new MArray();
         this._async = false;
         this.checkConditions = () => true;
-        this.initCmd = () => {};
-        this.onEnd = () => {};
+        this.initCmd = () => { };
+        this.onEnd = () => { };
         this.logLevels = [];
     }
 
@@ -134,8 +134,8 @@ export abstract class Binder<C extends CommandImpl, I extends InteractionImpl<D,
      * @throws InstantiationException On issues while creating the commands.
      */
     public bind(): WidgetBindingImpl<C, I, D> {
-        return new AnonNodeBinding<C, I, D>(false, this.interaction, this.cmdProducer, this.initCmd, (d: D) => {},
-            this.checkConditions, this.onEnd, () => {}, () => {}, () => {},
+        return new AnonNodeBinding<C, I, D>(false, this.interaction, this.cmdProducer, this.initCmd, (d: D) => { },
+            this.checkConditions, this.onEnd, () => { }, () => { }, () => { },
             this.widgets, this.additionalWidgets, this.targetWidgets, this._async, false, this.logLevels);
     }
 }

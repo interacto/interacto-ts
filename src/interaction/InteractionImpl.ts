@@ -12,12 +12,12 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSM} from "../fsm/FSM";
-import {OutputState} from "../fsm/OutputState";
-import {InitState} from "../fsm/InitState";
-import {Logger} from "typescript-logging";
-import {catInteraction} from "../logging/ConfigLog";
-import {InteractionData} from "./InteractionData";
+import { FSM } from "../fsm/FSM";
+import { OutputState } from "../fsm/OutputState";
+import { InitState } from "../fsm/InitState";
+import { Logger } from "typescript-logging";
+import { catInteraction } from "../logging/ConfigLog";
+import { InteractionData } from "./InteractionData";
 import { MArray } from "../util/ArrayUtil";
 import { EventRegistrationToken } from "../fsm/Events";
 import { WidgetData } from "./WidgetData";
@@ -37,7 +37,7 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM, 
     private keyHandler: ((e: KeyboardEvent) => void) | undefined;
     private uiHandler: ((e: UIEvent) => void) | undefined;
     private actionHandler: EventListener | undefined;
-    private readonly disposable : Subscription;
+    private readonly disposable: Subscription;
 
     /**
      * Defines if the interaction is activated or not. If not, the interaction will not
@@ -79,7 +79,7 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM, 
             eventsToRemove.forEach(type => this.unregisterEventToNode(type, n));
             eventsToAdd.forEach(type => this.registerEventToNode(type, n));
         });
-        this._additionalNodes.forEach( n => {
+        this._additionalNodes.forEach(n => {
             n.childNodes.forEach(child => {// update the content of the additionalNode
                 eventsToRemove.forEach(type => this.unregisterEventToNode(type, child));
                 eventsToAdd.forEach(type => this.registerEventToNode(type, child));
@@ -143,7 +143,7 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM, 
 
     public registerToObservableList(elementToObserve: Node) {
         const newMutationObserver = new MutationObserver(mutations => this.callBackMutationObserver(mutations));
-        newMutationObserver.observe(elementToObserve, {childList: true});
+        newMutationObserver.observe(elementToObserve, { childList: true });
         this.listMutationObserver.push(newMutationObserver);
     }
 

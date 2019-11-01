@@ -12,11 +12,11 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {UpdateBinder} from "./UpdateBinder";
-import {CommandImpl} from "../command/CommandImpl";
-import {FSM} from "../fsm/FSM";
-import {InteractionData} from "../interaction/InteractionData";
-import {MArray} from "../util/ArrayUtil";
+import { UpdateBinder } from "./UpdateBinder";
+import { CommandImpl } from "../command/CommandImpl";
+import { FSM } from "../fsm/FSM";
+import { InteractionData } from "../interaction/InteractionData";
+import { MArray } from "../util/ArrayUtil";
 import { InteractionImpl } from "../interaction/InteractionImpl";
 
 export class SourceTargetBinder<C extends CommandImpl, I extends InteractionImpl<D, FSM, {}>, D extends InteractionData,

@@ -12,9 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSMHandler} from "../../src/fsm/FSMHandler";
-import {StubFSMHandler} from "../fsm/StubFSMHandler";
-import {ChoiceBoxSelected} from "../../src/interaction/library/ChoiceBoxSelected";
+import { FSMHandler } from "../../src/fsm/FSMHandler";
+import { StubFSMHandler } from "../fsm/StubFSMHandler";
+import { ChoiceBoxSelected } from "../../src/interaction/library/ChoiceBoxSelected";
 
 jest.mock("../fsm/StubFSMHandler");
 
@@ -51,9 +51,9 @@ test("Other event don't start the interaction ChoiceBoxSelected", () => {
 });
 
 test("Multiple input event on choiceBox start and stop the interaction each time.", () => {
-   interaction.registerToNodes([choiceBox]);
-   choiceBox.dispatchEvent(new Event("input"));
-   choiceBox.dispatchEvent(new Event("input"));
-   expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
-   expect(handler.fsmStops).toHaveBeenCalledTimes(2);
+    interaction.registerToNodes([choiceBox]);
+    choiceBox.dispatchEvent(new Event("input"));
+    choiceBox.dispatchEvent(new Event("input"));
+    expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
+    expect(handler.fsmStops).toHaveBeenCalledTimes(2);
 });

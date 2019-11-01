@@ -12,14 +12,14 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {StubSubEvent1, StubSubEvent2} from "./StubEvent";
-import {TerminalState} from "../../src/fsm/TerminalState";
-import {StdState} from "../../src/fsm/StdState";
-import {FSM} from "../../src/fsm/FSM";
-import {SubFSMTransition} from "../../src/fsm/SubFSMTransition";
-import {SubStubTransition1} from "./StubTransitionOK";
-import {InputState} from "../../src/fsm/InputState";
-import {Optional} from "../../src/util/Optional";
+import { StubSubEvent1, StubSubEvent2 } from "./StubEvent";
+import { TerminalState } from "../../src/fsm/TerminalState";
+import { StdState } from "../../src/fsm/StdState";
+import { FSM } from "../../src/fsm/FSM";
+import { SubFSMTransition } from "../../src/fsm/SubFSMTransition";
+import { SubStubTransition1 } from "./StubTransitionOK";
+import { InputState } from "../../src/fsm/InputState";
+import { Optional } from "../../src/util/Optional";
 
 jest.mock("../../src/fsm/StdState");
 
@@ -69,13 +69,13 @@ test("testGuardKOFirstEvent", () => {
 });
 
 test("testExecuteFirstEventReturnsSubState", () => {
-    const state : Optional<InputState> = tr.execute(new StubSubEvent1());
+    const state: Optional<InputState> = tr.execute(new StubSubEvent1());
     expect(state.isPresent()).toBeTruthy();
     expect(state.get()).toEqual(subS);
 });
 
 test("testExecuteFirstEventKO", () => {
-    const state : Optional<InputState> = tr.execute(new StubSubEvent2());
+    const state: Optional<InputState> = tr.execute(new StubSubEvent2());
     expect(state.isPresent()).toBeFalsy();
 });
 

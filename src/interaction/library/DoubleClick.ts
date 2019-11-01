@@ -12,18 +12,18 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import {Click, ClickFSM} from "./Click";
-import {TerminalState} from "../../fsm/TerminalState";
-import {CancellingState} from "../../fsm/CancellingState";
-import {StdState} from "../../fsm/StdState";
-import {SubFSMTransition} from "../../fsm/SubFSMTransition";
-import {InputState} from "../../fsm/InputState";
-import {FSM} from "../../fsm/FSM";
-import {OutputState} from "../../fsm/OutputState";
-import {TimeoutTransition} from "../../fsm/TimeoutTransition";
-import {MoveTransition} from "../../fsm/MoveTransition";
-import {PointData} from "./PointData";
+import { FSMDataHandler } from "../../fsm/FSMDataHandler";
+import { Click, ClickFSM } from "./Click";
+import { TerminalState } from "../../fsm/TerminalState";
+import { CancellingState } from "../../fsm/CancellingState";
+import { StdState } from "../../fsm/StdState";
+import { SubFSMTransition } from "../../fsm/SubFSMTransition";
+import { InputState } from "../../fsm/InputState";
+import { FSM } from "../../fsm/FSM";
+import { OutputState } from "../../fsm/OutputState";
+import { TimeoutTransition } from "../../fsm/TimeoutTransition";
+import { MoveTransition } from "../../fsm/MoveTransition";
+import { PointData } from "./PointData";
 import { InteractionImpl } from "../InteractionImpl";
 
 export class DoubleClickFSM extends FSM {

@@ -12,12 +12,12 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSM} from "../../src/fsm/FSM";
-import {InitState} from "../../src/fsm/InitState";
+import { FSM } from "../../src/fsm/FSM";
+import { InitState } from "../../src/fsm/InitState";
 import "jest";
-import {StdState} from "../../src/fsm/StdState";
+import { StdState } from "../../src/fsm/StdState";
 
-let fsm : FSM;
+let fsm: FSM;
 
 beforeEach(() => {
     fsm = new FSM();
@@ -41,7 +41,7 @@ test("testCurrentStateAtStart", () => {
 });
 
 test("testAddState", () => {
-    const state : StdState = new StdState(fsm, "s1");
+    const state: StdState = new StdState(fsm, "s1");
     fsm.addState(state);
     expect(fsm.getStates().length).toBe(2);
 });

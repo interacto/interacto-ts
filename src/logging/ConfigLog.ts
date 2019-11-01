@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {Category, CategoryConfiguration, CategoryServiceFactory, LogLevel} from "typescript-logging";
+import { Category, CategoryConfiguration, CategoryServiceFactory, LogLevel } from "typescript-logging";
 
 CategoryServiceFactory.setDefaultConfiguration(new CategoryConfiguration(LogLevel.Info));
 

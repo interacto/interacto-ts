@@ -12,10 +12,10 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {isUndoableType} from "../undo/Undoable";
-import {UndoCollector} from "../undo/UndoCollector";
-import {MArray} from "../util/ArrayUtil";
-import {Command, RegistrationPolicy} from "./Command";
+import { isUndoableType } from "../undo/Undoable";
+import { UndoCollector } from "../undo/UndoCollector";
+import { MArray } from "../util/ArrayUtil";
+import { Command, RegistrationPolicy } from "./Command";
 import { Subject, Observable } from "rxjs";
 
 /**
@@ -51,9 +51,9 @@ export class CommandsRegistry {
     }
 
     /** An RX observable objects that will provide the commands produced by the binding. */
-	public commands(): Observable<Command> {
-		return this.cmdPublisher;
-	}
+    public commands(): Observable<Command> {
+        return this.cmdPublisher;
+    }
 
     /**
      * @return {*[]} The stored commands. Cannot be null. Because of concurrency, you should not modify this list.

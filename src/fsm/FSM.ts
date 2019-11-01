@@ -12,18 +12,18 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {State} from "./State";
-import {InitState} from "./InitState";
-import {OutputState} from "./OutputState";
-import {FSMHandler} from "./FSMHandler";
-import {TimeoutTransition} from "./TimeoutTransition";
-import {StdState} from "./StdState";
-import {InputState} from "./InputState";
-import {MArray} from "../util/ArrayUtil";
-import {OutputStateImpl} from "./OutputStateImpl";
-import {catFSM} from "../logging/ConfigLog";
+import { State } from "./State";
+import { InitState } from "./InitState";
+import { OutputState } from "./OutputState";
+import { FSMHandler } from "./FSMHandler";
+import { TimeoutTransition } from "./TimeoutTransition";
+import { StdState } from "./StdState";
+import { InputState } from "./InputState";
+import { MArray } from "../util/ArrayUtil";
+import { OutputStateImpl } from "./OutputStateImpl";
+import { catFSM } from "../logging/ConfigLog";
 import { FSMDataHandler } from "./FSMDataHandler";
-import {isKeyDownEvent} from "./Events";
+import { isKeyDownEvent } from "./Events";
 import { Subject, Observable } from "rxjs";
 
 export class FSM {
@@ -111,9 +111,9 @@ export class FSM {
         return this._currentState;
     }
 
-    public currentStateObservable() : Observable<[OutputState, OutputState]> {
-		return this.currentStatePublisher;
-	}
+    public currentStateObservable(): Observable<[OutputState, OutputState]> {
+        return this.currentStatePublisher;
+    }
 
     public set inner(inner: boolean) {
         this._inner = inner;

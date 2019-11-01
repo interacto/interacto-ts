@@ -12,14 +12,14 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {KeyData} from "./KeyData";
-import {FSM} from "../../fsm/FSM";
-import {Optional} from "../../util/Optional";
-import {KeyDataImpl} from "./KeyDataImpl";
+import { KeyData } from "./KeyData";
+import { FSM } from "../../fsm/FSM";
+import { Optional } from "../../util/Optional";
+import { KeyDataImpl } from "./KeyDataImpl";
 import { InteractionImpl } from "../InteractionImpl";
 
 export abstract class KeyInteraction<D extends KeyData, F extends FSM, T> extends InteractionImpl<D, F, T>
-                        implements KeyData {
+    implements KeyData {
     public readonly keyData: KeyDataImpl;
 
     protected constructor(fsm: F) {

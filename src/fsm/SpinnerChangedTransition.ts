@@ -12,9 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {OutputState} from "./OutputState";
-import {InputState} from "./InputState";
-import {EventRegistrationToken, isSpinner} from "./Events";
+import { OutputState } from "./OutputState";
+import { InputState } from "./InputState";
+import { EventRegistrationToken, isSpinner } from "./Events";
 import { Transition } from "./Transition";
 
 /**

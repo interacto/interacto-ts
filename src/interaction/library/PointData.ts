@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {Optional} from "../../util/Optional";
+import { Optional } from "../../util/Optional";
 
 export interface PointData {
     /**

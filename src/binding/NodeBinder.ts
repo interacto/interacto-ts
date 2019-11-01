@@ -12,10 +12,10 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSM} from "../fsm/FSM";
-import {UpdateBinder} from "./UpdateBinder";
-import {CommandImpl} from "../command/CommandImpl";
-import {InteractionData} from "../interaction/InteractionData";
+import { FSM } from "../fsm/FSM";
+import { UpdateBinder } from "./UpdateBinder";
+import { CommandImpl } from "../command/CommandImpl";
+import { InteractionData } from "../interaction/InteractionData";
 import { InteractionImpl } from "../interaction/InteractionImpl";
 
 /**
@@ -25,7 +25,7 @@ import { InteractionImpl } from "../interaction/InteractionImpl";
  * @author Arnaud Blouin
  */
 export class NodeBinder<C extends CommandImpl, I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>
-            extends UpdateBinder<C, I, D, NodeBinder<C, I, D>> {
+    extends UpdateBinder<C, I, D, NodeBinder<C, I, D>> {
     public constructor(interaction: I, cmdProducer: (i?: D) => C) {
         super(interaction, cmdProducer);
     }

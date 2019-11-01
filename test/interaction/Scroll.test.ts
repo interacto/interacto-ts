@@ -12,10 +12,10 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSMHandler} from "../../src/fsm/FSMHandler";
-import {StubFSMHandler} from "../fsm/StubFSMHandler";
-import {Scroll} from "../../src/interaction/library/Scroll";
-import {createUIEvent} from "./StubEvents";
+import { FSMHandler } from "../../src/fsm/FSMHandler";
+import { StubFSMHandler } from "../fsm/StubFSMHandler";
+import { Scroll } from "../../src/interaction/library/Scroll";
+import { createUIEvent } from "./StubEvents";
 
 jest.mock("../fsm/StubFSMHandler");
 

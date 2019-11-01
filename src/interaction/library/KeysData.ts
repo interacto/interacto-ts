@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {InteractionData, Optional} from "../..";
+import { InteractionData, Optional } from "../..";
 
 export interface KeysData extends InteractionData {
     /**

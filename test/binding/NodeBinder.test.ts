@@ -12,11 +12,11 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {Click} from "../../src/interaction/library/Click";
-import {NodeBinder} from "../../src/binding/NodeBinder";
-import {DoubleClick} from "../../src/interaction/library/DoubleClick";
-import {StubCmd} from "../command/StubCmd";
-import {PointData} from "../../src/interaction/library/PointData";
+import { Click } from "../../src/interaction/library/Click";
+import { NodeBinder } from "../../src/binding/NodeBinder";
+import { DoubleClick } from "../../src/interaction/library/DoubleClick";
+import { StubCmd } from "../command/StubCmd";
+import { PointData } from "../../src/interaction/library/PointData";
 
 jest.mock("../command/StubCmd");
 

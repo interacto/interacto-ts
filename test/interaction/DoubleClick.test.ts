@@ -12,11 +12,11 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSMHandler} from "../../src/fsm/FSMHandler";
-import {StubFSMHandler} from "../fsm/StubFSMHandler";
-import {DoubleClick} from "../../src/interaction/library/DoubleClick";
-import {EventRegistrationToken} from "../../src/fsm/Events";
-import {createMouseEvent} from "./StubEvents";
+import { FSMHandler } from "../../src/fsm/FSMHandler";
+import { StubFSMHandler } from "../fsm/StubFSMHandler";
+import { DoubleClick } from "../../src/interaction/library/DoubleClick";
+import { EventRegistrationToken } from "../../src/fsm/Events";
+import { createMouseEvent } from "./StubEvents";
 
 jest.mock("../fsm/StubFSMHandler");
 
@@ -60,7 +60,7 @@ test("Check data of the interaction.", () => {
             expect(interaction.getData().getButton()).toBe(0);
         }
     }());
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.Click, canvas,  undefined, undefined, 11,
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.Click, canvas, undefined, undefined, 11,
         23));
     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.Click, canvas, undefined, undefined, 11,
         23));

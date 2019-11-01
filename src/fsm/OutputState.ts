@@ -12,8 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {State} from "./State";
-import {Transition} from "./Transition";
+import { State } from "./State";
+import { Transition } from "./Transition";
 
 export interface OutputState extends State {
     exit(): void;

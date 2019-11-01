@@ -12,15 +12,15 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {StubEvent} from "./StubEvent";
-import {FSM} from "../../src/fsm/FSM";
-import {FSMHandler} from "../../src/fsm/FSMHandler";
-import {StdState} from "../../src/fsm/StdState";
-import {TimeoutTransition} from "../../src/fsm/TimeoutTransition";
-import {TerminalState} from "../../src/fsm/TerminalState";
-import {StubTransitionOK} from "./StubTransitionOK";
-import {StubFSMHandler} from "./StubFSMHandler";
-import {CancelFSMException} from "../../src/fsm/CancelFSMException";
+import { StubEvent } from "./StubEvent";
+import { FSM } from "../../src/fsm/FSM";
+import { FSMHandler } from "../../src/fsm/FSMHandler";
+import { StdState } from "../../src/fsm/StdState";
+import { TimeoutTransition } from "../../src/fsm/TimeoutTransition";
+import { TerminalState } from "../../src/fsm/TerminalState";
+import { StubTransitionOK } from "./StubTransitionOK";
+import { StubFSMHandler } from "./StubFSMHandler";
+import { CancelFSMException } from "../../src/fsm/CancelFSMException";
 
 jest.mock("./StubFSMHandler");
 

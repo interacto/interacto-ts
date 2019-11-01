@@ -15,11 +15,11 @@
 // IMPORTANT : this interaction is not fully supported by Web browsers yet.
 // see https://developer.mozilla.org/fr/docs/Web/HTML/Element/menu for more information.
 
-import {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import {TerminalState} from "../../fsm/TerminalState";
-import {isMenuButton} from "../../fsm/Events";
-import {WidgetData} from "../WidgetData";
-import {MenuButtonPressedTransition} from "../../fsm/MenuButtonPressedTransition";
+import { FSMDataHandler } from "../../fsm/FSMDataHandler";
+import { TerminalState } from "../../fsm/TerminalState";
+import { isMenuButton } from "../../fsm/Events";
+import { WidgetData } from "../WidgetData";
+import { MenuButtonPressedTransition } from "../../fsm/MenuButtonPressedTransition";
 import { FSM } from "../../fsm/FSM";
 import { InteractionImpl } from "../InteractionImpl";
 

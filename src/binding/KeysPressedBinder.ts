@@ -12,12 +12,12 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {KeysData} from "../interaction/library/KeysData";
-import {CommandImpl} from "../command/CommandImpl";
-import {KeyBinder} from "./KeyBinder";
+import { KeysData } from "../interaction/library/KeysData";
+import { CommandImpl } from "../command/CommandImpl";
+import { KeyBinder } from "./KeyBinder";
 
 export class KeysPressedBinder<C extends CommandImpl> extends KeyBinder<C, KeysPressedBinder<C>> {
-    public constructor(cmd: (i ?: KeysData) => C) {
+    public constructor(cmd: (i?: KeysData) => C) {
         super(cmd);
     }
 }

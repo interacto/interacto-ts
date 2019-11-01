@@ -12,9 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {InputState} from "./InputState";
-import {OutputState} from "./OutputState";
-import {EventRegistrationToken} from "./Events";
+import { InputState } from "./InputState";
+import { OutputState } from "./OutputState";
+import { EventRegistrationToken } from "./Events";
 import { Transition } from "./Transition";
 
 /**
@@ -30,7 +30,7 @@ export class ScrollTransition extends Transition {
     }
 
     public accept(event: Event): boolean {
-        return event.type === "scroll" ;
+        return event.type === "scroll";
     }
 
     public isGuardOK(event: Event): boolean {

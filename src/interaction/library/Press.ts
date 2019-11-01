@@ -12,12 +12,12 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import {TerminalState} from "../../fsm/TerminalState";
-import {PressureTransition} from "../../fsm/PressureTransition";
-import {isMouseDownEvent} from "../../fsm/Events";
-import {PointInteraction} from "./PointInteraction";
-import {PointData} from "./PointData";
+import { FSMDataHandler } from "../../fsm/FSMDataHandler";
+import { TerminalState } from "../../fsm/TerminalState";
+import { PressureTransition } from "../../fsm/PressureTransition";
+import { isMouseDownEvent } from "../../fsm/Events";
+import { PointInteraction } from "./PointInteraction";
+import { PointData } from "./PointData";
 import { FSM } from "../../fsm/FSM";
 
 export class PressFSM extends FSM {
@@ -67,7 +67,7 @@ export class Press extends PointInteraction<PointData, PressFSM, Node> {
     /**
      * Creates the interaction.
      */
-    private readonly handler : PressFSMHandler;
+    private readonly handler: PressFSMHandler;
 
     public constructor(fsm?: PressFSM) {
         super(fsm === undefined ? new PressFSM() : fsm);

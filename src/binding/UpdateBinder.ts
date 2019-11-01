@@ -12,11 +12,11 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSM} from "../fsm/FSM";
-import {Binder} from "./Binder";
-import {AnonNodeBinding} from "./AnonNodeBinding";
-import {CommandImpl} from "../command/CommandImpl";
-import {InteractionData} from "../interaction/InteractionData";
+import { FSM } from "../fsm/FSM";
+import { Binder } from "./Binder";
+import { AnonNodeBinding } from "./AnonNodeBinding";
+import { CommandImpl } from "../command/CommandImpl";
+import { InteractionData } from "../interaction/InteractionData";
 import { WidgetBindingImpl } from "./WidgetBindingImpl";
 import { InteractionImpl } from "../interaction/InteractionImpl";
 

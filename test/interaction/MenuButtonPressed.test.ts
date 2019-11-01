@@ -15,9 +15,9 @@
 //This file test the implementation of the MenuButtonPressed interaction, as this interaction is not yet support by Web browser,
 //this interaction and file test are here to follow the feature of the javaFX version of Interacto.
 
-import {FSMHandler} from "../../src/fsm/FSMHandler";
-import {StubFSMHandler} from "../fsm/StubFSMHandler";
-import {MenuButtonPressed} from "../../src/interaction/library/MenuButtonPressed";
+import { FSMHandler } from "../../src/fsm/FSMHandler";
+import { StubFSMHandler } from "../fsm/StubFSMHandler";
+import { MenuButtonPressed } from "../../src/interaction/library/MenuButtonPressed";
 
 jest.mock("../fsm/StubFSMHandler");
 

@@ -12,10 +12,10 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {ButtonPressed} from "../interaction/library/ButtonPressed";
-import {CommandImpl} from "../command/CommandImpl";
-import {WidgetData} from "../interaction/WidgetData";
-import {Binder} from "./Binder";
+import { ButtonPressed } from "../interaction/library/ButtonPressed";
+import { CommandImpl } from "../command/CommandImpl";
+import { WidgetData } from "../interaction/WidgetData";
+import { Binder } from "./Binder";
 
 
 /**

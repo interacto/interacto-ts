@@ -13,10 +13,10 @@
  */
 
 
-import {ComboBoxSelected} from "../interaction/library/ComboBoxSelected";
-import {CommandImpl} from "../command/CommandImpl";
-import {WidgetData} from "../interaction/WidgetData";
-import {Binder} from "./Binder";
+import { ComboBoxSelected } from "../interaction/library/ComboBoxSelected";
+import { CommandImpl } from "../command/CommandImpl";
+import { WidgetData } from "../interaction/WidgetData";
+import { Binder } from "./Binder";
 
 /**
  * The binding builder to create bindings between a combobox interaction and a given command.
@@ -25,7 +25,7 @@ import {Binder} from "./Binder";
  */
 
 export class ComboBoxBinder<C extends CommandImpl> extends Binder<C, ComboBoxSelected, WidgetData<Element>, ComboBoxBinder<C>> {
-    public constructor(cmd: (i ?: WidgetData<Element>) => C) {
+    public constructor(cmd: (i?: WidgetData<Element>) => C) {
         super(new ComboBoxSelected(), cmd);
     }
 }

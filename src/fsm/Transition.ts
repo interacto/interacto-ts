@@ -12,9 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {OutputState} from "./OutputState";
-import {InputState} from "./InputState";
-import {Optional} from "../util/Optional";
+import { OutputState } from "./OutputState";
+import { InputState } from "./InputState";
+import { Optional } from "../util/Optional";
 
 export abstract class Transition {
     public readonly src: OutputState;

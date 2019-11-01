@@ -12,11 +12,11 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSMHandler} from "../../src/fsm/FSMHandler";
-import {StubFSMHandler} from "../fsm/StubFSMHandler";
-import {EventRegistrationToken} from "../../src/fsm/Events";
-import {createMouseEvent} from "./StubEvents";
-import {DnD} from "../../src/interaction/library/DnD";
+import { FSMHandler } from "../../src/fsm/FSMHandler";
+import { StubFSMHandler } from "../fsm/StubFSMHandler";
+import { EventRegistrationToken } from "../../src/fsm/Events";
+import { createMouseEvent } from "./StubEvents";
+import { DnD } from "../../src/interaction/library/DnD";
 
 jest.mock("../fsm/StubFSMHandler");
 
@@ -78,17 +78,17 @@ test("Test data of the  press and drag part of the interaction", () => {
 });
 
 test("Check if drag with different button don't cancel or stop the interaction.", () => {
-interaction.registerToNodes([canvas]);
-canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, canvas, undefined, undefined, 11, 23,
-    0));
-canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 12, 22,
-    2));
-canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 12, 22,
-    0));
-expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
-expect(handler.fsmStops).not.toHaveBeenCalled();
-expect(handler.fsmCancels).not.toHaveBeenCalled();
+    interaction.registerToNodes([canvas]);
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, canvas, undefined, undefined, 11, 23,
+        0));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 12, 22,
+        2));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 12, 22,
+        0));
+    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+    expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
+    expect(handler.fsmStops).not.toHaveBeenCalled();
+    expect(handler.fsmCancels).not.toHaveBeenCalled();
 });
 
 test("Check if drag with different button don't cancel or stop the interaction-bis.", () => {
@@ -165,14 +165,14 @@ test("Check data with multiple drag", () => {
 });
 
 test("Click and move and release start and stop the interaction", () => {
-   interaction.registerToNodes([canvas]);
-   canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, canvas));
-   canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas));
-   canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseUp, canvas));
-   expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-   expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
-   expect(handler.fsmStops).toHaveBeenCalledTimes(1);
-   expect(handler.fsmCancels).not.toHaveBeenCalled();
+    interaction.registerToNodes([canvas]);
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, canvas));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseUp, canvas));
+    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+    expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
+    expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+    expect(handler.fsmCancels).not.toHaveBeenCalled();
 });
 
 test("Release with a different key that the one use to press and drag don't cancel or stop the interaction", () => {

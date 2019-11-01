@@ -12,10 +12,10 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {ColorPicked} from "../interaction/library/ColorPicked";
-import {CommandImpl} from "../command/CommandImpl";
-import {WidgetData} from "../interaction/WidgetData";
-import {Binder} from "./Binder";
+import { ColorPicked } from "../interaction/library/ColorPicked";
+import { CommandImpl } from "../command/CommandImpl";
+import { WidgetData } from "../interaction/WidgetData";
+import { Binder } from "./Binder";
 
 /**
  * The binding builder to create bindings between a colorpicker interaction and a given command.
@@ -23,8 +23,8 @@ import {Binder} from "./Binder";
  * @author Gwendal Didot
  */
 
-export class ColorPickerBinder<C extends CommandImpl> extends Binder<C, ColorPicked, WidgetData<Element>, ColorPickerBinder<C> > {
-    public constructor (cmd: (i ?: WidgetData<Element>) => C) {
+export class ColorPickerBinder<C extends CommandImpl> extends Binder<C, ColorPicked, WidgetData<Element>, ColorPickerBinder<C>> {
+    public constructor(cmd: (i?: WidgetData<Element>) => C) {
         super(new ColorPicked(), cmd);
     }
 }

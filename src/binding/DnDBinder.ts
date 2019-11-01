@@ -12,10 +12,10 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {CommandImpl} from "../command/CommandImpl";
-import {DnD} from "../interaction/library/DnD";
-import {SrcTgtPointsData} from "../interaction/library/SrcTgtPointsData";
-import {SourceTargetBinder} from "./SourceTargetBinder";
+import { CommandImpl } from "../command/CommandImpl";
+import { DnD } from "../interaction/library/DnD";
+import { SrcTgtPointsData } from "../interaction/library/SrcTgtPointsData";
+import { SourceTargetBinder } from "./SourceTargetBinder";
 
 /**
  * The binding builder to create bindings between a checkbox interaction and a given command.
@@ -24,7 +24,7 @@ import {SourceTargetBinder} from "./SourceTargetBinder";
  */
 
 export class DnDBinder<C extends CommandImpl> extends SourceTargetBinder<C, DnD, SrcTgtPointsData, DnDBinder<C>> {
-    public constructor (cmd: (i ?: SrcTgtPointsData) => C, srcOnUpdate: boolean, cancellable: boolean) {
+    public constructor(cmd: (i?: SrcTgtPointsData) => C, srcOnUpdate: boolean, cancellable: boolean) {
         super(new DnD(srcOnUpdate, cancellable), cmd);
     }
 }

@@ -12,8 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {State} from "./State";
-import {FSM} from "./FSM";
+import { State } from "./State";
+import { FSM } from "./FSM";
 
 export abstract class StateImpl implements State {
     protected readonly fsm: FSM;

@@ -12,15 +12,15 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {InputState} from "../../fsm/InputState";
-import {OutputState} from "../../fsm/OutputState";
-import {StdState} from "../../fsm/StdState";
-import {TerminalState} from "../../fsm/TerminalState";
-import {KeyPressureTransition} from "../../fsm/KeyPressureTransition";
-import {KeyReleaseTransition} from "../../fsm/KeyReleaseTransition";
-import {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import {MultiKeyInteraction} from "./MultiKeyInteraction";
-import {KeysData} from "./KeysData";
+import { InputState } from "../../fsm/InputState";
+import { OutputState } from "../../fsm/OutputState";
+import { StdState } from "../../fsm/StdState";
+import { TerminalState } from "../../fsm/TerminalState";
+import { KeyPressureTransition } from "../../fsm/KeyPressureTransition";
+import { KeyReleaseTransition } from "../../fsm/KeyReleaseTransition";
+import { FSMDataHandler } from "../../fsm/FSMDataHandler";
+import { MultiKeyInteraction } from "./MultiKeyInteraction";
+import { KeysData } from "./KeysData";
 import { FSM } from "../../fsm/FSM";
 
 export class KeysPressedFSM extends FSM {
@@ -31,7 +31,7 @@ export class KeysPressedFSM extends FSM {
         this.currentCodes = [];
     }
 
-    public buildFSM(dataHandler ?: KeysPressedFSMHandler) {
+    public buildFSM(dataHandler?: KeysPressedFSMHandler) {
         if (this.states.length > 1) {
             return;
         }
@@ -102,7 +102,7 @@ export interface KeysPressedFSMHandler extends FSMDataHandler {
     onKeyPressed(event: KeyboardEvent): void;
 }
 
-export class KeysPressed  extends MultiKeyInteraction<KeysData, KeysPressedFSM> {
+export class KeysPressed extends MultiKeyInteraction<KeysData, KeysPressedFSM> {
     private readonly handler: KeysPressedFSMHandler;
 
     public constructor(fsm?: KeysPressedFSM) {

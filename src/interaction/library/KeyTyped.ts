@@ -12,17 +12,17 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import {TerminalState} from "../../fsm/TerminalState";
-import {KeyPressureTransition} from "../../fsm/KeyPressureTransition";
-import {KeyData} from "./KeyData";
-import {KeyInteraction} from "./KeyInteraction";
-import {StdState} from "../../fsm/StdState";
-import {KeyReleaseTransition} from "../../fsm/KeyReleaseTransition";
-import {CancellingState} from "../../fsm/CancellingState";
-import {TimeoutTransition} from "../../fsm/TimeoutTransition";
-import {OutputState} from "../../fsm/OutputState";
-import {InputState} from "../../fsm/InputState";
+import { FSMDataHandler } from "../../fsm/FSMDataHandler";
+import { TerminalState } from "../../fsm/TerminalState";
+import { KeyPressureTransition } from "../../fsm/KeyPressureTransition";
+import { KeyData } from "./KeyData";
+import { KeyInteraction } from "./KeyInteraction";
+import { StdState } from "../../fsm/StdState";
+import { KeyReleaseTransition } from "../../fsm/KeyReleaseTransition";
+import { CancellingState } from "../../fsm/CancellingState";
+import { TimeoutTransition } from "../../fsm/TimeoutTransition";
+import { OutputState } from "../../fsm/OutputState";
+import { InputState } from "../../fsm/InputState";
 import { FSM } from "../../fsm/FSM";
 
 export class KeyTypedFSM extends FSM {
@@ -51,7 +51,7 @@ export class KeyTypedFSM extends FSM {
         this.addState(typed);
         this.addState(cancel);
 
-        new  class extends KeyPressureTransition {
+        new class extends KeyPressureTransition {
             private readonly _parent: KeyTypedFSM;
 
             public constructor(parent: KeyTypedFSM, srcState: OutputState, tgtState: InputState) {
@@ -108,7 +108,7 @@ export class KeyTypedFSM extends FSM {
     }
 }
 
-export interface KeyTypedFSMHandler  extends FSMDataHandler {
+export interface KeyTypedFSMHandler extends FSMDataHandler {
     onKeyTyped(event: Event): void;
 }
 

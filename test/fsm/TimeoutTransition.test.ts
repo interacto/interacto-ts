@@ -12,11 +12,11 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSM} from "../../src/fsm/FSM";
-import {InputState} from "../../src/fsm/InputState";
-import {OutputState} from "../../src/fsm/OutputState";
-import {TimeoutTransition} from "../../src/fsm/TimeoutTransition";
-import {StdState} from "../../src/fsm/StdState";
+import { FSM } from "../../src/fsm/FSM";
+import { InputState } from "../../src/fsm/InputState";
+import { OutputState } from "../../src/fsm/OutputState";
+import { TimeoutTransition } from "../../src/fsm/TimeoutTransition";
+import { StdState } from "../../src/fsm/StdState";
 
 jest.mock("../../src/fsm/FSM");
 jest.mock("../../src/fsm/StdState");

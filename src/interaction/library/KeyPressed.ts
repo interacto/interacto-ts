@@ -12,13 +12,13 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import {TerminalState} from "../../fsm/TerminalState";
-import {KeyPressureTransition} from "../../fsm/KeyPressureTransition";
-import {OutputState} from "../../fsm/OutputState";
-import {InputState} from "../../fsm/InputState";
-import {KeyData} from "./KeyData";
-import {KeyInteraction} from "./KeyInteraction";
+import { FSMDataHandler } from "../../fsm/FSMDataHandler";
+import { TerminalState } from "../../fsm/TerminalState";
+import { KeyPressureTransition } from "../../fsm/KeyPressureTransition";
+import { OutputState } from "../../fsm/OutputState";
+import { InputState } from "../../fsm/InputState";
+import { KeyData } from "./KeyData";
+import { KeyInteraction } from "./KeyInteraction";
 import { FSM } from "../../fsm/FSM";
 
 export class KeyPressedFSM extends FSM {
@@ -67,8 +67,8 @@ export class KeyPressedFSM extends FSM {
 
 }
 
-export interface KeyPressedFSMHandler  extends FSMDataHandler {
-   onKeyPressed(event: Event): void;
+export interface KeyPressedFSMHandler extends FSMDataHandler {
+    onKeyPressed(event: Event): void;
 }
 
 /**

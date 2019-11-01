@@ -12,11 +12,11 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {TerminalState} from "../../fsm/TerminalState";
-import {isHyperLink} from "../../fsm/Events";
-import {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import {WidgetData} from "../WidgetData";
-import {HyperLinkTransition} from "../../fsm/HyperLinkTransition";
+import { TerminalState } from "../../fsm/TerminalState";
+import { isHyperLink } from "../../fsm/Events";
+import { FSMDataHandler } from "../../fsm/FSMDataHandler";
+import { WidgetData } from "../WidgetData";
+import { HyperLinkTransition } from "../../fsm/HyperLinkTransition";
 import { FSM } from "../../fsm/FSM";
 import { InteractionImpl } from "../InteractionImpl";
 
@@ -27,7 +27,7 @@ export class HyperLinkClickedFSM extends FSM {
 
     public buildFSM(dataHandler?: HyperLinkClickedFSMHandler): void {
         if (this.states.length > 1) {
-            return ;
+            return;
         }
 
         super.buildFSM(dataHandler);

@@ -12,11 +12,11 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {TerminalState} from "../../fsm/TerminalState";
-import {isSpinner} from "../../fsm/Events";
-import {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import {WidgetData} from "../WidgetData";
-import {SpinnerChangedTransition} from "../../fsm/SpinnerChangedTransition";
+import { TerminalState } from "../../fsm/TerminalState";
+import { isSpinner } from "../../fsm/Events";
+import { FSMDataHandler } from "../../fsm/FSMDataHandler";
+import { WidgetData } from "../WidgetData";
+import { SpinnerChangedTransition } from "../../fsm/SpinnerChangedTransition";
 import { FSM } from "../../fsm/FSM";
 import { InteractionImpl } from "../InteractionImpl";
 
@@ -27,7 +27,7 @@ export class SpinnerChangedFSM extends FSM {
 
     public buildFSM(dataHandler?: SpinnerChangedHandler): void {
         if (this.states.length > 1) {
-            return ;
+            return;
         }
 
         super.buildFSM(dataHandler);
@@ -44,7 +44,7 @@ export class SpinnerChangedFSM extends FSM {
     }
 }
 
-export interface SpinnerChangedHandler  extends FSMDataHandler {
+export interface SpinnerChangedHandler extends FSMDataHandler {
     initToChangedHandler(event: Event): void;
 }
 

@@ -12,11 +12,11 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {anonCmdBinder, buttonBinder, dndBinder, dragLockBinder, nodeBinder} from "../../src/binding/Bindings";
-import {Click} from "../../src/interaction/library/Click";
-import {StubCmd} from "../command/StubCmd";
-import {AnonCmd, DoubleClick, EventRegistrationToken, LogLevel, MArray} from "../../src";
-import {createMouseEvent} from "../interaction/StubEvents";
+import { anonCmdBinder, buttonBinder, dndBinder, dragLockBinder, nodeBinder } from "../../src/binding/Bindings";
+import { Click } from "../../src/interaction/library/Click";
+import { StubCmd } from "../command/StubCmd";
+import { AnonCmd, DoubleClick, EventRegistrationToken, LogLevel, MArray } from "../../src";
+import { createMouseEvent } from "../interaction/StubEvents";
 
 jest.mock("../command/StubCmd");
 
@@ -58,7 +58,7 @@ test("Anon cmd binder ok", () => {
 test("node binder on multiple target", () => {
     const target = new MArray<EventTarget>();
     target.push(canvas, button);
-    nodeBinder(new Click(), () => new  AnonCmd(() => {
+    nodeBinder(new Click(), () => new AnonCmd(() => {
         console.log("Test");
     })).on(target).bind();
     // canvas.click();

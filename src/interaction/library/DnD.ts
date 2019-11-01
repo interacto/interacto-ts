@@ -12,17 +12,17 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import {StdState} from "../../../src/fsm/StdState";
-import {TerminalState} from "../../../src/fsm/TerminalState";
-import {CancellingState} from "../../../src/fsm/CancellingState";
-import {OutputState} from "../../../src/fsm/OutputState";
-import {InputState} from "../../../src/fsm/InputState";
-import {MoveTransition} from "../../fsm/MoveTransition";
-import {EscapeKeyPressureTransition} from "../../fsm/EscapeKeyPressureTransition";
-import {PointInteraction} from "./PointInteraction";
-import {SrcTgtPointsData} from "./SrcTgtPointsData";
-import {Optional} from "../../util/Optional";
+import { FSMDataHandler } from "../../fsm/FSMDataHandler";
+import { StdState } from "../../../src/fsm/StdState";
+import { TerminalState } from "../../../src/fsm/TerminalState";
+import { CancellingState } from "../../../src/fsm/CancellingState";
+import { OutputState } from "../../../src/fsm/OutputState";
+import { InputState } from "../../../src/fsm/InputState";
+import { MoveTransition } from "../../fsm/MoveTransition";
+import { EscapeKeyPressureTransition } from "../../fsm/EscapeKeyPressureTransition";
+import { PointInteraction } from "./PointInteraction";
+import { SrcTgtPointsData } from "./SrcTgtPointsData";
+import { Optional } from "../../util/Optional";
 import { FSM } from "../../fsm/FSM";
 import { PressureTransition } from "../../fsm/PressureTransition";
 import { ReleaseTransition } from "../../fsm/ReleaseTransition";
@@ -43,7 +43,7 @@ export class DnDFSM extends FSM {
         super.buildFSM(dataHandler);
 
         const pressed: StdState = new StdState(this, "pressed");
-        const dragged: StdState = new  StdState(this, "dragged");
+        const dragged: StdState = new StdState(this, "dragged");
         const released: TerminalState = new TerminalState(this, "released");
         const cancelled: CancellingState = new CancellingState(this, "cancelled");
 
@@ -182,7 +182,7 @@ export class DnD extends PointInteraction<SrcTgtPointsData, DnDFSM, Node> implem
     /**
      * Creates the interaction.
      */
-    private readonly handler : DnDFSMHandler;
+    private readonly handler: DnDFSMHandler;
 
     public constructor(srcOnUpdate: boolean, cancellable: boolean, fsm?: DnDFSM) {
         super(fsm === undefined ? new DnDFSM(cancellable) : fsm);

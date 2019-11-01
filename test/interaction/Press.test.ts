@@ -12,11 +12,11 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {Press} from "../../src/interaction/library/Press";
-import {FSMHandler} from "../../src/fsm/FSMHandler";
-import {StubFSMHandler} from "../fsm/StubFSMHandler";
-import {createMouseEvent} from "./StubEvents";
-import {EventRegistrationToken} from "../../src/fsm/Events";
+import { Press } from "../../src/interaction/library/Press";
+import { FSMHandler } from "../../src/fsm/FSMHandler";
+import { StubFSMHandler } from "../fsm/StubFSMHandler";
+import { createMouseEvent } from "./StubEvents";
+import { EventRegistrationToken } from "../../src/fsm/Events";
 
 jest.mock("../fsm/StubFSMHandler");
 

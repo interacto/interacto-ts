@@ -12,8 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {ScrollData} from "./ScrollData";
-import {Optional} from "../../util/Optional";
+import { ScrollData } from "./ScrollData";
+import { Optional } from "../../util/Optional";
 
 export class ScrollDataImpl implements ScrollData {
 
@@ -25,7 +25,7 @@ export class ScrollDataImpl implements ScrollData {
 
     protected increment: number | undefined;
 
-    public constructor() {}
+    public constructor() { }
 
     public reinitData(): void {
         this.increment = undefined;
@@ -56,7 +56,7 @@ export class ScrollDataImpl implements ScrollData {
         if (event.view !== null) {
             this.increment = this.getIncrement() + (event.view.scrollY === undefined
                 || event.view.scrollY < this.getIncrement() ? 0 :
-                event.view.scrollY - (this.py === undefined || event.view.scrollY  < this.getIncrement() ? 0 : this.py));
+                event.view.scrollY - (this.py === undefined || event.view.scrollY < this.getIncrement() ? 0 : this.py));
             this.px = event.view.scrollX;
             this.py = event.view.scrollY;
         }

@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {CommandImpl} from "../CommandImpl";
+import { CommandImpl } from "../CommandImpl";
 
 /**
  * Create the command.

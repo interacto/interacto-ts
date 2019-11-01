@@ -12,11 +12,11 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSM} from "../fsm/FSM";
-import {CommandImpl} from "../command/CommandImpl";
-import {InteractionData} from "../interaction/InteractionData";
-import {MArray} from "../util/ArrayUtil";
-import {LogLevel} from "../logging/LogLevel";
+import { FSM } from "../fsm/FSM";
+import { CommandImpl } from "../command/CommandImpl";
+import { InteractionData } from "../interaction/InteractionData";
+import { MArray } from "../util/ArrayUtil";
+import { LogLevel } from "../logging/LogLevel";
 import { WidgetBindingImpl } from "./WidgetBindingImpl";
 import { InteractionImpl } from "../interaction/InteractionImpl";
 
@@ -62,7 +62,6 @@ export class AnonNodeBinding<C extends CommandImpl, I extends InteractionImpl<D,
                        onEndFct: (i: D, c: C | undefined) => void, cancel: (i: D, c: C | undefined) => void,
                        endOrCancel: (i: D, c: C | undefined) => void, feedback: () => void, widgets: Array<EventTarget>,
                        additionalWidgets: Array<Node>, targetWidgets: MArray<EventTarget>,
-                       // List<ObservableList<? extends Node>> additionalWidgets, HelpAnimation animation, help : boolean
                        asyncExec: boolean, strict: boolean, loggers: Array<LogLevel>) {
         super(exec, interaction, cmdProducer, widgets);
         this.configureLoggers(loggers);

@@ -12,19 +12,19 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSMHandler} from "../../src/fsm/FSMHandler";
-import {StubFSMHandler} from "../fsm/StubFSMHandler";
-import {DragLock} from "../../src/interaction/library/DragLock";
-import {createMouseEvent} from "./StubEvents";
-import {EventRegistrationToken} from "../../src/fsm/Events";
+import { FSMHandler } from "../../src/fsm/FSMHandler";
+import { StubFSMHandler } from "../fsm/StubFSMHandler";
+import { DragLock } from "../../src/interaction/library/DragLock";
+import { createMouseEvent } from "./StubEvents";
+import { EventRegistrationToken } from "../../src/fsm/Events";
 
 jest.mock("../fsm/StubFSMHandler");
 
 let interaction: DragLock;
 let svg: SVGSVGElement;
 let handler: FSMHandler;
-let rect1 : SVGRectElement;
-let rect2 : SVGRectElement;
+let rect1: SVGRectElement;
+let rect2: SVGRectElement;
 
 beforeEach(() => {
     jest.clearAllMocks();

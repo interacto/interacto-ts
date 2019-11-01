@@ -12,13 +12,13 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import {TerminalState} from "../../fsm/TerminalState";
-import {ClickTransition} from "../../fsm/ClickTransition";
-import {InputState} from "../../fsm/InputState";
-import {OutputState} from "../../fsm/OutputState";
-import {PointInteraction} from "./PointInteraction";
-import {PointData} from "./PointData";
+import { FSMDataHandler } from "../../fsm/FSMDataHandler";
+import { TerminalState } from "../../fsm/TerminalState";
+import { ClickTransition } from "../../fsm/ClickTransition";
+import { InputState } from "../../fsm/InputState";
+import { OutputState } from "../../fsm/OutputState";
+import { PointInteraction } from "./PointInteraction";
+import { PointData } from "./PointData";
 import { FSM } from "../../fsm/FSM";
 
 export class ClickFSM extends FSM {

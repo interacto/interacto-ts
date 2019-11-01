@@ -12,15 +12,15 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {TerminalState} from "../../fsm/TerminalState";
-import {isTextInput} from "../../fsm/Events";
-import {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import {WidgetData} from "../WidgetData";
-import {StdState} from "../../fsm/StdState";
-import {TextInputChangedTransition} from "../../fsm/TextInputChangedTransition";
-import {TimeoutTransition} from "../../fsm/TimeoutTransition";
-import {OutputState} from "../../fsm/OutputState";
-import {InputState} from "../../fsm/InputState";
+import { TerminalState } from "../../fsm/TerminalState";
+import { isTextInput } from "../../fsm/Events";
+import { FSMDataHandler } from "../../fsm/FSMDataHandler";
+import { WidgetData } from "../WidgetData";
+import { StdState } from "../../fsm/StdState";
+import { TextInputChangedTransition } from "../../fsm/TextInputChangedTransition";
+import { TimeoutTransition } from "../../fsm/TimeoutTransition";
+import { OutputState } from "../../fsm/OutputState";
+import { InputState } from "../../fsm/InputState";
 import { FSM } from "../../fsm/FSM";
 import { InteractionImpl } from "../InteractionImpl";
 
@@ -46,7 +46,7 @@ export class TextInputChangedFSM extends FSM {
 
     public buildFSM(dataHandler?: TextInputChangedHandler): void {
         if (this.states.length > 1) {
-            return ;
+            return;
         }
 
         super.buildFSM(dataHandler);
@@ -86,7 +86,7 @@ export class TextInputChangedFSM extends FSM {
 }
 
 
-export interface TextInputChangedHandler  extends FSMDataHandler {
+export interface TextInputChangedHandler extends FSMDataHandler {
     initToChangedHandler(event: Event): void;
 }
 

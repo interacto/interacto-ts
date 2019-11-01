@@ -12,19 +12,19 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import {DoubleClick, DoubleClickFSM} from "./DoubleClick";
-import {TerminalState} from "../../fsm/TerminalState";
-import {CancellingState} from "../../fsm/CancellingState";
-import {StdState} from "../../fsm/StdState";
-import {SubFSMTransition} from "../../fsm/SubFSMTransition";
-import {InputState} from "../../fsm/InputState";
-import {FSM} from "../../fsm/FSM";
-import {OutputState} from "../../fsm/OutputState";
-import {MoveTransition} from "../../fsm/MoveTransition";
-import {EscapeKeyPressureTransition} from "../../fsm/EscapeKeyPressureTransition";
-import {SrcTgtPointsData} from "./SrcTgtPointsData";
-import {Optional} from "../../util/Optional";
+import { FSMDataHandler } from "../../fsm/FSMDataHandler";
+import { DoubleClick, DoubleClickFSM } from "./DoubleClick";
+import { TerminalState } from "../../fsm/TerminalState";
+import { CancellingState } from "../../fsm/CancellingState";
+import { StdState } from "../../fsm/StdState";
+import { SubFSMTransition } from "../../fsm/SubFSMTransition";
+import { InputState } from "../../fsm/InputState";
+import { FSM } from "../../fsm/FSM";
+import { OutputState } from "../../fsm/OutputState";
+import { MoveTransition } from "../../fsm/MoveTransition";
+import { EscapeKeyPressureTransition } from "../../fsm/EscapeKeyPressureTransition";
+import { SrcTgtPointsData } from "./SrcTgtPointsData";
+import { Optional } from "../../util/Optional";
 import { InteractionImpl } from "../InteractionImpl";
 
 export class DragLockFSM extends FSM {

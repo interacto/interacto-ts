@@ -12,8 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {Optional} from "../../util/Optional";
-import {PointData} from "./PointData";
+import { Optional } from "../../util/Optional";
+import { PointData } from "./PointData";
 
 export class PointDataImpl implements PointData {
     /** The pressed X-local position. */

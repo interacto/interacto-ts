@@ -12,11 +12,11 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {StateImpl} from "./StateImpl";
-import {OutputState} from "./OutputState";
-import {Transition} from "./Transition";
-import {FSM} from "./FSM";
-import {MArray} from "../util/ArrayUtil";
+import { StateImpl } from "./StateImpl";
+import { OutputState } from "./OutputState";
+import { Transition } from "./Transition";
+import { FSM } from "./FSM";
+import { MArray } from "../util/ArrayUtil";
 
 export abstract class OutputStateImpl extends StateImpl implements OutputState {
     protected readonly transitions: MArray<Transition>;

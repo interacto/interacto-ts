@@ -12,9 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {OutputState} from "./OutputState";
-import {InputState} from "./InputState";
-import {EventRegistrationToken, isCheckBox} from "./Events";
+import { OutputState } from "./OutputState";
+import { InputState } from "./InputState";
+import { EventRegistrationToken, isCheckBox } from "./Events";
 import { Transition } from "./Transition";
 
 /**
@@ -26,7 +26,7 @@ export class BoxCheckPressedTransition extends Transition {
     /**
      * Creates the transition.
      */
-    public constructor (srcState: OutputState, tgtState: InputState) {
+    public constructor(srcState: OutputState, tgtState: InputState) {
         super(srcState, tgtState);
     }
 

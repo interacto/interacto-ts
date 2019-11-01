@@ -12,9 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {Undoable} from "./Undoable";
-import {Optional} from "../util/Optional";
-import {MArray} from "../util/ArrayUtil";
+import { Undoable } from "./Undoable";
+import { Optional } from "../util/Optional";
+import { MArray } from "../util/ArrayUtil";
 import { Subject, Observable } from "rxjs";
 
 /**
@@ -53,7 +53,7 @@ export class UndoCollector {
     private sizeMax: number;
 
     private readonly undoPublisher: Subject<Optional<Undoable>>;
-	private readonly redoPublisher: Subject<Optional<Undoable>>;
+    private readonly redoPublisher: Subject<Optional<Undoable>>;
 
     constructor() {
         this.sizeMax = 0;
@@ -70,7 +70,7 @@ export class UndoCollector {
 	 * that no undoable object are stored anymore.
      */
     public undosObservable(): Observable<Optional<Undoable>> {
-		return this.undoPublisher;
+        return this.undoPublisher;
     }
 
     /**
@@ -79,8 +79,8 @@ export class UndoCollector {
 	 * that no redoable object are stored anymore.
      */
     public redosObservable(): Observable<Optional<Undoable>> {
-		return this.redoPublisher;
-	}
+        return this.redoPublisher;
+    }
 
     /**
      * Removes all the undoable objects of the collector.
@@ -93,11 +93,11 @@ export class UndoCollector {
     }
 
     private clearRedo(): void {
-		if (!this.redos.isEmpty()) {
-			this.redos.clear();
-			this.redoPublisher.next(Optional.empty());
-		}
-	}
+        if (!this.redos.isEmpty()) {
+            this.redos.clear();
+            this.redoPublisher.next(Optional.empty());
+        }
+    }
 
     /**
      * Adds an undoable object to the collector.
@@ -189,8 +189,8 @@ export class UndoCollector {
                 removed = true;
             }
             if (removed && this.undos.isEmpty()) {
-				this.undoPublisher.next(Optional.empty());
-			}
+                this.undoPublisher.next(Optional.empty());
+            }
             this.sizeMax = max;
         }
     }

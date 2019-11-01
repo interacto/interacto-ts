@@ -12,8 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {UndoCollector} from "../../undo/UndoCollector";
-import {CommandImpl} from "../CommandImpl";
+import { UndoCollector } from "../../undo/UndoCollector";
+import { CommandImpl } from "../CommandImpl";
 
 /**
  * Initialises an Undo command.

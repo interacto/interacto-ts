@@ -12,11 +12,11 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {TerminalState} from "../../fsm/TerminalState";
-import {isChoiceBox} from "../../fsm/Events";
-import {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import {WidgetData} from "../WidgetData";
-import {ChoiceBoxTransition} from "../../fsm/ChoiceBoxTransition";
+import { TerminalState } from "../../fsm/TerminalState";
+import { isChoiceBox } from "../../fsm/Events";
+import { FSMDataHandler } from "../../fsm/FSMDataHandler";
+import { WidgetData } from "../WidgetData";
+import { ChoiceBoxTransition } from "../../fsm/ChoiceBoxTransition";
 import { FSM } from "../../fsm/FSM";
 import { InteractionImpl } from "../InteractionImpl";
 
@@ -27,7 +27,7 @@ export class ChoiceBoxSelectedSFM extends FSM {
 
     public buildFSM(dataHandler?: ChoiceBoxSelectedHandler): void {
         if (this.states.length > 1) {
-            return ;
+            return;
         }
 
         super.buildFSM(dataHandler);
@@ -45,7 +45,7 @@ export class ChoiceBoxSelectedSFM extends FSM {
 }
 
 
-export interface ChoiceBoxSelectedHandler  extends FSMDataHandler {
+export interface ChoiceBoxSelectedHandler extends FSMDataHandler {
     initToSelectedHandler(event: Event): void;
 }
 

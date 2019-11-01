@@ -12,15 +12,15 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {WidgetBinding} from "./WidgetBinding";
-import {CancelFSMException} from "../fsm/CancelFSMException";
-import {isUndoableType} from "../undo/Undoable";
-import {catBinder, catCommand} from "../logging/ConfigLog";
-import {FSM} from "../fsm/FSM";
-import {MustBeUndoableCmdException} from "./MustBeUndoableCmdException";
-import {Command, RegistrationPolicy, CmdStatus} from "../command/Command";
-import {CommandsRegistry} from "../command/CommandsRegistry";
-import {InteractionData} from "../interaction/InteractionData";
+import { WidgetBinding } from "./WidgetBinding";
+import { CancelFSMException } from "../fsm/CancelFSMException";
+import { isUndoableType } from "../undo/Undoable";
+import { catBinder, catCommand } from "../logging/ConfigLog";
+import { FSM } from "../fsm/FSM";
+import { MustBeUndoableCmdException } from "./MustBeUndoableCmdException";
+import { Command, RegistrationPolicy, CmdStatus } from "../command/Command";
+import { CommandsRegistry } from "../command/CommandsRegistry";
+import { InteractionData } from "../interaction/InteractionData";
 import { InteractionImpl } from "../interaction/InteractionImpl";
 import { Subject, Observable } from "rxjs";
 
@@ -31,7 +31,7 @@ import { Subject, Observable } from "rxjs";
  * @author Arnaud BLOUIN
  */
 export abstract class WidgetBindingImpl<C extends Command, I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>
-            implements WidgetBinding<C> {
+    implements WidgetBinding<C> {
 
     protected asLogBinding: boolean;
 
@@ -66,14 +66,14 @@ export abstract class WidgetBindingImpl<C extends Command, I extends Interaction
 
     protected readonly cmdsProduced: Subject<C>;
 
-     /**
-     * Creates a widget binding.
-     * @param continuousExecution Specifies whether the command must be executed on each step of the interaction.
-     * @param cmdProducer The type of the command that will be created. Used to instantiate the command by reflexivity.
-     * The class must be public and must have a constructor with no parameter.
-     * @param interaction The user interaction of the binding.
-     * @param widgets The widgets concerned by the binding. Cannot be null.
-     */
+    /**
+    * Creates a widget binding.
+    * @param continuousExecution Specifies whether the command must be executed on each step of the interaction.
+    * @param cmdProducer The type of the command that will be created. Used to instantiate the command by reflexivity.
+    * The class must be public and must have a constructor with no parameter.
+    * @param interaction The user interaction of the binding.
+    * @param widgets The widgets concerned by the binding. Cannot be null.
+    */
     protected constructor(continuousExecution: boolean, interaction: I, cmdProducer: (i?: D) => C, widgets: Array<EventTarget>) {
         this.asLogBinding = false;
         this.asLogCmd = false;
@@ -125,36 +125,36 @@ export abstract class WidgetBindingImpl<C extends Command, I extends Interaction
     }
 
     public first(): void {
-		// to override.
-	}
+        // to override.
+    }
 
     public then(): void {
         // to override.
     }
 
-	public end(): void {
-		// to override.
-	}
+    public end(): void {
+        // to override.
+    }
 
-	public cancel(): void {
-		// to override.
-	}
+    public cancel(): void {
+        // to override.
+    }
 
-	public endOrCancel(): void {
-		// to override.
+    public endOrCancel(): void {
+        // to override.
     }
 
     public ifCmdHadNoEffect(): void {
-		// to override.
-	}
+        // to override.
+    }
 
-	public ifCmdHadEffects(): void {
-		// to override.
-	}
+    public ifCmdHadEffects(): void {
+        // to override.
+    }
 
-	public ifCannotExecuteCmd(): void {
-		// to override.
-	}
+    public ifCannotExecuteCmd(): void {
+        // to override.
+    }
 
     public getInteraction(): I {
         return this.interaction;
@@ -237,7 +237,7 @@ export abstract class WidgetBindingImpl<C extends Command, I extends Interaction
      */
     public fsmStarts(): void {
         if (!this.isActivated()) {
-			return;
+            return;
         }
 
         const ok: boolean = this.when();
@@ -263,7 +263,7 @@ export abstract class WidgetBindingImpl<C extends Command, I extends Interaction
 
     public fsmUpdates(): void {
         if (!this.isActivated()) {
-			return;
+            return;
         }
 
         if (this.asLogBinding) {
@@ -278,19 +278,19 @@ export abstract class WidgetBindingImpl<C extends Command, I extends Interaction
             this.then();
 
             if (this.continuousCmdExec) {
-				if (this.asLogCmd) {
-					catCommand.info("Try to execute command (continuous execution)");
-				}
-				const ok = this.cmd === undefined ? false : this.cmd.doIt();
+                if (this.asLogCmd) {
+                    catCommand.info("Try to execute command (continuous execution)");
+                }
+                const ok = this.cmd === undefined ? false : this.cmd.doIt();
 
-				if (this.asLogCmd) {
-					catCommand.info(`Continuous command execution had this result: ${ok}`);
-				}
+                if (this.asLogCmd) {
+                    catCommand.info(`Continuous command execution had this result: ${ok}`);
+                }
 
-				if (!ok) {
-					this.ifCannotExecuteCmd();
-				}
-			}
+                if (!ok) {
+                    this.ifCannotExecuteCmd();
+                }
+            }
         }
     }
 
@@ -299,7 +299,7 @@ export abstract class WidgetBindingImpl<C extends Command, I extends Interaction
      */
     public fsmStops(): void {
         if (!this.isActivated()) {
-			return;
+            return;
         }
 
         if (this.asLogBinding) {
@@ -337,25 +337,25 @@ export abstract class WidgetBindingImpl<C extends Command, I extends Interaction
         }
     }
 
-	protected createAndInitCommand(): boolean {
-		const ok = this.when();
+    protected createAndInitCommand(): boolean {
+        const ok = this.when();
 
-		if (this.asLogBinding) {
+        if (this.asLogBinding) {
             catBinder.info(`when predicate is ${ok}`);
-		}
+        }
 
-		if (ok) {
-			if (this.cmd === undefined) {
-				if (this.asLogCmd) {
-					catCommand.info("Command creation");
-				}
-				this.cmd = this.createCommand();
-				this.first();
-			}
-		}
+        if (ok) {
+            if (this.cmd === undefined) {
+                if (this.asLogCmd) {
+                    catCommand.info("Command creation");
+                }
+                this.cmd = this.createCommand();
+                this.first();
+            }
+        }
 
-		return ok;
-	}
+        return ok;
+    }
 
     private executeCmd(cmd: C, async: boolean): void {
         if (async) {
@@ -370,7 +370,7 @@ export abstract class WidgetBindingImpl<C extends Command, I extends Interaction
     }
 
     protected afterCmdExecuted(cmd: C, ok: boolean): void {
-        if ( this.cmd === undefined) {
+        if (this.cmd === undefined) {
             return;
         }
 
@@ -381,15 +381,15 @@ export abstract class WidgetBindingImpl<C extends Command, I extends Interaction
             this.end();
             this.endOrCancel();
         } else {
-			this.ifCannotExecuteCmd();
+            this.ifCannotExecuteCmd();
         }
 
         // In continuous mode, a command may have been executed in the update routine
         if (this.cmd.getStatus() !== CmdStatus.EXECUTED) {
-			return;
-		}
+            return;
+        }
 
-		// For commands executed at least one time
+        // For commands executed at least one time
         this.cmd.done();
         this.cmdsProduced.next(cmd);
 
@@ -441,7 +441,7 @@ export abstract class WidgetBindingImpl<C extends Command, I extends Interaction
             this.unbindCmdAttributes();
             this.cmd.flush();
             this.cmd = undefined;
-		}
+        }
     }
 
     public setLogBinding(log: boolean) {
@@ -453,6 +453,6 @@ export abstract class WidgetBindingImpl<C extends Command, I extends Interaction
     }
 
     public produces(): Observable<C> {
-		return this.cmdsProduced;
-	}
+        return this.cmdsProduced;
+    }
 }

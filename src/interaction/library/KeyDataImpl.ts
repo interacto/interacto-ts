@@ -12,8 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {Optional} from "../../util/Optional";
-import {KeyData} from "./KeyData";
+import { Optional } from "../../util/Optional";
+import { KeyData } from "./KeyData";
 
 export class KeyDataImpl implements KeyData {
     /**
@@ -24,9 +24,9 @@ export class KeyDataImpl implements KeyData {
     /**
      * The target of the event that trigger the interaction
      */
-    protected target : EventTarget | undefined;
+    protected target: EventTarget | undefined;
 
-    public constructor() {}
+    public constructor() { }
 
     public reinitData(): void {
         this.key = undefined;
@@ -43,6 +43,6 @@ export class KeyDataImpl implements KeyData {
 
     public setKeyData(event: KeyboardEvent): void {
         this.target = event.target === null ? undefined : event.target;
-        this.key =  event.code;
+        this.key = event.code;
     }
 }

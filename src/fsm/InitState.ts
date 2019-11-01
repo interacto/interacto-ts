@@ -12,8 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {OutputStateImpl} from "./OutputStateImpl";
-import {FSM} from "./FSM";
+import { OutputStateImpl } from "./OutputStateImpl";
+import { FSM } from "./FSM";
 
 export class InitState extends OutputStateImpl {
     constructor(stateMachine: FSM, stateName: string) {

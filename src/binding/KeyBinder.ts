@@ -12,10 +12,10 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {KeysPressed} from "../interaction/library/KeysPressed";
-import {KeysData} from "../interaction/library/KeysData";
-import {CommandImpl} from "../command/CommandImpl";
-import {Binder} from "./Binder";
+import { KeysPressed } from "../interaction/library/KeysPressed";
+import { KeysData } from "../interaction/library/KeysData";
+import { CommandImpl } from "../command/CommandImpl";
+import { Binder } from "./Binder";
 
 /**
  * The binding builder to create bindings between a combobox interaction and a given command.
@@ -27,19 +27,19 @@ export class KeyBinder<C extends CommandImpl, B extends KeyBinder<C, B>> extends
     private readonly codes: Array<String>;
     public readonly checkCode: boolean;
 
-    public constructor(cmdProducer: (i ?: KeysData) => C) {
+    public constructor(cmdProducer: (i?: KeysData) => C) {
         super(new KeysPressed(), cmdProducer);
         this.codes = [];
-        this.checkCode =  this.isPresent(this.codes, this.interaction.getData());
+        this.checkCode = this.isPresent(this.codes, this.interaction.getData());
     }
 
     private isPresent(codes: Array<String>, data: KeysData): boolean {
         let keys: Array<String>;
         keys = data.getKeys();
-        return (codes.length === 0 || codes.length === keys.length && keys.every( value => codes.indexOf(value) >= 0));
+        return (codes.length === 0 || codes.length === keys.length && keys.every(value => codes.indexOf(value) >= 0));
     }
 
-    public with(codes: Array<String>): B  {
+    public with(codes: Array<String>): B {
         codes.forEach(value => this.codes.push(value));
         return this as {} as B;
     }

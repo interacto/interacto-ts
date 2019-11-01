@@ -12,14 +12,14 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {Transition} from "./Transition";
-import {FSM} from "./FSM";
-import {FSMHandler} from "./FSMHandler";
-import {isOutputStateType, OutputState} from "./OutputState";
-import {InputState} from "./InputState";
-import {Optional} from "../util/Optional";
-import {TerminalState} from "./TerminalState";
-import {CancellingState} from "./CancellingState";
+import { Transition } from "./Transition";
+import { FSM } from "./FSM";
+import { FSMHandler } from "./FSMHandler";
+import { isOutputStateType, OutputState } from "./OutputState";
+import { InputState } from "./InputState";
+import { Optional } from "../util/Optional";
+import { TerminalState } from "./TerminalState";
+import { CancellingState } from "./CancellingState";
 
 export class SubFSMTransition extends Transition {
     private readonly subFSM: FSM;
@@ -50,7 +50,7 @@ export class SubFSMTransition extends Transition {
                 this._parent.action(undefined);
                 this._parent.subFSM.removeHandler(this._parent.subFSMHandler);
                 this._parent.src.getFSM().setCurrentSubFSM(undefined);
-                if (this._parent.tgt instanceof  TerminalState) {
+                if (this._parent.tgt instanceof TerminalState) {
                     this._parent.tgt.enter();
                     return;
                 }

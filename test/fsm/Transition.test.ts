@@ -12,10 +12,10 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {StdState} from "../../src/fsm/StdState";
-import {Transition} from "../../src/fsm/Transition";
-import {FSM} from "../../src/fsm/FSM";
-import {StubTransitionOK} from "./StubTransitionOK";
+import { StdState } from "../../src/fsm/StdState";
+import { Transition } from "../../src/fsm/Transition";
+import { FSM } from "../../src/fsm/FSM";
+import { StubTransitionOK } from "./StubTransitionOK";
 import "jest";
 
 let tr: Transition;

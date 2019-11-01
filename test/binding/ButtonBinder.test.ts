@@ -12,11 +12,11 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {ButtonBinder} from "../../src/binding/ButtonBinder";
-import {StubFSMHandler} from "../fsm/StubFSMHandler";
-import {ButtonPressed} from "../../src/interaction/library/ButtonPressed";
-import {StubCmd} from "../command/StubCmd";
-import {WidgetData} from "../../src/interaction/WidgetData";
+import { ButtonBinder } from "../../src/binding/ButtonBinder";
+import { StubFSMHandler } from "../fsm/StubFSMHandler";
+import { ButtonPressed } from "../../src/interaction/library/ButtonPressed";
+import { StubCmd } from "../command/StubCmd";
+import { WidgetData } from "../../src/interaction/WidgetData";
 import { WidgetBindingImpl } from "../../src";
 
 jest.mock("../fsm/StubFSMHandler");

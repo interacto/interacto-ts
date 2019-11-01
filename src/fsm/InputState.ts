@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {State} from "./State";
+import { State } from "./State";
 
 export interface InputState extends State {
     enter(): void;

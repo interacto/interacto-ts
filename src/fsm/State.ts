@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSM} from "./FSM";
+import { FSM } from "./FSM";
 
 export interface State {
     getName(): string;

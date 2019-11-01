@@ -12,9 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSMHandler} from "../../src/fsm/FSMHandler";
-import {StubFSMHandler} from "../fsm/StubFSMHandler";
-import {TextInputChanged} from "../../src/interaction/library/TextInputChanged";
+import { FSMHandler } from "../../src/fsm/FSMHandler";
+import { StubFSMHandler } from "../fsm/StubFSMHandler";
+import { TextInputChanged } from "../../src/interaction/library/TextInputChanged";
 
 jest.mock("../fsm/StubFSMHandler");
 jest.useFakeTimers();

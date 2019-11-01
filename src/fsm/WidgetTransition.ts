@@ -12,9 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {Transition} from "./Transition";
-import {OutputState} from "./OutputState";
-import {InputState} from "./InputState";
+import { Transition } from "./Transition";
+import { OutputState } from "./OutputState";
+import { InputState } from "./InputState";
 
 /**
  * This transition must be used to use a widget within an interaction.
