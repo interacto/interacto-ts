@@ -38,7 +38,7 @@ export class CommandsRegistry {
     private readonly cmds: MArray<Command>;
 
     /**
-     * The max number of cleanable commands (cf. Action::getRegistrationPolicy) that can contain the register.
+     * The max number of cleanable commands (cf. Command::getRegistrationPolicy) that can contain the register.
      */
     private sizeMax: number;
 
@@ -64,16 +64,16 @@ export class CommandsRegistry {
 
     /**
      * Removes and flushes the commands from the register that use the given command type.
-     * @see Action::unregisteredBy
+     * @see Command::unregisteredBy
      * @param {*} cmd The command that may cancels others.
      */
     public unregisterCmd(cmd: Command): void {
         let i = 0;
-        while ((i < this.cmds.length)) {
+        while (i < this.cmds.length) {
             if (this.cmds[i].unregisteredBy(cmd)) {
-                const delAction = this.cmds.removeAt(i);
-                if (delAction !== undefined) {
-                    delAction.flush();
+                const delCmd = this.cmds.removeAt(i);
+                if (delCmd !== undefined) {
+                    delCmd.flush();
                 }
             } else {
                 i++;
@@ -115,7 +115,7 @@ export class CommandsRegistry {
      * Removes the command from the register. The command is then flushed.
      * @param {*} cmd The command to remove.
      */
-    public removeAction(cmd: Command): void {
+    public removeCmd(cmd: Command): void {
         this.cmds.remove(cmd);
         cmd.flush();
     }
@@ -134,7 +134,7 @@ export class CommandsRegistry {
      * Handlers are then notified. The command is finally flushed.
      * @param {*} cmd The command to cancel.
      */
-    public cancelAction(cmd: Command): void {
+    public cancelCmd(cmd: Command): void {
         cmd.cancel();
         this.cmds.remove(cmd);
         cmd.flush();
@@ -150,7 +150,7 @@ export class CommandsRegistry {
     /**
      * Changes the number of commands that the register can contain.
      * In the case that commands have to be removed (because the new size is smaller than the old one),
-     * the necessary number of the oldest and cleanable commands (cf. Action::getRegistrationPolicy)
+     * the necessary number of the oldest and cleanable commands (cf. Command::getRegistrationPolicy)
      * are flushed and removed from the register.
      * @param {number} newSizeMax The max number of commands that can contain the register. Must be equal or greater than 0.
      */

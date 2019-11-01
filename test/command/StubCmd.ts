@@ -12,7 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {CommandImpl} from "../../src/command/CommandImpl";
+import { CommandImpl } from "../../src/command/CommandImpl";
+import { Undoable } from "../../src";
 
 export class StubCmd extends CommandImpl {
     public candoValue = false;
@@ -26,5 +27,21 @@ export class StubCmd extends CommandImpl {
 
     public canDo(): boolean {
         return this.candoValue;
+    }
+}
+
+export class StubUndoableCmd extends StubCmd implements Undoable {
+    public constructor() {
+        super();
+    }
+
+    public undo(): void {
+    }
+
+    public redo(): void {
+    }
+
+    public getUndoName(): string {
+        return "";
     }
 }
