@@ -21,8 +21,8 @@ let cmd: Command;
 
 afterEach(() => {
     jest.clearAllMocks();
-    CommandsRegistry.INSTANCE.clear();
-    UndoCollector.INSTANCE.clear();
+    CommandsRegistry.getInstance().clear();
+    UndoCollector.getInstance().clear();
 });
 
 test("testExecuteAndFlushCannotDo", () => {

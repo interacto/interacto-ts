@@ -15,6 +15,7 @@
 import { WidgetBindingImpl, InteractionData, Command, CommandsRegistry, CancelFSMException, FSM, ErrorCatcher } from "../../src";
 import { InteractionStub } from "../interaction/InteractionStub";
 import { StubCmd } from "../command/StubCmd";
+import { Subscription } from "rxjs";
 
 export class WidgetBindingStub extends WidgetBindingImpl<StubCmd, InteractionStub, InteractionData> {
     public conditionRespected: boolean;
@@ -43,16 +44,17 @@ export class WidgetBindingStub extends WidgetBindingImpl<StubCmd, InteractionStu
 }
 
 let binding: WidgetBindingStub;
+let errorStream: Subscription;
 
 beforeEach(() => {
     binding = new WidgetBindingStub(false, () => new StubCmd(), new InteractionStub(new FSM()));
     binding.setActivated(true);
-    ErrorCatcher.INSTANCE.setNotifier((err: Error) => fail());
+    errorStream = ErrorCatcher.getInstance().getErrors().subscribe((err: Error) => fail());
 });
 
 afterEach(() => {
-    CommandsRegistry.INSTANCE.clear();
-    ErrorCatcher.INSTANCE.setNotifier(undefined);
+    CommandsRegistry.getInstance().clear();
+    errorStream.unsubscribe();
 }
 
 );

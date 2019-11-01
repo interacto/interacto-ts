@@ -25,7 +25,15 @@ export class UndoCollector {
     /**
      * The default undo/redo collector.
      */
-    public static readonly INSTANCE: UndoCollector = new UndoCollector();
+    private static instance: UndoCollector = new UndoCollector();
+
+    public static setInstance(newInstance: UndoCollector): void {
+        this.instance = newInstance;
+    }
+
+    public static getInstance(): UndoCollector {
+        return this.instance;
+    }
 
     /**
      * The standard text for redo.
@@ -55,7 +63,7 @@ export class UndoCollector {
     private readonly undoPublisher: Subject<Optional<Undoable>>;
     private readonly redoPublisher: Subject<Optional<Undoable>>;
 
-    constructor() {
+    public constructor() {
         this.sizeMax = 0;
         this.undos = new MArray();
         this.redos = new MArray();

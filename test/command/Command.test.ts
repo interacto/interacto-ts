@@ -20,8 +20,8 @@ let cmd: StubCmd;
 beforeEach(() => {
     cmd = new StubCmd();
     cmd.candoValue = true;
-    CommandsRegistry.INSTANCE.clear();
-    UndoCollector.INSTANCE.clear();
+    CommandsRegistry.getInstance().clear();
+    UndoCollector.getInstance().clear();
 });
 
 

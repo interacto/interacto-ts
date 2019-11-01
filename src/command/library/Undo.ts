@@ -16,10 +16,7 @@ import { UndoCollector } from "../../undo/UndoCollector";
 import { CommandImpl } from "../CommandImpl";
 
 /**
- * Initialises an Undo command.
- * @since 0.2
- * @class
- * @extends CommandImpl
+ * An Undo command.
  * @author Arnaud BLOUIN
  */
 export class Undo extends CommandImpl {
@@ -32,11 +29,11 @@ export class Undo extends CommandImpl {
      * @return {boolean}
      */
     public canDo(): boolean {
-        return UndoCollector.INSTANCE.getLastUndo().isPresent();
+        return UndoCollector.getInstance().getLastUndo().isPresent();
     }
 
     protected doCmdBody(): void {
-        UndoCollector.INSTANCE.undo();
+        UndoCollector.getInstance().undo();
         this.done();
     }
 }

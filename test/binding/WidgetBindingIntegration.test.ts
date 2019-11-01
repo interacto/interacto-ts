@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { InteractionStub } from "../interaction/InteractionStub";
-import { InteractionData, WidgetBindingImpl, FSM, CommandsRegistry, ErrorCatcher, TerminalState,
+import { InteractionData, WidgetBindingImpl, FSM, CommandsRegistry, TerminalState,
         Transition, OutputState, InputState, CmdStatus } from "../../src";
 import { StubCmd } from "../command/StubCmd";
 import { StubSubEvent1 } from "../fsm/StubEvent";
@@ -88,8 +88,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-    CommandsRegistry.INSTANCE.clear();
-    ErrorCatcher.INSTANCE.setNotifier(undefined);
+    CommandsRegistry.getInstance().clear();
 });
 
 test("testNothingDoneIsDeactivated", () => {

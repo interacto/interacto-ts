@@ -28,105 +28,107 @@ class StubCmd2 extends CommandImpl {
     }
 }
 
+let instance : CommandsRegistry;
+
 beforeEach(() => {
-    CommandsRegistry.INSTANCE.clear();
-    CommandsRegistry.INSTANCE.setSizeMax(30);
-    UndoCollector.INSTANCE.clear();
+    instance = new CommandsRegistry();
+    instance.setSizeMax(30);
+    UndoCollector.getInstance().clear();
 });
 
 test("testGetSetSizeMaxOK", () => {
-    CommandsRegistry.INSTANCE.setSizeMax(55);
-    expect(CommandsRegistry.INSTANCE.getSizeMax()).toEqual(55);
+    instance.setSizeMax(55);
+    expect(instance.getSizeMax()).toEqual(55);
 });
 
 test("testGetSetSizeMaxNeg", () => {
-    CommandsRegistry.INSTANCE.setSizeMax(45);
-    CommandsRegistry.INSTANCE.setSizeMax(-1);
-    expect(CommandsRegistry.INSTANCE.getSizeMax()).toEqual(45);
+    instance.setSizeMax(45);
+    instance.setSizeMax(-1);
+    expect(instance.getSizeMax()).toEqual(45);
 });
 
 test("testGetSetSizeMaxZero", () => {
-    CommandsRegistry.INSTANCE.setSizeMax(0);
-    expect(CommandsRegistry.INSTANCE.getSizeMax()).toEqual(0);
+    instance.setSizeMax(0);
+    expect(instance.getSizeMax()).toEqual(0);
 });
 
 test("testSetSizeMaxRemovesCmd", () => {
     const command1 = new StubCmd();
     const command2 = new StubCmd();
-    CommandsRegistry.INSTANCE.setSizeMax(10);
-    CommandsRegistry.INSTANCE.addCommand(command1);
-    CommandsRegistry.INSTANCE.addCommand(command2);
-    CommandsRegistry.INSTANCE.setSizeMax(1);
+    instance.setSizeMax(10);
+    instance.addCommand(command1);
+    instance.addCommand(command2);
+    instance.setSizeMax(1);
 
     expect(command1.getStatus()).toEqual(CmdStatus.FLUSHED);
     expect(command2.getStatus()).toEqual(CmdStatus.CREATED);
-    expect(CommandsRegistry.INSTANCE.getCommands().length).toEqual(1);
-    expect(CommandsRegistry.INSTANCE.getCommands()[0]).toBe(command2);
+    expect(instance.getCommands().length).toEqual(1);
+    expect(instance.getCommands()[0]).toBe(command2);
 });
 
 test("testCancelCommandFlush", () => {
     const command = new StubCmd();
-    CommandsRegistry.INSTANCE.cancelCmd(command);
+    instance.cancelCmd(command);
     expect(command.getStatus()).toEqual(CmdStatus.FLUSHED);
 });
 
 test("testCancelCommandRemoved", () => {
     const command = new StubCmd();
-    CommandsRegistry.INSTANCE.addCommand(command);
-    CommandsRegistry.INSTANCE.cancelCmd(command);
-    expect(CommandsRegistry.INSTANCE.getCommands().length).toEqual(0);
+    instance.addCommand(command);
+    instance.cancelCmd(command);
+    expect(instance.getCommands().length).toEqual(0);
 });
 
 test("testRemoveCommand", () => {
     const command = new StubCmd();
-    CommandsRegistry.INSTANCE.addCommand(command);
-    CommandsRegistry.INSTANCE.removeCmd(command);
-    expect(CommandsRegistry.INSTANCE.getCommands().length).toEqual(0);
+    instance.addCommand(command);
+    instance.removeCmd(command);
+    expect(instance.getCommands().length).toEqual(0);
     expect(command.getStatus()).toEqual(CmdStatus.FLUSHED);
 });
 
 test("test Unregister Cmd KO", () => {
     const command = new StubCmd();
-    CommandsRegistry.INSTANCE.addCommand(command);
-    CommandsRegistry.INSTANCE.unregisterCmd(new StubCmd2());
-    expect(CommandsRegistry.INSTANCE.getCommands().length).toEqual(1);
+    instance.addCommand(command);
+    instance.unregisterCmd(new StubCmd2());
+    expect(instance.getCommands().length).toEqual(1);
     expect(command.getStatus()).not.toEqual(CmdStatus.FLUSHED);
 });
 
 test("test Unregister Cmd OK", () => {
     const command = new StubCmd2();
-    CommandsRegistry.INSTANCE.addCommand(command);
-    CommandsRegistry.INSTANCE.unregisterCmd(new StubCmd());
-    expect(CommandsRegistry.INSTANCE.getCommands().length).toEqual(0);
+    instance.addCommand(command);
+    instance.unregisterCmd(new StubCmd());
+    expect(instance.getCommands().length).toEqual(0);
     expect(command.getStatus()).toEqual(CmdStatus.FLUSHED);
 });
 
 test("testAddCommandCannotAddBecauseExist", () => {
     const command = new StubCmd();
-    CommandsRegistry.INSTANCE.getCommands().push(command);
-    CommandsRegistry.INSTANCE.addCommand(command);
-    expect(CommandsRegistry.INSTANCE.getCommands().length).toEqual(1);
+    instance.getCommands().push(command);
+    instance.addCommand(command);
+    expect(instance.getCommands().length).toEqual(1);
 });
 
 test("testAddCommandRemovesCommandWhenMaxCapacity", () => {
 	const command = new StubCmd();
 	const command2 = new StubCmd();
-	CommandsRegistry.INSTANCE.setSizeMax(1);
-	CommandsRegistry.INSTANCE.getCommands().push(command2);
-	CommandsRegistry.INSTANCE.addCommand(command);
-	expect(CommandsRegistry.INSTANCE.getCommands().length).toEqual(1);
-	expect(CommandsRegistry.INSTANCE.getCommands()[0]).toBe(command);
+	instance.setSizeMax(1);
+	instance.getCommands().push(command2);
+	instance.addCommand(command);
+	expect(instance.getCommands().length).toEqual(1);
+	expect(instance.getCommands()[0]).toBe(command);
 	expect(command2.getStatus()).toEqual(CmdStatus.FLUSHED);
 });
 
 test("testAddCommandRemovesCommandWhenMaxCapacity", () => {
-	CommandsRegistry.INSTANCE.setSizeMax(0);
-	CommandsRegistry.INSTANCE.addCommand(new StubCmd());
-	expect(CommandsRegistry.INSTANCE.getCommands().length).toEqual(0);
+	instance.setSizeMax(0);
+	instance.addCommand(new StubCmd());
+	expect(instance.getCommands().length).toEqual(0);
 });
 
 test("testAddCommandAddsUndoableCollector", () => {
 	const command = new StubUndoableCmd();
-	CommandsRegistry.INSTANCE.addCommand(command);
-	expect(UndoCollector.INSTANCE.getLastUndo().get()).toBe(command);
+	instance.addCommand(command);
+	expect(UndoCollector.getInstance().getLastUndo().get()).toBe(command);
 });

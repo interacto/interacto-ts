@@ -24,13 +24,20 @@ import { Subject, Observable } from "rxjs";
  * The register has a limited size that can be changed.
  * It can notify handler about changes in the registry.
  * @author Arnaud Blouin
- * @class
  */
 export class CommandsRegistry {
     /**
      * The singleton.
      */
-    public static readonly INSTANCE: CommandsRegistry = new CommandsRegistry();
+    private static instance: CommandsRegistry = new CommandsRegistry();
+
+    public static setInstance(newInstance: CommandsRegistry): void {
+        this.instance = newInstance;
+    }
+
+    public static getInstance(): CommandsRegistry {
+        return this.instance;
+    }
 
     /**
      * The saved commands.
@@ -44,7 +51,7 @@ export class CommandsRegistry {
 
     private readonly cmdPublisher: Subject<Command>;
 
-    constructor() {
+    public constructor() {
         this.cmds = new MArray();
         this.sizeMax = 50;
         this.cmdPublisher = new Subject();
@@ -106,7 +113,7 @@ export class CommandsRegistry {
             this.cmdPublisher.next(cmd);
 
             if (isUndoableType(cmd)) {
-                UndoCollector.INSTANCE.add(cmd);
+                UndoCollector.getInstance().add(cmd);
             }
         }
     }

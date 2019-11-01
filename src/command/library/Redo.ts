@@ -16,10 +16,7 @@ import { UndoCollector } from "../../undo/UndoCollector";
 import { CommandImpl } from "../CommandImpl";
 
 /**
- * Initialises a Redo action.
- * @since 0.2
- * @class
- * @extends CommandImpl
+ * A Redo action.
  * @author Arnaud BLOUIN
  */
 export class Redo extends CommandImpl {
@@ -32,11 +29,11 @@ export class Redo extends CommandImpl {
      * @return {boolean}
      */
     public canDo(): boolean {
-        return UndoCollector.INSTANCE.getLastRedo().isPresent();
+        return UndoCollector.getInstance().getLastRedo().isPresent();
     }
 
     protected doCmdBody(): void {
-        UndoCollector.INSTANCE.redo();
+        UndoCollector.getInstance().redo();
         this.done();
     }
 }

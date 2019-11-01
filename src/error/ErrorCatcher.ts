@@ -11,6 +11,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
+import { Subject, Observable } from "rxjs";
 
 
 /**
@@ -19,41 +20,40 @@
  * @author Arnaud BLOUIN
  */
 export class ErrorCatcher {
+    private static instance: ErrorCatcher = new ErrorCatcher();
+
+    public static setInstance(newInstance: ErrorCatcher): void {
+        this.instance = newInstance;
+    }
+
     /**
-     * The singleton.
+     * The single instance. Cannot be null.
      */
-    public static INSTANCE: ErrorCatcher = new ErrorCatcher();
+    public static getInstance(): ErrorCatcher {
+        return this.instance;
+    }
 
     /**
      * The notifier object.
      */
-    private notifier: ((err: Error) => void) | undefined;
+    private readonly notifier : Subject<Error>;
 
-    private constructor() {
+    public constructor() {
+        this.notifier = new Subject();
     }
 
     /**
-     * Sets the notifier that will be notified about the collected exceptions.
-     * @param {*} newNotifier The notifier that will be notified the collected exceptions. Can be undefined.
-     */
-    public setNotifier(newNotifier: ((err: Error) => void) | undefined): void {
-        this.notifier = newNotifier;
-    }
-
-    /**
-     * @return {*} The notifier that is notified about the collected exceptions.
-     */
-    public getErrorNotifier(): ((err: Error) => void) | undefined {
-        return this.notifier;
-    }
+	 * @return An observable stream of errors. Cannot be null.
+	 */
+	public getErrors(): Observable<Error> {
+		return this.notifier;
+	}
 
     /**
      * Gathers exceptions. The notifier is then notified of the exceptions (if defined).
-     * @param {Error} exception The errors to gather.
+     * @param {Error} err The errors to gather.
      */
-    public reportError(exception: Error): void {
-        if (this.notifier !== undefined) {
-            this.notifier(exception);
-        }
+    public reportError(err: Error): void {
+        this.notifier.next(err);
     }
 }
