@@ -31,7 +31,7 @@ import { Subject, Observable } from "rxjs";
  * @author Arnaud BLOUIN
  */
 export abstract class WidgetBindingImpl<C extends Command, I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>
-    implements WidgetBinding<C> {
+    implements WidgetBinding<C, I, D> {
 
     protected asLogBinding: boolean;
 

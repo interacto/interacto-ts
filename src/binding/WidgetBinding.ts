@@ -17,12 +17,13 @@ import { InteractionImpl } from "../interaction/InteractionImpl";
 import { FSM } from "../fsm/FSM";
 import { Command } from "../command/Command";
 import { Observable } from "rxjs";
+import { InteractionData } from "../interaction/InteractionData";
 
 /**
  * The concept of widget binding and its related services.
  * @author Arnaud BLOUIN
  */
-export interface WidgetBinding<C extends Command> extends FSMHandler {
+export interface WidgetBinding<C extends Command, I extends InteractionImpl<D, FSM, {}>, D extends InteractionData> extends FSMHandler {
     /**
      * Stops the interaction and clears all its events waiting for a process.
      */
@@ -76,7 +77,7 @@ export interface WidgetBinding<C extends Command> extends FSMHandler {
     /**
      * @return {InteractionImpl} The interaction.
      */
-    getInteraction(): InteractionImpl<{}, FSM, {}>;
+    getInteraction(): I;
 
     /**
      * @return {*} The command in progress or null.

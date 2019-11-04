@@ -70,8 +70,6 @@ class StubWidgetBinding extends WidgetBindingImpl<StubCmd, InteractionStub, Inte
     public ifCannotExecuteCmd(): void {
         cannotExec++;
     }
-    protected unbindCmdAttributes(): void {
-    }
 }
 
 beforeEach(() => {

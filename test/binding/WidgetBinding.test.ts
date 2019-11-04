@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { WidgetBindingImpl, InteractionData, Command, CommandsRegistry, CancelFSMException, FSM, ErrorCatcher } from "../../src";
+import { WidgetBindingImpl, InteractionData, CommandsRegistry, CancelFSMException, FSM, ErrorCatcher } from "../../src";
 import { InteractionStub } from "../interaction/InteractionStub";
 import { StubCmd } from "../command/StubCmd";
 import { Subscription } from "rxjs";
@@ -34,12 +34,6 @@ export class WidgetBindingStub extends WidgetBindingImpl<StubCmd, InteractionStu
 
     public isStrictStart(): boolean {
         return this.mustCancel;
-    }
-
-    protected unbindCmdAttributes(): void {
-    }
-
-    protected executeCmdAsync(cmd: Command): void {
     }
 }
 
