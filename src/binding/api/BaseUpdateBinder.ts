@@ -20,27 +20,27 @@ import { InteractionData } from "../../interaction/InteractionData";
 import { CmdUpdateBinder } from "./CmdUpdateBinder";
 import { InteractionUpdateBinder } from "./InteractionUpdateBinder";
 
-export interface BaseUpdateBinder<W> extends BaseUpdateBinderBuilder<W> {
-	on(...widgets: Array<W>): BaseUpdateBinder<W>;
+export interface BaseUpdateBinder extends BaseUpdateBinderBuilder {
+	on(...widgets: Array<EventTarget>): BaseUpdateBinder;
 
-    when(whenPredicate: () => boolean): BaseUpdateBinder<W>;
+    when(whenPredicate: () => boolean): BaseUpdateBinder;
 
-	end(endFct: () => void): BaseUpdateBinder<W>;
+	end(endFct: () => void): BaseUpdateBinder;
 
-	log(...level: Array<LogLevel>): BaseUpdateBinder<W>;
+	log(...level: Array<LogLevel>): BaseUpdateBinder;
 
-	// async(): BaseUpdateBinder<W>;
+	// async(): BaseUpdateBinder;
 
-	// help(): BaseUpdateBinder<W>;
+	// help(): BaseUpdateBinder;
 
-	continuousExecution(): BaseUpdateBinder<W>;
+	continuousExecution(): BaseUpdateBinder;
 
-	strictStart(): BaseUpdateBinder<W>;
+	strictStart(): BaseUpdateBinder;
 
-	throttle(timeout: number): BaseUpdateBinder<W>;
+	throttle(timeout: number): BaseUpdateBinder;
 
-	toProduce<C extends Command>(cmdSupplier: () => C): CmdUpdateBinder<W, C>;
+	toProduce<C extends Command>(cmdSupplier: () => C): CmdUpdateBinder<C>;
 
     usingInteraction<I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>
-        (interactionSupplier: () => I): InteractionUpdateBinder<W, I, D>;
+        (interactionSupplier: () => I): InteractionUpdateBinder<I, D>;
 }

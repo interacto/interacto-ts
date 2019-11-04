@@ -14,18 +14,18 @@
 import { BaseBinderBuilder } from "./BaseBinderBuilder";
 import { LogLevel } from "../../logging/LogLevel";
 
-export interface BaseUpdateBinderBuilder<W> extends BaseBinderBuilder<W>  {
+export interface BaseUpdateBinderBuilder extends BaseBinderBuilder {
 	/**
 	 * Specifies whether the command must be executed on each evolution of the interaction (if 'when' predicate is ok).
 	 * @return The builder to chain the building configuration.
 	 */
-	 continuousExecution(): BaseUpdateBinderBuilder<W>;
+	 continuousExecution(): BaseUpdateBinderBuilder;
 
 	/**
 	 * The interaction does not start if the condition of the binding ('when') is not fulfilled.
 	 * @return The builder to chain the building configuration.
 	 */
-	strictStart(): BaseUpdateBinderBuilder<W>;
+	strictStart(): BaseUpdateBinderBuilder;
 
 	/**
 	 * Backpressure operation. Instead of emitting all the events, successive events of the same type are factorized modulo a timeout.
@@ -39,17 +39,17 @@ export interface BaseUpdateBinderBuilder<W> extends BaseBinderBuilder<W>  {
 	 * @param timeout The timeout used by the throttle operation. In ms.
 	 * @return The builder to chain the building configuration.
 	 */
-	throttle(timeout: number): BaseUpdateBinderBuilder<W>;
+	throttle(timeout: number): BaseUpdateBinderBuilder;
 
-    when(whenPredicate: () => boolean): BaseUpdateBinderBuilder<W>;
+    when(whenPredicate: () => boolean): BaseUpdateBinderBuilder;
 
-    end(endFct: () => void): BaseUpdateBinderBuilder<W>;
+    end(endFct: () => void): BaseUpdateBinderBuilder;
 
-    log(...level: Array<LogLevel>): BaseUpdateBinderBuilder<W>;
+    log(...level: Array<LogLevel>): BaseUpdateBinderBuilder;
 
-    // async(): BaseUpdateBinderBuilder<W>;
+    // async(): BaseUpdateBinderBuilder;
 
-    // help(): BaseUpdateBinderBuilder<W>;
+    // help(): BaseUpdateBinderBuilder;
 
-    on(...widgets: Array<W>): BaseUpdateBinderBuilder<W>;
+    on(...widgets: Array<EventTarget>): BaseUpdateBinderBuilder;
 }

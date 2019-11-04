@@ -20,8 +20,8 @@ import { InteractionBinderBuilder } from "./InteractionBinderBuilder";
 import { LogLevel } from "../../logging/LogLevel";
 import { WidgetBinding } from "../WidgetBinding";
 
-export interface InteractionCmdBinder<W, C extends Command, I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>
-        extends CmdBinderBuilder<W, C>, InteractionBinderBuilder<W, I, D> {
+export interface InteractionCmdBinder<C extends Command, I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>
+        extends CmdBinderBuilder<C>, InteractionBinderBuilder<I, D> {
     /**
     * Specifies the initialisation of the command when the interaction starts.
     * Each time the interaction starts, an instance of the command is created and configured by the given callback.
@@ -29,11 +29,11 @@ export interface InteractionCmdBinder<W, C extends Command, I extends Interactio
     * This callback takes as arguments both the command and interaction involved in the binding.
     * @return The builder to chain the building configuration.
     */
-    first(initCmdFct: (c: C, i?: D) => void): InteractionCmdBinder<W, C, I, D>;
+    first(initCmdFct: (c: C, i?: D) => void): InteractionCmdBinder<C, I, D>;
 
-    ifHadEffects(hadEffectFct: (c: C, i: D) => void): InteractionCmdBinder<W, C, I, D>;
+    ifHadEffects(hadEffectFct: (c: C, i: D) => void): InteractionCmdBinder<C, I, D>;
 
-    ifHadNoEffect(noEffectFct: (c: C, i: D) => void): InteractionCmdBinder<W, C, I, D>;
+    ifHadNoEffect(noEffectFct: (c: C, i: D) => void): InteractionCmdBinder<C, I, D>;
 
     /**
     * Specifies what to do end when an interaction ends (when the last event of the interaction has occurred, but just after
@@ -41,17 +41,17 @@ export interface InteractionCmdBinder<W, C extends Command, I extends Interactio
     * @param onEnd The callback method to specify what to do when an interaction ends.
     * @return The builder to chain the building configuration.
     */
-    end(onEnd: (c: C, i?: D) => void): InteractionCmdBinder<W, C, I, D>;
+    end(onEnd: (c: C, i?: D) => void): InteractionCmdBinder<C, I, D>;
 
-    on(...widgets: Array<W>): InteractionCmdBinder<W, C, I, D>;
+    on(...widgets: Array<EventTarget>): InteractionCmdBinder<C, I, D>;
 
-    log(...level: Array<LogLevel>): InteractionCmdBinder<W, C, I, D>;
+    log(...level: Array<LogLevel>): InteractionCmdBinder<C, I, D>;
 
-    // async(): InteractionCmdBinder<W, C, I, D>;
+    // async(): InteractionCmdBinder<C, I, D>;
 
-    // help(): InteractionCmdBinder<W, C, I, D>;
+    // help(): InteractionCmdBinder<C, I, D>;
 
-    when(whenPredicate: (i?: D) => boolean): InteractionCmdBinder<W, C, I, D>;
+    when(whenPredicate: (i?: D) => boolean): InteractionCmdBinder<C, I, D>;
 
 
     /**

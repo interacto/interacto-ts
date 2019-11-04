@@ -13,17 +13,17 @@
  */
 import { LogLevel } from "../../logging/LogLevel";
 
-export interface BaseBinderBuilder<W> {
-	on(...widgets: Array<W>): BaseBinderBuilder<W>;
+export interface BaseBinderBuilder {
+	on(...widgets: Array<EventTarget>): BaseBinderBuilder;
 
 	/**
 	 * Specifies the conditions to fulfill to initialise, update, or execute the command while the interaction is running.
 	 * @param whenPredicate The predicate that checks whether the command can be initialised, updated, or executed.
 	 * @return The builder to chain the building configuration.
 	 */
-    when(whenPredicate: () => boolean): BaseBinderBuilder<W>;
+    when(whenPredicate: () => boolean): BaseBinderBuilder;
 
-    end(endFct: () => void): BaseBinderBuilder<W>;
+    end(endFct: () => void): BaseBinderBuilder;
 
 	/**
 	 * Specifies the loggings to use.
@@ -32,19 +32,19 @@ export interface BaseBinderBuilder<W> {
 	 * @param level The logging level to use.
 	 * @return The builder to chain the building configuration.
 	 */
-    log(...level: Array<LogLevel>): BaseBinderBuilder<W>;
+    log(...level: Array<LogLevel>): BaseBinderBuilder;
 
 	// /**
 	//  * Specifies that the command will be executed in a separated threads.
 	//  * Beware of UI modifications: UI changes must be done in the JFX UI thread.
 	//  * @return The builder to chain the building configuration.
 	//  */
-    // async(): BaseBinderBuilder<W>;
+    // async(): BaseBinderBuilder;
 
 	// /**
 	//  * Uses the default help animation of the user interaction to explain how the binding works.
 	//  * @param helpPane The pane where the animation will be played.
 	//  * @return The builder to chain the building configuration.
 	//  */
-    // help(): BaseBinderBuilder<W>;
+    // help(): BaseBinderBuilder;
 }

@@ -20,21 +20,21 @@ import { FSM } from "../../fsm/FSM";
 import { InteractionBinder } from "./InteractionBinder";
 import { CmdBinder } from "./CmdBinder";
 
-export interface BaseBinder<W> extends BaseBinderBuilder<W> {
-on(...widgets: Array<W>): BaseBinder< W >;
+export interface BaseBinder extends BaseBinderBuilder {
+on(...widgets: Array<EventTarget>): BaseBinder;
 
-when(whenPredicate: () => boolean): BaseBinder < W >;
+when(whenPredicate: () => boolean): BaseBinder;
 
-end(endFct: () => void): BaseBinder < W >;
+end(endFct: () => void): BaseBinder;
 
-log(...level: Array<LogLevel>): BaseBinder < W >;
+log(...level: Array<LogLevel>): BaseBinder;
 
-// async(): BaseBinder < W >;
+// async(): BaseBinder;
 
-// help(): BaseBinder < W >;
+// help(): BaseBinder;
 
-toProduce<C extends Command>(cmdSupplier: () => C): CmdBinder<W, C>;
+toProduce<C extends Command>(cmdSupplier: () => C): CmdBinder<C>;
 
 usingInteraction<I extends InteractionImpl<D, FSM, {}> , D extends InteractionData>(interactionSupplier: () => I) :
-    InteractionBinder< W, I, D >;
+    InteractionBinder<I, D>;
 }

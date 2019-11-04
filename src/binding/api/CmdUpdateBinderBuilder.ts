@@ -16,32 +16,32 @@ import { CmdBinderBuilder } from "./CmdBinderBuilder";
 import { BaseUpdateBinderBuilder } from "./BaseUpdateBinderBuilder";
 import { LogLevel } from "../../logging/LogLevel";
 
-export interface CmdUpdateBinderBuilder<W, C extends Command> extends CmdBinderBuilder<W, C>, BaseUpdateBinderBuilder<W> {
+export interface CmdUpdateBinderBuilder<C extends Command> extends CmdBinderBuilder<C>, BaseUpdateBinderBuilder {
 	/**
 	 * Specifies the update of the command on interaction updates.
 	 * @param update The callback method that updates the command.
 	 * This callback takes as arguments the command to update.
 	 * @return The builder to chain the building configuration.
 	 */
-	then(update: (c: C) => void): CmdUpdateBinderBuilder<W, C>;
+	then(update: (c: C) => void): CmdUpdateBinderBuilder<C>;
 
-    continuousExecution(): CmdUpdateBinderBuilder<W, C>;
+    continuousExecution(): CmdUpdateBinderBuilder<C>;
 
-	strictStart(): CmdUpdateBinderBuilder<W, C>;
+	strictStart(): CmdUpdateBinderBuilder<C>;
 
-    throttle(timeout: number): CmdUpdateBinderBuilder<W, C>;
+    throttle(timeout: number): CmdUpdateBinderBuilder<C>;
 
-    first(initCmdFct: (c: C) => void): CmdUpdateBinderBuilder<W, C>;
+    first(initCmdFct: (c: C) => void): CmdUpdateBinderBuilder<C>;
 
-    on(...widgets: Array<W>): CmdUpdateBinderBuilder<W, C>;
+    on(...widgets: Array<EventTarget>): CmdUpdateBinderBuilder<C>;
 
-    end(endFct: (c?: C) => void): CmdUpdateBinderBuilder<W, C>;
+    end(endFct: (c?: C) => void): CmdUpdateBinderBuilder<C>;
 
-    when(whenPredicate: () => boolean): CmdUpdateBinderBuilder<W, C>;
+    when(whenPredicate: () => boolean): CmdUpdateBinderBuilder<C>;
 
-    log(...level: Array<LogLevel>): CmdUpdateBinderBuilder<W, C>;
+    log(...level: Array<LogLevel>): CmdUpdateBinderBuilder<C>;
 
-    // async(): CmdUpdateBinderBuilder<W, C> ;
+    // async(): CmdUpdateBinderBuilder<C> ;
 
-    // help() : CmdUpdateBinderBuilder<W, C>;
+    // help() : CmdUpdateBinderBuilder<C>;
 }

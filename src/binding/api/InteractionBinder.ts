@@ -20,20 +20,20 @@ import { Command } from "../../command/Command";
 import { InteractionCmdBinder } from "./InteractionCmdBinder";
 
 
-export interface InteractionBinder<W, I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>
-        extends InteractionBinderBuilder<W, I, D> {
+export interface InteractionBinder<I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>
+        extends InteractionBinderBuilder<I, D> {
 
-    when(whenPredicate: (i?: D) => boolean): InteractionBinder<W, I, D>;
+    when(whenPredicate: (i?: D) => boolean): InteractionBinder<I, D>;
 
-    on(...widgets: Array<W>): InteractionBinder<W, I, D>;
+    on(...widgets: Array<EventTarget>): InteractionBinder<I, D>;
 
-	log(...level: Array<LogLevel>): InteractionBinder<W, I, D>;
+	log(...level: Array<LogLevel>): InteractionBinder<I, D>;
 
-	end(endFct: () => void): InteractionBinder<W, I, D>;
+	end(endFct: () => void): InteractionBinder<I, D>;
 
-	async(): InteractionBinder<W, I, D>;
+	async(): InteractionBinder<I, D>;
 
-	help(): InteractionBinder<W, I, D>;
+	help(): InteractionBinder<I, D>;
 
-	toProduce<C extends Command>(cmdSupplier: (d?: D) => C): InteractionCmdBinder<W, C, I, D>;
+	toProduce<C extends Command>(cmdSupplier: (d?: D) => C): InteractionCmdBinder<C, I, D>;
 }

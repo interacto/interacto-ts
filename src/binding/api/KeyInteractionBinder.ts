@@ -20,22 +20,22 @@ import { KeyCode } from "../../fsm/Events";
 import { Command } from "../../command/Command";
 import { KeyInteractionCmdBinder } from "./KeyInteractionCmdBinder";
 
-export interface KeyInteractionBinder<W, I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>
-        extends KeyInteractionBinderBuilder<W, I, D> {
+export interface KeyInteractionBinder<I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>
+        extends KeyInteractionBinderBuilder<I, D> {
 
-    when(whenPredicate: (i?: D) => boolean): KeyInteractionBinder<W, I, D>;
+    when(whenPredicate: (i?: D) => boolean): KeyInteractionBinder<I, D>;
 
-    on(...widgets: Array<W>): KeyInteractionBinder<W, I, D>;
+    on(...widgets: Array<EventTarget>): KeyInteractionBinder<I, D>;
 
-    log(...level: Array<LogLevel>): KeyInteractionBinder<W, I, D>;
+    log(...level: Array<LogLevel>): KeyInteractionBinder<I, D>;
 
-    end(endFct: () => void): KeyInteractionBinder<W, I, D>;
+    end(endFct: () => void): KeyInteractionBinder<I, D>;
 
-    // async(): KeyInteractionBinder<W, I, D>;
+    // async(): KeyInteractionBinder<I, D>;
 
-    // help(): KeyInteractionBinder<W, I, D>;
+    // help(): KeyInteractionBinder<I, D>;
 
-    with(...codes: Array<KeyCode>): KeyInteractionBinder<W, I, D>;
+    with(...codes: Array<KeyCode>): KeyInteractionBinder<I, D>;
 
-	toProduce<C extends Command>(cmdSupplier: (c: C, i?: D) => void): KeyInteractionCmdBinder<W, C, I, D>;
+	toProduce<C extends Command>(cmdSupplier: (c: C, i?: D) => void): KeyInteractionCmdBinder<C, I, D>;
 }

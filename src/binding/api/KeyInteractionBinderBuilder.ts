@@ -20,20 +20,20 @@ import { LogLevel } from "../../logging/LogLevel";
 import { KeyCode } from "../../fsm/Events";
 
 
-export interface KeyInteractionBinderBuilder<W, I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>
-        extends InteractionBinderBuilder<W, I, D>, KeyBinderBuilder<W> {
+export interface KeyInteractionBinderBuilder<I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>
+        extends InteractionBinderBuilder<I, D>, KeyBinderBuilder {
 
-    when(whenPredicate: (i?: D) => boolean): KeyInteractionBinderBuilder<W, I, D>;
+    when(whenPredicate: (i?: D) => boolean): KeyInteractionBinderBuilder<I, D>;
 
-    on(...widgets: Array<W>): KeyInteractionBinderBuilder<W, I, D>;
+    on(...widgets: Array<EventTarget>): KeyInteractionBinderBuilder<I, D>;
 
-    log(...level: Array<LogLevel>): KeyInteractionBinderBuilder<W, I, D>;
+    log(...level: Array<LogLevel>): KeyInteractionBinderBuilder<I, D>;
 
-    // async(): KeyInteractionBinderBuilder<W, I, D>;
+    // async(): KeyInteractionBinderBuilder<I, D>;
 
-    end(endFct: () => void): KeyInteractionBinderBuilder<W, I, D>;
+    end(endFct: () => void): KeyInteractionBinderBuilder<I, D>;
 
-    // help(): KeyInteractionBinderBuilder<W, I, D>;
+    // help(): KeyInteractionBinderBuilder<I, D>;
 
-    with(...codes: Array<KeyCode>): KeyInteractionBinderBuilder<W, I, D>;
+    with(...codes: Array<KeyCode>): KeyInteractionBinderBuilder<I, D>;
 }

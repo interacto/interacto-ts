@@ -21,28 +21,28 @@ import { LogLevel } from "../../logging/LogLevel";
 import { KeyCode } from "../../fsm/Events";
 import { WidgetBinding } from "../WidgetBinding";
 
-export interface KeyInteractionCmdBinder<W, C extends Command, I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>
-        extends KeyInteractionBinderBuilder<W, I, D>, InteractionCmdBinder<W, C, I, D> {
+export interface KeyInteractionCmdBinder<C extends Command, I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>
+        extends KeyInteractionBinderBuilder<I, D>, InteractionCmdBinder<C, I, D> {
 
-    first(initCmdFct: (c: C, i?: D) => void): KeyInteractionCmdBinder<W, C, I, D>;
+    first(initCmdFct: (c: C, i?: D) => void): KeyInteractionCmdBinder<C, I, D>;
 
-    on(...widgets: Array<W>): KeyInteractionCmdBinder<W, C, I, D>;
+    on(...widgets: Array<EventTarget>): KeyInteractionCmdBinder<C, I, D>;
 
-    log(...level: Array<LogLevel>): KeyInteractionCmdBinder<W, C, I, D>;
+    log(...level: Array<LogLevel>): KeyInteractionCmdBinder<C, I, D>;
 
-    // async(): KeyInteractionCmdBinder<W, C, I, D>;
+    // async(): KeyInteractionCmdBinder<C, I, D>;
 
-    // help(): KeyInteractionCmdBinder<W, C, I, D>;
+    // help(): KeyInteractionCmdBinder<C, I, D>;
 
-    when(whenPredicate: (i?: D) => boolean): KeyInteractionCmdBinder<W, C, I, D>;
+    when(whenPredicate: (i?: D) => boolean): KeyInteractionCmdBinder<C, I, D>;
 
-    ifHadEffects(hadEffectFct: (c: C, i: D) => void): KeyInteractionCmdBinder<W, C, I, D>;
+    ifHadEffects(hadEffectFct: (c: C, i: D) => void): KeyInteractionCmdBinder<C, I, D>;
 
-    ifHadNoEffect(noEffectFct: (c: C, i: D) => void): KeyInteractionCmdBinder<W, C, I, D>;
+    ifHadNoEffect(noEffectFct: (c: C, i: D) => void): KeyInteractionCmdBinder<C, I, D>;
 
-    end(onEnd: (c: C, i?: D) => void): KeyInteractionCmdBinder<W, C, I, D>;
+    end(onEnd: (c: C, i?: D) => void): KeyInteractionCmdBinder<C, I, D>;
 
-    with(...codes: Array<KeyCode>): KeyInteractionCmdBinder<W, C, I, D>;
+    with(...codes: Array<KeyCode>): KeyInteractionCmdBinder<C, I, D>;
 
     bind(): WidgetBinding<C, I, D>;
 }

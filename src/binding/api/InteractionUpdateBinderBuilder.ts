@@ -18,31 +18,31 @@ import { InteractionBinderBuilder } from "./InteractionBinderBuilder";
 import { LogLevel } from "../../logging/LogLevel";
 
 
-export interface InteractionUpdateBinderBuilder<W, I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>
-    extends InteractionBinderBuilder < W, I, D > {
+export interface InteractionUpdateBinderBuilder<I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>
+    extends InteractionBinderBuilder <I, D> {
     /**
     * Defines what to do when a command is cancelled (because the interaction is cancelled).
     * The undoable command is automatically cancelled so that nothing must be done on the command.
     * @return The builder to chain the building configuration.
     */
-    cancel(cancel: (i: D) => void): InteractionUpdateBinderBuilder<W, I, D>;
+    cancel(cancel: (i: D) => void): InteractionUpdateBinderBuilder<I, D>;
 
     /**
     * Defines what to do when a command is cancelled (because the interaction is cancelled).
     * The undoable command is automatically cancelled so that nothing must be done on the command.
     * @return The builder to chain the building configuration.
     */
-    endOrCancel(endOrCancel: (i: D) => void): InteractionUpdateBinderBuilder<W, I, D>;
+    endOrCancel(endOrCancel: (i: D) => void): InteractionUpdateBinderBuilder<I, D>;
 
-    when(whenPredicate: (i?: D) => boolean): InteractionUpdateBinderBuilder<W, I, D>;
+    when(whenPredicate: (i?: D) => boolean): InteractionUpdateBinderBuilder<I, D>;
 
-    end(endFct: () => void): InteractionUpdateBinderBuilder<W, I, D>;
+    end(endFct: () => void): InteractionUpdateBinderBuilder<I, D>;
 
-    on(...widgets: Array<W>): InteractionUpdateBinderBuilder<W, I, D>;
+    on(...widgets: Array<EventTarget>): InteractionUpdateBinderBuilder<I, D>;
 
-    log(...level: Array<LogLevel>): InteractionUpdateBinderBuilder<W, I, D>;
+    log(...level: Array<LogLevel>): InteractionUpdateBinderBuilder<I, D>;
 
-    // async(): InteractionUpdateBinderBuilder<W, I, D>;
+    // async(): InteractionUpdateBinderBuilder<I, D>;
 
-    // help(): InteractionUpdateBinderBuilder<W, I, D>;
+    // help(): InteractionUpdateBinderBuilder<I, D>;
 }

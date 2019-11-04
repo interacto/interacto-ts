@@ -19,24 +19,24 @@ import { LogLevel } from "../../logging/LogLevel";
 import { Command } from "../../command/Command";
 import { InteractionCmdUpdateBinder } from "./InteractionCmdUpdateBinder";
 
-export interface InteractionUpdateBinder<W, I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>
-        extends InteractionUpdateBinderBuilder<W, I, D> {
+export interface InteractionUpdateBinder<I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>
+        extends InteractionUpdateBinderBuilder<I, D> {
 
-    on(...widgets: Array<W>): InteractionUpdateBinder<W, I, D>;
+    on(...widgets: Array<EventTarget>): InteractionUpdateBinder<I, D>;
 
-    log(...level: Array<LogLevel>): InteractionUpdateBinder<W, I, D>;
+    log(...level: Array<LogLevel>): InteractionUpdateBinder<I, D>;
 
-    // async(): InteractionUpdateBinder<W, I, D>;
+    // async(): InteractionUpdateBinder<I, D>;
 
-    // help(): InteractionUpdateBinder<W, I, D>;
+    // help(): InteractionUpdateBinder<I, D>;
 
-    when(whenPredicate: (i?: D) => boolean): InteractionUpdateBinder<W, I, D>;
+    when(whenPredicate: (i?: D) => boolean): InteractionUpdateBinder<I, D>;
 
-    end(endFct: () => void): InteractionUpdateBinder<W, I, D>;
+    end(endFct: () => void): InteractionUpdateBinder<I, D>;
 
-    cancel(cancel: (i: D) => void): InteractionUpdateBinder<W, I, D>;
+    cancel(cancel: (i: D) => void): InteractionUpdateBinder<I, D>;
 
-    endOrCancel(endOrCancel: (i: D) => void): InteractionUpdateBinder<W, I, D>;
+    endOrCancel(endOrCancel: (i: D) => void): InteractionUpdateBinder<I, D>;
 
-    toProduce<C extends Command>(cmdSupplier: (c: C, i?: D) => void): InteractionCmdUpdateBinder<W, C, I, D>;
+    toProduce<C extends Command>(cmdSupplier: (c: C, i?: D) => void): InteractionCmdUpdateBinder<C, I, D>;
 }
