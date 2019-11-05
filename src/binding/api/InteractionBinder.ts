@@ -35,5 +35,5 @@ export interface InteractionBinder<I extends InteractionImpl<D, FSM, {}>, D exte
 
 	// help(): InteractionBinder<I, D>;
 
-	toProduce<C extends Command>(cmdSupplier: (d?: D) => C): InteractionCmdBinder<C, I, D>;
+	toProduce<C extends Command>(cmdSupplier: (i?: D) => C): InteractionCmdBinder<C, I, D>;
 }

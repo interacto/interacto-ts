@@ -57,7 +57,7 @@ export interface InteractionCmdUpdateBinder<C extends Command, I extends Interac
 
     ifHadNoEffect(noEffectFct: (c: C, i: D) => void): InteractionCmdUpdateBinder<C, I, D>;
 
-    end(onEnd: (c: C, i?: D) => void): InteractionCmdUpdateBinder<C, I, D>;
+    end(onEnd: (c?: C, i?: D) => void): InteractionCmdUpdateBinder<C, I, D>;
 
     bind(): WidgetBinding<C, I, D>;
 }

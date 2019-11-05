@@ -14,103 +14,143 @@
 
 import { FSM } from "../fsm/FSM";
 import { Binder } from "./Binder";
-import { AnonNodeBinding } from "./AnonNodeBinding";
-import { CommandImpl } from "../command/CommandImpl";
 import { InteractionData } from "../interaction/InteractionData";
-import { WidgetBindingImpl } from "./WidgetBindingImpl";
 import { InteractionImpl } from "../interaction/InteractionImpl";
+import { Command } from "../command/Command";
+import { CmdUpdateBinder } from "./api/CmdUpdateBinder";
+import { InteractionCmdUpdateBinder } from "./api/InteractionCmdUpdateBinder";
+import { LogLevel } from "../logging/LogLevel";
+import { WidgetBinding } from "./WidgetBinding";
+import { AnonBinding } from "./AnonBinding";
 
 /**
- * The base binding builder for bindings where actions can be updated while the user interaction is running.
- * @param <A> The type of the command to produce.
+ * The base binding builder for bindings where commands can be updated while the user interaction is running.
+ * @param <C> The type of the command to produce.
  * @author Arnaud Blouin
  */
-export abstract class UpdateBinder<C extends CommandImpl, I extends InteractionImpl<D, FSM, {}>, D extends InteractionData,
-    B extends UpdateBinder<C, I, D, B>> extends Binder<C, I, D, B> {
+export class UpdateBinder<C extends Command, I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>
+        extends Binder<C, I, D> implements CmdUpdateBinder<C>, InteractionCmdUpdateBinder<C, I, D> {
 
-    protected updateFct: (i: D, c: C | undefined) => void;
-    protected cancelFct: (i: D, c: C | undefined) => void;
-    protected endOrCancelFct: (i: D, c: C | undefined) => void;
-    protected feedbackFct: () => void;
-    protected execOnChanges: boolean;
-    protected _strictStart: boolean;
+  private updateFct?: (c: C, i?: D) => void;
+  private cancelFct?: (i: D) => void;
+  private endOrCancelFct?: (i: D) => void;
+  private continuousCmdExecution: boolean;
+  private _strictStart: boolean;
+  private throttleTimeout: number;
 
-    protected constructor(interaction: I, cmdProducer: (i?: D) => C) {
-        super(interaction, cmdProducer);
-        this.updateFct = () => {
-        };
-        this.cancelFct = () => {
-        };
-        this.endOrCancelFct = () => {
-        };
-        this.feedbackFct = () => {
-        };
-        this.execOnChanges = false;
-        this._strictStart = false;
+  protected constructor(throttleTimeout: number, continuousCmdExecution: boolean,
+                        strict: boolean, initCmd?: (c: C, i?: D) => void, checkConditions?: (i: D) => boolean, cmdProducer?: (i?: D) => C,
+                        widgets?: Array<EventTarget>, interactionSupplier?: () => I, onEnd?: (c: C, i?: D) => void,
+                        logLevels?: Array<LogLevel>, hadNoEffectFct?: (c: C, i: D) => void, hadEffectsFct?: (c: C, i: D) => void,
+                        cannotExecFct?: (c: C, i: D) => void, updateFct?: (c: C, i?: D) => void, cancelFct?: (i: D) => void,
+                        endOrCancelFct?: (i: D) => void, targetWidgets?: Array<EventTarget>) {
+    super(initCmd, checkConditions, cmdProducer, widgets, interactionSupplier, onEnd, logLevels, hadNoEffectFct, hadEffectsFct,
+          cannotExecFct, targetWidgets);
+    this.updateFct = updateFct;
+    this.cancelFct = cancelFct;
+    this.endOrCancelFct = endOrCancelFct;
+    this.continuousCmdExecution = continuousCmdExecution;
+    this._strictStart = strict;
+    this.throttleTimeout = throttleTimeout;
+  }
+
+  public then(update: (c: C, i?: D) => void): UpdateBinder<C, I, D> {
+    const dup = this.duplicate();
+    dup.updateFct = update;
+    return dup;
+  }
+
+  public continuousExecution(): UpdateBinder<C, I, D> {
+    const dup = this.duplicate();
+    dup.continuousCmdExecution = true;
+    return dup;
+  }
+
+  public cancel(cancel: (i: D) => void): UpdateBinder<C, I, D> {
+    const dup = this.duplicate();
+    dup.cancelFct = cancel;
+    return dup;
+  }
+
+  public endOrCancel(endOrCancel: (i: D) => void): UpdateBinder<C, I, D> {
+    const dup = this.duplicate();
+    dup.endOrCancelFct = endOrCancel;
+    return dup;
+  }
+
+  public strictStart(): UpdateBinder<C, I, D> {
+    const dup = this.duplicate();
+    dup._strictStart = true;
+    return dup;
+  }
+
+  public throttle(timeout: number): UpdateBinder<C, I, D> {
+    const dup = this.duplicate();
+    dup.throttleTimeout = timeout;
+    return dup;
+  }
+
+  public on(...widget: Array<EventTarget>): UpdateBinder<C, I, D> {
+    return super.on(...widget) as UpdateBinder<C, I, D>;
+  }
+
+  public first(initCmdFct: (c: C, i?: D) => void): UpdateBinder<C, I, D> {
+    return super.first(initCmdFct) as UpdateBinder<C, I, D>;
+  }
+
+  public when(checkCmd: (i?: D) => boolean): UpdateBinder<C, I, D> {
+    return super.when(checkCmd) as UpdateBinder<C, I, D>;
+  }
+
+  public ifHadEffects(hadEffectFct: (c: C, i: D) => void): UpdateBinder<C, I, D> {
+    return super.ifHadEffects(hadEffectFct) as UpdateBinder<C, I, D>;
+  }
+
+  public ifHadNoEffect(noEffectFct: (c: C, i: D) => void): UpdateBinder<C, I, D> {
+    return super.ifHadNoEffect(noEffectFct) as UpdateBinder<C, I, D>;
+  }
+
+  public end(onEndFct: (c: C, i?: D) => void): UpdateBinder<C, I, D> {
+    return super.end(onEndFct) as UpdateBinder<C, I, D>;
+  }
+
+  public log(...level: Array<LogLevel>): UpdateBinder<C, I, D> {
+    return super.log(...level) as UpdateBinder<C, I, D>;
+  }
+
+  public usingInteraction<I2 extends InteractionImpl<D2, FSM, {}>, D2 extends InteractionData>
+          (interactionSupplier: () => I2): UpdateBinder<C, I2, D2> {
+    return super.usingInteraction(interactionSupplier) as UpdateBinder<C, I2, D2>;
+  }
+
+  public toProduce<C2 extends Command>(cmdCreation: (i: D) => C2): UpdateBinder<C2, I, D> {
+    return super.toProduce(cmdCreation) as UpdateBinder<C2, I, D>;
+  }
+
+  protected duplicate(): UpdateBinder<C, I, D> {
+    if (this.cmdProducer === undefined) {
+      throw new Error("the cmd producer should not be undefined here");
     }
 
-    /**
-     * Specifies the update of the command on interaction updates.
-     * @param update The callback method that updates the command.
-     * This callback takes as arguments the command to update and the ongoing interactions (and its parameters).
-     * @return The builder to chain the buiding configuration.
-     */
-    public then(update: (i: D, c: C | undefined) => void): B {
-        this.updateFct = update;
-        return this as {} as B;
+    return new UpdateBinder<C, I, D>(this.throttleTimeout, this.continuousCmdExecution,
+      this._strictStart, this.initCmd, this.checkConditions, this.cmdProducer,
+      this.widgets, this.interactionSupplier, this.onEnd,
+      this.logLevels, this.hadNoEffectFct, this.hadEffectsFct,
+      this.cannotExecFct, this.updateFct, this.cancelFct, this.endOrCancelFct, this.targetWidgets);
+  }
+
+  public bind(): WidgetBinding<C, I, D> {
+    if (this.interactionSupplier === undefined) {
+      throw new Error("The interaction supplier cannot be undefined here");
     }
 
-    /**
-     * Defines whether the command must be executed on each interaction updates (if 'when' predicate is ok).
-     * @return The builder to chain the building configuration.
-     */
-    public exec(): B {
-        this.execOnChanges = true;
-        return this as {} as B;
+    if (this.cmdProducer === undefined) {
+      throw new Error("The command supplier cannot be undefined here");
     }
 
-    /**
-     * Defines what to do when a command is aborted (because the interaction is aborted first).
-     * The undoable command is automatically cancelled so that nothing must be done on the command.
-     * @return The builder to chain the building configuration.
-     */
-    public cancel(cancel: (i: D, c: C | undefined) => void): B {
-        this.cancelFct = cancel;
-        return this as {} as B;
-    }
-
-    /**
-     * Defines what to do when a command is aborted (because the interaction is aborted first).
-     * The undoable command is automatically cancelled so that nothing must be done on the command.
-     * @return The builder to chain the building configuration.
-     */
-    public endOrCancel(endOrCancel: (i: D, c: C | undefined) => void): B {
-        this.endOrCancelFct = endOrCancel;
-        return this as {} as B;
-    }
-
-    /**
-     * Defines interim feedback provided to users on each interaction updates.
-     * @return The builder to chain the building configuration.
-     */
-    public feedback(feedback: () => void): B {
-        this.feedbackFct = feedback;
-        return this as {} as B;
-    }
-
-    /**
-     * The interaction does not start if the condition of the binding ('when') is not fulfilled.
-     * @return The builder to chain the building configuration.
-     */
-    public strictStart(): B {
-        this._strictStart = true;
-        return this as {} as B;
-    }
-
-    public bind(): WidgetBindingImpl<C, I, D> {
-        return new AnonNodeBinding(this.execOnChanges, this.interaction, this.cmdProducer, this.initCmd, this.updateFct,
-            this.checkConditions, this.onEnd, this.cancelFct, this.endOrCancelFct, this.feedbackFct, this.widgets,
-            this.additionalWidgets, this.targetWidgets, this._async,
-            this._strictStart, this.logLevels);
-    }
+    return new AnonBinding(this.continuousCmdExecution, this.interactionSupplier(), this.cmdProducer, [...this.widgets],
+            [], this._strictStart, [...this.logLevels], this.throttleTimeout, this.initCmd, this.updateFct, this.checkConditions,
+            this.onEnd, this.cancelFct, this.endOrCancelFct, this.hadEffectsFct,
+            this.hadNoEffectFct, this.cannotExecFct);
+  }
 }

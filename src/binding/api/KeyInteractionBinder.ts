@@ -37,5 +37,5 @@ export interface KeyInteractionBinder<I extends InteractionImpl<D, FSM, {}>, D e
 
     with(...codes: Array<KeyCode>): KeyInteractionBinder<I, D>;
 
-	toProduce<C extends Command>(cmdSupplier: (c: C, i?: D) => void): KeyInteractionCmdBinder<C, I, D>;
+	toProduce<C extends Command>(cmdSupplier: (i?: D) => C): KeyInteractionCmdBinder<C, I, D>;
 }

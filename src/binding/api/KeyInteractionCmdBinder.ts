@@ -40,7 +40,7 @@ export interface KeyInteractionCmdBinder<C extends Command, I extends Interactio
 
     ifHadNoEffect(noEffectFct: (c: C, i: D) => void): KeyInteractionCmdBinder<C, I, D>;
 
-    end(onEnd: (c: C, i?: D) => void): KeyInteractionCmdBinder<C, I, D>;
+    end(onEnd: (c?: C, i?: D) => void): KeyInteractionCmdBinder<C, I, D>;
 
     with(...codes: Array<KeyCode>): KeyInteractionCmdBinder<C, I, D>;
 

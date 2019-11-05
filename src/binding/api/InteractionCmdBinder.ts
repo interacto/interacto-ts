@@ -41,7 +41,7 @@ export interface InteractionCmdBinder<C extends Command, I extends InteractionIm
     * @param onEnd The callback method to specify what to do when an interaction ends.
     * @return The builder to chain the building configuration.
     */
-    end(onEnd: (c: C, i?: D) => void): InteractionCmdBinder<C, I, D>;
+    end(onEnd: (c?: C, i?: D) => void): InteractionCmdBinder<C, I, D>;
 
     on(...widgets: Array<EventTarget>): InteractionCmdBinder<C, I, D>;
 
