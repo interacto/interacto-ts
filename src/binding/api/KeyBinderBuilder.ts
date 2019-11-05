@@ -11,7 +11,6 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { KeyCode } from "../../fsm/Events";
 
 export interface KeyBinderBuilder {
 	/**
@@ -20,5 +19,5 @@ export interface KeyBinderBuilder {
 	 * @param codes The key codes to match.
 	 * @return The builder.
 	 */
-	with(...codes: Array<KeyCode>): KeyBinderBuilder;
+	with(...codes: Array<string>): KeyBinderBuilder;
 }

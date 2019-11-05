@@ -16,7 +16,6 @@ import { InteractionImpl } from "../../interaction/InteractionImpl";
 import { InteractionData } from "../../interaction/InteractionData";
 import { KeyInteractionBinderBuilder } from "./KeyInteractionBinderBuilder";
 import { LogLevel } from "../../logging/LogLevel";
-import { KeyCode } from "../../fsm/Events";
 import { Command } from "../../command/Command";
 import { KeyInteractionCmdBinder } from "./KeyInteractionCmdBinder";
 
@@ -35,7 +34,7 @@ export interface KeyInteractionBinder<I extends InteractionImpl<D, FSM, {}>, D e
 
     // help(): KeyInteractionBinder<I, D>;
 
-    with(...codes: Array<KeyCode>): KeyInteractionBinder<I, D>;
+    with(...codes: Array<string>): KeyInteractionBinder<I, D>;
 
 	toProduce<C extends Command>(cmdSupplier: (i?: D) => C): KeyInteractionCmdBinder<C, I, D>;
 }

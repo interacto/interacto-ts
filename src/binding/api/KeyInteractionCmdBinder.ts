@@ -18,7 +18,6 @@ import { InteractionData } from "../../interaction/InteractionData";
 import { KeyInteractionBinderBuilder } from "./KeyInteractionBinderBuilder";
 import { InteractionCmdBinder } from "./InteractionCmdBinder";
 import { LogLevel } from "../../logging/LogLevel";
-import { KeyCode } from "../../fsm/Events";
 import { WidgetBinding } from "../WidgetBinding";
 
 export interface KeyInteractionCmdBinder<C extends Command, I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>
@@ -42,7 +41,7 @@ export interface KeyInteractionCmdBinder<C extends Command, I extends Interactio
 
     end(onEnd: (c?: C, i?: D) => void): KeyInteractionCmdBinder<C, I, D>;
 
-    with(...codes: Array<KeyCode>): KeyInteractionCmdBinder<C, I, D>;
+    with(...codes: Array<string>): KeyInteractionCmdBinder<C, I, D>;
 
     bind(): WidgetBinding<C, I, D>;
 }

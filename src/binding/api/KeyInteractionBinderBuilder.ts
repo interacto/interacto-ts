@@ -17,7 +17,6 @@ import { InteractionData } from "../../interaction/InteractionData";
 import { InteractionBinderBuilder } from "./InteractionBinderBuilder";
 import { KeyBinderBuilder } from "./KeyBinderBuilder";
 import { LogLevel } from "../../logging/LogLevel";
-import { KeyCode } from "../../fsm/Events";
 
 
 export interface KeyInteractionBinderBuilder<I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>
@@ -35,5 +34,5 @@ export interface KeyInteractionBinderBuilder<I extends InteractionImpl<D, FSM, {
 
     // help(): KeyInteractionBinderBuilder<I, D>;
 
-    with(...codes: Array<KeyCode>): KeyInteractionBinderBuilder<I, D>;
+    with(...codes: Array<string>): KeyInteractionBinderBuilder<I, D>;
 }
