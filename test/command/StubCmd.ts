@@ -16,11 +16,12 @@ import { CommandImpl } from "../../src/command/CommandImpl";
 import { Undoable } from "../../src";
 
 export class StubCmd extends CommandImpl {
-    public candoValue = false;
+    public candoValue: boolean;
     public exec = 0;
 
-    public constructor() {
+    public constructor(candoValue?: boolean) {
         super();
+        this.candoValue = candoValue === undefined ? false : true;
     }
 
     protected doCmdBody(): void {
