@@ -30,7 +30,7 @@ beforeEach(() => {
     interaction.getFsm().log(true);
     interaction.getFsm().addHandler(handler);
     document.documentElement.innerHTML = "<html><div><select id='sel1'><option value='test'>Test</option>" +
-        "<option value='Test2'>Test2</option></div></html>";
+        "<option value='Test2'>Test2</option></select></div></html>";
     const elt = document.getElementById("sel1");
     if (elt !== null) {
         choiceBox = elt;
