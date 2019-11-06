@@ -55,11 +55,6 @@ export abstract class WidgetBindingImpl<C extends Command, I extends Interaction
     protected continuousCmdExec: boolean;
 
     /**
-     * Defines whether the command must be executed in a specific thread.
-     */
-    protected async: boolean;
-
-    /**
      * The command class to instantiate.
      */
     protected readonly cmdProducer: (i?: D) => C;
@@ -78,7 +73,6 @@ export abstract class WidgetBindingImpl<C extends Command, I extends Interaction
         this.asLogBinding = false;
         this.asLogCmd = false;
         this.continuousCmdExec = false;
-        this.async = false;
         this.cmdsProduced = new Subject();
         this.cmdProducer = cmdProducer;
         this.interaction = interaction;
@@ -91,22 +85,6 @@ export abstract class WidgetBindingImpl<C extends Command, I extends Interaction
 
     public when(): boolean {
         return true;
-    }
-
-    /**
-     * Whether the command must be executed in a specific thread.
-     * @return {boolean} True: the command will be executed asynchronously.
-     */
-    public isAsync(): boolean {
-        return this.async;
-    }
-
-    /**
-     * Sets wether the command must be executed in a specific thread.
-     * @param {boolean} asyncCmd True: the command will be executed asynchronously.
-     */
-    public setAsync(asyncCmd: boolean) {
-        this.async = asyncCmd;
     }
 
     /**
@@ -322,7 +300,7 @@ export abstract class WidgetBindingImpl<C extends Command, I extends Interaction
                 }
             }
 
-            this.executeCmd(this.cmd, this.async);
+            this.executeCmd(this.cmd);
             this.unbindCmdAttributes();
             this.cmd = undefined;
         } else {
@@ -357,16 +335,8 @@ export abstract class WidgetBindingImpl<C extends Command, I extends Interaction
         return ok;
     }
 
-    private executeCmd(cmd: C, async: boolean): void {
-        if (async) {
-            this.executeCmdAsync(cmd);
-        } else {
-            this.afterCmdExecuted(cmd, cmd.doIt());
-        }
-    }
-
-    protected executeCmdAsync(cmd: C): void {
-        //TODO
+    private executeCmd(cmd: C): void {
+        this.afterCmdExecuted(cmd, cmd.doIt());
     }
 
     protected afterCmdExecuted(cmd: C, ok: boolean): void {

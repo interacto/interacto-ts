@@ -38,12 +38,12 @@ export class UpdateBinder<C extends Command, I extends InteractionImpl<D, FSM, {
   private _strictStart: boolean;
   private throttleTimeout: number;
 
-  protected constructor(throttleTimeout: number, continuousCmdExecution: boolean,
-                        strict: boolean, initCmd?: (c: C, i?: D) => void, checkConditions?: (i: D) => boolean, cmdProducer?: (i?: D) => C,
-                        widgets?: Array<EventTarget>, interactionSupplier?: () => I, onEnd?: (c: C, i?: D) => void,
-                        logLevels?: Array<LogLevel>, hadNoEffectFct?: (c: C, i: D) => void, hadEffectsFct?: (c: C, i: D) => void,
-                        cannotExecFct?: (c: C, i: D) => void, updateFct?: (c: C, i?: D) => void, cancelFct?: (i: D) => void,
-                        endOrCancelFct?: (i: D) => void, targetWidgets?: Array<EventTarget>) {
+  constructor(throttleTimeout: number, continuousCmdExecution: boolean,
+              strict: boolean, initCmd?: (c: C, i?: D) => void, checkConditions?: (i: D) => boolean, cmdProducer?: (i?: D) => C,
+              widgets?: Array<EventTarget>, interactionSupplier?: () => I, onEnd?: (c: C, i?: D) => void,
+              logLevels?: Array<LogLevel>, hadNoEffectFct?: (c: C, i: D) => void, hadEffectsFct?: (c: C, i: D) => void,
+              cannotExecFct?: (c: C, i: D) => void, updateFct?: (c: C, i?: D) => void, cancelFct?: (i: D) => void,
+              endOrCancelFct?: (i: D) => void, targetWidgets?: Array<EventTarget>) {
     super(initCmd, checkConditions, cmdProducer, widgets, interactionSupplier, onEnd, logLevels, hadNoEffectFct, hadEffectsFct,
           cannotExecFct, targetWidgets);
     this.updateFct = updateFct;
@@ -128,10 +128,6 @@ export class UpdateBinder<C extends Command, I extends InteractionImpl<D, FSM, {
   }
 
   protected duplicate(): UpdateBinder<C, I, D> {
-    if (this.cmdProducer === undefined) {
-      throw new Error("the cmd producer should not be undefined here");
-    }
-
     return new UpdateBinder<C, I, D>(this.throttleTimeout, this.continuousCmdExecution,
       this._strictStart, this.initCmd, this.checkConditions, this.cmdProducer,
       this.widgets, this.interactionSupplier, this.onEnd,

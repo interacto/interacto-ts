@@ -12,130 +12,112 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { MArray } from "../util/ArrayUtil";
 import { LogLevel } from "../logging/LogLevel";
-import { AnonNodeBinding } from "./AnonNodeBinding";
 import { FSM } from "../fsm/FSM";
-import { CommandImpl } from "../command/CommandImpl";
 import { InteractionData } from "../interaction/InteractionData";
-import { WidgetBindingImpl } from "./WidgetBindingImpl";
 import { InteractionImpl } from "../interaction/InteractionImpl";
+import { Command } from "../command/Command";
+import { CmdBinder } from "./api/CmdBinder";
+import { InteractionBinder } from "./api/InteractionBinder";
+import { InteractionCmdBinder } from "./api/InteractionCmdBinder";
+import { WidgetBinding } from "./WidgetBinding";
 
 /**
  * The base class that defines the concept of binding builder (called binder).
- * @param <W> The type of the widgets.
- * @param <A> The type of the command to produce.
+ * @param <C> The type of the action to produce.
  * @param <I> The type of the user interaction to bind.
  * @author Arnaud Blouin
  */
-export abstract class Binder<C extends CommandImpl, I extends InteractionImpl<D, FSM, {}>, D extends InteractionData,
-    B extends Binder<C, I, D, B>> {
+export abstract class Binder<C extends Command, I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>
+        implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> {
 
-    protected initCmd: (i: D, c: C | undefined) => void;
-    protected checkConditions: (i: D) => boolean;
-    protected readonly widgets: MArray<EventTarget>;
-    protected additionalWidgets: MArray<Node>;
-    protected targetWidgets: MArray<EventTarget>;
-    protected readonly cmdProducer: (i?: D) => C;
-    protected readonly interaction: I;
-    protected _async: boolean;
-    protected onEnd: (i: D, c: C | undefined) => void;
-    protected readonly logLevels: Array<LogLevel>;
+    protected initCmd?: (c: C, i?: D) => void;
+    protected checkConditions?: (i: D) => boolean;
+    protected cmdProducer?: (i?: D) => C;
+    protected widgets: Array<EventTarget>;
+    protected interactionSupplier?: () => I;
+    protected hadEffectsFct?: (c: C, i: D) => void;
+	protected hadNoEffectFct?: (c: C, i: D) => void;
+	protected cannotExecFct?: (c: C, i: D) => void;
+    protected onEnd?: (c: C, i?: D) => void;
+    protected logLevels: Array<LogLevel>;
+    protected targetWidgets: Array<EventTarget>;
 
-    protected constructor(interaction: I, cmdProducer: (i?: D) => C) {
+
+    protected constructor(initCmd?: (c: C, i?: D) => void, checkConditions?: (i: D) => boolean, cmdProducer?: (i?: D) => C,
+                          widgets?: Array<EventTarget>, interactionSupplier?: () => I, onEnd?: (c: C, i?: D) => void,
+                          logLevels?: Array<LogLevel>, hadNoEffectFct?: (c: C, i: D) => void, hadEffectsFct?: (c: C, i: D) => void,
+                          cannotExecFct?: (c: C, i: D) => void, targetWidgets?: Array<EventTarget>) {
+        this.initCmd = initCmd;
+        this.checkConditions = checkConditions;
         this.cmdProducer = cmdProducer;
-        this.interaction = interaction;
-        this.widgets = new MArray();
-        this._async = false;
-        this.checkConditions = () => true;
-        this.initCmd = () => { };
-        this.onEnd = () => { };
-        this.logLevels = [];
+        this.widgets = widgets === undefined ? [] : widgets;
+        this.interactionSupplier = interactionSupplier;
+        this.onEnd = onEnd;
+        this.hadEffectsFct = hadEffectsFct;
+        this.hadNoEffectFct = hadNoEffectFct;
+        this.cannotExecFct = cannotExecFct;
+        this.logLevels = logLevels === undefined ? [] : logLevels;
+        this.targetWidgets = targetWidgets === undefined ? [] : targetWidgets;
     }
 
-    /**
-     * Specifies the widgets on which the binding must operate.
-     * @param widget The widgets involve in the bindings.
-     * @return The builder to chain the building configuration.
-     */
-    public on(widget: EventTarget | MArray<EventTarget>): B {
-        widget instanceof MArray ? this.widgets.push(...widget) : this.widgets.push(widget);
-        return this as {} as B;
+    protected abstract duplicate(): Binder<C, I, D>;
+
+    public on(...widget: Array<EventTarget>): Binder<C, I, D> {
+        const w : Array<EventTarget> = this.widgets.length === 0 ? widget : [...this.widgets].concat(widget);
+        const dup = this.duplicate();
+        dup.widgets = w;
+        return dup;
     }
 
-    public onContent(widget: Node): B {
-        if (this.additionalWidgets === undefined) {
-            this.additionalWidgets = new MArray<Node>();
-        }
-        this.additionalWidgets.push(widget);
-        return this as {} as B;
+    public first(initCmdFct: (c: C, i?: D) => void): Binder<C, I, D> {
+        const dup = this.duplicate();
+        dup.initCmd = initCmdFct;
+        return dup;
     }
 
-    /**
-     * Specifies the initialisation of the command when the interaction starts.
-     * Each time the interaction starts, an instance of the command is created and configured by the given callback.
-     * @param initCmdFct The callback method that initialises the command.
-     * This callback takes as arguments both the command and interaction involved in the binding.
-     * @return The builder to chain the building configuration.
-     */
-    public first(initCmdFct: (i: D, c: C) => void): B {
-        this.initCmd = initCmdFct;
-        return this as {} as B;
+    public when(checkCmd: (i?: D) => boolean): Binder<C, I, D> {
+        const dup = this.duplicate();
+        dup.checkConditions = checkCmd;
+        return dup;
     }
 
-    /**
-     * Specifies the conditions to fulfill to initialise, update, or execute the command while the interaction is running.
-     * @param checkCmd The predicate that checks whether the command can be initialised, updated, or executed.
-     * This predicate takes as arguments the ongoing user interaction involved in the binding.
-     * @return The builder to chain the building configuration.
-     */
-    public when(checkCmd: (i: D) => boolean): B {
-        this.checkConditions = checkCmd;
-        return this as {} as B;
+	public ifHadEffects(hadEffectFct: (c: C, i: D) => void): Binder<C, I, D> {
+		const dup = this.duplicate();
+		dup.hadEffectsFct = hadEffectFct;
+		return dup;
+	}
+
+	public ifHadNoEffect(noEffectFct: (c: C, i: D) => void): Binder<C, I, D> {
+		const dup = this.duplicate();
+		dup.hadNoEffectFct = noEffectFct;
+		return dup;
     }
 
-
-    /**
-     * Specifies that the command will be executed in a separated threads.
-     * Beware of UI modifications: UI changes must be done in the JFX UI thread.
-     * @return The builder to chain the building configuration.
-     */
-    public async(): B {
-        this._async = true;
-        return this as {} as B;
+    public end(onEndFct: (c?: C, i?: D) => void): Binder<C, I, D> {
+        const dup = this.duplicate();
+        dup.onEnd = onEndFct;
+        return dup;
     }
 
-    /**
-     * Specifies what to do end when an interaction ends (when the last event of the interaction has occurred, but just after
-     * the interaction is reinitialised and the command finally executed and discarded / saved).
-     * @param onEndFct The callback method to specify what to do when an interaction ends.
-     * @return The builder to chain the building configuration.
-     */
-    public end(onEndFct: (i: D, c: C) => void): B {
-        this.onEnd = onEndFct;
-        return this as {} as B;
+    public log(...level: Array<LogLevel>): Binder<C, I, D> {
+		const dup = this.duplicate();
+		dup.logLevels = [...level];
+		return dup;
     }
 
-    /**
-     * Specifies the loggings to use.
-     * Several call to 'log' can be done to log different parts:
-     * log(LogLevel.INTERACTION).log(LogLevel.COMMAND)
-     * @param level The logging level to use.
-     * @return The builder to chain the building configuration.
-     */
-    public log(level: LogLevel): B {
-        this.logLevels.push(level);
-        return this as {} as B;
+    public usingInteraction<I2 extends InteractionImpl<D2, FSM, {}>, D2 extends InteractionData>
+            (interactionSupplier: () => I2): Binder<C, I2, D2> {
+		const dup = this.duplicate();
+		dup.interactionSupplier = interactionSupplier as {} as () => I;
+		return dup as {} as Binder<C, I2, D2>;
     }
 
-    /**
-     * Executes the builder to create and install the binding on the instrument.
-     * @throws IllegalArgumentException On issues while creating the commands.
-     * @throws InstantiationException On issues while creating the commands.
-     */
-    public bind(): WidgetBindingImpl<C, I, D> {
-        return new AnonNodeBinding<C, I, D>(false, this.interaction, this.cmdProducer, this.initCmd, (d: D) => { },
-            this.checkConditions, this.onEnd, () => { }, () => { }, () => { },
-            this.widgets, this.additionalWidgets, this.targetWidgets, this._async, false, this.logLevels);
+    public toProduce<C2 extends Command>(cmdCreation: (i: D) => C2): Binder<C2, I, D> {
+		const dup = this.duplicate();
+		dup.cmdProducer = cmdCreation as {} as (i: D) => C;
+		return dup as {} as Binder<C2, I, D>;
     }
+
+    public abstract bind(): WidgetBinding<C, I, D>;
 }

@@ -149,9 +149,9 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM, 
     }
 
     public addAdditionalNodes(additionalNodes: Array<Node>) {
-        additionalNodes.forEach(node => {
+        additionalNodes.forEach((node: Node) => {
             this._additionalNodes.push(node);
-            node.childNodes.forEach(child => this.onNewNodeRegistered(child)); //register the additional node children
+            node.childNodes.forEach((child: Node) => this.onNewNodeRegistered(child)); //register the additional node children
         });
     }
 

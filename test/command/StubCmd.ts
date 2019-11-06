@@ -17,12 +17,14 @@ import { Undoable } from "../../src";
 
 export class StubCmd extends CommandImpl {
     public candoValue = false;
+    public exec = 0;
 
     public constructor() {
         super();
     }
 
     protected doCmdBody(): void {
+        this.exec++;
     }
 
     public canDo(): boolean {

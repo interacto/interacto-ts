@@ -13,20 +13,10 @@
  */
 
 export * from "./binding/AnonCmdBinder";
-export * from "./binding/AnonNodeBinding";
+export * from "./binding/AnonBinding";
 export * from "./binding/Binder";
 export * from "./binding/Bindings";
-export * from "./binding/ButtonBinder";
-export * from "./binding/CheckBoxBinder";
-export * from "./binding/ColorPickerBinder";
-export * from "./binding/ComboBoxBinder";
-export * from "./binding/DnDBinder";
-export * from "./binding/KeyBinder";
-export * from "./binding/KeyNodeBinder";
-export * from "./binding/KeysPressedBinder";
-export * from "./binding/NodeBinder";
-export * from "./binding/SourceTargetBinder";
-export * from "./binding/SpinnerBinder";
+export * from "./binding/KeysBinder";
 export * from "./binding/UpdateBinder";
 export * from "./fsm/BoxCheckPressedTransition";
 export * from "./fsm/ButtonPressedTransition";

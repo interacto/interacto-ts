@@ -14,22 +14,48 @@
 
 import { FSM } from "../fsm/FSM";
 import { Binder } from "./Binder";
-import { AnonNodeBinding } from "./AnonNodeBinding";
+import { AnonBinding } from "./AnonBinding";
 import { AnonCmd } from "../command/AnonCmd";
 import { InteractionData } from "../interaction/InteractionData";
 import { WidgetBindingImpl } from "./WidgetBindingImpl";
 import { InteractionImpl } from "../interaction/InteractionImpl";
 
-export class AnonCmdBinder<I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>
-    extends Binder<AnonCmd, I, D, AnonCmdBinder<I, D>> {
+export class AnonCmdBinder<I extends InteractionImpl<D, FSM, {}>, D extends InteractionData> extends Binder<AnonCmd, I, D> {
 
-    public constructor(interaction: I, anonCmd: () => void) {
-        super(interaction, () => new AnonCmd(anonCmd));
+    constructor(anonCmd: () => void) {
+        super(() => new AnonCmd(anonCmd));
     }
 
+	protected duplicate(): AnonCmdBinder<I, D> {
+        if (this.cmdProducer === undefined) {
+            throw new Error("the cmd producer should not be undefined here");
+        }
+
+        const dup = new AnonCmdBinder<I, D>(this.cmdProducer);
+        dup.checkConditions = this.checkConditions;
+        dup.cmdProducer = this.cmdProducer;
+        dup.widgets = [...this.widgets];
+        dup.interactionSupplier = this.interactionSupplier;
+        dup.onEnd =  this.onEnd;
+        dup.logLevels =  [...this.logLevels];
+        dup.hadNoEffectFct = this.hadNoEffectFct;
+        dup.hadEffectsFct = this.hadEffectsFct;
+        dup.cannotExecFct = this.cannotExecFct;
+        return dup;
+	}
+
     public bind(): WidgetBindingImpl<AnonCmd, I, D> {
-        return new AnonNodeBinding(false, this.interaction, this.cmdProducer, () => { },
-            () => { }, this.checkConditions, this.onEnd, () => { }, () => { }, () => { },
-            this.widgets, this.additionalWidgets, this.targetWidgets, this._async, false, new Array(...this.logLevels));
+        if (this.interactionSupplier === undefined) {
+            throw new Error("The interaction supplier cannot be undefined here");
+        }
+
+        if (this.cmdProducer === undefined) {
+            throw new Error("The command supplier cannot be undefined here");
+        }
+
+        return new AnonBinding(false, this.interactionSupplier(), this.cmdProducer, [...this.widgets],
+                                   [], false, [...this.logLevels], 0, this.initCmd, undefined, this.checkConditions,
+                                   this.onEnd, undefined, undefined, this.hadEffectsFct,
+                                   this.hadNoEffectFct, this.cannotExecFct);
     }
 }
