@@ -21,6 +21,7 @@ import { WidgetData } from "../interaction/WidgetData";
 import { Command } from "../command/Command";
 import { UpdateBinder } from "./UpdateBinder";
 import { BoxChecked } from "../interaction/library/BoxChecked";
+import { ColorPicked } from "../interaction/library/ColorPicked";
 
 /**
  * Creates binding builder to build a binding between a KeysPressure interaction (done on a Node) and the given command type.
@@ -46,4 +47,9 @@ export function buttonBinder<C extends Command>(): InteractionBinder<ButtonPress
 export function checkboxBinder<C extends Command>(): InteractionBinder<BoxChecked, WidgetData<Element>> {
     return new UpdateBinder<C, BoxChecked, WidgetData<Element>>(0, false, false)
         .usingInteraction<BoxChecked, WidgetData<Element>>(() => new BoxChecked());
+}
+
+export function colorPickerBinder<C extends Command>(): InteractionBinder<ColorPicked, WidgetData<Element>> {
+    return new UpdateBinder<C, ColorPicked, WidgetData<Element>>(0, false, false)
+        .usingInteraction<ColorPicked, WidgetData<Element>>(() => new ColorPicked());
 }
