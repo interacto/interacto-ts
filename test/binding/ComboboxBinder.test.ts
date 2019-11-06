@@ -48,7 +48,7 @@ afterEach(() => {
     UndoCollector.getInstance().clear();
 });
 
-test("testCommandExecutedOnSinglePickerFunction", () => {
+test("testCommandExecutedOnSingleComboFunction", () => {
     binding = comboBoxBinder()
                 .toProduce(i => cmd)
                 .on(widget1)
@@ -59,7 +59,7 @@ test("testCommandExecutedOnSinglePickerFunction", () => {
     expect(cmd.exec).toEqual(1);
 });
 
-test("testCommandExecutedOnTwoPickers", () => {
+test("testCommandExecutedOnTwoCombos", () => {
     binding = comboBoxBinder()
                 .on(widget1, widget2)
                 .toProduce(i => new StubCmd(true))
