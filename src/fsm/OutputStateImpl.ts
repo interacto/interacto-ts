@@ -16,14 +16,13 @@ import { StateImpl } from "./StateImpl";
 import { OutputState } from "./OutputState";
 import { Transition } from "./Transition";
 import { FSM } from "./FSM";
-import { MArray } from "../util/ArrayUtil";
 
 export abstract class OutputStateImpl extends StateImpl implements OutputState {
-    protected readonly transitions: MArray<Transition>;
+    protected readonly transitions: Array<Transition>;
 
     protected constructor(stateMachine: FSM, stateName: string) {
         super(stateMachine, stateName);
-        this.transitions = new MArray<Transition>();
+        this.transitions = [];
     }
 
     public process(event: Event): boolean {
@@ -46,7 +45,7 @@ export abstract class OutputStateImpl extends StateImpl implements OutputState {
     }
 
     public clearTransitions(): void {
-        this.transitions.clear();
+        this.transitions.length = 0;
     }
 
     public getTransitions(): Array<Transition> {
@@ -61,6 +60,6 @@ export abstract class OutputStateImpl extends StateImpl implements OutputState {
 
     public uninstall(): void {
         this.transitions.forEach(tr => tr.uninstall());
-        this.transitions.clear();
+        this.transitions.length = 0;
     }
 }

@@ -19,12 +19,12 @@ import { FSMHandler } from "./FSMHandler";
 import { TimeoutTransition } from "./TimeoutTransition";
 import { StdState } from "./StdState";
 import { InputState } from "./InputState";
-import { MArray } from "../util/ArrayUtil";
 import { OutputStateImpl } from "./OutputStateImpl";
 import { catFSM } from "../logging/ConfigLog";
 import { FSMDataHandler } from "./FSMDataHandler";
 import { isKeyDownEvent } from "./Events";
 import { Subject, Observable } from "rxjs";
+import { remove, removeAt } from "../util/ArrayUtil";
 
 export class FSM {
     protected dataHandler: FSMDataHandler | undefined;
@@ -58,12 +58,12 @@ export class FSM {
     /**
      * The tes that compose the finite state machine.
      */
-    protected readonly states: MArray<State>;
+    protected readonly states: Array<State>;
 
     /**
      * The handler that want to be notified when the state machine of the interaction changed.
      */
-    protected readonly handlers: MArray<FSMHandler>;
+    protected readonly handlers: Array<FSMHandler>;
 
     /**
      * The events still in process. For example when the user press key ctrl and scroll one time using
@@ -72,7 +72,7 @@ export class FSM {
      * are re-introduced into the
      * state machine of the interaction for processing.
      */
-    protected readonly eventsToProcess: MArray<Event>;
+    protected readonly eventsToProcess: Array<Event>;
 
     /**
      * The current timeout in progress.
@@ -86,12 +86,12 @@ export class FSM {
         this.started = false;
         this.started = false;
         this.initState = new InitState(this, "init");
-        this.states = new MArray<State>(this.initState);
+        this.states = new Array<State>(this.initState);
         this._startingState = this.initState;
         this._currentState = this.initState;
         this.currentStatePublisher = new Subject();
-        this.handlers = new MArray();
-        this.eventsToProcess = new MArray();
+        this.handlers = [];
+        this.eventsToProcess = [];
         this.asLogFSM = false;
     }
 
@@ -168,7 +168,7 @@ export class FSM {
 
             if (event instanceof KeyboardEvent && event.code === key) {
                 removed = true;
-                this.eventsToProcess.removeAt(i);
+                removeAt(this.eventsToProcess, i);
             }
         }
     }
@@ -195,12 +195,12 @@ export class FSM {
      * the end of the FSM execution, the events still (eg keyPress) in process must be recycled to be reused in the FSM.
      */
     protected processRemainingEvents(): void {
-        const list: MArray<Event> = new MArray(...this.eventsToProcess);
+        const list: Array<Event> = [...this.eventsToProcess];
         while (list.length > 0) {
-            const event = list.removeAt(0);
+            const event = removeAt(list, 0);
 
             if (event !== undefined) {
-                this.eventsToProcess.removeAt(0);
+                removeAt(this.eventsToProcess, 0);
                 if (this.asLogFSM) {
                     catFSM.info(`Recycling event: ${event.constructor.name}`);
                 }
@@ -299,7 +299,7 @@ export class FSM {
     }
 
     public fullReinit(): void {
-        this.eventsToProcess.clear();
+        this.eventsToProcess.length = 0;
         this.reinit();
         if (this.currentSubFSM !== undefined) {
             this.currentSubFSM.fullReinit();
@@ -353,7 +353,7 @@ export class FSM {
     }
 
     public removeHandler(handler: FSMHandler): void {
-        this.handlers.remove(handler);
+        remove(this.handlers, handler);
     }
 
     /**
@@ -411,8 +411,8 @@ export class FSM {
         this._startingState = state;
     }
 
-    public getEventsToProcess(): MArray<Event> {
-        return new MArray(...this.eventsToProcess);
+    public getEventsToProcess(): Array<Event> {
+        return [...this.eventsToProcess];
     }
 
     public uninstall(): void {
@@ -421,7 +421,7 @@ export class FSM {
         this.currentStatePublisher.complete();
         this.currentSubFSM = undefined;
         this.states.forEach(state => state.uninstall());
-        this.states.clear();
+        this.states.length = 0;
         this.dataHandler = undefined;
     }
 }

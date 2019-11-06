@@ -18,7 +18,6 @@ import { InitState } from "../fsm/InitState";
 import { Logger } from "typescript-logging";
 import { catInteraction } from "../logging/ConfigLog";
 import { InteractionData } from "./InteractionData";
-import { MArray } from "../util/ArrayUtil";
 import { EventRegistrationToken } from "../fsm/Events";
 import { WidgetData } from "./WidgetData";
 import { Subscription } from "rxjs";
@@ -28,9 +27,9 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM, 
     protected readonly fsm: F;
     protected asLog: boolean;
     protected readonly _registeredNodes: Set<EventTarget>;
-    protected readonly _registeredTargetNode: MArray<EventTarget>;
-    protected readonly _additionalNodes: MArray<Node>;
-    protected readonly listMutationObserver: MArray<MutationObserver>;
+    protected readonly _registeredTargetNode: Set<EventTarget>;
+    protected readonly _additionalNodes: Array<Node>;
+    protected readonly listMutationObserver: Array<MutationObserver>;
     /** The widget used during the interaction. */
     protected _widget: T | undefined;
     private mouseHandler: ((e: MouseEvent) => void) | undefined;
@@ -52,9 +51,9 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM, 
         this.activated = true;
         this.asLog = false;
         this._registeredNodes = new Set<EventTarget>();
-        this._additionalNodes = new MArray<Node>();
-        this.listMutationObserver = new MArray<MutationObserver>();
-        this._registeredTargetNode = new MArray<EventTarget>();
+        this._additionalNodes = new Array<Node>();
+        this.listMutationObserver = new Array<MutationObserver>();
+        this._registeredTargetNode = new Set<EventTarget>();
     }
 
     /**
@@ -116,7 +115,7 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM, 
 
     public registerToTargetNodes(targetWidgets: Array<EventTarget>): void {
         targetWidgets.forEach(w => {
-            this._registeredTargetNode.push(w);
+            this._registeredTargetNode.add(w);
             this.onNewNodeTargetRegistered(w);
         });
     }
@@ -320,7 +319,7 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM, 
         this._widget = undefined;
         this.disposable.unsubscribe();
         this._registeredNodes.clear();
-        this._additionalNodes.clear();
+        this._additionalNodes.length = 0;
         this._registeredTargetNode.clear();
         this.setActivated(false);
     }

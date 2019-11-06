@@ -119,7 +119,7 @@ test("testRecycleEvent", () => {
     fsm.process(new StubEvent());
     expect(fsm.currentState).toEqual(std);
     expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
-    expect(fsm.getEventsToProcess().isEmpty()).toBeTruthy();
+    expect(fsm.getEventsToProcess().length).toEqual(0);
 });
 
 test("testNoRecycleEventOnCancel", () => {
@@ -131,7 +131,7 @@ test("testNoRecycleEventOnCancel", () => {
     expect(fsm.currentState).toEqual(fsm.initState);
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
-    expect(fsm.getEventsToProcess().isEmpty()).toBeTruthy();
+    expect(fsm.getEventsToProcess().length).toEqual(0);
 });
 
 test("testReinit", () => {
@@ -144,7 +144,7 @@ test("testFullReinit", () => {
     fsm.process(new StubEvent());
     fsm.addRemaningEventsToProcess(new StubEvent());
     fsm.fullReinit();
-    expect(fsm.getEventsToProcess().isEmpty()).toBeTruthy();
+    expect(fsm.getEventsToProcess().length).toEqual(0);
     expect(fsm.currentState).toEqual(fsm.initState);
 });
 

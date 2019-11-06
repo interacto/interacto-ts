@@ -14,9 +14,9 @@
 
 import { isUndoableType } from "../undo/Undoable";
 import { UndoCollector } from "../undo/UndoCollector";
-import { MArray } from "../util/ArrayUtil";
 import { Command, RegistrationPolicy } from "./Command";
 import { Subject, Observable } from "rxjs";
+import { removeAt, remove } from "../util/ArrayUtil";
 
 /**
  * A register of commands.
@@ -42,7 +42,7 @@ export class CommandsRegistry {
     /**
      * The saved commands.
      */
-    private readonly cmds: MArray<Command>;
+    private readonly cmds: Array<Command>;
 
     /**
      * The max number of cleanable commands (cf. Command::getRegistrationPolicy) that can contain the register.
@@ -52,7 +52,7 @@ export class CommandsRegistry {
     private readonly cmdPublisher: Subject<Command>;
 
     public constructor() {
-        this.cmds = new MArray();
+        this.cmds = [];
         this.sizeMax = 50;
         this.cmdPublisher = new Subject();
     }
@@ -78,7 +78,7 @@ export class CommandsRegistry {
         let i = 0;
         while (i < this.cmds.length) {
             if (this.cmds[i].unregisteredBy(cmd)) {
-                const delCmd = this.cmds.removeAt(i);
+                const delCmd = removeAt(this.cmds, i);
                 if (delCmd !== undefined) {
                     delCmd.flush();
                 }
@@ -104,7 +104,7 @@ export class CommandsRegistry {
                 const command = this.cmds.find(a => a.getRegistrationPolicy() !== RegistrationPolicy.UNLIMITED);
 
                 if (command !== undefined) {
-                    this.cmds.remove(command);
+                    remove(this.cmds, command);
                     command.flush();
                 }
             }
@@ -123,7 +123,7 @@ export class CommandsRegistry {
      * @param {*} cmd The command to remove.
      */
     public removeCmd(cmd: Command): void {
-        this.cmds.remove(cmd);
+        remove(this.cmds, cmd);
         cmd.flush();
     }
 
@@ -133,7 +133,7 @@ export class CommandsRegistry {
      */
     public clear(): void {
         this.cmds.forEach(cmd => cmd.flush());
-        this.cmds.clear();
+        this.cmds.length = 0;
     }
 
     /**
@@ -143,7 +143,7 @@ export class CommandsRegistry {
      */
     public cancelCmd(cmd: Command): void {
         cmd.cancel();
-        this.cmds.remove(cmd);
+        remove(this.cmds, cmd);
         cmd.flush();
     }
 
@@ -169,7 +169,7 @@ export class CommandsRegistry {
 
             while (nb < toRemove && i < this.cmds.length) {
                 if (this.cmds[i].getRegistrationPolicy() !== RegistrationPolicy.UNLIMITED) {
-                    const removed = this.cmds.removeAt(i);
+                    const removed = removeAt(this.cmds, i);
                     if (removed !== undefined) {
                         removed.flush();
                     }
