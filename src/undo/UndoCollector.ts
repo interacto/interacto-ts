@@ -94,9 +94,10 @@ export class UndoCollector {
      * Removes all the undoable objects of the collector.
      */
     public clear(): void {
-        this.undos.length = 0;
-        this.redos.length = 0;
-        this.undoPublisher.next(Optional.empty());
+        if (this.undos.length > 0) {
+            this.undos.length = 0;
+            this.undoPublisher.next(Optional.empty());
+        }
         this.clearRedo();
     }
 
@@ -119,7 +120,8 @@ export class UndoCollector {
             }
 
             this.undos.push(undoable);
-            this.redos.length = 0;
+            this.undoPublisher.next(Optional.of(undoable));
+            this.clearRedo();
         }
     }
 
