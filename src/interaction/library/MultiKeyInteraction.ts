@@ -32,7 +32,7 @@ export abstract class MultiKeyInteraction<D extends KeysData, F extends FSM> ext
         this.keysData.reinitData();
     }
 
-    public setKeysDataTartget(event: KeyboardEvent) {
+    public setKeysDataTarget(event: KeyboardEvent) {
         this.keysData.setKeysDataTarget(event);
     }
 

@@ -116,7 +116,7 @@ export class KeysPressed extends MultiKeyInteraction<KeysData, KeysPressedFSM> {
             }
 
             public onKeyPressed(event: KeyboardEvent) {
-                this._parent.setKeysDataTartget(event);
+                this._parent.setKeysDataTarget(event);
                 this._parent.addKeysDataKey(event);
             }
 
