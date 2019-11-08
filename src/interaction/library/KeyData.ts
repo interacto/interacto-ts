@@ -25,5 +25,5 @@ export interface KeyData extends InteractionData {
      *
      * @returns The key use by the interaction
      */
-    getKey(): String;
+    getKey(): string;
 }

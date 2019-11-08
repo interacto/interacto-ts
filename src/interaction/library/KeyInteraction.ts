@@ -36,7 +36,7 @@ export abstract class KeyInteraction<D extends KeyData, F extends FSM, T> extend
         this.keyData.setKeyData(event);
     }
 
-    public getKey(): String {
+    public getKey(): string {
         return this.keyData.getKey();
     }
 

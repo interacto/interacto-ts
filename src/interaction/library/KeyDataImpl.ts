@@ -19,7 +19,7 @@ export class KeyDataImpl implements KeyData {
     /**
      * The key involve in the interaction
      */
-    protected key: String | undefined;
+    protected key: string | undefined;
 
     /**
      * The target of the event that trigger the interaction
@@ -37,7 +37,7 @@ export class KeyDataImpl implements KeyData {
         return Optional.of(this.target);
     }
 
-    public getKey(): String {
+    public getKey(): string {
         return this.key === undefined ? "" : this.key;
     }
 
