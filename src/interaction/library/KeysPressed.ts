@@ -24,7 +24,7 @@ import { KeysData } from "./KeysData";
 import { FSM } from "../../fsm/FSM";
 
 export class KeysPressedFSM extends FSM {
-    private readonly currentCodes: Array<String>;
+    private readonly currentCodes: Array<string>;
 
     public constructor() {
         super();

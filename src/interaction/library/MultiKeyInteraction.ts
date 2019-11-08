@@ -44,7 +44,7 @@ export abstract class MultiKeyInteraction<D extends KeysData, F extends FSM> ext
         this.keysData.removeKeysDataKey(event);
     }
 
-    public getKeys(): Array<String> {
+    public getKeys(): Array<string> {
         return this.keysData.getKeys();
     }
 

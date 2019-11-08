@@ -20,7 +20,7 @@ export class KeysDataImpl implements KeysData {
     /**
      * The keys involve in the interaction
      */
-    protected keys: Array<String> | undefined;
+    protected keys: Array<string> | undefined;
 
     /**
      * The target of the event that trigger the interaction
@@ -34,7 +34,7 @@ export class KeysDataImpl implements KeysData {
         this.target = undefined;
     }
 
-    public getKeys(): Array<String> {
+    public getKeys(): Array<string> {
         return this.keys === undefined ? [] : this.keys;
     }
 
