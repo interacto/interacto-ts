@@ -94,7 +94,8 @@ export class KeysPressedFSM extends FSM {
     }
 
     public reinit(): void {
-        this.currentCodes.splice(0, this.currentCodes.length);
+        this.currentCodes.length = 0;
+        super.reinit();
     }
 }
 
