@@ -70,6 +70,10 @@ export function isKeyDownEvent(event: Event): event is KeyboardEvent {
     return event instanceof KeyboardEvent && event.type === "keydown";
 }
 
+export function isKeyUpEvent(event: Event): event is KeyboardEvent {
+    return event instanceof KeyboardEvent && event.type === "keyup";
+}
+
 export function isMouseDownEvent(event: Event): event is MouseEvent {
     return event instanceof MouseEvent && event.type === "mousedown";
 }

@@ -22,7 +22,7 @@ import { InputState } from "./InputState";
 import { OutputStateImpl } from "./OutputStateImpl";
 import { catFSM } from "../logging/ConfigLog";
 import { FSMDataHandler } from "./FSMDataHandler";
-import { isKeyDownEvent } from "./Events";
+import { isKeyDownEvent, isKeyUpEvent } from "./Events";
 import { Subject, Observable } from "rxjs";
 import { remove, removeAt } from "../util/ArrayUtil";
 
@@ -125,7 +125,7 @@ export class FSM {
 
     public process(event: Event): boolean {
         // Removing the possible corresponding and pending key pressed event
-        if (isKeyDownEvent(event)) {
+        if (isKeyUpEvent(event)) {
             this.removeKeyEvent(event.code);
         }
 
@@ -135,16 +135,13 @@ export class FSM {
         // Recycling events
         if (processed && isKeyDownEvent(event) && !(this.currentState instanceof InitState) &&
             this.eventsToProcess.find(evt => isKeyDownEvent(evt) && evt.code === event.code) === undefined) {
-            // this.addRemaningEventsToProcess((Event) event.clone()); //TODO
+            this.addRemaningEventsToProcess(event);
         }
 
         return processed;
     }
 
-    private processEvent(event: Event) {
-        if (event === undefined) {
-            return false;
-        }
+    private processEvent(event: Event): boolean {
         if (this.currentSubFSM !== undefined) {
             return this.currentSubFSM.process(event);
         }
@@ -196,23 +193,18 @@ export class FSM {
      */
     protected processRemainingEvents(): void {
         const list: Array<Event> = [...this.eventsToProcess];
-        while (list.length > 0) {
-            const event = removeAt(list, 0);
 
-            if (event !== undefined) {
-                removeAt(this.eventsToProcess, 0);
-                if (this.asLogFSM) {
-                    catFSM.info(`Recycling event: ${event.constructor.name}`);
-                }
-                this.process(event);
+        list.forEach(event => {
+            removeAt(this.eventsToProcess, 0);
+            if (this.asLogFSM) {
+                catFSM.info(`Recycling event: ${event.constructor.name}`);
             }
-        }
+            this.process(event);
+        });
     }
 
     public addRemaningEventsToProcess(event: Event): void {
-        if (event !== undefined) {
-            this.eventsToProcess.push(event);
-        }
+        this.eventsToProcess.push(event);
     }
 
     /**
