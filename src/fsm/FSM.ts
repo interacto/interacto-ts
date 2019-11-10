@@ -157,7 +157,7 @@ export class FSM {
      * Removes the given KeyPress event from the events 'still in process' list.
      * @param key The key code of the event to remove.
      */
-    private removeKeyEvent(key: String): void {
+    private removeKeyEvent(key: string): void {
         let removed = false;
 
         for (let i = 0, size = this.eventsToProcess.length; i < size && !removed; i++) {
