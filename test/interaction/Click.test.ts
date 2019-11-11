@@ -12,7 +12,6 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FSMHandler } from "../../src/fsm/FSMHandler";
 import { StubFSMHandler } from "../fsm/StubFSMHandler";
 import { Click } from "../../src/interaction/library/Click";
 import { EventRegistrationToken } from "../../src/fsm/Events";
@@ -22,7 +21,7 @@ jest.mock("../fsm/StubFSMHandler");
 
 let interaction: Click;
 let canvas: HTMLElement;
-let handler: FSMHandler;
+let handler: StubFSMHandler;
 
 beforeEach(() => {
     jest.clearAllMocks();
@@ -58,22 +57,48 @@ test("Press on a canvas then move don't starts the interaction", () => {
     expect(handler.fsmStarts).not.toHaveBeenCalled();
 });
 
-// test("Check data of the interaction", () => {
-//     interaction.registerToNodes([canvas]);
-//     const evt = document.createEvent("MouseEvent");
-//     evt.initMouseEvent("click", true, false, window, 0, 0, 0, 15,
-//         20, false, false, false, false, 0, null);
-//     interaction.getFsm().addHandler(new class extends StubFSMHandler {
-//         public constructor() {
-//             super();
-//         }
-//
-//         public fsmStarts() {
-//             expect(interaction.getData().getSrcClientY()).toEqual(15);
-//             expect(interaction.getData().getSrcClientY()).toEqual(20);
-//             expect(interaction.getData().getButton()).toEqual(0);
-//         }
-//     }());
-//     canvas.dispatchEvent(evt);
-//     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-// });
+test("testClickData", () => {
+    let x: number | undefined;
+    let y: number | undefined;
+    let sx: number | undefined;
+    let sy: number | undefined;
+    let button: number | undefined;
+
+    handler.fsmStops = jest.fn(() => {
+        button = interaction.getButton();
+        x = interaction.getSrcClientX();
+        y = interaction.getSrcClientY();
+        sx = interaction.getSrcScreenX();
+        sy = interaction.getSrcScreenY();
+    });
+    interaction.processEvent(createMouseEvent("click", canvas, 111, 222, 11, 22, 1));
+    expect(x).toEqual(11);
+    expect(y).toEqual(22);
+    expect(sx).toEqual(111);
+    expect(sy).toEqual(222);
+    expect(button).toEqual(1);
+});
+
+test("testClickOnWidgetData", () => {
+    let x: number | undefined;
+    let y: number | undefined;
+    let sx: number | undefined;
+    let sy: number | undefined;
+    let button: number | undefined;
+
+    handler.fsmStops = jest.fn(() => {
+        button = interaction.getButton();
+        x = interaction.getSrcClientX();
+        y = interaction.getSrcClientY();
+        sx = interaction.getSrcScreenX();
+        sy = interaction.getSrcScreenY();
+    });
+    interaction.registerToNodes([canvas]);
+    canvas.dispatchEvent(createMouseEvent("click", canvas, 111, 222, 11, 22, 1));
+    expect(x).toEqual(11);
+    expect(y).toEqual(22);
+    expect(sx).toEqual(111);
+    expect(sy).toEqual(222);
+    expect(button).toEqual(1);
+});
+
