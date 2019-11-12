@@ -52,7 +52,7 @@ interface ButtonPressedFSMHandler extends FSMDataHandler {
  * A user interaction for buttons.
  * @author Arnaud BLOUIN
  */
-export class ButtonPressed extends InteractionImpl<WidgetData<Element>, ButtonPressedFSM, Element> {
+export class ButtonPressed extends InteractionImpl<WidgetData<HTMLButtonElement>, ButtonPressedFSM, HTMLButtonElement> {
     private readonly handler: ButtonPressedFSMHandler;
 
     /**
@@ -70,7 +70,7 @@ export class ButtonPressed extends InteractionImpl<WidgetData<Element>, ButtonPr
 
             public initToPressedHandler(event: Event): void {
                 if (event.target !== null && isButton(event.target)) {
-                    this._parent._widget = event.currentTarget as Element;
+                    this._parent._widget = event.target;
                 }
             }
 
@@ -94,7 +94,7 @@ export class ButtonPressed extends InteractionImpl<WidgetData<Element>, ButtonPr
         }
     }
 
-    public getData(): WidgetData<Element> {
+    public getData(): WidgetData<HTMLButtonElement> {
         return this;
     }
 }

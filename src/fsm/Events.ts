@@ -25,8 +25,8 @@ export enum EventRegistrationToken {
     BeforeUnload = "beforeunload"
 }
 
-export function isButton(target: EventTarget): target is Element {
-    return (<Element> target).tagName === "BUTTON" && !(<Element> target).hasAttribute("type");
+export function isButton(target: EventTarget): target is HTMLButtonElement {
+    return target instanceof HTMLButtonElement;
 }
 
 export function isCheckBox(target: EventTarget): target is Element {

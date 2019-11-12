@@ -15,11 +15,12 @@
 import { ButtonPressed } from "../../src/interaction/library/ButtonPressed";
 import { FSMHandler } from "../../src/fsm/FSMHandler";
 import { StubFSMHandler } from "../fsm/StubFSMHandler";
+import { isButton } from "../../src";
 
 jest.mock("../fsm/StubFSMHandler");
 
 let interaction: ButtonPressed;
-let button: HTMLElement;
+let button: HTMLButtonElement;
 let handler: FSMHandler;
 
 beforeEach(() => {
@@ -31,7 +32,7 @@ beforeEach(() => {
     interaction.getFsm().addHandler(handler);
     document.documentElement.innerHTML = "<html><div><button id='b1'>A Button</button></div></html>";
     const elt = document.getElementById("b1");
-    if (elt !== null) {
+    if (elt !== null && isButton(elt)) {
         button = elt;
     }
 });

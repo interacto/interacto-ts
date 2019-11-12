@@ -11,12 +11,12 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { WidgetBinding, ButtonPressed, WidgetData, buttonBinder, CommandsRegistry, UndoCollector, LogLevel } from "../../src";
+import { WidgetBinding, ButtonPressed, WidgetData, buttonBinder, CommandsRegistry, UndoCollector, LogLevel, isButton } from "../../src";
 import { StubCmd } from "../command/StubCmd";
 import { Subscription } from "rxjs";
 
-let button1: HTMLElement;
-let button2: HTMLElement;
+let button1: HTMLButtonElement;
+let button2: HTMLButtonElement;
 let binding: WidgetBinding<StubCmd, ButtonPressed, WidgetData<Element>>;
 let cmd: StubCmd;
 let producedCmds: Array<StubCmd>;
@@ -25,11 +25,11 @@ let disposable: Subscription;
 beforeEach(() => {
     document.documentElement.innerHTML = "<html><div><button id='b1'>A Button</button><button id='b2'>A Button2</button></div></html>";
     const elt1 = document.getElementById("b1");
-    if (elt1 !== null) {
+    if (elt1 !== null && isButton(elt1)) {
         button1 = elt1;
     }
     const elt2 = document.getElementById("b2");
-    if (elt2 !== null) {
+    if (elt2 !== null && isButton(elt2)) {
         button2 = elt2;
     }
     cmd = new StubCmd(true);
