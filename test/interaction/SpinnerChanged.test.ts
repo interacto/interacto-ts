@@ -14,7 +14,7 @@
 
 import { FSMHandler } from "../../src/fsm/FSMHandler";
 import { StubFSMHandler } from "../fsm/StubFSMHandler";
-import { SpinnerChanged } from "../../src/interaction/library/SpinnerChanged";
+import { SpinnerChanged, SpinnerChangedFSM } from "../../src/interaction/library/SpinnerChanged";
 
 jest.mock("../fsm/StubFSMHandler");
 
@@ -24,21 +24,79 @@ let handler: FSMHandler;
 
 beforeEach(() => {
     jest.clearAllMocks();
+    jest.useFakeTimers();
     handler = new StubFSMHandler();
     interaction = new SpinnerChanged();
     interaction.log(true);
     interaction.getFsm().log(true);
     interaction.getFsm().addHandler(handler);
-    document.documentElement.innerHTML = "<html><div><input id='sp1' type='number'></div></html>";
+    document.documentElement.innerHTML = "<html><div><input id='sp1' type='number' step='1' value='1'/></div></html>";
     const elt = document.getElementById("sp1");
     if (elt !== null) {
         spinner = elt;
     }
 });
 
-test("Click on spinner starts and stops the interaction", () => {
+test("testSpinnerChangedGoodState", () => {
     interaction.registerToNodes([spinner]);
     spinner.dispatchEvent(new Event("input"));
+    jest.runAllTimers();
+    expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+    expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
+});
+
+test("testSpinnerChange2TimesGoodState", () => {
+    interaction.registerToNodes([spinner]);
+    spinner.dispatchEvent(new Event("input"));
+    spinner.dispatchEvent(new Event("input"));
+    jest.runAllTimers();
+    expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+    expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
+});
+
+test("testSpinnerChangedGoodStateWithTimeGap", () => {
+    SpinnerChangedFSM.setTimeGap(50);
+    interaction.registerToNodes([spinner]);
+    spinner.dispatchEvent(new Event("input"));
+    jest.runAllTimers();
+    expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+    expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
+});
+
+test("testSpinnerChangeTwoTimesWith500GoodState", () => {
+    interaction.registerToNodes([spinner]);
+    spinner.dispatchEvent(new Event("input"));
+    jest.runAllTimers();
+    spinner.dispatchEvent(new Event("input"));
+    jest.runAllTimers();
+    expect(handler.fsmStops).toHaveBeenCalledTimes(2);
+    expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
+    expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
+});
+
+test("testNoActionWhenNotRegistered", () => {
+    spinner.dispatchEvent(new Event("input"));
+    jest.runAllTimers();
+    expect(handler.fsmStops).not.toHaveBeenCalled();
+    expect(handler.fsmStarts).not.toHaveBeenCalled();
+});
+
+test("testUnRegisterNode", () => {
+    interaction.registerToNodes([spinner]);
+    interaction.unregisterFromNodes([spinner]);
+    spinner.dispatchEvent(new Event("input"));
+    jest.runAllTimers();
+    expect(handler.fsmStops).not.toHaveBeenCalled();
+    expect(handler.fsmStarts).not.toHaveBeenCalled();
+});
+
+test("test Registered twice", () => {
+    interaction.registerToNodes([spinner, spinner]);
+    spinner.dispatchEvent(new Event("input"));
+    jest.runAllTimers();
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
 });

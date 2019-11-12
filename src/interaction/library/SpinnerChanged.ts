@@ -19,8 +19,32 @@ import { WidgetData } from "../WidgetData";
 import { SpinnerChangedTransition } from "../../fsm/SpinnerChangedTransition";
 import { FSM } from "../../fsm/FSM";
 import { InteractionImpl } from "../InteractionImpl";
+import { StdState } from "../../fsm/StdState";
+import { TimeoutTransition } from "../../fsm/TimeoutTransition";
 
 export class SpinnerChangedFSM extends FSM {
+    /** The time gap between the two spinner events. */
+	private static timeGap = 300;
+	/** The supplier that provides the time gap. */
+    private static readonly SUPPLY_TIME_GAP = () => SpinnerChangedFSM.getTimeGap();
+
+	/**
+	 * @return The time gap between the two spinner events.
+	 */
+	public static getTimeGap(): number {
+		return SpinnerChangedFSM.timeGap;
+	}
+
+	/**
+	 * Sets The time gap between the two spinner events.
+	 * @param timeGapBetweenClicks The time gap between the two spinner events. Not done if negative.
+	 */
+	public static setTimeGap(timeGapBetweenClicks: number): void {
+		if (timeGapBetweenClicks > 0) {
+			SpinnerChangedFSM.timeGap = timeGapBetweenClicks;
+		}
+    }
+
     public constructor() {
         super();
     }
@@ -31,20 +55,35 @@ export class SpinnerChangedFSM extends FSM {
         }
 
         super.buildFSM(dataHandler);
-        const picked: TerminalState = new TerminalState(this, "picked");
-        this.addState(picked);
+        const changed = new StdState(this, "valueChanged");
+        const ended = new TerminalState(this, "ended");
+
+        this.addState(changed);
+        this.addState(ended);
+
+        const spinnerAction = (event: Event) => {
+            if (event.target !== null && isSpinner(event.target) && dataHandler !== undefined) {
+                dataHandler.initToChangedHandler(event);
+            }
+        };
 
         new class extends SpinnerChangedTransition {
             public action(event: Event): void {
-                if (event.target !== null && isSpinner(event.target) && dataHandler !== undefined) {
-                    dataHandler.initToChangedHandler(event);
-                }
+                spinnerAction(event);
             }
-        }(this.initState, picked);
+        }(this.initState, changed);
+
+        new class extends SpinnerChangedTransition {
+            public action(event: Event): void {
+                spinnerAction(event);
+            }
+        }(changed, changed);
+
+        new TimeoutTransition(changed, ended, SpinnerChangedFSM.SUPPLY_TIME_GAP);
     }
 }
 
-export interface SpinnerChangedHandler extends FSMDataHandler {
+interface SpinnerChangedHandler extends FSMDataHandler {
     initToChangedHandler(event: Event): void;
 }
 

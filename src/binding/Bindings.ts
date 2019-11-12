@@ -24,6 +24,8 @@ import { BoxChecked } from "../interaction/library/BoxChecked";
 import { ColorPicked } from "../interaction/library/ColorPicked";
 import { ComboBoxSelected } from "../interaction/library/ComboBoxSelected";
 import { ChoiceBoxSelected } from "../interaction/library/ChoiceBoxSelected";
+import { SpinnerChanged } from "../interaction/library/SpinnerChanged";
+import { InteractionUpdateBinder } from "./api/InteractionUpdateBinder";
 
 /**
  * Creates binding builder to build a binding between a KeysPressure interaction (done on a Node) and the given command type.
@@ -64,4 +66,9 @@ export function comboBoxBinder<C extends Command>(): InteractionBinder<ComboBoxS
 export function choiceBoxBinder<C extends Command>(): InteractionBinder<ChoiceBoxSelected, WidgetData<Element>> {
     return new UpdateBinder<C, ChoiceBoxSelected, WidgetData<Element>>(0, false, false)
         .usingInteraction<ChoiceBoxSelected, WidgetData<Element>>(() => new ChoiceBoxSelected());
+}
+
+export function spinnerBinder<C extends Command>(): InteractionUpdateBinder<SpinnerChanged, WidgetData<Element>> {
+    return new UpdateBinder<C, SpinnerChanged, WidgetData<Element>>(0, false, false)
+        .usingInteraction<SpinnerChanged, WidgetData<Element>>(() => new SpinnerChanged());
 }
