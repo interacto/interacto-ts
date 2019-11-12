@@ -86,7 +86,6 @@ export * from "./command/library/Zoom";
 export * from "./error/ErrorCatcher";
 export * from "./fsm/CancelFSMException";
 export * from "./fsm/CancellingState";
-export * from "./fsm/EpsilonTransition";
 export * from "./fsm/FSM";
 export * from "./fsm/FSMHandler";
 export * from "./fsm/InitState";
