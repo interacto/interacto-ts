@@ -38,5 +38,5 @@ export interface InteractionUpdateBinder<I extends InteractionImpl<D, FSM, {}>, 
 
     endOrCancel(endOrCancel: (i: D) => void): InteractionUpdateBinder<I, D>;
 
-    toProduce<C extends Command>(cmdSupplier: (c: C, i?: D) => void): InteractionCmdUpdateBinder<C, I, D>;
+    toProduce<C extends Command>(cmdSupplier: (i?: D) => C): InteractionCmdUpdateBinder<C, I, D>;
 }
