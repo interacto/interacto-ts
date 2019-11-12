@@ -45,7 +45,7 @@ export class ComboBoxSelectedFSM extends FSM {
 }
 
 
-export interface ComboBoxSelectedHandler extends FSMDataHandler {
+interface ComboBoxSelectedHandler extends FSMDataHandler {
     initToSelectedHandler(event: Event): void;
 }
 

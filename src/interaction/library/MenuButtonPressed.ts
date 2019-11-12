@@ -47,7 +47,7 @@ export class MenuButtonPressedFSM extends FSM {
     }
 }
 
-export interface MenuButtonPressedFSMHandler extends FSMDataHandler {
+interface MenuButtonPressedFSMHandler extends FSMDataHandler {
     initToPressedHandler(event: Event): void;
 }
 

@@ -108,7 +108,7 @@ export class KeyTypedFSM extends FSM {
     }
 }
 
-export interface KeyTypedFSMHandler extends FSMDataHandler {
+interface KeyTypedFSMHandler extends FSMDataHandler {
     onKeyTyped(event: Event): void;
 }
 

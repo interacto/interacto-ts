@@ -45,7 +45,7 @@ export class ChoiceBoxSelectedSFM extends FSM {
 }
 
 
-export interface ChoiceBoxSelectedHandler extends FSMDataHandler {
+interface ChoiceBoxSelectedHandler extends FSMDataHandler {
     initToSelectedHandler(event: Event): void;
 }
 

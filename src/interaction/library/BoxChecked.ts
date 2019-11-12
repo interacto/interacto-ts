@@ -46,7 +46,7 @@ export class BoxCheckedFSM extends FSM {
     }
 }
 
-export interface BoxCheckedHandler extends FSMDataHandler {
+interface BoxCheckedHandler extends FSMDataHandler {
     initToCheckHandler(event: Event): void;
 }
 

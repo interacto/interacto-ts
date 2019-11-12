@@ -86,7 +86,7 @@ export class TextInputChangedFSM extends FSM {
 }
 
 
-export interface TextInputChangedHandler extends FSMDataHandler {
+interface TextInputChangedHandler extends FSMDataHandler {
     initToChangedHandler(event: Event): void;
 }
 

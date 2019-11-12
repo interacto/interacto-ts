@@ -106,7 +106,7 @@ export class DragLockFSM extends FSM {
     }
 }
 
-export interface DragLockFSMHandler extends FSMDataHandler {
+interface DragLockFSMHandler extends FSMDataHandler {
     onMove(event: MouseEvent): void;
 }
 

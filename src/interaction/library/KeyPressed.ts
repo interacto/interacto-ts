@@ -67,7 +67,7 @@ export class KeyPressedFSM extends FSM {
 
 }
 
-export interface KeyPressedFSMHandler extends FSMDataHandler {
+interface KeyPressedFSMHandler extends FSMDataHandler {
     onKeyPressed(event: Event): void;
 }
 

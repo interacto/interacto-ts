@@ -78,7 +78,7 @@ export class ClickFSM extends FSM {
     }
 }
 
-export interface ClickFSMHandler extends FSMDataHandler {
+interface ClickFSMHandler extends FSMDataHandler {
     initToClicked(event: MouseEvent): void;
 }
 

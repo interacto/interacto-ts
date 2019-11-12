@@ -99,7 +99,7 @@ export class KeysPressedFSM extends FSM {
     }
 }
 
-export interface KeysPressedFSMHandler extends FSMDataHandler {
+interface KeysPressedFSMHandler extends FSMDataHandler {
     onKeyPressed(event: KeyboardEvent): void;
 }
 

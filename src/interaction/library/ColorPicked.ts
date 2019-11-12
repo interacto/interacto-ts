@@ -44,7 +44,7 @@ export class ColorPickedFSM extends FSM {
 }
 
 
-export interface ColorPickedHandler extends FSMDataHandler {
+interface ColorPickedHandler extends FSMDataHandler {
     initToPickedHandler(event: Event): void;
 }
 

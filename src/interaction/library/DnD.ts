@@ -156,7 +156,7 @@ export class DnDFSM extends FSM {
     }
 }
 
-export interface DnDFSMHandler extends FSMDataHandler {
+interface DnDFSMHandler extends FSMDataHandler {
     onPress(event: Event): void;
     onDrag(event: Event): void;
     onRelease(event: Event): void;

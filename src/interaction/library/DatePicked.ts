@@ -45,7 +45,7 @@ export class DatePickedFSM extends FSM {
 }
 
 
-export interface DatePickedHandler extends FSMDataHandler {
+interface DatePickedHandler extends FSMDataHandler {
     initToPickedHandler(event: Event): void;
 }
 

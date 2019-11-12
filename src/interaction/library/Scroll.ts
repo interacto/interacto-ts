@@ -45,7 +45,7 @@ export class ScrollFSM extends FSM {
 }
 
 
-export interface ScrollFSMHandler extends FSMDataHandler {
+interface ScrollFSMHandler extends FSMDataHandler {
     initToScroll(event: Event): void;
 }
 

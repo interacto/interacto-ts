@@ -45,7 +45,7 @@ export class HyperLinkClickedFSM extends FSM {
 }
 
 
-export interface HyperLinkClickedFSMHandler extends FSMDataHandler {
+interface HyperLinkClickedFSMHandler extends FSMDataHandler {
     initToClickedHandler(event: Event): void;
 }
 

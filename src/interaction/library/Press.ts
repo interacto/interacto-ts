@@ -55,7 +55,7 @@ export class PressFSM extends FSM {
     }
 }
 
-export interface PressFSMHandler extends FSMDataHandler {
+interface PressFSMHandler extends FSMDataHandler {
     initToPress(event: Event): void;
 }
 
