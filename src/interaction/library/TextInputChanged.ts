@@ -95,7 +95,8 @@ interface TextInputChangedHandler extends FSMDataHandler {
  * @author Gwendal DIDOT
  */
 
-export class TextInputChanged extends InteractionImpl<WidgetData<Element>, TextInputChangedFSM, Element> {
+export class TextInputChanged extends InteractionImpl<WidgetData<HTMLInputElement | HTMLTextAreaElement>,
+        TextInputChangedFSM, HTMLInputElement | HTMLTextAreaElement> {
     private readonly handler: TextInputChangedHandler;
 
     public constructor(timeGap?: number) {
@@ -110,7 +111,7 @@ export class TextInputChanged extends InteractionImpl<WidgetData<Element>, TextI
 
             public initToChangedHandler(event: Event): void {
                 if (event.target !== null && isTextInput(event.target)) {
-                    this._parent._widget = event.currentTarget as Element;
+                    this._parent._widget = event.target;
                 }
             }
 
@@ -135,7 +136,7 @@ export class TextInputChanged extends InteractionImpl<WidgetData<Element>, TextI
         }
     }
 
-    public getData(): WidgetData<Element> {
+    public getData(): WidgetData<HTMLInputElement | HTMLTextAreaElement> {
         return this;
     }
 }

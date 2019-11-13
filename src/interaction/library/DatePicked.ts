@@ -54,7 +54,7 @@ interface DatePickedHandler extends FSMDataHandler {
  * @author Gwendal DIDOT
  */
 
-export class DatePicked extends InteractionImpl<WidgetData<Element>, DatePickedFSM, Element> {
+export class DatePicked extends InteractionImpl<WidgetData<HTMLInputElement>, DatePickedFSM, HTMLInputElement> {
     private readonly handler: DatePickedHandler;
 
     /**
@@ -72,7 +72,7 @@ export class DatePicked extends InteractionImpl<WidgetData<Element>, DatePickedF
 
             public initToPickedHandler(event: Event): void {
                 if (event.target !== null && isDatePicker(event.target)) {
-                    this._parent._widget = event.currentTarget as Element;
+                    this._parent._widget = event.target;
                 }
             }
 
@@ -97,7 +97,7 @@ export class DatePicked extends InteractionImpl<WidgetData<Element>, DatePickedF
         }
     }
 
-    public getData(): WidgetData<Element> {
+    public getData(): WidgetData<HTMLInputElement> {
         return this;
     }
 }

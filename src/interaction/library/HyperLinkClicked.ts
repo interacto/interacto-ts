@@ -54,7 +54,7 @@ interface HyperLinkClickedFSMHandler extends FSMDataHandler {
  * @author Gwendal DIDOT
  */
 
-export class HyperLinkClicked extends InteractionImpl<WidgetData<Element>, HyperLinkClickedFSM, Element> {
+export class HyperLinkClicked extends InteractionImpl<WidgetData<HTMLAnchorElement>, HyperLinkClickedFSM, HTMLAnchorElement> {
     private readonly handler: HyperLinkClickedFSMHandler;
 
     /**
@@ -72,7 +72,7 @@ export class HyperLinkClicked extends InteractionImpl<WidgetData<Element>, Hyper
 
             public initToClickedHandler(event: Event): void {
                 if (event.target !== null && isHyperLink(event.target)) {
-                    this._parent._widget = event.currentTarget as Element;
+                    this._parent._widget = event.target;
                 }
             }
 
@@ -97,7 +97,7 @@ export class HyperLinkClicked extends InteractionImpl<WidgetData<Element>, Hyper
         }
     }
 
-    public getData(): WidgetData<Element> {
+    public getData(): WidgetData<HTMLAnchorElement> {
         return this;
     }
 }
