@@ -29,7 +29,7 @@ beforeEach(() => {
     interaction.log(true);
     interaction.getFsm().log(true);
     interaction.getFsm().addHandler(handler);
-    document.documentElement.innerHTML = "<html><div><input id='dt1' type='date'></div></html>";
+    document.documentElement.innerHTML = "<html><div><input id='dt1' type='date' /></div></html>";
     const elt = document.getElementById("dt1");
     if (elt !== null) {
         date = elt;

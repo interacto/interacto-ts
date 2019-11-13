@@ -30,7 +30,8 @@ beforeEach(() => {
     interaction.log(true);
     interaction.getFsm().log(true);
     interaction.getFsm().addHandler(handler);
-    document.documentElement.innerHTML = "<html><div><input id='inT' type='text'></div><div><textarea id='teA'></textarea></div></html>";
+    document.documentElement.innerHTML =
+        "<html><div><input id='inT' type='text'/></div><div><textarea id='teA'/></textarea></div></html>";
     const elt2 = document.getElementById("teA");
     if (elt2 !== null) {
         textArea = elt2;

@@ -30,7 +30,7 @@ beforeEach(() => {
     interaction.getFsm().log(true);
     interaction.getFsm().addHandler(handler);
     document.documentElement.innerHTML = "<html><div><input id='comb1' list='test'><datalist id='test'>" +
-        "<option value='test1'>Test1</option> </datalist> </div></html>";
+        "<option value='test1'>Test1</option> </datalist></input></div></html>";
     const elt = document.getElementById("comb1");
     if (elt !== null) {
         comboBox = elt;
