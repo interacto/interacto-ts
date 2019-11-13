@@ -91,7 +91,7 @@ interface SpinnerChangedHandler extends FSMDataHandler {
  * A user interaction for Number input.
  * @author Gwendal DIDOT
  */
-export class SpinnerChanged extends InteractionImpl<WidgetData<Element>, SpinnerChangedFSM, Element> {
+export class SpinnerChanged extends InteractionImpl<WidgetData<HTMLInputElement>, SpinnerChangedFSM, HTMLInputElement> {
     private readonly handler: SpinnerChangedHandler;
 
     /**
@@ -109,7 +109,7 @@ export class SpinnerChanged extends InteractionImpl<WidgetData<Element>, Spinner
 
             public initToChangedHandler(event: Event): void {
                 if (event.target !== null && isSpinner(event.target)) {
-                    this._parent._widget = event.currentTarget as Element;
+                    this._parent._widget = event.target;
                 }
             }
 
@@ -134,7 +134,7 @@ export class SpinnerChanged extends InteractionImpl<WidgetData<Element>, Spinner
         }
     }
 
-    public getData(): WidgetData<Element> {
+    public getData(): WidgetData<HTMLInputElement> {
         return this;
     }
 }

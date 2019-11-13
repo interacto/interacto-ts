@@ -17,7 +17,7 @@ import { Subscription } from "rxjs";
 
 let widget1: HTMLElement;
 let widget2: HTMLElement;
-let binding: WidgetBinding<StubCmd, SpinnerChanged, WidgetData<Element>>;
+let binding: WidgetBinding<StubCmd, SpinnerChanged, WidgetData<HTMLInputElement>>;
 let cmd: StubCmd;
 let producedCmds: Array<StubCmd>;
 let disposable: Subscription;

@@ -62,7 +62,7 @@ export function comboBoxBinder<C extends Command>(): InteractionBinder<ComboBoxS
         .usingInteraction<ComboBoxSelected, WidgetData<HTMLSelectElement>>(() => new ComboBoxSelected());
 }
 
-export function spinnerBinder<C extends Command>(): InteractionUpdateBinder<SpinnerChanged, WidgetData<Element>> {
-    return new UpdateBinder<C, SpinnerChanged, WidgetData<Element>>(0, false, false)
-        .usingInteraction<SpinnerChanged, WidgetData<Element>>(() => new SpinnerChanged());
+export function spinnerBinder<C extends Command>(): InteractionUpdateBinder<SpinnerChanged, WidgetData<HTMLInputElement>> {
+    return new UpdateBinder<C, SpinnerChanged, WidgetData<HTMLInputElement>>(0, false, false)
+        .usingInteraction<SpinnerChanged, WidgetData<HTMLInputElement>>(() => new SpinnerChanged());
 }
