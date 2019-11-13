@@ -17,7 +17,7 @@ import { WidgetBinding, WidgetData, BoxChecked, CommandsRegistry, UndoCollector,
 
 let widget1: HTMLElement;
 let widget2: HTMLElement;
-let binding: WidgetBinding<StubCmd, BoxChecked, WidgetData<Element>>;
+let binding: WidgetBinding<StubCmd, BoxChecked, WidgetData<HTMLInputElement>>;
 let cmd: StubCmd;
 let producedCmds: Array<StubCmd>;
 let disposable: Subscription;

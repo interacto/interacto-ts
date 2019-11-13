@@ -54,7 +54,7 @@ interface BoxCheckedHandler extends FSMDataHandler {
  * A user interaction for CheckBox.
  * @author Gwendal DIDOT
  */
-export class BoxChecked extends InteractionImpl<WidgetData<Element>, BoxCheckedFSM, Element> {
+export class BoxChecked extends InteractionImpl<WidgetData<HTMLInputElement>, BoxCheckedFSM, HTMLInputElement> {
     private readonly handler: BoxCheckedHandler;
 
     /**
@@ -72,7 +72,7 @@ export class BoxChecked extends InteractionImpl<WidgetData<Element>, BoxCheckedF
 
             public initToCheckHandler(event: Event): void {
                 if (event.target !== null && isCheckBox(event.target)) {
-                    this._parent._widget = event.currentTarget as Element;
+                    this._parent._widget = event.target;
                 }
             }
 
@@ -97,7 +97,7 @@ export class BoxChecked extends InteractionImpl<WidgetData<Element>, BoxCheckedF
         }
     }
 
-    public getData(): WidgetData<Element> {
+    public getData(): WidgetData<HTMLInputElement> {
         return this;
     }
 }
