@@ -17,7 +17,7 @@ import { Subscription } from "rxjs";
 
 let button1: HTMLButtonElement;
 let button2: HTMLButtonElement;
-let binding: WidgetBinding<StubCmd, ButtonPressed, WidgetData<Element>>;
+let binding: WidgetBinding<StubCmd, ButtonPressed, WidgetData<HTMLButtonElement>>;
 let cmd: StubCmd;
 let producedCmds: Array<StubCmd>;
 let disposable: Subscription;

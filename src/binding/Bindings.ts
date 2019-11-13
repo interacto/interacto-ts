@@ -40,11 +40,11 @@ export function anonCmdBinder(cmd: () => void): CmdBinder<AnonCmd> {
 /**
  * Creates binding builder to build a binding between a button interaction and the given command type.
  * Do not forget to call bind() at the end of the build to execute the builder.
- * @return The binding builder. Cannot be null.
+ * @return The binding builder.
  */
-export function buttonBinder<C extends Command>(): InteractionBinder<ButtonPressed, WidgetData<Element>> {
-    return new UpdateBinder<C, ButtonPressed, WidgetData<Element>>(0, false, false)
-        .usingInteraction<ButtonPressed, WidgetData<Element>>(() => new ButtonPressed());
+export function buttonBinder<C extends Command>(): InteractionBinder<ButtonPressed, WidgetData<HTMLButtonElement>> {
+    return new UpdateBinder<C, ButtonPressed, WidgetData<HTMLButtonElement>>(0, false, false)
+        .usingInteraction<ButtonPressed, WidgetData<HTMLButtonElement>>(() => new ButtonPressed());
 }
 
 export function checkboxBinder<C extends Command>(): InteractionBinder<BoxChecked, WidgetData<Element>> {
