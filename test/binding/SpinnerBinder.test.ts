@@ -11,12 +11,12 @@
  * You should have received a copy of the GNU General export function License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { WidgetData, WidgetBinding, CommandsRegistry, UndoCollector, spinnerBinder, SpinnerChanged, SpinnerChangedFSM } from "../../src";
+import { WidgetData, WidgetBinding, CommandsRegistry, UndoCollector, spinnerBinder, SpinnerChanged, SpinnerChangedFSM, isSpinner } from "../../src";
 import { StubCmd } from "../command/StubCmd";
 import { Subscription } from "rxjs";
 
-let widget1: HTMLElement;
-let widget2: HTMLElement;
+let widget1: HTMLInputElement;
+let widget2: HTMLInputElement;
 let binding: WidgetBinding<StubCmd, SpinnerChanged, WidgetData<HTMLInputElement>>;
 let cmd: StubCmd;
 let producedCmds: Array<StubCmd>;
@@ -30,11 +30,11 @@ beforeEach(() => {
         "<input id='sp2' type='number'>" +
         "</div></html>";
     const elt1 = document.getElementById("sp1");
-    if (elt1 !== null) {
+    if (elt1 !== null && isSpinner(elt1)) {
         widget1 = elt1;
     }
     const elt2 = document.getElementById("sp2");
-    if (elt2 !== null) {
+    if (elt2 !== null && isSpinner(elt2)) {
         widget2 = elt2;
     }
     cmd = new StubCmd(true);

@@ -13,10 +13,10 @@
  */
 import { StubCmd } from "../command/StubCmd";
 import { Subscription } from "rxjs";
-import { WidgetBinding, WidgetData, BoxChecked, CommandsRegistry, UndoCollector, checkboxBinder } from "../../src";
+import { WidgetBinding, WidgetData, BoxChecked, CommandsRegistry, UndoCollector, checkboxBinder, isCheckBox } from "../../src";
 
-let widget1: HTMLElement;
-let widget2: HTMLElement;
+let widget1: HTMLInputElement;
+let widget2: HTMLInputElement;
 let binding: WidgetBinding<StubCmd, BoxChecked, WidgetData<HTMLInputElement>>;
 let cmd: StubCmd;
 let producedCmds: Array<StubCmd>;
@@ -26,11 +26,11 @@ beforeEach(() => {
     document.documentElement.innerHTML =
         "<html><div><input type='checkbox' id='b1'>CB</input><input type='checkbox' id='b2'>CB2</input></div></html>";
     const elt1 = document.getElementById("b1");
-    if (elt1 !== null) {
+    if (elt1 !== null && isCheckBox(elt1)) {
         widget1 = elt1;
     }
     const elt2 = document.getElementById("b2");
-    if (elt2 !== null) {
+    if (elt2 !== null && isCheckBox(elt2)) {
         widget2 = elt2;
     }
     cmd = new StubCmd(true);

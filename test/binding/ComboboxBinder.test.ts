@@ -11,12 +11,12 @@
  * You should have received a copy of the GNU General export function License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { WidgetData, WidgetBinding, CommandsRegistry, UndoCollector, ComboBoxSelected, comboBoxBinder } from "../../src";
+import { WidgetData, WidgetBinding, CommandsRegistry, UndoCollector, ComboBoxSelected, comboBoxBinder, isComboBox } from "../../src";
 import { StubCmd } from "../command/StubCmd";
 import { Subscription } from "rxjs";
 
-let widget1: HTMLElement;
-let widget2: HTMLElement;
+let widget1: HTMLSelectElement;
+let widget2: HTMLSelectElement;
 let binding: WidgetBinding<StubCmd, ComboBoxSelected, WidgetData<HTMLSelectElement>>;
 let cmd: StubCmd;
 let producedCmds: Array<StubCmd>;
@@ -27,11 +27,11 @@ beforeEach(() => {
         "<html><div><select id='comb1'><option value='v1'>Volvo</option></select>" +
         "<select id='comb2'><option value='v1'>Volvo</option></select></div></html>";
     const elt1 = document.getElementById("comb1");
-    if (elt1 !== null) {
+    if (elt1 !== null && isComboBox(elt1)) {
         widget1 = elt1;
     }
     const elt2 = document.getElementById("comb2");
-    if (elt2 !== null) {
+    if (elt2 !== null && isComboBox(elt2)) {
         widget2 = elt2;
     }
     cmd = new StubCmd(true);
