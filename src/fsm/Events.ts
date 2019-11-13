@@ -21,75 +21,56 @@ export enum EventRegistrationToken {
     Click = "click",
     Input = "input",
     Scroll = "scroll",
-    Change = "change",
-    BeforeUnload = "beforeunload"
+    Change = "change"
 }
 
 export function isButton(target: EventTarget): target is HTMLButtonElement {
     return target instanceof HTMLButtonElement;
 }
 
-export function isCheckBox(target: EventTarget): target is Element {
-    return (<Element> target).tagName === "INPUT" && (<Element> target).getAttribute("type") === "checkbox";
+export function isCheckBox(target: EventTarget): target is HTMLInputElement {
+    return target instanceof HTMLInputElement && target.getAttribute("type") === "checkbox";
 }
 
-export function isColorChoice(target: EventTarget): target is Element {
-    return (<Element> target).tagName === "INPUT" && (<Element> target).getAttribute("type") === "color";
+export function isColorChoice(target: EventTarget): target is HTMLInputElement {
+    return target instanceof HTMLInputElement && target.getAttribute("type") === "color";
 }
 
-export function isComboBox(target: EventTarget): target is Element {
-    return (<Element> target).tagName === "INPUT" && (<Element> target).getAttribute("list") !== undefined;
+export function isComboBox(target: EventTarget): target is HTMLSelectElement {
+    return target instanceof HTMLSelectElement;
 }
 
-export function isDatePicker(target: EventTarget): target is Element {
-    return (<Element> target).tagName === "INPUT" && (<Element> target).getAttribute("type") === "date";
+export function isDatePicker(target: EventTarget): target is HTMLInputElement {
+    return target instanceof HTMLInputElement && target.getAttribute("type") === "date";
 }
 
-export function isSpinner(target: EventTarget): target is Element {
-    return (<Element> target).tagName === "INPUT" && (<Element> target).getAttribute("type") === "number";
+export function isSpinner(target: EventTarget): target is HTMLInputElement {
+    return target instanceof HTMLInputElement && target.getAttribute("type") === "number";
 }
 
-export function isHyperLink(target: EventTarget): target is Element {
-    return (<Element> target).getAttribute("href") !== undefined;
+export function isHyperLink(target: EventTarget): target is HTMLAnchorElement {
+    return target instanceof HTMLAnchorElement;
 }
 
-export function isChoiceBox(target: EventTarget): target is Element {
-    return (<Element> target).tagName === "SELECT";
-}
-
-export function isTextInput(target: EventTarget): target is Element {
-    return (<Element> target).tagName === "TEXTAREA" || ((<Element> target).tagName === "INPUT"
-        && (<Element> target).getAttribute("type") === "text");
-}
-
-export function isWindowClosed(event: Event): boolean {
-    return event.target === window && event.type === "beforeunload";
+export function isTextInput(target: EventTarget): target is HTMLInputElement | HTMLTextAreaElement {
+    return (target instanceof HTMLInputElement && target.getAttribute("type") === "text") ||
+        target instanceof HTMLTextAreaElement;
 }
 
 export function isKeyDownEvent(event: Event): event is KeyboardEvent {
-    return event instanceof KeyboardEvent && event.type === "keydown";
+    return event instanceof KeyboardEvent && event.type === EventRegistrationToken.KeyDown;
 }
 
 export function isKeyUpEvent(event: Event): event is KeyboardEvent {
-    return event instanceof KeyboardEvent && event.type === "keyup";
+    return event instanceof KeyboardEvent && event.type === EventRegistrationToken.KeyUp;
 }
 
 export function isMouseDownEvent(event: Event): event is MouseEvent {
-    return event instanceof MouseEvent && event.type === "mousedown";
-}
-
-export function isMouseUpEvent(event: Event): event is MouseEvent {
-    return event instanceof MouseEvent && event.type === "mouseup";
+    return event instanceof MouseEvent && event.type === EventRegistrationToken.MouseDown;
 }
 
 export function isScrollEvent(event: Event): event is UIEvent {
-    return event instanceof UIEvent && event.type === "scroll";
-}
-
-export function isMenuButton(target: EventTarget): target is Element {
-    //Not yet implemented in Web browser, is present to follow the
-    // feature of the javaFX version of Interacto
-    return(<Element> target).tagName === "BUTTON" && (<Element> target).getAttribute("type") === "menu";
+    return event instanceof UIEvent && event.type === EventRegistrationToken.Scroll;
 }
 
 export enum KeyCode {

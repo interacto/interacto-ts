@@ -24,10 +24,8 @@ let disposable: Subscription;
 
 beforeEach(() => {
     document.documentElement.innerHTML =
-        "<html><div><input id='comb1' list='test'><datalist id='test1'>" +
-        "<option value='test1a'>Test1a</option><option value='test2a'>Test2a</option> </datalist></input>" +
-        "<input id='comb2' list='test'><datalist id='test2'>" +
-        "<option value='test1b'>Test1b</option><option value='test2b'>Test2b</option> </datalist></input></div></html>";
+        "<html><div><select id='comb1'><option value='v1'>Volvo</option></select>" +
+        "<select id='comb2'><option value='v1'>Volvo</option></select></div></html>";
     const elt1 = document.getElementById("comb1");
     if (elt1 !== null) {
         widget1 = elt1;
