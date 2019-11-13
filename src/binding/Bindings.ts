@@ -57,9 +57,9 @@ export function colorPickerBinder<C extends Command>(): InteractionBinder<ColorP
         .usingInteraction<ColorPicked, WidgetData<HTMLInputElement>>(() => new ColorPicked());
 }
 
-export function comboBoxBinder<C extends Command>(): InteractionBinder<ComboBoxSelected, WidgetData<Element>> {
-    return new UpdateBinder<C, ComboBoxSelected, WidgetData<Element>>(0, false, false)
-        .usingInteraction<ComboBoxSelected, WidgetData<Element>>(() => new ComboBoxSelected());
+export function comboBoxBinder<C extends Command>(): InteractionBinder<ComboBoxSelected, WidgetData<HTMLSelectElement>> {
+    return new UpdateBinder<C, ComboBoxSelected, WidgetData<HTMLSelectElement>>(0, false, false)
+        .usingInteraction<ComboBoxSelected, WidgetData<HTMLSelectElement>>(() => new ComboBoxSelected());
 }
 
 export function spinnerBinder<C extends Command>(): InteractionUpdateBinder<SpinnerChanged, WidgetData<Element>> {

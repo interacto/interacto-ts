@@ -54,7 +54,7 @@ interface ComboBoxSelectedHandler extends FSMDataHandler {
  * @author Gwendal DIDOT
  */
 
-export class ComboBoxSelected extends InteractionImpl<WidgetData<Element>, ComboBoxSelectedFSM, Element> {
+export class ComboBoxSelected extends InteractionImpl<WidgetData<HTMLSelectElement>, ComboBoxSelectedFSM, HTMLSelectElement> {
     private readonly handler: ComboBoxSelectedHandler;
 
     /**
@@ -72,7 +72,7 @@ export class ComboBoxSelected extends InteractionImpl<WidgetData<Element>, Combo
 
             public initToSelectedHandler(event: Event): void {
                 if (event.target !== null && isComboBox(event.target)) {
-                    this._parent._widget = event.currentTarget as Element;
+                    this._parent._widget = event.target;
                 }
             }
 
@@ -97,7 +97,7 @@ export class ComboBoxSelected extends InteractionImpl<WidgetData<Element>, Combo
         }
     }
 
-    public getData(): WidgetData<Element> {
+    public getData(): WidgetData<HTMLSelectElement> {
         return this;
     }
 }
