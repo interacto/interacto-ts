@@ -23,7 +23,6 @@ import { UpdateBinder } from "./UpdateBinder";
 import { BoxChecked } from "../interaction/library/BoxChecked";
 import { ColorPicked } from "../interaction/library/ColorPicked";
 import { ComboBoxSelected } from "../interaction/library/ComboBoxSelected";
-import { ChoiceBoxSelected } from "../interaction/library/ChoiceBoxSelected";
 import { SpinnerChanged } from "../interaction/library/SpinnerChanged";
 import { InteractionUpdateBinder } from "./api/InteractionUpdateBinder";
 
@@ -61,11 +60,6 @@ export function colorPickerBinder<C extends Command>(): InteractionBinder<ColorP
 export function comboBoxBinder<C extends Command>(): InteractionBinder<ComboBoxSelected, WidgetData<Element>> {
     return new UpdateBinder<C, ComboBoxSelected, WidgetData<Element>>(0, false, false)
         .usingInteraction<ComboBoxSelected, WidgetData<Element>>(() => new ComboBoxSelected());
-}
-
-export function choiceBoxBinder<C extends Command>(): InteractionBinder<ChoiceBoxSelected, WidgetData<Element>> {
-    return new UpdateBinder<C, ChoiceBoxSelected, WidgetData<Element>>(0, false, false)
-        .usingInteraction<ChoiceBoxSelected, WidgetData<Element>>(() => new ChoiceBoxSelected());
 }
 
 export function spinnerBinder<C extends Command>(): InteractionUpdateBinder<SpinnerChanged, WidgetData<Element>> {
