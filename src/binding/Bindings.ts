@@ -52,9 +52,9 @@ export function checkboxBinder<C extends Command>(): InteractionBinder<BoxChecke
         .usingInteraction<BoxChecked, WidgetData<HTMLInputElement>>(() => new BoxChecked());
 }
 
-export function colorPickerBinder<C extends Command>(): InteractionBinder<ColorPicked, WidgetData<Element>> {
-    return new UpdateBinder<C, ColorPicked, WidgetData<Element>>(0, false, false)
-        .usingInteraction<ColorPicked, WidgetData<Element>>(() => new ColorPicked());
+export function colorPickerBinder<C extends Command>(): InteractionBinder<ColorPicked, WidgetData<HTMLInputElement>> {
+    return new UpdateBinder<C, ColorPicked, WidgetData<HTMLInputElement>>(0, false, false)
+        .usingInteraction<ColorPicked, WidgetData<HTMLInputElement>>(() => new ColorPicked());
 }
 
 export function comboBoxBinder<C extends Command>(): InteractionBinder<ComboBoxSelected, WidgetData<Element>> {

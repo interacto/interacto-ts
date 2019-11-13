@@ -53,7 +53,7 @@ interface ColorPickedHandler extends FSMDataHandler {
  * @author Gwendal DIDOT
  */
 
-export class ColorPicked extends InteractionImpl<WidgetData<Element>, ColorPickedFSM, Element> {
+export class ColorPicked extends InteractionImpl<WidgetData<HTMLInputElement>, ColorPickedFSM, HTMLInputElement> {
     private readonly handler: ColorPickedHandler;
 
     /**
@@ -71,7 +71,7 @@ export class ColorPicked extends InteractionImpl<WidgetData<Element>, ColorPicke
 
             public initToPickedHandler(event: Event): void {
                 if (event.target !== null && isColorChoice(event.target)) {
-                    this._parent._widget = event.currentTarget as Element;
+                    this._parent._widget = event.target;
                 }
             }
 
@@ -96,7 +96,7 @@ export class ColorPicked extends InteractionImpl<WidgetData<Element>, ColorPicke
         }
     }
 
-    public getData(): WidgetData<Element> {
+    public getData(): WidgetData<HTMLInputElement> {
         return this;
     }
 }
