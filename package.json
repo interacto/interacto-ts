@@ -6,20 +6,26 @@
   "contributors": [
     "Gwendal Didot <didotgwendal@gmail.com>"
   ],
+  "bugs": {
+    "url": "https://github.com/interacto/interacto-ts-api/issues"
+  },
+  "homepage": "https://github.com/interacto/interacto-ts-api",
   "repository": "https://github.com/interacto/interacto-ts-api.git",
   "license": "GPL3",
-  "main": "./lib/index.js",
-  "types": "./lib/index.d.ts",
+  "main": "./dist/interacto.umd.js",
+  "module": "dist/interacto.es5.js",
+  "types": "./dist/interacto.d.ts",
   "devDependencies": {
     "@types/jest": "^24.0.21",
     "@types/rx": "^4.1.1",
     "@types/node": "^12.12.3",
-    "rxjs": "^6.5.3",
     "barrelsby": "^2.2.0",
     "jest": "^24.9.0",
     "rollup": "^1.26.0",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-sourcemaps": "^0.4.2",
+    "rollup-plugin-json": "^3.1.0",
     "rollup-plugin-typescript2": "^0.24.3",
     "ts-jest": "^24.1.0",
     "ts-node": "^8.4.1",
@@ -27,23 +33,21 @@
     "typescript": "^3.6.4"
   },
   "scripts": {
-    "lib-build": "npm run pre-build && npm run build && npm run clean_after",
+    "package": "npm run pre-build && npm run build",
     "build": "rollup -c",
     "generate-barrels": "barrelsby -c ./barrelsby-config.json --delete",
     "compile": "tsc",
     "pre-build": "npm run clean && npm run lint && npm run compile && npm run coverage",
-    "clean": "rm -rf coverage/* lib/*",
-    "clean_after": "rm -rf compiled_inter",
+    "clean": "rm -rf coverage dist",
     "test": "jest",
     "lint": "tslint --project tsconfig.json --config tslint.json",
-    "coverage": "jest --coverage --collectCoverageFrom=src*/**/*.ts",
-    "clear-all": "npm run clean && npm run clean_after"
+    "coverage": "jest --coverage --collectCoverageFrom=src*/**/*.ts"
   },
   "files": [
-    "lib"
+    "dist"
   ],
   "dependencies": {
-    "npm": "^6.12.1",
+    "rxjs": "^6.5.3",
     "typescript-logging": "^0.6.4"
   },
   "jest": {
@@ -60,7 +64,7 @@
       "node"
     ],
     "modulePathIgnorePatterns": [
-      "<rootDir>/compiled_inter"
+      "<rootDir>/dist"
     ]
   }
 }

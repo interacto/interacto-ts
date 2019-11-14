@@ -4,5 +4,5 @@ node_modules/
 .tscache/
 coverage/
 .rpt2_cache/
-lib/
+dist/
 compiled_inter/

@@ -56,7 +56,7 @@ pipeline {
         stage ('NPM build') {
             steps {
                 sh '''
-                    npm run lib-build
+                    npm run package
                 '''
             }
         }
