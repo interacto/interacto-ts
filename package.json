@@ -29,7 +29,7 @@
   "scripts": {
     "lib-build": "npm run pre-build && npm run build && npm run clean_after",
     "build": "rollup -c",
-    "generates-barrels": "barrelsby -c ./barrelsby-config.json --delete",
+    "generate-barrels": "barrelsby -c ./barrelsby-config.json --delete",
     "compile": "tsc",
     "pre-build": "npm run clean && npm run lint && npm run compile && npm run coverage",
     "clean": "rm -rf coverage/* lib/*",
