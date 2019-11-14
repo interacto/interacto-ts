@@ -5,4 +5,4 @@ node_modules/
 coverage/
 .rpt2_cache/
 dist/
-compiled_inter/
+docs/

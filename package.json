@@ -27,21 +27,23 @@
     "rollup-plugin-sourcemaps": "^0.4.2",
     "rollup-plugin-json": "^3.1.0",
     "rollup-plugin-typescript2": "^0.24.3",
+    "typedoc": "^0.15.1",
     "ts-jest": "^24.1.0",
     "ts-node": "^8.4.1",
     "tslint": "^5.20.0",
     "typescript": "^3.6.4"
   },
   "scripts": {
-    "package": "npm run pre-build && npm run build",
+    "package": "npm run pre-build && npm run build && npm run doc",
     "build": "rollup -c",
     "generate-barrels": "barrelsby -c ./barrelsby-config.json --delete",
     "compile": "tsc",
     "pre-build": "npm run clean && npm run lint && npm run compile && npm run coverage",
-    "clean": "rm -rf coverage dist",
+    "clean": "rm -rf coverage dist docs",
     "test": "jest",
     "lint": "tslint --project tsconfig.json --config tslint.json",
-    "coverage": "jest --coverage --collectCoverageFrom=src*/**/*.ts"
+    "coverage": "jest --coverage --collectCoverageFrom=src*/**/*.ts",
+    "doc": "typedoc --out docs"
   },
   "files": [
     "dist"
