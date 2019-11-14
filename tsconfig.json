@@ -4,7 +4,7 @@
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "moduleResolution": "node",
-    "module": "ESnext",
+    "module": "esnext",
     "outDir": "dist",
     "pretty": true,
     "noImplicitAny": true,

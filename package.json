@@ -54,19 +54,13 @@
   },
   "jest": {
     "transform": {
-      "^.+\\.tsx?$": "ts-jest"
+      ".(ts|tsx)": "ts-jest"
     },
-    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "testRegex": "(.*\\.)(test|spec)\\.ts$",
     "moduleFileExtensions": [
       "ts",
       "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ],
-    "modulePathIgnorePatterns": [
-      "<rootDir>/dist"
+      "js"
     ]
   }
 }
