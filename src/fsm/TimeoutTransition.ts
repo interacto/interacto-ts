@@ -44,7 +44,7 @@ export class TimeoutTransition extends Transition {
         if (this.timeoutThread === undefined) {
             const time = this.timeoutDuration();
             if (time > 0) {
-                this.timeoutThread = setTimeout(() => {
+                this.timeoutThread = window.setTimeout(() => {
                     this.timeouted = true;
                     this.src.getFSM().onTimeout();
                 }, time);
