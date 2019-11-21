@@ -7,16 +7,12 @@ def githubStatusCheck(String state, String description){
 pipeline {
     agent any
 
-    tools {
-        maven 'Maven'
-    }
-
     stages {
 
         stage('Github Pending') {
             steps{
                 script{
-                    githubStatusCheck("PENDING", "Currently building the project");
+                    githubStatusCheck("PENDING", "Building the project");
                 }
             }
         }
@@ -29,18 +25,8 @@ pipeline {
             }
         }
 
-        stage ('Tools Info') {
-            steps {
-                sh '''
-                    git --version
-                    mvn -v
-                '''
-            }
-        }
-
         stage ('Git') {
             steps {
-                //going to build on the branch master
                 git branch: 'master', url: "https://github.com/interacto/interacto-ts-api"
             }
         }
@@ -64,10 +50,10 @@ pipeline {
 
     post{
         success {
-            githubStatusCheck("SUCCESS", "Build succeeded");
+            githubStatusCheck("SUCCESS", "Build success");
         }
         failure {
-            githubStatusCheck("FAILURE", "Build failed");
+            githubStatusCheck("FAILURE", "Build failure");
         }
     }
 }
