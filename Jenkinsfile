@@ -33,17 +33,21 @@ pipeline {
         
         stage ('NPM install') {
             steps {
-                sh '''
-                    npm install
-                '''
+                nodejs(nodeJSInstallationName: 'node10') {
+                    sh '''
+                        npm install
+                    '''
+                }
             }
         }
         
         stage ('NPM build') {
             steps {
-                sh '''
-                    npm run package
-                '''
+                nodejs(nodeJSInstallationName: 'node10') {
+                    sh '''
+                        npm run package
+                    '''
+                }
             }
         }
     }
