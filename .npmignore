@@ -1,7 +1,8 @@
-./src
-./node_modules
-./test
-./coverage
-./rpt2_cache
-barrelsby-config.json
-rollup.config.js
+src
+test
+coverage
+docs
+*.tgz
+*.json
+*.js
+Jenkinsfile

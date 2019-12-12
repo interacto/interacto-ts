@@ -1,7 +1,7 @@
 {
   "name": "interacto",
   "description": "A novel user interaction library",
-  "version": "4.0.0-alpha.2",
+  "version": "4.0.0-alpha.3",
   "author": "Arnaud Blouin",
   "contributors": [
     "Gwendal Didot <didotgwendal@gmail.com>"
@@ -14,7 +14,7 @@
   "license": "GPL3",
   "main": "./dist/interacto.umd.js",
   "module": "dist/interacto.es5.js",
-  "types": "./dist/interacto.d.ts",
+  "types": "./dist/index.d.ts",
   "devDependencies": {
     "@types/jest": "^24.0.21",
     "@types/rx": "^4.1.1",
@@ -45,9 +45,6 @@
     "coverage": "jest --coverage --collectCoverageFrom=src*/**/*.ts",
     "doc": "typedoc --out docs"
   },
-  "files": [
-    "dist"
-  ],
   "dependencies": {
     "rxjs": "^6.5.3",
     "typescript-logging": "^0.6.4"
