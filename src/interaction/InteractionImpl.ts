@@ -128,16 +128,16 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM, 
     }
 
     public onNodeUnregistered(node: EventTarget): void {
-        this.getEventTypesOf(this.fsm.currentState).forEach(type => this.unregisterEventToNode(type, node));
+        this.getEventTypesOf(this.fsm.getCurrentState()).forEach(type => this.unregisterEventToNode(type, node));
     }
 
     public onNewNodeRegistered(node: EventTarget): void {
-        this.getEventTypesOf(this.fsm.currentState).forEach(type => this.registerEventToNode(type, node));
+        this.getEventTypesOf(this.fsm.getCurrentState()).forEach(type => this.registerEventToNode(type, node));
     }
 
     public onNewNodeTargetRegistered(node: EventTarget): void {
-        if (this.fsm.currentState !== this.fsm.initState) {
-            this.getEventTypesOf(this.fsm.currentState).forEach(type => this.registerEventToNode(type, node));
+        if (this.fsm.getCurrentState() !== this.fsm.initState) {
+            this.getEventTypesOf(this.fsm.getCurrentState()).forEach(type => this.registerEventToNode(type, node));
         }
     }
 
@@ -266,7 +266,7 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM, 
 
 
     public isRunning(): boolean {
-        return this.activated && !(this.fsm.currentState instanceof InitState);
+        return this.activated && !(this.fsm.getCurrentState() instanceof InitState);
     }
 
     public fullReinit(): void {

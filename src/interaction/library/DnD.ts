@@ -52,7 +52,7 @@ export class DnDFSM extends FSM {
         this.addState(released);
         this.addState(cancelled);
 
-        this.startingState = dragged;
+        this.setStartingState(dragged);
 
         new class extends PressureTransition {
             private readonly _parent: DnDFSM;

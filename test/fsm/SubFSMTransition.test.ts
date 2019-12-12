@@ -48,8 +48,8 @@ beforeEach(() => {
 });
 
 test("testInner", () => {
-    expect(fsm.inner).toBeTruthy();
-    expect(mainfsm.inner).toBeFalsy();
+    expect(fsm.getInner()).toBeTruthy();
+    expect(mainfsm.getInner()).toBeFalsy();
 });
 
 test("testAcceptFirstEvent", () => {

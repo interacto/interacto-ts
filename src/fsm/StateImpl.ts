@@ -26,7 +26,7 @@ export abstract class StateImpl implements State {
     }
 
     public checkStartingState() {
-        if (!this.fsm.isStarted() && this.fsm.startingState === this) {
+        if (!this.fsm.isStarted() && this.fsm.getStartingState() === this) {
             this.fsm.onStarting();
         }
     }

@@ -39,7 +39,7 @@ export abstract class OutputStateImpl extends StateImpl implements OutputState {
     }
 
     public checkStartingState(): void {
-        if (!this.getFSM().isStarted() && this.getFSM().startingState === this) {
+        if (!this.getFSM().isStarted() && this.getFSM().getStartingState() === this) {
             this.getFSM().onStarting();
         }
     }

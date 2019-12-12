@@ -22,7 +22,7 @@ export class StdState extends OutputStateImpl implements InputState {
     }
 
     public checkStartingState(): void {
-        if (!this.getFSM().isStarted() && this.getFSM().startingState === this) {
+        if (!this.getFSM().isStarted() && this.getFSM().getStartingState() === this) {
             this.getFSM().onStarting();
         }
     }

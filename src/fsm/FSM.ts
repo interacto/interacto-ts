@@ -107,7 +107,7 @@ export class FSM {
         this.currentSubFSM = subFSM;
     }
 
-    public get currentState(): OutputState {
+    public getCurrentState(): OutputState {
         return this._currentState;
     }
 
@@ -115,11 +115,11 @@ export class FSM {
         return this.currentStatePublisher;
     }
 
-    public set inner(inner: boolean) {
+    public setInner(inner: boolean) {
         this._inner = inner;
     }
 
-    public get inner(): boolean {
+    public getInner(): boolean {
         return this._inner;
     }
 
@@ -133,7 +133,7 @@ export class FSM {
         const processed: boolean = this.processEvent(event);
 
         // Recycling events
-        if (processed && isKeyDownEvent(event) && !(this.currentState instanceof InitState) &&
+        if (processed && isKeyDownEvent(event) && !(this._currentState instanceof InitState) &&
             this.eventsToProcess.find(evt => isKeyDownEvent(evt) && evt.code === event.code) === undefined) {
             this.addRemaningEventsToProcess(event);
         }
@@ -145,7 +145,7 @@ export class FSM {
         if (this.currentSubFSM !== undefined) {
             return this.currentSubFSM.process(event);
         }
-        return this.currentState.process(event);
+        return this.getCurrentState().process(event);
     }
 
 
@@ -171,7 +171,7 @@ export class FSM {
     }
 
     public enterStdState(state: StdState): void {
-        this.currentState = state;
+        this.setCurrentState(state);
         this.checkTimeoutTransition();
         if (this.started) {
             this.onUpdating();
@@ -182,10 +182,10 @@ export class FSM {
         return this.started;
     }
 
-    public set currentState(state: OutputState) {
-        const old = this.currentState;
+    public setCurrentState(state: OutputState) {
+        const old = this.getCurrentState();
         this._currentState = state;
-        this.currentStatePublisher.next([old, this.currentState]);
+        this.currentStatePublisher.next([old, this._currentState]);
     }
 
     /**
@@ -227,7 +227,7 @@ export class FSM {
     public onCancelling(cancelState?: InputState): void {
         if (this.asLogFSM) {
             catFSM.info(`FSM cancelled on state : ${cancelState === undefined ?
-                this.currentState.getName() : cancelState.getName()}`);
+                this.getCurrentState().getName() : cancelState.getName()}`);
         }
         if (this.started) {
             this.notifyHandlerOnCancel();
@@ -240,7 +240,7 @@ export class FSM {
      */
     public onStarting(): void {
         if (this.asLogFSM) {
-            catFSM.info(`FSM started with state : ${this.currentState.getName()}`);
+            catFSM.info(`FSM started with state : ${this.getCurrentState().getName()}`);
         }
         this.started = true;
         this.notifyHandlerOnStart();
@@ -252,7 +252,7 @@ export class FSM {
     public onUpdating(): void {
         if (this.started) {
             if (this.asLogFSM) {
-                catFSM.info(`FSM updated to the state :  ${this.currentState.getName()}`);
+                catFSM.info(`FSM updated to the state :  ${this.getCurrentState().getName()}`);
             }
             this.notifyHandlerOnUpdate();
         }
@@ -278,7 +278,7 @@ export class FSM {
             this.currentTimeout.stopTimeout();
         }
         this.started = false;
-        this.currentState = this.initState;
+        this.setCurrentState(this.initState);
         this.currentTimeout = undefined;
 
         if (this.currentSubFSM !== undefined) {
@@ -305,7 +305,7 @@ export class FSM {
             }
             const state = this.currentTimeout.execute().get();
             if (state instanceof OutputStateImpl) {
-                this.currentState = state;
+                this.setCurrentState(state);
                 this.checkTimeoutTransition();
             }
         }
@@ -329,7 +329,7 @@ export class FSM {
      * If it is the case, the timeout transition is launched.
      */
     protected checkTimeoutTransition(): void {
-        const tr = this.currentState.getTransitions().find(t => t instanceof TimeoutTransition) as TimeoutTransition | undefined;
+        const tr = this.getCurrentState().getTransitions().find(t => t instanceof TimeoutTransition) as TimeoutTransition | undefined;
 
         if (tr !== undefined) {
             if (this.asLogFSM) {
@@ -395,11 +395,11 @@ export class FSM {
         return [...this.states];
     }
 
-    public get startingState(): State {
+    public getStartingState(): State {
         return this._startingState;
     }
 
-    public set startingState(state: State) {
+    public setStartingState(state: State) {
         this._startingState = state;
     }
 

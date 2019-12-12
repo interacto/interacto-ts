@@ -1,7 +1,7 @@
 {
   "name": "interacto",
   "description": "A novel user interaction library",
-  "version": "4.0.0-alpha.1",
+  "version": "4.0.0-alpha.2",
   "author": "Arnaud Blouin",
   "contributors": [
     "Gwendal Didot <didotgwendal@gmail.com>"
@@ -31,7 +31,7 @@
     "ts-jest": "^24.1.0",
     "ts-node": "^8.4.1",
     "tslint": "^5.20.0",
-    "typescript": "^3.6.4"
+    "typescript": "^3.7.2"
   },
   "scripts": {
     "package": "npm run pre-build && npm run build && npm run doc",

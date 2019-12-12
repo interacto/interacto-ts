@@ -29,7 +29,7 @@ export class SubFSMTransition extends Transition {
     public constructor(srcState: OutputState, tgtState: InputState, fsm: FSM) {
         super(srcState, tgtState);
         this.subFSM = fsm;
-        this.subFSM.inner = true;
+        this.subFSM.setInner(true);
         this.subFSMHandler = new class implements FSMHandler {
             protected _parent: SubFSMTransition;
 
@@ -42,7 +42,7 @@ export class SubFSMTransition extends Transition {
             }
 
             public fsmUpdates(): void {
-                this._parent.src.getFSM().currentState = this._parent.subFSM.currentState;
+                this._parent.src.getFSM().setCurrentState(this._parent.subFSM.getCurrentState());
                 this._parent.src.getFSM().onUpdating();
             }
 
@@ -59,7 +59,7 @@ export class SubFSMTransition extends Transition {
                     return;
                 }
                 if (isOutputStateType(this._parent.tgt)) {
-                    this._parent.src.getFSM().currentState = this._parent.tgt;
+                    this._parent.src.getFSM().setCurrentState(this._parent.tgt);
                     this._parent.tgt.enter();
                 }
             }

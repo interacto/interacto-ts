@@ -26,6 +26,16 @@ import { ComboBoxSelected } from "../interaction/library/ComboBoxSelected";
 import { SpinnerChanged } from "../interaction/library/SpinnerChanged";
 import { InteractionUpdateBinder } from "./api/InteractionUpdateBinder";
 import { DatePicked } from "../interaction/library/DatePicked";
+import { InteractionImpl } from "../interaction/InteractionImpl";
+import { InteractionData } from "../interaction/InteractionData";
+import { FSM } from "../fsm/FSM";
+import { CommandImpl } from "../command/CommandImpl";
+import { BaseUpdateBinder } from "./api/BaseUpdateBinder";
+
+
+export function nodeBinder(): BaseUpdateBinder {
+    return new UpdateBinder<CommandImpl, InteractionImpl<InteractionData, FSM, {}>, InteractionData>(0, false, false) as BaseUpdateBinder;
+}
 
 /**
  * Creates binding builder to build a binding between a KeysPressure interaction (done on a Node) and the given command type.

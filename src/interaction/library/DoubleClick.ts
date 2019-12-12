@@ -74,7 +74,7 @@ export class DoubleClickFSM extends FSM {
         this.addState(clicked);
         this.addState(dbleclicked);
         this.addState(cancelled);
-        this.startingState = dbleclicked;
+        this.setStartingState(dbleclicked);
 
         new class extends SubFSMTransition {
             private readonly _parent: DoubleClickFSM;
