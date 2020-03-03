@@ -115,4 +115,16 @@ export interface WidgetBinding<C extends Command, I extends InteractionImpl<D, F
 
     /** An RX observable objects that will provide the commands produced by the binding. */
     produces(): Observable<C>;
+
+	/**
+	 * Information method.
+	 * @return The number of times the widget binding successfully ended (nevermind a command was created or not).
+	 */
+	getTimesEnded(): number;
+
+	/**
+	 * Information method.
+	 * @return The number of times the widget binding was cancelled (nevermind a command was created or not).
+	 */
+	getTimesCancelled(): number;
 }

@@ -118,3 +118,45 @@ test("testInteractionStartsOk", () => {
 	binding.fsmStarts();
 	expect(binding.getCommand()).not.toBeUndefined();
 });
+
+test("testCounters", () => {
+	expect(binding.getTimesEnded()).toEqual(0);
+	expect(binding.getTimesCancelled()).toEqual(0);
+});
+
+
+test("testCounterEndedOnce", () => {
+	binding.conditionRespected = true;
+	binding.fsmStarts();
+	binding.fsmStops();
+	expect(binding.getTimesEnded()).toEqual(1);
+	expect(binding.getTimesCancelled()).toEqual(0);
+});
+
+test("testCounterEndedTwice", () => {
+	binding.conditionRespected = true;
+	binding.fsmStarts();
+	binding.fsmStops();
+	binding.fsmStarts();
+	binding.fsmStops();
+	expect(binding.getTimesEnded()).toEqual(2);
+	expect(binding.getTimesCancelled()).toEqual(0);
+});
+
+test("testCounterCancelledOnce", () => {
+	binding.conditionRespected = true;
+	binding.fsmStarts();
+	binding.fsmCancels();
+	expect(binding.getTimesCancelled()).toEqual(1);
+	expect(binding.getTimesEnded()).toEqual(0);
+});
+
+test("testCounterCancelledTwice", () => {
+	binding.conditionRespected = true;
+	binding.fsmStarts();
+	binding.fsmCancels();
+	binding.fsmStarts();
+	binding.fsmCancels();
+	expect(binding.getTimesCancelled()).toEqual(2);
+	expect(binding.getTimesEnded()).toEqual(0);
+});

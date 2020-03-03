@@ -33,6 +33,10 @@ import { Subject, Observable } from "rxjs";
 export abstract class WidgetBindingImpl<C extends Command, I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>
     implements WidgetBinding<C, I, D> {
 
+    protected timeEnded: number;
+
+	protected timeCancelled: number;
+
     protected asLogBinding: boolean;
 
     protected asLogCmd: boolean;
@@ -73,6 +77,8 @@ export abstract class WidgetBindingImpl<C extends Command, I extends Interaction
         this.asLogBinding = false;
         this.asLogCmd = false;
         this.continuousCmdExec = false;
+        this.timeCancelled = 0;
+        this.timeEnded = 0;
         this.cmdsProduced = new Subject();
         this.cmdProducer = cmdProducer;
         this.interaction = interaction;
@@ -207,6 +213,7 @@ export abstract class WidgetBindingImpl<C extends Command, I extends Interaction
             this.cmd = undefined;
             this.cancel();
             this.endOrCancel();
+            this.timeCancelled++;
         }
     }
 
@@ -303,6 +310,7 @@ export abstract class WidgetBindingImpl<C extends Command, I extends Interaction
             this.executeCmd(this.cmd);
             this.unbindCmdAttributes();
             this.cmd = undefined;
+            this.timeEnded++;
         } else {
             if (this.cmd !== undefined) {
                 if (this.asLogCmd) {
@@ -311,6 +319,7 @@ export abstract class WidgetBindingImpl<C extends Command, I extends Interaction
                 this.cmd.cancel();
                 this.unbindCmdAttributes();
                 this.cmd = undefined;
+                this.timeCancelled++;
             }
         }
     }
@@ -425,4 +434,12 @@ export abstract class WidgetBindingImpl<C extends Command, I extends Interaction
     public produces(): Observable<C> {
         return this.cmdsProduced;
     }
+
+	public getTimesEnded(): number {
+		return this.timeEnded;
+	}
+
+	public getTimesCancelled(): number {
+		return this.timeCancelled;
+	}
 }
