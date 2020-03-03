@@ -12,6 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+ /**
+ * The exception an FSM will throw to cancel the user interaction.
+ */
 export class CancelFSMException extends Error {
     constructor() {
         super();

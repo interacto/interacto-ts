@@ -16,6 +16,11 @@ import { StateImpl } from "./StateImpl";
 import { InputState } from "./InputState";
 import { FSM } from "./FSM";
 
+/**
+ * A state of an FSM.
+ * A cancelling state cancels the FSM of a user interaction.
+ * @param <E> The type of events the FSM processes.
+ */
 export class CancellingState extends StateImpl implements InputState {
     public constructor(stateMachine: FSM, stateName: string) {
         super(stateMachine, stateName);

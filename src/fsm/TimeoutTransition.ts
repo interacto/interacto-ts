@@ -17,6 +17,12 @@ import { OutputState } from "./OutputState";
 import { InputState } from "./InputState";
 import { Optional } from "../util/Optional";
 
+
+/**
+ * A timeout transition is an FSM transition that is not executed by an event:
+ * the FSM goes through such a transition on a timeout.
+ * @param <E> The type of events the FSM processes.
+ */
 export class TimeoutTransition extends Transition {
     /**
      * The timeoutDuration in ms.

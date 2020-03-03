@@ -16,6 +16,14 @@ import { OutputStateImpl } from "./OutputStateImpl";
 import { InputState } from "./InputState";
 import { FSM } from "./FSM";
 
+
+/**
+ * An FSM state.
+ * A standard state can compose an FSM.
+ * They do not start, stop, cancel an FSM.
+ * They accept input and ouptut events.
+ * @param <E> The type of events the FSM processes.
+ */
 export class StdState extends OutputStateImpl implements InputState {
     public constructor(stateMachine: FSM, stateName: string) {
         super(stateMachine, stateName);

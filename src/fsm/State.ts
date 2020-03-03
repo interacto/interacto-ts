@@ -14,6 +14,11 @@
 
 import { FSM } from "./FSM";
 
+
+/**
+ * The base type of an FSM state.
+ * @param <E> The type of events the FSM processes.
+ */
 export interface State {
     getName(): string;
 

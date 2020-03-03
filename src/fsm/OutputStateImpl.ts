@@ -17,6 +17,10 @@ import { OutputState } from "./OutputState";
 import { Transition } from "./Transition";
 import { FSM } from "./FSM";
 
+/**
+ * Base implementation of the OutputState interface.
+ * @param <E> The type of events the FSM processes.
+ */
 export abstract class OutputStateImpl extends StateImpl implements OutputState {
     protected readonly transitions: Array<Transition>;
 

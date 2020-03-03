@@ -15,6 +15,10 @@
 import { State } from "./State";
 import { FSM } from "./FSM";
 
+/**
+ * The base implementation of the State interface.
+ * @param <E> The type of events the FSM processes.
+ */
 export abstract class StateImpl implements State {
     protected readonly fsm: FSM;
 

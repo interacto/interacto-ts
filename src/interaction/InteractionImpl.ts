@@ -22,6 +22,12 @@ import { EventRegistrationToken } from "../fsm/Events";
 import { WidgetData } from "./WidgetData";
 import { Subscription } from "rxjs";
 
+/**
+ * The base implementation of a user interaction.
+ * @param <D> The type of the interaction data.
+ * @param <E> The type of the events that the interaction will process.
+ * @param <F> The type of the FSM.
+ */
 export abstract class InteractionImpl<D extends InteractionData, F extends FSM, T> implements WidgetData<T> {
     protected logger: Logger | undefined;
     protected readonly fsm: F;
@@ -264,30 +270,53 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM, 
         return this.uiHandler;
     }
 
-
+    /**
+	 * @return Whether the user interaction is running.
+	 */
     public isRunning(): boolean {
         return this.activated && !(this.fsm.getCurrentState() instanceof InitState);
     }
 
+    /**
+	 * Reinitialises the user interaction
+	 */
     public fullReinit(): void {
         this.fsm.fullReinit();
     }
 
+    /**
+	 * Processes the given UI event.
+	 * @param event The event to process.
+	 */
     public processEvent(event: Event): void {
         if (this.isActivated()) {
             this.fsm.process(event);
         }
     }
 
+    /**
+	 * Sets the logging of the user interaction.
+	 * @param log True: the user interaction will log information.
+	 */
     public log(log: boolean): void {
         this.asLog = log;
         this.fsm.log(log);
     }
 
+
+	/**
+	 * @return True if the user interaction is activated.
+	 */
     public isActivated(): boolean {
         return this.activated;
     }
 
+    /**
+	 * Sets whether the user interaction is activated.
+	 * When not activated, a user interaction does not process
+	 * input events any more.
+	 * @param activated True: the user interaction will be activated.
+	 */
     public setActivated(activated: boolean): void {
         if (this.asLog) {
             catInteraction.info("Interaction activation: " + String(activated));
@@ -298,10 +327,16 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM, 
         }
     }
 
+    /**
+	 * @return The FSM of the user interaction.
+	 */
     public getFsm(): F {
         return this.fsm;
     }
 
+    /**
+	 * @return The interaction data of the user interaction. Cannot be null.
+	 */
     public abstract getData(): D;
 
     protected reinit(): void {
@@ -309,6 +344,10 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM, 
         this.reinitData();
     }
 
+	/**
+	 * Uninstall the user interaction. Used to free memory.
+	 * Then, user interaction can be used any more.
+	 */
     public uninstall(): void {
         this._widget = undefined;
         this.disposable.unsubscribe();

@@ -16,6 +16,10 @@ import { OutputState } from "./OutputState";
 import { InputState } from "./InputState";
 import { Optional } from "../util/Optional";
 
+/**
+ * The base implementation of a FSM transition.
+ * @param <E> The type of events the FSM processes.
+ */
 export abstract class Transition {
     public readonly src: OutputState;
 

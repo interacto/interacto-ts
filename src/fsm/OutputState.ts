@@ -15,6 +15,10 @@
 import { State } from "./State";
 import { Transition } from "./Transition";
 
+/**
+ * Defines a type of state that can produce as output events.
+ * @param <E> The type of events the FSM processes.
+ */
 export interface OutputState extends State {
     exit(): void;
 

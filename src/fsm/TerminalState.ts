@@ -16,6 +16,11 @@ import { StateImpl } from "./StateImpl";
 import { InputState } from "./InputState";
 import { FSM } from "./FSM";
 
+/**
+ * An FSM state.
+ * A terminal state ends normally an FSM.
+ * @param <E> The type of events the FSM processes.
+ */
 export class TerminalState extends StateImpl implements InputState {
     public constructor(stateMachine: FSM, stateName: string) {
         super(stateMachine, stateName);

@@ -12,6 +12,10 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+ /**
+ * Defines a handler that can register an FSM to receive notifications
+ * about changes in the state of the FSM.
+ */
 export interface FSMHandler {
     /**
      * When the FSM starts.

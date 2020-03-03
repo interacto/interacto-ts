@@ -21,6 +21,12 @@ import { Optional } from "../util/Optional";
 import { TerminalState } from "./TerminalState";
 import { CancellingState } from "./CancellingState";
 
+/**
+ * A transition that refers to another FSM.
+ * Entering this transition starts the underlying sub-FSM.
+ * To leave the transition, the sub-FSM must end.
+ * @param <E> The type of events the FSM processes.
+ */
 export class SubFSMTransition extends Transition {
     private readonly subFSM: FSM;
 
