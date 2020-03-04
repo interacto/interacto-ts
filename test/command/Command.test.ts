@@ -11,7 +11,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { CommandsRegistry, UndoCollector, CmdStatus } from "../../src";
+import { CommandsRegistry, UndoCollector, CmdStatus, RegistrationPolicy } from "../../src";
 import { StubCmd } from "./StubCmd";
 
 let cmd: StubCmd;
@@ -58,7 +58,7 @@ test("testCommandCanDoItWhenCanDo", () => {
     expect(cmd.doIt()).toBeTruthy();
 });
 
-test("testCommandCanDoItWhenCanDo", () => {
+test("testCommandIsExecutedWhenDoIt", () => {
     cmd.doIt();
     expect(cmd.getStatus()).toEqual(CmdStatus.EXECUTED);
 });
@@ -86,6 +86,15 @@ test("testCommandHadEffectWhenNotDoneAndExecuted", () => {
     cmd.candoValue = true;
     cmd.doIt();
     expect(cmd.hadEffect()).toBeFalsy();
+});
+
+test("testGetRegistrationPolicyNotExecuted", () => {
+	expect(cmd.getRegistrationPolicy()).toEqual(RegistrationPolicy.NONE);
+});
+
+test("testGetRegistrationPolicyDone", () => {
+	cmd.done();
+	expect(cmd.getRegistrationPolicy()).toEqual(RegistrationPolicy.LIMITED);
 });
 
 test("testCommandNotUnregisterByByDefault", () => {
@@ -146,4 +155,10 @@ test("testNotCancelAtStart", () => {
 test("testCancel", () => {
     cmd.cancel();
     expect(cmd.getStatus()).toEqual(CmdStatus.CANCELLED);
+});
+
+test("testExecutedTwoTimes", () => {
+    cmd.doIt();
+    cmd.doIt();
+    expect(cmd.exec).toEqual(2);
 });

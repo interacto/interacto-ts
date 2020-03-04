@@ -17,18 +17,21 @@ import { InitState } from "../../src/fsm/InitState";
 import "jest";
 import { StdState } from "../../src/fsm/StdState";
 import { TerminalState, CancellingState, CancelFSMException, OutputState, InputState,
-    TimeoutTransition, SubFSMTransition } from "../../src";
+    TimeoutTransition, SubFSMTransition, catFSM } from "../../src";
 import { StubFSMHandler } from "./StubFSMHandler";
 import { StubTransitionOK } from "./StubTransitionOK";
 import { StubEvent, StubSubEvent1, StubSubEvent2, StubSubEvent3 } from "./StubEvent";
+import { Subject } from "rxjs";
 
 jest.mock("../fsm/StubFSMHandler");
 
 let fsm: FSM;
+let handler: StubFSMHandler;
 
 beforeEach(() => {
     jest.clearAllMocks();
     fsm = new FSM();
+    handler = new StubFSMHandler();
 });
 
 test("testInitState", () => {
@@ -55,13 +58,99 @@ test("testAddState", () => {
 });
 
 
+test("testAddRemainingNotNull", () => {
+    const evt = new StubEvent();
+    fsm.addRemaningEventsToProcess(evt);
+    expect(fsm.getEventsToProcess()).toEqual([evt]);
+});
+
+test("testIsInner", () => {
+    expect(fsm.getInner()).toBeFalsy();
+});
+
+test("testSetInnerTrue", () => {
+    fsm.setInner(true);
+    expect(fsm.getInner()).toBeTruthy();
+});
+
+test("testSetInnerFalse", () => {
+    fsm.setInner(true);
+    fsm.setInner(false);
+    expect(fsm.getInner()).toBeFalsy();
+});
+
+test("testProcessRemainingEvents", () => {
+    const evt = new StubEvent();
+    fsm.addRemaningEventsToProcess(evt);
+    fsm.onTerminating();
+    expect(fsm.getEventsToProcess().length).toEqual(0);
+});
+
+test("testOnTerminatingIfStarted", () => {
+    fsm.onStarting();
+    fsm.addHandler(handler);
+    fsm.onTerminating();
+    expect(handler.fsmStops).toBeCalledTimes(1);
+});
+
+test("testOnTerminatingNotStarted", () => {
+    fsm.addHandler(handler);
+    fsm.onTerminating();
+    expect(handler.fsmStops).not.toHaveBeenCalled();
+});
+
+test("testOnUpdatingIfStarted", () => {
+    fsm.onStarting();
+    fsm.addHandler(handler);
+    fsm.onUpdating();
+    expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
+});
+
+test("testOnUpdatingNotStarted", () => {
+    fsm.addHandler(handler);
+    fsm.onUpdating();
+    expect(handler.fsmUpdates).not.toHaveBeenCalled();
+});
+
+
+test("testOnTimeoutWithoutTimeout", () => {
+    jest.spyOn(catFSM, 'info');
+    fsm.onTimeout();
+    expect(catFSM.info).not.toHaveBeenCalled();
+});
+
+
+test("testUninstall", () => {
+    const s1 = new StdState(fsm, "su");
+    const subj = fsm.currentStateObservable() as any as Subject<[OutputState, OutputState]>;
+    jest.spyOn(s1, "uninstall");
+    jest.spyOn(subj, "complete");
+    fsm.addState(s1);
+    fsm.addRemaningEventsToProcess(new StubEvent());
+    fsm.uninstall();
+
+    expect(fsm.getStates().length).toEqual(0);
+    expect(fsm.getEventsToProcess().length).toEqual(0);
+    expect(subj.complete).toBeCalledTimes(1);
+    expect(s1.uninstall).toHaveBeenCalledTimes(1);
+});
+
+test("testCurrentStateChanged", () => {
+    const changes: Array<[OutputState, OutputState]> = [];
+    const newCurr = new StdState(fsm, "so");
+    fsm.currentStateObservable().subscribe(e => changes.push(e));
+    fsm.setCurrentState(newCurr);
+    expect(changes.length).toEqual(1);
+    expect(changes[0][1]).toEqual(newCurr);
+    expect(changes[0][0]).toEqual(fsm.initState);
+});
+
+
 describe("TestProcessUniqueEvent", () => {
     let std: StdState;
     let terminal: TerminalState;
-    let handler: StubFSMHandler;
 
     beforeEach(() => {
-        handler = new StubFSMHandler();
         fsm.addHandler(handler);
         fsm.log(true);
         std = new StdState(fsm, "s1");
@@ -260,10 +349,8 @@ describe("TestMultipleTransitionChoice", () => {
     let terminal: TerminalState;
     let cancel: CancellingState;
     let iToS: StubTransitionOK;
-    let handler: StubFSMHandler;
 
     beforeEach(() => {
-        handler = new StubFSMHandler();
         fsm.addHandler(handler);
         fsm.log(true);
         std = new StdState(fsm, "s1");
@@ -370,12 +457,10 @@ describe("TestWithTimeoutTransition", () => {
     let std: StdState;
     let std2: StdState;
     let terminal: TerminalState;
-    let handler: StubFSMHandler;
 
     beforeEach(() => {
         jest.clearAllTimers();
         jest.useFakeTimers();
-        handler = new StubFSMHandler();
         fsm.addHandler(handler);
         fsm.log(true);
         std = new StdState(fsm, "s1");
@@ -391,11 +476,20 @@ describe("TestWithTimeoutTransition", () => {
     });
 
     test("testTimeoutChangeState", () => {
+        fsm.log(true);
         fsm.process(new StubEvent());
         jest.runOnlyPendingTimers();
         expect(setTimeout).toHaveBeenCalledTimes(1);
         expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), 100);
         expect(fsm.getCurrentState()).toEqual(std2);
+    });
+
+    test("testTimeoutStoppedOnOtherTransitionWithLog", () => {
+        fsm.log(true);
+        fsm.process(new StubEvent());
+        fsm.process(new StubEvent());
+        jest.runOnlyPendingTimers();
+        expect(fsm.getCurrentState()).toEqual(fsm.initState);
     });
 
     test("testTimeoutStoppedOnOtherTransition", () => {
@@ -425,11 +519,9 @@ describe("TestWithSubFSM", () => {
     let subS2: StdState;
     let subT: TerminalState;
     let subC: CancellingState;
-    let handler: StubFSMHandler;
 
     beforeEach(() => {
         jest.clearAllMocks();
-        handler = new StubFSMHandler();
         fsm = new FSM();
         mainfsm = new FSM();
         s1 = new StdState(mainfsm, "s1");

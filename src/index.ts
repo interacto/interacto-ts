@@ -43,7 +43,6 @@ export * from "./command/AnonCmd";
 export * from "./command/Command";
 export * from "./command/CommandImpl";
 export * from "./command/CommandsRegistry";
-export * from "./command/library/AnonymousCmd";
 export * from "./command/library/ModifyValue";
 export * from "./command/library/PositionAction";
 export * from "./command/library/Redo";

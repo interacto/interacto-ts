@@ -34,6 +34,6 @@ export class TerminalState extends StateImpl implements InputState {
 
     public enter(): void {
         this.checkStartingState();
-        this.fsm.onTerminating(this);
+        this.fsm.onTerminating();
     }
 }

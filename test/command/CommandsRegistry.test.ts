@@ -11,7 +11,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { CommandsRegistry, UndoCollector, CmdStatus, CommandImpl, Command } from "../../src";
+import { CommandsRegistry, UndoCollector, CmdStatus, CommandImpl, Command, RegistrationPolicy } from "../../src";
 import { StubCmd, StubUndoableCmd } from "./StubCmd";
 
 
@@ -34,6 +34,10 @@ beforeEach(() => {
     instance = new CommandsRegistry();
     instance.setSizeMax(30);
     UndoCollector.getInstance().clear();
+});
+
+afterEach(() => {
+    jest.clearAllMocks();
 });
 
 test("testGetSetSizeMaxOK", () => {
@@ -64,6 +68,35 @@ test("testSetSizeMaxRemovesCmd", () => {
     expect(command2.getStatus()).toEqual(CmdStatus.CREATED);
     expect(instance.getCommands().length).toEqual(1);
     expect(instance.getCommands()[0]).toBe(command2);
+});
+
+
+test("testSetSiezMaxWithUnlimited", () => {
+    jest.mock("./StubCmd");
+    const cmd1 = new StubCmd();
+    cmd1.getRegistrationPolicy = jest.fn().mockImplementation(() => RegistrationPolicy.UNLIMITED);
+    const cmd2 = new StubCmd();
+    cmd2.getRegistrationPolicy = jest.fn().mockImplementation(() => RegistrationPolicy.LIMITED);
+    const cmd3 = new StubCmd();
+    cmd3.getRegistrationPolicy = jest.fn().mockImplementation(() => RegistrationPolicy.LIMITED);
+    instance.addCommand(cmd2);
+    instance.addCommand(cmd1);
+    instance.addCommand(cmd3);
+    instance.setSizeMax(0);
+    expect(instance.getCommands()).toEqual([cmd1]);
+});
+
+test("testCommandsNotNull", () => {
+    expect(instance.commands()).not.toBeNull;
+});
+
+test("testCommandsObservedOnAdded", () => {
+    const cmds: Array<Command>  = [];
+    instance.commands().subscribe(e => cmds.push(e));
+    jest.mock("./StubCmd");
+    const cmd = new StubCmd();
+    instance.addCommand(cmd);
+    expect(cmds).toEqual([cmd]);
 });
 
 test("testCancelCommandFlush", () => {
@@ -131,4 +164,18 @@ test("testAddCommandAddsUndoableCollector", () => {
 	const command = new StubUndoableCmd();
 	instance.addCommand(command);
 	expect(UndoCollector.getInstance().getLastUndo().get()).toBe(command);
+});
+
+
+test("testClear", () => {
+    const c1 = new StubCmd();
+    const c2 = new StubCmd();
+    jest.spyOn(c1, 'flush');
+    jest.spyOn(c2, 'flush');
+    instance.addCommand(c1);
+    instance.addCommand(c2);
+    instance.clear();
+    expect(instance.getCommands().length).toEqual(0);
+    expect(c1.flush).toHaveBeenCalledTimes(1);
+    expect(c2.flush).toHaveBeenCalledTimes(1);
 });

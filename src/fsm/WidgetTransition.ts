@@ -46,8 +46,6 @@ export abstract class WidgetTransition<E, T> extends Transition {
      * @param {*} widget The widget to set. Nothign done if null.
      */
     public setWidget(widget: T): void {
-        if (widget !== undefined) {
-            this.widget = widget;
-        }
+        this.widget = widget;
     }
 }

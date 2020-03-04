@@ -33,7 +33,7 @@ export class CancellingState extends StateImpl implements InputState {
     }
 
     public enter(): void {
-        this.fsm.onCancelling(this);
+        this.fsm.onCancelling();
     }
 
     public uninstall(): void {
