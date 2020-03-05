@@ -66,7 +66,7 @@ export class ComboBoxSelected extends InteractionImpl<WidgetData<HTMLSelectEleme
         this.handler = new class implements ComboBoxSelectedHandler {
             private readonly _parent: ComboBoxSelected;
 
-            constructor(parent: ComboBoxSelected) {
+            public constructor(parent: ComboBoxSelected) {
                 this._parent = parent;
             }
 

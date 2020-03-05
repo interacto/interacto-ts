@@ -34,7 +34,7 @@ export class ColorPickedTransition extends Transition {
         return event.target !== null && isColorChoice(event.target);
     }
 
-    public isGuardOK(event: Event): boolean {
+    public isGuardOK(_event: Event): boolean {
         return true;
     }
 

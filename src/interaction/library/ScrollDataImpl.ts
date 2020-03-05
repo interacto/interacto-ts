@@ -25,7 +25,8 @@ export class ScrollDataImpl implements ScrollData {
 
     protected increment: number | undefined;
 
-    public constructor() { }
+    public constructor() {
+    }
 
     public reinitData(): void {
         this.increment = undefined;
@@ -50,7 +51,7 @@ export class ScrollDataImpl implements ScrollData {
         return Optional.of(this.scrolledNode);
     }
 
-    public setScrollData(event: UIEvent) {
+    public setScrollData(event: UIEvent): void {
         this.scrolledNode = event.target === null ? undefined : event.target;
 
         if (event.view !== null) {

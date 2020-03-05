@@ -34,7 +34,7 @@ export class DatePickedTransition extends Transition {
         return event.target !== null && isDatePicker(event.target);
     }
 
-    public isGuardOK(event: Event): boolean {
+    public isGuardOK(_event: Event): boolean {
         return true;
     }
 

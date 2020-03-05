@@ -34,7 +34,7 @@ export class SpinnerChangedTransition extends Transition {
         return event.target !== null && isSpinner(event.target);
     }
 
-    public isGuardOK(event: Event): boolean {
+    public isGuardOK(_event: Event): boolean {
         return true;
     }
 

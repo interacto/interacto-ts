@@ -33,7 +33,7 @@ export class ScrollTransition extends Transition {
         return event.type === "scroll";
     }
 
-    public isGuardOK(event: Event): boolean {
+    public isGuardOK(_event: Event): boolean {
         return true;
     }
 

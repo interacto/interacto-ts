@@ -65,7 +65,7 @@ export class Scroll extends ScrollInteraction<ScrollData, ScrollFSM, undefined> 
         this.handler = new class implements ScrollFSMHandler {
             private readonly _parent: Scroll;
 
-            constructor(parent: Scroll) {
+            public constructor(parent: Scroll) {
                 this._parent = parent;
             }
 

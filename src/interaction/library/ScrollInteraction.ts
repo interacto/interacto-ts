@@ -48,7 +48,7 @@ export abstract class ScrollInteraction<D extends ScrollData, F extends FSM, T> 
         return this.scrollData.getScrolledNode();
     }
 
-    public setScrollData(event: UIEvent) {
+    public setScrollData(event: UIEvent): void {
         this.scrollData.setScrollData(event);
     }
 }

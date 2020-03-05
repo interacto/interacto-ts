@@ -64,7 +64,7 @@ export class ButtonPressed extends InteractionImpl<WidgetData<HTMLButtonElement>
         this.handler = new class implements ButtonPressedFSMHandler {
             private readonly _parent: ButtonPressed;
 
-            constructor(parent: ButtonPressed) {
+            public constructor(parent: ButtonPressed) {
                 this._parent = parent;
             }
 

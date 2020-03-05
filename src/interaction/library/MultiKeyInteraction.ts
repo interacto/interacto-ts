@@ -19,7 +19,7 @@ import { KeysDataImpl } from "./KeysDataImpl";
 import { InteractionImpl } from "../InteractionImpl";
 
 export abstract class MultiKeyInteraction<D extends KeysData, F extends FSM> extends InteractionImpl<D, F, Event>
-                    implements KeysData {
+    implements KeysData {
     public readonly keysData: KeysDataImpl;
 
     protected constructor(fsm: F) {
@@ -32,15 +32,15 @@ export abstract class MultiKeyInteraction<D extends KeysData, F extends FSM> ext
         this.keysData.reinitData();
     }
 
-    public setKeysDataTarget(event: KeyboardEvent) {
+    public setKeysDataTarget(event: KeyboardEvent): void {
         this.keysData.setKeysDataTarget(event);
     }
 
-    public addKeysDataKey(event: KeyboardEvent) {
+    public addKeysDataKey(event: KeyboardEvent): void {
         this.keysData.addKeysDataKey(event);
     }
 
-    public removeKeysDataKey(event: KeyboardEvent) {
+    public removeKeysDataKey(event: KeyboardEvent): void {
         this.keysData.removeKeysDataKey(event);
     }
 

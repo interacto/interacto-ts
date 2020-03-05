@@ -78,8 +78,8 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM, 
 
         const currEvents: Array<string> = [...this.getEventTypesOf(newState)];
         const events: Array<string> = [...this.getEventTypesOf(oldState)];
-        const eventsToRemove: Array<string> = events.filter(e => currEvents.indexOf(e) < 0);
-        const eventsToAdd: Array<string> = currEvents.filter(e => events.indexOf(e) < 0);
+        const eventsToRemove: Array<string> = events.filter(e => !currEvents.includes(e));
+        const eventsToAdd: Array<string> = currEvents.filter(e => !events.includes(e));
         this._registeredNodes.forEach(n => {
             eventsToRemove.forEach(type => this.unregisterEventToNode(type, n));
             eventsToAdd.forEach(type => this.registerEventToNode(type, n));
@@ -101,7 +101,7 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM, 
         }
     }
 
-    private callBackMutationObserver(mutationList: Array<MutationRecord>) {
+    private callBackMutationObserver(mutationList: Array<MutationRecord>): void {
         mutationList.forEach(mutation => {
             mutation.addedNodes.forEach(node => this.onNewNodeRegistered(node));
             mutation.removedNodes.forEach(node => this.onNodeUnregistered(node));
@@ -147,13 +147,13 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM, 
         }
     }
 
-    public registerToObservableList(elementToObserve: Node) {
+    public registerToObservableList(elementToObserve: Node): void {
         const newMutationObserver = new MutationObserver(mutations => this.callBackMutationObserver(mutations));
         newMutationObserver.observe(elementToObserve, { childList: true });
         this.listMutationObserver.push(newMutationObserver);
     }
 
-    public addAdditionalNodes(additionalNodes: Array<Node>) {
+    public addAdditionalNodes(additionalNodes: Array<Node>): void {
         additionalNodes.forEach((node: Node) => {
             this._additionalNodes.push(node);
             node.childNodes.forEach((child: Node) => this.onNewNodeRegistered(child)); //register the additional node children
@@ -209,7 +209,7 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM, 
 
     protected getActionHandler(): EventListener {
         if (this.actionHandler === undefined) {
-            this.actionHandler = evt => this.processEvent(evt);
+            this.actionHandler = (evt): void => this.processEvent(evt);
         }
         return this.actionHandler;
     }
@@ -251,21 +251,21 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM, 
 
     protected getMouseHandler(): (e: MouseEvent) => void {
         if (this.mouseHandler === undefined) {
-            this.mouseHandler = evt => this.processEvent(evt);
+            this.mouseHandler = (evt): void => this.processEvent(evt);
         }
         return this.mouseHandler;
     }
 
     protected getKeyHandler(): (e: KeyboardEvent) => void {
         if (this.keyHandler === undefined) {
-            this.keyHandler = evt => this.processEvent(evt);
+            this.keyHandler = (evt): void => this.processEvent(evt);
         }
         return this.keyHandler;
     }
 
     protected getUIHandler(): (e: UIEvent) => void {
         if (this.uiHandler === undefined) {
-            this.uiHandler = evt => this.processEvent(evt);
+            this.uiHandler = (evt): void => this.processEvent(evt);
         }
         return this.uiHandler;
     }
@@ -304,7 +304,7 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM, 
     }
 
 
-	/**
+    /**
 	 * @return True if the user interaction is activated.
 	 */
     public isActivated(): boolean {
@@ -344,7 +344,7 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM, 
         this.reinitData();
     }
 
-	/**
+    /**
 	 * Uninstall the user interaction. Used to free memory.
 	 * Then, user interaction can be used any more.
 	 */

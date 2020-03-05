@@ -66,7 +66,7 @@ export class HyperLinkClicked extends InteractionImpl<WidgetData<HTMLAnchorEleme
         this.handler = new class implements HyperLinkClickedFSMHandler {
             private readonly _parent: HyperLinkClicked;
 
-            constructor(parent: HyperLinkClicked) {
+            public constructor(parent: HyperLinkClicked) {
                 this._parent = parent;
             }
 

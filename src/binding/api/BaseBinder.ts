@@ -21,20 +21,19 @@ import { InteractionBinder } from "./InteractionBinder";
 import { CmdBinder } from "./CmdBinder";
 
 export interface BaseBinder extends BaseBinderBuilder {
-on(...widgets: Array<EventTarget>): BaseBinder;
+    on(...widgets: Array<EventTarget>): BaseBinder;
 
-when(whenPredicate: () => boolean): BaseBinder;
+    when(whenPredicate: () => boolean): BaseBinder;
 
-end(endFct: () => void): BaseBinder;
+    end(endFct: () => void): BaseBinder;
 
-log(...level: Array<LogLevel>): BaseBinder;
+    log(...level: Array<LogLevel>): BaseBinder;
 
-// async(): BaseBinder;
+    // async(): BaseBinder;
 
-// help(): BaseBinder;
+    // help(): BaseBinder;
 
-toProduce<C extends Command>(cmdSupplier: () => C): CmdBinder<C>;
+    toProduce<C extends Command>(cmdSupplier: () => C): CmdBinder<C>;
 
-usingInteraction<I extends InteractionImpl<D, FSM, {}> , D extends InteractionData>(interactionSupplier: () => I) :
-    InteractionBinder<I, D>;
+    usingInteraction<I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>(interactionSupplier: () => I): InteractionBinder<I, D>;
 }

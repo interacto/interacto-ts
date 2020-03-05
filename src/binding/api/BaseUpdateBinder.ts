@@ -21,26 +21,26 @@ import { CmdUpdateBinder } from "./CmdUpdateBinder";
 import { InteractionUpdateBinder } from "./InteractionUpdateBinder";
 
 export interface BaseUpdateBinder extends BaseUpdateBinderBuilder {
-	on(...widgets: Array<EventTarget>): BaseUpdateBinder;
+    on(...widgets: Array<EventTarget>): BaseUpdateBinder;
 
     when(whenPredicate: () => boolean): BaseUpdateBinder;
 
-	end(endFct: () => void): BaseUpdateBinder;
+    end(endFct: () => void): BaseUpdateBinder;
 
-	log(...level: Array<LogLevel>): BaseUpdateBinder;
+    log(...level: Array<LogLevel>): BaseUpdateBinder;
 
-	// async(): BaseUpdateBinder;
+    // async(): BaseUpdateBinder;
 
-	// help(): BaseUpdateBinder;
+    // help(): BaseUpdateBinder;
 
-	continuousExecution(): BaseUpdateBinder;
+    continuousExecution(): BaseUpdateBinder;
 
-	strictStart(): BaseUpdateBinder;
+    strictStart(): BaseUpdateBinder;
 
-	throttle(timeout: number): BaseUpdateBinder;
+    throttle(timeout: number): BaseUpdateBinder;
 
-	toProduce<C extends Command>(cmdSupplier: () => C): CmdUpdateBinder<C>;
+    toProduce<C extends Command>(cmdSupplier: () => C): CmdUpdateBinder<C>;
 
     usingInteraction<I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>
-        (interactionSupplier: () => I): InteractionUpdateBinder<I, D>;
+    (interactionSupplier: () => I): InteractionUpdateBinder<I, D>;
 }

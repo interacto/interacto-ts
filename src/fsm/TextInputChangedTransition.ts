@@ -33,7 +33,7 @@ export class TextInputChangedTransition extends Transition {
         return event.target !== null && isTextInput(event.target);
     }
 
-    public isGuardOK(event: Event): boolean {
+    public isGuardOK(_event: Event): boolean {
         return true;
     }
 

@@ -33,7 +33,7 @@ export class ClickTransition extends Transition {
         return event.type === "click";
     }
 
-    public isGuardOK(event: Event): boolean {
+    public isGuardOK(_event: Event): boolean {
         return true;
     }
 

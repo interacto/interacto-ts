@@ -21,7 +21,7 @@ import { FSM } from "./FSM";
  * @param <E> The type of events the FSM processes.
  */
 export class InitState extends OutputStateImpl {
-    constructor(stateMachine: FSM, stateName: string) {
+    public constructor(stateMachine: FSM, stateName: string) {
         super(stateMachine, stateName);
     }
 

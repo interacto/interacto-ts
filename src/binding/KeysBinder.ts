@@ -41,9 +41,9 @@ export class KeysBinder<C extends Command> extends Binder<C, KeysPressed, KeysDa
                           cannotExecFct?: (c: C, i: KeysData) => void, targetWidgets?: Array<EventTarget>,
                           keyCodes?: Array<string>) {
         super(initCmd, whenPredicate, cmdProducer, widgets, () => new KeysPressed(), onEnd, logLevels, hadNoEffectFct, hadEffectsFct,
-              cannotExecFct, targetWidgets);
+            cannotExecFct, targetWidgets);
         this.codes = keyCodes === undefined ? [] : [...keyCodes];
-        this.checkCode = (i: KeysData) => {
+        this.checkCode = (i: KeysData): boolean => {
             const keys = i.getKeys();
             return (this.codes.length === 0 || this.codes.length === keys.length
                 && keys.every((v: string) => this.codes.includes(v)))
@@ -106,8 +106,8 @@ export class KeysBinder<C extends Command> extends Binder<C, KeysPressed, KeysDa
         }
 
         return new AnonBinding(false, this.interactionSupplier(), this.cmdProducer, [...this.widgets],
-                                [], false, [...this.logLevels], 0, this.initCmd, undefined, this.checkCode,
-                                this.onEnd, undefined, undefined, this.hadEffectsFct,
-                                this.hadNoEffectFct, this.cannotExecFct);
+            [], false, [...this.logLevels], 0, this.initCmd, undefined, this.checkCode,
+            this.onEnd, undefined, undefined, this.hadEffectsFct,
+            this.hadNoEffectFct, this.cannotExecFct);
     }
 }

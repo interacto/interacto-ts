@@ -66,7 +66,7 @@ export class DatePicked extends InteractionImpl<WidgetData<HTMLInputElement>, Da
         this.handler = new class implements DatePickedHandler {
             private readonly _parent: DatePicked;
 
-            constructor(parent: DatePicked) {
+            public constructor(parent: DatePicked) {
                 this._parent = parent;
             }
 

@@ -17,17 +17,17 @@ import { BaseUpdateBinderBuilder } from "./BaseUpdateBinderBuilder";
 import { LogLevel } from "../../logging/LogLevel";
 
 export interface CmdUpdateBinderBuilder<C extends Command> extends CmdBinderBuilder<C>, BaseUpdateBinderBuilder {
-	/**
+    /**
 	 * Specifies the update of the command on interaction updates.
 	 * @param update The callback method that updates the command.
 	 * This callback takes as arguments the command to update.
 	 * @return The builder to chain the building configuration.
 	 */
-	then(update: (c: C) => void): CmdUpdateBinderBuilder<C>;
+    then(update: (c: C) => void): CmdUpdateBinderBuilder<C>;
 
     continuousExecution(): CmdUpdateBinderBuilder<C>;
 
-	strictStart(): CmdUpdateBinderBuilder<C>;
+    strictStart(): CmdUpdateBinderBuilder<C>;
 
     throttle(timeout: number): CmdUpdateBinderBuilder<C>;
 

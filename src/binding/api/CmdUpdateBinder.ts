@@ -20,28 +20,28 @@ import { InteractionData } from "../../interaction/InteractionData";
 import { InteractionCmdUpdateBinder } from "./InteractionCmdUpdateBinder";
 
 export interface CmdUpdateBinder<C extends Command> extends CmdUpdateBinderBuilder<C> {
-	then(update: (c: C) => void): CmdUpdateBinder<C>;
+    then(update: (c: C) => void): CmdUpdateBinder<C>;
 
-	continuousExecution(): CmdUpdateBinder<C>;
+    continuousExecution(): CmdUpdateBinder<C>;
 
-	strictStart(): CmdUpdateBinder<C>;
+    strictStart(): CmdUpdateBinder<C>;
 
-	throttle(timeout: number): CmdUpdateBinder<C>;
+    throttle(timeout: number): CmdUpdateBinder<C>;
 
-	first(initCmdFct: (c: C) => void): CmdUpdateBinder<C>;
+    first(initCmdFct: (c: C) => void): CmdUpdateBinder<C>;
 
-	on(...widgets: Array<EventTarget>): CmdUpdateBinder<C>;
+    on(...widgets: Array<EventTarget>): CmdUpdateBinder<C>;
 
     when(whenPredicate: () => boolean): CmdUpdateBinder<C>;
 
-	log(...level: Array<LogLevel>): CmdUpdateBinder<C>;
+    log(...level: Array<LogLevel>): CmdUpdateBinder<C>;
 
-	// async(): CmdUpdateBinder<C>;
+    // async(): CmdUpdateBinder<C>;
 
-	// help(): CmdUpdateBinder<C>;
+    // help(): CmdUpdateBinder<C>;
 
     end(endFct: (c?: C) => void): CmdUpdateBinder<C>;
 
     usingInteraction<I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>
-        (interactionSupplier: () => I): InteractionCmdUpdateBinder<C, I, D>;
+    (interactionSupplier: () => I): InteractionCmdUpdateBinder<C, I, D>;
 }

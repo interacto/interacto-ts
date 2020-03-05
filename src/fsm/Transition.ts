@@ -42,7 +42,7 @@ export abstract class Transition {
         return Optional.empty<InputState>();
     }
 
-    protected action(event: Event | undefined): void {
+    protected action(_event?: Event): void {
     }
 
     public abstract accept(event: Event): boolean;

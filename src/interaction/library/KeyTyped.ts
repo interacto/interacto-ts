@@ -31,13 +31,13 @@ export class KeyTypedFSM extends FSM {
     /** The time gap between the two spinner events. */
     private static readonly timeGap = 1000;
     /** The supplier that provides the time gap. */
-    private static readonly SUPPLY_TIME_GAP = () => KeyTypedFSM.getTimeGap();
+    private static readonly SUPPLY_TIME_GAP: () => number = () => KeyTypedFSM.getTimeGap();
 
     public constructor() {
         super();
     }
 
-    public buildFSM(dataHandler?: KeyTypedFSMHandler) {
+    public buildFSM(dataHandler?: KeyTypedFSMHandler): void {
         if (this.states.length > 1) {
             return;
         }
@@ -59,7 +59,7 @@ export class KeyTypedFSM extends FSM {
                 this._parent = parent;
             }
 
-            public action(event: Event) {
+            public action(event: Event): void {
                 if (event instanceof KeyboardEvent) {
                     this._parent.setCheckKey(event.code);
                 }
@@ -75,12 +75,12 @@ export class KeyTypedFSM extends FSM {
                 this._parent = parent;
             }
 
-            public isGuardOK(event: Event) {
+            public isGuardOK(event: Event): boolean {
                 return super.isGuardOK(event) && this._parent.checkKey === undefined ||
                     (event instanceof KeyboardEvent && event.code === this._parent.checkKey);
             }
 
-            public action(event: Event) {
+            public action(event: Event): void {
                 if (dataHandler !== undefined && event instanceof KeyboardEvent) {
                     dataHandler.onKeyTyped(event);
                 }
@@ -89,11 +89,11 @@ export class KeyTypedFSM extends FSM {
         new TimeoutTransition(pressed, cancel, KeyTypedFSM.SUPPLY_TIME_GAP);
     }
 
-    public getCheckKey() {
+    public getCheckKey(): string {
         return this.checkKey === undefined ? "" : this.checkKey;
     }
 
-    public setCheckKey(keyToCheck: string) {
+    public setCheckKey(keyToCheck: string): void {
         if (this.checkKey === undefined) {
             this.checkKey = keyToCheck;
         }
@@ -103,7 +103,7 @@ export class KeyTypedFSM extends FSM {
         super.reinit();
     }
 
-    private static getTimeGap() {
+    private static getTimeGap(): number {
         return KeyTypedFSM.timeGap;
     }
 }

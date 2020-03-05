@@ -44,12 +44,12 @@ export interface WidgetBinding<C extends Command, I extends InteractionImpl<D, F
 	 */
     end(): void;
 
-	/**
+    /**
 	 * On cancellation
 	 */
     cancel(): void;
 
-	/**
+    /**
 	 * On end or cancellation
 	 */
     endOrCancel(): void;
@@ -59,12 +59,12 @@ export interface WidgetBinding<C extends Command, I extends InteractionImpl<D, F
 	 */
     ifCmdHadNoEffect(): void;
 
-	/**
+    /**
 	 * Called when an executed command had effects
 	 */
     ifCmdHadEffects(): void;
 
-	/**
+    /**
 	 * Called when an ongoing command cannot be executed
 	 */
     ifCannotExecuteCmd(): void;
@@ -116,15 +116,15 @@ export interface WidgetBinding<C extends Command, I extends InteractionImpl<D, F
     /** An RX observable objects that will provide the commands produced by the binding. */
     produces(): Observable<C>;
 
-	/**
+    /**
 	 * Information method.
 	 * @return The number of times the widget binding successfully ended (nevermind a command was created or not).
 	 */
-	getTimesEnded(): number;
+    getTimesEnded(): number;
 
-	/**
+    /**
 	 * Information method.
 	 * @return The number of times the widget binding was cancelled (nevermind a command was created or not).
 	 */
-	getTimesCancelled(): number;
+    getTimesCancelled(): number;
 }

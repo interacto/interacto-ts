@@ -38,7 +38,7 @@ export class PressureTransition extends Transition {
         return new Set([EventRegistrationToken.MouseDown]);
     }
 
-    public isGuardOK(event: Event): boolean {
+    public isGuardOK(_event: Event): boolean {
         return true;
     }
 }

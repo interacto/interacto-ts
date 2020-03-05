@@ -21,5 +21,5 @@ import { InteractionCmdBinder } from "./InteractionCmdBinder";
 
 export interface CmdBinder<C extends Command> extends CmdBinderBuilder<C> {
     usingInteraction<I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>(interactionSupplier: () => I):
-        InteractionCmdBinder<C, I, D>;
+    InteractionCmdBinder<C, I, D>;
 }

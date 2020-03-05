@@ -65,7 +65,7 @@ export class ColorPicked extends InteractionImpl<WidgetData<HTMLInputElement>, C
         this.handler = new class implements ColorPickedHandler {
             private readonly _parent: ColorPicked;
 
-            constructor(parent: ColorPicked) {
+            public constructor(parent: ColorPicked) {
                 this._parent = parent;
             }
 

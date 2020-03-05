@@ -20,7 +20,7 @@ import { Command } from "../../command/Command";
 import { KeyInteractionCmdBinder } from "./KeyInteractionCmdBinder";
 
 export interface KeyInteractionBinder<I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>
-        extends KeyInteractionBinderBuilder<I, D> {
+    extends KeyInteractionBinderBuilder<I, D> {
 
     when(whenPredicate: (i?: D) => boolean): KeyInteractionBinder<I, D>;
 
@@ -36,5 +36,5 @@ export interface KeyInteractionBinder<I extends InteractionImpl<D, FSM, {}>, D e
 
     with(...codes: Array<string>): KeyInteractionBinder<I, D>;
 
-	toProduce<C extends Command>(cmdSupplier: (i?: D) => C): KeyInteractionCmdBinder<C, I, D>;
+    toProduce<C extends Command>(cmdSupplier: (i?: D) => C): KeyInteractionCmdBinder<C, I, D>;
 }

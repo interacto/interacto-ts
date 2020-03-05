@@ -34,7 +34,7 @@ export class BoxCheckPressedTransition extends Transition {
         return event.target !== null && isCheckBox(event.target);
     }
 
-    public isGuardOK(event: Event): boolean {
+    public isGuardOK(_event: Event): boolean {
         return true;
     }
 

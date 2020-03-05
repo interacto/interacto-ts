@@ -33,7 +33,7 @@ export class KeyReleaseTransition extends Transition {
         return event instanceof KeyboardEvent && event.type === EventRegistrationToken.KeyUp;
     }
 
-    public isGuardOK(event: Event): boolean {
+    public isGuardOK(_event: Event): boolean {
         return true;
     }
 

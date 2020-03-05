@@ -73,7 +73,7 @@ export class TimeoutTransition extends Transition {
      * @param {*} event
      * @return {boolean}
      */
-    public accept(event: Event | undefined): boolean {
+    public accept(_event?: Event): boolean {
         return this.timeouted;
     }
 
@@ -82,7 +82,7 @@ export class TimeoutTransition extends Transition {
      * @param {*} event
      * @return {boolean}
      */
-    public isGuardOK(event: Event | undefined): boolean {
+    public isGuardOK(_event?: Event): boolean {
         return this.timeouted;
     }
 

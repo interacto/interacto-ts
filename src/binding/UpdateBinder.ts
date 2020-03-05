@@ -29,124 +29,124 @@ import { AnonBinding } from "./AnonBinding";
  * @author Arnaud Blouin
  */
 export class UpdateBinder<C extends Command, I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>
-        extends Binder<C, I, D> implements CmdUpdateBinder<C>, InteractionCmdUpdateBinder<C, I, D> {
+    extends Binder<C, I, D> implements CmdUpdateBinder<C>, InteractionCmdUpdateBinder<C, I, D> {
 
-  private updateFct?: (c: C, i?: D) => void;
-  private cancelFct?: (i: D) => void;
-  private endOrCancelFct?: (i: D) => void;
-  private continuousCmdExecution: boolean;
-  private _strictStart: boolean;
-  private throttleTimeout: number;
+    private updateFct?: (c: C, i?: D) => void;
+    private cancelFct?: (i: D) => void;
+    private endOrCancelFct?: (i: D) => void;
+    private continuousCmdExecution: boolean;
+    private _strictStart: boolean;
+    private throttleTimeout: number;
 
-  constructor(throttleTimeout: number, continuousCmdExecution: boolean,
-              strict: boolean, initCmd?: (c: C, i?: D) => void, checkConditions?: (i: D) => boolean, cmdProducer?: (i?: D) => C,
-              widgets?: Array<EventTarget>, interactionSupplier?: () => I, onEnd?: (c: C, i?: D) => void,
-              logLevels?: Array<LogLevel>, hadNoEffectFct?: (c: C, i: D) => void, hadEffectsFct?: (c: C, i: D) => void,
-              cannotExecFct?: (c: C, i: D) => void, updateFct?: (c: C, i?: D) => void, cancelFct?: (i: D) => void,
-              endOrCancelFct?: (i: D) => void, targetWidgets?: Array<EventTarget>) {
-    super(initCmd, checkConditions, cmdProducer, widgets, interactionSupplier, onEnd, logLevels, hadNoEffectFct, hadEffectsFct,
-          cannotExecFct, targetWidgets);
-    this.updateFct = updateFct;
-    this.cancelFct = cancelFct;
-    this.endOrCancelFct = endOrCancelFct;
-    this.continuousCmdExecution = continuousCmdExecution;
-    this._strictStart = strict;
-    this.throttleTimeout = throttleTimeout;
-  }
-
-  public then(update: (c: C, i?: D) => void): UpdateBinder<C, I, D> {
-    const dup = this.duplicate();
-    dup.updateFct = update;
-    return dup;
-  }
-
-  public continuousExecution(): UpdateBinder<C, I, D> {
-    const dup = this.duplicate();
-    dup.continuousCmdExecution = true;
-    return dup;
-  }
-
-  public cancel(cancel: (i: D) => void): UpdateBinder<C, I, D> {
-    const dup = this.duplicate();
-    dup.cancelFct = cancel;
-    return dup;
-  }
-
-  public endOrCancel(endOrCancel: (i: D) => void): UpdateBinder<C, I, D> {
-    const dup = this.duplicate();
-    dup.endOrCancelFct = endOrCancel;
-    return dup;
-  }
-
-  public strictStart(): UpdateBinder<C, I, D> {
-    const dup = this.duplicate();
-    dup._strictStart = true;
-    return dup;
-  }
-
-  public throttle(timeout: number): UpdateBinder<C, I, D> {
-    const dup = this.duplicate();
-    dup.throttleTimeout = timeout;
-    return dup;
-  }
-
-  public on(...widget: Array<EventTarget>): UpdateBinder<C, I, D> {
-    return super.on(...widget) as UpdateBinder<C, I, D>;
-  }
-
-  public first(initCmdFct: (c: C, i?: D) => void): UpdateBinder<C, I, D> {
-    return super.first(initCmdFct) as UpdateBinder<C, I, D>;
-  }
-
-  public when(checkCmd: (i?: D) => boolean): UpdateBinder<C, I, D> {
-    return super.when(checkCmd) as UpdateBinder<C, I, D>;
-  }
-
-  public ifHadEffects(hadEffectFct: (c: C, i: D) => void): UpdateBinder<C, I, D> {
-    return super.ifHadEffects(hadEffectFct) as UpdateBinder<C, I, D>;
-  }
-
-  public ifHadNoEffect(noEffectFct: (c: C, i: D) => void): UpdateBinder<C, I, D> {
-    return super.ifHadNoEffect(noEffectFct) as UpdateBinder<C, I, D>;
-  }
-
-  public end(onEndFct: (c: C, i?: D) => void): UpdateBinder<C, I, D> {
-    return super.end(onEndFct) as UpdateBinder<C, I, D>;
-  }
-
-  public log(...level: Array<LogLevel>): UpdateBinder<C, I, D> {
-    return super.log(...level) as UpdateBinder<C, I, D>;
-  }
-
-  public usingInteraction<I2 extends InteractionImpl<D2, FSM, {}>, D2 extends InteractionData>
-          (interactionSupplier: () => I2): UpdateBinder<C, I2, D2> {
-    return super.usingInteraction(interactionSupplier) as UpdateBinder<C, I2, D2>;
-  }
-
-  public toProduce<C2 extends Command>(cmdCreation: (i: D) => C2): UpdateBinder<C2, I, D> {
-    return super.toProduce(cmdCreation) as UpdateBinder<C2, I, D>;
-  }
-
-  protected duplicate(): UpdateBinder<C, I, D> {
-    return new UpdateBinder<C, I, D>(this.throttleTimeout, this.continuousCmdExecution,
-      this._strictStart, this.initCmd, this.checkConditions, this.cmdProducer,
-      this.widgets, this.interactionSupplier, this.onEnd,
-      this.logLevels, this.hadNoEffectFct, this.hadEffectsFct,
-      this.cannotExecFct, this.updateFct, this.cancelFct, this.endOrCancelFct, this.targetWidgets);
-  }
-
-  public bind(): WidgetBinding<C, I, D> {
-    if (this.interactionSupplier === undefined) {
-      throw new Error("The interaction supplier cannot be undefined here");
+    public constructor(throttleTimeout: number, continuousCmdExecution: boolean,
+                       strict: boolean, initCmd?: (c: C, i?: D) => void, checkConditions?: (i: D) => boolean, cmdProducer?: (i?: D) => C,
+                       widgets?: Array<EventTarget>, interactionSupplier?: () => I, onEnd?: (c: C, i?: D) => void,
+                       logLevels?: Array<LogLevel>, hadNoEffectFct?: (c: C, i: D) => void, hadEffectsFct?: (c: C, i: D) => void,
+                       cannotExecFct?: (c: C, i: D) => void, updateFct?: (c: C, i?: D) => void, cancelFct?: (i: D) => void,
+                       endOrCancelFct?: (i: D) => void, targetWidgets?: Array<EventTarget>) {
+        super(initCmd, checkConditions, cmdProducer, widgets, interactionSupplier, onEnd, logLevels, hadNoEffectFct, hadEffectsFct,
+            cannotExecFct, targetWidgets);
+        this.updateFct = updateFct;
+        this.cancelFct = cancelFct;
+        this.endOrCancelFct = endOrCancelFct;
+        this.continuousCmdExecution = continuousCmdExecution;
+        this._strictStart = strict;
+        this.throttleTimeout = throttleTimeout;
     }
 
-    if (this.cmdProducer === undefined) {
-      throw new Error("The command supplier cannot be undefined here");
+    public then(update: (c: C, i?: D) => void): UpdateBinder<C, I, D> {
+        const dup = this.duplicate();
+        dup.updateFct = update;
+        return dup;
     }
 
-    return new AnonBinding(this.continuousCmdExecution, this.interactionSupplier(), this.cmdProducer, [...this.widgets],
+    public continuousExecution(): UpdateBinder<C, I, D> {
+        const dup = this.duplicate();
+        dup.continuousCmdExecution = true;
+        return dup;
+    }
+
+    public cancel(cancel: (i: D) => void): UpdateBinder<C, I, D> {
+        const dup = this.duplicate();
+        dup.cancelFct = cancel;
+        return dup;
+    }
+
+    public endOrCancel(endOrCancel: (i: D) => void): UpdateBinder<C, I, D> {
+        const dup = this.duplicate();
+        dup.endOrCancelFct = endOrCancel;
+        return dup;
+    }
+
+    public strictStart(): UpdateBinder<C, I, D> {
+        const dup = this.duplicate();
+        dup._strictStart = true;
+        return dup;
+    }
+
+    public throttle(timeout: number): UpdateBinder<C, I, D> {
+        const dup = this.duplicate();
+        dup.throttleTimeout = timeout;
+        return dup;
+    }
+
+    public on(...widget: Array<EventTarget>): UpdateBinder<C, I, D> {
+        return super.on(...widget) as UpdateBinder<C, I, D>;
+    }
+
+    public first(initCmdFct: (c: C, i?: D) => void): UpdateBinder<C, I, D> {
+        return super.first(initCmdFct) as UpdateBinder<C, I, D>;
+    }
+
+    public when(checkCmd: (i?: D) => boolean): UpdateBinder<C, I, D> {
+        return super.when(checkCmd) as UpdateBinder<C, I, D>;
+    }
+
+    public ifHadEffects(hadEffectFct: (c: C, i: D) => void): UpdateBinder<C, I, D> {
+        return super.ifHadEffects(hadEffectFct) as UpdateBinder<C, I, D>;
+    }
+
+    public ifHadNoEffect(noEffectFct: (c: C, i: D) => void): UpdateBinder<C, I, D> {
+        return super.ifHadNoEffect(noEffectFct) as UpdateBinder<C, I, D>;
+    }
+
+    public end(onEndFct: (c: C, i?: D) => void): UpdateBinder<C, I, D> {
+        return super.end(onEndFct) as UpdateBinder<C, I, D>;
+    }
+
+    public log(...level: Array<LogLevel>): UpdateBinder<C, I, D> {
+        return super.log(...level) as UpdateBinder<C, I, D>;
+    }
+
+    public usingInteraction<I2 extends InteractionImpl<D2, FSM, {}>, D2 extends InteractionData>
+    (interactionSupplier: () => I2): UpdateBinder<C, I2, D2> {
+        return super.usingInteraction(interactionSupplier) as UpdateBinder<C, I2, D2>;
+    }
+
+    public toProduce<C2 extends Command>(cmdCreation: (i: D) => C2): UpdateBinder<C2, I, D> {
+        return super.toProduce(cmdCreation) as UpdateBinder<C2, I, D>;
+    }
+
+    protected duplicate(): UpdateBinder<C, I, D> {
+        return new UpdateBinder<C, I, D>(this.throttleTimeout, this.continuousCmdExecution,
+            this._strictStart, this.initCmd, this.checkConditions, this.cmdProducer,
+            this.widgets, this.interactionSupplier, this.onEnd,
+            this.logLevels, this.hadNoEffectFct, this.hadEffectsFct,
+            this.cannotExecFct, this.updateFct, this.cancelFct, this.endOrCancelFct, this.targetWidgets);
+    }
+
+    public bind(): WidgetBinding<C, I, D> {
+        if (this.interactionSupplier === undefined) {
+            throw new Error("The interaction supplier cannot be undefined here");
+        }
+
+        if (this.cmdProducer === undefined) {
+            throw new Error("The command supplier cannot be undefined here");
+        }
+
+        return new AnonBinding(this.continuousCmdExecution, this.interactionSupplier(), this.cmdProducer, [...this.widgets],
             [], this._strictStart, [...this.logLevels], this.throttleTimeout, this.initCmd, this.updateFct, this.checkConditions,
             this.onEnd, this.cancelFct, this.endOrCancelFct, this.hadEffectsFct,
             this.hadNoEffectFct, this.cannotExecFct);
-  }
+    }
 }

@@ -38,7 +38,7 @@ export class ButtonPressedTransition extends Transition {
         return new Set([EventRegistrationToken.Click]);
     }
 
-    public isGuardOK(event: Event): boolean {
+    public isGuardOK(_event: Event): boolean {
         return true;
     }
 }

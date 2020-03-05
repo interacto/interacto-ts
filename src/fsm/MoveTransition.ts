@@ -33,7 +33,7 @@ export class MoveTransition extends Transition {
         return event instanceof MouseEvent && event.type === EventRegistrationToken.MouseMove;
     }
 
-    public isGuardOK(event: Event): boolean {
+    public isGuardOK(_event: Event): boolean {
         return true;
     }
 

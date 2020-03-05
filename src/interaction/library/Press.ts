@@ -75,7 +75,7 @@ export class Press extends PointInteraction<PointData, PressFSM, Node> {
         this.handler = new class implements PressFSMHandler {
             private readonly _parent: Press;
 
-            constructor(parent: Press) {
+            public constructor(parent: Press) {
                 this._parent = parent;
             }
 

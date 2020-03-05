@@ -24,25 +24,25 @@ import { TimeoutTransition } from "../../fsm/TimeoutTransition";
 
 export class SpinnerChangedFSM extends FSM {
     /** The time gap between the two spinner events. */
-	private static timeGap = 300;
-	/** The supplier that provides the time gap. */
-    private static readonly SUPPLY_TIME_GAP = () => SpinnerChangedFSM.getTimeGap();
+    private static timeGap = 300;
+    /** The supplier that provides the time gap. */
+    private static readonly SUPPLY_TIME_GAP: () => number = () => SpinnerChangedFSM.getTimeGap();
 
-	/**
+    /**
 	 * @return The time gap between the two spinner events.
 	 */
-	public static getTimeGap(): number {
-		return SpinnerChangedFSM.timeGap;
-	}
+    public static getTimeGap(): number {
+        return SpinnerChangedFSM.timeGap;
+    }
 
-	/**
+    /**
 	 * Sets The time gap between the two spinner events.
 	 * @param timeGapBetweenClicks The time gap between the two spinner events. Not done if negative.
 	 */
-	public static setTimeGap(timeGapBetweenClicks: number): void {
-		if (timeGapBetweenClicks > 0) {
-			SpinnerChangedFSM.timeGap = timeGapBetweenClicks;
-		}
+    public static setTimeGap(timeGapBetweenClicks: number): void {
+        if (timeGapBetweenClicks > 0) {
+            SpinnerChangedFSM.timeGap = timeGapBetweenClicks;
+        }
     }
 
     public constructor() {
@@ -61,7 +61,7 @@ export class SpinnerChangedFSM extends FSM {
         this.addState(changed);
         this.addState(ended);
 
-        const spinnerAction = (event: Event) => {
+        const spinnerAction: (_: Event) => void = (event: Event) => {
             if (event.target !== null && isSpinner(event.target) && dataHandler !== undefined) {
                 dataHandler.initToChangedHandler(event);
             }
@@ -103,7 +103,7 @@ export class SpinnerChanged extends InteractionImpl<WidgetData<HTMLInputElement>
         this.handler = new class implements SpinnerChangedHandler {
             private readonly _parent: SpinnerChanged;
 
-            constructor(parent: SpinnerChanged) {
+            public constructor(parent: SpinnerChanged) {
                 this._parent = parent;
             }
 

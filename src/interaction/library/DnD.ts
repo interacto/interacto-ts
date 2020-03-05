@@ -82,7 +82,7 @@ export class DnDFSM extends FSM {
                 this._parent = parent;
             }
 
-            public isGuardOK(event: Event) {
+            public isGuardOK(event: Event): boolean {
                 return event instanceof MouseEvent && event.button === this._parent.buttonToCheck;
             }
         }(this, pressed, cancelled);
@@ -95,11 +95,11 @@ export class DnDFSM extends FSM {
                 this._parent = parent;
             }
 
-            public isGuardOK(event: Event) {
+            public isGuardOK(event: Event): boolean {
                 return event instanceof MouseEvent && event.button === this._parent.buttonToCheck;
             }
 
-            public action(event: Event) {
+            public action(event: Event): void {
                 if (dataHandler !== undefined && event instanceof MouseEvent) {
                     dataHandler.onDrag(event);
                 }
@@ -114,11 +114,11 @@ export class DnDFSM extends FSM {
                 this._parent = parent;
             }
 
-            public isGuardOK(event: Event) {
+            public isGuardOK(event: Event): boolean {
                 return event instanceof MouseEvent && event.button === this._parent.buttonToCheck;
             }
 
-            public action(event: Event) {
+            public action(event: Event): void {
                 if (dataHandler !== undefined && event instanceof MouseEvent) {
                     dataHandler.onDrag(event);
                 }
@@ -133,11 +133,11 @@ export class DnDFSM extends FSM {
                 this._parent = parent;
             }
 
-            public isGuardOK(event: Event) {
+            public isGuardOK(event: Event): boolean {
                 return event instanceof MouseEvent && event.button === this._parent.buttonToCheck;
             }
 
-            public action(event: Event) {
+            public action(event: Event): void {
                 if (dataHandler !== undefined && event instanceof MouseEvent) {
                     dataHandler.onRelease(event);
                 }
@@ -190,7 +190,7 @@ export class DnD extends PointInteraction<SrcTgtPointsData, DnDFSM, Node> implem
         this.handler = new class implements DnDFSMHandler {
             private readonly _parent: DnD;
 
-            constructor(parent: DnD) {
+            public constructor(parent: DnD) {
                 this._parent = parent;
             }
 
@@ -217,7 +217,7 @@ export class DnD extends PointInteraction<SrcTgtPointsData, DnDFSM, Node> implem
         this.getFsm().buildFSM(this.handler);
     }
 
-    public setTgtData(event: MouseEvent) {
+    public setTgtData(event: MouseEvent): void {
         this.tgtClientX = event.clientX;
         this.tgtClientY = event.clientY;
         this.tgtScreenX = event.screenX;

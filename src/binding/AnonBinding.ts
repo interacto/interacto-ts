@@ -130,7 +130,7 @@ export class AnonBinding<C extends Command, I extends InteractionImpl<D, FSM, {}
         const ok = this.checkInteraction === undefined || this.checkInteraction(this.getInteraction().getData());
         if (this.asLogBinding) {
             catBinder.info(`Checking condition:  ${ok}`);
-		}
+        }
         return ok;
     }
 }

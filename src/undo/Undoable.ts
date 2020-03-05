@@ -38,7 +38,7 @@ export interface Undoable {
     getUndoName(): string;
 }
 
-export function isUndoableType(obj: Undoable | Object): obj is Undoable {
-    return (<Undoable> obj).undo !== undefined && (<Undoable> obj).redo !== undefined && (<Undoable> obj).getUndoName !== undefined;
+export function isUndoableType(obj: Undoable | object): obj is Undoable {
+    return (obj as Undoable).undo !== undefined && (obj as Undoable).redo !== undefined && (obj as Undoable).getUndoName !== undefined;
 }
 

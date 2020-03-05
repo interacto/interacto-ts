@@ -39,7 +39,7 @@ export class SubFSMTransition extends Transition {
         this.subFSMHandler = new class implements FSMHandler {
             protected _parent: SubFSMTransition;
 
-            constructor(parentFSM: SubFSMTransition) {
+            public constructor(parentFSM: SubFSMTransition) {
                 this._parent = parentFSM;
             }
 

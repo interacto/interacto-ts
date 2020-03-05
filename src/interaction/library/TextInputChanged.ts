@@ -28,7 +28,7 @@ export class TextInputChangedFSM extends FSM {
     /** The time gap between the two spinner events. */
     private readonly _timeGap: number = 1000;
     /** The supplier that provides the time gap. */
-    private readonly SUPPLY_TIME_GAP = () => this.getTimeGap();
+    private readonly SUPPLY_TIME_GAP: () => number = () => this.getTimeGap();
 
     /**
      * @return The time gap between the two spinner events.
@@ -94,9 +94,8 @@ interface TextInputChangedHandler extends FSMDataHandler {
  * A user interaction for Number input.
  * @author Gwendal DIDOT
  */
-
-export class TextInputChanged extends InteractionImpl<WidgetData<HTMLInputElement | HTMLTextAreaElement>,
-        TextInputChangedFSM, HTMLInputElement | HTMLTextAreaElement> {
+export class TextInputChanged extends
+    InteractionImpl<WidgetData<HTMLInputElement | HTMLTextAreaElement>, TextInputChangedFSM, HTMLInputElement | HTMLTextAreaElement> {
     private readonly handler: TextInputChangedHandler;
 
     public constructor(timeGap?: number) {
@@ -105,7 +104,7 @@ export class TextInputChanged extends InteractionImpl<WidgetData<HTMLInputElemen
         this.handler = new class implements TextInputChangedHandler {
             private readonly _parent: TextInputChanged;
 
-            constructor(parent: TextInputChanged) {
+            public constructor(parent: TextInputChanged) {
                 this._parent = parent;
             }
 

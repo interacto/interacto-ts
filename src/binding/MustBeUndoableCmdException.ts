@@ -19,7 +19,7 @@
  * @author Arnaud BLOUIN
  */
 export class MustBeUndoableCmdException extends Error {
-    public constructor(cmdProducer: Object) {
+    public constructor(cmdProducer: object) {
         super("The following command must be undoable: " + String(cmdProducer));
     }
 }

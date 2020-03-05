@@ -29,7 +29,7 @@ import { WidgetBinding } from "./WidgetBinding";
  * @author Arnaud Blouin
  */
 export abstract class Binder<C extends Command, I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>
-        implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> {
+implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> {
 
     protected initCmd?: (c: C, i?: D) => void;
     protected checkConditions?: (i: D) => boolean;
@@ -37,8 +37,8 @@ export abstract class Binder<C extends Command, I extends InteractionImpl<D, FSM
     protected widgets: Array<EventTarget>;
     protected interactionSupplier?: () => I;
     protected hadEffectsFct?: (c: C, i: D) => void;
-	protected hadNoEffectFct?: (c: C, i: D) => void;
-	protected cannotExecFct?: (c: C, i: D) => void;
+    protected hadNoEffectFct?: (c: C, i: D) => void;
+    protected cannotExecFct?: (c: C, i: D) => void;
     protected onEnd?: (c: C, i?: D) => void;
     protected logLevels: Array<LogLevel>;
     protected targetWidgets: Array<EventTarget>;
@@ -64,7 +64,7 @@ export abstract class Binder<C extends Command, I extends InteractionImpl<D, FSM
     protected abstract duplicate(): Binder<C, I, D>;
 
     public on(...widget: Array<EventTarget>): Binder<C, I, D> {
-        const w : Array<EventTarget> = this.widgets.length === 0 ? widget : [...this.widgets].concat(widget);
+        const w: Array<EventTarget> = this.widgets.length === 0 ? widget : [...this.widgets].concat(widget);
         const dup = this.duplicate();
         dup.widgets = w;
         return dup;
@@ -82,16 +82,16 @@ export abstract class Binder<C extends Command, I extends InteractionImpl<D, FSM
         return dup;
     }
 
-	public ifHadEffects(hadEffectFct: (c: C, i: D) => void): Binder<C, I, D> {
-		const dup = this.duplicate();
-		dup.hadEffectsFct = hadEffectFct;
-		return dup;
-	}
+    public ifHadEffects(hadEffectFct: (c: C, i: D) => void): Binder<C, I, D> {
+        const dup = this.duplicate();
+        dup.hadEffectsFct = hadEffectFct;
+        return dup;
+    }
 
-	public ifHadNoEffect(noEffectFct: (c: C, i: D) => void): Binder<C, I, D> {
-		const dup = this.duplicate();
-		dup.hadNoEffectFct = noEffectFct;
-		return dup;
+    public ifHadNoEffect(noEffectFct: (c: C, i: D) => void): Binder<C, I, D> {
+        const dup = this.duplicate();
+        dup.hadNoEffectFct = noEffectFct;
+        return dup;
     }
 
     public end(onEndFct: (c?: C, i?: D) => void): Binder<C, I, D> {
@@ -101,22 +101,22 @@ export abstract class Binder<C extends Command, I extends InteractionImpl<D, FSM
     }
 
     public log(...level: Array<LogLevel>): Binder<C, I, D> {
-		const dup = this.duplicate();
-		dup.logLevels = [...level];
-		return dup;
+        const dup = this.duplicate();
+        dup.logLevels = [...level];
+        return dup;
     }
 
     public usingInteraction<I2 extends InteractionImpl<D2, FSM, {}>, D2 extends InteractionData>
-            (interactionSupplier: () => I2): Binder<C, I2, D2> {
-		const dup = this.duplicate();
-		dup.interactionSupplier = interactionSupplier as {} as () => I;
-		return dup as {} as Binder<C, I2, D2>;
+    (interactionSupplier: () => I2): Binder<C, I2, D2> {
+        const dup = this.duplicate();
+        dup.interactionSupplier = interactionSupplier as {} as () => I;
+        return dup as {} as Binder<C, I2, D2>;
     }
 
     public toProduce<C2 extends Command>(cmdCreation: (i: D) => C2): Binder<C2, I, D> {
-		const dup = this.duplicate();
-		dup.cmdProducer = cmdCreation as {} as (i: D) => C;
-		return dup as {} as Binder<C2, I, D>;
+        const dup = this.duplicate();
+        dup.cmdProducer = cmdCreation as {} as (i: D) => C;
+        return dup as {} as Binder<C2, I, D>;
     }
 
     public abstract bind(): WidgetBinding<C, I, D>;

@@ -29,7 +29,7 @@ export class KeyPressedFSM extends FSM {
         this.modifiersAccepted = modifierAccepted;
     }
 
-    public buildFSM(dataHandler?: KeyPressedFSMHandler) {
+    public buildFSM(dataHandler?: KeyPressedFSMHandler): void {
         if (this.states.length > 1) {
             return;
         }

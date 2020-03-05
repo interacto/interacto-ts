@@ -95,7 +95,7 @@ export class CommandsRegistry {
      * @param {*} cmd The command to add. If null, nothing is done.
      */
     public addCommand(cmd: Command): void {
-        if (this.cmds.indexOf(cmd) < 0 &&
+        if (!this.cmds.includes(cmd) &&
             (this.sizeMax > 0 || cmd.getRegistrationPolicy() === RegistrationPolicy.UNLIMITED)) {
             this.unregisterCmd(cmd);
 

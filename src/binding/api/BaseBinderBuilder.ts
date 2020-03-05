@@ -14,9 +14,9 @@
 import { LogLevel } from "../../logging/LogLevel";
 
 export interface BaseBinderBuilder {
-	on(...widgets: Array<EventTarget>): BaseBinderBuilder;
+    on(...widgets: Array<EventTarget>): BaseBinderBuilder;
 
-	/**
+    /**
 	 * Specifies the conditions to fulfill to initialise, update, or execute the command while the interaction is running.
 	 * @param whenPredicate The predicate that checks whether the command can be initialised, updated, or executed.
 	 * @return The builder to chain the building configuration.
@@ -25,7 +25,7 @@ export interface BaseBinderBuilder {
 
     end(endFct: () => void): BaseBinderBuilder;
 
-	/**
+    /**
 	 * Specifies the loggings to use.
 	 * Several call to 'log' can be done to log different parts:
 	 * log(LogLevel.INTERACTION).log(LogLevel.COMMAND)
@@ -34,17 +34,17 @@ export interface BaseBinderBuilder {
 	 */
     log(...level: Array<LogLevel>): BaseBinderBuilder;
 
-	// /**
-	//  * Specifies that the command will be executed in a separated threads.
-	//  * Beware of UI modifications: UI changes must be done in the JFX UI thread.
-	//  * @return The builder to chain the building configuration.
-	//  */
+    // /**
+    //  * Specifies that the command will be executed in a separated threads.
+    //  * Beware of UI modifications: UI changes must be done in the JFX UI thread.
+    //  * @return The builder to chain the building configuration.
+    //  */
     // async(): BaseBinderBuilder;
 
-	// /**
-	//  * Uses the default help animation of the user interaction to explain how the binding works.
-	//  * @param helpPane The pane where the animation will be played.
-	//  * @return The builder to chain the building configuration.
-	//  */
+    // /**
+    //  * Uses the default help animation of the user interaction to explain how the binding works.
+    //  * @param helpPane The pane where the animation will be played.
+    //  * @return The builder to chain the building configuration.
+    //  */
     // help(): BaseBinderBuilder;
 }

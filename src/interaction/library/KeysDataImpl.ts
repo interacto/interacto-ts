@@ -42,15 +42,15 @@ export class KeysDataImpl implements KeysData {
         return Optional.of(this.target);
     }
 
-    public setKeysDataTarget(event: KeyboardEvent) {
+    public setKeysDataTarget(event: KeyboardEvent): void {
         this.target = event.target === null ? undefined : event.target;
     }
 
-    public addKeysDataKey(event: KeyboardEvent) {
+    public addKeysDataKey(event: KeyboardEvent): void {
         this.keys === undefined ? this.keys = [event.code] : this.keys.push(event.code);
     }
 
-    public removeKeysDataKey(event: KeyboardEvent) {
+    public removeKeysDataKey(event: KeyboardEvent): void {
         if (this.keys === undefined) {
             this.keys = [];
         } else {

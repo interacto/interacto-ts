@@ -100,7 +100,7 @@ export abstract class CommandImpl implements Command {
      * @param {*} cmd
      * @return {boolean}
      */
-    public unregisteredBy(cmd: Command): boolean {
+    public unregisteredBy(_cmd: Command): boolean {
         return false;
     }
 

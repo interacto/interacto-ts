@@ -66,7 +66,7 @@ export class BoxChecked extends InteractionImpl<WidgetData<HTMLInputElement>, Bo
         this.handler = new class implements BoxCheckedHandler {
             private readonly _parent: BoxChecked;
 
-            constructor(parent: BoxChecked) {
+            public constructor(parent: BoxChecked) {
                 this._parent = parent;
             }
 

@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
- /**
+/**
  * Defines the top type of interaction data.
  * Every interaction data provided by a user interaction must implements
  * this interface.

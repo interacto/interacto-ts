@@ -94,7 +94,7 @@ export class Click extends PointInteraction<PointData, ClickFSM, Node> {
         this.handler = new class implements ClickFSMHandler {
             private readonly _parent: Click;
 
-            constructor(parent: Click) {
+            public constructor(parent: Click) {
                 this._parent = parent;
             }
 

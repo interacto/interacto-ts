@@ -36,7 +36,7 @@ export class ErrorCatcher {
     /**
      * The notifier object.
      */
-    private readonly notifier : Subject<Error>;
+    private readonly notifier: Subject<Error>;
 
     public constructor() {
         this.notifier = new Subject();
@@ -45,9 +45,9 @@ export class ErrorCatcher {
     /**
 	 * @return An observable stream of errors. Cannot be null.
 	 */
-	public getErrors(): Observable<Error> {
-		return this.notifier;
-	}
+    public getErrors(): Observable<Error> {
+        return this.notifier;
+    }
 
     /**
      * Gathers exceptions. The notifier is then notified of the exceptions (if defined).

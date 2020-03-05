@@ -30,7 +30,7 @@ export class DoubleClickFSM extends FSM {
     /** The time gap between the two spinner events. */
     private static timeGap = 300;
     /** The supplier that provides the time gap. */
-    private static readonly SUPPLY_TIME_GAP = () => DoubleClickFSM.getTimeGap();
+    private static readonly SUPPLY_TIME_GAP: () => number = () => DoubleClickFSM.getTimeGap();
 
     /**
      * @return The time gap between the two spinner events.
@@ -84,7 +84,7 @@ export class DoubleClickFSM extends FSM {
                 this._parent = parent;
             }
 
-            protected action(event: Event): void {
+            protected action(): void {
                 this._parent.setCheckButton(this._parent.firstClickFSM.getCheckButton());
             }
         }(this, this.initState, clicked, this.firstClickFSM);

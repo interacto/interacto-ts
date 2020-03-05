@@ -22,11 +22,11 @@ import { InteractionImpl } from "../interaction/InteractionImpl";
 
 export class AnonCmdBinder<I extends InteractionImpl<D, FSM, {}>, D extends InteractionData> extends Binder<AnonCmd, I, D> {
 
-    constructor(anonCmd: () => void) {
+    public constructor(anonCmd: () => void) {
         super(() => new AnonCmd(anonCmd));
     }
 
-	protected duplicate(): AnonCmdBinder<I, D> {
+    protected duplicate(): AnonCmdBinder<I, D> {
         if (this.cmdProducer === undefined) {
             throw new Error("the cmd producer should not be undefined here");
         }
@@ -42,7 +42,7 @@ export class AnonCmdBinder<I extends InteractionImpl<D, FSM, {}>, D extends Inte
         dup.hadEffectsFct = this.hadEffectsFct;
         dup.cannotExecFct = this.cannotExecFct;
         return dup;
-	}
+    }
 
     public bind(): WidgetBindingImpl<AnonCmd, I, D> {
         if (this.interactionSupplier === undefined) {
@@ -54,8 +54,8 @@ export class AnonCmdBinder<I extends InteractionImpl<D, FSM, {}>, D extends Inte
         }
 
         return new AnonBinding(false, this.interactionSupplier(), this.cmdProducer, [...this.widgets],
-                                   [], false, [...this.logLevels], 0, this.initCmd, undefined, this.checkConditions,
-                                   this.onEnd, undefined, undefined, this.hadEffectsFct,
-                                   this.hadNoEffectFct, this.cannotExecFct);
+            [], false, [...this.logLevels], 0, this.initCmd, undefined, this.checkConditions,
+            this.onEnd, undefined, undefined, this.hadEffectsFct,
+            this.hadNoEffectFct, this.cannotExecFct);
     }
 }

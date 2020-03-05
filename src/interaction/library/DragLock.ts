@@ -70,7 +70,7 @@ export class DragLockFSM extends FSM {
                 this._parent = parent;
             }
 
-            protected action(event: Event): void {
+            protected action(): void {
                 this._parent.checkButton = this._parent.firstDbleClick.getCheckButton();
                 this._parent.sndDbleClick.setCheckButton(this._parent.checkButton);
                 cancelDbleClick.setCheckButton(this._parent.checkButton);
@@ -154,19 +154,19 @@ export class DragLock extends InteractionImpl<SrcTgtPointsData, DragLockFSM, Eve
         return this.sndClick.getData().getSrcObject();
     }
 
-    public getTgtClientX() {
+    public getTgtClientX(): number {
         return this.sndClick.getData().getButton() === undefined ? this.getSrcClientX() : this.sndClick.getData().getSrcClientX();
     }
 
-    public getTgtClientY() {
+    public getTgtClientY(): number {
         return this.sndClick.getData().getButton() === undefined ? this.getSrcClientY() : this.sndClick.getData().getSrcClientY();
     }
 
-    public getTgtScreenX() {
+    public getTgtScreenX(): number {
         return this.sndClick.getData().getButton() === undefined ? this.getSrcScreenX() : this.sndClick.getData().getSrcScreenX();
     }
 
-    public getTgtScreenY() {
+    public getTgtScreenY(): number {
         return this.sndClick.getData().getButton() === undefined ? this.getSrcScreenY() : this.sndClick.getData().getSrcScreenY();
     }
 

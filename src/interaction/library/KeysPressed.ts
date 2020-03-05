@@ -31,7 +31,7 @@ export class KeysPressedFSM extends FSM {
         this.currentCodes = [];
     }
 
-    public buildFSM(dataHandler?: KeysPressedFSMHandler) {
+    public buildFSM(dataHandler?: KeysPressedFSMHandler): void {
         if (this.states.length > 1) {
             return;
         }
@@ -87,7 +87,7 @@ export class KeysPressedFSM extends FSM {
                 this._parent = parent;
             }
 
-            public isGuardOK(event: Event) {
+            public isGuardOK(event: Event): boolean {
                 return event instanceof KeyboardEvent && (this._parent.currentCodes.find(value => value === event.code) !== undefined);
             }
         }(this, pressed, ended);
@@ -116,12 +116,12 @@ export class KeysPressed extends MultiKeyInteraction<KeysData, KeysPressedFSM> {
                 this._parent = parent;
             }
 
-            public onKeyPressed(event: KeyboardEvent) {
+            public onKeyPressed(event: KeyboardEvent): void {
                 this._parent.setKeysDataTarget(event);
                 this._parent.addKeysDataKey(event);
             }
 
-            public reinitData() {
+            public reinitData(): void {
                 this._parent.reinitData();
             }
         }(this);

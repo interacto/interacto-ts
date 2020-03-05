@@ -19,13 +19,13 @@ import { LogLevel } from "../../logging/LogLevel";
 
 export interface InteractionBinderBuilder<I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>
     extends BaseBinderBuilder {
-	/**
+    /**
 	 * Specifies the conditions to fulfill to initialise, update, or execute the command while the interaction is running.
 	 * @param whenPredicate The predicate that checks whether the command can be initialised, updated, or executed.
 	 * This predicate takes as arguments the ongoing user interaction involved in the binding.
 	 * @return The builder to chain the building configuration.
 	 */
-	when(whenPredicate: (i?: D) => boolean): InteractionBinderBuilder<I, D>;
+    when(whenPredicate: (i?: D) => boolean): InteractionBinderBuilder<I, D>;
 
     on(...widgets: Array<EventTarget>): InteractionBinderBuilder<I, D>;
 

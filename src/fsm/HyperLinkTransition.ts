@@ -34,7 +34,7 @@ export class HyperLinkTransition extends Transition {
         return event.target !== null && isHyperLink(event.target);
     }
 
-    public isGuardOK(event: Event): boolean {
+    public isGuardOK(_event: Event): boolean {
         return true;
     }
 

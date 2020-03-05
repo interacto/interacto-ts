@@ -34,7 +34,7 @@ export class ComboBoxTransition extends Transition {
         return event.target !== null && isComboBox(event.target);
     }
 
-    public isGuardOK(event: Event): boolean {
+    public isGuardOK(_event: Event): boolean {
         return true;
     }
 

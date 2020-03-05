@@ -119,7 +119,7 @@ export class FSM {
         return this.currentStatePublisher;
     }
 
-    public setInner(inner: boolean) {
+    public setInner(inner: boolean): void {
         this._inner = inner;
     }
 
@@ -186,7 +186,7 @@ export class FSM {
         return this.started;
     }
 
-    public setCurrentState(state: OutputState) {
+    public setCurrentState(state: OutputState): void {
         const old = this.getCurrentState();
         this._currentState = state;
         this.currentStatePublisher.next([old, this._currentState]);
@@ -301,7 +301,7 @@ export class FSM {
         }
     }
 
-    public onTimeout() {
+    public onTimeout(): void {
         if (this.currentTimeout !== undefined) {
             if (this.asLogFSM) {
                 catFSM.info("Timeout");
@@ -378,7 +378,7 @@ export class FSM {
     /**
      * Notifies handler that the interaction stops.
      */
-    public notifyHandlerOnStop() {
+    public notifyHandlerOnStop(): void {
         try {
             this.handlers.forEach(handler => handler.fsmStops());
         } catch (ex) {
@@ -402,7 +402,7 @@ export class FSM {
         return this._startingState;
     }
 
-    public setStartingState(state: State) {
+    public setStartingState(state: State): void {
         this._startingState = state;
     }
 

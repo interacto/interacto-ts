@@ -22,7 +22,7 @@ import { WidgetBinding } from "../WidgetBinding";
 import { FSM } from "../../fsm/FSM";
 
 export interface InteractionCmdUpdateBinder<C extends Command, I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>
-        extends InteractionCmdBinder<C, I, D>, CmdUpdateBinderBuilder<C>, InteractionUpdateBinderBuilder<I, D> {
+    extends InteractionCmdBinder<C, I, D>, CmdUpdateBinderBuilder<C>, InteractionUpdateBinderBuilder<I, D> {
     /**
     * Specifies the update of the command on interaction command.
     * @param update The callback method that updates the action.

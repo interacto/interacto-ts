@@ -33,7 +33,7 @@ export class KeyPressureTransition extends Transition {
         return event instanceof KeyboardEvent && event.type === EventRegistrationToken.KeyDown;
     }
 
-    public isGuardOK(event: Event): boolean {
+    public isGuardOK(_event: Event): boolean {
         return true;
     }
 

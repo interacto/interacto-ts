@@ -31,11 +31,11 @@ import { Subject, Observable } from "rxjs";
  * @author Arnaud BLOUIN
  */
 export abstract class WidgetBindingImpl<C extends Command, I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>
-    implements WidgetBinding<C, I, D> {
+implements WidgetBinding<C, I, D> {
 
     protected timeEnded: number;
 
-	protected timeCancelled: number;
+    protected timeCancelled: number;
 
     protected asLogBinding: boolean;
 
@@ -182,13 +182,11 @@ export abstract class WidgetBindingImpl<C extends Command, I extends Interaction
         }
     }
 
-    private unbindCmdAttributesClass(clazz: Object): void {
+    private unbindCmdAttributesClass(_clazz: object): void {
         //FIXME
     }
 
-    /**
-     *
-     */
+
     public fsmCancels(): void {
         if (this.cmd !== undefined) {
             if (this.asLogBinding) {
@@ -423,11 +421,11 @@ export abstract class WidgetBindingImpl<C extends Command, I extends Interaction
         }
     }
 
-    public setLogBinding(log: boolean) {
+    public setLogBinding(log: boolean): void {
         this.asLogBinding = log;
     }
 
-    public setLogCmd(log: boolean) {
+    public setLogCmd(log: boolean): void {
         this.asLogCmd = log;
     }
 
@@ -435,11 +433,11 @@ export abstract class WidgetBindingImpl<C extends Command, I extends Interaction
         return this.cmdsProduced;
     }
 
-	public getTimesEnded(): number {
-		return this.timeEnded;
-	}
+    public getTimesEnded(): number {
+        return this.timeEnded;
+    }
 
-	public getTimesCancelled(): number {
-		return this.timeCancelled;
-	}
+    public getTimesCancelled(): number {
+        return this.timeCancelled;
+    }
 }

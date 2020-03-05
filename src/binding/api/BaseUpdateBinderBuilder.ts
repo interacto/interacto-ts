@@ -15,19 +15,19 @@ import { BaseBinderBuilder } from "./BaseBinderBuilder";
 import { LogLevel } from "../../logging/LogLevel";
 
 export interface BaseUpdateBinderBuilder extends BaseBinderBuilder {
-	/**
+    /**
 	 * Specifies whether the command must be executed on each evolution of the interaction (if 'when' predicate is ok).
 	 * @return The builder to chain the building configuration.
 	 */
-	 continuousExecution(): BaseUpdateBinderBuilder;
+    continuousExecution(): BaseUpdateBinderBuilder;
 
-	/**
+    /**
 	 * The interaction does not start if the condition of the binding ('when') is not fulfilled.
 	 * @return The builder to chain the building configuration.
 	 */
-	strictStart(): BaseUpdateBinderBuilder;
+    strictStart(): BaseUpdateBinderBuilder;
 
-	/**
+    /**
 	 * Backpressure operation. Instead of emitting all the events, successive events of the same type are factorized modulo a timeout.
 	 * The timeout is used to send at max one event of the same type in a given duration (the timeout).
 	 * For example with three mouse moves and a time out of 10ms.
@@ -39,7 +39,7 @@ export interface BaseUpdateBinderBuilder extends BaseBinderBuilder {
 	 * @param timeout The timeout used by the throttle operation. In ms.
 	 * @return The builder to chain the building configuration.
 	 */
-	throttle(timeout: number): BaseUpdateBinderBuilder;
+    throttle(timeout: number): BaseUpdateBinderBuilder;
 
     when(whenPredicate: () => boolean): BaseUpdateBinderBuilder;
 

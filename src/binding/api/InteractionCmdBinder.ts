@@ -21,7 +21,7 @@ import { LogLevel } from "../../logging/LogLevel";
 import { WidgetBinding } from "../WidgetBinding";
 
 export interface InteractionCmdBinder<C extends Command, I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>
-        extends CmdBinderBuilder<C>, InteractionBinderBuilder<I, D> {
+    extends CmdBinderBuilder<C>, InteractionBinderBuilder<I, D> {
     /**
     * Specifies the initialisation of the command when the interaction starts.
     * Each time the interaction starts, an instance of the command is created and configured by the given callback.

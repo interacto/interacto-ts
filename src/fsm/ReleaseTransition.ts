@@ -40,7 +40,7 @@ export class ReleaseTransition extends Transition {
         return new Set([EventRegistrationToken.MouseUp]);
     }
 
-    public isGuardOK(event: Event): boolean {
+    public isGuardOK(_event: Event): boolean {
         return true;
     }
 }
