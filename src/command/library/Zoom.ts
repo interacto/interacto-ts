@@ -24,7 +24,7 @@ export class Zoom extends PositionAction {
     /**
      * The object to zoom.
      */
-    protected zoomable: Zoomable | undefined;
+    protected zoomable?: Zoomable;
 
     /**
      * The zooming level.

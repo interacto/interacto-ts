@@ -14,7 +14,7 @@
 
 export class Optional<T> {
     private static readonly EMPTY: Optional<{}> = new Optional<{}>();
-    private readonly value: T | undefined;
+    private readonly value?: T;
 
     private constructor(obj?: T) {
         this.value = obj;
@@ -24,7 +24,7 @@ export class Optional<T> {
         return Optional.EMPTY as Optional<T>;
     }
 
-    public static of<T>(obj: T | undefined): Optional<T> {
+    public static of<T>(obj?: T): Optional<T> {
         return obj === undefined ? Optional.empty() : new Optional(obj);
     }
 

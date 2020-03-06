@@ -51,14 +51,14 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
         this.initCmd = initCmd;
         this.checkConditions = checkConditions;
         this.cmdProducer = cmdProducer;
-        this.widgets = widgets === undefined ? [] : widgets;
+        this.widgets = widgets ?? [];
         this.interactionSupplier = interactionSupplier;
         this.onEnd = onEnd;
         this.hadEffectsFct = hadEffectsFct;
         this.hadNoEffectFct = hadNoEffectFct;
         this.cannotExecFct = cannotExecFct;
-        this.logLevels = logLevels === undefined ? [] : logLevels;
-        this.targetWidgets = targetWidgets === undefined ? [] : targetWidgets;
+        this.logLevels = logLevels ?? [];
+        this.targetWidgets = targetWidgets ?? [];
     }
 
     protected abstract duplicate(): Binder<C, I, D>;

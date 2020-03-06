@@ -25,7 +25,7 @@ export abstract class ModifyValue<T> extends CommandImpl {
     /**
      * The new value of the property.
      */
-    protected value: T | undefined;
+    protected value?: T;
 
     protected constructor(value?: T) {
         super();

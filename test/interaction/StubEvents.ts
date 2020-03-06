@@ -15,11 +15,11 @@
 export function createMouseEvent(type: string, target: EventTarget, screenX ?: number, screenY ?: number, clientX ?: number,
                                  clientY?: number, button?: number): MouseEvent {
 
-    const screenXvalue = screenX === undefined ? 0 : screenX;
-    const screenYvalue = screenY === undefined ? 0 : screenY;
-    const clientXvalue = clientX === undefined ? 0 : clientX;
-    const clientYvalue = clientY === undefined ? 0 : clientY;
-    const buttonValue = button === undefined ? 0 : button;
+    const screenXvalue = screenX ?? 0;
+    const screenYvalue = screenY ?? 0;
+    const clientXvalue = clientX ?? 0;
+    const clientYvalue = clientY ?? 0;
+    const buttonValue = button ?? 0;
     return new MouseEvent(type, {
         view: window,
         bubbles: true,

@@ -19,12 +19,12 @@ export class KeyDataImpl implements KeyData {
     /**
      * The key involve in the interaction
      */
-    protected key: string | undefined;
+    protected key?: string;
 
     /**
      * The target of the event that trigger the interaction
      */
-    protected target: EventTarget | undefined;
+    protected target?: EventTarget;
 
     public constructor() { }
 
@@ -38,11 +38,11 @@ export class KeyDataImpl implements KeyData {
     }
 
     public getKey(): string {
-        return this.key === undefined ? "" : this.key;
+        return this.key ?? "";
     }
 
     public setKeyData(event: KeyboardEvent): void {
-        this.target = event.target === null ? undefined : event.target;
+        this.target = event.target ?? undefined;
         this.key = event.code;
     }
 }

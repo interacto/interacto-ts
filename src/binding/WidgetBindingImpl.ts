@@ -51,7 +51,7 @@ implements WidgetBinding<C, I, D> {
     /**
      * The current action in progress.
      */
-    protected cmd: C | undefined;
+    protected cmd?: C;
 
     /**
      * Specifies whether the command must be executed on each step of the interaction.
@@ -264,7 +264,7 @@ implements WidgetBinding<C, I, D> {
                 if (this.asLogCmd) {
                     catCommand.info("Try to execute command (continuous execution)");
                 }
-                const ok = this.cmd === undefined ? false : this.cmd.doIt();
+                const ok = this.cmd?.doIt() ?? false;
 
                 if (this.asLogCmd) {
                     catCommand.info(`Continuous command execution had this result: ${ok}`);

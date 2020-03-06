@@ -26,7 +26,7 @@ import { InputState } from "../../fsm/InputState";
 import { FSM } from "../../fsm/FSM";
 
 export class KeyTypedFSM extends FSM {
-    private checkKey: string | undefined;
+    private checkKey?: string;
 
     /** The time gap between the two spinner events. */
     private static readonly timeGap = 1000;
@@ -90,7 +90,7 @@ export class KeyTypedFSM extends FSM {
     }
 
     public getCheckKey(): string {
-        return this.checkKey === undefined ? "" : this.checkKey;
+        return this.checkKey ?? "";
     }
 
     public setCheckKey(keyToCheck: string): void {
@@ -122,7 +122,7 @@ export class KeyTyped extends KeyInteraction<KeyData, KeyTypedFSM, Node> {
     private readonly handler: KeyTypedFSMHandler;
 
     public constructor(fsm?: KeyTypedFSM) {
-        super(fsm === undefined ? new KeyTypedFSM() : fsm);
+        super(fsm ?? new KeyTypedFSM());
 
         this.handler = new class implements KeyTypedFSMHandler {
             private readonly _parent: KeyTyped;

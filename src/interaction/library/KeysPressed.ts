@@ -107,7 +107,7 @@ export class KeysPressed extends MultiKeyInteraction<KeysData, KeysPressedFSM> {
     private readonly handler: KeysPressedFSMHandler;
 
     public constructor(fsm?: KeysPressedFSM) {
-        super(fsm === undefined ? new KeysPressedFSM() : fsm);
+        super(fsm ?? new KeysPressedFSM());
 
         this.handler = new class implements KeysPressedFSMHandler {
             private readonly _parent: KeysPressed;

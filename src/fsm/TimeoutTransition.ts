@@ -32,7 +32,7 @@ export class TimeoutTransition extends Transition {
     /**
      * The current thread in progress.
      */
-    private timeoutThread: number | undefined;
+    private timeoutThread?: number;
 
     private timeouted: boolean;
 

@@ -20,12 +20,12 @@ export class KeysDataImpl implements KeysData {
     /**
      * The keys involve in the interaction
      */
-    protected keys: Array<string> | undefined;
+    protected keys?: Array<string>;
 
     /**
      * The target of the event that trigger the interaction
      */
-    protected target: EventTarget | undefined;
+    protected target?: EventTarget;
 
     public constructor() { }
 
@@ -35,7 +35,7 @@ export class KeysDataImpl implements KeysData {
     }
 
     public getKeys(): Array<string> {
-        return this.keys === undefined ? [] : this.keys;
+        return this.keys ?? [];
     }
 
     public getTarget(): Optional<EventTarget> {
@@ -43,7 +43,7 @@ export class KeysDataImpl implements KeysData {
     }
 
     public setKeysDataTarget(event: KeyboardEvent): void {
-        this.target = event.target === null ? undefined : event.target;
+        this.target = event.target ?? undefined;
     }
 
     public addKeysDataKey(event: KeyboardEvent): void {

@@ -29,7 +29,7 @@ import { Subscription } from "rxjs";
  * @param <F> The type of the FSM.
  */
 export abstract class InteractionImpl<D extends InteractionData, F extends FSM, T> implements WidgetData<T> {
-    protected logger: Logger | undefined;
+    protected logger?: Logger;
     protected readonly fsm: F;
     protected asLog: boolean;
     protected readonly _registeredNodes: Set<EventTarget>;
@@ -37,11 +37,11 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM, 
     protected readonly _additionalNodes: Array<Node>;
     protected readonly listMutationObserver: Array<MutationObserver>;
     /** The widget used during the interaction. */
-    protected _widget: T | undefined;
-    private mouseHandler: ((e: MouseEvent) => void) | undefined;
-    private keyHandler: ((e: KeyboardEvent) => void) | undefined;
-    private uiHandler: ((e: UIEvent) => void) | undefined;
-    private actionHandler: EventListener | undefined;
+    protected _widget?: T;
+    private mouseHandler?: ((e: MouseEvent) => void);
+    private keyHandler?: ((e: KeyboardEvent) => void);
+    private uiHandler?: ((e: UIEvent) => void);
+    private actionHandler?: EventListener;
     private readonly disposable: Subscription;
 
     /**

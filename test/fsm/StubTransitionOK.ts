@@ -22,7 +22,7 @@ export class StubTransitionOK extends Transition {
 
     public constructor(srcState: OutputState, tgtState: InputState, guard?: boolean) {
         super(srcState, tgtState);
-        this.guard = guard === undefined ? true : guard;
+        this.guard = guard ?? true;
     }
 
     public accept(event: StubEvent): boolean {

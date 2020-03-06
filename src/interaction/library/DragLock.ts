@@ -30,7 +30,7 @@ import { InteractionImpl } from "../InteractionImpl";
 export class DragLockFSM extends FSM {
     public readonly firstDbleClick: DoubleClickFSM;
     public readonly sndDbleClick: DoubleClickFSM;
-    protected checkButton: number | undefined;
+    protected checkButton?: number;
 
     public constructor() {
         super();

@@ -29,7 +29,7 @@ import { ReleaseTransition } from "../../fsm/ReleaseTransition";
 
 export class DnDFSM extends FSM {
     private readonly cancellable: boolean;
-    private buttonToCheck: number | undefined;
+    private buttonToCheck?: number;
 
     public constructor(cancellable: boolean) {
         super();
@@ -169,15 +169,15 @@ interface DnDFSMHandler extends FSMDataHandler {
 export class DnD extends PointInteraction<SrcTgtPointsData, DnDFSM, Node> implements SrcTgtPointsData {
 
     /**The object pick at the end of the interaction*/
-    private tgtObject: EventTarget | undefined;
+    private tgtObject?: EventTarget;
 
-    private tgtClientX: number | undefined;
+    private tgtClientX?: number;
 
-    private tgtClientY: number | undefined;
+    private tgtClientY?: number;
 
-    private tgtScreenX: number | undefined;
+    private tgtScreenX?: number;
 
-    private tgtScreenY: number | undefined;
+    private tgtScreenY?: number;
 
     /**
      * Creates the interaction.
@@ -185,7 +185,7 @@ export class DnD extends PointInteraction<SrcTgtPointsData, DnDFSM, Node> implem
     private readonly handler: DnDFSMHandler;
 
     public constructor(srcOnUpdate: boolean, cancellable: boolean, fsm?: DnDFSM) {
-        super(fsm === undefined ? new DnDFSM(cancellable) : fsm);
+        super(fsm ?? new DnDFSM(cancellable));
 
         this.handler = new class implements DnDFSMHandler {
             private readonly _parent: DnD;
@@ -239,19 +239,19 @@ export class DnD extends PointInteraction<SrcTgtPointsData, DnDFSM, Node> implem
     }
 
     public getTgtClientX(): number {
-        return this.tgtClientX === undefined ? 0 : this.tgtClientX;
+        return this.tgtClientX ?? 0;
     }
 
     public getTgtClientY(): number {
-        return this.tgtClientY === undefined ? 0 : this.tgtClientY;
+        return this.tgtClientY ?? 0;
     }
 
     public getTgtScreenX(): number {
-        return this.tgtScreenX === undefined ? 0 : this.tgtScreenX;
+        return this.tgtScreenX ?? 0;
     }
 
     public getTgtScreenY(): number {
-        return this.tgtScreenY === undefined ? 0 : this.tgtScreenY;
+        return this.tgtScreenY ?? 0;
     }
 
     public getTgtObject(): Optional<EventTarget> {

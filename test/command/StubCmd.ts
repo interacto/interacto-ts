@@ -21,7 +21,7 @@ export class StubCmd extends CommandImpl {
 
     public constructor(candoValue?: boolean) {
         super();
-        this.candoValue = candoValue === undefined ? false : true;
+        this.candoValue = candoValue ?? false;
     }
 
     protected doCmdBody(): void {

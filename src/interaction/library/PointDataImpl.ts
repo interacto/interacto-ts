@@ -17,16 +17,16 @@ import { PointData } from "./PointData";
 
 export class PointDataImpl implements PointData {
     /** The pressed X-local position. */
-    protected srcClientX: number | undefined;
+    protected srcClientX?: number;
     /** The pressed Y-local position. */
-    protected srcClientY: number | undefined;
+    protected srcClientY?: number;
     /** The pressed X-screen position. */
-    protected srcScreenX: number | undefined;
+    protected srcScreenX?: number;
     /** The pressed Y-screen position. */
-    protected srcScreenY: number | undefined;
+    protected srcScreenY?: number;
 
     /** The button used for the pressure. */
-    protected button: number | undefined;
+    protected button?: number;
 
     protected altPressed: boolean;
 
@@ -37,9 +37,9 @@ export class PointDataImpl implements PointData {
     protected metaPressed: boolean;
 
     /** The object picked at the pressed position. */
-    protected srcObject: EventTarget | undefined;
+    protected srcObject?: EventTarget;
 
-    protected currentTarget: EventTarget | undefined;
+    protected currentTarget?: EventTarget;
 
     public constructor() {
     }
@@ -77,19 +77,19 @@ export class PointDataImpl implements PointData {
     }
 
     public getSrcScreenY(): number {
-        return this.srcScreenY === undefined ? 0 : this.srcScreenY;
+        return this.srcScreenY ?? 0;
     }
 
     public getSrcScreenX(): number {
-        return this.srcScreenX === undefined ? 0 : this.srcScreenX;
+        return this.srcScreenX ?? 0;
     }
 
     public getSrcClientX(): number {
-        return this.srcClientX === undefined ? 0 : this.srcClientX;
+        return this.srcClientX ?? 0;
     }
 
     public getSrcClientY(): number {
-        return this.srcClientY === undefined ? 0 : this.srcClientY;
+        return this.srcClientY ?? 0;
     }
 
     public setModifiersData(event: MouseEvent): void {

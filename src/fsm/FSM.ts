@@ -31,7 +31,7 @@ import { remove, removeAt } from "../util/ArrayUtil";
  * @param <E> The type of events the FSM processes.
  */
 export class FSM {
-    protected dataHandler: FSMDataHandler | undefined;
+    protected dataHandler?: FSMDataHandler;
 
     protected asLogFSM: boolean;
 
@@ -81,9 +81,9 @@ export class FSM {
     /**
      * The current timeout in progress.
      */
-    protected currentTimeout: TimeoutTransition | undefined;
+    protected currentTimeout?: TimeoutTransition;
 
-    protected currentSubFSM: FSM | undefined;
+    protected currentSubFSM?: FSM;
 
     public constructor() {
         this._inner = false;

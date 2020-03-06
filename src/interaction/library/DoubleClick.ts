@@ -51,7 +51,7 @@ export class DoubleClickFSM extends FSM {
 
     public readonly firstClickFSM: ClickFSM;
     private readonly sndClick: ClickFSM;
-    private checkButton: number | undefined;
+    private checkButton?: number;
 
     public constructor() {
         super();
@@ -115,7 +115,7 @@ export class DoubleClickFSM extends FSM {
     }
 
     public getCheckButton(): number {
-        return this.checkButton === undefined ? -1 : this.checkButton;
+        return this.checkButton ?? -1;
     }
 
     public reinit(): void {
@@ -128,7 +128,7 @@ export class DoubleClick extends InteractionImpl<PointData, DoubleClickFSM, Node
     public readonly firstClick: Click;
 
     public constructor(fsm?: DoubleClickFSM) {
-        super(fsm === undefined ? new DoubleClickFSM() : fsm);
+        super(fsm ?? new DoubleClickFSM());
 
         this.firstClick = new Click(this.getFsm().firstClickFSM);
         this.getFsm().buildFSM(this);

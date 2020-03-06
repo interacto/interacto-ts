@@ -22,7 +22,7 @@ import { PointData } from "./PointData";
 import { FSM } from "../../fsm/FSM";
 
 export class ClickFSM extends FSM {
-    private checkButton: number | undefined;
+    private checkButton?: number;
 
     public constructor() {
         super();
@@ -63,7 +63,7 @@ export class ClickFSM extends FSM {
     }
 
     public getCheckButton(): number {
-        return this.checkButton === undefined ? -1 : this.checkButton;
+        return this.checkButton ?? -1;
     }
 
     public setCheckButton(buttonToCheck: number): void {
@@ -89,7 +89,7 @@ export class Click extends PointInteraction<PointData, ClickFSM, Node> {
      * Creates the interaction.
      */
     public constructor(fsm?: ClickFSM) {
-        super(fsm === undefined ? new ClickFSM() : fsm);
+        super(fsm ?? new ClickFSM());
 
         this.handler = new class implements ClickFSMHandler {
             private readonly _parent: Click;

@@ -81,7 +81,7 @@ export class KeyPressed extends KeyInteraction<KeyData, KeyPressedFSM, Node> {
     private readonly handler: KeyPressedFSMHandler;
 
     public constructor(modifierAccepted: boolean, fsm?: KeyPressedFSM) {
-        super(fsm === undefined ? new KeyPressedFSM(modifierAccepted) : fsm);
+        super(fsm ?? new KeyPressedFSM(modifierAccepted));
 
         this.handler = new class implements KeyPressedFSMHandler {
             private readonly _parent: KeyPressed;
