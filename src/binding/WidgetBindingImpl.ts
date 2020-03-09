@@ -198,26 +198,32 @@ implements WidgetBinding<C, I, D> {
             if (this.asLogBinding) {
                 catBinder.info("Binding cancelled");
             }
+            const hadEffects = this.cmd.hadEffect();
             this.cmd.cancel();
             if (this.asLogCmd) {
                 catCommand.info(`Command ${this.cmd.constructor.name} cancelled`);
             }
             this.unbindCmdAttributes();
 
-            if (this.isContinuousCmdExec() && this.cmd.hadEffect()) {
-                if (isUndoableType(this.cmd)) {
-                    this.cmd.undo();
-                    if (this.asLogCmd) {
-                        catCommand.info(`Command ${this.cmd.constructor.name} undone`);
-                    }
-                } else {
-                    throw new MustBeUndoableCmdException(this.cmd);
-                }
+            if(this.isContinuousCmdExec() && hadEffects) {
+                this.cancelContinousWithEffectsCmd(this.cmd);
             }
+
             this.cmd = undefined;
             this.cancel();
             this.endOrCancel();
             this.timeCancelled++;
+        }
+    }
+
+    private cancelContinousWithEffectsCmd(c: C): void {
+        if(isUndoableType(c)) {
+            c.undo();
+            if (this.asLogCmd) {
+                catCommand.info(`Command ${c.constructor.name} undone`);
+            }
+        }else {
+            throw new MustBeUndoableCmdException(c);
         }
     }
 
