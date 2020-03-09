@@ -11,7 +11,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { CommandsRegistry, UndoCollector, CmdStatus, RegistrationPolicy } from "../../src";
+import { CommandsRegistry, UndoCollector, CmdStatus, RegistrationPolicy, CommandImpl } from "../../src";
 import { StubCmd } from "./StubCmd";
 
 let cmd: StubCmd;
@@ -24,6 +24,35 @@ beforeEach(() => {
     UndoCollector.getInstance().clear();
 });
 
+test("cando default", () => {
+    const command = new class extends CommandImpl {
+        public constructor() {
+            super();
+        }
+
+        protected doCmdBody(): void {
+        }
+    }();
+
+    expect(command.canDo()).toBeTruthy();
+});
+
+test("execute and flush cannotDo", () => {
+    jest.spyOn(cmd, "doIt");
+    jest.spyOn(cmd, "flush");
+    cmd.candoValue = false;
+    CommandImpl.executeAndFlush(cmd);
+    expect(cmd.doIt).not.toHaveBeenCalled();
+    expect(cmd.flush).toHaveBeenCalledTimes(1);
+});
+
+test("execute and flush canDo", () => {
+    jest.spyOn(cmd, "doIt");
+    jest.spyOn(cmd, "flush");
+    CommandImpl.executeAndFlush(cmd);
+    expect(cmd.doIt).toHaveBeenCalledTimes(1);
+    expect(cmd.flush).toHaveBeenCalledTimes(1);
+});
 
 test("testCommandStatusAfterCreation", () => {
     expect(cmd.getStatus()).toStrictEqual(CmdStatus.CREATED);
