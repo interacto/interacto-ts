@@ -32,18 +32,15 @@ export abstract class ModifyValue<T> extends CommandImpl {
         this.value = value;
     }
 
-    /**
-     *
-     */
+    protected doCmdBody(): void {
+        this.applyValue();
+    }
+
     public flush(): void {
         super.flush();
         this.value = undefined;
     }
 
-    /**
-     *
-     * @return {boolean}
-     */
     public canDo(): boolean {
         return this.value !== undefined && this.isValueMatchesProperty();
     }
@@ -56,12 +53,15 @@ export abstract class ModifyValue<T> extends CommandImpl {
         this.value = newValue;
     }
 
+    public getValue(): T | undefined {
+        return this.value;
+    }
+
     /**
      * This method executes the job of methods undo, redo, and do
-     * @param {*} obj The value to set. Must not be null.
      * @throws NullPointerException If the given value is null.
      */
-    public abstract applyValue(obj: T): void;
+    public abstract applyValue(): void;
 
     /**
      * @return {boolean} True: the object to modified supports the selected property.

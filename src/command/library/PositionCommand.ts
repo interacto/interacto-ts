@@ -21,7 +21,7 @@ import { CommandImpl } from "../CommandImpl";
  * @extends CommandImpl
  * @author Arnaud BLOUIN
  */
-export abstract class PositionAction extends CommandImpl {
+export abstract class PositionCommand extends CommandImpl {
     /**
      * The X-coordinate of the location to zoom.
      */
@@ -36,14 +36,6 @@ export abstract class PositionAction extends CommandImpl {
         super();
         this.px = NaN;
         this.py = NaN;
-    }
-
-    /**
-     *
-     * @return {boolean}
-     */
-    public canDo(): boolean {
-        return !isNaN(this.px) && !isNaN(this.py);
     }
 
     /**

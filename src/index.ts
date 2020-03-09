@@ -44,7 +44,7 @@ export * from "./command/Command";
 export * from "./command/CommandImpl";
 export * from "./command/CommandsRegistry";
 export * from "./command/library/ModifyValue";
-export * from "./command/library/PositionAction";
+export * from "./command/library/PositionCommand";
 export * from "./command/library/Redo";
 export * from "./command/library/Undo";
 export * from "./command/library/Zoom";

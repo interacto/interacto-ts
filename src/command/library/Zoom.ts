@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { PositionAction } from "./PositionAction";
+import { PositionCommand } from "./PositionCommand";
 import { Zoomable } from "../../properties/Zoomable";
 
 /**
@@ -20,58 +20,33 @@ import { Zoomable } from "../../properties/Zoomable";
  * @since 0.2
  * @author Arnaud BLOUIN
  */
-export class Zoom extends PositionAction {
+export class Zoom extends PositionCommand {
     /**
      * The object to zoom.
      */
-    protected zoomable?: Zoomable;
+    protected readonly zoomable: Zoomable;
 
     /**
      * The zooming level.
      */
     protected zoomLevel: number;
 
-    public constructor() {
+    public constructor(zoomable: Zoomable) {
         super();
         this.zoomLevel = NaN;
+        this.zoomable = zoomable;
     }
 
-    /**
-     *
-     */
-    public flush(): void {
-        super.flush();
-        this.zoomable = undefined;
-    }
-
-    /**
-     *
-     * @return {boolean}
-     */
     public canDo(): boolean {
-        return this.zoomable !== undefined && this.zoomLevel >= this.zoomable.getMinZoom() && this.zoomLevel <= this.zoomable.getMaxZoom();
+        return this.zoomLevel >= this.zoomable.getMinZoom() && this.zoomLevel <= this.zoomable.getMaxZoom();
     }
 
-    /**
-     *
-     */
     protected doCmdBody(): void {
-        if (this.zoomable !== undefined) {
-            this.zoomable.setZoom(this.px, this.py, this.zoomLevel);
-        }
-    }
-
-    /**
-     * @param {*} newZoomable the zoomable to set.
-     * @since 0.2
-     */
-    public setZoomable(newZoomable: Zoomable): void {
-        this.zoomable = newZoomable;
+        this.zoomable.setZoom(this.px, this.py, this.zoomLevel);
     }
 
     /**
      * @param {number} newZoomLevel the zoomLevel to set.
-     * @since 0.2
      */
     public setZoomLevel(newZoomLevel: number): void {
         this.zoomLevel = newZoomLevel;

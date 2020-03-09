@@ -24,16 +24,11 @@ export class Undo extends CommandImpl {
         super();
     }
 
-    /**
-     *
-     * @return {boolean}
-     */
     public canDo(): boolean {
         return UndoCollector.getInstance().getLastUndo().isPresent();
     }
 
     protected doCmdBody(): void {
         UndoCollector.getInstance().undo();
-        this.done();
     }
 }
