@@ -49,9 +49,7 @@ beforeEach(() => {
 afterEach(() => {
     CommandsRegistry.getInstance().clear();
     errorStream.unsubscribe();
-}
-
-);
+});
 
 test("testLinkDeActivation", () => {
     binding.setActivated(true);
@@ -72,6 +70,25 @@ test("testExecuteNope", () => {
 test("testExecuteOK", () => {
     binding = new WidgetBindingStub(true, () => new StubCmd(), new InteractionStub(new FSM()));
     expect(binding.isContinuousCmdExec()).toBeTruthy();
+});
+
+test("execute crash", () => {
+    errorStream.unsubscribe();
+    const errors: Array<Error> = [];
+    const ex = new Error();
+    errorStream = ErrorCatcher.getInstance().getErrors().subscribe(err => errors.push(err));
+    const supplier = (): StubCmd => {
+        throw ex;
+    };
+
+    binding = new WidgetBindingStub(true, supplier, new InteractionStub(new FSM()));
+    binding.conditionRespected = true;
+    jest.spyOn(binding, "first");
+    binding.fsmStarts();
+    expect(binding.getCommand()).toBeUndefined();
+    expect(errors).toHaveLength(1);
+    expect(ex).toBe(errors[0]);
+    expect(binding.first).not.toHaveBeenCalled();
 });
 
 test("testIsInteractionMustBeCancelled", () => {
@@ -108,8 +125,14 @@ test("testInteractionStartsWhenNoCorrectInteractionActivated", () => {
     expect(binding.getCommand()).toBeUndefined();
 });
 
-test("testInteractionStartsThrowMustCancelStateMachineException", () => {
+test("interaction starts throw MustCancelStateMachineException", () => {
     binding.mustCancel = true;
+    expect(() => binding.fsmStarts()).toThrow(CancelFSMException);
+});
+
+test("interaction starts throw MustCancelStateMachineException with log", () => {
+    binding.mustCancel = true;
+    binding.setLogBinding(true);
     expect(() => binding.fsmStarts()).toThrow(CancelFSMException);
 });
 

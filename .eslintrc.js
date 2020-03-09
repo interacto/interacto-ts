@@ -110,7 +110,7 @@ module.exports = {
     "@typescript-eslint/unified-signatures": "error",
     "arrow-parens": ["error", "as-needed"],
     "camelcase": "error",
-    "complexity": ["error", { "max": 10 }],
+    "complexity": ["error", { "max": 12 }],
     "constructor-super": "error",
     "curly": "error",
     "dot-notation": "error",

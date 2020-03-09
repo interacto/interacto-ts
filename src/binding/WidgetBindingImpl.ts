@@ -23,6 +23,7 @@ import { CommandsRegistry } from "../command/CommandsRegistry";
 import { InteractionData } from "../interaction/InteractionData";
 import { InteractionImpl } from "../interaction/InteractionImpl";
 import { Subject, Observable } from "rxjs";
+import { ErrorCatcher } from "..";
 
 /**
  * The base class to do widget bindings, i.e. bindings between user interactions and (undoable) commands.
@@ -102,10 +103,15 @@ implements WidgetBinding<C, I, D> {
 
     /**
      * creates the command of the widget binding. If the attribute 'cmd' is not null, nothing will be done.
-     * @return {CommandImpl} The created command.
+     * @return {CommandImpl} The created command or undefined if an error occured
      */
-    protected createCommand(): C {
-        return this.cmdProducer(this.interaction.getData());
+    protected createCommand(): C | undefined {
+        try {
+            return this.cmdProducer(this.interaction.getData());
+        }catch(ex) {
+            ErrorCatcher.getInstance().reportError(ex);
+            return undefined;
+        }
     }
 
     public first(): void {
@@ -215,9 +221,6 @@ implements WidgetBinding<C, I, D> {
         }
     }
 
-    /**
-     *
-     */
     public fsmStarts(): void {
         if (!this.isActivated()) {
             return;
@@ -230,9 +233,11 @@ implements WidgetBinding<C, I, D> {
         }
         if (ok) {
             this.cmd = this.createCommand();
-            this.first();
-            if (this.asLogCmd) {
-                catCommand.info(`Command created and init: ${this.cmd.constructor.name}`);
+            if(this.cmd !== undefined) {
+                this.first();
+                if (this.asLogCmd) {
+                    catCommand.info(`Command created and init: ${this.cmd.constructor.name}`);
+                }
             }
         } else {
             if (this.isStrictStart()) {
@@ -277,9 +282,7 @@ implements WidgetBinding<C, I, D> {
         }
     }
 
-    /**
-     *
-     */
+
     public fsmStops(): void {
         if (!this.isActivated()) {
             return;
@@ -290,29 +293,23 @@ implements WidgetBinding<C, I, D> {
         }
 
         if (this.createAndInitCommand()) {
-            if (this.cmd === undefined) {
-                this.cmd = this.createCommand();
-                this.first();
-                if (this.asLogCmd) {
-                    catCommand.info(`Command created and init: ${this.cmd.constructor.name}`);
-                }
-            }
-
-            if (!this.continuousCmdExec) {
+            if(!this.continuousCmdExec) {
                 this.then();
-                if (this.asLogCmd) {
-                    catCommand.info(`Command ${this.cmd.constructor.name} is updated`);
+                if(this.asLogCmd) {
+                    catCommand.info("Command updated");
                 }
             }
 
-            this.executeCmd(this.cmd);
+            // We are sure here that the command is not undefined
+            // (this is the goal of createAndInitCommand)
+            this.executeCmd(this.cmd as C);
             this.unbindCmdAttributes();
             this.cmd = undefined;
             this.timeEnded++;
-        } else {
-            if (this.cmd !== undefined) {
-                if (this.asLogCmd) {
-                    catCommand.info(`Cancelling the command: ${this.cmd.constructor.name}`);
+        }else {
+            if(this.cmd != null) {
+                if(this.asLogCmd) {
+                    catCommand.info("Cancelling the command");
                 }
                 this.cmd.cancel();
                 this.unbindCmdAttributes();
@@ -347,10 +344,6 @@ implements WidgetBinding<C, I, D> {
     }
 
     protected afterCmdExecuted(cmd: C, ok: boolean): void {
-        if (this.cmd === undefined) {
-            return;
-        }
-
         if (this.asLogCmd) {
             catCommand.info(`Command execution had this result: ${ok}`);
         }
@@ -362,12 +355,12 @@ implements WidgetBinding<C, I, D> {
         }
 
         // In continuous mode, a command may have been executed in the update routine
-        if (this.cmd.getStatus() !== CmdStatus.EXECUTED) {
+        if (cmd.getStatus() !== CmdStatus.EXECUTED) {
             return;
         }
 
         // For commands executed at least one time
-        this.cmd.done();
+        cmd.done();
         this.cmdsProduced.next(cmd);
 
         const hadEffect: boolean = cmd.hadEffect();
