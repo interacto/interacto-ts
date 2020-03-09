@@ -320,7 +320,7 @@ implements WidgetBinding<C, I, D> {
     }
 
     protected createAndInitCommand(): boolean {
-        const ok = this.when();
+        let ok = this.when();
 
         if (this.asLogBinding) {
             catBinder.info(`when predicate is ${ok}`);
@@ -332,7 +332,10 @@ implements WidgetBinding<C, I, D> {
                     catCommand.info("Command creation");
                 }
                 this.cmd = this.createCommand();
-                this.first();
+                ok = this.cmd !== undefined;
+                if(ok) {
+                    this.first();
+                }
             }
         }
 

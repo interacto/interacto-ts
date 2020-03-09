@@ -91,6 +91,18 @@ test("execute crash", () => {
     expect(binding.first).not.toHaveBeenCalled();
 });
 
+test("execute crash and interaction stops", () => {
+    errorStream.unsubscribe();
+    const ex = new Error();
+    const supplier = (): StubCmd => {
+        throw ex;
+    };
+
+    binding = new WidgetBindingStub(true, supplier, new InteractionStub(new FSM()));
+    binding.conditionRespected = true;
+    binding.fsmStops();
+});
+
 test("testIsInteractionMustBeCancelled", () => {
     expect(binding.isStrictStart()).toBeFalsy();
 });
