@@ -382,7 +382,11 @@ implements WidgetBinding<C, I, D> {
             if (cmd.getRegistrationPolicy() !== RegistrationPolicy.NONE) {
                 CommandsRegistry.getInstance().addCommand(cmd);
             } else {
-                CommandsRegistry.getInstance().unregisterCmd(cmd);
+                // This case is possible only if the policy of the command changes during
+                // its lifecycle using continuous execution:
+                // at start, the command policy is no NONE so the command is executed and added.
+                // Then the policy changes to NONE so that we must remove it from the registry.
+                CommandsRegistry.getInstance().removeCommand(cmd);
             }
             this.ifCmdHadEffects();
         } else {

@@ -13,7 +13,7 @@
  */
 
 import { WidgetBindingImpl, InteractionData, CommandsRegistry, CancelFSMException, FSM, ErrorCatcher,
-    CmdStatus, MustBeUndoableCmdException, Undoable } from "../../src";
+    CmdStatus, MustBeUndoableCmdException, Undoable, RegistrationPolicy } from "../../src";
 import { InteractionStub } from "../interaction/InteractionStub";
 import { StubCmd } from "../command/StubCmd";
 import { Subscription } from "rxjs";
@@ -56,16 +56,19 @@ class CmdStubUndoable extends StubCmd implements Undoable {
 
 let binding: WidgetBindingStub;
 let errorStream: Subscription;
+let errors: Array<Error>;
 
 beforeEach(() => {
     binding = new WidgetBindingStub(false, () => new StubCmd(), new InteractionStub(new FSM()));
     binding.setActivated(true);
-    errorStream = ErrorCatcher.getInstance().getErrors().subscribe((_err: Error) => fail());
+    errors = [];
+    errorStream = ErrorCatcher.getInstance().getErrors().subscribe(err => errors.push(err));
 });
 
 afterEach(() => {
     CommandsRegistry.getInstance().clear();
     errorStream.unsubscribe();
+    expect(errors).toHaveLength(0);
 });
 
 test("testLinkDeActivation", () => {
@@ -91,9 +94,9 @@ test("testExecuteOK", () => {
 
 test("execute crash", () => {
     errorStream.unsubscribe();
-    const errors: Array<Error> = [];
     const ex = new Error();
-    errorStream = ErrorCatcher.getInstance().getErrors().subscribe(err => errors.push(err));
+    const errs: Array<Error> = [];
+    errorStream = ErrorCatcher.getInstance().getErrors().subscribe(err => errs.push(err));
     const supplier = (): StubCmd => {
         throw ex;
     };
@@ -103,8 +106,8 @@ test("execute crash", () => {
     jest.spyOn(binding, "first");
     binding.fsmStarts();
     expect(binding.getCommand()).toBeUndefined();
-    expect(errors).toHaveLength(1);
-    expect(ex).toBe(errors[0]);
+    expect(errs).toHaveLength(1);
+    expect(ex).toBe(errs[0]);
     expect(binding.first).not.toHaveBeenCalled();
 });
 
@@ -175,7 +178,6 @@ test("testCounters", () => {
     expect(binding.getTimesEnded()).toStrictEqual(0);
     expect(binding.getTimesCancelled()).toStrictEqual(0);
 });
-
 
 test("testCounterEndedOnce", () => {
     binding.conditionRespected = true;
@@ -283,4 +285,156 @@ test("cancel interaction continuous undoable no log", () => {
     binding.fsmStarts();
     binding.fsmCancels();
     expect(cmd.undo).toHaveBeenCalledTimes(1);
+});
+
+test("update activated with log cmd not ok", () => {
+    jest.spyOn(binding, "then");
+    binding.conditionRespected = false;
+    binding.setLogBinding(true);
+    binding.fsmStarts();
+    binding.fsmUpdates();
+    expect(binding.then).not.toHaveBeenCalledWith();
+});
+
+test("update activated no log cmd ok", () => {
+    jest.spyOn(binding, "then");
+    binding.conditionRespected = true;
+    binding.fsmStarts();
+    binding.fsmUpdates();
+    expect(binding.then).toHaveBeenCalledWith();
+});
+
+test("update activated with log cmd ok", () => {
+    jest.spyOn(binding, "then");
+    binding.conditionRespected = true;
+    binding.setLogCmd(true);
+    binding.fsmStarts();
+    binding.fsmUpdates();
+    expect(binding.then).toHaveBeenCalledWith();
+});
+
+test("update not activated", () => {
+    binding.conditionRespected = true;
+    binding.fsmStarts();
+    jest.spyOn(binding, "first");
+    jest.spyOn(binding, "then");
+    binding.setActivated(false);
+    binding.fsmUpdates();
+    expect(binding.first).not.toHaveBeenCalledWith();
+    expect(binding.then).not.toHaveBeenCalledWith();
+});
+
+test("update when cmd not created", () => {
+    jest.spyOn(binding, "first");
+    binding.conditionRespected = false;
+    binding.fsmStarts();
+    binding.setLogCmd(true);
+    binding.conditionRespected = true;
+    binding.fsmUpdates();
+    expect(binding.first).toHaveBeenCalledWith();
+    expect(binding.getCommand()).not.toBeUndefined();
+});
+
+test("update with cmd crash", () => {
+    const ex = new Error();
+    const supplier = (): StubCmd => {
+        throw ex;
+    };
+    binding = new WidgetBindingStub(true, supplier, new InteractionStub(new FSM()));
+    jest.spyOn(binding, "first");
+    binding.conditionRespected = false;
+    binding.fsmStarts();
+    binding.conditionRespected = true;
+    binding.fsmUpdates();
+    errors.splice(errors.indexOf(ex), 1);
+    expect(binding.first).not.toHaveBeenCalledWith();
+    expect(binding.getCommand()).toBeUndefined();
+});
+
+test("update continuous with log cannotDo", () => {
+    binding = new WidgetBindingStub(true, () => new StubCmd(), new InteractionStub(new FSM()));
+    jest.spyOn(binding, "ifCannotExecuteCmd");
+    binding.conditionRespected = true;
+    binding.setLogCmd(true);
+    binding.fsmStarts();
+    (binding.getCommand() as StubCmd).candoValue = false;
+    binding.fsmUpdates();
+    expect(binding.ifCannotExecuteCmd).toHaveBeenCalledWith();
+    expect(binding.getCommand()?.exec).toStrictEqual(0);
+});
+
+test("update continuous not log canDo", () => {
+    binding = new WidgetBindingStub(true, () => new StubCmd(), new InteractionStub(new FSM()));
+    jest.spyOn(binding, "ifCannotExecuteCmd");
+    binding.conditionRespected = true;
+    binding.fsmStarts();
+    (binding.getCommand() as StubCmd).candoValue = true;
+    binding.fsmUpdates();
+    expect(binding.ifCannotExecuteCmd).not.toHaveBeenCalledWith();
+    expect(binding.getCommand()?.exec).toStrictEqual(1);
+});
+
+test("stop no log cmd created", () => {
+    binding.conditionRespected = true;
+    binding.fsmStarts();
+    const cmd = binding.getCommand();
+    binding.conditionRespected = false;
+    binding.fsmStops();
+    expect(cmd?.getStatus()).toStrictEqual(CmdStatus.CANCELLED);
+    expect(binding.getCommand()).toBeUndefined();
+    expect(binding.getTimesCancelled()).toStrictEqual(1);
+});
+
+test("stop no cmd created", () => {
+    binding.conditionRespected = false;
+    binding.fsmStarts();
+    binding.fsmStops();
+    expect(binding.getCommand()).toBeUndefined();
+    expect(binding.getTimesCancelled()).toStrictEqual(0);
+});
+
+test("stop with log cmd created and cancelled two times", () => {
+    binding.conditionRespected = true;
+    binding.setLogCmd(true);
+    binding.fsmStarts();
+    binding.conditionRespected = false;
+    binding.fsmStops();
+    binding.conditionRespected = true;
+    binding.fsmStarts();
+    binding.conditionRespected = false;
+    binding.fsmStops();
+    expect(binding.getTimesCancelled()).toStrictEqual(2);
+});
+
+test("uninstall Binding", () => {
+    binding.uninstallBinding();
+    expect(binding.isActivated()).toBeFalsy();
+});
+
+test("after exec cmd had effects", () => {
+    binding = new WidgetBindingStub(true, () => new CmdStubUndoable(), new InteractionStub(new FSM()));
+    binding.conditionRespected = true;
+    jest.spyOn(binding, "ifCmdHadEffects");
+    binding.fsmStarts();
+    (binding.getCommand() as CmdStubUndoable).candoValue = true;
+    binding.fsmStops();
+    expect(CommandsRegistry.getInstance().getCommands()).toHaveLength(1);
+    expect(CommandsRegistry.getInstance().getCommands()[0]).toBeInstanceOf(CmdStubUndoable);
+    expect(binding.ifCmdHadEffects).toHaveBeenCalledWith();
+});
+
+test("after exec cmd had effects with none policy", () => {
+    binding = new WidgetBindingStub(true, () => new class extends CmdStubUndoable {
+        public getRegistrationPolicy(): RegistrationPolicy {
+            return RegistrationPolicy.NONE;
+        }
+    }(), new InteractionStub(new FSM()));
+    jest.spyOn(binding, "ifCmdHadEffects");
+    binding.conditionRespected = true;
+    binding.fsmStarts();
+    (binding.getCommand() as CmdStubUndoable).candoValue = true;
+    CommandsRegistry.getInstance().addCommand(binding.getCommand() as CmdStubUndoable);
+    binding.fsmStops();
+    expect(CommandsRegistry.getInstance().getCommands()).toHaveLength(0);
+    expect(binding.ifCmdHadEffects).toHaveBeenCalledWith();
 });

@@ -115,7 +115,7 @@ test("testCancelCommandRemoved", () => {
 test("testRemoveCommand", () => {
     const command = new StubCmd();
     instance.addCommand(command);
-    instance.removeCmd(command);
+    instance.removeCommand(command);
     expect(instance.getCommands()).toHaveLength(0);
     expect(command.getStatus()).toStrictEqual(CmdStatus.FLUSHED);
 });

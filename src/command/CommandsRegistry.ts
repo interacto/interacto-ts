@@ -122,7 +122,7 @@ export class CommandsRegistry {
      * Removes the command from the register. The command is then flushed.
      * @param {*} cmd The command to remove.
      */
-    public removeCmd(cmd: Command): void {
+    public removeCommand(cmd: Command): void {
         remove(this.cmds, cmd);
         cmd.flush();
     }

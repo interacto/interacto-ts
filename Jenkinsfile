@@ -54,7 +54,7 @@ pipeline {
                     cloverReportDir: 'coverage',
                     cloverReportFileName: 'clover.xml',
                     healthyTarget: [methodCoverage: 100, conditionalCoverage: 100, statementCoverage: 100],
-                    failingTarget: [methodCoverage: 80, conditionalCoverage: 70, statementCoverage: 85]
+                    failingTarget: [methodCoverage: 80, conditionalCoverage: 75, statementCoverage: 85]
                 ])
             }
         }
