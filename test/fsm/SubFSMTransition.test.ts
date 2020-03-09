@@ -71,7 +71,7 @@ test("testGuardKOFirstEvent", () => {
 test("testExecuteFirstEventReturnsSubState", () => {
     const state: Optional<InputState> = tr.execute(new StubSubEvent1());
     expect(state.isPresent()).toBeTruthy();
-    expect(state.get()).toEqual(subS);
+    expect(state.get()).toStrictEqual(subS);
 });
 
 test("testExecuteFirstEventKO", () => {

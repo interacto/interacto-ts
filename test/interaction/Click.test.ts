@@ -37,20 +37,20 @@ beforeEach(() => {
     }
 });
 
-test("Click on a element starts and stops the interaction Click", () => {
+test("click on a element starts and stops the interaction Click", () => {
     interaction.registerToNodes([canvas]);
     canvas.click();
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
 });
 
-test("Other event don't trigger the interaction.", () => {
+test("other event don't trigger the interaction.", () => {
     interaction.registerToNodes([canvas]);
     canvas.dispatchEvent(new Event("input"));
     expect(handler.fsmStarts).not.toHaveBeenCalled();
 });
 
-test("Press on a canvas then move don't starts the interaction", () => {
+test("press on a canvas then move don't starts the interaction", () => {
     interaction.registerToNodes([canvas]);
     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, canvas));
     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas));
@@ -72,11 +72,11 @@ test("testClickData", () => {
         sy = interaction.getSrcScreenY();
     });
     interaction.processEvent(createMouseEvent("click", canvas, 111, 222, 11, 22, 1));
-    expect(x).toEqual(11);
-    expect(y).toEqual(22);
-    expect(sx).toEqual(111);
-    expect(sy).toEqual(222);
-    expect(button).toEqual(1);
+    expect(x).toStrictEqual(11);
+    expect(y).toStrictEqual(22);
+    expect(sx).toStrictEqual(111);
+    expect(sy).toStrictEqual(222);
+    expect(button).toStrictEqual(1);
 });
 
 test("testClickOnWidgetData", () => {
@@ -95,10 +95,10 @@ test("testClickOnWidgetData", () => {
     });
     interaction.registerToNodes([canvas]);
     canvas.dispatchEvent(createMouseEvent("click", canvas, 111, 222, 11, 22, 1));
-    expect(x).toEqual(11);
-    expect(y).toEqual(22);
-    expect(sx).toEqual(111);
-    expect(sy).toEqual(222);
-    expect(button).toEqual(1);
+    expect(x).toStrictEqual(11);
+    expect(y).toStrictEqual(22);
+    expect(sx).toStrictEqual(111);
+    expect(sy).toStrictEqual(222);
+    expect(button).toStrictEqual(1);
 });
 

@@ -13,7 +13,7 @@
  */
 import { InteractionStub } from "../interaction/InteractionStub";
 import { InteractionData, WidgetBindingImpl, FSM, CommandsRegistry, TerminalState,
-        Transition, OutputState, InputState, CmdStatus } from "../../src";
+    Transition, OutputState, InputState, CmdStatus } from "../../src";
 import { StubCmd } from "../command/StubCmd";
 import { StubSubEvent1 } from "../fsm/StubEvent";
 
@@ -32,11 +32,11 @@ class TrStub extends Transition {
         super(srcState, tgtState);
     }
 
-    public accept(event: Object): boolean {
+    public accept(event: object): boolean {
         return event instanceof StubSubEvent1;
     }
 
-    public isGuardOK(event: Object): boolean {
+    public isGuardOK(_event: object): boolean {
         return true;
     }
 
@@ -77,7 +77,7 @@ beforeEach(() => {
     noEffect = 0;
     effects = 0;
     cannotExec = 0;
-    whenValue = () => true;
+    whenValue = (): boolean => true;
     cmd = new StubCmd();
     cmd.candoValue = true;
     fsm = new OneTrFSM();
@@ -95,10 +95,10 @@ test("testNothingDoneIsDeactivated", () => {
     fsm.process(new StubSubEvent1());
 
     expect(dotItSpy).not.toHaveBeenCalled();
-    expect(effects).toEqual(0);
-    expect(noEffect).toEqual(0);
-    expect(cannotExec).toEqual(0);
-    expect(cmd.getStatus()).toEqual(CmdStatus.CREATED);
+    expect(effects).toStrictEqual(0);
+    expect(noEffect).toStrictEqual(0);
+    expect(cannotExec).toStrictEqual(0);
+    expect(cmd.getStatus()).toStrictEqual(CmdStatus.CREATED);
 });
 
 test("testCmdCreatedExecSavedWhenActivated", () => {
@@ -106,32 +106,32 @@ test("testCmdCreatedExecSavedWhenActivated", () => {
     fsm.process(new StubSubEvent1());
 
     expect(dotItSpy).toHaveBeenCalledTimes(1);
-    expect(effects).toEqual(1);
-    expect(noEffect).toEqual(0);
-    expect(cannotExec).toEqual(0);
-    expect(cmd.getStatus()).toEqual(CmdStatus.DONE);
+    expect(effects).toStrictEqual(1);
+    expect(noEffect).toStrictEqual(0);
+    expect(cannotExec).toStrictEqual(0);
+    expect(cmd.getStatus()).toStrictEqual(CmdStatus.DONE);
 });
 
 test("testCmdKOWhenNotWhenOK", () => {
-    whenValue = () => false;
+    whenValue = (): boolean => false;
     const dotItSpy = jest.spyOn(cmd, "doIt");
     fsm.process(new StubSubEvent1());
 
     expect(dotItSpy).not.toHaveBeenCalled();
-    expect(effects).toEqual(0);
-    expect(noEffect).toEqual(0);
-    expect(cannotExec).toEqual(0);
-    expect(cmd.getStatus()).toEqual(CmdStatus.CREATED);
+    expect(effects).toStrictEqual(0);
+    expect(noEffect).toStrictEqual(0);
+    expect(cannotExec).toStrictEqual(0);
+    expect(cmd.getStatus()).toStrictEqual(CmdStatus.CREATED);
 });
 
 test("testCmdKOWhenCannotDoCmd", () => {
     cmd.candoValue = false;
     fsm.process(new StubSubEvent1());
 
-    expect(cmd.getStatus()).toEqual(CmdStatus.CREATED);
-    expect(effects).toEqual(0);
-    expect(noEffect).toEqual(0);
-    expect(cannotExec).toEqual(1);
+    expect(cmd.getStatus()).toStrictEqual(CmdStatus.CREATED);
+    expect(effects).toStrictEqual(0);
+    expect(noEffect).toStrictEqual(0);
+    expect(cannotExec).toStrictEqual(1);
 });
 
 test("testWhenOKCanDoButNoEffect", () => {
@@ -140,9 +140,9 @@ test("testWhenOKCanDoButNoEffect", () => {
     fsm.process(new StubSubEvent1());
 
     expect(dotItSpy).toHaveBeenCalledTimes(1);
-    expect(effects).toEqual(0);
-    expect(noEffect).toEqual(1);
-    expect(cannotExec).toEqual(0);
+    expect(effects).toStrictEqual(0);
+    expect(noEffect).toStrictEqual(1);
+    expect(cannotExec).toStrictEqual(0);
 });
 
 test("testProducedNone", () => {
@@ -151,7 +151,7 @@ test("testProducedNone", () => {
     binding.produces().subscribe(elt => cmds.push(elt));
 
     fsm.process(new StubSubEvent1());
-    expect(cmds.length).toEqual(0);
+    expect(cmds).toHaveLength(0);
 });
 
 test("testProducedOne", () => {
@@ -159,7 +159,7 @@ test("testProducedOne", () => {
     binding.produces().subscribe(elt => cmds.push(elt));
 
     fsm.process(new StubSubEvent1());
-    expect(cmds.length).toEqual(1);
+    expect(cmds).toHaveLength(1);
 });
 
 test("testProducedTwo", () => {
@@ -170,6 +170,6 @@ test("testProducedTwo", () => {
     cmd = new StubCmd();
     cmd.candoValue = true;
     fsm.process(new StubSubEvent1());
-    expect(cmds.length).toEqual(2);
+    expect(cmds).toHaveLength(2);
     expect(cmds[0]).not.toBe(cmds[1]);
 });

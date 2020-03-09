@@ -26,9 +26,9 @@ beforeEach(() => {
 });
 
 test("testFSM", () => {
-    expect(state.getFSM()).toEqual(fsm);
+    expect(state.getFSM()).toStrictEqual(fsm);
 });
 
 test("testName", () => {
-    expect(state.getName()).toEqual("s1");
+    expect(state.getName()).toStrictEqual("s1");
 });

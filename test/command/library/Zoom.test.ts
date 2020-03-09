@@ -65,4 +65,3 @@ test("testDoNoPosition", () => {
     expect(zoomable.setZoom).toHaveBeenCalledTimes(1);
     expect(zoomable.setZoom).toHaveBeenCalledWith(NaN, NaN, 3);
 });
-    

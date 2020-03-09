@@ -39,7 +39,7 @@ beforeEach(() => {
     }
 });
 
-test("Type 'a' in the textarea starts and stops the interaction.", () => {
+test("type 'a' in the textarea starts and stops the interaction.", () => {
     interaction.registerToNodes([text]);
     text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "a"));
     text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyUp, "a"));
@@ -47,14 +47,14 @@ test("Type 'a' in the textarea starts and stops the interaction.", () => {
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
 });
 
-test("Only press the key don't stop the interaction.", () => {
+test("only press the key don't stop the interaction.", () => {
     interaction.registerToNodes([text]);
     text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "a"));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).not.toHaveBeenCalled();
 });
 
-test("Only press the key cancel the interaction after a timeout.", () => {
+test("only press the key cancel the interaction after a timeout.", () => {
     interaction.registerToNodes([text]);
     text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "a"));
     jest.runOnlyPendingTimers();
@@ -62,7 +62,7 @@ test("Only press the key cancel the interaction after a timeout.", () => {
     expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
 });
 
-test("If you release a key different that the one you press, the interaction don't stop", () => {
+test("if you release a key different that the one you press, the interaction don't stop", () => {
     interaction.registerToNodes([text]);
     text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "a"));
     text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyUp, "b"));

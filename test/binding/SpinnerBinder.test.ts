@@ -51,21 +51,21 @@ afterEach(() => {
 
 test("testCommandExecutedOnSingleSpinnerFunction", () => {
     binding = spinnerBinder()
-                .toProduce(i => cmd)
-                .on(widget1)
-                .bind();
+        .toProduce(_i => cmd)
+        .on(widget1)
+        .bind();
 
     widget1.dispatchEvent(new Event("input"));
     jest.runAllTimers();
     expect(binding).not.toBeNull();
-    expect(cmd.exec).toEqual(1);
+    expect(cmd.exec).toStrictEqual(1);
 });
 
 test("testCommandExecutedOnTwoSpinners", () => {
     binding = spinnerBinder()
-                .on(widget1, widget2)
-                .toProduce(i => new StubCmd(true))
-                .bind();
+        .on(widget1, widget2)
+        .toProduce(_i => new StubCmd(true))
+        .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
     widget1.dispatchEvent(new Event("input"));
@@ -74,64 +74,64 @@ test("testCommandExecutedOnTwoSpinners", () => {
     jest.runAllTimers();
 
     expect(binding).not.toBeNull();
-    expect(producedCmds.length).toEqual(2);
+    expect(producedCmds).toHaveLength(2);
 });
 
 test("testInit1Executed", () => {
     binding = spinnerBinder()
-                .on(widget1)
-                .toProduce(i => cmd)
-                .first(c => c.exec = 10)
-                .bind();
+        .on(widget1)
+        .toProduce(_i => cmd)
+        .first(c => c.exec = 10)
+        .bind();
 
     widget1.dispatchEvent(new Event("input"));
     jest.runAllTimers();
 
     expect(binding).not.toBeNull();
-    expect(cmd.exec).toEqual(11);
+    expect(cmd.exec).toStrictEqual(11);
 });
 
 test("testCheckFalse", () => {
     binding = spinnerBinder()
-                .toProduce(i => cmd)
-                .on(widget1)
-                .when(i => false)
-                .bind();
+        .toProduce(_i => cmd)
+        .on(widget1)
+        .when(_i => false)
+        .bind();
 
     widget1.dispatchEvent(new Event("input"));
     jest.runAllTimers();
     expect(binding).not.toBeNull();
-    expect(cmd.exec).toEqual(0);
+    expect(cmd.exec).toStrictEqual(0);
 });
 
 test("testEndsOnThen", () => {
     let cpt = 0;
 
     binding = spinnerBinder()
-                .toProduce(i => cmd)
-                .on(widget1)
-                .then(c => {
-                    // checking that its compiles
-                    c.exec = 10;
-                    cpt++;
-                })
-                .bind();
+        .toProduce(_i => cmd)
+        .on(widget1)
+        .then(c => {
+            // checking that its compiles
+            c.exec = 10;
+            cpt++;
+        })
+        .bind();
 
     widget1.dispatchEvent(new Event("input"));
     jest.runAllTimers();
 
-    expect(cmd.exec).toEqual(11);
-    expect(cpt).toEqual(2);
+    expect(cmd.exec).toStrictEqual(11);
+    expect(cpt).toStrictEqual(2);
 });
 
 test("testContinuousThen", () => {
     let cpt = 0;
 
     binding = spinnerBinder()
-                .toProduce(i => cmd)
-                .on(widget1)
-                .then(c => cpt++)
-                .bind();
+        .toProduce(_i => cmd)
+        .on(widget1)
+        .then(_c => cpt++)
+        .bind();
 
     widget1.dispatchEvent(new Event("input"));
     widget1.dispatchEvent(new Event("input"));
@@ -139,7 +139,7 @@ test("testContinuousThen", () => {
     widget1.dispatchEvent(new Event("input"));
     jest.runAllTimers();
 
-    expect(cpt).toEqual(5);
+    expect(cpt).toStrictEqual(5);
 });
 
 test("testContinuousThenTimeOut", () => {
@@ -149,11 +149,11 @@ test("testContinuousThenTimeOut", () => {
     SpinnerChangedFSM.setTimeGap(2000);
 
     binding = spinnerBinder()
-                .toProduce(i => new StubCmd(true))
-                .on(widget1)
-                .first(c => cpt1++)
-                .end(c => cpt2++)
-                .bind();
+        .toProduce(_i => new StubCmd(true))
+        .on(widget1)
+        .first(_c => cpt1++)
+        .end(_c => cpt2++)
+        .bind();
 
     widget1.dispatchEvent(new Event("input"));
     widget1.dispatchEvent(new Event("input"));
@@ -163,6 +163,6 @@ test("testContinuousThenTimeOut", () => {
     widget1.dispatchEvent(new Event("input"));
     jest.runAllTimers();
 
-    expect(cpt1).toEqual(2);
-    expect(cpt2).toEqual(2);
+    expect(cpt1).toStrictEqual(2);
+    expect(cpt2).toStrictEqual(2);
 });

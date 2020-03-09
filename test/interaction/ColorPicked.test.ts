@@ -36,14 +36,14 @@ beforeEach(() => {
     }
 });
 
-test("Input event starts and stops the interaction ColorPicked", () => {
+test("input event starts and stops the interaction ColorPicked", () => {
     interaction.registerToNodes([colorBox]);
     colorBox.dispatchEvent(new Event("input"));
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
 });
 
-test("Other event don't trigger the interaction", () => {
+test("other event don't trigger the interaction", () => {
     interaction.registerToNodes([colorBox]);
     colorBox.dispatchEvent(new Event("click"));
     expect(handler.fsmStarts).not.toHaveBeenCalled();

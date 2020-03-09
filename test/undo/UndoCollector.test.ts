@@ -37,32 +37,32 @@ test("testGetSetInstanceOK", () => {
 test("testUndoCallundo", () => {
     instance.add(undoable);
     instance.undo();
-    expect(undoable.undo).toBeCalledTimes(1);
+    expect(undoable.undo).toHaveBeenCalledTimes(1);
 });
 
 test("testRedowithUndoDonewithGlobalUndoable", () => {
     instance.add(undoable);
     instance.undo();
     instance.redo();
-    expect(undoable.undo).toBeCalledTimes(1);
-    expect(undoable.redo).toBeCalledTimes(1);
+    expect(undoable.undo).toHaveBeenCalledTimes(1);
+    expect(undoable.redo).toHaveBeenCalledTimes(1);
 });
 
 test("testRedowhenRedoEmpty", () => {
     instance.redo();
-    expect(undoable.redo).not.toBeCalled();
+    expect(undoable.redo).not.toHaveBeenCalled();
 });
 
 test("testUndowhenUndoEmpty", () => {
     instance.undo();
-    expect(undoable.undo).not.toBeCalled();
+    expect(undoable.undo).not.toHaveBeenCalled();
 });
 
 test("testRedoCallredo", () => {
     instance.add(undoable);
     instance.undo();
     instance.redo();
-    expect(undoable.redo).toBeCalledTimes(1);
+    expect(undoable.redo).toHaveBeenCalledTimes(1);
     expect(instance.getLastUndo().get()).toBe(undoable);
 });
 
@@ -82,8 +82,8 @@ test("testSetSizeMax0KO", () => {
 test("testAddUndoablewith0SizeUndoable", () => {
     instance.setSizeMax(0);
     instance.add(undoable);
-    expect(instance.getUndo().length).toEqual(0);
-    expect(instance.getRedo().length).toEqual(0);
+    expect(instance.getUndo()).toHaveLength(0);
+    expect(instance.getRedo()).toHaveLength(0);
 });
 
 test("testAddUndoablewithLimitedUndoSize", () => {
@@ -95,7 +95,7 @@ test("testAddUndoablewithLimitedUndoSize", () => {
     instance.setSizeMax(1);
     instance.add(undoable);
     instance.add(undoable2);
-    expect(instance.getUndo().length).toEqual(1);
+    expect(instance.getUndo()).toHaveLength(1);
     expect(instance.getUndo()[0]).toBe(undoable2);
 });
 
@@ -113,7 +113,7 @@ test("testSizeMaxRemovedWhen0", () => {
     instance.setSizeMax(0);
     undosStream.unsubscribe();
     expect(instance.getLastUndo().isPresent()).toBeFalsy();
-    expect(undos.length).toEqual(1);
+    expect(undos).toHaveLength(1);
     expect(undos[0].isPresent()).toBeFalsy();
 });
 
@@ -131,19 +131,19 @@ test("testSizeMaxRemovedWhen1", () => {
     instance.setSizeMax(1);
     undosStream.unsubscribe();
     expect(instance.getLastUndo().isPresent()).toBeTruthy();
-    expect(instance.getLastUndo().get()).toEqual(undoable);
-    expect(undos.length).toEqual(0);
+    expect(instance.getLastUndo().get()).toStrictEqual(undoable);
+    expect(undos).toHaveLength(0);
 });
 
 test("testSizeMaxMutatorsSizeOK", () => {
     instance.setSizeMax(21);
-    expect(instance.getSizeMax()).toEqual(21);
+    expect(instance.getSizeMax()).toStrictEqual(21);
 });
 
 test("testSizeMaxMutatorsSizeKO", () => {
     instance.setSizeMax(5);
     instance.setSizeMax(-1);
-    expect(instance.getSizeMax()).toEqual(5);
+    expect(instance.getSizeMax()).toStrictEqual(5);
 });
 
 test("testGetLastRedoNothingStart", () => {
@@ -158,7 +158,7 @@ test("testGetLastRedoNothingOnNewUndoable", () => {
 test("testGetLastRedoOKOnRedo", () => {
     instance.add(undoable);
     instance.undo();
-    expect(instance.getLastRedo().get()).toEqual(undoable);
+    expect(instance.getLastRedo().get()).toStrictEqual(undoable);
 });
 
 test("testGetLastUndoNothingAtStart", () => {
@@ -167,7 +167,7 @@ test("testGetLastUndoNothingAtStart", () => {
 
 test("testGetLastUndoOKOnAdd", () => {
     instance.add(undoable);
-    expect(instance.getLastUndo().get()).toEqual(undoable);
+    expect(instance.getLastUndo().get()).toStrictEqual(undoable);
 });
 
 test("testGetLastUndoMessageNothingOnStart", () => {
@@ -180,13 +180,13 @@ test("testGetLastRedoMessageNothingOnStart", () => {
 
 test("testGetLastUndoMessageOK", () => {
     instance.add(undoable);
-    expect(instance.getLastUndoMessage().get()).toEqual("undoredomsg");
+    expect(instance.getLastUndoMessage().get()).toStrictEqual("undoredomsg");
 });
 
 test("testGetLastRedoMessageOK", () => {
     instance.add(undoable);
     instance.undo();
-    expect(instance.getLastRedoMessage().get()).toEqual("undoredomsg");
+    expect(instance.getLastRedoMessage().get()).toStrictEqual("undoredomsg");
 });
 
 test("testClear", () => {
@@ -210,8 +210,8 @@ test("testUndosAdded", () => {
     instance.add(undoable);
     undosStream.unsubscribe();
 
-    expect(undos.length).toEqual(1);
-    expect(undos[0].get()).toEqual(undoable);
+    expect(undos).toHaveLength(1);
+    expect(undos[0].get()).toStrictEqual(undoable);
 });
 
 test("testUndoRedoAdded", () => {
@@ -225,8 +225,8 @@ test("testUndoRedoAdded", () => {
     undosStream.unsubscribe();
     redosStream.unsubscribe();
 
-    expect(undos.length).toEqual(2);
+    expect(undos).toHaveLength(2);
     expect(undos[1].isPresent()).toBeFalsy();
-    expect(redos.length).toEqual(1);
+    expect(redos).toHaveLength(1);
     expect(redos[0].get()).toBe(undoable);
 });

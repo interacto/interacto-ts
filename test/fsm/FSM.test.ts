@@ -35,7 +35,7 @@ beforeEach(() => {
 });
 
 test("testInitState", () => {
-    expect(fsm.getStates().length).toBe(1);
+    expect(fsm.getStates()).toHaveLength(1);
     expect(fsm.getStates()[0]).toBeInstanceOf(InitState);
 });
 
@@ -44,24 +44,24 @@ test("testInner", () => {
 });
 
 test("testStartingState", () => {
-    expect(fsm.getStartingState()).toEqual(fsm.initState);
+    expect(fsm.getStartingState()).toStrictEqual(fsm.initState);
 });
 
 test("testCurrentStateAtStart", () => {
-    expect(fsm.getCurrentState()).toEqual(fsm.initState);
+    expect(fsm.getCurrentState()).toStrictEqual(fsm.initState);
 });
 
 test("testAddState", () => {
     const state: StdState = new StdState(fsm, "s1");
     fsm.addState(state);
-    expect(fsm.getStates().length).toBe(2);
+    expect(fsm.getStates()).toHaveLength(2);
 });
 
 
 test("testAddRemainingNotNull", () => {
     const evt = new StubEvent();
     fsm.addRemaningEventsToProcess(evt);
-    expect(fsm.getEventsToProcess()).toEqual([evt]);
+    expect(fsm.getEventsToProcess()).toStrictEqual([evt]);
 });
 
 test("testIsInner", () => {
@@ -83,14 +83,14 @@ test("testProcessRemainingEvents", () => {
     const evt = new StubEvent();
     fsm.addRemaningEventsToProcess(evt);
     fsm.onTerminating();
-    expect(fsm.getEventsToProcess().length).toEqual(0);
+    expect(fsm.getEventsToProcess()).toHaveLength(0);
 });
 
 test("testOnTerminatingIfStarted", () => {
     fsm.onStarting();
     fsm.addHandler(handler);
     fsm.onTerminating();
-    expect(handler.fsmStops).toBeCalledTimes(1);
+    expect(handler.fsmStops).toHaveBeenCalledTimes(1);
 });
 
 test("testOnTerminatingNotStarted", () => {
@@ -114,7 +114,7 @@ test("testOnUpdatingNotStarted", () => {
 
 
 test("testOnTimeoutWithoutTimeout", () => {
-    jest.spyOn(catFSM, 'info');
+    jest.spyOn(catFSM, "info");
     fsm.onTimeout();
     expect(catFSM.info).not.toHaveBeenCalled();
 });
@@ -122,16 +122,16 @@ test("testOnTimeoutWithoutTimeout", () => {
 
 test("testUninstall", () => {
     const s1 = new StdState(fsm, "su");
-    const subj = fsm.currentStateObservable() as any as Subject<[OutputState, OutputState]>;
+    const subj = fsm.currentStateObservable() as {} as Subject<[OutputState, OutputState]>;
     jest.spyOn(s1, "uninstall");
     jest.spyOn(subj, "complete");
     fsm.addState(s1);
     fsm.addRemaningEventsToProcess(new StubEvent());
     fsm.uninstall();
 
-    expect(fsm.getStates().length).toEqual(0);
-    expect(fsm.getEventsToProcess().length).toEqual(0);
-    expect(subj.complete).toBeCalledTimes(1);
+    expect(fsm.getStates()).toHaveLength(0);
+    expect(fsm.getEventsToProcess()).toHaveLength(0);
+    expect(subj.complete).toHaveBeenCalledTimes(1);
     expect(s1.uninstall).toHaveBeenCalledTimes(1);
 });
 
@@ -140,13 +140,13 @@ test("testCurrentStateChanged", () => {
     const newCurr = new StdState(fsm, "so");
     fsm.currentStateObservable().subscribe(e => changes.push(e));
     fsm.setCurrentState(newCurr);
-    expect(changes.length).toEqual(1);
-    expect(changes[0][1]).toEqual(newCurr);
-    expect(changes[0][0]).toEqual(fsm.initState);
+    expect(changes).toHaveLength(1);
+    expect(changes[0][1]).toStrictEqual(newCurr);
+    expect(changes[0][0]).toStrictEqual(fsm.initState);
 });
 
 
-describe("TestProcessUniqueEvent", () => {
+describe("testProcessUniqueEvent", () => {
     let std: StdState;
     let terminal: TerminalState;
 
@@ -162,15 +162,15 @@ describe("TestProcessUniqueEvent", () => {
     });
 
     test("testGetStates", () => {
-        expect(fsm.getStates()).toEqual([fsm.initState, std, terminal]);
+        expect(fsm.getStates()).toStrictEqual([fsm.initState, std, terminal]);
     });
 
     test("testFireEventTriggerFSMStartUpdate", () => {
         fsm.process(new StubEvent());
-        expect(handler.fsmUpdates).toBeCalledTimes(1);
-        expect(handler.fsmStarts).toBeCalledTimes(1);
-        expect(handler.fsmCancels).not.toBeCalled();
-        expect(handler.fsmStops).not.toBeCalled();
+        expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
+        expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+        expect(handler.fsmCancels).not.toHaveBeenCalled();
+        expect(handler.fsmStops).not.toHaveBeenCalled();
     });
 
     test("testFire2EventsToEnd", () => {
@@ -182,17 +182,17 @@ describe("TestProcessUniqueEvent", () => {
     test("testFireEventTriggerFSMUpdate", () => {
         fsm.process(new StubEvent());
         fsm.process(new StubEvent());
-        expect(handler.fsmUpdates).toBeCalledTimes(1);
-        expect(handler.fsmStarts).toBeCalledTimes(1);
-        expect(handler.fsmStops).toBeCalledTimes(1);
-        expect(handler.fsmCancels).not.toBeCalled();
+        expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
+        expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+        expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+        expect(handler.fsmCancels).not.toHaveBeenCalled();
     });
 
     test("testFireThreeEventRestartOK", () => {
         fsm.process(new StubEvent());
         fsm.process(new StubEvent());
         fsm.process(new StubEvent());
-        expect(handler.fsmStarts).toBeCalledTimes(2);
+        expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
     });
 
     test("testRecycleEvent", () => {
@@ -201,8 +201,8 @@ describe("TestProcessUniqueEvent", () => {
         fsm.process(new StubEvent());
 
         expect(fsm.getCurrentState()).toBe(std);
-        expect(handler.fsmStarts).toBeCalledTimes(2);
-        expect(fsm.getEventsToProcess().length).toEqual(0);
+        expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
+        expect(fsm.getEventsToProcess()).toHaveLength(0);
     });
 
     test("testReinit", () => {
@@ -215,7 +215,7 @@ describe("TestProcessUniqueEvent", () => {
         fsm.process(new StubEvent());
         fsm.addRemaningEventsToProcess(new StubEvent());
         fsm.fullReinit();
-        expect(fsm.getEventsToProcess().length).toEqual(0);
+        expect(fsm.getEventsToProcess()).toHaveLength(0);
         expect(fsm.getCurrentState()).toBe(fsm.initState);
     });
 
@@ -225,10 +225,10 @@ describe("TestProcessUniqueEvent", () => {
         });
         fsm.process(new StubEvent());
         expect(fsm.getCurrentState()).toBe(fsm.initState);
-        expect(handler.fsmStarts).toBeCalledTimes(1);
-        expect(handler.fsmCancels).toBeCalledTimes(1);
-        expect(handler.fsmStops).not.toBeCalled();
-        expect(handler.fsmUpdates).not.toBeCalled();
+        expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+        expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
+        expect(handler.fsmStops).not.toHaveBeenCalled();
+        expect(handler.fsmUpdates).not.toHaveBeenCalled();
     });
 
     test("testCancelOnUpdate", () => {
@@ -237,10 +237,10 @@ describe("TestProcessUniqueEvent", () => {
         });
         fsm.process(new StubEvent());
         expect(fsm.getCurrentState()).toBe(fsm.initState);
-        expect(handler.fsmStarts).toBeCalledTimes(1);
-        expect(handler.fsmCancels).toBeCalledTimes(1);
-        expect(handler.fsmUpdates).toBeCalledTimes(1);
-        expect(handler.fsmStops).not.toBeCalled();
+        expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+        expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
+        expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
+        expect(handler.fsmStops).not.toHaveBeenCalled();
     });
 
     test("testCancelOnEnd", () => {
@@ -250,10 +250,10 @@ describe("TestProcessUniqueEvent", () => {
         fsm.process(new StubEvent());
         fsm.process(new StubEvent());
         expect(fsm.getCurrentState()).toBe(fsm.initState);
-        expect(handler.fsmStarts).toBeCalledTimes(1);
-        expect(handler.fsmCancels).toBeCalledTimes(1);
-        expect(handler.fsmUpdates).toBeCalledTimes(1);
-        expect(handler.fsmStops).toBeCalledTimes(1);
+        expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+        expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
+        expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
+        expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     });
 
     test("testHasStartedReinit", () => {
@@ -268,10 +268,9 @@ describe("TestProcessUniqueEvent", () => {
     });
 });
 
-describe("TestProcessUniqueEvent -- cancel", () => {
+describe("testProcessUniqueEvent -- cancel", () => {
     let std: StdState;
     let cancelling: CancellingState;
-    let handler: StubFSMHandler;
 
     beforeEach(() => {
         handler = new StubFSMHandler();
@@ -290,8 +289,8 @@ describe("TestProcessUniqueEvent -- cancel", () => {
         fsm.process(new StubEvent());
 
         expect(fsm.getCurrentState()).toBe(fsm.initState);
-        expect(handler.fsmCancels).toBeCalledTimes(1);
-        expect(handler.fsmStops).not.toBeCalled();
+        expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
+        expect(handler.fsmStops).not.toHaveBeenCalled();
     });
 
     test("testNoRecycleEventOnCancel", () => {
@@ -300,51 +299,51 @@ describe("TestProcessUniqueEvent -- cancel", () => {
         fsm.process(new StubEvent());
 
         expect(fsm.getCurrentState()).toBe(fsm.initState);
-        expect(handler.fsmStarts).toBeCalledTimes(1);
-        expect(handler.fsmCancels).toBeCalledTimes(1);
-        expect(fsm.getEventsToProcess().length).toEqual(0);
+        expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+        expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
+        expect(fsm.getEventsToProcess()).toHaveLength(0);
     });
 });
 
 
 class SubStubTransition1 extends StubTransitionOK {
-	constructor(srcState: OutputState, tgtState: InputState, guard: boolean) {
-		super(srcState, tgtState, guard);
-	}
-	public accept(event: StubEvent): boolean {
-		return event instanceof StubSubEvent1;
-	}
-	public getAcceptedEvents(): Set<string> {
-		return new Set(["StubSubEvent1"]);
-	}
+    public constructor(srcState: OutputState, tgtState: InputState, guard: boolean) {
+        super(srcState, tgtState, guard);
+    }
+    public accept(event: StubEvent): boolean {
+        return event instanceof StubSubEvent1;
+    }
+    public getAcceptedEvents(): Set<string> {
+        return new Set(["StubSubEvent1"]);
+    }
 }
 
 class SubStubTransition2 extends StubTransitionOK {
-	constructor(srcState: OutputState, tgtState: InputState, guard: boolean) {
-		super(srcState, tgtState, guard);
-	}
-	public accept(event: StubEvent): boolean {
-		return event instanceof StubSubEvent2;
-	}
-	public getAcceptedEvents(): Set<string> {
-		return new Set(["StubSubEvent2"]);
-	}
+    public constructor(srcState: OutputState, tgtState: InputState, guard: boolean) {
+        super(srcState, tgtState, guard);
+    }
+    public accept(event: StubEvent): boolean {
+        return event instanceof StubSubEvent2;
+    }
+    public getAcceptedEvents(): Set<string> {
+        return new Set(["StubSubEvent2"]);
+    }
 }
 
 class SubStubTransition3 extends StubTransitionOK {
-	constructor(srcState: OutputState, tgtState: InputState, guard: boolean) {
-		super(srcState, tgtState, guard);
-	}
-	public accept(event: StubEvent): boolean {
-		return event instanceof StubSubEvent3;
-	}
-	public getAcceptedEvents(): Set<string> {
-		return new Set(["StubSubEvent3"]);
-	}
+    public constructor(srcState: OutputState, tgtState: InputState, guard: boolean) {
+        super(srcState, tgtState, guard);
+    }
+    public accept(event: StubEvent): boolean {
+        return event instanceof StubSubEvent3;
+    }
+    public getAcceptedEvents(): Set<string> {
+        return new Set(["StubSubEvent3"]);
+    }
 }
 
 
-describe("TestMultipleTransitionChoice", () => {
+describe("testMultipleTransitionChoice", () => {
     let std: StdState;
     let terminal: TerminalState;
     let cancel: CancellingState;
@@ -370,7 +369,7 @@ describe("TestMultipleTransitionChoice", () => {
         fsm.process(new StubEvent());
 
         expect(fsm.getCurrentState()).toBe(fsm.initState);
-        expect(handler.fsmStarts).not.toBeCalled();
+        expect(handler.fsmStarts).not.toHaveBeenCalled();
     });
 
     test("testNotTriggeredIfNotGoodEvent", () => {
@@ -378,10 +377,10 @@ describe("TestMultipleTransitionChoice", () => {
         fsm.process(new StubEvent());
 
         expect(fsm.getCurrentState()).toBe(std);
-        expect(handler.fsmCancels).not.toBeCalled();
-        expect(handler.fsmStops).not.toBeCalled();
-        expect(handler.fsmStarts).toBeCalledTimes(1);
-        expect(handler.fsmUpdates).toBeCalledTimes(1);
+        expect(handler.fsmCancels).not.toHaveBeenCalled();
+        expect(handler.fsmStops).not.toHaveBeenCalled();
+        expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+        expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
     });
 
     test("testTriggerGoodChoice", () => {
@@ -389,10 +388,10 @@ describe("TestMultipleTransitionChoice", () => {
         fsm.process(new StubSubEvent2());
 
         expect(fsm.getCurrentState()).toBe(fsm.initState);
-        expect(handler.fsmStops).not.toBeCalled();
-        expect(handler.fsmCancels).toBeCalledTimes(1);
-        expect(handler.fsmStarts).toBeCalledTimes(1);
-        expect(handler.fsmUpdates).toBeCalledTimes(1);
+        expect(handler.fsmStops).not.toHaveBeenCalled();
+        expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
+        expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+        expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
     });
 
     test("testHasStartedReinitOnCancel", () => {
@@ -407,24 +406,24 @@ describe("TestMultipleTransitionChoice", () => {
         fsm.process(new StubSubEvent1());
 
         expect(fsm.getCurrentState()).toBe(fsm.initState);
-        expect(handler.fsmCancels).not.toBeCalled();
-        expect(handler.fsmStops).toBeCalledTimes(1);
-        expect(handler.fsmStarts).toBeCalledTimes(1);
-        expect(handler.fsmUpdates).toBeCalledTimes(1);
+        expect(handler.fsmCancels).not.toHaveBeenCalled();
+        expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+        expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+        expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
     });
 
-    test("Check onstart not called when starting state diff", () => {
+    test("check onstart not called when starting state diff", () => {
         fsm.setStartingState(terminal);
         fsm.process(new StubEvent());
 
-        expect(handler.fsmStarts).not.toBeCalled();
+        expect(handler.fsmStarts).not.toHaveBeenCalled();
     });
 
     test("testStartingStateNotTriggeredSoNoUpdate", () => {
         fsm.setStartingState(terminal);
         fsm.process(new StubEvent());
 
-        expect(handler.fsmUpdates).not.toBeCalled();
+        expect(handler.fsmUpdates).not.toHaveBeenCalled();
     });
 
     test("testStartingStateNotTriggeredSoNoCancel", () => {
@@ -432,7 +431,7 @@ describe("TestMultipleTransitionChoice", () => {
         fsm.process(new StubEvent());
         fsm.process(new StubSubEvent2());
 
-        expect(handler.fsmCancels).not.toBeCalled();
+        expect(handler.fsmCancels).not.toHaveBeenCalled();
     });
 
     test("testStartingStateTriggeredOnTerminal", () => {
@@ -440,8 +439,8 @@ describe("TestMultipleTransitionChoice", () => {
         fsm.process(new StubEvent());
         fsm.process(new StubSubEvent1());
 
-        expect(handler.fsmStarts).toBeCalledTimes(1);
-        expect(handler.fsmStops).toBeCalledTimes(1);
+        expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+        expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     });
 
     test("testStartingStateOnRecursion", () => {
@@ -449,11 +448,11 @@ describe("TestMultipleTransitionChoice", () => {
         fsm.process(new StubEvent());
         fsm.process(new StubSubEvent3());
 
-        expect(handler.fsmStarts).toBeCalledTimes(1);
+        expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     });
 });
 
-describe("TestWithTimeoutTransition", () => {
+describe("testWithTimeoutTransition", () => {
     let std: StdState;
     let std2: StdState;
     let terminal: TerminalState;
@@ -481,7 +480,7 @@ describe("TestWithTimeoutTransition", () => {
         jest.runOnlyPendingTimers();
         expect(setTimeout).toHaveBeenCalledTimes(1);
         expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), 100);
-        expect(fsm.getCurrentState()).toEqual(std2);
+        expect(fsm.getCurrentState()).toStrictEqual(std2);
     });
 
     test("testTimeoutStoppedOnOtherTransitionWithLog", () => {
@@ -489,7 +488,7 @@ describe("TestWithTimeoutTransition", () => {
         fsm.process(new StubEvent());
         fsm.process(new StubEvent());
         jest.runOnlyPendingTimers();
-        expect(fsm.getCurrentState()).toEqual(fsm.initState);
+        expect(fsm.getCurrentState()).toStrictEqual(fsm.initState);
     });
 
     test("testTimeoutStoppedOnOtherTransition", () => {
@@ -497,7 +496,7 @@ describe("TestWithTimeoutTransition", () => {
         fsm.process(new StubEvent());
         expect(setTimeout).toHaveBeenCalledTimes(1);
         expect(clearTimeout).toHaveBeenCalledTimes(1);
-        expect(fsm.getCurrentState()).toEqual(fsm.initState);
+        expect(fsm.getCurrentState()).toStrictEqual(fsm.initState);
     });
 
     test("testTimeoutChangeStateThenCancel", () => {
@@ -506,13 +505,13 @@ describe("TestWithTimeoutTransition", () => {
         });
         fsm.process(new StubEvent());
         jest.runOnlyPendingTimers();
-        expect(fsm.getCurrentState()).toEqual(fsm.initState);
+        expect(fsm.getCurrentState()).toStrictEqual(fsm.initState);
         expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
     });
 });
 
 
-describe("TestWithSubFSM", () => {
+describe("testWithSubFSM", () => {
     let mainfsm: FSM;
     let s1: StdState;
     let subS1: StdState;
@@ -544,16 +543,16 @@ describe("TestWithSubFSM", () => {
 
     test("testEntersSubGoodCurrState", () => {
         mainfsm.process(new StubSubEvent1());
-        expect(mainfsm.getCurrentState()).toEqual(subS1);
-        expect(fsm.getCurrentState()).toEqual(subS1);
+        expect(mainfsm.getCurrentState()).toStrictEqual(subS1);
+        expect(fsm.getCurrentState()).toStrictEqual(subS1);
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     });
 
     test("testNextSubStarteChangesMainCurrState", () => {
         mainfsm.process(new StubSubEvent1());
         mainfsm.process(new StubSubEvent2());
-        expect(mainfsm.getCurrentState()).toEqual(subS2);
-        expect(fsm.getCurrentState()).toEqual(subS2);
+        expect(mainfsm.getCurrentState()).toStrictEqual(subS2);
+        expect(fsm.getCurrentState()).toStrictEqual(subS2);
         expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
     });
 
@@ -561,19 +560,19 @@ describe("TestWithSubFSM", () => {
         mainfsm.process(new StubSubEvent1());
         mainfsm.process(new StubSubEvent2());
         mainfsm.process(new StubSubEvent1());
-        expect(mainfsm.getCurrentState()).toEqual(s1);
-        expect(fsm.getCurrentState()).toEqual(fsm.initState);
-        expect(handler.fsmStops).not.toBeCalled();
-        expect(handler.fsmCancels).not.toBeCalled();
+        expect(mainfsm.getCurrentState()).toStrictEqual(s1);
+        expect(fsm.getCurrentState()).toStrictEqual(fsm.initState);
+        expect(handler.fsmStops).not.toHaveBeenCalled();
+        expect(handler.fsmCancels).not.toHaveBeenCalled();
     });
 
     test("testEntersSubCancelCancelsMain", () => {
         mainfsm.process(new StubSubEvent1());
         mainfsm.process(new StubSubEvent2());
         mainfsm.process(new StubSubEvent2());
-        expect(mainfsm.getCurrentState()).toEqual(mainfsm.initState);
-        expect(fsm.getCurrentState()).toEqual(fsm.initState);
-        expect(handler.fsmStops).not.toBeCalled();
+        expect(mainfsm.getCurrentState()).toStrictEqual(mainfsm.initState);
+        expect(fsm.getCurrentState()).toStrictEqual(fsm.initState);
+        expect(handler.fsmStops).not.toHaveBeenCalled();
         expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
     });
 
@@ -581,7 +580,7 @@ describe("TestWithSubFSM", () => {
         mainfsm.process(new StubSubEvent1());
         mainfsm.process(new StubSubEvent2());
         mainfsm.fullReinit();
-        expect(fsm.getCurrentState()).toEqual(fsm.initState);
+        expect(fsm.getCurrentState()).toStrictEqual(fsm.initState);
     });
 
     test("testExitSubGoIntoCancelling", () => {
@@ -592,8 +591,8 @@ describe("TestWithSubFSM", () => {
         mainfsm.process(new StubSubEvent1());
         mainfsm.process(new StubSubEvent2());
         mainfsm.process(new StubSubEvent1());
-        expect(mainfsm.getCurrentState()).toEqual(mainfsm.initState);
-        expect(fsm.getCurrentState()).toEqual(fsm.initState);
+        expect(mainfsm.getCurrentState()).toStrictEqual(mainfsm.initState);
+        expect(fsm.getCurrentState()).toStrictEqual(fsm.initState);
         expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
     });
 
@@ -605,8 +604,8 @@ describe("TestWithSubFSM", () => {
         mainfsm.process(new StubSubEvent1());
         mainfsm.process(new StubSubEvent2());
         mainfsm.process(new StubSubEvent1());
-        expect(mainfsm.getCurrentState()).toEqual(mainfsm.initState);
-        expect(fsm.getCurrentState()).toEqual(fsm.initState);
+        expect(mainfsm.getCurrentState()).toStrictEqual(mainfsm.initState);
+        expect(fsm.getCurrentState()).toStrictEqual(fsm.initState);
         expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     });
 });

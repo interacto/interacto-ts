@@ -43,7 +43,7 @@ test("testKeyPressExecution", () => {
     interaction.registerToNodes([text]);
     text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "A"));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-    expect(handler.fsmStops).not.toBeCalled();
+    expect(handler.fsmStops).not.toHaveBeenCalled();
 });
 
 test("testKeyPressData", () => {
@@ -59,8 +59,8 @@ test("testKeyPressData", () => {
     }());
 
     text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "A"));
-    expect(length).toEqual(1);
-    expect(txt).toEqual("A");
+    expect(length).toStrictEqual(1);
+    expect(txt).toStrictEqual("A");
 });
 
 test("testTwoKeyPressExecution", () => {
@@ -69,7 +69,7 @@ test("testTwoKeyPressExecution", () => {
     text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "B"));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
-    expect(handler.fsmStops).not.toBeCalled();
+    expect(handler.fsmStops).not.toHaveBeenCalled();
 });
 
 test("testTwoKeyPressData", () => {
@@ -84,9 +84,9 @@ test("testTwoKeyPressData", () => {
 
     text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "A"));
     text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "B"));
-    expect(data.length).toEqual(2);
-    expect(data[0]).toEqual("A");
-    expect(data[1]).toEqual("B");
+    expect(data).toHaveLength(2);
+    expect(data[0]).toStrictEqual("A");
+    expect(data[1]).toStrictEqual("B");
 });
 
 test("testTwoKeyPressReleaseExecution", () => {
@@ -111,8 +111,8 @@ test("testTwoKeyPressReleaseData", () => {
         }
     }());
     text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyUp, "B"));
-    expect(data.length).toEqual(1);
-    expect(data[0]).toEqual("A");
+    expect(data).toHaveLength(1);
+    expect(data[0]).toStrictEqual("A");
 });
 
 test("testTwoKeyPressReleaseRecycle", () => {

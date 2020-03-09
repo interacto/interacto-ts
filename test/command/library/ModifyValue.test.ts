@@ -14,9 +14,9 @@
 
 import { ModifyValue } from "../../../src/command/library/ModifyValue";
 
-class ModifyValueImpl extends ModifyValue<String> {
-    public mustMatch: boolean = false;
-    public cptApply: number = 0;
+class ModifyValueImpl extends ModifyValue<string> {
+    public mustMatch = false;
+    public cptApply = 0;
 
     public constructor() {
         super();
@@ -48,7 +48,7 @@ test("testCannotDoMatch", () => {
 
 test("testSetValue", () => {
     cmd.setValue("bar");
-    expect(cmd.getValue()).toEqual("bar");
+    expect(cmd.getValue()).toStrictEqual("bar");
 });
 
 test("testFlush", () => {
@@ -67,7 +67,7 @@ test("testDo", () => {
     cmd.mustMatch = true;
     cmd.setValue("foo");
     cmd.doIt();
-    expect(cmd.cptApply).toEqual(1);
+    expect(cmd.cptApply).toStrictEqual(1);
 });
 
 test("testHadEffects", () => {

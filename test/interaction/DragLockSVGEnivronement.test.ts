@@ -42,7 +42,7 @@ beforeEach(() => {
     svg.appendChild(rect2);
 });
 
-test("Test DragLock in a SVG environment", () => {
+test("dragLock in a SVG environment", () => {
     interaction.registerToNodes([rect1, rect2]);
     rect2.dispatchEvent(createMouseEvent(EventRegistrationToken.Click, rect2));
     rect2.dispatchEvent(createMouseEvent(EventRegistrationToken.Click, rect2));
@@ -55,20 +55,18 @@ test("Test DragLock in a SVG environment", () => {
     expect(handler.fsmCancels).not.toHaveBeenCalled();
 });
 
-test("Test DragLock data in a SVG environment", () => {
+test("dragLock data in a SVG environment", () => {
     let srcX = -1;
     let srcY = -1;
     let tgtX = -1;
     let tgtY = -1;
     interaction.getFsm().addHandler(new class extends StubFSMHandler {
-
-        public fsmStops() {
+        public fsmStops(): void {
             srcX = interaction.getData().getSrcClientX();
             srcY = interaction.getData().getSrcClientY();
             tgtX = interaction.getData().getTgtClientX();
             tgtY = interaction.getData().getTgtClientY();
         }
-
     }());
     interaction.processEvent(createMouseEvent(EventRegistrationToken.Click, rect1, undefined, undefined, 11, 23));
     interaction.processEvent(createMouseEvent(EventRegistrationToken.Click, rect1, undefined, undefined, 11, 23));

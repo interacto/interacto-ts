@@ -40,7 +40,7 @@ beforeEach(() => {
     }
 });
 
-test("Test current target with group tag", () => {
+test("current target with group tag", () => {
     interaction.registerToNodes([groupe]);
     circle.dispatchEvent(createMouseEvent("click", circle));
     expect(interaction.pointData.getCurrentTarget().get()).toBe(groupe);

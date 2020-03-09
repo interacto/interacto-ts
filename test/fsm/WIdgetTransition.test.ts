@@ -16,15 +16,15 @@
 import { WidgetTransition, StdState, FSM } from "../../src";
 import { StubEvent } from "./StubEvent";
 
-class WTransition extends WidgetTransition<StubEvent, Object> {
+class WTransition extends WidgetTransition<StubEvent, object> {
     public constructor() {
         super(new StdState(new FSM(), "a"), new StdState(new FSM(), "b"));
     }
 
-    public accept(event: StubEvent): boolean {
+    public accept(_event: StubEvent): boolean {
         return false;
     }
-    public isGuardOK(event: StubEvent): boolean {
+    public isGuardOK(_event: StubEvent): boolean {
         return false;
     }
     public getAcceptedEvents(): Set<string> {
@@ -41,5 +41,5 @@ beforeEach(() => {
 test("testSetWidget", () => {
     const o = new Object();
     transition.setWidget(o);
-    expect(transition.getWidget()).toEqual(o);
+    expect(transition.getWidget()).toStrictEqual(o);
 });

@@ -38,14 +38,14 @@ beforeEach(() => {
     }
 });
 
-test("Type 'a' in the textarea starts and stops the interaction.", () => {
+test("type 'a' in the textarea starts and stops the interaction.", () => {
     interaction.registerToNodes([text]);
     text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "a"));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
 });
 
-test("The key typed in the textarea is the same key in the data of the interaction.", () => {
+test("the key typed in the textarea is the same key in the data of the interaction.", () => {
     let data = "";
     interaction.registerToNodes([text]);
     interaction.getFsm().addHandler(new class extends StubFSMHandler {
@@ -54,7 +54,7 @@ test("The key typed in the textarea is the same key in the data of the interacti
         }
     }());
     text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "a"));
-    expect(data).toEqual("a");
+    expect(data).toStrictEqual("a");
 });
 
 test("testTwoKeyPressEnds", () => {

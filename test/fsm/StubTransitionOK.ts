@@ -25,11 +25,11 @@ export class StubTransitionOK extends Transition {
         this.guard = guard ?? true;
     }
 
-    public accept(event: StubEvent): boolean {
+    public accept(_event: StubEvent): boolean {
         return true;
     }
 
-    public isGuardOK(event: StubEvent): boolean {
+    public isGuardOK(_event: StubEvent): boolean {
         return this.guard;
     }
 

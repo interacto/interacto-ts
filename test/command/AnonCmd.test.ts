@@ -17,8 +17,8 @@ import { AnonCmd } from "../../src";
 let cmd: AnonCmd;
 
 test("testCanDoOKCmd", () => {
-	cmd = new AnonCmd(() => { });
-	expect(cmd.canDo()).toBeTruthy();
+    cmd = new AnonCmd(() => { });
+    expect(cmd.canDo()).toBeTruthy();
 });
 
 test("testExecute", () => {
@@ -29,8 +29,8 @@ test("testExecute", () => {
 });
 
 test("testHadEffect", () => {
-	cmd = new AnonCmd(() => { });
-	cmd.doIt();
-	cmd.done();
-	expect(cmd.hadEffect()).toBeTruthy();
+    cmd = new AnonCmd(() => { });
+    cmd.doIt();
+    cmd.done();
+    expect(cmd.hadEffect()).toBeTruthy();
 });

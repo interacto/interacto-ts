@@ -38,7 +38,7 @@ beforeEach(() => {
     }
 });
 
-test("Test Press execution", () => {
+test("press execution", () => {
     interaction.registerToNodes([canvas]);
     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, canvas));
     expect(handler.fsmStarts).not.toHaveBeenCalled();
@@ -46,7 +46,7 @@ test("Test Press execution", () => {
     expect(handler.fsmCancels).not.toHaveBeenCalled();
 });
 
-test("Press escape key while press don't trigger the interaction", () => {
+test("press escape key while press don't trigger the interaction", () => {
     interaction.registerToNodes([canvas]);
     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, canvas, undefined, undefined, 11,
         23));
@@ -56,7 +56,7 @@ test("Press escape key while press don't trigger the interaction", () => {
     expect(handler.fsmCancels).not.toHaveBeenCalled();
 });
 
-test("Press escape after moving cancel the interaction", () => {
+test("press escape after moving cancel the interaction", () => {
     interaction.registerToNodes([canvas]);
     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, canvas, undefined, undefined, 11,
         23));
@@ -68,7 +68,7 @@ test("Press escape after moving cancel the interaction", () => {
     expect(handler.fsmStops).not.toHaveBeenCalled();
 });
 
-test("Press escape after multiple move cancel the interaction.", () => {
+test("press escape after multiple move cancel the interaction.", () => {
     interaction.registerToNodes([canvas]);
     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, canvas, undefined, undefined, 11,
         23));
@@ -82,7 +82,7 @@ test("Press escape after multiple move cancel the interaction.", () => {
     expect(handler.fsmStops).not.toHaveBeenCalled();
 });
 
-test("Interaction restart after cancel", () => {
+test("interaction restart after cancel", () => {
     interaction.registerToNodes([canvas]);
     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, canvas));
     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas));

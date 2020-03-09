@@ -37,14 +37,14 @@ beforeEach(() => {
     }
 });
 
-test("Scroll event start and stop the interaction", () => {
+test("scroll event start and stop the interaction", () => {
     interaction.registerToNodes([scroll]);
     scroll.dispatchEvent(createUIEvent("scroll"));
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
 });
 
-test("Multiple scroll trigger multiple interaction that start and stop", () => {
+test("multiple scroll trigger multiple interaction that start and stop", () => {
     interaction.registerToNodes([scroll]);
     scroll.dispatchEvent(createUIEvent("scroll"));
     scroll.dispatchEvent(createUIEvent("scroll"));

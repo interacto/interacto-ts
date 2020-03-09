@@ -38,7 +38,7 @@ beforeEach(() => {
     }
 });
 
-test("Type in a text area starts and stops the interaction", () => {
+test("type in a text area starts and stops the interaction", () => {
     interaction.registerToNodes([textArea]);
     textArea.dispatchEvent(new Event("input"));
     jest.runOnlyPendingTimers();

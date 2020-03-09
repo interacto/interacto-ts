@@ -31,14 +31,14 @@ beforeEach(() => {
 });
 
 test("testGoodSrc", () => {
-    expect(tr.src).toEqual(state1);
+    expect(tr.src).toStrictEqual(state1);
 });
 
 test("testGoodTgt", () => {
-    expect(tr.tgt).toEqual(state2);
+    expect(tr.tgt).toStrictEqual(state2);
 });
 
 test("testSrcStateTransitionAdded", () => {
-    expect(state1.getTransitions().length).toBe(1);
-    expect(state1.getTransitions()[0]).toEqual(tr);
+    expect(state1.getTransitions()).toHaveLength(1);
+    expect(state1.getTransitions()[0]).toStrictEqual(tr);
 });

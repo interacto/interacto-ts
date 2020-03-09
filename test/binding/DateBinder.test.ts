@@ -42,51 +42,51 @@ afterEach(() => {
 
 test("testCommandExecutedOnSingleDateFunction", () => {
     binding = dateBinder()
-                .toProduce(i => cmd)
-                .on(widget1)
-                .bind();
+        .toProduce(_i => cmd)
+        .on(widget1)
+        .bind();
 
     widget1.dispatchEvent(new Event("input"));
     expect(binding).not.toBeNull();
-    expect(cmd.exec).toEqual(1);
+    expect(cmd.exec).toStrictEqual(1);
 });
 
 test("testCommandExecutedOnTwoDates", () => {
     binding = dateBinder()
-                .on(widget1, widget2)
-                .toProduce(i => new StubCmd(true))
-                .bind();
+        .on(widget1, widget2)
+        .toProduce(_i => new StubCmd(true))
+        .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
     widget1.dispatchEvent(new Event("input"));
     widget2.dispatchEvent(new Event("input"));
 
     expect(binding).not.toBeNull();
-    expect(producedCmds.length).toEqual(2);
+    expect(producedCmds).toHaveLength(2);
 });
 
 test("testInit1Executed", () => {
     binding = dateBinder()
-                .on(widget1)
-                .toProduce(i => cmd)
-                .first(c => c.exec = 10)
-                .bind();
+        .on(widget1)
+        .toProduce(_i => cmd)
+        .first(c => c.exec = 10)
+        .bind();
 
     widget1.dispatchEvent(new Event("input"));
 
     expect(binding).not.toBeNull();
-    expect(cmd.exec).toEqual(11);
+    expect(cmd.exec).toStrictEqual(11);
 });
 
 test("testCheckFalse", () => {
     binding = dateBinder()
-                .toProduce(i => cmd)
-                .on(widget1)
-                .when(i => false)
-                .bind();
+        .toProduce(_i => cmd)
+        .on(widget1)
+        .when(_i => false)
+        .bind();
 
     widget1.dispatchEvent(new Event("input"));
 
     expect(binding).not.toBeNull();
-    expect(cmd.exec).toEqual(0);
+    expect(cmd.exec).toStrictEqual(0);
 });

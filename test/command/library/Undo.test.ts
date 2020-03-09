@@ -31,11 +31,11 @@ describe("base undo testing", () => {
         UndoCollector.getInstance = jest.fn().mockImplementation(() => collector);
 
     });
-    
+
     afterEach(() => {
         jest.clearAllMocks();
     });
-    
+
     test("testCannotDo", () => {
         collector.getLastUndo = jest.fn().mockImplementation(() => Optional.empty());
         expect(cmd.canDo()).toBeFalsy();
@@ -50,18 +50,18 @@ describe("base undo testing", () => {
         });
 
         test("testCanDo", () => {
-            expect(cmd.canDo());
+            expect(cmd.canDo()).toBeTruthy();
         });
-        
-		test("testDo", () => {
-			cmd.doIt();
-			expect(collector.undo).toHaveBeenCalledTimes(1);
+
+        test("testDo", () => {
+            cmd.doIt();
+            expect(collector.undo).toHaveBeenCalledTimes(1);
         });
-        
+
         test("testHadEffects", () => {
-			cmd.doIt();
-			cmd.done();
-			expect(cmd.hadEffect()).toBeTruthy();
-		});
+            cmd.doIt();
+            cmd.done();
+            expect(cmd.hadEffect()).toBeTruthy();
+        });
     });
 })

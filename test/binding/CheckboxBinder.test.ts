@@ -47,72 +47,72 @@ afterEach(() => {
 
 test("testCommandExecutedOnSingleButtonFunction", () => {
     binding = checkboxBinder()
-                .toProduce(i => cmd)
-                .on(widget1)
-                .bind();
+        .toProduce(_i => cmd)
+        .on(widget1)
+        .bind();
 
     widget1.click();
     expect(binding).not.toBeNull();
-    expect(cmd.exec).toEqual(1);
+    expect(cmd.exec).toStrictEqual(1);
 });
 
 test("testCommandExecutedOnSingleButtonSupplier", () => {
     binding = checkboxBinder()
-                .toProduce(() => cmd)
-                .on(widget1)
-                .bind();
+        .toProduce(() => cmd)
+        .on(widget1)
+        .bind();
 
     widget1.click();
     expect(binding).not.toBeNull();
-    expect(cmd.exec).toEqual(1);
+    expect(cmd.exec).toStrictEqual(1);
 });
 
 test("testCommandExecutedOnTwoCheckboxes", () => {
     binding = checkboxBinder()
-                .toProduce(i => new StubCmd(true))
-                .on(widget1, widget2)
-                .bind();
+        .toProduce(_i => new StubCmd(true))
+        .on(widget1, widget2)
+        .bind();
 
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
     widget2.click();
     widget1.click();
     expect(binding).not.toBeNull();
-    expect(producedCmds.length).toEqual(2);
+    expect(producedCmds).toHaveLength(2);
 });
 
 test("testInit1Executed", () => {
     binding = checkboxBinder()
-                .toProduce(i => cmd)
-                .first(c => c.exec = 10)
-                .on(widget1)
-                .bind();
+        .toProduce(_i => cmd)
+        .first(c => c.exec = 10)
+        .on(widget1)
+        .bind();
 
     widget1.click();
     expect(binding).not.toBeNull();
-    expect(cmd.exec).toEqual(11);
+    expect(cmd.exec).toStrictEqual(11);
 });
 
 test("testInit2Executed", () => {
     binding = checkboxBinder()
-                .toProduce(() => cmd)
-                .on(widget1)
-                .first((c, i) => c.exec = 10)
-                .bind();
+        .toProduce(() => cmd)
+        .on(widget1)
+        .first((c, _i) => c.exec = 10)
+        .bind();
 
     widget1.click();
     expect(binding).not.toBeNull();
-    expect(cmd.exec).toEqual(11);
+    expect(cmd.exec).toStrictEqual(11);
 });
 
 test("testCheckFalse", () => {
     binding = checkboxBinder()
-                .on(widget1)
-                .when(i => false)
-                .toProduce(i => cmd)
-                .bind();
+        .on(widget1)
+        .when(_i => false)
+        .toProduce(_i => cmd)
+        .bind();
 
     widget1.click();
     expect(binding).not.toBeNull();
-    expect(cmd.exec).toEqual(0);
+    expect(cmd.exec).toStrictEqual(0);
 });

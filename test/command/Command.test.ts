@@ -26,12 +26,12 @@ beforeEach(() => {
 
 
 test("testCommandStatusAfterCreation", () => {
-    expect(cmd.getStatus()).toEqual(CmdStatus.CREATED);
+    expect(cmd.getStatus()).toStrictEqual(CmdStatus.CREATED);
 });
 
 test("testCommandStatusAfterFlush", () => {
     cmd.flush();
-    expect(cmd.getStatus()).toEqual(CmdStatus.FLUSHED);
+    expect(cmd.getStatus()).toStrictEqual(CmdStatus.FLUSHED);
 });
 
 test("testCommandCannotDoItWhenFlushed", () => {
@@ -60,7 +60,7 @@ test("testCommandCanDoItWhenCanDo", () => {
 
 test("testCommandIsExecutedWhenDoIt", () => {
     cmd.doIt();
-    expect(cmd.getStatus()).toEqual(CmdStatus.EXECUTED);
+    expect(cmd.getStatus()).toStrictEqual(CmdStatus.EXECUTED);
 });
 
 test("testCommandHadEffectWhenDone", () => {
@@ -89,12 +89,12 @@ test("testCommandHadEffectWhenNotDoneAndExecuted", () => {
 });
 
 test("testGetRegistrationPolicyNotExecuted", () => {
-	expect(cmd.getRegistrationPolicy()).toEqual(RegistrationPolicy.NONE);
+    expect(cmd.getRegistrationPolicy()).toStrictEqual(RegistrationPolicy.NONE);
 });
 
 test("testGetRegistrationPolicyDone", () => {
-	cmd.done();
-	expect(cmd.getRegistrationPolicy()).toEqual(RegistrationPolicy.LIMITED);
+    cmd.done();
+    expect(cmd.getRegistrationPolicy()).toStrictEqual(RegistrationPolicy.LIMITED);
 });
 
 test("testCommandNotUnregisterByByDefault", () => {
@@ -104,24 +104,24 @@ test("testCommandNotUnregisterByByDefault", () => {
 test("testCommandNotDoneWhenFlushed", () => {
     cmd.flush();
     cmd.done();
-    expect(cmd.getStatus()).toEqual(CmdStatus.FLUSHED);
+    expect(cmd.getStatus()).toStrictEqual(CmdStatus.FLUSHED);
 });
 
 test("testCommandNotDoneWhenCancelled", () => {
     cmd.cancel();
     cmd.done();
-    expect(cmd.getStatus()).toEqual(CmdStatus.CANCELLED);
+    expect(cmd.getStatus()).toStrictEqual(CmdStatus.CANCELLED);
 });
 
 test("testCommandDoneWhenCreated", () => {
     cmd.done();
-    expect(cmd.getStatus()).toEqual(CmdStatus.DONE);
+    expect(cmd.getStatus()).toStrictEqual(CmdStatus.DONE);
 });
 
 test("testCommandDoneWhenExecuted", () => {
     cmd.doIt();
     cmd.done();
-    expect(cmd.getStatus()).toEqual(CmdStatus.DONE);
+    expect(cmd.getStatus()).toStrictEqual(CmdStatus.DONE);
 });
 
 test("testIsDoneWhenCreated", () => {
@@ -149,16 +149,16 @@ test("testIsDoneWhenExecuted", () => {
 });
 
 test("testNotCancelAtStart", () => {
-    expect(cmd.getStatus()).not.toEqual(CmdStatus.CANCELLED);
+    expect(cmd.getStatus()).not.toStrictEqual(CmdStatus.CANCELLED);
 });
 
 test("testCancel", () => {
     cmd.cancel();
-    expect(cmd.getStatus()).toEqual(CmdStatus.CANCELLED);
+    expect(cmd.getStatus()).toStrictEqual(CmdStatus.CANCELLED);
 });
 
 test("testExecutedTwoTimes", () => {
     cmd.doIt();
     cmd.doIt();
-    expect(cmd.exec).toEqual(2);
+    expect(cmd.exec).toStrictEqual(2);
 });

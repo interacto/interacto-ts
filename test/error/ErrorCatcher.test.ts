@@ -31,6 +31,6 @@ test("testErrors", () => {
     const error = new Error();
     instance.reportError(error);
     errorStream.unsubscribe();
-    expect(errors.length).toEqual(1);
+    expect(errors).toHaveLength(1);
     expect(errors[0]).toBe(error);
 });

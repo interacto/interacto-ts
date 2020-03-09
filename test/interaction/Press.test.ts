@@ -38,7 +38,7 @@ beforeEach(() => {
     }
 });
 
-test("Press on the canvas starts and stops interaction Press", () => {
+test("press on the canvas starts and stops interaction Press", () => {
     interaction.registerToNodes([canvas]);
     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, canvas));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);

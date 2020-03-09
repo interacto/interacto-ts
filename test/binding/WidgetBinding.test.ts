@@ -43,7 +43,7 @@ let errorStream: Subscription;
 beforeEach(() => {
     binding = new WidgetBindingStub(false, () => new StubCmd(), new InteractionStub(new FSM()));
     binding.setActivated(true);
-    errorStream = ErrorCatcher.getInstance().getErrors().subscribe((err: Error) => fail());
+    errorStream = ErrorCatcher.getInstance().getErrors().subscribe((_err: Error) => fail());
 });
 
 afterEach(() => {
@@ -54,109 +54,109 @@ afterEach(() => {
 );
 
 test("testLinkDeActivation", () => {
-	binding.setActivated(true);
-	binding.setActivated(false);
-	expect(binding.isActivated()).toBeFalsy();
+    binding.setActivated(true);
+    binding.setActivated(false);
+    expect(binding.isActivated()).toBeFalsy();
 });
 
 test("testLinkActivation", () => {
-	binding.setActivated(false);
-	binding.setActivated(true);
-	expect(binding.isActivated()).toBeTruthy();
+    binding.setActivated(false);
+    binding.setActivated(true);
+    expect(binding.isActivated()).toBeTruthy();
 });
 
 test("testExecuteNope", () => {
-	expect(binding.isContinuousCmdExec()).toBeFalsy();
+    expect(binding.isContinuousCmdExec()).toBeFalsy();
 });
 
 test("testExecuteOK", () => {
-	binding = new WidgetBindingStub(true, () => new StubCmd(), new InteractionStub(new FSM()));
-	expect(binding.isContinuousCmdExec()).toBeTruthy();
+    binding = new WidgetBindingStub(true, () => new StubCmd(), new InteractionStub(new FSM()));
+    expect(binding.isContinuousCmdExec()).toBeTruthy();
 });
 
 test("testIsInteractionMustBeCancelled", () => {
-	expect(binding.isStrictStart()).toBeFalsy();
+    expect(binding.isStrictStart()).toBeFalsy();
 });
 
 test("testNotRunning", () => {
-	expect(binding.isRunning()).toBeFalsy();
+    expect(binding.isRunning()).toBeFalsy();
 });
 
 test("testInteractionCancelsWhenNotStarted", () => {
-	binding.fsmCancels();
+    binding.fsmCancels();
 });
 
 test("testInteractionUpdatesWhenNotStarted", () => {
-	binding.fsmUpdates();
+    binding.fsmUpdates();
 });
 
 test("testInteractionStopsWhenNotStarted", () => {
-	binding.fsmStops();
+    binding.fsmStops();
 });
 
 test("testInteractionStartsWhenNoCorrectInteractionNotActivated", () => {
-	binding.mustCancel = false;
-	binding.setActivated(false);
-	binding.fsmStarts();
-	expect(binding.getCommand()).toBeUndefined();
+    binding.mustCancel = false;
+    binding.setActivated(false);
+    binding.fsmStarts();
+    expect(binding.getCommand()).toBeUndefined();
 });
 
 test("testInteractionStartsWhenNoCorrectInteractionActivated", () => {
-	binding.mustCancel = false;
-	binding.conditionRespected = false;
-	binding.fsmStarts();
-	expect(binding.getCommand()).toBeUndefined();
+    binding.mustCancel = false;
+    binding.conditionRespected = false;
+    binding.fsmStarts();
+    expect(binding.getCommand()).toBeUndefined();
 });
 
 test("testInteractionStartsThrowMustCancelStateMachineException", () => {
-	binding.mustCancel = true;
-	expect(() => binding.fsmStarts()).toThrow(CancelFSMException);
+    binding.mustCancel = true;
+    expect(() => binding.fsmStarts()).toThrow(CancelFSMException);
 });
 
 test("testInteractionStartsOk", () => {
-	binding.conditionRespected = true;
-	binding.fsmStarts();
-	expect(binding.getCommand()).not.toBeUndefined();
+    binding.conditionRespected = true;
+    binding.fsmStarts();
+    expect(binding.getCommand()).not.toBeUndefined();
 });
 
 test("testCounters", () => {
-	expect(binding.getTimesEnded()).toEqual(0);
-	expect(binding.getTimesCancelled()).toEqual(0);
+    expect(binding.getTimesEnded()).toStrictEqual(0);
+    expect(binding.getTimesCancelled()).toStrictEqual(0);
 });
 
 
 test("testCounterEndedOnce", () => {
-	binding.conditionRespected = true;
-	binding.fsmStarts();
-	binding.fsmStops();
-	expect(binding.getTimesEnded()).toEqual(1);
-	expect(binding.getTimesCancelled()).toEqual(0);
+    binding.conditionRespected = true;
+    binding.fsmStarts();
+    binding.fsmStops();
+    expect(binding.getTimesEnded()).toStrictEqual(1);
+    expect(binding.getTimesCancelled()).toStrictEqual(0);
 });
 
 test("testCounterEndedTwice", () => {
-	binding.conditionRespected = true;
-	binding.fsmStarts();
-	binding.fsmStops();
-	binding.fsmStarts();
-	binding.fsmStops();
-	expect(binding.getTimesEnded()).toEqual(2);
-	expect(binding.getTimesCancelled()).toEqual(0);
+    binding.conditionRespected = true;
+    binding.fsmStarts();
+    binding.fsmStops();
+    binding.fsmStarts();
+    binding.fsmStops();
+    expect(binding.getTimesEnded()).toStrictEqual(2);
+    expect(binding.getTimesCancelled()).toStrictEqual(0);
 });
 
 test("testCounterCancelledOnce", () => {
-	binding.conditionRespected = true;
-	binding.fsmStarts();
-	binding.fsmCancels();
-	expect(binding.getTimesCancelled()).toEqual(1);
-	expect(binding.getTimesEnded()).toEqual(0);
+    binding.conditionRespected = true;
+    binding.fsmStarts();
+    binding.fsmCancels();
+    expect(binding.getTimesCancelled()).toStrictEqual(1);
+    expect(binding.getTimesEnded()).toStrictEqual(0);
 });
 
 test("testCounterCancelledTwice", () => {
-	binding.conditionRespected = true;
-	binding.fsmStarts();
-	binding.fsmCancels();
-	binding.fsmStarts();
-	binding.fsmCancels();
-	expect(binding.getTimesCancelled()).toEqual(2);
-	expect(binding.getTimesEnded()).toEqual(0);
+    binding.conditionRespected = true;
+    binding.fsmStarts();
+    binding.fsmCancels();
+    binding.fsmStarts();
+    binding.fsmCancels();
+    expect(binding.getTimesCancelled()).toStrictEqual(2);
+    expect(binding.getTimesEnded()).toStrictEqual(0);
 });

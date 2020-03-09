@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export function createMouseEvent(type: string, target: EventTarget, screenX ?: number, screenY ?: number, clientX ?: number,
+export function createMouseEvent(type: string, target: EventTarget, screenX?: number, screenY?: number, clientX?: number,
                                  clientY?: number, button?: number): MouseEvent {
 
     const screenXvalue = screenX ?? 0;

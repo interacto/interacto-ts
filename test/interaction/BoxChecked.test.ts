@@ -36,21 +36,21 @@ beforeEach(() => {
     }
 });
 
-test("Click event start and stop the interaction CheckBox", () => {
+test("click event start and stop the interaction CheckBox", () => {
     interaction.registerToNodes([boxCheck]);
     boxCheck.click();
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
 });
 
-test("Input event trigger the interaction CheckBox", () => {
+test("input event trigger the interaction CheckBox", () => {
     interaction.registerToNodes([boxCheck]);
     boxCheck.dispatchEvent(new Event("input"));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
 });
 
-test("Other event don't trigger the interaction CheckBox", () => {
+test("other event don't trigger the interaction CheckBox", () => {
     interaction.registerToNodes([boxCheck]);
     boxCheck.dispatchEvent(new Event("change"));
     boxCheck.dispatchEvent(new Event("update"));

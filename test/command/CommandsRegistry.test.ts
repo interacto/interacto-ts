@@ -28,7 +28,7 @@ class StubCmd2 extends CommandImpl {
     }
 }
 
-let instance : CommandsRegistry;
+let instance: CommandsRegistry;
 
 beforeEach(() => {
     instance = new CommandsRegistry();
@@ -42,18 +42,18 @@ afterEach(() => {
 
 test("testGetSetSizeMaxOK", () => {
     instance.setSizeMax(55);
-    expect(instance.getSizeMax()).toEqual(55);
+    expect(instance.getSizeMax()).toStrictEqual(55);
 });
 
 test("testGetSetSizeMaxNeg", () => {
     instance.setSizeMax(45);
     instance.setSizeMax(-1);
-    expect(instance.getSizeMax()).toEqual(45);
+    expect(instance.getSizeMax()).toStrictEqual(45);
 });
 
 test("testGetSetSizeMaxZero", () => {
     instance.setSizeMax(0);
-    expect(instance.getSizeMax()).toEqual(0);
+    expect(instance.getSizeMax()).toStrictEqual(0);
 });
 
 test("testSetSizeMaxRemovesCmd", () => {
@@ -64,9 +64,9 @@ test("testSetSizeMaxRemovesCmd", () => {
     instance.addCommand(command2);
     instance.setSizeMax(1);
 
-    expect(command1.getStatus()).toEqual(CmdStatus.FLUSHED);
-    expect(command2.getStatus()).toEqual(CmdStatus.CREATED);
-    expect(instance.getCommands().length).toEqual(1);
+    expect(command1.getStatus()).toStrictEqual(CmdStatus.FLUSHED);
+    expect(command2.getStatus()).toStrictEqual(CmdStatus.CREATED);
+    expect(instance.getCommands()).toHaveLength(1);
     expect(instance.getCommands()[0]).toBe(command2);
 });
 
@@ -83,11 +83,11 @@ test("testSetSiezMaxWithUnlimited", () => {
     instance.addCommand(cmd1);
     instance.addCommand(cmd3);
     instance.setSizeMax(0);
-    expect(instance.getCommands()).toEqual([cmd1]);
+    expect(instance.getCommands()).toStrictEqual([cmd1]);
 });
 
 test("testCommandsNotNull", () => {
-    expect(instance.commands()).not.toBeNull;
+    expect(instance.commands()).not.toBeNull();
 });
 
 test("testCommandsObservedOnAdded", () => {
@@ -96,86 +96,86 @@ test("testCommandsObservedOnAdded", () => {
     jest.mock("./StubCmd");
     const cmd = new StubCmd();
     instance.addCommand(cmd);
-    expect(cmds).toEqual([cmd]);
+    expect(cmds).toStrictEqual([cmd]);
 });
 
 test("testCancelCommandFlush", () => {
     const command = new StubCmd();
     instance.cancelCmd(command);
-    expect(command.getStatus()).toEqual(CmdStatus.FLUSHED);
+    expect(command.getStatus()).toStrictEqual(CmdStatus.FLUSHED);
 });
 
 test("testCancelCommandRemoved", () => {
     const command = new StubCmd();
     instance.addCommand(command);
     instance.cancelCmd(command);
-    expect(instance.getCommands().length).toEqual(0);
+    expect(instance.getCommands()).toHaveLength(0);
 });
 
 test("testRemoveCommand", () => {
     const command = new StubCmd();
     instance.addCommand(command);
     instance.removeCmd(command);
-    expect(instance.getCommands().length).toEqual(0);
-    expect(command.getStatus()).toEqual(CmdStatus.FLUSHED);
+    expect(instance.getCommands()).toHaveLength(0);
+    expect(command.getStatus()).toStrictEqual(CmdStatus.FLUSHED);
 });
 
-test("test Unregister Cmd KO", () => {
+test("unregister Cmd KO", () => {
     const command = new StubCmd();
     instance.addCommand(command);
     instance.unregisterCmd(new StubCmd2());
-    expect(instance.getCommands().length).toEqual(1);
-    expect(command.getStatus()).not.toEqual(CmdStatus.FLUSHED);
+    expect(instance.getCommands()).toHaveLength(1);
+    expect(command.getStatus()).not.toStrictEqual(CmdStatus.FLUSHED);
 });
 
-test("test Unregister Cmd OK", () => {
+test("unregister Cmd OK", () => {
     const command = new StubCmd2();
     instance.addCommand(command);
     instance.unregisterCmd(new StubCmd());
-    expect(instance.getCommands().length).toEqual(0);
-    expect(command.getStatus()).toEqual(CmdStatus.FLUSHED);
+    expect(instance.getCommands()).toHaveLength(0);
+    expect(command.getStatus()).toStrictEqual(CmdStatus.FLUSHED);
 });
 
-test("testAddCommandCannotAddBecauseExist", () => {
+test("add Command Cannot Add Because Exist", () => {
     const command = new StubCmd();
     instance.getCommands().push(command);
     instance.addCommand(command);
-    expect(instance.getCommands().length).toEqual(1);
+    expect(instance.getCommands()).toHaveLength(1);
 });
 
-test("testAddCommandRemovesCommandWhenMaxCapacity", () => {
-	const command = new StubCmd();
-	const command2 = new StubCmd();
-	instance.setSizeMax(1);
-	instance.getCommands().push(command2);
-	instance.addCommand(command);
-	expect(instance.getCommands().length).toEqual(1);
-	expect(instance.getCommands()[0]).toBe(command);
-	expect(command2.getStatus()).toEqual(CmdStatus.FLUSHED);
+test("add Command Removes Command When Max Capacity", () => {
+    const command = new StubCmd();
+    const command2 = new StubCmd();
+    instance.setSizeMax(1);
+    instance.getCommands().push(command2);
+    instance.addCommand(command);
+    expect(instance.getCommands()).toHaveLength(1);
+    expect(instance.getCommands()[0]).toBe(command);
+    expect(command2.getStatus()).toStrictEqual(CmdStatus.FLUSHED);
 });
 
-test("testAddCommandRemovesCommandWhenMaxCapacity", () => {
-	instance.setSizeMax(0);
-	instance.addCommand(new StubCmd());
-	expect(instance.getCommands().length).toEqual(0);
+test("testAddCommandRemovesCommandWhenMaxCapacity0", () => {
+    instance.setSizeMax(0);
+    instance.addCommand(new StubCmd());
+    expect(instance.getCommands()).toHaveLength(0);
 });
 
 test("testAddCommandAddsUndoableCollector", () => {
-	const command = new StubUndoableCmd();
-	instance.addCommand(command);
-	expect(UndoCollector.getInstance().getLastUndo().get()).toBe(command);
+    const command = new StubUndoableCmd();
+    instance.addCommand(command);
+    expect(UndoCollector.getInstance().getLastUndo().get()).toBe(command);
 });
 
 
 test("testClear", () => {
     const c1 = new StubCmd();
     const c2 = new StubCmd();
-    jest.spyOn(c1, 'flush');
-    jest.spyOn(c2, 'flush');
+    jest.spyOn(c1, "flush");
+    jest.spyOn(c2, "flush");
     instance.addCommand(c1);
     instance.addCommand(c2);
     instance.clear();
-    expect(instance.getCommands().length).toEqual(0);
+    expect(instance.getCommands()).toHaveLength(0);
     expect(c1.flush).toHaveBeenCalledTimes(1);
     expect(c2.flush).toHaveBeenCalledTimes(1);
 });

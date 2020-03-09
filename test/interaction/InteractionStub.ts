@@ -13,26 +13,23 @@
  */
 import { InteractionImpl, InteractionData, FSM, OutputState } from "../../src";
 
-export class DataStub implements InteractionData {
-}
+export class InteractionStub extends InteractionImpl<InteractionData, FSM, object> {
+    public constructor(fsm: FSM) {
+        super(fsm);
+    }
 
-export class InteractionStub extends InteractionImpl<InteractionData, FSM, Object> {
-	public constructor(fsm: FSM) {
-		super(fsm);
-	}
+    public getData(): InteractionData {
+        return {} as InteractionData;
+    }
 
-	public getData(): InteractionData {
-		return new DataStub();
-	}
+    public updateEventsRegistered(_newState: OutputState, _oldState: OutputState): void {
+    }
 
-	public updateEventsRegistered(newState: OutputState, oldState: OutputState): void {
-	}
+    public isEventsOfSameType(_evt1: object, _evt2: object): boolean {
+        return false;
+    }
 
-	public isEventsOfSameType(evt1: Object, evt2: Object): boolean {
-		return false;
-	}
-
-	public reinitData(): void {
-	}
+    public reinitData(): void {
+    }
 }
 

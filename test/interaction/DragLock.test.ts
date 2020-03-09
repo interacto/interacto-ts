@@ -39,7 +39,7 @@ beforeEach(() => {
     }
 });
 
-test("Drag lock is ok", () => {
+test("drag lock is ok", () => {
     interaction.registerToNodes([canvas]);
     canvas.click();
     canvas.click();
@@ -51,7 +51,7 @@ test("Drag lock is ok", () => {
     expect(handler.fsmCancels).not.toHaveBeenCalled();
 });
 
-test("Drag lock requires a least a move", () => {
+test("drag lock requires a least a move", () => {
     interaction.registerToNodes([canvas]);
     canvas.click();
     canvas.click();
@@ -62,7 +62,7 @@ test("Drag lock requires a least a move", () => {
     expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
 });
 
-test("Drag lock canceled on ESC", () => {
+test("drag lock canceled on ESC", () => {
     interaction.registerToNodes([canvas]);
     canvas.click();
     canvas.click();
@@ -72,20 +72,18 @@ test("Drag lock canceled on ESC", () => {
     expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
 });
 
-test("Check data with a normal execution", () => {
+test("check data with a normal execution", () => {
     let srcX = -1;
     let srcY = -1;
     let tgtX = -1;
     let tgtY = -1;
     interaction.getFsm().addHandler(new class extends StubFSMHandler {
-
-        public fsmStops() {
+        public fsmStops(): void {
             srcX = interaction.getData().getSrcClientX();
             srcY = interaction.getData().getSrcClientY();
             tgtX = interaction.getData().getTgtClientX();
             tgtY = interaction.getData().getTgtClientY();
         }
-
     }());
     interaction.processEvent(createMouseEvent(EventRegistrationToken.Click, canvas, undefined, undefined, 11, 23));
     interaction.processEvent(createMouseEvent(EventRegistrationToken.Click, canvas, undefined, undefined, 11, 23));
@@ -102,7 +100,7 @@ test("Check data with a normal execution", () => {
     expect(handler.fsmCancels).not.toHaveBeenCalled();
 });
 
-test("Check update work during move", () => {
+test("check update work during move", () => {
     interaction.registerToNodes([canvas]);
     canvas.click();
     canvas.click();
@@ -110,13 +108,12 @@ test("Check update work during move", () => {
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
 });
 
-test("Check data update during a move", () => {
+test("check data update during a move", () => {
     interaction.registerToNodes([canvas]);
     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.Click, canvas, undefined, undefined, 11, 23));
     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.Click, canvas, undefined, undefined, 11, 23));
     interaction.getFsm().addHandler(new class extends StubFSMHandler {
-
-        public fsmUpdates() {
+        public fsmUpdates(): void {
             expect(interaction.getData().getTgtClientX()).toBe(30);
             expect(interaction.getData().getTgtClientY()).toBe(40);
         }
@@ -125,7 +122,7 @@ test("Check data update during a move", () => {
     expect(handler.fsmCancels).not.toHaveBeenCalled();
 });
 
-test("Check data reinitialisation", () => {
+test("check data reinitialisation", () => {
     interaction.registerToNodes([canvas]);
     canvas.click();
     canvas.click();
@@ -138,7 +135,7 @@ test("Check data reinitialisation", () => {
     expect(interaction.getData().getTgtClientY()).toBe(0);
 });
 
-test("Check if canceled with Esc after a move", () => {
+test("check if canceled with Esc after a move", () => {
     interaction.registerToNodes([canvas]);
     canvas.click();
     canvas.click();
@@ -149,7 +146,7 @@ test("Check if canceled with Esc after a move", () => {
     expect(handler.fsmStops).not.toHaveBeenCalled();
 });
 
-test("Check if the last DoubleClick with a different button don't stop the interaction", () => {
+test("check if the last DoubleClick with a different button don't stop the interaction", () => {
     interaction.registerToNodes([canvas]);
     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.Click, canvas, undefined, undefined, 11, 23, 1));
     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.Click, canvas, undefined, undefined, 11, 23, 1));

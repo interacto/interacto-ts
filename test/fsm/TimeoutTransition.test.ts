@@ -75,7 +75,7 @@ test("testStopTimeout", () => {
 });
 
 test("testGetAcceptEventsEmpty", () => {
-    expect(evt.getAcceptedEvents().size).toEqual(0);
+    expect(evt.getAcceptedEvents().size).toStrictEqual(0);
 });
 
 test("testExecuteWithoutTimeout", () => {
@@ -87,7 +87,7 @@ test("testExecuteWithTimeout", () => {
     setTimeout(() => {
     }, 100);
     jest.runOnlyPendingTimers();
-    expect(evt.execute(undefined).get()).toEqual(tgt);
+    expect(evt.execute(undefined).get()).toStrictEqual(tgt);
 });
 
 test("testExecuteCallFSMTimeout", () => {

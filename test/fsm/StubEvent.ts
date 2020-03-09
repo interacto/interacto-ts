@@ -13,7 +13,7 @@
  */
 
 export class StubEvent extends Event {
-    constructor() {
+    public constructor() {
         super("stubevent");
     }
 }
