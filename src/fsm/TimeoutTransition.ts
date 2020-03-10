@@ -16,6 +16,7 @@ import { Transition } from "./Transition";
 import { OutputState } from "./OutputState";
 import { InputState } from "./InputState";
 import { Optional } from "../util/Optional";
+import { ErrorCatcher } from "../error/ErrorCatcher";
 
 
 /**
@@ -47,14 +48,22 @@ export class TimeoutTransition extends Transition {
      * Launches the timer.
      */
     public startTimeout(): void {
+        const time = this.timeoutDuration();
+
+        if(time <= 0) {
+            this.src.getFSM().onTimeout();
+            return;
+        }
+
         if (this.timeoutThread === undefined) {
-            const time = this.timeoutDuration();
-            if (time > 0) {
-                this.timeoutThread = window.setTimeout(() => {
+            this.timeoutThread = window.setTimeout(() => {
+                try {
                     this.timeouted = true;
                     this.src.getFSM().onTimeout();
-                }, time);
-            }
+                }catch(ex) {
+                    ErrorCatcher.getInstance().reportError(ex);
+                }
+            }, time);
         }
     }
 
@@ -68,20 +77,10 @@ export class TimeoutTransition extends Transition {
         }
     }
 
-    /**
-     *
-     * @param {*} event
-     * @return {boolean}
-     */
     public accept(_event?: Event): boolean {
         return this.timeouted;
     }
 
-    /**
-     *
-     * @param {*} event
-     * @return {boolean}
-     */
     public isGuardOK(_event?: Event): boolean {
         return this.timeouted;
     }
