@@ -78,37 +78,23 @@ export class SubFSMTransition extends Transition {
         }(this);
     }
 
-    /**
-     * @param {*} event
-     */
     public execute(event: Event): Optional<InputState> {
-        if (this.isGuardOK(event)) {
+        const transition: Optional<Transition> = this.findTransition(event);
+
+        if (transition.isPresent()) {
             this.src.getFSM().stopCurrentTimeout();
-            const transition: Optional<Transition> = this.findTransition(event);
-            if (transition.isPresent()) {
-                this.subFSM.addHandler(this.subFSMHandler);
-                this.src.getFSM().setCurrentSubFSM(this.subFSM);
-                this.subFSM.process(event);
-                return Optional.of(transition.get()).map(t => t.tgt);
-            }
+            this.subFSM.addHandler(this.subFSMHandler);
+            this.src.getFSM().setCurrentSubFSM(this.subFSM);
+            this.subFSM.process(event);
+            return Optional.of(transition.get()).map(t => t.tgt);
         }
         return Optional.empty<InputState>();
     }
 
-    /**
-     *
-     * @param {*} event
-     * @return {boolean}
-     */
     public accept(event: Event): boolean {
         return this.findTransition(event).isPresent();
     }
 
-    /**
-     *
-     * @param {*} event
-     * @return {boolean}
-     */
     public isGuardOK(event: Event): boolean {
         return this.findTransition(event).filter(tr => tr.isGuardOK(event)).isPresent();
     }
@@ -117,12 +103,11 @@ export class SubFSMTransition extends Transition {
         return Optional.of(this.subFSM.initState.getTransitions().find(tr => tr.accept(event)));
     }
 
-    /**
-     *
-     * @return {*[]}
-     */
     public getAcceptedEvents(): Set<string> {
-        return this.subFSM.initState.getTransitions().map(tr => tr.getAcceptedEvents()).reduce((a, b) => new Set([...a, ...b]));
+        return this.subFSM.initState
+            .getTransitions()
+            .map(tr => tr.getAcceptedEvents())
+            .reduce((a, b) => new Set([...a, ...b]));
     }
 
     public uninstall(): void {

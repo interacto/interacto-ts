@@ -48,7 +48,7 @@ export class SubStubTransition1 extends StubTransitionOK {
     }
 
     public getAcceptedEvents(): Set<string> {
-        return new Set("StubSubEvent1");
+        return new Set(["StubSubEvent1"]);
     }
 }
 
@@ -62,7 +62,7 @@ export class SubStubTransition2 extends StubTransitionOK {
     }
 
     public getAcceptedEvents(): Set<string> {
-        return new Set("StubSubEvent2");
+        return new Set(["StubSubEvent2"]);
     }
 }
 
@@ -76,6 +76,6 @@ export class SubStubTransition3 extends StubTransitionOK {
     }
 
     public getAcceptedEvents(): Set<string> {
-        return new Set("StubSubEvent3");
+        return new Set(["StubSubEvent3"]);
     }
 }

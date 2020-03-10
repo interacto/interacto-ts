@@ -596,6 +596,31 @@ describe("testWithSubFSM", () => {
         expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
     });
 
+    test("exit KO state type", () => {
+        const stateKO = new class implements InputState {
+            public enter(): void {
+            }
+            public getName(): string {
+                return "foo";
+            }
+            public getFSM(): FSM {
+                return mainfsm;
+            }
+            public checkStartingState(): void {
+            }
+            public uninstall(): void {
+            }
+        }();
+        mainfsm.addState(stateKO);
+        mainfsm.initState.clearTransitions();
+        new SubFSMTransition(mainfsm.initState, stateKO, fsm);
+        mainfsm.process(new StubSubEvent1());
+        mainfsm.process(new StubSubEvent2());
+        mainfsm.process(new StubSubEvent1());
+        expect(mainfsm.getCurrentState().getName()).toStrictEqual("sub2");
+        expect(fsm.getCurrentState()).toBe(fsm.initState);
+    });
+
     test("testExitSubGoIntoTerminal", () => {
         const terminal: TerminalState = new TerminalState(mainfsm, "terminal1");
         mainfsm.addState(terminal);

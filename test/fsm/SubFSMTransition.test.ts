@@ -20,6 +20,7 @@ import { SubFSMTransition } from "../../src/fsm/SubFSMTransition";
 import { SubStubTransition1 } from "./StubTransitionOK";
 import { InputState } from "../../src/fsm/InputState";
 import { Optional } from "../../src/util/Optional";
+import { Transition } from "../../src";
 
 jest.mock("../../src/fsm/StdState");
 
@@ -74,9 +75,32 @@ test("testExecuteFirstEventReturnsSubState", () => {
     expect(state.get()).toStrictEqual(subS);
 });
 
+test("execute no transition", () => {
+    const state = tr.execute(new StubSubEvent2());
+    expect(state.isPresent()).toBeFalsy();
+});
+
 test("testExecuteFirstEventKO", () => {
     const state: Optional<InputState> = tr.execute(new StubSubEvent2());
     expect(state.isPresent()).toBeFalsy();
+});
+
+test("uninstall", () => {
+    tr = new SubFSMTransition(s1, s2, fsm);
+    jest.spyOn(fsm, "uninstall");
+    tr.uninstall();
+    expect(fsm.uninstall).toHaveBeenCalledTimes(1);
+});
+
+test("get accepted events", () => {
+    const tr2 = {} as Transition;
+    tr2.getAcceptedEvents = jest.fn(() => new Set(["foo", "bar"]));
+    fsm.initState.addTransition(tr2);
+    const evts = tr.getAcceptedEvents();
+    expect([...evts]).toHaveLength(3);
+    expect(evts.has("foo")).toBeTruthy();
+    expect(evts.has("bar")).toBeTruthy();
+    expect(evts.has([... fsm.initState.getTransitions()[0].getAcceptedEvents()][0])).toBeTruthy();
 });
 
 test("testExecuteExitSrcState", () => {

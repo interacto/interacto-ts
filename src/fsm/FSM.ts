@@ -380,7 +380,7 @@ export class FSM {
      */
     public notifyHandlerOnStop(): void {
         try {
-            this.handlers.forEach(handler => handler.fsmStops());
+            [...this.handlers].forEach(handler => handler.fsmStops());
         } catch (ex) {
             this.onCancelling();
             throw ex;
@@ -391,7 +391,7 @@ export class FSM {
      * Notifies handler that the interaction is cancelled.
      */
     protected notifyHandlerOnCancel(): void {
-        this.handlers.forEach(handler => handler.fsmCancels());
+        [...this.handlers].forEach(handler => handler.fsmCancels());
     }
 
     public getStates(): Array<State> {
