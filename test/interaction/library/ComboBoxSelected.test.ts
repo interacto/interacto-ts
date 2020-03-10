@@ -12,47 +12,40 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FSMHandler } from "../../src/fsm/FSMHandler";
-import { StubFSMHandler } from "../fsm/StubFSMHandler";
-import { BoxChecked } from "../../src/interaction/library/BoxChecked";
+import { FSMHandler } from "../../../src/fsm/FSMHandler";
+import { StubFSMHandler } from "../../fsm/StubFSMHandler";
+import { ComboBoxSelected } from "../../../src/interaction/library/ComboBoxSelected";
 
-jest.mock("../fsm/StubFSMHandler");
+jest.mock("../../fsm/StubFSMHandler");
 
-let interaction: BoxChecked;
-let boxCheck: HTMLElement;
+let interaction: ComboBoxSelected;
+let comboBox: HTMLElement;
 let handler: FSMHandler;
 
 beforeEach(() => {
     jest.clearAllMocks();
     handler = new StubFSMHandler();
-    interaction = new BoxChecked();
+    interaction = new ComboBoxSelected();
     interaction.log(true);
     interaction.getFsm().log(true);
     interaction.getFsm().addHandler(handler);
-    document.documentElement.innerHTML = "<html><div><input id='bc1' type='checkbox'></div></html>";
-    const elt = document.getElementById("bc1");
+    document.documentElement.innerHTML =
+        "<html><div><select id='comb1'><option value='v1'>Volvo</option></select></html>";
+    const elt = document.getElementById("comb1");
     if (elt !== null) {
-        boxCheck = elt;
+        comboBox = elt;
     }
 });
 
-test("click event start and stop the interaction CheckBox", () => {
-    interaction.registerToNodes([boxCheck]);
-    boxCheck.click();
+test("input event starts and stops the interaction ComboBoxSelected", () => {
+    interaction.registerToNodes([comboBox]);
+    comboBox.dispatchEvent(new Event("input"));
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
 });
 
-test("input event trigger the interaction CheckBox", () => {
-    interaction.registerToNodes([boxCheck]);
-    boxCheck.dispatchEvent(new Event("input"));
-    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-    expect(handler.fsmStops).toHaveBeenCalledTimes(1);
-});
-
-test("other event don't trigger the interaction CheckBox", () => {
-    interaction.registerToNodes([boxCheck]);
-    boxCheck.dispatchEvent(new Event("change"));
-    boxCheck.dispatchEvent(new Event("update"));
+test("other event don't trigger the interaction", () => {
+    interaction.registerToNodes([comboBox]);
+    comboBox.dispatchEvent(new Event("change"));
     expect(handler.fsmStarts).not.toHaveBeenCalled();
 });

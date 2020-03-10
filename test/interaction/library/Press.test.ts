@@ -12,39 +12,35 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FSMHandler } from "../../src/fsm/FSMHandler";
-import { StubFSMHandler } from "../fsm/StubFSMHandler";
-import { ColorPicked } from "../../src/interaction/library/ColorPicked";
+import { Press } from "../../../src/interaction/library/Press";
+import { FSMHandler } from "../../../src/fsm/FSMHandler";
+import { StubFSMHandler } from "../../fsm/StubFSMHandler";
+import { createMouseEvent } from "../StubEvents";
+import { EventRegistrationToken } from "../../../src/fsm/Events";
 
-jest.mock("../fsm/StubFSMHandler");
+jest.mock("../../fsm/StubFSMHandler");
 
-let interaction: ColorPicked;
-let colorBox: HTMLElement;
+let interaction: Press;
+let canvas: HTMLElement;
 let handler: FSMHandler;
 
 beforeEach(() => {
     jest.clearAllMocks();
     handler = new StubFSMHandler();
-    interaction = new ColorPicked();
+    interaction = new Press();
     interaction.log(true);
     interaction.getFsm().log(true);
     interaction.getFsm().addHandler(handler);
-    document.documentElement.innerHTML = "<html><div><input id='col1' type='color'></div></html>";
-    const elt = document.getElementById("col1");
+    document.documentElement.innerHTML = "<html><div><canvas id='canvas1' /></div></html>";
+    const elt = document.getElementById("canvas1");
     if (elt !== null) {
-        colorBox = elt;
+        canvas = elt;
     }
 });
 
-test("input event starts and stops the interaction ColorPicked", () => {
-    interaction.registerToNodes([colorBox]);
-    colorBox.dispatchEvent(new Event("input"));
-    expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+test("press on the canvas starts and stops interaction Press", () => {
+    interaction.registerToNodes([canvas]);
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, canvas));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-});
-
-test("other event don't trigger the interaction", () => {
-    interaction.registerToNodes([colorBox]);
-    colorBox.dispatchEvent(new Event("click"));
-    expect(handler.fsmStarts).not.toHaveBeenCalled();
+    expect(handler.fsmStops).toHaveBeenCalledTimes(1);
 });

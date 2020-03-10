@@ -12,43 +12,39 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FSMHandler } from "../../src/fsm/FSMHandler";
-import { StubFSMHandler } from "../fsm/StubFSMHandler";
-import { Scroll } from "../../src/interaction/library/Scroll";
-import { createUIEvent } from "./StubEvents";
+import { FSMHandler } from "../../../src/fsm/FSMHandler";
+import { StubFSMHandler } from "../../fsm/StubFSMHandler";
+import { ColorPicked } from "../../../src/interaction/library/ColorPicked";
 
-jest.mock("../fsm/StubFSMHandler");
+jest.mock("../../fsm/StubFSMHandler");
 
-let interaction: Scroll;
-let scroll: Window;
+let interaction: ColorPicked;
+let colorBox: HTMLElement;
 let handler: FSMHandler;
 
 beforeEach(() => {
     jest.clearAllMocks();
     handler = new StubFSMHandler();
-    interaction = new Scroll();
+    interaction = new ColorPicked();
     interaction.log(true);
     interaction.getFsm().log(true);
     interaction.getFsm().addHandler(handler);
-    document.documentElement.innerHTML = "<html><div></div></html>";
-    const elt = document.defaultView;
+    document.documentElement.innerHTML = "<html><div><input id='col1' type='color'></div></html>";
+    const elt = document.getElementById("col1");
     if (elt !== null) {
-        scroll = elt;
+        colorBox = elt;
     }
 });
 
-test("scroll event start and stop the interaction", () => {
-    interaction.registerToNodes([scroll]);
-    scroll.dispatchEvent(createUIEvent("scroll"));
+test("input event starts and stops the interaction ColorPicked", () => {
+    interaction.registerToNodes([colorBox]);
+    colorBox.dispatchEvent(new Event("input"));
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
 });
 
-test("multiple scroll trigger multiple interaction that start and stop", () => {
-    interaction.registerToNodes([scroll]);
-    scroll.dispatchEvent(createUIEvent("scroll"));
-    scroll.dispatchEvent(createUIEvent("scroll"));
-    scroll.dispatchEvent(createUIEvent("scroll"));
-    expect(handler.fsmStops).toHaveBeenCalledTimes(3);
-    expect(handler.fsmStarts).toHaveBeenCalledTimes(3);
+test("other event don't trigger the interaction", () => {
+    interaction.registerToNodes([colorBox]);
+    colorBox.dispatchEvent(new Event("click"));
+    expect(handler.fsmStarts).not.toHaveBeenCalled();
 });

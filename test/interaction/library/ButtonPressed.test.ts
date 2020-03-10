@@ -12,12 +12,12 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ButtonPressed } from "../../src/interaction/library/ButtonPressed";
-import { FSMHandler } from "../../src/fsm/FSMHandler";
-import { StubFSMHandler } from "../fsm/StubFSMHandler";
-import { isButton } from "../../src";
+import { ButtonPressed } from "../../../src/interaction/library/ButtonPressed";
+import { FSMHandler } from "../../../src/fsm/FSMHandler";
+import { StubFSMHandler } from "../../fsm/StubFSMHandler";
+import { isButton } from "../../../src";
 
-jest.mock("../fsm/StubFSMHandler");
+jest.mock("../../fsm/StubFSMHandler");
 
 let interaction: ButtonPressed;
 let button: HTMLButtonElement;

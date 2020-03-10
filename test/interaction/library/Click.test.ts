@@ -12,12 +12,12 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { StubFSMHandler } from "../fsm/StubFSMHandler";
-import { Click } from "../../src/interaction/library/Click";
-import { EventRegistrationToken } from "../../src/fsm/Events";
-import { createMouseEvent } from "./StubEvents";
+import { StubFSMHandler } from "../../fsm/StubFSMHandler";
+import { Click } from "../../../src/interaction/library/Click";
+import { EventRegistrationToken } from "../../../src/fsm/Events";
+import { createMouseEvent } from "../StubEvents";
 
-jest.mock("../fsm/StubFSMHandler");
+jest.mock("../../fsm/StubFSMHandler");
 
 let interaction: Click;
 let canvas: HTMLElement;

@@ -12,35 +12,36 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Press } from "../../src/interaction/library/Press";
-import { FSMHandler } from "../../src/fsm/FSMHandler";
-import { StubFSMHandler } from "../fsm/StubFSMHandler";
-import { createMouseEvent } from "./StubEvents";
-import { EventRegistrationToken } from "../../src/fsm/Events";
+import { FSMHandler } from "../../../src/fsm/FSMHandler";
+import { StubFSMHandler } from "../../fsm/StubFSMHandler";
+import { TextInputChanged } from "../../../src/interaction/library/TextInputChanged";
 
-jest.mock("../fsm/StubFSMHandler");
+jest.mock("../../fsm/StubFSMHandler");
+jest.useFakeTimers();
 
-let interaction: Press;
-let canvas: HTMLElement;
+let interaction: TextInputChanged;
+let textArea: HTMLElement;
 let handler: FSMHandler;
 
 beforeEach(() => {
     jest.clearAllMocks();
     handler = new StubFSMHandler();
-    interaction = new Press();
+    interaction = new TextInputChanged();
     interaction.log(true);
     interaction.getFsm().log(true);
     interaction.getFsm().addHandler(handler);
-    document.documentElement.innerHTML = "<html><div><canvas id='canvas1' /></div></html>";
-    const elt = document.getElementById("canvas1");
-    if (elt !== null) {
-        canvas = elt;
+    document.documentElement.innerHTML =
+        "<html><div><input id='inT' type='text'/></div><div><textarea id='teA'/></textarea></div></html>";
+    const elt2 = document.getElementById("teA");
+    if (elt2 !== null) {
+        textArea = elt2;
     }
 });
 
-test("press on the canvas starts and stops interaction Press", () => {
-    interaction.registerToNodes([canvas]);
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, canvas));
-    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+test("type in a text area starts and stops the interaction", () => {
+    interaction.registerToNodes([textArea]);
+    textArea.dispatchEvent(new Event("input"));
+    jest.runOnlyPendingTimers();
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
 });

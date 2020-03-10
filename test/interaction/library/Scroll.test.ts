@@ -12,33 +12,43 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FSMHandler } from "../../src/fsm/FSMHandler";
-import { StubFSMHandler } from "../fsm/StubFSMHandler";
-import { HyperLinkClicked } from "../../src/interaction/library/HyperLinkClicked";
+import { FSMHandler } from "../../../src/fsm/FSMHandler";
+import { StubFSMHandler } from "../../fsm/StubFSMHandler";
+import { Scroll } from "../../../src/interaction/library/Scroll";
+import { createUIEvent } from "../StubEvents";
 
-jest.mock("../fsm/StubFSMHandler");
+jest.mock("../../fsm/StubFSMHandler");
 
-let interaction: HyperLinkClicked;
-let url: HTMLElement;
+let interaction: Scroll;
+let scroll: Window;
 let handler: FSMHandler;
 
 beforeEach(() => {
     jest.clearAllMocks();
     handler = new StubFSMHandler();
-    interaction = new HyperLinkClicked();
+    interaction = new Scroll();
     interaction.log(true);
     interaction.getFsm().log(true);
     interaction.getFsm().addHandler(handler);
-    document.documentElement.innerHTML = "<html><div><a id='url1' href=''>Test</a> </div></html>";
-    const elt = document.getElementById("url1");
+    document.documentElement.innerHTML = "<html><div></div></html>";
+    const elt = document.defaultView;
     if (elt !== null) {
-        url = elt;
+        scroll = elt;
     }
 });
 
-test("click on url starts and stops the interaction", () => {
-    interaction.registerToNodes([url]);
-    url.dispatchEvent(new Event("input"));
+test("scroll event start and stop the interaction", () => {
+    interaction.registerToNodes([scroll]);
+    scroll.dispatchEvent(createUIEvent("scroll"));
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+});
+
+test("multiple scroll trigger multiple interaction that start and stop", () => {
+    interaction.registerToNodes([scroll]);
+    scroll.dispatchEvent(createUIEvent("scroll"));
+    scroll.dispatchEvent(createUIEvent("scroll"));
+    scroll.dispatchEvent(createUIEvent("scroll"));
+    expect(handler.fsmStops).toHaveBeenCalledTimes(3);
+    expect(handler.fsmStarts).toHaveBeenCalledTimes(3);
 });

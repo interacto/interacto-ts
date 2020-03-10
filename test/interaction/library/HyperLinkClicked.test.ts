@@ -12,36 +12,33 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FSMHandler } from "../../src/fsm/FSMHandler";
-import { StubFSMHandler } from "../fsm/StubFSMHandler";
-import { TextInputChanged } from "../../src/interaction/library/TextInputChanged";
+import { FSMHandler } from "../../../src/fsm/FSMHandler";
+import { StubFSMHandler } from "../../fsm/StubFSMHandler";
+import { HyperLinkClicked } from "../../../src/interaction/library/HyperLinkClicked";
 
-jest.mock("../fsm/StubFSMHandler");
-jest.useFakeTimers();
+jest.mock("../../fsm/StubFSMHandler");
 
-let interaction: TextInputChanged;
-let textArea: HTMLElement;
+let interaction: HyperLinkClicked;
+let url: HTMLElement;
 let handler: FSMHandler;
 
 beforeEach(() => {
     jest.clearAllMocks();
     handler = new StubFSMHandler();
-    interaction = new TextInputChanged();
+    interaction = new HyperLinkClicked();
     interaction.log(true);
     interaction.getFsm().log(true);
     interaction.getFsm().addHandler(handler);
-    document.documentElement.innerHTML =
-        "<html><div><input id='inT' type='text'/></div><div><textarea id='teA'/></textarea></div></html>";
-    const elt2 = document.getElementById("teA");
-    if (elt2 !== null) {
-        textArea = elt2;
+    document.documentElement.innerHTML = "<html><div><a id='url1' href=''>Test</a> </div></html>";
+    const elt = document.getElementById("url1");
+    if (elt !== null) {
+        url = elt;
     }
 });
 
-test("type in a text area starts and stops the interaction", () => {
-    interaction.registerToNodes([textArea]);
-    textArea.dispatchEvent(new Event("input"));
-    jest.runOnlyPendingTimers();
+test("click on url starts and stops the interaction", () => {
+    interaction.registerToNodes([url]);
+    url.dispatchEvent(new Event("input"));
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
 });
