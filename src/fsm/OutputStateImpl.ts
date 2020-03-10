@@ -63,6 +63,7 @@ export abstract class OutputStateImpl extends StateImpl implements OutputState {
     public abstract exit(): void;
 
     public uninstall(): void {
+        super.uninstall();
         this.transitions.forEach(tr => tr.uninstall());
         this.transitions.length = 0;
     }

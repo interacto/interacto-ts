@@ -17,6 +17,7 @@ import { Transition } from "../../src/fsm/Transition";
 import { FSM } from "../../src/fsm/FSM";
 import { StubTransitionOK } from "./StubTransitionOK";
 import "jest";
+import { ErrorCatcher } from "../../src/error/ErrorCatcher";
 
 let tr: Transition;
 let state1: StdState;
@@ -41,4 +42,12 @@ test("testGoodTgt", () => {
 test("testSrcStateTransitionAdded", () => {
     expect(state1.getTransitions()).toHaveLength(1);
     expect(state1.getTransitions()[0]).toStrictEqual(tr);
+});
+
+test("uninstall", () => {
+    const errors: Array<Error> = [];
+    const disposable = ErrorCatcher.getInstance().getErrors().subscribe(err => errors.push(err));
+    tr.uninstall();
+    disposable.unsubscribe();
+    expect(errors).toHaveLength(0);
 });
