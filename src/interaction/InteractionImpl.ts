@@ -274,6 +274,8 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM, 
 	 * @return Whether the user interaction is running.
 	 */
     public isRunning(): boolean {
+        console.log(this.fsm.getCurrentState() instanceof InitState);
+        console.log(this.fsm.getCurrentState());
         return this.activated && !(this.fsm.getCurrentState() instanceof InitState);
     }
 
@@ -339,7 +341,7 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM, 
 	 */
     public abstract getData(): D;
 
-    protected reinit(): void {
+    public reinit(): void {
         this.fsm.reinit();
         this.reinitData();
     }
