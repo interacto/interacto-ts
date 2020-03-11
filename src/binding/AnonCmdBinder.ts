@@ -24,7 +24,7 @@ import { BindingsObserver } from "./BindingsObserver";
 export class AnonCmdBinder<I extends InteractionImpl<D, FSM, {}>, D extends InteractionData> extends Binder<AnonCmd, I, D> {
 
     public constructor(anonCmd: () => void, observer?: BindingsObserver) {
-        super(observer, () => new AnonCmd(anonCmd));
+        super(observer, undefined, undefined, () => new AnonCmd(anonCmd));
     }
 
     protected duplicate(): AnonCmdBinder<I, D> {

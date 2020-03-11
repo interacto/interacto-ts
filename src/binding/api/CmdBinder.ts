@@ -17,9 +17,20 @@ import { InteractionData } from "../../interaction/InteractionData";
 import { FSM } from "../../fsm/FSM";
 import { CmdBinderBuilder } from "./CmdBinderBuilder";
 import { InteractionCmdBinder } from "./InteractionCmdBinder";
+import { LogLevel } from "../../logging/LogLevel";
 
 
 export interface CmdBinder<C extends Command> extends CmdBinderBuilder<C> {
+    first(initCmdFct: (c: C) => void): CmdBinder<C>;
+
+    end(onEnd: (c?: C) => void): CmdBinder<C>;
+
+    on(...widgets: Array<EventTarget>): CmdBinder<C>;
+
+    when(whenPredicate: () => boolean): CmdBinder<C>;
+
+    log(...level: Array<LogLevel>): CmdBinder<C>;
+
     usingInteraction<I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>(interactionSupplier: () => I):
     InteractionCmdBinder<C, I, D>;
 }
