@@ -21,6 +21,7 @@ jest.mock("../../fsm/StubFSMHandler");
 let interaction: SpinnerChanged;
 let spinner: HTMLElement;
 let handler: FSMHandler;
+let timer: number;
 
 beforeEach(() => {
     jest.clearAllMocks();
@@ -30,11 +31,16 @@ beforeEach(() => {
     interaction.log(true);
     interaction.getFsm().log(true);
     interaction.getFsm().addHandler(handler);
+    timer = SpinnerChangedFSM.getTimeGap();
     document.documentElement.innerHTML = "<html><div><input id='sp1' type='number' step='1' value='1'/></div></html>";
     const elt = document.getElementById("sp1");
     if (elt !== null) {
         spinner = elt;
     }
+});
+
+afterEach(() => {
+    SpinnerChangedFSM.setTimeGap(timer);
 });
 
 test("testSpinnerChangedGoodState", () => {
