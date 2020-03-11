@@ -21,6 +21,7 @@ import { CmdBinder } from "./api/CmdBinder";
 import { InteractionBinder } from "./api/InteractionBinder";
 import { InteractionCmdBinder } from "./api/InteractionCmdBinder";
 import { WidgetBinding } from "./WidgetBinding";
+import { BindingsObserver } from "./BindingsObserver";
 
 /**
  * The base class that defines the concept of binding builder (called binder).
@@ -42,10 +43,11 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
     protected onEnd?: (c: C, i?: D) => void;
     protected logLevels: Array<LogLevel>;
     protected targetWidgets: Array<EventTarget>;
+    protected observer?: BindingsObserver;
 
 
-    protected constructor(initCmd?: (c: C, i?: D) => void, checkConditions?: (i: D) => boolean, cmdProducer?: (i?: D) => C,
-                          widgets?: Array<EventTarget>, interactionSupplier?: () => I, onEnd?: (c: C, i?: D) => void,
+    protected constructor(observer?: BindingsObserver, initCmd?: (c: C, i?: D) => void, checkConditions?: (i: D) => boolean,
+                          cmdProducer?: (i?: D) => C, widgets?: Array<EventTarget>, interactionSupplier?: () => I, onEnd?: (c: C, i?: D) => void,
                           logLevels?: Array<LogLevel>, hadNoEffectFct?: (c: C, i: D) => void, hadEffectsFct?: (c: C, i: D) => void,
                           cannotExecFct?: (c: C, i: D) => void, targetWidgets?: Array<EventTarget>) {
         this.initCmd = initCmd;
@@ -59,6 +61,7 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
         this.cannotExecFct = cannotExecFct;
         this.logLevels = logLevels ?? [];
         this.targetWidgets = targetWidgets ?? [];
+        this.observer = observer;
     }
 
     protected abstract duplicate(): Binder<C, I, D>;

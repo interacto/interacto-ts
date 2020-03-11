@@ -22,6 +22,7 @@ import { InteractionCmdUpdateBinder } from "./api/InteractionCmdUpdateBinder";
 import { LogLevel } from "../logging/LogLevel";
 import { WidgetBinding } from "./WidgetBinding";
 import { AnonBinding } from "./AnonBinding";
+import { BindingsObserver } from "./BindingsObserver";
 
 /**
  * The base binding builder for bindings where commands can be updated while the user interaction is running.
@@ -38,13 +39,13 @@ export class UpdateBinder<C extends Command, I extends InteractionImpl<D, FSM, {
     private _strictStart: boolean;
     private throttleTimeout: number;
 
-    public constructor(throttleTimeout: number, continuousCmdExecution: boolean,
-                       strict: boolean, initCmd?: (c: C, i?: D) => void, checkConditions?: (i: D) => boolean, cmdProducer?: (i?: D) => C,
+    public constructor(throttleTimeout: number, continuousCmdExecution: boolean, strict: boolean, observer?: BindingsObserver,
+                       initCmd?: (c: C, i?: D) => void, checkConditions?: (i: D) => boolean, cmdProducer?: (i?: D) => C,
                        widgets?: Array<EventTarget>, interactionSupplier?: () => I, onEnd?: (c: C, i?: D) => void,
                        logLevels?: Array<LogLevel>, hadNoEffectFct?: (c: C, i: D) => void, hadEffectsFct?: (c: C, i: D) => void,
                        cannotExecFct?: (c: C, i: D) => void, updateFct?: (c: C, i?: D) => void, cancelFct?: (i: D) => void,
                        endOrCancelFct?: (i: D) => void, targetWidgets?: Array<EventTarget>) {
-        super(initCmd, checkConditions, cmdProducer, widgets, interactionSupplier, onEnd, logLevels, hadNoEffectFct, hadEffectsFct,
+        super(observer, initCmd, checkConditions, cmdProducer, widgets, interactionSupplier, onEnd, logLevels, hadNoEffectFct, hadEffectsFct,
             cannotExecFct, targetWidgets);
         this.updateFct = updateFct;
         this.cancelFct = cancelFct;
@@ -129,7 +130,7 @@ export class UpdateBinder<C extends Command, I extends InteractionImpl<D, FSM, {
 
     protected duplicate(): UpdateBinder<C, I, D> {
         return new UpdateBinder<C, I, D>(this.throttleTimeout, this.continuousCmdExecution,
-            this._strictStart, this.initCmd, this.checkConditions, this.cmdProducer,
+            this._strictStart, this.observer, this.initCmd, this.checkConditions, this.cmdProducer,
             this.widgets, this.interactionSupplier, this.onEnd,
             this.logLevels, this.hadNoEffectFct, this.hadEffectsFct,
             this.cannotExecFct, this.updateFct, this.cancelFct, this.endOrCancelFct, this.targetWidgets);
@@ -144,9 +145,13 @@ export class UpdateBinder<C extends Command, I extends InteractionImpl<D, FSM, {
             throw new Error("The command supplier cannot be undefined here");
         }
 
-        return new AnonBinding(this.continuousCmdExecution, this.interactionSupplier(), this.cmdProducer, [...this.widgets],
+        const binding = new AnonBinding(this.continuousCmdExecution, this.interactionSupplier(), this.cmdProducer, [...this.widgets],
             [], this._strictStart, [...this.logLevels], this.throttleTimeout, this.initCmd, this.updateFct, this.checkConditions,
             this.onEnd, this.cancelFct, this.endOrCancelFct, this.hadEffectsFct,
             this.hadNoEffectFct, this.cannotExecFct);
+
+        this.observer?.observeBinding(binding);
+
+        return binding;
     }
 }

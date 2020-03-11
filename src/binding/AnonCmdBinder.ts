@@ -19,11 +19,12 @@ import { AnonCmd } from "../command/AnonCmd";
 import { InteractionData } from "../interaction/InteractionData";
 import { WidgetBindingImpl } from "./WidgetBindingImpl";
 import { InteractionImpl } from "../interaction/InteractionImpl";
+import { BindingsObserver } from "./BindingsObserver";
 
 export class AnonCmdBinder<I extends InteractionImpl<D, FSM, {}>, D extends InteractionData> extends Binder<AnonCmd, I, D> {
 
-    public constructor(anonCmd: () => void) {
-        super(() => new AnonCmd(anonCmd));
+    public constructor(anonCmd: () => void, observer?: BindingsObserver) {
+        super(observer, () => new AnonCmd(anonCmd));
     }
 
     protected duplicate(): AnonCmdBinder<I, D> {
@@ -41,6 +42,7 @@ export class AnonCmdBinder<I extends InteractionImpl<D, FSM, {}>, D extends Inte
         dup.hadNoEffectFct = this.hadNoEffectFct;
         dup.hadEffectsFct = this.hadEffectsFct;
         dup.cannotExecFct = this.cannotExecFct;
+        dup.observer = this.observer;
         return dup;
     }
 
@@ -53,9 +55,13 @@ export class AnonCmdBinder<I extends InteractionImpl<D, FSM, {}>, D extends Inte
             throw new Error("The command supplier cannot be undefined here");
         }
 
-        return new AnonBinding(false, this.interactionSupplier(), this.cmdProducer, [...this.widgets],
+        const binding = new AnonBinding(false, this.interactionSupplier(), this.cmdProducer, [...this.widgets],
             [], false, [...this.logLevels], 0, this.initCmd, undefined, this.checkConditions,
             this.onEnd, undefined, undefined, this.hadEffectsFct,
             this.hadNoEffectFct, this.cannotExecFct);
+
+        this.observer?.observeBinding(binding);
+
+        return binding;
     }
 }

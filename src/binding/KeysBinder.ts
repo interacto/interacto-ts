@@ -21,6 +21,7 @@ import { KeyInteractionCmdBinder } from "./api/KeyInteractionCmdBinder";
 import { LogLevel } from "../logging/LogLevel";
 import { WidgetBinding } from "./WidgetBinding";
 import { AnonBinding } from "./AnonBinding";
+import { BindingsObserver } from "./BindingsObserver";
 
 /**
  * The base binding builder to create bindings between a keys pressure interaction and a given command.
@@ -34,13 +35,13 @@ export class KeysBinder<C extends Command> extends Binder<C, KeysPressed, KeysDa
     private codes: Array<string>;
     private readonly checkCode: (i: KeysData) => boolean;
 
-    protected constructor(initCmd?: (c: C, i?: KeysData) => void, whenPredicate?: (i: KeysData) => boolean,
+    protected constructor(observer?: BindingsObserver, initCmd?: (c: C, i?: KeysData) => void, whenPredicate?: (i: KeysData) => boolean,
                           cmdProducer?: (i?: KeysData) => C, widgets?: Array<EventTarget>,
                           onEnd?: (c: C, i?: KeysData) => void, logLevels?: Array<LogLevel>,
                           hadNoEffectFct?: (c: C, i: KeysData) => void, hadEffectsFct?: (c: C, i: KeysData) => void,
                           cannotExecFct?: (c: C, i: KeysData) => void, targetWidgets?: Array<EventTarget>,
                           keyCodes?: Array<string>) {
-        super(initCmd, whenPredicate, cmdProducer, widgets, () => new KeysPressed(), onEnd, logLevels, hadNoEffectFct, hadEffectsFct,
+        super(observer, initCmd, whenPredicate, cmdProducer, widgets, () => new KeysPressed(), onEnd, logLevels, hadNoEffectFct, hadEffectsFct,
             cannotExecFct, targetWidgets);
         this.codes = keyCodes === undefined ? [] : [...keyCodes];
         this.checkCode = (i: KeysData): boolean => {
@@ -91,7 +92,7 @@ export class KeysBinder<C extends Command> extends Binder<C, KeysPressed, KeysDa
 
 
     protected duplicate(): KeysBinder<C> {
-        return new KeysBinder(this.initCmd, this.checkConditions, this.cmdProducer, [...this.widgets],
+        return new KeysBinder(this.observer, this.initCmd, this.checkConditions, this.cmdProducer, [...this.widgets],
             this.onEnd, [...this.logLevels], this.hadNoEffectFct, this.hadEffectsFct, this.cannotExecFct,
             [...this.targetWidgets], [...this.codes]);
     }
@@ -105,9 +106,13 @@ export class KeysBinder<C extends Command> extends Binder<C, KeysPressed, KeysDa
             throw new Error("The command supplier cannot be undefined here");
         }
 
-        return new AnonBinding(false, this.interactionSupplier(), this.cmdProducer, [...this.widgets],
+        const binding = new AnonBinding(false, this.interactionSupplier(), this.cmdProducer, [...this.widgets],
             [], false, [...this.logLevels], 0, this.initCmd, undefined, this.checkCode,
             this.onEnd, undefined, undefined, this.hadEffectsFct,
             this.hadNoEffectFct, this.cannotExecFct);
+
+        this.observer?.observeBinding(binding);
+
+        return binding;
     }
 }
