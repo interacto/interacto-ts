@@ -24,6 +24,26 @@ export enum EventRegistrationToken {
     Change = "change"
 }
 
+/**
+ * Checks whether the given event type is a mouse event.
+ * @param eventType The event type to check.
+ */
+export function isMouseEvent(eventType: string): boolean {
+    return eventType === EventRegistrationToken.MouseDown ||
+    eventType === EventRegistrationToken.MouseUp ||
+    eventType === EventRegistrationToken.MouseMove ||
+    eventType === EventRegistrationToken.Click;
+}
+
+/**
+ * Checks whether the given event type is a key event.
+ * @param eventType The event type to check.
+ */
+export function isKeyEvent(eventType: string): boolean {
+    return eventType === EventRegistrationToken.KeyDown ||
+    eventType === EventRegistrationToken.KeyUp;
+}
+
 export function isButton(target: EventTarget): target is HTMLButtonElement {
     return target instanceof HTMLButtonElement;
 }

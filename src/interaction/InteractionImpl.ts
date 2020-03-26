@@ -18,7 +18,7 @@ import { InitState } from "../fsm/InitState";
 import { Logger } from "typescript-logging";
 import { catInteraction } from "../logging/ConfigLog";
 import { InteractionData } from "./InteractionData";
-import { EventRegistrationToken } from "../fsm/Events";
+import { EventRegistrationToken, isMouseEvent, isKeyEvent } from "../fsm/Events";
 import { Subscription } from "rxjs";
 
 /**
@@ -166,28 +166,12 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM> 
     }
 
     private registerEventToNode(eventType: string, node: EventTarget): void {
-        if (EventRegistrationToken.MouseDown === eventType) {
-            node.addEventListener(EventRegistrationToken.MouseDown, this.getMouseHandler());
+        if (isMouseEvent(eventType)) {
+            node.addEventListener(eventType, this.getMouseHandler());
             return;
         }
-        if (EventRegistrationToken.MouseUp === eventType) {
-            node.addEventListener(EventRegistrationToken.MouseUp, this.getMouseHandler());
-            return;
-        }
-        if (EventRegistrationToken.Click === eventType) {
-            node.addEventListener(EventRegistrationToken.Click, this.getMouseHandler());
-            return;
-        }
-        if (EventRegistrationToken.MouseMove === eventType) {
-            node.addEventListener(EventRegistrationToken.MouseMove, this.getMouseHandler());
-            return;
-        }
-        if (EventRegistrationToken.KeyDown === eventType) {
-            node.addEventListener(EventRegistrationToken.KeyDown, this.getKeyHandler());
-            return;
-        }
-        if (EventRegistrationToken.KeyUp === eventType) {
-            node.addEventListener(EventRegistrationToken.KeyUp, this.getKeyHandler());
+        if (isKeyEvent(eventType)) {
+            node.addEventListener(eventType, this.getKeyHandler());
             return;
         }
         if (EventRegistrationToken.Scroll === eventType) {
@@ -220,28 +204,12 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM> 
     }
 
     private unregisterEventToNode(eventType: string, node: EventTarget): void {
-        if (EventRegistrationToken.MouseDown === eventType) {
-            node.removeEventListener(EventRegistrationToken.MouseDown, this.getMouseHandler());
+        if (isMouseEvent(eventType)) {
+            node.removeEventListener(eventType, this.getMouseHandler());
             return;
         }
-        if (EventRegistrationToken.MouseUp === eventType) {
-            node.removeEventListener(EventRegistrationToken.MouseUp, this.getMouseHandler());
-            return;
-        }
-        if (EventRegistrationToken.Click === eventType) {
-            node.removeEventListener(EventRegistrationToken.Click, this.getMouseHandler());
-            return;
-        }
-        if (EventRegistrationToken.MouseMove === eventType) {
-            node.removeEventListener(EventRegistrationToken.MouseMove, this.getMouseHandler());
-            return;
-        }
-        if (EventRegistrationToken.KeyDown === eventType) {
-            node.removeEventListener(EventRegistrationToken.KeyDown, this.getKeyHandler());
-            return;
-        }
-        if (EventRegistrationToken.KeyUp === eventType) {
-            node.removeEventListener(EventRegistrationToken.KeyUp, this.getKeyHandler());
+        if (isKeyEvent(eventType)) {
+            node.removeEventListener(eventType, this.getKeyHandler());
             return;
         }
         if (EventRegistrationToken.Scroll === eventType) {
