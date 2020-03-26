@@ -29,7 +29,7 @@ import { BindingsObserver } from "./BindingsObserver";
  * @param <C> The type of the command to produce.
  * @author Arnaud Blouin
  */
-export class UpdateBinder<C extends Command, I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>
+export class UpdateBinder<C extends Command, I extends InteractionImpl<D, FSM>, D extends InteractionData>
     extends Binder<C, I, D> implements CmdUpdateBinder<C>, InteractionCmdUpdateBinder<C, I, D> {
 
     private updateFct?: (c: C, i?: D) => void;
@@ -119,7 +119,7 @@ export class UpdateBinder<C extends Command, I extends InteractionImpl<D, FSM, {
         return super.log(...level) as UpdateBinder<C, I, D>;
     }
 
-    public usingInteraction<I2 extends InteractionImpl<D2, FSM, {}>, D2 extends InteractionData>
+    public usingInteraction<I2 extends InteractionImpl<D2, FSM>, D2 extends InteractionData>
     (interactionSupplier: () => I2): UpdateBinder<C, I2, D2> {
         return super.usingInteraction(interactionSupplier) as UpdateBinder<C, I2, D2>;
     }

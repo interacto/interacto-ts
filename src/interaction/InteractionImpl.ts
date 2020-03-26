@@ -19,7 +19,6 @@ import { Logger } from "typescript-logging";
 import { catInteraction } from "../logging/ConfigLog";
 import { InteractionData } from "./InteractionData";
 import { EventRegistrationToken } from "../fsm/Events";
-import { WidgetData } from "./WidgetData";
 import { Subscription } from "rxjs";
 
 /**
@@ -28,7 +27,7 @@ import { Subscription } from "rxjs";
  * @param <E> The type of the events that the interaction will process.
  * @param <F> The type of the FSM.
  */
-export abstract class InteractionImpl<D extends InteractionData, F extends FSM, T> implements WidgetData<T> {
+export abstract class InteractionImpl<D extends InteractionData, F extends FSM> {
     protected logger?: Logger;
     protected readonly fsm: F;
     protected asLog: boolean;
@@ -36,8 +35,8 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM, 
     protected readonly _registeredTargetNode: Set<EventTarget>;
     protected readonly _additionalNodes: Array<Node>;
     protected readonly listMutationObserver: Array<MutationObserver>;
-    /** The widget used during the interaction. */
-    protected _widget?: T;
+    /** The interaction data */
+    protected readonly data: D;
     private mouseHandler?: ((e: MouseEvent) => void);
     private keyHandler?: ((e: KeyboardEvent) => void);
     private uiHandler?: ((e: UIEvent) => void);
@@ -52,6 +51,7 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM, 
 
     protected constructor(fsm: F) {
         this.activated = false;
+        this.data = this.createDataObject();
         this.fsm = fsm;
         this.disposable = this.fsm.currentStateObservable().subscribe(current => this.updateEventsRegistered(current[1], current[0]));
         this.activated = true;
@@ -62,13 +62,18 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM, 
         this._registeredTargetNode = new Set<EventTarget>();
     }
 
-    /**
-     * @return The widget used during the interaction.
-     */
-    public getWidget(): T | undefined {
-        return this._widget;
+    protected abstract createDataObject(): D;
+
+    public reinitData(): void {
+        this.data.flush();
     }
 
+    /**
+	 * @return The interaction data of the user interaction. Cannot be null.
+	 */
+    public getData(): D {
+        return this.data;
+    }
 
     protected updateEventsRegistered(newState: OutputState, oldState: OutputState): void {
         // Do nothing when the interaction has only two nodes: init node and terminal node (this is a single-event interaction).
@@ -214,10 +219,6 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM, 
         return this.actionHandler;
     }
 
-    public reinitData(): void {
-        this._widget = undefined;
-    }
-
     private unregisterEventToNode(eventType: string, node: EventTarget): void {
         if (EventRegistrationToken.MouseDown === eventType) {
             node.removeEventListener(EventRegistrationToken.MouseDown, this.getMouseHandler());
@@ -336,11 +337,6 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM, 
         return this.fsm;
     }
 
-    /**
-	 * @return The interaction data of the user interaction. Cannot be null.
-	 */
-    public abstract getData(): D;
-
     public reinit(): void {
         this.fsm.reinit();
         this.reinitData();
@@ -351,7 +347,6 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM, 
 	 * Then, user interaction can be used any more.
 	 */
     public uninstall(): void {
-        this._widget = undefined;
         this.disposable.unsubscribe();
         this._registeredNodes.clear();
         this._additionalNodes.length = 0;

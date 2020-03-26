@@ -16,7 +16,7 @@ import { FSMDataHandler } from "../../fsm/FSMDataHandler";
 import { ButtonPressedTransition } from "../../fsm/ButtonPressedTransition";
 import { TerminalState } from "../../fsm/TerminalState";
 import { isButton } from "../../fsm/Events";
-import { WidgetData } from "../WidgetData";
+import { WidgetData, WidgetDataImpl } from "../WidgetData";
 import { FSM } from "../../fsm/FSM";
 import { InteractionImpl } from "../InteractionImpl";
 
@@ -52,7 +52,7 @@ interface ButtonPressedFSMHandler extends FSMDataHandler {
  * A user interaction for buttons.
  * @author Arnaud BLOUIN
  */
-export class ButtonPressed extends InteractionImpl<WidgetData<HTMLButtonElement>, ButtonPressedFSM, HTMLButtonElement> {
+export class ButtonPressed extends InteractionImpl<WidgetData<HTMLButtonElement>, ButtonPressedFSM> {
     private readonly handler: ButtonPressedFSMHandler;
 
     /**
@@ -70,7 +70,7 @@ export class ButtonPressed extends InteractionImpl<WidgetData<HTMLButtonElement>
 
             public initToPressedHandler(event: Event): void {
                 if (event.target !== null && isButton(event.target)) {
-                    this._parent._widget = event.target;
+                    (this._parent.data as WidgetDataImpl<HTMLButtonElement>).setWidget(event.target);
                 }
             }
 
@@ -94,7 +94,7 @@ export class ButtonPressed extends InteractionImpl<WidgetData<HTMLButtonElement>
         }
     }
 
-    public getData(): WidgetData<HTMLButtonElement> {
-        return this;
+    public createDataObject(): WidgetData<HTMLButtonElement> {
+        return new WidgetDataImpl<HTMLButtonElement>();
     }
 }

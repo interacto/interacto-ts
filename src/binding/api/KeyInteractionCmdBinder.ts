@@ -20,7 +20,7 @@ import { InteractionCmdBinder } from "./InteractionCmdBinder";
 import { LogLevel } from "../../logging/LogLevel";
 import { WidgetBinding } from "../WidgetBinding";
 
-export interface KeyInteractionCmdBinder<C extends Command, I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>
+export interface KeyInteractionCmdBinder<C extends Command, I extends InteractionImpl<D, FSM>, D extends InteractionData>
     extends KeyInteractionBinderBuilder<I, D>, InteractionCmdBinder<C, I, D> {
 
     first(initCmdFct: (c: C, i?: D) => void): KeyInteractionCmdBinder<C, I, D>;

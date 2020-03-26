@@ -18,8 +18,9 @@ import { KeyPressureTransition } from "../../fsm/KeyPressureTransition";
 import { OutputState } from "../../fsm/OutputState";
 import { InputState } from "../../fsm/InputState";
 import { KeyData } from "./KeyData";
-import { KeyInteraction } from "./KeyInteraction";
 import { FSM } from "../../fsm/FSM";
+import { InteractionImpl } from "../InteractionImpl";
+import { KeyDataImpl } from "./KeyDataImpl";
 
 export class KeyPressedFSM extends FSM {
     private readonly modifiersAccepted: boolean;
@@ -76,7 +77,7 @@ interface KeyPressedFSMHandler extends FSMDataHandler {
  * @author Gwendal DIDOT
  */
 
-export class KeyPressed extends KeyInteraction<KeyData, KeyPressedFSM, Node> {
+export class KeyPressed extends InteractionImpl<KeyData, KeyPressedFSM> {
 
     private readonly handler: KeyPressedFSMHandler;
 
@@ -91,7 +92,7 @@ export class KeyPressed extends KeyInteraction<KeyData, KeyPressedFSM, Node> {
             }
 
             public onKeyPressed(event: KeyboardEvent): void {
-                this._parent.setKeyData(event);
+                (this._parent.getData() as KeyDataImpl).setKeyData(event);
             }
 
             public reinitData(): void {
@@ -102,7 +103,7 @@ export class KeyPressed extends KeyInteraction<KeyData, KeyPressedFSM, Node> {
 
     }
 
-    public getData(): KeyData {
-        return this;
+    public createDataObject(): KeyData {
+        return new KeyDataImpl();
     }
 }

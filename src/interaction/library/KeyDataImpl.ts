@@ -12,7 +12,6 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Optional } from "../../util/Optional";
 import { KeyData } from "./KeyData";
 
 export class KeyDataImpl implements KeyData {
@@ -26,15 +25,16 @@ export class KeyDataImpl implements KeyData {
      */
     protected target?: EventTarget;
 
-    public constructor() { }
+    public constructor() {
+    }
 
-    public reinitData(): void {
+    public flush(): void {
         this.key = undefined;
         this.target = undefined;
     }
 
-    public getTarget(): Optional<EventTarget> {
-        return Optional.of(this.target);
+    public getTarget(): EventTarget | undefined {
+        return this.target;
     }
 
     public getKey(): string {

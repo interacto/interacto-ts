@@ -36,7 +36,7 @@ import { BindingsObserver } from "./BindingsObserver";
 let observer: BindingsObserver | undefined;
 
 export function nodeBinder(): BaseUpdateBinder {
-    return new UpdateBinder<CommandImpl, InteractionImpl<InteractionData, FSM, {}>, InteractionData>(0, false, false) as BaseUpdateBinder;
+    return new UpdateBinder<CommandImpl, InteractionImpl<InteractionData, FSM>, InteractionData>(0, false, false) as BaseUpdateBinder;
 }
 
 /**

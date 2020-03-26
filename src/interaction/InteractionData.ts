@@ -18,4 +18,5 @@
  * this interface.
  */
 export interface InteractionData {
+    flush(): void;
 }

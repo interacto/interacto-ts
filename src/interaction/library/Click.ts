@@ -17,9 +17,10 @@ import { TerminalState } from "../../fsm/TerminalState";
 import { ClickTransition } from "../../fsm/ClickTransition";
 import { InputState } from "../../fsm/InputState";
 import { OutputState } from "../../fsm/OutputState";
-import { PointInteraction } from "./PointInteraction";
 import { PointData } from "./PointData";
 import { FSM } from "../../fsm/FSM";
+import { InteractionImpl } from "../InteractionImpl";
+import { PointDataImpl } from "./PointDataImpl";
 
 export class ClickFSM extends FSM {
     private checkButton?: number;
@@ -82,7 +83,7 @@ interface ClickFSMHandler extends FSMDataHandler {
     initToClicked(event: MouseEvent): void;
 }
 
-export class Click extends PointInteraction<PointData, ClickFSM, Node> {
+export class Click extends InteractionImpl<PointData, ClickFSM> {
     private readonly handler: ClickFSMHandler;
 
     /**
@@ -98,8 +99,9 @@ export class Click extends PointInteraction<PointData, ClickFSM, Node> {
                 this._parent = parent;
             }
 
-            public initToClicked(event: MouseEvent): void {
-                this._parent.setPointData(event);
+            public initToClicked(evt: MouseEvent): void {
+                (this._parent.data as PointDataImpl).setPointData(evt.clientX, evt.clientY, evt.screenX, evt.screenY,
+                    evt.button, evt.target ?? undefined, evt.currentTarget ?? undefined);
             }
 
             public reinitData(): void {
@@ -110,7 +112,7 @@ export class Click extends PointInteraction<PointData, ClickFSM, Node> {
         this.getFsm().buildFSM(this.handler);
     }
 
-    public getData(): PointData {
-        return this;
+    public createDataObject(): PointData {
+        return new PointDataImpl();
     }
 }

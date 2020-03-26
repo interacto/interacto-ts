@@ -21,7 +21,7 @@ import { WidgetBindingImpl } from "./WidgetBindingImpl";
 import { InteractionImpl } from "../interaction/InteractionImpl";
 import { BindingsObserver } from "./BindingsObserver";
 
-export class AnonCmdBinder<I extends InteractionImpl<D, FSM, {}>, D extends InteractionData> extends Binder<AnonCmd, I, D> {
+export class AnonCmdBinder<I extends InteractionImpl<D, FSM>, D extends InteractionData> extends Binder<AnonCmd, I, D> {
 
     public constructor(anonCmd: () => void, observer?: BindingsObserver) {
         super(observer, undefined, undefined, () => new AnonCmd(anonCmd));

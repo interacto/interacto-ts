@@ -20,3 +20,19 @@ export interface WidgetData<T> extends InteractionData {
      */
     getWidget(): T | undefined;
 }
+
+export class WidgetDataImpl<T> implements WidgetData<T> {
+    private widget?: T;
+
+    public getWidget(): T | undefined {
+        return this.widget;
+    }
+
+    public setWidget(widget?: T): void {
+        this.widget = widget;
+    }
+
+    public flush(): void {
+        this.widget = undefined;
+    }
+}

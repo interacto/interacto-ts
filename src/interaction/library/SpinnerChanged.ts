@@ -15,7 +15,7 @@
 import { TerminalState } from "../../fsm/TerminalState";
 import { isSpinner } from "../../fsm/Events";
 import { FSMDataHandler } from "../../fsm/FSMDataHandler";
-import { WidgetData } from "../WidgetData";
+import { WidgetData, WidgetDataImpl } from "../WidgetData";
 import { SpinnerChangedTransition } from "../../fsm/SpinnerChangedTransition";
 import { FSM } from "../../fsm/FSM";
 import { InteractionImpl } from "../InteractionImpl";
@@ -91,7 +91,7 @@ interface SpinnerChangedHandler extends FSMDataHandler {
  * A user interaction for Number input.
  * @author Gwendal DIDOT
  */
-export class SpinnerChanged extends InteractionImpl<WidgetData<HTMLInputElement>, SpinnerChangedFSM, HTMLInputElement> {
+export class SpinnerChanged extends InteractionImpl<WidgetData<HTMLInputElement>, SpinnerChangedFSM> {
     private readonly handler: SpinnerChangedHandler;
 
     /**
@@ -109,7 +109,7 @@ export class SpinnerChanged extends InteractionImpl<WidgetData<HTMLInputElement>
 
             public initToChangedHandler(event: Event): void {
                 if (event.target !== null && isSpinner(event.target)) {
-                    this._parent._widget = event.target;
+                    (this._parent.data as WidgetDataImpl<HTMLInputElement>).setWidget(event.target);
                 }
             }
 
@@ -134,7 +134,7 @@ export class SpinnerChanged extends InteractionImpl<WidgetData<HTMLInputElement>
         }
     }
 
-    public getData(): WidgetData<HTMLInputElement> {
-        return this;
+    public createDataObject(): WidgetData<HTMLInputElement> {
+        return new WidgetDataImpl<HTMLInputElement>();
     }
 }

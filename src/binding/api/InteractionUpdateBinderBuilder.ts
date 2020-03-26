@@ -18,7 +18,7 @@ import { InteractionBinderBuilder } from "./InteractionBinderBuilder";
 import { LogLevel } from "../../logging/LogLevel";
 
 
-export interface InteractionUpdateBinderBuilder<I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>
+export interface InteractionUpdateBinderBuilder<I extends InteractionImpl<D, FSM>, D extends InteractionData>
     extends InteractionBinderBuilder <I, D> {
     /**
     * Defines what to do when a command is cancelled (because the interaction is cancelled).

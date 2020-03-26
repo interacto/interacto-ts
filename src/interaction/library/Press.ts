@@ -16,9 +16,10 @@ import { FSMDataHandler } from "../../fsm/FSMDataHandler";
 import { TerminalState } from "../../fsm/TerminalState";
 import { PressureTransition } from "../../fsm/PressureTransition";
 import { isMouseDownEvent } from "../../fsm/Events";
-import { PointInteraction } from "./PointInteraction";
 import { PointData } from "./PointData";
 import { FSM } from "../../fsm/FSM";
+import { InteractionImpl } from "../InteractionImpl";
+import { PointDataImpl } from "./PointDataImpl";
 
 export class PressFSM extends FSM {
     private checkButton?: number;
@@ -63,7 +64,7 @@ interface PressFSMHandler extends FSMDataHandler {
  * A user interaction for pressing down the mouse button.
  * @author Gwendal DIDOT
  */
-export class Press extends PointInteraction<PointData, PressFSM, Node> {
+export class Press extends InteractionImpl<PointData, PressFSM> {
     /**
      * Creates the interaction.
      */
@@ -79,8 +80,9 @@ export class Press extends PointInteraction<PointData, PressFSM, Node> {
                 this._parent = parent;
             }
 
-            public initToPress(event: MouseEvent): void {
-                this._parent.setPointData(event);
+            public initToPress(evt: MouseEvent): void {
+                (this._parent.data as PointDataImpl).setPointData(evt.clientX, evt.clientY, evt.screenX, evt.screenY,
+                    evt.button, evt.target ?? undefined, evt.currentTarget ?? undefined);
             }
 
             public reinitData(): void {
@@ -90,7 +92,7 @@ export class Press extends PointInteraction<PointData, PressFSM, Node> {
         this.getFsm().buildFSM(this.handler);
     }
 
-    public getData(): PointData {
-        return this;
+    public createDataObject(): PointData {
+        return new PointDataImpl();
     }
 }

@@ -20,7 +20,7 @@ import { Command } from "../../command/Command";
 import { InteractionCmdBinder } from "./InteractionCmdBinder";
 
 
-export interface InteractionBinder<I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>
+export interface InteractionBinder<I extends InteractionImpl<D, FSM>, D extends InteractionData>
     extends InteractionBinderBuilder<I, D> {
 
     when(whenPredicate: (i?: D) => boolean): InteractionBinder<I, D>;

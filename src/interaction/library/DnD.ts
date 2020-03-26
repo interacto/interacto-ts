@@ -20,12 +20,11 @@ import { OutputState } from "../../../src/fsm/OutputState";
 import { InputState } from "../../../src/fsm/InputState";
 import { MoveTransition } from "../../fsm/MoveTransition";
 import { EscapeKeyPressureTransition } from "../../fsm/EscapeKeyPressureTransition";
-import { PointInteraction } from "./PointInteraction";
-import { SrcTgtPointsData } from "./SrcTgtPointsData";
-import { Optional } from "../../util/Optional";
+import { SrcTgtPointsData, SrcTgtPointsDataImpl } from "./SrcTgtPointsData";
 import { FSM } from "../../fsm/FSM";
 import { PressureTransition } from "../../fsm/PressureTransition";
 import { ReleaseTransition } from "../../fsm/ReleaseTransition";
+import { InteractionImpl } from "../InteractionImpl";
 
 export class DnDFSM extends FSM {
     private readonly cancellable: boolean;
@@ -166,19 +165,7 @@ interface DnDFSMHandler extends FSMDataHandler {
  * A user interaction for Drag and Drop
  * @author Gwendal DIDOT
  */
-export class DnD extends PointInteraction<SrcTgtPointsData, DnDFSM, Node> implements SrcTgtPointsData {
-
-    /**The object pick at the end of the interaction*/
-    private tgtObject?: EventTarget;
-
-    private tgtClientX?: number;
-
-    private tgtClientY?: number;
-
-    private tgtScreenX?: number;
-
-    private tgtScreenY?: number;
-
+export class DnD extends InteractionImpl<SrcTgtPointsData, DnDFSM> {
     /**
      * Creates the interaction.
      */
@@ -194,68 +181,39 @@ export class DnD extends PointInteraction<SrcTgtPointsData, DnDFSM, Node> implem
                 this._parent = parent;
             }
 
-            public onPress(event: MouseEvent): void {
-                this._parent.setPointData(event);
-                this._parent.setTgtData(event);
+            public onPress(evt: MouseEvent): void {
+                (this._parent.data as (SrcTgtPointsDataImpl)).setPointData(evt.clientX, evt.clientY, evt.screenX, evt.screenY,
+                    evt.button, evt.target ?? undefined, evt.currentTarget ?? undefined);
+                this.setTgt(evt);
             }
 
-            public onDrag(event: MouseEvent): void {
+            public onDrag(evt: MouseEvent): void {
                 if (srcOnUpdate) {
-                    this._parent.setPointData(event);
+                    const d: SrcTgtPointsDataImpl = this._parent.data as (SrcTgtPointsDataImpl);
+                    d.setPointData(this._parent.data.getTgtClientX(), this._parent.data.getTgtClientY(), this._parent.data.getTgtScreenX(),
+                        this._parent.data.getTgtScreenY(), this._parent.data.getButton(),
+                        this._parent.data.getTgtObject(), this._parent.data.getTgtObject());
                 }
-                this._parent.setTgtData(event);
+                this.setTgt(evt);
             }
 
-            public onRelease(event: MouseEvent): void {
-                this._parent.setTgtData(event);
+            public onRelease(evt: MouseEvent): void {
+                this.setTgt(evt);
             }
 
             public reinitData(): void {
                 this._parent.reinitData();
             }
+
+            private setTgt(evt: MouseEvent): void {
+                (this._parent.data as (SrcTgtPointsDataImpl)).setTgtData(evt.clientX, evt.clientY, evt.screenX, evt.screenY, evt.target ?? undefined);
+                (this._parent.data as (SrcTgtPointsDataImpl)).setModifiersData(evt);
+            }
         }(this);
         this.getFsm().buildFSM(this.handler);
     }
 
-    public setTgtData(event: MouseEvent): void {
-        this.tgtClientX = event.clientX;
-        this.tgtClientY = event.clientY;
-        this.tgtScreenX = event.screenX;
-        this.tgtScreenY = event.screenY;
-        this.tgtObject = event.target === null ? undefined : event.target;
+    public createDataObject(): SrcTgtPointsData {
+        return new SrcTgtPointsDataImpl();
     }
-
-    public reinitData(): void {
-        super.reinitData();
-        this.tgtClientX = undefined;
-        this.tgtClientY = undefined;
-        this.tgtScreenX = undefined;
-        this.tgtScreenY = undefined;
-        this.tgtObject = undefined;
-    }
-
-    public getData(): SrcTgtPointsData {
-        return this;
-    }
-
-    public getTgtClientX(): number {
-        return this.tgtClientX ?? 0;
-    }
-
-    public getTgtClientY(): number {
-        return this.tgtClientY ?? 0;
-    }
-
-    public getTgtScreenX(): number {
-        return this.tgtScreenX ?? 0;
-    }
-
-    public getTgtScreenY(): number {
-        return this.tgtScreenY ?? 0;
-    }
-
-    public getTgtObject(): Optional<EventTarget> {
-        return Optional.of(this.tgtObject);
-    }
-
 }

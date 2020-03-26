@@ -35,5 +35,5 @@ export interface BaseBinder extends BaseBinderBuilder {
 
     toProduce<C extends Command>(cmdSupplier: () => C): CmdBinder<C>;
 
-    usingInteraction<I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>(interactionSupplier: () => I): InteractionBinder<I, D>;
+    usingInteraction<I extends InteractionImpl<D, FSM>, D extends InteractionData>(interactionSupplier: () => I): InteractionBinder<I, D>;
 }

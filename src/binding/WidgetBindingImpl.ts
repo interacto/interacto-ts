@@ -31,7 +31,7 @@ import { ErrorCatcher } from "..";
  * @param <I> The type of the interaction that will use this widget binding.
  * @author Arnaud BLOUIN
  */
-export abstract class WidgetBindingImpl<C extends Command, I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>
+export abstract class WidgetBindingImpl<C extends Command, I extends InteractionImpl<D, FSM>, D extends InteractionData>
 implements WidgetBinding<C, I, D> {
 
     protected timeEnded: number;

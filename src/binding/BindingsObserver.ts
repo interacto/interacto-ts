@@ -26,7 +26,7 @@ export interface BindingsObserver {
      * Adds a widget binding to observe.
      * @param binding The binding to observe.
      */
-    observeBinding(binding: WidgetBindingImpl<Command, InteractionImpl<InteractionData, FSM, {}>, {}>): void;
+    observeBinding(binding: WidgetBindingImpl<Command, InteractionImpl<InteractionData, FSM>, InteractionData>): void;
 
     /**
      * Clear all the observed bindings and uninstall them.

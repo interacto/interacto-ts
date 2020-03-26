@@ -23,7 +23,7 @@ import { InteractionData } from "../interaction/InteractionData";
  * The concept of widget binding and its related services.
  * @author Arnaud BLOUIN
  */
-export interface WidgetBinding<C extends Command, I extends InteractionImpl<D, FSM, {}>, D extends InteractionData> extends FSMHandler {
+export interface WidgetBinding<C extends Command, I extends InteractionImpl<D, FSM>, D extends InteractionData> extends FSMHandler {
     /**
      * Stops the interaction and clears all its events waiting for a process.
      */

@@ -15,7 +15,7 @@
 import { TerminalState } from "../../fsm/TerminalState";
 import { isComboBox } from "../../fsm/Events";
 import { FSMDataHandler } from "../../fsm/FSMDataHandler";
-import { WidgetData } from "../WidgetData";
+import { WidgetData, WidgetDataImpl } from "../WidgetData";
 import { ComboBoxTransition } from "../../fsm/ComboBoxTransition";
 import { FSM } from "../../fsm/FSM";
 import { InteractionImpl } from "../InteractionImpl";
@@ -54,7 +54,7 @@ interface ComboBoxSelectedHandler extends FSMDataHandler {
  * @author Gwendal DIDOT
  */
 
-export class ComboBoxSelected extends InteractionImpl<WidgetData<HTMLSelectElement>, ComboBoxSelectedFSM, HTMLSelectElement> {
+export class ComboBoxSelected extends InteractionImpl<WidgetData<HTMLSelectElement>, ComboBoxSelectedFSM> {
     private readonly handler: ComboBoxSelectedHandler;
 
     /**
@@ -72,7 +72,7 @@ export class ComboBoxSelected extends InteractionImpl<WidgetData<HTMLSelectEleme
 
             public initToSelectedHandler(event: Event): void {
                 if (event.target !== null && isComboBox(event.target)) {
-                    this._parent._widget = event.target;
+                    (this._parent.data as WidgetDataImpl<HTMLSelectElement>).setWidget(event.target);
                 }
             }
 
@@ -97,7 +97,7 @@ export class ComboBoxSelected extends InteractionImpl<WidgetData<HTMLSelectEleme
         }
     }
 
-    public getData(): WidgetData<HTMLSelectElement> {
-        return this;
+    public createDataObject(): WidgetData<HTMLSelectElement> {
+        return new WidgetDataImpl<HTMLSelectElement>();
     }
 }

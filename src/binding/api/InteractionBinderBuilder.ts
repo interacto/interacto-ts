@@ -17,7 +17,7 @@ import { BaseBinderBuilder } from "./BaseBinderBuilder";
 import { FSM } from "../../fsm/FSM";
 import { LogLevel } from "../../logging/LogLevel";
 
-export interface InteractionBinderBuilder<I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>
+export interface InteractionBinderBuilder<I extends InteractionImpl<D, FSM>, D extends InteractionData>
     extends BaseBinderBuilder {
     /**
 	 * Specifies the conditions to fulfill to initialise, update, or execute the command while the interaction is running.

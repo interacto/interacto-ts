@@ -65,11 +65,11 @@ test("testClickData", () => {
     let button: number | undefined;
 
     handler.fsmStops = jest.fn(() => {
-        button = interaction.getButton();
-        x = interaction.getSrcClientX();
-        y = interaction.getSrcClientY();
-        sx = interaction.getSrcScreenX();
-        sy = interaction.getSrcScreenY();
+        button = interaction.getData().getButton();
+        x = interaction.getData().getSrcClientX();
+        y = interaction.getData().getSrcClientY();
+        sx = interaction.getData().getSrcScreenX();
+        sy = interaction.getData().getSrcScreenY();
     });
     interaction.processEvent(createMouseEvent("click", canvas, 111, 222, 11, 22, 1));
     expect(x).toStrictEqual(11);
@@ -87,11 +87,11 @@ test("testClickOnWidgetData", () => {
     let button: number | undefined;
 
     handler.fsmStops = jest.fn(() => {
-        button = interaction.getButton();
-        x = interaction.getSrcClientX();
-        y = interaction.getSrcClientY();
-        sx = interaction.getSrcScreenX();
-        sy = interaction.getSrcScreenY();
+        button = interaction.getData().getButton();
+        x = interaction.getData().getSrcClientX();
+        y = interaction.getData().getSrcClientY();
+        sx = interaction.getData().getSrcScreenX();
+        sy = interaction.getData().getSrcScreenY();
     });
     interaction.registerToNodes([canvas]);
     canvas.dispatchEvent(createMouseEvent("click", canvas, 111, 222, 11, 22, 1));

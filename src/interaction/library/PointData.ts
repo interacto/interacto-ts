@@ -12,9 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Optional } from "../../util/Optional";
+import { InteractionData } from "../InteractionData";
 
-export interface PointData {
+export interface PointData extends InteractionData {
     /**
      * @return True: the alt key is pressed.
      */
@@ -63,7 +63,7 @@ export interface PointData {
     /**
      * @return The object picked at the pressed position.
      */
-    getSrcObject(): Optional<EventTarget>;
+    getSrcObject(): EventTarget | undefined;
 
-    getCurrentTarget(): Optional<EventTarget>;
+    getCurrentTarget(): EventTarget | undefined;
 }

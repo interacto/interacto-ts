@@ -11,15 +11,11 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { InteractionImpl, InteractionData, FSM, OutputState } from "../../src";
+import { InteractionImpl, InteractionData, FSM, OutputState, PointDataImpl } from "../../src";
 
-export class InteractionStub extends InteractionImpl<InteractionData, FSM, object> {
+export class InteractionStub extends InteractionImpl<InteractionData, FSM> {
     public constructor(fsm: FSM) {
         super(fsm);
-    }
-
-    public getData(): InteractionData {
-        return {} as InteractionData;
     }
 
     public updateEventsRegistered(_newState: OutputState, _oldState: OutputState): void {
@@ -30,6 +26,10 @@ export class InteractionStub extends InteractionImpl<InteractionData, FSM, objec
     }
 
     public reinitData(): void {
+    }
+
+    protected createDataObject(): InteractionData {
+        return new PointDataImpl();
     }
 }
 

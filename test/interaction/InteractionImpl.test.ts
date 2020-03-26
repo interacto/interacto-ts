@@ -93,18 +93,12 @@ test("reinit", () => {
     expect(fsm.reinit).toHaveBeenCalledTimes(1);
 });
 
-test("reinitData", () => {
-    interaction.reinitData();
-    expect(interaction.getWidget()).toBeUndefined();
-});
-
 test("uninstall", () => {
     jest.spyOn(interaction, "updateEventsRegistered");
     interaction.uninstall();
     currentStateObs.next([{} as OutputState, {} as OutputState]);
     expect(interaction.isActivated()).toBeFalsy();
     expect(interaction.updateEventsRegistered).not.toHaveBeenCalledWith();
-    expect(interaction.getWidget()).toBeUndefined();
 });
 
 test("currentState", () => {
@@ -115,18 +109,3 @@ test("currentState", () => {
     expect(interaction.updateEventsRegistered).toHaveBeenCalledWith(s1, s2);
 });
 
-test("getWidget undefined", () => {
-    expect(interaction.getWidget()).toBeUndefined();
-});
-
-
-test("getWidget not undefined", () => {
-    const elt = {} as HTMLElement;
-    interaction = new class extends InteractionStub {
-        public constructor() {
-            super(fsm);
-            this._widget = elt;
-        }
-    }();
-    expect(interaction.getWidget()).toBe(elt);
-});

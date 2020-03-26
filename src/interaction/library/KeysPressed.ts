@@ -19,9 +19,10 @@ import { TerminalState } from "../../fsm/TerminalState";
 import { KeyPressureTransition } from "../../fsm/KeyPressureTransition";
 import { KeyReleaseTransition } from "../../fsm/KeyReleaseTransition";
 import { FSMDataHandler } from "../../fsm/FSMDataHandler";
-import { MultiKeyInteraction } from "./MultiKeyInteraction";
 import { KeysData } from "./KeysData";
 import { FSM } from "../../fsm/FSM";
+import { KeysDataImpl } from "./KeysDataImpl";
+import { InteractionImpl } from "../InteractionImpl";
 
 export class KeysPressedFSM extends FSM {
     private readonly currentCodes: Array<string>;
@@ -103,7 +104,7 @@ interface KeysPressedFSMHandler extends FSMDataHandler {
     onKeyPressed(event: KeyboardEvent): void;
 }
 
-export class KeysPressed extends MultiKeyInteraction<KeysData, KeysPressedFSM> {
+export class KeysPressed extends InteractionImpl<KeysData, KeysPressedFSM> {
     private readonly handler: KeysPressedFSMHandler;
 
     public constructor(fsm?: KeysPressedFSM) {
@@ -117,8 +118,8 @@ export class KeysPressed extends MultiKeyInteraction<KeysData, KeysPressedFSM> {
             }
 
             public onKeyPressed(event: KeyboardEvent): void {
-                this._parent.setKeysDataTarget(event);
-                this._parent.addKeysDataKey(event);
+                (this._parent.data as (KeysDataImpl)).setKeysDataTarget(event);
+                (this._parent.data as (KeysDataImpl)).addKeysDataKey(event);
             }
 
             public reinitData(): void {
@@ -129,7 +130,7 @@ export class KeysPressed extends MultiKeyInteraction<KeysData, KeysPressedFSM> {
         this.getFsm().buildFSM(this.handler);
     }
 
-    public getData(): KeysData {
-        return this;
+    public createDataObject(): KeysData {
+        return new KeysDataImpl();
     }
 }

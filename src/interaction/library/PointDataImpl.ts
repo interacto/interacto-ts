@@ -12,7 +12,6 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Optional } from "../../util/Optional";
 import { PointData } from "./PointData";
 
 export class PointDataImpl implements PointData {
@@ -44,7 +43,7 @@ export class PointDataImpl implements PointData {
     public constructor() {
     }
 
-    public reinitData(): void {
+    public flush(): void {
         this.button = undefined;
         this.altPressed = false;
         this.ctrlPressed = false;
@@ -72,8 +71,8 @@ export class PointDataImpl implements PointData {
         return this.button;
     }
 
-    public getSrcObject(): Optional<EventTarget> {
-        return Optional.of(this.srcObject);
+    public getSrcObject(): EventTarget | undefined {
+        return this.srcObject;
     }
 
     public getSrcScreenY(): number {
@@ -99,17 +98,18 @@ export class PointDataImpl implements PointData {
         this.metaPressed = event.metaKey;
     }
 
-    public setPointData(event: MouseEvent): void {
-        this.srcScreenY = event.screenY;
-        this.srcScreenX = event.screenX;
-        this.srcClientX = event.clientX;
-        this.srcClientY = event.clientY;
-        this.button = event.button;
-        this.srcObject = event.target === null ? undefined : event.target;
-        this.currentTarget = event.currentTarget === null ? undefined : event.currentTarget;
-        this.setModifiersData(event);
+    public setPointData(cx: number, cy: number, sx: number, sy: number, button: number | undefined, target: EventTarget | undefined,
+                        currTarget: EventTarget | undefined): void {
+        this.srcClientX = cx;
+        this.srcClientY = cy;
+        this.srcScreenX = sx;
+        this.srcScreenY = sy;
+        this.button = button;
+        this.srcObject = target;
+        this.currentTarget = currTarget;
     }
-    public getCurrentTarget(): Optional<EventTarget> {
-        return Optional.of(this.currentTarget);
+
+    public getCurrentTarget(): EventTarget | undefined {
+        return this.currentTarget;
     }
 }

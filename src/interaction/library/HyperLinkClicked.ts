@@ -15,7 +15,7 @@
 import { TerminalState } from "../../fsm/TerminalState";
 import { isHyperLink } from "../../fsm/Events";
 import { FSMDataHandler } from "../../fsm/FSMDataHandler";
-import { WidgetData } from "../WidgetData";
+import { WidgetData, WidgetDataImpl } from "../WidgetData";
 import { HyperLinkTransition } from "../../fsm/HyperLinkTransition";
 import { FSM } from "../../fsm/FSM";
 import { InteractionImpl } from "../InteractionImpl";
@@ -54,7 +54,7 @@ interface HyperLinkClickedFSMHandler extends FSMDataHandler {
  * @author Gwendal DIDOT
  */
 
-export class HyperLinkClicked extends InteractionImpl<WidgetData<HTMLAnchorElement>, HyperLinkClickedFSM, HTMLAnchorElement> {
+export class HyperLinkClicked extends InteractionImpl<WidgetData<HTMLAnchorElement>, HyperLinkClickedFSM> {
     private readonly handler: HyperLinkClickedFSMHandler;
 
     /**
@@ -72,7 +72,7 @@ export class HyperLinkClicked extends InteractionImpl<WidgetData<HTMLAnchorEleme
 
             public initToClickedHandler(event: Event): void {
                 if (event.target !== null && isHyperLink(event.target)) {
-                    this._parent._widget = event.target;
+                    (this._parent.data as WidgetDataImpl<HTMLAnchorElement>).setWidget(event.target);
                 }
             }
 
@@ -97,7 +97,7 @@ export class HyperLinkClicked extends InteractionImpl<WidgetData<HTMLAnchorEleme
         }
     }
 
-    public getData(): WidgetData<HTMLAnchorElement> {
-        return this;
+    public createDataObject(): WidgetData<HTMLAnchorElement> {
+        return new WidgetDataImpl<HTMLAnchorElement>();
     }
 }

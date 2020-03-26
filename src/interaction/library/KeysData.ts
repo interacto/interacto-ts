@@ -12,13 +12,13 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { InteractionData, Optional } from "../..";
+import { InteractionData } from "../InteractionData";
 
 export interface KeysData extends InteractionData {
     /**
      * @return The component that produce the interaction
      */
-    getTarget(): Optional<EventTarget>;
+    getTarget(): EventTarget | undefined;
 
     /**
      * @return The keys use by the interaction

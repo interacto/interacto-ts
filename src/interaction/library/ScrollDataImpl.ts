@@ -13,22 +13,17 @@
  */
 
 import { ScrollData } from "./ScrollData";
-import { Optional } from "../../util/Optional";
 
 export class ScrollDataImpl implements ScrollData {
-
     protected scrolledNode?: EventTarget;
-
     protected px?: number;
-
     protected py?: number;
-
     protected increment?: number;
 
     public constructor() {
     }
 
-    public reinitData(): void {
+    public flush(): void {
         this.increment = undefined;
         this.px = undefined;
         this.py = undefined;
@@ -47,8 +42,8 @@ export class ScrollDataImpl implements ScrollData {
         return this.py ?? 0;
     }
 
-    public getScrolledNode(): Optional<EventTarget> {
-        return Optional.of(this.scrolledNode);
+    public getScrolledNode(): EventTarget | undefined {
+        return this.scrolledNode;
     }
 
     public setScrollData(event: UIEvent): void {

@@ -15,7 +15,7 @@
 import { TerminalState } from "../../fsm/TerminalState";
 import { isDatePicker } from "../../fsm/Events";
 import { FSMDataHandler } from "../../fsm/FSMDataHandler";
-import { WidgetData } from "../WidgetData";
+import { WidgetData, WidgetDataImpl } from "../WidgetData";
 import { DatePickedTransition } from "../../fsm/DatePickedTransition";
 import { FSM } from "../../fsm/FSM";
 import { InteractionImpl } from "../InteractionImpl";
@@ -54,7 +54,7 @@ interface DatePickedHandler extends FSMDataHandler {
  * @author Gwendal DIDOT
  */
 
-export class DatePicked extends InteractionImpl<WidgetData<HTMLInputElement>, DatePickedFSM, HTMLInputElement> {
+export class DatePicked extends InteractionImpl<WidgetData<HTMLInputElement>, DatePickedFSM> {
     private readonly handler: DatePickedHandler;
 
     /**
@@ -72,7 +72,7 @@ export class DatePicked extends InteractionImpl<WidgetData<HTMLInputElement>, Da
 
             public initToPickedHandler(event: Event): void {
                 if (event.target !== null && isDatePicker(event.target)) {
-                    this._parent._widget = event.target;
+                    (this._parent.data as WidgetDataImpl<HTMLInputElement>).setWidget(event.target);
                 }
             }
 
@@ -97,7 +97,7 @@ export class DatePicked extends InteractionImpl<WidgetData<HTMLInputElement>, Da
         }
     }
 
-    public getData(): WidgetData<HTMLInputElement> {
-        return this;
+    public createDataObject(): WidgetData<HTMLInputElement> {
+        return new WidgetDataImpl<HTMLInputElement>();
     }
 }

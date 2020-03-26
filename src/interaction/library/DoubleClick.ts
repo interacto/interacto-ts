@@ -25,6 +25,7 @@ import { TimeoutTransition } from "../../fsm/TimeoutTransition";
 import { MoveTransition } from "../../fsm/MoveTransition";
 import { PointData } from "./PointData";
 import { InteractionImpl } from "../InteractionImpl";
+import { PointDataImpl } from "./PointDataImpl";
 
 export class DoubleClickFSM extends FSM {
     /** The time gap between the two spinner events. */
@@ -124,7 +125,7 @@ export class DoubleClickFSM extends FSM {
     }
 }
 
-export class DoubleClick extends InteractionImpl<PointData, DoubleClickFSM, Node> {
+export class DoubleClick extends InteractionImpl<PointData, DoubleClickFSM> {
     public readonly firstClick: Click;
 
     public constructor(fsm?: DoubleClickFSM) {
@@ -141,5 +142,9 @@ export class DoubleClick extends InteractionImpl<PointData, DoubleClickFSM, Node
 
     public getData(): PointData {
         return this.firstClick.getData();
+    }
+
+    public createDataObject(): PointData {
+        return new PointDataImpl();
     }
 }

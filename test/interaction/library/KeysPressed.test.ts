@@ -78,7 +78,7 @@ test("testTwoKeyPressData", () => {
 
     interaction.getFsm().addHandler(new class extends StubFSMHandler {
         public fsmUpdates(): void {
-            data = [...interaction.getKeys()];
+            data = [...interaction.getData().getKeys()];
         }
     }());
 
@@ -107,7 +107,7 @@ test("testTwoKeyPressReleaseData", () => {
     text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "B"));
     interaction.getFsm().addHandler(new class extends StubFSMHandler {
         public fsmUpdates(): void {
-            data = [...interaction.getKeys()];
+            data = [...interaction.getData().getKeys()];
         }
     }());
     text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyUp, "B"));

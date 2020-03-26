@@ -12,13 +12,13 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Optional } from "../../util/Optional";
+import { InteractionData } from "../InteractionData";
 
-export interface ScrollData {
+export interface ScrollData extends InteractionData {
     /**
      * @return The object on witch the scroll is performed.
      */
-    getScrolledNode(): Optional<EventTarget>;
+    getScrolledNode(): EventTarget | undefined;
 
     /**
      * @return  The X-coordinate of the scroll position.

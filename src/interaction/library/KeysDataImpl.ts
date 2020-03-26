@@ -12,24 +12,22 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Optional } from "../../util/Optional";
 import { KeysData } from "./KeysData";
 
 export class KeysDataImpl implements KeysData {
-
     /**
      * The keys involve in the interaction
      */
     protected keys?: Array<string>;
-
     /**
      * The target of the event that trigger the interaction
      */
     protected target?: EventTarget;
 
-    public constructor() { }
+    public constructor() {
+    }
 
-    public reinitData(): void {
+    public flush(): void {
         this.keys = undefined;
         this.target = undefined;
     }
@@ -38,8 +36,8 @@ export class KeysDataImpl implements KeysData {
         return this.keys ?? [];
     }
 
-    public getTarget(): Optional<EventTarget> {
-        return Optional.of(this.target);
+    public getTarget(): EventTarget | undefined {
+        return this.target;
     }
 
     public setKeysDataTarget(event: KeyboardEvent): void {

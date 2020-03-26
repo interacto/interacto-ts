@@ -19,7 +19,7 @@ import { LogLevel } from "../../logging/LogLevel";
 import { Command } from "../../command/Command";
 import { InteractionCmdUpdateBinder } from "./InteractionCmdUpdateBinder";
 
-export interface InteractionUpdateBinder<I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>
+export interface InteractionUpdateBinder<I extends InteractionImpl<D, FSM>, D extends InteractionData>
     extends InteractionUpdateBinderBuilder<I, D> {
 
     on(...widgets: Array<EventTarget>): InteractionUpdateBinder<I, D>;

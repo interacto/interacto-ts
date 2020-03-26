@@ -15,10 +15,11 @@
 import { FSMDataHandler } from "../../fsm/FSMDataHandler";
 import { TerminalState } from "../../fsm/TerminalState";
 import { isScrollEvent } from "../../fsm/Events";
-import { ScrollInteraction } from "./ScrollInteraction";
 import { ScrollTransition } from "../../fsm/ScrollTransition";
 import { ScrollData } from "./ScrollData";
 import { FSM } from "../../fsm/FSM";
+import { InteractionImpl } from "../InteractionImpl";
+import { ScrollDataImpl } from "./ScrollDataImpl";
 
 export class ScrollFSM extends FSM {
 
@@ -53,7 +54,7 @@ interface ScrollFSMHandler extends FSMDataHandler {
  * A user interaction for pressing down the mouse button.
  * @author Gwendal DIDOT
  */
-export class Scroll extends ScrollInteraction<ScrollData, ScrollFSM, undefined> {
+export class Scroll extends InteractionImpl<ScrollData, ScrollFSM> {
     /**
      * Creates the interaction.
      */
@@ -70,7 +71,7 @@ export class Scroll extends ScrollInteraction<ScrollData, ScrollFSM, undefined> 
             }
 
             public initToScroll(event: MouseEvent): void {
-                this._parent.setScrollData(event);
+                (this._parent.getData() as ScrollDataImpl).setScrollData(event);
             }
 
             public reinitData(): void {
@@ -80,7 +81,7 @@ export class Scroll extends ScrollInteraction<ScrollData, ScrollFSM, undefined> 
         this.getFsm().buildFSM(this.handler);
     }
 
-    public getData(): ScrollData {
-        return this;
+    public createDataObject(): ScrollData {
+        return new ScrollDataImpl();
     }
 }

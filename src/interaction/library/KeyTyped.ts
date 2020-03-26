@@ -16,7 +16,6 @@ import { FSMDataHandler } from "../../fsm/FSMDataHandler";
 import { TerminalState } from "../../fsm/TerminalState";
 import { KeyPressureTransition } from "../../fsm/KeyPressureTransition";
 import { KeyData } from "./KeyData";
-import { KeyInteraction } from "./KeyInteraction";
 import { StdState } from "../../fsm/StdState";
 import { KeyReleaseTransition } from "../../fsm/KeyReleaseTransition";
 import { CancellingState } from "../../fsm/CancellingState";
@@ -24,6 +23,8 @@ import { TimeoutTransition } from "../../fsm/TimeoutTransition";
 import { OutputState } from "../../fsm/OutputState";
 import { InputState } from "../../fsm/InputState";
 import { FSM } from "../../fsm/FSM";
+import { KeyDataImpl } from "./KeyDataImpl";
+import { InteractionImpl } from "../InteractionImpl";
 
 export class KeyTypedFSM extends FSM {
     private checkKey?: string;
@@ -117,7 +118,7 @@ interface KeyTypedFSMHandler extends FSMDataHandler {
  * @author Gwendal DIDOT
  */
 
-export class KeyTyped extends KeyInteraction<KeyData, KeyTypedFSM, Node> {
+export class KeyTyped extends InteractionImpl<KeyData, KeyTypedFSM> {
 
     private readonly handler: KeyTypedFSMHandler;
 
@@ -132,7 +133,7 @@ export class KeyTyped extends KeyInteraction<KeyData, KeyTypedFSM, Node> {
             }
 
             public onKeyTyped(event: KeyboardEvent): void {
-                this._parent.setKeyData(event);
+                (this._parent.getData() as KeyDataImpl).setKeyData(event);
             }
 
             public reinitData(): void {
@@ -143,7 +144,7 @@ export class KeyTyped extends KeyInteraction<KeyData, KeyTypedFSM, Node> {
 
     }
 
-    public getData(): KeyData {
-        return this;
+    public createDataObject(): KeyData {
+        return new KeyDataImpl();
     }
 }

@@ -15,7 +15,7 @@
 import { TerminalState } from "../../fsm/TerminalState";
 import { isTextInput } from "../../fsm/Events";
 import { FSMDataHandler } from "../../fsm/FSMDataHandler";
-import { WidgetData } from "../WidgetData";
+import { WidgetData, WidgetDataImpl } from "../WidgetData";
 import { StdState } from "../../fsm/StdState";
 import { TextInputChangedTransition } from "../../fsm/TextInputChangedTransition";
 import { TimeoutTransition } from "../../fsm/TimeoutTransition";
@@ -95,7 +95,7 @@ interface TextInputChangedHandler extends FSMDataHandler {
  * @author Gwendal DIDOT
  */
 export class TextInputChanged extends
-    InteractionImpl<WidgetData<HTMLInputElement | HTMLTextAreaElement>, TextInputChangedFSM, HTMLInputElement | HTMLTextAreaElement> {
+    InteractionImpl<WidgetData<HTMLInputElement | HTMLTextAreaElement>, TextInputChangedFSM> {
     private readonly handler: TextInputChangedHandler;
 
     public constructor(timeGap?: number) {
@@ -110,7 +110,7 @@ export class TextInputChanged extends
 
             public initToChangedHandler(event: Event): void {
                 if (event.target !== null && isTextInput(event.target)) {
-                    this._parent._widget = event.target;
+                    (this._parent.data as WidgetDataImpl<HTMLInputElement | HTMLTextAreaElement>).setWidget(event.target);
                 }
             }
 
@@ -135,7 +135,7 @@ export class TextInputChanged extends
         }
     }
 
-    public getData(): WidgetData<HTMLInputElement | HTMLTextAreaElement> {
-        return this;
+    public createDataObject(): WidgetData<HTMLInputElement | HTMLTextAreaElement> {
+        return new WidgetDataImpl<HTMLInputElement | HTMLTextAreaElement>();
     }
 }

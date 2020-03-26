@@ -20,7 +20,7 @@ import { InteractionImpl } from "../interaction/InteractionImpl";
 import { catBinder } from "../logging/ConfigLog";
 import { Command } from "../command/Command";
 
-export class AnonBinding<C extends Command, I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>
+export class AnonBinding<C extends Command, I extends InteractionImpl<D, FSM>, D extends InteractionData>
     extends WidgetBindingImpl<C, I, D> {
 
     private readonly execInitCmd?: (c: C, i?: D) => void;

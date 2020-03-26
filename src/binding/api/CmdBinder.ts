@@ -31,6 +31,6 @@ export interface CmdBinder<C extends Command> extends CmdBinderBuilder<C> {
 
     log(...level: Array<LogLevel>): CmdBinder<C>;
 
-    usingInteraction<I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>(interactionSupplier: () => I):
+    usingInteraction<I extends InteractionImpl<D, FSM>, D extends InteractionData>(interactionSupplier: () => I):
     InteractionCmdBinder<C, I, D>;
 }

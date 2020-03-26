@@ -14,7 +14,7 @@
 import { TerminalState } from "../../fsm/TerminalState";
 import { isColorChoice } from "../../fsm/Events";
 import { FSMDataHandler } from "../../fsm/FSMDataHandler";
-import { WidgetData } from "../WidgetData";
+import { WidgetData, WidgetDataImpl } from "../WidgetData";
 import { ColorPickedTransition } from "../../fsm/ColorPickedTransition";
 import { FSM } from "../../fsm/FSM";
 import { InteractionImpl } from "../InteractionImpl";
@@ -53,7 +53,7 @@ interface ColorPickedHandler extends FSMDataHandler {
  * @author Gwendal DIDOT
  */
 
-export class ColorPicked extends InteractionImpl<WidgetData<HTMLInputElement>, ColorPickedFSM, HTMLInputElement> {
+export class ColorPicked extends InteractionImpl<WidgetData<HTMLInputElement>, ColorPickedFSM> {
     private readonly handler: ColorPickedHandler;
 
     /**
@@ -71,7 +71,7 @@ export class ColorPicked extends InteractionImpl<WidgetData<HTMLInputElement>, C
 
             public initToPickedHandler(event: Event): void {
                 if (event.target !== null && isColorChoice(event.target)) {
-                    this._parent._widget = event.target;
+                    (this._parent.data as WidgetDataImpl<HTMLInputElement>).setWidget(event.target);
                 }
             }
 
@@ -96,7 +96,7 @@ export class ColorPicked extends InteractionImpl<WidgetData<HTMLInputElement>, C
         }
     }
 
-    public getData(): WidgetData<HTMLInputElement> {
-        return this;
+    public createDataObject(): WidgetData<HTMLInputElement> {
+        return new WidgetDataImpl<HTMLInputElement>();
     }
 }

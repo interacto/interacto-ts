@@ -20,7 +20,7 @@ import { InteractionBinderBuilder } from "./InteractionBinderBuilder";
 import { LogLevel } from "../../logging/LogLevel";
 import { WidgetBinding } from "../WidgetBinding";
 
-export interface InteractionCmdBinder<C extends Command, I extends InteractionImpl<D, FSM, {}>, D extends InteractionData>
+export interface InteractionCmdBinder<C extends Command, I extends InteractionImpl<D, FSM>, D extends InteractionData>
     extends CmdBinderBuilder<C>, InteractionBinderBuilder<I, D> {
     /**
     * Specifies the initialisation of the command when the interaction starts.

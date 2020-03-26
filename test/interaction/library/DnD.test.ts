@@ -68,7 +68,7 @@ test("data of the  press and drag part of the interaction", () => {
             expect(interaction.getData().getTgtClientX()).toBe(16);
             expect(interaction.getData().getTgtClientY()).toBe(21);
             expect(interaction.getData().getButton()).toBe(0);
-            const tgtElem: HTMLCanvasElement = interaction.getData().getTgtObject().get() as HTMLCanvasElement;
+            const tgtElem: HTMLCanvasElement = interaction.getData().getTgtObject() as HTMLCanvasElement;
             expect(tgtElem).toBe(canvas);
         }
     }());
@@ -137,11 +137,11 @@ test("check data with multiple drag", () => {
         }
 
         public fsmUpdates(): void {
-            expect(interaction.getSrcClientX()).toBe(11);
-            expect(interaction.getSrcClientY()).toBe(23);
-            expect(interaction.getTgtClientX()).toBe(12);
-            expect(interaction.getTgtClientY()).toBe(24);
-            expect(interaction.getButton()).toBe(0);
+            expect(interaction.getData().getSrcClientX()).toBe(11);
+            expect(interaction.getData().getSrcClientY()).toBe(23);
+            expect(interaction.getData().getTgtClientX()).toBe(12);
+            expect(interaction.getData().getTgtClientY()).toBe(24);
+            expect(interaction.getData().getButton()).toBe(0);
         }
     }());
     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 12, 24, 0));
