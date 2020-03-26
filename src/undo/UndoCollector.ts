@@ -13,7 +13,6 @@
  */
 
 import { Undoable } from "./Undoable";
-import { Optional } from "../util/Optional";
 import { Subject, Observable } from "rxjs";
 import { peek } from "../util/ArrayUtil";
 
@@ -60,8 +59,8 @@ export class UndoCollector {
      */
     private sizeMax: number;
 
-    private readonly undoPublisher: Subject<Optional<Undoable>>;
-    private readonly redoPublisher: Subject<Optional<Undoable>>;
+    private readonly undoPublisher: Subject<Undoable | undefined>;
+    private readonly redoPublisher: Subject<Undoable | undefined>;
 
     public constructor() {
         this.sizeMax = 0;
@@ -77,7 +76,7 @@ export class UndoCollector {
 	 * @return An observable value of optional undoable objects: if empty, this means
 	 * that no undoable object are stored anymore.
      */
-    public undosObservable(): Observable<Optional<Undoable>> {
+    public undosObservable(): Observable<Undoable | undefined> {
         return this.undoPublisher;
     }
 
@@ -86,7 +85,7 @@ export class UndoCollector {
 	 * @return An observable value of optional redoable objects: if empty, this means
 	 * that no redoable object are stored anymore.
      */
-    public redosObservable(): Observable<Optional<Undoable>> {
+    public redosObservable(): Observable<Undoable | undefined> {
         return this.redoPublisher;
     }
 
@@ -96,7 +95,7 @@ export class UndoCollector {
     public clear(): void {
         if (this.undos.length > 0) {
             this.undos.length = 0;
-            this.undoPublisher.next(Optional.empty());
+            this.undoPublisher.next(undefined);
         }
         this.clearRedo();
     }
@@ -104,7 +103,7 @@ export class UndoCollector {
     private clearRedo(): void {
         if (this.redos.length > 0) {
             this.redos.length = 0;
-            this.redoPublisher.next(Optional.empty());
+            this.redoPublisher.next(undefined);
         }
     }
 
@@ -120,7 +119,7 @@ export class UndoCollector {
             }
 
             this.undos.push(undoable);
-            this.undoPublisher.next(Optional.of(undoable));
+            this.undoPublisher.next(undoable);
             this.clearRedo();
         }
     }
@@ -135,7 +134,7 @@ export class UndoCollector {
             undoable.undo();
             this.redos.push(undoable);
             this.undoPublisher.next(this.getLastUndo());
-            this.redoPublisher.next(Optional.of(undoable));
+            this.redoPublisher.next(undoable);
         }
     }
 
@@ -148,7 +147,7 @@ export class UndoCollector {
         if (undoable !== undefined) {
             undoable.redo();
             this.undos.push(undoable);
-            this.undoPublisher.next(Optional.of(undoable));
+            this.undoPublisher.next(undoable);
             this.redoPublisher.next(this.getLastRedo());
         }
     }
@@ -156,29 +155,29 @@ export class UndoCollector {
     /**
      * @return {Optional} The last undoable object name or null if there is no last object.
      */
-    public getLastUndoMessage(): Optional<string> {
-        return Optional.of<Undoable>(peek(this.undos)).map(o => o.getUndoName());
+    public getLastUndoMessage(): string | undefined {
+        return peek(this.undos)?.getUndoName();
     }
 
     /**
      * @return {Optional} The last redoable object name or null if there is no last object.
      */
-    public getLastRedoMessage(): Optional<string> {
-        return Optional.of<Undoable>(peek(this.redos)).map(o => o.getUndoName());
+    public getLastRedoMessage(): string | undefined {
+        return peek(this.redos)?.getUndoName();
     }
 
     /**
      * @return {Optional} The last undoable object or null if there is no last object.
      */
-    public getLastUndo(): Optional<Undoable> {
-        return Optional.of(peek(this.undos));
+    public getLastUndo(): Undoable | undefined {
+        return peek(this.undos);
     }
 
     /**
      * @return {Optional} The last redoable object or null if there is no last object.
      */
-    public getLastRedo(): Optional<Undoable> {
-        return Optional.of(peek(this.redos));
+    public getLastRedo(): Undoable | undefined {
+        return peek(this.redos);
     }
 
     /**
@@ -199,7 +198,7 @@ export class UndoCollector {
                 removed = true;
             }
             if (removed && this.undos.length === 0) {
-                this.undoPublisher.next(Optional.empty());
+                this.undoPublisher.next(undefined);
             }
             this.sizeMax = max;
         }

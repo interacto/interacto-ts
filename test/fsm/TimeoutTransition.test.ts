@@ -107,7 +107,7 @@ test("testGetAcceptEventsEmpty", () => {
 });
 
 test("testExecuteWithoutTimeout", () => {
-    expect(evt.execute(undefined).isPresent()).toBeFalsy();
+    expect(evt.execute(undefined)).toBeUndefined();
 });
 
 test("testExecuteWithTimeout", () => {
@@ -115,7 +115,7 @@ test("testExecuteWithTimeout", () => {
     setTimeout(() => {
     }, 100);
     jest.runOnlyPendingTimers();
-    expect(evt.execute(undefined).get()).toStrictEqual(tgt);
+    expect(evt.execute(undefined)).toStrictEqual(tgt);
 });
 
 test("execute and guard not OK", () => {
@@ -129,7 +129,7 @@ test("execute and guard not OK", () => {
     }();
     evt.startTimeout();
     jest.runOnlyPendingTimers();
-    expect(evt.execute(undefined).isPresent()).toBeFalsy();
+    expect(evt.execute(undefined)).toBeUndefined();
 });
 
 test("execute cancels", () => {

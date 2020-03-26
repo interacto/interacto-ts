@@ -17,7 +17,6 @@ import { FSM } from "./FSM";
 import { FSMHandler } from "./FSMHandler";
 import { isOutputStateType, OutputState } from "./OutputState";
 import { InputState } from "./InputState";
-import { Optional } from "../util/Optional";
 import { TerminalState } from "./TerminalState";
 import { CancellingState } from "./CancellingState";
 
@@ -78,29 +77,30 @@ export class SubFSMTransition extends Transition {
         }(this);
     }
 
-    public execute(event: Event): Optional<InputState> {
-        const transition: Optional<Transition> = this.findTransition(event);
+    public execute(event: Event): InputState | undefined {
+        const transition: Transition | undefined = this.findTransition(event);
 
-        if (transition.isPresent()) {
-            this.src.getFSM().stopCurrentTimeout();
-            this.subFSM.addHandler(this.subFSMHandler);
-            this.src.getFSM().setCurrentSubFSM(this.subFSM);
-            this.subFSM.process(event);
-            return Optional.of(transition.get()).map(t => t.tgt);
+        if (transition === undefined) {
+            return undefined;
         }
-        return Optional.empty<InputState>();
+
+        this.src.getFSM().stopCurrentTimeout();
+        this.subFSM.addHandler(this.subFSMHandler);
+        this.src.getFSM().setCurrentSubFSM(this.subFSM);
+        this.subFSM.process(event);
+        return transition.tgt;
     }
 
     public accept(event: Event): boolean {
-        return this.findTransition(event).isPresent();
+        return this.findTransition(event) !== undefined;
     }
 
     public isGuardOK(event: Event): boolean {
-        return this.findTransition(event).filter(tr => tr.isGuardOK(event)).isPresent();
+        return this.findTransition(event)?.isGuardOK(event) ?? false;
     }
 
-    private findTransition(event: Event): Optional<Transition> {
-        return Optional.of(this.subFSM.initState.getTransitions().find(tr => tr.accept(event)));
+    private findTransition(event: Event): Transition | undefined {
+        return this.subFSM.initState.getTransitions().find(tr => tr.accept(event));
     }
 
     public getAcceptedEvents(): Set<string> {

@@ -120,4 +120,3 @@ export * from "./properties/Zoomable";
 export * from "./undo/UndoCollector";
 export * from "./undo/Undoable";
 export * from "./util/ArrayUtil";
-export * from "./util/Optional";

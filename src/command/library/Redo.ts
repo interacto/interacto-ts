@@ -25,7 +25,7 @@ export class Redo extends CommandImpl {
     }
 
     public canDo(): boolean {
-        return UndoCollector.getInstance().getLastRedo().isPresent();
+        return UndoCollector.getInstance().getLastRedo() !== undefined;
     }
 
     protected doCmdBody(): void {

@@ -14,7 +14,6 @@
 
 import { OutputState } from "./OutputState";
 import { InputState } from "./InputState";
-import { Optional } from "../util/Optional";
 
 /**
  * The base implementation of a FSM transition.
@@ -31,15 +30,15 @@ export abstract class Transition {
         this.src.addTransition(this);
     }
 
-    public execute(event: Event): Optional<InputState> {
+    public execute(event: Event): InputState | undefined {
         if (this.accept(event) && this.isGuardOK(event)) {
             this.src.getFSM().stopCurrentTimeout();
             this.action(event);
             this.src.exit();
             this.tgt.enter();
-            return Optional.of<InputState>(this.tgt);
+            return this.tgt;
         }
-        return Optional.empty<InputState>();
+        return undefined;
     }
 
     protected action(_event?: Event): void {

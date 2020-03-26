@@ -15,7 +15,6 @@
 import { Undo } from "../../../src/command/library/Undo";
 import { UndoCollector } from "../../../src/undo/UndoCollector";
 import { Undoable } from "../../../src/undo/Undoable";
-import { Optional } from "../../../src/util/Optional";
 
 jest.mock("../../../src/undo/UndoCollector");
 
@@ -37,7 +36,7 @@ describe("base undo testing", () => {
     });
 
     test("testCannotDo", () => {
-        collector.getLastUndo = jest.fn().mockImplementation(() => Optional.empty());
+        collector.getLastUndo = jest.fn().mockImplementation(() => undefined);
         expect(cmd.canDo()).toBeFalsy();
     });
 
@@ -46,7 +45,7 @@ describe("base undo testing", () => {
 
         beforeEach(() => {
             undoable = {} as Undoable;
-            collector.getLastUndo = jest.fn().mockImplementation(() => Optional.of(undoable));
+            collector.getLastUndo = jest.fn().mockImplementation(() =>undoable);
         });
 
         test("testCanDo", () => {

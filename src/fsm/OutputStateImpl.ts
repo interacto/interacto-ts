@@ -32,13 +32,11 @@ export abstract class OutputStateImpl extends StateImpl implements OutputState {
     public process(event: Event): boolean {
         return this.getTransitions().find(tr => {
             try {
-                if (tr.execute(event).isPresent()) {
-                    return true;
-                }
+                return tr.execute(event) !== undefined;
             } catch (ignored) {
                 // Already processed
+                return false;
             }
-            return false;
         }) !== undefined;
     }
 

@@ -306,7 +306,7 @@ export class FSM {
             if (this.asLogFSM) {
                 catFSM.info("Timeout");
             }
-            const state = this.currentTimeout.execute().get();
+            const state = this.currentTimeout.execute();
             if (state instanceof OutputStateImpl) {
                 this.setCurrentState(state);
                 this.checkTimeoutTransition();

@@ -11,9 +11,12 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { CommandsRegistry, UndoCollector, CmdStatus, CommandImpl, Command, RegistrationPolicy } from "../../src";
-import { StubCmd, StubUndoableCmd } from "./StubCmd";
 
+import { CommandImpl } from "../../src/command/CommandImpl";
+import { Command, CmdStatus, RegistrationPolicy } from "../../src/command/Command";
+import { CommandsRegistry } from "../../src/command/CommandsRegistry";
+import { UndoCollector } from "../../src/undo/UndoCollector";
+import { StubCmd, StubUndoableCmd } from "./StubCmd";
 
 class StubCmd2 extends CommandImpl {
     public constructor() {
@@ -163,7 +166,7 @@ test("testAddCommandRemovesCommandWhenMaxCapacity0", () => {
 test("testAddCommandAddsUndoableCollector", () => {
     const command = new StubUndoableCmd();
     instance.addCommand(command);
-    expect(UndoCollector.getInstance().getLastUndo().get()).toBe(command);
+    expect(UndoCollector.getInstance().getLastUndo()).toBe(command);
 });
 
 

@@ -25,7 +25,7 @@ export class Undo extends CommandImpl {
     }
 
     public canDo(): boolean {
-        return UndoCollector.getInstance().getLastUndo().isPresent();
+        return UndoCollector.getInstance().getLastUndo() !== undefined;
     }
 
     protected doCmdBody(): void {

@@ -15,7 +15,6 @@
 import { Transition } from "./Transition";
 import { OutputState } from "./OutputState";
 import { InputState } from "./InputState";
-import { Optional } from "../util/Optional";
 import { ErrorCatcher } from "../error/ErrorCatcher";
 
 
@@ -85,16 +84,16 @@ export class TimeoutTransition extends Transition {
         return this.timeouted;
     }
 
-    public execute(event?: Event): Optional<InputState> {
+    public execute(event?: Event): InputState | undefined {
         try {
             if (this.accept(event) && this.isGuardOK(event)) {
                 this.src.exit();
                 this.action(event);
                 this.tgt.enter();
                 this.timeouted = false;
-                return Optional.of(this.tgt);
+                return this.tgt;
             }
-            return Optional.empty<InputState>();
+            return undefined;
         } catch (ex) {
             this.timeouted = false;
             throw ex;
