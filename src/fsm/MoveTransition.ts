@@ -18,7 +18,7 @@ import { EventRegistrationToken } from "./Events";
 import { Transition } from "./Transition";
 
 /**
- * This transition corresponds to a pressure of a button of a pointing device.
+ * This transition corresponds to a move of a button of a pointing device.
  * @author Arnaud BLOUIN
  */
 export class MoveTransition extends Transition {
