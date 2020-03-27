@@ -12,9 +12,44 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+export function createTouchEvent(type: string, id: number, target: EventTarget, screenX?: number, screenY?: number,
+                                 clientX?: number, clientY?: number): TouchEvent {
+    const screenXvalue = screenX ?? 0;
+    const screenYvalue = screenY ?? 0;
+    const clientXvalue = clientX ?? 0;
+    const clientYvalue = clientY ?? 0;
+    return new TouchEvent(type, {
+        view: window,
+        bubbles: true,
+        cancelable: false,
+        detail: 1,
+        ctrlKey: false,
+        altKey: false,
+        shiftKey: false,
+        metaKey: false,
+        changedTouches: [{
+            altitudeAngle: 0,
+            azimuthAngle: 0,
+            identifier: id,
+            screenX: screenXvalue,
+            screenY: screenYvalue,
+            clientX: clientXvalue,
+            clientY: clientYvalue,
+            force: 0,
+            pageX: 0,
+            pageY: 0,
+            radiusX:0,
+            radiusY:0,
+            rotationAngle:0,
+            target,
+            touchType: "direct"
+        }]
+    });
+}
+
+
 export function createMouseEvent(type: string, target: EventTarget, screenX?: number, screenY?: number, clientX?: number,
                                  clientY?: number, button?: number): MouseEvent {
-
     const screenXvalue = screenX ?? 0;
     const screenYvalue = screenY ?? 0;
     const clientXvalue = clientX ?? 0;

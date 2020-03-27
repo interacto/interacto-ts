@@ -15,7 +15,7 @@
 import { TerminalState } from "../../fsm/TerminalState";
 import { isComboBox } from "../../fsm/Events";
 import { FSMDataHandler } from "../../fsm/FSMDataHandler";
-import { WidgetData, WidgetDataImpl } from "../WidgetData";
+import { WidgetData, WidgetDataImpl } from "./WidgetData";
 import { ComboBoxTransition } from "../../fsm/ComboBoxTransition";
 import { FSM } from "../../fsm/FSM";
 import { InteractionImpl } from "../InteractionImpl";

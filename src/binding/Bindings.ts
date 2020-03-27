@@ -17,7 +17,7 @@ import { AnonCmd } from "../command/AnonCmd";
 import { AnonCmdBinder } from "./AnonCmdBinder";
 import { InteractionBinder } from "./api/InteractionBinder";
 import { ButtonPressed } from "../interaction/library/ButtonPressed";
-import { WidgetData } from "../interaction/WidgetData";
+import { WidgetData } from "../interaction/library/WidgetData";
 import { Command } from "../command/Command";
 import { UpdateBinder } from "./UpdateBinder";
 import { BoxChecked } from "../interaction/library/BoxChecked";

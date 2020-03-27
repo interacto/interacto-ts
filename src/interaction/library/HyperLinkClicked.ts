@@ -15,7 +15,7 @@
 import { TerminalState } from "../../fsm/TerminalState";
 import { isHyperLink } from "../../fsm/Events";
 import { FSMDataHandler } from "../../fsm/FSMDataHandler";
-import { WidgetData, WidgetDataImpl } from "../WidgetData";
+import { WidgetData, WidgetDataImpl } from "./WidgetData";
 import { HyperLinkTransition } from "../../fsm/HyperLinkTransition";
 import { FSM } from "../../fsm/FSM";
 import { InteractionImpl } from "../InteractionImpl";

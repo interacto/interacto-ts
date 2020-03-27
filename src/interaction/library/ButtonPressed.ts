@@ -16,7 +16,7 @@ import { FSMDataHandler } from "../../fsm/FSMDataHandler";
 import { ButtonPressedTransition } from "../../fsm/ButtonPressedTransition";
 import { TerminalState } from "../../fsm/TerminalState";
 import { isButton } from "../../fsm/Events";
-import { WidgetData, WidgetDataImpl } from "../WidgetData";
+import { WidgetData, WidgetDataImpl } from "./WidgetData";
 import { FSM } from "../../fsm/FSM";
 import { InteractionImpl } from "../InteractionImpl";
 

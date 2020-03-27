@@ -166,11 +166,11 @@ interface DnDFSMHandler extends FSMDataHandler {
  * @author Gwendal DIDOT
  */
 export class DnD extends InteractionImpl<SrcTgtPointsData, DnDFSM> {
+    private readonly handler: DnDFSMHandler;
+
     /**
      * Creates the interaction.
      */
-    private readonly handler: DnDFSMHandler;
-
     public constructor(srcOnUpdate: boolean, cancellable: boolean, fsm?: DnDFSM) {
         super(fsm ?? new DnDFSM(cancellable));
 

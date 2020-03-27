@@ -21,7 +21,35 @@ export enum EventRegistrationToken {
     Click = "click",
     Input = "input",
     Scroll = "scroll",
-    Change = "change"
+    Change = "change",
+    Touchstart = "touchstart",
+    Touchend = "touchend",
+    Touchmove = "touchmove"
+}
+
+/**
+ * Searches for a touch.
+ * @param idToFind The ID of the touch to find.
+ * @param touches The list of touches to search in.
+ */
+export function getTouch(touches: TouchList, idToFind: number): Touch | undefined {
+    // eslint-disable-next-line @typescript-eslint/prefer-for-of
+    for (let i = 0; i < touches.length; i++) {
+        if (touches[i].identifier === idToFind) {
+            return touches[i];
+        }
+    }
+    return undefined;
+}
+
+/**
+ * Checks whether the given event type is a touch event.
+ * @param eventType The event type to check.
+ */
+export function isTouchEvent(eventType: string): boolean {
+    return eventType === EventRegistrationToken.Touchstart ||
+    eventType === EventRegistrationToken.Touchend ||
+    eventType === EventRegistrationToken.Touchmove;
 }
 
 /**

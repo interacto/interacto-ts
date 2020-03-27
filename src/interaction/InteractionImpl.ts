@@ -18,7 +18,7 @@ import { InitState } from "../fsm/InitState";
 import { Logger } from "typescript-logging";
 import { catInteraction } from "../logging/ConfigLog";
 import { InteractionData } from "./InteractionData";
-import { EventRegistrationToken, isMouseEvent, isKeyEvent } from "../fsm/Events";
+import { EventRegistrationToken, isMouseEvent, isKeyEvent, isTouchEvent } from "../fsm/Events";
 import { Subscription } from "rxjs";
 
 /**
@@ -38,6 +38,7 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM> 
     /** The interaction data */
     protected readonly data: D;
     private mouseHandler?: ((e: MouseEvent) => void);
+    private touchHandler?: ((e: TouchEvent) => void);
     private keyHandler?: ((e: KeyboardEvent) => void);
     private uiHandler?: ((e: UIEvent) => void);
     private actionHandler?: EventListener;
@@ -161,7 +162,8 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM> 
     public addAdditionalNodes(additionalNodes: Array<Node>): void {
         additionalNodes.forEach((node: Node) => {
             this._additionalNodes.push(node);
-            node.childNodes.forEach((child: Node) => this.onNewNodeRegistered(child)); //register the additional node children
+            //register the additional node children
+            node.childNodes.forEach((child: Node) => this.onNewNodeRegistered(child));
         });
     }
 
@@ -170,12 +172,35 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM> 
             node.addEventListener(eventType, this.getMouseHandler());
             return;
         }
+        if (isTouchEvent(eventType)) {
+            node.addEventListener(eventType, this.getTouchHandler());
+            return;
+        }
         if (isKeyEvent(eventType)) {
             node.addEventListener(eventType, this.getKeyHandler());
             return;
         }
         if (EventRegistrationToken.Scroll === eventType) {
             node.addEventListener(EventRegistrationToken.Scroll, this.getUIHandler());
+            return;
+        }
+    }
+
+    private unregisterEventToNode(eventType: string, node: EventTarget): void {
+        if (isMouseEvent(eventType)) {
+            node.removeEventListener(eventType, this.getMouseHandler());
+            return;
+        }
+        if (isTouchEvent(eventType)) {
+            node.removeEventListener(eventType, this.getTouchHandler());
+            return;
+        }
+        if (isKeyEvent(eventType)) {
+            node.removeEventListener(eventType, this.getKeyHandler());
+            return;
+        }
+        if (EventRegistrationToken.Scroll === eventType) {
+            node.removeEventListener(EventRegistrationToken.Scroll, this.getUIHandler());
             return;
         }
     }
@@ -203,38 +228,30 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM> 
         return this.actionHandler;
     }
 
-    private unregisterEventToNode(eventType: string, node: EventTarget): void {
-        if (isMouseEvent(eventType)) {
-            node.removeEventListener(eventType, this.getMouseHandler());
-            return;
-        }
-        if (isKeyEvent(eventType)) {
-            node.removeEventListener(eventType, this.getKeyHandler());
-            return;
-        }
-        if (EventRegistrationToken.Scroll === eventType) {
-            node.removeEventListener(EventRegistrationToken.Scroll, this.getUIHandler());
-            return;
-        }
-    }
-
     protected getMouseHandler(): (e: MouseEvent) => void {
         if (this.mouseHandler === undefined) {
-            this.mouseHandler = (evt): void => this.processEvent(evt);
+            this.mouseHandler = (evt: MouseEvent): void => this.processEvent(evt);
         }
         return this.mouseHandler;
     }
 
+    protected getTouchHandler(): (e: TouchEvent) => void {
+        if (this.touchHandler === undefined) {
+            this.touchHandler = (evt: TouchEvent): void => this.processEvent(evt);
+        }
+        return this.touchHandler;
+    }
+
     protected getKeyHandler(): (e: KeyboardEvent) => void {
         if (this.keyHandler === undefined) {
-            this.keyHandler = (evt): void => this.processEvent(evt);
+            this.keyHandler = (evt: KeyboardEvent): void => this.processEvent(evt);
         }
         return this.keyHandler;
     }
 
     protected getUIHandler(): (e: UIEvent) => void {
         if (this.uiHandler === undefined) {
-            this.uiHandler = (evt): void => this.processEvent(evt);
+            this.uiHandler = (evt: UIEvent): void => this.processEvent(evt);
         }
         return this.uiHandler;
     }
