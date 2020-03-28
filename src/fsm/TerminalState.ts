@@ -22,6 +22,11 @@ import { FSM } from "./FSM";
  * @param <E> The type of events the FSM processes.
  */
 export class TerminalState extends StateImpl implements InputState {
+    /**
+	 * Creates the terminal state.
+	 * @param stateMachine The FSM that will contain the state.
+	 * @param stateName The name of this state.
+	 */
     public constructor(stateMachine: FSM, stateName: string) {
         super(stateMachine, stateName);
     }

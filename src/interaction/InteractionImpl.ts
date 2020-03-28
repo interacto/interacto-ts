@@ -50,6 +50,10 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM> 
      */
     protected activated: boolean;
 
+    /**
+	 * Creates the interaction.
+	 * @param fsm The FSM that defines the behavior of the user interaction.
+	 */
     protected constructor(fsm: F) {
         this.activated = false;
         this.data = this.createDataObject();

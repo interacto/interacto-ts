@@ -19,10 +19,6 @@ import { InputState } from "./InputState";
 /**
  * This transition must be used to use a widget within an interaction.
  * @author Arnaud BLOUIN
- * @param {*} srcState
- * @param {*} tgtState
- * @class
- * @extends Transition
  */
 export abstract class WidgetTransition<E, T> extends Transition {
     /**
@@ -30,6 +26,11 @@ export abstract class WidgetTransition<E, T> extends Transition {
      */
     protected widget: T;
 
+    /**
+	 * Creates the widget transition.
+	 * @param srcState The source state of the transition.
+	 * @param tgtState The output state of the transition.
+	 */
     protected constructor(srcState: OutputState, tgtState: InputState) {
         super(srcState, tgtState);
     }

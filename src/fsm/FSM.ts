@@ -85,6 +85,9 @@ export class FSM {
 
     protected currentSubFSM?: FSM;
 
+    /**
+	 * Creates the FSM.
+	 */
     public constructor() {
         this._inner = false;
         this.started = false;
@@ -111,22 +114,41 @@ export class FSM {
         this.currentSubFSM = subFSM;
     }
 
+    /**
+	 * @return The current state of FSM during its execution.
+	 */
     public getCurrentState(): OutputState {
         return this._currentState;
     }
 
+    /**
+	 * @return An observable value for observing the current state of FSM during its execution.
+	 */
     public currentStateObservable(): Observable<[OutputState, OutputState]> {
         return this.currentStatePublisher;
     }
 
+    /**
+	 * States whether the FSM is an inner FSM (ie, whether it is included into another FSM as
+	 * a sub-FSM transition).
+	 * @param inner True: this FSM will be considered as an inner FSM.
+	 */
     public setInner(inner: boolean): void {
         this._inner = inner;
     }
 
+    /**
+	 * @return True: this FSM is an inner FSM.
+	 */
     public getInner(): boolean {
         return this._inner;
     }
 
+    /**
+	 * Processes the provided event to run the FSM.
+	 * @param event The event to process.
+	 * @return True: the FSM correctly processed the event.
+	 */
     public process(event: Event): boolean {
         // Removing the possible corresponding and pending key pressed event
         if (isKeyUpEvent(event)) {
@@ -182,6 +204,9 @@ export class FSM {
         }
     }
 
+    /**
+	 * @return True: The FSM started.
+	 */
     public isStarted(): boolean {
         return this.started;
     }
@@ -263,16 +288,25 @@ export class FSM {
 
     /**
      * Adds a state to the state machine.
-     * @param {*} state The state to add. Must not be null.
+     * @param state The state to add. Must not be null.
      */
     public addState(state: InputState): void {
         this.states.push(state);
     }
 
+    /**
+	 * Logs (or not) information about the execution of the FSM.
+	 * @param log True: logging activated.
+	 */
     public log(log: boolean): void {
         this.asLogFSM = log;
     }
 
+    /**
+	 * Reinitialises the FSM.
+	 * Remaining events to process are however not clear.
+	 * See [[`FSM#fullReinit`]] for that.
+	 */
     public reinit(): void {
         if (this.asLogFSM) {
             catFSM.info("FSM reinitialised");
@@ -293,6 +327,11 @@ export class FSM {
         }
     }
 
+    /**
+	 * Reinitialises the FSM.
+	 * Compared to [[`FSM#reinit`]] this method
+	 * flushes the remaining events to process.
+	 */
     public fullReinit(): void {
         this.eventsToProcess.length = 0;
         this.reinit();
@@ -301,6 +340,12 @@ export class FSM {
         }
     }
 
+    /**
+	 * Jobs to do when a timeout transition is executed.
+	 * Because the timeout transition is based on a separated thread, the job
+	 * done by this method must be executed in the UI thread.
+	 * UI Platforms must override this method to do that.
+	 */
     public onTimeout(): void {
         if (this.currentTimeout !== undefined) {
             if (this.asLogFSM) {
@@ -343,10 +388,18 @@ export class FSM {
         }
     }
 
+    /**
+	 * Adds an FSM handler.
+	 * @param handler The handler to add.
+	 */
     public addHandler(handler: FSMHandler): void {
         this.handlers.push(handler);
     }
 
+    /**
+	 * Removes the given FSM handler from this FSM.
+	 * @param handler The handler to remove.
+	 */
     public removeHandler(handler: FSMHandler): void {
         remove(this.handlers, handler);
     }
@@ -394,6 +447,10 @@ export class FSM {
         [...this.handlers].forEach(handler => handler.fsmCancels());
     }
 
+    /**
+	 * @return The set of the states that compose the FSM.
+	 * This returns a copy of the real set.
+	 */
     public getStates(): Array<State> {
         return [...this.states];
     }
@@ -410,6 +467,11 @@ export class FSM {
         return [...this.eventsToProcess];
     }
 
+    /**
+	 * Uninstall the FSM.
+	 * Useful for flushing memory.
+	 * The FSM must not be used after that.
+	 */
     public uninstall(): void {
         this.fullReinit();
         this.asLogFSM = false;

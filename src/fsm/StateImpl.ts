@@ -17,13 +17,17 @@ import { FSM } from "./FSM";
 
 /**
  * The base implementation of the State interface.
- * @param <E> The type of events the FSM processes.
  */
 export abstract class StateImpl implements State {
     protected readonly fsm: FSM;
 
     protected readonly name: string;
 
+    /**
+	 * Creates the state.
+	 * @param stateMachine The FSM that will contain the state.
+	 * @param stateName The name of this state.
+	 */
     protected constructor(stateMachine: FSM, stateName: string) {
         this.fsm = stateMachine;
         this.name = stateName;
@@ -35,18 +39,10 @@ export abstract class StateImpl implements State {
         }
     }
 
-    /**
-     *
-     * @return {string}
-     */
     public getName(): string {
         return this.name;
     }
 
-    /**
-     *
-     * @return {FSM}
-     */
     public getFSM(): FSM {
         return this.fsm;
     }

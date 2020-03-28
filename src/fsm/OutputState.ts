@@ -20,6 +20,11 @@ import { Transition } from "./Transition";
  * @param <E> The type of events the FSM processes.
  */
 export interface OutputState extends State {
+    /**
+	 * Actions done when a transition of the state is executed so
+	 * that this state is left.
+	 * @throws CancelFSMException If leaving the state leads to a cancelling of the FSM execution.
+	 */
     exit(): void;
 
     /**
@@ -29,8 +34,15 @@ export interface OutputState extends State {
      */
     process(event: Event): boolean;
 
+    /**
+	 * @return The list of outgoing transitions of the state.
+	 */
     getTransitions(): Array<Transition>;
 
+    /**
+	 * Adds the given transitions to the list of outgoing transitions of the state.
+	 * @param tr The transition to add.
+	 */
     addTransition(tr: Transition): void;
 }
 

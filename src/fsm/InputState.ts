@@ -14,12 +14,13 @@
 
 import { State } from "./State";
 
-
 /**
  * Defines a type of state that can receive input events.
- * @param <E> The type of events the FSM processes.
  */
 export interface InputState extends State {
+    /**
+	 * Actions done while entering this state.
+	 * @throws CancelFSMException If entering the state leads to a cancelling of the FSM execution.
+	 */
     enter(): void;
 }
-

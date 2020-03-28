@@ -21,7 +21,6 @@ import { ErrorCatcher } from "../error/ErrorCatcher";
 /**
  * A timeout transition is an FSM transition that is not executed by an event:
  * the FSM goes through such a transition on a timeout.
- * @param <E> The type of events the FSM processes.
  */
 export class TimeoutTransition extends Transition {
     /**
@@ -36,6 +35,12 @@ export class TimeoutTransition extends Transition {
 
     private timeouted: boolean;
 
+    /**
+	 * Creates the timeout transition.
+	 * @param srcState The source state of the transition.
+	 * @param tgtState The output state of the transition.
+     * @param timeout The function that returns the timeout value in ms.
+	 */
     public constructor(srcState: OutputState, tgtState: InputState, timeout: () => number) {
         super(srcState, tgtState);
         this.timeouted = false;

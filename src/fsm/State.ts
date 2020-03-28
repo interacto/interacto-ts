@@ -17,11 +17,16 @@ import { FSM } from "./FSM";
 
 /**
  * The base type of an FSM state.
- * @param <E> The type of events the FSM processes.
  */
 export interface State {
+    /**
+	 * @return The name of the state.
+	 */
     getName(): string;
 
+    /**
+	 * @return The FSM that contains the state.
+	 */
     getFSM(): FSM;
 
     /**
@@ -31,6 +36,11 @@ export interface State {
      */
     checkStartingState(): void;
 
+    /**
+	 * Uninstall (ie flushes) the state.
+	 * Useful to clear data.
+	 * The state must not be used after that.
+	 */
     uninstall(): void;
 }
 

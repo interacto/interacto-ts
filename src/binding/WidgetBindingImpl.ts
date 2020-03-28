@@ -94,9 +94,6 @@ implements WidgetBinding<C, I, D> {
         return true;
     }
 
-    /**
-     *
-     */
     public clearEvents(): void {
         this.interaction.fullReinit();
     }
@@ -150,31 +147,22 @@ implements WidgetBinding<C, I, D> {
         return this.interaction;
     }
 
-    /**
-     * @return {CommandImpl}
-     */
+
     public getCommand(): C | undefined {
         return this.cmd;
     }
 
-    /**
-     * @return {boolean}
-     */
+
     public isActivated(): boolean {
         return this.activated;
     }
 
-    /**
-     * @return {boolean}
-     */
+
     public isRunning(): boolean {
         return this.interaction.isRunning();
     }
 
-    /**
-     *
-     * @return {boolean}
-     */
+
     public isStrictStart(): boolean {
         return false;
     }
@@ -401,19 +389,12 @@ implements WidgetBinding<C, I, D> {
         this.asLogCmd = false;
     }
 
-    /**
-     *
-     * @return {boolean}
-     */
+
     public isContinuousCmdExec(): boolean {
         return this.continuousCmdExec;
     }
 
 
-    /**
-     *
-     * @param {boolean} activated
-     */
     public setActivated(activated: boolean): void {
         if (this.asLogBinding) {
             catBinder.info(`Binding Activated: ${activated}`);
@@ -427,12 +408,28 @@ implements WidgetBinding<C, I, D> {
         }
     }
 
+    /**
+	 * Logs information related to the binding.
+	 * @param log True: information will be logged
+	 */
     public setLogBinding(log: boolean): void {
         this.asLogBinding = log;
     }
 
+    /**
+	 * Logs information related to the command creation.
+	 * @param log True: information related to the command creation will be logged
+	 */
     public setLogCmd(log: boolean): void {
         this.asLogCmd = log;
+    }
+
+    /**
+	 * Logs information related to the user interaction.
+	 * @param log True: information related to the user interaction will be logged
+	 */
+    public logInteraction(log: boolean): void {
+        this.interaction.log(log);
     }
 
     public produces(): Observable<C> {

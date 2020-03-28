@@ -24,13 +24,18 @@ import { CancellingState } from "./CancellingState";
  * A transition that refers to another FSM.
  * Entering this transition starts the underlying sub-FSM.
  * To leave the transition, the sub-FSM must end.
- * @param <E> The type of events the FSM processes.
  */
 export class SubFSMTransition extends Transition {
     private readonly subFSM: FSM;
 
     private readonly subFSMHandler: FSMHandler;
 
+    /**
+	 * Creates the transition.
+	 * @param srcState The source state of the transition.
+	 * @param tgtState The output state of the transition.
+     * @param fsm The inner FSM that composes the transition.
+	 */
     public constructor(srcState: OutputState, tgtState: InputState, fsm: FSM) {
         super(srcState, tgtState);
         this.subFSM = fsm;

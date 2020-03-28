@@ -18,7 +18,6 @@ import { FSM } from "./FSM";
 /**
  * An FSM state.
  * An initial state is the unique state that can start an FSM.
- * @param <E> The type of events the FSM processes.
  */
 export class InitState extends OutputStateImpl {
     public constructor(stateMachine: FSM, stateName: string) {

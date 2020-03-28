@@ -17,19 +17,29 @@ import { InputState } from "./InputState";
 
 /**
  * The base implementation of a FSM transition.
- * @param <E> The type of events the FSM processes.
  */
 export abstract class Transition {
     public readonly src: OutputState;
 
     public readonly tgt: InputState;
 
+    /**
+	 * Creates the transition.
+	 * @param srcState The source state of the transition.
+	 * @param tgtState The output state of the transition.
+	 */
     protected constructor(srcState: OutputState, tgtState: InputState) {
         this.src = srcState;
         this.tgt = tgtState;
         this.src.addTransition(this);
     }
 
+    /**
+	 * Executes the transition.
+	 * @param event The event to process.
+	 * @return The potential output state.
+	 * @throws CancelFSMException If the execution cancels the FSM execution.
+	 */
     public execute(event: Event): InputState | undefined {
         if (this.accept(event) && this.isGuardOK(event)) {
             this.src.getFSM().stopCurrentTimeout();
@@ -48,6 +58,9 @@ export abstract class Transition {
 
     public abstract isGuardOK(event: Event): boolean;
 
+    /**
+	 * @return The set of events accepted by the transition.
+	 */
     public abstract getAcceptedEvents(): Set<string>;
 
     /**
