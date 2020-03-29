@@ -13,16 +13,31 @@
  */
 import { LogLevel } from "../../logging/LogLevel";
 
+/**
+ * The base interface for building widget bindings.
+ */
 export interface BaseBinderBuilder {
+    /**
+	 * Specifies the widgets on which the binding must operate.
+	 * When a widget is added to this list, the added widget is binded to this binding.
+	 * When widget is removed from this list, this widget is unbinded from this binding.
+	 * @param widgets The observable list of the widgets involved in the bindings.
+	 * @return A clone of the current builder to chain the building configuration.
+	 */
     on(...widgets: Array<EventTarget>): BaseBinderBuilder;
 
     /**
 	 * Specifies the conditions to fulfill to initialise, update, or execute the command while the interaction is running.
 	 * @param whenPredicate The predicate that checks whether the command can be initialised, updated, or executed.
-	 * @return The builder to chain the building configuration.
+	 * @return A clone of the current builder to chain the building configuration.
 	 */
     when(whenPredicate: () => boolean): BaseBinderBuilder;
 
+    /**
+	 * Defines actions to perform with a widget binding ends.
+	 * @param endFct The command to execute on each widget binding end.
+	 * @return A clone of the current builder to chain the building configuration.
+	 */
     end(endFct: () => void): BaseBinderBuilder;
 
     /**
@@ -30,21 +45,7 @@ export interface BaseBinderBuilder {
 	 * Several call to 'log' can be done to log different parts:
 	 * log(LogLevel.INTERACTION).log(LogLevel.COMMAND)
 	 * @param level The logging level to use.
-	 * @return The builder to chain the building configuration.
+	 * @return A clone of the current builder to chain the building configuration.
 	 */
     log(...level: Array<LogLevel>): BaseBinderBuilder;
-
-    // /**
-    //  * Specifies that the command will be executed in a separated threads.
-    //  * Beware of UI modifications: UI changes must be done in the JFX UI thread.
-    //  * @return The builder to chain the building configuration.
-    //  */
-    // async(): BaseBinderBuilder;
-
-    // /**
-    //  * Uses the default help animation of the user interaction to explain how the binding works.
-    //  * @param helpPane The pane where the animation will be played.
-    //  * @return The builder to chain the building configuration.
-    //  */
-    // help(): BaseBinderBuilder;
 }

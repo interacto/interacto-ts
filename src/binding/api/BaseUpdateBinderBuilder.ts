@@ -14,6 +14,9 @@
 import { BaseBinderBuilder } from "./BaseBinderBuilder";
 import { LogLevel } from "../../logging/LogLevel";
 
+/**
+ * The base interface for building widget bindings based on non-trivial user interactions (eg DnD).
+ */
 export interface BaseUpdateBinderBuilder extends BaseBinderBuilder {
     /**
 	 * Specifies whether the command must be executed on each evolution of the interaction (if 'when' predicate is ok).
@@ -46,10 +49,6 @@ export interface BaseUpdateBinderBuilder extends BaseBinderBuilder {
     end(endFct: () => void): BaseUpdateBinderBuilder;
 
     log(...level: Array<LogLevel>): BaseUpdateBinderBuilder;
-
-    // async(): BaseUpdateBinderBuilder;
-
-    // help(): BaseUpdateBinderBuilder;
 
     on(...widgets: Array<EventTarget>): BaseUpdateBinderBuilder;
 }

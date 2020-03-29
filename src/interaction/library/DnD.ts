@@ -26,10 +26,17 @@ import { PressureTransition } from "../../fsm/PressureTransition";
 import { ReleaseTransition } from "../../fsm/ReleaseTransition";
 import { InteractionImpl } from "../InteractionImpl";
 
+/**
+ * The FSM for DnD interactions.
+ */
 export class DnDFSM extends FSM {
     private readonly cancellable: boolean;
     private buttonToCheck?: number;
 
+    /**
+	 * Creates the FSM
+	 * @param cancellable True: the FSM can be cancelled using the ESC key.
+	 */
     public constructor(cancellable: boolean) {
         super();
         this.cancellable = cancellable;

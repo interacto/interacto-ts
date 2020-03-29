@@ -21,8 +21,13 @@ import { FSM } from "../../fsm/FSM";
 import { InteractionImpl } from "../InteractionImpl";
 import { ScrollDataImpl } from "./ScrollDataImpl";
 
+/**
+ * An FSM for scrolling.
+ */
 export class ScrollFSM extends FSM {
-
+    /**
+	 * Creates the FSM
+	 */
     public constructor() {
         super();
     }

@@ -24,9 +24,16 @@ import { FSM } from "../../fsm/FSM";
 import { KeysDataImpl } from "./KeysDataImpl";
 import { InteractionImpl } from "../InteractionImpl";
 
+/**
+ * This interaction permits to define combo a key pressed that can be used to define shortcuts, etc.
+ * @author Arnaud BLOUIN
+ */
 export class KeysPressedFSM extends FSM {
     private readonly currentCodes: Array<string>;
 
+    /**
+	 * Creates the FSM.
+	 */
     public constructor() {
         super();
         this.currentCodes = [];
@@ -104,11 +111,18 @@ interface KeysPressedFSMHandler extends FSMDataHandler {
     onKeyPressed(event: KeyboardEvent): void;
 }
 
+/**
+ * Several keys pressed at the same time.
+ * Starts on a key pressure. Ends as soon as one of the pressed keys is released.
+ */
 export class KeysPressed extends InteractionImpl<KeysData, KeysPressedFSM> {
     private readonly handler: KeysPressedFSMHandler;
 
-    public constructor(fsm?: KeysPressedFSM) {
-        super(fsm ?? new KeysPressedFSM());
+    /**
+	 * Creates the user interaction.
+	 */
+    public constructor() {
+        super(new KeysPressedFSM());
 
         this.handler = new class implements KeysPressedFSMHandler {
             private readonly _parent: KeysPressed;

@@ -15,6 +15,10 @@
 import { PointData } from "./PointData";
 import { PointDataImpl } from "./PointDataImpl";
 
+/**
+ * Interaction data for a single pointing device that moves from a source
+ * position to a target position.
+ */
 export interface SrcTgtPointsData extends PointData {
     /**
      * @return The object picked at the target location.

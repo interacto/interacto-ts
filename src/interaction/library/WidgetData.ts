@@ -14,6 +14,10 @@
 
 import { InteractionData } from "../InteractionData";
 
+/**
+ * Interaction data that contains a widget.
+ * @param <T> The type of the widget.
+ */
 export interface WidgetData<T> extends InteractionData {
     /**
      * @return The widget used during the interaction.

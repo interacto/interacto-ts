@@ -15,7 +15,11 @@ import { Command } from "../../command/Command";
 import { BaseBinderBuilder } from "./BaseBinderBuilder";
 import { LogLevel } from "../../logging/LogLevel";
 
-
+/**
+ * The widget binding builder API already knows the type of UI command
+ * the widget bindings will produce
+ * @param <C> The type of the produced UI Commands
+ */
 export interface CmdBinderBuilder<C extends Command> extends BaseBinderBuilder {
     /**
 	 * Specifies the initialisation of the command when the interaction starts.
@@ -33,8 +37,4 @@ export interface CmdBinderBuilder<C extends Command> extends BaseBinderBuilder {
     when(whenPredicate: () => boolean): CmdBinderBuilder<C>;
 
     log(...level: Array<LogLevel>): CmdBinderBuilder<C>;
-
-    // async(): CmdBinderBuilder<C>;
-
-    // help(): CmdBinderBuilder<C>;
 }

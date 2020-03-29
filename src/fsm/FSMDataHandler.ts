@@ -12,6 +12,12 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+/**
+ * The base interface for listening FSMs behavior.
+ */
 export interface FSMDataHandler {
+    /**
+	 * Notifies the concrete handler that the interaction data must be flushed
+	 */
     reinitData(): void;
 }

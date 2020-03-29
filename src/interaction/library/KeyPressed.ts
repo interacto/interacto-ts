@@ -22,9 +22,16 @@ import { FSM } from "../../fsm/FSM";
 import { InteractionImpl } from "../InteractionImpl";
 import { KeyDataImpl } from "./KeyDataImpl";
 
+/**
+ * An FSM for a single key pressure.
+ */
 export class KeyPressedFSM extends FSM {
     private readonly modifiersAccepted: boolean;
 
+    /**
+	 * Creates the FSM.
+	 * @param modifiersAccepted True: the FSM will consider key modifiers.
+	 */
     public constructor(modifierAccepted: boolean) {
         super();
         this.modifiersAccepted = modifierAccepted;

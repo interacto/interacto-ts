@@ -14,6 +14,9 @@
 
 import { ScrollData } from "./ScrollData";
 
+/**
+ * Scrolling interaction data implementation with write access.
+ */
 export class ScrollDataImpl implements ScrollData {
     protected scrolledNode?: EventTarget;
     protected px?: number;

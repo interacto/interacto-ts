@@ -28,7 +28,6 @@ import { remove, removeAt } from "../util/ArrayUtil";
 
 /**
  * A finite state machine that defines the behavior of a user interaction.
- * @param <E> The type of events the FSM processes.
  */
 export class FSM {
     protected dataHandler?: FSMDataHandler;

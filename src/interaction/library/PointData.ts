@@ -14,6 +14,9 @@
 
 import { InteractionData } from "../InteractionData";
 
+/**
+ * Interaction data for a single pointing device at a single position.
+ */
 export interface PointData extends InteractionData {
     /**
      * @return True: the alt key is pressed.

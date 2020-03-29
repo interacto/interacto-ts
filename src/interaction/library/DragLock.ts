@@ -110,6 +110,9 @@ interface DragLockFSMHandler extends FSMDataHandler {
     onMove(event: MouseEvent): void;
 }
 
+/**
+ * The drag-lock user interaction
+ */
 export class DragLock extends InteractionImpl<SrcTgtPointsData, DragLockFSM> {
     private static readonly DragLockData = class implements SrcTgtPointsData {
         private readonly draglock: DragLock;
@@ -196,6 +199,9 @@ export class DragLock extends InteractionImpl<SrcTgtPointsData, DragLockFSM> {
     private readonly firstClick: DoubleClick;
     private readonly sndClick: DoubleClick;
 
+    /**
+	 * Creates a drag lock.
+	 */
     public constructor() {
         super(new DragLockFSM());
 

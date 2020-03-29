@@ -14,6 +14,9 @@
 
 import { InteractionData } from "../InteractionData";
 
+/**
+ * Scrolling interaction data
+ */
 export interface ScrollData extends InteractionData {
     /**
      * @return The object on witch the scroll is performed.

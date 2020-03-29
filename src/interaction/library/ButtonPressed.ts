@@ -20,8 +20,13 @@ import { WidgetData, WidgetDataImpl } from "./WidgetData";
 import { FSM } from "../../fsm/FSM";
 import { InteractionImpl } from "../InteractionImpl";
 
-
+/**
+ * The FSM for button pressures.
+ */
 export class ButtonPressedFSM extends FSM {
+    /**
+	 * Creates the FSM
+	 */
     public constructor() {
         super();
     }

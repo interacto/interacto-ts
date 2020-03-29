@@ -22,9 +22,15 @@ import { FSM } from "../../fsm/FSM";
 import { InteractionImpl } from "../InteractionImpl";
 import { PointDataImpl } from "./PointDataImpl";
 
+/**
+ * The FSM for click interactions
+ */
 export class ClickFSM extends FSM {
     private checkButton?: number;
 
+    /**
+	 * Creates the FSM
+	 */
     public constructor() {
         super();
     }
