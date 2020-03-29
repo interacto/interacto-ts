@@ -178,8 +178,8 @@ export class DnD extends InteractionImpl<SrcTgtPointsData, DnDFSM> {
     /**
      * Creates the interaction.
      */
-    public constructor(srcOnUpdate: boolean, cancellable: boolean, fsm?: DnDFSM) {
-        super(fsm ?? new DnDFSM(cancellable));
+    public constructor(srcOnUpdate: boolean, cancellable: boolean) {
+        super(new DnDFSM(cancellable));
 
         this.handler = new class implements DnDFSMHandler {
             private readonly _parent: DnD;

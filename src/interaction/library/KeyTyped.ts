@@ -117,13 +117,12 @@ interface KeyTypedFSMHandler extends FSMDataHandler {
  * A user interaction for pressing and releasing a key on a keyboard
  * @author Gwendal DIDOT
  */
-
 export class KeyTyped extends InteractionImpl<KeyData, KeyTypedFSM> {
 
     private readonly handler: KeyTypedFSMHandler;
 
-    public constructor(fsm?: KeyTypedFSM) {
-        super(fsm ?? new KeyTypedFSM());
+    public constructor() {
+        super(new KeyTypedFSM());
 
         this.handler = new class implements KeyTypedFSMHandler {
             private readonly _parent: KeyTyped;

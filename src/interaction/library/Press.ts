@@ -70,8 +70,8 @@ export class Press extends InteractionImpl<PointData, PressFSM> {
      */
     private readonly handler: PressFSMHandler;
 
-    public constructor(fsm?: PressFSM) {
-        super(fsm ?? new PressFSM());
+    public constructor() {
+        super(new PressFSM());
 
         this.handler = new class implements PressFSMHandler {
             private readonly _parent: Press;
