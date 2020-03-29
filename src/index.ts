@@ -47,6 +47,7 @@ export * from "./fsm/CancellingState";
 export * from "./fsm/ClickTransition";
 export * from "./fsm/ColorPickedTransition";
 export * from "./fsm/ComboBoxTransition";
+export * from "./fsm/ConcurrentFSM";
 export * from "./fsm/DatePickedTransition";
 export * from "./fsm/EscapeKeyPressureTransition";
 export * from "./fsm/Events";
