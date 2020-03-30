@@ -8,3 +8,4 @@ docs
 Jenkinsfile
 .vscode
 .idea
+node_modules
