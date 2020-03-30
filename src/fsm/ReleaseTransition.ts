@@ -22,7 +22,6 @@ import { Transition } from "./Transition";
  * @author Gwendal DIDOT
  */
 export class ReleaseTransition extends Transition {
-
     /**
      * Defines a transition.
      * @param srcState The source state of the transition.
