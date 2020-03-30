@@ -18,18 +18,20 @@ export interface TouchData extends SrcTgtPointsData {
     /**
 	 * @return The ID of the touch.
 	 */
-    getTouchId(): number;
+    getTouchId(): number | undefined;
 }
 
 export class TouchDataImpl extends SrcTgtPointsDataImpl implements TouchData {
-    private touchID: number;
+    private touchID: number | undefined;
 
-    public constructor() {
+    public constructor(id?: number, cx?: number, cy?: number, sx?: number, sy?: number, target?: EventTarget) {
         super();
-        this.touchID = -1;
+        this.touchID = id;
+        this.setPointData(cx, cy, sx, sy, undefined, target, target);
+        this.setTgtData(cx, cy, sx, sy, target);
     }
 
-    public getTouchId(): number {
+    public getTouchId(): number | undefined {
         return this.touchID;
     }
 

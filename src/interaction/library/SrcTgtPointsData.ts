@@ -78,7 +78,7 @@ export class SrcTgtPointsDataImpl extends PointDataImpl implements SrcTgtPointsD
         return this.tgtObject;
     }
 
-    public setTgtData(cx: number, cy: number, sx: number, sy: number, target: EventTarget | undefined): void {
+    public setTgtData(cx?: number, cy?: number, sx?: number, sy?: number, target?: EventTarget): void {
         this.tgtClientX = cx;
         this.tgtClientY = cy;
         this.tgtScreenX = sx;

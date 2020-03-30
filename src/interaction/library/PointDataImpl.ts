@@ -14,6 +14,9 @@
 
 import { PointData } from "./PointData";
 
+/**
+ * Single point interaction data implementation with write accesses.
+ */
 export class PointDataImpl implements PointData {
     /** The pressed X-local position. */
     protected srcClientX?: number;
@@ -40,6 +43,9 @@ export class PointDataImpl implements PointData {
 
     protected currentTarget?: EventTarget;
 
+    /**
+	 * Creates the interaction data with no value.
+	 */
     public constructor() {
     }
 
@@ -91,6 +97,10 @@ export class PointDataImpl implements PointData {
         return this.srcClientY ?? 0;
     }
 
+    /**
+	 * Sets the possible modifiers of this point data used in the mouse event.
+	 * @param event The mouse event to use to set this interaction data.
+	 */
     public setModifiersData(event: MouseEvent): void {
         this.altPressed = event.altKey;
         this.shiftPressed = event.shiftKey;
@@ -98,8 +108,19 @@ export class PointDataImpl implements PointData {
         this.metaPressed = event.metaKey;
     }
 
-    public setPointData(cx: number, cy: number, sx: number, sy: number, button: number | undefined, target: EventTarget | undefined,
-                        currTarget: EventTarget | undefined): void {
+    /**
+	 * Sets the point data (the coordinates, the mouse button and the targeted node).
+	 * Key modifiers are not set here.
+	 * @param cx The x local position
+	 * @param cy The y local position
+	 * @param sx The x scene position
+	 * @param sy The y scene position
+	 * @param button The mouse button
+	 * @param target The targeted object
+	 * @param currTarget The current targeted object
+	 */
+    public setPointData(cx?: number, cy?: number, sx?: number, sy?: number, button?: number,
+                        target?: EventTarget, currTarget?: EventTarget): void {
         this.srcClientX = cx;
         this.srcClientY = cy;
         this.srcScreenX = sx;

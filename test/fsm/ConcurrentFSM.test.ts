@@ -133,16 +133,16 @@ beforeEach(() => {
     handler2 = new StubFSMHandler();
     fsm1.addHandler(handler1);
     fsm2.addHandler(handler2);
-    fsm = new ConcurrentFSM(new Set([fsm1, fsm2]));
+    fsm = new ConcurrentFSM([fsm1, fsm2]);
     fsm.addHandler(handler);
 });
 
 test("cons OK error", () => {
-    expect(() => new ConcurrentFSM(new Set<FSM>([fsm1]))).toThrow(Error);
+    expect(() => new ConcurrentFSM([fsm1])).toThrow(Error);
 });
 
 test("cons OK error empty", () => {
-    expect(() => new ConcurrentFSM(new Set<FSM>())).toThrow(Error);
+    expect(() => new ConcurrentFSM(Array<FSM>())).toThrow(Error);
 });
 
 test("nb FSMs OK", () => {

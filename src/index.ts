@@ -97,6 +97,8 @@ export * from "./interaction/library/KeyTyped";
 export * from "./interaction/library/KeysData";
 export * from "./interaction/library/KeysDataImpl";
 export * from "./interaction/library/KeysPressed";
+export * from "./interaction/library/MultiTouch";
+export * from "./interaction/library/MultiTouchData";
 export * from "./interaction/library/PointData";
 export * from "./interaction/library/PointDataImpl";
 export * from "./interaction/library/Press";

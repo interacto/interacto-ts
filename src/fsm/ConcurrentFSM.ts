@@ -47,10 +47,10 @@ export class ConcurrentFSM<F extends FSM> extends FSM {
 
     private readonly conccurFSMs: Array<F>
 
-    public constructor(fsms: Set<F>) {
+    public constructor(fsms: Array<F>) {
         super();
-        if(fsms.size < 2) {
-            throw new Error("Requires more that 1 FSM");
+        if(fsms.length < 2) {
+            throw new Error(`Requires more that 1 FSM: ${fsms}`);
         }
 
         this.conccurFSMs = [...fsms];

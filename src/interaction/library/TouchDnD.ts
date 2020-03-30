@@ -29,14 +29,14 @@ import { getTouch } from "../../fsm/Events";
  * The FSM that defines a touch interaction (that works like a DnD)
  */
 export class TouchDnDFSM extends FSM {
-    private touchID: number;
+    private touchID: number | undefined;
 
     /**
 	 * Creates the FSM.
 	 */
     public constructor() {
         super();
-        this.touchID = -1;
+        this.touchID = undefined;
     }
 
     public buildFSM(dataHandler?: TouchDnDFSMHandler): void {
@@ -111,13 +111,17 @@ export class TouchDnDFSM extends FSM {
         super.buildFSM(dataHandler);
     }
 
+    public getTouchId(): number | undefined {
+        return this.touchID;
+    }
+
     public reinit(): void {
         super.reinit();
-        this.touchID = -1;
+        this.touchID = undefined;
     }
 }
 
-interface TouchDnDFSMHandler extends FSMDataHandler {
+export interface TouchDnDFSMHandler extends FSMDataHandler {
     onTouch(event: TouchEvent): void;
 
     onMove(event: TouchEvent): void;
