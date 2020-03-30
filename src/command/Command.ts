@@ -21,11 +21,8 @@
  */
 export interface Command {
     /**
-     * Flushes the command.
-     * Can be useful to close streams, free objects, etc.
-     * A command should flushed manually only when it is not managed by the command registry of the application.
-     * When a command is gathered and managed by a command registry, it is automatically flushed when the
-     * command registry removes the command.
+     * Flushes the UI command.
+     * The command must not be used after that.
      */
     flush(): void;
 
@@ -37,40 +34,38 @@ export interface Command {
     getRegistrationPolicy(): RegistrationPolicy;
 
     /**
-     * This method manages the execution of the command.
-     * @return {boolean} True: the execution of the command is OK.
+     * Executes (if possible) the commands.
+     * @return True: the command has been executed.
      */
     doIt(): boolean;
 
     /**
      * Checks whether the command can be executed.
-     * @return {boolean} True if the command can be executed.
-     * @since 0.1
+     * @return True if the command can be executed.
      */
     canDo(): boolean;
 
     /**
      * State whether the execution of this command has effects on the system.
-     * @return {boolean} True: the command has effects on the system.
+     * @return True: the command has effects on the system.
      */
     hadEffect(): boolean;
 
     /**
      * Checks whether the current command can be cancelled by the given one.
-     * @param {*} cmd The command to check whether it can cancel the current command.
-     * @return {boolean} True: The given command can cancel the current command.
+     * @param cmd The command to check whether it can cancel the current command.
+     * @return True: The given command can cancel the current command.
      */
     unregisteredBy(cmd: Command): boolean;
 
     /**
      * Marks the command as "done" and sends it to the command registry.
-     * @since 0.1
      */
     done(): void;
 
     /**
      * To know whether the command has been marked as 'done'.
-     * @return {boolean} True: the command has been marked as 'done'.
+     * @return True: the command has been marked as 'done'.
      */
     isDone(): boolean;
 
@@ -82,21 +77,12 @@ export interface Command {
     /**
      * Provides the status of the command.
      * @return The status of the command.
-     * @since 0.2
      */
     getStatus(): CmdStatus;
 }
 
 /**
  * Defines the registration policy of the command.
- * @enum
- * @property {RegistrationPolicy} NONE
- * The command is never registered.
- * @property {RegistrationPolicy} UNLIMITED
- * The command is registered in the command register. The command is not flushed when the registry wants to free some commands.
- * @property {RegistrationPolicy} LIMITED
- * The command is registered in the command register. The command can be flushed by the registry.
- * @class
  */
 export enum RegistrationPolicy {
     /**
@@ -115,18 +101,6 @@ export enum RegistrationPolicy {
 
 /**
  * Defines the different states of the command.
- * @since 0.2
- * @enum
- * @property {CmdStatus} CREATED
- * When the command is created but not executed yet.
- * @property {CmdStatus} EXECUTED
- * When the command has been created and executed one time.
- * @property {CmdStatus} CANCELLED
- * When the command has been cancelled.
- * @property {CmdStatus} DONE
- * When the command has been marked as done.
- * @property {CmdStatus} FLUSHED
- * The command has been flushed. In this case, the command must not be used anymore.
  */
 export enum CmdStatus {
     /**
