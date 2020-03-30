@@ -11,11 +11,19 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 import { InteractionStub } from "../interaction/InteractionStub";
-import { InteractionData, WidgetBindingImpl, FSM, CommandsRegistry, TerminalState,
-    Transition, OutputState, InputState, CmdStatus } from "../../src";
 import { StubCmd } from "../command/StubCmd";
 import { StubSubEvent1 } from "../fsm/StubEvent";
+import { InteractionData } from "../../src/interaction/InteractionData";
+import { WidgetBindingImpl } from "../../src/binding/WidgetBindingImpl";
+import { FSM } from "../../src/fsm/FSM";
+import { OutputState } from "../../src/fsm/OutputState";
+import { Transition } from "../../src/fsm/Transition";
+import { InputState } from "../../src/fsm/InputState";
+import { TerminalState } from "../../src/fsm/TerminalState";
+import { CommandsRegistry } from "../../src/command/CommandsRegistry";
+import { CmdStatus } from "../../src/command/Command";
 
 let interaction: InteractionStub;
 let binding: WidgetBindingImpl<StubCmd, InteractionStub, InteractionData>;

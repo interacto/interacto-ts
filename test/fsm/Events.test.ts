@@ -11,9 +11,10 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { EventRegistrationToken, isButton, isCheckBox, isColorChoice, isComboBox,
-    isDatePicker, isSpinner, isHyperLink, isTextInput, isKeyDownEvent, isKeyUpEvent,
-    isMouseDownEvent, isScrollEvent, KeyCode } from "../../src";
+
+import { EventRegistrationToken, isButton, isCheckBox, isColorChoice, isComboBox, isDatePicker,
+    isHyperLink, isKeyDownEvent, isKeyUpEvent, isMouseDownEvent, isScrollEvent, isSpinner,
+    isTextInput, KeyCode } from "../../src/fsm/Events";
 import { createKeyEvent, createMouseEvent, createUIEvent } from "../interaction/StubEvents";
 
 

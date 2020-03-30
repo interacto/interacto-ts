@@ -12,11 +12,18 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { WidgetBindingImpl, InteractionData, CommandsRegistry, CancelFSMException, FSM, ErrorCatcher,
-    CmdStatus, MustBeUndoableCmdException, Undoable, RegistrationPolicy } from "../../src";
-import { InteractionStub } from "../interaction/InteractionStub";
-import { StubCmd } from "../command/StubCmd";
 import { Subscription } from "rxjs";
+import { StubCmd } from "../command/StubCmd";
+import { InteractionStub } from "../interaction/InteractionStub";
+import { WidgetBindingImpl } from "../../src/binding/WidgetBindingImpl";
+import { InteractionData } from "../../src/interaction/InteractionData";
+import { Undoable } from "../../src/undo/Undoable";
+import { ErrorCatcher } from "../../src/error/ErrorCatcher";
+import { CommandsRegistry } from "../../src/command/CommandsRegistry";
+import { FSM } from "../../src/fsm/FSM";
+import { CancelFSMException } from "../../src/fsm/CancelFSMException";
+import { CmdStatus, RegistrationPolicy } from "../../src/command/Command";
+import { MustBeUndoableCmdException } from "../../src/binding/MustBeUndoableCmdException";
 
 export class WidgetBindingStub extends WidgetBindingImpl<StubCmd, InteractionStub, InteractionData> {
     public conditionRespected: boolean;

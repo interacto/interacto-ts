@@ -11,7 +11,9 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Undoable, UndoCollector } from "../../src";
+
+import { Undoable } from "../../src/undo/Undoable";
+import { UndoCollector } from "../../src/undo/UndoCollector";
 
 jest.mock("../../src/undo/Undoable");
 

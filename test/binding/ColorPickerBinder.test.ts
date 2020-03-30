@@ -11,9 +11,15 @@
  * You should have received a copy of the GNU General export function License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { ColorPicked, WidgetData, WidgetBinding, CommandsRegistry, UndoCollector, colorPickerBinder, isColorChoice } from "../../src";
-import { StubCmd } from "../command/StubCmd";
 import { Subscription } from "rxjs";
+import { colorPickerBinder } from "../../src/binding/Bindings";
+import { WidgetBinding } from "../../src/binding/WidgetBinding";
+import { CommandsRegistry } from "../../src/command/CommandsRegistry";
+import { isColorChoice } from "../../src/fsm/Events";
+import { ColorPicked } from "../../src/interaction/library/ColorPicked";
+import { WidgetData } from "../../src/interaction/library/WidgetData";
+import { UndoCollector } from "../../src/undo/UndoCollector";
+import { StubCmd } from "../command/StubCmd";
 
 let widget1: HTMLInputElement;
 let widget2: HTMLInputElement;

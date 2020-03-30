@@ -11,8 +11,11 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
+import { Command } from "../../src/command/Command";
+import { CommandImpl } from "../../src/command/CommandImpl";
+import { CommandsRegistry } from "../../src/command/CommandsRegistry";
+import { UndoCollector } from "../../src/undo/UndoCollector";
 import { StubCmd } from "./StubCmd";
-import { CommandImpl, CommandsRegistry, UndoCollector, Command } from "../../src";
 
 
 jest.mock("./StubCmd");

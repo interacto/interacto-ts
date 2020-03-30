@@ -12,11 +12,11 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { WidgetBindingImpl } from "./WidgetBindingImpl";
-import { InteractionData } from "../interaction/InteractionData";
+import { Command } from "../command/Command";
 import { FSM } from "../fsm/FSM";
-import { Command } from "..";
+import { InteractionData } from "../interaction/InteractionData";
 import { InteractionImpl } from "../interaction/InteractionImpl";
+import { WidgetBindingImpl } from "./WidgetBindingImpl";
 
 /**
  * Permits widget bindings produced by Bindings to be observed.

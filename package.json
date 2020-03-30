@@ -14,7 +14,7 @@
   "license": "GPL3",
   "main": "./dist/interacto.umd.js",
   "module": "dist/interacto.es5.js",
-  "types": "./dist/index.d.ts",
+  "types": "./dist/interacto.d.ts",
   "devDependencies": {
     "@types/jest": "^25.1.4",
     "@types/node": "^13.9.5",
@@ -47,7 +47,9 @@
     "lint": "eslint src test --ext .ts",
     "lint-fix": "eslint src test --ext .ts --fix",
     "coverage": "jest --coverage --collectCoverageFrom=src*/**/*.ts",
-    "doc": "typedoc --out docs"
+    "doc": "typedoc --out docs",
+    "test-publish": "npm pack",
+    "publish": "npm publish"
   },
   "dependencies": {
     "rxjs": "^6.5.4",

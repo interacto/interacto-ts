@@ -11,7 +11,8 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { ErrorCatcher } from "../../src";
+
+import { ErrorCatcher } from "../../src/error/ErrorCatcher";
 
 let instance: ErrorCatcher;
 

@@ -12,10 +12,10 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ButtonPressed } from "../../../src/interaction/library/ButtonPressed";
+import { isButton } from "../../../src/fsm/Events";
 import { FSMHandler } from "../../../src/fsm/FSMHandler";
+import { ButtonPressed } from "../../../src/interaction/library/ButtonPressed";
 import { StubFSMHandler } from "../../fsm/StubFSMHandler";
-import { isButton } from "../../../src";
 
 jest.mock("../../fsm/StubFSMHandler");
 

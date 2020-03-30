@@ -7,7 +7,7 @@ import json from '@rollup/plugin-json'
 const pkg = require('./package.json')
 
 export default {
-  input: 'src/index.ts',
+  input: 'src/interacto.ts',
   output: [
     { file: pkg.main, name:'Interacto', format: 'umd', sourcemap: true },
     { file: pkg.module, format: 'es', sourcemap: true },

@@ -11,9 +11,16 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { WidgetBinding, ButtonPressed, WidgetData, buttonBinder, CommandsRegistry, UndoCollector, LogLevel, isButton } from "../../src";
-import { StubCmd } from "../command/StubCmd";
 import { Subscription } from "rxjs";
+import { buttonBinder } from "../../src/binding/Bindings";
+import { WidgetBinding } from "../../src/binding/WidgetBinding";
+import { CommandsRegistry } from "../../src/command/CommandsRegistry";
+import { isButton } from "../../src/fsm/Events";
+import { ButtonPressed } from "../../src/interaction/library/ButtonPressed";
+import { WidgetData } from "../../src/interaction/library/WidgetData";
+import { LogLevel } from "../../src/logging/LogLevel";
+import { UndoCollector } from "../../src/undo/UndoCollector";
+import { StubCmd } from "../command/StubCmd";
 
 let button1: HTMLButtonElement;
 let button2: HTMLButtonElement;

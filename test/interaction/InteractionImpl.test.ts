@@ -12,9 +12,12 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { InteractionStub } from "./InteractionStub";
-import { FSM, OutputState, InitState, StdState } from "../../src";
 import { Subject } from "rxjs";
+import { FSM } from "../../src/fsm/FSM";
+import { InitState } from "../../src/fsm/InitState";
+import { OutputState } from "../../src/fsm/OutputState";
+import { StdState } from "../../src/fsm/StdState";
+import { InteractionStub } from "./InteractionStub";
 
 let interaction: InteractionStub;
 let fsm: FSM;

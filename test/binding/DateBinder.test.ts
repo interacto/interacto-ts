@@ -11,9 +11,14 @@
  * You should have received a copy of the GNU General export function License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { WidgetData, WidgetBinding, CommandsRegistry, UndoCollector, dateBinder, DatePicked } from "../../src";
 import { StubCmd } from "../command/StubCmd";
 import { Subscription } from "rxjs";
+import { WidgetBinding } from "../../src/binding/WidgetBinding";
+import { DatePicked } from "../../src/interaction/library/DatePicked";
+import { WidgetData } from "../../src/interaction/library/WidgetData";
+import { CommandsRegistry } from "../../src/command/CommandsRegistry";
+import { UndoCollector } from "../../src/undo/UndoCollector";
+import { dateBinder } from "../../src/binding/Bindings";
 
 let widget1: HTMLInputElement;
 let widget2: HTMLInputElement;

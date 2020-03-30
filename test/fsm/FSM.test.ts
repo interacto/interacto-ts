@@ -12,16 +12,22 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import "jest";
+import { Subject } from "rxjs";
+import { CancelFSMException } from "../../src/fsm/CancelFSMException";
+import { CancellingState } from "../../src/fsm/CancellingState";
 import { FSM } from "../../src/fsm/FSM";
 import { InitState } from "../../src/fsm/InitState";
-import "jest";
+import { InputState } from "../../src/fsm/InputState";
+import { OutputState } from "../../src/fsm/OutputState";
 import { StdState } from "../../src/fsm/StdState";
-import { TerminalState, CancellingState, CancelFSMException, OutputState, InputState,
-    TimeoutTransition, SubFSMTransition, catFSM } from "../../src";
+import { SubFSMTransition } from "../../src/fsm/SubFSMTransition";
+import { TerminalState } from "../../src/fsm/TerminalState";
+import { TimeoutTransition } from "../../src/fsm/TimeoutTransition";
+import { catFSM } from "../../src/logging/ConfigLog";
+import { StubEvent, StubSubEvent1, StubSubEvent2, StubSubEvent3 } from "./StubEvent";
 import { StubFSMHandler } from "./StubFSMHandler";
 import { StubTransitionOK } from "./StubTransitionOK";
-import { StubEvent, StubSubEvent1, StubSubEvent2, StubSubEvent3 } from "./StubEvent";
-import { Subject } from "rxjs";
 
 jest.mock("../fsm/StubFSMHandler");
 

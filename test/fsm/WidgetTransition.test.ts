@@ -13,7 +13,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { WidgetTransition, StdState, FSM } from "../../src";
+import { FSM } from "../../src/fsm/FSM";
+import { StdState } from "../../src/fsm/StdState";
+import { WidgetTransition } from "../../src/fsm/WidgetTransition";
 import { StubEvent } from "./StubEvent";
 
 class WTransition extends WidgetTransition<StubEvent, object> {

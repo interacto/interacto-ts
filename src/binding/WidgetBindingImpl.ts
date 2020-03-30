@@ -12,18 +12,18 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { WidgetBinding } from "./WidgetBinding";
-import { CancelFSMException } from "../fsm/CancelFSMException";
-import { isUndoableType } from "../undo/Undoable";
-import { catBinder, catCommand } from "../logging/ConfigLog";
-import { FSM } from "../fsm/FSM";
-import { MustBeUndoableCmdException } from "./MustBeUndoableCmdException";
-import { Command, RegistrationPolicy, CmdStatus } from "../command/Command";
+import { Observable, Subject } from "rxjs";
+import { CmdStatus, Command, RegistrationPolicy } from "../command/Command";
 import { CommandsRegistry } from "../command/CommandsRegistry";
+import { ErrorCatcher } from "../error/ErrorCatcher";
+import { CancelFSMException } from "../fsm/CancelFSMException";
+import { FSM } from "../fsm/FSM";
 import { InteractionData } from "../interaction/InteractionData";
 import { InteractionImpl } from "../interaction/InteractionImpl";
-import { Subject, Observable } from "rxjs";
-import { ErrorCatcher } from "..";
+import { catBinder, catCommand } from "../logging/ConfigLog";
+import { isUndoableType } from "../undo/Undoable";
+import { MustBeUndoableCmdException } from "./MustBeUndoableCmdException";
+import { WidgetBinding } from "./WidgetBinding";
 
 /**
  * The base class to do widget bindings, i.e. bindings between user interactions and (undoable) commands.

@@ -11,9 +11,15 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { StubCmd } from "../command/StubCmd";
 import { Subscription } from "rxjs";
-import { WidgetBinding, WidgetData, BoxChecked, CommandsRegistry, UndoCollector, checkboxBinder, isCheckBox } from "../../src";
+import { checkboxBinder } from "../../src/binding/Bindings";
+import { WidgetBinding } from "../../src/binding/WidgetBinding";
+import { CommandsRegistry } from "../../src/command/CommandsRegistry";
+import { isCheckBox } from "../../src/fsm/Events";
+import { BoxChecked } from "../../src/interaction/library/BoxChecked";
+import { WidgetData } from "../../src/interaction/library/WidgetData";
+import { UndoCollector } from "../../src/undo/UndoCollector";
+import { StubCmd } from "../command/StubCmd";
 
 let widget1: HTMLInputElement;
 let widget2: HTMLInputElement;

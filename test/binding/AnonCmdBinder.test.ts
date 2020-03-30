@@ -12,7 +12,11 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { isButton, CommandsRegistry, UndoCollector, ButtonPressed, anonCmdBinder } from "../../src";
+import { anonCmdBinder } from "../../src/binding/Bindings";
+import { CommandsRegistry } from "../../src/command/CommandsRegistry";
+import { isButton } from "../../src/fsm/Events";
+import { ButtonPressed } from "../../src/interaction/library/ButtonPressed";
+import { UndoCollector } from "../../src/undo/UndoCollector";
 
 interface A {
     foo(): void;

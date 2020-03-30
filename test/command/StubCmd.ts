@@ -13,7 +13,7 @@
  */
 
 import { CommandImpl } from "../../src/command/CommandImpl";
-import { Undoable } from "../../src";
+import { Undoable } from "../../src/undo/Undoable";
 
 export class StubCmd extends CommandImpl {
     public candoValue: boolean;

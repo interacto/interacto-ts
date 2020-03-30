@@ -11,7 +11,12 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { InteractionImpl, InteractionData, FSM, OutputState, PointDataImpl } from "../../src";
+
+import { InteractionImpl } from "../../src/interaction/InteractionImpl";
+import { InteractionData } from "../../src/interaction/InteractionData";
+import { FSM } from "../../src/fsm/FSM";
+import { OutputState } from "../../src/fsm/OutputState";
+import { PointDataImpl } from "../../src/interaction/library/PointDataImpl";
 
 export class InteractionStub extends InteractionImpl<InteractionData, FSM> {
     public constructor(fsm: FSM) {
