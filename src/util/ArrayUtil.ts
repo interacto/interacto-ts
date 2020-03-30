@@ -29,5 +29,5 @@ export function removeAt<T>(array: Array<T>, index: number): T | undefined {
 }
 
 export function peek<T>(array: Array<T>): T | undefined {
-    return array.length === 0 ? undefined : array[array.length - 1];
+    return array[array.length - 1];
 }
