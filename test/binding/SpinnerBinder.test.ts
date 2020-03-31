@@ -12,13 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { Subscription } from "rxjs";
-import { spinnerBinder } from "../../src/binding/Bindings";
-import { WidgetBinding } from "../../src/binding/WidgetBinding";
-import { CommandsRegistry } from "../../src/command/CommandsRegistry";
-import { isSpinner } from "../../src/fsm/Events";
-import { SpinnerChanged, SpinnerChangedFSM } from "../../src/interaction/library/SpinnerChanged";
-import { WidgetData } from "../../src/interaction/library/WidgetData";
-import { UndoCollector } from "../../src/undo/UndoCollector";
+import { CommandsRegistry, isSpinner, spinnerBinder, SpinnerChanged, SpinnerChangedFSM, UndoCollector,
+    WidgetBinding, WidgetData } from "../../src/interacto";
 import { StubCmd } from "../command/StubCmd";
 
 let widget1: HTMLInputElement;

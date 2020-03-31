@@ -13,17 +13,11 @@
  */
 
 import { Subscription } from "rxjs";
+import { CancelFSMException, CmdStatus, CommandsRegistry, ErrorCatcher, FSM, InteractionData,
+    MustBeUndoableCmdException, RegistrationPolicy, Undoable, WidgetBindingImpl } from "../../src/interacto";
 import { StubCmd } from "../command/StubCmd";
 import { InteractionStub } from "../interaction/InteractionStub";
-import { WidgetBindingImpl } from "../../src/binding/WidgetBindingImpl";
-import { InteractionData } from "../../src/interaction/InteractionData";
-import { Undoable } from "../../src/undo/Undoable";
-import { ErrorCatcher } from "../../src/error/ErrorCatcher";
-import { CommandsRegistry } from "../../src/command/CommandsRegistry";
-import { FSM } from "../../src/fsm/FSM";
-import { CancelFSMException } from "../../src/fsm/CancelFSMException";
-import { CmdStatus, RegistrationPolicy } from "../../src/command/Command";
-import { MustBeUndoableCmdException } from "../../src/binding/MustBeUndoableCmdException";
+
 
 export class WidgetBindingStub extends WidgetBindingImpl<StubCmd, InteractionStub, InteractionData> {
     public conditionRespected: boolean;

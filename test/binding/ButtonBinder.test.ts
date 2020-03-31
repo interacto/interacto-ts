@@ -12,14 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { Subscription } from "rxjs";
-import { buttonBinder } from "../../src/binding/Bindings";
-import { WidgetBinding } from "../../src/binding/WidgetBinding";
-import { CommandsRegistry } from "../../src/command/CommandsRegistry";
-import { isButton } from "../../src/fsm/Events";
-import { ButtonPressed } from "../../src/interaction/library/ButtonPressed";
-import { WidgetData } from "../../src/interaction/library/WidgetData";
-import { LogLevel } from "../../src/logging/LogLevel";
-import { UndoCollector } from "../../src/undo/UndoCollector";
+import { buttonBinder, ButtonPressed, CommandsRegistry, isButton, LogLevel, UndoCollector, WidgetBinding, WidgetData } from "../../src/interacto";
 import { StubCmd } from "../command/StubCmd";
 
 let button1: HTMLButtonElement;
