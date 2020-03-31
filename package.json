@@ -55,6 +55,9 @@
     "rxjs": "^6.5.4",
     "typescript-logging": "^0.6.4"
   },
+  "files": [
+    "dist/"
+  ],
   "jest": {
     "transform": {
       ".(ts|tsx)": "ts-jest"
