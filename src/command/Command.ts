@@ -52,13 +52,6 @@ export interface Command {
     hadEffect(): boolean;
 
     /**
-     * Checks whether the current command can be cancelled by the given one.
-     * @param cmd The command to check whether it can cancel the current command.
-     * @return True: The given command can cancel the current command.
-     */
-    unregisteredBy(cmd: Command): boolean;
-
-    /**
      * Marks the command as "done" and sends it to the command registry.
      */
     done(): void;

@@ -12,24 +12,10 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { CommandImpl } from "../../src/command/CommandImpl";
 import { Command, CmdStatus, RegistrationPolicy } from "../../src/command/Command";
 import { CommandsRegistry } from "../../src/command/CommandsRegistry";
 import { UndoCollector } from "../../src/undo/UndoCollector";
 import { StubCmd, StubUndoableCmd } from "./StubCmd";
-
-class StubCmd2 extends CommandImpl {
-    public constructor() {
-        super();
-    }
-
-    public unregisteredBy(cmd: Command): boolean {
-        return cmd instanceof StubCmd;
-    }
-
-    protected doCmdBody(): void {
-    }
-}
 
 let instance: CommandsRegistry;
 
@@ -119,22 +105,6 @@ test("testRemoveCommand", () => {
     const command = new StubCmd();
     instance.addCommand(command);
     instance.removeCommand(command);
-    expect(instance.getCommands()).toHaveLength(0);
-    expect(command.getStatus()).toStrictEqual(CmdStatus.FLUSHED);
-});
-
-test("unregister Cmd KO", () => {
-    const command = new StubCmd();
-    instance.addCommand(command);
-    instance.unregisterCmd(new StubCmd2());
-    expect(instance.getCommands()).toHaveLength(1);
-    expect(command.getStatus()).not.toStrictEqual(CmdStatus.FLUSHED);
-});
-
-test("unregister Cmd OK", () => {
-    const command = new StubCmd2();
-    instance.addCommand(command);
-    instance.unregisterCmd(new StubCmd());
     expect(instance.getCommands()).toHaveLength(0);
     expect(command.getStatus()).toStrictEqual(CmdStatus.FLUSHED);
 });

@@ -70,34 +70,14 @@ export class CommandsRegistry {
     }
 
     /**
-     * Removes and flushes the commands from the register that use the given command type.
-     * @see Command::unregisteredBy
-     * @param {*} cmd The command that may cancels others.
-     */
-    public unregisterCmd(cmd: Command): void {
-        let i = 0;
-        while (i < this.cmds.length) {
-            if (this.cmds[i].unregisteredBy(cmd)) {
-                const delCmd = removeAt(this.cmds, i);
-                if (delCmd !== undefined) {
-                    delCmd.flush();
-                }
-            } else {
-                i++;
-            }
-        }
-    }
-
-    /**
-     * Adds a command to the register. Before being added, the given command is used to cancel commands
-     * already added. Handlers are notified of the add of the given command. If Undoable, the command is
+     * Adds a command to the register.
+     * Handlers are notified of the add of the given command. If Undoable, the command is
      * added to the undo collector as well.
-     * @param {*} cmd The command to add. If null, nothing is done.
+     * @param cmd The command to add. If null, nothing is done.
      */
     public addCommand(cmd: Command): void {
         if (!this.cmds.includes(cmd) &&
             (this.sizeMax > 0 || cmd.getRegistrationPolicy() === RegistrationPolicy.UNLIMITED)) {
-            this.unregisterCmd(cmd);
 
             // If there is too many commands in the register, the oldest removable command is removed and flushed.
             if (this.cmds.length >= this.sizeMax) {

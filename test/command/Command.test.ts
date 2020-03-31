@@ -129,10 +129,6 @@ test("testGetRegistrationPolicyDone", () => {
     expect(cmd.getRegistrationPolicy()).toStrictEqual(RegistrationPolicy.LIMITED);
 });
 
-test("testCommandNotUnregisterByByDefault", () => {
-    expect(cmd.unregisteredBy(new StubCmd())).toBeFalsy();
-});
-
 test("testCommandNotDoneWhenFlushed", () => {
     cmd.flush();
     cmd.done();

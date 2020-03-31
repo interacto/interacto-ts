@@ -86,10 +86,6 @@ export abstract class CommandImpl implements Command {
         return this.isDone();
     }
 
-    public unregisteredBy(_cmd: Command): boolean {
-        return false;
-    }
-
     public done(): void {
         if (this.status === CmdStatus.CREATED || this.status === CmdStatus.EXECUTED) {
             this.status = CmdStatus.DONE;
