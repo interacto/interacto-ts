@@ -176,8 +176,16 @@ test("testGetLastUndoMessageNothingOnStart", () => {
     expect(instance.getLastUndoMessage()).toBeUndefined();
 });
 
+test("getLastOrEmptyUndoMessage NothingOnStart", () => {
+    expect(instance.getLastOrEmptyUndoMessage()).toStrictEqual("");
+});
+
 test("testGetLastRedoMessageNothingOnStart", () => {
     expect(instance.getLastRedoMessage()).toBeUndefined();
+});
+
+test("getLastOrEmptyRedoMessage NothingOnStart", () => {
+    expect(instance.getLastOrEmptyRedoMessage()).toStrictEqual("");
 });
 
 test("testGetLastUndoMessageOK", () => {
@@ -185,10 +193,21 @@ test("testGetLastUndoMessageOK", () => {
     expect(instance.getLastUndoMessage()).toStrictEqual("undoredomsg");
 });
 
+test("getLastOrEmptyUndoMessage OK", () => {
+    instance.add(undoable);
+    expect(instance.getLastOrEmptyUndoMessage()).toStrictEqual("undoredomsg");
+});
+
 test("testGetLastRedoMessageOK", () => {
     instance.add(undoable);
     instance.undo();
     expect(instance.getLastRedoMessage()).toStrictEqual("undoredomsg");
+});
+
+test("getLastOrEmptyRedoMessage OK", () => {
+    instance.add(undoable);
+    instance.undo();
+    expect(instance.getLastOrEmptyRedoMessage()).toStrictEqual("undoredomsg");
 });
 
 test("testClear", () => {

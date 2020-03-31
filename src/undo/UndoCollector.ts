@@ -153,28 +153,42 @@ export class UndoCollector {
     }
 
     /**
-     * @return {Optional} The last undoable object name or null if there is no last object.
+     * @return The last undoable object name or undefined if there is no last object.
      */
     public getLastUndoMessage(): string | undefined {
         return peek(this.undos)?.getUndoName();
     }
 
     /**
-     * @return {Optional} The last redoable object name or null if there is no last object.
+     * @return The last redoable object name or undefined if there is no last object.
      */
     public getLastRedoMessage(): string | undefined {
         return peek(this.redos)?.getUndoName();
     }
 
     /**
-     * @return {Optional} The last undoable object or null if there is no last object.
+     * @return The last undoable object name or an empty string if there is no last object.
+     */
+    public getLastOrEmptyUndoMessage(): string {
+        return this.getLastUndoMessage() ?? "";
+    }
+
+    /**
+     * @return The last redoable object name or an empty string if there is no last object.
+     */
+    public getLastOrEmptyRedoMessage(): string {
+        return this.getLastRedoMessage() ?? "";
+    }
+
+    /**
+     * @return The last undoable object or undefined if there is no last object.
      */
     public getLastUndo(): Undoable | undefined {
         return peek(this.undos);
     }
 
     /**
-     * @return {Optional} The last redoable object or null if there is no last object.
+     * @return The last redoable object or undefined if there is no last object.
      */
     public getLastRedo(): Undoable | undefined {
         return peek(this.redos);
