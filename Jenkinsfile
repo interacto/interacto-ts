@@ -67,5 +67,8 @@ pipeline {
         failure {
             githubStatusCheck("FAILURE", "Build failure");
         }
+        unstable {
+            githubStatusCheck("FAILURE", "Build failure");
+        }
     }
 }
