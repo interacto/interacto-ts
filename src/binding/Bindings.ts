@@ -32,6 +32,7 @@ import { FSM } from "../fsm/FSM";
 import { CommandImpl } from "../command/CommandImpl";
 import { BaseUpdateBinder } from "./api/BaseUpdateBinder";
 import { BindingsObserver } from "./BindingsObserver";
+import { TextInputChanged } from "../interaction/library/TextInputChanged";
 
 let observer: BindingsObserver | undefined;
 
@@ -83,4 +84,9 @@ export function spinnerBinder<C extends Command>(): InteractionUpdateBinder<Spin
 export function dateBinder<C extends Command>(): InteractionUpdateBinder<DatePicked, WidgetData<HTMLInputElement>> {
     return new UpdateBinder<C, DatePicked, WidgetData<HTMLInputElement>>(0, false, false, observer)
         .usingInteraction<DatePicked, WidgetData<HTMLInputElement>>(() => new DatePicked());
+}
+
+export function textInputBinder<C extends Command>(): InteractionUpdateBinder<TextInputChanged, WidgetData<HTMLInputElement | HTMLTextAreaElement>> {
+    return new UpdateBinder<C, TextInputChanged, WidgetData<HTMLInputElement | HTMLTextAreaElement>>(0, false, false, observer)
+        .usingInteraction<TextInputChanged, WidgetData<HTMLInputElement | HTMLTextAreaElement>>(() => new TextInputChanged());
 }

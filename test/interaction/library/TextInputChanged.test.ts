@@ -40,7 +40,7 @@ beforeEach(() => {
 
 test("type in a text area starts and stops the interaction", () => {
     interaction.registerToNodes([textArea]);
-    textArea.dispatchEvent(new Event("input"));
+    textArea.dispatchEvent(new InputEvent("input"));
     jest.runOnlyPendingTimers();
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
