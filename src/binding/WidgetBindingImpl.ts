@@ -387,6 +387,7 @@ implements WidgetBinding<C, I, D> {
         this.cmdsProduced.complete();
         this.asLogBinding = false;
         this.asLogCmd = false;
+        this.interaction.uninstall();
     }
 
 

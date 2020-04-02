@@ -408,8 +408,10 @@ test("stop with log cmd created and cancelled two times", () => {
 });
 
 test("uninstall Binding", () => {
+    jest.spyOn(binding.getInteraction(), "uninstall");
     binding.uninstallBinding();
     expect(binding.isActivated()).toBeFalsy();
+    expect(binding.getInteraction().uninstall).toHaveBeenCalledTimes(1);
 });
 
 test("after exec cmd had effects", () => {
