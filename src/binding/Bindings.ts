@@ -33,6 +33,8 @@ import { CommandImpl } from "../command/CommandImpl";
 import { BaseUpdateBinder } from "./api/BaseUpdateBinder";
 import { BindingsObserver } from "./BindingsObserver";
 import { TextInputChanged } from "../interaction/library/TextInputChanged";
+import { MultiTouch } from "../interaction/library/MultiTouch";
+import { MultiTouchData } from "../interaction/library/MultiTouchData";
 
 let observer: BindingsObserver | undefined;
 
@@ -89,4 +91,9 @@ export function dateBinder<C extends Command>(): InteractionUpdateBinder<DatePic
 export function textInputBinder<C extends Command>(): InteractionUpdateBinder<TextInputChanged, WidgetData<HTMLInputElement | HTMLTextAreaElement>> {
     return new UpdateBinder<C, TextInputChanged, WidgetData<HTMLInputElement | HTMLTextAreaElement>>(0, false, false, observer)
         .usingInteraction<TextInputChanged, WidgetData<HTMLInputElement | HTMLTextAreaElement>>(() => new TextInputChanged());
+}
+
+export function multiTouchBinder<C extends Command>(nbTouches: number): InteractionUpdateBinder<MultiTouch, MultiTouchData> {
+    return new UpdateBinder<C, TextInputChanged, WidgetData<HTMLInputElement | HTMLTextAreaElement>>(0, false, false, observer)
+        .usingInteraction<MultiTouch, MultiTouchData>(() => new MultiTouch(nbTouches));
 }
