@@ -24,7 +24,6 @@ import { Subscription } from "rxjs";
 /**
  * The base implementation of a user interaction.
  * @param <D> The type of the interaction data.
- * @param <E> The type of the events that the interaction will process.
  * @param <F> The type of the FSM.
  */
 export abstract class InteractionImpl<D extends InteractionData, F extends FSM> {
@@ -86,7 +85,7 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM> 
             return;
         }
 
-        const currEvents: Array<string> = [...this.getEventTypesOf(newState)];
+        const currEvents: Array<string> = this.getCurrentAcceptedEvents(newState);
         const events: Array<string> = [...this.getEventTypesOf(oldState)];
         const eventsToRemove: Array<string> = events.filter(e => !currEvents.includes(e));
         const eventsToAdd: Array<string> = currEvents.filter(e => !events.includes(e));
@@ -104,11 +103,15 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM> 
         this._registeredTargetNode.forEach(n => {
             eventsToRemove.forEach(type => this.unregisterEventToNode(type, n));
         });
-        if (newState !== this.fsm.initState) {
+        if (newState !== newState.getFSM().initState) {
             this._registeredTargetNode.forEach(n => {
                 eventsToAdd.forEach(type => this.registerEventToNode(type, n));
             });
         }
+    }
+
+    protected getCurrentAcceptedEvents(state: OutputState): Array<string> {
+        return [...this.getEventTypesOf(state)];
     }
 
     private callBackMutationObserver(mutationList: Array<MutationRecord>): void {
@@ -118,7 +121,7 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM> 
         });
     }
 
-    private getEventTypesOf(state: OutputState): Set<string> {
+    protected getEventTypesOf(state: OutputState): Set<string> {
         return state.getTransitions().map(t => t.getAcceptedEvents()).reduce((a, b) => new Set([...a, ...b]));
     }
 
@@ -171,7 +174,7 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM> 
         });
     }
 
-    private registerEventToNode(eventType: string, node: EventTarget): void {
+    protected registerEventToNode(eventType: string, node: EventTarget): void {
         if (isMouseEvent(eventType)) {
             node.addEventListener(eventType, this.getMouseHandler());
             return;
@@ -190,7 +193,7 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM> 
         }
     }
 
-    private unregisterEventToNode(eventType: string, node: EventTarget): void {
+    protected unregisterEventToNode(eventType: string, node: EventTarget): void {
         if (isMouseEvent(eventType)) {
             node.removeEventListener(eventType, this.getMouseHandler());
             return;

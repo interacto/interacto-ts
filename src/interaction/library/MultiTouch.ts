@@ -13,10 +13,10 @@
  */
 
 import { ConcurrentFSM } from "../../fsm/ConcurrentFSM";
-import { TouchDnDFSM, TouchDnDFSMHandler } from "./TouchDnD";
+import { ConcurrentInteraction } from "../ConcurrentInteraction";
 import { MultiTouchData, MultiTouchDataImpl } from "./MultiTouchData";
-import { InteractionImpl } from "../InteractionImpl";
 import { TouchDataImpl } from "./TouchData";
+import { TouchDnDFSM, TouchDnDFSMHandler } from "./TouchDnD";
 
 /**
  * The FSM that defines a multi-touch interaction (that works like a DnD)
@@ -50,9 +50,18 @@ export class MultiTouchFSM extends ConcurrentFSM<TouchDnDFSM> {
     }
 }
 
-export class MultiTouch extends InteractionImpl<MultiTouchData, MultiTouchFSM> {
+/**
+ * A multi-touch user interaction.
+ * A multi-touch starts when all its touches have started.
+ * A multi-touch ends when the number of required touches is greater than the number of touches.
+ */
+export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouchFSM> {
     private readonly handler: TouchDnDFSMHandler;
 
+    /**
+	 * Creates the multi-touch interaction
+	 * @param nbTouches The number of touches.
+	 */
     public constructor(nbTouches: number) {
         super(new MultiTouchFSM(nbTouches));
 
@@ -85,10 +94,6 @@ export class MultiTouch extends InteractionImpl<MultiTouchData, MultiTouchFSM> {
         }(this);
 
         this.fsm.buildFSM(this.handler);
-    }
-
-    public isRunning(): boolean {
-        return this.isActivated() && this.fsm.isStarted();
     }
 
     protected createDataObject(): MultiTouchData {

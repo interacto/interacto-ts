@@ -78,6 +78,7 @@ export * from "./fsm/TouchPressureTransition";
 export * from "./fsm/TouchReleaseTransition";
 export * from "./fsm/Transition";
 export * from "./fsm/WidgetTransition";
+export * from "./interaction/ConcurrentInteraction";
 export * from "./interaction/InteractionData";
 export * from "./interaction/InteractionImpl";
 export * from "./interaction/library/BoxChecked";
