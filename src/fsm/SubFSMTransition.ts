@@ -109,6 +109,10 @@ export class SubFSMTransition extends Transition {
     }
 
     public getAcceptedEvents(): Set<string> {
+        if(this.subFSM.initState.getTransitions().length === 0) {
+            return new Set();
+        }
+
         return this.subFSM.initState
             .getTransitions()
             .map(tr => tr.getAcceptedEvents())

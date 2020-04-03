@@ -12,28 +12,27 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FSMDataHandler } from "../../fsm/FSMDataHandler";
-import { TerminalState } from "../../fsm/TerminalState";
-import { KeyPressureTransition } from "../../fsm/KeyPressureTransition";
-import { KeyData } from "./KeyData";
-import { StdState } from "../../fsm/StdState";
-import { KeyReleaseTransition } from "../../fsm/KeyReleaseTransition";
-import { CancellingState } from "../../fsm/CancellingState";
-import { TimeoutTransition } from "../../fsm/TimeoutTransition";
-import { OutputState } from "../../fsm/OutputState";
-import { InputState } from "../../fsm/InputState";
-import { FSM } from "../../fsm/FSM";
-import { KeyDataImpl } from "./KeyDataImpl";
-import { InteractionImpl } from "../InteractionImpl";
+import {FSMDataHandler} from "../../fsm/FSMDataHandler";
+import {TerminalState} from "../../fsm/TerminalState";
+import {KeyPressureTransition} from "../../fsm/KeyPressureTransition";
+import {KeyData} from "./KeyData";
+import {StdState} from "../../fsm/StdState";
+import {KeyReleaseTransition} from "../../fsm/KeyReleaseTransition";
+import {OutputState} from "../../fsm/OutputState";
+import {InputState} from "../../fsm/InputState";
+import {FSM} from "../../fsm/FSM";
+import {KeyDataImpl} from "./KeyDataImpl";
+import {InteractionImpl} from "../InteractionImpl";
 
+/**
+ * The FSM that describes a keyboard touch typed.
+ */
 export class KeyTypedFSM extends FSM {
     private checkKey?: string;
 
-    /** The time gap between the two spinner events. */
-    private static readonly timeGap = 1000;
-    /** The supplier that provides the time gap. */
-    private static readonly SUPPLY_TIME_GAP: () => number = () => KeyTypedFSM.getTimeGap();
-
+    /**
+     * Creates the FSM.
+     */
     public constructor() {
         super();
     }
@@ -46,11 +45,9 @@ export class KeyTypedFSM extends FSM {
         super.buildFSM(dataHandler);
         const pressed: StdState = new StdState(this, "pressed");
         const typed: TerminalState = new TerminalState(this, "typed");
-        const cancel: CancellingState = new CancellingState(this, "cancel");
 
         this.addState(pressed);
         this.addState(typed);
-        this.addState(cancel);
 
         new class extends KeyPressureTransition {
             private readonly _parent: KeyTypedFSM;
@@ -62,7 +59,7 @@ export class KeyTypedFSM extends FSM {
 
             public action(event: Event): void {
                 if (event instanceof KeyboardEvent) {
-                    this._parent.setCheckKey(event.code);
+                    this._parent.checkKey = event.code;
                 }
             }
 
@@ -87,25 +84,11 @@ export class KeyTypedFSM extends FSM {
                 }
             }
         }(this, pressed, typed);
-        new TimeoutTransition(pressed, cancel, KeyTypedFSM.SUPPLY_TIME_GAP);
-    }
-
-    public getCheckKey(): string {
-        return this.checkKey ?? "";
-    }
-
-    public setCheckKey(keyToCheck: string): void {
-        if (this.checkKey === undefined) {
-            this.checkKey = keyToCheck;
-        }
     }
 
     public reinit(): void {
         super.reinit();
-    }
-
-    private static getTimeGap(): number {
-        return KeyTypedFSM.timeGap;
+        this.checkKey = undefined;
     }
 }
 
@@ -114,13 +97,15 @@ interface KeyTypedFSMHandler extends FSMDataHandler {
 }
 
 /**
- * A user interaction for pressing and releasing a key on a keyboard
+ * A user interaction for pressing and releasing a keyboard key
  * @author Gwendal DIDOT
  */
 export class KeyTyped extends InteractionImpl<KeyData, KeyTypedFSM> {
-
     private readonly handler: KeyTypedFSMHandler;
 
+    /**
+     * Creates the user interaction.
+     */
     public constructor() {
         super(new KeyTypedFSM());
 
@@ -140,7 +125,6 @@ export class KeyTyped extends InteractionImpl<KeyData, KeyTypedFSM> {
             }
         }(this);
         this.getFsm().buildFSM(this.handler);
-
     }
 
     public createDataObject(): KeyData {

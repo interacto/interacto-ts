@@ -39,6 +39,11 @@ beforeEach(() => {
     }
 });
 
+test("cannot create several times the FSM", () => {
+    interaction.getFsm().buildFSM();
+    expect(interaction.getFsm().getStates()).toHaveLength(3);
+});
+
 test("type 'a' in the textarea starts and stops the interaction.", () => {
     interaction.registerToNodes([text]);
     text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "a"));
@@ -52,14 +57,6 @@ test("only press the key don't stop the interaction.", () => {
     text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "a"));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).not.toHaveBeenCalled();
-});
-
-test("only press the key cancel the interaction after a timeout.", () => {
-    interaction.registerToNodes([text]);
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "a"));
-    jest.runOnlyPendingTimers();
-    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-    expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
 });
 
 test("if you release a key different that the one you press, the interaction don't stop", () => {

@@ -102,6 +102,12 @@ test("get accepted events", () => {
     expect(evts.has([... fsm.initState.getTransitions()[0].getAcceptedEvents()][0])).toBeTruthy();
 });
 
+test("get accepted events when nothing to return", () => {
+    fsm.initState.clearTransitions();
+    const evts = tr.getAcceptedEvents();
+    expect([...evts]).toHaveLength(0);
+});
+
 test("testExecuteExitSrcState", () => {
     tr.execute(new StubSubEvent1());
     expect(s1.exit).toHaveBeenCalledTimes(1);
