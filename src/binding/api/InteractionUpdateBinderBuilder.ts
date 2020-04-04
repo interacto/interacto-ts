@@ -42,7 +42,7 @@ export interface InteractionUpdateBinderBuilder<I extends InteractionImpl<D, FSM
 
     log(...level: Array<LogLevel>): InteractionUpdateBinderBuilder<I, D>;
 
-    // async(): InteractionUpdateBinderBuilder<I, D>;
+    stopImmediatePropagation(): InteractionUpdateBinderBuilder<I, D>;
 
-    // help(): InteractionUpdateBinderBuilder<I, D>;
+    preventDefault(): InteractionUpdateBinderBuilder<I, D>;
 }

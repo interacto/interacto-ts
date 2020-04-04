@@ -29,10 +29,6 @@ export interface KeyInteractionCmdBinder<C extends Command, I extends Interactio
 
     log(...level: Array<LogLevel>): KeyInteractionCmdBinder<C, I, D>;
 
-    // async(): KeyInteractionCmdBinder<C, I, D>;
-
-    // help(): KeyInteractionCmdBinder<C, I, D>;
-
     when(whenPredicate: (i?: D) => boolean): KeyInteractionCmdBinder<C, I, D>;
 
     ifHadEffects(hadEffectFct: (c: C, i: D) => void): KeyInteractionCmdBinder<C, I, D>;
@@ -42,6 +38,10 @@ export interface KeyInteractionCmdBinder<C extends Command, I extends Interactio
     end(onEnd: (c?: C, i?: D) => void): KeyInteractionCmdBinder<C, I, D>;
 
     with(...codes: Array<string>): KeyInteractionCmdBinder<C, I, D>;
+
+    stopImmediatePropagation(): KeyInteractionCmdBinder<C, I, D>;
+
+    preventDefault(): KeyInteractionCmdBinder<C, I, D>;
 
     bind(): WidgetBinding<C, I, D>;
 }

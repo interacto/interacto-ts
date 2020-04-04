@@ -51,4 +51,8 @@ export interface BaseUpdateBinderBuilder extends BaseBinderBuilder {
     log(...level: Array<LogLevel>): BaseUpdateBinderBuilder;
 
     on(...widgets: Array<EventTarget>): BaseUpdateBinderBuilder;
+
+    stopImmediatePropagation(): BaseUpdateBinderBuilder;
+
+    preventDefault(): BaseUpdateBinderBuilder;
 }

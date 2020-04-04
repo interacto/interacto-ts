@@ -39,20 +39,21 @@ export class UpdateBinder<C extends Command, I extends InteractionImpl<D, FSM>, 
     private _strictStart: boolean;
     private throttleTimeout: number;
 
-    public constructor(throttleTimeout: number, continuousCmdExecution: boolean, strict: boolean, observer?: BindingsObserver,
+    public constructor(observer?: BindingsObserver, throttleTimeout?: number, continuousCmdExecution?: boolean, strict?: boolean,
                        initCmd?: (c: C, i?: D) => void, checkConditions?: (i: D) => boolean, cmdProducer?: (i?: D) => C,
                        widgets?: Array<EventTarget>, interactionSupplier?: () => I, onEnd?: (c: C, i?: D) => void,
                        logLevels?: Array<LogLevel>, hadNoEffectFct?: (c: C, i: D) => void, hadEffectsFct?: (c: C, i: D) => void,
                        cannotExecFct?: (c: C, i: D) => void, updateFct?: (c: C, i?: D) => void, cancelFct?: (i: D) => void,
-                       endOrCancelFct?: (i: D) => void, targetWidgets?: Array<EventTarget>) {
-        super(observer, initCmd, checkConditions, cmdProducer, widgets, interactionSupplier, onEnd, logLevels, hadNoEffectFct, hadEffectsFct,
-            cannotExecFct, targetWidgets);
+                       endOrCancelFct?: (i: D) => void, targetWidgets?: Array<EventTarget>, stopProga?: boolean,
+                       prevent?: boolean) {
+        super(observer, initCmd, checkConditions, cmdProducer, widgets, interactionSupplier, onEnd, logLevels,
+            hadNoEffectFct, hadEffectsFct, cannotExecFct, targetWidgets, stopProga, prevent);
         this.updateFct = updateFct;
         this.cancelFct = cancelFct;
         this.endOrCancelFct = endOrCancelFct;
-        this.continuousCmdExecution = continuousCmdExecution;
-        this._strictStart = strict;
-        this.throttleTimeout = throttleTimeout;
+        this.continuousCmdExecution = continuousCmdExecution ?? false;
+        this._strictStart = strict ?? false;
+        this.throttleTimeout = throttleTimeout ?? 0;
     }
 
     public then(update: (c: C, i?: D) => void): UpdateBinder<C, I, D> {
@@ -119,6 +120,14 @@ export class UpdateBinder<C extends Command, I extends InteractionImpl<D, FSM>, 
         return super.log(...level) as UpdateBinder<C, I, D>;
     }
 
+    public stopImmediatePropagation(): UpdateBinder<C, I, D> {
+        return super.stopImmediatePropagation() as UpdateBinder<C, I, D>;
+    }
+
+    public preventDefault(): UpdateBinder<C, I, D> {
+        return super.preventDefault() as UpdateBinder<C, I, D>;
+    }
+
     public usingInteraction<I2 extends InteractionImpl<D2, FSM>, D2 extends InteractionData>
     (interactionSupplier: () => I2): UpdateBinder<C, I2, D2> {
         return super.usingInteraction(interactionSupplier) as UpdateBinder<C, I2, D2>;
@@ -129,11 +138,12 @@ export class UpdateBinder<C extends Command, I extends InteractionImpl<D, FSM>, 
     }
 
     protected duplicate(): UpdateBinder<C, I, D> {
-        return new UpdateBinder<C, I, D>(this.throttleTimeout, this.continuousCmdExecution,
-            this._strictStart, this.observer, this.initCmd, this.checkConditions, this.cmdProducer,
+        return new UpdateBinder<C, I, D>(this.observer, this.throttleTimeout, this.continuousCmdExecution,
+            this._strictStart, this.initCmd, this.checkConditions, this.cmdProducer,
             this.widgets, this.interactionSupplier, this.onEnd,
             this.logLevels, this.hadNoEffectFct, this.hadEffectsFct,
-            this.cannotExecFct, this.updateFct, this.cancelFct, this.endOrCancelFct, this.targetWidgets);
+            this.cannotExecFct, this.updateFct, this.cancelFct, this.endOrCancelFct, this.targetWidgets,
+            this.stopPropaNow, this.prevDef);
     }
 
     public bind(): WidgetBinding<C, I, D> {
@@ -145,8 +155,9 @@ export class UpdateBinder<C extends Command, I extends InteractionImpl<D, FSM>, 
             throw new Error("The command supplier cannot be undefined here");
         }
 
-        const binding = new AnonBinding(this.continuousCmdExecution, this.interactionSupplier(), this.cmdProducer, [...this.widgets],
-            [], this._strictStart, [...this.logLevels], this.throttleTimeout, this.initCmd, this.updateFct, this.checkConditions,
+        const binding = new AnonBinding(this.continuousCmdExecution, this.interactionSupplier(), this.cmdProducer,
+            [...this.widgets], [], this._strictStart, [...this.logLevels], this.throttleTimeout,
+            this.stopPropaNow, this.prevDef, this.initCmd, this.updateFct, this.checkConditions,
             this.onEnd, this.cancelFct, this.endOrCancelFct, this.hadEffectsFct,
             this.hadNoEffectFct, this.cannotExecFct);
 

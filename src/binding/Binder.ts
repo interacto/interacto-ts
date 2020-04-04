@@ -42,6 +42,8 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
     protected cannotExecFct?: (c: C, i: D) => void;
     protected onEnd?: (c: C, i?: D) => void;
     protected logLevels: Array<LogLevel>;
+    protected stopPropaNow: boolean;
+    protected prevDef: boolean;
     protected targetWidgets: Array<EventTarget>;
     protected observer?: BindingsObserver;
 
@@ -49,7 +51,8 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
     protected constructor(observer?: BindingsObserver, initCmd?: (c: C, i?: D) => void, checkConditions?: (i: D) => boolean,
                           cmdProducer?: (i?: D) => C, widgets?: Array<EventTarget>, interactionSupplier?: () => I, onEnd?: (c: C, i?: D) => void,
                           logLevels?: Array<LogLevel>, hadNoEffectFct?: (c: C, i: D) => void, hadEffectsFct?: (c: C, i: D) => void,
-                          cannotExecFct?: (c: C, i: D) => void, targetWidgets?: Array<EventTarget>) {
+                          cannotExecFct?: (c: C, i: D) => void, targetWidgets?: Array<EventTarget>, stopProga?: boolean,
+                          prevent?: boolean) {
         this.initCmd = initCmd;
         this.checkConditions = checkConditions;
         this.cmdProducer = cmdProducer;
@@ -61,6 +64,8 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
         this.cannotExecFct = cannotExecFct;
         this.logLevels = logLevels ?? [];
         this.targetWidgets = targetWidgets ?? [];
+        this.stopPropaNow = stopProga ?? false;
+        this.prevDef = prevent ?? false;
         this.observer = observer;
     }
 
@@ -106,6 +111,18 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
     public log(...level: Array<LogLevel>): Binder<C, I, D> {
         const dup = this.duplicate();
         dup.logLevels = [...level];
+        return dup;
+    }
+
+    public stopImmediatePropagation(): Binder<C, I, D> {
+        const dup = this.duplicate();
+        dup.stopPropaNow = true;
+        return dup;
+    }
+
+    public preventDefault(): Binder<C, I, D> {
+        const dup = this.duplicate();
+        dup.prevDef = true;
         return dup;
     }
 

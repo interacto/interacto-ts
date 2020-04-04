@@ -43,10 +43,6 @@ export interface InteractionCmdUpdateBinder<C extends Command, I extends Interac
 
     log(...level: Array<LogLevel>): InteractionCmdUpdateBinder<C, I, D>;
 
-    // async(): InteractionCmdUpdateBinder<C, I, D>;
-
-    // help(): InteractionCmdUpdateBinder<C, I, D>;
-
     cancel(cancel: (i: D) => void): InteractionCmdUpdateBinder<C, I, D>;
 
     endOrCancel(endOrCancel: (i: D) => void): InteractionCmdUpdateBinder<C, I, D>;
@@ -58,6 +54,10 @@ export interface InteractionCmdUpdateBinder<C extends Command, I extends Interac
     ifHadNoEffect(noEffectFct: (c: C, i: D) => void): InteractionCmdUpdateBinder<C, I, D>;
 
     end(onEnd: (c?: C, i?: D) => void): InteractionCmdUpdateBinder<C, I, D>;
+
+    stopImmediatePropagation(): InteractionCmdUpdateBinder<C, I, D>;
+
+    preventDefault(): InteractionCmdUpdateBinder<C, I, D>;
 
     bind(): WidgetBinding<C, I, D>;
 }

@@ -41,7 +41,7 @@ export interface CmdUpdateBinderBuilder<C extends Command> extends CmdBinderBuil
 
     log(...level: Array<LogLevel>): CmdUpdateBinderBuilder<C>;
 
-    // async(): CmdUpdateBinderBuilder<C> ;
+    stopImmediatePropagation(): CmdUpdateBinderBuilder<C>;
 
-    // help() : CmdUpdateBinderBuilder<C>;
+    preventDefault(): CmdUpdateBinderBuilder<C>;
 }

@@ -26,10 +26,6 @@ export interface InteractionUpdateBinder<I extends InteractionImpl<D, FSM>, D ex
 
     log(...level: Array<LogLevel>): InteractionUpdateBinder<I, D>;
 
-    // async(): InteractionUpdateBinder<I, D>;
-
-    // help(): InteractionUpdateBinder<I, D>;
-
     when(whenPredicate: (i?: D) => boolean): InteractionUpdateBinder<I, D>;
 
     end(endFct: () => void): InteractionUpdateBinder<I, D>;
@@ -37,6 +33,10 @@ export interface InteractionUpdateBinder<I extends InteractionImpl<D, FSM>, D ex
     cancel(cancel: (i: D) => void): InteractionUpdateBinder<I, D>;
 
     endOrCancel(endOrCancel: (i: D) => void): InteractionUpdateBinder<I, D>;
+
+    stopImmediatePropagation(): InteractionUpdateBinder<I, D>;
+
+    preventDefault(): InteractionUpdateBinder<I, D>;
 
     toProduce<C extends Command>(cmdSupplier: (i?: D) => C): InteractionCmdUpdateBinder<C, I, D>;
 }

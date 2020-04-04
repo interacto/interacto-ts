@@ -31,9 +31,9 @@ export interface InteractionBinder<I extends InteractionImpl<D, FSM>, D extends 
 
     end(endFct: () => void): InteractionBinder<I, D>;
 
-    // async(): InteractionBinder<I, D>;
+    stopImmediatePropagation(): InteractionBinder<I, D>;
 
-    // help(): InteractionBinder<I, D>;
+    preventDefault(): InteractionBinder<I, D>;
 
     toProduce<C extends Command>(cmdSupplier: (i?: D) => C): InteractionCmdBinder<C, I, D>;
 }

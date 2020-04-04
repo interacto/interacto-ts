@@ -38,6 +38,9 @@ afterEach(() => {
     binding.uninstallBinding();
     CommandsRegistry.getInstance().clear();
     UndoCollector.getInstance().clear();
+    if(binding !== undefined) {
+        binding.uninstallBinding();
+    }
 });
 
 test("run multi-touch produces cmd", () => {

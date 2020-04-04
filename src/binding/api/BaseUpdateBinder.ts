@@ -44,4 +44,8 @@ export interface BaseUpdateBinder extends BaseUpdateBinderBuilder {
 
     usingInteraction<I extends InteractionImpl<D, FSM>, D extends InteractionData>
     (interactionSupplier: () => I): InteractionUpdateBinder<I, D>;
+
+    stopImmediatePropagation(): BaseUpdateBinder;
+
+    preventDefault(): BaseUpdateBinder;
 }

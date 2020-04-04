@@ -48,6 +48,9 @@ afterEach(() => {
     }
     CommandsRegistry.getInstance().clear();
     UndoCollector.getInstance().clear();
+    if(binding !== undefined) {
+        binding.uninstallBinding();
+    }
 });
 
 test("testCommandExecutedOnSingleSpinnerFunction", () => {

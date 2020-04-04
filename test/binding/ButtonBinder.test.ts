@@ -11,9 +11,18 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Subscription } from "rxjs";
-import { buttonBinder, ButtonPressed, CommandsRegistry, isButton, LogLevel, UndoCollector, WidgetBinding, WidgetData } from "../../src/interacto";
-import { StubCmd } from "../command/StubCmd";
+import {Subscription} from "rxjs";
+import {
+    buttonBinder,
+    ButtonPressed,
+    CommandsRegistry,
+    isButton,
+    LogLevel,
+    UndoCollector,
+    WidgetBinding,
+    WidgetData
+} from "../../src/interacto";
+import {StubCmd} from "../command/StubCmd";
 
 let button1: HTMLButtonElement;
 let button2: HTMLButtonElement;
@@ -42,6 +51,9 @@ afterEach(() => {
     }
     CommandsRegistry.getInstance().clear();
     UndoCollector.getInstance().clear();
+    if(binding !== undefined) {
+        binding.uninstallBinding();
+    }
 });
 
 test("testCommandExecutedOnSingleButtonConsumer", () => {
@@ -159,7 +171,7 @@ test("testClonedBuildersSameWidgetCmdOK", () => {
     const binder = buttonBinder()
         .toProduce(() => new StubCmd(true))
         .on(button1);
-    const binding1 = binder
+    binding = binder
         .end(_i => cpt1++)
         .bind();
     const binding2 = binder
@@ -168,7 +180,7 @@ test("testClonedBuildersSameWidgetCmdOK", () => {
 
     button1.click();
 
-    expect(binding1).not.toBe(binding2);
+    expect(binding).not.toBe(binding2);
     expect(cpt1).toStrictEqual(1);
     expect(cpt2).toStrictEqual(1);
 });
@@ -178,7 +190,7 @@ test("testClonedBuildersDiffWidgetsCmdOK", () => {
     let cpt2 = 0;
     const binder = buttonBinder()
         .toProduce(() => new StubCmd(true));
-    const binding1 = binder
+    binding = binder
         .on(button1)
         .end(_i => cpt1++)
         .bind();
@@ -190,7 +202,31 @@ test("testClonedBuildersDiffWidgetsCmdOK", () => {
     button1.click();
     button2.click();
 
-    expect(binding1).not.toBe(binding2);
+    expect(binding).not.toBe(binding2);
     expect(cpt1).toStrictEqual(1);
     expect(cpt2).toStrictEqual(1);
+});
+
+test("prevent default set", () => {
+    binding = buttonBinder()
+        .preventDefault()
+        .toProduce(() => cmd)
+        .on(button1)
+        .bind();
+
+    expect(binding.getInteraction().preventDefault).toBeTruthy();
+    expect(binding.getInteraction().stopImmediatePropagation).toBeFalsy();
+    expect(binding).not.toBeUndefined();
+});
+
+test("stop propag set", () => {
+    binding = buttonBinder()
+        .toProduce(() => cmd)
+        .stopImmediatePropagation()
+        .on(button1)
+        .bind();
+
+    expect(binding.getInteraction().stopImmediatePropagation).toBeTruthy();
+    expect(binding.getInteraction().preventDefault).toBeFalsy();
+    expect(binding).not.toBeUndefined();
 });

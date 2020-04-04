@@ -12,7 +12,16 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { anonCmdBinder, ButtonPressed, CommandsRegistry, isButton, UndoCollector } from "../../src/interacto";
+import {
+    AnonCmd,
+    anonCmdBinder,
+    ButtonPressed,
+    CommandsRegistry,
+    InteractionData,
+    isButton,
+    UndoCollector,
+    WidgetBinding
+} from "../../src/interacto";
 
 interface A {
     foo(): void;
@@ -21,6 +30,7 @@ interface A {
 let button1: HTMLButtonElement;
 let button2: HTMLButtonElement;
 let a: A;
+let binding: WidgetBinding<AnonCmd, ButtonPressed, InteractionData>;
 
 beforeEach(() => {
     document.documentElement.innerHTML = "<html><div><button id='b1'>A Button</button><button id='b2'>A Button2</button></div></html>";
@@ -39,20 +49,26 @@ beforeEach(() => {
 afterEach(() => {
     CommandsRegistry.getInstance().clear();
     UndoCollector.getInstance().clear();
+    if(binding !== undefined) {
+        binding.uninstallBinding();
+    }
 });
 
 test("commandExecutedOnSingleButton", () => {
-    anonCmdBinder(() => a.foo())
+    binding = anonCmdBinder(() => a.foo())
         .usingInteraction(() => new ButtonPressed())
         .on(button1)
         .bind();
 
     button1.click();
     expect(a.foo).toHaveBeenCalledTimes(1);
+    expect(binding).not.toBeUndefined();
+    expect(binding.getInteraction().preventDefault).toBeFalsy();
+    expect(binding.getInteraction().stopImmediatePropagation).toBeFalsy();
 });
 
 test("commandExecutedOnTwoButtons", () => {
-    anonCmdBinder(() => a.foo())
+    binding = anonCmdBinder(() => a.foo())
         .usingInteraction(() => new ButtonPressed())
         .on(button1, button2)
         .bind();
@@ -61,16 +77,42 @@ test("commandExecutedOnTwoButtons", () => {
     button2.click();
     button2.click();
     expect(a.foo).toHaveBeenCalledTimes(3);
+    expect(binding).not.toBeUndefined();
 });
 
 test("differentOrderBuilder", () => {
     let cpt = 0;
 
-    anonCmdBinder(() => cpt++)
+    binding = anonCmdBinder(() => cpt++)
         .on(button1, button1)
         .usingInteraction(() => new ButtonPressed())
         .bind();
 
     button1.click();
     expect(cpt).toStrictEqual(1);
+    expect(binding).not.toBeUndefined();
+});
+
+test("prevent default set", () => {
+    binding = anonCmdBinder(() => a.foo())
+        .usingInteraction(() => new ButtonPressed())
+        .on(button1)
+        .preventDefault()
+        .bind();
+
+    expect(binding.getInteraction().preventDefault).toBeTruthy();
+    expect(binding.getInteraction().stopImmediatePropagation).toBeFalsy();
+    expect(binding).not.toBeUndefined();
+});
+
+test("stop propag set", () => {
+    binding = anonCmdBinder(() => a.foo())
+        .usingInteraction(() => new ButtonPressed())
+        .on(button1)
+        .stopImmediatePropagation()
+        .bind();
+
+    expect(binding.getInteraction().stopImmediatePropagation).toBeTruthy();
+    expect(binding.getInteraction().preventDefault).toBeFalsy();
+    expect(binding).not.toBeUndefined();
 });

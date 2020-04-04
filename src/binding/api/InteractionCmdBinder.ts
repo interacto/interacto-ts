@@ -47,12 +47,11 @@ export interface InteractionCmdBinder<C extends Command, I extends InteractionIm
 
     log(...level: Array<LogLevel>): InteractionCmdBinder<C, I, D>;
 
-    // async(): InteractionCmdBinder<C, I, D>;
-
-    // help(): InteractionCmdBinder<C, I, D>;
-
     when(whenPredicate: (i?: D) => boolean): InteractionCmdBinder<C, I, D>;
 
+    stopImmediatePropagation(): InteractionCmdBinder<C, I, D>;
+
+    preventDefault(): InteractionCmdBinder<C, I, D>;
 
     /**
     * Executes the builder to create and install the binding on the instrument.

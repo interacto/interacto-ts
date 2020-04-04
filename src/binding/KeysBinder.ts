@@ -40,9 +40,9 @@ export class KeysBinder<C extends Command> extends Binder<C, KeysPressed, KeysDa
                           onEnd?: (c: C, i?: KeysData) => void, logLevels?: Array<LogLevel>,
                           hadNoEffectFct?: (c: C, i: KeysData) => void, hadEffectsFct?: (c: C, i: KeysData) => void,
                           cannotExecFct?: (c: C, i: KeysData) => void, targetWidgets?: Array<EventTarget>,
-                          keyCodes?: Array<string>) {
-        super(observer, initCmd, whenPredicate, cmdProducer, widgets, () => new KeysPressed(), onEnd, logLevels, hadNoEffectFct, hadEffectsFct,
-            cannotExecFct, targetWidgets);
+                          keyCodes?: Array<string>, stopProga?: boolean, prevent?: boolean) {
+        super(observer, initCmd, whenPredicate, cmdProducer, widgets, () => new KeysPressed(), onEnd,
+            logLevels, hadNoEffectFct, hadEffectsFct, cannotExecFct, targetWidgets, stopProga, prevent);
         this.codes = keyCodes === undefined ? [] : [...keyCodes];
         this.checkCode = (i: KeysData): boolean => {
             const keys = i.getKeys();
@@ -86,6 +86,14 @@ export class KeysBinder<C extends Command> extends Binder<C, KeysPressed, KeysDa
         return super.log(...level) as KeysBinder<C>;
     }
 
+    public stopImmediatePropagation(): KeysBinder<C> {
+        return super.stopImmediatePropagation() as KeysBinder<C>;
+    }
+
+    public preventDefault(): KeysBinder<C> {
+        return super.preventDefault() as KeysBinder<C>;
+    }
+
     public toProduce<C2 extends Command>(cmdCreation: (i: KeysData) => C2): KeysBinder<C2> {
         return super.toProduce(cmdCreation) as KeysBinder<C2>;
     }
@@ -107,7 +115,8 @@ export class KeysBinder<C extends Command> extends Binder<C, KeysPressed, KeysDa
         }
 
         const binding = new AnonBinding(false, this.interactionSupplier(), this.cmdProducer, [...this.widgets],
-            [], false, [...this.logLevels], 0, this.initCmd, undefined, this.checkCode,
+            [], false, [...this.logLevels], 0, this.stopPropaNow, this.prevDef,
+            this.initCmd, undefined, this.checkCode,
             this.onEnd, undefined, undefined, this.hadEffectsFct,
             this.hadNoEffectFct, this.cannotExecFct);
 

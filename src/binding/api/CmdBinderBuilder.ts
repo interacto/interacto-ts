@@ -37,4 +37,8 @@ export interface CmdBinderBuilder<C extends Command> extends BaseBinderBuilder {
     when(whenPredicate: () => boolean): CmdBinderBuilder<C>;
 
     log(...level: Array<LogLevel>): CmdBinderBuilder<C>;
+
+    stopImmediatePropagation(): CmdBinderBuilder<C>;
+
+    preventDefault(): CmdBinderBuilder<C>;
 }

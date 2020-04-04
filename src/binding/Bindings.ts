@@ -39,7 +39,7 @@ import { MultiTouchData } from "../interaction/library/MultiTouchData";
 let observer: BindingsObserver | undefined;
 
 export function nodeBinder(): BaseUpdateBinder {
-    return new UpdateBinder<CommandImpl, InteractionImpl<InteractionData, FSM>, InteractionData>(0, false, false) as BaseUpdateBinder;
+    return new UpdateBinder<CommandImpl, InteractionImpl<InteractionData, FSM>, InteractionData>(observer) as BaseUpdateBinder;
 }
 
 /**
@@ -59,41 +59,41 @@ export function anonCmdBinder(cmd: () => void): CmdBinder<AnonCmd> {
  * @return The binding builder.
  */
 export function buttonBinder<C extends Command>(): InteractionBinder<ButtonPressed, WidgetData<HTMLButtonElement>> {
-    return new UpdateBinder<C, ButtonPressed, WidgetData<HTMLButtonElement>>(0, false, false, observer)
+    return new UpdateBinder<C, ButtonPressed, WidgetData<HTMLButtonElement>>(observer)
         .usingInteraction<ButtonPressed, WidgetData<HTMLButtonElement>>(() => new ButtonPressed());
 }
 
 export function checkboxBinder<C extends Command>(): InteractionBinder<BoxChecked, WidgetData<HTMLInputElement>> {
-    return new UpdateBinder<C, BoxChecked, WidgetData<HTMLInputElement>>(0, false, false, observer)
+    return new UpdateBinder<C, BoxChecked, WidgetData<HTMLInputElement>>(observer)
         .usingInteraction<BoxChecked, WidgetData<HTMLInputElement>>(() => new BoxChecked());
 }
 
 export function colorPickerBinder<C extends Command>(): InteractionBinder<ColorPicked, WidgetData<HTMLInputElement>> {
-    return new UpdateBinder<C, ColorPicked, WidgetData<HTMLInputElement>>(0, false, false, observer)
+    return new UpdateBinder<C, ColorPicked, WidgetData<HTMLInputElement>>(observer)
         .usingInteraction<ColorPicked, WidgetData<HTMLInputElement>>(() => new ColorPicked());
 }
 
 export function comboBoxBinder<C extends Command>(): InteractionBinder<ComboBoxSelected, WidgetData<HTMLSelectElement>> {
-    return new UpdateBinder<C, ComboBoxSelected, WidgetData<HTMLSelectElement>>(0, false, false, observer)
+    return new UpdateBinder<C, ComboBoxSelected, WidgetData<HTMLSelectElement>>(observer)
         .usingInteraction<ComboBoxSelected, WidgetData<HTMLSelectElement>>(() => new ComboBoxSelected());
 }
 
 export function spinnerBinder<C extends Command>(): InteractionUpdateBinder<SpinnerChanged, WidgetData<HTMLInputElement>> {
-    return new UpdateBinder<C, SpinnerChanged, WidgetData<HTMLInputElement>>(0, false, false, observer)
+    return new UpdateBinder<C, SpinnerChanged, WidgetData<HTMLInputElement>>(observer)
         .usingInteraction<SpinnerChanged, WidgetData<HTMLInputElement>>(() => new SpinnerChanged());
 }
 
 export function dateBinder<C extends Command>(): InteractionUpdateBinder<DatePicked, WidgetData<HTMLInputElement>> {
-    return new UpdateBinder<C, DatePicked, WidgetData<HTMLInputElement>>(0, false, false, observer)
+    return new UpdateBinder<C, DatePicked, WidgetData<HTMLInputElement>>(observer)
         .usingInteraction<DatePicked, WidgetData<HTMLInputElement>>(() => new DatePicked());
 }
 
 export function textInputBinder<C extends Command>(): InteractionUpdateBinder<TextInputChanged, WidgetData<HTMLInputElement | HTMLTextAreaElement>> {
-    return new UpdateBinder<C, TextInputChanged, WidgetData<HTMLInputElement | HTMLTextAreaElement>>(0, false, false, observer)
+    return new UpdateBinder<C, TextInputChanged, WidgetData<HTMLInputElement | HTMLTextAreaElement>>(observer)
         .usingInteraction<TextInputChanged, WidgetData<HTMLInputElement | HTMLTextAreaElement>>(() => new TextInputChanged());
 }
 
 export function multiTouchBinder<C extends Command>(nbTouches: number): InteractionUpdateBinder<MultiTouch, MultiTouchData> {
-    return new UpdateBinder<C, TextInputChanged, WidgetData<HTMLInputElement | HTMLTextAreaElement>>(0, false, false, observer)
+    return new UpdateBinder<C, TextInputChanged, WidgetData<HTMLInputElement | HTMLTextAreaElement>>(observer)
         .usingInteraction<MultiTouch, MultiTouchData>(() => new MultiTouch(nbTouches));
 }

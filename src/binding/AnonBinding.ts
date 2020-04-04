@@ -38,6 +38,7 @@ export class AnonBinding<C extends Command, I extends InteractionImpl<D, FSM>, D
     public constructor(continuousExec: boolean, interaction: I, cmdProducer: (d?: D) => C,
                        widgets: Array<EventTarget>, targetWidgets: Array<EventTarget>,
                        strict: boolean, loggers: Array<LogLevel>, timeoutThrottle: number,
+                       stopPropa: boolean, prevDef: boolean,
                        initCmdFct?: (c: C, i?: D) => void,
                        updateCmdFct?: (c: C, i?: D) => void, check?: (i?: D) => boolean,
                        onEndFct?: (c: C, i?: D) => void, cancel?: (i: D) => void,
@@ -56,6 +57,8 @@ export class AnonBinding<C extends Command, I extends InteractionImpl<D, FSM>, D
         this.hadNoEffectFct = hadNoEffectFct;
         this.cannotExecFct = cannotExecFct;
 
+        this.interaction.stopImmediatePropagation = stopPropa;
+        this.interaction.preventDefault = prevDef;
         // this.interaction.setThrottleTimeout(timeoutThrottle);
         interaction.registerToTargetNodes(targetWidgets);
     }

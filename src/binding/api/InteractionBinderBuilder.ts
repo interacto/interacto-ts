@@ -33,7 +33,7 @@ export interface InteractionBinderBuilder<I extends InteractionImpl<D, FSM>, D e
 
     log(...level: Array<LogLevel>): InteractionBinderBuilder<I, D>;
 
-    // async(): InteractionBinderBuilder<I, D>;
+    stopImmediatePropagation(): InteractionBinderBuilder<I, D>;
 
-    // help(): InteractionBinderBuilder<I, D>;
+    preventDefault(): InteractionBinderBuilder<I, D>;
 }

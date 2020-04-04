@@ -42,6 +42,8 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM> 
     private uiHandler?: ((e: UIEvent) => void);
     private actionHandler?: EventListener;
     private readonly disposable: Subscription;
+    private stopImmediatePropag: boolean;
+    private preventDef: boolean;
 
     /**
      * Defines if the interaction is activated or not. If not, the interaction will not
@@ -55,6 +57,8 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM> 
 	 */
     protected constructor(fsm: F) {
         this.activated = false;
+        this.stopImmediatePropag = false;
+        this.preventDef = false;
         this.data = this.createDataObject();
         this.fsm = fsm;
         this.disposable = this.fsm.currentStateObservable().subscribe(current => this.updateEventsRegistered(current[1], current[0]));
@@ -278,12 +282,52 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM> 
     }
 
     /**
+     * Sets whether the user interaction will stop immidiately the propagation
+     * of events processed by this user interaction to others listeners.
+     * @param stop True: the propagation of the events will stop immediately.
+     */
+    public set stopImmediatePropagation(stop: boolean) {
+        this.stopImmediatePropag = stop;
+    }
+
+    /**
+     * @return True if the user interaction will stop immidiately the propagation
+     * of events processed by this user interaction to others listeners.
+     */
+    public get stopImmediatePropagation(): boolean {
+        return this.stopImmediatePropag;
+    }
+
+    /**
+     * Sets whether the default behavior associated to the event
+     * will be executed.
+     * @param prevent True: the default behavior associated to the event
+     * will be ignored.
+     */
+    public set preventDefault(prevent: boolean) {
+        this.preventDef = prevent;
+    }
+
+    /**
+     * @return True if the default behavior associated to the event will be executed.
+     */
+    public get preventDefault(): boolean {
+        return this.preventDef;
+    }
+
+    /**
 	 * Processes the given UI event.
 	 * @param event The event to process.
 	 */
     public processEvent(event: Event): void {
         if (this.isActivated()) {
             this.fsm.process(event);
+            if(this.preventDef) {
+                event.preventDefault();
+            }
+            if(this.stopImmediatePropag) {
+                event.stopImmediatePropagation();
+            }
         }
     }
 

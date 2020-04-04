@@ -30,11 +30,11 @@ export interface KeyInteractionBinder<I extends InteractionImpl<D, FSM>, D exten
 
     end(endFct: () => void): KeyInteractionBinder<I, D>;
 
-    // async(): KeyInteractionBinder<I, D>;
-
-    // help(): KeyInteractionBinder<I, D>;
-
     with(...codes: Array<string>): KeyInteractionBinder<I, D>;
+
+    stopImmediatePropagation(): KeyInteractionBinder<I, D>;
+
+    preventDefault(): KeyInteractionBinder<I, D>;
 
     toProduce<C extends Command>(cmdSupplier: (i?: D) => C): KeyInteractionCmdBinder<C, I, D>;
 }

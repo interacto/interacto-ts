@@ -41,11 +41,23 @@ export interface BaseBinderBuilder {
     end(endFct: () => void): BaseBinderBuilder;
 
     /**
-	 * Specifies the loggings to use.
+	 * Specifies the logging level to use.
 	 * Several call to 'log' can be done to log different parts:
 	 * log(LogLevel.INTERACTION).log(LogLevel.COMMAND)
 	 * @param level The logging level to use.
 	 * @return A clone of the current builder to chain the building configuration.
 	 */
     log(...level: Array<LogLevel>): BaseBinderBuilder;
+
+    /**
+	 * If called, all the events the interaction will process will be consumed and
+	 * not progagated to next listeners.
+	 * @return A clone of the current builder to chain the building configuration.
+	 */
+    stopImmediatePropagation(): BaseBinderBuilder;
+
+    /**
+	 * The default behavior associated to the event will be ignored.
+	 */
+    preventDefault(): BaseBinderBuilder;
 }

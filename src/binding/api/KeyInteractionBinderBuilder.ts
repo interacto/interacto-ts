@@ -28,11 +28,11 @@ export interface KeyInteractionBinderBuilder<I extends InteractionImpl<D, FSM>, 
 
     log(...level: Array<LogLevel>): KeyInteractionBinderBuilder<I, D>;
 
-    // async(): KeyInteractionBinderBuilder<I, D>;
-
     end(endFct: () => void): KeyInteractionBinderBuilder<I, D>;
 
-    // help(): KeyInteractionBinderBuilder<I, D>;
-
     with(...codes: Array<string>): KeyInteractionBinderBuilder<I, D>;
+
+    stopImmediatePropagation(): KeyInteractionBinderBuilder<I, D>;
+
+    preventDefault(): KeyInteractionBinderBuilder<I, D>;
 }
