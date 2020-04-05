@@ -16,7 +16,7 @@ import { InteractionData } from "../InteractionData";
 import { TouchData, TouchDataImpl } from "./TouchData";
 
 /**
- * Multi-touch interaction data implementation
+ * Multi-touch interaction data interface
  */
 export interface MultiTouchData extends InteractionData {
     /**
@@ -62,7 +62,7 @@ export class MultiTouchDataImpl implements MultiTouchData {
 	 * Sets new value for the given touch point.
 	 * The identifier of the given event point is used to find the corresponding
 	 * touch data.
-	 * @param evt The touch event to use.
+	 * @param tp The touch event to use.
 	 */
     public setTouch(tp: Touch | null): void {
         if(tp !== null) {
@@ -71,6 +71,5 @@ export class MultiTouchDataImpl implements MultiTouchData {
                 tdata.setTgtData(tp.clientX, tp.clientY, tp.screenX, tp.screenY, tp.target);
             }
         }
-
     }
 }
