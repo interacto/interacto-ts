@@ -12,9 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FSMHandler } from "../../../src/fsm/FSMHandler";
-import { StubFSMHandler } from "../../fsm/StubFSMHandler";
-import { BoxChecked } from "../../../src/interaction/library/BoxChecked";
+import {BoxChecked, FSMHandler} from "../../../src/interacto";
+import {StubFSMHandler} from "../../fsm/StubFSMHandler";
 
 jest.mock("../../fsm/StubFSMHandler");
 
@@ -30,10 +29,7 @@ beforeEach(() => {
     interaction.getFsm().log(true);
     interaction.getFsm().addHandler(handler);
     document.documentElement.innerHTML = "<html><div><input id='bc1' type='checkbox'></div></html>";
-    const elt = document.getElementById("bc1");
-    if (elt !== null) {
-        boxCheck = elt;
-    }
+    boxCheck = document.getElementById("bc1") as HTMLElement;
 });
 
 test("click event start and stop the interaction CheckBox", () => {
