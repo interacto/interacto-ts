@@ -23,10 +23,11 @@ import { InteractionUpdateBinder } from "./InteractionUpdateBinder";
 /**
  * The base interface for building widget bindings based on non-trivial user interactions (eg DnD) with routines
  * for defining the UI command and the user interaction to use.
- * @param <W> The type of accepted widgets.
  */
 export interface BaseUpdateBinder extends BaseUpdateBinderBuilder {
     on(...widgets: Array<EventTarget>): BaseUpdateBinder;
+
+    onDynamic(node: Node): BaseUpdateBinder;
 
     when(whenPredicate: () => boolean): BaseUpdateBinder;
 

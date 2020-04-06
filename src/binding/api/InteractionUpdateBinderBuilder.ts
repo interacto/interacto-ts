@@ -40,6 +40,8 @@ export interface InteractionUpdateBinderBuilder<I extends InteractionImpl<D, FSM
 
     on(...widgets: Array<EventTarget>): InteractionUpdateBinderBuilder<I, D>;
 
+    onDynamic(node: Node): InteractionUpdateBinderBuilder<I, D>;
+
     log(...level: Array<LogLevel>): InteractionUpdateBinderBuilder<I, D>;
 
     stopImmediatePropagation(): InteractionUpdateBinderBuilder<I, D>;

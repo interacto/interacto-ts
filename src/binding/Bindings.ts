@@ -35,6 +35,8 @@ import { BindingsObserver } from "./BindingsObserver";
 import { TextInputChanged } from "../interaction/library/TextInputChanged";
 import { MultiTouch } from "../interaction/library/MultiTouch";
 import { MultiTouchData } from "../interaction/library/MultiTouchData";
+import {Tap} from "../interaction/library/Tap";
+import {TapData} from "../interaction/library/TapData";
 
 let observer: BindingsObserver | undefined;
 
@@ -93,7 +95,23 @@ export function textInputBinder<C extends Command>(): InteractionUpdateBinder<Te
         .usingInteraction<TextInputChanged, WidgetData<HTMLInputElement | HTMLTextAreaElement>>(() => new TextInputChanged());
 }
 
+/**
+ * Creates a widget binding that uses the multi-touch user interaction.
+ * @param nbTouches The number of required touches.
+ * A multi-touch starts when all its touches have started.
+ * A multi-touch ends when the number of required touches is greater than the number of touches.
+ */
 export function multiTouchBinder<C extends Command>(nbTouches: number): InteractionUpdateBinder<MultiTouch, MultiTouchData> {
-    return new UpdateBinder<C, TextInputChanged, WidgetData<HTMLInputElement | HTMLTextAreaElement>>(observer)
+    return new UpdateBinder<C, MultiTouch, MultiTouchData>(observer)
         .usingInteraction<MultiTouch, MultiTouchData>(() => new MultiTouch(nbTouches));
+}
+
+/**
+ * Creates a widget binding that uses the tap user interaction.
+ * @param nbTap The number of required taps.
+ * If this number is not reached after a timeout, the interaction is cancelled.
+ */
+export function tapBinder<C extends Command>(nbTap: number): InteractionUpdateBinder<Tap, TapData> {
+    return new UpdateBinder<C, Tap, TapData>(observer)
+        .usingInteraction<Tap, TapData>(() => new Tap(nbTap));
 }

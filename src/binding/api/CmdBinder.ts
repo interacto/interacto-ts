@@ -32,6 +32,8 @@ export interface CmdBinder<C extends Command> extends CmdBinderBuilder<C> {
 
     on(...widgets: Array<EventTarget>): CmdBinder<C>;
 
+    onDynamic(node: Node): CmdBinder<C>;
+
     when(whenPredicate: () => boolean): CmdBinder<C>;
 
     log(...level: Array<LogLevel>): CmdBinder<C>;
@@ -39,8 +41,8 @@ export interface CmdBinder<C extends Command> extends CmdBinderBuilder<C> {
     /**
 	 * Defines how to create the user interaction that the widget binding will use to create UI commands.
 	 * @param interactionSupplier The supplier that will return a new user interaction.
-	 * @param <D> The user interaction data type
-	 * @param <I> The user interaction type
+	 * @type <D> The user interaction data type
+	 * @type <I> The user interaction type
 	 * @return A clone of the current builder to chain the building configuration.
 	 */
     usingInteraction<I extends InteractionImpl<D, FSM>, D extends InteractionData>(interactionSupplier: () => I):

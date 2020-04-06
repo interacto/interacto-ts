@@ -12,12 +12,12 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Subject } from "rxjs";
-import { FSM } from "../../src/fsm/FSM";
-import { InitState } from "../../src/fsm/InitState";
-import { OutputState } from "../../src/fsm/OutputState";
-import { StdState } from "../../src/fsm/StdState";
-import { InteractionStub } from "./InteractionStub";
+import {Subject} from "rxjs";
+import {FSM} from "../../src/fsm/FSM";
+import {InitState} from "../../src/fsm/InitState";
+import {OutputState} from "../../src/fsm/OutputState";
+import {StdState} from "../../src/fsm/StdState";
+import {InteractionStub} from "./InteractionStub";
 
 let interaction: InteractionStub;
 let fsm: FSM;
@@ -112,3 +112,21 @@ test("currentState", () => {
     expect(interaction.updateEventsRegistered).toHaveBeenCalledWith(s1, s2);
 });
 
+test("register to node children", async () => {
+    expect.assertions(1);
+
+    interaction = new InteractionStub(new FSM());
+    document.documentElement.innerHTML = "<html><div><svg id='doc'></svg>svg></html>";
+    const doc: HTMLElement = document.getElementById("doc") as HTMLElement;
+
+    jest.spyOn(interaction, "onNewNodeRegistered");
+
+    interaction.registerToNodeChildren(doc);
+    const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    rect.setAttribute("id", "rect");
+    doc.appendChild(rect);
+
+    // Waiting for the mutation changes to be done.
+    await Promise.resolve();
+    expect(interaction.onNewNodeRegistered).toHaveBeenCalledTimes(1);
+});

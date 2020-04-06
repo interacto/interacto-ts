@@ -24,6 +24,8 @@ export interface InteractionUpdateBinder<I extends InteractionImpl<D, FSM>, D ex
 
     on(...widgets: Array<EventTarget>): InteractionUpdateBinder<I, D>;
 
+    onDynamic(node: Node): InteractionUpdateBinder<I, D>;
+
     log(...level: Array<LogLevel>): InteractionUpdateBinder<I, D>;
 
     when(whenPredicate: (i?: D) => boolean): InteractionUpdateBinder<I, D>;

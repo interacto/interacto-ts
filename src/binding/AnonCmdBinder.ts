@@ -36,6 +36,7 @@ export class AnonCmdBinder<I extends InteractionImpl<D, FSM>, D extends Interact
         dup.checkConditions = this.checkConditions;
         dup.cmdProducer = this.cmdProducer;
         dup.widgets = [...this.widgets];
+        dup.dynamicNodes = [...this.dynamicNodes];
         dup.interactionSupplier = this.interactionSupplier;
         dup.onEnd =  this.onEnd;
         dup.logLevels =  [...this.logLevels];
@@ -58,8 +59,8 @@ export class AnonCmdBinder<I extends InteractionImpl<D, FSM>, D extends Interact
         }
 
         const binding = new AnonBinding(false, this.interactionSupplier(), this.cmdProducer, [...this.widgets],
-            [], false, [...this.logLevels], 0, this.stopPropaNow, this.prevDef,
-            this.initCmd, undefined, this.checkConditions,
+            [...this.dynamicNodes], [], false, [...this.logLevels], 0,
+            this.stopPropaNow, this.prevDef, this.initCmd, undefined, this.checkConditions,
             this.onEnd, undefined, undefined, this.hadEffectsFct,
             this.hadNoEffectFct, this.cannotExecFct);
 

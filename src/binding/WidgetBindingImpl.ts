@@ -72,7 +72,7 @@ implements WidgetBinding<C, I, D> {
     * @param cmdProducer The type of the command that will be created. Used to instantiate the command by reflexivity.
     * The class must be public and must have a constructor with no parameter.
     * @param interaction The user interaction of the binding.
-    * @param widgets The widgets concerned by the binding. Cannot be null.
+    * @param widgets The widgets on which the binding will operate.
     */
     protected constructor(continuousExecution: boolean, interaction: I, cmdProducer: (i?: D) => C, widgets: Array<EventTarget>) {
         this.asLogBinding = false;

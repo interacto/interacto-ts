@@ -27,6 +27,8 @@ export interface InteractionBinder<I extends InteractionImpl<D, FSM>, D extends 
 
     on(...widgets: Array<EventTarget>): InteractionBinder<I, D>;
 
+    onDynamic(node: Node): InteractionBinder<I, D>;
+
     log(...level: Array<LogLevel>): InteractionBinder<I, D>;
 
     end(endFct: () => void): InteractionBinder<I, D>;

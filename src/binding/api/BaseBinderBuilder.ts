@@ -21,10 +21,19 @@ export interface BaseBinderBuilder {
 	 * Specifies the widgets on which the binding must operate.
 	 * When a widget is added to this list, the added widget is binded to this binding.
 	 * When widget is removed from this list, this widget is unbinded from this binding.
-	 * @param widgets The observable list of the widgets involved in the bindings.
+	 * @param widgets The list of the widgets involved in the bindings.
 	 * @return A clone of the current builder to chain the building configuration.
 	 */
     on(...widgets: Array<EventTarget>): BaseBinderBuilder;
+
+    /**
+	 * Specifies the node which children will be observed by the binding.
+	 * The children list is observed by the binding, so that additions and removals
+	 * from it are managed by the binding.
+	 * @param node The node which children will be observed by the binding dynamically.
+	 * @return A clone of the current builder to chain the building configuration.
+	 */
+    onDynamic(node: Node): BaseBinderBuilder;
 
     /**
 	 * Specifies the conditions to fulfill to initialise, update, or execute the command while the interaction is running.

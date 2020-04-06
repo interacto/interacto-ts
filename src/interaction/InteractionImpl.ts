@@ -33,6 +33,7 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM> 
     protected readonly _registeredNodes: Set<EventTarget>;
     protected readonly _registeredTargetNode: Set<EventTarget>;
     protected readonly _additionalNodes: Array<Node>;
+    /** The current list of mutation observers. Used for listening changes in node lists. */
     protected readonly listMutationObserver: Array<MutationObserver>;
     /** The interaction data */
     protected readonly data: D;
@@ -126,6 +127,10 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM> 
     }
 
     protected getEventTypesOf(state: OutputState): Set<string> {
+        if(state.getTransitions().length === 0) {
+            return new Set();
+        }
+
         return state.getTransitions().map(t => t.getAcceptedEvents()).reduce((a, b) => new Set([...a, ...b]));
     }
 
@@ -164,18 +169,22 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM> 
         }
     }
 
-    public registerToObservableList(elementToObserve: Node): void {
+    /**
+     * Permits to listen any change in the content (ie children) of the given node.
+     * For all child nodes of the given node, this interaction subscribes to it.
+     * This is dynamic: on new child nodes, the interaction registers to them.
+     * On child removals, the interaction unregisters to them.
+     * @param elementToObserve The node which children will be observed by the interaction.
+     */
+    public registerToNodeChildren(elementToObserve: Node): void {
+        elementToObserve.childNodes.forEach((node: Node) => {
+            this._additionalNodes.push(node);
+            this.onNewNodeRegistered(node);
+        });
+
         const newMutationObserver = new MutationObserver(mutations => this.callBackMutationObserver(mutations));
         newMutationObserver.observe(elementToObserve, { childList: true });
         this.listMutationObserver.push(newMutationObserver);
-    }
-
-    public addAdditionalNodes(additionalNodes: Array<Node>): void {
-        additionalNodes.forEach((node: Node) => {
-            this._additionalNodes.push(node);
-            //register the additional node children
-            node.childNodes.forEach((child: Node) => this.onNewNodeRegistered(child));
-        });
     }
 
     protected registerEventToNode(eventType: string, node: EventTarget): void {

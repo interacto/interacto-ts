@@ -27,6 +27,8 @@ export interface KeyInteractionCmdBinder<C extends Command, I extends Interactio
 
     on(...widgets: Array<EventTarget>): KeyInteractionCmdBinder<C, I, D>;
 
+    onDynamic(node: Node): KeyInteractionCmdBinder<C, I, D>;
+
     log(...level: Array<LogLevel>): KeyInteractionCmdBinder<C, I, D>;
 
     when(whenPredicate: (i?: D) => boolean): KeyInteractionCmdBinder<C, I, D>;

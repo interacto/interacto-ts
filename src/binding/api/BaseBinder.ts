@@ -23,10 +23,11 @@ import { CmdBinder } from "./CmdBinder";
 /**
  * The base interface for building widget bindings with routines
  * for defining the UI command and the user interaction to use.
- * @param <W> The type of accepted widgets.
  */
 export interface BaseBinder extends BaseBinderBuilder {
     on(...widgets: Array<EventTarget>): BaseBinder;
+
+    onDynamic(node: Node): BaseBinder;
 
     when(whenPredicate: () => boolean): BaseBinder;
 
@@ -37,7 +38,7 @@ export interface BaseBinder extends BaseBinderBuilder {
     /**
 	 * Defines how to create the UI command that will produce the widget binding.
 	 * @param cmdSupplier The supplier that will return a new UI command on each call.
-	 * @param <C> The type of the UI command
+	 * @type <C> The type of the UI command
 	 * @return A clone of the current builder to chain the building configuration.
 	 */
     toProduce<C extends Command>(cmdSupplier: () => C): CmdBinder<C>;
@@ -45,8 +46,8 @@ export interface BaseBinder extends BaseBinderBuilder {
     /**
 	 * Defines how to create the user interaction that the widget binding will use to create UI commands.
 	 * @param interactionSupplier The supplier that will return a new user interaction.
-	 * @param <D> The user interaction data type
-	 * @param <I> The user interaction type
+	 * @type <D> The user interaction data type
+	 * @type <I> The user interaction type
 	 * @return A clone of the current builder to chain the building configuration.
 	 */
     usingInteraction<I extends InteractionImpl<D, FSM>, D extends InteractionData>(interactionSupplier: () => I): InteractionBinder<I, D>;

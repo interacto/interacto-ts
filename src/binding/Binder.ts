@@ -36,6 +36,7 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
     protected checkConditions?: (i: D) => boolean;
     protected cmdProducer?: (i?: D) => C;
     protected widgets: Array<EventTarget>;
+    protected dynamicNodes: Array<Node>;
     protected interactionSupplier?: () => I;
     protected hadEffectsFct?: (c: C, i: D) => void;
     protected hadNoEffectFct?: (c: C, i: D) => void;
@@ -49,7 +50,8 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
 
 
     protected constructor(observer?: BindingsObserver, initCmd?: (c: C, i?: D) => void, checkConditions?: (i: D) => boolean,
-                          cmdProducer?: (i?: D) => C, widgets?: Array<EventTarget>, interactionSupplier?: () => I, onEnd?: (c: C, i?: D) => void,
+                          cmdProducer?: (i?: D) => C, widgets?: Array<EventTarget>, dynamicNodes?: Array<Node>,
+                          interactionSupplier?: () => I, onEnd?: (c: C, i?: D) => void,
                           logLevels?: Array<LogLevel>, hadNoEffectFct?: (c: C, i: D) => void, hadEffectsFct?: (c: C, i: D) => void,
                           cannotExecFct?: (c: C, i: D) => void, targetWidgets?: Array<EventTarget>, stopProga?: boolean,
                           prevent?: boolean) {
@@ -57,6 +59,7 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
         this.checkConditions = checkConditions;
         this.cmdProducer = cmdProducer;
         this.widgets = widgets ?? [];
+        this.dynamicNodes = dynamicNodes ?? [];
         this.interactionSupplier = interactionSupplier;
         this.onEnd = onEnd;
         this.hadEffectsFct = hadEffectsFct;
@@ -75,6 +78,12 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
         const w: Array<EventTarget> = this.widgets.length === 0 ? widget : [...this.widgets].concat(widget);
         const dup = this.duplicate();
         dup.widgets = w;
+        return dup;
+    }
+
+    public onDynamic(node: Node): Binder<C, I, D> {
+        const dup = this.duplicate();
+        dup.dynamicNodes = [...this.dynamicNodes].concat(node);
         return dup;
     }
 

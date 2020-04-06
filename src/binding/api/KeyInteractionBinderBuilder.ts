@@ -26,6 +26,8 @@ export interface KeyInteractionBinderBuilder<I extends InteractionImpl<D, FSM>, 
 
     on(...widgets: Array<EventTarget>): KeyInteractionBinderBuilder<I, D>;
 
+    onDynamic(node: Node): KeyInteractionBinderBuilder<I, D>;
+
     log(...level: Array<LogLevel>): KeyInteractionBinderBuilder<I, D>;
 
     end(endFct: () => void): KeyInteractionBinderBuilder<I, D>;

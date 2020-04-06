@@ -52,6 +52,8 @@ export interface BaseUpdateBinderBuilder extends BaseBinderBuilder {
 
     on(...widgets: Array<EventTarget>): BaseUpdateBinderBuilder;
 
+    onDynamic(node: Node): BaseUpdateBinderBuilder;
+
     stopImmediatePropagation(): BaseUpdateBinderBuilder;
 
     preventDefault(): BaseUpdateBinderBuilder;

@@ -36,13 +36,13 @@ export class KeysBinder<C extends Command> extends Binder<C, KeysPressed, KeysDa
     private readonly checkCode: (i: KeysData) => boolean;
 
     protected constructor(observer?: BindingsObserver, initCmd?: (c: C, i?: KeysData) => void, whenPredicate?: (i: KeysData) => boolean,
-                          cmdProducer?: (i?: KeysData) => C, widgets?: Array<EventTarget>,
+                          cmdProducer?: (i?: KeysData) => C, widgets?: Array<EventTarget>, dynamicNodes?: Array<Node>,
                           onEnd?: (c: C, i?: KeysData) => void, logLevels?: Array<LogLevel>,
                           hadNoEffectFct?: (c: C, i: KeysData) => void, hadEffectsFct?: (c: C, i: KeysData) => void,
                           cannotExecFct?: (c: C, i: KeysData) => void, targetWidgets?: Array<EventTarget>,
                           keyCodes?: Array<string>, stopProga?: boolean, prevent?: boolean) {
-        super(observer, initCmd, whenPredicate, cmdProducer, widgets, () => new KeysPressed(), onEnd,
-            logLevels, hadNoEffectFct, hadEffectsFct, cannotExecFct, targetWidgets, stopProga, prevent);
+        super(observer, initCmd, whenPredicate, cmdProducer, widgets, dynamicNodes, () => new KeysPressed(),
+            onEnd, logLevels, hadNoEffectFct, hadEffectsFct, cannotExecFct, targetWidgets, stopProga, prevent);
         this.codes = keyCodes === undefined ? [] : [...keyCodes];
         this.checkCode = (i: KeysData): boolean => {
             const keys = i.getKeys();
@@ -60,6 +60,10 @@ export class KeysBinder<C extends Command> extends Binder<C, KeysPressed, KeysDa
 
     public on(...widget: Array<EventTarget>): KeysBinder<C> {
         return super.on(...widget) as KeysBinder<C>;
+    }
+
+    public onDynamic(node: Node): KeysBinder<C> {
+        return super.onDynamic(node) as KeysBinder<C>;
     }
 
     public first(initCmdFct: (c: C, i?: KeysData) => void): KeysBinder<C> {
@@ -101,8 +105,8 @@ export class KeysBinder<C extends Command> extends Binder<C, KeysPressed, KeysDa
 
     protected duplicate(): KeysBinder<C> {
         return new KeysBinder(this.observer, this.initCmd, this.checkConditions, this.cmdProducer, [...this.widgets],
-            this.onEnd, [...this.logLevels], this.hadNoEffectFct, this.hadEffectsFct, this.cannotExecFct,
-            [...this.targetWidgets], [...this.codes]);
+            [...this.dynamicNodes], this.onEnd, [...this.logLevels], this.hadNoEffectFct,
+            this.hadEffectsFct, this.cannotExecFct, [...this.targetWidgets], [...this.codes]);
     }
 
     public bind(): WidgetBinding<C, KeysPressed, KeysData> {
@@ -115,8 +119,8 @@ export class KeysBinder<C extends Command> extends Binder<C, KeysPressed, KeysDa
         }
 
         const binding = new AnonBinding(false, this.interactionSupplier(), this.cmdProducer, [...this.widgets],
-            [], false, [...this.logLevels], 0, this.stopPropaNow, this.prevDef,
-            this.initCmd, undefined, this.checkCode,
+            [...this.dynamicNodes], [], false, [...this.logLevels], 0,
+            this.stopPropaNow, this.prevDef, this.initCmd, undefined, this.checkCode,
             this.onEnd, undefined, undefined, this.hadEffectsFct,
             this.hadNoEffectFct, this.cannotExecFct);
 

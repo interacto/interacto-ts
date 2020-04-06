@@ -29,7 +29,7 @@ export interface InteractionCmdUpdateBinder<C extends Command, I extends Interac
     * This callback takes as arguments the command to update and the ongoing interactions (and its parameters).
     * @return The builder to chain the building configuration.
     */
-    then(initCmdFct: (c: C, i?: D) => void): InteractionCmdUpdateBinder<C, I, D>;
+    then(update: (c: C, i?: D) => void): InteractionCmdUpdateBinder<C, I, D>;
 
     continuousExecution(): InteractionCmdUpdateBinder<C, I, D>;
 
@@ -40,6 +40,8 @@ export interface InteractionCmdUpdateBinder<C extends Command, I extends Interac
     first(initCmdFct: (c: C, i?: D) => void): InteractionCmdUpdateBinder<C, I, D>;
 
     on(...widgets: Array<EventTarget>): InteractionCmdUpdateBinder<C, I, D>;
+
+    onDynamic(node: Node): InteractionCmdUpdateBinder<C, I, D>;
 
     log(...level: Array<LogLevel>): InteractionCmdUpdateBinder<C, I, D>;
 

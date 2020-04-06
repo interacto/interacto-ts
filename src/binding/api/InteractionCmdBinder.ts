@@ -45,6 +45,8 @@ export interface InteractionCmdBinder<C extends Command, I extends InteractionIm
 
     on(...widgets: Array<EventTarget>): InteractionCmdBinder<C, I, D>;
 
+    onDynamic(node: Node): InteractionCmdBinder<C, I, D>;
+
     log(...level: Array<LogLevel>): InteractionCmdBinder<C, I, D>;
 
     when(whenPredicate: (i?: D) => boolean): InteractionCmdBinder<C, I, D>;

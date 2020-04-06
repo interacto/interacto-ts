@@ -41,13 +41,14 @@ export class UpdateBinder<C extends Command, I extends InteractionImpl<D, FSM>, 
 
     public constructor(observer?: BindingsObserver, throttleTimeout?: number, continuousCmdExecution?: boolean, strict?: boolean,
                        initCmd?: (c: C, i?: D) => void, checkConditions?: (i: D) => boolean, cmdProducer?: (i?: D) => C,
-                       widgets?: Array<EventTarget>, interactionSupplier?: () => I, onEnd?: (c: C, i?: D) => void,
+                       widgets?: Array<EventTarget>, dynamicNodes?: Array<Node>,
+                       interactionSupplier?: () => I, onEnd?: (c: C, i?: D) => void,
                        logLevels?: Array<LogLevel>, hadNoEffectFct?: (c: C, i: D) => void, hadEffectsFct?: (c: C, i: D) => void,
                        cannotExecFct?: (c: C, i: D) => void, updateFct?: (c: C, i?: D) => void, cancelFct?: (i: D) => void,
                        endOrCancelFct?: (i: D) => void, targetWidgets?: Array<EventTarget>, stopProga?: boolean,
                        prevent?: boolean) {
-        super(observer, initCmd, checkConditions, cmdProducer, widgets, interactionSupplier, onEnd, logLevels,
-            hadNoEffectFct, hadEffectsFct, cannotExecFct, targetWidgets, stopProga, prevent);
+        super(observer, initCmd, checkConditions, cmdProducer, widgets, dynamicNodes, interactionSupplier, onEnd,
+            logLevels, hadNoEffectFct, hadEffectsFct, cannotExecFct, targetWidgets, stopProga, prevent);
         this.updateFct = updateFct;
         this.cancelFct = cancelFct;
         this.endOrCancelFct = endOrCancelFct;
@@ -96,6 +97,10 @@ export class UpdateBinder<C extends Command, I extends InteractionImpl<D, FSM>, 
         return super.on(...widget) as UpdateBinder<C, I, D>;
     }
 
+    public onDynamic(node: Node): UpdateBinder<C, I, D> {
+        return super.onDynamic(node) as UpdateBinder<C, I, D>;
+    }
+
     public first(initCmdFct: (c: C, i?: D) => void): UpdateBinder<C, I, D> {
         return super.first(initCmdFct) as UpdateBinder<C, I, D>;
     }
@@ -140,7 +145,7 @@ export class UpdateBinder<C extends Command, I extends InteractionImpl<D, FSM>, 
     protected duplicate(): UpdateBinder<C, I, D> {
         return new UpdateBinder<C, I, D>(this.observer, this.throttleTimeout, this.continuousCmdExecution,
             this._strictStart, this.initCmd, this.checkConditions, this.cmdProducer,
-            this.widgets, this.interactionSupplier, this.onEnd,
+            this.widgets, this.dynamicNodes, this.interactionSupplier, this.onEnd,
             this.logLevels, this.hadNoEffectFct, this.hadEffectsFct,
             this.cannotExecFct, this.updateFct, this.cancelFct, this.endOrCancelFct, this.targetWidgets,
             this.stopPropaNow, this.prevDef);
@@ -156,7 +161,7 @@ export class UpdateBinder<C extends Command, I extends InteractionImpl<D, FSM>, 
         }
 
         const binding = new AnonBinding(this.continuousCmdExecution, this.interactionSupplier(), this.cmdProducer,
-            [...this.widgets], [], this._strictStart, [...this.logLevels], this.throttleTimeout,
+            [...this.widgets], [...this.dynamicNodes],[], this._strictStart, [...this.logLevels], this.throttleTimeout,
             this.stopPropaNow, this.prevDef, this.initCmd, this.updateFct, this.checkConditions,
             this.onEnd, this.cancelFct, this.endOrCancelFct, this.hadEffectsFct,
             this.hadNoEffectFct, this.cannotExecFct);
