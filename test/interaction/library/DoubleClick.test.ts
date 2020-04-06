@@ -12,10 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FSMHandler } from "../../../src/fsm/FSMHandler";
+import {DoubleClick, EventRegistrationToken, FSMHandler} from "../../../src/interacto";
 import { StubFSMHandler } from "../../fsm/StubFSMHandler";
-import { DoubleClick } from "../../../src/interaction/library/DoubleClick";
-import { EventRegistrationToken } from "../../../src/fsm/Events";
 import { createMouseEvent } from "../StubEvents";
 
 jest.mock("../../fsm/StubFSMHandler");
@@ -33,10 +31,7 @@ beforeEach(() => {
     interaction.getFsm().log(true);
     interaction.getFsm().addHandler(handler);
     document.documentElement.innerHTML = "<html><div><canvas id='canvas1' /></div></html>";
-    const elt = document.getElementById("canvas1");
-    if (elt !== null) {
-        canvas = elt;
-    }
+    canvas = document.getElementById("canvas1") as HTMLElement;
 });
 
 test("double click on a canvas starts and stops the interaction", () => {
@@ -48,20 +43,26 @@ test("double click on a canvas starts and stops the interaction", () => {
 });
 
 test("check data of the interaction.", () => {
+    let sx: number | undefined;
+    let sy: number | undefined;
+    let button: number | undefined;
+    let obj: HTMLCanvasElement | undefined;
+
     interaction.registerToNodes([canvas]);
     interaction.getFsm().addHandler(new class extends StubFSMHandler {
-        public constructor() {
-            super();
-        }
-
         public fsmStops(): void {
-            expect(interaction.getData().getSrcClientX()).toBe(11);
-            expect(interaction.getData().getSrcClientY()).toBe(23);
-            expect(interaction.getData().getButton()).toBe(0);
+            sx = interaction.getData().getSrcClientX();
+            sy = interaction.getData().getSrcClientY();
+            button = interaction.getData().getButton();
+            obj = interaction.getData().getSrcObject() as HTMLCanvasElement;
         }
     }());
     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.Click, canvas, undefined, undefined, 11, 23));
     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.Click, canvas, undefined, undefined, 11, 23));
+    expect(sx).toBe(11);
+    expect(sy).toBe(23);
+    expect(button).toBe(0);
+    expect(obj).toBe(canvas);
 });
 
 test("move between clicks cancels the double click", () => {
@@ -90,18 +91,6 @@ test("double click with two different mouse button for each click don't start th
         undefined, undefined, 2));
     expect(handler.fsmStarts).not.toHaveBeenCalled();
 });
-
-// test("Check the reinitData of the DoubleClicked interaction", () => {
-//     interaction.registerToNodes([canvas]);
-//     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.Click, canvas, undefined, undefined,
-//         11, 23, 0));
-//     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.Click, canvas, undefined, undefined,
-//         11, 23, 0));
-//     jest.runOnlyPendingTimers();
-//     expect(interaction.getData().getSrcClientX()).toBe(undefined);
-//     expect(interaction.getData().getSrcClientY()).toBe(undefined);
-//     expect(interaction.getData().getButton()).toBe(0);
-// });
 
 test("check if the interaction is recycled after a cancel", () => {
     interaction.registerToNodes([canvas]);

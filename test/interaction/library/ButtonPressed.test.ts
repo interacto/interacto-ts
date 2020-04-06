@@ -12,10 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { isButton } from "../../../src/fsm/Events";
-import { FSMHandler } from "../../../src/fsm/FSMHandler";
-import { ButtonPressed } from "../../../src/interaction/library/ButtonPressed";
-import { StubFSMHandler } from "../../fsm/StubFSMHandler";
+import {ButtonPressed, FSMHandler} from "../../../src/interacto";
+import {StubFSMHandler} from "../../fsm/StubFSMHandler";
 
 jest.mock("../../fsm/StubFSMHandler");
 
@@ -31,10 +29,7 @@ beforeEach(() => {
     interaction.getFsm().log(true);
     interaction.getFsm().addHandler(handler);
     document.documentElement.innerHTML = "<html><div><button id='b1'>A Button</button></div></html>";
-    const elt = document.getElementById("b1");
-    if (elt !== null && isButton(elt)) {
-        button = elt;
-    }
+    button = document.getElementById("b1") as HTMLButtonElement;
 });
 
 test("click event start and stop the interaction ButtonPressed", () => {

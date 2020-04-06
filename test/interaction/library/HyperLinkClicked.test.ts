@@ -12,9 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FSMHandler } from "../../../src/fsm/FSMHandler";
-import { StubFSMHandler } from "../../fsm/StubFSMHandler";
-import { HyperLinkClicked } from "../../../src/interaction/library/HyperLinkClicked";
+import {FSMHandler, HyperLinkClicked} from "../../../src/interacto";
+import {StubFSMHandler} from "../../fsm/StubFSMHandler";
 
 jest.mock("../../fsm/StubFSMHandler");
 
@@ -30,10 +29,7 @@ beforeEach(() => {
     interaction.getFsm().log(true);
     interaction.getFsm().addHandler(handler);
     document.documentElement.innerHTML = "<html><div><a id='url1' href=''>Test</a> </div></html>";
-    const elt = document.getElementById("url1");
-    if (elt !== null) {
-        url = elt;
-    }
+    url = document.getElementById("url1") as HTMLElement;
 });
 
 test("click on url starts and stops the interaction", () => {

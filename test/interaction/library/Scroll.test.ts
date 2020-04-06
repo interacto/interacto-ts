@@ -12,9 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FSMHandler } from "../../../src/fsm/FSMHandler";
+import {FSMHandler, Scroll} from "../../../src/interacto";
 import { StubFSMHandler } from "../../fsm/StubFSMHandler";
-import { Scroll } from "../../../src/interaction/library/Scroll";
 import { createUIEvent } from "../StubEvents";
 
 jest.mock("../../fsm/StubFSMHandler");
@@ -31,10 +30,7 @@ beforeEach(() => {
     interaction.getFsm().log(true);
     interaction.getFsm().addHandler(handler);
     document.documentElement.innerHTML = "<html><div></div></html>";
-    const elt = document.defaultView;
-    if (elt !== null) {
-        scroll = elt;
-    }
+    scroll = document.defaultView as Window;
 });
 
 test("scroll event start and stop the interaction", () => {

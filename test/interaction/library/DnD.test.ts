@@ -12,11 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FSMHandler } from "../../../src/fsm/FSMHandler";
-import { StubFSMHandler } from "../../fsm/StubFSMHandler";
-import { EventRegistrationToken } from "../../../src/fsm/Events";
-import { createMouseEvent } from "../StubEvents";
-import { DnD } from "../../../src/interaction/library/DnD";
+import {DnD, EventRegistrationToken, FSMHandler} from "../../../src/interacto";
+import {StubFSMHandler} from "../../fsm/StubFSMHandler";
+import {createMouseEvent} from "../StubEvents";
 
 jest.mock("../../fsm/StubFSMHandler");
 
@@ -32,10 +30,7 @@ beforeEach(() => {
     interaction.getFsm().log(true);
     interaction.getFsm().addHandler(handler);
     document.documentElement.innerHTML = "<html><div><canvas id='canvas1' /></div></html>";
-    const elt = document.getElementById("canvas1");
-    if (elt !== null) {
-        canvas = elt;
-    }
+    canvas = document.getElementById("canvas1") as HTMLElement;
 });
 
 test("press event don't trigger the interaction DnD", () => {
@@ -55,24 +50,32 @@ test("press and release without moving don't trigger the interaction", () => {
 });
 
 test("data of the  press and drag part of the interaction", () => {
+    let tx: number | undefined;
+    let ty: number | undefined;
+    let sx: number | undefined;
+    let sy: number | undefined;
+    let button: number | undefined;
+    let obj: HTMLCanvasElement | undefined;
+
     interaction.registerToNodes([canvas]);
     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, canvas, undefined, undefined, 15, 20, 0));
     interaction.getFsm().addHandler(new class extends StubFSMHandler {
-        public constructor() {
-            super();
-        }
-
         public fsmUpdates(): void {
-            expect(interaction.getData().getSrcClientX()).toBe(15);
-            expect(interaction.getData().getSrcClientY()).toBe(20);
-            expect(interaction.getData().getTgtClientX()).toBe(16);
-            expect(interaction.getData().getTgtClientY()).toBe(21);
-            expect(interaction.getData().getButton()).toBe(0);
-            const tgtElem: HTMLCanvasElement = interaction.getData().getTgtObject() as HTMLCanvasElement;
-            expect(tgtElem).toBe(canvas);
+            sx = interaction.getData().getSrcClientX();
+            sy = interaction.getData().getSrcClientY();
+            tx = interaction.getData().getTgtClientX();
+            ty = interaction.getData().getTgtClientY();
+            button = interaction.getData().getButton();
+            obj = interaction.getData().getTgtObject() as HTMLCanvasElement;
         }
     }());
     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 16, 21));
+    expect(sx).toBe(15);
+    expect(sy).toBe(20);
+    expect(tx).toBe(16);
+    expect(ty).toBe(21);
+    expect(button).toBe(0);
+    expect(obj).toBe(canvas);
 });
 
 test("check if drag with different button don't cancel or stop the interaction.", () => {
@@ -128,23 +131,33 @@ test("press and drag multiple time start the interaction but don't cancel it or 
 });
 
 test("check data with multiple drag", () => {
+    let tx: number | undefined;
+    let ty: number | undefined;
+    let sx: number | undefined;
+    let sy: number | undefined;
+    let button: number | undefined;
+    let obj: HTMLCanvasElement | undefined;
+
     interaction.registerToNodes([canvas]);
     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, canvas, undefined, undefined, 11, 23, 0));
     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 12, 22, 0));
     interaction.getFsm().addHandler(new class extends StubFSMHandler {
-        public constructor() {
-            super();
-        }
-
         public fsmUpdates(): void {
-            expect(interaction.getData().getSrcClientX()).toBe(11);
-            expect(interaction.getData().getSrcClientY()).toBe(23);
-            expect(interaction.getData().getTgtClientX()).toBe(12);
-            expect(interaction.getData().getTgtClientY()).toBe(24);
-            expect(interaction.getData().getButton()).toBe(0);
+            sx = interaction.getData().getSrcClientX();
+            sy = interaction.getData().getSrcClientY();
+            tx = interaction.getData().getTgtClientX();
+            ty = interaction.getData().getTgtClientY();
+            button = interaction.getData().getButton();
+            obj = interaction.getData().getTgtObject() as HTMLCanvasElement;
         }
     }());
     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 12, 24, 0));
+    expect(sx).toBe(11);
+    expect(sy).toBe(23);
+    expect(tx).toBe(12);
+    expect(ty).toBe(24);
+    expect(obj).toBe(canvas);
+    expect(button).toBe(0);
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
     expect(handler.fsmStops).not.toHaveBeenCalled();
@@ -187,20 +200,25 @@ test("click, multiple move and release start and stop the interaction", () => {
 });
 
 test("check data with one move.", () => {
+    let tx: number | undefined;
+    let ty: number | undefined;
+    let sx: number | undefined;
+    let sy: number | undefined;
+
     interaction.registerToNodes([canvas]);
     interaction.getFsm().addHandler(new class extends StubFSMHandler {
-        public constructor() {
-            super();
-        }
-
         public fsmStops(): void {
-            expect(interaction.getData().getSrcClientX()).toBe(11);
-            expect(interaction.getData().getSrcClientY()).toBe(23);
-            expect(interaction.getData().getTgtClientX()).toBe(15);
-            expect(interaction.getData().getTgtClientY()).toBe(25);
+            sx = interaction.getData().getSrcClientX();
+            sy = interaction.getData().getSrcClientY();
+            tx = interaction.getData().getTgtClientX();
+            ty = interaction.getData().getTgtClientY();
         }
     }());
     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, canvas, undefined, undefined, 11, 23));
     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 15, 25));
     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseUp, canvas, undefined, undefined, 15, 25));
+    expect(sx).toBe(11);
+    expect(sy).toBe(23);
+    expect(tx).toBe(15);
+    expect(ty).toBe(25);
 });

@@ -12,12 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { EventRegistrationToken } from "../../../src/fsm/Events";
-import { FSMHandler } from "../../../src/fsm/FSMHandler";
-import { KeysPressed } from "../../../src/interaction/library/KeysPressed";
+import {EventRegistrationToken, FSMHandler, KeysPressed} from "../../../src/interacto";
 import { StubFSMHandler } from "../../fsm/StubFSMHandler";
 import { createKeyEvent } from "../StubEvents";
-
 
 jest.mock("../../fsm/StubFSMHandler");
 
@@ -33,10 +30,7 @@ beforeEach(() => {
     interaction.getFsm().log(true);
     interaction.getFsm().addHandler(handler);
     document.documentElement.innerHTML = "<html><div><textarea id='text1'></textarea></div></html>";
-    const elt = document.getElementById("text1");
-    if (elt !== null) {
-        text = elt;
-    }
+    text = document.getElementById("text1") as HTMLElement;
 });
 
 

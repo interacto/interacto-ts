@@ -12,9 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FSMHandler } from "../../../src/fsm/FSMHandler";
-import { StubFSMHandler } from "../../fsm/StubFSMHandler";
-import { ColorPicked } from "../../../src/interaction/library/ColorPicked";
+import {ColorPicked, FSMHandler} from "../../../src/interacto";
+import {StubFSMHandler} from "../../fsm/StubFSMHandler";
 
 jest.mock("../../fsm/StubFSMHandler");
 
@@ -30,10 +29,7 @@ beforeEach(() => {
     interaction.getFsm().log(true);
     interaction.getFsm().addHandler(handler);
     document.documentElement.innerHTML = "<html><div><input id='col1' type='color'></div></html>";
-    const elt = document.getElementById("col1");
-    if (elt !== null) {
-        colorBox = elt;
-    }
+    colorBox = document.getElementById("col1") as HTMLElement;
 });
 
 test("input event starts and stops the interaction ColorPicked", () => {

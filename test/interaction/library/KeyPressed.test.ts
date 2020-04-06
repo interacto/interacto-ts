@@ -13,10 +13,8 @@
  */
 
 import { StubFSMHandler } from "../../fsm/StubFSMHandler";
-import { EventRegistrationToken } from "../../../src/fsm/Events";
+import {EventRegistrationToken, FSMHandler, KeyPressed} from "../../../src/interacto";
 import { createKeyEvent } from "../StubEvents";
-import { FSMHandler } from "../../../src/fsm/FSMHandler";
-import { KeyPressed } from "../../../src/interaction/library/KeyPressed";
 
 jest.mock("../../fsm/StubFSMHandler");
 
@@ -32,10 +30,7 @@ beforeEach(() => {
     interaction.getFsm().log(true);
     interaction.getFsm().addHandler(handler);
     document.documentElement.innerHTML = "<html><div><textarea id='text1'></textarea></div></html>";
-    const elt = document.getElementById("text1");
-    if (elt !== null) {
-        text = elt;
-    }
+    text = document.getElementById("text1") as HTMLElement;
 });
 
 test("type 'a' in the textarea starts and stops the interaction.", () => {

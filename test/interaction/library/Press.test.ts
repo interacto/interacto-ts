@@ -12,11 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Press } from "../../../src/interaction/library/Press";
-import { FSMHandler } from "../../../src/fsm/FSMHandler";
-import { StubFSMHandler } from "../../fsm/StubFSMHandler";
-import { createMouseEvent } from "../StubEvents";
-import { EventRegistrationToken } from "../../../src/fsm/Events";
+import {EventRegistrationToken, FSMHandler, Press} from "../../../src/interacto";
+import {StubFSMHandler} from "../../fsm/StubFSMHandler";
+import {createMouseEvent} from "../StubEvents";
 
 jest.mock("../../fsm/StubFSMHandler");
 
@@ -32,10 +30,7 @@ beforeEach(() => {
     interaction.getFsm().log(true);
     interaction.getFsm().addHandler(handler);
     document.documentElement.innerHTML = "<html><div><canvas id='canvas1' /></div></html>";
-    const elt = document.getElementById("canvas1");
-    if (elt !== null) {
-        canvas = elt;
-    }
+    canvas = document.getElementById("canvas1") as HTMLElement;
 });
 
 test("press on the canvas starts and stops interaction Press", () => {

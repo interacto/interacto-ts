@@ -12,11 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { EventRegistrationToken } from "../../../src/fsm/Events";
-import { DnD } from "../../../src/interaction/library/DnD";
-import { FSMHandler } from "../../../src/fsm/FSMHandler";
-import { StubFSMHandler } from "../../fsm/StubFSMHandler";
-import { createKeyEvent, createMouseEvent } from "../StubEvents";
+import {DnD, EventRegistrationToken, FSMHandler} from "../../../src/interacto";
+import {StubFSMHandler} from "../../fsm/StubFSMHandler";
+import {createKeyEvent, createMouseEvent} from "../StubEvents";
 
 jest.mock("../../fsm/StubFSMHandler");
 
@@ -32,10 +30,7 @@ beforeEach(() => {
     interaction.getFsm().log(true);
     interaction.getFsm().addHandler(handler);
     document.documentElement.innerHTML = "<html><canvas id='cv1'></canvas></html>";
-    const elt = document.getElementById("cv1");
-    if (elt !== null) {
-        canvas = elt;
-    }
+    canvas = document.getElementById("cv1") as HTMLElement;
 });
 
 test("press execution", () => {

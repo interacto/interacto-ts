@@ -12,12 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { EventRegistrationToken } from "../../../src/fsm/Events";
-import { FSMHandler } from "../../../src/fsm/FSMHandler";
-import { MultiTouch } from "../../../src/interaction/library/MultiTouch";
+import {EventRegistrationToken, FSMHandler, MultiTouch, TouchData} from "../../../src/interacto";
 import { StubFSMHandler } from "../../fsm/StubFSMHandler";
-import { createTouchEvent } from "../StubEvents";
-import { TouchData } from "../../../src/interaction/library/TouchData";
+import {createTouchEvent} from "../StubEvents";
 
 jest.mock("../../fsm/StubFSMHandler");
 
@@ -25,24 +22,24 @@ let interaction: MultiTouch;
 let canvas: HTMLElement;
 let handler: FSMHandler;
 
-function checkSrcTouchPoint(data: TouchData, lx: number, ly: number, sx: number, sy: number, id: number, o: EventTarget): void {
-    expect(data.getSrcClientX()).toStrictEqual(lx);
-    expect(data.getSrcClientY()).toStrictEqual(ly);
-    expect(data.getSrcScreenX()).toStrictEqual(sx);
-    expect(data.getSrcScreenY()).toStrictEqual(sy);
-    expect(data.getButton()).toBeUndefined();
-    expect(data.getTouchId()).toStrictEqual(id);
-    expect(data.getSrcObject()).toBe(o);
+function checkSrcTouchPoint(data: TouchData | undefined, lx: number, ly: number, sx: number, sy: number, id: number, o: EventTarget): void {
+    expect(data?.getSrcClientX()).toStrictEqual(lx);
+    expect(data?.getSrcClientY()).toStrictEqual(ly);
+    expect(data?.getSrcScreenX()).toStrictEqual(sx);
+    expect(data?.getSrcScreenY()).toStrictEqual(sy);
+    expect(data?.getButton()).toBeUndefined();
+    expect(data?.getTouchId()).toStrictEqual(id);
+    expect(data?.getSrcObject()).toBe(o);
 }
 
-function checkTgtTouchPoint(data: TouchData, lx: number, ly: number, sx: number, sy: number, id: number, o: EventTarget): void {
-    expect(data.getTgtClientX()).toStrictEqual(lx);
-    expect(data.getTgtClientY()).toStrictEqual(ly);
-    expect(data.getTgtScreenX()).toStrictEqual(sx);
-    expect(data.getTgtScreenY()).toStrictEqual(sy);
-    expect(data.getButton()).toBeUndefined();
-    expect(data.getTouchId()).toStrictEqual(id);
-    expect(data.getTgtObject()).toBe(o);
+function checkTgtTouchPoint(data: TouchData | undefined, lx: number, ly: number, sx: number, sy: number, id: number, o: EventTarget): void {
+    expect(data?.getTgtClientX()).toStrictEqual(lx);
+    expect(data?.getTgtClientY()).toStrictEqual(ly);
+    expect(data?.getTgtScreenX()).toStrictEqual(sx);
+    expect(data?.getTgtScreenY()).toStrictEqual(sy);
+    expect(data?.getButton()).toBeUndefined();
+    expect(data?.getTouchId()).toStrictEqual(id);
+    expect(data?.getTgtObject()).toBe(o);
 }
 
 beforeEach(() => {
@@ -51,10 +48,7 @@ beforeEach(() => {
     interaction = new MultiTouch(3);
     interaction.getFsm().addHandler(handler);
     document.documentElement.innerHTML = "<html><div><canvas id='canvas1' /></div></html>";
-    const elt = document.getElementById("canvas1");
-    if (elt !== null) {
-        canvas = elt;
-    }
+    canvas = document.getElementById("canvas1") as HTMLElement;
 });
 
 test("touch1", () => {
@@ -169,25 +163,28 @@ test("touch end", () => {
 });
 
 test("touch end data", () => {
+    let data1: TouchData | undefined;
+    let data2: TouchData | undefined;
+    let data3: TouchData | undefined;
+
     interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 1, canvas, 11, 23, 11, 23));
     interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 3, canvas, 21, 13, 21, 13));
     interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 2, canvas, 210, 130, 210, 130));
 
     interaction.getFsm().addHandler(new class extends StubFSMHandler {
-        public constructor() {
-            super();
-        }
         public fsmStops(): void {
-            checkSrcTouchPoint(interaction.getData().getTouchData()[0], 11, 23, 11, 23, 1, canvas);
-            checkTgtTouchPoint(interaction.getData().getTouchData()[0], 11, 23, 11, 23, 1, canvas);
-
-            checkSrcTouchPoint(interaction.getData().getTouchData()[1], 110, 230, 110, 230, 2, canvas);
-            checkTgtTouchPoint(interaction.getData().getTouchData()[1], 11, 23, 11, 23, 2, canvas);
-
-            checkSrcTouchPoint(interaction.getData().getTouchData()[2], 111, 231, 111, 231, 3, canvas);
-            checkTgtTouchPoint(interaction.getData().getTouchData()[2], 111, 231, 111, 231, 3, canvas);
+            data1 = Object.create(interaction.getData().getTouchData()[0]);
+            data2 = Object.create(interaction.getData().getTouchData()[1]);
+            data3 = Object.create(interaction.getData().getTouchData()[2]);
         }
     }());
 
     interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchend, 2, canvas, 11, 23, 11, 23));
+
+    checkSrcTouchPoint(data1, 11, 23, 11, 23, 1, canvas);
+    checkTgtTouchPoint(data1, 11, 23, 11, 23, 1, canvas);
+    checkSrcTouchPoint(data2, 21, 13, 21, 13, 3, canvas);
+    checkTgtTouchPoint(data2, 21, 13, 21, 13, 3, canvas);
+    checkSrcTouchPoint(data3, 210, 130, 210, 130, 2, canvas);
+    checkTgtTouchPoint(data3, 11, 23, 11, 23, 2, canvas);
 });

@@ -12,9 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FSMHandler } from "../../../src/fsm/FSMHandler";
-import { StubFSMHandler } from "../../fsm/StubFSMHandler";
-import { TextInputChanged } from "../../../src/interaction/library/TextInputChanged";
+import {FSMHandler, TextInputChanged} from "../../../src/interacto";
+import {StubFSMHandler} from "../../fsm/StubFSMHandler";
 
 jest.mock("../../fsm/StubFSMHandler");
 jest.useFakeTimers();
@@ -32,10 +31,7 @@ beforeEach(() => {
     interaction.getFsm().addHandler(handler);
     document.documentElement.innerHTML =
         "<html><div><input id='inT' type='text'/></div><div><textarea id='teA'/></textarea></div></html>";
-    const elt2 = document.getElementById("teA");
-    if (elt2 !== null) {
-        textArea = elt2;
-    }
+    textArea = document.getElementById("teA") as HTMLElement;
 });
 
 test("type in a text area starts and stops the interaction", () => {

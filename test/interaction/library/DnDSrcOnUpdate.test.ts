@@ -12,17 +12,21 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { DnD } from "../../../src/interaction/library/DnD";
-import { FSMHandler } from "../../../src/fsm/FSMHandler";
-import { StubFSMHandler } from "../../fsm/StubFSMHandler";
-import { createMouseEvent } from "../StubEvents";
-import { EventRegistrationToken } from "../../../src/fsm/Events";
+import {DnD, EventRegistrationToken, FSMHandler} from "../../../src/interacto";
+import {StubFSMHandler} from "../../fsm/StubFSMHandler";
+import {createMouseEvent} from "../StubEvents";
 
 jest.mock("../../fsm/StubFSMHandler");
 
 let interaction: DnD;
 let canvas: HTMLElement;
 let handler: FSMHandler;
+let tx: number | undefined;
+let ty: number | undefined;
+let sx: number | undefined;
+let sy: number | undefined;
+let button: number | undefined;
+let obj: HTMLCanvasElement | undefined;
 
 beforeEach(() => {
     jest.clearAllMocks();
@@ -32,10 +36,7 @@ beforeEach(() => {
     interaction.getFsm().log(true);
     interaction.getFsm().addHandler(handler);
     document.documentElement.innerHTML = "<html><canvas id='cav1'></canvas></html>";
-    const elt = document.getElementById("cav1");
-    if (elt !== null) {
-        canvas = elt;
-    }
+    canvas = document.getElementById("cav1") as HTMLElement;
 });
 
 test("press event don't trigger the interaction DnD", () => {
@@ -46,23 +47,26 @@ test("press event don't trigger the interaction DnD", () => {
     expect(handler.fsmCancels).not.toHaveBeenCalled();
 });
 
-//TODO Test always pass WIP
-test("check data when pressing", () => {
+test("check data press move", () => {
     interaction.registerToNodes([canvas]);
     interaction.getFsm().addHandler(new class extends StubFSMHandler {
-        public constructor() {
-            super();
-        }
-
         public fsmStarts(): void {
-            expect(interaction.getData().getSrcClientX()).toBe(11);
-            expect(interaction.getData().getSrcClientY()).toBe(23);
-            expect(interaction.getData().getTgtClientX()).toBe(11);
-            expect(interaction.getData().getTgtClientY()).toBe(23);
-            expect(interaction.getData().getButton()).toBe(0);
+            sx = interaction.getData().getSrcClientX();
+            sy = interaction.getData().getSrcClientY();
+            tx = interaction.getData().getTgtClientX();
+            ty = interaction.getData().getTgtClientY();
+            button = interaction.getData().getButton();
+            obj = interaction.getData().getTgtObject() as HTMLCanvasElement;
         }
     }());
     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, canvas, undefined, undefined, 11, 23));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 110, 230));
+    expect(sx).toBe(11);
+    expect(sy).toBe(23);
+    expect(tx).toBe(110);
+    expect(ty).toBe(230);
+    expect(button).toBe(0);
+    expect(obj).toBe(canvas);
 });
 
 test("click and move and release start and update the interaction", () => {
@@ -79,21 +83,22 @@ test("data of the press and drag part of the interaction", () => {
     interaction.registerToNodes([canvas]);
     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, canvas, undefined, undefined, 15, 20, 0));
     interaction.getFsm().addHandler(new class extends StubFSMHandler {
-        public constructor() {
-            super();
-        }
-
         public fsmUpdates(): void {
-            expect(interaction.getData().getSrcClientX()).toBe(15);
-            expect(interaction.getData().getSrcClientY()).toBe(20);
-            expect(interaction.getData().getTgtClientX()).toBe(16);
-            expect(interaction.getData().getTgtClientY()).toBe(21);
-            expect(interaction.getData().getButton()).toBe(0);
-            const tgtElem: HTMLCanvasElement = interaction.getData().getTgtObject() as HTMLCanvasElement;
-            expect(tgtElem).toBe(canvas);
+            sx = interaction.getData().getSrcClientX();
+            sy = interaction.getData().getSrcClientY();
+            tx = interaction.getData().getTgtClientX();
+            ty = interaction.getData().getTgtClientY();
+            button = interaction.getData().getButton();
+            obj = interaction.getData().getTgtObject() as HTMLCanvasElement;
         }
     }());
     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 16, 21));
+    expect(sx).toBe(15);
+    expect(sy).toBe(20);
+    expect(tx).toBe(16);
+    expect(ty).toBe(21);
+    expect(button).toBe(0);
+    expect(obj).toBe(canvas);
 });
 
 test("check data with multiple drag", () => {
@@ -101,17 +106,19 @@ test("check data with multiple drag", () => {
     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, canvas, undefined, undefined, 11, 23, 0));
     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 12, 22, 0));
     interaction.getFsm().addHandler(new class extends StubFSMHandler {
-        public constructor() {
-            super();
-        }
-
         public fsmUpdates(): void {
-            expect(interaction.getData().getSrcClientX()).toBe(12);
-            expect(interaction.getData().getSrcClientY()).toBe(22);
-            expect(interaction.getData().getTgtClientX()).toBe(12);
-            expect(interaction.getData().getTgtClientY()).toBe(24);
-            expect(interaction.getData().getButton()).toBe(0);
+            sx = interaction.getData().getSrcClientX();
+            sy = interaction.getData().getSrcClientY();
+            tx = interaction.getData().getTgtClientX();
+            ty = interaction.getData().getTgtClientY();
+            button = interaction.getData().getButton();
+            obj = interaction.getData().getTgtObject() as HTMLCanvasElement;
         }
     }());
     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 12, 24, 0));
+    expect(sx).toBe(12);
+    expect(sy).toBe(22);
+    expect(tx).toBe(12);
+    expect(ty).toBe(24);
+    expect(button).toBe(0);
 });

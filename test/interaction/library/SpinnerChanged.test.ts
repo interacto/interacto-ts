@@ -12,9 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FSMHandler } from "../../../src/fsm/FSMHandler";
-import { StubFSMHandler } from "../../fsm/StubFSMHandler";
-import { SpinnerChanged, SpinnerChangedFSM } from "../../../src/interaction/library/SpinnerChanged";
+import {FSMHandler, SpinnerChanged, SpinnerChangedFSM} from "../../../src/interacto";
+import {StubFSMHandler} from "../../fsm/StubFSMHandler";
 
 jest.mock("../../fsm/StubFSMHandler");
 
@@ -33,10 +32,7 @@ beforeEach(() => {
     interaction.getFsm().addHandler(handler);
     timer = SpinnerChangedFSM.getTimeGap();
     document.documentElement.innerHTML = "<html><div><input id='sp1' type='number' step='1' value='1'/></div></html>";
-    const elt = document.getElementById("sp1");
-    if (elt !== null) {
-        spinner = elt;
-    }
+    spinner = document.getElementById("sp1") as HTMLElement;
 });
 
 afterEach(() => {

@@ -55,6 +55,10 @@ export class PointDataImpl implements PointData {
         this.ctrlPressed = false;
         this.shiftPressed = false;
         this.metaPressed = false;
+        this.srcClientX = undefined;
+        this.srcClientY = undefined;
+        this.srcScreenX = undefined;
+        this.srcScreenY = undefined;
     }
 
     public isAltPressed(): boolean {

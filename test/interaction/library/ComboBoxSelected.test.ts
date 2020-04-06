@@ -12,9 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FSMHandler } from "../../../src/fsm/FSMHandler";
-import { StubFSMHandler } from "../../fsm/StubFSMHandler";
-import { ComboBoxSelected } from "../../../src/interaction/library/ComboBoxSelected";
+import {ComboBoxSelected, FSMHandler} from "../../../src/interacto";
+import {StubFSMHandler} from "../../fsm/StubFSMHandler";
 
 jest.mock("../../fsm/StubFSMHandler");
 
@@ -31,10 +30,7 @@ beforeEach(() => {
     interaction.getFsm().addHandler(handler);
     document.documentElement.innerHTML =
         "<html><div><select id='comb1'><option value='v1'>Volvo</option></select></html>";
-    const elt = document.getElementById("comb1");
-    if (elt !== null) {
-        comboBox = elt;
-    }
+    comboBox = document.getElementById("comb1") as HTMLElement;
 });
 
 test("input event starts and stops the interaction ComboBoxSelected", () => {

@@ -41,7 +41,7 @@ export class TouchDataImpl extends SrcTgtPointsDataImpl implements TouchData {
 
     public flush(): void {
         super.flush();
-        this.touchID = -1;
+        this.touchID = undefined;
     }
 
     public getButton(): number | undefined {

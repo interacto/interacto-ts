@@ -12,10 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { StubFSMHandler } from "../../fsm/StubFSMHandler";
-import { Click } from "../../../src/interaction/library/Click";
-import { EventRegistrationToken } from "../../../src/fsm/Events";
-import { createMouseEvent } from "../StubEvents";
+import {StubFSMHandler} from "../../fsm/StubFSMHandler";
+import {Click, EventRegistrationToken} from "../../../src/interacto";
+import {createMouseEvent} from "../StubEvents";
 
 jest.mock("../../fsm/StubFSMHandler");
 
@@ -31,10 +30,7 @@ beforeEach(() => {
     interaction.getFsm().log(true);
     interaction.getFsm().addHandler(handler);
     document.documentElement.innerHTML = "<html><div><canvas id='canvas1' /></div></html>";
-    const elt = document.getElementById("canvas1");
-    if (elt !== null) {
-        canvas = elt;
-    }
+    canvas = document.getElementById("canvas1") as HTMLElement;
 });
 
 test("click on a element starts and stops the interaction Click", () => {

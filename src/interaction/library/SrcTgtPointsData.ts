@@ -48,15 +48,15 @@ export interface SrcTgtPointsData extends PointData {
 
 export class SrcTgtPointsDataImpl extends PointDataImpl implements SrcTgtPointsData {
     /**The object pick at the end of the interaction*/
-    private tgtObject?: EventTarget;
+    protected tgtObject?: EventTarget;
 
-    private tgtClientX?: number;
+    protected tgtClientX?: number;
 
-    private tgtClientY?: number;
+    protected tgtClientY?: number;
 
-    private tgtScreenX?: number;
+    protected tgtScreenX?: number;
 
-    private tgtScreenY?: number;
+    protected tgtScreenY?: number;
 
     public getTgtClientX(): number {
         return this.tgtClientX ?? 0;

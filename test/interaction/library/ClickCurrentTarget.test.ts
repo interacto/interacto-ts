@@ -12,10 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FSMHandler } from "../../../src/fsm/FSMHandler";
-import { StubFSMHandler } from "../../fsm/StubFSMHandler";
-import { Click } from "../../../src/interaction/library/Click";
-import { createMouseEvent } from "../StubEvents";
+import {Click, FSMHandler} from "../../../src/interacto";
+import {StubFSMHandler} from "../../fsm/StubFSMHandler";
+import {createMouseEvent} from "../StubEvents";
 
 jest.mock("../../fsm/StubFSMHandler");
 
@@ -32,12 +31,8 @@ beforeEach(() => {
     interaction.getFsm().log(true);
     interaction.getFsm().addHandler(handler);
     document.documentElement.innerHTML = "<html><svg><g id='gro'><circle r=\"1\" id='circle'></circle><text></text></g></svg></html>";
-    const elt = document.getElementById("gro");
-    const elt2 = document.getElementById("circle");
-    if (elt !== null && elt2 !== null) {
-        groupe = elt;
-        circle = elt2;
-    }
+    groupe = document.getElementById("gro") as HTMLElement;
+    circle = document.getElementById("circle") as HTMLElement;
 });
 
 test("current target with group tag", () => {
