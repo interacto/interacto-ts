@@ -12,8 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {EventRegistrationToken, FSMHandler, MultiTouch, TouchData} from "../../../src/interacto";
-import { StubFSMHandler } from "../../fsm/StubFSMHandler";
+import {EventRegistrationToken, FSMHandler, MultiTouch, SrcTgtTouchData} from "../../../src/interacto";
+import {StubFSMHandler} from "../../fsm/StubFSMHandler";
 import {createTouchEvent} from "../StubEvents";
 
 jest.mock("../../fsm/StubFSMHandler");
@@ -22,7 +22,7 @@ let interaction: MultiTouch;
 let canvas: HTMLElement;
 let handler: FSMHandler;
 
-function checkSrcTouchPoint(data: TouchData | undefined, lx: number, ly: number, sx: number, sy: number, id: number, o: EventTarget): void {
+function checkSrcTouchPoint(data: SrcTgtTouchData | undefined, lx: number, ly: number, sx: number, sy: number, id: number, o: EventTarget): void {
     expect(data?.getSrcClientX()).toStrictEqual(lx);
     expect(data?.getSrcClientY()).toStrictEqual(ly);
     expect(data?.getSrcScreenX()).toStrictEqual(sx);
@@ -32,7 +32,7 @@ function checkSrcTouchPoint(data: TouchData | undefined, lx: number, ly: number,
     expect(data?.getSrcObject()).toBe(o);
 }
 
-function checkTgtTouchPoint(data: TouchData | undefined, lx: number, ly: number, sx: number, sy: number, id: number, o: EventTarget): void {
+function checkTgtTouchPoint(data: SrcTgtTouchData | undefined, lx: number, ly: number, sx: number, sy: number, id: number, o: EventTarget): void {
     expect(data?.getTgtClientX()).toStrictEqual(lx);
     expect(data?.getTgtClientY()).toStrictEqual(ly);
     expect(data?.getTgtScreenX()).toStrictEqual(sx);
@@ -163,9 +163,9 @@ test("touch end", () => {
 });
 
 test("touch end data", () => {
-    let data1: TouchData | undefined;
-    let data2: TouchData | undefined;
-    let data3: TouchData | undefined;
+    let data1: SrcTgtTouchData | undefined;
+    let data2: SrcTgtTouchData | undefined;
+    let data3: SrcTgtTouchData | undefined;
 
     interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 1, canvas, 11, 23, 11, 23));
     interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 3, canvas, 21, 13, 21, 13));

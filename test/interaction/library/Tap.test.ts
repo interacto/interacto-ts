@@ -85,11 +85,6 @@ describe("tap 1", () => {
         expect(touch[0].getSrcScreenX()).toBe(15);
         expect(touch[0].getSrcScreenY()).toBe(20);
         expect(touch[0].getSrcObject()).toBe(canvas);
-        expect(touch[0].getTgtClientX()).toBe(16);
-        expect(touch[0].getTgtClientY()).toBe(21);
-        expect(touch[0].getTgtScreenX()).toBe(15);
-        expect(touch[0].getTgtScreenY()).toBe(20);
-        expect(touch[0].getTgtObject()).toBe(canvas);
     });
 });
 
@@ -157,11 +152,6 @@ describe("tap 2", () => {
         expect(touch[0].getSrcScreenX()).toBe(15);
         expect(touch[0].getSrcScreenY()).toBe(20);
         expect(touch[0].getSrcObject()).toBe(canvas);
-        expect(touch[1].getTgtClientX()).toBe(14);
-        expect(touch[1].getTgtClientY()).toBe(28);
-        expect(touch[1].getTgtScreenX()).toBe(12);
-        expect(touch[1].getTgtScreenY()).toBe(27);
-        expect(touch[1].getTgtObject()).toBe(canvas);
     });
 });
 
@@ -236,15 +226,5 @@ describe("tap 3", () => {
         expect(touch[0].getSrcScreenX()).toBe(15);
         expect(touch[0].getSrcScreenY()).toBe(20);
         expect(touch[0].getSrcObject()).toBe(canvas);
-        expect(touch[1].getTgtClientX()).toBe(14);
-        expect(touch[1].getTgtClientY()).toBe(28);
-        expect(touch[1].getTgtScreenX()).toBe(12);
-        expect(touch[1].getTgtScreenY()).toBe(27);
-        expect(touch[1].getTgtObject()).toBe(canvas);
-        expect(touch[2].getTgtClientX()).toBe(114);
-        expect(touch[2].getTgtClientY()).toBe(128);
-        expect(touch[2].getTgtScreenX()).toBe(112);
-        expect(touch[2].getTgtScreenY()).toBe(217);
-        expect(touch[2].getTgtObject()).toBe(canvas);
     });
 });

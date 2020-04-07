@@ -12,26 +12,23 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {PointData} from "./PointData";
-import {PointDataImpl} from "./PointDataImpl";
+import { SrcTgtPointsData, SrcTgtPointsDataImpl } from "./SrcTgtPointsData";
 
-/**
- * The touch interaction data interface
- */
-export interface TouchData extends PointData {
+export interface SrcTgtTouchData extends SrcTgtPointsData {
     /**
-     * @return The ID of the touch.
-     */
+	 * @return The ID of the touch.
+	 */
     getTouchId(): number | undefined;
 }
 
-export class TouchDataImpl extends PointDataImpl implements TouchData {
+export class SrcTgtTouchDataImpl extends SrcTgtPointsDataImpl implements SrcTgtTouchData {
     private touchID: number | undefined;
 
     public constructor(id?: number, cx?: number, cy?: number, sx?: number, sy?: number, target?: EventTarget) {
         super();
         this.touchID = id;
         this.setPointData(cx, cy, sx, sy, undefined, target, target);
+        this.setTgtData(cx, cy, sx, sy, target);
     }
 
     public getTouchId(): number | undefined {
@@ -50,5 +47,20 @@ export class TouchDataImpl extends PointDataImpl implements TouchData {
     public getButton(): number | undefined {
         return undefined;
     }
-}
 
+    public isAltPressed(): boolean {
+        return false;
+    }
+
+    public isCtrlPressed(): boolean {
+        return false;
+    }
+
+    public isShiftPressed(): boolean {
+        return false;
+    }
+
+    public isMetaPressed(): boolean {
+        return false;
+    }
+}

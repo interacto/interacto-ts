@@ -13,7 +13,7 @@
  */
 
 import { InteractionData } from "../InteractionData";
-import { TouchData, TouchDataImpl } from "./TouchData";
+import { SrcTgtTouchData, SrcTgtTouchDataImpl } from "./SrcTgtTouchData";
 
 /**
  * Multi-touch interaction data interface
@@ -22,7 +22,7 @@ export interface MultiTouchData extends InteractionData {
     /**
 	 * @return The list of touch data.
 	 */
-    getTouchData(): Array<TouchData>;
+    getTouchData(): Array<SrcTgtTouchData>;
 }
 
 
@@ -30,16 +30,16 @@ export interface MultiTouchData extends InteractionData {
  * Multi-touch interaction data implementation
  */
 export class MultiTouchDataImpl implements MultiTouchData {
-    private readonly touchesData: Map<number, TouchDataImpl>;
+    private readonly touchesData: Map<number, SrcTgtTouchDataImpl>;
 
     /**
 	 * Creates the interaction data
 	 */
     public constructor() {
-        this.touchesData = new Map<number, TouchDataImpl>();
+        this.touchesData = new Map<number, SrcTgtTouchDataImpl>();
     }
 
-    public getTouchData(): Array<TouchData> {
+    public getTouchData(): Array<SrcTgtTouchData> {
         return [...this.touchesData.values()];
     }
 
@@ -47,7 +47,7 @@ export class MultiTouchDataImpl implements MultiTouchData {
 	 * Adds a touch data to this multi-touch data
 	 * @param data The touch data to add
 	 */
-    public addTouchData(data: TouchDataImpl): void {
+    public addTouchData(data: SrcTgtTouchDataImpl): void {
         const id = data.getTouchId();
         if(id !== undefined) {
             this.touchesData.set(id, data);

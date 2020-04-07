@@ -12,8 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { InteractionData } from "../InteractionData";
-import { TouchData, TouchDataImpl } from "./TouchData";
+import {InteractionData} from "../InteractionData";
+import {TouchData, TouchDataImpl} from "./TouchData";
 
 /**
  * Tapping data interface.

@@ -15,7 +15,7 @@
 import { ConcurrentFSM } from "../../fsm/ConcurrentFSM";
 import { ConcurrentInteraction } from "../ConcurrentInteraction";
 import { MultiTouchData, MultiTouchDataImpl } from "./MultiTouchData";
-import { TouchDataImpl } from "./TouchData";
+import { SrcTgtTouchDataImpl } from "./SrcTgtTouchData";
 import { TouchDnDFSM, TouchDnDFSMHandler } from "./TouchDnD";
 
 /**
@@ -76,7 +76,7 @@ export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouch
                 const touch = event.changedTouches[0];
                 if(touch !== undefined) {
                     (this.parent.data as (MultiTouchDataImpl)).addTouchData(
-                        new TouchDataImpl(touch.identifier, touch.clientX, touch.clientY, touch.screenX, touch.screenY, touch.target));
+                        new SrcTgtTouchDataImpl(touch.identifier, touch.clientX, touch.clientY, touch.screenX, touch.screenY, touch.target));
                 }
             }
 

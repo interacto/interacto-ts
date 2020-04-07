@@ -22,8 +22,8 @@ import {TouchPressureTransition} from "../../fsm/TouchPressureTransition";
 import {StdState} from "../../fsm/StdState";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 import {CancellingState} from "../../fsm/CancellingState";
-import {TouchDataImpl} from "./TouchData";
 import {TapData, TapDataImpl} from "./TapData";
+import {TouchDataImpl} from "./TouchData";
 
 /**
  * The FSM for the Tap interaction

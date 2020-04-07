@@ -13,7 +13,7 @@
  */
 
 import { InteractionImpl } from "../InteractionImpl";
-import { TouchData, TouchDataImpl } from "./TouchData";
+import { SrcTgtTouchData, SrcTgtTouchDataImpl } from "./SrcTgtTouchData";
 import { FSM } from "../../fsm/FSM";
 import { FSMDataHandler } from "../../fsm/FSMDataHandler";
 import { StdState } from "../../fsm/StdState";
@@ -132,7 +132,7 @@ export interface TouchDnDFSMHandler extends FSMDataHandler {
 /**
  * A touch interaction (that works as a DnD)
  */
-export class TouchDnD extends InteractionImpl<TouchData, TouchDnDFSM> {
+export class TouchDnD extends InteractionImpl<SrcTgtTouchData, TouchDnDFSM> {
     private readonly handler: TouchDnDFSMHandler;
 
     /**
@@ -150,9 +150,9 @@ export class TouchDnD extends InteractionImpl<TouchData, TouchDnDFSM> {
 
             public onTouch(evt: TouchEvent): void {
                 const touch: Touch = evt.changedTouches[0];
-                (this._parent.data as (TouchDataImpl)).setPointData(touch.clientX, touch.clientY, touch.screenX, touch.screenY,
+                (this._parent.data as (SrcTgtTouchDataImpl)).setPointData(touch.clientX, touch.clientY, touch.screenX, touch.screenY,
                     undefined, touch.target, touch.target);
-                (this._parent.data as (TouchDataImpl)).setTouchId(touch.identifier);
+                (this._parent.data as (SrcTgtTouchDataImpl)).setTouchId(touch.identifier);
                 this.setTgtData(evt);
             }
 
@@ -169,7 +169,7 @@ export class TouchDnD extends InteractionImpl<TouchData, TouchDnDFSM> {
             }
 
             private setTgtData(evt: TouchEvent): void {
-                const data = this._parent.data as (TouchDataImpl);
+                const data = this._parent.data as (SrcTgtTouchDataImpl);
                 const touch: Touch | undefined = getTouch(evt.changedTouches, data.getTouchId());
                 if(touch !== undefined) {
                     data.setTgtData(touch.clientX, touch.clientY, touch.screenX, touch.screenY, touch.target);
@@ -179,7 +179,7 @@ export class TouchDnD extends InteractionImpl<TouchData, TouchDnDFSM> {
         this.getFsm().buildFSM(this.handler);
     }
 
-    public createDataObject(): TouchData {
-        return new TouchDataImpl();
+    public createDataObject(): SrcTgtTouchData {
+        return new SrcTgtTouchDataImpl();
     }
 }
