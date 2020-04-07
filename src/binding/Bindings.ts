@@ -37,6 +37,8 @@ import { MultiTouch } from "../interaction/library/MultiTouch";
 import { MultiTouchData } from "../interaction/library/MultiTouchData";
 import {Tap} from "../interaction/library/Tap";
 import {TapData} from "../interaction/library/TapData";
+import {LongTouch} from "../interaction/library/LongTouch";
+import {TouchData} from "../interaction/library/TouchData";
 
 let observer: BindingsObserver | undefined;
 
@@ -114,4 +116,14 @@ export function multiTouchBinder<C extends Command>(nbTouches: number): Interact
 export function tapBinder<C extends Command>(nbTap: number): InteractionUpdateBinder<Tap, TapData> {
     return new UpdateBinder<C, Tap, TapData>(observer)
         .usingInteraction<Tap, TapData>(() => new Tap(nbTap));
+}
+
+/**
+ * Creates a widget binding that uses the long touch interaction.
+ * @param duration The duration of the touch to end the user interaction.
+ * If this duration is not reached, the interaction is cancelled.
+ */
+export function longTouchBinder<C extends Command>(duration: number): InteractionUpdateBinder<LongTouch, TouchData> {
+    return new UpdateBinder<C, LongTouch, TouchData>(observer)
+        .usingInteraction<LongTouch, TouchData>(() => new LongTouch(duration));
 }
