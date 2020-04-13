@@ -168,7 +168,13 @@ export class FSM {
 
     private processEvent(event: Event): boolean {
         if (this.currentSubFSM !== undefined) {
+            if (this.asLogFSM) {
+                catFSM.info(`processing event ${event} in a sub-FSM`);
+            }
             return this.currentSubFSM.process(event);
+        }
+        if (this.asLogFSM) {
+            catFSM.info(`processing event ${event} at state ${this.getCurrentState().getName()}`);
         }
         return this.getCurrentState().process(event);
     }
