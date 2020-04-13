@@ -89,6 +89,16 @@ test("cannot build the interaction twice", () => {
             expect(handler.fsmStops).toHaveBeenCalledTimes(1);
             expect(handler.fsmCancels).not.toHaveBeenCalled();
         });
+
+
+        test("two taps then timeout", () => {
+            interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 3, canvas));
+            interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchend, 3, canvas));
+            jest.runOnlyPendingTimers();
+            expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+            expect(handler.fsmStops).not.toHaveBeenCalled();
+            expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
+        });
     });
 });
 

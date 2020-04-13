@@ -121,8 +121,8 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM> 
 
     private callBackMutationObserver(mutationList: Array<MutationRecord>): void {
         mutationList.forEach(mutation => {
-            mutation.addedNodes.forEach(node => this.onNewNodeRegistered(node));
-            mutation.removedNodes.forEach(node => this.onNodeUnregistered(node));
+            mutation.addedNodes.forEach(node => this.registerToNodes([node]));
+            mutation.removedNodes.forEach(node => this.unregisterFromNodes([node]));
         });
     }
 
@@ -178,8 +178,7 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM> 
      */
     public registerToNodeChildren(elementToObserve: Node): void {
         elementToObserve.childNodes.forEach((node: Node) => {
-            this._additionalNodes.push(node);
-            this.onNewNodeRegistered(node);
+            this.registerToNodes([node]);
         });
 
         const newMutationObserver = new MutationObserver(mutations => this.callBackMutationObserver(mutations));
@@ -391,8 +390,11 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM> 
 	 */
     public uninstall(): void {
         this.disposable.unsubscribe();
+        this._registeredNodes.forEach(n => this.onNodeUnregistered(n));
         this._registeredNodes.clear();
         this._additionalNodes.length = 0;
+        this.listMutationObserver.length = 0;
+        this._registeredTargetNode.forEach(n => this.onNodeUnregistered(n));
         this._registeredTargetNode.clear();
         this.setActivated(false);
     }

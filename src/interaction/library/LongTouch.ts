@@ -88,7 +88,9 @@ class LongTouchFSM extends FSM {
             }
 
             public isGuardOK(event: Event): boolean {
-                return event instanceof TouchEvent && event.changedTouches[0].identifier === this._parent.currentTouchID;
+                return super.isGuardOK(event)
+                    && event instanceof TouchEvent
+                    && event.changedTouches[0].identifier === this._parent.currentTouchID;
             }
         }(this, touched, releasedTooEarly);
 
