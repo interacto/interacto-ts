@@ -39,6 +39,8 @@ import {Tap} from "../interaction/library/Tap";
 import {TapData} from "../interaction/library/TapData";
 import {LongTouch} from "../interaction/library/LongTouch";
 import {TouchData} from "../interaction/library/TouchData";
+import {Swipe} from "../interaction/library/Swipe";
+import {SrcTgtTouchData} from "../interaction/library/SrcTgtTouchData";
 
 let observer: BindingsObserver | undefined;
 
@@ -126,4 +128,17 @@ export function tapBinder<C extends Command>(nbTap: number): InteractionUpdateBi
 export function longTouchBinder<C extends Command>(duration: number): InteractionUpdateBinder<LongTouch, TouchData> {
     return new UpdateBinder<C, LongTouch, TouchData>(observer)
         .usingInteraction<LongTouch, TouchData>(() => new LongTouch(duration));
+}
+
+/**
+ * Creates a widget binding that uses the swipe interaction.
+ * If this duration is not reached, the interaction is cancelled.
+ * @param horizontal Defines whether the swipe is horizontal or vertical
+ * @param minLength The minimal distance from the starting point to the release point for validating the swipe
+ * @param pxTolerance The tolerance rate in pixels accepted while executing the swipe
+ */
+export function swipeBinder<C extends Command>(horizontal: boolean, minLength: number, pxTolerance: number):
+InteractionUpdateBinder<Swipe, SrcTgtTouchData> {
+    return new UpdateBinder<C, Swipe, SrcTgtTouchData>(observer)
+        .usingInteraction<Swipe, SrcTgtTouchData>(() => new Swipe(horizontal, minLength, pxTolerance));
 }

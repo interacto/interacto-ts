@@ -111,6 +111,7 @@ export * from "./interaction/library/ScrollDataImpl";
 export * from "./interaction/library/SpinnerChanged";
 export * from "./interaction/library/SrcTgtPointsData";
 export * from "./interaction/library/SrcTgtTouchData";
+export * from "./interaction/library/Swipe";
 export * from "./interaction/library/Tap";
 export * from "./interaction/library/TapData";
 export * from "./interaction/library/TextInputChanged";

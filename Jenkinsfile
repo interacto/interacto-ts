@@ -30,7 +30,7 @@ pipeline {
                 git branch: 'master', url: "https://github.com/interacto/interacto-ts-api"
             }
         }
-        
+
         stage ('NPM install') {
             steps {
                 nodejs(nodeJSInstallationName: 'node12') {
@@ -40,7 +40,7 @@ pipeline {
                 }
             }
         }
-        
+
         stage ('NPM build') {
             steps {
                 nodejs(nodeJSInstallationName: 'node12') {
@@ -54,7 +54,7 @@ pipeline {
                     cloverReportDir: 'coverage',
                     cloverReportFileName: 'clover.xml',
                     healthyTarget: [methodCoverage: 100, conditionalCoverage: 100, statementCoverage: 100],
-                    failingTarget: [methodCoverage: 85, conditionalCoverage: 75, statementCoverage: 90]
+                    failingTarget: [methodCoverage: 90, conditionalCoverage: 80, statementCoverage: 90]
                 ])
             }
         }
