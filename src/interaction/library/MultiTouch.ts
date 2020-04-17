@@ -12,11 +12,11 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ConcurrentFSM } from "../../fsm/ConcurrentFSM";
-import { ConcurrentInteraction } from "../ConcurrentInteraction";
-import { MultiTouchData, MultiTouchDataImpl } from "./MultiTouchData";
-import { SrcTgtTouchDataImpl } from "./SrcTgtTouchData";
-import { TouchDnDFSM, TouchDnDFSMHandler } from "./TouchDnD";
+import {ConcurrentFSM} from "../../fsm/ConcurrentFSM";
+import {ConcurrentInteraction} from "../ConcurrentInteraction";
+import {MultiTouchData, MultiTouchDataImpl} from "./MultiTouchData";
+import {SrcTgtTouchDataImpl} from "./SrcTgtTouchData";
+import {TouchDnDFSM, TouchDnDFSMHandler} from "./TouchDnD";
 
 /**
  * The FSM that defines a multi-touch interaction (that works like a DnD)
@@ -89,7 +89,15 @@ export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouch
             }
 
             public reinitData(): void {
-                this.parent.reinitData();
+                const currentIDs = this.parent.getFsm().getConccurFSMs()
+                    .filter(fsm => fsm.isStarted())
+                    .map(fsm => fsm.getTouchId());
+
+                this.parent.getData()
+                    .getTouchData()
+                    .filter(data => !currentIDs.includes(data.getTouchId()))
+                    .forEach(data => (this.parent.getData() as MultiTouchDataImpl)
+                        .removeTouchData(data.getTouchId() as number));
             }
         }(this);
 

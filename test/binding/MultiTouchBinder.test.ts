@@ -11,11 +11,18 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Subscription } from "rxjs";
-import { CommandsRegistry, EventRegistrationToken, MultiTouch, multiTouchBinder, MultiTouchData,
-    MultiTouchDataImpl, UndoCollector, WidgetBinding } from "../../src/interacto";
-import { StubCmd } from "../command/StubCmd";
-import { createTouchEvent } from "../interaction/StubEvents";
+import {Subscription} from "rxjs";
+import {
+    CommandsRegistry,
+    EventRegistrationToken,
+    MultiTouch,
+    multiTouchBinder,
+    MultiTouchData,
+    UndoCollector,
+    WidgetBinding
+} from "../../src/interacto";
+import {StubCmd} from "../command/StubCmd";
+import {createTouchEvent} from "../interaction/StubEvents";
 
 let c1: HTMLElement;
 let binding: WidgetBinding<StubCmd, MultiTouch, MultiTouchData>;
@@ -46,10 +53,6 @@ afterEach(() => {
 test("run multi-touch produces cmd", () => {
     binding = multiTouchBinder(2)
         .toProduce(() => cmd)
-        .then((c, i) => {
-            expect(c).toBeInstanceOf(StubCmd);
-            expect(i).toBeInstanceOf(MultiTouchDataImpl);
-        })
         .on(c1)
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
@@ -67,24 +70,18 @@ test("run multi-touch produces cmd", () => {
 
 
 test("run multi-touch two times recycle events", () => {
+    const data: Array<number> = [];
+    const dataFirst: Array<number> = [];
+
     binding = multiTouchBinder(2)
         .toProduce(() => new StubCmd(true))
         .first((c, i) => {
-            expect(c).toBeInstanceOf(StubCmd);
-            expect(i).toBeInstanceOf(MultiTouchDataImpl);
-        })
-        .then((c, i) => {
-            expect(c).toBeInstanceOf(StubCmd);
-            expect(i).toBeInstanceOf(MultiTouchDataImpl);
-        })
-        .end((c, i) => {
-            expect(c).toBeInstanceOf(StubCmd);
-            expect(i).toBeInstanceOf(MultiTouchDataImpl);
-        })
-        .endOrCancel(i => {
-            expect(i).toBeInstanceOf(MultiTouchDataImpl);
+            dataFirst.push(i === undefined ? -1 : i.getTouchData().length);
         })
         .on(c1)
+        .end((c, i) => {
+            data.push(i === undefined ? -1 : i.getTouchData().length);
+        })
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
@@ -98,15 +95,17 @@ test("run multi-touch two times recycle events", () => {
 
     expect(binding).not.toBeNull();
     expect(producedCmds).toHaveLength(2);
+    expect(dataFirst).toHaveLength(2);
+    expect(dataFirst[0]).toStrictEqual(2);
+    expect(dataFirst[1]).toStrictEqual(2);
+    expect(data).toHaveLength(2);
+    expect(data[0]).toStrictEqual(2);
+    expect(data[1]).toStrictEqual(2);
 });
 
 test("unsubscribe does not trigger the binding", () => {
     binding = multiTouchBinder(2)
         .toProduce(() => cmd)
-        .then((c, i) => {
-            expect(c).toBeInstanceOf(StubCmd);
-            expect(i).toBeInstanceOf(MultiTouchDataImpl);
-        })
         .on(c1)
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));

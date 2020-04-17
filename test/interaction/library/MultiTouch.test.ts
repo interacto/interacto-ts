@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {EventRegistrationToken, FSMHandler, MultiTouch, SrcTgtTouchData} from "../../../src/interacto";
+import {EventRegistrationToken, FSMHandler, MultiTouch} from "../../../src/interacto";
 import {StubFSMHandler} from "../../fsm/StubFSMHandler";
 import {createTouchEvent} from "../StubEvents";
 
@@ -22,24 +22,26 @@ let interaction: MultiTouch;
 let canvas: HTMLElement;
 let handler: FSMHandler;
 
-function checkSrcTouchPoint(data: SrcTgtTouchData | undefined, lx: number, ly: number, sx: number, sy: number, id: number, o: EventTarget): void {
-    expect(data?.getSrcClientX()).toStrictEqual(lx);
-    expect(data?.getSrcClientY()).toStrictEqual(ly);
-    expect(data?.getSrcScreenX()).toStrictEqual(sx);
-    expect(data?.getSrcScreenY()).toStrictEqual(sy);
-    expect(data?.getButton()).toBeUndefined();
-    expect(data?.getTouchId()).toStrictEqual(id);
-    expect(data?.getSrcObject()).toBe(o);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function checkSrcTouchPoint(data: any, lx: number, ly: number, sx: number, sy: number, id: number, o: EventTarget): void {
+    expect(data.srcClientX).toStrictEqual(lx);
+    expect(data.srcClientY).toStrictEqual(ly);
+    expect(data.srcScreenX).toStrictEqual(sx);
+    expect(data.srcScreenY).toStrictEqual(sy);
+    expect(data.button).toBeUndefined();
+    expect(data.touchID).toStrictEqual(id);
+    expect(data.srcObject).toBe(o);
 }
 
-function checkTgtTouchPoint(data: SrcTgtTouchData | undefined, lx: number, ly: number, sx: number, sy: number, id: number, o: EventTarget): void {
-    expect(data?.getTgtClientX()).toStrictEqual(lx);
-    expect(data?.getTgtClientY()).toStrictEqual(ly);
-    expect(data?.getTgtScreenX()).toStrictEqual(sx);
-    expect(data?.getTgtScreenY()).toStrictEqual(sy);
-    expect(data?.getButton()).toBeUndefined();
-    expect(data?.getTouchId()).toStrictEqual(id);
-    expect(data?.getTgtObject()).toBe(o);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function checkTgtTouchPoint(data: any, lx: number, ly: number, sx: number, sy: number, id: number, o: EventTarget): void {
+    expect(data.tgtClientX).toStrictEqual(lx);
+    expect(data.tgtClientY).toStrictEqual(ly);
+    expect(data.tgtScreenX).toStrictEqual(sx);
+    expect(data.tgtScreenY).toStrictEqual(sy);
+    expect(data.button).toBeUndefined();
+    expect(data.touchID).toStrictEqual(id);
+    expect(data.tgtObject).toBe(o);
 }
 
 beforeEach(() => {
@@ -163,9 +165,12 @@ test("touch end", () => {
 });
 
 test("touch end data", () => {
-    let data1: SrcTgtTouchData | undefined;
-    let data2: SrcTgtTouchData | undefined;
-    let data3: SrcTgtTouchData | undefined;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let data1: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let data2: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let data3: any;
 
     interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 1, canvas, 11, 23, 11, 23));
     interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 3, canvas, 21, 13, 21, 13));
@@ -173,9 +178,9 @@ test("touch end data", () => {
 
     interaction.getFsm().addHandler(new class extends StubFSMHandler {
         public fsmStops(): void {
-            data1 = Object.create(interaction.getData().getTouchData()[0]);
-            data2 = Object.create(interaction.getData().getTouchData()[1]);
-            data3 = Object.create(interaction.getData().getTouchData()[2]);
+            data1 = {...interaction.getData().getTouchData()[0]};
+            data2 = {...interaction.getData().getTouchData()[1]};
+            data3 = {...interaction.getData().getTouchData()[2]};
         }
     }());
 

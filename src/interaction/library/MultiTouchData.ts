@@ -12,8 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { InteractionData } from "../InteractionData";
-import { SrcTgtTouchData, SrcTgtTouchDataImpl } from "./SrcTgtTouchData";
+import {InteractionData} from "../InteractionData";
+import {SrcTgtTouchData, SrcTgtTouchDataImpl} from "./SrcTgtTouchData";
 
 /**
  * Multi-touch interaction data interface
@@ -54,7 +54,16 @@ export class MultiTouchDataImpl implements MultiTouchData {
         }
     }
 
+    public removeTouchData(id: number): void {
+        const tdata = this.touchesData.get(id);
+        if(tdata !== undefined) {
+            this.touchesData.delete(id);
+            tdata.flush();
+        }
+    }
+
     public flush(): void {
+        this.touchesData.forEach(data => data.flush());
         this.touchesData.clear();
     }
 
