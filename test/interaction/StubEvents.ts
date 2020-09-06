@@ -13,12 +13,12 @@
  */
 
 export function createTouchEvent(type: string, id: number, target: EventTarget, screenX?: number, screenY?: number,
-                                 clientX?: number, clientY?: number): TouchEvent {
+                                 clientX?: number, clientY?: number, timeStamp?: number): TouchEvent {
     const screenXvalue = screenX ?? 0;
     const screenYvalue = screenY ?? 0;
     const clientXvalue = clientX ?? 0;
     const clientYvalue = clientY ?? 0;
-    return new TouchEvent(type, {
+    const evt = new TouchEvent(type, {
         view: window,
         bubbles: true,
         cancelable: false,
@@ -45,6 +45,12 @@ export function createTouchEvent(type: string, id: number, target: EventTarget, 
             touchType: "direct"
         }]
     });
+
+    if(timeStamp !== undefined) {
+        Object.defineProperty(evt, "timeStamp", {value: timeStamp})
+    }
+
+    return evt;
 }
 
 

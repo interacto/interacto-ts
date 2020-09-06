@@ -41,6 +41,7 @@ import {LongTouch} from "../interaction/library/LongTouch";
 import {TouchData} from "../interaction/library/TouchData";
 import {Swipe} from "../interaction/library/Swipe";
 import {SrcTgtTouchData} from "../interaction/library/SrcTgtTouchData";
+import {Pan} from "../interaction/library/Pan";
 
 let observer: BindingsObserver | undefined;
 
@@ -132,13 +133,26 @@ export function longTouchBinder<C extends Command>(duration: number): Interactio
 
 /**
  * Creates a widget binding that uses the swipe interaction.
- * If this duration is not reached, the interaction is cancelled.
+ * If this velocity is not reached, the interaction is cancelled.
  * @param horizontal Defines whether the swipe is horizontal or vertical
+ * @param minVelocity The minimal minVelocity to reach for validating the swipe. In pixels per second.
  * @param minLength The minimal distance from the starting point to the release point for validating the swipe
  * @param pxTolerance The tolerance rate in pixels accepted while executing the swipe
  */
-export function swipeBinder<C extends Command>(horizontal: boolean, minLength: number, pxTolerance: number):
+export function swipeBinder<C extends Command>(horizontal: boolean, minVelocity: number, minLength: number, pxTolerance: number):
 InteractionUpdateBinder<Swipe, SrcTgtTouchData> {
     return new UpdateBinder<C, Swipe, SrcTgtTouchData>(observer)
-        .usingInteraction<Swipe, SrcTgtTouchData>(() => new Swipe(horizontal, minLength, pxTolerance));
+        .usingInteraction<Swipe, SrcTgtTouchData>(() => new Swipe(horizontal, minVelocity, minLength, pxTolerance));
+}
+
+/**
+ * Creates a widget binding that uses the pan interaction.
+ * @param horizontal Defines whether the pan is horizontal or vertical
+ * @param minLength The minimal distance from the starting point to the release point for validating the pan
+ * @param pxTolerance The tolerance rate in pixels accepted while executing the pan
+ */
+export function panBinder<C extends Command>(horizontal: boolean, minLength: number, pxTolerance: number):
+InteractionUpdateBinder<Pan, SrcTgtTouchData> {
+    return new UpdateBinder<C, Pan, SrcTgtTouchData>(observer)
+        .usingInteraction<Pan, SrcTgtTouchData>(() => new Pan(horizontal, minLength, pxTolerance));
 }

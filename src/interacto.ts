@@ -102,6 +102,7 @@ export * from "./interaction/library/KeysTyped";
 export * from "./interaction/library/LongTouch";
 export * from "./interaction/library/MultiTouch";
 export * from "./interaction/library/MultiTouchData";
+export * from "./interaction/library/Pan";
 export * from "./interaction/library/PointData";
 export * from "./interaction/library/PointDataImpl";
 export * from "./interaction/library/Press";

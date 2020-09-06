@@ -12,19 +12,19 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 import {Subscription} from "rxjs";
+import {StubCmd} from "../command/StubCmd";
+import {createTouchEvent} from "../interaction/StubEvents";
 import {
     CommandsRegistry,
     EventRegistrationToken,
+    Pan,
+    panBinder,
     SrcTgtTouchData,
-    Swipe,
-    swipeBinder,
     UndoCollector,
     WidgetBinding
 } from "../../src/interacto";
-import {StubCmd} from "../command/StubCmd";
-import {createTouchEvent} from "../interaction/StubEvents";
 
-let binding: WidgetBinding<StubCmd, Swipe, SrcTgtTouchData>;
+let binding: WidgetBinding<StubCmd, Pan, SrcTgtTouchData>;
 let producedCmds: Array<StubCmd>;
 let disposable: Subscription;
 let c1: HTMLElement;
@@ -50,8 +50,8 @@ afterEach(() => {
     }
 });
 
-test("swipe horizontal right", () => {
-    binding = swipeBinder(true, 50, 5)
+test("pan horizontal right", () => {
+    binding = panBinder(true, 50, 5)
         .toProduce(() => new StubCmd(true))
         .on(c1)
         .bind();
@@ -69,8 +69,8 @@ test("swipe horizontal right", () => {
     expect(producedCmds[0]).toBeInstanceOf(StubCmd);
 });
 
-test("swipe horizontal left", () => {
-    binding = swipeBinder(true, 50, 5)
+test("pan horizontal left", () => {
+    binding = panBinder(true, 50, 5)
         .toProduce(() => new StubCmd(true))
         .on(c1)
         .bind();
@@ -89,8 +89,8 @@ test("swipe horizontal left", () => {
 });
 
 
-test("swipe vertical up", () => {
-    binding = swipeBinder(false, 10, 0)
+test("pan vertical up", () => {
+    binding = panBinder(false, 10, 0)
         .toProduce(() => new StubCmd(true))
         .on(c1)
         .bind();
@@ -108,8 +108,8 @@ test("swipe vertical up", () => {
     expect(producedCmds[0]).toBeInstanceOf(StubCmd);
 });
 
-test("swipe vertical down", () => {
-    binding = swipeBinder(false, 100, 1)
+test("pan vertical down", () => {
+    binding = panBinder(false, 100, 1)
         .toProduce(() => new StubCmd(true))
         .on(c1)
         .bind();
