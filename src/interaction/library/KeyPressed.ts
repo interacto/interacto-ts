@@ -30,7 +30,7 @@ export class KeyPressedFSM extends FSM {
 
     /**
 	 * Creates the FSM.
-	 * @param modifiersAccepted True: the FSM will consider key modifiers.
+	 * @param modifierAccepted True: the FSM will consider key modifiers.
 	 */
     public constructor(modifierAccepted: boolean) {
         super();
