@@ -13,21 +13,21 @@
  */
 
 import "jest";
-import { Subject } from "rxjs";
-import { CancelFSMException } from "../../src/fsm/CancelFSMException";
-import { CancellingState } from "../../src/fsm/CancellingState";
-import { FSM } from "../../src/fsm/FSM";
-import { InitState } from "../../src/fsm/InitState";
-import { InputState } from "../../src/fsm/InputState";
-import { OutputState } from "../../src/fsm/OutputState";
-import { StdState } from "../../src/fsm/StdState";
-import { SubFSMTransition } from "../../src/fsm/SubFSMTransition";
-import { TerminalState } from "../../src/fsm/TerminalState";
-import { TimeoutTransition } from "../../src/fsm/TimeoutTransition";
-import { catFSM } from "../../src/logging/ConfigLog";
-import { StubEvent, StubSubEvent1, StubSubEvent2, StubSubEvent3 } from "./StubEvent";
-import { StubFSMHandler } from "./StubFSMHandler";
-import { StubTransitionOK } from "./StubTransitionOK";
+import {Subject} from "rxjs";
+import {CancelFSMException} from "../../src/fsm/CancelFSMException";
+import {CancellingState} from "../../src/fsm/CancellingState";
+import {FSM} from "../../src/fsm/FSM";
+import {InitState} from "../../src/fsm/InitState";
+import {InputState} from "../../src/fsm/InputState";
+import {OutputState} from "../../src/fsm/OutputState";
+import {StdState} from "../../src/fsm/StdState";
+import {SubFSMTransition} from "../../src/fsm/SubFSMTransition";
+import {TerminalState} from "../../src/fsm/TerminalState";
+import {TimeoutTransition} from "../../src/fsm/TimeoutTransition";
+import {catFSM} from "../../src/logging/ConfigLog";
+import {StubEvent, StubSubEvent1, StubSubEvent2, StubSubEvent3} from "./StubEvent";
+import {StubFSMHandler} from "./StubFSMHandler";
+import {StubTransitionOK} from "./StubTransitionOK";
 
 jest.mock("../fsm/StubFSMHandler");
 
@@ -313,36 +313,30 @@ describe("testProcessUniqueEvent -- cancel", () => {
 
 
 class SubStubTransition1 extends StubTransitionOK {
-    public constructor(srcState: OutputState, tgtState: InputState, guard: boolean) {
-        super(srcState, tgtState, guard);
-    }
     public accept(event: StubEvent): boolean {
         return event instanceof StubSubEvent1;
     }
+
     public getAcceptedEvents(): Set<string> {
         return new Set(["StubSubEvent1"]);
     }
 }
 
 class SubStubTransition2 extends StubTransitionOK {
-    public constructor(srcState: OutputState, tgtState: InputState, guard: boolean) {
-        super(srcState, tgtState, guard);
-    }
     public accept(event: StubEvent): boolean {
         return event instanceof StubSubEvent2;
     }
+
     public getAcceptedEvents(): Set<string> {
         return new Set(["StubSubEvent2"]);
     }
 }
 
 class SubStubTransition3 extends StubTransitionOK {
-    public constructor(srcState: OutputState, tgtState: InputState, guard: boolean) {
-        super(srcState, tgtState, guard);
-    }
     public accept(event: StubEvent): boolean {
         return event instanceof StubSubEvent3;
     }
+
     public getAcceptedEvents(): Set<string> {
         return new Set(["StubSubEvent3"]);
     }
@@ -606,14 +600,18 @@ describe("testWithSubFSM", () => {
         const stateKO = new class implements InputState {
             public enter(): void {
             }
+
             public getName(): string {
                 return "foo";
             }
+
             public getFSM(): FSM {
                 return mainfsm;
             }
+
             public checkStartingState(): void {
             }
+
             public uninstall(): void {
             }
         }();

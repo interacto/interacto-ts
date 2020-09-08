@@ -12,10 +12,10 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Transition } from "../../src/fsm/Transition";
-import { StubEvent, StubSubEvent1, StubSubEvent2, StubSubEvent3 } from "./StubEvent";
-import { InputState } from "../../src/fsm/InputState";
-import { OutputState } from "../../src/fsm/OutputState";
+import {Transition} from "../../src/fsm/Transition";
+import {StubEvent, StubSubEvent1, StubSubEvent2, StubSubEvent3} from "./StubEvent";
+import {InputState} from "../../src/fsm/InputState";
+import {OutputState} from "../../src/fsm/OutputState";
 
 export class StubTransitionOK extends Transition {
     public guard: boolean;
@@ -39,10 +39,6 @@ export class StubTransitionOK extends Transition {
 }
 
 export class SubStubTransition1 extends StubTransitionOK {
-    public constructor(srcState: OutputState, tgtState: InputState, guard?: boolean) {
-        super(srcState, tgtState, guard);
-    }
-
     public accept(event: StubEvent): boolean {
         return event instanceof StubSubEvent1;
     }
@@ -53,10 +49,6 @@ export class SubStubTransition1 extends StubTransitionOK {
 }
 
 export class SubStubTransition2 extends StubTransitionOK {
-    public constructor(srcState: OutputState, tgtState: InputState, guard?: boolean) {
-        super(srcState, tgtState, guard);
-    }
-
     public accept(event: StubEvent): boolean {
         return event instanceof StubSubEvent2;
     }
@@ -67,10 +59,6 @@ export class SubStubTransition2 extends StubTransitionOK {
 }
 
 export class SubStubTransition3 extends StubTransitionOK {
-    public constructor(srcState: OutputState, tgtState: InputState, guard?: boolean) {
-        super(srcState, tgtState, guard);
-    }
-
     public accept(event: StubEvent): boolean {
         return event instanceof StubSubEvent3;
     }

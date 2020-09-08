@@ -12,9 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { StateImpl } from "./StateImpl";
-import { InputState } from "./InputState";
-import { FSM } from "./FSM";
+import {StateImpl} from "./StateImpl";
+import {InputState} from "./InputState";
+import {FSM} from "./FSM";
 
 /**
  * An FSM state.
@@ -23,10 +23,10 @@ import { FSM } from "./FSM";
  */
 export class TerminalState extends StateImpl implements InputState {
     /**
-	 * Creates the terminal state.
-	 * @param stateMachine The FSM that will contain the state.
-	 * @param stateName The name of this state.
-	 */
+     * Creates the terminal state.
+     * @param stateMachine The FSM that will contain the state.
+     * @param stateName The name of this state.
+     */
     public constructor(stateMachine: FSM, stateName: string) {
         super(stateMachine, stateName);
     }

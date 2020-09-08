@@ -11,10 +11,10 @@
  * You should have received a copy of the GNU General export function License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Subscription } from "rxjs";
-import { CommandsRegistry, isSpinner, spinnerBinder, SpinnerChanged, SpinnerChangedFSM, UndoCollector,
-    WidgetBinding, WidgetData } from "../../src/interacto";
-import { StubCmd } from "../command/StubCmd";
+import {Subscription} from "rxjs";
+import {CommandsRegistry, isSpinner, spinnerBinder, SpinnerChanged, SpinnerChangedFSM, UndoCollector,
+    WidgetBinding, WidgetData} from "../../src/interacto";
+import {StubCmd} from "../command/StubCmd";
 
 let widget1: HTMLInputElement;
 let widget2: HTMLInputElement;
@@ -48,7 +48,7 @@ afterEach(() => {
     }
     CommandsRegistry.getInstance().clear();
     UndoCollector.getInstance().clear();
-    if(binding !== undefined) {
+    if (binding !== undefined) {
         binding.uninstallBinding();
     }
 });
@@ -85,7 +85,9 @@ test("testInit1Executed", () => {
     binding = spinnerBinder()
         .on(widget1)
         .toProduce(_i => cmd)
-        .first(c => c.exec = 10)
+        .first(c => {
+            c.exec = 10;
+        })
         .bind();
 
     widget1.dispatchEvent(new Event("input"));

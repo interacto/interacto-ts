@@ -12,18 +12,18 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { InteractionImpl } from "../InteractionImpl";
-import { SrcTgtTouchData, SrcTgtTouchDataImpl } from "./SrcTgtTouchData";
-import { FSM } from "../../fsm/FSM";
-import { FSMDataHandler } from "../../fsm/FSMDataHandler";
-import { StdState } from "../../fsm/StdState";
-import { TerminalState } from "../../fsm/TerminalState";
-import { TouchPressureTransition } from "../../fsm/TouchPressureTransition";
-import { OutputState } from "../../fsm/OutputState";
-import { InputState } from "../../fsm/InputState";
-import { TouchMoveTransition } from "../../fsm/TouchMoveTransition";
-import { TouchReleaseTransition } from "../../fsm/TouchReleaseTransition";
-import { getTouch } from "../../fsm/Events";
+import {InteractionImpl} from "../InteractionImpl";
+import {SrcTgtTouchData, SrcTgtTouchDataImpl} from "./SrcTgtTouchData";
+import {FSM} from "../../fsm/FSM";
+import {FSMDataHandler} from "../../fsm/FSMDataHandler";
+import {StdState} from "../../fsm/StdState";
+import {TerminalState} from "../../fsm/TerminalState";
+import {TouchPressureTransition} from "../../fsm/TouchPressureTransition";
+import {OutputState} from "../../fsm/OutputState";
+import {InputState} from "../../fsm/InputState";
+import {TouchMoveTransition} from "../../fsm/TouchMoveTransition";
+import {TouchReleaseTransition} from "../../fsm/TouchReleaseTransition";
+import {getTouch} from "../../fsm/Events";
 
 /**
  * The FSM that defines a touch interaction (that works like a DnD)
@@ -32,8 +32,8 @@ export class TouchDnDFSM extends FSM {
     private touchID: number | undefined;
 
     /**
-	 * Creates the FSM.
-	 */
+     * Creates the FSM.
+     */
     public constructor() {
         super();
         this.touchID = undefined;
@@ -171,7 +171,7 @@ export class TouchDnD extends InteractionImpl<SrcTgtTouchData, TouchDnDFSM> {
             private setTgtData(evt: TouchEvent): void {
                 const data = this._parent.data as (SrcTgtTouchDataImpl);
                 const touch: Touch | undefined = getTouch(evt.changedTouches, data.getTouchId());
-                if(touch !== undefined) {
+                if (touch !== undefined) {
                     data.setTgtData(touch.clientX, touch.clientY, touch.screenX, touch.screenY, touch.target);
                 }
             }

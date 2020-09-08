@@ -55,7 +55,8 @@ beforeEach(() => {
 
 test("touch1", () => {
     interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 3, canvas, 11, 23, 11, 23));
-    expect(interaction.getFsm().getConccurFSMs().filter(fsm => fsm.isStarted())).toHaveLength(1);
+    expect(interaction.getFsm().getConccurFSMs()
+        .filter(fsm => fsm.isStarted())).toHaveLength(1);
     expect(interaction.isRunning()).toBeFalsy();
     expect(handler.fsmStarts).not.toHaveBeenCalled();
     expect(handler.fsmUpdates).not.toHaveBeenCalled();
@@ -73,7 +74,8 @@ test("touch1 data", () => {
 test("touch2", () => {
     interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 1, canvas, 11, 23, 11, 23));
     interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 2, canvas, 11, 23, 11, 23));
-    expect(interaction.getFsm().getConccurFSMs().filter(fsm => fsm.isStarted())).toHaveLength(2);
+    expect(interaction.getFsm().getConccurFSMs()
+        .filter(fsm => fsm.isStarted())).toHaveLength(2);
     expect(interaction.isRunning()).toBeFalsy();
     expect(handler.fsmStarts).not.toHaveBeenCalled();
     expect(handler.fsmUpdates).not.toHaveBeenCalled();
@@ -95,7 +97,8 @@ test("touch3", () => {
     interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 1, canvas, 11, 23, 11, 23));
     interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 3, canvas, 21, 13, 21, 13));
     interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 2, canvas, 210, 130, 210, 130));
-    expect(interaction.getFsm().getConccurFSMs().filter(fsm => fsm.isStarted())).toHaveLength(3);
+    expect(interaction.getFsm().getConccurFSMs()
+        .filter(fsm => fsm.isStarted())).toHaveLength(3);
     expect(interaction.isRunning()).toBeTruthy();
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
@@ -120,7 +123,8 @@ test("touch3 with one error event", () => {
     interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 1, canvas, 11, 23, 11, 23));
     interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 3, canvas, 21, 13, 21, 13));
     interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 3, canvas, 210, 130, 210, 130));
-    expect(interaction.getFsm().getConccurFSMs().filter(fsm => fsm.isStarted())).toHaveLength(2);
+    expect(interaction.getFsm().getConccurFSMs()
+        .filter(fsm => fsm.isStarted())).toHaveLength(2);
     expect(interaction.isRunning()).toBeFalsy();
     expect(handler.fsmStarts).not.toHaveBeenCalled();
     expect(handler.fsmUpdates).not.toHaveBeenCalled();

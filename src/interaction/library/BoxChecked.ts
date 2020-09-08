@@ -12,13 +12,13 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { TerminalState } from "../../fsm/TerminalState";
-import { BoxCheckPressedTransition } from "../../fsm/BoxCheckPressedTransition";
-import { isCheckBox } from "../../fsm/Events";
-import { FSMDataHandler } from "../../fsm/FSMDataHandler";
-import { WidgetData, WidgetDataImpl } from "./WidgetData";
-import { FSM } from "../../fsm/FSM";
-import { InteractionImpl } from "../InteractionImpl";
+import {TerminalState} from "../../fsm/TerminalState";
+import {BoxCheckPressedTransition} from "../../fsm/BoxCheckPressedTransition";
+import {isCheckBox} from "../../fsm/Events";
+import {FSMDataHandler} from "../../fsm/FSMDataHandler";
+import {WidgetData, WidgetDataImpl} from "./WidgetData";
+import {FSM} from "../../fsm/FSM";
+import {InteractionImpl} from "../InteractionImpl";
 
 export class BoxCheckedFSM extends FSM {
 

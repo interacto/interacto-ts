@@ -12,11 +12,11 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { TouchMoveTransition } from "../../src/fsm/TouchMoveTransition";
-import { createMouseEvent, createTouchEvent } from "../interaction/StubEvents";
-import { EventRegistrationToken } from "../../src/fsm/Events";
-import { FSM } from "../../src/fsm/FSM";
-import { StdState } from "../../src/fsm/StdState";
+import {TouchMoveTransition} from "../../src/fsm/TouchMoveTransition";
+import {createMouseEvent, createTouchEvent} from "../interaction/StubEvents";
+import {EventRegistrationToken} from "../../src/fsm/Events";
+import {FSM} from "../../src/fsm/FSM";
+import {StdState} from "../../src/fsm/StdState";
 
 let tr: TouchMoveTransition;
 

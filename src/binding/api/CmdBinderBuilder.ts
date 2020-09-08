@@ -11,9 +11,9 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Command } from "../../command/Command";
-import { BaseBinderBuilder } from "./BaseBinderBuilder";
-import { LogLevel } from "../../logging/LogLevel";
+import {Command} from "../../command/Command";
+import {BaseBinderBuilder} from "./BaseBinderBuilder";
+import {LogLevel} from "../../logging/LogLevel";
 
 /**
  * The widget binding builder API already knows the type of UI command
@@ -22,12 +22,12 @@ import { LogLevel } from "../../logging/LogLevel";
  */
 export interface CmdBinderBuilder<C extends Command> extends BaseBinderBuilder {
     /**
-	 * Specifies the initialisation of the command when the interaction starts.
-	 * Each time the interaction starts, an instance of the command is created and configured by the given callback.
-	 * @param initCmdFct The callback method that initialises the command.
-	 * This callback takes as arguments the command to configure.
-	 * @return The builder to chain the building configuration.
-	 */
+     * Specifies the initialisation of the command when the interaction starts.
+     * Each time the interaction starts, an instance of the command is created and configured by the given callback.
+     * @param initCmdFct The callback method that initialises the command.
+     * This callback takes as arguments the command to configure.
+     * @return The builder to chain the building configuration.
+     */
     first(initCmdFct: (c: C) => void): CmdBinderBuilder<C>;
 
     end(onEnd: (c?: C) => void): CmdBinderBuilder<C>;

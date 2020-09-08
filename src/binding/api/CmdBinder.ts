@@ -11,13 +11,13 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Command } from "../../command/Command";
-import { InteractionImpl } from "../../interaction/InteractionImpl";
-import { InteractionData } from "../../interaction/InteractionData";
-import { FSM } from "../../fsm/FSM";
-import { CmdBinderBuilder } from "./CmdBinderBuilder";
-import { InteractionCmdBinder } from "./InteractionCmdBinder";
-import { LogLevel } from "../../logging/LogLevel";
+import {Command} from "../../command/Command";
+import {InteractionImpl} from "../../interaction/InteractionImpl";
+import {InteractionData} from "../../interaction/InteractionData";
+import {FSM} from "../../fsm/FSM";
+import {CmdBinderBuilder} from "./CmdBinderBuilder";
+import {InteractionCmdBinder} from "./InteractionCmdBinder";
+import {LogLevel} from "../../logging/LogLevel";
 
 /**
  * The widget binding builder API already knows the type of UI command
@@ -39,12 +39,12 @@ export interface CmdBinder<C extends Command> extends CmdBinderBuilder<C> {
     log(...level: Array<LogLevel>): CmdBinder<C>;
 
     /**
-	 * Defines how to create the user interaction that the widget binding will use to create UI commands.
-	 * @param interactionSupplier The supplier that will return a new user interaction.
-	 * @type <D> The user interaction data type
-	 * @type <I> The user interaction type
-	 * @return A clone of the current builder to chain the building configuration.
-	 */
+     * Defines how to create the user interaction that the widget binding will use to create UI commands.
+     * @param interactionSupplier The supplier that will return a new user interaction.
+     * @type <D> The user interaction data type
+     * @type <I> The user interaction type
+     * @return A clone of the current builder to chain the building configuration.
+     */
     usingInteraction<I extends InteractionImpl<D, FSM>, D extends InteractionData>(interactionSupplier: () => I):
     InteractionCmdBinder<C, I, D>;
 

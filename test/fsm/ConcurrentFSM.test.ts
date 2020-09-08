@@ -12,16 +12,14 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ConcurrentFSM } from "../../src/fsm/ConcurrentFSM";
-import { FSM } from "../../src/fsm/FSM";
-import { FSMHandler } from "../../src/fsm/FSMHandler";
-import { StdState } from "../../src/fsm/StdState";
-import { TerminalState } from "../../src/fsm/TerminalState";
-import { CancellingState } from "../../src/fsm/CancellingState";
-import { Transition } from "../../src/fsm/Transition";
-import { OutputState } from "../../src/fsm/OutputState";
-import { InputState } from "../../src/fsm/InputState";
-import { StubFSMHandler } from "./StubFSMHandler";
+import {ConcurrentFSM} from "../../src/fsm/ConcurrentFSM";
+import {FSM} from "../../src/fsm/FSM";
+import {FSMHandler} from "../../src/fsm/FSMHandler";
+import {StdState} from "../../src/fsm/StdState";
+import {TerminalState} from "../../src/fsm/TerminalState";
+import {CancellingState} from "../../src/fsm/CancellingState";
+import {Transition} from "../../src/fsm/Transition";
+import {StubFSMHandler} from "./StubFSMHandler";
 
 class StubTouchFSM extends FSM {
     public cpt: number;
@@ -39,77 +37,72 @@ class StubTouchFSM extends FSM {
         this.addState(cancelled);
 
         new class extends Transition {
-            public constructor(srcState: OutputState, tgtState: InputState) {
-                super(srcState, tgtState);
-            }
             public accept(_event: Event): boolean {
                 return true;
             }
+
             public isGuardOK(event: Event): boolean {
-                return `touch${cpt}` === event.type;
+                return `touch${String(cpt)}` === event.type;
             }
+
             public getAcceptedEvents(): Set<string> {
-                return new Set(`touch${cpt}`);
+                return new Set(`touch${String(cpt)}`);
             }
         }(this.initState, touched);
 
         new class extends Transition {
-            public constructor(srcState: OutputState, tgtState: InputState) {
-                super(srcState, tgtState);
-            }
             public accept(_event: Event): boolean {
                 return true;
             }
+
             public isGuardOK(event: Event): boolean {
-                return `move${cpt}` === event.type;
+                return `move${String(cpt)}` === event.type;
             }
+
             public getAcceptedEvents(): Set<string> {
-                return new Set(`move${cpt}`);
+                return new Set(`move${String(cpt)}`);
             }
         }(touched, moved);
 
         new class extends Transition {
-            public constructor(srcState: OutputState, tgtState: InputState) {
-                super(srcState, tgtState);
-            }
             public accept(_event: Event): boolean {
                 return true;
             }
+
             public isGuardOK(event: Event): boolean {
-                return `move${cpt}` === event.type;
+                return `move${String(cpt)}` === event.type;
             }
+
             public getAcceptedEvents(): Set<string> {
-                return new Set(`move${cpt}`);
+                return new Set(`move${String(cpt)}`);
             }
         }(moved, moved);
 
         new class extends Transition {
-            public constructor(srcState: OutputState, tgtState: InputState) {
-                super(srcState, tgtState);
-            }
             public accept(_event: Event): boolean {
                 return true;
             }
+
             public isGuardOK(event: Event): boolean {
-                return `release${cpt}` === event.type;
+                return `release${String(cpt)}` === event.type;
             }
+
             public getAcceptedEvents(): Set<string> {
-                return new Set(`release${cpt}`);
+                return new Set(`release${String(cpt)}`);
             }
         }(moved, released);
 
         new class extends Transition {
-            public constructor(srcState: OutputState, tgtState: InputState) {
-                super(srcState, tgtState);
-            }
             public accept(_event: Event): boolean {
                 return true;
             }
+
             public isGuardOK(event: Event): boolean {
-                return `cancel${cpt}` === event.type;
+                return `cancel${String(cpt)}` === event.type;
             }
+
             public getAcceptedEvents(): Set<string> {
-                return new Set(`cancel${cpt}`);
+                return new Set(`cancel${String(cpt)}`);
             }
         }(moved, cancelled);
     }

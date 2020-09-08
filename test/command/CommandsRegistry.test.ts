@@ -12,10 +12,10 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Command, CmdStatus, RegistrationPolicy } from "../../src/command/Command";
-import { CommandsRegistry } from "../../src/command/CommandsRegistry";
-import { UndoCollector } from "../../src/undo/UndoCollector";
-import { StubCmd, StubUndoableCmd } from "./StubCmd";
+import {Command, CmdStatus, RegistrationPolicy} from "../../src/command/Command";
+import {CommandsRegistry} from "../../src/command/CommandsRegistry";
+import {UndoCollector} from "../../src/undo/UndoCollector";
+import {StubCmd, StubUndoableCmd} from "./StubCmd";
 
 let instance: CommandsRegistry;
 
@@ -80,7 +80,7 @@ test("testCommandsNotNull", () => {
 });
 
 test("testCommandsObservedOnAdded", () => {
-    const cmds: Array<Command>  = [];
+    const cmds: Array<Command> = [];
     instance.commands().subscribe(e => cmds.push(e));
     jest.mock("./StubCmd");
     const cmd = new StubCmd();

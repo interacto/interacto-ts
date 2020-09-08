@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { CommandImpl } from "../CommandImpl";
+import {CommandImpl} from "../CommandImpl";
 
 /**
  * Initialises the command with the value to set.
@@ -27,7 +27,7 @@ export abstract class ModifyValue<T> extends CommandImpl {
      */
     protected value?: T;
 
-    protected constructor(value?: T) {
+    public constructor(value?: T) {
         super();
         this.value = value;
     }

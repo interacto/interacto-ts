@@ -12,8 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { PointData } from "./PointData";
-import { PointDataImpl } from "./PointDataImpl";
+import {PointData} from "./PointData";
+import {PointDataImpl} from "./PointDataImpl";
 
 /**
  * Interaction data for a single pointing device that moves from a source
@@ -47,7 +47,7 @@ export interface SrcTgtPointsData extends PointData {
 }
 
 export class SrcTgtPointsDataImpl extends PointDataImpl implements SrcTgtPointsData {
-    /**The object pick at the end of the interaction*/
+    /** The object pick at the end of the interaction*/
     protected tgtObject?: EventTarget;
 
     protected tgtClientX?: number;

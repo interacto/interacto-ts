@@ -12,10 +12,10 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Transition } from "./Transition";
-import { OutputState } from "./OutputState";
-import { InputState } from "./InputState";
-import { ErrorCatcher } from "../error/ErrorCatcher";
+import {Transition} from "./Transition";
+import {OutputState} from "./OutputState";
+import {InputState} from "./InputState";
+import {ErrorCatcher} from "../error/ErrorCatcher";
 
 
 /**
@@ -36,11 +36,11 @@ export class TimeoutTransition extends Transition {
     private timeouted: boolean;
 
     /**
-	 * Creates the timeout transition.
-	 * @param srcState The source state of the transition.
-	 * @param tgtState The output state of the transition.
+     * Creates the timeout transition.
+     * @param srcState The source state of the transition.
+     * @param tgtState The output state of the transition.
      * @param timeout The function that returns the timeout value in ms.
-	 */
+     */
     public constructor(srcState: OutputState, tgtState: InputState, timeout: () => number) {
         super(srcState, tgtState);
         this.timeouted = false;
@@ -55,7 +55,7 @@ export class TimeoutTransition extends Transition {
         if (this.timeoutThread === undefined) {
             const time = this.timeoutDuration();
             // If incorrect duration value, no thread created
-            if(time <= 0) {
+            if (time <= 0) {
                 this.src.getFSM().onTimeout();
                 return;
             }
@@ -64,7 +64,7 @@ export class TimeoutTransition extends Transition {
                 try {
                     this.timeouted = true;
                     this.src.getFSM().onTimeout();
-                }catch(ex) {
+                } catch (ex) {
                     ErrorCatcher.getInstance().reportError(ex);
                 }
             }, time);

@@ -12,8 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { PositionCommand } from "./PositionCommand";
-import { Zoomable } from "../../properties/Zoomable";
+import {PositionCommand} from "./PositionCommand";
+import {Zoomable} from "../../properties/Zoomable";
 
 /**
  * Initialises a Zoom command.

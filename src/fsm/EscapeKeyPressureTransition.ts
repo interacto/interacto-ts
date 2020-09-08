@@ -12,10 +12,10 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { InputState } from "./InputState";
-import { OutputState } from "./OutputState";
-import { KeyCode } from "./Events";
-import { KeyPressureTransition } from "./KeyPressureTransition";
+import {InputState} from "./InputState";
+import {OutputState} from "./OutputState";
+import {KeyCode} from "./Events";
+import {KeyPressureTransition} from "./KeyPressureTransition";
 
 /**
  * This transition should be used to cancel an interaction using key ESCAPE.

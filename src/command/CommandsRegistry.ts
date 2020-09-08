@@ -12,11 +12,11 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { isUndoableType } from "../undo/Undoable";
-import { UndoCollector } from "../undo/UndoCollector";
-import { Command, RegistrationPolicy } from "./Command";
-import { Subject, Observable } from "rxjs";
-import { removeAt, remove } from "../util/ArrayUtil";
+import {isUndoableType} from "../undo/Undoable";
+import {UndoCollector} from "../undo/UndoCollector";
+import {Command, RegistrationPolicy} from "./Command";
+import {Subject, Observable} from "rxjs";
+import {removeAt, remove} from "../util/ArrayUtil";
 
 /**
  * A register of commands.
@@ -148,14 +148,14 @@ export class CommandsRegistry {
             const toRemove: number = this.cmds.length - newSizeMax;
 
             while (nb < toRemove && i < this.cmds.length) {
-                if (this.cmds[i].getRegistrationPolicy() !== RegistrationPolicy.UNLIMITED) {
+                if (this.cmds[i].getRegistrationPolicy() === RegistrationPolicy.UNLIMITED) {
+                    i++;
+                } else {
                     const removed = removeAt(this.cmds, i);
                     if (removed !== undefined) {
                         removed.flush();
                     }
                     nb++;
-                } else {
-                    i++;
                 }
             }
             this.sizeMax = newSizeMax;

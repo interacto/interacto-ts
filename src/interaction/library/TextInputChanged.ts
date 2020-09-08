@@ -12,21 +12,20 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { TerminalState } from "../../fsm/TerminalState";
-import { isTextInput } from "../../fsm/Events";
-import { FSMDataHandler } from "../../fsm/FSMDataHandler";
-import { WidgetData, WidgetDataImpl } from "./WidgetData";
-import { StdState } from "../../fsm/StdState";
-import { TextInputChangedTransition } from "../../fsm/TextInputChangedTransition";
-import { TimeoutTransition } from "../../fsm/TimeoutTransition";
-import { OutputState } from "../../fsm/OutputState";
-import { InputState } from "../../fsm/InputState";
-import { FSM } from "../../fsm/FSM";
-import { InteractionImpl } from "../InteractionImpl";
+import {TerminalState} from "../../fsm/TerminalState";
+import {isTextInput} from "../../fsm/Events";
+import {FSMDataHandler} from "../../fsm/FSMDataHandler";
+import {WidgetData, WidgetDataImpl} from "./WidgetData";
+import {StdState} from "../../fsm/StdState";
+import {TextInputChangedTransition} from "../../fsm/TextInputChangedTransition";
+import {TimeoutTransition} from "../../fsm/TimeoutTransition";
+import {FSM} from "../../fsm/FSM";
+import {InteractionImpl} from "../InteractionImpl";
 
 export class TextInputChangedFSM extends FSM {
     /** The time gap between the two spinner events. */
     private readonly _timeGap: number = 1000;
+
     /** The supplier that provides the time gap. */
     private readonly SUPPLY_TIME_GAP: () => number = () => this.getTimeGap();
 
@@ -56,11 +55,6 @@ export class TextInputChangedFSM extends FSM {
         this.addState(ended);
 
         new class extends TextInputChangedTransition {
-
-            public constructor(srcState: OutputState, tgtState: InputState) {
-                super(srcState, tgtState);
-            }
-
             public action(event: Event): void {
                 if (event.target !== null && isTextInput(event.target) && dataHandler !== undefined) {
                     dataHandler.initToChangedHandler(event);
@@ -69,11 +63,6 @@ export class TextInputChangedFSM extends FSM {
         }(this.initState, changed);
 
         new class extends TextInputChangedTransition {
-
-            public constructor(srcState: OutputState, tgtState: InputState) {
-                super(srcState, tgtState);
-            }
-
             public action(event: Event): void {
                 if (event.target !== null && isTextInput(event.target) && dataHandler !== undefined) {
                     dataHandler.initToChangedHandler(event);

@@ -12,14 +12,14 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FSM } from "../../src/fsm/FSM";
-import { InputState } from "../../src/fsm/InputState";
-import { StdState } from "../../src/fsm/StdState";
-import { SubFSMTransition } from "../../src/fsm/SubFSMTransition";
-import { TerminalState } from "../../src/fsm/TerminalState";
-import { Transition } from "../../src/fsm/Transition";
-import { StubSubEvent1, StubSubEvent2 } from "./StubEvent";
-import { SubStubTransition1 } from "./StubTransitionOK";
+import {FSM} from "../../src/fsm/FSM";
+import {InputState} from "../../src/fsm/InputState";
+import {StdState} from "../../src/fsm/StdState";
+import {SubFSMTransition} from "../../src/fsm/SubFSMTransition";
+import {TerminalState} from "../../src/fsm/TerminalState";
+import {Transition} from "../../src/fsm/Transition";
+import {StubSubEvent1, StubSubEvent2} from "./StubEvent";
+import {SubStubTransition1} from "./StubTransitionOK";
 
 jest.mock("../../src/fsm/StdState");
 
@@ -99,7 +99,7 @@ test("get accepted events", () => {
     expect([...evts]).toHaveLength(3);
     expect(evts.has("foo")).toBeTruthy();
     expect(evts.has("bar")).toBeTruthy();
-    expect(evts.has([... fsm.initState.getTransitions()[0].getAcceptedEvents()][0])).toBeTruthy();
+    expect(evts.has([...fsm.initState.getTransitions()[0].getAcceptedEvents()][0])).toBeTruthy();
 });
 
 test("get accepted events when nothing to return", () => {

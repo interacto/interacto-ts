@@ -12,9 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { OutputStateImpl } from "./OutputStateImpl";
-import { InputState } from "./InputState";
-import { FSM } from "./FSM";
+import {OutputStateImpl} from "./OutputStateImpl";
+import {InputState} from "./InputState";
+import {FSM} from "./FSM";
 
 
 /**
@@ -25,10 +25,10 @@ import { FSM } from "./FSM";
  */
 export class StdState extends OutputStateImpl implements InputState {
     /**
-	 * Creates the state.
-	 * @param stateMachine The FSM that will contain the state.
-	 * @param stateName The name of this state.
-	 */
+     * Creates the state.
+     * @param stateMachine The FSM that will contain the state.
+     * @param stateName The name of this state.
+     */
     public constructor(stateMachine: FSM, stateName: string) {
         super(stateMachine, stateName);
     }
@@ -39,17 +39,11 @@ export class StdState extends OutputStateImpl implements InputState {
         }
     }
 
-    /**
-     *
-     */
     public enter(): void {
         this.checkStartingState();
         this.fsm.enterStdState(this);
     }
 
-    /**
-     *
-     */
     public exit(): void {
     }
 }

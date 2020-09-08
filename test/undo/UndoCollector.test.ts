@@ -12,8 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Undoable } from "../../src/undo/Undoable";
-import { UndoCollector } from "../../src/undo/UndoCollector";
+import {Undoable} from "../../src/undo/Undoable";
+import {UndoCollector} from "../../src/undo/UndoCollector";
 
 jest.mock("../../src/undo/Undoable");
 
@@ -25,9 +25,9 @@ beforeEach(() => {
     instance = new UndoCollector();
     instance.setSizeMax(10);
     undoable = {
-        undo: jest.fn(() => {}),
-        redo: jest.fn(() => {}),
-        getUndoName: jest.fn(() => "undoredomsg")
+        "undo": jest.fn(() => {}),
+        "redo": jest.fn(() => {}),
+        "getUndoName": jest.fn(() => "undoredomsg")
     };
 });
 
@@ -90,9 +90,9 @@ test("testAddUndoablewith0SizeUndoable", () => {
 
 test("testAddUndoablewithLimitedUndoSize", () => {
     const undoable2 = {
-        undo: jest.fn(() => {}),
-        redo: jest.fn(() => {}),
-        getUndoName: jest.fn(() => "")
+        "undo": jest.fn(() => {}),
+        "redo": jest.fn(() => {}),
+        "getUndoName": jest.fn(() => "")
     };
     instance.setSizeMax(1);
     instance.add(undoable);
@@ -121,9 +121,9 @@ test("testSizeMaxRemovedWhen0", () => {
 
 test("testSizeMaxRemovedWhen1", () => {
     const undoable2 = {
-        undo: jest.fn(() => {}),
-        redo: jest.fn(() => {}),
-        getUndoName: jest.fn(() => "")
+        "undo": jest.fn(() => {}),
+        "redo": jest.fn(() => {}),
+        "getUndoName": jest.fn(() => "")
     };
     const undos = new Array<Undoable | undefined>();
     instance.setSizeMax(5);
@@ -212,9 +212,9 @@ test("getLastOrEmptyRedoMessage OK", () => {
 
 test("testClear", () => {
     const undoable2 = {
-        undo: jest.fn(() => {}),
-        redo: jest.fn(() => {}),
-        getUndoName: jest.fn(() => "")
+        "undo": jest.fn(() => {}),
+        "redo": jest.fn(() => {}),
+        "getUndoName": jest.fn(() => "")
     };
     instance.add(undoable);
     instance.add(undoable2);

@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { PointData } from "./PointData";
+import {PointData} from "./PointData";
 
 /**
  * Single point interaction data implementation with write accesses.
@@ -20,10 +20,13 @@ import { PointData } from "./PointData";
 export class PointDataImpl implements PointData {
     /** The pressed X-local position. */
     protected srcClientX?: number;
+
     /** The pressed Y-local position. */
     protected srcClientY?: number;
+
     /** The pressed X-screen position. */
     protected srcScreenX?: number;
+
     /** The pressed Y-screen position. */
     protected srcScreenY?: number;
 
@@ -42,12 +45,6 @@ export class PointDataImpl implements PointData {
     protected srcObject?: EventTarget;
 
     protected currentTarget?: EventTarget;
-
-    /**
-	 * Creates the interaction data with no value.
-	 */
-    public constructor() {
-    }
 
     public flush(): void {
         this.button = undefined;
@@ -102,9 +99,9 @@ export class PointDataImpl implements PointData {
     }
 
     /**
-	 * Sets the possible modifiers of this point data used in the mouse event.
-	 * @param event The mouse event to use to set this interaction data.
-	 */
+     * Sets the possible modifiers of this point data used in the mouse event.
+     * @param event The mouse event to use to set this interaction data.
+     */
     public setModifiersData(event: MouseEvent): void {
         this.altPressed = event.altKey;
         this.shiftPressed = event.shiftKey;
@@ -113,16 +110,16 @@ export class PointDataImpl implements PointData {
     }
 
     /**
-	 * Sets the point data (the coordinates, the mouse button and the targeted node).
-	 * Key modifiers are not set here.
-	 * @param cx The x local position
-	 * @param cy The y local position
-	 * @param sx The x scene position
-	 * @param sy The y scene position
-	 * @param button The mouse button
-	 * @param target The targeted object
-	 * @param currTarget The current targeted object
-	 */
+     * Sets the point data (the coordinates, the mouse button and the targeted node).
+     * Key modifiers are not set here.
+     * @param cx The x local position
+     * @param cy The y local position
+     * @param sx The x scene position
+     * @param sy The y scene position
+     * @param button The mouse button
+     * @param target The targeted object
+     * @param currTarget The current targeted object
+     */
     public setPointData(cx?: number, cy?: number, sx?: number, sy?: number, button?: number,
                         target?: EventTarget, currTarget?: EventTarget): void {
         this.srcClientX = cx;

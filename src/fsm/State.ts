@@ -12,21 +12,20 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FSM } from "./FSM";
-
+import {FSM} from "./FSM";
 
 /**
  * The base type of an FSM state.
  */
 export interface State {
     /**
-	 * @return The name of the state.
-	 */
+     * @return The name of the state.
+     */
     getName(): string;
 
     /**
-	 * @return The FSM that contains the state.
-	 */
+     * @return The FSM that contains the state.
+     */
     getFSM(): FSM;
 
     /**
@@ -37,10 +36,10 @@ export interface State {
     checkStartingState(): void;
 
     /**
-	 * Uninstall (ie flushes) the state.
-	 * Useful to clear data.
-	 * The state must not be used after that.
-	 */
+     * Uninstall (ie flushes) the state.
+     * Useful to clear data.
+     * The state must not be used after that.
+     */
     uninstall(): void;
 }
 

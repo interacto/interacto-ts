@@ -18,7 +18,6 @@ import {AnonCmdBinder} from "./AnonCmdBinder";
 import {InteractionBinder} from "./api/InteractionBinder";
 import {ButtonPressed} from "../interaction/library/ButtonPressed";
 import {WidgetData} from "../interaction/library/WidgetData";
-import {Command} from "../command/Command";
 import {UpdateBinder} from "./UpdateBinder";
 import {BoxChecked} from "../interaction/library/BoxChecked";
 import {ColorPicked} from "../interaction/library/ColorPicked";
@@ -81,42 +80,42 @@ export function anonCmdBinder(cmd: () => void): CmdBinder<AnonCmd> {
  * Do not forget to call bind() at the end of the build to execute the builder.
  * @return The binding builder.
  */
-export function buttonBinder<C extends Command>(): InteractionBinder<ButtonPressed, WidgetData<HTMLButtonElement>> {
+export function buttonBinder(): InteractionBinder<ButtonPressed, WidgetData<HTMLButtonElement>> {
     return new UpdateBinder(observer)
         .usingInteraction<ButtonPressed, WidgetData<HTMLButtonElement>>(() => new ButtonPressed());
 }
 
-export function checkboxBinder<C extends Command>(): InteractionBinder<BoxChecked, WidgetData<HTMLInputElement>> {
+export function checkboxBinder(): InteractionBinder<BoxChecked, WidgetData<HTMLInputElement>> {
     return new UpdateBinder(observer)
         .usingInteraction<BoxChecked, WidgetData<HTMLInputElement>>(() => new BoxChecked());
 }
 
-export function colorPickerBinder<C extends Command>(): InteractionBinder<ColorPicked, WidgetData<HTMLInputElement>> {
+export function colorPickerBinder(): InteractionBinder<ColorPicked, WidgetData<HTMLInputElement>> {
     return new UpdateBinder(observer)
         .usingInteraction<ColorPicked, WidgetData<HTMLInputElement>>(() => new ColorPicked());
 }
 
-export function comboBoxBinder<C extends Command>(): InteractionBinder<ComboBoxSelected, WidgetData<HTMLSelectElement>> {
+export function comboBoxBinder(): InteractionBinder<ComboBoxSelected, WidgetData<HTMLSelectElement>> {
     return new UpdateBinder(observer)
         .usingInteraction<ComboBoxSelected, WidgetData<HTMLSelectElement>>(() => new ComboBoxSelected());
 }
 
-export function spinnerBinder<C extends Command>(): InteractionUpdateBinder<SpinnerChanged, WidgetData<HTMLInputElement>> {
+export function spinnerBinder(): InteractionUpdateBinder<SpinnerChanged, WidgetData<HTMLInputElement>> {
     return new UpdateBinder(observer)
         .usingInteraction<SpinnerChanged, WidgetData<HTMLInputElement>>(() => new SpinnerChanged());
 }
 
-export function dateBinder<C extends Command>(): InteractionUpdateBinder<DatePicked, WidgetData<HTMLInputElement>> {
+export function dateBinder(): InteractionUpdateBinder<DatePicked, WidgetData<HTMLInputElement>> {
     return new UpdateBinder(observer)
         .usingInteraction<DatePicked, WidgetData<HTMLInputElement>>(() => new DatePicked());
 }
 
-export function hyperlinkBinder<C extends Command>(): InteractionUpdateBinder<HyperLinkClicked, WidgetData<HTMLAnchorElement>> {
+export function hyperlinkBinder(): InteractionUpdateBinder<HyperLinkClicked, WidgetData<HTMLAnchorElement>> {
     return new UpdateBinder(observer)
         .usingInteraction<HyperLinkClicked, WidgetData<HTMLAnchorElement>>(() => new HyperLinkClicked());
 }
 
-export function textInputBinder<C extends Command>(): InteractionUpdateBinder<TextInputChanged, WidgetData<HTMLInputElement | HTMLTextAreaElement>> {
+export function textInputBinder(): InteractionUpdateBinder<TextInputChanged, WidgetData<HTMLInputElement | HTMLTextAreaElement>> {
     return new UpdateBinder(observer)
         .usingInteraction<TextInputChanged, WidgetData<HTMLInputElement | HTMLTextAreaElement>>(() => new TextInputChanged());
 }
@@ -127,7 +126,7 @@ export function textInputBinder<C extends Command>(): InteractionUpdateBinder<Te
  * A multi-touch starts when all its touches have started.
  * A multi-touch ends when the number of required touches is greater than the number of touches.
  */
-export function multiTouchBinder<C extends Command>(nbTouches: number): InteractionUpdateBinder<MultiTouch, MultiTouchData> {
+export function multiTouchBinder(nbTouches: number): InteractionUpdateBinder<MultiTouch, MultiTouchData> {
     return new UpdateBinder(observer)
         .usingInteraction<MultiTouch, MultiTouchData>(() => new MultiTouch(nbTouches));
 }
@@ -137,7 +136,7 @@ export function multiTouchBinder<C extends Command>(nbTouches: number): Interact
  * @param nbTap The number of required taps.
  * If this number is not reached after a timeout, the interaction is cancelled.
  */
-export function tapBinder<C extends Command>(nbTap: number): InteractionUpdateBinder<Tap, TapData> {
+export function tapBinder(nbTap: number): InteractionUpdateBinder<Tap, TapData> {
     return new UpdateBinder(observer)
         .usingInteraction<Tap, TapData>(() => new Tap(nbTap));
 }
@@ -147,7 +146,7 @@ export function tapBinder<C extends Command>(nbTap: number): InteractionUpdateBi
  * @param duration The duration of the touch to end the user interaction.
  * If this duration is not reached, the interaction is cancelled.
  */
-export function longTouchBinder<C extends Command>(duration: number): InteractionUpdateBinder<LongTouch, TouchData> {
+export function longTouchBinder(duration: number): InteractionUpdateBinder<LongTouch, TouchData> {
     return new UpdateBinder(observer)
         .usingInteraction<LongTouch, TouchData>(() => new LongTouch(duration));
 }
@@ -160,7 +159,7 @@ export function longTouchBinder<C extends Command>(duration: number): Interactio
  * @param minLength The minimal distance from the starting point to the release point for validating the swipe
  * @param pxTolerance The tolerance rate in pixels accepted while executing the swipe
  */
-export function swipeBinder<C extends Command>(horizontal: boolean, minVelocity: number, minLength: number, pxTolerance: number):
+export function swipeBinder(horizontal: boolean, minVelocity: number, minLength: number, pxTolerance: number):
 InteractionUpdateBinder<Swipe, SrcTgtTouchData> {
     return new UpdateBinder(observer)
         .usingInteraction<Swipe, SrcTgtTouchData>(() => new Swipe(horizontal, minVelocity, minLength, pxTolerance));
@@ -172,7 +171,7 @@ InteractionUpdateBinder<Swipe, SrcTgtTouchData> {
  * @param minLength The minimal distance from the starting point to the release point for validating the pan
  * @param pxTolerance The tolerance rate in pixels accepted while executing the pan
  */
-export function panBinder<C extends Command>(horizontal: boolean, minLength: number, pxTolerance: number):
+export function panBinder(horizontal: boolean, minLength: number, pxTolerance: number):
 InteractionUpdateBinder<Pan, SrcTgtTouchData> {
     return new UpdateBinder(observer)
         .usingInteraction<Pan, SrcTgtTouchData>(() => new Pan(horizontal, minLength, pxTolerance));
@@ -181,7 +180,7 @@ InteractionUpdateBinder<Pan, SrcTgtTouchData> {
 /**
  * Creates a widget binding that uses the click interaction.
  */
-export function clickBinder<C extends Command>(): InteractionBinder<Click, PointData> {
+export function clickBinder(): InteractionBinder<Click, PointData> {
     return new UpdateBinder(observer)
         .usingInteraction<Click, PointData>(() => new Click());
 }
@@ -189,7 +188,7 @@ export function clickBinder<C extends Command>(): InteractionBinder<Click, Point
 /**
  * Creates a widget binding that uses the double click interaction.
  */
-export function dbleClickBinder<C extends Command>(): InteractionBinder<DoubleClick, PointData> {
+export function dbleClickBinder(): InteractionBinder<DoubleClick, PointData> {
     return new UpdateBinder(observer)
         .usingInteraction<DoubleClick, PointData>(() => new DoubleClick());
 }
@@ -197,7 +196,7 @@ export function dbleClickBinder<C extends Command>(): InteractionBinder<DoubleCl
 /**
  * Creates a widget binding that uses the mouse press interaction.
  */
-export function pressBinder<C extends Command>(): InteractionBinder<Press, PointData> {
+export function pressBinder(): InteractionBinder<Press, PointData> {
     return new UpdateBinder(observer)
         .usingInteraction<Press, PointData>(() => new Press());
 }
@@ -205,7 +204,7 @@ export function pressBinder<C extends Command>(): InteractionBinder<Press, Point
 /**
  * Creates a widget binding that uses the mouse scroll interaction.
  */
-export function scrollBinder<C extends Command>(): InteractionBinder<Scroll, ScrollData> {
+export function scrollBinder(): InteractionBinder<Scroll, ScrollData> {
     return new UpdateBinder(observer)
         .usingInteraction<Scroll, ScrollData>(() => new Scroll());
 }
@@ -215,7 +214,7 @@ export function scrollBinder<C extends Command>(): InteractionBinder<Scroll, Scr
  * @param cancellable True: the FSM can be cancelled using the ESC key.
  * @param srcOnUpdate True: the source point will take the former target position on each update.
  */
-export function dndBinder<C extends Command>(srcOnUpdate: boolean, cancellable: boolean): InteractionBinder<DnD, SrcTgtPointsData> {
+export function dndBinder(srcOnUpdate: boolean, cancellable: boolean): InteractionBinder<DnD, SrcTgtPointsData> {
     return new UpdateBinder(observer)
         .usingInteraction<DnD, SrcTgtPointsData>(() => new DnD(srcOnUpdate, cancellable));
 }
@@ -223,7 +222,7 @@ export function dndBinder<C extends Command>(srcOnUpdate: boolean, cancellable: 
 /**
  * Creates a widget binding that uses the drag lock interaction.
  */
-export function dragLockBinder<C extends Command>(): InteractionBinder<DragLock, SrcTgtPointsData> {
+export function dragLockBinder(): InteractionBinder<DragLock, SrcTgtPointsData> {
     return new UpdateBinder(observer)
         .usingInteraction<DragLock, SrcTgtPointsData>(() => new DragLock());
 }
@@ -232,7 +231,7 @@ export function dragLockBinder<C extends Command>(): InteractionBinder<DragLock,
  * Creates a widget binding that uses the key pressure interaction.
  * @param modifierAccepted True: the interaction will consider key modifiers.
  */
-export function keyPressBinder<C extends Command>(modifierAccepted: boolean): InteractionBinder<KeyPressed, KeyData> {
+export function keyPressBinder(modifierAccepted: boolean): InteractionBinder<KeyPressed, KeyData> {
     return new UpdateBinder(observer)
         .usingInteraction<KeyPressed, KeyData>(() => new KeyPressed(modifierAccepted));
 }
@@ -240,7 +239,7 @@ export function keyPressBinder<C extends Command>(modifierAccepted: boolean): In
 /**
  * Creates a widget binding that uses the multiple key pressures interaction.
  */
-export function keysPressBinder<C extends Command>(): InteractionBinder<KeysPressed, KeysData> {
+export function keysPressBinder(): InteractionBinder<KeysPressed, KeysData> {
     return new UpdateBinder(observer)
         .usingInteraction<KeysPressed, KeysData>(() => new KeysPressed());
 }
@@ -248,7 +247,7 @@ export function keysPressBinder<C extends Command>(): InteractionBinder<KeysPres
 /**
  * Creates a widget binding that uses the multiple key typings interaction.
  */
-export function keysTypeBinder<C extends Command>(): InteractionBinder<KeysTyped, KeysData> {
+export function keysTypeBinder(): InteractionBinder<KeysTyped, KeysData> {
     return new UpdateBinder(observer)
         .usingInteraction<KeysTyped, KeysData>(() => new KeysTyped());
 }
@@ -256,7 +255,7 @@ export function keysTypeBinder<C extends Command>(): InteractionBinder<KeysTyped
 /**
  * Creates a widget binding that uses the key typing interaction.
  */
-export function keyTypeBinder<C extends Command>(): InteractionBinder<KeyTyped, KeyData> {
+export function keyTypeBinder(): InteractionBinder<KeyTyped, KeyData> {
     return new UpdateBinder(observer)
         .usingInteraction<KeyTyped, KeyData>(() => new KeyTyped());
 }

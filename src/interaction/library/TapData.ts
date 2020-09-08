@@ -22,8 +22,8 @@ import {TouchData, TouchDataImpl} from "./TouchData";
  */
 export interface TapData extends InteractionData {
     /**
-	 * @return The list of touches data.
-	 */
+     * @return The list of touches data.
+     */
     getTapData(): Array<TouchData>;
 }
 
@@ -35,8 +35,8 @@ export class TapDataImpl implements TapData {
     private readonly tapsData: Array<TouchDataImpl>;
 
     /**
-	 * Creates the interaction data
-	 */
+     * Creates the interaction data
+     */
     public constructor() {
         this.tapsData = new Array<TouchDataImpl>();
     }
@@ -46,9 +46,9 @@ export class TapDataImpl implements TapData {
     }
 
     /**
-	 * Adds a touch data to this multi-touch data
-	 * @param data The touch data to add
-	 */
+     * Adds a touch data to this multi-touch data
+     * @param data The touch data to add
+     */
     public addTapData(data: TouchDataImpl): void {
         this.tapsData.push(data);
     }

@@ -11,13 +11,13 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { TerminalState } from "../../fsm/TerminalState";
-import { isColorChoice } from "../../fsm/Events";
-import { FSMDataHandler } from "../../fsm/FSMDataHandler";
-import { WidgetData, WidgetDataImpl } from "./WidgetData";
-import { ColorPickedTransition } from "../../fsm/ColorPickedTransition";
-import { FSM } from "../../fsm/FSM";
-import { InteractionImpl } from "../InteractionImpl";
+import {TerminalState} from "../../fsm/TerminalState";
+import {isColorChoice} from "../../fsm/Events";
+import {FSMDataHandler} from "../../fsm/FSMDataHandler";
+import {WidgetData, WidgetDataImpl} from "./WidgetData";
+import {ColorPickedTransition} from "../../fsm/ColorPickedTransition";
+import {FSM} from "../../fsm/FSM";
+import {InteractionImpl} from "../InteractionImpl";
 
 export class ColorPickedFSM extends FSM {
     public constructor() {

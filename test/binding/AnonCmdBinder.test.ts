@@ -49,7 +49,7 @@ beforeEach(() => {
 afterEach(() => {
     CommandsRegistry.getInstance().clear();
     UndoCollector.getInstance().clear();
-    if(binding !== undefined) {
+    if (binding !== undefined) {
         binding.uninstallBinding();
     }
 });

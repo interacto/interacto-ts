@@ -12,15 +12,16 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Subscription } from "rxjs";
-import { CancelFSMException, CmdStatus, CommandsRegistry, ErrorCatcher, FSM, InteractionData,
-    MustBeUndoableCmdException, RegistrationPolicy, Undoable, WidgetBindingImpl } from "../../src/interacto";
-import { StubCmd } from "../command/StubCmd";
-import { InteractionStub } from "../interaction/InteractionStub";
+import {Subscription} from "rxjs";
+import {CancelFSMException, CmdStatus, CommandsRegistry, ErrorCatcher, FSM, InteractionData,
+    MustBeUndoableCmdException, RegistrationPolicy, Undoable, WidgetBindingImpl} from "../../src/interacto";
+import {StubCmd} from "../command/StubCmd";
+import {InteractionStub} from "../interaction/InteractionStub";
 
 
 export class WidgetBindingStub extends WidgetBindingImpl<StubCmd, InteractionStub, InteractionData> {
     public conditionRespected: boolean;
+
     public mustCancel: boolean;
 
 
@@ -43,13 +44,17 @@ class CmdStubUndoable extends StubCmd implements Undoable {
     public hadEffect(): boolean {
         return true;
     }
+
     public canDo(): boolean {
         return true;
     }
+
     public undo(): void {
     }
+
     public redo(): void {
     }
+
     public getUndoName(): string {
         return "";
     }
@@ -63,7 +68,8 @@ beforeEach(() => {
     binding = new WidgetBindingStub(false, () => new StubCmd(), new InteractionStub(new FSM()));
     binding.setActivated(true);
     errors = [];
-    errorStream = ErrorCatcher.getInstance().getErrors().subscribe(err => errors.push(err));
+    errorStream = ErrorCatcher.getInstance().getErrors()
+        .subscribe(err => errors.push(err));
 });
 
 afterEach(() => {
@@ -97,7 +103,8 @@ test("execute crash", () => {
     errorStream.unsubscribe();
     const ex = new Error();
     const errs: Array<Error> = [];
-    errorStream = ErrorCatcher.getInstance().getErrors().subscribe(err => errs.push(err));
+    errorStream = ErrorCatcher.getInstance().getErrors()
+        .subscribe(err => errs.push(err));
     const supplier = (): StubCmd => {
         throw ex;
     };
@@ -254,6 +261,7 @@ test("cancel interaction continuous", () => {
     binding = new WidgetBindingStub(true, () => new StubCmd(), new InteractionStub(new FSM()));
     binding.conditionRespected = true;
     binding.fsmStarts();
+    // eslint-disable-next-line no-unused-expressions
     binding.getCommand()?.done();
     expect(() => binding.fsmCancels()).toThrow(MustBeUndoableCmdException);
 });

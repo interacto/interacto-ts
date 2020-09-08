@@ -12,25 +12,25 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Transition } from "./Transition";
-import { OutputState } from "./OutputState";
-import { InputState } from "./InputState";
+import {Transition} from "./Transition";
+import {OutputState} from "./OutputState";
+import {InputState} from "./InputState";
 
 /**
  * This transition must be used to use a widget within an interaction.
  * @author Arnaud BLOUIN
  */
-export abstract class WidgetTransition<E, T> extends Transition {
+export abstract class WidgetTransition<T> extends Transition {
     /**
      * The pressed button.
      */
     protected widget: T;
 
     /**
-	 * Creates the widget transition.
-	 * @param srcState The source state of the transition.
-	 * @param tgtState The output state of the transition.
-	 */
+     * Creates the widget transition.
+     * @param srcState The source state of the transition.
+     * @param tgtState The output state of the transition.
+     */
     protected constructor(srcState: OutputState, tgtState: InputState) {
         super(srcState, tgtState);
     }

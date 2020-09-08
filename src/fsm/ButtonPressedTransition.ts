@@ -12,10 +12,10 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { OutputState } from "./OutputState";
-import { InputState } from "./InputState";
-import { EventRegistrationToken, isButton } from "./Events";
-import { Transition } from "./Transition";
+import {OutputState} from "./OutputState";
+import {InputState} from "./InputState";
+import {EventRegistrationToken, isButton} from "./Events";
+import {Transition} from "./Transition";
 
 /**
  * An FSM transition for the Button HTML element.

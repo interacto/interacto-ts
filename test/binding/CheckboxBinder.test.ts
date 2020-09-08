@@ -11,9 +11,9 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Subscription } from "rxjs";
-import { BoxChecked, checkboxBinder, CommandsRegistry, isCheckBox, UndoCollector, WidgetBinding, WidgetData } from "../../src/interacto";
-import { StubCmd } from "../command/StubCmd";
+import {Subscription} from "rxjs";
+import {BoxChecked, checkboxBinder, CommandsRegistry, isCheckBox, UndoCollector, WidgetBinding, WidgetData} from "../../src/interacto";
+import {StubCmd} from "../command/StubCmd";
 
 let widget1: HTMLInputElement;
 let widget2: HTMLInputElement;
@@ -43,7 +43,7 @@ afterEach(() => {
     }
     CommandsRegistry.getInstance().clear();
     UndoCollector.getInstance().clear();
-    if(binding !== undefined) {
+    if (binding !== undefined) {
         binding.uninstallBinding();
     }
 });
@@ -87,7 +87,9 @@ test("testCommandExecutedOnTwoCheckboxes", () => {
 test("testInit1Executed", () => {
     binding = checkboxBinder()
         .toProduce(_i => cmd)
-        .first(c => c.exec = 10)
+        .first(c => {
+            c.exec = 10;
+        })
         .on(widget1)
         .bind();
 
@@ -100,7 +102,9 @@ test("testInit2Executed", () => {
     binding = checkboxBinder()
         .toProduce(() => cmd)
         .on(widget1)
-        .first((c, _i) => c.exec = 10)
+        .first((c, _i) => {
+            c.exec = 10;
+        })
         .bind();
 
     widget1.click();

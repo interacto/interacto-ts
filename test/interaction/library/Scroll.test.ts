@@ -13,8 +13,8 @@
  */
 
 import {FSMHandler, Scroll} from "../../../src/interacto";
-import { StubFSMHandler } from "../../fsm/StubFSMHandler";
-import { createUIEvent } from "../StubEvents";
+import {StubFSMHandler} from "../../fsm/StubFSMHandler";
+import {createUIEvent} from "../StubEvents";
 
 jest.mock("../../fsm/StubFSMHandler");
 

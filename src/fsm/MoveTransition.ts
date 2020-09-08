@@ -12,10 +12,10 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { InputState } from "./InputState";
-import { OutputState } from "./OutputState";
-import { EventRegistrationToken } from "./Events";
-import { Transition } from "./Transition";
+import {InputState} from "./InputState";
+import {OutputState} from "./OutputState";
+import {EventRegistrationToken} from "./Events";
+import {Transition} from "./Transition";
 
 /**
  * This transition corresponds to a move of a button of a pointing device.

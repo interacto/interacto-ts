@@ -20,7 +20,7 @@
  */
 export class MustBeUndoableCmdException extends Error {
     public constructor(cmdProducer: object) {
-        super("The following command must be undoable: " + String(cmdProducer));
+        super(`The following command must be undoable: ${String(cmdProducer)}`);
     }
 }
 

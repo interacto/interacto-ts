@@ -12,17 +12,17 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { InputState } from "../../fsm/InputState";
-import { OutputState } from "../../fsm/OutputState";
-import { StdState } from "../../fsm/StdState";
-import { TerminalState } from "../../fsm/TerminalState";
-import { KeyPressureTransition } from "../../fsm/KeyPressureTransition";
-import { KeyReleaseTransition } from "../../fsm/KeyReleaseTransition";
-import { FSMDataHandler } from "../../fsm/FSMDataHandler";
-import { KeysData } from "./KeysData";
-import { FSM } from "../../fsm/FSM";
-import { KeysDataImpl } from "./KeysDataImpl";
-import { InteractionImpl } from "../InteractionImpl";
+import {InputState} from "../../fsm/InputState";
+import {OutputState} from "../../fsm/OutputState";
+import {StdState} from "../../fsm/StdState";
+import {TerminalState} from "../../fsm/TerminalState";
+import {KeyPressureTransition} from "../../fsm/KeyPressureTransition";
+import {KeyReleaseTransition} from "../../fsm/KeyReleaseTransition";
+import {FSMDataHandler} from "../../fsm/FSMDataHandler";
+import {KeysData} from "./KeysData";
+import {FSM} from "../../fsm/FSM";
+import {KeysDataImpl} from "./KeysDataImpl";
+import {InteractionImpl} from "../InteractionImpl";
 
 /**
  * This interaction permits to define combo a key pressed that can be used to define shortcuts, etc.
@@ -32,8 +32,8 @@ export class KeysPressedFSM extends FSM {
     private readonly currentCodes: Array<string>;
 
     /**
-	 * Creates the FSM.
-	 */
+     * Creates the FSM.
+     */
     public constructor() {
         super();
         this.currentCodes = [];
@@ -119,8 +119,8 @@ export class KeysPressed extends InteractionImpl<KeysData, KeysPressedFSM> {
     private readonly handler: KeysPressedFSMHandler;
 
     /**
-	 * Creates the user interaction.
-	 */
+     * Creates the user interaction.
+     */
     public constructor() {
         super(new KeysPressedFSM());
 

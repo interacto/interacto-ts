@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { InteractionData } from "../InteractionData";
+import {InteractionData} from "../InteractionData";
 
 /**
  * Interaction data for a single pointing device at a single position.

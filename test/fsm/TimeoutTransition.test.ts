@@ -12,13 +12,13 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ErrorCatcher } from "../../src/error/ErrorCatcher";
-import { CancelFSMException } from "../../src/fsm/CancelFSMException";
-import { FSM } from "../../src/fsm/FSM";
-import { InputState } from "../../src/fsm/InputState";
-import { OutputState } from "../../src/fsm/OutputState";
-import { StdState } from "../../src/fsm/StdState";
-import { TimeoutTransition } from "../../src/fsm/TimeoutTransition";
+import {ErrorCatcher} from "../../src/error/ErrorCatcher";
+import {CancelFSMException} from "../../src/fsm/CancelFSMException";
+import {FSM} from "../../src/fsm/FSM";
+import {InputState} from "../../src/fsm/InputState";
+import {OutputState} from "../../src/fsm/OutputState";
+import {StdState} from "../../src/fsm/StdState";
+import {TimeoutTransition} from "../../src/fsm/TimeoutTransition";
 
 jest.mock("../../src/fsm/FSM");
 jest.mock("../../src/fsm/StdState");
@@ -123,6 +123,7 @@ test("execute and guard not OK", () => {
         public constructor() {
             super(src, tgt, () => 50);
         }
+
         public isGuardOK(_event: Event): boolean {
             return false;
         }
@@ -145,7 +146,8 @@ test("execute cancels", () => {
 test("fsm throws exception in thread", () => {
     const ex = new Error("foo");
     const errors: Array<Error> = [];
-    const disposable = ErrorCatcher.getInstance().getErrors().subscribe(err => errors.push(err));
+    const disposable = ErrorCatcher.getInstance().getErrors()
+        .subscribe(err => errors.push(err));
     jest.spyOn(fsm, "onTimeout");
     fsm.onTimeout = jest.fn((): void => {
         throw ex;

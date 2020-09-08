@@ -12,8 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { State } from "./State";
-import { Transition } from "./Transition";
+import {State} from "./State";
+import {Transition} from "./Transition";
 
 /**
  * Defines a type of state that can produce as output events.
@@ -21,10 +21,10 @@ import { Transition } from "./Transition";
  */
 export interface OutputState extends State {
     /**
-	 * Actions done when a transition of the state is executed so
-	 * that this state is left.
-	 * @throws CancelFSMException If leaving the state leads to a cancelling of the FSM execution.
-	 */
+     * Actions done when a transition of the state is executed so
+     * that this state is left.
+     * @throws CancelFSMException If leaving the state leads to a cancelling of the FSM execution.
+     */
     exit(): void;
 
     /**
@@ -35,18 +35,18 @@ export interface OutputState extends State {
     process(event: Event): boolean;
 
     /**
-	 * @return The list of outgoing transitions of the state.
-	 */
+     * @return The list of outgoing transitions of the state.
+     */
     getTransitions(): Array<Transition>;
 
     /**
-	 * Adds the given transitions to the list of outgoing transitions of the state.
-	 * @param tr The transition to add.
-	 */
+     * Adds the given transitions to the list of outgoing transitions of the state.
+     * @param tr The transition to add.
+     */
     addTransition(tr: Transition): void;
 }
 
-export function isOutputStateType<E>(obj: OutputState | object): obj is OutputState {
+export function isOutputStateType(obj: OutputState | object): obj is OutputState {
     return (obj as OutputState).exit !== undefined && (obj as OutputState).addTransition !== undefined &&
         (obj as OutputState).process !== undefined && (obj as OutputState).getTransitions !== undefined;
 }

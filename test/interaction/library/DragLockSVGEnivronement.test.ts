@@ -13,8 +13,8 @@
  */
 
 import {DragLock, EventRegistrationToken, FSMHandler} from "../../../src/interacto";
-import { StubFSMHandler } from "../../fsm/StubFSMHandler";
-import { createMouseEvent } from "../StubEvents";
+import {StubFSMHandler} from "../../fsm/StubFSMHandler";
+import {createMouseEvent} from "../StubEvents";
 
 jest.mock("../../fsm/StubFSMHandler");
 

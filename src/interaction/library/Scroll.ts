@@ -12,26 +12,19 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FSMDataHandler } from "../../fsm/FSMDataHandler";
-import { TerminalState } from "../../fsm/TerminalState";
-import { isScrollEvent } from "../../fsm/Events";
-import { ScrollTransition } from "../../fsm/ScrollTransition";
-import { ScrollData } from "./ScrollData";
-import { FSM } from "../../fsm/FSM";
-import { InteractionImpl } from "../InteractionImpl";
-import { ScrollDataImpl } from "./ScrollDataImpl";
+import {FSMDataHandler} from "../../fsm/FSMDataHandler";
+import {TerminalState} from "../../fsm/TerminalState";
+import {isScrollEvent} from "../../fsm/Events";
+import {ScrollTransition} from "../../fsm/ScrollTransition";
+import {ScrollData} from "./ScrollData";
+import {FSM} from "../../fsm/FSM";
+import {InteractionImpl} from "../InteractionImpl";
+import {ScrollDataImpl} from "./ScrollDataImpl";
 
 /**
  * An FSM for scrolling.
  */
 export class ScrollFSM extends FSM {
-    /**
-	 * Creates the FSM
-	 */
-    public constructor() {
-        super();
-    }
-
     public buildFSM(dataHandler?: ScrollFSMHandler): void {
         if (this.states.length > 1) {
             return;

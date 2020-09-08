@@ -13,7 +13,7 @@
  */
 
 
-import { CommandImpl } from "../CommandImpl";
+import {CommandImpl} from "../CommandImpl";
 
 /**
  * Creates the command.

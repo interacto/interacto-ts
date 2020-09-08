@@ -12,12 +12,12 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { StdState } from "../../src/fsm/StdState";
-import { Transition } from "../../src/fsm/Transition";
-import { FSM } from "../../src/fsm/FSM";
-import { StubTransitionOK } from "./StubTransitionOK";
+import {StdState} from "../../src/fsm/StdState";
+import {Transition} from "../../src/fsm/Transition";
+import {FSM} from "../../src/fsm/FSM";
+import {StubTransitionOK} from "./StubTransitionOK";
 import "jest";
-import { ErrorCatcher } from "../../src/error/ErrorCatcher";
+import {ErrorCatcher} from "../../src/error/ErrorCatcher";
 
 let tr: Transition;
 let state1: StdState;
@@ -46,7 +46,8 @@ test("testSrcStateTransitionAdded", () => {
 
 test("uninstall", () => {
     const errors: Array<Error> = [];
-    const disposable = ErrorCatcher.getInstance().getErrors().subscribe(err => errors.push(err));
+    const disposable = ErrorCatcher.getInstance().getErrors()
+        .subscribe(err => errors.push(err));
     tr.uninstall();
     disposable.unsubscribe();
     expect(errors).toHaveLength(0);

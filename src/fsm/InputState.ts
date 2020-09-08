@@ -12,15 +12,15 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { State } from "./State";
+import {State} from "./State";
 
 /**
  * Defines a type of state that can receive input events.
  */
 export interface InputState extends State {
     /**
-	 * Actions done while entering this state.
-	 * @throws CancelFSMException If entering the state leads to a cancelling of the FSM execution.
-	 */
+     * Actions done while entering this state.
+     * @throws CancelFSMException If entering the state leads to a cancelling of the FSM execution.
+     */
     enter(): void;
 }

@@ -12,12 +12,12 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FSMHandler } from "../fsm/FSMHandler";
-import { InteractionImpl } from "../interaction/InteractionImpl";
-import { FSM } from "../fsm/FSM";
-import { Command } from "../command/Command";
-import { Observable } from "rxjs";
-import { InteractionData } from "../interaction/InteractionData";
+import {FSMHandler} from "../fsm/FSMHandler";
+import {InteractionImpl} from "../interaction/InteractionImpl";
+import {FSM} from "../fsm/FSM";
+import {Command} from "../command/Command";
+import {Observable} from "rxjs";
+import {InteractionData} from "../interaction/InteractionData";
 
 /**
  * The concept of widget binding and its related services.
@@ -40,33 +40,33 @@ export interface WidgetBinding<C extends Command, I extends InteractionImpl<D, F
     then(): void;
 
     /**
-	 * On end
-	 */
+     * On end
+     */
     end(): void;
 
     /**
-	 * On cancellation
-	 */
+     * On cancellation
+     */
     cancel(): void;
 
     /**
-	 * On end or cancellation
-	 */
+     * On end or cancellation
+     */
     endOrCancel(): void;
 
     /**
-	 * Called when an executed command did not had effect
-	 */
+     * Called when an executed command did not had effect
+     */
     ifCmdHadNoEffect(): void;
 
     /**
-	 * Called when an executed command had effects
-	 */
+     * Called when an executed command had effects
+     */
     ifCmdHadEffects(): void;
 
     /**
-	 * Called when an ongoing command cannot be executed
-	 */
+     * Called when an ongoing command cannot be executed
+     */
     ifCannotExecuteCmd(): void;
 
     /**
@@ -117,14 +117,14 @@ export interface WidgetBinding<C extends Command, I extends InteractionImpl<D, F
     produces(): Observable<C>;
 
     /**
-	 * Information method.
-	 * @return The number of times the widget binding successfully ended (nevermind a command was created or not).
-	 */
+     * Information method.
+     * @return The number of times the widget binding successfully ended (nevermind a command was created or not).
+     */
     getTimesEnded(): number;
 
     /**
-	 * Information method.
-	 * @return The number of times the widget binding was cancelled (nevermind a command was created or not).
-	 */
+     * Information method.
+     * @return The number of times the widget binding was cancelled (nevermind a command was created or not).
+     */
     getTimesCancelled(): number;
 }

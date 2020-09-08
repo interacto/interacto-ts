@@ -12,19 +12,19 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { State } from "./State";
-import { InitState } from "./InitState";
-import { OutputState } from "./OutputState";
-import { FSMHandler } from "./FSMHandler";
-import { TimeoutTransition } from "./TimeoutTransition";
-import { StdState } from "./StdState";
-import { InputState } from "./InputState";
-import { OutputStateImpl } from "./OutputStateImpl";
-import { catFSM } from "../logging/ConfigLog";
-import { FSMDataHandler } from "./FSMDataHandler";
-import { isKeyDownEvent, isKeyUpEvent } from "./Events";
-import { Subject, Observable } from "rxjs";
-import { remove, removeAt } from "../util/ArrayUtil";
+import {State} from "./State";
+import {InitState} from "./InitState";
+import {OutputState} from "./OutputState";
+import {FSMHandler} from "./FSMHandler";
+import {TimeoutTransition} from "./TimeoutTransition";
+import {StdState} from "./StdState";
+import {InputState} from "./InputState";
+import {OutputStateImpl} from "./OutputStateImpl";
+import {catFSM} from "../logging/ConfigLog";
+import {FSMDataHandler} from "./FSMDataHandler";
+import {isKeyDownEvent, isKeyUpEvent} from "./Events";
+import {Subject, Observable} from "rxjs";
+import {remove, removeAt} from "../util/ArrayUtil";
 
 /**
  * A finite state machine that defines the behavior of a user interaction.
@@ -85,8 +85,8 @@ export class FSM {
     protected currentSubFSM?: FSM;
 
     /**
-	 * Creates the FSM.
-	 */
+     * Creates the FSM.
+     */
     public constructor() {
         this._inner = false;
         this.started = false;
@@ -114,40 +114,40 @@ export class FSM {
     }
 
     /**
-	 * @return The current state of FSM during its execution.
-	 */
+     * @return The current state of FSM during its execution.
+     */
     public getCurrentState(): OutputState {
         return this._currentState;
     }
 
     /**
-	 * @return An observable value for observing the current state of FSM during its execution.
-	 */
+     * @return An observable value for observing the current state of FSM during its execution.
+     */
     public currentStateObservable(): Observable<[OutputState, OutputState]> {
         return this.currentStatePublisher;
     }
 
     /**
-	 * States whether the FSM is an inner FSM (ie, whether it is included into another FSM as
-	 * a sub-FSM transition).
-	 * @param inner True: this FSM will be considered as an inner FSM.
-	 */
+     * States whether the FSM is an inner FSM (ie, whether it is included into another FSM as
+     * a sub-FSM transition).
+     * @param inner True: this FSM will be considered as an inner FSM.
+     */
     public setInner(inner: boolean): void {
         this._inner = inner;
     }
 
     /**
-	 * @return True: this FSM is an inner FSM.
-	 */
+     * @return True: this FSM is an inner FSM.
+     */
     public getInner(): boolean {
         return this._inner;
     }
 
     /**
-	 * Processes the provided event to run the FSM.
-	 * @param event The event to process.
-	 * @return True: the FSM correctly processed the event.
-	 */
+     * Processes the provided event to run the FSM.
+     * @param event The event to process.
+     * @return True: the FSM correctly processed the event.
+     */
     public process(event: Event): boolean {
         // Removing the possible corresponding and pending key pressed event
         if (isKeyUpEvent(event)) {
@@ -169,12 +169,12 @@ export class FSM {
     private processEvent(event: Event): boolean {
         if (this.currentSubFSM !== undefined) {
             if (this.asLogFSM) {
-                catFSM.info(`processing event ${event} in a sub-FSM`);
+                catFSM.info(`processing event ${String(event)} in a sub-FSM`);
             }
             return this.currentSubFSM.process(event);
         }
         if (this.asLogFSM) {
-            catFSM.info(`processing event ${event} at state ${this.getCurrentState().getName()}`);
+            catFSM.info(`processing event ${String(event)} at state ${this.getCurrentState().getName()}`);
         }
         return this.getCurrentState().process(event);
     }
@@ -210,8 +210,8 @@ export class FSM {
     }
 
     /**
-	 * @return True: The FSM started.
-	 */
+     * @return True: The FSM started.
+     */
     public isStarted(): boolean {
         return this.started;
     }
@@ -223,7 +223,7 @@ export class FSM {
     }
 
     /**
-     * the end of the FSM execution, the events still (eg keyPress) in process must be recycled to be reused in the FSM.
+     * The end of the FSM execution, the events still (eg keyPress) in process must be recycled to be reused in the FSM.
      */
     protected processRemainingEvents(): void {
         const list: Array<Event> = [...this.eventsToProcess];
@@ -300,18 +300,18 @@ export class FSM {
     }
 
     /**
-	 * Logs (or not) information about the execution of the FSM.
-	 * @param log True: logging activated.
-	 */
+     * Logs (or not) information about the execution of the FSM.
+     * @param log True: logging activated.
+     */
     public log(log: boolean): void {
         this.asLogFSM = log;
     }
 
     /**
-	 * Reinitialises the FSM.
-	 * Remaining events to process are however not clear.
-	 * See [[`FSM#fullReinit`]] for that.
-	 */
+     * Reinitialises the FSM.
+     * Remaining events to process are however not clear.
+     * See [[`FSM#fullReinit`]] for that.
+     */
     public reinit(): void {
         if (this.asLogFSM) {
             catFSM.info("FSM reinitialised");
@@ -333,10 +333,10 @@ export class FSM {
     }
 
     /**
-	 * Reinitialises the FSM.
-	 * Compared to [[`FSM#reinit`]] this method
-	 * flushes the remaining events to process.
-	 */
+     * Reinitialises the FSM.
+     * Compared to [[`FSM#reinit`]] this method
+     * flushes the remaining events to process.
+     */
     public fullReinit(): void {
         this.eventsToProcess.length = 0;
         this.reinit();
@@ -346,11 +346,11 @@ export class FSM {
     }
 
     /**
-	 * Jobs to do when a timeout transition is executed.
-	 * Because the timeout transition is based on a separated thread, the job
-	 * done by this method must be executed in the UI thread.
-	 * UI Platforms must override this method to do that.
-	 */
+     * Jobs to do when a timeout transition is executed.
+     * Because the timeout transition is based on a separated thread, the job
+     * done by this method must be executed in the UI thread.
+     * UI Platforms must override this method to do that.
+     */
     public onTimeout(): void {
         if (this.currentTimeout !== undefined) {
             if (this.asLogFSM) {
@@ -382,7 +382,8 @@ export class FSM {
      * If it is the case, the timeout transition is launched.
      */
     protected checkTimeoutTransition(): void {
-        const tr = this.getCurrentState().getTransitions().find(t => t instanceof TimeoutTransition) as TimeoutTransition | undefined;
+        const tr = this.getCurrentState().getTransitions()
+            .find(t => t instanceof TimeoutTransition) as TimeoutTransition | undefined;
 
         if (tr !== undefined) {
             if (this.asLogFSM) {
@@ -394,17 +395,17 @@ export class FSM {
     }
 
     /**
-	 * Adds an FSM handler.
-	 * @param handler The handler to add.
-	 */
+     * Adds an FSM handler.
+     * @param handler The handler to add.
+     */
     public addHandler(handler: FSMHandler): void {
         this.handlers.push(handler);
     }
 
     /**
-	 * Removes the given FSM handler from this FSM.
-	 * @param handler The handler to remove.
-	 */
+     * Removes the given FSM handler from this FSM.
+     * @param handler The handler to remove.
+     */
     public removeHandler(handler: FSMHandler): void {
         remove(this.handlers, handler);
     }
@@ -453,9 +454,9 @@ export class FSM {
     }
 
     /**
-	 * @return The set of the states that compose the FSM.
-	 * This returns a copy of the real set.
-	 */
+     * @return The set of the states that compose the FSM.
+     * This returns a copy of the real set.
+     */
     public getStates(): Array<State> {
         return [...this.states];
     }
@@ -473,10 +474,10 @@ export class FSM {
     }
 
     /**
-	 * Uninstall the FSM.
-	 * Useful for flushing memory.
-	 * The FSM must not be used after that.
-	 */
+     * Uninstall the FSM.
+     * Useful for flushing memory.
+     * The FSM must not be used after that.
+     */
     public uninstall(): void {
         this.fullReinit();
         this.asLogFSM = false;

@@ -12,20 +12,18 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { KeysData } from "./KeysData";
+import {KeysData} from "./KeysData";
 
 export class KeysDataImpl implements KeysData {
     /**
      * The keys involve in the interaction
      */
     protected keys?: Array<string>;
+
     /**
      * The target of the event that trigger the interaction
      */
     protected target?: EventTarget;
-
-    public constructor() {
-    }
 
     public flush(): void {
         this.keys = undefined;

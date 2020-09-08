@@ -12,13 +12,14 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FSM } from "./FSM";
-import { FSMHandler } from "./FSMHandler";
+import {FSM} from "./FSM";
+import {FSMHandler} from "./FSMHandler";
 
 /**
  * A concurrent FSM: an FSM that contains multiple FSMs that run concurrently.
  */
 export class ConcurrentFSM<F extends FSM> extends FSM {
+    // eslint-disable-next-line @typescript-eslint/typedef
     private static readonly FSMConcurrHandler = class implements FSMHandler {
         private readonly _parent: ConcurrentFSM<FSM>;
 
@@ -27,7 +28,7 @@ export class ConcurrentFSM<F extends FSM> extends FSM {
         }
 
         public fsmStarts(): void {
-            if(this._parent.isStarted()) {
+            if (this._parent.isStarted()) {
                 this._parent.onStarting();
             }
         }
@@ -43,23 +44,23 @@ export class ConcurrentFSM<F extends FSM> extends FSM {
         public fsmCancels(): void {
             this._parent.onCancelling();
         }
-    }
+    };
 
-    private readonly conccurFSMs: Array<F>
+    private readonly conccurFSMs: Array<F>;
 
     public constructor(fsms: Array<F>) {
         super();
-        if(fsms.length < 2) {
-            throw new Error(`Requires more that 1 FSM: ${fsms}`);
+        if (fsms.length < 2) {
+            throw new Error(`Requires more that 1 FSM: ${String(fsms)}`);
         }
 
         this.conccurFSMs = [...fsms];
-        this.conccurFSMs.forEach(fsm => fsm.addHandler(new ConcurrentFSM.FSMConcurrHandler(this)))
+        this.conccurFSMs.forEach(fsm => fsm.addHandler(new ConcurrentFSM.FSMConcurrHandler(this)));
     }
 
     /**
-	 * @return All the FSMs in an copy of the original array.
-	 */
+     * @return All the FSMs in an copy of the original array.
+     */
     public getConccurFSMs(): Array<F> {
         return [...this.conccurFSMs];
     }

@@ -163,6 +163,7 @@ test("pressure move release data", () => {
         public fsmUpdates(): void {
             data = {...interaction.getData()};
         }
+
         public fsmStops(): void {
             data2 = {...interaction.getData()};
         }

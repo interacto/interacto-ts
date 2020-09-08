@@ -12,24 +12,26 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FSMDataHandler } from "../../fsm/FSMDataHandler";
-import { DoubleClick, DoubleClickFSM } from "./DoubleClick";
-import { TerminalState } from "../../fsm/TerminalState";
-import { CancellingState } from "../../fsm/CancellingState";
-import { StdState } from "../../fsm/StdState";
-import { SubFSMTransition } from "../../fsm/SubFSMTransition";
-import { InputState } from "../../fsm/InputState";
-import { FSM } from "../../fsm/FSM";
-import { OutputState } from "../../fsm/OutputState";
-import { MoveTransition } from "../../fsm/MoveTransition";
-import { EscapeKeyPressureTransition } from "../../fsm/EscapeKeyPressureTransition";
-import { SrcTgtPointsData } from "./SrcTgtPointsData";
-import { InteractionImpl } from "../InteractionImpl";
-import { PointDataImpl } from "./PointDataImpl";
+import {FSMDataHandler} from "../../fsm/FSMDataHandler";
+import {DoubleClick, DoubleClickFSM} from "./DoubleClick";
+import {TerminalState} from "../../fsm/TerminalState";
+import {CancellingState} from "../../fsm/CancellingState";
+import {StdState} from "../../fsm/StdState";
+import {SubFSMTransition} from "../../fsm/SubFSMTransition";
+import {InputState} from "../../fsm/InputState";
+import {FSM} from "../../fsm/FSM";
+import {OutputState} from "../../fsm/OutputState";
+import {MoveTransition} from "../../fsm/MoveTransition";
+import {EscapeKeyPressureTransition} from "../../fsm/EscapeKeyPressureTransition";
+import {SrcTgtPointsData} from "./SrcTgtPointsData";
+import {InteractionImpl} from "../InteractionImpl";
+import {PointDataImpl} from "./PointDataImpl";
 
 export class DragLockFSM extends FSM {
     public readonly firstDbleClick: DoubleClickFSM;
+
     public readonly sndDbleClick: DoubleClickFSM;
+
     protected checkButton?: number;
 
     public constructor() {
@@ -193,15 +195,17 @@ export class DragLock extends InteractionImpl<SrcTgtPointsData, DragLockFSM> {
             this.draglock.firstClick.getData().flush();
             this.draglock.sndClick.getData().flush();
         }
-    }
+    };
 
     private readonly handler: DragLockFSMHandler;
+
     private readonly firstClick: DoubleClick;
+
     private readonly sndClick: DoubleClick;
 
     /**
-	 * Creates a drag lock.
-	 */
+     * Creates a drag lock.
+     */
     public constructor() {
         super(new DragLockFSM());
 

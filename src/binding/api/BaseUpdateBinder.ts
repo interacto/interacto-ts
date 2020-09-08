@@ -11,14 +11,14 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { BaseUpdateBinderBuilder } from "./BaseUpdateBinderBuilder";
-import { LogLevel } from "../../logging/LogLevel";
-import { Command } from "../../command/Command";
-import { InteractionImpl } from "../../interaction/InteractionImpl";
-import { FSM } from "../../fsm/FSM";
-import { InteractionData } from "../../interaction/InteractionData";
-import { CmdUpdateBinder } from "./CmdUpdateBinder";
-import { InteractionUpdateBinder } from "./InteractionUpdateBinder";
+import {BaseUpdateBinderBuilder} from "./BaseUpdateBinderBuilder";
+import {LogLevel} from "../../logging/LogLevel";
+import {Command} from "../../command/Command";
+import {InteractionImpl} from "../../interaction/InteractionImpl";
+import {FSM} from "../../fsm/FSM";
+import {InteractionData} from "../../interaction/InteractionData";
+import {CmdUpdateBinder} from "./CmdUpdateBinder";
+import {InteractionUpdateBinder} from "./InteractionUpdateBinder";
 
 /**
  * The base interface for building widget bindings based on non-trivial user interactions (eg DnD) with routines

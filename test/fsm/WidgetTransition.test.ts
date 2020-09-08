@@ -13,12 +13,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { FSM } from "../../src/fsm/FSM";
-import { StdState } from "../../src/fsm/StdState";
-import { WidgetTransition } from "../../src/fsm/WidgetTransition";
-import { StubEvent } from "./StubEvent";
+import {FSM} from "../../src/fsm/FSM";
+import {StdState} from "../../src/fsm/StdState";
+import {WidgetTransition} from "../../src/fsm/WidgetTransition";
+import {StubEvent} from "./StubEvent";
 
-class WTransition extends WidgetTransition<StubEvent, object> {
+class WTransition extends WidgetTransition<object> {
     public constructor() {
         super(new StdState(new FSM(), "a"), new StdState(new FSM(), "b"));
     }
@@ -26,9 +26,11 @@ class WTransition extends WidgetTransition<StubEvent, object> {
     public accept(_event: StubEvent): boolean {
         return false;
     }
+
     public isGuardOK(_event: StubEvent): boolean {
         return false;
     }
+
     public getAcceptedEvents(): Set<string> {
         return new Set();
     }
@@ -41,7 +43,7 @@ beforeEach(() => {
 });
 
 test("testSetWidget", () => {
-    const o = new Object();
+    const o = {};
     transition.setWidget(o);
     expect(transition.getWidget()).toStrictEqual(o);
 });

@@ -12,8 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Zoom } from "../../../src/command/library/Zoom";
-import { Zoomable } from "../../../src/properties/Zoomable";
+import {Zoom} from "../../../src/command/library/Zoom";
+import {Zoomable} from "../../../src/properties/Zoomable";
 
 jest.mock("../../../src/properties/Zoomable");
 

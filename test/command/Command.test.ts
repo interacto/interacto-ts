@@ -11,11 +11,11 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { CmdStatus, RegistrationPolicy } from "../../src/command/Command";
-import { CommandImpl } from "../../src/command/CommandImpl";
-import { CommandsRegistry } from "../../src/command/CommandsRegistry";
-import { UndoCollector } from "../../src/undo/UndoCollector";
-import { StubCmd } from "./StubCmd";
+import {CmdStatus, RegistrationPolicy} from "../../src/command/Command";
+import {CommandImpl} from "../../src/command/CommandImpl";
+import {CommandsRegistry} from "../../src/command/CommandsRegistry";
+import {UndoCollector} from "../../src/undo/UndoCollector";
+import {StubCmd} from "./StubCmd";
 
 let cmd: StubCmd;
 
@@ -29,10 +29,6 @@ beforeEach(() => {
 
 test("cando default", () => {
     const command = new class extends CommandImpl {
-        public constructor() {
-            super();
-        }
-
         protected doCmdBody(): void {
         }
     }();

@@ -84,7 +84,7 @@ describe("horizontal", () => {
         expect(data.tgtObject).toBe(canvas);
     });
 
-    [20, -30].forEach(y => {
+    [20, -30].forEach((y: number) => {
         test("touch move KO not horizontal enough", () => {
             interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 3, canvas, 15,
                 20, 150, 200, 10));
@@ -115,7 +115,7 @@ describe("horizontal", () => {
         expect(handler.fsmCancels).not.toHaveBeenCalled();
     });
 
-    [40, -50].forEach(y => {
+    [40, -50].forEach((y: number) => {
         test("touch move move cancelled not horizontal enough", () => {
             interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 3, canvas, 150,
                 20, 150, 200, 0));
@@ -219,120 +219,6 @@ describe("horizontal", () => {
         expect(handler.fsmStops).toHaveBeenCalledTimes(1);
         expect(handler.fsmCancels).not.toHaveBeenCalled();
     });
-
-    // test("move", () => {
-    //     interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchmove, 2, canvas));
-    //     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-    //     expect(handler.fsmStops).not.toHaveBeenCalled();
-    //     expect(handler.fsmCancels).not.toHaveBeenCalled();
-    // });
-    //
-    // test("touch move", () => {
-    //     const evt1 = createTouchEvent(EventRegistrationToken.Touchstart, 2, canvas);
-    //     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    //     (evt1 as any).timestamp = 0;
-    //     interaction.processEvent(evt1);
-    //     const evt2 = createTouchEvent(EventRegistrationToken.Touchmove, 2, canvas);
-    //     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    //     (evt2 as any).timestamp = 10;
-    //     interaction.processEvent(evt2);
-    //     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-    //     expect(handler.fsmStops).not.toHaveBeenCalled();
-    //     expect(handler.fsmCancels).not.toHaveBeenCalled();
-    // });
-    //
-    // test("move release", () => {
-    //     interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchmove, 2, canvas));
-    //     interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchend, 2, canvas));
-    //     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-    //     expect(handler.fsmStops).not.toHaveBeenCalled();
-    //     expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
-    // });
-    //
-    // test("move move KO: not enough pixels", () => {
-    //     interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchmove, 3, canvas, 100, 30,
-    //         200, 210, 100));
-    //     interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchmove, 3, canvas, 499, 30,
-    //         599, 210, 1100));
-    //     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-    //     expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
-    //     expect(handler.fsmStops).not.toHaveBeenCalled();
-    //     expect(handler.fsmCancels).not.toHaveBeenCalled();
-    // });
-    //
-    // test("move move OK", () => {
-    //     interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchmove, 3, canvas, 200, 30,
-    //         200, 210, 200));
-    //     interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchmove, 3, canvas, 600, 30,
-    //         600, 210, 1200));
-    //     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-    //     expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
-    //     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
-    //     expect(handler.fsmCancels).not.toHaveBeenCalled();
-    // });
-    //
-    // test("move move KO: ok pixel but too slow", () => {
-    //     interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchmove, 3, canvas, 200, 30,
-    //         200, 210, 200));
-    //     interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchmove, 3, canvas, 600, 30,
-    //         600, 210, 1201));
-    //     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-    //     expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
-    //     expect(handler.fsmStops).not.toHaveBeenCalled();
-    //     expect(handler.fsmCancels).not.toHaveBeenCalled();
-    // });
-    //
-    // test("move move move KO: ok pixel but too slow", () => {
-    //     interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchmove, 3, canvas, 200, 30,
-    //         200, 210, 200));
-    //     interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchmove, 3, canvas, 600, 30,
-    //         600, 210, 1201));
-    //     interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchmove, 3, canvas, 1000, 30,
-    //         1000, 210, 2202));
-    //     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-    //     expect(handler.fsmUpdates).toHaveBeenCalledTimes(3);
-    //     expect(handler.fsmStops).not.toHaveBeenCalled();
-    //     expect(handler.fsmCancels).not.toHaveBeenCalled();
-    // });
-    //
-    // test("move move move KO: not enough pixels", () => {
-    //     interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchmove, 3, canvas, 100, 30,
-    //         200, 210, 100));
-    //     interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchmove, 3, canvas, 499, 30,
-    //         599, 210, 1100));
-    //     interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchmove, 3, canvas, 898, 30,
-    //         998, 210, 2100));
-    //     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-    //     expect(handler.fsmUpdates).toHaveBeenCalledTimes(3);
-    //     expect(handler.fsmStops).not.toHaveBeenCalled();
-    //     expect(handler.fsmCancels).not.toHaveBeenCalled();
-    // });
-    //
-    // test("move move move OK: one time", () => {
-    //     interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchmove, 3, canvas, 200, 30,
-    //         200, 210, 200));
-    //     interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchmove, 3, canvas, 400, 30,
-    //         400, 210, 1000));
-    //     interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchmove, 3, canvas, 600, 30,
-    //         600, 210, 1200));
-    //     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-    //     expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
-    //     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
-    //     expect(handler.fsmCancels).not.toHaveBeenCalled();
-    // });
-    //
-    // test("move move move OK: two time", () => {
-    //     interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchmove, 3, canvas, 200, 30,
-    //         200, 210, 200));
-    //     interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchmove, 3, canvas, 600, 30,
-    //         600, 210, 1100));
-    //     interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchmove, 3, canvas, 1000, 30,
-    //         1000, 210, 2000));
-    //     expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
-    //     expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
-    //     expect(handler.fsmStops).toHaveBeenCalledTimes(2);
-    //     expect(handler.fsmCancels).not.toHaveBeenCalled();
-    // });
 });
 
 

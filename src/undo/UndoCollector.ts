@@ -12,9 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Undoable } from "./Undoable";
-import { Subject, Observable } from "rxjs";
-import { peek } from "../util/ArrayUtil";
+import {Undoable} from "./Undoable";
+import {Subject, Observable} from "rxjs";
+import {peek} from "../util/ArrayUtil";
 
 /**
  * A collector of undone/redone objects.
@@ -60,6 +60,7 @@ export class UndoCollector {
     private sizeMax: number;
 
     private readonly undoPublisher: Subject<Undoable | undefined>;
+
     private readonly redoPublisher: Subject<Undoable | undefined>;
 
     public constructor() {
@@ -73,8 +74,8 @@ export class UndoCollector {
 
     /**
      * A stream for observing changes regarding the last undoable object.
-	 * @return An observable value of optional undoable objects: if empty, this means
-	 * that no undoable object are stored anymore.
+     * @return An observable value of optional undoable objects: if empty, this means
+     * that no undoable object are stored anymore.
      */
     public undosObservable(): Observable<Undoable | undefined> {
         return this.undoPublisher;
@@ -82,8 +83,8 @@ export class UndoCollector {
 
     /**
      * A stream for observing changes regarding the last redoable object.
-	 * @return An observable value of optional redoable objects: if empty, this means
-	 * that no redoable object are stored anymore.
+     * @return An observable value of optional redoable objects: if empty, this means
+     * that no redoable object are stored anymore.
      */
     public redosObservable(): Observable<Undoable | undefined> {
         return this.redoPublisher;

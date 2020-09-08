@@ -12,24 +12,25 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FSMDataHandler } from "../../fsm/FSMDataHandler";
-import { Click, ClickFSM } from "./Click";
-import { TerminalState } from "../../fsm/TerminalState";
-import { CancellingState } from "../../fsm/CancellingState";
-import { StdState } from "../../fsm/StdState";
-import { SubFSMTransition } from "../../fsm/SubFSMTransition";
-import { InputState } from "../../fsm/InputState";
-import { FSM } from "../../fsm/FSM";
-import { OutputState } from "../../fsm/OutputState";
-import { TimeoutTransition } from "../../fsm/TimeoutTransition";
-import { MoveTransition } from "../../fsm/MoveTransition";
-import { PointData } from "./PointData";
-import { InteractionImpl } from "../InteractionImpl";
-import { PointDataImpl } from "./PointDataImpl";
+import {FSMDataHandler} from "../../fsm/FSMDataHandler";
+import {Click, ClickFSM} from "./Click";
+import {TerminalState} from "../../fsm/TerminalState";
+import {CancellingState} from "../../fsm/CancellingState";
+import {StdState} from "../../fsm/StdState";
+import {SubFSMTransition} from "../../fsm/SubFSMTransition";
+import {InputState} from "../../fsm/InputState";
+import {FSM} from "../../fsm/FSM";
+import {OutputState} from "../../fsm/OutputState";
+import {TimeoutTransition} from "../../fsm/TimeoutTransition";
+import {MoveTransition} from "../../fsm/MoveTransition";
+import {PointData} from "./PointData";
+import {InteractionImpl} from "../InteractionImpl";
+import {PointDataImpl} from "./PointDataImpl";
 
 export class DoubleClickFSM extends FSM {
     /** The time gap between the two spinner events. */
     private static timeGap = 300;
+
     /** The supplier that provides the time gap. */
     private static readonly SUPPLY_TIME_GAP: () => number = () => DoubleClickFSM.getTimeGap();
 
@@ -51,7 +52,9 @@ export class DoubleClickFSM extends FSM {
     }
 
     public readonly firstClickFSM: ClickFSM;
+
     private readonly sndClick: ClickFSM;
+
     private checkButton?: number;
 
     public constructor() {

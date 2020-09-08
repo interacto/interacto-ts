@@ -31,6 +31,7 @@ import {TimeoutTransition} from "../../fsm/TimeoutTransition";
  */
 class LongTouchFSM extends FSM {
     private readonly duration: number;
+
     private currentTouchID: number | undefined;
 
     /**
@@ -40,7 +41,7 @@ class LongTouchFSM extends FSM {
     public constructor(duration: number) {
         super();
 
-        if(duration <= 0) {
+        if (duration <= 0) {
             throw new Error("Incorrect duration");
         }
 
@@ -88,9 +89,9 @@ class LongTouchFSM extends FSM {
             }
 
             public isGuardOK(event: Event): boolean {
-                return super.isGuardOK(event)
-                    && event instanceof TouchEvent
-                    && event.changedTouches[0].identifier === this._parent.currentTouchID;
+                return super.isGuardOK(event) &&
+                    event instanceof TouchEvent &&
+                    event.changedTouches[0].identifier === this._parent.currentTouchID;
             }
         }(this, touched, releasedTooEarly);
 
@@ -129,7 +130,7 @@ export class LongTouch extends InteractionImpl<TouchData, LongTouchFSM> {
 
             public tap(evt: TouchEvent): void {
                 const touch = evt.changedTouches[0];
-                if(touch !== undefined) {
+                if (touch !== undefined) {
                     (this._parent.data as (SrcTgtTouchDataImpl)).setPointData(
                         touch.clientX, touch.clientY, touch.screenX, touch.screenY, undefined,
                         touch.target, touch.target);

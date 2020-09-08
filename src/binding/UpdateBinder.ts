@@ -12,17 +12,17 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FSM } from "../fsm/FSM";
-import { Binder } from "./Binder";
-import { InteractionData } from "../interaction/InteractionData";
-import { InteractionImpl } from "../interaction/InteractionImpl";
-import { Command } from "../command/Command";
-import { CmdUpdateBinder } from "./api/CmdUpdateBinder";
-import { InteractionCmdUpdateBinder } from "./api/InteractionCmdUpdateBinder";
-import { LogLevel } from "../logging/LogLevel";
-import { WidgetBinding } from "./WidgetBinding";
-import { AnonBinding } from "./AnonBinding";
-import { BindingsObserver } from "./BindingsObserver";
+import {FSM} from "../fsm/FSM";
+import {Binder} from "./Binder";
+import {InteractionData} from "../interaction/InteractionData";
+import {InteractionImpl} from "../interaction/InteractionImpl";
+import {Command} from "../command/Command";
+import {CmdUpdateBinder} from "./api/CmdUpdateBinder";
+import {InteractionCmdUpdateBinder} from "./api/InteractionCmdUpdateBinder";
+import {LogLevel} from "../logging/LogLevel";
+import {WidgetBinding} from "./WidgetBinding";
+import {AnonBinding} from "./AnonBinding";
+import {BindingsObserver} from "./BindingsObserver";
 
 /**
  * The base binding builder for bindings where commands can be updated while the user interaction is running.
@@ -33,10 +33,15 @@ export class UpdateBinder<C extends Command, I extends InteractionImpl<D, FSM>, 
     extends Binder<C, I, D> implements CmdUpdateBinder<C>, InteractionCmdUpdateBinder<C, I, D> {
 
     private updateFct?: (c: C, i?: D) => void;
+
     private cancelFct?: (i: D) => void;
+
     private endOrCancelFct?: (i: D) => void;
+
     private continuousCmdExecution: boolean;
+
     private _strictStart: boolean;
+
     private throttleTimeout: number;
 
     public constructor(observer?: BindingsObserver, throttleTimeout?: number, continuousCmdExecution?: boolean, strict?: boolean,
@@ -161,7 +166,7 @@ export class UpdateBinder<C extends Command, I extends InteractionImpl<D, FSM>, 
         }
 
         const binding = new AnonBinding(this.continuousCmdExecution, this.interactionSupplier(), this.cmdProducer,
-            [...this.widgets], [...this.dynamicNodes],[], this._strictStart, [...this.logLevels], this.throttleTimeout,
+            [...this.widgets], [...this.dynamicNodes], [], this._strictStart, [...this.logLevels], this.throttleTimeout,
             this.stopPropaNow, this.prevDef, this.initCmd, this.updateFct, this.checkConditions,
             this.onEnd, this.cancelFct, this.endOrCancelFct, this.hadEffectsFct,
             this.hadNoEffectFct, this.cannotExecFct);

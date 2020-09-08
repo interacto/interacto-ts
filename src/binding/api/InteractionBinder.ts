@@ -11,13 +11,13 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { InteractionImpl } from "../../interaction/InteractionImpl";
-import { FSM } from "../../fsm/FSM";
-import { InteractionData } from "../../interaction/InteractionData";
-import { InteractionBinderBuilder } from "./InteractionBinderBuilder";
-import { LogLevel } from "../../logging/LogLevel";
-import { Command } from "../../command/Command";
-import { InteractionCmdBinder } from "./InteractionCmdBinder";
+import {InteractionImpl} from "../../interaction/InteractionImpl";
+import {FSM} from "../../fsm/FSM";
+import {InteractionData} from "../../interaction/InteractionData";
+import {InteractionBinderBuilder} from "./InteractionBinderBuilder";
+import {LogLevel} from "../../logging/LogLevel";
+import {Command} from "../../command/Command";
+import {InteractionCmdBinder} from "./InteractionCmdBinder";
 
 
 export interface InteractionBinder<I extends InteractionImpl<D, FSM>, D extends InteractionData>

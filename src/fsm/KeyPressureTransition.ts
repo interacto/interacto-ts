@@ -12,10 +12,10 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { InputState } from "./InputState";
-import { OutputState } from "./OutputState";
-import { EventRegistrationToken } from "./Events";
-import { Transition } from "./Transition";
+import {InputState} from "./InputState";
+import {OutputState} from "./OutputState";
+import {EventRegistrationToken} from "./Events";
+import {Transition} from "./Transition";
 
 /**
  * A transition for a pressure of a key of a keyboard.

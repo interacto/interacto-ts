@@ -12,18 +12,18 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Observable, Subject } from "rxjs";
-import { CmdStatus, Command, RegistrationPolicy } from "../command/Command";
-import { CommandsRegistry } from "../command/CommandsRegistry";
-import { ErrorCatcher } from "../error/ErrorCatcher";
-import { CancelFSMException } from "../fsm/CancelFSMException";
-import { FSM } from "../fsm/FSM";
-import { InteractionData } from "../interaction/InteractionData";
-import { InteractionImpl } from "../interaction/InteractionImpl";
-import { catBinder, catCommand } from "../logging/ConfigLog";
-import { isUndoableType } from "../undo/Undoable";
-import { MustBeUndoableCmdException } from "./MustBeUndoableCmdException";
-import { WidgetBinding } from "./WidgetBinding";
+import {Observable, Subject} from "rxjs";
+import {CmdStatus, Command, RegistrationPolicy} from "../command/Command";
+import {CommandsRegistry} from "../command/CommandsRegistry";
+import {ErrorCatcher} from "../error/ErrorCatcher";
+import {CancelFSMException} from "../fsm/CancelFSMException";
+import {FSM} from "../fsm/FSM";
+import {InteractionData} from "../interaction/InteractionData";
+import {InteractionImpl} from "../interaction/InteractionImpl";
+import {catBinder, catCommand} from "../logging/ConfigLog";
+import {isUndoableType} from "../undo/Undoable";
+import {MustBeUndoableCmdException} from "./MustBeUndoableCmdException";
+import {WidgetBinding} from "./WidgetBinding";
 
 /**
  * The base class to do widget bindings, i.e. bindings between user interactions and (undoable) commands.
@@ -67,13 +67,13 @@ implements WidgetBinding<C, I, D> {
     protected readonly cmdsProduced: Subject<C>;
 
     /**
-    * Creates a widget binding.
-    * @param continuousExecution Specifies whether the command must be executed on each step of the interaction.
-    * @param cmdProducer The type of the command that will be created. Used to instantiate the command by reflexivity.
-    * The class must be public and must have a constructor with no parameter.
-    * @param interaction The user interaction of the binding.
-    * @param widgets The widgets on which the binding will operate.
-    */
+     * Creates a widget binding.
+     * @param continuousExecution Specifies whether the command must be executed on each step of the interaction.
+     * @param cmdProducer The type of the command that will be created. Used to instantiate the command by reflexivity.
+     * The class must be public and must have a constructor with no parameter.
+     * @param interaction The user interaction of the binding.
+     * @param widgets The widgets on which the binding will operate.
+     */
     protected constructor(continuousExecution: boolean, interaction: I, cmdProducer: (i?: D) => C, widgets: Array<EventTarget>) {
         this.asLogBinding = false;
         this.asLogCmd = false;
@@ -105,34 +105,34 @@ implements WidgetBinding<C, I, D> {
     protected createCommand(): C | undefined {
         try {
             return this.cmdProducer(this.interaction.getData());
-        }catch(ex) {
+        } catch (ex) {
             ErrorCatcher.getInstance().reportError(ex);
             return undefined;
         }
     }
 
     public first(): void {
-        // to override.
+        // To override.
     }
 
     public then(): void {
-        // to override.
+        // To override.
     }
 
     public end(): void {
-        // to override.
+        // To override.
     }
 
     public cancel(): void {
-        // to override.
+        // To override.
     }
 
     public endOrCancel(): void {
-        // to override.
+        // To override.
     }
 
     public ifCmdHadNoEffect(): void {
-        // to override.
+        // To override.
     }
 
     public ifCmdHadEffects(): void {
@@ -177,7 +177,7 @@ implements WidgetBinding<C, I, D> {
     }
 
     private unbindCmdAttributesClass(_clazz: object): void {
-        //FIXME
+        // FIXME
     }
 
 
@@ -193,7 +193,7 @@ implements WidgetBinding<C, I, D> {
             }
             this.unbindCmdAttributes();
 
-            if(this.isContinuousCmdExec() && hadEffects) {
+            if (this.isContinuousCmdExec() && hadEffects) {
                 this.cancelContinousWithEffectsCmd(this.cmd);
             }
 
@@ -205,12 +205,12 @@ implements WidgetBinding<C, I, D> {
     }
 
     private cancelContinousWithEffectsCmd(c: C): void {
-        if(isUndoableType(c)) {
+        if (isUndoableType(c)) {
             c.undo();
             if (this.asLogCmd) {
                 catCommand.info(`Command ${c.constructor.name} undone`);
             }
-        }else {
+        } else {
             throw new MustBeUndoableCmdException(c);
         }
     }
@@ -223,11 +223,11 @@ implements WidgetBinding<C, I, D> {
         const ok: boolean = this.when();
 
         if (this.asLogBinding) {
-            catBinder.info(`Starting binding: ${ok}`);
+            catBinder.info(`Starting binding: ${String(ok)}`);
         }
         if (ok) {
             this.cmd = this.createCommand();
-            if(this.cmd !== undefined) {
+            if (this.cmd !== undefined) {
                 this.first();
                 if (this.asLogCmd) {
                     catCommand.info(`Command created and init: ${this.cmd.constructor.name}`);
@@ -266,7 +266,7 @@ implements WidgetBinding<C, I, D> {
                 const ok = this.cmd?.doIt() ?? false;
 
                 if (this.asLogCmd) {
-                    catCommand.info(`Continuous command execution had this result: ${ok}`);
+                    catCommand.info(`Continuous command execution had this result: ${String(ok)}`);
                 }
 
                 if (!ok) {
@@ -287,9 +287,9 @@ implements WidgetBinding<C, I, D> {
         }
 
         if (this.createAndInitCommand()) {
-            if(!this.continuousCmdExec) {
+            if (!this.continuousCmdExec) {
                 this.then();
-                if(this.asLogCmd) {
+                if (this.asLogCmd) {
                     catCommand.info("Command updated");
                 }
             }
@@ -300,9 +300,9 @@ implements WidgetBinding<C, I, D> {
             this.unbindCmdAttributes();
             this.cmd = undefined;
             this.timeEnded++;
-        }else {
-            if(this.cmd != null) {
-                if(this.asLogCmd) {
+        } else {
+            if (this.cmd !== undefined) {
+                if (this.asLogCmd) {
                     catCommand.info("Cancelling the command");
                 }
                 this.cmd.cancel();
@@ -317,7 +317,7 @@ implements WidgetBinding<C, I, D> {
         let ok = this.when();
 
         if (this.asLogBinding) {
-            catBinder.info(`when predicate is ${ok}`);
+            catBinder.info(`when predicate is ${String(ok)}`);
         }
 
         if (ok) {
@@ -327,7 +327,7 @@ implements WidgetBinding<C, I, D> {
                 }
                 this.cmd = this.createCommand();
                 ok = this.cmd !== undefined;
-                if(ok) {
+                if (ok) {
                     this.first();
                 }
             }
@@ -342,7 +342,7 @@ implements WidgetBinding<C, I, D> {
 
     protected afterCmdExecuted(cmd: C, ok: boolean): void {
         if (this.asLogCmd) {
-            catCommand.info(`Command execution had this result: ${ok}`);
+            catCommand.info(`Command execution had this result: ${String(ok)}`);
         }
         if (ok) {
             this.end();
@@ -363,18 +363,18 @@ implements WidgetBinding<C, I, D> {
         const hadEffect: boolean = cmd.hadEffect();
 
         if (this.asLogCmd) {
-            catCommand.info(`Command execution had effect: ${hadEffect}`);
+            catCommand.info(`Command execution had effect: ${String(hadEffect)}`);
         }
 
         if (hadEffect) {
-            if (cmd.getRegistrationPolicy() !== RegistrationPolicy.NONE) {
-                CommandsRegistry.getInstance().addCommand(cmd);
-            } else {
+            if (cmd.getRegistrationPolicy() === RegistrationPolicy.NONE) {
                 // This case is possible only if the policy of the command changes during
                 // its lifecycle using continuous execution:
                 // at start, the command policy is no NONE so the command is executed and added.
                 // Then the policy changes to NONE so that we must remove it from the registry.
                 CommandsRegistry.getInstance().removeCommand(cmd);
+            } else {
+                CommandsRegistry.getInstance().addCommand(cmd);
             }
             this.ifCmdHadEffects();
         } else {
@@ -398,7 +398,7 @@ implements WidgetBinding<C, I, D> {
 
     public setActivated(activated: boolean): void {
         if (this.asLogBinding) {
-            catBinder.info(`Binding Activated: ${activated}`);
+            catBinder.info(`Binding Activated: ${String(activated)}`);
         }
         this.activated = activated;
         this.interaction.setActivated(activated);
@@ -410,25 +410,25 @@ implements WidgetBinding<C, I, D> {
     }
 
     /**
-	 * Logs information related to the binding.
-	 * @param log True: information will be logged
-	 */
+     * Logs information related to the binding.
+     * @param log True: information will be logged
+     */
     public setLogBinding(log: boolean): void {
         this.asLogBinding = log;
     }
 
     /**
-	 * Logs information related to the command creation.
-	 * @param log True: information related to the command creation will be logged
-	 */
+     * Logs information related to the command creation.
+     * @param log True: information related to the command creation will be logged
+     */
     public setLogCmd(log: boolean): void {
         this.asLogCmd = log;
     }
 
     /**
-	 * Logs information related to the user interaction.
-	 * @param log True: information related to the user interaction will be logged
-	 */
+     * Logs information related to the user interaction.
+     * @param log True: information related to the user interaction will be logged
+     */
     public logInteraction(log: boolean): void {
         this.interaction.log(log);
     }

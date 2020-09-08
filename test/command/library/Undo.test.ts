@@ -12,9 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Undo } from "../../../src/command/library/Undo";
-import { UndoCollector } from "../../../src/undo/UndoCollector";
-import { Undoable } from "../../../src/undo/Undoable";
+import {Undo} from "../../../src/command/library/Undo";
+import {UndoCollector} from "../../../src/undo/UndoCollector";
+import {Undoable} from "../../../src/undo/Undoable";
 
 jest.mock("../../../src/undo/UndoCollector");
 
@@ -45,7 +45,7 @@ describe("base undo testing", () => {
 
         beforeEach(() => {
             undoable = {} as Undoable;
-            collector.getLastUndo = jest.fn().mockImplementation(() =>undoable);
+            collector.getLastUndo = jest.fn().mockImplementation(() => undoable);
         });
 
         test("testCanDo", () => {
@@ -63,4 +63,4 @@ describe("base undo testing", () => {
             expect(cmd.hadEffect()).toBeTruthy();
         });
     });
-})
+});

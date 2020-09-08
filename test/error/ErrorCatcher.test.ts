@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ErrorCatcher } from "../../src/error/ErrorCatcher";
+import {ErrorCatcher} from "../../src/error/ErrorCatcher";
 
 let instance: ErrorCatcher;
 

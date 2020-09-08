@@ -12,15 +12,15 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FSMDataHandler } from "../../fsm/FSMDataHandler";
-import { TerminalState } from "../../fsm/TerminalState";
-import { ClickTransition } from "../../fsm/ClickTransition";
-import { InputState } from "../../fsm/InputState";
-import { OutputState } from "../../fsm/OutputState";
-import { PointData } from "./PointData";
-import { FSM } from "../../fsm/FSM";
-import { InteractionImpl } from "../InteractionImpl";
-import { PointDataImpl } from "./PointDataImpl";
+import {FSMDataHandler} from "../../fsm/FSMDataHandler";
+import {TerminalState} from "../../fsm/TerminalState";
+import {ClickTransition} from "../../fsm/ClickTransition";
+import {InputState} from "../../fsm/InputState";
+import {OutputState} from "../../fsm/OutputState";
+import {PointData} from "./PointData";
+import {FSM} from "../../fsm/FSM";
+import {InteractionImpl} from "../InteractionImpl";
+import {PointDataImpl} from "./PointDataImpl";
 
 /**
  * The FSM for click interactions
@@ -29,8 +29,8 @@ export class ClickFSM extends FSM {
     private checkButton?: number;
 
     /**
-	 * Creates the FSM
-	 */
+     * Creates the FSM
+     */
     public constructor() {
         super();
     }

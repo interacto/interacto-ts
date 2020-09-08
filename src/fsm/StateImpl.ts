@@ -12,8 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { State } from "./State";
-import { FSM } from "./FSM";
+import {State} from "./State";
+import {FSM} from "./FSM";
 
 /**
  * The base implementation of the State interface.
@@ -24,10 +24,10 @@ export abstract class StateImpl implements State {
     protected readonly name: string;
 
     /**
-	 * Creates the state.
-	 * @param stateMachine The FSM that will contain the state.
-	 * @param stateName The name of this state.
-	 */
+     * Creates the state.
+     * @param stateMachine The FSM that will contain the state.
+     * @param stateName The name of this state.
+     */
     protected constructor(stateMachine: FSM, stateName: string) {
         this.fsm = stateMachine;
         this.name = stateName;

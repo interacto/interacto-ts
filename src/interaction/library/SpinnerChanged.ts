@@ -12,41 +12,38 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { TerminalState } from "../../fsm/TerminalState";
-import { isSpinner } from "../../fsm/Events";
-import { FSMDataHandler } from "../../fsm/FSMDataHandler";
-import { WidgetData, WidgetDataImpl } from "./WidgetData";
-import { SpinnerChangedTransition } from "../../fsm/SpinnerChangedTransition";
-import { FSM } from "../../fsm/FSM";
-import { InteractionImpl } from "../InteractionImpl";
-import { StdState } from "../../fsm/StdState";
-import { TimeoutTransition } from "../../fsm/TimeoutTransition";
+import {TerminalState} from "../../fsm/TerminalState";
+import {isSpinner} from "../../fsm/Events";
+import {FSMDataHandler} from "../../fsm/FSMDataHandler";
+import {WidgetData, WidgetDataImpl} from "./WidgetData";
+import {SpinnerChangedTransition} from "../../fsm/SpinnerChangedTransition";
+import {FSM} from "../../fsm/FSM";
+import {InteractionImpl} from "../InteractionImpl";
+import {StdState} from "../../fsm/StdState";
+import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 
 export class SpinnerChangedFSM extends FSM {
     /** The time gap between the two spinner events. */
     private static timeGap = 300;
+
     /** The supplier that provides the time gap. */
     private static readonly SUPPLY_TIME_GAP: () => number = () => SpinnerChangedFSM.getTimeGap();
 
     /**
-	 * @return The time gap between the two spinner events.
-	 */
+     * @return The time gap between the two spinner events.
+     */
     public static getTimeGap(): number {
         return SpinnerChangedFSM.timeGap;
     }
 
     /**
-	 * Sets The time gap between the two spinner events.
-	 * @param timeGapBetweenClicks The time gap between the two spinner events. Not done if negative.
-	 */
+     * Sets The time gap between the two spinner events.
+     * @param timeGapBetweenClicks The time gap between the two spinner events. Not done if negative.
+     */
     public static setTimeGap(timeGapBetweenClicks: number): void {
         if (timeGapBetweenClicks > 0) {
             SpinnerChangedFSM.timeGap = timeGapBetweenClicks;
         }
-    }
-
-    public constructor() {
-        super();
     }
 
     public buildFSM(dataHandler?: SpinnerChangedHandler): void {

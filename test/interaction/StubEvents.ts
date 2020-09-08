@@ -19,35 +19,37 @@ export function createTouchEvent(type: string, id: number, target: EventTarget, 
     const clientXvalue = clientX ?? 0;
     const clientYvalue = clientY ?? 0;
     const evt = new TouchEvent(type, {
-        view: window,
-        bubbles: true,
-        cancelable: false,
-        detail: 1,
-        ctrlKey: false,
-        altKey: false,
-        shiftKey: false,
-        metaKey: false,
-        changedTouches: [{
-            altitudeAngle: 0,
-            azimuthAngle: 0,
-            identifier: id,
-            screenX: screenXvalue,
-            screenY: screenYvalue,
-            clientX: clientXvalue,
-            clientY: clientYvalue,
-            force: 0,
-            pageX: 0,
-            pageY: 0,
-            radiusX:0,
-            radiusY:0,
-            rotationAngle:0,
-            target,
-            touchType: "direct"
-        }]
+        "view": window,
+        "bubbles": true,
+        "cancelable": false,
+        "detail": 1,
+        "ctrlKey": false,
+        "altKey": false,
+        "shiftKey": false,
+        "metaKey": false,
+        "changedTouches": [
+            {
+                "altitudeAngle": 0,
+                "azimuthAngle": 0,
+                "identifier": id,
+                "screenX": screenXvalue,
+                "screenY": screenYvalue,
+                "clientX": clientXvalue,
+                "clientY": clientYvalue,
+                "force": 0,
+                "pageX": 0,
+                "pageY": 0,
+                "radiusX": 0,
+                "radiusY": 0,
+                "rotationAngle": 0,
+                target,
+                "touchType": "direct"
+            }
+        ]
     });
 
-    if(timeStamp !== undefined) {
-        Object.defineProperty(evt, "timeStamp", {value: timeStamp})
+    if (timeStamp !== undefined) {
+        Object.defineProperty(evt, "timeStamp", {"value": timeStamp});
     }
 
     return evt;
@@ -62,38 +64,38 @@ export function createMouseEvent(type: string, target: EventTarget, screenX?: nu
     const clientYvalue = clientY ?? 0;
     const buttonValue = button ?? 0;
     return new MouseEvent(type, {
-        view: window,
-        bubbles: true,
-        cancelable: false,
-        detail: 1,
-        screenX: screenXvalue,
-        screenY: screenYvalue,
-        clientX: clientXvalue,
-        clientY: clientYvalue,
-        ctrlKey: false,
-        altKey: false,
-        shiftKey: false,
-        metaKey: false,
-        button: buttonValue,
-        relatedTarget: target
+        "view": window,
+        "bubbles": true,
+        "cancelable": false,
+        "detail": 1,
+        "screenX": screenXvalue,
+        "screenY": screenYvalue,
+        "clientX": clientXvalue,
+        "clientY": clientYvalue,
+        "ctrlKey": false,
+        "altKey": false,
+        "shiftKey": false,
+        "metaKey": false,
+        "button": buttonValue,
+        "relatedTarget": target
     });
 }
 
 export function createKeyEvent(type: string, keyCode: string): KeyboardEvent {
     return new KeyboardEvent(type, {
-        cancelable: false,
-        bubbles: true,
-        view: window,
-        code: keyCode,
-        repeat: false
+        "cancelable": false,
+        "bubbles": true,
+        "view": window,
+        "code": keyCode,
+        "repeat": false
     });
 }
 
 export function createUIEvent(type: string): UIEvent {
     return new UIEvent(type, {
-        detail : 0,
-        bubbles: true,
-        cancelable: false,
-        view: window
+        "detail": 0,
+        "bubbles": true,
+        "cancelable": false,
+        "view": window
     });
 }

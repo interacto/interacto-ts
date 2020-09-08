@@ -12,31 +12,32 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FSMDataHandler } from "../../fsm/FSMDataHandler";
-import { StdState } from "../../../src/fsm/StdState";
-import { TerminalState } from "../../../src/fsm/TerminalState";
-import { CancellingState } from "../../../src/fsm/CancellingState";
-import { OutputState } from "../../../src/fsm/OutputState";
-import { InputState } from "../../../src/fsm/InputState";
-import { MoveTransition } from "../../fsm/MoveTransition";
-import { EscapeKeyPressureTransition } from "../../fsm/EscapeKeyPressureTransition";
-import { SrcTgtPointsData, SrcTgtPointsDataImpl } from "./SrcTgtPointsData";
-import { FSM } from "../../fsm/FSM";
-import { PressureTransition } from "../../fsm/PressureTransition";
-import { ReleaseTransition } from "../../fsm/ReleaseTransition";
-import { InteractionImpl } from "../InteractionImpl";
+import {FSMDataHandler} from "../../fsm/FSMDataHandler";
+import {StdState} from "../../../src/fsm/StdState";
+import {TerminalState} from "../../../src/fsm/TerminalState";
+import {CancellingState} from "../../../src/fsm/CancellingState";
+import {OutputState} from "../../../src/fsm/OutputState";
+import {InputState} from "../../../src/fsm/InputState";
+import {MoveTransition} from "../../fsm/MoveTransition";
+import {EscapeKeyPressureTransition} from "../../fsm/EscapeKeyPressureTransition";
+import {SrcTgtPointsData, SrcTgtPointsDataImpl} from "./SrcTgtPointsData";
+import {FSM} from "../../fsm/FSM";
+import {PressureTransition} from "../../fsm/PressureTransition";
+import {ReleaseTransition} from "../../fsm/ReleaseTransition";
+import {InteractionImpl} from "../InteractionImpl";
 
 /**
  * The FSM for DnD interactions.
  */
 export class DnDFSM extends FSM {
     private readonly cancellable: boolean;
+
     private buttonToCheck?: number;
 
     /**
-	 * Creates the FSM
-	 * @param cancellable True: the FSM can be cancelled using the ESC key.
-	 */
+     * Creates the FSM
+     * @param cancellable True: the FSM can be cancelled using the ESC key.
+     */
     public constructor(cancellable: boolean) {
         super();
         this.cancellable = cancellable;

@@ -11,7 +11,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Subject, Observable } from "rxjs";
+import {Subject, Observable} from "rxjs";
 
 
 /**
@@ -43,8 +43,8 @@ export class ErrorCatcher {
     }
 
     /**
-	 * @return An observable stream of errors. Cannot be null.
-	 */
+     * @return An observable stream of errors. Cannot be null.
+     */
     public getErrors(): Observable<Error> {
         return this.notifier;
     }

@@ -13,8 +13,8 @@
  */
 
 import {EventRegistrationToken, FSMHandler, KeysPressed} from "../../../src/interacto";
-import { StubFSMHandler } from "../../fsm/StubFSMHandler";
-import { createKeyEvent } from "../StubEvents";
+import {StubFSMHandler} from "../../fsm/StubFSMHandler";
+import {createKeyEvent} from "../StubEvents";
 
 jest.mock("../../fsm/StubFSMHandler");
 

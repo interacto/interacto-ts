@@ -20,8 +20,8 @@ import {SrcTgtTouchData, SrcTgtTouchDataImpl} from "./SrcTgtTouchData";
  */
 export interface MultiTouchData extends InteractionData {
     /**
-	 * @return The list of touch data.
-	 */
+     * @return The list of touch data.
+     */
     getTouchData(): Array<SrcTgtTouchData>;
 }
 
@@ -33,8 +33,8 @@ export class MultiTouchDataImpl implements MultiTouchData {
     private readonly touchesData: Map<number, SrcTgtTouchDataImpl>;
 
     /**
-	 * Creates the interaction data
-	 */
+     * Creates the interaction data
+     */
     public constructor() {
         this.touchesData = new Map<number, SrcTgtTouchDataImpl>();
     }
@@ -44,19 +44,19 @@ export class MultiTouchDataImpl implements MultiTouchData {
     }
 
     /**
-	 * Adds a touch data to this multi-touch data
-	 * @param data The touch data to add
-	 */
+     * Adds a touch data to this multi-touch data
+     * @param data The touch data to add
+     */
     public addTouchData(data: SrcTgtTouchDataImpl): void {
         const id = data.getTouchId();
-        if(id !== undefined) {
+        if (id !== undefined) {
             this.touchesData.set(id, data);
         }
     }
 
     public removeTouchData(id: number): void {
         const tdata = this.touchesData.get(id);
-        if(tdata !== undefined) {
+        if (tdata !== undefined) {
             this.touchesData.delete(id);
             tdata.flush();
         }
@@ -68,15 +68,15 @@ export class MultiTouchDataImpl implements MultiTouchData {
     }
 
     /**
-	 * Sets new value for the given touch point.
-	 * The identifier of the given event point is used to find the corresponding
-	 * touch data.
-	 * @param tp The touch event to use.
-	 */
+     * Sets new value for the given touch point.
+     * The identifier of the given event point is used to find the corresponding
+     * touch data.
+     * @param tp The touch event to use.
+     */
     public setTouch(tp: Touch | null): void {
-        if(tp !== null) {
+        if (tp !== null) {
             const tdata = this.touchesData.get(tp.identifier);
-            if(tdata !== undefined) {
+            if (tdata !== undefined) {
                 tdata.setTgtData(tp.clientX, tp.clientY, tp.screenX, tp.screenY, tp.target);
             }
         }

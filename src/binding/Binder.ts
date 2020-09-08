@@ -12,16 +12,16 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { LogLevel } from "../logging/LogLevel";
-import { FSM } from "../fsm/FSM";
-import { InteractionData } from "../interaction/InteractionData";
-import { InteractionImpl } from "../interaction/InteractionImpl";
-import { Command } from "../command/Command";
-import { CmdBinder } from "./api/CmdBinder";
-import { InteractionBinder } from "./api/InteractionBinder";
-import { InteractionCmdBinder } from "./api/InteractionCmdBinder";
-import { WidgetBinding } from "./WidgetBinding";
-import { BindingsObserver } from "./BindingsObserver";
+import {LogLevel} from "../logging/LogLevel";
+import {FSM} from "../fsm/FSM";
+import {InteractionData} from "../interaction/InteractionData";
+import {InteractionImpl} from "../interaction/InteractionImpl";
+import {Command} from "../command/Command";
+import {CmdBinder} from "./api/CmdBinder";
+import {InteractionBinder} from "./api/InteractionBinder";
+import {InteractionCmdBinder} from "./api/InteractionCmdBinder";
+import {WidgetBinding} from "./WidgetBinding";
+import {BindingsObserver} from "./BindingsObserver";
 
 /**
  * The base class that defines the concept of binding builder (called binder).
@@ -33,19 +33,33 @@ export abstract class Binder<C extends Command, I extends InteractionImpl<D, FSM
 implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> {
 
     protected initCmd?: (c: C, i?: D) => void;
+
     protected checkConditions?: (i: D) => boolean;
+
     protected cmdProducer?: (i?: D) => C;
+
     protected widgets: Array<EventTarget>;
+
     protected dynamicNodes: Array<Node>;
+
     protected interactionSupplier?: () => I;
+
     protected hadEffectsFct?: (c: C, i: D) => void;
+
     protected hadNoEffectFct?: (c: C, i: D) => void;
+
     protected cannotExecFct?: (c: C, i: D) => void;
+
     protected onEnd?: (c: C, i?: D) => void;
+
     protected logLevels: Array<LogLevel>;
+
     protected stopPropaNow: boolean;
+
     protected prevDef: boolean;
+
     protected targetWidgets: Array<EventTarget>;
+
     protected observer?: BindingsObserver;
 
 

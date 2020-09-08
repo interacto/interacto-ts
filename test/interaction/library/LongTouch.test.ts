@@ -32,7 +32,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-    if(interaction !== undefined) {
+    if (interaction !== undefined) {
         interaction.uninstall();
     }
     jest.clearAllMocks();
@@ -50,7 +50,7 @@ test("cannot build the interaction twice", () => {
 });
 
 [1000, 2000].forEach(duration => {
-    describe(`long touch ${duration}`, () => {
+    describe(`long touch ${String(duration)}`, () => {
         beforeEach(() => {
             interaction = new LongTouch(duration);
             interaction.getFsm().addHandler(handler);

@@ -12,12 +12,12 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { SrcTgtPointsData, SrcTgtPointsDataImpl } from "./SrcTgtPointsData";
+import {SrcTgtPointsData, SrcTgtPointsDataImpl} from "./SrcTgtPointsData";
 
 export interface SrcTgtTouchData extends SrcTgtPointsData {
     /**
-	 * @return The ID of the touch.
-	 */
+     * @return The ID of the touch.
+     */
     getTouchId(): number | undefined;
 }
 

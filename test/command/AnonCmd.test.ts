@@ -13,7 +13,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { AnonCmd } from "../../src/command/AnonCmd";
+import {AnonCmd} from "../../src/command/AnonCmd";
 
 let cmd: AnonCmd;
 
@@ -24,7 +24,9 @@ test("testCanDoOKCmd", () => {
 
 test("testExecute", () => {
     let ok = false;
-    cmd = new AnonCmd(() => ok = true);
+    cmd = new AnonCmd(() => {
+        ok = true;
+    });
     cmd.doIt();
     expect(ok).toBeTruthy();
 });

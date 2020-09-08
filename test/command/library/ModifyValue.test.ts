@@ -12,15 +12,12 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ModifyValue } from "../../../src/command/library/ModifyValue";
+import {ModifyValue} from "../../../src/command/library/ModifyValue";
 
 class ModifyValueImpl extends ModifyValue<string> {
     public mustMatch = false;
-    public cptApply = 0;
 
-    public constructor() {
-        super();
-    }
+    public cptApply = 0;
 
     public applyValue(): void {
         this.cptApply++;

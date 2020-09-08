@@ -12,10 +12,10 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { StateImpl } from "./StateImpl";
-import { OutputState } from "./OutputState";
-import { Transition } from "./Transition";
-import { FSM } from "./FSM";
+import {StateImpl} from "./StateImpl";
+import {OutputState} from "./OutputState";
+import {Transition} from "./Transition";
+import {FSM} from "./FSM";
 
 /**
  * Base implementation of the OutputState interface.
@@ -24,10 +24,10 @@ export abstract class OutputStateImpl extends StateImpl implements OutputState {
     protected readonly transitions: Array<Transition>;
 
     /**
-	 * Creates the state.
-	 * @param stateMachine The FSM that will contain the state.
-	 * @param stateName The name of this state.
-	 */
+     * Creates the state.
+     * @param stateMachine The FSM that will contain the state.
+     * @param stateName The name of this state.
+     */
     protected constructor(stateMachine: FSM, stateName: string) {
         super(stateMachine, stateName);
         this.transitions = [];

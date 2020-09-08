@@ -12,9 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FSM } from "../../src/fsm/FSM";
-import { StateImpl } from "../../src/fsm/StateImpl";
-import { StdState } from "../../src/fsm/StdState";
+import {FSM} from "../../src/fsm/FSM";
+import {StateImpl} from "../../src/fsm/StateImpl";
+import {StdState} from "../../src/fsm/StdState";
 import "jest";
 
 let state: StateImpl;

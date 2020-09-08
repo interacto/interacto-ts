@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { KeyData } from "./KeyData";
+import {KeyData} from "./KeyData";
 
 export class KeyDataImpl implements KeyData {
     /**
@@ -24,9 +24,6 @@ export class KeyDataImpl implements KeyData {
      * The target of the event that trigger the interaction
      */
     protected target?: EventTarget;
-
-    public constructor() {
-    }
 
     public flush(): void {
         this.key = undefined;

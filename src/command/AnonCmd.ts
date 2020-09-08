@@ -13,7 +13,7 @@
  */
 
 
-import { CommandImpl } from "./CommandImpl";
+import {CommandImpl} from "./CommandImpl";
 
 /**
  * An anonymous command that takes an anonymous function as a parameter corresponding to the command to execute.

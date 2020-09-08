@@ -11,10 +11,10 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Subscription } from "rxjs";
-import { CommandsRegistry, UndoCollector, WidgetBinding,
-    WidgetData, isTextInput, TextInputChanged, textInputBinder, WidgetDataImpl } from "../../src/interacto";
-import { StubCmd } from "../command/StubCmd";
+import {Subscription} from "rxjs";
+import {CommandsRegistry, UndoCollector, WidgetBinding,
+    WidgetData, isTextInput, TextInputChanged, textInputBinder, WidgetDataImpl} from "../../src/interacto";
+import {StubCmd} from "../command/StubCmd";
 
 let txt1: HTMLInputElement | HTMLTextAreaElement;
 let binding: WidgetBinding<StubCmd, TextInputChanged, WidgetData<HTMLInputElement | HTMLTextAreaElement>>;
@@ -39,13 +39,13 @@ afterEach(() => {
     }
     CommandsRegistry.getInstance().clear();
     UndoCollector.getInstance().clear();
-    if(binding !== undefined) {
+    if (binding !== undefined) {
         binding.uninstallBinding();
     }
 });
 
 test("type text create command", () => {
-    const textonUpdate = Array<string>()
+    const textonUpdate = Array<string>();
 
     binding = textInputBinder()
         .toProduce(() => cmd)
@@ -73,7 +73,7 @@ test("type text create command", () => {
 });
 
 test("type text exec several times the command", () => {
-    const textonUpdate = Array<string>()
+    const textonUpdate = Array<string>();
 
     binding = textInputBinder()
         .toProduce(() => cmd)

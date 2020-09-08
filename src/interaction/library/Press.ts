@@ -22,10 +22,6 @@ import {InteractionImpl} from "../InteractionImpl";
 import {PointDataImpl} from "./PointDataImpl";
 
 export class PressFSM extends FSM {
-    public constructor() {
-        super();
-    }
-
     public buildFSM(dataHandler?: PressFSMHandler): void {
         if (this.states.length > 1) {
             return;

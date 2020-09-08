@@ -12,14 +12,14 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FSM } from "../fsm/FSM";
-import { OutputState } from "../fsm/OutputState";
-import { InitState } from "../fsm/InitState";
-import { Logger } from "typescript-logging";
-import { catInteraction } from "../logging/ConfigLog";
-import { InteractionData } from "./InteractionData";
-import { EventRegistrationToken, isMouseEvent, isKeyEvent, isTouchEvent } from "../fsm/Events";
-import { Subscription } from "rxjs";
+import {FSM} from "../fsm/FSM";
+import {OutputState} from "../fsm/OutputState";
+import {InitState} from "../fsm/InitState";
+import {Logger} from "typescript-logging";
+import {catInteraction} from "../logging/ConfigLog";
+import {InteractionData} from "./InteractionData";
+import {EventRegistrationToken, isMouseEvent, isKeyEvent, isTouchEvent} from "../fsm/Events";
+import {Subscription} from "rxjs";
 
 /**
  * The base implementation of a user interaction.
@@ -28,22 +28,37 @@ import { Subscription } from "rxjs";
  */
 export abstract class InteractionImpl<D extends InteractionData, F extends FSM> {
     protected logger?: Logger;
+
     protected readonly fsm: F;
+
     protected asLog: boolean;
+
     protected readonly _registeredNodes: Set<EventTarget>;
+
     protected readonly _registeredTargetNode: Set<EventTarget>;
+
     protected readonly _additionalNodes: Array<Node>;
+
     /** The current list of mutation observers. Used for listening changes in node lists. */
     protected readonly listMutationObserver: Array<MutationObserver>;
+
     /** The interaction data */
     protected readonly data: D;
+
     private mouseHandler?: ((e: MouseEvent) => void);
+
     private touchHandler?: ((e: TouchEvent) => void);
+
     private keyHandler?: ((e: KeyboardEvent) => void);
+
     private uiHandler?: ((e: UIEvent) => void);
+
     private actionHandler?: EventListener;
+
     private readonly disposable: Subscription;
+
     private stopImmediatePropag: boolean;
+
     private preventDef: boolean;
 
     /**
@@ -53,10 +68,10 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM> 
     protected activated: boolean;
 
     /**
-	 * Creates the interaction.
-	 * @param fsm The FSM that defines the behavior of the user interaction.
-	 */
-    protected constructor(fsm: F) {
+     * Creates the interaction.
+     * @param fsm The FSM that defines the behavior of the user interaction.
+     */
+    public constructor(fsm: F) {
         this.activated = false;
         this.stopImmediatePropag = false;
         this.preventDef = false;
@@ -78,8 +93,8 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM> 
     }
 
     /**
-	 * @return The interaction data of the user interaction. Cannot be null.
-	 */
+     * @return The interaction data of the user interaction. Cannot be null.
+     */
     public getData(): D {
         return this.data;
     }
@@ -127,11 +142,12 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM> 
     }
 
     protected getEventTypesOf(state: OutputState): Set<string> {
-        if(state.getTransitions().length === 0) {
+        if (state.getTransitions().length === 0) {
             return new Set();
         }
 
-        return state.getTransitions().map(t => t.getAcceptedEvents()).reduce((a, b) => new Set([...a, ...b]));
+        return state.getTransitions().map(t => t.getAcceptedEvents())
+            .reduce((a, b) => new Set([...a, ...b]));
     }
 
     public registerToNodes(widgets: Array<EventTarget>): void {
@@ -182,7 +198,7 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM> 
         });
 
         const newMutationObserver = new MutationObserver(mutations => this.callBackMutationObserver(mutations));
-        newMutationObserver.observe(elementToObserve, { childList: true });
+        newMutationObserver.observe(elementToObserve, {"childList": true});
         this.listMutationObserver.push(newMutationObserver);
     }
 
@@ -201,7 +217,7 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM> 
         }
         if (EventRegistrationToken.Scroll === eventType) {
             node.addEventListener(EventRegistrationToken.Scroll, this.getUIHandler());
-            return;
+
         }
     }
 
@@ -220,7 +236,7 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM> 
         }
         if (EventRegistrationToken.Scroll === eventType) {
             node.removeEventListener(EventRegistrationToken.Scroll, this.getUIHandler());
-            return;
+
         }
     }
 
@@ -278,15 +294,15 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM> 
     }
 
     /**
-	 * @return Whether the user interaction is running.
-	 */
+     * @return Whether the user interaction is running.
+     */
     public isRunning(): boolean {
         return this.activated && !(this.fsm.getCurrentState() instanceof InitState);
     }
 
     /**
-	 * Reinitialises the user interaction
-	 */
+     * Reinitialises the user interaction
+     */
     public fullReinit(): void {
         this.fsm.fullReinit();
     }
@@ -326,25 +342,25 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM> 
     }
 
     /**
-	 * Processes the given UI event.
-	 * @param event The event to process.
-	 */
+     * Processes the given UI event.
+     * @param event The event to process.
+     */
     public processEvent(event: Event): void {
         if (this.isActivated()) {
             this.fsm.process(event);
-            if(this.preventDef) {
+            if (this.preventDef) {
                 event.preventDefault();
             }
-            if(this.stopImmediatePropag) {
+            if (this.stopImmediatePropag) {
                 event.stopImmediatePropagation();
             }
         }
     }
 
     /**
-	 * Sets the logging of the user interaction.
-	 * @param log True: the user interaction will log information.
-	 */
+     * Sets the logging of the user interaction.
+     * @param log True: the user interaction will log information.
+     */
     public log(log: boolean): void {
         this.asLog = log;
         this.fsm.log(log);
@@ -352,21 +368,21 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM> 
 
 
     /**
-	 * @return True if the user interaction is activated.
-	 */
+     * @return True if the user interaction is activated.
+     */
     public isActivated(): boolean {
         return this.activated;
     }
 
     /**
-	 * Sets whether the user interaction is activated.
-	 * When not activated, a user interaction does not process
-	 * input events any more.
-	 * @param activated True: the user interaction will be activated.
-	 */
+     * Sets whether the user interaction is activated.
+     * When not activated, a user interaction does not process
+     * input events any more.
+     * @param activated True: the user interaction will be activated.
+     */
     public setActivated(activated: boolean): void {
         if (this.asLog) {
-            catInteraction.info("Interaction activation: " + String(activated));
+            catInteraction.info(`Interaction activation: ${String(activated)}`);
         }
         this.activated = activated;
         if (!activated) {
@@ -375,8 +391,8 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM> 
     }
 
     /**
-	 * @return The FSM of the user interaction.
-	 */
+     * @return The FSM of the user interaction.
+     */
     public getFsm(): F {
         return this.fsm;
     }
@@ -387,9 +403,9 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM> 
     }
 
     /**
-	 * Uninstall the user interaction. Used to free memory.
-	 * Then, user interaction can be used any more.
-	 */
+     * Uninstall the user interaction. Used to free memory.
+     * Then, user interaction can be used any more.
+     */
     public uninstall(): void {
         this.disposable.unsubscribe();
         this._registeredNodes.forEach(n => this.onNodeUnregistered(n));

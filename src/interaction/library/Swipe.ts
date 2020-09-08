@@ -19,6 +19,7 @@ import {Pan, PanFSM} from "./Pan";
  */
 class SwipeFSM extends PanFSM {
     private readonly minVelocity: number;
+
     private t0: number;
 
     /**
@@ -42,8 +43,8 @@ class SwipeFSM extends PanFSM {
     }
 
     protected checkFinalPanConditions(evt: TouchEvent): boolean {
-        return super.checkFinalPanConditions(evt)
-            && this.computeVelocity(evt.timeStamp,
+        return super.checkFinalPanConditions(evt) &&
+            this.computeVelocity(evt.timeStamp,
                 evt.changedTouches[0].clientX, evt.changedTouches[0].clientY) >= this.minVelocity;
     }
 
@@ -57,8 +58,6 @@ class SwipeFSM extends PanFSM {
  * A swipe user interaction.
  */
 export class Swipe extends Pan {
-    // private readonly handler: SwipeFSMDataHandler;
-
     /**
      * Creates the swipe user interaction
      * If this velocity is not reached, the interaction is cancelled.
@@ -69,43 +68,5 @@ export class Swipe extends Pan {
      */
     public constructor(horizontal: boolean, minVelocity: number, minLength: number, pxTolerance: number) {
         super(horizontal, minLength, pxTolerance, new SwipeFSM(horizontal, minVelocity, minLength, pxTolerance));
-
-        // this.handler = new class implements SwipeFSMDataHandler {
-        //     private readonly _parent: Swipe;
-        //
-        //     public constructor(parent: Swipe) {
-        //         this._parent = parent;
-        //     }
-        //
-        //     public startSwipping(evt: TouchEvent): void {
-        //         const touch: Touch = evt.changedTouches[0];
-        //         const data = (this._parent.data as (SrcTgtTouchDataImpl));
-        //         data.setPointData(touch.clientX, touch.clientY, touch.screenX, touch.screenY,
-        //             undefined, touch.target, touch.target);
-        //         data.setTouchId(touch.identifier);
-        //         data.setTgtData(touch.clientX, touch.clientY, touch.screenX, touch.screenY, touch.target);
-        //     }
-        //
-        //     public swipping(evt: TouchEvent): void {
-        //         const touch: Touch = evt.changedTouches[0];
-        //         (this._parent.data as (SrcTgtTouchDataImpl)).setTgtData(touch.clientX, touch.clientY, touch.screenX,
-        //             touch.screenY, touch.target);
-        //     }
-        //
-        //     public swipped(evt: TouchEvent): void {
-        //         const touch: Touch = evt.changedTouches[0];
-        //         (this._parent.data as (SrcTgtTouchDataImpl)).setTgtData(touch.clientX, touch.clientY, touch.screenX,
-        //             touch.screenY, touch.target);
-        //     }
-        //
-        //     public reinitData(): void {
-        //         this._parent.reinitData();
-        //     }
-        // }(this);
-        // this.getFsm().buildFSM(this.handler);
     }
-    //
-    // public createDataObject(): SrcTgtTouchData {
-    //     return new SrcTgtTouchDataImpl();
-    // }
 }

@@ -12,9 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { StubFSMHandler } from "../../fsm/StubFSMHandler";
+import {StubFSMHandler} from "../../fsm/StubFSMHandler";
 import {EventRegistrationToken, FSMHandler, KeyTyped} from "../../../src/interacto";
-import { createKeyEvent } from "../StubEvents";
+import {createKeyEvent} from "../StubEvents";
 
 jest.mock("../../fsm/StubFSMHandler");
 

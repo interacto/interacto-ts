@@ -29,6 +29,7 @@ import {TouchMoveTransition} from "../../fsm/TouchMoveTransition";
  * The FSM for the Pan interaction
  */
 export class PanFSM extends FSM {
+    // eslint-disable-next-line @typescript-eslint/typedef
     private static readonly PanMoveTransitionKO = class extends TouchMoveTransition {
         private readonly _parent: PanFSM;
 
@@ -38,14 +39,16 @@ export class PanFSM extends FSM {
         }
 
         public isGuardOK(evt: Event): boolean {
-            return evt instanceof TouchEvent
-                && evt.changedTouches[0].identifier === this._parent.touchID
-                && !this._parent.isStable(evt.changedTouches[0].clientX, evt.changedTouches[0].clientY)
+            return evt instanceof TouchEvent &&
+                evt.changedTouches[0].identifier === this._parent.touchID &&
+                !this._parent.isStable(evt.changedTouches[0].clientX, evt.changedTouches[0].clientY);
         }
     };
 
+    // eslint-disable-next-line @typescript-eslint/typedef
     private static readonly PanMoveTransitionOK = class extends TouchMoveTransition {
         private readonly parent: PanFSM;
+
         private readonly dataHandler?: PanFSMDataHandler;
 
         public constructor(parent: PanFSM, srcState: OutputState, tgtState: InputState,
@@ -62,17 +65,22 @@ export class PanFSM extends FSM {
         }
 
         public isGuardOK(evt: Event): boolean {
-            return evt instanceof TouchEvent
-                && evt.changedTouches[0].identifier === this.parent.touchID
-                && this.parent.isStable(evt.changedTouches[0].clientX, evt.changedTouches[0].clientY)
+            return evt instanceof TouchEvent &&
+                evt.changedTouches[0].identifier === this.parent.touchID &&
+                this.parent.isStable(evt.changedTouches[0].clientX, evt.changedTouches[0].clientY);
         }
     };
 
     protected readonly horizontal: boolean;
+
     protected readonly minLength: number;
+
     protected readonly pxTolerance: number;
+
     protected touchID: number | undefined;
+
     protected stableAxe: number | undefined;
+
     protected moveAxe: number | undefined;
 
     /**
@@ -165,9 +173,9 @@ export class PanFSM extends FSM {
             }
 
             public isGuardOK(evt: Event): boolean {
-                return evt instanceof TouchEvent
-                    && evt.changedTouches[0].identifier === this._parent.touchID
-                    && !this._parent.checkFinalPanConditions(evt);
+                return evt instanceof TouchEvent &&
+                    evt.changedTouches[0].identifier === this._parent.touchID &&
+                    !this._parent.checkFinalPanConditions(evt);
             }
         }(this, moved, cancelled);
 
@@ -180,9 +188,9 @@ export class PanFSM extends FSM {
             }
 
             public isGuardOK(evt: Event): boolean {
-                return evt instanceof TouchEvent
-                    && evt.changedTouches[0].identifier === this._parent.touchID
-                    && this._parent.checkFinalPanConditions(evt);
+                return evt instanceof TouchEvent &&
+                    evt.changedTouches[0].identifier === this._parent.touchID &&
+                    this._parent.checkFinalPanConditions(evt);
             }
 
             public action(event: Event): void {

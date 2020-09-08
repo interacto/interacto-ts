@@ -12,13 +12,13 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Transition } from "./Transition";
-import { FSM } from "./FSM";
-import { FSMHandler } from "./FSMHandler";
-import { isOutputStateType, OutputState } from "./OutputState";
-import { InputState } from "./InputState";
-import { TerminalState } from "./TerminalState";
-import { CancellingState } from "./CancellingState";
+import {Transition} from "./Transition";
+import {FSM} from "./FSM";
+import {FSMHandler} from "./FSMHandler";
+import {isOutputStateType, OutputState} from "./OutputState";
+import {InputState} from "./InputState";
+import {TerminalState} from "./TerminalState";
+import {CancellingState} from "./CancellingState";
 
 /**
  * A transition that refers to another FSM.
@@ -31,11 +31,11 @@ export class SubFSMTransition extends Transition {
     private readonly subFSMHandler: FSMHandler;
 
     /**
-	 * Creates the transition.
-	 * @param srcState The source state of the transition.
-	 * @param tgtState The output state of the transition.
+     * Creates the transition.
+     * @param srcState The source state of the transition.
+     * @param tgtState The output state of the transition.
      * @param fsm The inner FSM that composes the transition.
-	 */
+     */
     public constructor(srcState: OutputState, tgtState: InputState, fsm: FSM) {
         super(srcState, tgtState);
         this.subFSM = fsm;
@@ -109,7 +109,7 @@ export class SubFSMTransition extends Transition {
     }
 
     public getAcceptedEvents(): Set<string> {
-        if(this.subFSM.initState.getTransitions().length === 0) {
+        if (this.subFSM.initState.getTransitions().length === 0) {
             return new Set();
         }
 

@@ -51,7 +51,7 @@ afterEach(() => {
     }
     CommandsRegistry.getInstance().clear();
     UndoCollector.getInstance().clear();
-    if(binding !== undefined) {
+    if (binding !== undefined) {
         binding.uninstallBinding();
     }
 });
@@ -103,7 +103,9 @@ test("testInit1Executed", () => {
     binding = buttonBinder()
         .on(button1)
         .toProduce(() => cmd)
-        .first(c => c.exec = 10)
+        .first(c => {
+            c.exec = 10;
+        })
         .bind();
 
     button1.click();
@@ -115,7 +117,9 @@ test("testInit1Executed", () => {
 test("testInit2Executed", () => {
     binding = buttonBinder()
         .toProduce(_i => cmd)
-        .first((c, _i) => c.exec = 10)
+        .first((c, _i) => {
+            c.exec = 10;
+        })
         .on(button1)
         .bind();
 
@@ -158,10 +162,12 @@ test("testBuilderCloned", () => {
 
     expect(binder).not.toBe(buttonBinder);
     expect(binder).not.toBe(buttonBinder().toProduce(() => cmd));
-    expect(binder).not.toBe(buttonBinder().toProduce(() => cmd).first(() => { }));
+    expect(binder).not.toBe(buttonBinder().toProduce(() => cmd)
+        .first(() => { }));
     expect(binder).not.toBe(buttonBinder().on(button1));
     expect(binder).not.toBe(buttonBinder().when(() => false));
-    expect(binder).not.toBe(buttonBinder().toProduce(_i => cmd).end(_c => { }));
+    expect(binder).not.toBe(buttonBinder().toProduce(_i => cmd)
+        .end(_c => { }));
     expect(binder).not.toBe(buttonBinder().log(LogLevel.COMMAND));
 });
 

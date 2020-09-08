@@ -12,12 +12,12 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Subscription } from "rxjs/internal/Subscription";
-import { ConcurrentFSM } from "../fsm/ConcurrentFSM";
-import { FSM } from "../fsm/FSM";
-import { OutputState } from "../fsm/OutputState";
-import { InteractionData } from "./InteractionData";
-import { InteractionImpl } from "./InteractionImpl";
+import {Subscription} from "rxjs/internal/Subscription";
+import {ConcurrentFSM} from "../fsm/ConcurrentFSM";
+import {FSM} from "../fsm/FSM";
+import {OutputState} from "../fsm/OutputState";
+import {InteractionData} from "./InteractionData";
+import {InteractionImpl} from "./InteractionImpl";
 
 /**
  * The base implementation of a user interaction that uses concurrent FSMs.
@@ -28,13 +28,14 @@ export abstract class ConcurrentInteraction<D extends InteractionData, F extends
     private readonly subscriptions: Array<Subscription>;
 
     /**
-	 * Creates the concurrent interaction.
-	 * @param fsm The concurrent FSM that defines the behavior of the user interaction.
-	 */
+     * Creates the concurrent interaction.
+     * @param fsm The concurrent FSM that defines the behavior of the user interaction.
+     */
     public constructor(fsm: F) {
         super(fsm);
         this.subscriptions = this.fsm.getConccurFSMs()
-            .map(conc => conc.currentStateObservable().subscribe(current => this.updateEventsRegistered(current[1], current[0])));
+            .map(conc => conc.currentStateObservable()
+                .subscribe(current => this.updateEventsRegistered(current[1], current[0])));
     }
 
     public isRunning(): boolean {

@@ -30,13 +30,6 @@ import {InteractionImpl} from "../InteractionImpl";
 export class KeyTypedFSM extends FSM {
     private checkKey?: string;
 
-    /**
-     * Creates the FSM.
-     */
-    public constructor() {
-        super();
-    }
-
     public buildFSM(dataHandler?: KeyTypedFSMHandler): void {
         if (this.states.length > 1) {
             return;

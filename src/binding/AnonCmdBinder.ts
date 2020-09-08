@@ -12,14 +12,14 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FSM } from "../fsm/FSM";
-import { Binder } from "./Binder";
-import { AnonBinding } from "./AnonBinding";
-import { AnonCmd } from "../command/AnonCmd";
-import { InteractionData } from "../interaction/InteractionData";
-import { WidgetBindingImpl } from "./WidgetBindingImpl";
-import { InteractionImpl } from "../interaction/InteractionImpl";
-import { BindingsObserver } from "./BindingsObserver";
+import {FSM} from "../fsm/FSM";
+import {Binder} from "./Binder";
+import {AnonBinding} from "./AnonBinding";
+import {AnonCmd} from "../command/AnonCmd";
+import {InteractionData} from "../interaction/InteractionData";
+import {WidgetBindingImpl} from "./WidgetBindingImpl";
+import {InteractionImpl} from "../interaction/InteractionImpl";
+import {BindingsObserver} from "./BindingsObserver";
 
 export class AnonCmdBinder<I extends InteractionImpl<D, FSM>, D extends InteractionData> extends Binder<AnonCmd, I, D> {
 
@@ -38,8 +38,8 @@ export class AnonCmdBinder<I extends InteractionImpl<D, FSM>, D extends Interact
         dup.widgets = [...this.widgets];
         dup.dynamicNodes = [...this.dynamicNodes];
         dup.interactionSupplier = this.interactionSupplier;
-        dup.onEnd =  this.onEnd;
-        dup.logLevels =  [...this.logLevels];
+        dup.onEnd = this.onEnd;
+        dup.logLevels = [...this.logLevels];
         dup.hadNoEffectFct = this.hadNoEffectFct;
         dup.hadEffectsFct = this.hadEffectsFct;
         dup.cannotExecFct = this.cannotExecFct;

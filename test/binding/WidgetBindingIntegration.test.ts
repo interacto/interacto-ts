@@ -12,11 +12,18 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { CmdStatus, CommandsRegistry, FSM, InputState, InteractionData, OutputState,
-    TerminalState, Transition, WidgetBindingImpl } from "../../src/interacto";
-import { StubCmd } from "../command/StubCmd";
-import { StubSubEvent1 } from "../fsm/StubEvent";
-import { InteractionStub } from "../interaction/InteractionStub";
+import {
+    CmdStatus,
+    CommandsRegistry,
+    FSM,
+    InteractionData,
+    TerminalState,
+    Transition,
+    WidgetBindingImpl
+} from "../../src/interacto";
+import {StubCmd} from "../command/StubCmd";
+import {StubSubEvent1} from "../fsm/StubEvent";
+import {InteractionStub} from "../interaction/InteractionStub";
 
 
 let interaction: InteractionStub;
@@ -27,10 +34,6 @@ let whenValue: () => boolean;
 
 
 class TrStub extends Transition {
-    public constructor(srcState: OutputState, tgtState: InputState) {
-        super(srcState, tgtState);
-    }
-
     public accept(event: object): boolean {
         return event instanceof StubSubEvent1;
     }
@@ -57,6 +60,7 @@ class StubWidgetBinding extends WidgetBindingImpl<StubCmd, InteractionStub, Inte
     public constructor() {
         super(false, interaction, () => cmd, []);
     }
+
     public when(): boolean {
         return whenValue();
     }

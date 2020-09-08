@@ -12,13 +12,13 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { TerminalState } from "../../fsm/TerminalState";
-import { isDatePicker } from "../../fsm/Events";
-import { FSMDataHandler } from "../../fsm/FSMDataHandler";
-import { WidgetData, WidgetDataImpl } from "./WidgetData";
-import { DatePickedTransition } from "../../fsm/DatePickedTransition";
-import { FSM } from "../../fsm/FSM";
-import { InteractionImpl } from "../InteractionImpl";
+import {TerminalState} from "../../fsm/TerminalState";
+import {isDatePicker} from "../../fsm/Events";
+import {FSMDataHandler} from "../../fsm/FSMDataHandler";
+import {WidgetData, WidgetDataImpl} from "./WidgetData";
+import {DatePickedTransition} from "../../fsm/DatePickedTransition";
+import {FSM} from "../../fsm/FSM";
+import {InteractionImpl} from "../InteractionImpl";
 
 export class DatePickedFSM extends FSM {
     public constructor() {

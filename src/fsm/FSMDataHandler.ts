@@ -17,7 +17,7 @@
  */
 export interface FSMDataHandler {
     /**
-	 * Notifies the concrete handler that the interaction data must be flushed
-	 */
+     * Notifies the concrete handler that the interaction data must be flushed
+     */
     reinitData(): void;
 }

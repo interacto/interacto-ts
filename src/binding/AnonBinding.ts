@@ -12,31 +12,41 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FSM } from "../fsm/FSM";
-import { InteractionData } from "../interaction/InteractionData";
-import { LogLevel } from "../logging/LogLevel";
-import { WidgetBindingImpl } from "./WidgetBindingImpl";
-import { InteractionImpl } from "../interaction/InteractionImpl";
-import { catBinder } from "../logging/ConfigLog";
-import { Command } from "../command/Command";
+import {FSM} from "../fsm/FSM";
+import {InteractionData} from "../interaction/InteractionData";
+import {LogLevel} from "../logging/LogLevel";
+import {WidgetBindingImpl} from "./WidgetBindingImpl";
+import {InteractionImpl} from "../interaction/InteractionImpl";
+import {catBinder} from "../logging/ConfigLog";
+import {Command} from "../command/Command";
 
 export class AnonBinding<C extends Command, I extends InteractionImpl<D, FSM>, D extends InteractionData>
     extends WidgetBindingImpl<C, I, D> {
 
     private readonly execInitCmd?: (c: C, i?: D) => void;
+
     private readonly execUpdateCmd?: (c: C, i?: D) => void;
+
     private readonly checkInteraction?: (i?: D) => boolean;
+
     private readonly cancelFct?: (i: D) => void;
+
     private readonly endOrCancelFct?: (i: D) => void;
+
     private readonly hadEffectsFct?: (c: C, i?: D) => void;
+
     private readonly hadNoEffectFct?: (c: C, i?: D) => void;
+
     private readonly cannotExecFct?: (c: C, i?: D) => void;
+
     private readonly onEnd?: (c: C, i?: D) => void;
+
     private readonly strictStart: boolean;
 
 
     public constructor(continuousExec: boolean, interaction: I, cmdProducer: (d?: D) => C,
                        widgets: Array<EventTarget>, dynamicNodes: Array<Node>, targetWidgets: Array<EventTarget>,
+                       // eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
                        strict: boolean, loggers: Array<LogLevel>, timeoutThrottle: number,
                        stopPropa: boolean, prevDef: boolean,
                        initCmdFct?: (c: C, i?: D) => void,
@@ -133,7 +143,7 @@ export class AnonBinding<C extends Command, I extends InteractionImpl<D, FSM>, D
     public when(): boolean {
         const ok = this.checkInteraction === undefined || this.checkInteraction(this.getInteraction().getData());
         if (this.asLogBinding) {
-            catBinder.info(`Checking condition:  ${ok}`);
+            catBinder.info(`Checking condition:  ${String(ok)}`);
         }
         return ok;
     }

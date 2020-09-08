@@ -23,8 +23,8 @@ import {TouchDnDFSM, TouchDnDFSMHandler} from "./TouchDnD";
  */
 export class MultiTouchFSM extends ConcurrentFSM<TouchDnDFSM> {
     /**
-	 * Creates the FSM.
-	 */
+     * Creates the FSM.
+     */
     public constructor(nbTouch: number) {
         super([...Array(nbTouch).keys()].map(_ => new TouchDnDFSM()));
     }
@@ -35,14 +35,14 @@ export class MultiTouchFSM extends ConcurrentFSM<TouchDnDFSM> {
     }
 
     public process(event: Event): boolean {
-        if(!(event instanceof TouchEvent)) {
+        if (!(event instanceof TouchEvent)) {
             return false;
         }
 
         const touch = this.getConccurFSMs()
             .filter(fsm => fsm.getTouchId() === event.changedTouches[0].identifier)[0];
 
-        if(touch !== undefined) {
+        if (touch !== undefined) {
             return touch.process(event);
         }
 
@@ -59,9 +59,9 @@ export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouch
     private readonly handler: TouchDnDFSMHandler;
 
     /**
-	 * Creates the multi-touch interaction
-	 * @param nbTouches The number of touches.
-	 */
+     * Creates the multi-touch interaction
+     * @param nbTouches The number of touches.
+     */
     public constructor(nbTouches: number) {
         super(new MultiTouchFSM(nbTouches));
 
@@ -74,7 +74,7 @@ export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouch
 
             public onTouch(event: TouchEvent): void {
                 const touch = event.changedTouches[0];
-                if(touch !== undefined) {
+                if (touch !== undefined) {
                     (this.parent.data as (MultiTouchDataImpl)).addTouchData(
                         new SrcTgtTouchDataImpl(touch.identifier, touch.clientX, touch.clientY, touch.screenX, touch.screenY, touch.target));
                 }

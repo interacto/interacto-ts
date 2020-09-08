@@ -80,7 +80,7 @@ describe("horizontal", () => {
         expect(data.tgtObject).toBe(canvas);
     });
 
-    [11, -11].forEach(y => {
+    [11, -11].forEach((y: number) => {
         test("touch move KO not horizontal enough", () => {
             interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 3, canvas, 15,
                 20, 150, 200));
@@ -109,7 +109,7 @@ describe("horizontal", () => {
     });
 
 
-    [11, -11].forEach(y => {
+    [11, -11].forEach((y: number) => {
         test("touch move move cancelled not horizontal enough", () => {
             interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 3, canvas, 15,
                 20, 150, 200));

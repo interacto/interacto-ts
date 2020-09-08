@@ -30,6 +30,7 @@ import {TouchDataImpl} from "./TouchData";
  */
 class TapFSM extends FSM {
     private countTaps: number;
+
     private readonly nbTaps: number;
 
     /**
@@ -174,7 +175,7 @@ export class Tap extends InteractionImpl<TapData, TapFSM> {
 
             public tap(evt: TouchEvent): void {
                 const touch = evt.changedTouches[0];
-                if(touch !== undefined) {
+                if (touch !== undefined) {
                     (this._parent.data as (TapDataImpl)).addTapData(
                         new TouchDataImpl(touch.identifier, touch.clientX, touch.clientY,
                             touch.screenX, touch.screenY, touch.target));

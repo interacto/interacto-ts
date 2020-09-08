@@ -12,9 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { CancellingState } from "../../src/fsm/CancellingState";
-import { FSM } from "../../src/fsm/FSM";
-import { OutputState } from "../../src/fsm/OutputState";
+import {CancellingState} from "../../src/fsm/CancellingState";
+import {FSM} from "../../src/fsm/FSM";
+import {OutputState} from "../../src/fsm/OutputState";
 
 let state: CancellingState;
 let fsm: FSM;

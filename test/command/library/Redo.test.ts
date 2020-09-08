@@ -12,9 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Redo } from "../../../src/command/library/Redo";
-import { UndoCollector } from "../../../src/undo/UndoCollector";
-import { Undoable } from "../../../src/undo/Undoable";
+import {Redo} from "../../../src/command/library/Redo";
+import {UndoCollector} from "../../../src/undo/UndoCollector";
+import {Undoable} from "../../../src/undo/Undoable";
 
 jest.mock("../../../src/undo/UndoCollector");
 
@@ -63,4 +63,4 @@ describe("base redo testing", () => {
             expect(cmd.hadEffect()).toBeTruthy();
         });
     });
-})
+});

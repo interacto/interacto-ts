@@ -12,19 +12,19 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ScrollData } from "./ScrollData";
+import {ScrollData} from "./ScrollData";
 
 /**
  * Scrolling interaction data implementation with write access.
  */
 export class ScrollDataImpl implements ScrollData {
     protected scrolledNode?: EventTarget;
-    protected px?: number;
-    protected py?: number;
-    protected increment?: number;
 
-    public constructor() {
-    }
+    protected px?: number;
+
+    protected py?: number;
+
+    protected increment?: number;
 
     public flush(): void {
         this.increment = undefined;
@@ -53,9 +53,9 @@ export class ScrollDataImpl implements ScrollData {
         this.scrolledNode = event.target ?? undefined;
 
         if (event.view !== null) {
-            this.increment = this.getIncrement() + (event.view.scrollY === undefined
-                || event.view.scrollY < this.getIncrement() ? 0 :
-                event.view.scrollY - (this.py === undefined || event.view.scrollY < this.getIncrement() ? 0 : this.py));
+            this.increment = this.getIncrement() + (event.view.scrollY === undefined ||
+                event.view.scrollY < this.getIncrement() ? 0
+                : event.view.scrollY - (this.py === undefined || event.view.scrollY < this.getIncrement() ? 0 : this.py));
             this.px = event.view.scrollX;
             this.py = event.view.scrollY;
         }

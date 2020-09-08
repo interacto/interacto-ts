@@ -12,16 +12,16 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { KeysPressed } from "../interaction/library/KeysPressed";
-import { KeysData } from "../interaction/library/KeysData";
-import { Binder } from "./Binder";
-import { Command } from "../command/Command";
-import { KeyInteractionBinder } from "./api/KeyInteractionBinder";
-import { KeyInteractionCmdBinder } from "./api/KeyInteractionCmdBinder";
-import { LogLevel } from "../logging/LogLevel";
-import { WidgetBinding } from "./WidgetBinding";
-import { AnonBinding } from "./AnonBinding";
-import { BindingsObserver } from "./BindingsObserver";
+import {KeysPressed} from "../interaction/library/KeysPressed";
+import {KeysData} from "../interaction/library/KeysData";
+import {Binder} from "./Binder";
+import {Command} from "../command/Command";
+import {KeyInteractionBinder} from "./api/KeyInteractionBinder";
+import {KeyInteractionCmdBinder} from "./api/KeyInteractionCmdBinder";
+import {LogLevel} from "../logging/LogLevel";
+import {WidgetBinding} from "./WidgetBinding";
+import {AnonBinding} from "./AnonBinding";
+import {BindingsObserver} from "./BindingsObserver";
 
 /**
  * The base binding builder to create bindings between a keys pressure interaction and a given command.
@@ -33,6 +33,7 @@ export class KeysBinder<C extends Command> extends Binder<C, KeysPressed, KeysDa
         KeyInteractionBinder<KeysPressed, KeysData>, KeyInteractionCmdBinder<C, KeysPressed, KeysData> {
 
     private codes: Array<string>;
+
     private readonly checkCode: (i: KeysData) => boolean;
 
     protected constructor(observer?: BindingsObserver, initCmd?: (c: C, i?: KeysData) => void, whenPredicate?: (i: KeysData) => boolean,
@@ -46,9 +47,9 @@ export class KeysBinder<C extends Command> extends Binder<C, KeysPressed, KeysDa
         this.codes = keyCodes === undefined ? [] : [...keyCodes];
         this.checkCode = (i: KeysData): boolean => {
             const keys = i.getKeys();
-            return (this.codes.length === 0 || this.codes.length === keys.length
-                && keys.every((v: string) => this.codes.includes(v)))
-                && (this.checkConditions === undefined || this.checkConditions(i));
+            return (this.codes.length === 0 || this.codes.length === keys.length &&
+                keys.every((v: string) => this.codes.includes(v))) &&
+                (this.checkConditions === undefined || this.checkConditions(i));
         };
     }
 

@@ -45,7 +45,7 @@ afterEach(() => {
     binding.uninstallBinding();
     CommandsRegistry.getInstance().clear();
     UndoCollector.getInstance().clear();
-    if(binding !== undefined) {
+    if (binding !== undefined) {
         binding.uninstallBinding();
     }
 });
@@ -75,11 +75,11 @@ test("run multi-touch two times recycle events", () => {
 
     binding = multiTouchBinder(2)
         .toProduce(() => new StubCmd(true))
-        .first((c, i) => {
+        .first((_, i) => {
             dataFirst.push(i === undefined ? -1 : i.getTouchData().length);
         })
         .on(c1)
-        .end((c, i) => {
+        .end((_, i) => {
             data.push(i === undefined ? -1 : i.getTouchData().length);
         })
         .bind();

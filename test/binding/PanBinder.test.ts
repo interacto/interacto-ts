@@ -45,7 +45,7 @@ afterEach(() => {
     binding.uninstallBinding();
     CommandsRegistry.getInstance().clear();
     UndoCollector.getInstance().clear();
-    if(binding !== undefined) {
+    if (binding !== undefined) {
         binding.uninstallBinding();
     }
 });

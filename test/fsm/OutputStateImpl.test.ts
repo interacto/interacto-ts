@@ -12,12 +12,12 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FSM } from "../../src/fsm/FSM";
-import { InputState } from "../../src/fsm/InputState";
-import { OutputStateImpl } from "../../src/fsm/OutputStateImpl";
-import { StubTransitionOK } from "./StubTransitionOK";
-import { StdState } from "../../src/fsm/StdState";
-import { Transition } from "../../src/fsm/Transition";
+import {FSM} from "../../src/fsm/FSM";
+import {InputState} from "../../src/fsm/InputState";
+import {OutputStateImpl} from "../../src/fsm/OutputStateImpl";
+import {StubTransitionOK} from "./StubTransitionOK";
+import {StdState} from "../../src/fsm/StdState";
+import {Transition} from "../../src/fsm/Transition";
 
 let state: OutputStateImpl;
 let fsm: FSM;
@@ -28,6 +28,7 @@ beforeEach(() => {
         public constructor() {
             super(fsm, "os");
         }
+
         public exit(): void {
         }
     }();

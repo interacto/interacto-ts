@@ -11,14 +11,14 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { LogLevel } from "../../logging/LogLevel";
-import { Command } from "../../command/Command";
-import { InteractionData } from "../../interaction/InteractionData";
-import { InteractionImpl } from "../../interaction/InteractionImpl";
-import { BaseBinderBuilder } from "./BaseBinderBuilder";
-import { FSM } from "../../fsm/FSM";
-import { InteractionBinder } from "./InteractionBinder";
-import { CmdBinder } from "./CmdBinder";
+import {LogLevel} from "../../logging/LogLevel";
+import {Command} from "../../command/Command";
+import {InteractionData} from "../../interaction/InteractionData";
+import {InteractionImpl} from "../../interaction/InteractionImpl";
+import {BaseBinderBuilder} from "./BaseBinderBuilder";
+import {FSM} from "../../fsm/FSM";
+import {InteractionBinder} from "./InteractionBinder";
+import {CmdBinder} from "./CmdBinder";
 
 /**
  * The base interface for building widget bindings with routines
@@ -36,19 +36,19 @@ export interface BaseBinder extends BaseBinderBuilder {
     log(...level: Array<LogLevel>): BaseBinder;
 
     /**
-	 * Defines how to create the UI command that will produce the widget binding.
-	 * @param cmdSupplier The supplier that will return a new UI command on each call.
-	 * @type <C> The type of the UI command
-	 * @return A clone of the current builder to chain the building configuration.
-	 */
+     * Defines how to create the UI command that will produce the widget binding.
+     * @param cmdSupplier The supplier that will return a new UI command on each call.
+     * @type <C> The type of the UI command
+     * @return A clone of the current builder to chain the building configuration.
+     */
     toProduce<C extends Command>(cmdSupplier: () => C): CmdBinder<C>;
 
     /**
-	 * Defines how to create the user interaction that the widget binding will use to create UI commands.
-	 * @param interactionSupplier The supplier that will return a new user interaction.
-	 * @type <D> The user interaction data type
-	 * @type <I> The user interaction type
-	 * @return A clone of the current builder to chain the building configuration.
-	 */
+     * Defines how to create the user interaction that the widget binding will use to create UI commands.
+     * @param interactionSupplier The supplier that will return a new user interaction.
+     * @type <D> The user interaction data type
+     * @type <I> The user interaction type
+     * @return A clone of the current builder to chain the building configuration.
+     */
     usingInteraction<I extends InteractionImpl<D, FSM>, D extends InteractionData>(interactionSupplier: () => I): InteractionBinder<I, D>;
 }

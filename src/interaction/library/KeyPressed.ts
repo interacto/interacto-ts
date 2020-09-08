@@ -12,15 +12,15 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FSMDataHandler } from "../../fsm/FSMDataHandler";
-import { TerminalState } from "../../fsm/TerminalState";
-import { KeyPressureTransition } from "../../fsm/KeyPressureTransition";
-import { OutputState } from "../../fsm/OutputState";
-import { InputState } from "../../fsm/InputState";
-import { KeyData } from "./KeyData";
-import { FSM } from "../../fsm/FSM";
-import { InteractionImpl } from "../InteractionImpl";
-import { KeyDataImpl } from "./KeyDataImpl";
+import {FSMDataHandler} from "../../fsm/FSMDataHandler";
+import {TerminalState} from "../../fsm/TerminalState";
+import {KeyPressureTransition} from "../../fsm/KeyPressureTransition";
+import {OutputState} from "../../fsm/OutputState";
+import {InputState} from "../../fsm/InputState";
+import {KeyData} from "./KeyData";
+import {FSM} from "../../fsm/FSM";
+import {InteractionImpl} from "../InteractionImpl";
+import {KeyDataImpl} from "./KeyDataImpl";
 
 /**
  * An FSM for a single key pressure.
@@ -29,9 +29,9 @@ export class KeyPressedFSM extends FSM {
     private readonly modifiersAccepted: boolean;
 
     /**
-	 * Creates the FSM.
-	 * @param modifierAccepted True: the FSM will consider key modifiers.
-	 */
+     * Creates the FSM.
+     * @param modifierAccepted True: the FSM will consider key modifiers.
+     */
     public constructor(modifierAccepted: boolean) {
         super();
         this.modifiersAccepted = modifierAccepted;
@@ -62,8 +62,8 @@ export class KeyPressedFSM extends FSM {
             }
 
             public isGuardOK(event: Event): boolean {
-                return this._parent.modifiersAccepted || (event instanceof KeyboardEvent && !event.altKey && !event.ctrlKey
-                    && !event.shiftKey && !event.metaKey);
+                return this._parent.modifiersAccepted || (event instanceof KeyboardEvent && !event.altKey && !event.ctrlKey &&
+                    !event.shiftKey && !event.metaKey);
             }
 
         }(this, this.initState, pressed);
