@@ -11,7 +11,7 @@
   },
   "homepage": "https://github.com/interacto/interacto-ts-api",
   "repository": "https://github.com/interacto/interacto-ts-api.git",
-  "license": "GPL3",
+  "license": "GPL-3.0",
   "main": "./dist/interacto.umd.js",
   "module": "dist/interacto.es5.js",
   "types": "./dist/interacto.d.ts",
