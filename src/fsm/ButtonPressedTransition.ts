@@ -35,7 +35,7 @@ export class ButtonPressedTransition extends Transition {
     }
 
     public getAcceptedEvents(): Set<string> {
-        return new Set([EventRegistrationToken.Click]);
+        return new Set([EventRegistrationToken.Click, EventRegistrationToken.Auxclick]);
     }
 
     public isGuardOK(_event: Event): boolean {

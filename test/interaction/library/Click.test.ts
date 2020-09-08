@@ -53,6 +53,13 @@ test("press on a canvas then move don't starts the interaction", () => {
     expect(handler.fsmStarts).not.toHaveBeenCalled();
 });
 
+test("specific mouse button checking OK", () => {
+    interaction.registerToNodes([canvas]);
+    canvas.dispatchEvent(createMouseEvent("auxclick", canvas, 111, 222, 11, 22, 2));
+    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+    expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+});
+
 test("testClickData", () => {
     let x: number | undefined;
     let y: number | undefined;

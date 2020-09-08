@@ -19,6 +19,7 @@ export enum EventRegistrationToken {
     KeyDown = "keydown",
     KeyUp = "keyup",
     Click = "click",
+    Auxclick = "auxclick",
     Input = "input",
     Scroll = "scroll",
     Change = "change",
@@ -60,7 +61,8 @@ export function isMouseEvent(eventType: string): boolean {
     return eventType === EventRegistrationToken.MouseDown ||
     eventType === EventRegistrationToken.MouseUp ||
     eventType === EventRegistrationToken.MouseMove ||
-    eventType === EventRegistrationToken.Click;
+    eventType === EventRegistrationToken.Click ||
+    eventType === EventRegistrationToken.Auxclick;
 }
 
 /**

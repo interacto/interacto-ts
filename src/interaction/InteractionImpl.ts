@@ -226,10 +226,12 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM> 
 
     protected registerActionHandlerClick(node: EventTarget): void {
         node.addEventListener(EventRegistrationToken.Click, this.getActionHandler());
+        node.addEventListener(EventRegistrationToken.Auxclick, this.getActionHandler());
     }
 
     protected unregisterActionHandlerClick(node: EventTarget): void {
         node.removeEventListener(EventRegistrationToken.Click, this.getActionHandler());
+        node.removeEventListener(EventRegistrationToken.Auxclick, this.getActionHandler());
     }
 
     protected registerActionHandlerInput(node: EventTarget): void {

@@ -30,7 +30,7 @@ export class ClickTransition extends Transition {
     }
 
     public accept(event: Event): boolean {
-        return event.type === "click";
+        return this.getAcceptedEvents().has(event.type);
     }
 
     public isGuardOK(_event: Event): boolean {
@@ -38,6 +38,6 @@ export class ClickTransition extends Transition {
     }
 
     public getAcceptedEvents(): Set<string> {
-        return new Set([EventRegistrationToken.Click]);
+        return new Set([EventRegistrationToken.Click, EventRegistrationToken.Auxclick]);
     }
 }
