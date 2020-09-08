@@ -12,18 +12,16 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { FSMDataHandler } from "../../fsm/FSMDataHandler";
-import { TerminalState } from "../../fsm/TerminalState";
-import { PressureTransition } from "../../fsm/PressureTransition";
-import { isMouseDownEvent } from "../../fsm/Events";
-import { PointData } from "./PointData";
-import { FSM } from "../../fsm/FSM";
-import { InteractionImpl } from "../InteractionImpl";
-import { PointDataImpl } from "./PointDataImpl";
+import {FSMDataHandler} from "../../fsm/FSMDataHandler";
+import {TerminalState} from "../../fsm/TerminalState";
+import {PressureTransition} from "../../fsm/PressureTransition";
+import {isMouseDownEvent} from "../../fsm/Events";
+import {PointData} from "./PointData";
+import {FSM} from "../../fsm/FSM";
+import {InteractionImpl} from "../InteractionImpl";
+import {PointDataImpl} from "./PointDataImpl";
 
 export class PressFSM extends FSM {
-    private checkButton?: number;
-
     public constructor() {
         super();
     }
@@ -43,16 +41,6 @@ export class PressFSM extends FSM {
                 }
             }
         }(this.initState, pressed);
-    }
-
-    public setCheckButton(buttonToCheck: number): void {
-        if (this.checkButton === undefined) {
-            this.checkButton = buttonToCheck;
-        }
-    }
-
-    public getCheckButton(): number {
-        return this.checkButton ?? -1;
     }
 }
 
