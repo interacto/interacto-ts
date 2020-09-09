@@ -410,7 +410,9 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM> 
         this.disposable.unsubscribe();
         this._registeredNodes.forEach(n => this.onNodeUnregistered(n));
         this._registeredNodes.clear();
+        this._additionalNodes.forEach(n => this.onNodeUnregistered(n));
         this._additionalNodes.length = 0;
+        this.listMutationObserver.forEach(m => m.disconnect());
         this.listMutationObserver.length = 0;
         this._registeredTargetNode.forEach(n => this.onNodeUnregistered(n));
         this._registeredTargetNode.clear();
