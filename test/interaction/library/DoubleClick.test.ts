@@ -112,3 +112,11 @@ test("check if the interaction work fine with bad move", () => {
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     expect(handler.fsmCancels).not.toHaveBeenCalled();
 });
+
+test("specific mouse button checking OK", () => {
+    interaction.registerToNodes([canvas]);
+    canvas.dispatchEvent(createMouseEvent("auxclick", canvas, 111, 222, 11, 22, 2));
+    canvas.dispatchEvent(createMouseEvent("auxclick", canvas, 111, 222, 11, 22, 2));
+    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+    expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+});

@@ -152,3 +152,14 @@ test("check if the last DoubleClick with a different button don't stop the inter
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).not.toHaveBeenCalled();
 });
+
+test("specific mouse button checking OK", () => {
+    interaction.registerToNodes([canvas]);
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.Auxclick, canvas, undefined, undefined, 11, 23));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.Auxclick, canvas, undefined, undefined, 11, 23));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 20, 30));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.Auxclick, canvas, undefined, undefined, 22, 33));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.Auxclick, canvas, undefined, undefined, 22, 33));
+    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+    expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+});
