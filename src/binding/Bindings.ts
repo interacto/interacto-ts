@@ -105,12 +105,12 @@ export function spinnerBinder(): InteractionUpdateBinder<SpinnerChanged, WidgetD
         .usingInteraction<SpinnerChanged, WidgetData<HTMLInputElement>>(() => new SpinnerChanged());
 }
 
-export function dateBinder(): InteractionUpdateBinder<DatePicked, WidgetData<HTMLInputElement>> {
+export function dateBinder(): InteractionBinder<DatePicked, WidgetData<HTMLInputElement>> {
     return new UpdateBinder(observer)
         .usingInteraction<DatePicked, WidgetData<HTMLInputElement>>(() => new DatePicked());
 }
 
-export function hyperlinkBinder(): InteractionUpdateBinder<HyperLinkClicked, WidgetData<HTMLAnchorElement>> {
+export function hyperlinkBinder(): InteractionBinder<HyperLinkClicked, WidgetData<HTMLAnchorElement>> {
     return new UpdateBinder(observer)
         .usingInteraction<HyperLinkClicked, WidgetData<HTMLAnchorElement>>(() => new HyperLinkClicked());
 }
@@ -188,7 +188,7 @@ export function clickBinder(): InteractionBinder<Click, PointData> {
 /**
  * Creates a widget binding that uses the double click interaction.
  */
-export function dbleClickBinder(): InteractionBinder<DoubleClick, PointData> {
+export function dbleClickBinder(): InteractionUpdateBinder<DoubleClick, PointData> {
     return new UpdateBinder(observer)
         .usingInteraction<DoubleClick, PointData>(() => new DoubleClick());
 }
@@ -214,7 +214,7 @@ export function scrollBinder(): InteractionBinder<Scroll, ScrollData> {
  * @param cancellable True: the FSM can be cancelled using the ESC key.
  * @param srcOnUpdate True: the source point will take the former target position on each update.
  */
-export function dndBinder(srcOnUpdate: boolean, cancellable: boolean): InteractionBinder<DnD, SrcTgtPointsData> {
+export function dndBinder(srcOnUpdate: boolean, cancellable: boolean): InteractionUpdateBinder<DnD, SrcTgtPointsData> {
     return new UpdateBinder(observer)
         .usingInteraction<DnD, SrcTgtPointsData>(() => new DnD(srcOnUpdate, cancellable));
 }
@@ -222,7 +222,7 @@ export function dndBinder(srcOnUpdate: boolean, cancellable: boolean): Interacti
 /**
  * Creates a widget binding that uses the drag lock interaction.
  */
-export function dragLockBinder(): InteractionBinder<DragLock, SrcTgtPointsData> {
+export function dragLockBinder(): InteractionUpdateBinder<DragLock, SrcTgtPointsData> {
     return new UpdateBinder(observer)
         .usingInteraction<DragLock, SrcTgtPointsData>(() => new DragLock());
 }
@@ -239,7 +239,7 @@ export function keyPressBinder(modifierAccepted: boolean): InteractionBinder<Key
 /**
  * Creates a widget binding that uses the multiple key pressures interaction.
  */
-export function keysPressBinder(): InteractionBinder<KeysPressed, KeysData> {
+export function keysPressBinder(): InteractionUpdateBinder<KeysPressed, KeysData> {
     return new UpdateBinder(observer)
         .usingInteraction<KeysPressed, KeysData>(() => new KeysPressed());
 }
@@ -247,7 +247,7 @@ export function keysPressBinder(): InteractionBinder<KeysPressed, KeysData> {
 /**
  * Creates a widget binding that uses the multiple key typings interaction.
  */
-export function keysTypeBinder(): InteractionBinder<KeysTyped, KeysData> {
+export function keysTypeBinder(): InteractionUpdateBinder<KeysTyped, KeysData> {
     return new UpdateBinder(observer)
         .usingInteraction<KeysTyped, KeysData>(() => new KeysTyped());
 }
