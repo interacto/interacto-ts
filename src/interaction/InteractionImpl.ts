@@ -15,10 +15,9 @@
 import {FSM} from "../fsm/FSM";
 import {OutputState} from "../fsm/OutputState";
 import {InitState} from "../fsm/InitState";
-import {Logger} from "typescript-logging";
 import {catInteraction} from "../logging/ConfigLog";
 import {InteractionData} from "./InteractionData";
-import {EventRegistrationToken, isMouseEvent, isKeyEvent, isTouchEvent} from "../fsm/Events";
+import {EventRegistrationToken, isKeyEvent, isMouseEvent, isTouchEvent} from "../fsm/Events";
 import {Subscription} from "rxjs";
 
 /**
@@ -27,20 +26,18 @@ import {Subscription} from "rxjs";
  * @param <F> The type of the FSM.
  */
 export abstract class InteractionImpl<D extends InteractionData, F extends FSM> {
-    protected logger?: Logger;
-
     protected readonly fsm: F;
 
     protected asLog: boolean;
 
-    protected readonly _registeredNodes: Set<EventTarget>;
+    protected readonly registeredNodes: Set<EventTarget>;
 
-    protected readonly _registeredTargetNode: Set<EventTarget>;
+    protected readonly registeredTargetNode: Set<EventTarget>;
 
-    protected readonly _additionalNodes: Array<Node>;
+    protected readonly additionalNodes: Array<Node>;
 
     /** The current list of mutation observers. Used for listening changes in node lists. */
-    protected readonly listMutationObserver: Array<MutationObserver>;
+    protected readonly mutationObservers: Array<MutationObserver>;
 
     /** The interaction data */
     protected readonly data: D;
@@ -80,10 +77,10 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM> 
         this.disposable = this.fsm.currentStateObservable().subscribe(current => this.updateEventsRegistered(current[1], current[0]));
         this.activated = true;
         this.asLog = false;
-        this._registeredNodes = new Set<EventTarget>();
-        this._additionalNodes = new Array<Node>();
-        this.listMutationObserver = new Array<MutationObserver>();
-        this._registeredTargetNode = new Set<EventTarget>();
+        this.registeredNodes = new Set<EventTarget>();
+        this.additionalNodes = new Array<Node>();
+        this.mutationObservers = new Array<MutationObserver>();
+        this.registeredTargetNode = new Set<EventTarget>();
     }
 
     protected abstract createDataObject(): D;
@@ -109,22 +106,22 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM> 
         const events: Array<string> = [...this.getEventTypesOf(oldState)];
         const eventsToRemove: Array<string> = events.filter(e => !currEvents.includes(e));
         const eventsToAdd: Array<string> = currEvents.filter(e => !events.includes(e));
-        this._registeredNodes.forEach(n => {
+        this.registeredNodes.forEach(n => {
             eventsToRemove.forEach(type => this.unregisterEventToNode(type, n));
             eventsToAdd.forEach(type => this.registerEventToNode(type, n));
         });
-        this._additionalNodes.forEach(n => {
+        this.additionalNodes.forEach(n => {
             n.childNodes.forEach(child => {
                 // update the content of the additionalNode
                 eventsToRemove.forEach(type => this.unregisterEventToNode(type, child));
                 eventsToAdd.forEach(type => this.registerEventToNode(type, child));
             });
         });
-        this._registeredTargetNode.forEach(n => {
+        this.registeredTargetNode.forEach(n => {
             eventsToRemove.forEach(type => this.unregisterEventToNode(type, n));
         });
         if (newState !== newState.getFSM().initState) {
-            this._registeredTargetNode.forEach(n => {
+            this.registeredTargetNode.forEach(n => {
                 eventsToAdd.forEach(type => this.registerEventToNode(type, n));
             });
         }
@@ -152,21 +149,21 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM> 
 
     public registerToNodes(widgets: Array<EventTarget>): void {
         widgets.forEach(w => {
-            this._registeredNodes.add(w);
+            this.registeredNodes.add(w);
             this.onNewNodeRegistered(w);
         });
     }
 
     public registerToTargetNodes(targetWidgets: Array<EventTarget>): void {
         targetWidgets.forEach(w => {
-            this._registeredTargetNode.add(w);
+            this.registeredTargetNode.add(w);
             this.onNewNodeTargetRegistered(w);
         });
     }
 
     public unregisterFromNodes(widgets: Array<EventTarget>): void {
         widgets.forEach(w => {
-            this._registeredNodes.delete(w);
+            this.registeredNodes.delete(w);
             this.onNodeUnregistered(w);
         });
     }
@@ -199,7 +196,7 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM> 
 
         const newMutationObserver = new MutationObserver(mutations => this.callBackMutationObserver(mutations));
         newMutationObserver.observe(elementToObserve, {"childList": true});
-        this.listMutationObserver.push(newMutationObserver);
+        this.mutationObservers.push(newMutationObserver);
     }
 
     protected registerEventToNode(eventType: string, node: EventTarget): void {
@@ -408,14 +405,14 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM> 
      */
     public uninstall(): void {
         this.disposable.unsubscribe();
-        this._registeredNodes.forEach(n => this.onNodeUnregistered(n));
-        this._registeredNodes.clear();
-        this._additionalNodes.forEach(n => this.onNodeUnregistered(n));
-        this._additionalNodes.length = 0;
-        this.listMutationObserver.forEach(m => m.disconnect());
-        this.listMutationObserver.length = 0;
-        this._registeredTargetNode.forEach(n => this.onNodeUnregistered(n));
-        this._registeredTargetNode.clear();
+        this.registeredNodes.forEach(n => this.onNodeUnregistered(n));
+        this.registeredNodes.clear();
+        this.additionalNodes.forEach(n => this.onNodeUnregistered(n));
+        this.additionalNodes.length = 0;
+        this.mutationObservers.forEach(m => m.disconnect());
+        this.mutationObservers.length = 0;
+        this.registeredTargetNode.forEach(n => this.onNodeUnregistered(n));
+        this.registeredTargetNode.clear();
         this.setActivated(false);
     }
 }
