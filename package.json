@@ -1,7 +1,7 @@
 {
   "name": "interacto",
   "description": "A novel user interaction library",
-  "version": "4.2.1",
+  "version": "4.3.0",
   "author": "Arnaud Blouin",
   "contributors": [
     "Gwendal Didot <didotgwendal@gmail.com>"
