@@ -32,7 +32,21 @@ export class DragLockFSM extends FSM {
 
     public readonly sndDbleClick: DoubleClickFSM;
 
-    protected checkButton?: number;
+    private static readonly MoveTransitionDragLock = class extends MoveTransition {
+        private readonly parent: DragLockFSM;
+
+        public constructor(dgfsm: DragLockFSM, srcState: OutputState, tgtState: InputState) {
+            super(srcState, tgtState);
+            this.parent = dgfsm;
+        }
+
+        protected action(event: Event): void {
+            const handler = this.parent.getDataHandler();
+            if (handler !== undefined && event instanceof MouseEvent) {
+                handler.onMove(event);
+            }
+        }
+    };
 
     public constructor() {
         super();
@@ -65,43 +79,24 @@ export class DragLockFSM extends FSM {
         this.addState(moved);
 
         new class extends SubFSMTransition {
-            private readonly _parent: DragLockFSM;
+            private readonly parent: DragLockFSM;
 
-            public constructor(parent: DragLockFSM, srcState: OutputState, tgtState: InputState, fsm: FSM) {
+            public constructor(dlFSM: DragLockFSM, srcState: OutputState, tgtState: InputState, fsm: FSM) {
                 super(srcState, tgtState, fsm);
-                this._parent = parent;
+                this.parent = dlFSM;
             }
 
             protected action(): void {
-                this._parent.checkButton = this._parent.firstDbleClick.getCheckButton();
-                this._parent.sndDbleClick.setCheckButton(this._parent.checkButton);
-                cancelDbleClick.setCheckButton(this._parent.checkButton);
+                const checkButton = this.parent.firstDbleClick.getCheckButton();
+                this.parent.sndDbleClick.setCheckButton(checkButton);
+                cancelDbleClick.setCheckButton(checkButton);
             }
         }(this, this.initState, locked, this.firstDbleClick);
 
         new SubFSMTransition(locked, cancelled, cancelDbleClick);
 
-        new class extends MoveTransition {
-            private readonly _parent: DragLockFSM;
-
-            public constructor(parent: DragLockFSM, srcState: OutputState, tgtState: InputState) {
-                super(srcState, tgtState);
-                this._parent = parent;
-            }
-
-            public isGuardOK(event: Event): boolean {
-                return super.isGuardOK(event) &&
-                    (this._parent.checkButton === undefined || event instanceof MouseEvent && event.button === this._parent.checkButton);
-            }
-
-            protected action(event: Event): void {
-                const handler = this._parent.getDataHandler();
-                if (handler !== undefined && event instanceof MouseEvent) {
-                    handler.onMove(event);
-                }
-            }
-        }(this, locked, moved);
-
+        new DragLockFSM.MoveTransitionDragLock(this, locked, moved);
+        new DragLockFSM.MoveTransitionDragLock(this, moved, moved);
         new EscapeKeyPressureTransition(locked, cancelled);
         new EscapeKeyPressureTransition(moved, cancelled);
         new SubFSMTransition(moved, dropped, this.sndDbleClick);

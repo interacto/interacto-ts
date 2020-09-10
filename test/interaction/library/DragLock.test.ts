@@ -163,3 +163,31 @@ test("specific mouse button checking OK", () => {
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
 });
+
+test("several moves ok", () => {
+    interaction.registerToNodes([canvas]);
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.Auxclick, canvas, undefined, undefined, 11, 23));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.Auxclick, canvas, undefined, undefined, 11, 23));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 20, 30));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 20, 30));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 20, 30));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 20, 30));
+    expect(handler.fsmUpdates).toHaveBeenCalledTimes(5);
+});
+
+test("several moves ok with specific mosue button", () => {
+    interaction.registerToNodes([canvas]);
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.Auxclick, canvas, undefined, undefined, 11, 23, 2));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.Auxclick, canvas, undefined, undefined, 11, 23, 2));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 21, 30, 0));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 22, 30, 0));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 23, 30, 0));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 25, 30, 0));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 20, 30, 0));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 20, 30, 0));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.Auxclick, canvas, undefined, undefined, 11, 23, 2));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.Auxclick, canvas, undefined, undefined, 11, 23, 2));
+    expect(handler.fsmUpdates).toHaveBeenCalledTimes(7);
+    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+    expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+});
