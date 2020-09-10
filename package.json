@@ -7,10 +7,10 @@
     "Gwendal Didot <didotgwendal@gmail.com>"
   ],
   "bugs": {
-    "url": "https://github.com/interacto/interacto-ts-api/issues"
+    "url": "https://github.com/interacto/interacto-ts/issues"
   },
-  "homepage": "https://github.com/interacto/interacto-ts-api",
-  "repository": "https://github.com/interacto/interacto-ts-api.git",
+  "homepage": "https://github.com/interacto/interacto-ts",
+  "repository": "https://github.com/interacto/interacto-ts.git",
   "license": "GPL-3.0",
   "main": "./dist/interacto.umd.js",
   "module": "dist/interacto.es5.js",

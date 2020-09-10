@@ -3,16 +3,13 @@
 ![npm](https://img.shields.io/npm/dm/interacto)
 
 # Interacto :
-The TypeScript implementation of [Interacto](https://github.com/interacto/interacto-ts-api).
+The TypeScript implementation of [Interacto](https://github.com/interacto/).
 
 # How to use
 
-As an npm package, just add `interacto` to your dependencies.
-
+Using npm:
 ```
-{
-"interacto": "latest"
-}
+npm install interacto
 ```
 
 WIP

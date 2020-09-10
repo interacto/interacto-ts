@@ -1,6 +1,6 @@
 def githubStatusCheck(String state, String description){
     def commitHash = checkout(scm).GIT_COMMIT
-    githubNotify account: 'interacto',sha: "${commitHash}", status: state, description: description, credentialsId: 'github-token', repo: 'interacto-ts-api'
+    githubNotify account: 'interacto',sha: "${commitHash}", status: state, description: description, credentialsId: 'github-token', repo: 'interacto-ts'
 }
 
 
@@ -27,7 +27,7 @@ pipeline {
 
         stage ('Git') {
             steps {
-                git branch: 'master', url: "https://github.com/interacto/interacto-ts-api"
+                git branch: 'master', url: "https://github.com/interacto/interacto-ts"
             }
         }
 
