@@ -1,3 +1,20 @@
+#4.3.0
+
+* feat(binding): all the interactions should have binding routines in Bindings
+* feat(interaction): the event auxclick now supported
+* fix(binding): some provided bindings not to expose the good binding interface
+* fix(code): eslint conf changes and numerous smells fixed
+* fix(config): invalid licence identifier
+* fix(interaction): the draglock did not work properly using a non-primary button
+* fix(interaction): uninstall a user interaction does not clean everything
+* test(binding): tests added
+* test(interaction): tests on auxclick added
+* chore(doc): changelog file added
+* clean(interaction): attributes named or removed
+* clean(interaction): useless code removed
+* config(jest): jest version updated
+
+
 #4.2.1
 
 This is the first stable release after several development versions.
