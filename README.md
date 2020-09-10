@@ -1,4 +1,4 @@
-[![Build Status](https://ci.inria.fr/malai/buildStatus/icon?job=interacto-ts-api)](https://ci.inria.fr/malai/view/Latexdraw/job/interacto-ts) 
+[![Build Status](https://ci.inria.fr/malai/buildStatus/icon?job=interacto-ts)](https://ci.inria.fr/malai/view/Latexdraw/job/interacto-ts) 
 ![npm](https://img.shields.io/npm/v/interacto)
 ![npm](https://img.shields.io/npm/dm/interacto)
 
