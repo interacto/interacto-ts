@@ -46,8 +46,7 @@
     "lint-fix": "eslint src test --ext .ts --fix",
     "coverage": "jest --coverage --collectCoverageFrom=src*/**/*.ts",
     "doc": "typedoc --out docs",
-    "test-publish": "npm pack",
-    "publish": "npm publish"
+    "test-publish": "npm pack"
   },
   "dependencies": {
     "rxjs": "^6.5.4",
