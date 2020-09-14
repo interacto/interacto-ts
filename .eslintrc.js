@@ -23,6 +23,7 @@ module.exports = {
       env: {
         jest: true
       },
+      extends: ["plugin:jest/recommended"],
       plugins: ["jest"],
       rules: {
         "jest/no-disabled-tests": "warn",

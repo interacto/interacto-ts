@@ -16,7 +16,6 @@ import {StdState} from "../../src/fsm/StdState";
 import {Transition} from "../../src/fsm/Transition";
 import {FSM} from "../../src/fsm/FSM";
 import {StubTransitionOK} from "./StubTransitionOK";
-import "jest";
 import {ErrorCatcher} from "../../src/error/ErrorCatcher";
 
 let tr: Transition;

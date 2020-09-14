@@ -13,7 +13,7 @@
  */
 import {Subscription} from "rxjs";
 import {CommandsRegistry, UndoCollector, WidgetBinding,
-    WidgetData, isTextInput, TextInputChanged, textInputBinder, WidgetDataImpl} from "../../src/interacto";
+    WidgetData, isTextInput, TextInputChanged, textInputBinder} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 
 let txt1: HTMLInputElement | HTMLTextAreaElement;
@@ -47,12 +47,11 @@ afterEach(() => {
 test("type text create command", () => {
     const textonUpdate = Array<string>();
 
+    // eslint-disable-next-line jest/valid-expect-in-promise
     binding = textInputBinder()
         .toProduce(() => cmd)
         .then((c, i) => {
-            expect(c).toBeInstanceOf(StubCmd);
-            expect(i).toBeInstanceOf(WidgetDataImpl);
-            textonUpdate.push(txt1.value);
+            textonUpdate.push(i.getWidget()?.value ?? "");
         })
         .on(txt1)
         .bind();
@@ -75,12 +74,11 @@ test("type text create command", () => {
 test("type text exec several times the command", () => {
     const textonUpdate = Array<string>();
 
+    // eslint-disable-next-line jest/valid-expect-in-promise
     binding = textInputBinder()
         .toProduce(() => cmd)
         .then((c, i) => {
-            expect(c).toBeInstanceOf(StubCmd);
-            expect(i).toBeInstanceOf(WidgetDataImpl);
-            textonUpdate.push(txt1.value);
+            textonUpdate.push(i.getWidget()?.value ?? "");
         })
         .on(txt1)
         .continuousExecution()

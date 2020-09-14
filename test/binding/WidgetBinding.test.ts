@@ -19,7 +19,7 @@ import {StubCmd} from "../command/StubCmd";
 import {InteractionStub} from "../interaction/InteractionStub";
 
 
-export class WidgetBindingStub extends WidgetBindingImpl<StubCmd, InteractionStub, InteractionData> {
+class WidgetBindingStub extends WidgetBindingImpl<StubCmd, InteractionStub, InteractionData> {
     public conditionRespected: boolean;
 
     public mustCancel: boolean;
@@ -75,6 +75,7 @@ beforeEach(() => {
 afterEach(() => {
     CommandsRegistry.getInstance().clear();
     errorStream.unsubscribe();
+    // eslint-disable-next-line jest/no-standalone-expect
     expect(errors).toHaveLength(0);
 });
 
@@ -129,6 +130,7 @@ test("execute crash and interaction stops", () => {
     binding = new WidgetBindingStub(true, supplier, new InteractionStub(new FSM()));
     binding.conditionRespected = true;
     binding.fsmStops();
+    expect(binding.getCommand()).toBeUndefined();
 });
 
 test("testIsInteractionMustBeCancelled", () => {
@@ -141,14 +143,17 @@ test("testNotRunning", () => {
 
 test("testInteractionCancelsWhenNotStarted", () => {
     binding.fsmCancels();
+    expect(binding.getCommand()).toBeUndefined();
 });
 
 test("testInteractionUpdatesWhenNotStarted", () => {
     binding.fsmUpdates();
+    expect(binding.getCommand()).toBeUndefined();
 });
 
 test("testInteractionStopsWhenNotStarted", () => {
     binding.fsmStops();
+    expect(binding.getCommand()).toBeUndefined();
 });
 
 test("testInteractionStartsWhenNoCorrectInteractionNotActivated", () => {

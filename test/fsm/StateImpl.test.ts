@@ -15,7 +15,6 @@
 import {FSM} from "../../src/fsm/FSM";
 import {StateImpl} from "../../src/fsm/StateImpl";
 import {StdState} from "../../src/fsm/StdState";
-import "jest";
 
 let state: StateImpl;
 let fsm: FSM;

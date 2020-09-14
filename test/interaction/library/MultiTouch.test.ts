@@ -168,6 +168,7 @@ test("touch end", () => {
     expect(handler.fsmCancels).not.toHaveBeenCalled();
 });
 
+// eslint-disable-next-line jest/expect-expect
 test("touch end data", () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let data1: any;

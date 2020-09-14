@@ -12,7 +12,6 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import "jest";
 import {Subject} from "rxjs";
 import {CancelFSMException} from "../../src/fsm/CancelFSMException";
 import {CancellingState} from "../../src/fsm/CancellingState";

@@ -18,7 +18,6 @@ import {
     Tap,
     tapBinder,
     TapData,
-    TapDataImpl,
     UndoCollector,
     WidgetBinding
 } from "../../src/interacto";
@@ -54,10 +53,6 @@ describe("on canvas", () => {
     test("run tap produces cmd", () => {
         binding = tapBinder(2)
             .toProduce(() => cmd)
-            .then((c, i) => {
-                expect(c).toBeInstanceOf(StubCmd);
-                expect(i).toBeInstanceOf(TapDataImpl);
-            })
             .on(c1)
             .bind();
         disposable = binding.produces().subscribe(c => producedCmds.push(c));
