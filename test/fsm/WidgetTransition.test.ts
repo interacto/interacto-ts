@@ -18,7 +18,7 @@ import {StdState} from "../../src/fsm/StdState";
 import {WidgetTransition} from "../../src/fsm/WidgetTransition";
 import {StubEvent} from "./StubEvent";
 
-class WTransition extends WidgetTransition<object> {
+class WTransition extends WidgetTransition<string> {
     public constructor() {
         super(new StdState(new FSM(), "a"), new StdState(new FSM(), "b"));
     }
@@ -43,7 +43,6 @@ beforeEach(() => {
 });
 
 test("testSetWidget", () => {
-    const o = {};
-    transition.setWidget(o);
-    expect(transition.getWidget()).toStrictEqual(o);
+    transition.setWidget("foooo");
+    expect(transition.getWidget()).toStrictEqual("foooo");
 });

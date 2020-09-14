@@ -32,6 +32,7 @@ export class DragLockFSM extends FSM {
 
     public readonly sndDbleClick: DoubleClickFSM;
 
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     private static readonly MoveTransitionDragLock = class extends MoveTransition {
         private readonly parent: DragLockFSM;
 
@@ -111,6 +112,7 @@ interface DragLockFSMHandler extends FSMDataHandler {
  * The drag-lock user interaction
  */
 export class DragLock extends InteractionImpl<SrcTgtPointsData, DragLockFSM> {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     private static readonly DragLockData = class implements SrcTgtPointsData {
         private readonly draglock: DragLock;
 

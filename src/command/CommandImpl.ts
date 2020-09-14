@@ -38,7 +38,7 @@ export abstract class CommandImpl implements Command {
      * Creates the command with the status CREATED.
      */
     public constructor() {
-        this.status = CmdStatus.CREATED;
+        this.status = CmdStatus.created;
     }
 
     /**
@@ -46,7 +46,7 @@ export abstract class CommandImpl implements Command {
      * The command must not be used after that.
      */
     public flush(): void {
-        this.status = CmdStatus.FLUSHED;
+        this.status = CmdStatus.flushed;
     }
 
     /**
@@ -59,13 +59,13 @@ export abstract class CommandImpl implements Command {
 
     public doIt(): boolean {
         let ok: boolean;
-        if ((this.status === CmdStatus.CREATED || this.status === CmdStatus.EXECUTED) && this.canDo()) {
-            if (this.status === CmdStatus.CREATED) {
+        if ((this.status === CmdStatus.created || this.status === CmdStatus.executed) && this.canDo()) {
+            if (this.status === CmdStatus.created) {
                 this.createMemento();
             }
             ok = true;
             this.doCmdBody();
-            this.status = CmdStatus.EXECUTED;
+            this.status = CmdStatus.executed;
         } else {
             ok = false;
         }
@@ -79,7 +79,7 @@ export abstract class CommandImpl implements Command {
     protected abstract doCmdBody(): void;
 
     public getRegistrationPolicy(): RegistrationPolicy {
-        return this.hadEffect() ? RegistrationPolicy.LIMITED : RegistrationPolicy.NONE;
+        return this.hadEffect() ? RegistrationPolicy.limited : RegistrationPolicy.none;
     }
 
     public hadEffect(): boolean {
@@ -87,17 +87,17 @@ export abstract class CommandImpl implements Command {
     }
 
     public done(): void {
-        if (this.status === CmdStatus.CREATED || this.status === CmdStatus.EXECUTED) {
-            this.status = CmdStatus.DONE;
+        if (this.status === CmdStatus.created || this.status === CmdStatus.executed) {
+            this.status = CmdStatus.done;
         }
     }
 
     public isDone(): boolean {
-        return this.status === CmdStatus.DONE;
+        return this.status === CmdStatus.done;
     }
 
     public cancel(): void {
-        this.status = CmdStatus.CANCELLED;
+        this.status = CmdStatus.cancelled;
     }
 
     public getStatus(): CmdStatus {

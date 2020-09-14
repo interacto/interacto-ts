@@ -41,7 +41,7 @@ test("drag lock is ok", () => {
     interaction.registerToNodes([canvas]);
     canvas.click();
     canvas.click();
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas));
     canvas.click();
     canvas.click();
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
@@ -64,7 +64,7 @@ test("drag lock canceled on ESC", () => {
     interaction.registerToNodes([canvas]);
     canvas.click();
     canvas.click();
-    canvas.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, String(KeyCode.ESCAPE)));
+    canvas.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, String(KeyCode.escape)));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).not.toHaveBeenCalled();
     expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
@@ -79,11 +79,11 @@ test("check data with a normal execution", () => {
             ty = interaction.getData().getTgtClientY();
         }
     }());
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.Click, canvas, undefined, undefined, 11, 23));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.Click, canvas, undefined, undefined, 11, 23));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 20, 30));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.Click, canvas, undefined, undefined, 22, 33));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.Click, canvas, undefined, undefined, 22, 33));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.click, canvas, undefined, undefined, 11, 23));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.click, canvas, undefined, undefined, 11, 23));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 20, 30));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.click, canvas, undefined, undefined, 22, 33));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.click, canvas, undefined, undefined, 22, 33));
     expect(sx).toBe(11);
     expect(sy).toBe(23);
     expect(tx).toBe(22);
@@ -98,21 +98,21 @@ test("check update work during move", () => {
     interaction.registerToNodes([canvas]);
     canvas.click();
     canvas.click();
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas));
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
 });
 
 test("check data update during a move", () => {
     interaction.registerToNodes([canvas]);
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.Click, canvas, undefined, undefined, 11, 23));
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.Click, canvas, undefined, undefined, 11, 23));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.click, canvas, undefined, undefined, 11, 23));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.click, canvas, undefined, undefined, 11, 23));
     interaction.getFsm().addHandler(new class extends StubFSMHandler {
         public fsmUpdates(): void {
             tx = interaction.getData().getTgtClientX();
             ty = interaction.getData().getTgtClientY();
         }
     }());
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 30, 40));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 30, 40));
     expect(handler.fsmCancels).not.toHaveBeenCalled();
     expect(tx).toBe(30);
     expect(ty).toBe(40);
@@ -122,7 +122,7 @@ test("check data reinitialisation", () => {
     interaction.registerToNodes([canvas]);
     canvas.click();
     canvas.click();
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas));
     canvas.click();
     canvas.click();
     expect(interaction.getData().getSrcClientX()).toBe(0);
@@ -135,8 +135,8 @@ test("check if canceled with Esc after a move", () => {
     interaction.registerToNodes([canvas]);
     canvas.click();
     canvas.click();
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas));
-    canvas.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "Escape"));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas));
+    canvas.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "Escape"));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).not.toHaveBeenCalled();
@@ -144,49 +144,49 @@ test("check if canceled with Esc after a move", () => {
 
 test("check if the last DoubleClick with a different button don't stop the interaction", () => {
     interaction.registerToNodes([canvas]);
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.Click, canvas, undefined, undefined, 11, 23, 1));
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.Click, canvas, undefined, undefined, 11, 23, 1));
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 20, 30, 1));
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.Click, canvas, undefined, undefined, 20, 30, 0));
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.Click, canvas, undefined, undefined, 20, 30, 0));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.click, canvas, undefined, undefined, 11, 23, 1));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.click, canvas, undefined, undefined, 11, 23, 1));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 20, 30, 1));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.click, canvas, undefined, undefined, 20, 30, 0));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.click, canvas, undefined, undefined, 20, 30, 0));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).not.toHaveBeenCalled();
 });
 
 test("specific mouse button checking OK", () => {
     interaction.registerToNodes([canvas]);
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.Auxclick, canvas, undefined, undefined, 11, 23));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.Auxclick, canvas, undefined, undefined, 11, 23));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 20, 30));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.Auxclick, canvas, undefined, undefined, 22, 33));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.Auxclick, canvas, undefined, undefined, 22, 33));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 20, 30));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 22, 33));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 22, 33));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
 });
 
 test("several moves ok", () => {
     interaction.registerToNodes([canvas]);
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.Auxclick, canvas, undefined, undefined, 11, 23));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.Auxclick, canvas, undefined, undefined, 11, 23));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 20, 30));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 20, 30));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 20, 30));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 20, 30));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 20, 30));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 20, 30));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 20, 30));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 20, 30));
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(5);
 });
 
 test("several moves ok with specific mosue button", () => {
     interaction.registerToNodes([canvas]);
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.Auxclick, canvas, undefined, undefined, 11, 23, 2));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.Auxclick, canvas, undefined, undefined, 11, 23, 2));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 21, 30, 0));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 22, 30, 0));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 23, 30, 0));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 25, 30, 0));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 20, 30, 0));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 20, 30, 0));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.Auxclick, canvas, undefined, undefined, 11, 23, 2));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.Auxclick, canvas, undefined, undefined, 11, 23, 2));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23, 2));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23, 2));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 21, 30, 0));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 22, 30, 0));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 23, 30, 0));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 25, 30, 0));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 20, 30, 0));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 20, 30, 0));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23, 2));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23, 2));
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(7);
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);

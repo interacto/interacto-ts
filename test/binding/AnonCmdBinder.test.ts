@@ -30,7 +30,7 @@ interface A {
 let button1: HTMLButtonElement;
 let button2: HTMLButtonElement;
 let a: A;
-let binding: WidgetBinding<AnonCmd, ButtonPressed, InteractionData>;
+let binding: WidgetBinding<AnonCmd, ButtonPressed, InteractionData> | undefined;
 
 beforeEach(() => {
     document.documentElement.innerHTML = "<html><div><button id='b1'>A Button</button><button id='b2'>A Button2</button></div></html>";
@@ -49,9 +49,7 @@ beforeEach(() => {
 afterEach(() => {
     CommandsRegistry.getInstance().clear();
     UndoCollector.getInstance().clear();
-    if (binding !== undefined) {
-        binding.uninstallBinding();
-    }
+    binding?.uninstallBinding();
 });
 
 test("commandExecutedOnSingleButton", () => {
@@ -77,7 +75,7 @@ test("commandExecutedOnTwoButtons", () => {
     button2.click();
     button2.click();
     expect(a.foo).toHaveBeenCalledTimes(3);
-    expect(binding).not.toBeUndefined();
+    expect(binding).toBeDefined();
 });
 
 test("differentOrderBuilder", () => {
@@ -90,7 +88,7 @@ test("differentOrderBuilder", () => {
 
     button1.click();
     expect(cpt).toStrictEqual(1);
-    expect(binding).not.toBeUndefined();
+    expect(binding).toBeDefined();
 });
 
 test("prevent default set", () => {
@@ -102,7 +100,7 @@ test("prevent default set", () => {
 
     expect(binding.getInteraction().preventDefault).toBeTruthy();
     expect(binding.getInteraction().stopImmediatePropagation).toBeFalsy();
-    expect(binding).not.toBeUndefined();
+    expect(binding).toBeDefined();
 });
 
 test("stop propag set", () => {
@@ -114,5 +112,5 @@ test("stop propag set", () => {
 
     expect(binding.getInteraction().stopImmediatePropagation).toBeTruthy();
     expect(binding.getInteraction().preventDefault).toBeFalsy();
-    expect(binding).not.toBeUndefined();
+    expect(binding).toBeDefined();
 });

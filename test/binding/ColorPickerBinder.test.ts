@@ -17,10 +17,10 @@ import {StubCmd} from "../command/StubCmd";
 
 let widget1: HTMLInputElement;
 let widget2: HTMLInputElement;
-let binding: WidgetBinding<StubCmd, ColorPicked, WidgetData<HTMLInputElement>>;
+let binding: WidgetBinding<StubCmd, ColorPicked, WidgetData<HTMLInputElement>> | undefined;
 let cmd: StubCmd;
 let producedCmds: Array<StubCmd>;
-let disposable: Subscription;
+let disposable: Subscription | undefined;
 
 beforeEach(() => {
     document.documentElement.innerHTML =
@@ -55,7 +55,7 @@ test("testCommandExecutedOnSinglePickerFunction", () => {
         .bind();
 
     widget1.dispatchEvent(new Event("input"));
-    expect(binding).not.toBeNull();
+    expect(binding).toBeDefined();
     expect(cmd.exec).toStrictEqual(1);
 });
 
@@ -69,7 +69,7 @@ test("testCommandExecutedOnTwoPickers", () => {
     widget1.dispatchEvent(new Event("input"));
     widget2.dispatchEvent(new Event("input"));
 
-    expect(binding).not.toBeNull();
+    expect(binding).toBeDefined();
     expect(producedCmds).toHaveLength(2);
 });
 
@@ -84,7 +84,7 @@ test("testInit1Executed", () => {
 
     widget1.dispatchEvent(new Event("input"));
 
-    expect(binding).not.toBeNull();
+    expect(binding).toBeDefined();
     expect(cmd.exec).toStrictEqual(11);
 });
 
@@ -97,6 +97,6 @@ test("testCheckFalse", () => {
 
     widget1.dispatchEvent(new Event("input"));
 
-    expect(binding).not.toBeNull();
+    expect(binding).toBeDefined();
     expect(cmd.exec).toStrictEqual(0);
 });

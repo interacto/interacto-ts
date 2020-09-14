@@ -128,7 +128,7 @@ test("testOnTimeoutWithoutTimeout", () => {
 
 test("testUninstall", () => {
     const s1 = new StdState(fsm, "su");
-    const subj = fsm.currentStateObservable() as {} as Subject<[OutputState, OutputState]>;
+    const subj = fsm.currentStateObservable() as unknown as Subject<[OutputState, OutputState]>;
     jest.spyOn(s1, "uninstall");
     jest.spyOn(subj, "complete");
     fsm.addState(s1);

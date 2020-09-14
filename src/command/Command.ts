@@ -81,15 +81,15 @@ export enum RegistrationPolicy {
     /**
      * The command is never registered.
      */
-    NONE,
+    none = 0,
     /**
      * The command is registered in the command register. The command is not flushed when the registry wants to free some commands.
      */
-    UNLIMITED,
+    unlimited = 1,
     /**
      * The command is registered in the command register. The command can be flushed by the registry.
      */
-    LIMITED
+    limited = 2
 }
 
 /**
@@ -99,21 +99,21 @@ export enum CmdStatus {
     /**
      * When the command is created but not executed yet.
      */
-    CREATED,
+    created = 0,
     /**
      * When the command has been created and executed one time.
      */
-    EXECUTED,
+    executed = 1,
     /**
      * When the command has been cancelled.
      */
-    CANCELLED,
+    cancelled = 2,
     /**
      * When the command has been marked as done.
      */
-    DONE,
+    done = 3,
     /**
      * The command has been flushed. In this case, the command must not be used anymore.
      */
-    FLUSHED
+    flushed = 4
 }

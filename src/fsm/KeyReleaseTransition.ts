@@ -30,7 +30,7 @@ export class KeyReleaseTransition extends Transition {
     }
 
     public accept(event: Event): boolean {
-        return event instanceof KeyboardEvent && event.type === EventRegistrationToken.KeyUp;
+        return event instanceof KeyboardEvent && event.type === EventRegistrationToken.keyUp;
     }
 
     public isGuardOK(_event: Event): boolean {
@@ -38,6 +38,6 @@ export class KeyReleaseTransition extends Transition {
     }
 
     public getAcceptedEvents(): Set<string> {
-        return new Set([EventRegistrationToken.KeyUp]);
+        return new Set([EventRegistrationToken.keyUp]);
     }
 }

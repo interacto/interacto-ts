@@ -121,8 +121,6 @@ export * from "./interaction/library/TouchDnD";
 export * from "./interaction/library/WidgetData";
 export * from "./logging/ConfigLog";
 export * from "./logging/LogLevel";
-export * from "./properties/Modifiable";
-export * from "./properties/Reinitialisable";
 export * from "./properties/Zoomable";
 export * from "./undo/UndoCollector";
 export * from "./undo/Undoable";

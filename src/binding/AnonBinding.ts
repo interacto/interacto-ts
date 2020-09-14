@@ -76,9 +76,9 @@ export class AnonBinding<C extends Command, I extends InteractionImpl<D, FSM>, D
 
     private configureLoggers(loggers: Array<LogLevel>): void {
         if (loggers.length !== 0) {
-            this.setLogCmd(loggers.includes(LogLevel.COMMAND.valueOf()));
-            this.setLogBinding(loggers.includes(LogLevel.BINDING.valueOf()));
-            this.interaction.log(loggers.includes(LogLevel.INTERACTION.valueOf()));
+            this.setLogCmd(loggers.includes(LogLevel.command.valueOf()));
+            this.setLogBinding(loggers.includes(LogLevel.binding.valueOf()));
+            this.interaction.log(loggers.includes(LogLevel.interaction.valueOf()));
         }
     }
 

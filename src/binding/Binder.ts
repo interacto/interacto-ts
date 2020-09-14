@@ -152,14 +152,14 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
     public usingInteraction<I2 extends InteractionImpl<D2, FSM>, D2 extends InteractionData>
     (interactionSupplier: () => I2): Binder<C, I2, D2> {
         const dup = this.duplicate();
-        dup.interactionSupplier = interactionSupplier as {} as () => I;
-        return dup as {} as Binder<C, I2, D2>;
+        dup.interactionSupplier = interactionSupplier as unknown as () => I;
+        return dup as unknown as Binder<C, I2, D2>;
     }
 
     public toProduce<C2 extends Command>(cmdCreation: (i: D) => C2): Binder<C2, I, D> {
         const dup = this.duplicate();
-        dup.cmdProducer = cmdCreation as {} as (i: D) => C;
-        return dup as {} as Binder<C2, I, D>;
+        dup.cmdProducer = cmdCreation as unknown as (i: D) => C;
+        return dup as unknown as Binder<C2, I, D>;
     }
 
     public abstract bind(): WidgetBinding<C, I, D>;

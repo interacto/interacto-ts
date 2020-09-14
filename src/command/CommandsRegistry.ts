@@ -77,11 +77,11 @@ export class CommandsRegistry {
      */
     public addCommand(cmd: Command): void {
         if (!this.cmds.includes(cmd) &&
-            (this.sizeMax > 0 || cmd.getRegistrationPolicy() === RegistrationPolicy.UNLIMITED)) {
+            (this.sizeMax > 0 || cmd.getRegistrationPolicy() === RegistrationPolicy.unlimited)) {
 
             // If there is too many commands in the register, the oldest removable command is removed and flushed.
             if (this.cmds.length >= this.sizeMax) {
-                const command = this.cmds.find(a => a.getRegistrationPolicy() !== RegistrationPolicy.UNLIMITED);
+                const command = this.cmds.find(a => a.getRegistrationPolicy() !== RegistrationPolicy.unlimited);
 
                 if (command !== undefined) {
                     remove(this.cmds, command);
@@ -148,7 +148,7 @@ export class CommandsRegistry {
             const toRemove: number = this.cmds.length - newSizeMax;
 
             while (nb < toRemove && i < this.cmds.length) {
-                if (this.cmds[i].getRegistrationPolicy() === RegistrationPolicy.UNLIMITED) {
+                if (this.cmds[i].getRegistrationPolicy() === RegistrationPolicy.unlimited) {
                     i++;
                 } else {
                     const removed = removeAt(this.cmds, i);

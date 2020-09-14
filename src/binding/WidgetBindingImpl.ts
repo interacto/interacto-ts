@@ -169,15 +169,10 @@ implements WidgetBinding<C, I, D> {
 
     protected unbindCmdAttributes(): void {
         if (this.cmd !== undefined) {
-            this.unbindCmdAttributesClass(this.cmd.constructor);
             if (this.asLogCmd) {
                 catCommand.info(`Command unbound: ${this.cmd.constructor.name}`);
             }
         }
-    }
-
-    private unbindCmdAttributesClass(_clazz: object): void {
-        // FIXME
     }
 
 
@@ -352,7 +347,7 @@ implements WidgetBinding<C, I, D> {
         }
 
         // In continuous mode, a command may have been executed in the update routine
-        if (cmd.getStatus() !== CmdStatus.EXECUTED) {
+        if (cmd.getStatus() !== CmdStatus.executed) {
             return;
         }
 
@@ -367,7 +362,7 @@ implements WidgetBinding<C, I, D> {
         }
 
         if (hadEffect) {
-            if (cmd.getRegistrationPolicy() === RegistrationPolicy.NONE) {
+            if (cmd.getRegistrationPolicy() === RegistrationPolicy.none) {
                 // This case is possible only if the policy of the command changes during
                 // its lifecycle using continuous execution:
                 // at start, the command policy is no NONE so the command is executed and added.

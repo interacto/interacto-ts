@@ -32,11 +32,11 @@ export class TouchReleaseTransition extends Transition {
     }
 
     public accept(e: Event): boolean {
-        return e instanceof TouchEvent && e.type === EventRegistrationToken.Touchend;
+        return e instanceof TouchEvent && e.type === EventRegistrationToken.touchend;
     }
 
     public getAcceptedEvents(): Set<string> {
-        return new Set([EventRegistrationToken.Touchend]);
+        return new Set([EventRegistrationToken.touchend]);
     }
 
     public isGuardOK(_event: Event): boolean {

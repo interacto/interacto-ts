@@ -47,23 +47,23 @@ describe("tap 1", () => {
     });
 
     test("one touch", () => {
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 2, canvas));
+        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 2, canvas));
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmStops).toHaveBeenCalledTimes(1);
         expect(handler.fsmCancels).not.toHaveBeenCalled();
     });
 
     test("two touches with same id", () => {
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 4, canvas));
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 4, canvas));
+        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 4, canvas));
+        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 4, canvas));
         expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
         expect(handler.fsmStops).toHaveBeenCalledTimes(2);
         expect(handler.fsmCancels).not.toHaveBeenCalled();
     });
 
     test("two touches with different id", () => {
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 3, canvas));
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 1, canvas));
+        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 3, canvas));
+        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, canvas));
         expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
         expect(handler.fsmStops).toHaveBeenCalledTimes(2);
         expect(handler.fsmCancels).not.toHaveBeenCalled();
@@ -77,7 +77,7 @@ describe("tap 1", () => {
                 touch = [...interaction.getData().getTapData()];
             }
         }());
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 3, canvas, 15, 20, 16, 21));
+        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 3, canvas, 15, 20, 16, 21));
 
         expect(touch).toHaveLength(1);
         expect(touch[0].getSrcClientX()).toBe(16);
@@ -95,14 +95,14 @@ describe("tap 2", () => {
     });
 
     test("one touch", () => {
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 2, canvas));
+        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 2, canvas));
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmStops).not.toHaveBeenCalled();
         expect(handler.fsmCancels).not.toHaveBeenCalled();
     });
 
     test("one touch with timeout", () => {
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 2, canvas));
+        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 2, canvas));
         jest.runOnlyPendingTimers();
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmStops).not.toHaveBeenCalled();
@@ -110,26 +110,26 @@ describe("tap 2", () => {
     });
 
     test("two touches with same id", () => {
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 4, canvas));
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 4, canvas));
+        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 4, canvas));
+        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 4, canvas));
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmStops).toHaveBeenCalledTimes(1);
         expect(handler.fsmCancels).not.toHaveBeenCalled();
     });
 
     test("two touches with different id", () => {
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 3, canvas));
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 1, canvas));
+        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 3, canvas));
+        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, canvas));
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmStops).toHaveBeenCalledTimes(1);
         expect(handler.fsmCancels).not.toHaveBeenCalled();
     });
 
     test("tap restarts with different id", () => {
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 4, canvas));
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 4, canvas));
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 3, canvas));
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 3, canvas));
+        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 4, canvas));
+        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 4, canvas));
+        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 3, canvas));
+        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 3, canvas));
         expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
         expect(handler.fsmStops).toHaveBeenCalledTimes(2);
         expect(handler.fsmCancels).not.toHaveBeenCalled();
@@ -143,8 +143,8 @@ describe("tap 2", () => {
                 touch = [...interaction.getData().getTapData()];
             }
         }());
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 3, canvas, 15, 20, 16, 21));
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 2, canvas, 12, 27, 14, 28));
+        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 3, canvas, 15, 20, 16, 21));
+        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 2, canvas, 12, 27, 14, 28));
 
         expect(touch).toHaveLength(2);
         expect(touch[0].getSrcClientX()).toBe(16);
@@ -162,16 +162,16 @@ describe("tap 3", () => {
     });
 
     test("two touches with same id", () => {
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 4, canvas));
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 4, canvas));
+        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 4, canvas));
+        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 4, canvas));
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmStops).not.toHaveBeenCalled();
         expect(handler.fsmCancels).not.toHaveBeenCalled();
     });
 
     test("two touches with same id with timeout", () => {
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 4, canvas));
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 4, canvas));
+        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 4, canvas));
+        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 4, canvas));
         jest.runOnlyPendingTimers();
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmStops).not.toHaveBeenCalled();
@@ -179,30 +179,30 @@ describe("tap 3", () => {
     });
 
     test("three touches with same id", () => {
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 4, canvas));
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 4, canvas));
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 4, canvas));
+        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 4, canvas));
+        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 4, canvas));
+        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 4, canvas));
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmStops).toHaveBeenCalledTimes(1);
         expect(handler.fsmCancels).not.toHaveBeenCalled();
     });
 
     test("three touches with diffent id", () => {
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 4, canvas));
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 4, canvas));
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 3, canvas));
+        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 4, canvas));
+        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 4, canvas));
+        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 3, canvas));
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmStops).toHaveBeenCalledTimes(1);
         expect(handler.fsmCancels).not.toHaveBeenCalled();
     });
 
     test("tap restarts with different id", () => {
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 4, canvas));
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 4, canvas));
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 4, canvas));
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 3, canvas));
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 3, canvas));
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 3, canvas));
+        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 4, canvas));
+        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 4, canvas));
+        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 4, canvas));
+        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 3, canvas));
+        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 3, canvas));
+        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 3, canvas));
         expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
         expect(handler.fsmStops).toHaveBeenCalledTimes(2);
         expect(handler.fsmCancels).not.toHaveBeenCalled();
@@ -216,9 +216,9 @@ describe("tap 3", () => {
                 touch = [...interaction.getData().getTapData()];
             }
         }());
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 3, canvas, 15, 20, 16, 21));
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 2, canvas, 12, 27, 14, 28));
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 2, canvas, 112, 217, 114, 128));
+        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 3, canvas, 15, 20, 16, 21));
+        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 2, canvas, 12, 27, 14, 28));
+        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 2, canvas, 112, 217, 114, 128));
 
         expect(touch).toHaveLength(3);
         expect(touch[0].getSrcClientX()).toBe(16);

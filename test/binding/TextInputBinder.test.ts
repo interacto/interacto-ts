@@ -17,10 +17,10 @@ import {CommandsRegistry, UndoCollector, WidgetBinding,
 import {StubCmd} from "../command/StubCmd";
 
 let txt1: HTMLInputElement | HTMLTextAreaElement;
-let binding: WidgetBinding<StubCmd, TextInputChanged, WidgetData<HTMLInputElement | HTMLTextAreaElement>>;
+let binding: WidgetBinding<StubCmd, TextInputChanged, WidgetData<HTMLInputElement | HTMLTextAreaElement>> | undefined;
 let cmd: StubCmd;
 let producedCmds: Array<StubCmd>;
-let disposable: Subscription;
+let disposable: Subscription | undefined;
 
 beforeEach(() => {
     jest.useFakeTimers();
@@ -94,7 +94,7 @@ test("type text exec several times the command", () => {
     txt1.value = "foo";
     txt1.dispatchEvent(new InputEvent("input"));
     jest.runOnlyPendingTimers();
-    expect(binding).not.toBeNull();
+    expect(binding).toBeDefined();
     expect(cmd.exec).toStrictEqual(4);
     expect(producedCmds).toHaveLength(1);
     expect(producedCmds[0]).toBe(cmd);

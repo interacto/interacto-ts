@@ -26,10 +26,10 @@ import {StubCmd} from "../command/StubCmd";
 
 let button1: HTMLButtonElement;
 let button2: HTMLButtonElement;
-let binding: WidgetBinding<StubCmd, ButtonPressed, WidgetData<HTMLButtonElement>>;
+let binding: WidgetBinding<StubCmd, ButtonPressed, WidgetData<HTMLButtonElement>> | undefined;
 let cmd: StubCmd;
 let producedCmds: Array<StubCmd>;
-let disposable: Subscription;
+let disposable: Subscription | undefined;
 
 beforeEach(() => {
     document.documentElement.innerHTML = "<html><div><button id='b1'>A Button</button><button id='b2'>A Button2</button></div></html>";
@@ -64,7 +64,7 @@ test("testCommandExecutedOnSingleButtonConsumer", () => {
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
     button1.click();
-    expect(binding).not.toBeNull();
+    expect(binding).toBeDefined();
     expect(cmd.exec).toStrictEqual(1);
     expect(producedCmds).toHaveLength(1);
     expect(producedCmds[0]).toBe(cmd);
@@ -77,7 +77,7 @@ test("testCommandExecutedOnSingleButtonConsumerConsumer", () => {
         .bind();
 
     button1.click();
-    expect(binding).not.toBeNull();
+    expect(binding).toBeDefined();
     expect(cmd.exec).toStrictEqual(1);
 });
 
@@ -92,7 +92,7 @@ test("testCommandExecutedOnTwoButtons", () => {
     button2.click();
     button1.click();
 
-    expect(binding).not.toBeNull();
+    expect(binding).toBeDefined();
     expect(producedCmds).toHaveLength(2);
     expect(producedCmds[0]).not.toBe(producedCmds[1]);
     expect(producedCmds[0].exec).toStrictEqual(1);
@@ -110,7 +110,7 @@ test("testInit1Executed", () => {
 
     button1.click();
 
-    expect(binding).not.toBeNull();
+    expect(binding).toBeDefined();
     expect(cmd.exec).toStrictEqual(11);
 });
 
@@ -125,7 +125,7 @@ test("testInit2Executed", () => {
 
     button1.click();
 
-    expect(binding).not.toBeNull();
+    expect(binding).toBeDefined();
     expect(cmd.exec).toStrictEqual(11);
 });
 
@@ -138,7 +138,7 @@ test("testCheckFalse", () => {
 
     button1.click();
 
-    expect(binding).not.toBeNull();
+    expect(binding).toBeDefined();
     expect(cmd.exec).toStrictEqual(0);
 });
 
@@ -152,7 +152,7 @@ test("testCommandExecutedOnTwoButtonsSame", () => {
 
     button1.click();
 
-    expect(binding).not.toBeNull();
+    expect(binding).toBeDefined();
     expect(cmd.exec).toStrictEqual(1);
     expect(cpt).toStrictEqual(1);
 });
@@ -168,7 +168,7 @@ test("testBuilderCloned", () => {
     expect(binder).not.toBe(buttonBinder().when(() => false));
     expect(binder).not.toBe(buttonBinder().toProduce(_i => cmd)
         .end(_c => { }));
-    expect(binder).not.toBe(buttonBinder().log(LogLevel.COMMAND));
+    expect(binder).not.toBe(buttonBinder().log(LogLevel.command));
 });
 
 test("testClonedBuildersSameWidgetCmdOK", () => {
@@ -222,7 +222,7 @@ test("prevent default set", () => {
 
     expect(binding.getInteraction().preventDefault).toBeTruthy();
     expect(binding.getInteraction().stopImmediatePropagation).toBeFalsy();
-    expect(binding).not.toBeUndefined();
+    expect(binding).toBeDefined();
 });
 
 test("stop propag set", () => {
@@ -234,5 +234,5 @@ test("stop propag set", () => {
 
     expect(binding.getInteraction().stopImmediatePropagation).toBeTruthy();
     expect(binding.getInteraction().preventDefault).toBeFalsy();
-    expect(binding).not.toBeUndefined();
+    expect(binding).toBeDefined();
 });

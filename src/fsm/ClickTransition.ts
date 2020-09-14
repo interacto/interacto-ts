@@ -38,6 +38,6 @@ export class ClickTransition extends Transition {
     }
 
     public getAcceptedEvents(): Set<string> {
-        return new Set([EventRegistrationToken.Click, EventRegistrationToken.Auxclick]);
+        return new Set([EventRegistrationToken.click, EventRegistrationToken.auxclick]);
     }
 }

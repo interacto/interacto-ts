@@ -31,11 +31,11 @@ export class TouchPressureTransition extends Transition {
     }
 
     public accept(e: Event): boolean {
-        return e instanceof TouchEvent && e.type === EventRegistrationToken.Touchstart;
+        return e instanceof TouchEvent && e.type === EventRegistrationToken.touchstart;
     }
 
     public getAcceptedEvents(): Set<string> {
-        return new Set([EventRegistrationToken.Touchstart]);
+        return new Set([EventRegistrationToken.touchstart]);
     }
 
     public isGuardOK(_event: Event): boolean {

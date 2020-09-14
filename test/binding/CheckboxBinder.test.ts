@@ -17,10 +17,10 @@ import {StubCmd} from "../command/StubCmd";
 
 let widget1: HTMLInputElement;
 let widget2: HTMLInputElement;
-let binding: WidgetBinding<StubCmd, BoxChecked, WidgetData<HTMLInputElement>>;
+let binding: WidgetBinding<StubCmd, BoxChecked, WidgetData<HTMLInputElement>> | undefined;
 let cmd: StubCmd;
 let producedCmds: Array<StubCmd>;
-let disposable: Subscription;
+let disposable: Subscription | undefined;
 
 beforeEach(() => {
     document.documentElement.innerHTML =
@@ -55,7 +55,7 @@ test("testCommandExecutedOnSingleButtonFunction", () => {
         .bind();
 
     widget1.click();
-    expect(binding).not.toBeNull();
+    expect(binding).toBeDefined();
     expect(cmd.exec).toStrictEqual(1);
 });
 
@@ -66,7 +66,7 @@ test("testCommandExecutedOnSingleButtonSupplier", () => {
         .bind();
 
     widget1.click();
-    expect(binding).not.toBeNull();
+    expect(binding).toBeDefined();
     expect(cmd.exec).toStrictEqual(1);
 });
 
@@ -80,7 +80,7 @@ test("testCommandExecutedOnTwoCheckboxes", () => {
 
     widget2.click();
     widget1.click();
-    expect(binding).not.toBeNull();
+    expect(binding).toBeDefined();
     expect(producedCmds).toHaveLength(2);
 });
 
@@ -94,7 +94,7 @@ test("testInit1Executed", () => {
         .bind();
 
     widget1.click();
-    expect(binding).not.toBeNull();
+    expect(binding).toBeDefined();
     expect(cmd.exec).toStrictEqual(11);
 });
 
@@ -108,7 +108,7 @@ test("testInit2Executed", () => {
         .bind();
 
     widget1.click();
-    expect(binding).not.toBeNull();
+    expect(binding).toBeDefined();
     expect(cmd.exec).toStrictEqual(11);
 });
 
@@ -120,6 +120,6 @@ test("testCheckFalse", () => {
         .bind();
 
     widget1.click();
-    expect(binding).not.toBeNull();
+    expect(binding).toBeDefined();
     expect(cmd.exec).toStrictEqual(0);
 });

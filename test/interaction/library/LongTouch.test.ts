@@ -24,80 +24,81 @@ let handler: FSMHandler;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 let touchData: any;
 
-beforeEach(() => {
-    jest.useFakeTimers();
-    handler = new StubFSMHandler();
-    document.documentElement.innerHTML = "<html><div><canvas id='canvas1' /></div></html>";
-    canvas = document.getElementById("canvas1") as HTMLElement;
-});
-
-afterEach(() => {
-    if (interaction !== undefined) {
-        interaction.uninstall();
-    }
-    jest.clearAllMocks();
-    jest.clearAllTimers();
-});
 
 test("cannot create 0 or less duration", () => {
     expect(() => new LongTouch(0)).toThrow("Incorrect duration");
 });
 
-test("cannot build the interaction twice", () => {
-    interaction = new LongTouch(100);
-    interaction.getFsm().buildFSM();
-    expect(interaction.getFsm().getStates()).toHaveLength(4);
-});
+describe("long touch test", () => {
+    beforeEach(() => {
+        jest.useFakeTimers();
+        handler = new StubFSMHandler();
+        document.documentElement.innerHTML = "<html><div><canvas id='canvas1' /></div></html>";
+        canvas = document.getElementById("canvas1") as HTMLElement;
+    });
 
-[1000, 2000].forEach(duration => {
-    describe(`long touch ${String(duration)}`, () => {
-        beforeEach(() => {
-            interaction = new LongTouch(duration);
-            interaction.getFsm().addHandler(handler);
-        });
+    afterEach(() => {
+        interaction.uninstall();
+        jest.clearAllMocks();
+        jest.clearAllTimers();
+    });
 
-        test("touch does not end", () => {
-            interaction.getFsm().addHandler(new class extends StubFSMHandler {
-                public fsmStarts(): void {
-                    touchData = {...interaction.getData()};
-                }
-            }());
-            interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 3, canvas, 15, 20, 160, 21));
-            expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-            expect(handler.fsmStops).not.toHaveBeenCalled();
-            expect(handler.fsmCancels).not.toHaveBeenCalled();
-            expect(touchData.srcClientX).toBe(160);
-            expect(touchData.srcClientY).toBe(21);
-            expect(touchData.srcScreenX).toBe(15);
-            expect(touchData.srcScreenY).toBe(20);
-            expect(touchData.touchID).toBe(3);
-            expect(touchData.srcObject).toBe(canvas);
-        });
+    test("cannot build the interaction twice", () => {
+        interaction = new LongTouch(100);
+        interaction.getFsm().buildFSM();
+        expect(interaction.getFsm().getStates()).toHaveLength(4);
+    });
 
-        test("touch with early release", () => {
-            interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 3, canvas));
-            interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchend, 3, canvas));
-            expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-            expect(handler.fsmStops).not.toHaveBeenCalled();
-            expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
-        });
+    [1000, 2000].forEach(duration => {
+        describe(`long touch ${String(duration)}`, () => {
+            beforeEach(() => {
+                interaction = new LongTouch(duration);
+                interaction.getFsm().addHandler(handler);
+            });
 
-        test("touch with timeout", () => {
-            interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 3, canvas));
-            jest.runOnlyPendingTimers();
-            expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-            expect(handler.fsmStops).toHaveBeenCalledTimes(1);
-            expect(handler.fsmCancels).not.toHaveBeenCalled();
-        });
+            test("touch does not end", () => {
+                interaction.getFsm().addHandler(new class extends StubFSMHandler {
+                    public fsmStarts(): void {
+                        touchData = {...interaction.getData()};
+                    }
+                }());
+                interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 3, canvas, 15, 20, 160, 21));
+                expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+                expect(handler.fsmStops).not.toHaveBeenCalled();
+                expect(handler.fsmCancels).not.toHaveBeenCalled();
+                expect(touchData.srcClientX).toBe(160);
+                expect(touchData.srcClientY).toBe(21);
+                expect(touchData.srcScreenX).toBe(15);
+                expect(touchData.srcScreenY).toBe(20);
+                expect(touchData.touchID).toBe(3);
+                expect(touchData.srcObject).toBe(canvas);
+            });
+
+            test("touch with early release", () => {
+                interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 3, canvas));
+                interaction.processEvent(createTouchEvent(EventRegistrationToken.touchend, 3, canvas));
+                expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+                expect(handler.fsmStops).not.toHaveBeenCalled();
+                expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
+            });
+
+            test("touch with timeout", () => {
+                interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 3, canvas));
+                jest.runOnlyPendingTimers();
+                expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+                expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+                expect(handler.fsmCancels).not.toHaveBeenCalled();
+            });
 
 
-        test("two taps then timeout", () => {
-            interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchstart, 3, canvas));
-            interaction.processEvent(createTouchEvent(EventRegistrationToken.Touchend, 3, canvas));
-            jest.runOnlyPendingTimers();
-            expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-            expect(handler.fsmStops).not.toHaveBeenCalled();
-            expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
+            test("two taps then timeout", () => {
+                interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 3, canvas));
+                interaction.processEvent(createTouchEvent(EventRegistrationToken.touchend, 3, canvas));
+                jest.runOnlyPendingTimers();
+                expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+                expect(handler.fsmStops).not.toHaveBeenCalled();
+                expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
+            });
         });
     });
 });

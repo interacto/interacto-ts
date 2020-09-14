@@ -41,7 +41,7 @@ beforeEach(() => {
 
 test("press event don't trigger the interaction DnD", () => {
     interaction.registerToNodes([canvas]);
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, canvas));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, canvas));
     expect(handler.fsmStarts).not.toHaveBeenCalled();
     expect(handler.fsmStops).not.toHaveBeenCalled();
     expect(handler.fsmCancels).not.toHaveBeenCalled();
@@ -59,8 +59,8 @@ test("check data press move", () => {
             obj = interaction.getData().getTgtObject() as HTMLCanvasElement;
         }
     }());
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, canvas, undefined, undefined, 11, 23));
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 110, 230));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, canvas, undefined, undefined, 11, 23));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 110, 230));
     expect(sx).toBe(11);
     expect(sy).toBe(23);
     expect(tx).toBe(110);
@@ -71,8 +71,8 @@ test("check data press move", () => {
 
 test("click and move and release start and update the interaction", () => {
     interaction.registerToNodes([canvas]);
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, canvas));
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, canvas));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
     expect(handler.fsmCancels).not.toHaveBeenCalled();
@@ -81,7 +81,7 @@ test("click and move and release start and update the interaction", () => {
 
 test("data of the press and drag part of the interaction", () => {
     interaction.registerToNodes([canvas]);
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, canvas, undefined, undefined, 15, 20, 0));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, canvas, undefined, undefined, 15, 20, 0));
     interaction.getFsm().addHandler(new class extends StubFSMHandler {
         public fsmUpdates(): void {
             sx = interaction.getData().getSrcClientX();
@@ -92,7 +92,7 @@ test("data of the press and drag part of the interaction", () => {
             obj = interaction.getData().getTgtObject() as HTMLCanvasElement;
         }
     }());
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 16, 21));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 16, 21));
     expect(sx).toBe(15);
     expect(sy).toBe(20);
     expect(tx).toBe(16);
@@ -103,8 +103,8 @@ test("data of the press and drag part of the interaction", () => {
 
 test("check data with multiple drag", () => {
     interaction.registerToNodes([canvas]);
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, canvas, undefined, undefined, 11, 23, 0));
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 12, 22, 0));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, canvas, undefined, undefined, 11, 23, 0));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 12, 22, 0));
     interaction.getFsm().addHandler(new class extends StubFSMHandler {
         public fsmUpdates(): void {
             sx = interaction.getData().getSrcClientX();
@@ -115,7 +115,7 @@ test("check data with multiple drag", () => {
             obj = interaction.getData().getTgtObject() as HTMLCanvasElement;
         }
     }());
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 12, 24, 0));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 12, 24, 0));
     expect(sx).toBe(12);
     expect(sy).toBe(22);
     expect(tx).toBe(12);

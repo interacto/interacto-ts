@@ -38,6 +38,6 @@ export class ScrollTransition extends Transition {
     }
 
     public getAcceptedEvents(): Set<string> {
-        return new Set([EventRegistrationToken.Scroll]);
+        return new Set([EventRegistrationToken.scroll]);
     }
 }

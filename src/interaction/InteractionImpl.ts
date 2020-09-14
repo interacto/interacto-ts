@@ -212,8 +212,8 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM> 
             node.addEventListener(eventType, this.getKeyHandler());
             return;
         }
-        if (EventRegistrationToken.Scroll === eventType) {
-            node.addEventListener(EventRegistrationToken.Scroll, this.getUIHandler());
+        if (EventRegistrationToken.scroll === eventType) {
+            node.addEventListener(EventRegistrationToken.scroll, this.getUIHandler());
 
         }
     }
@@ -231,28 +231,28 @@ export abstract class InteractionImpl<D extends InteractionData, F extends FSM> 
             node.removeEventListener(eventType, this.getKeyHandler());
             return;
         }
-        if (EventRegistrationToken.Scroll === eventType) {
-            node.removeEventListener(EventRegistrationToken.Scroll, this.getUIHandler());
+        if (EventRegistrationToken.scroll === eventType) {
+            node.removeEventListener(EventRegistrationToken.scroll, this.getUIHandler());
 
         }
     }
 
     protected registerActionHandlerClick(node: EventTarget): void {
-        node.addEventListener(EventRegistrationToken.Click, this.getActionHandler());
-        node.addEventListener(EventRegistrationToken.Auxclick, this.getActionHandler());
+        node.addEventListener(EventRegistrationToken.click, this.getActionHandler());
+        node.addEventListener(EventRegistrationToken.auxclick, this.getActionHandler());
     }
 
     protected unregisterActionHandlerClick(node: EventTarget): void {
-        node.removeEventListener(EventRegistrationToken.Click, this.getActionHandler());
-        node.removeEventListener(EventRegistrationToken.Auxclick, this.getActionHandler());
+        node.removeEventListener(EventRegistrationToken.click, this.getActionHandler());
+        node.removeEventListener(EventRegistrationToken.auxclick, this.getActionHandler());
     }
 
     protected registerActionHandlerInput(node: EventTarget): void {
-        node.addEventListener(EventRegistrationToken.Input, this.getActionHandler());
+        node.addEventListener(EventRegistrationToken.input, this.getActionHandler());
     }
 
     protected unregisterActionHandlerInput(node: EventTarget): void {
-        node.removeEventListener(EventRegistrationToken.Input, this.getActionHandler());
+        node.removeEventListener(EventRegistrationToken.input, this.getActionHandler());
     }
 
     protected getActionHandler(): EventListener {

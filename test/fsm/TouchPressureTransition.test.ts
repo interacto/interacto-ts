@@ -26,20 +26,20 @@ beforeEach(() => {
 });
 
 test("invalid event", () => {
-    expect(tr.accept(createMouseEvent(EventRegistrationToken.MouseDown, document.getElementById("canvas") as EventTarget,
+    expect(tr.accept(createMouseEvent(EventRegistrationToken.mouseDown, document.getElementById("canvas") as EventTarget,
         11, 23, 11, 23, 0))).toBeFalsy();
 });
 
 test("valid event", () => {
-    expect(tr.accept(createTouchEvent(EventRegistrationToken.Touchstart, 3,
+    expect(tr.accept(createTouchEvent(EventRegistrationToken.touchstart, 3,
         document.getElementById("canvas") as EventTarget, 11, 23, 12, 25))).toBeTruthy();
 });
 
 test("guard OK", () => {
-    expect(tr.isGuardOK(createTouchEvent(EventRegistrationToken.Touchstart, 3,
+    expect(tr.isGuardOK(createTouchEvent(EventRegistrationToken.touchstart, 3,
         document.getElementById("canvas") as EventTarget, 11, 23, 12, 25))).toBeTruthy();
 });
 
 test("accepted events", () => {
-    expect(tr.getAcceptedEvents()).toStrictEqual(new Set([EventRegistrationToken.Touchstart]));
+    expect(tr.getAcceptedEvents()).toStrictEqual(new Set([EventRegistrationToken.touchstart]));
 });

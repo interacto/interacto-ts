@@ -30,7 +30,7 @@ export class MoveTransition extends Transition {
     }
 
     public accept(event: Event): boolean {
-        return event instanceof MouseEvent && event.type === EventRegistrationToken.MouseMove;
+        return event instanceof MouseEvent && event.type === EventRegistrationToken.mouseMove;
     }
 
     public isGuardOK(_event: Event): boolean {
@@ -38,6 +38,6 @@ export class MoveTransition extends Transition {
     }
 
     public getAcceptedEvents(): Set<string> {
-        return new Set([EventRegistrationToken.MouseMove]);
+        return new Set([EventRegistrationToken.mouseMove]);
     }
 }

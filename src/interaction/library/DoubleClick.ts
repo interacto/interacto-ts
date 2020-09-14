@@ -32,7 +32,7 @@ export class DoubleClickFSM extends FSM {
     private static timeGap = 300;
 
     /** The supplier that provides the time gap. */
-    private static readonly SUPPLY_TIME_GAP: () => number = () => DoubleClickFSM.getTimeGap();
+    private static readonly timeGapSupplier: () => number = () => DoubleClickFSM.getTimeGap();
 
     /**
      * @return The time gap between the two spinner events.
@@ -107,7 +107,7 @@ export class DoubleClickFSM extends FSM {
             }
         }(this, clicked, cancelled);
 
-        new TimeoutTransition(clicked, cancelled, DoubleClickFSM.SUPPLY_TIME_GAP);
+        new TimeoutTransition(clicked, cancelled, DoubleClickFSM.timeGapSupplier);
         new SubFSMTransition(clicked, dbleclicked, this.sndClick);
     }
 

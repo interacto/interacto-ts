@@ -39,6 +39,6 @@ export class SpinnerChangedTransition extends Transition {
     }
 
     public getAcceptedEvents(): Set<string> {
-        return new Set([EventRegistrationToken.Input]);
+        return new Set([EventRegistrationToken.input]);
     }
 }

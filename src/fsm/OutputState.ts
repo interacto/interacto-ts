@@ -46,7 +46,9 @@ export interface OutputState extends State {
     addTransition(tr: Transition): void;
 }
 
-export function isOutputStateType(obj: OutputState | object): obj is OutputState {
+export function isOutputStateType(obj: unknown): obj is OutputState {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     return (obj as OutputState).exit !== undefined && (obj as OutputState).addTransition !== undefined &&
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         (obj as OutputState).process !== undefined && (obj as OutputState).getTransitions !== undefined;
 }

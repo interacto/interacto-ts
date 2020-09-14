@@ -25,10 +25,10 @@ import {
 import {StubCmd} from "../command/StubCmd";
 import {createTouchEvent} from "../interaction/StubEvents";
 
-let binding: WidgetBinding<StubCmd, Tap, TapData>;
+let binding: WidgetBinding<StubCmd, Tap, TapData> | undefined;
 let cmd: StubCmd;
 let producedCmds: Array<StubCmd>;
-let disposable: Subscription;
+let disposable: Subscription | undefined;
 
 beforeEach(() => {
     jest.useFakeTimers();
@@ -37,15 +37,10 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-    if (disposable !== undefined) {
-        disposable.unsubscribe();
-    }
-    binding.uninstallBinding();
+    disposable?.unsubscribe();
+    binding?.uninstallBinding();
     CommandsRegistry.getInstance().clear();
     UndoCollector.getInstance().clear();
-    if (binding !== undefined) {
-        binding.uninstallBinding();
-    }
 });
 
 describe("on canvas", () => {
@@ -67,12 +62,12 @@ describe("on canvas", () => {
             .bind();
         disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
-        c1.dispatchEvent(createTouchEvent(EventRegistrationToken.Touchstart, 1, c1, 11, 23, 110, 230));
-        c1.dispatchEvent(createTouchEvent(EventRegistrationToken.Touchend, 1, c1, 11, 23, 110, 230));
-        c1.dispatchEvent(createTouchEvent(EventRegistrationToken.Touchstart, 2, c1, 31, 13, 310, 130));
-        c1.dispatchEvent(createTouchEvent(EventRegistrationToken.Touchend, 2, c1, 31, 13, 310, 130));
+        c1.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, c1, 11, 23, 110, 230));
+        c1.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 1, c1, 11, 23, 110, 230));
+        c1.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 2, c1, 31, 13, 310, 130));
+        c1.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 2, c1, 31, 13, 310, 130));
 
-        expect(binding).not.toBeNull();
+        expect(binding).toBeDefined();
         expect(cmd.exec).toStrictEqual(1);
         expect(producedCmds).toHaveLength(1);
         expect(producedCmds[0]).toBe(cmd);
@@ -86,16 +81,16 @@ describe("on canvas", () => {
             .bind();
         disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
-        c1.dispatchEvent(createTouchEvent(EventRegistrationToken.Touchstart, 1, c1, 11, 23, 110, 230));
-        c1.dispatchEvent(createTouchEvent(EventRegistrationToken.Touchend, 1, c1, 11, 23, 110, 230));
-        c1.dispatchEvent(createTouchEvent(EventRegistrationToken.Touchstart, 2, c1, 31, 13, 310, 130));
-        c1.dispatchEvent(createTouchEvent(EventRegistrationToken.Touchend, 2, c1, 31, 13, 310, 130));
-        c1.dispatchEvent(createTouchEvent(EventRegistrationToken.Touchstart, 2, c1, 31, 13, 310, 130));
-        c1.dispatchEvent(createTouchEvent(EventRegistrationToken.Touchend, 2, c1, 31, 13, 310, 130));
-        c1.dispatchEvent(createTouchEvent(EventRegistrationToken.Touchstart, 2, c1, 31, 13, 310, 130));
-        c1.dispatchEvent(createTouchEvent(EventRegistrationToken.Touchend, 2, c1, 31, 13, 310, 130));
+        c1.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, c1, 11, 23, 110, 230));
+        c1.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 1, c1, 11, 23, 110, 230));
+        c1.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 2, c1, 31, 13, 310, 130));
+        c1.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 2, c1, 31, 13, 310, 130));
+        c1.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 2, c1, 31, 13, 310, 130));
+        c1.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 2, c1, 31, 13, 310, 130));
+        c1.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 2, c1, 31, 13, 310, 130));
+        c1.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 2, c1, 31, 13, 310, 130));
 
-        expect(binding).not.toBeNull();
+        expect(binding).toBeDefined();
         expect(producedCmds).toHaveLength(2);
     });
 
@@ -108,7 +103,7 @@ describe("on canvas", () => {
 
         binding.getInteraction().onNodeUnregistered(c1);
 
-        c1.dispatchEvent(createTouchEvent(EventRegistrationToken.Touchstart, 1, c1, 11, 23, 110, 230));
+        c1.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, c1, 11, 23, 110, 230));
 
         expect(binding.isRunning()).toBeFalsy();
     });
@@ -129,10 +124,10 @@ describe("on svg doc for dynamic registration", () => {
             .bind();
         disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
-        doc.dispatchEvent(createTouchEvent(EventRegistrationToken.Touchstart, 1, doc, 11, 23, 110, 230));
+        doc.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, doc, 11, 23, 110, 230));
 
         expect(binding.isRunning()).toBeFalsy();
-        expect(binding).not.toBeNull();
+        expect(binding).toBeDefined();
         expect(producedCmds).toHaveLength(0);
     });
 
@@ -149,10 +144,10 @@ describe("on svg doc for dynamic registration", () => {
         // Waiting for the mutation changes to be done.
         await Promise.resolve();
 
-        rect.dispatchEvent(createTouchEvent(EventRegistrationToken.Touchstart, 1, rect, 11, 23, 110, 230));
-        rect.dispatchEvent(createTouchEvent(EventRegistrationToken.Touchstart, 1, rect, 11, 23, 110, 230));
+        rect.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, rect, 11, 23, 110, 230));
+        rect.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, rect, 11, 23, 110, 230));
 
-        expect(binding).not.toBeNull();
+        expect(binding).toBeDefined();
         expect(producedCmds).toHaveLength(1);
     });
 
@@ -169,10 +164,10 @@ describe("on svg doc for dynamic registration", () => {
             .bind();
         disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
-        rect.dispatchEvent(createTouchEvent(EventRegistrationToken.Touchstart, 1, rect, 11, 23, 110, 230));
-        rect.dispatchEvent(createTouchEvent(EventRegistrationToken.Touchstart, 1, rect, 11, 23, 110, 230));
+        rect.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, rect, 11, 23, 110, 230));
+        rect.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, rect, 11, 23, 110, 230));
 
-        expect(binding).not.toBeNull();
+        expect(binding).toBeDefined();
         expect(producedCmds).toHaveLength(1);
     });
 
@@ -190,9 +185,9 @@ describe("on svg doc for dynamic registration", () => {
         doc.removeChild(rect);
         await Promise.resolve();
 
-        rect.dispatchEvent(createTouchEvent(EventRegistrationToken.Touchstart, 1, rect, 11, 23, 110, 230));
+        rect.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, rect, 11, 23, 110, 230));
 
-        expect(binding).not.toBeNull();
+        expect(binding).toBeDefined();
         expect(producedCmds).toHaveLength(0);
     });
 
@@ -210,11 +205,11 @@ describe("on svg doc for dynamic registration", () => {
         doc.removeChild(rect);
         await Promise.resolve();
 
-        rect.dispatchEvent(createTouchEvent(EventRegistrationToken.Touchstart, 1, rect, 11, 23, 110, 230));
-        rect.dispatchEvent(createTouchEvent(EventRegistrationToken.Touchstart, 1, rect, 11, 23, 110, 230));
-        rect.dispatchEvent(createTouchEvent(EventRegistrationToken.Touchstart, 1, rect, 11, 23, 110, 230));
+        rect.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, rect, 11, 23, 110, 230));
+        rect.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, rect, 11, 23, 110, 230));
+        rect.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, rect, 11, 23, 110, 230));
 
-        expect(binding).not.toBeNull();
+        expect(binding).toBeDefined();
         expect(producedCmds).toHaveLength(0);
     });
 });

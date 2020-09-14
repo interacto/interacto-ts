@@ -29,7 +29,7 @@ import {TouchMoveTransition} from "../../fsm/TouchMoveTransition";
  * The FSM for the Pan interaction
  */
 export class PanFSM extends FSM {
-    // eslint-disable-next-line @typescript-eslint/typedef
+    // eslint-disable-next-line @typescript-eslint/typedef,@typescript-eslint/naming-convention
     private static readonly PanMoveTransitionKO = class extends TouchMoveTransition {
         private readonly _parent: PanFSM;
 
@@ -45,7 +45,7 @@ export class PanFSM extends FSM {
         }
     };
 
-    // eslint-disable-next-line @typescript-eslint/typedef
+    // eslint-disable-next-line @typescript-eslint/typedef,@typescript-eslint/naming-convention
     private static readonly PanMoveTransitionOK = class extends TouchMoveTransition {
         private readonly parent: PanFSM;
 

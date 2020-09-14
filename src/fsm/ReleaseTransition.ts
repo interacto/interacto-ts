@@ -32,11 +32,11 @@ export class ReleaseTransition extends Transition {
     }
 
     public accept(e: Event): boolean {
-        return e instanceof MouseEvent && e.type === EventRegistrationToken.MouseUp;
+        return e instanceof MouseEvent && e.type === EventRegistrationToken.mouseUp;
     }
 
     public getAcceptedEvents(): Set<string> {
-        return new Set([EventRegistrationToken.MouseUp]);
+        return new Set([EventRegistrationToken.mouseUp]);
     }
 
     public isGuardOK(_event: Event): boolean {

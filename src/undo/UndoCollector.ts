@@ -35,16 +35,6 @@ export class UndoCollector {
     }
 
     /**
-     * The standard text for redo.
-     */
-    public static readonly EMPTY_REDO: string = "redo";
-
-    /**
-     * The standard text for undo.
-     */
-    public static readonly EMPTY_UNDO: string = "undo";
-
-    /**
      * Contains the undoable objects.
      */
     private readonly undos: Array<Undoable>;

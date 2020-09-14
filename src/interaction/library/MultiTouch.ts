@@ -39,11 +39,11 @@ export class MultiTouchFSM extends ConcurrentFSM<TouchDnDFSM> {
             return false;
         }
 
-        const touch = this.getConccurFSMs()
-            .filter(fsm => fsm.getTouchId() === event.changedTouches[0].identifier)[0];
+        const touches = this.getConccurFSMs()
+            .filter(fsm => fsm.getTouchId() === event.changedTouches[0].identifier);
 
-        if (touch !== undefined) {
-            return touch.process(event);
+        if (touches.length > 0) {
+            return touches[0].process(event);
         }
 
         return this.getConccurFSMs().some(conccurFSM => conccurFSM.process(event));
@@ -73,8 +73,8 @@ export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouch
             }
 
             public onTouch(event: TouchEvent): void {
-                const touch = event.changedTouches[0];
-                if (touch !== undefined) {
+                if (event.changedTouches.length > 0) {
+                    const touch = event.changedTouches[0];
                     (this.parent.data as (MultiTouchDataImpl)).addTouchData(
                         new SrcTgtTouchDataImpl(touch.identifier, touch.clientX, touch.clientY, touch.screenX, touch.screenY, touch.target));
                 }

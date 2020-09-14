@@ -54,12 +54,12 @@ test("execute and flush canDo", () => {
 });
 
 test("testCommandStatusAfterCreation", () => {
-    expect(cmd.getStatus()).toStrictEqual(CmdStatus.CREATED);
+    expect(cmd.getStatus()).toStrictEqual(CmdStatus.created);
 });
 
 test("testCommandStatusAfterFlush", () => {
     cmd.flush();
-    expect(cmd.getStatus()).toStrictEqual(CmdStatus.FLUSHED);
+    expect(cmd.getStatus()).toStrictEqual(CmdStatus.flushed);
 });
 
 test("testCommandCannotDoItWhenFlushed", () => {
@@ -88,7 +88,7 @@ test("testCommandCanDoItWhenCanDo", () => {
 
 test("testCommandIsExecutedWhenDoIt", () => {
     cmd.doIt();
-    expect(cmd.getStatus()).toStrictEqual(CmdStatus.EXECUTED);
+    expect(cmd.getStatus()).toStrictEqual(CmdStatus.executed);
 });
 
 test("testCommandHadEffectWhenDone", () => {
@@ -117,35 +117,35 @@ test("testCommandHadEffectWhenNotDoneAndExecuted", () => {
 });
 
 test("testGetRegistrationPolicyNotExecuted", () => {
-    expect(cmd.getRegistrationPolicy()).toStrictEqual(RegistrationPolicy.NONE);
+    expect(cmd.getRegistrationPolicy()).toStrictEqual(RegistrationPolicy.none);
 });
 
 test("testGetRegistrationPolicyDone", () => {
     cmd.done();
-    expect(cmd.getRegistrationPolicy()).toStrictEqual(RegistrationPolicy.LIMITED);
+    expect(cmd.getRegistrationPolicy()).toStrictEqual(RegistrationPolicy.limited);
 });
 
 test("testCommandNotDoneWhenFlushed", () => {
     cmd.flush();
     cmd.done();
-    expect(cmd.getStatus()).toStrictEqual(CmdStatus.FLUSHED);
+    expect(cmd.getStatus()).toStrictEqual(CmdStatus.flushed);
 });
 
 test("testCommandNotDoneWhenCancelled", () => {
     cmd.cancel();
     cmd.done();
-    expect(cmd.getStatus()).toStrictEqual(CmdStatus.CANCELLED);
+    expect(cmd.getStatus()).toStrictEqual(CmdStatus.cancelled);
 });
 
 test("testCommandDoneWhenCreated", () => {
     cmd.done();
-    expect(cmd.getStatus()).toStrictEqual(CmdStatus.DONE);
+    expect(cmd.getStatus()).toStrictEqual(CmdStatus.done);
 });
 
 test("testCommandDoneWhenExecuted", () => {
     cmd.doIt();
     cmd.done();
-    expect(cmd.getStatus()).toStrictEqual(CmdStatus.DONE);
+    expect(cmd.getStatus()).toStrictEqual(CmdStatus.done);
 });
 
 test("testIsDoneWhenCreated", () => {
@@ -173,12 +173,12 @@ test("testIsDoneWhenExecuted", () => {
 });
 
 test("testNotCancelAtStart", () => {
-    expect(cmd.getStatus()).not.toStrictEqual(CmdStatus.CANCELLED);
+    expect(cmd.getStatus()).not.toStrictEqual(CmdStatus.cancelled);
 });
 
 test("testCancel", () => {
     cmd.cancel();
-    expect(cmd.getStatus()).toStrictEqual(CmdStatus.CANCELLED);
+    expect(cmd.getStatus()).toStrictEqual(CmdStatus.cancelled);
 });
 
 test("testExecutedTwoTimes", () => {

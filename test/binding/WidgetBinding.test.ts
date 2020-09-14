@@ -179,7 +179,7 @@ test("interaction starts throw MustCancelStateMachineException with log", () => 
 test("testInteractionStartsOk", () => {
     binding.conditionRespected = true;
     binding.fsmStarts();
-    expect(binding.getCommand()).not.toBeUndefined();
+    expect(binding.getCommand()).toBeDefined();
 });
 
 test("testCounters", () => {
@@ -240,8 +240,8 @@ test("cancel interaction", () => {
     binding.fsmCancels();
     binding.fsmCancels();
     binding.fsmCancels();
-    expect(cmd).not.toBeUndefined();
-    expect(cmd?.getStatus()).toStrictEqual(CmdStatus.CANCELLED);
+    expect(cmd).toBeDefined();
+    expect(cmd?.getStatus()).toStrictEqual(CmdStatus.cancelled);
     expect(binding.endOrCancel).toHaveBeenCalledWith();
     expect(binding.cancel).toHaveBeenCalledTimes(1);
     expect(binding.getCommand()).toBeUndefined();
@@ -272,7 +272,7 @@ test("cancel interaction continuous no effect", () => {
     binding.fsmStarts();
     const cmd = binding.getCommand();
     binding.fsmCancels();
-    expect(CmdStatus.CANCELLED).toStrictEqual(cmd?.getStatus());
+    expect(CmdStatus.cancelled).toStrictEqual(cmd?.getStatus());
 });
 
 test("cancel interaction continuous undoable", () => {
@@ -341,7 +341,7 @@ test("update when cmd not created", () => {
     binding.conditionRespected = true;
     binding.fsmUpdates();
     expect(binding.first).toHaveBeenCalledWith();
-    expect(binding.getCommand()).not.toBeUndefined();
+    expect(binding.getCommand()).toBeDefined();
 });
 
 test("update with cmd crash", () => {
@@ -389,7 +389,7 @@ test("stop no log cmd created", () => {
     const cmd = binding.getCommand();
     binding.conditionRespected = false;
     binding.fsmStops();
-    expect(cmd?.getStatus()).toStrictEqual(CmdStatus.CANCELLED);
+    expect(cmd?.getStatus()).toStrictEqual(CmdStatus.cancelled);
     expect(binding.getCommand()).toBeUndefined();
     expect(binding.getTimesCancelled()).toStrictEqual(1);
 });
@@ -437,7 +437,7 @@ test("after exec cmd had effects", () => {
 test("after exec cmd had effects with none policy", () => {
     binding = new WidgetBindingStub(true, () => new class extends CmdStubUndoable {
         public getRegistrationPolicy(): RegistrationPolicy {
-            return RegistrationPolicy.NONE;
+            return RegistrationPolicy.none;
         }
     }(), new InteractionStub(new FSM()));
     jest.spyOn(binding, "ifCmdHadEffects");

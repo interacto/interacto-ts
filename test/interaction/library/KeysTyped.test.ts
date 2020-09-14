@@ -41,8 +41,8 @@ test("cannot create several times the FSM", () => {
 
 test("type 'b' and wait for timeout stops the interaction", () => {
     interaction.registerToNodes([text]);
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "b"));
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyUp, "b"));
+    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "b"));
+    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "b"));
     jest.runOnlyPendingTimers();
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
@@ -58,8 +58,8 @@ test("type 'b' and wait for timeout stops the interaction: data", () => {
     }());
 
     interaction.registerToNodes([text]);
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "b"));
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyUp, "b"));
+    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "b"));
+    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "b"));
     jest.runOnlyPendingTimers();
     expect(keys).toHaveLength(1);
     expect(keys[0]).toStrictEqual("b");
@@ -67,12 +67,12 @@ test("type 'b' and wait for timeout stops the interaction: data", () => {
 
 test("type text and wait for timeout stops the interaction", () => {
     interaction.registerToNodes([text]);
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "b"));
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyUp, "b"));
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "c"));
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyUp, "c"));
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "a"));
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyUp, "a"));
+    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "b"));
+    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "b"));
+    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "c"));
+    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "c"));
+    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "a"));
+    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "a"));
     jest.runOnlyPendingTimers();
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
@@ -89,12 +89,12 @@ test("type text and wait for timeout stops the interaction: data", () => {
     }());
 
     interaction.registerToNodes([text]);
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "b"));
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyUp, "b"));
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "c"));
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyUp, "c"));
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "a"));
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyUp, "a"));
+    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "b"));
+    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "b"));
+    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "c"));
+    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "c"));
+    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "a"));
+    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "a"));
     jest.runOnlyPendingTimers();
     expect(keys).toHaveLength(3);
     expect(keys).toStrictEqual(["b", "c", "a"]);
@@ -110,8 +110,8 @@ test("type 'b' does not stop the interaction", () => {
     }());
 
     interaction.registerToNodes([text]);
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "z"));
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyUp, "z"));
+    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "z"));
+    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "z"));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).not.toHaveBeenCalledWith();
     expect(keys).toHaveLength(1);

@@ -36,7 +36,7 @@ beforeEach(() => {
 
 test("testKeyPressExecution", () => {
     interaction.registerToNodes([text]);
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "A"));
+    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "A"));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).not.toHaveBeenCalled();
 });
@@ -53,15 +53,15 @@ test("testKeyPressData", () => {
         }
     }());
 
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "A"));
+    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "A"));
     expect(length).toStrictEqual(1);
     expect(txt).toStrictEqual("A");
 });
 
 test("testTwoKeyPressExecution", () => {
     interaction.registerToNodes([text]);
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "A"));
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "B"));
+    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "A"));
+    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "B"));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
     expect(handler.fsmStops).not.toHaveBeenCalled();
@@ -77,8 +77,8 @@ test("testTwoKeyPressData", () => {
         }
     }());
 
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "A"));
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "B"));
+    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "A"));
+    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "B"));
     expect(data).toHaveLength(2);
     expect(data[0]).toStrictEqual("A");
     expect(data[1]).toStrictEqual("B");
@@ -86,9 +86,9 @@ test("testTwoKeyPressData", () => {
 
 test("testTwoKeyPressReleaseExecution", () => {
     interaction.registerToNodes([text]);
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "A"));
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "B"));
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyUp, "B"));
+    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "A"));
+    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "B"));
+    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "B"));
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(3);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
 });
@@ -98,32 +98,32 @@ test("testTwoKeyPressReleaseData", () => {
     interaction.registerToNodes([text]);
     let data: Array<string> = [];
 
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "A"));
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "B"));
+    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "A"));
+    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "B"));
     interaction.getFsm().addHandler(new class extends StubFSMHandler {
         public fsmUpdates(): void {
             data = [...interaction.getData().getKeys()];
         }
     }());
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyUp, "B"));
+    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "B"));
     expect(data).toHaveLength(1);
     expect(data[0]).toStrictEqual("A");
 });
 
 test("testTwoKeyPressReleaseRecycle", () => {
     interaction.registerToNodes([text]);
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "A"));
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "B"));
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyUp, "B"));
+    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "A"));
+    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "B"));
+    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "B"));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
 });
 
 test("testTwoKeyPressTwoReleasesExecution", () => {
     interaction.registerToNodes([text]);
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "A"));
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "B"));
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyUp, "A"));
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyUp, "B"));
+    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "A"));
+    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "B"));
+    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "A"));
+    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "B"));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
     expect(handler.fsmStops).toHaveBeenCalledTimes(2);
 });

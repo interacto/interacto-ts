@@ -129,8 +129,8 @@ export class LongTouch extends InteractionImpl<TouchData, LongTouchFSM> {
             }
 
             public tap(evt: TouchEvent): void {
-                const touch = evt.changedTouches[0];
-                if (touch !== undefined) {
+                if (evt.changedTouches.length > 0) {
+                    const touch = evt.changedTouches[0];
                     (this._parent.data as (SrcTgtTouchDataImpl)).setPointData(
                         touch.clientX, touch.clientY, touch.screenX, touch.screenY, undefined,
                         touch.target, touch.target);

@@ -48,8 +48,8 @@ test("other event don't trigger the interaction.", () => {
 
 test("press on a canvas then move don't starts the interaction", () => {
     interaction.registerToNodes([canvas]);
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, canvas));
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, canvas));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas));
     expect(handler.fsmStarts).not.toHaveBeenCalled();
 });
 

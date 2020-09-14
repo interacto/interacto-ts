@@ -53,6 +53,7 @@ export class ScrollDataImpl implements ScrollData {
         this.scrolledNode = event.target ?? undefined;
 
         if (event.view !== null) {
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             this.increment = this.getIncrement() + (event.view.scrollY === undefined ||
                 event.view.scrollY < this.getIncrement() ? 0
                 : event.view.scrollY - (this.py === undefined || event.view.scrollY < this.getIncrement() ? 0 : this.py));

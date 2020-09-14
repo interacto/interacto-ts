@@ -41,23 +41,23 @@ test("cannot create several times the FSM", () => {
 
 test("type 'a' in the textarea starts and stops the interaction.", () => {
     interaction.registerToNodes([text]);
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "a"));
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyUp, "a"));
+    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "a"));
+    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "a"));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
 });
 
 test("only press the key don't stop the interaction.", () => {
     interaction.registerToNodes([text]);
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "a"));
+    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "a"));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).not.toHaveBeenCalled();
 });
 
 test("if you release a key different that the one you press, the interaction don't stop", () => {
     interaction.registerToNodes([text]);
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "a"));
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyUp, "b"));
+    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "a"));
+    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "b"));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).not.toHaveBeenCalled();
 });

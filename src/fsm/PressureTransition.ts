@@ -31,11 +31,11 @@ export class PressureTransition extends Transition {
     }
 
     public accept(e: Event): boolean {
-        return e instanceof MouseEvent && e.type === EventRegistrationToken.MouseDown;
+        return e instanceof MouseEvent && e.type === EventRegistrationToken.mouseDown;
     }
 
     public getAcceptedEvents(): Set<string> {
-        return new Set([EventRegistrationToken.MouseDown]);
+        return new Set([EventRegistrationToken.mouseDown]);
     }
 
     public isGuardOK(_event: Event): boolean {

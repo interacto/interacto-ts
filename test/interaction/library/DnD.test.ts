@@ -35,7 +35,7 @@ beforeEach(() => {
 
 test("press event don't trigger the interaction DnD", () => {
     interaction.registerToNodes([canvas]);
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, canvas));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, canvas));
     expect(handler.fsmStarts).not.toHaveBeenCalled();
     expect(handler.fsmStops).not.toHaveBeenCalled();
     expect(handler.fsmCancels).not.toHaveBeenCalled();
@@ -43,8 +43,8 @@ test("press event don't trigger the interaction DnD", () => {
 
 test("press and release without moving don't trigger the interaction", () => {
     interaction.registerToNodes([canvas]);
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, canvas));
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseUp, canvas));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, canvas));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseUp, canvas));
     expect(handler.fsmStarts).not.toHaveBeenCalled();
     expect(handler.fsmCancels).not.toHaveBeenCalled();
 });
@@ -58,7 +58,7 @@ test("data of the  press and drag part of the interaction", () => {
     let obj: HTMLCanvasElement | undefined;
 
     interaction.registerToNodes([canvas]);
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, canvas, undefined, undefined, 15, 20, 0));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, canvas, undefined, undefined, 15, 20, 0));
     interaction.getFsm().addHandler(new class extends StubFSMHandler {
         public fsmUpdates(): void {
             sx = interaction.getData().getSrcClientX();
@@ -69,7 +69,7 @@ test("data of the  press and drag part of the interaction", () => {
             obj = interaction.getData().getTgtObject() as HTMLCanvasElement;
         }
     }());
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 16, 21));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 16, 21));
     expect(sx).toBe(15);
     expect(sy).toBe(20);
     expect(tx).toBe(16);
@@ -80,9 +80,9 @@ test("data of the  press and drag part of the interaction", () => {
 
 test("check if drag with different button don't cancel or stop the interaction.", () => {
     interaction.registerToNodes([canvas]);
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, canvas, undefined, undefined, 11, 23, 0));
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 12, 22, 2));
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 12, 22, 0));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, canvas, undefined, undefined, 11, 23, 0));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 12, 22, 2));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 12, 22, 0));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).not.toHaveBeenCalled();
@@ -91,9 +91,9 @@ test("check if drag with different button don't cancel or stop the interaction."
 
 test("check if drag with different button don't cancel or stop the interaction-bis.", () => {
     interaction.registerToNodes([canvas]);
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, canvas, undefined, undefined, 11, 23, 0));
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 12, 22, 0));
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 12, 22, 2));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, canvas, undefined, undefined, 11, 23, 0));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 12, 22, 0));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 12, 22, 2));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).not.toHaveBeenCalled();
@@ -102,8 +102,8 @@ test("check if drag with different button don't cancel or stop the interaction-b
 
 test("press one button and release a different one don't trigger the interaction.", () => {
     interaction.registerToNodes([canvas]);
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, canvas, undefined, undefined, undefined, undefined, 0));
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseUp, canvas, undefined, undefined, undefined, undefined, 2));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, canvas, undefined, undefined, undefined, undefined, 0));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseUp, canvas, undefined, undefined, undefined, undefined, 2));
     expect(handler.fsmStarts).not.toHaveBeenCalled();
     expect(handler.fsmStops).not.toHaveBeenCalled();
     expect(handler.fsmCancels).not.toHaveBeenCalled();
@@ -111,8 +111,8 @@ test("press one button and release a different one don't trigger the interaction
 
 test("press and drag start the interaction but don't cancel it or stop it", () => {
     interaction.registerToNodes([canvas]);
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, canvas));
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, canvas));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).not.toHaveBeenCalled();
@@ -121,9 +121,9 @@ test("press and drag start the interaction but don't cancel it or stop it", () =
 
 test("press and drag multiple time start the interaction but don't cancel it or stop it", () => {
     interaction.registerToNodes([canvas]);
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, canvas));
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas));
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, canvas));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
     expect(handler.fsmStops).not.toHaveBeenCalled();
@@ -139,8 +139,8 @@ test("check data with multiple drag", () => {
     let obj: HTMLCanvasElement | undefined;
 
     interaction.registerToNodes([canvas]);
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, canvas, undefined, undefined, 11, 23, 0));
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 12, 22, 0));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, canvas, undefined, undefined, 11, 23, 0));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 12, 22, 0));
     interaction.getFsm().addHandler(new class extends StubFSMHandler {
         public fsmUpdates(): void {
             sx = interaction.getData().getSrcClientX();
@@ -151,7 +151,7 @@ test("check data with multiple drag", () => {
             obj = interaction.getData().getTgtObject() as HTMLCanvasElement;
         }
     }());
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 12, 24, 0));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 12, 24, 0));
     expect(sx).toBe(11);
     expect(sy).toBe(23);
     expect(tx).toBe(12);
@@ -166,9 +166,9 @@ test("check data with multiple drag", () => {
 
 test("click and move and release start and stop the interaction", () => {
     interaction.registerToNodes([canvas]);
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, canvas));
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas));
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseUp, canvas));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, canvas));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseUp, canvas));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
@@ -177,9 +177,9 @@ test("click and move and release start and stop the interaction", () => {
 
 test("release with a different key that the one use to press and drag don't cancel or stop the interaction", () => {
     interaction.registerToNodes([canvas]);
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, canvas));
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas));
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseUp, canvas, undefined, undefined, undefined,
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, canvas));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseUp, canvas, undefined, undefined, undefined,
         undefined, 2));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
@@ -189,10 +189,10 @@ test("release with a different key that the one use to press and drag don't canc
 
 test("click, multiple move and release start and stop the interaction", () => {
     interaction.registerToNodes([canvas]);
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, canvas));
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas));
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas));
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseUp, canvas));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, canvas));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseUp, canvas));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
@@ -214,9 +214,9 @@ test("check data with one move.", () => {
             ty = interaction.getData().getTgtClientY();
         }
     }());
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, canvas, undefined, undefined, 11, 23));
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 15, 25));
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseUp, canvas, undefined, undefined, 15, 25));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, canvas, undefined, undefined, 11, 23));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 15, 25));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseUp, canvas, undefined, undefined, 15, 25));
     expect(sx).toBe(11);
     expect(sy).toBe(23);
     expect(tx).toBe(15);

@@ -22,7 +22,7 @@ import {
     WidgetBindingImpl
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
-import {StubSubEvent1} from "../fsm/StubEvent";
+import {StubEvent, StubSubEvent1} from "../fsm/StubEvent";
 import {InteractionStub} from "../interaction/InteractionStub";
 
 
@@ -34,11 +34,11 @@ let whenValue: () => boolean;
 
 
 class TrStub extends Transition {
-    public accept(event: object): boolean {
+    public accept(event: StubEvent): boolean {
         return event instanceof StubSubEvent1;
     }
 
-    public isGuardOK(_event: object): boolean {
+    public isGuardOK(_event: StubEvent): boolean {
         return true;
     }
 
@@ -92,7 +92,7 @@ test("testNothingDoneIsDeactivated", () => {
     expect(binding.ifCmdHadEffects).not.toHaveBeenCalledWith();
     expect(binding.ifCmdHadNoEffect).not.toHaveBeenCalledWith();
     expect(binding.ifCannotExecuteCmd).not.toHaveBeenCalledWith();
-    expect(cmd.getStatus()).toStrictEqual(CmdStatus.CREATED);
+    expect(cmd.getStatus()).toStrictEqual(CmdStatus.created);
 });
 
 test("testCmdCreatedExecSavedWhenActivated", () => {
@@ -106,7 +106,7 @@ test("testCmdCreatedExecSavedWhenActivated", () => {
     expect(binding.ifCmdHadEffects).toHaveBeenCalledTimes(1);
     expect(binding.ifCmdHadNoEffect).not.toHaveBeenCalledWith();
     expect(binding.ifCannotExecuteCmd).not.toHaveBeenCalledWith();
-    expect(cmd.getStatus()).toStrictEqual(CmdStatus.DONE);
+    expect(cmd.getStatus()).toStrictEqual(CmdStatus.done);
 });
 
 test("testCmdKOWhenNotWhenOK", () => {
@@ -121,7 +121,7 @@ test("testCmdKOWhenNotWhenOK", () => {
     expect(binding.ifCmdHadEffects).not.toHaveBeenCalledWith();
     expect(binding.ifCmdHadNoEffect).not.toHaveBeenCalledWith();
     expect(binding.ifCannotExecuteCmd).not.toHaveBeenCalledWith();
-    expect(cmd.getStatus()).toStrictEqual(CmdStatus.CREATED);
+    expect(cmd.getStatus()).toStrictEqual(CmdStatus.created);
 });
 
 test("testCmdKOWhenCannotDoCmd", () => {
@@ -131,7 +131,7 @@ test("testCmdKOWhenCannotDoCmd", () => {
     jest.spyOn(binding, "ifCannotExecuteCmd");
     fsm.process(new StubSubEvent1());
 
-    expect(cmd.getStatus()).toStrictEqual(CmdStatus.CREATED);
+    expect(cmd.getStatus()).toStrictEqual(CmdStatus.created);
     expect(binding.ifCmdHadEffects).not.toHaveBeenCalledWith();
     expect(binding.ifCmdHadNoEffect).not.toHaveBeenCalledWith();
     expect(binding.ifCannotExecuteCmd).toHaveBeenCalledTimes(1);

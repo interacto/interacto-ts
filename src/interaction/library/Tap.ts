@@ -174,8 +174,8 @@ export class Tap extends InteractionImpl<TapData, TapFSM> {
             }
 
             public tap(evt: TouchEvent): void {
-                const touch = evt.changedTouches[0];
-                if (touch !== undefined) {
+                if (evt.changedTouches.length > 0) {
+                    const touch = evt.changedTouches[0];
                     (this._parent.data as (TapDataImpl)).addTapData(
                         new TouchDataImpl(touch.identifier, touch.clientX, touch.clientY,
                             touch.screenX, touch.screenY, touch.target));

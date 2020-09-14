@@ -27,7 +27,7 @@ export class TextInputChangedFSM extends FSM {
     private readonly _timeGap: number = 1000;
 
     /** The supplier that provides the time gap. */
-    private readonly SUPPLY_TIME_GAP: () => number = () => this.getTimeGap();
+    private readonly timeGapSupplier: () => number = () => this.getTimeGap();
 
     /**
      * @return The time gap between the two spinner events.
@@ -70,7 +70,7 @@ export class TextInputChangedFSM extends FSM {
             }
         }(changed, changed);
 
-        new TimeoutTransition(changed, ended, this.SUPPLY_TIME_GAP);
+        new TimeoutTransition(changed, ended, this.timeGapSupplier);
     }
 }
 

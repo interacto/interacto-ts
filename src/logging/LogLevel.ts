@@ -16,11 +16,11 @@
  * Logging level to log interactions, bindings, and commands.
  * @author Arnaud Blouin
  * @enum
- * @property {LogLevel} INTERACTION
- * @property {LogLevel} BINDING
- * @property {LogLevel} COMMAND
+ * @property {LogLevel} interaction
+ * @property {LogLevel} binding
+ * @property {LogLevel} command
  */
 export enum LogLevel {
-    INTERACTION, BINDING, COMMAND
+    interaction = 0, binding = 1, command = 2
 }
 

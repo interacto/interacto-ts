@@ -28,16 +28,12 @@ let canvas1: HTMLElement;
 let canvas2: HTMLElement;
 let binding1: WidgetBinding<StubCmd, Press, PointData>;
 let binding2: WidgetBinding<StubCmd, Press, PointData>;
-// let cmd: StubCmd;
-// let producedCmds: Array<StubCmd>;
-let disposable: Subscription;
+let disposable: Subscription | undefined;
 
 beforeEach(() => {
     document.documentElement.innerHTML = "<html><div><canvas id='c1'> <canvas id='c2'/> </canvas></html>";
     canvas1 = document.getElementById("c1") as HTMLElement;
     canvas2 = document.getElementById("c2") as HTMLElement;
-    // cmd = new StubCmd(true);
-    // producedCmds = [];
 });
 
 afterEach(() => {
@@ -63,7 +59,7 @@ test("event bubbling works", () => {
         .on(canvas1)
         .bind();
 
-    canvas2.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, canvas2));
+    canvas2.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, canvas2));
 
     expect(binding2.getTimesEnded()).toStrictEqual(1);
     expect(binding1.getTimesEnded()).toStrictEqual(1);
@@ -82,7 +78,7 @@ test("event bubbling respects physical laws", () => {
         .on(canvas1)
         .bind();
 
-    canvas1.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, canvas1));
+    canvas1.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, canvas1));
 
     expect(binding1.getTimesEnded()).toStrictEqual(1);
     expect(binding2.getTimesEnded()).toStrictEqual(0);
@@ -102,7 +98,7 @@ test("stop propagation prevents bubbling", () => {
         .on(canvas1)
         .bind();
 
-    canvas2.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, canvas2));
+    canvas2.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, canvas2));
 
     expect(binding2.getTimesEnded()).toStrictEqual(1);
     expect(binding1.getTimesEnded()).toStrictEqual(0);
@@ -122,7 +118,7 @@ test("stop propagation prevents bubbling using cloned builders", () => {
         .on(canvas2)
         .bind();
 
-    canvas2.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, canvas2));
+    canvas2.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, canvas2));
 
     expect(binding2.getTimesEnded()).toStrictEqual(1);
     expect(binding1.getTimesEnded()).toStrictEqual(0);

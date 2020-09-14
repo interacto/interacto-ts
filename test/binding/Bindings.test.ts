@@ -49,7 +49,7 @@ test("press binder", () => {
         .toProduce(() => new StubCmd(true))
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, elt));
+    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, elt));
     expect(producedCmds).toHaveLength(1);
 });
 
@@ -59,7 +59,7 @@ test("click binder", () => {
         .toProduce(() => new StubCmd(true))
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.Click, elt));
+    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.click, elt));
     expect(producedCmds).toHaveLength(1);
 });
 
@@ -69,8 +69,8 @@ test("double click binder", () => {
         .toProduce(() => new StubCmd(true))
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.Click, elt));
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.Click, elt));
+    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.click, elt));
+    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.click, elt));
     expect(producedCmds).toHaveLength(1);
 });
 
@@ -80,11 +80,11 @@ test("drag lock binder", () => {
         .toProduce(() => new StubCmd(true))
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.Click, elt));
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.Click, elt));
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, elt));
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.Click, elt));
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.Click, elt));
+    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.click, elt));
+    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.click, elt));
+    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, elt));
+    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.click, elt));
+    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.click, elt));
     expect(producedCmds).toHaveLength(1);
 });
 
@@ -94,9 +94,9 @@ test("dnd binder", () => {
         .toProduce(() => new StubCmd(true))
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, elt));
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, elt));
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseUp, elt));
+    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, elt));
+    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, elt));
+    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseUp, elt));
     expect(producedCmds).toHaveLength(1);
 });
 
@@ -106,7 +106,7 @@ test("key press binder", () => {
         .toProduce(() => new StubCmd(true))
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "A"));
+    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "A"));
     expect(producedCmds).toHaveLength(1);
 });
 
@@ -116,7 +116,7 @@ test("key type binder", () => {
         .toProduce(() => new StubCmd(true))
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "A"));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyUp, "A"));
+    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "A"));
+    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "A"));
     expect(producedCmds).toHaveLength(1);
 });

@@ -35,7 +35,7 @@ beforeEach(() => {
 
 test("type 'a' in the textarea starts and stops the interaction.", () => {
     interaction.registerToNodes([text]);
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "a"));
+    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "a"));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
 });
@@ -48,14 +48,14 @@ test("the key typed in the textarea is the same key in the data of the interacti
             data = interaction.getData().getKey();
         }
     }());
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "a"));
+    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "a"));
     expect(data).toStrictEqual("a");
 });
 
 test("testTwoKeyPressEnds", () => {
     interaction.registerToNodes([text]);
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "a"));
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "b"));
+    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "a"));
+    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "b"));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
     expect(handler.fsmStops).toHaveBeenCalledTimes(2);
 });

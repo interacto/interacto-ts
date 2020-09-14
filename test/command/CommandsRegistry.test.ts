@@ -53,8 +53,8 @@ test("testSetSizeMaxRemovesCmd", () => {
     instance.addCommand(command2);
     instance.setSizeMax(1);
 
-    expect(command1.getStatus()).toStrictEqual(CmdStatus.FLUSHED);
-    expect(command2.getStatus()).toStrictEqual(CmdStatus.CREATED);
+    expect(command1.getStatus()).toStrictEqual(CmdStatus.flushed);
+    expect(command2.getStatus()).toStrictEqual(CmdStatus.created);
     expect(instance.getCommands()).toHaveLength(1);
     expect(instance.getCommands()[0]).toBe(command2);
 });
@@ -63,11 +63,11 @@ test("testSetSizeMaxRemovesCmd", () => {
 test("testSetSiezMaxWithUnlimited", () => {
     jest.mock("./StubCmd");
     const cmd1 = new StubCmd();
-    cmd1.getRegistrationPolicy = jest.fn().mockImplementation(() => RegistrationPolicy.UNLIMITED);
+    cmd1.getRegistrationPolicy = jest.fn().mockImplementation(() => RegistrationPolicy.unlimited);
     const cmd2 = new StubCmd();
-    cmd2.getRegistrationPolicy = jest.fn().mockImplementation(() => RegistrationPolicy.LIMITED);
+    cmd2.getRegistrationPolicy = jest.fn().mockImplementation(() => RegistrationPolicy.limited);
     const cmd3 = new StubCmd();
-    cmd3.getRegistrationPolicy = jest.fn().mockImplementation(() => RegistrationPolicy.LIMITED);
+    cmd3.getRegistrationPolicy = jest.fn().mockImplementation(() => RegistrationPolicy.limited);
     instance.addCommand(cmd2);
     instance.addCommand(cmd1);
     instance.addCommand(cmd3);
@@ -91,7 +91,7 @@ test("testCommandsObservedOnAdded", () => {
 test("testCancelCommandFlush", () => {
     const command = new StubCmd();
     instance.cancelCmd(command);
-    expect(command.getStatus()).toStrictEqual(CmdStatus.FLUSHED);
+    expect(command.getStatus()).toStrictEqual(CmdStatus.flushed);
 });
 
 test("testCancelCommandRemoved", () => {
@@ -106,7 +106,7 @@ test("testRemoveCommand", () => {
     instance.addCommand(command);
     instance.removeCommand(command);
     expect(instance.getCommands()).toHaveLength(0);
-    expect(command.getStatus()).toStrictEqual(CmdStatus.FLUSHED);
+    expect(command.getStatus()).toStrictEqual(CmdStatus.flushed);
 });
 
 test("add Command Cannot Add Because Exist", () => {
@@ -124,7 +124,7 @@ test("add Command Removes Command When Max Capacity", () => {
     instance.addCommand(command);
     expect(instance.getCommands()).toHaveLength(1);
     expect(instance.getCommands()[0]).toBe(command);
-    expect(command2.getStatus()).toStrictEqual(CmdStatus.FLUSHED);
+    expect(command2.getStatus()).toStrictEqual(CmdStatus.flushed);
 });
 
 test("testAddCommandRemovesCommandWhenMaxCapacity0", () => {

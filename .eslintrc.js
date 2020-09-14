@@ -63,6 +63,8 @@ module.exports = {
     "no-warning-comments": "off",
     "no-useless-constructor": "off",
     "@typescript-eslint/prefer-readonly-parameter-types": "off",
+    "@typescript-eslint/consistent-type-imports": "off",
+    "@typescript-eslint/no-implicit-any-catch": "off",
 
 
     "func-style": "off",
@@ -129,7 +131,7 @@ module.exports = {
     "max-len": ["error", { "code": 150 }],
     "no-multiple-empty-lines": ["error", { "max": 2 }],
     "no-restricted-syntax": ["error", "ForInStatement"],
-    "no-shadow": ["error", { "hoist": "all" }],
+    "no-shadow": "off",
     "one-var": ["error", "never"],
   }
 };

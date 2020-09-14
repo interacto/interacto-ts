@@ -27,7 +27,7 @@ export class SpinnerChangedFSM extends FSM {
     private static timeGap = 300;
 
     /** The supplier that provides the time gap. */
-    private static readonly SUPPLY_TIME_GAP: () => number = () => SpinnerChangedFSM.getTimeGap();
+    private static readonly timeGapSupplier: () => number = () => SpinnerChangedFSM.getTimeGap();
 
     /**
      * @return The time gap between the two spinner events.
@@ -76,7 +76,7 @@ export class SpinnerChangedFSM extends FSM {
             }
         }(changed, changed);
 
-        new TimeoutTransition(changed, ended, SpinnerChangedFSM.SUPPLY_TIME_GAP);
+        new TimeoutTransition(changed, ended, SpinnerChangedFSM.timeGapSupplier);
     }
 }
 

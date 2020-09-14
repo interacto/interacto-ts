@@ -18,10 +18,10 @@ import {StubCmd} from "../command/StubCmd";
 
 let widget1: HTMLInputElement;
 let widget2: HTMLInputElement;
-let binding: WidgetBinding<StubCmd, SpinnerChanged, WidgetData<HTMLInputElement>>;
+let binding: WidgetBinding<StubCmd, SpinnerChanged, WidgetData<HTMLInputElement>> | undefined;
 let cmd: StubCmd;
 let producedCmds: Array<StubCmd>;
-let disposable: Subscription;
+let disposable: Subscription | undefined;
 
 beforeEach(() => {
     jest.clearAllTimers();
@@ -61,7 +61,7 @@ test("testCommandExecutedOnSingleSpinnerFunction", () => {
 
     widget1.dispatchEvent(new Event("input"));
     jest.runAllTimers();
-    expect(binding).not.toBeNull();
+    expect(binding).toBeDefined();
     expect(cmd.exec).toStrictEqual(1);
 });
 
@@ -77,7 +77,7 @@ test("testCommandExecutedOnTwoSpinners", () => {
     widget2.dispatchEvent(new Event("input"));
     jest.runAllTimers();
 
-    expect(binding).not.toBeNull();
+    expect(binding).toBeDefined();
     expect(producedCmds).toHaveLength(2);
 });
 
@@ -93,7 +93,7 @@ test("testInit1Executed", () => {
     widget1.dispatchEvent(new Event("input"));
     jest.runAllTimers();
 
-    expect(binding).not.toBeNull();
+    expect(binding).toBeDefined();
     expect(cmd.exec).toStrictEqual(11);
 });
 
@@ -106,7 +106,7 @@ test("testCheckFalse", () => {
 
     widget1.dispatchEvent(new Event("input"));
     jest.runAllTimers();
-    expect(binding).not.toBeNull();
+    expect(binding).toBeDefined();
     expect(cmd.exec).toStrictEqual(0);
 });
 

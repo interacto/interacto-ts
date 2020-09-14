@@ -31,11 +31,11 @@ export class TouchMoveTransition extends Transition {
     }
 
     public accept(e: Event): boolean {
-        return e instanceof TouchEvent && e.type === EventRegistrationToken.Touchmove;
+        return e instanceof TouchEvent && e.type === EventRegistrationToken.touchmove;
     }
 
     public getAcceptedEvents(): Set<string> {
-        return new Set([EventRegistrationToken.Touchmove]);
+        return new Set([EventRegistrationToken.touchmove]);
     }
 
     public isGuardOK(_event: Event): boolean {

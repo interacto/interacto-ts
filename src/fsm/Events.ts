@@ -13,19 +13,19 @@
  */
 
 export enum EventRegistrationToken {
-    MouseDown = "mousedown",
-    MouseUp = "mouseup",
-    MouseMove = "mousemove",
-    KeyDown = "keydown",
-    KeyUp = "keyup",
-    Click = "click",
-    Auxclick = "auxclick",
-    Input = "input",
-    Scroll = "scroll",
-    Change = "change",
-    Touchstart = "touchstart",
-    Touchend = "touchend",
-    Touchmove = "touchmove"
+    mouseDown = "mousedown",
+    mouseUp = "mouseup",
+    mouseMove = "mousemove",
+    keyDown = "keydown",
+    keyUp = "keyup",
+    click = "click",
+    auxclick = "auxclick",
+    input = "input",
+    scroll = "scroll",
+    change = "change",
+    touchstart = "touchstart",
+    touchend = "touchend",
+    touchmove = "touchmove"
 }
 
 /**
@@ -48,9 +48,9 @@ export function getTouch(touches: TouchList, idToFind: number | undefined): Touc
  * @param eventType The event type to check.
  */
 export function isTouchEvent(eventType: string): boolean {
-    return eventType === EventRegistrationToken.Touchstart ||
-    eventType === EventRegistrationToken.Touchend ||
-    eventType === EventRegistrationToken.Touchmove;
+    return eventType === EventRegistrationToken.touchstart ||
+    eventType === EventRegistrationToken.touchend ||
+    eventType === EventRegistrationToken.touchmove;
 }
 
 /**
@@ -58,11 +58,11 @@ export function isTouchEvent(eventType: string): boolean {
  * @param eventType The event type to check.
  */
 export function isMouseEvent(eventType: string): boolean {
-    return eventType === EventRegistrationToken.MouseDown ||
-    eventType === EventRegistrationToken.MouseUp ||
-    eventType === EventRegistrationToken.MouseMove ||
-    eventType === EventRegistrationToken.Click ||
-    eventType === EventRegistrationToken.Auxclick;
+    return eventType === EventRegistrationToken.mouseDown ||
+    eventType === EventRegistrationToken.mouseUp ||
+    eventType === EventRegistrationToken.mouseMove ||
+    eventType === EventRegistrationToken.click ||
+    eventType === EventRegistrationToken.auxclick;
 }
 
 /**
@@ -70,8 +70,8 @@ export function isMouseEvent(eventType: string): boolean {
  * @param eventType The event type to check.
  */
 export function isKeyEvent(eventType: string): boolean {
-    return eventType === EventRegistrationToken.KeyDown ||
-    eventType === EventRegistrationToken.KeyUp;
+    return eventType === EventRegistrationToken.keyDown ||
+    eventType === EventRegistrationToken.keyUp;
 }
 
 export function isButton(target: EventTarget): target is HTMLButtonElement {
@@ -108,21 +108,21 @@ export function isTextInput(target: EventTarget): target is HTMLInputElement | H
 }
 
 export function isKeyDownEvent(event: Event): event is KeyboardEvent {
-    return event instanceof KeyboardEvent && event.type === EventRegistrationToken.KeyDown;
+    return event instanceof KeyboardEvent && event.type === EventRegistrationToken.keyDown;
 }
 
 export function isKeyUpEvent(event: Event): event is KeyboardEvent {
-    return event instanceof KeyboardEvent && event.type === EventRegistrationToken.KeyUp;
+    return event instanceof KeyboardEvent && event.type === EventRegistrationToken.keyUp;
 }
 
 export function isMouseDownEvent(event: Event): event is MouseEvent {
-    return event instanceof MouseEvent && event.type === EventRegistrationToken.MouseDown;
+    return event instanceof MouseEvent && event.type === EventRegistrationToken.mouseDown;
 }
 
 export function isScrollEvent(event: Event): event is UIEvent {
-    return event instanceof UIEvent && event.type === EventRegistrationToken.Scroll;
+    return event instanceof UIEvent && event.type === EventRegistrationToken.scroll;
 }
 
 export enum KeyCode {
-    ESCAPE = 27
+    escape = 27
 }

@@ -26,25 +26,25 @@ beforeEach(() => {
 });
 
 test("invalid move event", () => {
-    expect(tr.accept(createMouseEvent(EventRegistrationToken.MouseMove, document.getElementById("canvas") as EventTarget,
+    expect(tr.accept(createMouseEvent(EventRegistrationToken.mouseMove, document.getElementById("canvas") as EventTarget,
         11, 23, 11, 23, 0))).toBeFalsy();
 });
 
 test("invalid event type", () => {
-    expect(tr.accept(createTouchEvent(EventRegistrationToken.Touchstart, 3,
+    expect(tr.accept(createTouchEvent(EventRegistrationToken.touchstart, 3,
         document.getElementById("canvas") as EventTarget, 11, 23, 12, 25))).toBeFalsy();
 });
 
 test("valid event", () => {
-    expect(tr.accept(createMouseEvent(EventRegistrationToken.MouseUp,
+    expect(tr.accept(createMouseEvent(EventRegistrationToken.mouseUp,
         document.getElementById("canvas") as EventTarget, 11, 23, 12, 25, 1))).toBeTruthy();
 });
 
 test("guard OK", () => {
-    expect(tr.isGuardOK(createMouseEvent(EventRegistrationToken.MouseUp,
+    expect(tr.isGuardOK(createMouseEvent(EventRegistrationToken.mouseUp,
         document.getElementById("canvas") as EventTarget, 11, 23, 12, 25, 1))).toBeTruthy();
 });
 
 test("accepted events", () => {
-    expect(tr.getAcceptedEvents()).toStrictEqual(new Set([EventRegistrationToken.MouseUp]));
+    expect(tr.getAcceptedEvents()).toStrictEqual(new Set([EventRegistrationToken.mouseUp]));
 });

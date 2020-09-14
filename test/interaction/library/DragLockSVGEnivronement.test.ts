@@ -42,11 +42,11 @@ beforeEach(() => {
 
 test("dragLock in a SVG environment", () => {
     interaction.registerToNodes([rect1, rect2]);
-    rect2.dispatchEvent(createMouseEvent(EventRegistrationToken.Click, rect2));
-    rect2.dispatchEvent(createMouseEvent(EventRegistrationToken.Click, rect2));
-    rect2.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, rect2));
-    rect1.dispatchEvent(createMouseEvent(EventRegistrationToken.Click, rect1));
-    rect1.dispatchEvent(createMouseEvent(EventRegistrationToken.Click, rect1));
+    rect2.dispatchEvent(createMouseEvent(EventRegistrationToken.click, rect2));
+    rect2.dispatchEvent(createMouseEvent(EventRegistrationToken.click, rect2));
+    rect2.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, rect2));
+    rect1.dispatchEvent(createMouseEvent(EventRegistrationToken.click, rect1));
+    rect1.dispatchEvent(createMouseEvent(EventRegistrationToken.click, rect1));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
@@ -66,11 +66,11 @@ test("dragLock data in a SVG environment", () => {
             ty = interaction.getData().getTgtClientY();
         }
     }());
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.Click, rect1, undefined, undefined, 11, 23));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.Click, rect1, undefined, undefined, 11, 23));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.MouseMove, svg, undefined, undefined, 20, 30));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.Click, rect2, undefined, undefined, 22, 33));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.Click, rect2, undefined, undefined, 22, 33));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.click, rect1, undefined, undefined, 11, 23));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.click, rect1, undefined, undefined, 11, 23));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseMove, svg, undefined, undefined, 20, 30));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.click, rect2, undefined, undefined, 22, 33));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.click, rect2, undefined, undefined, 22, 33));
     expect(sx).toBe(11);
     expect(sy).toBe(23);
     expect(tx).toBe(22);

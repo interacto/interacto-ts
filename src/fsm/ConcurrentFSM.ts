@@ -19,7 +19,7 @@ import {FSMHandler} from "./FSMHandler";
  * A concurrent FSM: an FSM that contains multiple FSMs that run concurrently.
  */
 export class ConcurrentFSM<F extends FSM> extends FSM {
-    // eslint-disable-next-line @typescript-eslint/typedef
+    // eslint-disable-next-line @typescript-eslint/typedef,@typescript-eslint/naming-convention
     private static readonly FSMConcurrHandler = class implements FSMHandler {
         private readonly _parent: ConcurrentFSM<FSM>;
 

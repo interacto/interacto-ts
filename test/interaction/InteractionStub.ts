@@ -22,10 +22,6 @@ export class InteractionStub extends InteractionImpl<InteractionData, FSM> {
     public updateEventsRegistered(_newState: OutputState, _oldState: OutputState): void {
     }
 
-    public isEventsOfSameType(_evt1: object, _evt2: object): boolean {
-        return false;
-    }
-
     public reinitData(): void {
     }
 

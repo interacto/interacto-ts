@@ -20,39 +20,39 @@ import {createKeyEvent, createMouseEvent, createUIEvent} from "../interaction/St
 
 describe("checking event token", () => {
     test("check event token mouse down", () => {
-        expect(EventRegistrationToken.MouseDown).toStrictEqual("mousedown");
+        expect(EventRegistrationToken.mouseDown).toStrictEqual("mousedown");
     });
 
     test("check event token mouse up", () => {
-        expect(EventRegistrationToken.MouseUp).toStrictEqual("mouseup");
+        expect(EventRegistrationToken.mouseUp).toStrictEqual("mouseup");
     });
 
     test("check event token mouse move", () => {
-        expect(EventRegistrationToken.MouseMove).toStrictEqual("mousemove");
+        expect(EventRegistrationToken.mouseMove).toStrictEqual("mousemove");
     });
 
     test("check event token key up", () => {
-        expect(EventRegistrationToken.KeyUp).toStrictEqual("keyup");
+        expect(EventRegistrationToken.keyUp).toStrictEqual("keyup");
     });
 
     test("check event token key down", () => {
-        expect(EventRegistrationToken.KeyDown).toStrictEqual("keydown");
+        expect(EventRegistrationToken.keyDown).toStrictEqual("keydown");
     });
 
     test("check event token change", () => {
-        expect(EventRegistrationToken.Change).toStrictEqual("change");
+        expect(EventRegistrationToken.change).toStrictEqual("change");
     });
 
     test("check event token click", () => {
-        expect(EventRegistrationToken.Click).toStrictEqual("click");
+        expect(EventRegistrationToken.click).toStrictEqual("click");
     });
 
     test("check event token scroll", () => {
-        expect(EventRegistrationToken.Scroll).toStrictEqual("scroll");
+        expect(EventRegistrationToken.scroll).toStrictEqual("scroll");
     });
 
     test("check event token input", () => {
-        expect(EventRegistrationToken.Input).toStrictEqual("input");
+        expect(EventRegistrationToken.input).toStrictEqual("input");
     });
 });
 
@@ -162,45 +162,45 @@ describe("checking is widget functions", () => {
 
 describe("checking event functions", () => {
     test("isKeyDownEvent KO", () => {
-        expect(isKeyDownEvent(createKeyEvent(EventRegistrationToken.KeyUp, "a"))).toBeFalsy();
+        expect(isKeyDownEvent(createKeyEvent(EventRegistrationToken.keyUp, "a"))).toBeFalsy();
     });
 
     test("isKeyDownEvent OK", () => {
-        expect(isKeyDownEvent(createKeyEvent(EventRegistrationToken.KeyDown, "a"))).toBeTruthy();
+        expect(isKeyDownEvent(createKeyEvent(EventRegistrationToken.keyDown, "a"))).toBeTruthy();
     });
 
 
     test("isKeyUpEvent KO", () => {
-        expect(isKeyUpEvent(createKeyEvent(EventRegistrationToken.KeyDown, "b"))).toBeFalsy();
+        expect(isKeyUpEvent(createKeyEvent(EventRegistrationToken.keyDown, "b"))).toBeFalsy();
     });
 
     test("isKeyUpEvent OK", () => {
-        expect(isKeyUpEvent(createKeyEvent(EventRegistrationToken.KeyUp, "b"))).toBeTruthy();
+        expect(isKeyUpEvent(createKeyEvent(EventRegistrationToken.keyUp, "b"))).toBeTruthy();
     });
 
     test("isMouseDownEvent KO", () => {
         document.documentElement.innerHTML = "<html><div><textarea id='txt' /></div></html>";
         const elt1 = document.getElementById("txt") as Element;
-        expect(isMouseDownEvent(createMouseEvent(EventRegistrationToken.MouseUp, elt1))).toBeFalsy();
+        expect(isMouseDownEvent(createMouseEvent(EventRegistrationToken.mouseUp, elt1))).toBeFalsy();
     });
 
     test("isMouseDownEvent OK", () => {
         document.documentElement.innerHTML = "<html><div><textarea id='txt' /></div></html>";
         const elt1 = document.getElementById("txt") as Element;
-        expect(isMouseDownEvent(createMouseEvent(EventRegistrationToken.MouseDown, elt1))).toBeTruthy();
+        expect(isMouseDownEvent(createMouseEvent(EventRegistrationToken.mouseDown, elt1))).toBeTruthy();
     });
 
     test("isScrollEvent KO", () => {
-        expect(isScrollEvent(createUIEvent(EventRegistrationToken.MouseUp))).toBeFalsy();
+        expect(isScrollEvent(createUIEvent(EventRegistrationToken.mouseUp))).toBeFalsy();
     });
 
     test("isScrollEvent OK", () => {
-        expect(isScrollEvent(createUIEvent(EventRegistrationToken.Scroll))).toBeTruthy();
+        expect(isScrollEvent(createUIEvent(EventRegistrationToken.scroll))).toBeTruthy();
     });
 });
 
 describe("key codes", () => {
     test("key ESCAPE", () => {
-        expect(KeyCode.ESCAPE).toStrictEqual(27);
+        expect(KeyCode.escape).toStrictEqual(27);
     });
 });

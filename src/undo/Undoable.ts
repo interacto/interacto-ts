@@ -38,7 +38,9 @@ export interface Undoable {
     getUndoName(): string;
 }
 
-export function isUndoableType(obj: Undoable | object): obj is Undoable {
-    return (obj as Undoable).undo !== undefined && (obj as Undoable).redo !== undefined && (obj as Undoable).getUndoName !== undefined;
+export function isUndoableType(obj: unknown): obj is Undoable {
+    const undoable = obj as Undoable;
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    return undoable.undo !== undefined && undoable.redo !== undefined && undoable.getUndoName !== undefined;
 }
 

@@ -25,10 +25,10 @@ import {StubCmd} from "../command/StubCmd";
 import {createTouchEvent} from "../interaction/StubEvents";
 
 let c1: HTMLElement;
-let binding: WidgetBinding<StubCmd, MultiTouch, MultiTouchData>;
+let binding: WidgetBinding<StubCmd, MultiTouch, MultiTouchData> | undefined;
 let cmd: StubCmd;
 let producedCmds: Array<StubCmd>;
-let disposable: Subscription;
+let disposable: Subscription | undefined;
 
 beforeEach(() => {
     jest.useFakeTimers();
@@ -39,15 +39,10 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-    if (disposable !== undefined) {
-        disposable.unsubscribe();
-    }
-    binding.uninstallBinding();
+    disposable?.unsubscribe();
+    binding?.uninstallBinding();
     CommandsRegistry.getInstance().clear();
     UndoCollector.getInstance().clear();
-    if (binding !== undefined) {
-        binding.uninstallBinding();
-    }
 });
 
 test("run multi-touch produces cmd", () => {
@@ -57,12 +52,12 @@ test("run multi-touch produces cmd", () => {
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
-    c1.dispatchEvent(createTouchEvent(EventRegistrationToken.Touchstart, 1, c1, 11, 23, 110, 230));
-    c1.dispatchEvent(createTouchEvent(EventRegistrationToken.Touchstart, 2, c1, 31, 13, 310, 130));
-    c1.dispatchEvent(createTouchEvent(EventRegistrationToken.Touchmove, 2, c1, 15, 30, 150, 300));
-    c1.dispatchEvent(createTouchEvent(EventRegistrationToken.Touchend, 2, c1, 15, 30, 150, 300));
+    c1.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, c1, 11, 23, 110, 230));
+    c1.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 2, c1, 31, 13, 310, 130));
+    c1.dispatchEvent(createTouchEvent(EventRegistrationToken.touchmove, 2, c1, 15, 30, 150, 300));
+    c1.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 2, c1, 15, 30, 150, 300));
 
-    expect(binding).not.toBeNull();
+    expect(binding).toBeDefined();
     expect(cmd.exec).toStrictEqual(1);
     expect(producedCmds).toHaveLength(1);
     expect(producedCmds[0]).toBe(cmd);
@@ -85,15 +80,15 @@ test("run multi-touch two times recycle events", () => {
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
-    c1.dispatchEvent(createTouchEvent(EventRegistrationToken.Touchstart, 1, c1, 11, 23, 110, 230));
-    c1.dispatchEvent(createTouchEvent(EventRegistrationToken.Touchstart, 2, c1, 31, 13, 310, 130));
-    c1.dispatchEvent(createTouchEvent(EventRegistrationToken.Touchmove, 2, c1, 15, 30, 150, 300));
-    c1.dispatchEvent(createTouchEvent(EventRegistrationToken.Touchend, 2, c1, 15, 30, 150, 300));
-    c1.dispatchEvent(createTouchEvent(EventRegistrationToken.Touchstart, 3, c1, 31, 13, 310, 130));
-    c1.dispatchEvent(createTouchEvent(EventRegistrationToken.Touchmove, 3, c1, 15, 30, 150, 300));
-    c1.dispatchEvent(createTouchEvent(EventRegistrationToken.Touchend, 1, c1, 15, 30, 150, 300));
+    c1.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, c1, 11, 23, 110, 230));
+    c1.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 2, c1, 31, 13, 310, 130));
+    c1.dispatchEvent(createTouchEvent(EventRegistrationToken.touchmove, 2, c1, 15, 30, 150, 300));
+    c1.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 2, c1, 15, 30, 150, 300));
+    c1.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 3, c1, 31, 13, 310, 130));
+    c1.dispatchEvent(createTouchEvent(EventRegistrationToken.touchmove, 3, c1, 15, 30, 150, 300));
+    c1.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 1, c1, 15, 30, 150, 300));
 
-    expect(binding).not.toBeNull();
+    expect(binding).toBeDefined();
     expect(producedCmds).toHaveLength(2);
     expect(dataFirst).toHaveLength(2);
     expect(dataFirst[0]).toStrictEqual(2);
@@ -112,8 +107,8 @@ test("unsubscribe does not trigger the binding", () => {
 
     binding.getInteraction().onNodeUnregistered(c1);
 
-    c1.dispatchEvent(createTouchEvent(EventRegistrationToken.Touchstart, 1, c1, 11, 23, 110, 230));
-    c1.dispatchEvent(createTouchEvent(EventRegistrationToken.Touchstart, 2, c1, 31, 13, 310, 130));
+    c1.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, c1, 11, 23, 110, 230));
+    c1.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 2, c1, 31, 13, 310, 130));
 
     expect(binding.isRunning()).toBeFalsy();
 });

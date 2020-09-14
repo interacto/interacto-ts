@@ -35,7 +35,7 @@ export class KeysTypedFSM extends FSM {
     private static readonly timeGap: number = 1000;
 
     /** The supplier that provides the time gap. */
-    private static readonly SUPPLY_TIME_GAP: () => number = () => KeysTypedFSM.getTimeGap();
+    private static readonly timeGapSupplier: () => number = () => KeysTypedFSM.getTimeGap();
 
     private static getTimeGap(): number {
         return KeysTypedFSM.timeGap;
@@ -65,7 +65,7 @@ export class KeysTypedFSM extends FSM {
 
         new SubFSMTransition(this.initState, typed, this.keyTypeFSM);
         new SubFSMTransition(typed, typed, this.keyTypeFSM);
-        new TimeoutTransition(typed, timeouted, KeysTypedFSM.SUPPLY_TIME_GAP);
+        new TimeoutTransition(typed, timeouted, KeysTypedFSM.timeGapSupplier);
     }
 }
 

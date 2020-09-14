@@ -39,6 +39,6 @@ export class ComboBoxTransition extends Transition {
     }
 
     public getAcceptedEvents(): Set<string> {
-        return new Set([EventRegistrationToken.Input]);
+        return new Set([EventRegistrationToken.input]);
     }
 }

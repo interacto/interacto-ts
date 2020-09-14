@@ -35,7 +35,7 @@ beforeEach(() => {
 
 test("press execution", () => {
     interaction.registerToNodes([canvas]);
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, canvas));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, canvas));
     expect(handler.fsmStarts).not.toHaveBeenCalled();
     expect(handler.fsmStops).not.toHaveBeenCalled();
     expect(handler.fsmCancels).not.toHaveBeenCalled();
@@ -43,8 +43,8 @@ test("press execution", () => {
 
 test("press escape key while press don't trigger the interaction", () => {
     interaction.registerToNodes([canvas]);
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, canvas, undefined, undefined, 11, 23));
-    canvas.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "Escape"));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, canvas, undefined, undefined, 11, 23));
+    canvas.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "Escape"));
     expect(handler.fsmStarts).not.toHaveBeenCalled();
     expect(handler.fsmStops).not.toHaveBeenCalled();
     expect(handler.fsmCancels).not.toHaveBeenCalled();
@@ -52,9 +52,9 @@ test("press escape key while press don't trigger the interaction", () => {
 
 test("press escape after moving cancel the interaction", () => {
     interaction.registerToNodes([canvas]);
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, canvas, undefined, undefined, 11, 23));
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 11, 23));
-    canvas.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "Escape"));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, canvas, undefined, undefined, 11, 23));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 11, 23));
+    canvas.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "Escape"));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).not.toHaveBeenCalled();
@@ -62,10 +62,10 @@ test("press escape after moving cancel the interaction", () => {
 
 test("press escape after multiple move cancel the interaction.", () => {
     interaction.registerToNodes([canvas]);
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, canvas, undefined, undefined, 11, 23));
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 11, 23));
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas, undefined, undefined, 11, 23));
-    canvas.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "Escape"));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, canvas, undefined, undefined, 11, 23));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 11, 23));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 11, 23));
+    canvas.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "Escape"));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).not.toHaveBeenCalled();
@@ -73,10 +73,10 @@ test("press escape after multiple move cancel the interaction.", () => {
 
 test("interaction restart after cancel", () => {
     interaction.registerToNodes([canvas]);
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, canvas));
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas));
-    canvas.dispatchEvent(createKeyEvent(EventRegistrationToken.KeyDown, "Escape"));
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, canvas));
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, canvas));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas));
+    canvas.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "Escape"));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, canvas));
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
 });
