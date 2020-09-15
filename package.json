@@ -35,7 +35,7 @@
     "typescript": "^3.8.3"
   },
   "scripts": {
-    "package": "npm run pre-build && npm run build && npm run doc && npm audit",
+    "package": "npm run pre-build && npm run build && npm run doc",
     "build": "rollup -c",
     "generate-barrels": "barrelsby -c ./barrelsby-config.json --delete",
     "compile": "tsc",
