@@ -22,9 +22,11 @@ import {InteractionImpl} from "../interaction/InteractionImpl";
 import {BindingsObserver} from "./BindingsObserver";
 
 export class AnonCmdBinder<I extends InteractionImpl<D, FSM>, D extends InteractionData> extends Binder<AnonCmd, I, D> {
+    private readonly anonymousCmd: () => void;
 
     public constructor(anonCmd: () => void, observer?: BindingsObserver) {
         super(observer, undefined, undefined, () => new AnonCmd(anonCmd));
+        this.anonymousCmd = anonCmd;
     }
 
     protected duplicate(): AnonCmdBinder<I, D> {
@@ -32,7 +34,8 @@ export class AnonCmdBinder<I extends InteractionImpl<D, FSM>, D extends Interact
             throw new Error("the cmd producer should not be undefined here");
         }
 
-        const dup = new AnonCmdBinder<I, D>(this.cmdProducer);
+        const dup = new AnonCmdBinder<I, D>(this.anonymousCmd);
+        dup.initCmd = this.initCmd;
         dup.checkConditions = this.checkConditions;
         dup.cmdProducer = this.cmdProducer;
         dup.widgets = [...this.widgets];

@@ -37,7 +37,7 @@ export interface CmdUpdateBinderBuilder<C extends Command> extends CmdBinderBuil
 
     onDynamic(node: Node): CmdUpdateBinderBuilder<C>;
 
-    end(endFct: (c?: C) => void): CmdUpdateBinderBuilder<C>;
+    end(onEnd: (c: C) => void): CmdUpdateBinderBuilder<C>;
 
     when(whenPredicate: () => boolean): CmdUpdateBinderBuilder<C>;
 

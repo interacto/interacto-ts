@@ -50,7 +50,7 @@ afterEach(() => {
 
 test("testCommandExecutedOnSinglePickerFunction", () => {
     binding = colorPickerBinder()
-        .toProduce(_i => cmd)
+        .toProduce((_i: WidgetData<HTMLInputElement>) => cmd)
         .on(widget1)
         .bind();
 
@@ -62,7 +62,7 @@ test("testCommandExecutedOnSinglePickerFunction", () => {
 test("testCommandExecutedOnTwoPickers", () => {
     binding = colorPickerBinder()
         .on(widget1, widget2)
-        .toProduce(_i => new StubCmd(true))
+        .toProduce((_i: WidgetData<HTMLInputElement>) => new StubCmd(true))
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
@@ -76,8 +76,8 @@ test("testCommandExecutedOnTwoPickers", () => {
 test("testInit1Executed", () => {
     binding = colorPickerBinder()
         .on(widget1)
-        .toProduce(_i => cmd)
-        .first(c => {
+        .toProduce((_i: WidgetData<HTMLInputElement>) => cmd)
+        .first((c: StubCmd) => {
             c.exec = 10;
         })
         .bind();
@@ -90,9 +90,9 @@ test("testInit1Executed", () => {
 
 test("testCheckFalse", () => {
     binding = colorPickerBinder()
-        .toProduce(_i => cmd)
+        .toProduce((_i: WidgetData<HTMLInputElement>) => cmd)
         .on(widget1)
-        .when(_i => false)
+        .when((_i: WidgetData<HTMLInputElement>) => false)
         .bind();
 
     widget1.dispatchEvent(new Event("input"));

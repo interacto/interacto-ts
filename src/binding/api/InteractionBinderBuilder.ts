@@ -25,7 +25,7 @@ export interface InteractionBinderBuilder<I extends InteractionImpl<D, FSM>, D e
      * This predicate takes as arguments the ongoing user interaction involved in the binding.
      * @return The builder to chain the building configuration.
      */
-    when(whenPredicate: (i?: D) => boolean): InteractionBinderBuilder<I, D>;
+    when(whenPredicate: (i: D) => boolean): InteractionBinderBuilder<I, D>;
 
     on(...widgets: Array<EventTarget>): InteractionBinderBuilder<I, D>;
 

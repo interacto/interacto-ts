@@ -23,7 +23,7 @@ import {InteractionCmdBinder} from "./InteractionCmdBinder";
 export interface InteractionBinder<I extends InteractionImpl<D, FSM>, D extends InteractionData>
     extends InteractionBinderBuilder<I, D> {
 
-    when(whenPredicate: (i?: D) => boolean): InteractionBinder<I, D>;
+    when(whenPredicate: (i: D) => boolean): InteractionBinder<I, D>;
 
     on(...widgets: Array<EventTarget>): InteractionBinder<I, D>;
 
@@ -37,5 +37,5 @@ export interface InteractionBinder<I extends InteractionImpl<D, FSM>, D extends 
 
     preventDefault(): InteractionBinder<I, D>;
 
-    toProduce<C extends Command>(cmdSupplier: (i?: D) => C): InteractionCmdBinder<C, I, D>;
+    toProduce<C extends Command>(cmdSupplier: (i: D) => C): InteractionCmdBinder<C, I, D>;
 }

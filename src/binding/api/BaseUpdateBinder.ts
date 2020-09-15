@@ -19,12 +19,13 @@ import {FSM} from "../../fsm/FSM";
 import {InteractionData} from "../../interaction/InteractionData";
 import {CmdUpdateBinder} from "./CmdUpdateBinder";
 import {InteractionUpdateBinder} from "./InteractionUpdateBinder";
+import {BaseBinder} from "./BaseBinder";
 
 /**
  * The base interface for building widget bindings based on non-trivial user interactions (eg DnD) with routines
  * for defining the UI command and the user interaction to use.
  */
-export interface BaseUpdateBinder extends BaseUpdateBinderBuilder {
+export interface BaseUpdateBinder extends BaseUpdateBinderBuilder, BaseBinder {
     on(...widgets: Array<EventTarget>): BaseUpdateBinder;
 
     onDynamic(node: Node): BaseUpdateBinder;

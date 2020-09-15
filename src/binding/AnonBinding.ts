@@ -23,37 +23,37 @@ import {Command} from "../command/Command";
 export class AnonBinding<C extends Command, I extends InteractionImpl<D, FSM>, D extends InteractionData>
     extends WidgetBindingImpl<C, I, D> {
 
-    private readonly execInitCmd?: (c: C, i?: D) => void;
+    private readonly execInitCmd?: ((c: C, i: D) => void);
 
-    private readonly execUpdateCmd?: (c: C, i?: D) => void;
+    private readonly execUpdateCmd?: (c: C, i: D) => void;
 
-    private readonly checkInteraction?: (i?: D) => boolean;
+    private readonly checkInteraction?: (i: D) => boolean;
 
     private readonly cancelFct?: (i: D) => void;
 
     private readonly endOrCancelFct?: (i: D) => void;
 
-    private readonly hadEffectsFct?: (c: C, i?: D) => void;
+    private readonly hadEffectsFct?: (c: C, i: D) => void;
 
-    private readonly hadNoEffectFct?: (c: C, i?: D) => void;
+    private readonly hadNoEffectFct?: (c: C, i: D) => void;
 
-    private readonly cannotExecFct?: (c: C, i?: D) => void;
+    private readonly cannotExecFct?: (c: C, i: D) => void;
 
-    private readonly onEnd?: (c: C, i?: D) => void;
+    private readonly onEnd?: (c: C, i: D) => void;
 
     private readonly strictStart: boolean;
 
 
-    public constructor(continuousExec: boolean, interaction: I, cmdProducer: (d?: D) => C,
+    public constructor(continuousExec: boolean, interaction: I, cmdProducer: (d: D) => C,
                        widgets: Array<EventTarget>, dynamicNodes: Array<Node>, targetWidgets: Array<EventTarget>,
                        // eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
                        strict: boolean, loggers: Array<LogLevel>, timeoutThrottle: number,
                        stopPropa: boolean, prevDef: boolean,
-                       initCmdFct?: (c: C, i?: D) => void,
-                       updateCmdFct?: (c: C, i?: D) => void, check?: (i?: D) => boolean,
-                       onEndFct?: (c: C, i?: D) => void, cancel?: (i: D) => void,
-                       endOrCancel?: (i: D) => void, hadEffectsFct?: (c: C, i?: D) => void,
-                       hadNoEffectFct?: (c: C, i?: D) => void, cannotExecFct?: (c: C, i?: D) => void) {
+                       initCmdFct?: (c: C, i: D) => void,
+                       updateCmdFct?: (c: C, i: D) => void, check?: (i: D) => boolean,
+                       onEndFct?: (c: C, i: D) => void, cancel?: (i: D) => void,
+                       endOrCancel?: (i: D) => void, hadEffectsFct?: (c: C, i: D) => void,
+                       hadNoEffectFct?: (c: C, i: D) => void, cannotExecFct?: (c: C, i: D) => void) {
         super(continuousExec, interaction, cmdProducer, widgets);
         this.configureLoggers(loggers);
         this.execInitCmd = initCmdFct;

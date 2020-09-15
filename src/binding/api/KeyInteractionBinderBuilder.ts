@@ -22,7 +22,7 @@ import {LogLevel} from "../../logging/LogLevel";
 export interface KeyInteractionBinderBuilder<I extends InteractionImpl<D, FSM>, D extends InteractionData>
     extends InteractionBinderBuilder<I, D>, KeyBinderBuilder {
 
-    when(whenPredicate: (i?: D) => boolean): KeyInteractionBinderBuilder<I, D>;
+    when(whenPredicate: (i: D) => boolean): KeyInteractionBinderBuilder<I, D>;
 
     on(...widgets: Array<EventTarget>): KeyInteractionBinderBuilder<I, D>;
 

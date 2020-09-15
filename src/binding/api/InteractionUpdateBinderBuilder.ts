@@ -34,7 +34,7 @@ export interface InteractionUpdateBinderBuilder<I extends InteractionImpl<D, FSM
     */
     endOrCancel(endOrCancel: (i: D) => void): InteractionUpdateBinderBuilder<I, D>;
 
-    when(whenPredicate: (i?: D) => boolean): InteractionUpdateBinderBuilder<I, D>;
+    when(whenPredicate: (i: D) => boolean): InteractionUpdateBinderBuilder<I, D>;
 
     end(endFct: () => void): InteractionUpdateBinderBuilder<I, D>;
 

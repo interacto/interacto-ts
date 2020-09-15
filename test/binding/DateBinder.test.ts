@@ -72,7 +72,7 @@ test("testInit1Executed", () => {
     binding = dateBinder()
         .on(widget1)
         .toProduce(_i => cmd)
-        .first(c => {
+        .first((c: StubCmd) => {
             c.exec = 10;
         })
         .bind();
@@ -87,7 +87,7 @@ test("testCheckFalse", () => {
     binding = dateBinder()
         .toProduce(_i => cmd)
         .on(widget1)
-        .when(_i => false)
+        .when((_i: WidgetData<HTMLInputElement>) => false)
         .bind();
 
     widget1.dispatchEvent(new Event("input"));

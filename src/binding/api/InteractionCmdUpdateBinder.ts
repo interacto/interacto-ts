@@ -37,7 +37,7 @@ export interface InteractionCmdUpdateBinder<C extends Command, I extends Interac
 
     throttle(timeout: number): InteractionCmdUpdateBinder<C, I, D>;
 
-    first(initCmdFct: (c: C, i?: D) => void): InteractionCmdUpdateBinder<C, I, D>;
+    first(initCmdFct: (c: C, i: D) => void): InteractionCmdUpdateBinder<C, I, D>;
 
     on(...widgets: Array<EventTarget>): InteractionCmdUpdateBinder<C, I, D>;
 
@@ -49,13 +49,13 @@ export interface InteractionCmdUpdateBinder<C extends Command, I extends Interac
 
     endOrCancel(endOrCancel: (i: D) => void): InteractionCmdUpdateBinder<C, I, D>;
 
-    when(whenPredicate: (i?: D) => boolean): InteractionCmdUpdateBinder<C, I, D>;
+    when(whenPredicate: (i: D) => boolean): InteractionCmdUpdateBinder<C, I, D>;
 
     ifHadEffects(hadEffectFct: (c: C, i: D) => void): InteractionCmdUpdateBinder<C, I, D>;
 
     ifHadNoEffect(noEffectFct: (c: C, i: D) => void): InteractionCmdUpdateBinder<C, I, D>;
 
-    end(onEnd: (c?: C, i?: D) => void): InteractionCmdUpdateBinder<C, I, D>;
+    end(onEnd: (c: C, i: D) => void): InteractionCmdUpdateBinder<C, I, D>;
 
     stopImmediatePropagation(): InteractionCmdUpdateBinder<C, I, D>;
 

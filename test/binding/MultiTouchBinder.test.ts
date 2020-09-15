@@ -71,11 +71,11 @@ test("run multi-touch two times recycle events", () => {
     binding = multiTouchBinder(2)
         .toProduce(() => new StubCmd(true))
         .first((_, i) => {
-            dataFirst.push(i === undefined ? -1 : i.getTouchData().length);
+            dataFirst.push(i.getTouchData().length);
         })
         .on(c1)
         .end((_, i) => {
-            data.push(i === undefined ? -1 : i.getTouchData().length);
+            data.push(i.getTouchData().length);
         })
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));

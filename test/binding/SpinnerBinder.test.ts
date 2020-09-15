@@ -55,7 +55,7 @@ afterEach(() => {
 
 test("testCommandExecutedOnSingleSpinnerFunction", () => {
     binding = spinnerBinder()
-        .toProduce(_i => cmd)
+        .toProduce((_i: WidgetData<HTMLInputElement>) => cmd)
         .on(widget1)
         .bind();
 
@@ -68,7 +68,7 @@ test("testCommandExecutedOnSingleSpinnerFunction", () => {
 test("testCommandExecutedOnTwoSpinners", () => {
     binding = spinnerBinder()
         .on(widget1, widget2)
-        .toProduce(_i => new StubCmd(true))
+        .toProduce((_i: WidgetData<HTMLInputElement>) => new StubCmd(true))
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
@@ -85,7 +85,7 @@ test("testInit1Executed", () => {
     binding = spinnerBinder()
         .on(widget1)
         .toProduce(_i => cmd)
-        .first(c => {
+        .first((c: StubCmd) => {
             c.exec = 10;
         })
         .bind();
@@ -116,10 +116,12 @@ test("testEndsOnThen", () => {
     binding = spinnerBinder()
         .toProduce(_i => cmd)
         .on(widget1)
-        .then(c => {
+        .then((c: StubCmd) => {
             // checking that its compiles
             c.exec = 10;
             cpt++;
+        })
+        .end(() => {
         })
         .bind();
 
@@ -134,9 +136,11 @@ test("testContinuousThen", () => {
     let cpt = 0;
 
     binding = spinnerBinder()
-        .toProduce(_i => cmd)
+        .toProduce((_i: WidgetData<HTMLInputElement>) => cmd)
         .on(widget1)
-        .then(_c => cpt++)
+        .then((_c, _i) => cpt++)
+        .end((_c, _i) => {
+        })
         .bind();
 
     widget1.dispatchEvent(new Event("input"));
@@ -157,8 +161,8 @@ test("testContinuousThenTimeOut", () => {
     binding = spinnerBinder()
         .toProduce(_i => new StubCmd(true))
         .on(widget1)
-        .first(_c => cpt1++)
-        .end(_c => cpt2++)
+        .first((_c, _i) => cpt1++)
+        .end((_c: StubCmd) => cpt2++)
         .bind();
 
     widget1.dispatchEvent(new Event("input"));

@@ -78,7 +78,7 @@ test("testInit1Executed", () => {
     binding = comboBoxBinder()
         .on(widget1)
         .toProduce(_i => cmd)
-        .first(c => {
+        .first((c: StubCmd, _i: WidgetData<HTMLSelectElement>) => {
             c.exec = 10;
         })
         .bind();
@@ -93,7 +93,7 @@ test("testCheckFalse", () => {
     binding = comboBoxBinder()
         .toProduce(_i => cmd)
         .on(widget1)
-        .when(_i => false)
+        .when((_i: WidgetData<HTMLSelectElement>) => false)
         .bind();
 
     widget1.dispatchEvent(new Event("input"));

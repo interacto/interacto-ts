@@ -26,7 +26,6 @@ import {BindingsObserver} from "./BindingsObserver";
 /**
  * The base binding builder to create bindings between a keys pressure interaction and a given command.
  * @param <C> The type of the command to produce.
- * @param <W> The type of the widget to bind.
  * @author Arnaud Blouin
  */
 export class KeysBinder<C extends Command> extends Binder<C, KeysPressed, KeysData> implements
@@ -36,9 +35,9 @@ export class KeysBinder<C extends Command> extends Binder<C, KeysPressed, KeysDa
 
     private readonly checkCode: (i: KeysData) => boolean;
 
-    protected constructor(observer?: BindingsObserver, initCmd?: (c: C, i?: KeysData) => void, whenPredicate?: (i: KeysData) => boolean,
-                          cmdProducer?: (i?: KeysData) => C, widgets?: Array<EventTarget>, dynamicNodes?: Array<Node>,
-                          onEnd?: (c: C, i?: KeysData) => void, logLevels?: Array<LogLevel>,
+    protected constructor(observer?: BindingsObserver, initCmd?: (c: C, i: KeysData) => void, whenPredicate?: (i: KeysData) => boolean,
+                          cmdProducer?: (i: KeysData) => C, widgets?: Array<EventTarget>, dynamicNodes?: Array<Node>,
+                          onEnd?: (c: C, i: KeysData) => void, logLevels?: Array<LogLevel>,
                           hadNoEffectFct?: (c: C, i: KeysData) => void, hadEffectsFct?: (c: C, i: KeysData) => void,
                           cannotExecFct?: (c: C, i: KeysData) => void, targetWidgets?: Array<EventTarget>,
                           keyCodes?: Array<string>, stopProga?: boolean, prevent?: boolean) {
@@ -67,11 +66,11 @@ export class KeysBinder<C extends Command> extends Binder<C, KeysPressed, KeysDa
         return super.onDynamic(node) as KeysBinder<C>;
     }
 
-    public first(initCmdFct: (c: C, i?: KeysData) => void): KeysBinder<C> {
+    public first(initCmdFct: (c: C, i: KeysData) => void): KeysBinder<C> {
         return super.first(initCmdFct) as KeysBinder<C>;
     }
 
-    public when(checkCmd: (i?: KeysData) => boolean): KeysBinder<C> {
+    public when(checkCmd: ((i: KeysData) => boolean) | (() => boolean)): KeysBinder<C> {
         return super.when(checkCmd) as KeysBinder<C>;
     }
 
@@ -83,7 +82,7 @@ export class KeysBinder<C extends Command> extends Binder<C, KeysPressed, KeysDa
         return super.ifHadNoEffect(noEffectFct) as KeysBinder<C>;
     }
 
-    public end(onEndFct: (c?: C, i?: KeysData) => void): KeysBinder<C> {
+    public end(onEndFct: (c: C, i: KeysData) => void): KeysBinder<C> {
         return super.end(onEndFct) as KeysBinder<C>;
     }
 

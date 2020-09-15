@@ -30,7 +30,7 @@ export interface CmdBinderBuilder<C extends Command> extends BaseBinderBuilder {
      */
     first(initCmdFct: (c: C) => void): CmdBinderBuilder<C>;
 
-    end(onEnd: (c?: C) => void): CmdBinderBuilder<C>;
+    end(onEnd: (c: C) => void): CmdBinderBuilder<C>;
 
     on(...widgets: Array<EventTarget>): CmdBinderBuilder<C>;
 

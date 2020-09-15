@@ -38,7 +38,7 @@ export interface CmdUpdateBinder<C extends Command> extends CmdUpdateBinderBuild
 
     log(...level: Array<LogLevel>): CmdUpdateBinder<C>;
 
-    end(endFct: (c?: C) => void): CmdUpdateBinder<C>;
+    end(onEnd: (c: C) => void): CmdUpdateBinder<C>;
 
     usingInteraction<I extends InteractionImpl<D, FSM>, D extends InteractionData>
     (interactionSupplier: () => I): InteractionCmdUpdateBinder<C, I, D>;

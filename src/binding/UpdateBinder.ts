@@ -32,7 +32,7 @@ import {BindingsObserver} from "./BindingsObserver";
 export class UpdateBinder<C extends Command, I extends InteractionImpl<D, FSM>, D extends InteractionData>
     extends Binder<C, I, D> implements CmdUpdateBinder<C>, InteractionCmdUpdateBinder<C, I, D> {
 
-    private updateFct?: (c: C, i?: D) => void;
+    private updateFct?: (c: C, i: D) => void;
 
     private cancelFct?: (i: D) => void;
 
@@ -45,11 +45,11 @@ export class UpdateBinder<C extends Command, I extends InteractionImpl<D, FSM>, 
     private throttleTimeout: number;
 
     public constructor(observer?: BindingsObserver, throttleTimeout?: number, continuousCmdExecution?: boolean, strict?: boolean,
-                       initCmd?: (c: C, i?: D) => void, checkConditions?: (i: D) => boolean, cmdProducer?: (i?: D) => C,
+                       initCmd?: (c: C, i: D) => void, checkConditions?: (i: D) => boolean, cmdProducer?: (i: D) => C,
                        widgets?: Array<EventTarget>, dynamicNodes?: Array<Node>,
-                       interactionSupplier?: () => I, onEnd?: (c: C, i?: D) => void,
+                       interactionSupplier?: () => I, onEnd?: (c: C, i: D) => void,
                        logLevels?: Array<LogLevel>, hadNoEffectFct?: (c: C, i: D) => void, hadEffectsFct?: (c: C, i: D) => void,
-                       cannotExecFct?: (c: C, i: D) => void, updateFct?: (c: C, i?: D) => void, cancelFct?: (i: D) => void,
+                       cannotExecFct?: (c: C, i: D) => void, updateFct?: (c: C, i: D) => void, cancelFct?: (i: D) => void,
                        endOrCancelFct?: (i: D) => void, targetWidgets?: Array<EventTarget>, stopProga?: boolean,
                        prevent?: boolean) {
         super(observer, initCmd, checkConditions, cmdProducer, widgets, dynamicNodes, interactionSupplier, onEnd,
@@ -62,7 +62,7 @@ export class UpdateBinder<C extends Command, I extends InteractionImpl<D, FSM>, 
         this.throttleTimeout = throttleTimeout ?? 0;
     }
 
-    public then(update: (c: C, i?: D) => void): UpdateBinder<C, I, D> {
+    public then(update: (c: C, i: D) => void): UpdateBinder<C, I, D> {
         const dup = this.duplicate();
         dup.updateFct = update;
         return dup;
@@ -106,11 +106,11 @@ export class UpdateBinder<C extends Command, I extends InteractionImpl<D, FSM>, 
         return super.onDynamic(node) as UpdateBinder<C, I, D>;
     }
 
-    public first(initCmdFct: (c: C, i?: D) => void): UpdateBinder<C, I, D> {
+    public first(initCmdFct: (c: C, i: D) => void): UpdateBinder<C, I, D> {
         return super.first(initCmdFct) as UpdateBinder<C, I, D>;
     }
 
-    public when(checkCmd: (i?: D) => boolean): UpdateBinder<C, I, D> {
+    public when(checkCmd: (i: D) => boolean): UpdateBinder<C, I, D> {
         return super.when(checkCmd) as UpdateBinder<C, I, D>;
     }
 
@@ -122,7 +122,7 @@ export class UpdateBinder<C extends Command, I extends InteractionImpl<D, FSM>, 
         return super.ifHadNoEffect(noEffectFct) as UpdateBinder<C, I, D>;
     }
 
-    public end(onEndFct: (c: C, i?: D) => void): UpdateBinder<C, I, D> {
+    public end(onEndFct: (c: C, i: D) => void): UpdateBinder<C, I, D> {
         return super.end(onEndFct) as UpdateBinder<C, I, D>;
     }
 

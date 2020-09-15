@@ -49,13 +49,13 @@ afterEach(() => {
 test("event bubbling works", () => {
     binding2 = nodeBinder()
         .usingInteraction(() => new Press())
-        .toProduce(() => new StubCmd())
+        .toProduce(_i => new StubCmd())
         .on(canvas2)
         .bind();
 
     binding1 = nodeBinder()
         .usingInteraction(() => new Press())
-        .toProduce(() => new StubCmd())
+        .toProduce(_i => new StubCmd())
         .on(canvas1)
         .bind();
 

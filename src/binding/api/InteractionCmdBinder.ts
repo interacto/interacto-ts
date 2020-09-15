@@ -29,7 +29,7 @@ export interface InteractionCmdBinder<C extends Command, I extends InteractionIm
     * This callback takes as arguments both the command and interaction involved in the binding.
     * @return The builder to chain the building configuration.
     */
-    first(initCmdFct: (c: C, i?: D) => void): InteractionCmdBinder<C, I, D>;
+    first(initCmdFct: (c: C, i: D) => void): InteractionCmdBinder<C, I, D>;
 
     ifHadEffects(hadEffectFct: (c: C, i: D) => void): InteractionCmdBinder<C, I, D>;
 
@@ -41,7 +41,7 @@ export interface InteractionCmdBinder<C extends Command, I extends InteractionIm
     * @param onEnd The callback method to specify what to do when an interaction ends.
     * @return The builder to chain the building configuration.
     */
-    end(onEnd: (c?: C, i?: D) => void): InteractionCmdBinder<C, I, D>;
+    end(onEnd: (c: C, i: D) => void): InteractionCmdBinder<C, I, D>;
 
     on(...widgets: Array<EventTarget>): InteractionCmdBinder<C, I, D>;
 
@@ -49,7 +49,7 @@ export interface InteractionCmdBinder<C extends Command, I extends InteractionIm
 
     log(...level: Array<LogLevel>): InteractionCmdBinder<C, I, D>;
 
-    when(whenPredicate: (i?: D) => boolean): InteractionCmdBinder<C, I, D>;
+    when(whenPredicate: (i: D) => boolean): InteractionCmdBinder<C, I, D>;
 
     stopImmediatePropagation(): InteractionCmdBinder<C, I, D>;
 

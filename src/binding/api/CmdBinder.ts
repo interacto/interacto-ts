@@ -28,7 +28,7 @@ import {LogLevel} from "../../logging/LogLevel";
 export interface CmdBinder<C extends Command> extends CmdBinderBuilder<C> {
     first(initCmdFct: (c: C) => void): CmdBinder<C>;
 
-    end(onEnd: (c?: C) => void): CmdBinder<C>;
+    end(onEnd: (c: C) => void): CmdBinder<C>;
 
     on(...widgets: Array<EventTarget>): CmdBinder<C>;
 

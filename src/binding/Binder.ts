@@ -32,11 +32,11 @@ import {BindingsObserver} from "./BindingsObserver";
 export abstract class Binder<C extends Command, I extends InteractionImpl<D, FSM>, D extends InteractionData>
 implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> {
 
-    protected initCmd?: (c: C, i?: D) => void;
+    protected initCmd?: (c: C, i: D) => void;
 
     protected checkConditions?: (i: D) => boolean;
 
-    protected cmdProducer?: (i?: D) => C;
+    protected cmdProducer?: (i: D) => C;
 
     protected widgets: Array<EventTarget>;
 
@@ -50,7 +50,7 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
 
     protected cannotExecFct?: (c: C, i: D) => void;
 
-    protected onEnd?: (c: C, i?: D) => void;
+    protected onEnd?: (c: C, i: D) => void;
 
     protected logLevels: Array<LogLevel>;
 
@@ -63,9 +63,9 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
     protected observer?: BindingsObserver;
 
 
-    protected constructor(observer?: BindingsObserver, initCmd?: (c: C, i?: D) => void, checkConditions?: (i: D) => boolean,
-                          cmdProducer?: (i?: D) => C, widgets?: Array<EventTarget>, dynamicNodes?: Array<Node>,
-                          interactionSupplier?: () => I, onEnd?: (c: C, i?: D) => void,
+    protected constructor(observer?: BindingsObserver, initCmd?: (c: C, i: D) => void, checkConditions?: (i: D) => boolean,
+                          cmdProducer?: (i: D) => C, widgets?: Array<EventTarget>, dynamicNodes?: Array<Node>,
+                          interactionSupplier?: () => I, onEnd?: (c: C, i: D) => void,
                           logLevels?: Array<LogLevel>, hadNoEffectFct?: (c: C, i: D) => void, hadEffectsFct?: (c: C, i: D) => void,
                           cannotExecFct?: (c: C, i: D) => void, targetWidgets?: Array<EventTarget>, stopProga?: boolean,
                           prevent?: boolean) {
@@ -101,13 +101,13 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
         return dup;
     }
 
-    public first(initCmdFct: (c: C, i?: D) => void): Binder<C, I, D> {
+    public first(initCmdFct: (c: C, i: D) => void): Binder<C, I, D> {
         const dup = this.duplicate();
         dup.initCmd = initCmdFct;
         return dup;
     }
 
-    public when(checkCmd: (i?: D) => boolean): Binder<C, I, D> {
+    public when(checkCmd: (i: D) => boolean): Binder<C, I, D> {
         const dup = this.duplicate();
         dup.checkConditions = checkCmd;
         return dup;
@@ -125,7 +125,7 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
         return dup;
     }
 
-    public end(onEndFct: (c?: C, i?: D) => void): Binder<C, I, D> {
+    public end(onEndFct: (c: C, i: D) => void): Binder<C, I, D> {
         const dup = this.duplicate();
         dup.onEnd = onEndFct;
         return dup;
