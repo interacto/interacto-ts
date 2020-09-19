@@ -53,14 +53,14 @@ export class DoubleClickFSM extends FSM {
 
     public readonly firstClickFSM: ClickFSM;
 
-    private readonly sndClick: ClickFSM;
+    private readonly sndClickFSM: ClickFSM;
 
     private checkButton?: number;
 
     public constructor() {
         super();
         this.firstClickFSM = new ClickFSM();
-        this.sndClick = new ClickFSM();
+        this.sndClickFSM = new ClickFSM();
     }
 
     public buildFSM(dataHandler?: FSMDataHandler): void {
@@ -70,7 +70,7 @@ export class DoubleClickFSM extends FSM {
 
         super.buildFSM(dataHandler);
         this.firstClickFSM.buildFSM();
-        this.sndClick.buildFSM();
+        this.sndClickFSM.buildFSM();
         const dbleclicked = new TerminalState(this, "dbleclicked");
         const cancelled = new CancellingState(this, "cancelled");
         const clicked = new StdState(this, "clicked");
@@ -108,22 +108,31 @@ export class DoubleClickFSM extends FSM {
         }(this, clicked, cancelled);
 
         new TimeoutTransition(clicked, cancelled, DoubleClickFSM.timeGapSupplier);
-        new SubFSMTransition(clicked, dbleclicked, this.sndClick);
+        new SubFSMTransition(clicked, dbleclicked, this.sndClickFSM);
     }
 
     public setCheckButton(buttonToCheck: number): void {
         if (this.checkButton === undefined) {
             this.checkButton = buttonToCheck;
         }
-        this.sndClick.setCheckButton(buttonToCheck);
+        this.sndClickFSM.setCheckButton(buttonToCheck);
     }
 
     public getCheckButton(): number {
         return this.checkButton ?? -1;
     }
 
+
+    public fullReinit(): void {
+        super.fullReinit();
+        this.firstClickFSM.fullReinit();
+        this.sndClickFSM.fullReinit();
+    }
+
     public reinit(): void {
         super.reinit();
+        this.firstClickFSM.reinit();
+        this.sndClickFSM.reinit();
         this.checkButton = undefined;
     }
 }

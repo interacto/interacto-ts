@@ -120,3 +120,13 @@ test("specific mouse button checking OK", () => {
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
 });
+
+test("dble Click OK After Delay", () => {
+    interaction.registerToNodes([canvas]);
+    canvas.dispatchEvent(createMouseEvent("auxclick", canvas, 111, 222, 11, 22, 2));
+    jest.runOnlyPendingTimers();
+    canvas.dispatchEvent(createMouseEvent("click", canvas, 111, 222, 11, 22, 1));
+    canvas.dispatchEvent(createMouseEvent("click", canvas, 111, 222, 11, 22, 1));
+    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+    expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+});
