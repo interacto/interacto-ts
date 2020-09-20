@@ -22,15 +22,17 @@ import {InputState} from "../../fsm/InputState";
 import {FSM} from "../../fsm/FSM";
 import {OutputState} from "../../fsm/OutputState";
 import {MoveTransition} from "../../fsm/MoveTransition";
-import {EscapeKeyPressureTransition} from "../../fsm/EscapeKeyPressureTransition";
 import {SrcTgtPointsData} from "./SrcTgtPointsData";
 import {InteractionImpl} from "../InteractionImpl";
 import {PointDataImpl} from "./PointDataImpl";
+import {EscapeKeyPressureTransition} from "../../fsm/EscapeKeyPressureTransition";
 
 export class DragLockFSM extends FSM {
     public readonly firstDbleClick: DoubleClickFSM;
 
     public readonly sndDbleClick: DoubleClickFSM;
+
+    protected checkButton: number | undefined;
 
     // eslint-disable-next-line @typescript-eslint/naming-convention
     private static readonly MoveTransitionDragLock = class extends MoveTransition {
@@ -53,6 +55,25 @@ export class DragLockFSM extends FSM {
         super();
         this.firstDbleClick = new DoubleClickFSM();
         this.sndDbleClick = new DoubleClickFSM();
+    }
+
+    public log(log: boolean): void {
+        super.log(log);
+        this.firstDbleClick.log(log);
+        this.sndDbleClick.log(log);
+    }
+
+    public reinit(): void {
+        super.reinit();
+        this.firstDbleClick.reinit();
+        this.sndDbleClick.reinit();
+        this.checkButton = undefined;
+    }
+
+    public fullReinit(): void {
+        super.fullReinit();
+        this.firstDbleClick.fullReinit();
+        this.sndDbleClick.fullReinit();
     }
 
     public getDataHandler(): DragLockFSMHandler | undefined {
@@ -95,7 +116,6 @@ export class DragLockFSM extends FSM {
         }(this, this.initState, locked, this.firstDbleClick);
 
         new SubFSMTransition(locked, cancelled, cancelDbleClick);
-
         new DragLockFSM.MoveTransitionDragLock(this, locked, moved);
         new DragLockFSM.MoveTransitionDragLock(this, moved, moved);
         new EscapeKeyPressureTransition(locked, cancelled);

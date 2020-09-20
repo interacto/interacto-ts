@@ -63,6 +63,13 @@ export class DoubleClickFSM extends FSM {
         this.sndClickFSM = new ClickFSM();
     }
 
+
+    public log(log: boolean): void {
+        super.log(log);
+        this.firstClickFSM.log(log);
+        this.sndClickFSM.log(log);
+    }
+
     public buildFSM(dataHandler?: FSMDataHandler): void {
         if (this.states.length > 1) {
             return;
