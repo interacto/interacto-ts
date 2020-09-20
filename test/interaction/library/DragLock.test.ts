@@ -200,6 +200,42 @@ test("timeout first double click", () => {
     interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23, 2));
     interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23, 2));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+    expect(handler.fsmCancels).not.toHaveBeenCalled();
+    expect(handler.fsmStops).not.toHaveBeenCalled();
+    expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
+});
+
+test("timeout first Click Update Still OK", () => {
+    interaction.registerToNodes([canvas]);
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.click, canvas, undefined, undefined, 11, 23, 1));
+    jest.runOnlyPendingTimers();
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23, 2));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23, 2));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 21, 30, 2));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 21, 30, 2));
+
+    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+    expect(handler.fsmUpdates).toHaveBeenCalledTimes(3);
+    expect(handler.fsmCancels).not.toHaveBeenCalled();
+    expect(handler.fsmStops).not.toHaveBeenCalled();
+});
+
+test("timeout first Click end Still OK", () => {
+    interaction.log(true);
+    interaction.registerToNodes([canvas]);
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.click, canvas, undefined, undefined, 11, 23, 1));
+    jest.runOnlyPendingTimers();
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23, 2));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23, 2));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 21, 30, 2));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 21, 30, 2));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23, 2));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23, 2));
+
+    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+    expect(handler.fsmUpdates).toHaveBeenCalledTimes(3);
+    expect(handler.fsmCancels).not.toHaveBeenCalled();
+    expect(handler.fsmStops).toHaveBeenCalledTimes(1);
 });
 
 test("timeout Second Click KO", () => {

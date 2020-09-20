@@ -15,10 +15,20 @@
 import {
     clickBinder,
     CommandsRegistry,
-    dbleClickBinder, dndBinder, dragLockBinder,
-    EventRegistrationToken, keyPressBinder, keyTypeBinder,
+    dbleClickBinder,
+    dndBinder,
+    dragLockBinder,
+    EventRegistrationToken,
+    FSM,
+    InteractionData,
+    InteractionImpl,
+    keyPressBinder,
+    keyTypeBinder,
+    LogLevel,
+    PointData,
     pressBinder,
-    UndoCollector
+    UndoCollector,
+    WidgetBinding
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {Subscription} from "rxjs";
@@ -27,8 +37,12 @@ import {createKeyEvent, createMouseEvent} from "../interaction/StubEvents";
 let elt: HTMLElement;
 let producedCmds: Array<StubCmd>;
 let disposable: Subscription;
+let binding: WidgetBinding<StubCmd, InteractionImpl<InteractionData, FSM>, InteractionData>;
 
 beforeEach(() => {
+    jest.clearAllMocks();
+    jest.useFakeTimers();
+
     document.documentElement.innerHTML = "<html><div id='div'></div></html>";
     const elt1 = document.getElementById("div");
     if (elt1 !== null) {
@@ -38,13 +52,14 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+    binding.uninstallBinding();
     disposable.unsubscribe();
     CommandsRegistry.getInstance().clear();
     UndoCollector.getInstance().clear();
 });
 
 test("press binder", () => {
-    const binding = pressBinder()
+    binding = pressBinder()
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
@@ -54,7 +69,7 @@ test("press binder", () => {
 });
 
 test("click binder", () => {
-    const binding = clickBinder()
+    binding = clickBinder()
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
@@ -64,7 +79,7 @@ test("click binder", () => {
 });
 
 test("double click binder", () => {
-    const binding = dbleClickBinder()
+    binding = dbleClickBinder()
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
@@ -75,7 +90,7 @@ test("double click binder", () => {
 });
 
 test("drag lock binder", () => {
-    const binding = dragLockBinder()
+    binding = dragLockBinder()
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
@@ -89,7 +104,7 @@ test("drag lock binder", () => {
 });
 
 test("dnd binder", () => {
-    const binding = dndBinder(false, false)
+    binding = dndBinder(false, false)
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
@@ -101,7 +116,7 @@ test("dnd binder", () => {
 });
 
 test("key press binder", () => {
-    const binding = keyPressBinder(false)
+    binding = keyPressBinder(false)
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
@@ -111,7 +126,7 @@ test("key press binder", () => {
 });
 
 test("key type binder", () => {
-    const binding = keyTypeBinder()
+    binding = keyTypeBinder()
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
@@ -119,4 +134,42 @@ test("key type binder", () => {
     elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "A"));
     elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "A"));
     expect(producedCmds).toHaveLength(1);
+});
+
+test("click must not block drag lock", () => {
+    binding = dragLockBinder()
+        .on(elt)
+        .toProduce((_i: PointData) => new StubCmd(true))
+        .when(i => i.getButton() === 2)
+        .log(LogLevel.interaction)
+        .bind();
+
+    disposable = binding.produces().subscribe(c => producedCmds.push(c));
+
+    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.click, elt, 1, 2, 3, 4, 1));
+    jest.runOnlyPendingTimers();
+    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.auxclick, elt, 1, 2, 3, 4, 2));
+    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.auxclick, elt, 1, 2, 3, 4, 2));
+    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, elt));
+    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, elt));
+    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.auxclick, elt, 1, 2, 3, 4, 2));
+    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.auxclick, elt, 1, 2, 3, 4, 2));
+
+    expect(producedCmds).toHaveLength(1);
+});
+
+test("drag lock: double click does not cancel", () => {
+    binding = dragLockBinder()
+        .on(elt)
+        .toProduce((_i: PointData) => new StubCmd(true))
+        .log(LogLevel.interaction)
+        .bind();
+
+    disposable = binding.produces().subscribe(c => producedCmds.push(c));
+
+    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.click, elt, 1, 2, 3, 4, 0));
+    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.click, elt, 1, 2, 3, 4, 0));
+
+    expect(binding.getInteraction().isRunning()).toBeTruthy();
+    // expect(producedCmds).toHaveLength(1);
 });
