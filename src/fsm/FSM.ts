@@ -23,13 +23,17 @@ import {OutputStateImpl} from "./OutputStateImpl";
 import {catFSM} from "../logging/ConfigLog";
 import {FSMDataHandler} from "./FSMDataHandler";
 import {isKeyDownEvent, isKeyUpEvent} from "./Events";
-import {Subject, Observable} from "rxjs";
+import {Observable, Subject} from "rxjs";
 import {remove, removeAt} from "../util/ArrayUtil";
+import {Category} from "typescript-logging";
+import {CancelFSMException} from "./CancelFSMException";
 
 /**
  * A finite state machine that defines the behavior of a user interaction.
  */
 export class FSM {
+    private static readonly exLog = new Category("FSM Exception");
+
     protected dataHandler?: FSMDataHandler;
 
     protected asLogFSM: boolean;
@@ -169,12 +173,12 @@ export class FSM {
     private processEvent(event: Event): boolean {
         if (this.currentSubFSM !== undefined) {
             if (this.asLogFSM) {
-                catFSM.info(`processing event ${String(event)} in a sub-FSM`);
+                catFSM.info(`processing event ${String(event.type)} in a sub-FSM`);
             }
             return this.currentSubFSM.process(event);
         }
         if (this.asLogFSM) {
-            catFSM.info(`processing event ${String(event)} at state ${this.getCurrentState().getName()}`);
+            catFSM.info(`processing event ${String(event.type)} at state ${this.getCurrentState().getName()}: ${this.constructor.name}`);
         }
         return this.getCurrentState().process(event);
     }
@@ -246,7 +250,7 @@ export class FSM {
      */
     public onTerminating(): void {
         if (this.asLogFSM) {
-            catFSM.info("FSM ended");
+            catFSM.info(`FSM ended: ${this.constructor.name}`);
         }
         if (this.started) {
             this.notifyHandlerOnStop();
@@ -260,7 +264,7 @@ export class FSM {
      */
     public onCancelling(): void {
         if (this.asLogFSM) {
-            catFSM.info("FSM cancelled");
+            catFSM.info(`FSM cancelled: ${this.constructor.name}`);
         }
         if (this.started) {
             this.notifyHandlerOnCancel();
@@ -273,7 +277,7 @@ export class FSM {
      */
     public onStarting(): void {
         if (this.asLogFSM) {
-            catFSM.info("FSM started");
+            catFSM.info(`FSM started: ${this.constructor.name}`);
         }
         this.started = true;
         this.notifyHandlerOnStart();
@@ -285,7 +289,7 @@ export class FSM {
     public onUpdating(): void {
         if (this.started) {
             if (this.asLogFSM) {
-                catFSM.info("FSM updated");
+                catFSM.info(`FSM updated: ${this.constructor.name}`);
             }
             this.notifyHandlerOnUpdate();
         }
@@ -314,7 +318,7 @@ export class FSM {
      */
     public reinit(): void {
         if (this.asLogFSM) {
-            catFSM.info("FSM reinitialised");
+            catFSM.info(`FSM reinitialised: ${this.constructor.name}`);
         }
         if (this.currentTimeout !== undefined) {
             this.currentTimeout.stopTimeout();
@@ -354,7 +358,7 @@ export class FSM {
     public onTimeout(): void {
         if (this.currentTimeout !== undefined) {
             if (this.asLogFSM) {
-                catFSM.info("Timeout");
+                catFSM.info(`Timeout: ${this.constructor.name}`);
             }
             const state = this.currentTimeout.execute();
             if (state instanceof OutputStateImpl) {
@@ -370,7 +374,7 @@ export class FSM {
     public stopCurrentTimeout(): void {
         if (this.currentTimeout !== undefined) {
             if (this.asLogFSM) {
-                catFSM.info("Timeout stopped");
+                catFSM.info(`Timeout stopped: ${this.constructor.name}`);
             }
             this.currentTimeout.stopTimeout();
             this.currentTimeout = undefined;
@@ -387,7 +391,7 @@ export class FSM {
 
         if (tr !== undefined) {
             if (this.asLogFSM) {
-                catFSM.info("Timeout starting");
+                catFSM.info(`Timeout starting: ${this.constructor.name}`);
             }
             this.currentTimeout = tr;
             this.currentTimeout.startTimeout();
@@ -417,6 +421,10 @@ export class FSM {
         try {
             this.handlers.forEach(handler => handler.fsmStarts());
         } catch (ex) {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+            if (ex.constructor !== CancelFSMException) {
+                FSM.exLog.error("crash in notifyHandlerOnStart", ex);
+            }
             this.onCancelling();
             throw ex;
         }
@@ -429,6 +437,10 @@ export class FSM {
         try {
             this.handlers.forEach(handler => handler.fsmUpdates());
         } catch (ex) {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+            if (ex.constructor !== CancelFSMException) {
+                FSM.exLog.error("crash in notifyHandlerOnUpdate", ex);
+            }
             this.onCancelling();
             throw ex;
         }
@@ -441,6 +453,10 @@ export class FSM {
         try {
             [...this.handlers].forEach(handler => handler.fsmStops());
         } catch (ex) {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+            if (ex.constructor !== CancelFSMException) {
+                FSM.exLog.error("crash in notifyHandlerOnStop", ex);
+            }
             this.onCancelling();
             throw ex;
         }
