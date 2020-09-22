@@ -1,3 +1,19 @@
+#4.4.0
+
+* fix(binding): no more optional parameters in binding routines
+* fix(code): various code smells fixed thanks to a tslint upgrade
+* fix(interaction): double-click does not clean all data on timeout
+* fix(interaction): draglock data must set target details on the first double click
+* fix(interaction): reinit and log method calls must also be propagated in sub-interactions
+* fix(log): better logging in user interactions (in FSMs)
+* fix(test): various test smells fixed thanks to tslint jest upgrade
+* test(interaction): DragLock and Double Click tests added
+* config(npm): useless script cmd removed
+* chore(config): jest eslint rules updated
+* chore(config): no more audit on package
+* chore(git): git repo renamed to interacto-ts
+
+
 #4.3.0
 
 * feat(binding): all the interactions should have binding routines in Bindings
