@@ -262,3 +262,34 @@ test("timeout Second Click OK", () => {
 
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
 });
+
+test("first Click Has Target object", () => {
+    interaction.registerToNodes([canvas]);
+    canvas.click();
+    canvas.click();
+
+    expect(interaction.getData().getTgtObject()).toBe(canvas);
+});
+
+test("first Click Has Target Values", () => {
+    interaction.registerToNodes([canvas]);
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23, 2));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23, 2));
+
+    expect(interaction.getData().getTgtClientX()).toBe(11);
+    expect(interaction.getData().getTgtClientY()).toBe(23);
+    expect(interaction.getData().getButton()).toBe(2);
+});
+
+test("move Has Still Src Values", () => {
+    interaction.registerToNodes([canvas]);
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23, 2));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23, 2));
+    interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 21, 30, 2));
+
+    expect(interaction.getData().getTgtClientX()).toBe(21);
+    expect(interaction.getData().getTgtClientY()).toBe(30);
+    expect(interaction.getData().getSrcClientX()).toBe(11);
+    expect(interaction.getData().getSrcClientY()).toBe(23);
+    expect(interaction.getData().getButton()).toBe(2);
+});

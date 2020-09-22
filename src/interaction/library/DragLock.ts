@@ -141,7 +141,9 @@ export class DragLock extends InteractionImpl<SrcTgtPointsData, DragLockFSM> {
         }
 
         public getTgtObject(): EventTarget | undefined {
-            return this.draglock.sndClick.getData().getSrcObject();
+            return this.draglock.sndClick.getData().getButton() === undefined
+                ? this.draglock.firstClick.getData().getSrcObject()
+                : this.draglock.sndClick.getData().getSrcObject();
         }
 
         public getTgtClientX(): number {
