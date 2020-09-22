@@ -1,4 +1,4 @@
-#4.4.0
+# 4.4.0
 
 * fix(binding): no more optional parameters in binding routines
 * fix(code): various code smells fixed thanks to a tslint upgrade
@@ -14,7 +14,7 @@
 * chore(git): git repo renamed to interacto-ts
 
 
-#4.3.0
+# 4.3.0
 
 * feat(binding): all the interactions should have binding routines in Bindings
 * feat(interaction): the event auxclick now supported
@@ -31,7 +31,7 @@
 * config(jest): jest version updated
 
 
-#4.2.1
+# 4.2.1
 
 This is the first stable release after several development versions.
 
