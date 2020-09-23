@@ -50,7 +50,7 @@
   },
   "dependencies": {
     "rxjs": "^6.5.4",
-    "typescript-logging": "^0.6.4"
+    "typescript-logging": "^1.0.0"
   },
   "files": [
     "dist/"
