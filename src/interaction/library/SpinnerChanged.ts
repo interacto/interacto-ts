@@ -64,17 +64,11 @@ export class SpinnerChangedFSM extends FSM {
             }
         };
 
-        new class extends SpinnerChangedTransition {
-            public action(event: Event): void {
-                spinnerAction(event);
-            }
-        }(this.initState, changed);
+        const changedInit = new SpinnerChangedTransition(this.initState, changed);
+        changedInit.action = spinnerAction;
 
-        new class extends SpinnerChangedTransition {
-            public action(event: Event): void {
-                spinnerAction(event);
-            }
-        }(changed, changed);
+        const changedChanged = new SpinnerChangedTransition(changed, changed);
+        changedChanged.action = spinnerAction;
 
         new TimeoutTransition(changed, ended, SpinnerChangedFSM.timeGapSupplier);
     }
@@ -97,24 +91,14 @@ export class SpinnerChanged extends InteractionImpl<WidgetData<HTMLInputElement>
     public constructor() {
         super(new SpinnerChangedFSM());
 
-        this.handler = new class implements SpinnerChangedHandler {
-            private readonly _parent: SpinnerChanged;
-
-            public constructor(parent: SpinnerChanged) {
-                this._parent = parent;
-            }
-
-            public initToChangedHandler(event: Event): void {
+        this.handler = {
+            "initToChangedHandler": (event: Event): void => {
                 if (event.target !== null && isSpinner(event.target)) {
-                    (this._parent.data as WidgetDataImpl<HTMLInputElement>).setWidget(event.target);
+                    (this.data as WidgetDataImpl<HTMLInputElement>).setWidget(event.target);
                 }
-            }
-
-            public reinitData(): void {
-                this._parent.reinitData();
-            }
-
-        }(this);
+            },
+            "reinitData": (): void => this.reinitData()
+        };
 
         this.fsm.buildFSM(this.handler);
     }

@@ -18,8 +18,6 @@ import {KeyPressureTransition} from "../../fsm/KeyPressureTransition";
 import {KeyData} from "./KeyData";
 import {StdState} from "../../fsm/StdState";
 import {KeyReleaseTransition} from "../../fsm/KeyReleaseTransition";
-import {OutputState} from "../../fsm/OutputState";
-import {InputState} from "../../fsm/InputState";
 import {FSM} from "../../fsm/FSM";
 import {KeyDataImpl} from "./KeyDataImpl";
 import {InteractionImpl} from "../InteractionImpl";
@@ -42,41 +40,21 @@ export class KeyTypedFSM extends FSM {
         this.addState(pressed);
         this.addState(typed);
 
-        new class extends KeyPressureTransition {
-            private readonly _parent: KeyTypedFSM;
-
-            public constructor(parent: KeyTypedFSM, srcState: OutputState, tgtState: InputState) {
-                super(srcState, tgtState);
-                this._parent = parent;
+        const kp = new KeyPressureTransition(this.initState, pressed);
+        kp.action = (event: Event): void => {
+            if (event instanceof KeyboardEvent) {
+                this.checkKey = event.code;
             }
+        };
 
-            public action(event: Event): void {
-                if (event instanceof KeyboardEvent) {
-                    this._parent.checkKey = event.code;
-                }
+        const kr = new KeyReleaseTransition(pressed, typed);
+        kr.isGuardOK = (event: Event): boolean => this.checkKey === undefined ||
+                    (event instanceof KeyboardEvent && event.code === this.checkKey);
+        kr.action = (event: Event): void => {
+            if (dataHandler !== undefined && event instanceof KeyboardEvent) {
+                dataHandler.onKeyTyped(event);
             }
-
-        }(this, this.initState, pressed);
-
-        new class extends KeyReleaseTransition {
-            private readonly _parent: KeyTypedFSM;
-
-            public constructor(parent: KeyTypedFSM, srcState: OutputState, tgtState: InputState) {
-                super(srcState, tgtState);
-                this._parent = parent;
-            }
-
-            public isGuardOK(event: Event): boolean {
-                return super.isGuardOK(event) && this._parent.checkKey === undefined ||
-                    (event instanceof KeyboardEvent && event.code === this._parent.checkKey);
-            }
-
-            public action(event: Event): void {
-                if (dataHandler !== undefined && event instanceof KeyboardEvent) {
-                    dataHandler.onKeyTyped(event);
-                }
-            }
-        }(this, pressed, typed);
+        };
     }
 
     public reinit(): void {
@@ -102,21 +80,15 @@ export class KeyTyped extends InteractionImpl<KeyData, KeyTypedFSM> {
     public constructor() {
         super(new KeyTypedFSM());
 
-        this.handler = new class implements KeyTypedFSMHandler {
-            private readonly _parent: KeyTyped;
-
-            public constructor(parent: KeyTyped) {
-                this._parent = parent;
+        this.handler = {
+            "onKeyTyped": (event: KeyboardEvent): void => {
+                (this.getData() as KeyDataImpl).setKeyData(event);
+            },
+            "reinitData": (): void => {
+                this.reinitData();
             }
+        };
 
-            public onKeyTyped(event: KeyboardEvent): void {
-                (this._parent.getData() as KeyDataImpl).setKeyData(event);
-            }
-
-            public reinitData(): void {
-                this._parent.reinitData();
-            }
-        }(this);
         this.getFsm().buildFSM(this.handler);
     }
 

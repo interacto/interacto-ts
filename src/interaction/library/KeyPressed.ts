@@ -15,8 +15,6 @@
 import {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {TerminalState} from "../../fsm/TerminalState";
 import {KeyPressureTransition} from "../../fsm/KeyPressureTransition";
-import {OutputState} from "../../fsm/OutputState";
-import {InputState} from "../../fsm/InputState";
 import {KeyData} from "./KeyData";
 import {FSM} from "../../fsm/FSM";
 import {InteractionImpl} from "../InteractionImpl";
@@ -47,26 +45,14 @@ export class KeyPressedFSM extends FSM {
 
         this.addState(pressed);
 
-        new class extends KeyPressureTransition {
-            private readonly _parent: KeyPressedFSM;
-
-            public constructor(parent: KeyPressedFSM, srcState: OutputState, tgtState: InputState) {
-                super(srcState, tgtState);
-                this._parent = parent;
+        const kp = new KeyPressureTransition(this.initState, pressed);
+        kp.action = (event: Event): void => {
+            if (event instanceof KeyboardEvent && dataHandler !== undefined) {
+                dataHandler.onKeyPressed(event);
             }
-
-            public action(event: Event): void {
-                if (event instanceof KeyboardEvent && dataHandler !== undefined) {
-                    dataHandler.onKeyPressed(event);
-                }
-            }
-
-            public isGuardOK(event: Event): boolean {
-                return this._parent.modifiersAccepted || (event instanceof KeyboardEvent && !event.altKey && !event.ctrlKey &&
-                    !event.shiftKey && !event.metaKey);
-            }
-
-        }(this, this.initState, pressed);
+        };
+        kp.isGuardOK = (event: Event): boolean => this.modifiersAccepted || (event instanceof KeyboardEvent &&
+            !event.altKey && !event.ctrlKey && !event.shiftKey && !event.metaKey);
     }
 
     public reinit(): void {
@@ -83,7 +69,6 @@ interface KeyPressedFSMHandler extends FSMDataHandler {
  * A user interaction for pressing a key on a keyboard
  * @author Gwendal DIDOT
  */
-
 export class KeyPressed extends InteractionImpl<KeyData, KeyPressedFSM> {
 
     private readonly handler: KeyPressedFSMHandler;
@@ -91,23 +76,14 @@ export class KeyPressed extends InteractionImpl<KeyData, KeyPressedFSM> {
     public constructor(modifierAccepted: boolean, fsm?: KeyPressedFSM) {
         super(fsm ?? new KeyPressedFSM(modifierAccepted));
 
-        this.handler = new class implements KeyPressedFSMHandler {
-            private readonly _parent: KeyPressed;
+        this.handler = {
+            "onKeyPressed": (event: KeyboardEvent): void => {
+                (this.getData() as KeyDataImpl).setKeyData(event);
+            },
+            "reinitData": (): void => this.reinitData()
+        };
 
-            public constructor(parent: KeyPressed) {
-                this._parent = parent;
-            }
-
-            public onKeyPressed(event: KeyboardEvent): void {
-                (this._parent.getData() as KeyDataImpl).setKeyData(event);
-            }
-
-            public reinitData(): void {
-                this._parent.reinitData();
-            }
-        }(this);
         this.getFsm().buildFSM(this.handler);
-
     }
 
     public createDataObject(): KeyData {

@@ -65,41 +65,30 @@ export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouch
     public constructor(nbTouches: number) {
         super(new MultiTouchFSM(nbTouches));
 
-        this.handler = new class implements TouchDnDFSMHandler {
-            private readonly parent: MultiTouch;
-
-            public constructor(parent: MultiTouch) {
-                this.parent = parent;
-            }
-
-            public onTouch(event: TouchEvent): void {
+        this.handler = {
+            "onTouch": (event: TouchEvent): void => {
                 if (event.changedTouches.length > 0) {
                     const touch = event.changedTouches[0];
-                    (this.parent.data as (MultiTouchDataImpl)).addTouchData(
+                    (this.data as (MultiTouchDataImpl)).addTouchData(
                         new SrcTgtTouchDataImpl(touch.identifier, touch.clientX, touch.clientY, touch.screenX, touch.screenY, touch.target));
                 }
-            }
+            },
+            "onMove": (event: TouchEvent): void => (this.data as MultiTouchDataImpl).setTouch(event.changedTouches[0]),
 
-            public onMove(event: TouchEvent): void {
-                (this.parent.data as MultiTouchDataImpl).setTouch(event.changedTouches[0]);
-            }
+            "onRelease": (event: TouchEvent): void => (this.data as MultiTouchDataImpl).setTouch(event.changedTouches[0]),
 
-            public onRelease(event: TouchEvent): void {
-                (this.parent.data as MultiTouchDataImpl).setTouch(event.changedTouches[0]);
-            }
-
-            public reinitData(): void {
-                const currentIDs = this.parent.getFsm().getConccurFSMs()
+            "reinitData": (): void => {
+                const currentIDs = this.getFsm().getConccurFSMs()
                     .filter(fsm => fsm.isStarted())
                     .map(fsm => fsm.getTouchId());
 
-                this.parent.getData()
+                this.getData()
                     .getTouchData()
                     .filter(data => !currentIDs.includes(data.getTouchId()))
-                    .forEach(data => (this.parent.getData() as MultiTouchDataImpl)
+                    .forEach(data => (this.getData() as MultiTouchDataImpl)
                         .removeTouchData(data.getTouchId() as number));
             }
-        }(this);
+        };
 
         this.fsm.buildFSM(this.handler);
     }

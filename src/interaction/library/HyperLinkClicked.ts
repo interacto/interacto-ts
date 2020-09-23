@@ -34,13 +34,12 @@ export class HyperLinkClickedFSM extends FSM {
         const clicked: TerminalState = new TerminalState(this, "clicked");
         this.addState(clicked);
 
-        new class extends HyperLinkTransition {
-            public action(event: Event): void {
-                if (event.target !== null && isHyperLink(event.target) && dataHandler !== undefined) {
-                    dataHandler.initToClickedHandler(event);
-                }
+        const tr = new HyperLinkTransition(this.initState, clicked);
+        tr.action = (event: Event): void => {
+            if (event.target !== null && isHyperLink(event.target) && dataHandler !== undefined) {
+                dataHandler.initToClickedHandler(event);
             }
-        }(this.initState, clicked);
+        };
     }
 }
 
@@ -53,7 +52,6 @@ interface HyperLinkClickedFSMHandler extends FSMDataHandler {
  * A user interaction for CheckBox
  * @author Gwendal DIDOT
  */
-
 export class HyperLinkClicked extends InteractionImpl<WidgetData<HTMLAnchorElement>, HyperLinkClickedFSM> {
     private readonly handler: HyperLinkClickedFSMHandler;
 
@@ -63,24 +61,14 @@ export class HyperLinkClicked extends InteractionImpl<WidgetData<HTMLAnchorEleme
     public constructor() {
         super(new HyperLinkClickedFSM());
 
-        this.handler = new class implements HyperLinkClickedFSMHandler {
-            private readonly _parent: HyperLinkClicked;
-
-            public constructor(parent: HyperLinkClicked) {
-                this._parent = parent;
-            }
-
-            public initToClickedHandler(event: Event): void {
+        this.handler = {
+            "initToClickedHandler": (event: Event): void => {
                 if (event.target !== null && isHyperLink(event.target)) {
-                    (this._parent.data as WidgetDataImpl<HTMLAnchorElement>).setWidget(event.target);
+                    (this.data as WidgetDataImpl<HTMLAnchorElement>).setWidget(event.target);
                 }
-            }
-
-            public reinitData(): void {
-                this._parent.reinitData();
-            }
-
-        }(this);
+            },
+            "reinitData": (): void => this.reinitData()
+        };
 
         this.fsm.buildFSM(this.handler);
     }

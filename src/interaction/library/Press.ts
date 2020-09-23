@@ -30,13 +30,12 @@ export class PressFSM extends FSM {
         const pressed: TerminalState = new TerminalState(this, "pressed");
         this.addState(pressed);
 
-        new class extends PressureTransition {
-            public action(event: Event): void {
-                if (event.target !== null && isMouseDownEvent(event) && dataHandler !== undefined) {
-                    dataHandler.initToPress(event);
-                }
+        const pressure = new PressureTransition(this.initState, pressed);
+        pressure.action = (event: Event): void => {
+            if (event.target !== null && isMouseDownEvent(event) && dataHandler !== undefined) {
+                dataHandler.initToPress(event);
             }
-        }(this.initState, pressed);
+        };
     }
 }
 
@@ -57,22 +56,13 @@ export class Press extends InteractionImpl<PointData, PressFSM> {
     public constructor() {
         super(new PressFSM());
 
-        this.handler = new class implements PressFSMHandler {
-            private readonly _parent: Press;
+        this.handler = {
+            "initToPress": (evt: MouseEvent): void => (this.data as PointDataImpl)
+                .setPointData(evt.clientX, evt.clientY, evt.screenX, evt.screenY, evt.button,
+                    evt.target ?? undefined, evt.currentTarget ?? undefined),
+            "reinitData": (): void => this.reinitData()
+        };
 
-            public constructor(parent: Press) {
-                this._parent = parent;
-            }
-
-            public initToPress(evt: MouseEvent): void {
-                (this._parent.data as PointDataImpl).setPointData(evt.clientX, evt.clientY, evt.screenX, evt.screenY,
-                    evt.button, evt.target ?? undefined, evt.currentTarget ?? undefined);
-            }
-
-            public reinitData(): void {
-                this._parent.reinitData();
-            }
-        }(this);
         this.getFsm().buildFSM(this.handler);
     }
 

@@ -54,21 +54,19 @@ export class TextInputChangedFSM extends FSM {
         this.addState(changed);
         this.addState(ended);
 
-        new class extends TextInputChangedTransition {
-            public action(event: Event): void {
-                if (event.target !== null && isTextInput(event.target) && dataHandler !== undefined) {
-                    dataHandler.initToChangedHandler(event);
-                }
+        const trInit = new TextInputChangedTransition(this.initState, changed);
+        trInit.action = (event: Event): void => {
+            if (event.target !== null && isTextInput(event.target) && dataHandler !== undefined) {
+                dataHandler.initToChangedHandler(event);
             }
-        }(this.initState, changed);
+        };
 
-        new class extends TextInputChangedTransition {
-            public action(event: Event): void {
-                if (event.target !== null && isTextInput(event.target) && dataHandler !== undefined) {
-                    dataHandler.initToChangedHandler(event);
-                }
+        const trChanged = new TextInputChangedTransition(changed, changed);
+        trChanged.action = (event: Event): void => {
+            if (event.target !== null && isTextInput(event.target) && dataHandler !== undefined) {
+                dataHandler.initToChangedHandler(event);
             }
-        }(changed, changed);
+        };
 
         new TimeoutTransition(changed, ended, this.timeGapSupplier);
     }
@@ -90,24 +88,14 @@ export class TextInputChanged extends
     public constructor(timeGap?: number) {
         super(new TextInputChangedFSM(timeGap));
 
-        this.handler = new class implements TextInputChangedHandler {
-            private readonly _parent: TextInputChanged;
-
-            public constructor(parent: TextInputChanged) {
-                this._parent = parent;
-            }
-
-            public initToChangedHandler(event: Event): void {
+        this.handler = {
+            "initToChangedHandler": (event: Event): void => {
                 if (event.target !== null && isTextInput(event.target)) {
-                    (this._parent.data as WidgetDataImpl<HTMLInputElement | HTMLTextAreaElement>).setWidget(event.target);
+                    (this.data as WidgetDataImpl<HTMLInputElement | HTMLTextAreaElement>).setWidget(event.target);
                 }
-            }
-
-            public reinitData(): void {
-                this._parent.reinitData();
-            }
-
-        }(this);
+            },
+            "reinitData": (): void => this.reinitData()
+        };
 
         this.fsm.buildFSM(this.handler);
     }

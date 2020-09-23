@@ -19,33 +19,6 @@ import {FSMHandler} from "./FSMHandler";
  * A concurrent FSM: an FSM that contains multiple FSMs that run concurrently.
  */
 export class ConcurrentFSM<F extends FSM> extends FSM {
-    // eslint-disable-next-line @typescript-eslint/typedef,@typescript-eslint/naming-convention
-    private static readonly FSMConcurrHandler = class implements FSMHandler {
-        private readonly _parent: ConcurrentFSM<FSM>;
-
-        public constructor(fsm: ConcurrentFSM<FSM>) {
-            this._parent = fsm;
-        }
-
-        public fsmStarts(): void {
-            if (this._parent.isStarted()) {
-                this._parent.onStarting();
-            }
-        }
-
-        public fsmUpdates(): void {
-            this._parent.onUpdating();
-        }
-
-        public fsmStops(): void {
-            this._parent.onTerminating();
-        }
-
-        public fsmCancels(): void {
-            this._parent.onCancelling();
-        }
-    };
-
     private readonly conccurFSMs: Array<F>;
 
     public constructor(fsms: Array<F>) {
@@ -54,8 +27,24 @@ export class ConcurrentFSM<F extends FSM> extends FSM {
             throw new Error(`Requires more that 1 FSM: ${String(fsms)}`);
         }
 
+        const handler: FSMHandler = {
+            "fsmStarts": (): void => {
+                if (this.isStarted()) {
+                    this.onStarting();
+                }
+            },
+            "fsmUpdates": (): void => {
+                this.onUpdating();
+            },
+            "fsmStops": (): void => {
+                this.onTerminating();
+            },
+            "fsmCancels": (): void => {
+                this.onCancelling();
+            }
+        };
         this.conccurFSMs = [...fsms];
-        this.conccurFSMs.forEach(fsm => fsm.addHandler(new ConcurrentFSM.FSMConcurrHandler(this)));
+        this.conccurFSMs.forEach(fsm => fsm.addHandler(handler));
     }
 
     /**

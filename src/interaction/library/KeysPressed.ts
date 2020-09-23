@@ -12,8 +12,6 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {InputState} from "../../fsm/InputState";
-import {OutputState} from "../../fsm/OutputState";
 import {StdState} from "../../fsm/StdState";
 import {TerminalState} from "../../fsm/TerminalState";
 import {KeyPressureTransition} from "../../fsm/KeyPressureTransition";
@@ -50,55 +48,23 @@ export class KeysPressedFSM extends FSM {
         this.addState(pressed);
         this.addState(ended);
 
-        new class extends KeyPressureTransition {
-            private readonly _parent: KeysPressedFSM;
-
-            public constructor(parent: KeysPressedFSM, srcState: OutputState, tgtState: InputState) {
-                super(srcState, tgtState);
-                this._parent = parent;
-            }
-
-            public action(event: Event): void {
-                if (event instanceof KeyboardEvent) {
-                    this._parent.currentCodes.push(event.code);
-                    if (dataHandler !== undefined) {
-                        dataHandler.onKeyPressed(event);
-                    }
+        const actionkp = (event: Event): void => {
+            if (event instanceof KeyboardEvent) {
+                this.currentCodes.push(event.code);
+                if (dataHandler !== undefined) {
+                    dataHandler.onKeyPressed(event);
                 }
             }
+        };
+        const kpInit = new KeyPressureTransition(this.initState, pressed);
+        kpInit.action = actionkp;
 
-        }(this, this.initState, pressed);
-        new class extends KeyPressureTransition {
-            private readonly _parent: KeysPressedFSM;
+        const kpPressed = new KeyPressureTransition(pressed, pressed);
+        kpPressed.action = actionkp;
 
-            public constructor(parent: KeysPressedFSM, srcState: OutputState, tgtState: InputState) {
-                super(srcState, tgtState);
-                this._parent = parent;
-            }
-
-            public action(event: Event): void {
-                if (event instanceof KeyboardEvent) {
-                    this._parent.currentCodes.push(event.code);
-                    if (dataHandler !== undefined) {
-                        dataHandler.onKeyPressed(event);
-                    }
-                }
-            }
-
-        }(this, pressed, pressed);
-
-        new class extends KeyReleaseTransition {
-            private readonly _parent: KeysPressedFSM;
-
-            public constructor(parent: KeysPressedFSM, srcState: OutputState, tgtState: InputState) {
-                super(srcState, tgtState);
-                this._parent = parent;
-            }
-
-            public isGuardOK(event: Event): boolean {
-                return event instanceof KeyboardEvent && (this._parent.currentCodes.find(value => value === event.code) !== undefined);
-            }
-        }(this, pressed, ended);
+        const kr = new KeyReleaseTransition(pressed, ended);
+        kr.isGuardOK = (event: Event): boolean => event instanceof KeyboardEvent &&
+            (this.currentCodes.find(value => value === event.code) !== undefined);
     }
 
     public reinit(): void {
@@ -124,22 +90,13 @@ export class KeysPressed extends InteractionImpl<KeysData, KeysPressedFSM> {
     public constructor() {
         super(new KeysPressedFSM());
 
-        this.handler = new class implements KeysPressedFSMHandler {
-            private readonly _parent: KeysPressed;
-
-            public constructor(parent: KeysPressed) {
-                this._parent = parent;
-            }
-
-            public onKeyPressed(event: KeyboardEvent): void {
-                (this._parent.data as (KeysDataImpl)).setKeysDataTarget(event);
-                (this._parent.data as (KeysDataImpl)).addKeysDataKey(event);
-            }
-
-            public reinitData(): void {
-                this._parent.reinitData();
-            }
-        }(this);
+        this.handler = {
+            "onKeyPressed": (event: KeyboardEvent): void => {
+                (this.data as (KeysDataImpl)).setKeysDataTarget(event);
+                (this.data as (KeysDataImpl)).addKeysDataKey(event);
+            },
+            "reinitData": (): void => this.reinitData()
+        };
 
         this.getFsm().buildFSM(this.handler);
     }

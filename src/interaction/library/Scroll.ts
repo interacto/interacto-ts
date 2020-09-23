@@ -33,13 +33,12 @@ export class ScrollFSM extends FSM {
         const scrolled: TerminalState = new TerminalState(this, "scrolled");
         this.addState(scrolled);
 
-        new class extends ScrollTransition {
-            public action(event: Event): void {
-                if (event.target !== null && isScrollEvent(event) && dataHandler !== undefined) {
-                    dataHandler.initToScroll(event);
-                }
+        const scroll = new ScrollTransition(this.initState, scrolled);
+        scroll.action = (event: Event): void => {
+            if (event.target !== null && isScrollEvent(event) && dataHandler !== undefined) {
+                dataHandler.initToScroll(event);
             }
-        }(this.initState, scrolled);
+        };
     }
 }
 
@@ -61,21 +60,11 @@ export class Scroll extends InteractionImpl<ScrollData, ScrollFSM> {
     public constructor() {
         super(new ScrollFSM());
 
-        this.handler = new class implements ScrollFSMHandler {
-            private readonly _parent: Scroll;
+        this.handler = {
+            "initToScroll": (event: MouseEvent): void => (this.getData() as ScrollDataImpl).setScrollData(event),
+            "reinitData": (): void => this.reinitData()
+        };
 
-            public constructor(parent: Scroll) {
-                this._parent = parent;
-            }
-
-            public initToScroll(event: MouseEvent): void {
-                (this._parent.getData() as ScrollDataImpl).setScrollData(event);
-            }
-
-            public reinitData(): void {
-                this._parent.reinitData();
-            }
-        }(this);
         this.getFsm().buildFSM(this.handler);
     }
 

@@ -33,13 +33,12 @@ export class ColorPickedFSM extends FSM {
         const picked: TerminalState = new TerminalState(this, "picked");
         this.addState(picked);
 
-        new class extends ColorPickedTransition {
-            public action(event: Event): void {
-                if (event.target !== null && isColorChoice(event.target) && dataHandler !== undefined) {
-                    dataHandler.initToPickedHandler(event);
-                }
+        const tr = new ColorPickedTransition(this.initState, picked);
+        tr.action = (event: Event): void => {
+            if (event.target !== null && isColorChoice(event.target) && dataHandler !== undefined) {
+                dataHandler.initToPickedHandler(event);
             }
-        }(this.initState, picked);
+        };
     }
 }
 
@@ -62,24 +61,14 @@ export class ColorPicked extends InteractionImpl<WidgetData<HTMLInputElement>, C
     public constructor() {
         super(new ColorPickedFSM());
 
-        this.handler = new class implements ColorPickedHandler {
-            private readonly _parent: ColorPicked;
-
-            public constructor(parent: ColorPicked) {
-                this._parent = parent;
-            }
-
-            public initToPickedHandler(event: Event): void {
+        this.handler = {
+            "initToPickedHandler": (event: Event): void => {
                 if (event.target !== null && isColorChoice(event.target)) {
-                    (this._parent.data as WidgetDataImpl<HTMLInputElement>).setWidget(event.target);
+                    (this.data as WidgetDataImpl<HTMLInputElement>).setWidget(event.target);
                 }
-            }
-
-            public reinitData(): void {
-                this._parent.reinitData();
-            }
-
-        }(this);
+            },
+            "reinitData": (): void => this.reinitData()
+        };
 
         this.fsm.buildFSM(this.handler);
     }

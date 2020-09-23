@@ -34,13 +34,12 @@ export class DatePickedFSM extends FSM {
         const picked: TerminalState = new TerminalState(this, "picked");
         this.addState(picked);
 
-        new class extends DatePickedTransition {
-            public action(event: Event): void {
-                if (event.target !== null && isDatePicker(event.target) && dataHandler !== undefined) {
-                    dataHandler.initToPickedHandler(event);
-                }
+        const tr = new DatePickedTransition(this.initState, picked);
+        tr.action = (event: Event): void => {
+            if (event.target !== null && isDatePicker(event.target) && dataHandler !== undefined) {
+                dataHandler.initToPickedHandler(event);
             }
-        }(this.initState, picked);
+        };
     }
 }
 
@@ -63,24 +62,14 @@ export class DatePicked extends InteractionImpl<WidgetData<HTMLInputElement>, Da
     public constructor() {
         super(new DatePickedFSM());
 
-        this.handler = new class implements DatePickedHandler {
-            private readonly _parent: DatePicked;
-
-            public constructor(parent: DatePicked) {
-                this._parent = parent;
-            }
-
-            public initToPickedHandler(event: Event): void {
+        this.handler = {
+            "initToPickedHandler": (event: Event): void => {
                 if (event.target !== null && isDatePicker(event.target)) {
-                    (this._parent.data as WidgetDataImpl<HTMLInputElement>).setWidget(event.target);
+                    (this.data as WidgetDataImpl<HTMLInputElement>).setWidget(event.target);
                 }
-            }
-
-            public reinitData(): void {
-                this._parent.reinitData();
-            }
-
-        }(this);
+            },
+            "reinitData": (): void => this.reinitData()
+        };
 
         this.fsm.buildFSM(this.handler);
     }

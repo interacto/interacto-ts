@@ -15,8 +15,6 @@
 import {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {TerminalState} from "../../fsm/TerminalState";
 import {ClickTransition} from "../../fsm/ClickTransition";
-import {InputState} from "../../fsm/InputState";
-import {OutputState} from "../../fsm/OutputState";
 import {PointData} from "./PointData";
 import {FSM} from "../../fsm/FSM";
 import {InteractionImpl} from "../InteractionImpl";
@@ -44,29 +42,18 @@ export class ClickFSM extends FSM {
         const clicked = new TerminalState(this, "clicked");
         this.addState(clicked);
 
-        new class extends ClickTransition {
-            private readonly _parent: ClickFSM;
+        const clickt = new ClickTransition(this.initState, clicked);
+        clickt.action = (event: Event): void => {
+            if (event instanceof MouseEvent) {
+                this.setCheckButton(event.button);
 
-            public constructor(parent: ClickFSM, srcState: OutputState, tgtState: InputState) {
-                super(srcState, tgtState);
-                this._parent = parent;
-            }
-
-            public action(event: Event): void {
-                if (event instanceof MouseEvent) {
-                    this._parent.setCheckButton(event.button);
-
-                    if (dataHandler !== undefined) {
-                        dataHandler.initToClicked(event);
-                    }
+                if (dataHandler !== undefined) {
+                    dataHandler.initToClicked(event);
                 }
             }
-
-            public isGuardOK(event: Event): boolean {
-                return super.isGuardOK(event) && this._parent.checkButton === undefined ||
-                    (event instanceof MouseEvent && event.button === this._parent.checkButton);
-            }
-        }(this, this.initState, clicked);
+        };
+        clickt.isGuardOK = (event: Event): boolean => this.checkButton === undefined ||
+            (event instanceof MouseEvent && event.button === this.checkButton);
     }
 
     public getCheckButton(): number {
@@ -98,22 +85,13 @@ export class Click extends InteractionImpl<PointData, ClickFSM> {
     public constructor(fsm?: ClickFSM) {
         super(fsm ?? new ClickFSM());
 
-        this.handler = new class implements ClickFSMHandler {
-            private readonly _parent: Click;
-
-            public constructor(parent: Click) {
-                this._parent = parent;
-            }
-
-            public initToClicked(evt: MouseEvent): void {
-                (this._parent.data as PointDataImpl).setPointData(evt.clientX, evt.clientY, evt.screenX, evt.screenY,
+        this.handler = {
+            "initToClicked": (evt: MouseEvent): void => {
+                (this.data as PointDataImpl).setPointData(evt.clientX, evt.clientY, evt.screenX, evt.screenY,
                     evt.button, evt.target ?? undefined, evt.currentTarget ?? undefined);
-            }
-
-            public reinitData(): void {
-                this._parent.reinitData();
-            }
-        }(this);
+            },
+            "reinitData": (): void => this.reinitData()
+        };
 
         this.getFsm().buildFSM(this.handler);
     }

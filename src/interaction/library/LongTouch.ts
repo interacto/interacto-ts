@@ -21,8 +21,6 @@ import {StdState} from "../../fsm/StdState";
 import {TerminalState} from "../../fsm/TerminalState";
 import {CancellingState} from "../../fsm/CancellingState";
 import {TouchPressureTransition} from "../../fsm/TouchPressureTransition";
-import {OutputState} from "../../fsm/OutputState";
-import {InputState} from "../../fsm/InputState";
 import {TouchReleaseTransition} from "../../fsm/TouchReleaseTransition";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 
@@ -62,38 +60,19 @@ class LongTouchFSM extends FSM {
         this.addState(releasedTooEarly);
         this.addState(timeouted);
 
-        new class extends TouchPressureTransition {
-            private readonly _parent: LongTouchFSM;
-
-            public constructor(parent: LongTouchFSM, srcState: OutputState, tgtState: InputState) {
-                super(srcState, tgtState);
-                this._parent = parent;
-            }
-
-            public action(event: Event): void {
-                if (event instanceof TouchEvent) {
-                    this._parent.currentTouchID = event.changedTouches[0].identifier;
-                    if (dataHandler !== undefined) {
-                        dataHandler.tap(event);
-                    }
+        const press = new TouchPressureTransition(this.initState, touched);
+        press.action = (event: Event): void => {
+            if (event instanceof TouchEvent) {
+                this.currentTouchID = event.changedTouches[0].identifier;
+                if (dataHandler !== undefined) {
+                    dataHandler.tap(event);
                 }
             }
-        }(this, this.initState, touched);
+        };
 
-        new class extends TouchReleaseTransition {
-            private readonly _parent: LongTouchFSM;
-
-            public constructor(parent: LongTouchFSM, srcState: OutputState, tgtState: InputState) {
-                super(srcState, tgtState);
-                this._parent = parent;
-            }
-
-            public isGuardOK(event: Event): boolean {
-                return super.isGuardOK(event) &&
-                    event instanceof TouchEvent &&
-                    event.changedTouches[0].identifier === this._parent.currentTouchID;
-            }
-        }(this, touched, releasedTooEarly);
+        const release = new TouchReleaseTransition(touched, releasedTooEarly);
+        release.isGuardOK = (event: Event): boolean => event instanceof TouchEvent &&
+            event.changedTouches[0].identifier === this.currentTouchID;
 
         new TimeoutTransition(touched, timeouted, () => this.duration);
 
@@ -121,27 +100,18 @@ export class LongTouch extends InteractionImpl<TouchData, LongTouchFSM> {
     public constructor(duration: number) {
         super(new LongTouchFSM(duration));
 
-        this.handler = new class implements LongTouchFSMHandler {
-            private readonly _parent: LongTouch;
-
-            public constructor(parent: LongTouch) {
-                this._parent = parent;
-            }
-
-            public tap(evt: TouchEvent): void {
+        this.handler = {
+            "tap": (evt: TouchEvent): void => {
                 if (evt.changedTouches.length > 0) {
                     const touch = evt.changedTouches[0];
-                    (this._parent.data as (SrcTgtTouchDataImpl)).setPointData(
+                    (this.data as (SrcTgtTouchDataImpl)).setPointData(
                         touch.clientX, touch.clientY, touch.screenX, touch.screenY, undefined,
                         touch.target, touch.target);
-                    (this._parent.data as (SrcTgtTouchDataImpl)).setTouchId(touch.identifier);
+                    (this.data as (SrcTgtTouchDataImpl)).setTouchId(touch.identifier);
                 }
-            }
-
-            public reinitData(): void {
-                this._parent.reinitData();
-            }
-        }(this);
+            },
+            "reinitData": (): void => this.reinitData()
+        };
 
         this.getFsm().buildFSM(this.handler);
     }

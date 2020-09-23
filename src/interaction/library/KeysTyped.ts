@@ -88,22 +88,14 @@ export class KeysTyped extends InteractionImpl<KeysData, KeysTypedFSM> {
     public constructor() {
         super(new KeysTypedFSM());
 
-        this.handler = new class implements KeyTypedFSMHandler {
-            private readonly _parent: KeysTyped;
+        this.handler = {
+            "onKeyTyped": (event: KeyboardEvent): void => {
+                (this.data as (KeysDataImpl)).setKeysDataTarget(event);
+                (this.data as (KeysDataImpl)).addKeysDataKey(event);
+            },
+            "reinitData": (): void => this.reinitData()
+        };
 
-            public constructor(parent: KeysTyped) {
-                this._parent = parent;
-            }
-
-            public onKeyTyped(event: KeyboardEvent): void {
-                (this._parent.data as (KeysDataImpl)).setKeysDataTarget(event);
-                (this._parent.data as (KeysDataImpl)).addKeysDataKey(event);
-            }
-
-            public reinitData(): void {
-                this._parent.reinitData();
-            }
-        }(this);
         this.getFsm().buildFSM(this.handler);
     }
 

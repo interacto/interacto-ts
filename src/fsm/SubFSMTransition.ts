@@ -40,46 +40,39 @@ export class SubFSMTransition extends Transition {
         super(srcState, tgtState);
         this.subFSM = fsm;
         this.subFSM.setInner(true);
-        this.subFSMHandler = new class implements FSMHandler {
-            protected _parent: SubFSMTransition;
-
-            public constructor(parentFSM: SubFSMTransition) {
-                this._parent = parentFSM;
-            }
-
-            public fsmStarts(): void {
-                this._parent.src.exit();
-            }
-
-            public fsmUpdates(): void {
-                this._parent.src.getFSM().setCurrentState(this._parent.subFSM.getCurrentState());
-                this._parent.src.getFSM().onUpdating();
-            }
-
-            public fsmStops(): void {
-                this._parent.action(undefined);
-                this._parent.subFSM.removeHandler(this._parent.subFSMHandler);
-                this._parent.src.getFSM().setCurrentSubFSM(undefined);
-                if (this._parent.tgt instanceof TerminalState) {
-                    this._parent.tgt.enter();
+        this.subFSMHandler = {
+            "fsmStarts": (): void => {
+                this.src.exit();
+            },
+            "fsmUpdates": (): void => {
+                this.src.getFSM().setCurrentState(this.subFSM.getCurrentState());
+                this.src.getFSM().onUpdating();
+            },
+            "fsmStops": (): void => {
+                this.action(undefined);
+                this.subFSM.removeHandler(this.subFSMHandler);
+                this.src.getFSM().setCurrentSubFSM(undefined);
+                if (this.tgt instanceof TerminalState) {
+                    this.tgt.enter();
                     return;
                 }
-                if (this._parent.tgt instanceof CancellingState) {
-                    this.fsmCancels();
+                if (this.tgt instanceof CancellingState) {
+                    this.cancelsFSM();
                     return;
                 }
-                if (isOutputStateType(this._parent.tgt)) {
-                    this._parent.src.getFSM().setCurrentState(this._parent.tgt);
-                    this._parent.tgt.enter();
+                if (isOutputStateType(this.tgt)) {
+                    this.src.getFSM().setCurrentState(this.tgt);
+                    this.tgt.enter();
                 }
-            }
+            },
+            "fsmCancels": (): void => this.cancelsFSM()
+        };
+    }
 
-            public fsmCancels(): void {
-                this._parent.subFSM.removeHandler(this._parent.subFSMHandler);
-                this._parent.src.getFSM().setCurrentSubFSM(undefined);
-                this._parent.src.getFSM().onCancelling();
-            }
-        }(this);
+    private cancelsFSM(): void {
+        this.subFSM.removeHandler(this.subFSMHandler);
+        this.src.getFSM().setCurrentSubFSM(undefined);
+        this.src.getFSM().onCancelling();
     }
 
     public execute(event: Event): InputState | undefined {

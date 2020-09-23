@@ -13,11 +13,9 @@
  */
 
 import {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import {StdState} from "../../../src/fsm/StdState";
-import {TerminalState} from "../../../src/fsm/TerminalState";
-import {CancellingState} from "../../../src/fsm/CancellingState";
-import {OutputState} from "../../../src/fsm/OutputState";
-import {InputState} from "../../../src/fsm/InputState";
+import {StdState} from "../../fsm/StdState";
+import {TerminalState} from "../../fsm/TerminalState";
+import {CancellingState} from "../../fsm/CancellingState";
 import {MoveTransition} from "../../fsm/MoveTransition";
 import {EscapeKeyPressureTransition} from "../../fsm/EscapeKeyPressureTransition";
 import {SrcTgtPointsData, SrcTgtPointsDataImpl} from "./SrcTgtPointsData";
@@ -61,95 +59,41 @@ export class DnDFSM extends FSM {
 
         this.setStartingState(dragged);
 
-        new class extends PressureTransition {
-            private readonly _parent: DnDFSM;
-
-            public constructor(parent: DnDFSM, srcState: OutputState, tgtState: InputState) {
-                super(srcState, tgtState);
-                this._parent = parent;
-            }
-
-            public action(event: Event): void {
-
-                if (event instanceof MouseEvent) {
-                    this._parent.buttonToCheck = event.button;
-                    if (dataHandler !== undefined) {
-                        dataHandler.onPress(event);
-                    }
+        const press = new PressureTransition(this.initState, pressed);
+        press.action = (event: Event): void => {
+            if (event instanceof MouseEvent) {
+                this.buttonToCheck = event.button;
+                if (dataHandler !== undefined) {
+                    dataHandler.onPress(event);
                 }
             }
+        };
 
-        }(this, this.initState, pressed);
+        const relCancel = new ReleaseTransition(pressed, cancelled);
+        relCancel.isGuardOK = (event: Event): boolean => event instanceof MouseEvent && event.button === this.buttonToCheck;
 
-        new class extends ReleaseTransition {
-            private readonly _parent: DnDFSM;
-
-            public constructor(parent: DnDFSM, srcState: OutputState, tgtState: InputState) {
-                super(srcState, tgtState);
-                this._parent = parent;
+        const guardMove = (event: Event): boolean => event instanceof MouseEvent && event.button === this.buttonToCheck;
+        const actionMove = (event: Event): void => {
+            if (dataHandler !== undefined && event instanceof MouseEvent) {
+                dataHandler.onDrag(event);
             }
+        };
 
-            public isGuardOK(event: Event): boolean {
-                return event instanceof MouseEvent && event.button === this._parent.buttonToCheck;
+        const move = new MoveTransition(pressed, dragged);
+        move.isGuardOK = guardMove;
+        move.action = actionMove;
+
+        const moveDrag = new MoveTransition(dragged, dragged);
+        moveDrag.isGuardOK = guardMove;
+        moveDrag.action = actionMove;
+
+        const release = new ReleaseTransition(dragged, released);
+        release.isGuardOK = (event: Event): boolean => event instanceof MouseEvent && event.button === this.buttonToCheck;
+        release.action = (event: Event): void => {
+            if (dataHandler !== undefined && event instanceof MouseEvent) {
+                dataHandler.onRelease(event);
             }
-        }(this, pressed, cancelled);
-
-        new class extends MoveTransition {
-            private readonly _parent: DnDFSM;
-
-            public constructor(parent: DnDFSM, srcState: OutputState, tgtState: InputState) {
-                super(srcState, tgtState);
-                this._parent = parent;
-            }
-
-            public isGuardOK(event: Event): boolean {
-                return event instanceof MouseEvent && event.button === this._parent.buttonToCheck;
-            }
-
-            public action(event: Event): void {
-                if (dataHandler !== undefined && event instanceof MouseEvent) {
-                    dataHandler.onDrag(event);
-                }
-            }
-        }(this, pressed, dragged);
-
-        new class extends MoveTransition {
-            private readonly _parent: DnDFSM;
-
-            public constructor(parent: DnDFSM, srcState: OutputState, tgtState: InputState) {
-                super(srcState, tgtState);
-                this._parent = parent;
-            }
-
-            public isGuardOK(event: Event): boolean {
-                return event instanceof MouseEvent && event.button === this._parent.buttonToCheck;
-            }
-
-            public action(event: Event): void {
-                if (dataHandler !== undefined && event instanceof MouseEvent) {
-                    dataHandler.onDrag(event);
-                }
-            }
-        }(this, dragged, dragged);
-
-        new class extends ReleaseTransition {
-            private readonly _parent: DnDFSM;
-
-            public constructor(parent: DnDFSM, srcState: OutputState, tgtState: InputState) {
-                super(srcState, tgtState);
-                this._parent = parent;
-            }
-
-            public isGuardOK(event: Event): boolean {
-                return event instanceof MouseEvent && event.button === this._parent.buttonToCheck;
-            }
-
-            public action(event: Event): void {
-                if (dataHandler !== undefined && event instanceof MouseEvent) {
-                    dataHandler.onRelease(event);
-                }
-            }
-        }(this, dragged, released);
+        };
 
         if (this.cancellable) {
             new EscapeKeyPressureTransition(pressed, cancelled);
@@ -182,43 +126,31 @@ export class DnD extends InteractionImpl<SrcTgtPointsData, DnDFSM> {
     public constructor(srcOnUpdate: boolean, cancellable: boolean) {
         super(new DnDFSM(cancellable));
 
-        this.handler = new class implements DnDFSMHandler {
-            private readonly _parent: DnD;
-
-            public constructor(parent: DnD) {
-                this._parent = parent;
-            }
-
-            public onPress(evt: MouseEvent): void {
-                (this._parent.data as (SrcTgtPointsDataImpl)).setPointData(evt.clientX, evt.clientY, evt.screenX, evt.screenY,
+        this.handler = {
+            "onPress": (evt: MouseEvent): void => {
+                (this.data as (SrcTgtPointsDataImpl)).setPointData(evt.clientX, evt.clientY, evt.screenX, evt.screenY,
                     evt.button, evt.target ?? undefined, evt.currentTarget ?? undefined);
                 this.setTgt(evt);
-            }
-
-            public onDrag(evt: MouseEvent): void {
+            },
+            "onDrag": (evt: MouseEvent): void => {
                 if (srcOnUpdate) {
-                    const d: SrcTgtPointsDataImpl = this._parent.data as (SrcTgtPointsDataImpl);
-                    d.setPointData(this._parent.data.getTgtClientX(), this._parent.data.getTgtClientY(), this._parent.data.getTgtScreenX(),
-                        this._parent.data.getTgtScreenY(), this._parent.data.getButton(),
-                        this._parent.data.getTgtObject(), this._parent.data.getTgtObject());
+                    const d: SrcTgtPointsDataImpl = this.data as (SrcTgtPointsDataImpl);
+                    d.setPointData(this.data.getTgtClientX(), this.data.getTgtClientY(), this.data.getTgtScreenX(),
+                        this.data.getTgtScreenY(), this.data.getButton(),
+                        this.data.getTgtObject(), this.data.getTgtObject());
                 }
                 this.setTgt(evt);
-            }
+            },
+            "onRelease": (evt: MouseEvent): void => this.setTgt(evt),
+            "reinitData": (): void => this.reinitData()
+        };
 
-            public onRelease(evt: MouseEvent): void {
-                this.setTgt(evt);
-            }
-
-            public reinitData(): void {
-                this._parent.reinitData();
-            }
-
-            private setTgt(evt: MouseEvent): void {
-                (this._parent.data as (SrcTgtPointsDataImpl)).setTgtData(evt.clientX, evt.clientY, evt.screenX, evt.screenY, evt.target ?? undefined);
-                (this._parent.data as (SrcTgtPointsDataImpl)).setModifiersData(evt);
-            }
-        }(this);
         this.getFsm().buildFSM(this.handler);
+    }
+
+    private setTgt(evt: MouseEvent): void {
+        (this.data as (SrcTgtPointsDataImpl)).setTgtData(evt.clientX, evt.clientY, evt.screenX, evt.screenY, evt.target ?? undefined);
+        (this.data as (SrcTgtPointsDataImpl)).setModifiersData(evt);
     }
 
     public createDataObject(): SrcTgtPointsData {

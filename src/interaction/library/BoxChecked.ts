@@ -35,14 +35,12 @@ export class BoxCheckedFSM extends FSM {
         const checked: TerminalState = new TerminalState(this, "checked");
         this.addState(checked);
 
-        new class extends BoxCheckPressedTransition {
-
-            public action(event: Event): void {
-                if (event.target !== null && isCheckBox(event.target) && dataHandler !== undefined) {
-                    dataHandler.initToCheckHandler(event);
-                }
+        const tr = new BoxCheckPressedTransition(this.initState, checked);
+        tr.action = (event: Event): void => {
+            if (event.target !== null && isCheckBox(event.target) && dataHandler !== undefined) {
+                dataHandler.initToCheckHandler(event);
             }
-        }(this.initState, checked);
+        };
     }
 }
 
@@ -63,24 +61,14 @@ export class BoxChecked extends InteractionImpl<WidgetData<HTMLInputElement>, Bo
     public constructor() {
         super(new BoxCheckedFSM());
 
-        this.handler = new class implements BoxCheckedHandler {
-            private readonly _parent: BoxChecked;
-
-            public constructor(parent: BoxChecked) {
-                this._parent = parent;
-            }
-
-            public initToCheckHandler(event: Event): void {
+        this.handler = {
+            "initToCheckHandler": (event: Event): void => {
                 if (event.target !== null && isCheckBox(event.target)) {
-                    (this._parent.data as WidgetDataImpl<HTMLInputElement>).setWidget(event.target);
+                    (this.data as WidgetDataImpl<HTMLInputElement>).setWidget(event.target);
                 }
-            }
-
-            public reinitData(): void {
-                this._parent.reinitData();
-            }
-
-        }(this);
+            },
+            "reinitData": (): void => this.reinitData()
+        };
 
         this.fsm.buildFSM(this.handler);
     }

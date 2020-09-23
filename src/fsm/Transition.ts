@@ -51,7 +51,7 @@ export abstract class Transition {
         return undefined;
     }
 
-    protected action(_event?: Event): void {
+    public action(_event?: Event): void {
     }
 
     public abstract accept(event: Event): boolean;

@@ -16,8 +16,6 @@ import {InteractionImpl} from "../InteractionImpl";
 import {FSM} from "../../fsm/FSM";
 import {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {TerminalState} from "../../fsm/TerminalState";
-import {OutputState} from "../../fsm/OutputState";
-import {InputState} from "../../fsm/InputState";
 import {TouchPressureTransition} from "../../fsm/TouchPressureTransition";
 import {StdState} from "../../fsm/StdState";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
@@ -56,86 +54,39 @@ class TapFSM extends FSM {
         this.addState(ended);
         this.addState(timeouted);
 
-        new class extends TouchPressureTransition {
-            private readonly _parent: TapFSM;
-
-            public constructor(parent: TapFSM, srcState: OutputState, tgtState: InputState) {
-                super(srcState, tgtState);
-                this._parent = parent;
+        const pressInit = new TouchPressureTransition(this.initState, ended);
+        const pressInitAction = (event: Event): void => {
+            if (event instanceof TouchEvent && dataHandler !== undefined) {
+                dataHandler.tap(event);
             }
+        };
+        pressInit.action = pressInitAction;
+        pressInit.isGuardOK = (_event: Event): boolean => this.nbTaps === 1;
 
-            public action(event: Event): void {
-                if (event instanceof TouchEvent && dataHandler !== undefined) {
+        const pressTouched = new TouchPressureTransition(this.initState, touched);
+        pressTouched.action = (event: Event): void => {
+            if (event instanceof TouchEvent) {
+                this.countTaps++;
+
+                if (dataHandler !== undefined) {
                     dataHandler.tap(event);
                 }
             }
+        };
+        pressTouched.isGuardOK = (_event: Event): boolean => this.nbTaps > 1;
 
-            public isGuardOK(_event: Event): boolean {
-                return this._parent.nbTaps === 1;
+        const pressTouchedTouched = new TouchPressureTransition(touched, touched);
+        pressTouchedTouched.action = (event: Event): void => {
+            this.countTaps++;
+            if (event instanceof TouchEvent && dataHandler !== undefined) {
+                dataHandler.tap(event);
             }
-        }(this, this.initState, ended);
+        };
+        pressTouchedTouched.isGuardOK = (_event: Event): boolean => (this.countTaps + 1) < this.nbTaps;
 
-        new class extends TouchPressureTransition {
-            private readonly _parent: TapFSM;
-
-            public constructor(parent: TapFSM, srcState: OutputState, tgtState: InputState) {
-                super(srcState, tgtState);
-                this._parent = parent;
-            }
-
-            public action(event: Event): void {
-                if (event instanceof TouchEvent) {
-                    this._parent.countTaps++;
-
-                    if (dataHandler !== undefined) {
-                        dataHandler.tap(event);
-                    }
-                }
-            }
-
-            public isGuardOK(_event: Event): boolean {
-                return this._parent.nbTaps > 1;
-            }
-        }(this, this.initState, touched);
-
-        new class extends TouchPressureTransition {
-            private readonly _parent: TapFSM;
-
-            public constructor(parent: TapFSM, srcState: OutputState, tgtState: InputState) {
-                super(srcState, tgtState);
-                this._parent = parent;
-            }
-
-            public action(event: Event): void {
-                this._parent.countTaps++;
-                if (event instanceof TouchEvent && dataHandler !== undefined) {
-                    dataHandler.tap(event);
-                }
-            }
-
-            public isGuardOK(_event: Event): boolean {
-                return (this._parent.countTaps + 1) < this._parent.nbTaps;
-            }
-        }(this, touched, touched);
-
-        new class extends TouchPressureTransition {
-            private readonly _parent: TapFSM;
-
-            public constructor(parent: TapFSM, srcState: OutputState, tgtState: InputState) {
-                super(srcState, tgtState);
-                this._parent = parent;
-            }
-
-            public action(event: Event): void {
-                if (event instanceof TouchEvent && dataHandler !== undefined) {
-                    dataHandler.tap(event);
-                }
-            }
-
-            public isGuardOK(_event: Event): boolean {
-                return (this._parent.countTaps + 1) === this._parent.nbTaps;
-            }
-        }(this, touched, ended);
+        const pressEnded = new TouchPressureTransition(touched, ended);
+        pressEnded.action = pressInitAction;
+        pressEnded.isGuardOK = (_event: Event): boolean => (this.countTaps + 1) === this.nbTaps;
 
         new TimeoutTransition(touched, timeouted, () => 1000);
     }
@@ -166,26 +117,17 @@ export class Tap extends InteractionImpl<TapData, TapFSM> {
     public constructor(numberTaps: number) {
         super(new TapFSM(numberTaps));
 
-        this.handler = new class implements TapFSMHandler {
-            private readonly _parent: Tap;
-
-            public constructor(parent: Tap) {
-                this._parent = parent;
-            }
-
-            public tap(evt: TouchEvent): void {
+        this.handler = {
+            "tap": (evt: TouchEvent): void => {
                 if (evt.changedTouches.length > 0) {
                     const touch = evt.changedTouches[0];
-                    (this._parent.data as (TapDataImpl)).addTapData(
+                    (this.data as (TapDataImpl)).addTapData(
                         new TouchDataImpl(touch.identifier, touch.clientX, touch.clientY,
                             touch.screenX, touch.screenY, touch.target));
                 }
-            }
-
-            public reinitData(): void {
-                this._parent.reinitData();
-            }
-        }(this);
+            },
+            "reinitData": (): void => this.reinitData()
+        };
 
         this.getFsm().buildFSM(this.handler);
     }

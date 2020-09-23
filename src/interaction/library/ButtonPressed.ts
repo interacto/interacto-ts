@@ -39,13 +39,12 @@ export class ButtonPressedFSM extends FSM {
         const pressed: TerminalState = new TerminalState(this, "pressed");
         this.addState(pressed);
 
-        new class extends ButtonPressedTransition {
-            public action(event: Event): void {
-                if (event.target !== null && isButton(event.target) && dataHandler !== undefined) {
-                    dataHandler.initToPressedHandler(event);
-                }
+        const tr = new ButtonPressedTransition(this.initState, pressed);
+        tr.action = (event: Event): void => {
+            if (event.target !== null && isButton(event.target) && dataHandler !== undefined) {
+                dataHandler.initToPressedHandler(event);
             }
-        }(this.initState, pressed);
+        };
     }
 }
 
@@ -66,23 +65,14 @@ export class ButtonPressed extends InteractionImpl<WidgetData<HTMLButtonElement>
     public constructor() {
         super(new ButtonPressedFSM());
 
-        this.handler = new class implements ButtonPressedFSMHandler {
-            private readonly _parent: ButtonPressed;
-
-            public constructor(parent: ButtonPressed) {
-                this._parent = parent;
-            }
-
-            public initToPressedHandler(event: Event): void {
+        this.handler = {
+            "initToPressedHandler": (event: Event): void => {
                 if (event.target !== null && isButton(event.target)) {
-                    (this._parent.data as WidgetDataImpl<HTMLButtonElement>).setWidget(event.target);
+                    (this.data as WidgetDataImpl<HTMLButtonElement>).setWidget(event.target);
                 }
-            }
-
-            public reinitData(): void {
-                this._parent.reinitData();
-            }
-        }(this);
+            },
+            "reinitData": (): void => this.reinitData()
+        };
 
         this.fsm.buildFSM(this.handler);
     }

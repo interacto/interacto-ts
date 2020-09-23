@@ -34,13 +34,12 @@ export class ComboBoxSelectedFSM extends FSM {
         const selected: TerminalState = new TerminalState(this, "selected");
         this.addState(selected);
 
-        new class extends ComboBoxTransition {
-            public action(event: Event): void {
-                if (event.target !== null && isComboBox(event.target) && dataHandler !== undefined) {
-                    dataHandler.initToSelectedHandler(event);
-                }
+        const tr = new ComboBoxTransition(this.initState, selected);
+        tr.action = (event: Event): void => {
+            if (event.target !== null && isComboBox(event.target) && dataHandler !== undefined) {
+                dataHandler.initToSelectedHandler(event);
             }
-        }(this.initState, selected);
+        };
     }
 }
 
@@ -63,24 +62,14 @@ export class ComboBoxSelected extends InteractionImpl<WidgetData<HTMLSelectEleme
     public constructor() {
         super(new ComboBoxSelectedFSM());
 
-        this.handler = new class implements ComboBoxSelectedHandler {
-            private readonly _parent: ComboBoxSelected;
-
-            public constructor(parent: ComboBoxSelected) {
-                this._parent = parent;
-            }
-
-            public initToSelectedHandler(event: Event): void {
+        this.handler = {
+            "initToSelectedHandler": (event: Event): void => {
                 if (event.target !== null && isComboBox(event.target)) {
-                    (this._parent.data as WidgetDataImpl<HTMLSelectElement>).setWidget(event.target);
+                    (this.data as WidgetDataImpl<HTMLSelectElement>).setWidget(event.target);
                 }
-            }
-
-            public reinitData(): void {
-                this._parent.reinitData();
-            }
-
-        }(this);
+            },
+            "reinitData": (): void => this.reinitData()
+        };
 
         this.fsm.buildFSM(this.handler);
     }
