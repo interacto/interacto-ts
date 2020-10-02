@@ -167,15 +167,6 @@ implements WidgetBinding<C, I, D> {
         return false;
     }
 
-    protected unbindCmdAttributes(): void {
-        if (this.cmd !== undefined) {
-            if (this.asLogCmd) {
-                catCommand.info(`Command unbound: ${this.cmd.constructor.name}`);
-            }
-        }
-    }
-
-
     public fsmCancels(): void {
         if (this.cmd !== undefined) {
             if (this.asLogBinding) {
@@ -186,7 +177,6 @@ implements WidgetBinding<C, I, D> {
             if (this.asLogCmd) {
                 catCommand.info(`Command ${this.cmd.constructor.name} cancelled`);
             }
-            this.unbindCmdAttributes();
 
             if (this.isContinuousCmdExec() && hadEffects) {
                 this.cancelContinousWithEffectsCmd(this.cmd);
@@ -292,7 +282,6 @@ implements WidgetBinding<C, I, D> {
             // We are sure here that the command is not undefined
             // (this is the goal of createAndInitCommand)
             this.executeCmd(this.cmd as C);
-            this.unbindCmdAttributes();
             this.cmd = undefined;
             this.timeEnded++;
         } else {
@@ -301,7 +290,6 @@ implements WidgetBinding<C, I, D> {
                     catCommand.info("Cancelling the command");
                 }
                 this.cmd.cancel();
-                this.unbindCmdAttributes();
                 this.cmd = undefined;
                 this.timeCancelled++;
             }
@@ -398,7 +386,6 @@ implements WidgetBinding<C, I, D> {
         this.activated = activated;
         this.interaction.setActivated(activated);
         if (!this.activated && this.cmd !== undefined) {
-            this.unbindCmdAttributes();
             this.cmd.flush();
             this.cmd = undefined;
         }
