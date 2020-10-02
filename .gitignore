@@ -8,3 +8,4 @@ dist/
 docs/
 *.tgz
 .vscode
+out-test/
