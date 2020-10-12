@@ -13,18 +13,15 @@
  */
 
 import {EventRegistrationToken, FSMHandler, KeysPressed} from "../../../src/interacto";
-import {StubFSMHandler} from "../../fsm/StubFSMHandler";
 import {createKeyEvent} from "../StubEvents";
-
-jest.mock("../../fsm/StubFSMHandler");
+import {mock} from "jest-mock-extended";
 
 let interaction: KeysPressed;
 let text: HTMLElement;
 let handler: FSMHandler;
 
 beforeEach(() => {
-    jest.clearAllMocks();
-    handler = new StubFSMHandler();
+    handler = mock<FSMHandler>();
     interaction = new KeysPressed();
     interaction.log(true);
     interaction.getFsm().log(true);
@@ -46,12 +43,12 @@ test("testKeyPressData", () => {
     let length = 0;
     let txt = "";
 
-    interaction.getFsm().addHandler(new class extends StubFSMHandler {
-        public fsmUpdates(): void {
-            length = interaction.getData().getKeys().length;
-            txt = interaction.getData().getKeys()[0];
-        }
-    }());
+    const newHandler = mock<FSMHandler>();
+    newHandler.fsmUpdates.mockImplementation(() => {
+        length = interaction.getData().getKeys().length;
+        txt = interaction.getData().getKeys()[0];
+    });
+    interaction.getFsm().addHandler(newHandler);
 
     text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "A"));
     expect(length).toStrictEqual(1);
@@ -71,11 +68,11 @@ test("testTwoKeyPressData", () => {
     interaction.registerToNodes([text]);
     let data: Array<string> = [];
 
-    interaction.getFsm().addHandler(new class extends StubFSMHandler {
-        public fsmUpdates(): void {
-            data = [...interaction.getData().getKeys()];
-        }
-    }());
+    const newHandler = mock<FSMHandler>();
+    newHandler.fsmUpdates.mockImplementation(() => {
+        data = [...interaction.getData().getKeys()];
+    });
+    interaction.getFsm().addHandler(newHandler);
 
     text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "A"));
     text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "B"));
@@ -100,11 +97,11 @@ test("testTwoKeyPressReleaseData", () => {
 
     text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "A"));
     text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "B"));
-    interaction.getFsm().addHandler(new class extends StubFSMHandler {
-        public fsmUpdates(): void {
-            data = [...interaction.getData().getKeys()];
-        }
-    }());
+    const newHandler = mock<FSMHandler>();
+    newHandler.fsmUpdates.mockImplementation(() => {
+        data = [...interaction.getData().getKeys()];
+    });
+    interaction.getFsm().addHandler(newHandler);
     text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "B"));
     expect(data).toHaveLength(1);
     expect(data[0]).toStrictEqual("A");

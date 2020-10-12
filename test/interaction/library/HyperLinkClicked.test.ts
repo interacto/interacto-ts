@@ -13,17 +13,14 @@
  */
 
 import {FSMHandler, HyperLinkClicked} from "../../../src/interacto";
-import {StubFSMHandler} from "../../fsm/StubFSMHandler";
-
-jest.mock("../../fsm/StubFSMHandler");
+import {mock} from "jest-mock-extended";
 
 let interaction: HyperLinkClicked;
 let url: HTMLElement;
 let handler: FSMHandler;
 
 beforeEach(() => {
-    jest.clearAllMocks();
-    handler = new StubFSMHandler();
+    handler = mock<FSMHandler>();
     interaction = new HyperLinkClicked();
     interaction.log(true);
     interaction.getFsm().log(true);

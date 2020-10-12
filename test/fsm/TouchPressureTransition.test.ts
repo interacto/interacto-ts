@@ -17,11 +17,12 @@ import {createMouseEvent, createTouchEvent} from "../interaction/StubEvents";
 import {EventRegistrationToken} from "../../src/fsm/Events";
 import {FSM} from "../../src/fsm/FSM";
 import {StdState} from "../../src/fsm/StdState";
+import {mock} from "jest-mock-extended";
 
 let tr: TouchPressureTransition;
 
 beforeEach(() => {
-    tr = new TouchPressureTransition(new StdState({} as FSM, "a"), new StdState({} as FSM, "b"));
+    tr = new TouchPressureTransition(new StdState(mock<FSM>(), "a"), new StdState(mock<FSM>(), "b"));
     document.documentElement.innerHTML = "<html><div><canvas id='canvas' /></div></html>";
 });
 

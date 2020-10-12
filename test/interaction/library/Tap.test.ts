@@ -13,10 +13,8 @@
  */
 
 import {EventRegistrationToken, FSMHandler, Tap, TouchData} from "../../../src/interacto";
-import {StubFSMHandler} from "../../fsm/StubFSMHandler";
 import {createTouchEvent} from "../StubEvents";
-
-jest.mock("../../fsm/StubFSMHandler");
+import {mock} from "jest-mock-extended";
 
 let interaction: Tap;
 let canvas: HTMLElement;
@@ -24,7 +22,7 @@ let handler: FSMHandler;
 
 beforeEach(() => {
     jest.useFakeTimers();
-    handler = new StubFSMHandler();
+    handler = mock<FSMHandler>();
     document.documentElement.innerHTML = "<html><div><canvas id='canvas1' /></div></html>";
     canvas = document.getElementById("canvas1") as HTMLElement;
 });
@@ -71,12 +69,11 @@ describe("tap 1", () => {
 
     test("one touch data", () => {
         let touch: Array<TouchData> = [];
-
-        interaction.getFsm().addHandler(new class extends StubFSMHandler {
-            public fsmStarts(): void {
-                touch = [...interaction.getData().getTapData()];
-            }
-        }());
+        const newHandler = mock<FSMHandler>();
+        newHandler.fsmStarts.mockImplementation(() => {
+            touch = [...interaction.getData().getTapData()];
+        });
+        interaction.getFsm().addHandler(newHandler);
         interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 3, canvas, 15, 20, 16, 21));
 
         expect(touch).toHaveLength(1);
@@ -138,11 +135,11 @@ describe("tap 2", () => {
     test("two touches data", () => {
         let touch: Array<TouchData> = [];
 
-        interaction.getFsm().addHandler(new class extends StubFSMHandler {
-            public fsmStops(): void {
-                touch = [...interaction.getData().getTapData()];
-            }
-        }());
+        const newHandler = mock<FSMHandler>();
+        newHandler.fsmStops.mockImplementation(() => {
+            touch = [...interaction.getData().getTapData()];
+        });
+        interaction.getFsm().addHandler(newHandler);
         interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 3, canvas, 15, 20, 16, 21));
         interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 2, canvas, 12, 27, 14, 28));
 
@@ -211,11 +208,11 @@ describe("tap 3", () => {
     test("three touches data", () => {
         let touch: Array<TouchData> = [];
 
-        interaction.getFsm().addHandler(new class extends StubFSMHandler {
-            public fsmStops(): void {
-                touch = [...interaction.getData().getTapData()];
-            }
-        }());
+        const newHandler = mock<FSMHandler>();
+        newHandler.fsmStops.mockImplementation(() => {
+            touch = [...interaction.getData().getTapData()];
+        });
+        interaction.getFsm().addHandler(newHandler);
         interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 3, canvas, 15, 20, 16, 21));
         interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 2, canvas, 12, 27, 14, 28));
         interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 2, canvas, 112, 217, 114, 128));

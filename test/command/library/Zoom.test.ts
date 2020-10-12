@@ -14,22 +14,16 @@
 
 import {Zoom} from "../../../src/command/library/Zoom";
 import {Zoomable} from "../../../src/properties/Zoomable";
-
-jest.mock("../../../src/properties/Zoomable");
+import {mock, MockProxy} from "jest-mock-extended";
 
 let cmd: Zoom;
-let zoomable: Zoomable;
+let zoomable: Zoomable & MockProxy<Zoomable>;
 
 beforeEach(() => {
-    zoomable = {} as Zoomable;
-    zoomable.getMinZoom = jest.fn(() => -1);
-    zoomable.getMaxZoom = jest.fn(() => 10);
-    zoomable.setZoom = jest.fn();
+    zoomable = mock<Zoomable>();
+    zoomable.getMinZoom.mockReturnValue(-1);
+    zoomable.getMaxZoom.mockReturnValue(10);
     cmd = new Zoom(zoomable);
-});
-
-afterEach(() => {
-    jest.clearAllMocks();
 });
 
 test("testCannotDoZoomLevelBad", () => {

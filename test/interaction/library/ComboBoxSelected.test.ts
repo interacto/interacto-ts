@@ -13,17 +13,14 @@
  */
 
 import {ComboBoxSelected, FSMHandler} from "../../../src/interacto";
-import {StubFSMHandler} from "../../fsm/StubFSMHandler";
-
-jest.mock("../../fsm/StubFSMHandler");
+import {mock} from "jest-mock-extended";
 
 let interaction: ComboBoxSelected;
 let comboBox: HTMLElement;
 let handler: FSMHandler;
 
 beforeEach(() => {
-    jest.clearAllMocks();
-    handler = new StubFSMHandler();
+    handler = mock<FSMHandler>();
     interaction = new ComboBoxSelected();
     interaction.log(true);
     interaction.getFsm().log(true);

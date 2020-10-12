@@ -12,19 +12,16 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {StubFSMHandler} from "../../fsm/StubFSMHandler";
 import {EventRegistrationToken, FSMHandler, KeyPressed} from "../../../src/interacto";
 import {createKeyEvent} from "../StubEvents";
-
-jest.mock("../../fsm/StubFSMHandler");
+import {mock} from "jest-mock-extended";
 
 let interaction: KeyPressed;
 let text: HTMLElement;
 let handler: FSMHandler;
 
 beforeEach(() => {
-    jest.clearAllMocks();
-    handler = new StubFSMHandler();
+    handler = mock<FSMHandler>();
     interaction = new KeyPressed(false);
     interaction.log(true);
     interaction.getFsm().log(true);
@@ -43,11 +40,11 @@ test("type 'a' in the textarea starts and stops the interaction.", () => {
 test("the key typed in the textarea is the same key in the data of the interaction.", () => {
     let data = "";
     interaction.registerToNodes([text]);
-    interaction.getFsm().addHandler(new class extends StubFSMHandler {
-        public fsmStops(): void {
-            data = interaction.getData().getKey();
-        }
-    }());
+    const newHandler = mock<FSMHandler>();
+    newHandler.fsmStops.mockImplementation(() => {
+        data = interaction.getData().getKey();
+    });
+    interaction.getFsm().addHandler(newHandler);
     text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "a"));
     expect(data).toStrictEqual("a");
 });

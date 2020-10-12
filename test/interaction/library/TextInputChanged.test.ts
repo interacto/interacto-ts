@@ -13,9 +13,8 @@
  */
 
 import {FSMHandler, TextInputChanged} from "../../../src/interacto";
-import {StubFSMHandler} from "../../fsm/StubFSMHandler";
+import {mock} from "jest-mock-extended";
 
-jest.mock("../../fsm/StubFSMHandler");
 jest.useFakeTimers();
 
 let interaction: TextInputChanged;
@@ -23,8 +22,7 @@ let textArea: HTMLElement;
 let handler: FSMHandler;
 
 beforeEach(() => {
-    jest.clearAllMocks();
-    handler = new StubFSMHandler();
+    handler = mock<FSMHandler>();
     interaction = new TextInputChanged();
     interaction.log(true);
     interaction.getFsm().log(true);

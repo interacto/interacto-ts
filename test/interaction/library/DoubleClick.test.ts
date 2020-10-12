@@ -13,19 +13,16 @@
  */
 
 import {DoubleClick, EventRegistrationToken, FSMHandler} from "../../../src/interacto";
-import {StubFSMHandler} from "../../fsm/StubFSMHandler";
 import {createMouseEvent} from "../StubEvents";
-
-jest.mock("../../fsm/StubFSMHandler");
+import {mock} from "jest-mock-extended";
 
 let interaction: DoubleClick;
 let canvas: HTMLElement;
 let handler: FSMHandler;
 
 beforeEach(() => {
-    jest.clearAllMocks();
     jest.useFakeTimers();
-    handler = new StubFSMHandler();
+    handler = mock<FSMHandler>();
     interaction = new DoubleClick();
     interaction.log(true);
     interaction.getFsm().log(true);
@@ -49,14 +46,14 @@ test("check data of the interaction.", () => {
     let obj: HTMLCanvasElement | undefined;
 
     interaction.registerToNodes([canvas]);
-    interaction.getFsm().addHandler(new class extends StubFSMHandler {
-        public fsmStops(): void {
-            sx = interaction.getData().getSrcClientX();
-            sy = interaction.getData().getSrcClientY();
-            button = interaction.getData().getButton();
-            obj = interaction.getData().getSrcObject() as HTMLCanvasElement;
-        }
-    }());
+    const newHandler = mock<FSMHandler>();
+    newHandler.fsmStops.mockImplementation(() => {
+        sx = interaction.getData().getSrcClientX();
+        sy = interaction.getData().getSrcClientY();
+        button = interaction.getData().getButton();
+        obj = interaction.getData().getSrcObject() as HTMLCanvasElement;
+    });
+    interaction.getFsm().addHandler(newHandler);
     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.click, canvas, undefined, undefined, 11, 23));
     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.click, canvas, undefined, undefined, 11, 23));
     expect(sx).toBe(11);

@@ -13,10 +13,8 @@
  */
 
 import {DnD, EventRegistrationToken, FSMHandler} from "../../../src/interacto";
-import {StubFSMHandler} from "../../fsm/StubFSMHandler";
 import {createMouseEvent} from "../StubEvents";
-
-jest.mock("../../fsm/StubFSMHandler");
+import {mock} from "jest-mock-extended";
 
 let interaction: DnD;
 let canvas: HTMLElement;
@@ -29,8 +27,7 @@ let button: number | undefined;
 let obj: HTMLCanvasElement | undefined;
 
 beforeEach(() => {
-    jest.clearAllMocks();
-    handler = new StubFSMHandler();
+    handler = mock<FSMHandler>();
     interaction = new DnD(true, false);
     interaction.log(true);
     interaction.getFsm().log(true);
@@ -49,16 +46,16 @@ test("press event don't trigger the interaction DnD", () => {
 
 test("check data press move", () => {
     interaction.registerToNodes([canvas]);
-    interaction.getFsm().addHandler(new class extends StubFSMHandler {
-        public fsmStarts(): void {
-            sx = interaction.getData().getSrcClientX();
-            sy = interaction.getData().getSrcClientY();
-            tx = interaction.getData().getTgtClientX();
-            ty = interaction.getData().getTgtClientY();
-            button = interaction.getData().getButton();
-            obj = interaction.getData().getTgtObject() as HTMLCanvasElement;
-        }
-    }());
+    const newHandler = mock<FSMHandler>();
+    newHandler.fsmStarts.mockImplementation(() => {
+        sx = interaction.getData().getSrcClientX();
+        sy = interaction.getData().getSrcClientY();
+        tx = interaction.getData().getTgtClientX();
+        ty = interaction.getData().getTgtClientY();
+        button = interaction.getData().getButton();
+        obj = interaction.getData().getTgtObject() as HTMLCanvasElement;
+    });
+    interaction.getFsm().addHandler(newHandler);
     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, canvas, undefined, undefined, 11, 23));
     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 110, 230));
     expect(sx).toBe(11);
@@ -82,16 +79,16 @@ test("click and move and release start and update the interaction", () => {
 test("data of the press and drag part of the interaction", () => {
     interaction.registerToNodes([canvas]);
     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, canvas, undefined, undefined, 15, 20, 0));
-    interaction.getFsm().addHandler(new class extends StubFSMHandler {
-        public fsmUpdates(): void {
-            sx = interaction.getData().getSrcClientX();
-            sy = interaction.getData().getSrcClientY();
-            tx = interaction.getData().getTgtClientX();
-            ty = interaction.getData().getTgtClientY();
-            button = interaction.getData().getButton();
-            obj = interaction.getData().getTgtObject() as HTMLCanvasElement;
-        }
-    }());
+    const newHandler = mock<FSMHandler>();
+    newHandler.fsmUpdates.mockImplementation(() => {
+        sx = interaction.getData().getSrcClientX();
+        sy = interaction.getData().getSrcClientY();
+        tx = interaction.getData().getTgtClientX();
+        ty = interaction.getData().getTgtClientY();
+        button = interaction.getData().getButton();
+        obj = interaction.getData().getTgtObject() as HTMLCanvasElement;
+    });
+    interaction.getFsm().addHandler(newHandler);
     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 16, 21));
     expect(sx).toBe(15);
     expect(sy).toBe(20);
@@ -105,16 +102,16 @@ test("check data with multiple drag", () => {
     interaction.registerToNodes([canvas]);
     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, canvas, undefined, undefined, 11, 23, 0));
     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 12, 22, 0));
-    interaction.getFsm().addHandler(new class extends StubFSMHandler {
-        public fsmUpdates(): void {
-            sx = interaction.getData().getSrcClientX();
-            sy = interaction.getData().getSrcClientY();
-            tx = interaction.getData().getTgtClientX();
-            ty = interaction.getData().getTgtClientY();
-            button = interaction.getData().getButton();
-            obj = interaction.getData().getTgtObject() as HTMLCanvasElement;
-        }
-    }());
+    const newHandler = mock<FSMHandler>();
+    newHandler.fsmUpdates.mockImplementation(() => {
+        sx = interaction.getData().getSrcClientX();
+        sy = interaction.getData().getSrcClientY();
+        tx = interaction.getData().getTgtClientX();
+        ty = interaction.getData().getTgtClientY();
+        button = interaction.getData().getButton();
+        obj = interaction.getData().getTgtObject() as HTMLCanvasElement;
+    });
+    interaction.getFsm().addHandler(newHandler);
     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 12, 24, 0));
     expect(sx).toBe(12);
     expect(sy).toBe(22);

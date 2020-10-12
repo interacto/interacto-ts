@@ -13,17 +13,14 @@
  */
 
 import {ButtonPressed, FSMHandler} from "../../../src/interacto";
-import {StubFSMHandler} from "../../fsm/StubFSMHandler";
-
-jest.mock("../../fsm/StubFSMHandler");
+import {mock} from "jest-mock-extended";
 
 let interaction: ButtonPressed;
 let button: HTMLButtonElement;
 let handler: FSMHandler;
 
 beforeEach(() => {
-    jest.clearAllMocks();
-    handler = new StubFSMHandler();
+    handler = mock<FSMHandler>();
     interaction = new ButtonPressed();
     interaction.log(true);
     interaction.getFsm().log(true);

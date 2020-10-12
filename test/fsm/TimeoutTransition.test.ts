@@ -17,29 +17,25 @@ import {CancelFSMException} from "../../src/fsm/CancelFSMException";
 import {FSM} from "../../src/fsm/FSM";
 import {InputState} from "../../src/fsm/InputState";
 import {OutputState} from "../../src/fsm/OutputState";
-import {StdState} from "../../src/fsm/StdState";
 import {TimeoutTransition} from "../../src/fsm/TimeoutTransition";
-
-jest.mock("../../src/fsm/FSM");
-jest.mock("../../src/fsm/StdState");
+import {mock, MockProxy} from "jest-mock-extended";
 
 let evt: TimeoutTransition;
-let src: OutputState;
-let tgt: InputState;
-let fsm: FSM;
+let src: OutputState & MockProxy<OutputState>;
+let tgt: InputState & MockProxy<InputState>;
+let fsm: FSM & MockProxy<FSM>;
 
 beforeEach(() => {
     jest.useFakeTimers();
-    fsm = new FSM();
-    src = new StdState(fsm, "src");
-    tgt = new StdState(fsm, "tgt");
-    src.getFSM = jest.fn().mockReturnValue(fsm);
-    tgt.getFSM = jest.fn().mockReturnValue(fsm);
+    fsm = mock<FSM>();
+    src = mock<OutputState>();
+    tgt = mock<InputState>();
+    src.getFSM.mockReturnValue(fsm);
+    tgt.getFSM.mockReturnValue(fsm);
     evt = new TimeoutTransition(src, tgt, () => 500);
 });
 
 afterEach(() => {
-    jest.clearAllMocks();
     jest.clearAllTimers();
     ErrorCatcher.setInstance(new ErrorCatcher());
 });
@@ -135,7 +131,7 @@ test("execute and guard not OK", () => {
 
 test("execute cancels", () => {
     jest.spyOn(tgt, "enter");
-    tgt.enter = jest.fn((): void => {
+    tgt.enter.mockImplementation((): void => {
         throw new CancelFSMException();
     });
     evt.startTimeout();
@@ -149,7 +145,7 @@ test("fsm throws exception in thread", () => {
     const disposable = ErrorCatcher.getInstance().getErrors()
         .subscribe(err => errors.push(err));
     jest.spyOn(fsm, "onTimeout");
-    fsm.onTimeout = jest.fn((): void => {
+    fsm.onTimeout.mockImplementation((): void => {
         throw ex;
     });
     evt.startTimeout();

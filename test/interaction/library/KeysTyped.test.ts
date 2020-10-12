@@ -12,20 +12,17 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {StubFSMHandler} from "../../fsm/StubFSMHandler";
 import {EventRegistrationToken, FSMHandler, KeysTyped} from "../../../src/interacto";
 import {createKeyEvent} from "../StubEvents";
-
-jest.mock("../../fsm/StubFSMHandler");
+import {mock} from "jest-mock-extended";
 
 let interaction: KeysTyped;
 let text: HTMLElement;
 let handler: FSMHandler;
 
 beforeEach(() => {
-    jest.clearAllMocks();
     jest.useFakeTimers();
-    handler = new StubFSMHandler();
+    handler = mock<FSMHandler>();
     interaction = new KeysTyped();
     interaction.log(true);
     interaction.getFsm().log(true);
@@ -51,11 +48,11 @@ test("type 'b' and wait for timeout stops the interaction", () => {
 test("type 'b' and wait for timeout stops the interaction: data", () => {
     let keys: Array<string> = [];
 
-    interaction.getFsm().addHandler(new class extends StubFSMHandler {
-        public fsmStops(): void {
-            keys = [...interaction.getData().getKeys()];
-        }
-    }());
+    const newHandler = mock<FSMHandler>();
+    newHandler.fsmStops.mockImplementation(() => {
+        keys = [...interaction.getData().getKeys()];
+    });
+    interaction.getFsm().addHandler(newHandler);
 
     interaction.registerToNodes([text]);
     text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "b"));
@@ -82,11 +79,11 @@ test("type text and wait for timeout stops the interaction", () => {
 test("type text and wait for timeout stops the interaction: data", () => {
     let keys: Array<string> = [];
 
-    interaction.getFsm().addHandler(new class extends StubFSMHandler {
-        public fsmStops(): void {
-            keys = [...interaction.getData().getKeys()];
-        }
-    }());
+    const newHandler = mock<FSMHandler>();
+    newHandler.fsmStops.mockImplementation(() => {
+        keys = [...interaction.getData().getKeys()];
+    });
+    interaction.getFsm().addHandler(newHandler);
 
     interaction.registerToNodes([text]);
     text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "b"));
@@ -103,11 +100,11 @@ test("type text and wait for timeout stops the interaction: data", () => {
 test("type 'b' does not stop the interaction", () => {
     let keys: Array<string> = [];
 
-    interaction.getFsm().addHandler(new class extends StubFSMHandler {
-        public fsmUpdates(): void {
-            keys = [...interaction.getData().getKeys()];
-        }
-    }());
+    const newHandler = mock<FSMHandler>();
+    newHandler.fsmUpdates.mockImplementation(() => {
+        keys = [...interaction.getData().getKeys()];
+    });
+    interaction.getFsm().addHandler(newHandler);
 
     interaction.registerToNodes([text]);
     text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "z"));

@@ -40,7 +40,6 @@ let disposable: Subscription;
 let binding: WidgetBinding<StubCmd, InteractionImpl<InteractionData, FSM>, InteractionData>;
 
 beforeEach(() => {
-    jest.clearAllMocks();
     jest.useFakeTimers();
 
     document.documentElement.innerHTML = "<html><div id='div'></div></html>";
@@ -171,5 +170,4 @@ test("drag lock: double click does not cancel", () => {
     elt.dispatchEvent(createMouseEvent(EventRegistrationToken.click, elt, 1, 2, 3, 4, 0));
 
     expect(binding.getInteraction().isRunning()).toBeTruthy();
-    // expect(producedCmds).toHaveLength(1);
 });

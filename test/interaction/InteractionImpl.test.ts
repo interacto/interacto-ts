@@ -18,24 +18,24 @@ import {InitState} from "../../src/fsm/InitState";
 import {OutputState} from "../../src/fsm/OutputState";
 import {StdState} from "../../src/fsm/StdState";
 import {InteractionStub} from "./InteractionStub";
+import {mock, MockProxy} from "jest-mock-extended";
 
 let interaction: InteractionStub;
-let fsm: FSM;
+let fsm: FSM & MockProxy<FSM>;
 let currentStateObs: Subject<[OutputState, OutputState]>;
 let currentState: OutputState;
 
 beforeEach(() => {
     currentStateObs = new Subject();
-    fsm = {} as FSM;
-    fsm.fullReinit = jest.fn();
-    fsm.currentStateObservable = jest.fn(() => currentStateObs);
-    fsm.getCurrentState = jest.fn(() => currentState);
+    fsm = mock<FSM>();
+    fsm.currentStateObservable.mockReturnValue(currentStateObs);
+    fsm.getCurrentState.mockImplementation(() => currentState);
     interaction = new InteractionStub(fsm);
 });
 
 afterEach(() => {
-    jest.clearAllMocks();
     interaction.uninstall();
+    currentStateObs.complete();
 });
 
 
@@ -79,7 +79,6 @@ test("set reactivated", () => {
 test("not process when not activated", () => {
     const evt = {} as Event;
     interaction.setActivated(false);
-    fsm.process = jest.fn();
     interaction.processEvent(evt);
     expect(fsm.process).not.toHaveBeenCalledWith();
 });
@@ -89,7 +88,6 @@ test("getFSM", () => {
 });
 
 test("reinit", () => {
-    fsm.reinit = jest.fn();
     jest.spyOn(interaction, "reinitData");
     interaction.reinit();
     expect(interaction.reinitData).toHaveBeenCalledTimes(1);

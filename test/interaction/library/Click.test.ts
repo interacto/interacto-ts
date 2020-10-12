@@ -12,19 +12,16 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {StubFSMHandler} from "../../fsm/StubFSMHandler";
-import {Click, EventRegistrationToken} from "../../../src/interacto";
+import {Click, EventRegistrationToken, FSMHandler} from "../../../src/interacto";
 import {createMouseEvent} from "../StubEvents";
-
-jest.mock("../../fsm/StubFSMHandler");
+import {mock, MockProxy} from "jest-mock-extended";
 
 let interaction: Click;
 let canvas: HTMLElement;
-let handler: StubFSMHandler;
+let handler: FSMHandler & MockProxy<FSMHandler>;
 
 beforeEach(() => {
-    jest.clearAllMocks();
-    handler = new StubFSMHandler();
+    handler = mock<FSMHandler>();
     interaction = new Click();
     interaction.log(true);
     interaction.getFsm().log(true);
@@ -67,7 +64,7 @@ test("testClickData", () => {
     let sy: number | undefined;
     let button: number | undefined;
 
-    handler.fsmStops = jest.fn(() => {
+    handler.fsmStops.mockImplementation(() => {
         button = interaction.getData().getButton();
         x = interaction.getData().getSrcClientX();
         y = interaction.getData().getSrcClientY();
@@ -89,7 +86,7 @@ test("testClickOnWidgetData", () => {
     let sy: number | undefined;
     let button: number | undefined;
 
-    handler.fsmStops = jest.fn(() => {
+    handler.fsmStops.mockImplementation(() => {
         button = interaction.getData().getButton();
         x = interaction.getData().getSrcClientX();
         y = interaction.getData().getSrcClientY();

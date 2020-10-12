@@ -15,7 +15,9 @@
 import {Command, CmdStatus, RegistrationPolicy} from "../../src/command/Command";
 import {CommandsRegistry} from "../../src/command/CommandsRegistry";
 import {UndoCollector} from "../../src/undo/UndoCollector";
-import {StubCmd, StubUndoableCmd} from "./StubCmd";
+import {StubCmd} from "./StubCmd";
+import {mock} from "jest-mock-extended";
+import {Undoable} from "../../src/undo/Undoable";
 
 let instance: CommandsRegistry;
 
@@ -23,10 +25,6 @@ beforeEach(() => {
     instance = new CommandsRegistry();
     instance.setSizeMax(30);
     UndoCollector.getInstance().clear();
-});
-
-afterEach(() => {
-    jest.clearAllMocks();
 });
 
 test("testGetSetSizeMaxOK", () => {
@@ -62,12 +60,12 @@ test("testSetSizeMaxRemovesCmd", () => {
 
 test("testSetSiezMaxWithUnlimited", () => {
     jest.mock("./StubCmd");
-    const cmd1 = new StubCmd();
-    cmd1.getRegistrationPolicy = jest.fn().mockImplementation(() => RegistrationPolicy.unlimited);
-    const cmd2 = new StubCmd();
-    cmd2.getRegistrationPolicy = jest.fn().mockImplementation(() => RegistrationPolicy.limited);
-    const cmd3 = new StubCmd();
-    cmd3.getRegistrationPolicy = jest.fn().mockImplementation(() => RegistrationPolicy.limited);
+    const cmd1 = mock<Command>();
+    cmd1.getRegistrationPolicy.mockReturnValue(RegistrationPolicy.unlimited);
+    const cmd2 = mock<Command>();
+    cmd2.getRegistrationPolicy.mockReturnValue(RegistrationPolicy.limited);
+    const cmd3 = mock<Command>();
+    cmd3.getRegistrationPolicy.mockReturnValue(RegistrationPolicy.limited);
     instance.addCommand(cmd2);
     instance.addCommand(cmd1);
     instance.addCommand(cmd3);
@@ -83,7 +81,7 @@ test("testCommandsObservedOnAdded", () => {
     const cmds: Array<Command> = [];
     instance.commands().subscribe(e => cmds.push(e));
     jest.mock("./StubCmd");
-    const cmd = new StubCmd();
+    const cmd = mock<Command>();
     instance.addCommand(cmd);
     expect(cmds).toStrictEqual([cmd]);
 });
@@ -95,7 +93,7 @@ test("testCancelCommandFlush", () => {
 });
 
 test("testCancelCommandRemoved", () => {
-    const command = new StubCmd();
+    const command = mock<Command>();
     instance.addCommand(command);
     instance.cancelCmd(command);
     expect(instance.getCommands()).toHaveLength(0);
@@ -110,14 +108,14 @@ test("testRemoveCommand", () => {
 });
 
 test("add Command Cannot Add Because Exist", () => {
-    const command = new StubCmd();
+    const command = mock<Command>();
     instance.getCommands().push(command);
     instance.addCommand(command);
     expect(instance.getCommands()).toHaveLength(1);
 });
 
 test("add Command Removes Command When Max Capacity", () => {
-    const command = new StubCmd();
+    const command = mock<Command>();
     const command2 = new StubCmd();
     instance.setSizeMax(1);
     instance.getCommands().push(command2);
@@ -129,20 +127,20 @@ test("add Command Removes Command When Max Capacity", () => {
 
 test("testAddCommandRemovesCommandWhenMaxCapacity0", () => {
     instance.setSizeMax(0);
-    instance.addCommand(new StubCmd());
+    instance.addCommand(mock<Command>());
     expect(instance.getCommands()).toHaveLength(0);
 });
 
 test("testAddCommandAddsUndoableCollector", () => {
-    const command = new StubUndoableCmd();
+    const command = mock<Command & Undoable>();
     instance.addCommand(command);
     expect(UndoCollector.getInstance().getLastUndo()).toBe(command);
 });
 
 
 test("testClear", () => {
-    const c1 = new StubCmd();
-    const c2 = new StubCmd();
+    const c1 = mock<Command>();
+    const c2 = mock<Command>();
     jest.spyOn(c1, "flush");
     jest.spyOn(c2, "flush");
     instance.addCommand(c1);

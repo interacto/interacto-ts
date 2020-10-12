@@ -13,18 +13,15 @@
  */
 
 import {EventRegistrationToken, FSMHandler, Press} from "../../../src/interacto";
-import {StubFSMHandler} from "../../fsm/StubFSMHandler";
 import {createMouseEvent} from "../StubEvents";
-
-jest.mock("../../fsm/StubFSMHandler");
+import {mock} from "jest-mock-extended";
 
 let interaction: Press;
 let canvas: HTMLElement;
 let handler: FSMHandler;
 
 beforeEach(() => {
-    jest.clearAllMocks();
-    handler = new StubFSMHandler();
+    handler = mock<FSMHandler>();
     interaction = new Press();
     interaction.log(true);
     interaction.getFsm().log(true);

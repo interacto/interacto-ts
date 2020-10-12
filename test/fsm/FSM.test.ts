@@ -25,18 +25,17 @@ import {TerminalState} from "../../src/fsm/TerminalState";
 import {TimeoutTransition} from "../../src/fsm/TimeoutTransition";
 import {catFSM} from "../../src/logging/ConfigLog";
 import {StubEvent, StubSubEvent1, StubSubEvent2, StubSubEvent3} from "./StubEvent";
-import {StubFSMHandler} from "./StubFSMHandler";
 import {StubTransitionOK} from "./StubTransitionOK";
-
-jest.mock("../fsm/StubFSMHandler");
+import {FSMHandler} from "../../src/fsm/FSMHandler";
+import {mock} from "jest-mock-extended";
 
 let fsm: FSM;
-let handler: StubFSMHandler;
+let handler: FSMHandler;
 
 beforeEach(() => {
     jest.clearAllMocks();
     fsm = new FSM();
-    handler = new StubFSMHandler();
+    handler = mock<FSMHandler>();
 });
 
 test("testInitState", () => {
@@ -278,7 +277,7 @@ describe("testProcessUniqueEvent -- cancel", () => {
     let cancelling: CancellingState;
 
     beforeEach(() => {
-        handler = new StubFSMHandler();
+        handler = mock<FSMHandler>();
         fsm.addHandler(handler);
         fsm.log(true);
         std = new StdState(fsm, "s1");

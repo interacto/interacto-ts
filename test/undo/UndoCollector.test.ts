@@ -14,21 +14,18 @@
 
 import {Undoable} from "../../src/undo/Undoable";
 import {UndoCollector} from "../../src/undo/UndoCollector";
+import {mock, MockProxy} from "jest-mock-extended";
 
 jest.mock("../../src/undo/Undoable");
 
-let undoable: Undoable;
+let undoable: Undoable & MockProxy<Undoable>;
 let instance: UndoCollector;
 
 beforeEach(() => {
-    jest.clearAllMocks();
     instance = new UndoCollector();
     instance.setSizeMax(10);
-    undoable = {
-        "undo": jest.fn(() => {}),
-        "redo": jest.fn(() => {}),
-        "getUndoName": jest.fn(() => "undoredomsg")
-    };
+    undoable = mock<Undoable>();
+    undoable.getUndoName.mockReturnValue("undoredomsg");
 });
 
 test("testGetSetInstanceOK", () => {
@@ -89,11 +86,7 @@ test("testAddUndoablewith0SizeUndoable", () => {
 });
 
 test("testAddUndoablewithLimitedUndoSize", () => {
-    const undoable2 = {
-        "undo": jest.fn(() => {}),
-        "redo": jest.fn(() => {}),
-        "getUndoName": jest.fn(() => "")
-    };
+    const undoable2 = mock<Undoable>();
     instance.setSizeMax(1);
     instance.add(undoable);
     instance.add(undoable2);
@@ -120,11 +113,7 @@ test("testSizeMaxRemovedWhen0", () => {
 });
 
 test("testSizeMaxRemovedWhen1", () => {
-    const undoable2 = {
-        "undo": jest.fn(() => {}),
-        "redo": jest.fn(() => {}),
-        "getUndoName": jest.fn(() => "")
-    };
+    const undoable2 = mock<Undoable>();
     const undos = new Array<Undoable | undefined>();
     instance.setSizeMax(5);
     instance.add(undoable);
@@ -211,11 +200,7 @@ test("getLastOrEmptyRedoMessage OK", () => {
 });
 
 test("testClear", () => {
-    const undoable2 = {
-        "undo": jest.fn(() => {}),
-        "redo": jest.fn(() => {}),
-        "getUndoName": jest.fn(() => "")
-    };
+    const undoable2 = mock<Undoable>();
     instance.add(undoable);
     instance.add(undoable2);
     instance.undo();

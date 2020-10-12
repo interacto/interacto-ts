@@ -13,10 +13,8 @@
  */
 
 import {Click, FSMHandler} from "../../../src/interacto";
-import {StubFSMHandler} from "../../fsm/StubFSMHandler";
 import {createMouseEvent} from "../StubEvents";
-
-jest.mock("../../fsm/StubFSMHandler");
+import {mock} from "jest-mock-extended";
 
 let interaction: Click;
 let groupe: HTMLElement;
@@ -24,8 +22,7 @@ let circle: HTMLElement;
 let handler: FSMHandler;
 
 beforeEach(() => {
-    jest.clearAllMocks();
-    handler = new StubFSMHandler();
+    handler = mock<FSMHandler>();
     interaction = new Click();
     interaction.log(true);
     interaction.getFsm().log(true);

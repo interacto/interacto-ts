@@ -13,18 +13,15 @@
  */
 
 import {FSMHandler, Scroll} from "../../../src/interacto";
-import {StubFSMHandler} from "../../fsm/StubFSMHandler";
 import {createUIEvent} from "../StubEvents";
-
-jest.mock("../../fsm/StubFSMHandler");
+import {mock} from "jest-mock-extended";
 
 let interaction: Scroll;
 let scroll: Window;
 let handler: FSMHandler;
 
 beforeEach(() => {
-    jest.clearAllMocks();
-    handler = new StubFSMHandler();
+    handler = mock<FSMHandler>();
     interaction = new Scroll();
     interaction.log(true);
     interaction.getFsm().log(true);

@@ -12,12 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {StubFSMHandler} from "../../fsm/StubFSMHandler";
 import {EventRegistrationToken, FSMHandler, Swipe} from "../../../src/interacto";
 import {createTouchEvent} from "../StubEvents";
-
-jest.mock("../../fsm/StubFSMHandler");
-
+import {mock} from "jest-mock-extended";
 
 let interaction: Swipe;
 let canvas: HTMLElement;
@@ -26,7 +23,7 @@ let handler: FSMHandler;
 let data: any;
 
 beforeEach(() => {
-    handler = new StubFSMHandler();
+    handler = mock<FSMHandler>();
     document.documentElement.innerHTML = "<html><div><canvas id='canvas1' /></div></html>";
     canvas = document.getElementById("canvas1") as HTMLElement;
 });
@@ -56,11 +53,11 @@ describe("horizontal", () => {
     });
 
     test("touch move: too slow too short", () => {
-        interaction.getFsm().addHandler(new class extends StubFSMHandler {
-            public fsmStarts(): void {
-                data = {...interaction.getData()};
-            }
-        }());
+        const newHandler = mock<FSMHandler>();
+        newHandler.fsmStarts.mockImplementation(() => {
+            data = {...interaction.getData()};
+        });
+        interaction.getFsm().addHandler(newHandler);
 
         interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 3, canvas,
             15, 20, 150, 200, 100));
@@ -130,11 +127,11 @@ describe("horizontal", () => {
     });
 
     test("touch move move too short too slow", () => {
-        interaction.getFsm().addHandler(new class extends StubFSMHandler {
-            public fsmUpdates(): void {
-                data = {...interaction.getData()};
-            }
-        }());
+        const newHandler = mock<FSMHandler>();
+        newHandler.fsmUpdates.mockImplementation(() => {
+            data = {...interaction.getData()};
+        });
+        interaction.getFsm().addHandler(newHandler);
 
         interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 3, canvas,
             100, 20, 150, 200, 5000));

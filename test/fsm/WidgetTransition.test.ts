@@ -17,10 +17,11 @@ import {FSM} from "../../src/fsm/FSM";
 import {StdState} from "../../src/fsm/StdState";
 import {WidgetTransition} from "../../src/fsm/WidgetTransition";
 import {StubEvent} from "./StubEvent";
+import {mock} from "jest-mock-extended";
 
 class WTransition extends WidgetTransition<string> {
     public constructor() {
-        super(new StdState(new FSM(), "a"), new StdState(new FSM(), "b"));
+        super(new StdState(mock<FSM>(), "a"), new StdState(mock<FSM>(), "b"));
     }
 
     public accept(_event: StubEvent): boolean {

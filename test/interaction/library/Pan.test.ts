@@ -12,11 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {StubFSMHandler} from "../../fsm/StubFSMHandler";
 import {createTouchEvent} from "../StubEvents";
 import {EventRegistrationToken, FSMHandler, Pan} from "../../../src/interacto";
-
-jest.mock("../../fsm/StubFSMHandler");
+import {mock} from "jest-mock-extended";
 
 let interaction: Pan;
 let canvas: HTMLElement;
@@ -25,7 +23,7 @@ let handler: FSMHandler;
 let data: any;
 
 beforeEach(() => {
-    handler = new StubFSMHandler();
+    handler = mock<FSMHandler>();
     document.documentElement.innerHTML = "<html><div><canvas id='canvas1' /></div></html>";
     canvas = document.getElementById("canvas1") as HTMLElement;
 });
@@ -33,7 +31,6 @@ beforeEach(() => {
 afterEach(() => {
     interaction.uninstall();
     jest.clearAllTimers();
-    jest.clearAllMocks();
 });
 
 describe("horizontal", () => {
@@ -55,11 +52,11 @@ describe("horizontal", () => {
     });
 
     test("touch move OK", () => {
-        interaction.getFsm().addHandler(new class extends StubFSMHandler {
-            public fsmStarts(): void {
-                data = {...interaction.getData()};
-            }
-        }());
+        const newHandler = mock<FSMHandler>();
+        newHandler.fsmStarts.mockImplementation(() => {
+            data = {...interaction.getData()};
+        });
+        interaction.getFsm().addHandler(newHandler);
 
         interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 3, canvas, 15, 20, 150, 200));
         interaction.processEvent(createTouchEvent(EventRegistrationToken.touchmove, 3, canvas, 16, 30, 160, 210));
@@ -124,11 +121,11 @@ describe("horizontal", () => {
     });
 
     test("touch move move OK", () => {
-        interaction.getFsm().addHandler(new class extends StubFSMHandler {
-            public fsmUpdates(): void {
-                data = {...interaction.getData()};
-            }
-        }());
+        const newHandler = mock<FSMHandler>();
+        newHandler.fsmUpdates.mockImplementation(() => {
+            data = {...interaction.getData()};
+        });
+        interaction.getFsm().addHandler(newHandler);
 
         interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 3, canvas, 15, 20, 150, 200));
         interaction.processEvent(createTouchEvent(EventRegistrationToken.touchmove, 3, canvas, 16, 30, 160, 201));
@@ -175,11 +172,11 @@ describe("horizontal", () => {
 
 
     test("touch move move release OK", () => {
-        interaction.getFsm().addHandler(new class extends StubFSMHandler {
-            public fsmStops(): void {
-                data = {...interaction.getData()};
-            }
-        }());
+        const newHandler = mock<FSMHandler>();
+        newHandler.fsmStops.mockImplementation(() => {
+            data = {...interaction.getData()};
+        });
+        interaction.getFsm().addHandler(newHandler);
 
         interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 3, canvas, 15, 20, 150, 200));
         interaction.processEvent(createTouchEvent(EventRegistrationToken.touchmove, 3, canvas, 16, 30, 160, 201));

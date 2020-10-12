@@ -13,10 +13,8 @@
  */
 
 import {DragLock, EventRegistrationToken, FSMHandler} from "../../../src/interacto";
-import {StubFSMHandler} from "../../fsm/StubFSMHandler";
 import {createMouseEvent} from "../StubEvents";
-
-jest.mock("../../fsm/StubFSMHandler");
+import {mock} from "jest-mock-extended";
 
 let interaction: DragLock;
 let svg: SVGSVGElement;
@@ -25,8 +23,7 @@ let rect1: SVGRectElement;
 let rect2: SVGRectElement;
 
 beforeEach(() => {
-    jest.clearAllMocks();
-    handler = new StubFSMHandler();
+    handler = mock<FSMHandler>();
     interaction = new DragLock();
     interaction.log(true);
     interaction.getFsm().log(true);
@@ -58,14 +55,14 @@ test("dragLock data in a SVG environment", () => {
     let ty: number | undefined;
     let sx: number | undefined;
     let sy: number | undefined;
-    interaction.getFsm().addHandler(new class extends StubFSMHandler {
-        public fsmStops(): void {
-            sx = interaction.getData().getSrcClientX();
-            sy = interaction.getData().getSrcClientY();
-            tx = interaction.getData().getTgtClientX();
-            ty = interaction.getData().getTgtClientY();
-        }
-    }());
+    const newHandler = mock<FSMHandler>();
+    newHandler.fsmStops.mockImplementation(() => {
+        sx = interaction.getData().getSrcClientX();
+        sy = interaction.getData().getSrcClientY();
+        tx = interaction.getData().getTgtClientX();
+        ty = interaction.getData().getTgtClientY();
+    });
+    interaction.getFsm().addHandler(newHandler);
     interaction.processEvent(createMouseEvent(EventRegistrationToken.click, rect1, undefined, undefined, 11, 23));
     interaction.processEvent(createMouseEvent(EventRegistrationToken.click, rect1, undefined, undefined, 11, 23));
     interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseMove, svg, undefined, undefined, 20, 30));

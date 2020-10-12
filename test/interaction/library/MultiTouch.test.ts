@@ -13,10 +13,8 @@
  */
 
 import {EventRegistrationToken, FSMHandler, MultiTouch} from "../../../src/interacto";
-import {StubFSMHandler} from "../../fsm/StubFSMHandler";
 import {createTouchEvent} from "../StubEvents";
-
-jest.mock("../../fsm/StubFSMHandler");
+import {mock} from "jest-mock-extended";
 
 let interaction: MultiTouch;
 let canvas: HTMLElement;
@@ -45,8 +43,7 @@ function checkTgtTouchPoint(data: any, lx: number, ly: number, sx: number, sy: n
 }
 
 beforeEach(() => {
-    jest.clearAllMocks();
-    handler = new StubFSMHandler();
+    handler = mock<FSMHandler>();
     interaction = new MultiTouch(3);
     interaction.getFsm().addHandler(handler);
     document.documentElement.innerHTML = "<html><div><canvas id='canvas1' /></div></html>";
@@ -181,13 +178,13 @@ test("touch end data", () => {
     interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 3, canvas, 21, 13, 21, 13));
     interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 2, canvas, 210, 130, 210, 130));
 
-    interaction.getFsm().addHandler(new class extends StubFSMHandler {
-        public fsmStops(): void {
-            data1 = {...interaction.getData().getTouchData()[0]};
-            data2 = {...interaction.getData().getTouchData()[1]};
-            data3 = {...interaction.getData().getTouchData()[2]};
-        }
-    }());
+    const newHandler = mock<FSMHandler>();
+    newHandler.fsmStops.mockImplementation(() => {
+        data1 = {...interaction.getData().getTouchData()[0]};
+        data2 = {...interaction.getData().getTouchData()[1]};
+        data3 = {...interaction.getData().getTouchData()[2]};
+    });
+    interaction.getFsm().addHandler(newHandler);
 
     interaction.processEvent(createTouchEvent(EventRegistrationToken.touchend, 2, canvas, 11, 23, 11, 23));
 

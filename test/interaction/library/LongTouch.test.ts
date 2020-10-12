@@ -13,10 +13,8 @@
  */
 
 import {EventRegistrationToken, FSMHandler, LongTouch} from "../../../src/interacto";
-import {StubFSMHandler} from "../../fsm/StubFSMHandler";
 import {createTouchEvent} from "../StubEvents";
-
-jest.mock("../../fsm/StubFSMHandler");
+import {mock} from "jest-mock-extended";
 
 let interaction: LongTouch;
 let canvas: HTMLElement;
@@ -32,7 +30,7 @@ test("cannot create 0 or less duration", () => {
 describe("long touch test", () => {
     beforeEach(() => {
         jest.useFakeTimers();
-        handler = new StubFSMHandler();
+        handler = mock<FSMHandler>();
         document.documentElement.innerHTML = "<html><div><canvas id='canvas1' /></div></html>";
         canvas = document.getElementById("canvas1") as HTMLElement;
     });
@@ -57,11 +55,11 @@ describe("long touch test", () => {
             });
 
             test("touch does not end", () => {
-                interaction.getFsm().addHandler(new class extends StubFSMHandler {
-                    public fsmStarts(): void {
-                        touchData = {...interaction.getData()};
-                    }
-                }());
+                const newHandler = mock<FSMHandler>();
+                newHandler.fsmStarts.mockImplementation(() => {
+                    touchData = {...interaction.getData()};
+                });
+                interaction.getFsm().addHandler(newHandler);
                 interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 3, canvas, 15, 20, 160, 21));
                 expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
                 expect(handler.fsmStops).not.toHaveBeenCalled();

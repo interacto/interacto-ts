@@ -17,11 +17,12 @@ import {FSM} from "../../src/fsm/FSM";
 import {ReleaseTransition} from "../../src/fsm/ReleaseTransition";
 import {StdState} from "../../src/fsm/StdState";
 import {createMouseEvent, createTouchEvent} from "../interaction/StubEvents";
+import {mock} from "jest-mock-extended";
 
 let tr: ReleaseTransition;
 
 beforeEach(() => {
-    tr = new ReleaseTransition(new StdState({} as FSM, "a"), new StdState({} as FSM, "b"));
+    tr = new ReleaseTransition(new StdState(mock<FSM>(), "a"), new StdState(mock<FSM>(), "b"));
     document.documentElement.innerHTML = "<html><div><canvas id='canvas' /></div></html>";
 });
 

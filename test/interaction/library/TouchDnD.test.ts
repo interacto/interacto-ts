@@ -13,10 +13,8 @@
  */
 
 import {EventRegistrationToken, FSMHandler, TouchDnD} from "../../../src/interacto";
-import {StubFSMHandler} from "../../fsm/StubFSMHandler";
 import {createTouchEvent} from "../StubEvents";
-
-jest.mock("../../fsm/StubFSMHandler");
+import {mock} from "jest-mock-extended";
 
 let interaction: TouchDnD;
 let canvas: HTMLElement;
@@ -25,8 +23,7 @@ let handler: FSMHandler;
 let data: any;
 
 beforeEach(() => {
-    jest.clearAllMocks();
-    handler = new StubFSMHandler();
+    handler = mock<FSMHandler>();
     interaction = new TouchDnD();
     interaction.log(true);
     interaction.getFsm().log(true);
@@ -43,11 +40,11 @@ test("pressure", () => {
 });
 
 test("pressure data", () => {
-    interaction.getFsm().addHandler(new class extends StubFSMHandler {
-        public fsmUpdates(): void {
-            data = {...interaction.getData()};
-        }
-    }());
+    const newHandler = mock<FSMHandler>();
+    newHandler.fsmUpdates.mockImplementation(() => {
+        data = {...interaction.getData()};
+    });
+    interaction.getFsm().addHandler(newHandler);
     interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 3, canvas, 15, 20, 16, 21));
     expect(data.srcClientX).toBe(16);
     expect(data.srcClientY).toBe(21);
@@ -81,12 +78,11 @@ test("pressure move", () => {
 
 test("pressure move data", () => {
     interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 2, canvas, 11, 23, 12, 25));
-
-    interaction.getFsm().addHandler(new class extends StubFSMHandler {
-        public fsmUpdates(): void {
-            data = {...interaction.getData()};
-        }
-    }());
+    const newHandler = mock<FSMHandler>();
+    newHandler.fsmUpdates.mockImplementation(() => {
+        data = {...interaction.getData()};
+    });
+    interaction.getFsm().addHandler(newHandler);
 
     interaction.processEvent(createTouchEvent(EventRegistrationToken.touchmove, 2, canvas, 141, 24, 14, 28));
     expect(data.srcClientX).toBe(12);
@@ -126,11 +122,11 @@ test("pressure move move OK data", () => {
     interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 4, canvas, 111, 213, 112, 215));
     interaction.processEvent(createTouchEvent(EventRegistrationToken.touchmove, 4, canvas, 11, 24, 14, 28));
 
-    interaction.getFsm().addHandler(new class extends StubFSMHandler {
-        public fsmUpdates(): void {
-            data = {...interaction.getData()};
-        }
-    }());
+    const newHandler = mock<FSMHandler>();
+    newHandler.fsmUpdates.mockImplementation(() => {
+        data = {...interaction.getData()};
+    });
+    interaction.getFsm().addHandler(newHandler);
 
     interaction.processEvent(createTouchEvent(EventRegistrationToken.touchmove, 4, canvas, 110, 240, 140, 280));
     expect(data.srcClientX).toBe(112);
@@ -159,15 +155,14 @@ test("pressure move release", () => {
 test("pressure move release data", () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let data2: any;
-    interaction.getFsm().addHandler(new class extends StubFSMHandler {
-        public fsmUpdates(): void {
-            data = {...interaction.getData()};
-        }
-
-        public fsmStops(): void {
-            data2 = {...interaction.getData()};
-        }
-    }());
+    const newHandler = mock<FSMHandler>();
+    newHandler.fsmUpdates.mockImplementation(() => {
+        data = {...interaction.getData()};
+    });
+    newHandler.fsmStops.mockImplementation(() => {
+        data2 = {...interaction.getData()};
+    });
+    interaction.getFsm().addHandler(newHandler);
 
     interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 0, canvas, 111, 231, 121, 251));
     interaction.processEvent(createTouchEvent(EventRegistrationToken.touchmove, 0, canvas, 11, 24, 14, 28));

@@ -18,12 +18,13 @@ import {OutputStateImpl} from "../../src/fsm/OutputStateImpl";
 import {StubTransitionOK} from "./StubTransitionOK";
 import {StdState} from "../../src/fsm/StdState";
 import {Transition} from "../../src/fsm/Transition";
+import {mock, MockProxy} from "jest-mock-extended";
 
 let state: OutputStateImpl;
-let fsm: FSM;
+let fsm: MockProxy<FSM> & FSM;
 
 beforeEach(() => {
-    fsm = {} as FSM;
+    fsm = mock<FSM>();
     state = new class extends OutputStateImpl {
         public constructor() {
             super(fsm, "os");
@@ -35,25 +36,23 @@ beforeEach(() => {
 });
 
 test("getTransitions", () => {
-    state.addTransition(new StubTransitionOK(new StdState(fsm, "s"), {} as InputState));
+    state.addTransition(new StubTransitionOK(new StdState(fsm, "s"), mock<InputState>()));
     const tr = state.getTransitions();
     tr.length = 0;
     expect(state.getTransitions()).toHaveLength(1);
 });
 
 test("addTransition OK", () => {
-    const t1 = {} as Transition;
-    const t2 = {} as Transition;
+    const t1 = mock<Transition>();
+    const t2 = mock<Transition>();
     state.addTransition(t2);
     state.addTransition(t1);
     expect(state.getTransitions()).toStrictEqual([t2, t1]);
 });
 
 test("uninstall", () => {
-    const t1 = {} as Transition;
-    const t2 = {} as Transition;
-    t1.uninstall = jest.fn();
-    t2.uninstall = jest.fn();
+    const t1 = mock<Transition>();
+    const t2 = mock<Transition>();
     state.addTransition(t1);
     state.addTransition(t2);
     state.uninstall();

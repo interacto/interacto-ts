@@ -13,7 +13,6 @@
  */
 
 import {CommandImpl} from "../../src/command/CommandImpl";
-import {Undoable} from "../../src/undo/Undoable";
 
 export class StubCmd extends CommandImpl {
     public candoValue: boolean;
@@ -31,17 +30,5 @@ export class StubCmd extends CommandImpl {
 
     public canDo(): boolean {
         return this.candoValue;
-    }
-}
-
-export class StubUndoableCmd extends StubCmd implements Undoable {
-    public undo(): void {
-    }
-
-    public redo(): void {
-    }
-
-    public getUndoName(): string {
-        return "";
     }
 }

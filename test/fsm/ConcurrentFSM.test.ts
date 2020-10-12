@@ -19,7 +19,7 @@ import {StdState} from "../../src/fsm/StdState";
 import {TerminalState} from "../../src/fsm/TerminalState";
 import {CancellingState} from "../../src/fsm/CancellingState";
 import {Transition} from "../../src/fsm/Transition";
-import {StubFSMHandler} from "./StubFSMHandler";
+import {mock} from "jest-mock-extended";
 
 class StubTouchFSM extends FSM {
     public cpt: number;
@@ -108,8 +108,6 @@ class StubTouchFSM extends FSM {
     }
 }
 
-jest.mock("../fsm/StubFSMHandler");
-
 let fsm: ConcurrentFSM<StubTouchFSM>;
 let fsm1: StubTouchFSM;
 let fsm2: StubTouchFSM;
@@ -121,9 +119,9 @@ beforeEach(() => {
     jest.clearAllMocks();
     fsm1 = new StubTouchFSM(1);
     fsm2 = new StubTouchFSM(2);
-    handler = new StubFSMHandler();
-    handler1 = new StubFSMHandler();
-    handler2 = new StubFSMHandler();
+    handler = mock<FSMHandler>();
+    handler1 = mock<FSMHandler>();
+    handler2 = mock<FSMHandler>();
     fsm1.addHandler(handler1);
     fsm2.addHandler(handler2);
     fsm = new ConcurrentFSM([fsm1, fsm2]);

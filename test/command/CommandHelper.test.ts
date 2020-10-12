@@ -15,31 +15,30 @@ import {Command} from "../../src/command/Command";
 import {CommandImpl} from "../../src/command/CommandImpl";
 import {CommandsRegistry} from "../../src/command/CommandsRegistry";
 import {UndoCollector} from "../../src/undo/UndoCollector";
-import {StubCmd} from "./StubCmd";
+import {mock, MockProxy} from "jest-mock-extended";
 
 
-jest.mock("./StubCmd");
+let cmd: Command & MockProxy<Command>;
 
-let cmd: Command;
+beforeEach(() => {
+    cmd = mock<Command>();
+});
 
 afterEach(() => {
-    jest.clearAllMocks();
     CommandsRegistry.getInstance().clear();
     UndoCollector.getInstance().clear();
 });
 
 test("testExecuteAndFlushCannotDo", () => {
-    StubCmd.prototype.canDo = jest.fn().mockImplementation(() => false);
-    cmd = new StubCmd();
+    cmd.canDo.mockReturnValue(false);
     CommandImpl.executeAndFlush(cmd);
     expect(cmd.doIt).not.toHaveBeenCalled();
     expect(cmd.flush).toHaveBeenCalledTimes(1);
 });
 
 test("testExecuteAndFlushCanDo", () => {
-    StubCmd.prototype.canDo = jest.fn().mockImplementation(() => true);
-    StubCmd.prototype.doIt = jest.fn().mockImplementation(() => true);
-    cmd = new StubCmd();
+    cmd.canDo.mockReturnValue(true);
+    cmd.doIt.mockReturnValue(true);
     CommandImpl.executeAndFlush(cmd);
     expect(cmd.doIt).toHaveBeenCalledTimes(1);
     expect(cmd.flush).toHaveBeenCalledTimes(1);

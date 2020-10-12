@@ -12,20 +12,17 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {StubFSMHandler} from "../../fsm/StubFSMHandler";
 import {EventRegistrationToken, FSMHandler, KeyTyped} from "../../../src/interacto";
 import {createKeyEvent} from "../StubEvents";
-
-jest.mock("../../fsm/StubFSMHandler");
+import {mock} from "jest-mock-extended";
 
 let interaction: KeyTyped;
 let text: HTMLElement;
 let handler: FSMHandler;
 
 beforeEach(() => {
-    jest.clearAllMocks();
     jest.useFakeTimers();
-    handler = new StubFSMHandler();
+    handler = mock<FSMHandler>();
     interaction = new KeyTyped();
     interaction.log(true);
     interaction.getFsm().log(true);

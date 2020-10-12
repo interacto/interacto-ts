@@ -15,46 +15,40 @@
 import {CancellingState} from "../../src/fsm/CancellingState";
 import {FSM} from "../../src/fsm/FSM";
 import {OutputState} from "../../src/fsm/OutputState";
+import {mock, MockProxy} from "jest-mock-extended";
 
 let state: CancellingState;
-let fsm: FSM;
+let fsm: MockProxy<FSM> & FSM;
 
 beforeEach(() => {
-    fsm = {} as FSM;
+    fsm = mock<FSM>();
     state = new CancellingState(fsm, "os");
 });
 
 test("enter", () => {
-    fsm.onCancelling = jest.fn();
-    jest.spyOn(fsm, "onCancelling");
     state.enter();
     expect(fsm.onCancelling).toHaveBeenCalledTimes(1);
 });
 
 test("checkStartingState fsm started", () => {
-    fsm.onStarting = jest.fn();
-    fsm.isStarted = jest.fn(() => true);
-    jest.spyOn(fsm, "onStarting");
+    fsm.isStarted.mockReturnValue(true);
 
     state.checkStartingState();
     expect(fsm.onStarting).not.toHaveBeenCalledWith();
 });
 
 test("checkStartingState fsm not started but starting state not this state", () => {
-    fsm.onStarting = jest.fn();
-    fsm.isStarted = jest.fn(() => false);
-    fsm.getStartingState = jest.fn(() => ({} as OutputState));
-    jest.spyOn(fsm, "onStarting");
+    fsm.isStarted.mockReturnValue(false);
+    fsm.getStartingState.mockReturnValue(mock<OutputState>());
+    // fsm.getStartingState = jest.fn(() => ({} as OutputState));
 
     state.checkStartingState();
     expect(fsm.onStarting).not.toHaveBeenCalledWith();
 });
 
 test("checkStartingState fsm not started and starting state is this state", () => {
-    fsm.onStarting = jest.fn();
-    fsm.isStarted = jest.fn(() => false);
-    fsm.getStartingState = jest.fn(() => state);
-    jest.spyOn(fsm, "onStarting");
+    fsm.isStarted.mockReturnValue(false);
+    fsm.getStartingState.mockReturnValue(state);
 
     state.checkStartingState();
     expect(fsm.onStarting).toHaveBeenCalledTimes(1);

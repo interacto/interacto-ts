@@ -13,10 +13,8 @@
  */
 
 import {DragLock, EventRegistrationToken, FSMHandler, KeyCode} from "../../../src/interacto";
-import {StubFSMHandler} from "../../fsm/StubFSMHandler";
 import {createKeyEvent, createMouseEvent} from "../StubEvents";
-
-jest.mock("../../fsm/StubFSMHandler");
+import {mock} from "jest-mock-extended";
 
 let interaction: DragLock;
 let canvas: HTMLElement;
@@ -27,9 +25,8 @@ let sx: number | undefined;
 let sy: number | undefined;
 
 beforeEach(() => {
-    jest.clearAllMocks();
     jest.useFakeTimers();
-    handler = new StubFSMHandler();
+    handler = mock<FSMHandler>();
     interaction = new DragLock();
     interaction.log(true);
     interaction.getFsm().addHandler(handler);
@@ -71,14 +68,14 @@ test("drag lock canceled on ESC", () => {
 });
 
 test("check data with a normal execution", () => {
-    interaction.getFsm().addHandler(new class extends StubFSMHandler {
-        public fsmStops(): void {
-            sx = interaction.getData().getSrcClientX();
-            sy = interaction.getData().getSrcClientY();
-            tx = interaction.getData().getTgtClientX();
-            ty = interaction.getData().getTgtClientY();
-        }
-    }());
+    const newHandler = mock<FSMHandler>();
+    newHandler.fsmStops.mockImplementation(() => {
+        sx = interaction.getData().getSrcClientX();
+        sy = interaction.getData().getSrcClientY();
+        tx = interaction.getData().getTgtClientX();
+        ty = interaction.getData().getTgtClientY();
+    });
+    interaction.getFsm().addHandler(newHandler);
     interaction.processEvent(createMouseEvent(EventRegistrationToken.click, canvas, undefined, undefined, 11, 23));
     interaction.processEvent(createMouseEvent(EventRegistrationToken.click, canvas, undefined, undefined, 11, 23));
     interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 20, 30));
@@ -106,12 +103,12 @@ test("check data update during a move", () => {
     interaction.registerToNodes([canvas]);
     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.click, canvas, undefined, undefined, 11, 23));
     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.click, canvas, undefined, undefined, 11, 23));
-    interaction.getFsm().addHandler(new class extends StubFSMHandler {
-        public fsmUpdates(): void {
-            tx = interaction.getData().getTgtClientX();
-            ty = interaction.getData().getTgtClientY();
-        }
-    }());
+    const newHandler = mock<FSMHandler>();
+    newHandler.fsmUpdates.mockImplementation(() => {
+        tx = interaction.getData().getTgtClientX();
+        ty = interaction.getData().getTgtClientY();
+    });
+    interaction.getFsm().addHandler(newHandler);
     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 30, 40));
     expect(handler.fsmCancels).not.toHaveBeenCalled();
     expect(tx).toBe(30);

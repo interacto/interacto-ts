@@ -13,18 +13,16 @@
  */
 
 import {DnD, EventRegistrationToken, FSMHandler} from "../../../src/interacto";
-import {StubFSMHandler} from "../../fsm/StubFSMHandler";
 import {createMouseEvent} from "../StubEvents";
-
-jest.mock("../../fsm/StubFSMHandler");
+import {mock} from "jest-mock-extended";
+import {StubFSMHandler} from "../../fsm/StubFSMHandler";
 
 let interaction: DnD;
 let canvas: HTMLElement;
 let handler: FSMHandler;
 
 beforeEach(() => {
-    jest.clearAllMocks();
-    handler = new StubFSMHandler();
+    handler = mock<FSMHandler>();
     interaction = new DnD(false, false);
     interaction.log(true);
     interaction.getFsm().log(true);
@@ -59,16 +57,16 @@ test("data of the  press and drag part of the interaction", () => {
 
     interaction.registerToNodes([canvas]);
     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, canvas, undefined, undefined, 15, 20, 0));
-    interaction.getFsm().addHandler(new class extends StubFSMHandler {
-        public fsmUpdates(): void {
-            sx = interaction.getData().getSrcClientX();
-            sy = interaction.getData().getSrcClientY();
-            tx = interaction.getData().getTgtClientX();
-            ty = interaction.getData().getTgtClientY();
-            button = interaction.getData().getButton();
-            obj = interaction.getData().getTgtObject() as HTMLCanvasElement;
-        }
-    }());
+    const newHandler = mock<FSMHandler>();
+    newHandler.fsmUpdates.mockImplementation(() => {
+        sx = interaction.getData().getSrcClientX();
+        sy = interaction.getData().getSrcClientY();
+        tx = interaction.getData().getTgtClientX();
+        ty = interaction.getData().getTgtClientY();
+        button = interaction.getData().getButton();
+        obj = interaction.getData().getTgtObject() as HTMLCanvasElement;
+    });
+    interaction.getFsm().addHandler(newHandler);
     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 16, 21));
     expect(sx).toBe(15);
     expect(sy).toBe(20);
