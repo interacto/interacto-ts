@@ -40,7 +40,6 @@ test("checkStartingState fsm started", () => {
 test("checkStartingState fsm not started but starting state not this state", () => {
     fsm.isStarted.mockReturnValue(false);
     fsm.getStartingState.mockReturnValue(mock<OutputState>());
-    // fsm.getStartingState = jest.fn(() => ({} as OutputState));
 
     state.checkStartingState();
     expect(fsm.onStarting).not.toHaveBeenCalledWith();
