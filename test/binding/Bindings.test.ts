@@ -13,7 +13,8 @@
  */
 
 import {
-    clickBinder,
+    AnonCmd,
+    clickBinder, Command,
     CommandsRegistry,
     dbleClickBinder,
     dndBinder,
@@ -35,9 +36,9 @@ import {Subscription} from "rxjs";
 import {createKeyEvent, createMouseEvent} from "../interaction/StubEvents";
 
 let elt: HTMLElement;
-let producedCmds: Array<StubCmd>;
+let producedCmds: Array<Command>;
 let disposable: Subscription;
-let binding: WidgetBinding<StubCmd, InteractionImpl<InteractionData, FSM>, InteractionData>;
+let binding: WidgetBinding<Command, InteractionImpl<InteractionData, FSM>, InteractionData>;
 
 beforeEach(() => {
     jest.useFakeTimers();
@@ -170,4 +171,20 @@ test("drag lock: double click does not cancel", () => {
     elt.dispatchEvent(createMouseEvent(EventRegistrationToken.click, elt, 1, 2, 3, 4, 0));
 
     expect(binding.getInteraction().isRunning()).toBeTruthy();
+});
+
+
+test("binding with anon command", () => {
+    binding = clickBinder()
+        .on(elt)
+        .toProduce((_i: PointData) => new AnonCmd(() => {
+        }))
+        .log(LogLevel.interaction)
+        .bind();
+
+    disposable = binding.produces().subscribe(c => producedCmds.push(c));
+
+    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.click, elt, 1, 2, 3, 4, 0));
+
+    expect(producedCmds).toHaveLength(1);
 });

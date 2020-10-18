@@ -3,7 +3,6 @@
  */
 
 export * from "./binding/AnonBinding";
-export * from "./binding/AnonCmdBinder";
 export * from "./binding/Binder";
 export * from "./binding/Bindings";
 export * from "./binding/BindingsObserver";

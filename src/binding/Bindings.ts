@@ -12,9 +12,6 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {CmdBinder} from "./api/CmdBinder";
-import {AnonCmd} from "../command/AnonCmd";
-import {AnonCmdBinder} from "./AnonCmdBinder";
 import {InteractionBinder} from "./api/InteractionBinder";
 import {ButtonPressed} from "../interaction/library/ButtonPressed";
 import {WidgetData} from "../interaction/library/WidgetData";
@@ -62,17 +59,6 @@ let observer: BindingsObserver | undefined;
 
 export function nodeBinder(): BaseUpdateBinder {
     return new UpdateBinder<CommandImpl, InteractionImpl<InteractionData, FSM>, InteractionData>(observer) as BaseUpdateBinder;
-}
-
-/**
- * Creates binding builder to build a binding between a KeysPressure interaction (done on a Node) and the given command type.
- * Do not forget to call bind() at the end of the build to execute the builder.
- * @param cmd The anonymous command to produce.
- * @return The binding builder. Cannot be null.
- * @throws IllegalArgumentException If the given cmd is null.
- */
-export function anonCmdBinder(cmd: () => void): CmdBinder<AnonCmd> {
-    return new AnonCmdBinder(cmd, observer);
 }
 
 /**
