@@ -19,6 +19,7 @@ import {isOutputStateType, OutputState} from "./OutputState";
 import {InputState} from "./InputState";
 import {TerminalState} from "./TerminalState";
 import {CancellingState} from "./CancellingState";
+import {Subscription} from "rxjs";
 
 /**
  * A transition that refers to another FSM.
@@ -29,6 +30,11 @@ export class SubFSMTransition extends Transition {
     private readonly subFSM: FSM;
 
     private readonly subFSMHandler: FSMHandler;
+
+    /**
+     * Temporary subscription to the current state of the sub-FSM.
+     */
+    private subStateSubscription: Subscription | undefined;
 
     /**
      * Creates the transition.
@@ -45,13 +51,11 @@ export class SubFSMTransition extends Transition {
                 this.src.exit();
             },
             "fsmUpdates": (): void => {
-                this.src.getFSM().setCurrentState(this.subFSM.getCurrentState());
                 this.src.getFSM().onUpdating();
             },
             "fsmStops": (): void => {
                 this.action(undefined);
-                this.subFSM.removeHandler(this.subFSMHandler);
-                this.src.getFSM().setCurrentSubFSM(undefined);
+                this.unsetFSMHandler();
                 if (this.tgt instanceof TerminalState) {
                     this.tgt.enter();
                     return;
@@ -69,9 +73,29 @@ export class SubFSMTransition extends Transition {
         };
     }
 
-    private cancelsFSM(): void {
+    /**
+     * When has to setting up the subFSM
+     */
+    private setUpFSMHandler(): void {
+        this.subFSM.addHandler(this.subFSMHandler);
+        this.src.getFSM().setCurrentSubFSM(this.subFSM);
+        this.subStateSubscription = this.subFSM.currentStateObservable()
+            .subscribe(value => {
+                this.src.getFSM().setCurrentState(value[1]);
+            });
+    }
+
+    /**
+     * If the subFSM is not more used to should be unset.
+     */
+    private unsetFSMHandler(): void {
         this.subFSM.removeHandler(this.subFSMHandler);
         this.src.getFSM().setCurrentSubFSM(undefined);
+        this.subStateSubscription?.unsubscribe();
+    }
+
+    private cancelsFSM(): void {
+        this.unsetFSMHandler();
         this.src.getFSM().onCancelling();
     }
 
@@ -83,8 +107,7 @@ export class SubFSMTransition extends Transition {
         }
 
         this.src.getFSM().stopCurrentTimeout();
-        this.subFSM.addHandler(this.subFSMHandler);
-        this.src.getFSM().setCurrentSubFSM(this.subFSM);
+        this.setUpFSMHandler();
         this.subFSM.process(event);
         return transition.tgt;
     }
@@ -113,6 +136,7 @@ export class SubFSMTransition extends Transition {
     }
 
     public uninstall(): void {
+        this.unsetFSMHandler();
         this.subFSM.uninstall();
     }
 }

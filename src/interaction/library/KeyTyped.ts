@@ -36,6 +36,7 @@ export class KeyTypedFSM extends FSM {
         super.buildFSM(dataHandler);
         const pressed: StdState = new StdState(this, "pressed");
         const typed: TerminalState = new TerminalState(this, "typed");
+        this.setStartingState(typed);
 
         this.addState(pressed);
         this.addState(typed);

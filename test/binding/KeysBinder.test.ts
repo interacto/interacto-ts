@@ -229,7 +229,7 @@ test("keys type first end", () => {
     jest.runOnlyPendingTimers();
     expect(first).toHaveBeenCalledTimes(1);
     expect(end).toHaveBeenCalledTimes(1);
-    expect(then).toHaveBeenCalledTimes(7);
+    expect(then).toHaveBeenCalledTimes(4);
     expect(endcancel).toHaveBeenCalledTimes(1);
 });
 

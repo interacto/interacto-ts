@@ -73,7 +73,7 @@ test("type text and wait for timeout stops the interaction", () => {
     jest.runOnlyPendingTimers();
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
-    expect(handler.fsmUpdates).toHaveBeenCalledTimes(6);
+    expect(handler.fsmUpdates).toHaveBeenCalledTimes(3);
 });
 
 test("type text and wait for timeout stops the interaction: data", () => {
