@@ -318,3 +318,18 @@ test("keys type with 5", () => {
     jest.runOnlyPendingTimers();
     expect(producedCmds).toHaveLength(1);
 });
+
+test("keys type with 3 mixed keydown up", () => {
+    binding = keysTypeBinder()
+        .on(elt)
+        .with("z", "b")
+        .toProduce(() => new StubCmd(true))
+        .bind();
+    disposable = binding.produces().subscribe(c => producedCmds.push(c));
+    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "z"));
+    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "b"));
+    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "z"));
+    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "b"));
+    jest.runOnlyPendingTimers();
+    expect(producedCmds).toHaveLength(1);
+});

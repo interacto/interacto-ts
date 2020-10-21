@@ -16,12 +16,11 @@ import {TerminalState} from "../../fsm/TerminalState";
 import {StdState} from "../../fsm/StdState";
 import {FSM} from "../../fsm/FSM";
 import {InteractionImpl} from "../InteractionImpl";
-import {KeyTypedFSM} from "./KeyTyped";
-import {SubFSMTransition} from "../../fsm/SubFSMTransition";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 import {KeysData} from "./KeysData";
 import {KeysDataImpl} from "./KeysDataImpl";
 import {FSMDataHandler} from "../../fsm/FSMDataHandler";
+import {KeyReleaseTransition} from "../../fsm/KeyReleaseTransition";
 
 /**
  * An FSM for typing several keyboard touches.
@@ -29,8 +28,6 @@ import {FSMDataHandler} from "../../fsm/FSMDataHandler";
  * typed key).
  */
 export class KeysTypedFSM extends FSM {
-    private readonly keyTypeFSM: KeyTypedFSM;
-
     /** The time gap between the two spinner events. */
     private static readonly timeGap: number = 1000;
 
@@ -46,7 +43,6 @@ export class KeysTypedFSM extends FSM {
      */
     public constructor() {
         super();
-        this.keyTypeFSM = new KeyTypedFSM();
     }
 
     public buildFSM(dataHandler?: KeyTypedFSMHandler): void {
@@ -54,34 +50,25 @@ export class KeysTypedFSM extends FSM {
             return;
         }
 
-        this.keyTypeFSM.buildFSM(dataHandler);
         super.buildFSM(dataHandler);
 
-        const typed: StdState = new StdState(this, "typed");
+        const keyup: StdState = new StdState(this, "keyup");
         const timeouted: TerminalState = new TerminalState(this, "timeouted");
 
-        this.addState(typed);
+        this.addState(keyup);
         this.addState(timeouted);
 
-        new SubFSMTransition(this.initState, typed, this.keyTypeFSM);
-        new SubFSMTransition(typed, typed, this.keyTypeFSM);
-        new TimeoutTransition(typed, timeouted, KeysTypedFSM.timeGapSupplier);
-    }
+        const action = (event: Event): void => {
+            if (event instanceof KeyboardEvent) {
+                dataHandler?.onKeyTyped(event);
+            }
+        };
+        const keyupInit = new KeyReleaseTransition(this.initState, keyup);
+        const keyupSeq = new KeyReleaseTransition(keyup, keyup);
+        keyupInit.action = action;
+        keyupSeq.action = action;
 
-
-    public log(log: boolean): void {
-        super.log(log);
-        this.keyTypeFSM.log(log);
-    }
-
-    public reinit(): void {
-        super.reinit();
-        this.keyTypeFSM.reinit();
-    }
-
-    public fullReinit(): void {
-        super.fullReinit();
-        this.keyTypeFSM.fullReinit();
+        new TimeoutTransition(keyup, timeouted, KeysTypedFSM.timeGapSupplier);
     }
 }
 
@@ -96,15 +83,13 @@ interface KeyTypedFSMHandler extends FSMDataHandler {
  * typed key).
  */
 export class KeysTyped extends InteractionImpl<KeysData, KeysTypedFSM> {
-    private readonly handler: KeyTypedFSMHandler;
-
     /**
      * Creates the user interaction.
      */
     public constructor() {
         super(new KeysTypedFSM());
 
-        this.handler = {
+        const handler: KeyTypedFSMHandler = {
             "onKeyTyped": (event: KeyboardEvent): void => {
                 (this.data as (KeysDataImpl)).setKeysDataTarget(event);
                 (this.data as (KeysDataImpl)).addKeysDataKey(event);
@@ -112,7 +97,7 @@ export class KeysTyped extends InteractionImpl<KeysData, KeysTypedFSM> {
             "reinitData": (): void => this.reinitData()
         };
 
-        this.getFsm().buildFSM(this.handler);
+        this.getFsm().buildFSM(handler);
     }
 
     public createDataObject(): KeysData {
