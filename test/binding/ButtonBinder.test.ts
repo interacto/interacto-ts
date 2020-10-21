@@ -99,6 +99,57 @@ test("testCommandExecutedOnTwoButtons", () => {
     expect(producedCmds[1].exec).toStrictEqual(1);
 });
 
+test("command executed on 2 buttons using several on", () => {
+    binding = buttonBinder()
+        .toProduce(() => new StubCmd(true))
+        .on(button1)
+        .on(button2)
+        .bind();
+
+    disposable = binding.produces().subscribe(c => producedCmds.push(c));
+
+    button2.click();
+    button1.click();
+
+    expect(producedCmds).toHaveLength(2);
+});
+
+test("check ifhadeffects", () => {
+    cmd = new StubCmd(true);
+    jest.spyOn(cmd, "hadEffect").mockReturnValue(true);
+    const ifEffects = jest.fn();
+    const ifNoEffects = jest.fn();
+    binding = buttonBinder()
+        .toProduce(() => cmd)
+        .on(button1)
+        .ifHadEffects(ifEffects)
+        .ifHadNoEffect(ifNoEffects)
+        .bind();
+
+    button1.click();
+
+    expect(ifEffects).toHaveBeenCalledTimes(1);
+    expect(ifNoEffects).not.toHaveBeenCalled();
+});
+
+test("check ifhadnoeffects", () => {
+    cmd = new StubCmd(true);
+    jest.spyOn(cmd, "hadEffect").mockReturnValue(false);
+    const ifEffects = jest.fn();
+    const ifNoEffects = jest.fn();
+    binding = buttonBinder()
+        .toProduce(() => cmd)
+        .on(button1)
+        .ifHadEffects(ifEffects)
+        .ifHadNoEffect(ifNoEffects)
+        .bind();
+
+    button1.click();
+
+    expect(ifNoEffects).toHaveBeenCalledTimes(1);
+    expect(ifEffects).not.toHaveBeenCalled();
+});
+
 test("testInit1Executed", () => {
     binding = buttonBinder()
         .on(button1)
