@@ -58,6 +58,28 @@ test("key press std key", () => {
     expect(producedCmds).toHaveLength(1);
 });
 
+test("key press std key when false", () => {
+    binding = keyPressBinder(false)
+        .when(_i => false)
+        .on(elt)
+        .toProduce(() => new StubCmd(true))
+        .bind();
+    disposable = binding.produces().subscribe(c => producedCmds.push(c));
+    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "A"));
+    expect(producedCmds).toHaveLength(0);
+});
+
+test("key press std key when true", () => {
+    binding = keyPressBinder(false)
+        .when(i => i.getKey() === "A")
+        .on(elt)
+        .toProduce(() => new StubCmd(true))
+        .bind();
+    disposable = binding.produces().subscribe(c => producedCmds.push(c));
+    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "A"));
+    expect(producedCmds).toHaveLength(1);
+});
+
 test("key press modifier KO", () => {
     binding = keyPressBinder(false)
         .on(elt)
@@ -90,6 +112,30 @@ test("key press with routine OK", () => {
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
     elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "b"));
+    expect(producedCmds).toHaveLength(1);
+});
+
+test("key press std key with when false", () => {
+    binding = keyPressBinder(false)
+        .with("b")
+        .on(elt)
+        .when(_i => false)
+        .toProduce(() => new StubCmd(true))
+        .bind();
+    disposable = binding.produces().subscribe(c => producedCmds.push(c));
+    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "b"));
+    expect(producedCmds).toHaveLength(0);
+});
+
+test("key press std key with when true", () => {
+    binding = keyPressBinder(false)
+        .toProduce(() => new StubCmd(true))
+        .on(elt)
+        .with("c")
+        .when(i => i.getKey() === "c")
+        .bind();
+    disposable = binding.produces().subscribe(c => producedCmds.push(c));
+    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "c"));
     expect(producedCmds).toHaveLength(1);
 });
 
