@@ -94,7 +94,6 @@ export class FSM {
     public constructor() {
         this._inner = false;
         this.started = false;
-        this.started = false;
         this.initState = new InitState(this, "init");
         this.states = new Array<State>(this.initState);
         this._startingState = this.initState;
