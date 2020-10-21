@@ -67,6 +67,22 @@ export class KeysTypedFSM extends FSM {
         new SubFSMTransition(typed, typed, this.keyTypeFSM);
         new TimeoutTransition(typed, timeouted, KeysTypedFSM.timeGapSupplier);
     }
+
+
+    public log(log: boolean): void {
+        super.log(log);
+        this.keyTypeFSM.log(log);
+    }
+
+    public reinit(): void {
+        super.reinit();
+        this.keyTypeFSM.reinit();
+    }
+
+    public fullReinit(): void {
+        super.fullReinit();
+        this.keyTypeFSM.fullReinit();
+    }
 }
 
 interface KeyTypedFSMHandler extends FSMDataHandler {
