@@ -173,6 +173,36 @@ test("drag lock: double click does not cancel", () => {
     expect(binding.getInteraction().isRunning()).toBeTruthy();
 });
 
+test("drag lock: first then end", () => {
+    const first = jest.fn();
+    const end = jest.fn();
+    const then = jest.fn();
+    const endcancel = jest.fn();
+    binding = dragLockBinder()
+        .on(elt)
+        .toProduce((_i: PointData) => new StubCmd(true))
+        .end(end)
+        .endOrCancel(endcancel)
+        .first(first)
+        .then(then)
+        .bind();
+    disposable = binding.produces().subscribe(c => producedCmds.push(c));
+
+    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.click, elt, 1, 2, 3, 4, 1));
+    jest.runOnlyPendingTimers();
+    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.auxclick, elt, 1, 2, 3, 4, 2));
+    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.auxclick, elt, 1, 2, 3, 4, 2));
+    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, elt));
+    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, elt));
+    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.auxclick, elt, 1, 2, 3, 4, 2));
+    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.auxclick, elt, 1, 2, 3, 4, 2));
+
+    expect(first).toHaveBeenCalledTimes(1);
+    expect(end).toHaveBeenCalledTimes(1);
+    expect(then).toHaveBeenCalledTimes(4);
+    expect(endcancel).toHaveBeenCalledTimes(1);
+});
+
 
 test("binding with anon command", () => {
     binding = clickBinder()

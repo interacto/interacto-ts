@@ -54,6 +54,9 @@ import {KeysTyped} from "../interaction/library/KeysTyped";
 import {KeyTyped} from "../interaction/library/KeyTyped";
 import {Scroll} from "../interaction/library/Scroll";
 import {ScrollData} from "../interaction/library/ScrollData";
+import {KeyInteractionBinder} from "./api/KeyInteractionBinder";
+import {KeysBinder} from "./KeysBinder";
+import {KeyInteractionUpdateBinder} from "./api/KeyInteractionUpdateBinder";
 
 let observer: BindingsObserver | undefined;
 
@@ -217,31 +220,31 @@ export function dragLockBinder(): InteractionUpdateBinder<DragLock, SrcTgtPoints
  * Creates a widget binding that uses the key pressure interaction.
  * @param modifierAccepted True: the interaction will consider key modifiers.
  */
-export function keyPressBinder(modifierAccepted: boolean): InteractionBinder<KeyPressed, KeyData> {
-    return new UpdateBinder(observer)
+export function keyPressBinder(modifierAccepted: boolean): KeyInteractionBinder<KeyPressed, KeyData> {
+    return new KeysBinder(observer)
         .usingInteraction<KeyPressed, KeyData>(() => new KeyPressed(modifierAccepted));
 }
 
 /**
  * Creates a widget binding that uses the multiple key pressures interaction.
  */
-export function keysPressBinder(): InteractionUpdateBinder<KeysPressed, KeysData> {
-    return new UpdateBinder(observer)
+export function keysPressBinder(): KeyInteractionUpdateBinder<KeysPressed, KeysData> {
+    return new KeysBinder(observer)
         .usingInteraction<KeysPressed, KeysData>(() => new KeysPressed());
 }
 
 /**
  * Creates a widget binding that uses the multiple key typings interaction.
  */
-export function keysTypeBinder(): InteractionUpdateBinder<KeysTyped, KeysData> {
-    return new UpdateBinder(observer)
+export function keysTypeBinder(): KeyInteractionUpdateBinder<KeysTyped, KeysData> {
+    return new KeysBinder(observer)
         .usingInteraction<KeysTyped, KeysData>(() => new KeysTyped());
 }
 
 /**
  * Creates a widget binding that uses the key typing interaction.
  */
-export function keyTypeBinder(): InteractionBinder<KeyTyped, KeyData> {
-    return new UpdateBinder(observer)
+export function keyTypeBinder(): KeyInteractionBinder<KeyTyped, KeyData> {
+    return new KeysBinder(observer)
         .usingInteraction<KeyTyped, KeyData>(() => new KeyTyped());
 }

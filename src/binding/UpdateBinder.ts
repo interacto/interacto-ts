@@ -32,17 +32,17 @@ import {BindingsObserver} from "./BindingsObserver";
 export class UpdateBinder<C extends Command, I extends InteractionImpl<D, FSM>, D extends InteractionData>
     extends Binder<C, I, D> implements CmdUpdateBinder<C>, InteractionCmdUpdateBinder<C, I, D> {
 
-    private updateFct?: (c: C, i: D) => void;
+    protected updateFct?: (c: C, i: D) => void;
 
-    private cancelFct?: (i: D) => void;
+    protected cancelFct?: (i: D) => void;
 
-    private endOrCancelFct?: (i: D) => void;
+    protected endOrCancelFct?: (i: D) => void;
 
-    private continuousCmdExecution: boolean;
+    protected continuousCmdExecution: boolean;
 
-    private _strictStart: boolean;
+    protected _strictStart: boolean;
 
-    private throttleTimeout: number;
+    protected throttleTimeout: number;
 
     public constructor(observer?: BindingsObserver, throttleTimeout?: number, continuousCmdExecution?: boolean, strict?: boolean,
                        initCmd?: (c: C, i: D) => void, checkConditions?: (i: D) => boolean, cmdProducer?: (i: D) => C,

@@ -12,104 +12,148 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {KeysPressed} from "../interaction/library/KeysPressed";
-import {KeysData} from "../interaction/library/KeysData";
-import {Binder} from "./Binder";
 import {Command} from "../command/Command";
-import {KeyInteractionBinder} from "./api/KeyInteractionBinder";
-import {KeyInteractionCmdBinder} from "./api/KeyInteractionCmdBinder";
 import {LogLevel} from "../logging/LogLevel";
 import {WidgetBinding} from "./WidgetBinding";
 import {AnonBinding} from "./AnonBinding";
 import {BindingsObserver} from "./BindingsObserver";
+import {InteractionImpl} from "../interaction/InteractionImpl";
+import {FSM} from "../fsm/FSM";
+import {InteractionData} from "../interaction/InteractionData";
+import {KeysDataImpl} from "../interaction/library/KeysDataImpl";
+import {KeyDataImpl} from "../interaction/library/KeyDataImpl";
+import {UpdateBinder} from "./UpdateBinder";
+import {KeyInteractionCmdUpdateBinder} from "./api/KeyInteractionCmdUpdateBinder";
 
 /**
  * The base binding builder to create bindings between a keys pressure interaction and a given command.
  * @param <C> The type of the command to produce.
  * @author Arnaud Blouin
  */
-export class KeysBinder<C extends Command> extends Binder<C, KeysPressed, KeysData> implements
-        KeyInteractionBinder<KeysPressed, KeysData>, KeyInteractionCmdBinder<C, KeysPressed, KeysData> {
+export class KeysBinder<C extends Command, I extends InteractionImpl<D, FSM>, D extends InteractionData>
+    extends UpdateBinder<C, I, D> implements KeyInteractionCmdUpdateBinder<C, I, D> {
 
     private codes: Array<string>;
 
-    private readonly checkCode: (i: KeysData) => boolean;
+    private readonly checkCode: (i: InteractionData) => boolean;
 
-    protected constructor(observer?: BindingsObserver, initCmd?: (c: C, i: KeysData) => void, whenPredicate?: (i: KeysData) => boolean,
-                          cmdProducer?: (i: KeysData) => C, widgets?: Array<EventTarget>, dynamicNodes?: Array<Node>,
-                          onEnd?: (c: C, i: KeysData) => void, logLevels?: Array<LogLevel>,
-                          hadNoEffectFct?: (c: C, i: KeysData) => void, hadEffectsFct?: (c: C, i: KeysData) => void,
-                          cannotExecFct?: (c: C, i: KeysData) => void, targetWidgets?: Array<EventTarget>,
-                          keyCodes?: Array<string>, stopProga?: boolean, prevent?: boolean) {
-        super(observer, initCmd, whenPredicate, cmdProducer, widgets, dynamicNodes, () => new KeysPressed(),
-            onEnd, logLevels, hadNoEffectFct, hadEffectsFct, cannotExecFct, targetWidgets, stopProga, prevent);
+    public constructor(observer?: BindingsObserver, throttleTimeout?: number, continuousCmdExecution?: boolean, strict?: boolean,
+                       initCmd?: (c: C, i: D) => void, whenPredicate?: (i: D) => boolean,
+                       cmdProducer?: (i: D) => C, widgets?: Array<EventTarget>, dynamicNodes?: Array<Node>,
+                       interactionSupplier?: () => I, onEnd?: (c: C, i: D) => void, logLevels?: Array<LogLevel>,
+                       hadNoEffectFct?: (c: C, i: D) => void, hadEffectsFct?: (c: C, i: D) => void,
+                       cannotExecFct?: (c: C, i: D) => void, updateFct?: (c: C, i: D) => void, cancelFct?: (i: D) => void,
+                       endOrCancelFct?: (i: D) => void, targetWidgets?: Array<EventTarget>,
+                       keyCodes?: Array<string>, stopProga?: boolean, prevent?: boolean) {
+        super(observer, throttleTimeout, continuousCmdExecution, strict, initCmd, whenPredicate, cmdProducer, widgets,
+            dynamicNodes, interactionSupplier, onEnd, logLevels, hadNoEffectFct, hadEffectsFct, cannotExecFct,
+            updateFct, cancelFct, endOrCancelFct, targetWidgets, stopProga, prevent);
         this.codes = keyCodes === undefined ? [] : [...keyCodes];
-        this.checkCode = (i: KeysData): boolean => {
-            const keys = i.getKeys();
-            return (this.codes.length === 0 || this.codes.length === keys.length &&
-                keys.every((v: string) => this.codes.includes(v))) &&
-                (this.checkConditions === undefined || this.checkConditions(i));
+        this.checkCode = (i: D): boolean => {
+            if (i instanceof KeysDataImpl) {
+                const keys = i.getKeys();
+                return (this.codes.length === 0 || this.codes.length === keys.length &&
+                    keys.every((v: string) => this.codes.includes(v))) &&
+                    (this.checkConditions === undefined || this.checkConditions(i));
+            }
+            if (i instanceof KeyDataImpl) {
+                const key = (i as KeyDataImpl).getKey();
+                return (this.codes.length === 0 || this.codes.length === 1 && key === this.codes[0]) &&
+                    (this.checkConditions === undefined || this.checkConditions(i));
+            }
+            return false;
         };
     }
 
-    public with(...keyCodes: Array<string>): KeysBinder<C> {
+    public with(...keyCodes: Array<string>): KeysBinder<C, I, D> {
         const dup = this.duplicate();
         dup.codes = [...keyCodes];
         return dup;
     }
 
-    public on(...widget: Array<EventTarget>): KeysBinder<C> {
-        return super.on(...widget) as KeysBinder<C>;
+    public on(...widget: Array<EventTarget>): KeysBinder<C, I, D> {
+        return super.on(...widget) as KeysBinder<C, I, D>;
     }
 
-    public onDynamic(node: Node): KeysBinder<C> {
-        return super.onDynamic(node) as KeysBinder<C>;
+    public onDynamic(node: Node): KeysBinder<C, I, D> {
+        return super.onDynamic(node) as KeysBinder<C, I, D>;
     }
 
-    public first(initCmdFct: (c: C, i: KeysData) => void): KeysBinder<C> {
-        return super.first(initCmdFct) as KeysBinder<C>;
+    public first(initCmdFct: (c: C, i: D) => void): KeysBinder<C, I, D> {
+        return super.first(initCmdFct) as KeysBinder<C, I, D>;
     }
 
-    public when(checkCmd: ((i: KeysData) => boolean) | (() => boolean)): KeysBinder<C> {
-        return super.when(checkCmd) as KeysBinder<C>;
+    public when(checkCmd: ((i: D) => boolean) | (() => boolean)): KeysBinder<C, I, D> {
+        return super.when(checkCmd) as KeysBinder<C, I, D>;
     }
 
-    public ifHadEffects(hadEffectFct: (c: C, i: KeysData) => void): KeysBinder<C> {
-        return super.ifHadEffects(hadEffectFct) as KeysBinder<C>;
+    public ifHadEffects(hadEffectFct: (c: C, i: D) => void): KeysBinder<C, I, D> {
+        return super.ifHadEffects(hadEffectFct) as KeysBinder<C, I, D>;
     }
 
-    public ifHadNoEffect(noEffectFct: (c: C, i: KeysData) => void): KeysBinder<C> {
-        return super.ifHadNoEffect(noEffectFct) as KeysBinder<C>;
+    public ifHadNoEffect(noEffectFct: (c: C, i: D) => void): KeysBinder<C, I, D> {
+        return super.ifHadNoEffect(noEffectFct) as KeysBinder<C, I, D>;
     }
 
-    public end(onEndFct: (c: C, i: KeysData) => void): KeysBinder<C> {
-        return super.end(onEndFct) as KeysBinder<C>;
+    public end(onEndFct: (c: C, i: D) => void): KeysBinder<C, I, D> {
+        return super.end(onEndFct) as KeysBinder<C, I, D>;
     }
 
-    public log(...level: Array<LogLevel>): KeysBinder<C> {
-        return super.log(...level) as KeysBinder<C>;
+    public log(...level: Array<LogLevel>): KeysBinder<C, I, D> {
+        return super.log(...level) as KeysBinder<C, I, D>;
     }
 
-    public stopImmediatePropagation(): KeysBinder<C> {
-        return super.stopImmediatePropagation() as KeysBinder<C>;
+    public stopImmediatePropagation(): KeysBinder<C, I, D> {
+        return super.stopImmediatePropagation() as KeysBinder<C, I, D>;
     }
 
-    public preventDefault(): KeysBinder<C> {
-        return super.preventDefault() as KeysBinder<C>;
+    public preventDefault(): KeysBinder<C, I, D> {
+        return super.preventDefault() as KeysBinder<C, I, D>;
     }
 
-    public toProduce<C2 extends Command>(cmdCreation: (i: KeysData) => C2): KeysBinder<C2> {
-        return super.toProduce(cmdCreation) as KeysBinder<C2>;
+    public then(update: ((c: C, i: D) => void) | ((c: C) => void)): KeysBinder<C, I, D> {
+        return super.then(update) as KeysBinder<C, I, D>;
     }
 
-
-    protected duplicate(): KeysBinder<C> {
-        return new KeysBinder(this.observer, this.initCmd, this.checkConditions, this.cmdProducer, [...this.widgets],
-            [...this.dynamicNodes], this.onEnd, [...this.logLevels], this.hadNoEffectFct,
-            this.hadEffectsFct, this.cannotExecFct, [...this.targetWidgets], [...this.codes]);
+    public continuousExecution(): KeysBinder<C, I, D> {
+        return super.continuousExecution() as KeysBinder<C, I, D>;
     }
 
-    public bind(): WidgetBinding<C, KeysPressed, KeysData> {
+    public strictStart(): KeysBinder<C, I, D> {
+        return super.strictStart() as KeysBinder<C, I, D>;
+    }
+
+    public throttle(timeout: number): KeysBinder<C, I, D> {
+        return super.throttle(timeout) as KeysBinder<C, I, D>;
+    }
+
+    public cancel(cancel: (i: D) => void): KeysBinder<C, I, D> {
+        return super.cancel(cancel) as KeysBinder<C, I, D>;
+    }
+
+    public endOrCancel(endOrCancel: (i: D) => void): KeysBinder<C, I, D> {
+        return super.endOrCancel(endOrCancel) as KeysBinder<C, I, D>;
+    }
+
+    public toProduce<C2 extends Command>(cmdCreation: (i: D) => C2): KeysBinder<C2, I, D> {
+        return super.toProduce(cmdCreation) as KeysBinder<C2, I, D>;
+    }
+
+    public usingInteraction<I2 extends InteractionImpl<D2, FSM>, D2 extends InteractionData>
+    (interactionSupplier: () => I2): KeysBinder<C, I2, D2> {
+        return super.usingInteraction(interactionSupplier) as unknown as KeysBinder<C, I2, D2>;
+    }
+
+    protected duplicate(): KeysBinder<C, I, D> {
+        return new KeysBinder(this.observer, this.throttleTimeout, this.continuousCmdExecution,
+            this._strictStart, this.initCmd, this.checkConditions, this.cmdProducer,
+            this.widgets, this.dynamicNodes, this.interactionSupplier, this.onEnd,
+            this.logLevels, this.hadNoEffectFct, this.hadEffectsFct,
+            this.cannotExecFct, this.updateFct, this.cancelFct, this.endOrCancelFct, this.targetWidgets,
+            [...this.codes], this.stopPropaNow, this.prevDef);
+    }
+
+    public bind(): WidgetBinding<C, I, D> {
         if (this.interactionSupplier === undefined) {
             throw new Error("The interaction supplier cannot be undefined here");
         }
@@ -118,10 +162,11 @@ export class KeysBinder<C extends Command> extends Binder<C, KeysPressed, KeysDa
             throw new Error("The command supplier cannot be undefined here");
         }
 
-        const binding = new AnonBinding(false, this.interactionSupplier(), this.cmdProducer, [...this.widgets],
-            [...this.dynamicNodes], [], false, [...this.logLevels], 0,
-            this.stopPropaNow, this.prevDef, this.initCmd, undefined, this.checkCode,
-            this.onEnd, undefined, undefined, this.hadEffectsFct,
+        const binding = new AnonBinding(this.continuousCmdExecution, this.interactionSupplier(),
+            this.cmdProducer, [...this.widgets], [...this.dynamicNodes], [...this.targetWidgets],
+            this._strictStart, [...this.logLevels], this.throttleTimeout,
+            this.stopPropaNow, this.prevDef, this.initCmd, this.updateFct, this.checkCode,
+            this.onEnd, this.cancelFct, this.endOrCancelFct, this.hadEffectsFct,
             this.hadNoEffectFct, this.cannotExecFct);
 
         this.observer?.observeBinding(binding);
