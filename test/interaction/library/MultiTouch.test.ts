@@ -141,6 +141,58 @@ test("touch1 touch2 touch3 move3", () => {
     expect(handler.fsmCancels).not.toHaveBeenCalled();
 });
 
+test("touch1 touch2 touch3 release2", () => {
+    interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, canvas, 11, 23, 11, 23));
+    interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 2, canvas, 210, 130, 210, 130));
+    interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 3, canvas, 210, 130, 210, 130));
+    interaction.processEvent(createTouchEvent(EventRegistrationToken.touchend, 2, canvas, 210, 130, 210, 130));
+    expect(interaction.isRunning()).toBeFalsy();
+    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+    expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
+    expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+    expect(handler.fsmCancels).not.toHaveBeenCalled();
+});
+
+test("touch1 touch2 move2 touch3 move1 release2", () => {
+    interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, canvas, 11, 23, 11, 23));
+    interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 2, canvas, 210, 130, 210, 130));
+    interaction.processEvent(createTouchEvent(EventRegistrationToken.touchmove, 2, canvas, 210, 130, 210, 130));
+    interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 3, canvas, 210, 130, 210, 130));
+    interaction.processEvent(createTouchEvent(EventRegistrationToken.touchmove, 3, canvas, 210, 130, 210, 130));
+    interaction.processEvent(createTouchEvent(EventRegistrationToken.touchend, 2, canvas, 210, 130, 210, 130));
+    expect(interaction.isRunning()).toBeFalsy();
+    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+    expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
+    expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+    expect(handler.fsmCancels).not.toHaveBeenCalled();
+});
+
+test("touch1 touch2 touch3 release1 touch4", () => {
+    interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, canvas, 11, 23, 11, 23));
+    interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 2, canvas, 210, 130, 210, 130));
+    interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 3, canvas, 210, 130, 210, 130));
+    interaction.processEvent(createTouchEvent(EventRegistrationToken.touchend, 1, canvas, 210, 130, 210, 130));
+    interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 4, canvas, 210, 130, 210, 130));
+    expect(interaction.isRunning()).toBeTruthy();
+    expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
+    expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
+    expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+    expect(handler.fsmCancels).not.toHaveBeenCalled();
+});
+
+test("touch2 touch3 touch1 release3 touch3", () => {
+    interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 2, canvas, 11, 23, 11, 23));
+    interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 3, canvas, 210, 130, 210, 130));
+    interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, canvas, 210, 130, 210, 130));
+    interaction.processEvent(createTouchEvent(EventRegistrationToken.touchend, 3, canvas, 210, 130, 210, 130));
+    interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 3, canvas, 210, 130, 210, 130));
+    expect(interaction.isRunning()).toBeTruthy();
+    expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
+    expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
+    expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+    expect(handler.fsmCancels).not.toHaveBeenCalled();
+});
+
 test("touch1 touch2 touch3 move3 data", () => {
     interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, canvas, 11, 23, 11, 23));
     interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 3, canvas, 21, 13, 21, 13));
