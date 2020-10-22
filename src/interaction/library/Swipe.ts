@@ -63,7 +63,7 @@ export class Swipe extends Pan {
      * If this velocity is not reached, the interaction is cancelled.
      * @param horizontal Defines whether the swipe is horizontal or vertical
      * @param minLength The minimal distance from the starting point to the release point for validating the swipe
-     * @param minVelocity The minimal minVelocity to reach for validating the swipe. In pixels per second.
+     * @param minVelocity The minimal velocity to reach for validating the swipe. In pixels per second.
      * @param pxTolerance The tolerance rate in pixels accepted while executing the swipe
      */
     public constructor(horizontal: boolean, minVelocity: number, minLength: number, pxTolerance: number) {
