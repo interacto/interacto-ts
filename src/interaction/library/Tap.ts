@@ -16,12 +16,12 @@ import {InteractionImpl} from "../InteractionImpl";
 import {FSM} from "../../fsm/FSM";
 import {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {TerminalState} from "../../fsm/TerminalState";
-import {TouchPressureTransition} from "../../fsm/TouchPressureTransition";
 import {StdState} from "../../fsm/StdState";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 import {CancellingState} from "../../fsm/CancellingState";
 import {TapData, TapDataImpl} from "./TapData";
 import {TouchDataImpl} from "./TouchData";
+import {TouchReleaseTransition} from "../../fsm/TouchReleaseTransition";
 
 /**
  * The FSM for the Tap interaction
@@ -54,17 +54,17 @@ class TapFSM extends FSM {
         this.addState(ended);
         this.addState(timeouted);
 
-        const pressInit = new TouchPressureTransition(this.initState, ended);
-        const pressInitAction = (event: Event): void => {
+        const touchInit = new TouchReleaseTransition(this.initState, ended);
+        const touchInitAction = (event: Event): void => {
             if (event instanceof TouchEvent && dataHandler !== undefined) {
                 dataHandler.tap(event);
             }
         };
-        pressInit.action = pressInitAction;
-        pressInit.isGuardOK = (_event: Event): boolean => this.nbTaps === 1;
+        touchInit.action = touchInitAction;
+        touchInit.isGuardOK = (_event: Event): boolean => this.nbTaps === 1;
 
-        const pressTouched = new TouchPressureTransition(this.initState, touched);
-        pressTouched.action = (event: Event): void => {
+        const touchTouched = new TouchReleaseTransition(this.initState, touched);
+        touchTouched.action = (event: Event): void => {
             if (event instanceof TouchEvent) {
                 this.countTaps++;
 
@@ -73,20 +73,20 @@ class TapFSM extends FSM {
                 }
             }
         };
-        pressTouched.isGuardOK = (_event: Event): boolean => this.nbTaps > 1;
+        touchTouched.isGuardOK = (_event: Event): boolean => this.nbTaps > 1;
 
-        const pressTouchedTouched = new TouchPressureTransition(touched, touched);
-        pressTouchedTouched.action = (event: Event): void => {
+        const touchTouchedTouched = new TouchReleaseTransition(touched, touched);
+        touchTouchedTouched.action = (event: Event): void => {
             this.countTaps++;
             if (event instanceof TouchEvent && dataHandler !== undefined) {
                 dataHandler.tap(event);
             }
         };
-        pressTouchedTouched.isGuardOK = (_event: Event): boolean => (this.countTaps + 1) < this.nbTaps;
+        touchTouchedTouched.isGuardOK = (_event: Event): boolean => (this.countTaps + 1) < this.nbTaps;
 
-        const pressEnded = new TouchPressureTransition(touched, ended);
-        pressEnded.action = pressInitAction;
-        pressEnded.isGuardOK = (_event: Event): boolean => (this.countTaps + 1) === this.nbTaps;
+        const touchEnded = new TouchReleaseTransition(touched, ended);
+        touchEnded.action = touchInitAction;
+        touchEnded.isGuardOK = (_event: Event): boolean => (this.countTaps + 1) === this.nbTaps;
 
         new TimeoutTransition(touched, timeouted, () => 1000);
     }
