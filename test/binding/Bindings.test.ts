@@ -25,15 +25,15 @@ import {
     InteractionImpl,
     keyPressBinder,
     keyTypeBinder,
-    LogLevel,
+    LogLevel, longTouchBinder,
     PointData,
-    pressBinder,
+    pressBinder, tapBinder, TapData, TouchData,
     UndoCollector,
     WidgetBinding
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {Subscription} from "rxjs";
-import {createKeyEvent, createMouseEvent} from "../interaction/StubEvents";
+import {createKeyEvent, createMouseEvent, createTouchEvent} from "../interaction/StubEvents";
 
 let elt: HTMLElement;
 let producedCmds: Array<Command>;
@@ -56,6 +56,7 @@ afterEach(() => {
     disposable.unsubscribe();
     CommandsRegistry.getInstance().clear();
     UndoCollector.getInstance().clear();
+    jest.clearAllTimers();
 });
 
 test("press binder", () => {
@@ -217,4 +218,152 @@ test("binding with anon command", () => {
     elt.dispatchEvent(createMouseEvent(EventRegistrationToken.click, elt, 1, 2, 3, 4, 0));
 
     expect(producedCmds).toHaveLength(1);
+});
+
+
+describe("tap and longPress conflict", () => {
+    let producedCmds2: Array<Command>;
+    let disposable2: Subscription;
+    let binding2: WidgetBinding<Command, InteractionImpl<InteractionData, FSM>, InteractionData>;
+
+    beforeEach(() => {
+        producedCmds2 = [];
+        binding2 = longTouchBinder(50)
+            .on(elt)
+            .toProduce((_i: TouchData) => new StubCmd(true))
+            .bind();
+        binding = tapBinder(1)
+            .toProduce((_i: TapData) => new StubCmd(true))
+            .on(elt)
+            .bind();
+
+        disposable = binding.produces().subscribe(c => producedCmds.push(c));
+        disposable2 = binding2.produces().subscribe(c => producedCmds2.push(c));
+    });
+
+    afterEach(() => {
+        binding2.uninstallBinding();
+        disposable2.unsubscribe();
+    });
+
+    test("touchstart and wait", () => {
+        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, elt, 11, 23, 110, 230));
+        jest.runOnlyPendingTimers();
+        expect(producedCmds2).toHaveLength(1);
+        expect(producedCmds).toHaveLength(0);
+    });
+
+    test("touchstart and touchend", () => {
+        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 1, elt, 11, 23, 110, 230));
+        expect(producedCmds2).toHaveLength(0);
+        expect(producedCmds).toHaveLength(1);
+    });
+
+    test("touchstart, wait, touchend", () => {
+        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, elt, 11, 23, 110, 230));
+        jest.runOnlyPendingTimers();
+        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 1, elt, 11, 23, 110, 230));
+        expect(producedCmds2).toHaveLength(1);
+        expect(producedCmds).toHaveLength(1);
+    });
+});
+
+describe("two longTouch", () => {
+    let producedCmds2: Array<Command>;
+    let disposable2: Subscription;
+    let binding2: WidgetBinding<Command, InteractionImpl<InteractionData, FSM>, InteractionData>;
+
+
+    beforeEach(() => {
+        producedCmds2 = [];
+    });
+
+    afterEach(() => {
+        binding2.uninstallBinding();
+        disposable2.unsubscribe();
+    });
+
+    test("two longTouch stopImmediatePropagation", () => {
+        binding2 = longTouchBinder(10)
+            .on(elt)
+            .toProduce((_i: TouchData) => new StubCmd(true))
+            .stopImmediatePropagation()
+            .bind();
+        binding = longTouchBinder(500)
+            .toProduce((_i: TouchData) => new StubCmd(true))
+            .on(elt)
+            .bind();
+
+        disposable = binding.produces().subscribe(c => producedCmds.push(c));
+        disposable2 = binding2.produces().subscribe(c => producedCmds2.push(c));
+
+        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, elt, 11, 23, 110, 230));
+        jest.runOnlyPendingTimers();
+        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 1, elt, 11, 23, 110, 230));
+        expect(producedCmds2).toHaveLength(1);
+        expect(producedCmds).toHaveLength(0);
+    });
+
+    test("two longTouch std", () => {
+        binding2 = longTouchBinder(10)
+            .on(elt)
+            .toProduce((_i: TouchData) => new StubCmd(true))
+            .bind();
+        binding = longTouchBinder(500)
+            .toProduce((_i: TouchData) => new StubCmd(true))
+            .on(elt)
+            .bind();
+
+        disposable = binding.produces().subscribe(c => producedCmds.push(c));
+        disposable2 = binding2.produces().subscribe(c => producedCmds2.push(c));
+
+        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, elt, 11, 23, 110, 230));
+        jest.runOnlyPendingTimers();
+        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 1, elt, 11, 23, 110, 230));
+        expect(producedCmds2).toHaveLength(1);
+        expect(producedCmds).toHaveLength(1);
+    });
+
+    test("two longTouch std 2", () => {
+        binding2 = longTouchBinder(500)
+            .on(elt)
+            .toProduce((_i: TouchData) => new StubCmd(true))
+            .stopImmediatePropagation()
+            .bind();
+        binding = longTouchBinder(10)
+            .toProduce((_i: TouchData) => new StubCmd(true))
+            .on(elt)
+            .bind();
+
+        disposable = binding.produces().subscribe(c => producedCmds.push(c));
+        disposable2 = binding2.produces().subscribe(c => producedCmds2.push(c));
+
+        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, elt, 11, 23, 110, 230));
+        jest.runOnlyPendingTimers();
+        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 1, elt, 11, 23, 110, 230));
+        expect(producedCmds2).toHaveLength(1);
+        expect(producedCmds).toHaveLength(0);
+    });
+
+    test("two longTouch std 3", () => {
+        binding2 = longTouchBinder(500)
+            .on(elt)
+            .toProduce((_i: TouchData) => new StubCmd(true))
+            .bind();
+        binding = longTouchBinder(10)
+            .toProduce((_i: TouchData) => new StubCmd(true))
+            .on(elt)
+            .stopImmediatePropagation()
+            .bind();
+
+        disposable = binding.produces().subscribe(c => producedCmds.push(c));
+        disposable2 = binding2.produces().subscribe(c => producedCmds2.push(c));
+
+        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, elt, 11, 23, 110, 230));
+        jest.runOnlyPendingTimers();
+        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 1, elt, 11, 23, 110, 230));
+        expect(producedCmds2).toHaveLength(1);
+        expect(producedCmds).toHaveLength(1);
+    });
 });
