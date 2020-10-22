@@ -27,7 +27,7 @@ import {
     keyTypeBinder,
     LogLevel, longTouchBinder,
     PointData,
-    pressBinder, tapBinder, TapData, TouchData,
+    pressBinder, SrcTgtTouchData, tapBinder, TapData, TouchData, touchDnDBinder,
     UndoCollector,
     WidgetBinding
 } from "../../src/interacto";
@@ -216,6 +216,21 @@ test("binding with anon command", () => {
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
     elt.dispatchEvent(createMouseEvent(EventRegistrationToken.click, elt, 1, 2, 3, 4, 0));
+
+    expect(producedCmds).toHaveLength(1);
+});
+
+test("touch DnD binding", () => {
+    binding = touchDnDBinder()
+        .on(elt)
+        .toProduce((_i: SrcTgtTouchData) => new StubCmd(true))
+        .bind();
+
+    disposable = binding.produces().subscribe(c => producedCmds.push(c));
+
+    elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, elt, 11, 23, 110, 230));
+    elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchmove, 1, elt, 11, 23, 110, 230));
+    elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 1, elt, 11, 23, 110, 230));
 
     expect(producedCmds).toHaveLength(1);
 });

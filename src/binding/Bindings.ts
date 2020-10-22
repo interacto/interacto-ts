@@ -57,6 +57,7 @@ import {ScrollData} from "../interaction/library/ScrollData";
 import {KeyInteractionBinder} from "./api/KeyInteractionBinder";
 import {KeysBinder} from "./KeysBinder";
 import {KeyInteractionUpdateBinder} from "./api/KeyInteractionUpdateBinder";
+import {TouchDnD} from "../interaction/library/TouchDnD";
 
 let observer: BindingsObserver | undefined;
 
@@ -107,6 +108,15 @@ export function hyperlinkBinder(): InteractionBinder<HyperLinkClicked, WidgetDat
 export function textInputBinder(): InteractionUpdateBinder<TextInputChanged, WidgetData<HTMLInputElement | HTMLTextAreaElement>> {
     return new UpdateBinder(observer)
         .usingInteraction<TextInputChanged, WidgetData<HTMLInputElement | HTMLTextAreaElement>>(() => new TextInputChanged());
+}
+
+/**
+ * Creates a widget binding that uses the touch DnD interaction (a DnD interaction that uses one touch).
+ * This interaction works as a Drag-and-Drop interaction.
+ */
+export function touchDnDBinder(): InteractionUpdateBinder<TouchDnD, SrcTgtTouchData> {
+    return new UpdateBinder(observer)
+        .usingInteraction<TouchDnD, SrcTgtTouchData>(() => new TouchDnD());
 }
 
 /**
