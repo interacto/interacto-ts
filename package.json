@@ -61,6 +61,14 @@
     "transform": {
       ".(ts|tsx)": "ts-jest"
     },
+    "coverageThreshold": {
+      "global": {
+        "branches": 80,
+        "functions": 90,
+        "lines": 90,
+        "statements": 90
+      }
+    },
     "testRegex": "(.*\\.)(test|spec)\\.ts$",
     "moduleFileExtensions": [
       "ts",
