@@ -105,7 +105,7 @@ test("drag lock binder", () => {
 });
 
 test("dnd binder", () => {
-    binding = dndBinder(false, false)
+    binding = dndBinder(false)
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();

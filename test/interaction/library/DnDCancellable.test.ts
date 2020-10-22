@@ -22,7 +22,7 @@ let handler: FSMHandler;
 
 beforeEach(() => {
     handler = mock<FSMHandler>();
-    interaction = new DnD(false, true);
+    interaction = new DnD(true);
     interaction.log(true);
     interaction.getFsm().log(true);
     interaction.getFsm().addHandler(handler);

@@ -210,12 +210,11 @@ export function scrollBinder(): InteractionBinder<Scroll, ScrollData> {
 
 /**
  * Creates a widget binding that uses the DnD interaction.
- * @param cancellable True: the FSM can be cancelled using the ESC key.
- * @param srcOnUpdate True: the source point will take the former target position on each update.
+ * @param cancellable True: the escape key will cancels the DnD.
  */
-export function dndBinder(srcOnUpdate: boolean, cancellable: boolean): InteractionUpdateBinder<DnD, SrcTgtPointsData> {
+export function dndBinder(cancellable: boolean): InteractionUpdateBinder<DnD, SrcTgtPointsData> {
     return new UpdateBinder(observer)
-        .usingInteraction<DnD, SrcTgtPointsData>(() => new DnD(srcOnUpdate, cancellable));
+        .usingInteraction<DnD, SrcTgtPointsData>(() => new DnD(cancellable));
 }
 
 /**

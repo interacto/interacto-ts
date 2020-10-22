@@ -123,7 +123,7 @@ export class DnD extends InteractionImpl<SrcTgtPointsData, DnDFSM> {
     /**
      * Creates the interaction.
      */
-    public constructor(srcOnUpdate: boolean, cancellable: boolean) {
+    public constructor(cancellable: boolean) {
         super(new DnDFSM(cancellable));
 
         this.handler = {
@@ -133,12 +133,6 @@ export class DnD extends InteractionImpl<SrcTgtPointsData, DnDFSM> {
                 this.setTgt(evt);
             },
             "onDrag": (evt: MouseEvent): void => {
-                if (srcOnUpdate) {
-                    const d: SrcTgtPointsDataImpl = this.data as (SrcTgtPointsDataImpl);
-                    d.setPointData(this.data.getTgtClientX(), this.data.getTgtClientY(), this.data.getTgtScreenX(),
-                        this.data.getTgtScreenY(), this.data.getButton(),
-                        this.data.getTgtObject(), this.data.getTgtObject());
-                }
                 this.setTgt(evt);
             },
             "onRelease": (evt: MouseEvent): void => this.setTgt(evt),
