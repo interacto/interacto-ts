@@ -58,8 +58,6 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
 
     protected prevDef: boolean;
 
-    protected targetWidgets: Array<EventTarget>;
-
     protected observer?: BindingsObserver;
 
 
@@ -67,8 +65,7 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
                           cmdProducer?: (i: D) => C, widgets?: Array<EventTarget>, dynamicNodes?: Array<Node>,
                           interactionSupplier?: () => I, onEnd?: (c: C, i: D) => void,
                           logLevels?: Array<LogLevel>, hadNoEffectFct?: (c: C, i: D) => void, hadEffectsFct?: (c: C, i: D) => void,
-                          cannotExecFct?: (c: C, i: D) => void, targetWidgets?: Array<EventTarget>, stopProga?: boolean,
-                          prevent?: boolean) {
+                          cannotExecFct?: (c: C, i: D) => void, stopProga?: boolean, prevent?: boolean) {
         this.initCmd = initCmd;
         this.checkConditions = checkConditions;
         this.cmdProducer = cmdProducer;
@@ -80,7 +77,6 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
         this.hadNoEffectFct = hadNoEffectFct;
         this.cannotExecFct = cannotExecFct;
         this.logLevels = logLevels ?? [];
-        this.targetWidgets = targetWidgets ?? [];
         this.stopPropaNow = stopProga ?? false;
         this.prevDef = prevent ?? false;
         this.observer = observer;

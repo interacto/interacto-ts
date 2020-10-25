@@ -50,10 +50,9 @@ export class UpdateBinder<C extends Command, I extends InteractionImpl<D, FSM>, 
                        interactionSupplier?: () => I, onEnd?: (c: C, i: D) => void,
                        logLevels?: Array<LogLevel>, hadNoEffectFct?: (c: C, i: D) => void, hadEffectsFct?: (c: C, i: D) => void,
                        cannotExecFct?: (c: C, i: D) => void, updateFct?: (c: C, i: D) => void, cancelFct?: (i: D) => void,
-                       endOrCancelFct?: (i: D) => void, targetWidgets?: Array<EventTarget>, stopProga?: boolean,
-                       prevent?: boolean) {
+                       endOrCancelFct?: (i: D) => void, stopProga?: boolean, prevent?: boolean) {
         super(observer, initCmd, checkConditions, cmdProducer, widgets, dynamicNodes, interactionSupplier, onEnd,
-            logLevels, hadNoEffectFct, hadEffectsFct, cannotExecFct, targetWidgets, stopProga, prevent);
+            logLevels, hadNoEffectFct, hadEffectsFct, cannotExecFct, stopProga, prevent);
         this.updateFct = updateFct;
         this.cancelFct = cancelFct;
         this.endOrCancelFct = endOrCancelFct;
@@ -152,7 +151,7 @@ export class UpdateBinder<C extends Command, I extends InteractionImpl<D, FSM>, 
             this._strictStart, this.initCmd, this.checkConditions, this.cmdProducer,
             this.widgets, this.dynamicNodes, this.interactionSupplier, this.onEnd,
             this.logLevels, this.hadNoEffectFct, this.hadEffectsFct,
-            this.cannotExecFct, this.updateFct, this.cancelFct, this.endOrCancelFct, this.targetWidgets,
+            this.cannotExecFct, this.updateFct, this.cancelFct, this.endOrCancelFct,
             this.stopPropaNow, this.prevDef);
     }
 
@@ -166,8 +165,8 @@ export class UpdateBinder<C extends Command, I extends InteractionImpl<D, FSM>, 
         }
 
         const binding = new AnonBinding(this.continuousCmdExecution, this.interactionSupplier(), this.cmdProducer,
-            [...this.widgets], [...this.dynamicNodes], [], this._strictStart, [...this.logLevels], this.throttleTimeout,
-            this.stopPropaNow, this.prevDef, this.initCmd, this.updateFct, this.checkConditions,
+            [...this.widgets], [...this.dynamicNodes], this._strictStart, [...this.logLevels],
+            this.throttleTimeout, this.stopPropaNow, this.prevDef, this.initCmd, this.updateFct, this.checkConditions,
             this.onEnd, this.cancelFct, this.endOrCancelFct, this.hadEffectsFct,
             this.hadNoEffectFct, this.cannotExecFct);
 

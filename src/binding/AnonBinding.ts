@@ -45,7 +45,7 @@ export class AnonBinding<C extends Command, I extends InteractionImpl<D, FSM>, D
 
 
     public constructor(continuousExec: boolean, interaction: I, cmdProducer: (d: D) => C,
-                       widgets: Array<EventTarget>, dynamicNodes: Array<Node>, targetWidgets: Array<EventTarget>,
+                       widgets: Array<EventTarget>, dynamicNodes: Array<Node>,
                        // eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
                        strict: boolean, loggers: Array<LogLevel>, timeoutThrottle: number,
                        stopPropa: boolean, prevDef: boolean,
@@ -70,7 +70,6 @@ export class AnonBinding<C extends Command, I extends InteractionImpl<D, FSM>, D
         this.interaction.stopImmediatePropagation = stopPropa;
         this.interaction.preventDefault = prevDef;
         // this.interaction.setThrottleTimeout(timeoutThrottle);
-        interaction.registerToTargetNodes(targetWidgets);
         dynamicNodes.forEach(node => interaction.registerToNodeChildren(node));
     }
 

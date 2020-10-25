@@ -43,11 +43,10 @@ export class KeysBinder<C extends Command, I extends InteractionImpl<D, FSM>, D 
                        interactionSupplier?: () => I, onEnd?: (c: C, i: D) => void, logLevels?: Array<LogLevel>,
                        hadNoEffectFct?: (c: C, i: D) => void, hadEffectsFct?: (c: C, i: D) => void,
                        cannotExecFct?: (c: C, i: D) => void, updateFct?: (c: C, i: D) => void, cancelFct?: (i: D) => void,
-                       endOrCancelFct?: (i: D) => void, targetWidgets?: Array<EventTarget>,
-                       keyCodes?: Array<string>, stopProga?: boolean, prevent?: boolean) {
+                       endOrCancelFct?: (i: D) => void, keyCodes?: Array<string>, stopProga?: boolean, prevent?: boolean) {
         super(observer, throttleTimeout, continuousCmdExecution, strict, initCmd, whenPredicate, cmdProducer, widgets,
             dynamicNodes, interactionSupplier, onEnd, logLevels, hadNoEffectFct, hadEffectsFct, cannotExecFct,
-            updateFct, cancelFct, endOrCancelFct, targetWidgets, stopProga, prevent);
+            updateFct, cancelFct, endOrCancelFct, stopProga, prevent);
         this.codes = keyCodes === undefined ? [] : [...keyCodes];
         this.checkCode = (i: D): boolean => {
             if (i instanceof KeysDataImpl) {
@@ -149,7 +148,7 @@ export class KeysBinder<C extends Command, I extends InteractionImpl<D, FSM>, D 
             this._strictStart, this.initCmd, this.checkConditions, this.cmdProducer,
             this.widgets, this.dynamicNodes, this.interactionSupplier, this.onEnd,
             this.logLevels, this.hadNoEffectFct, this.hadEffectsFct,
-            this.cannotExecFct, this.updateFct, this.cancelFct, this.endOrCancelFct, this.targetWidgets,
+            this.cannotExecFct, this.updateFct, this.cancelFct, this.endOrCancelFct,
             [...this.codes], this.stopPropaNow, this.prevDef);
     }
 
@@ -163,7 +162,7 @@ export class KeysBinder<C extends Command, I extends InteractionImpl<D, FSM>, D 
         }
 
         const binding = new AnonBinding(this.continuousCmdExecution, this.interactionSupplier(),
-            this.cmdProducer, [...this.widgets], [...this.dynamicNodes], [...this.targetWidgets],
+            this.cmdProducer, [...this.widgets], [...this.dynamicNodes],
             this._strictStart, [...this.logLevels], this.throttleTimeout,
             this.stopPropaNow, this.prevDef, this.initCmd, this.updateFct, this.checkCode,
             this.onEnd, this.cancelFct, this.endOrCancelFct, this.hadEffectsFct,
