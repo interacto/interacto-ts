@@ -15,7 +15,6 @@
 /**
  * Defines an interface to zoomable objects.
  * @author Arnaud BLOUIN
- * @since 0.1
  * @class
  */
 export interface Zoomable {
@@ -36,7 +35,6 @@ export interface Zoomable {
 
     /**
      * @return {number} The zoom level.
-     * @since 0.1
      */
     getZoom(): number;
 
@@ -45,7 +43,6 @@ export interface Zoomable {
      * @param {number} zoomingLevel The zooming level.
      * @param {number} x The X-coordinate of the location to zoom.
      * @param {number} y The Y-coordinate of the location to zoom.
-     * @since 0.1
      */
     setZoom(x: number, y: number, zoomingLevel: number): void;
 
@@ -55,7 +52,6 @@ export interface Zoomable {
      * @param {number} x The X-coordinate of the point to modify.
      * @param {number} y The Y-coordinate of the point to modify.
      * @return The transformed point.
-     * @since 0.2
      */
     getZoomedPoint(x: number, y: number): void;
 }

@@ -15,25 +15,21 @@
 /**
  * An interface for undoable objects.
  * @author Arnaud BLOUIN
- * @since 0.1
  * @class
  */
 export interface Undoable {
     /**
      * Cancels the command.
-     * @since 0.1
      */
     undo(): void;
 
     /**
      * Redoes the cancelled command.
-     * @since 0.1
      */
     redo(): void;
 
     /**
      * @return {string} The name of the undo command.
-     * @since 0.1
      */
     getUndoName(): string;
 }

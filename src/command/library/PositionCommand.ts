@@ -40,7 +40,6 @@ export abstract class PositionCommand extends CommandImpl {
 
     /**
      * @param {number} px The x-coordinate to set.
-     * @since 0.2
      */
     public setPx(px: number): void {
         this.px = px;
@@ -48,7 +47,6 @@ export abstract class PositionCommand extends CommandImpl {
 
     /**
      * @param {number} py The y-coordinate to set.
-     * @since 0.2
      */
     public setPy(py: number): void {
         this.py = py;

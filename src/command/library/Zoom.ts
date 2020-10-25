@@ -17,7 +17,6 @@ import {Zoomable} from "../../properties/Zoomable";
 
 /**
  * Initialises a Zoom command.
- * @since 0.2
  * @author Arnaud BLOUIN
  */
 export class Zoom extends PositionCommand {
