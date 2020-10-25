@@ -12,24 +12,33 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {Command} from "../command/Command";
-import {FSM} from "../fsm/FSM";
-import {InteractionData} from "../interaction/InteractionData";
-import {Interaction} from "../interaction/Interaction";
-import {WidgetBinding} from "./WidgetBinding";
+import {InputState} from "./InputState";
 
 /**
- * Permits widget bindings produced by Bindings to be observed.
+ * The concept of FSM transition.
  */
-export interface BindingsObserver {
+export interface Transition {
     /**
-     * Adds a widget binding to observe.
-     * @param binding The binding to observe.
+     * Executes the transition.
+     * @param event The event to process.
+     * @return The potential output state.
+     * @throws CancelFSMException If the execution cancels the FSM execution.
      */
-    observeBinding(binding: WidgetBinding<Command, Interaction<InteractionData, FSM>, InteractionData>): void;
+    execute(event: Event): InputState | undefined;
+
+    isGuardOK(event: Event): boolean;
+
+    accept(event: Event): boolean;
 
     /**
-     * Clear all the observed bindings and uninstall them.
+     * @return The set of events accepted by the transition.
      */
-    clearObservedBindings(): void;
+    getAcceptedEvents(): Set<string>;
+
+    getTarget(): InputState;
+
+    /**
+     * Clean the transition when not used anymore.
+     */
+    uninstall(): void;
 }

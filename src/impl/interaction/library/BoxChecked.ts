@@ -16,11 +16,12 @@ import {TerminalState} from "../../fsm/TerminalState";
 import {BoxCheckPressedTransition} from "../../fsm/BoxCheckPressedTransition";
 import {isCheckBox} from "../../fsm/Events";
 import {FSMDataHandler} from "../../../api/fsm/FSMDataHandler";
-import {WidgetData, WidgetDataImpl} from "../../../api/interaction/WidgetData";
+import {WidgetData} from "../../../api/interaction/WidgetData";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {Interaction} from "../../../api/interaction/Interaction";
 import {FSM} from "../../../api/fsm/FSM";
+import {WidgetDataImpl} from "./WidgetDataImpl";
 
 export class BoxCheckedFSM extends FSMImpl {
 

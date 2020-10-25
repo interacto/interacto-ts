@@ -15,13 +15,13 @@
 import {OutputState} from "../../api/fsm/OutputState";
 import {InputState} from "../../api/fsm/InputState";
 import {EventRegistrationToken, isButton} from "./Events";
-import {Transition} from "./Transition";
+import {TransitionBase} from "./TransitionBase";
 
 /**
  * An FSM transition for the Button HTML element.
  * @author Arnaud BLOUIN
  */
-export class ButtonPressedTransition extends Transition {
+export class ButtonPressedTransition extends TransitionBase {
 
     /**
      * Creates the transition.

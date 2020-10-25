@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {Transition} from "./Transition";
+import {TransitionBase} from "./TransitionBase";
 import {OutputState} from "../../api/fsm/OutputState";
 import {InputState} from "../../api/fsm/InputState";
 
@@ -20,7 +20,7 @@ import {InputState} from "../../api/fsm/InputState";
  * This transition must be used to use a widget within an interaction.
  * @author Arnaud BLOUIN
  */
-export abstract class WidgetTransition<T> extends Transition {
+export abstract class WidgetTransition<T> extends TransitionBase {
     /**
      * The pressed button.
      */

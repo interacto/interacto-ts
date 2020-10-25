@@ -15,12 +15,13 @@
 import {TerminalState} from "../../fsm/TerminalState";
 import {isSpinner} from "../../fsm/Events";
 import {FSMDataHandler} from "../../../api/fsm/FSMDataHandler";
-import {WidgetData, WidgetDataImpl} from "../../../api/interaction/WidgetData";
+import {WidgetData} from "../../../api/interaction/WidgetData";
 import {SpinnerChangedTransition} from "../../fsm/SpinnerChangedTransition";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {StdState} from "../../fsm/StdState";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
+import {WidgetDataImpl} from "./WidgetDataImpl";
 
 export class SpinnerChangedFSM extends FSMImpl {
     /** The time gap between the two spinner events. */

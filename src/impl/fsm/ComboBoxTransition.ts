@@ -15,13 +15,13 @@
 import {OutputState} from "../../api/fsm/OutputState";
 import {InputState} from "../../api/fsm/InputState";
 import {EventRegistrationToken, isComboBox} from "./Events";
-import {Transition} from "./Transition";
+import {TransitionBase} from "./TransitionBase";
 
 /**
  * An FSM transition for the ComboBox HTML element.
  * @author Gwendal DIDOT
  */
-export class ComboBoxTransition extends Transition {
+export class ComboBoxTransition extends TransitionBase {
 
     /**
      * Creates the transition.

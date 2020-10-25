@@ -15,13 +15,13 @@
 import {OutputState} from "../../api/fsm/OutputState";
 import {InputState} from "../../api/fsm/InputState";
 import {EventRegistrationToken, isCheckBox} from "./Events";
-import {Transition} from "./Transition";
+import {TransitionBase} from "./TransitionBase";
 
 /**
  * An FSM transition for the CheckBox HTML element.
  * @author Gwendal DIDOT
  */
-export class BoxCheckPressedTransition extends Transition {
+export class BoxCheckPressedTransition extends TransitionBase {
 
     /**
      * Creates the transition.

@@ -16,8 +16,7 @@ import {Observable} from "rxjs";
 import {OutputState} from "./OutputState";
 import {State} from "./State";
 import {FSMHandler} from "./FSMHandler";
-import {StdState} from "../../impl/fsm/StdState";
-import {InitState} from "../../impl/fsm/InitState";
+import {InputState} from "./InputState";
 
 /**
  * A finite state machine that defines the behavior of a user interaction.
@@ -41,7 +40,7 @@ export interface FSM {
      */
     currentStateObservable(): Observable<[OutputState, OutputState]>;
 
-    getInitState(): InitState;
+    getInitState(): OutputState;
 
     /**
      * Processes the provided event to run the FSM.
@@ -96,7 +95,7 @@ export interface FSM {
      */
     stopCurrentTimeout(): void;
 
-    enterStdState(state: StdState): void;
+    enterStdState(state: OutputState & InputState): void;
 
     /**
      * States whether the FSM is an inner FSM (ie, whether it is included into another FSM as

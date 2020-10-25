@@ -14,8 +14,9 @@
 
 import {StateBase} from "./StateBase";
 import {OutputState} from "../../api/fsm/OutputState";
-import {Transition} from "./Transition";
+import {TransitionBase} from "./TransitionBase";
 import {FSM} from "../../api/fsm/FSM";
+import {Transition} from "../../api/fsm/Transition";
 
 /**
  * Base implementation of the OutputState interface.
@@ -58,7 +59,7 @@ export abstract class OutputStateBase extends StateBase implements OutputState {
         return [...this.transitions];
     }
 
-    public addTransition(tr: Transition): void {
+    public addTransition(tr: TransitionBase): void {
         this.transitions.push(tr);
     }
 

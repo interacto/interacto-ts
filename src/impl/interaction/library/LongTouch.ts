@@ -14,15 +14,16 @@
 
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
-import {SrcTgtTouchDataImpl} from "../../../api/interaction/SrcTgtTouchData";
 import {FSMDataHandler} from "../../../api/fsm/FSMDataHandler";
-import {TouchData, TouchDataImpl} from "../../../api/interaction/TouchData";
 import {StdState} from "../../fsm/StdState";
 import {TerminalState} from "../../fsm/TerminalState";
 import {CancellingState} from "../../fsm/CancellingState";
 import {TouchPressureTransition} from "../../fsm/TouchPressureTransition";
 import {TouchReleaseTransition} from "../../fsm/TouchReleaseTransition";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
+import {TouchData} from "../../../api/interaction/TouchData";
+import {SrcTgtTouchDataImpl} from "./SrcTgtTouchDataImpl";
+import {TouchDataImpl} from "./TouchDataImpl";
 
 /**
  * The FSM for the LongTouch interaction

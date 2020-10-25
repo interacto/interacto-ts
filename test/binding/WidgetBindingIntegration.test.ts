@@ -18,7 +18,7 @@ import {
     FSMImpl,
     InteractionData,
     TerminalState,
-    Transition,
+    TransitionBase,
     WidgetBindingBase
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
@@ -33,7 +33,7 @@ let cmd: StubCmd;
 let whenValue: () => boolean;
 
 
-class TrStub extends Transition {
+class TrStub extends TransitionBase {
     public accept(event: StubEvent): boolean {
         return event instanceof StubSubEvent1;
     }

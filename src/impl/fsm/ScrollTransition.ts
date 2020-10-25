@@ -15,13 +15,13 @@
 import {InputState} from "../../api/fsm/InputState";
 import {OutputState} from "../../api/fsm/OutputState";
 import {EventRegistrationToken} from "./Events";
-import {Transition} from "./Transition";
+import {TransitionBase} from "./TransitionBase";
 
 /**
  * This transition corresponds to the scroll of a window
  * @author Gwendal DIDOT
  */
-export class ScrollTransition extends Transition {
+export class ScrollTransition extends TransitionBase {
     /**
      * Creates the transition.
      */

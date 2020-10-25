@@ -18,11 +18,12 @@ import {TerminalState} from "../../fsm/TerminalState";
 import {CancellingState} from "../../fsm/CancellingState";
 import {MoveTransition} from "../../fsm/MoveTransition";
 import {EscapeKeyPressureTransition} from "../../fsm/EscapeKeyPressureTransition";
-import {SrcTgtPointsData, SrcTgtPointsDataImpl} from "../../../api/interaction/SrcTgtPointsData";
+import {SrcTgtPointsData} from "../../../api/interaction/SrcTgtPointsData";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {PressureTransition} from "../../fsm/PressureTransition";
 import {ReleaseTransition} from "../../fsm/ReleaseTransition";
 import {InteractionBase} from "../InteractionBase";
+import {SrcTgtPointsDataImpl} from "./SrcTgtPointsDataImpl";
 
 /**
  * The FSM for DnD interactions.

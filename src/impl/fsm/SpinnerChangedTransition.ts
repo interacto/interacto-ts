@@ -15,13 +15,13 @@
 import {OutputState} from "../../api/fsm/OutputState";
 import {InputState} from "../../api/fsm/InputState";
 import {EventRegistrationToken, isSpinner} from "./Events";
-import {Transition} from "./Transition";
+import {TransitionBase} from "./TransitionBase";
 
 /**
  * An FSM transition for the Spinner HTML element.
  * @author Gwendal DIDOT
  */
-export class SpinnerChangedTransition extends Transition {
+export class SpinnerChangedTransition extends TransitionBase {
 
     /**
      * Creates the transition.

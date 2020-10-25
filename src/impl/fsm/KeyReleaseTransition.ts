@@ -15,13 +15,13 @@
 import {InputState} from "../../api/fsm/InputState";
 import {OutputState} from "../../api/fsm/OutputState";
 import {EventRegistrationToken} from "./Events";
-import {Transition} from "./Transition";
+import {TransitionBase} from "./TransitionBase";
 
 /**
  * A transition for a release of a key of a keyboard.
  * @author Gwendal DIDOT
  */
-export class KeyReleaseTransition extends Transition {
+export class KeyReleaseTransition extends TransitionBase {
     /**
      * Creates the transition.
      */

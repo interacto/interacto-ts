@@ -12,24 +12,20 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {Command} from "../command/Command";
-import {FSM} from "../fsm/FSM";
-import {InteractionData} from "../interaction/InteractionData";
-import {Interaction} from "../interaction/Interaction";
-import {WidgetBinding} from "./WidgetBinding";
+import {WidgetData} from "../../../api/interaction/WidgetData";
 
-/**
- * Permits widget bindings produced by Bindings to be observed.
- */
-export interface BindingsObserver {
-    /**
-     * Adds a widget binding to observe.
-     * @param binding The binding to observe.
-     */
-    observeBinding(binding: WidgetBinding<Command, Interaction<InteractionData, FSM>, InteractionData>): void;
+export class WidgetDataImpl<T> implements WidgetData<T> {
+    private widget?: T;
 
-    /**
-     * Clear all the observed bindings and uninstall them.
-     */
-    clearObservedBindings(): void;
+    public getWidget(): T | undefined {
+        return this.widget;
+    }
+
+    public setWidget(widget?: T): void {
+        this.widget = widget;
+    }
+
+    public flush(): void {
+        this.widget = undefined;
+    }
 }

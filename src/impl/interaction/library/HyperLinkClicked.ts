@@ -15,10 +15,11 @@
 import {TerminalState} from "../../fsm/TerminalState";
 import {isHyperLink} from "../../fsm/Events";
 import {FSMDataHandler} from "../../../api/fsm/FSMDataHandler";
-import {WidgetData, WidgetDataImpl} from "../../../api/interaction/WidgetData";
+import {WidgetData} from "../../../api/interaction/WidgetData";
 import {HyperLinkTransition} from "../../fsm/HyperLinkTransition";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
+import {WidgetDataImpl} from "./WidgetDataImpl";
 
 export class HyperLinkClickedFSM extends FSMImpl {
     public constructor() {

@@ -15,13 +15,13 @@
 import {InputState} from "../../api/fsm/InputState";
 import {OutputState} from "../../api/fsm/OutputState";
 import {EventRegistrationToken} from "./Events";
-import {Transition} from "./Transition";
+import {TransitionBase} from "./TransitionBase";
 
 /**
  * This transition corresponds to a pressure of a button of a pointing device.
  * @author Arnaud BLOUIN
  */
-export class ClickTransition extends Transition {
+export class ClickTransition extends TransitionBase {
     /**
      * Creates the transition.
      */

@@ -18,7 +18,7 @@ import {FSMHandler} from "../../src/api/fsm/FSMHandler";
 import {StdState} from "../../src/impl/fsm/StdState";
 import {TerminalState} from "../../src/impl/fsm/TerminalState";
 import {CancellingState} from "../../src/impl/fsm/CancellingState";
-import {Transition} from "../../src/impl/fsm/Transition";
+import {TransitionBase} from "../../src/impl/fsm/TransitionBase";
 import {mock} from "jest-mock-extended";
 
 class StubTouchFSM extends FSMImpl {
@@ -36,7 +36,7 @@ class StubTouchFSM extends FSMImpl {
         this.addState(released);
         this.addState(cancelled);
 
-        new class extends Transition {
+        new class extends TransitionBase {
             public accept(_event: Event): boolean {
                 return true;
             }
@@ -50,7 +50,7 @@ class StubTouchFSM extends FSMImpl {
             }
         }(this.initState, touched);
 
-        new class extends Transition {
+        new class extends TransitionBase {
             public accept(_event: Event): boolean {
                 return true;
             }
@@ -64,7 +64,7 @@ class StubTouchFSM extends FSMImpl {
             }
         }(touched, moved);
 
-        new class extends Transition {
+        new class extends TransitionBase {
             public accept(_event: Event): boolean {
                 return true;
             }
@@ -78,7 +78,7 @@ class StubTouchFSM extends FSMImpl {
             }
         }(moved, moved);
 
-        new class extends Transition {
+        new class extends TransitionBase {
             public accept(_event: Event): boolean {
                 return true;
             }
@@ -92,7 +92,7 @@ class StubTouchFSM extends FSMImpl {
             }
         }(moved, released);
 
-        new class extends Transition {
+        new class extends TransitionBase {
             public accept(_event: Event): boolean {
                 return true;
             }

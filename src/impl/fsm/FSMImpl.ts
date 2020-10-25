@@ -17,7 +17,6 @@ import {InitState} from "./InitState";
 import {OutputState} from "../../api/fsm/OutputState";
 import {FSMHandler} from "../../api/fsm/FSMHandler";
 import {TimeoutTransition} from "./TimeoutTransition";
-import {StdState} from "./StdState";
 import {InputState} from "../../api/fsm/InputState";
 import {OutputStateBase} from "./OutputStateBase";
 import {catFSM} from "../../api/logging/ConfigLog";
@@ -186,7 +185,7 @@ export class FSMImpl implements FSM {
         }
     }
 
-    public enterStdState(state: StdState): void {
+    public enterStdState(state: OutputState & InputState): void {
         this.setCurrentState(state);
         this.checkTimeoutTransition();
         if (this.started) {
@@ -426,7 +425,7 @@ export class FSMImpl implements FSM {
         return [...this.eventsToProcess];
     }
 
-    public getInitState(): InitState {
+    public getInitState(): OutputState {
         return this.initState;
     }
 

@@ -15,12 +15,12 @@
 import {OutputState} from "../../api/fsm/OutputState";
 import {InputState} from "../../api/fsm/InputState";
 import {EventRegistrationToken} from "./Events";
-import {Transition} from "./Transition";
+import {TransitionBase} from "./TransitionBase";
 
 /**
  * This transition defines a touch pressure.
  */
-export class TouchPressureTransition extends Transition {
+export class TouchPressureTransition extends TransitionBase {
     /**
      * Defines a transition.
      * @param srcState The source state of the transition.

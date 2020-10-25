@@ -13,13 +13,13 @@
  */
 
 import {StdState} from "../../src/impl/fsm/StdState";
-import {Transition} from "../../src/impl/fsm/Transition";
+import {TransitionBase} from "../../src/impl/fsm/TransitionBase";
 import {FSMImpl} from "../../src/impl/fsm/FSMImpl";
 import {StubTransitionOK} from "./StubTransitionOK";
 import {ErrorCatcher} from "../../src/impl/error/ErrorCatcher";
 import {mock} from "jest-mock-extended";
 
-let tr: Transition;
+let tr: TransitionBase;
 let state1: StdState;
 let state2: StdState;
 

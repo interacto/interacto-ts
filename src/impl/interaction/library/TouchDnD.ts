@@ -13,7 +13,7 @@
  */
 
 import {InteractionBase} from "../InteractionBase";
-import {SrcTgtTouchData, SrcTgtTouchDataImpl} from "../../../api/interaction/SrcTgtTouchData";
+import {SrcTgtTouchData} from "../../../api/interaction/SrcTgtTouchData";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {FSMDataHandler} from "../../../api/fsm/FSMDataHandler";
 import {StdState} from "../../fsm/StdState";
@@ -22,6 +22,7 @@ import {TouchPressureTransition} from "../../fsm/TouchPressureTransition";
 import {TouchMoveTransition} from "../../fsm/TouchMoveTransition";
 import {TouchReleaseTransition} from "../../fsm/TouchReleaseTransition";
 import {getTouch} from "../../fsm/Events";
+import {SrcTgtTouchDataImpl} from "./SrcTgtTouchDataImpl";
 
 /**
  * The FSM that defines a touch interaction (that works like a DnD)

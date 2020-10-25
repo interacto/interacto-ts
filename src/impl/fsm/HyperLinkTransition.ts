@@ -15,13 +15,13 @@
 import {OutputState} from "../../api/fsm/OutputState";
 import {InputState} from "../../api/fsm/InputState";
 import {EventRegistrationToken, isHyperLink} from "./Events";
-import {Transition} from "./Transition";
+import {TransitionBase} from "./TransitionBase";
 
 /**
  * An FSM transition for the Hyperlink.
  * @author Gwendal DIDOT
  */
-export class HyperLinkTransition extends Transition {
+export class HyperLinkTransition extends TransitionBase {
 
     /**
      * Creates the transition.

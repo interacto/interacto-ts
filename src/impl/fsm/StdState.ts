@@ -21,7 +21,7 @@ import {FSM} from "../../api/fsm/FSM";
  * An FSM state.
  * A standard state can compose an FSM.
  * They do not start, stop, cancel an FSM.
- * They accept input and ouptut events.
+ * They accept input and output events.
  */
 export class StdState extends OutputStateBase implements InputState {
     /**

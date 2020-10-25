@@ -15,12 +15,12 @@
 import {OutputState} from "../../api/fsm/OutputState";
 import {InputState} from "../../api/fsm/InputState";
 import {EventRegistrationToken, isTextInput} from "./Events";
-import {Transition} from "./Transition";
+import {TransitionBase} from "./TransitionBase";
 
 /**
  * An FSM transition for the different text input HTML element.
  */
-export class TextInputChangedTransition extends Transition {
+export class TextInputChangedTransition extends TransitionBase {
 
     /**
      * Creates the transition.

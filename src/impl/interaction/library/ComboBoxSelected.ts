@@ -15,10 +15,11 @@
 import {TerminalState} from "../../fsm/TerminalState";
 import {isComboBox} from "../../fsm/Events";
 import {FSMDataHandler} from "../../../api/fsm/FSMDataHandler";
-import {WidgetData, WidgetDataImpl} from "../../../api/interaction/WidgetData";
+import {WidgetData} from "../../../api/interaction/WidgetData";
 import {ComboBoxTransition} from "../../fsm/ComboBoxTransition";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
+import {WidgetDataImpl} from "./WidgetDataImpl";
 
 export class ComboBoxSelectedFSM extends FSMImpl {
     public constructor() {

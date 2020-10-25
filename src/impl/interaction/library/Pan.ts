@@ -15,13 +15,14 @@
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {FSMDataHandler} from "../../../api/fsm/FSMDataHandler";
 import {InteractionBase} from "../InteractionBase";
-import {SrcTgtTouchData, SrcTgtTouchDataImpl} from "../../../api/interaction/SrcTgtTouchData";
+import {SrcTgtTouchData} from "../../../api/interaction/SrcTgtTouchData";
 import {StdState} from "../../fsm/StdState";
 import {TerminalState} from "../../fsm/TerminalState";
 import {TouchPressureTransition} from "../../fsm/TouchPressureTransition";
 import {TouchReleaseTransition} from "../../fsm/TouchReleaseTransition";
 import {CancellingState} from "../../fsm/CancellingState";
 import {TouchMoveTransition} from "../../fsm/TouchMoveTransition";
+import {SrcTgtTouchDataImpl} from "./SrcTgtTouchDataImpl";
 
 /**
  * The FSM for the Pan interaction

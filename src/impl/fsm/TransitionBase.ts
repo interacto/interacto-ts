@@ -14,11 +14,12 @@
 
 import {OutputState} from "../../api/fsm/OutputState";
 import {InputState} from "../../api/fsm/InputState";
+import {Transition} from "../../api/fsm/Transition";
 
 /**
  * The base implementation of a FSM transition.
  */
-export abstract class Transition {
+export abstract class TransitionBase implements Transition {
     public readonly src: OutputState;
 
     public readonly tgt: InputState;
@@ -34,12 +35,6 @@ export abstract class Transition {
         this.src.addTransition(this);
     }
 
-    /**
-     * Executes the transition.
-     * @param event The event to process.
-     * @return The potential output state.
-     * @throws CancelFSMException If the execution cancels the FSM execution.
-     */
     public execute(event: Event): InputState | undefined {
         if (this.accept(event) && this.isGuardOK(event)) {
             this.src.getFSM().stopCurrentTimeout();
@@ -58,14 +53,12 @@ export abstract class Transition {
 
     public abstract isGuardOK(event: Event): boolean;
 
-    /**
-     * @return The set of events accepted by the transition.
-     */
     public abstract getAcceptedEvents(): Set<string>;
 
-    /**
-     * Clean the transition when not used anymore.
-     */
+    public getTarget(): InputState {
+        return this.tgt;
+    }
+
     public uninstall(): void {
     }
 }

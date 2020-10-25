@@ -15,13 +15,13 @@
 import {InputState} from "../../api/fsm/InputState";
 import {OutputState} from "../../api/fsm/OutputState";
 import {EventRegistrationToken} from "./Events";
-import {Transition} from "./Transition";
+import {TransitionBase} from "./TransitionBase";
 
 /**
  * This transition corresponds to a move of a button of a pointing device.
  * @author Arnaud BLOUIN
  */
-export class MoveTransition extends Transition {
+export class MoveTransition extends TransitionBase {
     /**
      * Creates the transition.
      */

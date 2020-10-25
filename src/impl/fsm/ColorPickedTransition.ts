@@ -15,13 +15,13 @@
 import {OutputState} from "../../api/fsm/OutputState";
 import {InputState} from "../../api/fsm/InputState";
 import {EventRegistrationToken, isColorChoice} from "./Events";
-import {Transition} from "./Transition";
+import {TransitionBase} from "./TransitionBase";
 
 /**
  * An FSM transition for the ColorPicked HTML element.
  * @author Gwendal DIDOT
  */
-export class ColorPickedTransition extends Transition {
+export class ColorPickedTransition extends TransitionBase {
 
     /**
      * Creates the transition.

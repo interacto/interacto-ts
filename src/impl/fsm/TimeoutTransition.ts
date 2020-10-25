@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {Transition} from "./Transition";
+import {TransitionBase} from "./TransitionBase";
 import {OutputState} from "../../api/fsm/OutputState";
 import {InputState} from "../../api/fsm/InputState";
 import {ErrorCatcher} from "../error/ErrorCatcher";
@@ -22,7 +22,7 @@ import {ErrorCatcher} from "../error/ErrorCatcher";
  * A timeout transition is an FSM transition that is not executed by an event:
  * the FSM goes through such a transition on a timeout.
  */
-export class TimeoutTransition extends Transition {
+export class TimeoutTransition extends TransitionBase {
     /**
      * The timeoutDuration in ms.
      */

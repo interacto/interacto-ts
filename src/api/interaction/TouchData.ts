@@ -13,7 +13,6 @@
  */
 
 import {PointData} from "./PointData";
-import {PointDataImpl} from "../../impl/interaction/library/PointDataImpl";
 
 /**
  * The touch interaction data interface
@@ -24,31 +23,3 @@ export interface TouchData extends PointData {
      */
     getTouchId(): number | undefined;
 }
-
-export class TouchDataImpl extends PointDataImpl implements TouchData {
-    private touchID: number | undefined;
-
-    public constructor(id?: number, cx?: number, cy?: number, sx?: number, sy?: number, target?: EventTarget) {
-        super();
-        this.touchID = id;
-        this.setPointData(cx, cy, sx, sy, undefined, target, target);
-    }
-
-    public getTouchId(): number | undefined {
-        return this.touchID;
-    }
-
-    public setTouchId(id: number): void {
-        this.touchID = id;
-    }
-
-    public flush(): void {
-        super.flush();
-        this.touchID = undefined;
-    }
-
-    public getButton(): number | undefined {
-        return undefined;
-    }
-}
-

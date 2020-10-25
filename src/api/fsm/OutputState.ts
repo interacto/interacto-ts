@@ -13,7 +13,7 @@
  */
 
 import {State} from "./State";
-import {Transition} from "../../impl/fsm/Transition";
+import {Transition} from "./Transition";
 
 /**
  * Defines a type of state that can produce as output events.

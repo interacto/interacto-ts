@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {Transition} from "./Transition";
+import {TransitionBase} from "./TransitionBase";
 import {FSM} from "../../api/fsm/FSM";
 import {FSMHandler} from "../../api/fsm/FSMHandler";
 import {isOutputStateType, OutputState} from "../../api/fsm/OutputState";
@@ -20,13 +20,14 @@ import {InputState} from "../../api/fsm/InputState";
 import {TerminalState} from "./TerminalState";
 import {CancellingState} from "./CancellingState";
 import {Subscription} from "rxjs";
+import {Transition} from "../../api/fsm/Transition";
 
 /**
  * A transition that refers to another FSM.
  * Entering this transition starts the underlying sub-FSM.
  * To leave the transition, the sub-FSM must end.
  */
-export class SubFSMTransition extends Transition {
+export class SubFSMTransition extends TransitionBase {
     private readonly subFSM: FSM;
 
     private readonly subFSMHandler: FSMHandler;
@@ -109,7 +110,7 @@ export class SubFSMTransition extends Transition {
         this.src.getFSM().stopCurrentTimeout();
         this.setUpFSMHandler();
         this.subFSM.process(event);
-        return transition.tgt;
+        return transition.getTarget();
     }
 
     public accept(event: Event): boolean {
