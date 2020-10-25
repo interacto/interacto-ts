@@ -36,23 +36,6 @@ test("cando default", () => {
     expect(command.canDo()).toBeTruthy();
 });
 
-test("execute and flush cannotDo", () => {
-    jest.spyOn(cmd, "doIt");
-    jest.spyOn(cmd, "flush");
-    cmd.candoValue = false;
-    CommandImpl.executeAndFlush(cmd);
-    expect(cmd.doIt).not.toHaveBeenCalled();
-    expect(cmd.flush).toHaveBeenCalledTimes(1);
-});
-
-test("execute and flush canDo", () => {
-    jest.spyOn(cmd, "doIt");
-    jest.spyOn(cmd, "flush");
-    CommandImpl.executeAndFlush(cmd);
-    expect(cmd.doIt).toHaveBeenCalledTimes(1);
-    expect(cmd.flush).toHaveBeenCalledTimes(1);
-});
-
 test("testCommandStatusAfterCreation", () => {
     expect(cmd.getStatus()).toStrictEqual(CmdStatus.created);
 });
