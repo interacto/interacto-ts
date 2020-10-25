@@ -19,11 +19,11 @@ import {ErrorCatcher} from "../error/ErrorCatcher";
 import {CancelFSMException} from "../fsm/CancelFSMException";
 import {FSM} from "../fsm/FSM";
 import {InteractionData} from "../interaction/InteractionData";
-import {InteractionBase} from "../interaction/InteractionBase";
 import {catBinder, catCommand} from "../logging/ConfigLog";
 import {isUndoableType} from "../undo/Undoable";
 import {MustBeUndoableCmdException} from "./MustBeUndoableCmdException";
 import {WidgetBinding} from "./WidgetBinding";
+import {Interaction} from "../interaction/Interaction";
 
 /**
  * The base class to do widget bindings, i.e. bindings between user interactions and (undoable) commands.
@@ -31,7 +31,7 @@ import {WidgetBinding} from "./WidgetBinding";
  * @param <I> The type of the interaction that will use this widget binding.
  * @author Arnaud BLOUIN
  */
-export abstract class WidgetBindingBase<C extends Command, I extends InteractionBase<D, FSM>, D extends InteractionData>
+export abstract class WidgetBindingBase<C extends Command, I extends Interaction<D, FSM>, D extends InteractionData>
 implements WidgetBinding<C, I, D> {
 
     protected timeEnded: number;
@@ -100,7 +100,7 @@ implements WidgetBinding<C, I, D> {
 
     /**
      * creates the command of the widget binding. If the attribute 'cmd' is not null, nothing will be done.
-     * @return {CommandImpl} The created command or undefined if an error occured
+     * @return The created command or undefined if an error occurred
      */
     protected createCommand(): C | undefined {
         try {

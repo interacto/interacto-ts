@@ -12,7 +12,6 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 import {Command} from "../../command/Command";
-import {InteractionBase} from "../../interaction/InteractionBase";
 import {InteractionData} from "../../interaction/InteractionData";
 import {InteractionCmdBinder} from "./InteractionCmdBinder";
 import {CmdUpdateBinderBuilder} from "./CmdUpdateBinderBuilder";
@@ -20,8 +19,9 @@ import {InteractionUpdateBinderBuilder} from "./InteractionUpdateBinderBuilder";
 import {LogLevel} from "../../logging/LogLevel";
 import {WidgetBinding} from "../WidgetBinding";
 import {FSM} from "../../fsm/FSM";
+import {Interaction} from "../../interaction/Interaction";
 
-export interface InteractionCmdUpdateBinder<C extends Command, I extends InteractionBase<D, FSM>, D extends InteractionData>
+export interface InteractionCmdUpdateBinder<C extends Command, I extends Interaction<D, FSM>, D extends InteractionData>
     extends InteractionCmdBinder<C, I, D>, CmdUpdateBinderBuilder<C>, InteractionUpdateBinderBuilder<I, D> {
     /**
     * Specifies the update of the command on interaction command.

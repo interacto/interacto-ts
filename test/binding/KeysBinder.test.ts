@@ -15,7 +15,6 @@
 import {Command} from "../../src/command/Command";
 import {Subscription} from "rxjs";
 import {WidgetBinding} from "../../src/binding/WidgetBinding";
-import {InteractionBase} from "../../src/interaction/InteractionBase";
 import {InteractionData} from "../../src/interaction/InteractionData";
 import {FSM} from "../../src/fsm/FSM";
 import {keyPressBinder, keysTypeBinder} from "../../src/binding/Bindings";
@@ -24,11 +23,12 @@ import {createKeyEvent} from "../interaction/StubEvents";
 import {EventRegistrationToken} from "../../src/fsm/Events";
 import {UndoCollector} from "../../src/undo/UndoCollector";
 import {CommandsRegistry} from "../../src/command/CommandsRegistry";
+import {Interaction} from "../../src/interaction/Interaction";
 
 let elt: HTMLElement;
 let producedCmds: Array<Command>;
 let disposable: Subscription;
-let binding: WidgetBinding<Command, InteractionBase<InteractionData, FSM>, InteractionData>;
+let binding: WidgetBinding<Command, Interaction<InteractionData, FSM>, InteractionData>;
 
 beforeEach(() => {
     jest.useFakeTimers();

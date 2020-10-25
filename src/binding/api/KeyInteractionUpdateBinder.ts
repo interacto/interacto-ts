@@ -12,7 +12,6 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {InteractionBase} from "../../interaction/InteractionBase";
 import {FSM} from "../../fsm/FSM";
 import {InteractionData} from "../../interaction/InteractionData";
 import {LogLevel} from "../../logging/LogLevel";
@@ -20,8 +19,9 @@ import {Command} from "../../command/Command";
 import {KeyInteractionCmdUpdateBinder} from "./KeyInteractionCmdUpdateBinder";
 import {InteractionUpdateBinderBuilder} from "./InteractionUpdateBinderBuilder";
 import {KeyBinderBuilder} from "./KeyBinderBuilder";
+import {Interaction} from "../../interaction/Interaction";
 
-export interface KeyInteractionUpdateBinder<I extends InteractionBase<D, FSM>, D extends InteractionData>
+export interface KeyInteractionUpdateBinder<I extends Interaction<D, FSM>, D extends InteractionData>
     extends InteractionUpdateBinderBuilder<I, D>, KeyBinderBuilder {
 
     on(...widgets: Array<EventTarget>): KeyInteractionUpdateBinder<I, D>;

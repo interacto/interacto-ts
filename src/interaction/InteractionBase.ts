@@ -19,13 +19,14 @@ import {catInteraction} from "../logging/ConfigLog";
 import {InteractionData} from "./InteractionData";
 import {EventRegistrationToken, isKeyEvent, isMouseEvent, isTouchEvent} from "../fsm/Events";
 import {Subscription} from "rxjs";
+import {Interaction} from "./Interaction";
 
 /**
  * The base implementation of a user interaction.
  * @param <D> The type of the interaction data.
  * @param <F> The type of the FSM.
  */
-export abstract class InteractionBase<D extends InteractionData, F extends FSM> {
+export abstract class InteractionBase<D extends InteractionData, F extends FSM> implements Interaction<D, F> {
     protected readonly fsm: F;
 
     protected asLog: boolean;
@@ -86,9 +87,6 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
         this.data.flush();
     }
 
-    /**
-     * @return The interaction data of the user interaction. Cannot be null.
-     */
     public getData(): D {
         return this.data;
     }
@@ -143,7 +141,7 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
         });
     }
 
-    public unregisterFromNodes(widgets: Array<EventTarget>): void {
+    protected unregisterFromNodes(widgets: Array<EventTarget>): void {
         widgets.forEach(w => {
             this.registeredNodes.delete(w);
             this.onNodeUnregistered(w);
@@ -158,13 +156,6 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
         this.getEventTypesOf(this.fsm.getCurrentState()).forEach(type => this.registerEventToNode(type, node));
     }
 
-    /**
-     * Permits to listen any change in the content (ie children) of the given node.
-     * For all child nodes of the given node, this interaction subscribes to it.
-     * This is dynamic: on new child nodes, the interaction registers to them.
-     * On child removals, the interaction unregisters to them.
-     * @param elementToObserve The node which children will be observed by the interaction.
-     */
     public registerToNodeChildren(elementToObserve: Node): void {
         elementToObserve.childNodes.forEach((node: Node) => {
             this.registerToNodes([node]);
@@ -266,25 +257,14 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
         return this.uiHandler;
     }
 
-    /**
-     * @return Whether the user interaction is running.
-     */
     public isRunning(): boolean {
         return this.activated && !(this.fsm.getCurrentState() instanceof InitState);
     }
 
-    /**
-     * Reinitialises the user interaction
-     */
     public fullReinit(): void {
         this.fsm.fullReinit();
     }
 
-    /**
-     * Sets whether the user interaction will stop immidiately the propagation
-     * of events processed by this user interaction to others listeners.
-     * @param stop True: the propagation of the events will stop immediately.
-     */
     public set stopImmediatePropagation(stop: boolean) {
         this.stopImmediatePropag = stop;
     }
@@ -297,12 +277,6 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
         return this.stopImmediatePropag;
     }
 
-    /**
-     * Sets whether the default behavior associated to the event
-     * will be executed.
-     * @param prevent True: the default behavior associated to the event
-     * will be ignored.
-     */
     public set preventDefault(prevent: boolean) {
         this.preventDef = prevent;
     }
@@ -330,29 +304,16 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
         }
     }
 
-    /**
-     * Sets the logging of the user interaction.
-     * @param log True: the user interaction will log information.
-     */
     public log(log: boolean): void {
         this.asLog = log;
         this.fsm.log(log);
     }
 
 
-    /**
-     * @return True if the user interaction is activated.
-     */
     public isActivated(): boolean {
         return this.activated;
     }
 
-    /**
-     * Sets whether the user interaction is activated.
-     * When not activated, a user interaction does not process
-     * input events any more.
-     * @param activated True: the user interaction will be activated.
-     */
     public setActivated(activated: boolean): void {
         if (this.asLog) {
             catInteraction.info(`Interaction activation: ${String(activated)}`);
@@ -372,10 +333,6 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
         this.reinitData();
     }
 
-    /**
-     * Uninstall the user interaction. Used to free memory.
-     * Then, user interaction can be used any more.
-     */
     public uninstall(): void {
         this.disposable.unsubscribe();
         this.registeredNodes.forEach(n => this.onNodeUnregistered(n));

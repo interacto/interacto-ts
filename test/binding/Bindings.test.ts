@@ -14,20 +14,27 @@
 
 import {
     AnonCmd,
-    clickBinder, Command,
+    clickBinder,
+    Command,
     CommandsRegistry,
     dbleClickBinder,
     dndBinder,
     dragLockBinder,
     EventRegistrationToken,
     FSM,
+    Interaction,
     InteractionData,
-    InteractionBase,
     keyPressBinder,
     keyTypeBinder,
-    LogLevel, longTouchBinder,
+    LogLevel,
+    longTouchBinder,
     PointData,
-    pressBinder, SrcTgtTouchData, tapBinder, TapData, TouchData, touchDnDBinder,
+    pressBinder,
+    SrcTgtTouchData,
+    tapBinder,
+    TapData,
+    TouchData,
+    touchDnDBinder,
     UndoCollector,
     WidgetBinding
 } from "../../src/interacto";
@@ -38,7 +45,7 @@ import {createKeyEvent, createMouseEvent, createTouchEvent} from "../interaction
 let elt: HTMLElement;
 let producedCmds: Array<Command>;
 let disposable: Subscription;
-let binding: WidgetBinding<Command, InteractionBase<InteractionData, FSM>, InteractionData>;
+let binding: WidgetBinding<Command, Interaction<InteractionData, FSM>, InteractionData>;
 
 beforeEach(() => {
     jest.useFakeTimers();
@@ -239,7 +246,7 @@ test("touch DnD binding", () => {
 describe("tap and longPress conflict", () => {
     let producedCmds2: Array<Command>;
     let disposable2: Subscription;
-    let binding2: WidgetBinding<Command, InteractionBase<InteractionData, FSM>, InteractionData>;
+    let binding2: WidgetBinding<Command, Interaction<InteractionData, FSM>, InteractionData>;
 
     beforeEach(() => {
         producedCmds2 = [];
@@ -287,7 +294,7 @@ describe("tap and longPress conflict", () => {
 describe("two longTouch", () => {
     let producedCmds2: Array<Command>;
     let disposable2: Subscription;
-    let binding2: WidgetBinding<Command, InteractionBase<InteractionData, FSM>, InteractionData>;
+    let binding2: WidgetBinding<Command, Interaction<InteractionData, FSM>, InteractionData>;
 
 
     beforeEach(() => {

@@ -83,15 +83,6 @@ test("testNoActionWhenNotRegistered", () => {
     expect(handler.fsmStarts).not.toHaveBeenCalled();
 });
 
-test("testUnRegisterNode", () => {
-    interaction.registerToNodes([spinner]);
-    interaction.unregisterFromNodes([spinner]);
-    spinner.dispatchEvent(new Event("input"));
-    jest.runAllTimers();
-    expect(handler.fsmStops).not.toHaveBeenCalled();
-    expect(handler.fsmStarts).not.toHaveBeenCalled();
-});
-
 test("spinner Registered twice", () => {
     interaction.registerToNodes([spinner, spinner]);
     spinner.dispatchEvent(new Event("input"));

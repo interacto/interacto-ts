@@ -15,7 +15,6 @@
 import {FSM} from "../fsm/FSM";
 import {Binder} from "./Binder";
 import {InteractionData} from "../interaction/InteractionData";
-import {InteractionBase} from "../interaction/InteractionBase";
 import {Command} from "../command/Command";
 import {CmdUpdateBinder} from "./api/CmdUpdateBinder";
 import {InteractionCmdUpdateBinder} from "./api/InteractionCmdUpdateBinder";
@@ -23,13 +22,14 @@ import {LogLevel} from "../logging/LogLevel";
 import {WidgetBinding} from "./WidgetBinding";
 import {AnonBinding} from "./AnonBinding";
 import {BindingsObserver} from "./BindingsObserver";
+import {Interaction} from "../interaction/Interaction";
 
 /**
  * The base binding builder for bindings where commands can be updated while the user interaction is running.
  * @param <C> The type of the command to produce.
  * @author Arnaud Blouin
  */
-export class UpdateBinder<C extends Command, I extends InteractionBase<D, FSM>, D extends InteractionData>
+export class UpdateBinder<C extends Command, I extends Interaction<D, FSM>, D extends InteractionData>
     extends Binder<C, I, D> implements CmdUpdateBinder<C>, InteractionCmdUpdateBinder<C, I, D> {
 
     protected updateFct?: (c: C, i: D) => void;
@@ -137,7 +137,7 @@ export class UpdateBinder<C extends Command, I extends InteractionBase<D, FSM>, 
         return super.preventDefault() as UpdateBinder<C, I, D>;
     }
 
-    public usingInteraction<I2 extends InteractionBase<D2, FSM>, D2 extends InteractionData>
+    public usingInteraction<I2 extends Interaction<D2, FSM>, D2 extends InteractionData>
     (interactionSupplier: () => I2): UpdateBinder<C, I2, D2> {
         return super.usingInteraction(interactionSupplier) as UpdateBinder<C, I2, D2>;
     }

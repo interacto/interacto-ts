@@ -17,20 +17,20 @@ import {LogLevel} from "../logging/LogLevel";
 import {WidgetBinding} from "./WidgetBinding";
 import {AnonBinding} from "./AnonBinding";
 import {BindingsObserver} from "./BindingsObserver";
-import {InteractionBase} from "../interaction/InteractionBase";
 import {FSM} from "../fsm/FSM";
 import {InteractionData} from "../interaction/InteractionData";
 import {KeysDataImpl} from "../interaction/library/KeysDataImpl";
 import {KeyDataImpl} from "../interaction/library/KeyDataImpl";
 import {UpdateBinder} from "./UpdateBinder";
 import {KeyInteractionCmdUpdateBinder} from "./api/KeyInteractionCmdUpdateBinder";
+import {Interaction} from "../interaction/Interaction";
 
 /**
  * The base binding builder to create bindings between a keys pressure interaction and a given command.
  * @param <C> The type of the command to produce.
  * @author Arnaud Blouin
  */
-export class KeysBinder<C extends Command, I extends InteractionBase<D, FSM>, D extends InteractionData>
+export class KeysBinder<C extends Command, I extends Interaction<D, FSM>, D extends InteractionData>
     extends UpdateBinder<C, I, D> implements KeyInteractionCmdUpdateBinder<C, I, D> {
 
     private codes: Array<string>;
@@ -138,7 +138,7 @@ export class KeysBinder<C extends Command, I extends InteractionBase<D, FSM>, D 
         return super.toProduce(cmdCreation) as KeysBinder<C2, I, D>;
     }
 
-    public usingInteraction<I2 extends InteractionBase<D2, FSM>, D2 extends InteractionData>
+    public usingInteraction<I2 extends Interaction<D2, FSM>, D2 extends InteractionData>
     (interactionSupplier: () => I2): KeysBinder<C, I2, D2> {
         return super.usingInteraction(interactionSupplier) as unknown as KeysBinder<C, I2, D2>;
     }

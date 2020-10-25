@@ -16,11 +16,11 @@ import {FSM} from "../fsm/FSM";
 import {InteractionData} from "../interaction/InteractionData";
 import {LogLevel} from "../logging/LogLevel";
 import {WidgetBindingBase} from "./WidgetBindingBase";
-import {InteractionBase} from "../interaction/InteractionBase";
 import {catBinder} from "../logging/ConfigLog";
 import {Command} from "../command/Command";
+import {Interaction} from "../interaction/Interaction";
 
-export class AnonBinding<C extends Command, I extends InteractionBase<D, FSM>, D extends InteractionData>
+export class AnonBinding<C extends Command, I extends Interaction<D, FSM>, D extends InteractionData>
     extends WidgetBindingBase<C, I, D> {
 
     private readonly execInitCmd?: ((c: C, i: D) => void);

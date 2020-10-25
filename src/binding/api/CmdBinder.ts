@@ -12,12 +12,12 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 import {Command} from "../../command/Command";
-import {InteractionBase} from "../../interaction/InteractionBase";
 import {InteractionData} from "../../interaction/InteractionData";
 import {FSM} from "../../fsm/FSM";
 import {CmdBinderBuilder} from "./CmdBinderBuilder";
 import {InteractionCmdBinder} from "./InteractionCmdBinder";
 import {LogLevel} from "../../logging/LogLevel";
+import {Interaction} from "../../interaction/Interaction";
 
 /**
  * The widget binding builder API already knows the type of UI command
@@ -45,7 +45,7 @@ export interface CmdBinder<C extends Command> extends CmdBinderBuilder<C> {
      * @type <I> The user interaction type
      * @return A clone of the current builder to chain the building configuration.
      */
-    usingInteraction<I extends InteractionBase<D, FSM>, D extends InteractionData>(interactionSupplier: () => I):
+    usingInteraction<I extends Interaction<D, FSM>, D extends InteractionData>(interactionSupplier: () => I):
     InteractionCmdBinder<C, I, D>;
 
     stopImmediatePropagation(): CmdBinder<C>;

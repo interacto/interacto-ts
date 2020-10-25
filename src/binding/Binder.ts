@@ -15,13 +15,13 @@
 import {LogLevel} from "../logging/LogLevel";
 import {FSM} from "../fsm/FSM";
 import {InteractionData} from "../interaction/InteractionData";
-import {InteractionBase} from "../interaction/InteractionBase";
 import {Command} from "../command/Command";
 import {CmdBinder} from "./api/CmdBinder";
 import {InteractionBinder} from "./api/InteractionBinder";
 import {InteractionCmdBinder} from "./api/InteractionCmdBinder";
 import {WidgetBinding} from "./WidgetBinding";
 import {BindingsObserver} from "./BindingsObserver";
+import {Interaction} from "../interaction/Interaction";
 
 /**
  * The base class that defines the concept of binding builder (called binder).
@@ -29,7 +29,7 @@ import {BindingsObserver} from "./BindingsObserver";
  * @param <I> The type of the user interaction to bind.
  * @author Arnaud Blouin
  */
-export abstract class Binder<C extends Command, I extends InteractionBase<D, FSM>, D extends InteractionData>
+export abstract class Binder<C extends Command, I extends Interaction<D, FSM>, D extends InteractionData>
 implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> {
 
     protected initCmd?: (c: C, i: D) => void;
@@ -145,7 +145,7 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
         return dup;
     }
 
-    public usingInteraction<I2 extends InteractionBase<D2, FSM>, D2 extends InteractionData>
+    public usingInteraction<I2 extends Interaction<D2, FSM>, D2 extends InteractionData>
     (interactionSupplier: () => I2): Binder<C, I2, D2> {
         const dup = this.duplicate();
         dup.interactionSupplier = interactionSupplier as unknown as () => I;

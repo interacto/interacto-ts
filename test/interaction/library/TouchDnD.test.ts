@@ -226,16 +226,6 @@ test("touch on registered widget", () => {
     expect(handler.fsmCancels).not.toHaveBeenCalled();
 });
 
-test("touch on unregistered widget", () => {
-    interaction.registerToNodes([canvas]);
-    interaction.unregisterFromNodes([canvas]);
-    canvas.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 3, canvas, 11, 23, 12, 25));
-    canvas.dispatchEvent(createTouchEvent(EventRegistrationToken.touchmove, 3, canvas, 11, 24, 14, 28));
-    expect(handler.fsmStarts).not.toHaveBeenCalled();
-    expect(handler.fsmUpdates).not.toHaveBeenCalled();
-    expect(handler.fsmCancels).not.toHaveBeenCalled();
-});
-
 test("touch restart", () => {
     interaction.registerToNodes([canvas]);
     interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 3, canvas, 11, 23, 12, 25));

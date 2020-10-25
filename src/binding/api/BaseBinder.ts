@@ -14,11 +14,11 @@
 import {LogLevel} from "../../logging/LogLevel";
 import {Command} from "../../command/Command";
 import {InteractionData} from "../../interaction/InteractionData";
-import {InteractionBase} from "../../interaction/InteractionBase";
 import {BaseBinderBuilder} from "./BaseBinderBuilder";
 import {FSM} from "../../fsm/FSM";
 import {InteractionBinder} from "./InteractionBinder";
 import {CmdBinder} from "./CmdBinder";
+import {Interaction} from "../../interaction/Interaction";
 
 /**
  * The base interface for building widget bindings with routines
@@ -50,5 +50,5 @@ export interface BaseBinder extends BaseBinderBuilder {
      * @type <I> The user interaction type
      * @return A clone of the current builder to chain the building configuration.
      */
-    usingInteraction<I extends InteractionBase<D, FSM>, D extends InteractionData>(interactionSupplier: () => I): InteractionBinder<I, D>;
+    usingInteraction<I extends Interaction<D, FSM>, D extends InteractionData>(interactionSupplier: () => I): InteractionBinder<I, D>;
 }

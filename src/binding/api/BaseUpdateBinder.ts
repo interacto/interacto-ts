@@ -14,12 +14,12 @@
 import {BaseUpdateBinderBuilder} from "./BaseUpdateBinderBuilder";
 import {LogLevel} from "../../logging/LogLevel";
 import {Command} from "../../command/Command";
-import {InteractionBase} from "../../interaction/InteractionBase";
 import {FSM} from "../../fsm/FSM";
 import {InteractionData} from "../../interaction/InteractionData";
 import {CmdUpdateBinder} from "./CmdUpdateBinder";
 import {InteractionUpdateBinder} from "./InteractionUpdateBinder";
 import {BaseBinder} from "./BaseBinder";
+import {Interaction} from "../../interaction/Interaction";
 
 /**
  * The base interface for building widget bindings based on non-trivial user interactions (eg DnD) with routines
@@ -44,7 +44,7 @@ export interface BaseUpdateBinder extends BaseUpdateBinderBuilder, BaseBinder {
 
     toProduce<C extends Command>(cmdSupplier: () => C): CmdUpdateBinder<C>;
 
-    usingInteraction<I extends InteractionBase<D, FSM>, D extends InteractionData>
+    usingInteraction<I extends Interaction<D, FSM>, D extends InteractionData>
     (interactionSupplier: () => I): InteractionUpdateBinder<I, D>;
 
     stopImmediatePropagation(): BaseUpdateBinder;
