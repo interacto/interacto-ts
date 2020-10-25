@@ -32,8 +32,6 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
 
     protected readonly registeredNodes: Set<EventTarget>;
 
-    protected readonly registeredTargetNode: Set<EventTarget>;
-
     protected readonly additionalNodes: Array<Node>;
 
     /** The current list of mutation observers. Used for listening changes in node lists. */
@@ -80,7 +78,6 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
         this.registeredNodes = new Set<EventTarget>();
         this.additionalNodes = new Array<Node>();
         this.mutationObservers = new Array<MutationObserver>();
-        this.registeredTargetNode = new Set<EventTarget>();
     }
 
     protected abstract createDataObject(): D;
@@ -117,14 +114,6 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
                 eventsToAdd.forEach(type => this.registerEventToNode(type, child));
             });
         });
-        this.registeredTargetNode.forEach(n => {
-            eventsToRemove.forEach(type => this.unregisterEventToNode(type, n));
-        });
-        if (newState !== newState.getFSM().initState) {
-            this.registeredTargetNode.forEach(n => {
-                eventsToAdd.forEach(type => this.registerEventToNode(type, n));
-            });
-        }
     }
 
     protected getCurrentAcceptedEvents(state: OutputState): Array<string> {
@@ -154,13 +143,6 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
         });
     }
 
-    public registerToTargetNodes(targetWidgets: Array<EventTarget>): void {
-        targetWidgets.forEach(w => {
-            this.registeredTargetNode.add(w);
-            this.onNewNodeTargetRegistered(w);
-        });
-    }
-
     public unregisterFromNodes(widgets: Array<EventTarget>): void {
         widgets.forEach(w => {
             this.registeredNodes.delete(w);
@@ -174,12 +156,6 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
 
     public onNewNodeRegistered(node: EventTarget): void {
         this.getEventTypesOf(this.fsm.getCurrentState()).forEach(type => this.registerEventToNode(type, node));
-    }
-
-    public onNewNodeTargetRegistered(node: EventTarget): void {
-        if (this.fsm.getCurrentState() !== this.fsm.initState) {
-            this.getEventTypesOf(this.fsm.getCurrentState()).forEach(type => this.registerEventToNode(type, node));
-        }
     }
 
     /**
@@ -387,9 +363,6 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
         }
     }
 
-    /**
-     * @return The FSM of the user interaction.
-     */
     public getFsm(): F {
         return this.fsm;
     }
@@ -411,8 +384,6 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
         this.additionalNodes.length = 0;
         this.mutationObservers.forEach(m => m.disconnect());
         this.mutationObservers.length = 0;
-        this.registeredTargetNode.forEach(n => this.onNodeUnregistered(n));
-        this.registeredTargetNode.clear();
         this.setActivated(false);
     }
 }
