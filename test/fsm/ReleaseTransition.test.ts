@@ -12,10 +12,10 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {EventRegistrationToken} from "../../src/fsm/Events";
-import {FSMImpl} from "../../src/fsm/FSMImpl";
-import {ReleaseTransition} from "../../src/fsm/ReleaseTransition";
-import {StdState} from "../../src/fsm/StdState";
+import {EventRegistrationToken} from "../../src/impl/fsm/Events";
+import {FSMImpl} from "../../src/impl/fsm/FSMImpl";
+import {ReleaseTransition} from "../../src/impl/fsm/ReleaseTransition";
+import {StdState} from "../../src/impl/fsm/StdState";
 import {createMouseEvent, createTouchEvent} from "../interaction/StubEvents";
 import {mock} from "jest-mock-extended";
 

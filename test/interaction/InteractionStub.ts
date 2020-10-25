@@ -12,11 +12,11 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {InteractionBase} from "../../src/interaction/InteractionBase";
-import {InteractionData} from "../../src/interaction/InteractionData";
-import {FSM} from "../../src/fsm/FSM";
-import {OutputState} from "../../src/fsm/OutputState";
-import {PointDataImpl} from "../../src/interaction/library/PointDataImpl";
+import {InteractionBase} from "../../src/impl/interaction/InteractionBase";
+import {InteractionData} from "../../src/api/interaction/InteractionData";
+import {FSM} from "../../src/api/fsm/FSM";
+import {OutputState} from "../../src/api/fsm/OutputState";
+import {PointDataImpl} from "../../src/impl/interaction/library/PointDataImpl";
 
 export class InteractionStub extends InteractionBase<InteractionData, FSM> {
     public updateEventsRegistered(_newState: OutputState, _oldState: OutputState): void {

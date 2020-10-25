@@ -12,9 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSMImpl} from "../../src/fsm/FSMImpl";
-import {StateBase} from "../../src/fsm/StateBase";
-import {StdState} from "../../src/fsm/StdState";
+import {FSMImpl} from "../../src/impl/fsm/FSMImpl";
+import {StateBase} from "../../src/impl/fsm/StateBase";
+import {StdState} from "../../src/impl/fsm/StdState";
 
 let state: StateBase;
 let fsm: FSMImpl;

@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {CommandBase} from "../../src/command/CommandBase";
+import {CommandBase} from "../../src/impl/command/CommandBase";
 
 export class StubCmd extends CommandBase {
     public candoValue: boolean;

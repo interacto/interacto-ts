@@ -11,10 +11,10 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import {CmdStatus, RegistrationPolicy} from "../../src/command/Command";
-import {CommandBase} from "../../src/command/CommandBase";
-import {CommandsRegistry} from "../../src/command/CommandsRegistry";
-import {UndoCollector} from "../../src/undo/UndoCollector";
+import {CmdStatus, RegistrationPolicy} from "../../src/api/command/Command";
+import {CommandBase} from "../../src/impl/command/CommandBase";
+import {CommandsRegistry} from "../../src/impl/command/CommandsRegistry";
+import {UndoCollector} from "../../src/impl/undo/UndoCollector";
 import {StubCmd} from "./StubCmd";
 
 let cmd: StubCmd;

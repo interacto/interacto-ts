@@ -13,9 +13,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {FSMImpl} from "../../src/fsm/FSMImpl";
-import {StdState} from "../../src/fsm/StdState";
-import {WidgetTransition} from "../../src/fsm/WidgetTransition";
+import {FSMImpl} from "../../src/impl/fsm/FSMImpl";
+import {StdState} from "../../src/impl/fsm/StdState";
+import {WidgetTransition} from "../../src/impl/fsm/WidgetTransition";
 import {StubEvent} from "./StubEvent";
 import {mock} from "jest-mock-extended";
 

@@ -13,20 +13,20 @@
  */
 
 import {Subject} from "rxjs";
-import {CancelFSMException} from "../../src/fsm/CancelFSMException";
-import {CancellingState} from "../../src/fsm/CancellingState";
-import {FSMImpl} from "../../src/fsm/FSMImpl";
-import {InitState} from "../../src/fsm/InitState";
-import {InputState} from "../../src/fsm/InputState";
-import {OutputState} from "../../src/fsm/OutputState";
-import {StdState} from "../../src/fsm/StdState";
-import {SubFSMTransition} from "../../src/fsm/SubFSMTransition";
-import {TerminalState} from "../../src/fsm/TerminalState";
-import {TimeoutTransition} from "../../src/fsm/TimeoutTransition";
-import {catFSM} from "../../src/logging/ConfigLog";
+import {CancelFSMException} from "../../src/impl/fsm/CancelFSMException";
+import {CancellingState} from "../../src/impl/fsm/CancellingState";
+import {FSMImpl} from "../../src/impl/fsm/FSMImpl";
+import {InitState} from "../../src/impl/fsm/InitState";
+import {InputState} from "../../src/api/fsm/InputState";
+import {OutputState} from "../../src/api/fsm/OutputState";
+import {StdState} from "../../src/impl/fsm/StdState";
+import {SubFSMTransition} from "../../src/impl/fsm/SubFSMTransition";
+import {TerminalState} from "../../src/impl/fsm/TerminalState";
+import {TimeoutTransition} from "../../src/impl/fsm/TimeoutTransition";
+import {catFSM} from "../../src/api/logging/ConfigLog";
 import {StubEvent, StubSubEvent1, StubSubEvent2, StubSubEvent3} from "./StubEvent";
 import {StubTransitionOK} from "./StubTransitionOK";
-import {FSMHandler} from "../../src/fsm/FSMHandler";
+import {FSMHandler} from "../../src/api/fsm/FSMHandler";
 import {mock} from "jest-mock-extended";
 
 let fsm: FSMImpl;

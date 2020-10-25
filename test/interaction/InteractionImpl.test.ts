@@ -13,10 +13,10 @@
  */
 
 import {Subject} from "rxjs";
-import {FSMImpl} from "../../src/fsm/FSMImpl";
-import {InitState} from "../../src/fsm/InitState";
-import {OutputState} from "../../src/fsm/OutputState";
-import {StdState} from "../../src/fsm/StdState";
+import {FSMImpl} from "../../src/impl/fsm/FSMImpl";
+import {InitState} from "../../src/impl/fsm/InitState";
+import {OutputState} from "../../src/api/fsm/OutputState";
+import {StdState} from "../../src/impl/fsm/StdState";
 import {InteractionStub} from "./InteractionStub";
 import {mock, MockProxy} from "jest-mock-extended";
 

@@ -12,11 +12,11 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {Undoable} from "../../src/undo/Undoable";
-import {UndoCollector} from "../../src/undo/UndoCollector";
+import {Undoable} from "../../src/api/undo/Undoable";
+import {UndoCollector} from "../../src/impl/undo/UndoCollector";
 import {mock, MockProxy} from "jest-mock-extended";
 
-jest.mock("../../src/undo/Undoable");
+jest.mock("../../src/api/undo/Undoable");
 
 let undoable: Undoable & MockProxy<Undoable>;
 let instance: UndoCollector;

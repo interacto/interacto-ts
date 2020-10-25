@@ -12,16 +12,16 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSMImpl} from "../../src/fsm/FSMImpl";
-import {InputState} from "../../src/fsm/InputState";
-import {StdState} from "../../src/fsm/StdState";
-import {SubFSMTransition} from "../../src/fsm/SubFSMTransition";
-import {TerminalState} from "../../src/fsm/TerminalState";
-import {Transition} from "../../src/fsm/Transition";
+import {FSMImpl} from "../../src/impl/fsm/FSMImpl";
+import {InputState} from "../../src/api/fsm/InputState";
+import {StdState} from "../../src/impl/fsm/StdState";
+import {SubFSMTransition} from "../../src/impl/fsm/SubFSMTransition";
+import {TerminalState} from "../../src/impl/fsm/TerminalState";
+import {Transition} from "../../src/impl/fsm/Transition";
 import {StubSubEvent1, StubSubEvent2} from "./StubEvent";
 import {SubStubTransition1} from "./StubTransitionOK";
 
-jest.mock("../../src/fsm/StdState");
+jest.mock("../../src/impl/fsm/StdState");
 
 let tr: SubFSMTransition;
 let fsm: FSMImpl;

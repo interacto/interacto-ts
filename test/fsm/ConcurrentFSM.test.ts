@@ -12,13 +12,13 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {ConcurrentFSM} from "../../src/fsm/ConcurrentFSM";
-import {FSMImpl} from "../../src/fsm/FSMImpl";
-import {FSMHandler} from "../../src/fsm/FSMHandler";
-import {StdState} from "../../src/fsm/StdState";
-import {TerminalState} from "../../src/fsm/TerminalState";
-import {CancellingState} from "../../src/fsm/CancellingState";
-import {Transition} from "../../src/fsm/Transition";
+import {ConcurrentFSM} from "../../src/impl/fsm/ConcurrentFSM";
+import {FSMImpl} from "../../src/impl/fsm/FSMImpl";
+import {FSMHandler} from "../../src/api/fsm/FSMHandler";
+import {StdState} from "../../src/impl/fsm/StdState";
+import {TerminalState} from "../../src/impl/fsm/TerminalState";
+import {CancellingState} from "../../src/impl/fsm/CancellingState";
+import {Transition} from "../../src/impl/fsm/Transition";
 import {mock} from "jest-mock-extended";
 
 class StubTouchFSM extends FSMImpl {

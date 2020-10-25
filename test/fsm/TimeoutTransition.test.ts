@@ -12,12 +12,12 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {ErrorCatcher} from "../../src/error/ErrorCatcher";
-import {CancelFSMException} from "../../src/fsm/CancelFSMException";
-import {FSMImpl} from "../../src/fsm/FSMImpl";
-import {InputState} from "../../src/fsm/InputState";
-import {OutputState} from "../../src/fsm/OutputState";
-import {TimeoutTransition} from "../../src/fsm/TimeoutTransition";
+import {ErrorCatcher} from "../../src/impl/error/ErrorCatcher";
+import {CancelFSMException} from "../../src/impl/fsm/CancelFSMException";
+import {FSMImpl} from "../../src/impl/fsm/FSMImpl";
+import {InputState} from "../../src/api/fsm/InputState";
+import {OutputState} from "../../src/api/fsm/OutputState";
+import {TimeoutTransition} from "../../src/impl/fsm/TimeoutTransition";
 import {mock, MockProxy} from "jest-mock-extended";
 
 let evt: TimeoutTransition;

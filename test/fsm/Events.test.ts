@@ -14,7 +14,7 @@
 
 import {EventRegistrationToken, isButton, isCheckBox, isColorChoice, isComboBox, isDatePicker,
     isHyperLink, isKeyDownEvent, isKeyUpEvent, isMouseDownEvent, isScrollEvent, isSpinner,
-    isTextInput, KeyCode} from "../../src/fsm/Events";
+    isTextInput, KeyCode} from "../../src/impl/fsm/Events";
 import {createKeyEvent, createMouseEvent, createUIEvent} from "../interaction/StubEvents";
 
 

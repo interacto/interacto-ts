@@ -12,9 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {CancellingState} from "../../src/fsm/CancellingState";
-import {FSMImpl} from "../../src/fsm/FSMImpl";
-import {OutputState} from "../../src/fsm/OutputState";
+import {CancellingState} from "../../src/impl/fsm/CancellingState";
+import {FSMImpl} from "../../src/impl/fsm/FSMImpl";
+import {OutputState} from "../../src/api/fsm/OutputState";
 import {mock, MockProxy} from "jest-mock-extended";
 
 let state: CancellingState;

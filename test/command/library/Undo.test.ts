@@ -12,9 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {Undo} from "../../../src/command/library/Undo";
-import {UndoCollector} from "../../../src/undo/UndoCollector";
-import {Undoable} from "../../../src/undo/Undoable";
+import {Undo} from "../../../src/impl/command/library/Undo";
+import {UndoCollector} from "../../../src/impl/undo/UndoCollector";
+import {Undoable} from "../../../src/api/undo/Undoable";
 import {mock, MockProxy} from "jest-mock-extended";
 
 let cmd: Undo;
