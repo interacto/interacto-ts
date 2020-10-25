@@ -19,8 +19,6 @@ import {FSMDataHandler} from "../../../api/fsm/FSMDataHandler";
 import {WidgetData} from "../../../api/interaction/WidgetData";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
-import {Interaction} from "../../../api/interaction/Interaction";
-import {FSM} from "../../../api/fsm/FSM";
 import {WidgetDataImpl} from "./WidgetDataImpl";
 
 export class BoxCheckedFSM extends FSMImpl {
@@ -51,14 +49,11 @@ interface BoxCheckedHandler extends FSMDataHandler {
     initToCheckHandler(event: Event): void;
 }
 
-interface IBoxChecked extends Interaction<WidgetData<HTMLInputElement>, FSM> {
-
-}
 /**
  * A user interaction for CheckBox.
  * @author Gwendal DIDOT
  */
-export class BoxChecked extends InteractionBase<WidgetData<HTMLInputElement>, BoxCheckedFSM> implements IBoxChecked {
+export class BoxChecked extends InteractionBase<WidgetData<HTMLInputElement>, BoxCheckedFSM> {
     private readonly handler: BoxCheckedHandler;
 
     /**
