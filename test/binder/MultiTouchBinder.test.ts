@@ -15,9 +15,10 @@ import {Subscription} from "rxjs";
 import {
     CommandsRegistry,
     EventRegistrationToken,
-    MultiTouch,
+    FSM,
+    Interaction, InteractionBase,
+    InteractionData,
     multiTouchBinder,
-    MultiTouchData,
     UndoCollector,
     WidgetBinding
 } from "../../src/interacto";
@@ -25,7 +26,7 @@ import {StubCmd} from "../command/StubCmd";
 import {createTouchEvent} from "../interaction/StubEvents";
 
 let c1: HTMLElement;
-let binding: WidgetBinding<StubCmd, MultiTouch, MultiTouchData> | undefined;
+let binding: WidgetBinding<StubCmd, Interaction<InteractionData, FSM>, InteractionData> | undefined;
 let cmd: StubCmd;
 let producedCmds: Array<StubCmd>;
 let disposable: Subscription | undefined;
@@ -105,7 +106,7 @@ test("unsubscribe does not trigger the binding", () => {
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
-    binding.getInteraction().onNodeUnregistered(c1);
+    (binding.getInteraction() as InteractionBase<InteractionData, FSM>).onNodeUnregistered(c1);
 
     c1.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, c1, 11, 23, 110, 230));
     c1.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 2, c1, 31, 13, 310, 130));

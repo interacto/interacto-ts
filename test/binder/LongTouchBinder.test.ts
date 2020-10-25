@@ -15,17 +15,18 @@ import {Subscription} from "rxjs";
 import {
     CommandsRegistry,
     EventRegistrationToken,
+    FSM,
+    Interaction, InteractionBase,
+    InteractionData,
     LogLevel,
-    LongTouch,
     longTouchBinder,
-    TouchData,
     UndoCollector,
     WidgetBinding
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {createTouchEvent} from "../interaction/StubEvents";
 
-let binding: WidgetBinding<StubCmd, LongTouch, TouchData> | undefined;
+let binding: WidgetBinding<StubCmd, Interaction<InteractionData, FSM>, InteractionData> | undefined;
 let cmd: StubCmd;
 let producedCmds: Array<StubCmd>;
 let disposable: Subscription | undefined;
@@ -108,7 +109,7 @@ describe("on canvas", () => {
             .bind();
         disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
-        binding.getInteraction().onNodeUnregistered(c1);
+        (binding.getInteraction() as InteractionBase<InteractionData, FSM>).onNodeUnregistered(c1);
 
         c1.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, c1, 11, 23, 110, 230));
 

@@ -12,13 +12,23 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 import {Subscription} from "rxjs";
-import {CommandsRegistry, isSpinner, spinnerBinder, SpinnerChanged, SpinnerChangedFSM, UndoCollector,
-    WidgetBinding, WidgetData} from "../../src/interacto";
+import {
+    CommandsRegistry,
+    FSM,
+    Interaction,
+    InteractionData,
+    isSpinner,
+    spinnerBinder,
+    SpinnerChangedFSM,
+    UndoCollector,
+    WidgetBinding,
+    WidgetData
+} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 
 let widget1: HTMLInputElement;
 let widget2: HTMLInputElement;
-let binding: WidgetBinding<StubCmd, SpinnerChanged, WidgetData<HTMLInputElement>> | undefined;
+let binding: WidgetBinding<StubCmd, Interaction<InteractionData, FSM>, InteractionData> | undefined;
 let cmd: StubCmd;
 let producedCmds: Array<StubCmd>;
 let disposable: Subscription | undefined;

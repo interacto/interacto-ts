@@ -12,12 +12,20 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 import {Subscription} from "rxjs";
-import {CommandsRegistry, UndoCollector, WidgetBinding,
-    WidgetData, isTextInput, TextInputChanged, textInputBinder} from "../../src/interacto";
+import {
+    CommandsRegistry,
+    FSM,
+    Interaction,
+    InteractionData,
+    isTextInput,
+    textInputBinder,
+    UndoCollector,
+    WidgetBinding
+} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 
 let txt1: HTMLInputElement | HTMLTextAreaElement;
-let binding: WidgetBinding<StubCmd, TextInputChanged, WidgetData<HTMLInputElement | HTMLTextAreaElement>> | undefined;
+let binding: WidgetBinding<StubCmd, Interaction<InteractionData, FSM>, InteractionData> | undefined;
 let cmd: StubCmd;
 let producedCmds: Array<StubCmd>;
 let disposable: Subscription | undefined;

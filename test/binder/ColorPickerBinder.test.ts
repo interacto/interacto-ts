@@ -12,12 +12,22 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 import {Subscription} from "rxjs";
-import {ColorPicked, colorPickerBinder, CommandsRegistry, isColorChoice, UndoCollector, WidgetBinding, WidgetData} from "../../src/interacto";
+import {
+    colorPickerBinder,
+    CommandsRegistry,
+    FSM,
+    Interaction,
+    InteractionData,
+    isColorChoice,
+    UndoCollector,
+    WidgetBinding,
+    WidgetData
+} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 
 let widget1: HTMLInputElement;
 let widget2: HTMLInputElement;
-let binding: WidgetBinding<StubCmd, ColorPicked, WidgetData<HTMLInputElement>> | undefined;
+let binding: WidgetBinding<StubCmd, Interaction<InteractionData, FSM>, InteractionData> | undefined;
 let cmd: StubCmd;
 let producedCmds: Array<StubCmd>;
 let disposable: Subscription | undefined;

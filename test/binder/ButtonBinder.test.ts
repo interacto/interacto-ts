@@ -14,19 +14,20 @@
 import {Subscription} from "rxjs";
 import {
     buttonBinder,
-    ButtonPressed,
     CommandsRegistry,
+    FSM,
+    Interaction,
+    InteractionData,
     isButton,
     LogLevel,
     UndoCollector,
-    WidgetBinding,
-    WidgetData
+    WidgetBinding
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 
 let button1: HTMLButtonElement;
 let button2: HTMLButtonElement;
-let binding: WidgetBinding<StubCmd, ButtonPressed, WidgetData<HTMLButtonElement>> | undefined;
+let binding: WidgetBinding<StubCmd, Interaction<InteractionData, FSM>, InteractionData> | undefined;
 let cmd: StubCmd;
 let producedCmds: Array<StubCmd>;
 let disposable: Subscription | undefined;
