@@ -20,7 +20,7 @@ import {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {KeysData} from "./KeysData";
 import {FSM} from "../../fsm/FSM";
 import {KeysDataImpl} from "./KeysDataImpl";
-import {InteractionImpl} from "../InteractionImpl";
+import {InteractionBase} from "../InteractionBase";
 
 /**
  * This interaction permits to define combo a key pressed that can be used to define shortcuts, etc.
@@ -81,7 +81,7 @@ interface KeysPressedFSMHandler extends FSMDataHandler {
  * Several keys pressed at the same time.
  * Starts on a key pressure. Ends as soon as one of the pressed keys is released.
  */
-export class KeysPressed extends InteractionImpl<KeysData, KeysPressedFSM> {
+export class KeysPressed extends InteractionBase<KeysData, KeysPressedFSM> {
     private readonly handler: KeysPressedFSMHandler;
 
     /**

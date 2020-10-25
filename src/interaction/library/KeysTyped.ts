@@ -15,7 +15,7 @@
 import {TerminalState} from "../../fsm/TerminalState";
 import {StdState} from "../../fsm/StdState";
 import {FSM} from "../../fsm/FSM";
-import {InteractionImpl} from "../InteractionImpl";
+import {InteractionBase} from "../InteractionBase";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 import {KeysData} from "./KeysData";
 import {KeysDataImpl} from "./KeysDataImpl";
@@ -82,7 +82,7 @@ interface KeyTypedFSMHandler extends FSMDataHandler {
  * One can type on multiple keys. The interaction ends after a timeout (a delay after the latest
  * typed key).
  */
-export class KeysTyped extends InteractionImpl<KeysData, KeysTypedFSM> {
+export class KeysTyped extends InteractionBase<KeysData, KeysTypedFSM> {
     /**
      * Creates the user interaction.
      */

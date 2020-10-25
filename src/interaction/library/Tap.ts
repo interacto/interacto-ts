@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {InteractionImpl} from "../InteractionImpl";
+import {InteractionBase} from "../InteractionBase";
 import {FSM} from "../../fsm/FSM";
 import {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {TerminalState} from "../../fsm/TerminalState";
@@ -106,7 +106,7 @@ interface TapFSMHandler extends FSMDataHandler {
  * This touch interaction takes as input the number of taps expected to end the interaction.
  * If this number is not reached after a timeout, the interaction is cancelled.
  */
-export class Tap extends InteractionImpl<TapData, TapFSM> {
+export class Tap extends InteractionBase<TapData, TapFSM> {
     private readonly handler: TapFSMHandler;
 
     /**

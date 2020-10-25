@@ -17,7 +17,7 @@ import {TerminalState} from "../../fsm/TerminalState";
 import {ClickTransition} from "../../fsm/ClickTransition";
 import {PointData} from "./PointData";
 import {FSM} from "../../fsm/FSM";
-import {InteractionImpl} from "../InteractionImpl";
+import {InteractionBase} from "../InteractionBase";
 import {PointDataImpl} from "./PointDataImpl";
 
 /**
@@ -76,7 +76,7 @@ interface ClickFSMHandler extends FSMDataHandler {
     initToClicked(event: MouseEvent): void;
 }
 
-export class Click extends InteractionImpl<PointData, ClickFSM> {
+export class Click extends InteractionBase<PointData, ClickFSM> {
     private readonly handler: ClickFSMHandler;
 
     /**

@@ -20,7 +20,7 @@ import {StdState} from "../../fsm/StdState";
 import {KeyReleaseTransition} from "../../fsm/KeyReleaseTransition";
 import {FSM} from "../../fsm/FSM";
 import {KeyDataImpl} from "./KeyDataImpl";
-import {InteractionImpl} from "../InteractionImpl";
+import {InteractionBase} from "../InteractionBase";
 
 /**
  * The FSM that describes a keyboard touch typed.
@@ -72,7 +72,7 @@ interface KeyTypedFSMHandler extends FSMDataHandler {
  * A user interaction for pressing and releasing a keyboard key
  * @author Gwendal DIDOT
  */
-export class KeyTyped extends InteractionImpl<KeyData, KeyTypedFSM> {
+export class KeyTyped extends InteractionBase<KeyData, KeyTypedFSM> {
     private readonly handler: KeyTypedFSMHandler;
 
     /**

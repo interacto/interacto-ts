@@ -20,7 +20,7 @@ import {StdState} from "../../fsm/StdState";
 import {TextInputChangedTransition} from "../../fsm/TextInputChangedTransition";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 import {FSM} from "../../fsm/FSM";
-import {InteractionImpl} from "../InteractionImpl";
+import {InteractionBase} from "../InteractionBase";
 
 export class TextInputChangedFSM extends FSM {
     /** The time gap between the two spinner events. */
@@ -82,7 +82,7 @@ interface TextInputChangedHandler extends FSMDataHandler {
  * @author Gwendal DIDOT
  */
 export class TextInputChanged extends
-    InteractionImpl<WidgetData<HTMLInputElement | HTMLTextAreaElement>, TextInputChangedFSM> {
+    InteractionBase<WidgetData<HTMLInputElement | HTMLTextAreaElement>, TextInputChangedFSM> {
     private readonly handler: TextInputChangedHandler;
 
     public constructor(timeGap?: number) {

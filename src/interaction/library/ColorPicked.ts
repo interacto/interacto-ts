@@ -17,7 +17,7 @@ import {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {WidgetData, WidgetDataImpl} from "./WidgetData";
 import {ColorPickedTransition} from "../../fsm/ColorPickedTransition";
 import {FSM} from "../../fsm/FSM";
-import {InteractionImpl} from "../InteractionImpl";
+import {InteractionBase} from "../InteractionBase";
 
 export class ColorPickedFSM extends FSM {
     public constructor() {
@@ -52,7 +52,7 @@ interface ColorPickedHandler extends FSMDataHandler {
  * @author Gwendal DIDOT
  */
 
-export class ColorPicked extends InteractionImpl<WidgetData<HTMLInputElement>, ColorPickedFSM> {
+export class ColorPicked extends InteractionBase<WidgetData<HTMLInputElement>, ColorPickedFSM> {
     private readonly handler: ColorPickedHandler;
 
     /**

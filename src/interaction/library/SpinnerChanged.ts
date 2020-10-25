@@ -18,7 +18,7 @@ import {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {WidgetData, WidgetDataImpl} from "./WidgetData";
 import {SpinnerChangedTransition} from "../../fsm/SpinnerChangedTransition";
 import {FSM} from "../../fsm/FSM";
-import {InteractionImpl} from "../InteractionImpl";
+import {InteractionBase} from "../InteractionBase";
 import {StdState} from "../../fsm/StdState";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 
@@ -82,7 +82,7 @@ interface SpinnerChangedHandler extends FSMDataHandler {
  * A user interaction for Number input.
  * @author Gwendal DIDOT
  */
-export class SpinnerChanged extends InteractionImpl<WidgetData<HTMLInputElement>, SpinnerChangedFSM> {
+export class SpinnerChanged extends InteractionBase<WidgetData<HTMLInputElement>, SpinnerChangedFSM> {
     private readonly handler: SpinnerChangedHandler;
 
     /**

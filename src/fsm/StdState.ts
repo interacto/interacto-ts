@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {OutputStateImpl} from "./OutputStateImpl";
+import {OutputStateBase} from "./OutputStateBase";
 import {InputState} from "./InputState";
 import {FSM} from "./FSM";
 
@@ -23,7 +23,7 @@ import {FSM} from "./FSM";
  * They do not start, stop, cancel an FSM.
  * They accept input and ouptut events.
  */
-export class StdState extends OutputStateImpl implements InputState {
+export class StdState extends OutputStateBase implements InputState {
     /**
      * Creates the state.
      * @param stateMachine The FSM that will contain the state.

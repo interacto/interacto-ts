@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {StateImpl} from "./StateImpl";
+import {StateBase} from "./StateBase";
 import {InputState} from "./InputState";
 import {FSM} from "./FSM";
 
@@ -20,7 +20,7 @@ import {FSM} from "./FSM";
  * A state of an FSM.
  * A cancelling state cancels the FSM of a user interaction.
  */
-export class CancellingState extends StateImpl implements InputState {
+export class CancellingState extends StateBase implements InputState {
     /**
      * Creates the state.
      * @param stateMachine The FSM that will contain the state.

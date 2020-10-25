@@ -18,7 +18,7 @@ import {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {WidgetData, WidgetDataImpl} from "./WidgetData";
 import {DatePickedTransition} from "../../fsm/DatePickedTransition";
 import {FSM} from "../../fsm/FSM";
-import {InteractionImpl} from "../InteractionImpl";
+import {InteractionBase} from "../InteractionBase";
 
 export class DatePickedFSM extends FSM {
     public constructor() {
@@ -53,7 +53,7 @@ interface DatePickedHandler extends FSMDataHandler {
  * @author Gwendal DIDOT
  */
 
-export class DatePicked extends InteractionImpl<WidgetData<HTMLInputElement>, DatePickedFSM> {
+export class DatePicked extends InteractionBase<WidgetData<HTMLInputElement>, DatePickedFSM> {
     private readonly handler: DatePickedHandler;
 
     /**

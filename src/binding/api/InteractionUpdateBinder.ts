@@ -11,7 +11,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import {InteractionImpl} from "../../interaction/InteractionImpl";
+import {InteractionBase} from "../../interaction/InteractionBase";
 import {FSM} from "../../fsm/FSM";
 import {InteractionData} from "../../interaction/InteractionData";
 import {InteractionUpdateBinderBuilder} from "./InteractionUpdateBinderBuilder";
@@ -19,7 +19,7 @@ import {LogLevel} from "../../logging/LogLevel";
 import {Command} from "../../command/Command";
 import {InteractionCmdUpdateBinder} from "./InteractionCmdUpdateBinder";
 
-export interface InteractionUpdateBinder<I extends InteractionImpl<D, FSM>, D extends InteractionData>
+export interface InteractionUpdateBinder<I extends InteractionBase<D, FSM>, D extends InteractionData>
     extends InteractionUpdateBinderBuilder<I, D> {
 
     on(...widgets: Array<EventTarget>): InteractionUpdateBinder<I, D>;

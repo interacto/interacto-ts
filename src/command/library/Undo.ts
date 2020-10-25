@@ -13,13 +13,13 @@
  */
 
 import {UndoCollector} from "../../undo/UndoCollector";
-import {CommandImpl} from "../CommandImpl";
+import {CommandBase} from "../CommandBase";
 
 /**
  * An Undo command.
  * @author Arnaud BLOUIN
  */
-export class Undo extends CommandImpl {
+export class Undo extends CommandBase {
     public constructor() {
         super();
     }

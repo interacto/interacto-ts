@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {StateImpl} from "./StateImpl";
+import {StateBase} from "./StateBase";
 import {OutputState} from "./OutputState";
 import {Transition} from "./Transition";
 import {FSM} from "./FSM";
@@ -20,7 +20,7 @@ import {FSM} from "./FSM";
 /**
  * Base implementation of the OutputState interface.
  */
-export abstract class OutputStateImpl extends StateImpl implements OutputState {
+export abstract class OutputStateBase extends StateBase implements OutputState {
     protected readonly transitions: Array<Transition>;
 
     /**

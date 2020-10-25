@@ -14,7 +14,7 @@
 import {LogLevel} from "../../logging/LogLevel";
 import {Command} from "../../command/Command";
 import {InteractionData} from "../../interaction/InteractionData";
-import {InteractionImpl} from "../../interaction/InteractionImpl";
+import {InteractionBase} from "../../interaction/InteractionBase";
 import {BaseBinderBuilder} from "./BaseBinderBuilder";
 import {FSM} from "../../fsm/FSM";
 import {InteractionBinder} from "./InteractionBinder";
@@ -50,5 +50,5 @@ export interface BaseBinder extends BaseBinderBuilder {
      * @type <I> The user interaction type
      * @return A clone of the current builder to chain the building configuration.
      */
-    usingInteraction<I extends InteractionImpl<D, FSM>, D extends InteractionData>(interactionSupplier: () => I): InteractionBinder<I, D>;
+    usingInteraction<I extends InteractionBase<D, FSM>, D extends InteractionData>(interactionSupplier: () => I): InteractionBinder<I, D>;
 }

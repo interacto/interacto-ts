@@ -18,7 +18,7 @@ import {TerminalState} from "../../fsm/TerminalState";
 import {isButton} from "../../fsm/Events";
 import {WidgetData, WidgetDataImpl} from "./WidgetData";
 import {FSM} from "../../fsm/FSM";
-import {InteractionImpl} from "../InteractionImpl";
+import {InteractionBase} from "../InteractionBase";
 
 /**
  * The FSM for button pressures.
@@ -56,7 +56,7 @@ interface ButtonPressedFSMHandler extends FSMDataHandler {
  * A user interaction for buttons.
  * @author Arnaud BLOUIN
  */
-export class ButtonPressed extends InteractionImpl<WidgetData<HTMLButtonElement>, ButtonPressedFSM> {
+export class ButtonPressed extends InteractionBase<WidgetData<HTMLButtonElement>, ButtonPressedFSM> {
     private readonly handler: ButtonPressedFSMHandler;
 
     /**

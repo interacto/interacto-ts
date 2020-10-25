@@ -12,14 +12,14 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {OutputStateImpl} from "./OutputStateImpl";
+import {OutputStateBase} from "./OutputStateBase";
 import {FSM} from "./FSM";
 
 /**
  * An FSM state.
  * An initial state is the unique state that can start an FSM.
  */
-export class InitState extends OutputStateImpl {
+export class InitState extends OutputStateBase {
     public constructor(stateMachine: FSM, stateName: string) {
         super(stateMachine, stateName);
     }

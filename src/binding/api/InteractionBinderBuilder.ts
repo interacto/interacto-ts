@@ -11,13 +11,13 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import {InteractionImpl} from "../../interaction/InteractionImpl";
+import {InteractionBase} from "../../interaction/InteractionBase";
 import {InteractionData} from "../../interaction/InteractionData";
 import {BaseBinderBuilder} from "./BaseBinderBuilder";
 import {FSM} from "../../fsm/FSM";
 import {LogLevel} from "../../logging/LogLevel";
 
-export interface InteractionBinderBuilder<I extends InteractionImpl<D, FSM>, D extends InteractionData>
+export interface InteractionBinderBuilder<I extends InteractionBase<D, FSM>, D extends InteractionData>
     extends BaseBinderBuilder {
     /**
      * Specifies the conditions to fulfill to initialise, update, or execute the command while the interaction is running.

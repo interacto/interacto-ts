@@ -18,7 +18,7 @@ import {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {WidgetData, WidgetDataImpl} from "./WidgetData";
 import {ComboBoxTransition} from "../../fsm/ComboBoxTransition";
 import {FSM} from "../../fsm/FSM";
-import {InteractionImpl} from "../InteractionImpl";
+import {InteractionBase} from "../InteractionBase";
 
 export class ComboBoxSelectedFSM extends FSM {
     public constructor() {
@@ -53,7 +53,7 @@ interface ComboBoxSelectedHandler extends FSMDataHandler {
  * @author Gwendal DIDOT
  */
 
-export class ComboBoxSelected extends InteractionImpl<WidgetData<HTMLSelectElement>, ComboBoxSelectedFSM> {
+export class ComboBoxSelected extends InteractionBase<WidgetData<HTMLSelectElement>, ComboBoxSelectedFSM> {
     private readonly handler: ComboBoxSelectedHandler;
 
     /**

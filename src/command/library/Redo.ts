@@ -13,13 +13,13 @@
  */
 
 import {UndoCollector} from "../../undo/UndoCollector";
-import {CommandImpl} from "../CommandImpl";
+import {CommandBase} from "../CommandBase";
 
 /**
  * A Redo action.
  * @author Arnaud BLOUIN
  */
-export class Redo extends CommandImpl {
+export class Redo extends CommandBase {
     public constructor() {
         super();
     }

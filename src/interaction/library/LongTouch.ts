@@ -13,7 +13,7 @@
  */
 
 import {FSM} from "../../fsm/FSM";
-import {InteractionImpl} from "../InteractionImpl";
+import {InteractionBase} from "../InteractionBase";
 import {SrcTgtTouchDataImpl} from "./SrcTgtTouchData";
 import {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {TouchData, TouchDataImpl} from "./TouchData";
@@ -89,7 +89,7 @@ interface LongTouchFSMHandler extends FSMDataHandler {
     tap(evt: TouchEvent): void;
 }
 
-export class LongTouch extends InteractionImpl<TouchData, LongTouchFSM> {
+export class LongTouch extends InteractionBase<TouchData, LongTouchFSM> {
     private readonly handler: LongTouchFSMHandler;
 
     /**

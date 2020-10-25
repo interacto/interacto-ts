@@ -22,7 +22,7 @@ import {
     EventRegistrationToken,
     FSM,
     InteractionData,
-    InteractionImpl,
+    InteractionBase,
     keyPressBinder,
     keyTypeBinder,
     LogLevel, longTouchBinder,
@@ -38,7 +38,7 @@ import {createKeyEvent, createMouseEvent, createTouchEvent} from "../interaction
 let elt: HTMLElement;
 let producedCmds: Array<Command>;
 let disposable: Subscription;
-let binding: WidgetBinding<Command, InteractionImpl<InteractionData, FSM>, InteractionData>;
+let binding: WidgetBinding<Command, InteractionBase<InteractionData, FSM>, InteractionData>;
 
 beforeEach(() => {
     jest.useFakeTimers();
@@ -239,7 +239,7 @@ test("touch DnD binding", () => {
 describe("tap and longPress conflict", () => {
     let producedCmds2: Array<Command>;
     let disposable2: Subscription;
-    let binding2: WidgetBinding<Command, InteractionImpl<InteractionData, FSM>, InteractionData>;
+    let binding2: WidgetBinding<Command, InteractionBase<InteractionData, FSM>, InteractionData>;
 
     beforeEach(() => {
         producedCmds2 = [];
@@ -287,7 +287,7 @@ describe("tap and longPress conflict", () => {
 describe("two longTouch", () => {
     let producedCmds2: Array<Command>;
     let disposable2: Subscription;
-    let binding2: WidgetBinding<Command, InteractionImpl<InteractionData, FSM>, InteractionData>;
+    let binding2: WidgetBinding<Command, InteractionBase<InteractionData, FSM>, InteractionData>;
 
 
     beforeEach(() => {

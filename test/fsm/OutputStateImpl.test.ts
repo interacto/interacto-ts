@@ -14,18 +14,18 @@
 
 import {FSM} from "../../src/fsm/FSM";
 import {InputState} from "../../src/fsm/InputState";
-import {OutputStateImpl} from "../../src/fsm/OutputStateImpl";
+import {OutputStateBase} from "../../src/fsm/OutputStateBase";
 import {StubTransitionOK} from "./StubTransitionOK";
 import {StdState} from "../../src/fsm/StdState";
 import {Transition} from "../../src/fsm/Transition";
 import {mock, MockProxy} from "jest-mock-extended";
 
-let state: OutputStateImpl;
+let state: OutputStateBase;
 let fsm: MockProxy<FSM> & FSM;
 
 beforeEach(() => {
     fsm = mock<FSM>();
-    state = new class extends OutputStateImpl {
+    state = new class extends OutputStateBase {
         public constructor() {
             super(fsm, "os");
         }

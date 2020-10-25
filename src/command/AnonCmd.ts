@@ -13,7 +13,7 @@
  */
 
 
-import {CommandImpl} from "./CommandImpl";
+import {CommandBase} from "./CommandBase";
 
 /**
  * An anonymous command that takes an anonymous function as a parameter corresponding to the command to execute.
@@ -21,9 +21,9 @@ import {CommandImpl} from "./CommandImpl";
  * @author Arnaud Blouin
  * @param {() => void} function
  * @class
- * @extends CommandImpl
+ * @extends CommandBase
  */
-export class AnonCmd extends CommandImpl {
+export class AnonCmd extends CommandBase {
     private readonly exec: () => void;
 
     public constructor(fct: () => void) {

@@ -18,7 +18,7 @@ import {FSM} from "./FSM";
 /**
  * The base implementation of the State interface.
  */
-export abstract class StateImpl implements State {
+export abstract class StateBase implements State {
     protected readonly fsm: FSM;
 
     protected readonly name: string;

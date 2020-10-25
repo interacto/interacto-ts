@@ -25,7 +25,7 @@ import {Subscription} from "rxjs";
  * @param <D> The type of the interaction data.
  * @param <F> The type of the FSM.
  */
-export abstract class InteractionImpl<D extends InteractionData, F extends FSM> {
+export abstract class InteractionBase<D extends InteractionData, F extends FSM> {
     protected readonly fsm: F;
 
     protected asLog: boolean;

@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {InteractionImpl} from "../InteractionImpl";
+import {InteractionBase} from "../InteractionBase";
 import {SrcTgtTouchData, SrcTgtTouchDataImpl} from "./SrcTgtTouchData";
 import {FSM} from "../../fsm/FSM";
 import {FSMDataHandler} from "../../fsm/FSMDataHandler";
@@ -102,7 +102,7 @@ export interface TouchDnDFSMHandler extends FSMDataHandler {
 /**
  * A touch interaction (that works as a DnD)
  */
-export class TouchDnD extends InteractionImpl<SrcTgtTouchData, TouchDnDFSM> {
+export class TouchDnD extends InteractionBase<SrcTgtTouchData, TouchDnDFSM> {
     private readonly handler: TouchDnDFSMHandler;
 
     /**

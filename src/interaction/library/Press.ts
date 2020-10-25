@@ -18,7 +18,7 @@ import {PressureTransition} from "../../fsm/PressureTransition";
 import {isMouseDownEvent} from "../../fsm/Events";
 import {PointData} from "./PointData";
 import {FSM} from "../../fsm/FSM";
-import {InteractionImpl} from "../InteractionImpl";
+import {InteractionBase} from "../InteractionBase";
 import {PointDataImpl} from "./PointDataImpl";
 
 export class PressFSM extends FSM {
@@ -47,7 +47,7 @@ interface PressFSMHandler extends FSMDataHandler {
  * A user interaction for pressing down the mouse button.
  * @author Gwendal DIDOT
  */
-export class Press extends InteractionImpl<PointData, PressFSM> {
+export class Press extends InteractionBase<PointData, PressFSM> {
     /**
      * Creates the interaction.
      */

@@ -19,7 +19,7 @@ import {
     InteractionData,
     TerminalState,
     Transition,
-    WidgetBindingImpl
+    WidgetBindingBase
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {StubEvent, StubSubEvent1} from "../fsm/StubEvent";
@@ -27,7 +27,7 @@ import {InteractionStub} from "../interaction/InteractionStub";
 
 
 let interaction: InteractionStub;
-let binding: WidgetBindingImpl<StubCmd, InteractionStub, InteractionData>;
+let binding: WidgetBindingBase<StubCmd, InteractionStub, InteractionData>;
 let fsm: FSM;
 let cmd: StubCmd;
 let whenValue: () => boolean;
@@ -56,7 +56,7 @@ class OneTrFSM extends FSM {
     }
 }
 
-class StubWidgetBinding extends WidgetBindingImpl<StubCmd, InteractionStub, InteractionData> {
+class StubWidgetBinding extends WidgetBindingBase<StubCmd, InteractionStub, InteractionData> {
     public constructor() {
         super(false, interaction, () => cmd, []);
     }

@@ -19,7 +19,7 @@ import {FSMHandler} from "./FSMHandler";
 import {TimeoutTransition} from "./TimeoutTransition";
 import {StdState} from "./StdState";
 import {InputState} from "./InputState";
-import {OutputStateImpl} from "./OutputStateImpl";
+import {OutputStateBase} from "./OutputStateBase";
 import {catFSM} from "../logging/ConfigLog";
 import {FSMDataHandler} from "./FSMDataHandler";
 import {isKeyDownEvent, isKeyUpEvent} from "./Events";
@@ -360,7 +360,7 @@ export class FSM {
                 catFSM.info(`Timeout: ${this.constructor.name}`);
             }
             const state = this.currentTimeout.execute();
-            if (state instanceof OutputStateImpl) {
+            if (state instanceof OutputStateBase) {
                 this.setCurrentState(state);
                 this.checkTimeoutTransition();
             }

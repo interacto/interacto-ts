@@ -19,7 +19,7 @@ import {ErrorCatcher} from "../error/ErrorCatcher";
 import {CancelFSMException} from "../fsm/CancelFSMException";
 import {FSM} from "../fsm/FSM";
 import {InteractionData} from "../interaction/InteractionData";
-import {InteractionImpl} from "../interaction/InteractionImpl";
+import {InteractionBase} from "../interaction/InteractionBase";
 import {catBinder, catCommand} from "../logging/ConfigLog";
 import {isUndoableType} from "../undo/Undoable";
 import {MustBeUndoableCmdException} from "./MustBeUndoableCmdException";
@@ -31,7 +31,7 @@ import {WidgetBinding} from "./WidgetBinding";
  * @param <I> The type of the interaction that will use this widget binding.
  * @author Arnaud BLOUIN
  */
-export abstract class WidgetBindingImpl<C extends Command, I extends InteractionImpl<D, FSM>, D extends InteractionData>
+export abstract class WidgetBindingBase<C extends Command, I extends InteractionBase<D, FSM>, D extends InteractionData>
 implements WidgetBinding<C, I, D> {
 
     protected timeEnded: number;

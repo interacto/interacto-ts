@@ -17,7 +17,7 @@ import {CmdStatus, Command, RegistrationPolicy} from "./Command";
 /**
  * The base implementation class for coding UI commands.
  */
-export abstract class CommandImpl implements Command {
+export abstract class CommandBase implements Command {
     /**
      * The state of the command.
      */
@@ -40,7 +40,7 @@ export abstract class CommandImpl implements Command {
 
     /**
      * Actions may need to create a memento before their first execution.
-     * This is the goal of the operation that should be overriden.
+     * This is the goal of the operation that should be overridden.
      * This operator is called a single time before the first execution of the command.
      */
     protected createMemento(): void {

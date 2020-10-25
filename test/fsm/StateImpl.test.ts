@@ -13,10 +13,10 @@
  */
 
 import {FSM} from "../../src/fsm/FSM";
-import {StateImpl} from "../../src/fsm/StateImpl";
+import {StateBase} from "../../src/fsm/StateBase";
 import {StdState} from "../../src/fsm/StdState";
 
-let state: StateImpl;
+let state: StateBase;
 let fsm: FSM;
 
 beforeEach(() => {

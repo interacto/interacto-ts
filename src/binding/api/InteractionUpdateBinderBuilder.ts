@@ -11,14 +11,14 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import {InteractionImpl} from "../../interaction/InteractionImpl";
+import {InteractionBase} from "../../interaction/InteractionBase";
 import {FSM} from "../../fsm/FSM";
 import {InteractionData} from "../../interaction/InteractionData";
 import {InteractionBinderBuilder} from "./InteractionBinderBuilder";
 import {LogLevel} from "../../logging/LogLevel";
 
 
-export interface InteractionUpdateBinderBuilder<I extends InteractionImpl<D, FSM>, D extends InteractionData>
+export interface InteractionUpdateBinderBuilder<I extends InteractionBase<D, FSM>, D extends InteractionData>
     extends InteractionBinderBuilder <I, D> {
     /**
     * Defines what to do when a command is cancelled (because the interaction is cancelled).

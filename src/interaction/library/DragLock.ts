@@ -23,7 +23,7 @@ import {FSM} from "../../fsm/FSM";
 import {OutputState} from "../../fsm/OutputState";
 import {MoveTransition} from "../../fsm/MoveTransition";
 import {SrcTgtPointsData} from "./SrcTgtPointsData";
-import {InteractionImpl} from "../InteractionImpl";
+import {InteractionBase} from "../InteractionBase";
 import {PointDataImpl} from "./PointDataImpl";
 import {EscapeKeyPressureTransition} from "../../fsm/EscapeKeyPressureTransition";
 
@@ -123,7 +123,7 @@ interface DragLockFSMHandler extends FSMDataHandler {
 /**
  * The drag-lock user interaction
  */
-export class DragLock extends InteractionImpl<SrcTgtPointsData, DragLockFSM> {
+export class DragLock extends InteractionBase<SrcTgtPointsData, DragLockFSM> {
     private readonly handler: DragLockFSMHandler;
 
     private readonly firstClick: DoubleClick;

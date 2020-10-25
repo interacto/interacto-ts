@@ -18,7 +18,7 @@ import {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {WidgetData, WidgetDataImpl} from "./WidgetData";
 import {HyperLinkTransition} from "../../fsm/HyperLinkTransition";
 import {FSM} from "../../fsm/FSM";
-import {InteractionImpl} from "../InteractionImpl";
+import {InteractionBase} from "../InteractionBase";
 
 export class HyperLinkClickedFSM extends FSM {
     public constructor() {
@@ -52,7 +52,7 @@ interface HyperLinkClickedFSMHandler extends FSMDataHandler {
  * A user interaction for CheckBox
  * @author Gwendal DIDOT
  */
-export class HyperLinkClicked extends InteractionImpl<WidgetData<HTMLAnchorElement>, HyperLinkClickedFSM> {
+export class HyperLinkClicked extends InteractionBase<WidgetData<HTMLAnchorElement>, HyperLinkClickedFSM> {
     private readonly handler: HyperLinkClickedFSMHandler;
 
     /**

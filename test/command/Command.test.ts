@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 import {CmdStatus, RegistrationPolicy} from "../../src/command/Command";
-import {CommandImpl} from "../../src/command/CommandImpl";
+import {CommandBase} from "../../src/command/CommandBase";
 import {CommandsRegistry} from "../../src/command/CommandsRegistry";
 import {UndoCollector} from "../../src/undo/UndoCollector";
 import {StubCmd} from "./StubCmd";
@@ -28,7 +28,7 @@ beforeEach(() => {
 });
 
 test("cando default", () => {
-    const command = new class extends CommandImpl {
+    const command = new class extends CommandBase {
         protected doCmdBody(): void {
         }
     }();

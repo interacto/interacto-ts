@@ -17,7 +17,7 @@ import {TerminalState} from "../../fsm/TerminalState";
 import {KeyPressureTransition} from "../../fsm/KeyPressureTransition";
 import {KeyData} from "./KeyData";
 import {FSM} from "../../fsm/FSM";
-import {InteractionImpl} from "../InteractionImpl";
+import {InteractionBase} from "../InteractionBase";
 import {KeyDataImpl} from "./KeyDataImpl";
 
 /**
@@ -69,7 +69,7 @@ interface KeyPressedFSMHandler extends FSMDataHandler {
  * A user interaction for pressing a key on a keyboard
  * @author Gwendal DIDOT
  */
-export class KeyPressed extends InteractionImpl<KeyData, KeyPressedFSM> {
+export class KeyPressed extends InteractionBase<KeyData, KeyPressedFSM> {
 
     private readonly handler: KeyPressedFSMHandler;
 

@@ -15,8 +15,8 @@
 import {Command} from "../command/Command";
 import {FSM} from "../fsm/FSM";
 import {InteractionData} from "../interaction/InteractionData";
-import {InteractionImpl} from "../interaction/InteractionImpl";
-import {WidgetBindingImpl} from "./WidgetBindingImpl";
+import {InteractionBase} from "../interaction/InteractionBase";
+import {WidgetBindingBase} from "./WidgetBindingBase";
 
 /**
  * Permits widget bindings produced by Bindings to be observed.
@@ -26,7 +26,7 @@ export interface BindingsObserver {
      * Adds a widget binding to observe.
      * @param binding The binding to observe.
      */
-    observeBinding(binding: WidgetBindingImpl<Command, InteractionImpl<InteractionData, FSM>, InteractionData>): void;
+    observeBinding(binding: WidgetBindingBase<Command, InteractionBase<InteractionData, FSM>, InteractionData>): void;
 
     /**
      * Clear all the observed bindings and uninstall them.

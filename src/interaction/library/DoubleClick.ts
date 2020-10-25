@@ -22,7 +22,7 @@ import {FSM} from "../../fsm/FSM";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 import {MoveTransition} from "../../fsm/MoveTransition";
 import {PointData} from "./PointData";
-import {InteractionImpl} from "../InteractionImpl";
+import {InteractionBase} from "../InteractionBase";
 import {PointDataImpl} from "./PointDataImpl";
 
 export class DoubleClickFSM extends FSM {
@@ -122,7 +122,7 @@ export class DoubleClickFSM extends FSM {
     }
 }
 
-export class DoubleClick extends InteractionImpl<PointData, DoubleClickFSM> {
+export class DoubleClick extends InteractionBase<PointData, DoubleClickFSM> {
     public readonly firstClick: Click;
 
     public constructor(fsm?: DoubleClickFSM) {

@@ -22,7 +22,7 @@ import {SrcTgtPointsData, SrcTgtPointsDataImpl} from "./SrcTgtPointsData";
 import {FSM} from "../../fsm/FSM";
 import {PressureTransition} from "../../fsm/PressureTransition";
 import {ReleaseTransition} from "../../fsm/ReleaseTransition";
-import {InteractionImpl} from "../InteractionImpl";
+import {InteractionBase} from "../InteractionBase";
 
 /**
  * The FSM for DnD interactions.
@@ -117,7 +117,7 @@ interface DnDFSMHandler extends FSMDataHandler {
  * A user interaction for Drag and Drop
  * @author Gwendal DIDOT
  */
-export class DnD extends InteractionImpl<SrcTgtPointsData, DnDFSM> {
+export class DnD extends InteractionBase<SrcTgtPointsData, DnDFSM> {
     private readonly handler: DnDFSMHandler;
 
     /**

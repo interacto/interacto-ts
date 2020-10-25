@@ -22,10 +22,10 @@ import {ComboBoxSelected} from "../interaction/library/ComboBoxSelected";
 import {SpinnerChanged} from "../interaction/library/SpinnerChanged";
 import {InteractionUpdateBinder} from "./api/InteractionUpdateBinder";
 import {DatePicked} from "../interaction/library/DatePicked";
-import {InteractionImpl} from "../interaction/InteractionImpl";
+import {InteractionBase} from "../interaction/InteractionBase";
 import {InteractionData} from "../interaction/InteractionData";
 import {FSM} from "../fsm/FSM";
-import {CommandImpl} from "../command/CommandImpl";
+import {CommandBase} from "../command/CommandBase";
 import {BaseUpdateBinder} from "./api/BaseUpdateBinder";
 import {BindingsObserver} from "./BindingsObserver";
 import {TextInputChanged} from "../interaction/library/TextInputChanged";
@@ -62,7 +62,7 @@ import {TouchDnD} from "../interaction/library/TouchDnD";
 let observer: BindingsObserver | undefined;
 
 export function nodeBinder(): BaseUpdateBinder {
-    return new UpdateBinder<CommandImpl, InteractionImpl<InteractionData, FSM>, InteractionData>(observer) as BaseUpdateBinder;
+    return new UpdateBinder<CommandBase, InteractionBase<InteractionData, FSM>, InteractionData>(observer) as BaseUpdateBinder;
 }
 
 /**

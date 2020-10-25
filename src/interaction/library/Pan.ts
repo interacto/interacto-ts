@@ -14,7 +14,7 @@
 
 import {FSM} from "../../fsm/FSM";
 import {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import {InteractionImpl} from "../InteractionImpl";
+import {InteractionBase} from "../InteractionBase";
 import {SrcTgtTouchData, SrcTgtTouchDataImpl} from "./SrcTgtTouchData";
 import {StdState} from "../../fsm/StdState";
 import {TerminalState} from "../../fsm/TerminalState";
@@ -166,7 +166,7 @@ interface PanFSMDataHandler extends FSMDataHandler {
 /**
  * A Pan user interaction.
  */
-export class Pan extends InteractionImpl<SrcTgtTouchData, PanFSM> {
+export class Pan extends InteractionBase<SrcTgtTouchData, PanFSM> {
     private readonly handler: PanFSMDataHandler;
 
 

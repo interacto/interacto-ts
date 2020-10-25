@@ -17,14 +17,14 @@ import {ConcurrentFSM} from "../fsm/ConcurrentFSM";
 import {FSM} from "../fsm/FSM";
 import {OutputState} from "../fsm/OutputState";
 import {InteractionData} from "./InteractionData";
-import {InteractionImpl} from "./InteractionImpl";
+import {InteractionBase} from "./InteractionBase";
 
 /**
  * The base implementation of a user interaction that uses concurrent FSMs.
  * @param <D> The type of the interaction data.
  * @param <F> The type of the FSM.
  */
-export abstract class ConcurrentInteraction<D extends InteractionData, F extends ConcurrentFSM<FSM>> extends InteractionImpl<D, F> {
+export abstract class ConcurrentInteraction<D extends InteractionData, F extends ConcurrentFSM<FSM>> extends InteractionBase<D, F> {
     private readonly subscriptions: Array<Subscription>;
 
     /**

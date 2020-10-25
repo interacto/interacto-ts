@@ -18,7 +18,7 @@ import {isScrollEvent} from "../../fsm/Events";
 import {ScrollTransition} from "../../fsm/ScrollTransition";
 import {ScrollData} from "./ScrollData";
 import {FSM} from "../../fsm/FSM";
-import {InteractionImpl} from "../InteractionImpl";
+import {InteractionBase} from "../InteractionBase";
 import {ScrollDataImpl} from "./ScrollDataImpl";
 
 /**
@@ -51,7 +51,7 @@ interface ScrollFSMHandler extends FSMDataHandler {
  * A user interaction for pressing down the mouse button.
  * @author Gwendal DIDOT
  */
-export class Scroll extends InteractionImpl<ScrollData, ScrollFSM> {
+export class Scroll extends InteractionBase<ScrollData, ScrollFSM> {
     /**
      * Creates the interaction.
      */

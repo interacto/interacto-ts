@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {StateImpl} from "./StateImpl";
+import {StateBase} from "./StateBase";
 import {InputState} from "./InputState";
 import {FSM} from "./FSM";
 
@@ -21,7 +21,7 @@ import {FSM} from "./FSM";
  * A terminal state ends normally an FSM.
  * @param <E> The type of events the FSM processes.
  */
-export class TerminalState extends StateImpl implements InputState {
+export class TerminalState extends StateBase implements InputState {
     /**
      * Creates the terminal state.
      * @param stateMachine The FSM that will contain the state.

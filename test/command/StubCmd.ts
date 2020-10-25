@@ -12,9 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {CommandImpl} from "../../src/command/CommandImpl";
+import {CommandBase} from "../../src/command/CommandBase";
 
-export class StubCmd extends CommandImpl {
+export class StubCmd extends CommandBase {
     public candoValue: boolean;
 
     public exec = 0;
