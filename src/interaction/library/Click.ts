@@ -16,14 +16,14 @@ import {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {TerminalState} from "../../fsm/TerminalState";
 import {ClickTransition} from "../../fsm/ClickTransition";
 import {PointData} from "./PointData";
-import {FSM} from "../../fsm/FSM";
+import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {PointDataImpl} from "./PointDataImpl";
 
 /**
  * The FSM for click interactions
  */
-export class ClickFSM extends FSM {
+export class ClickFSM extends FSMImpl {
     private checkButton?: number;
 
     /**

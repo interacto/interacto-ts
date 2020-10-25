@@ -13,7 +13,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {FSM} from "../../src/fsm/FSM";
+import {FSMImpl} from "../../src/fsm/FSMImpl";
 import {StdState} from "../../src/fsm/StdState";
 import {WidgetTransition} from "../../src/fsm/WidgetTransition";
 import {StubEvent} from "./StubEvent";
@@ -21,7 +21,7 @@ import {mock} from "jest-mock-extended";
 
 class WTransition extends WidgetTransition<string> {
     public constructor() {
-        super(new StdState(mock<FSM>(), "a"), new StdState(mock<FSM>(), "b"));
+        super(new StdState(mock<FSMImpl>(), "a"), new StdState(mock<FSMImpl>(), "b"));
     }
 
     public accept(_event: StubEvent): boolean {

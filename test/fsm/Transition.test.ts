@@ -14,7 +14,7 @@
 
 import {StdState} from "../../src/fsm/StdState";
 import {Transition} from "../../src/fsm/Transition";
-import {FSM} from "../../src/fsm/FSM";
+import {FSMImpl} from "../../src/fsm/FSMImpl";
 import {StubTransitionOK} from "./StubTransitionOK";
 import {ErrorCatcher} from "../../src/error/ErrorCatcher";
 import {mock} from "jest-mock-extended";
@@ -25,7 +25,7 @@ let state2: StdState;
 
 
 beforeEach(() => {
-    const fsm: FSM = mock<FSM>();
+    const fsm: FSMImpl = mock<FSMImpl>();
     state1 = new StdState(fsm, "s1");
     state2 = new StdState(fsm, "s2");
     tr = new StubTransitionOK(state1, state2);

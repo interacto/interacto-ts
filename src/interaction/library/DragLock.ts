@@ -19,7 +19,7 @@ import {CancellingState} from "../../fsm/CancellingState";
 import {StdState} from "../../fsm/StdState";
 import {SubFSMTransition} from "../../fsm/SubFSMTransition";
 import {InputState} from "../../fsm/InputState";
-import {FSM} from "../../fsm/FSM";
+import {FSMImpl} from "../../fsm/FSMImpl";
 import {OutputState} from "../../fsm/OutputState";
 import {MoveTransition} from "../../fsm/MoveTransition";
 import {SrcTgtPointsData} from "./SrcTgtPointsData";
@@ -27,7 +27,7 @@ import {InteractionBase} from "../InteractionBase";
 import {PointDataImpl} from "./PointDataImpl";
 import {EscapeKeyPressureTransition} from "../../fsm/EscapeKeyPressureTransition";
 
-export class DragLockFSM extends FSM {
+export class DragLockFSM extends FSMImpl {
     public readonly firstDbleClick: DoubleClickFSM;
 
     public readonly sndDbleClick: DoubleClickFSM;
@@ -86,7 +86,7 @@ export class DragLockFSM extends FSM {
         new class extends SubFSMTransition {
             private readonly parent: DragLockFSM;
 
-            public constructor(dlFSM: DragLockFSM, srcState: OutputState, tgtState: InputState, fsm: FSM) {
+            public constructor(dlFSM: DragLockFSM, srcState: OutputState, tgtState: InputState, fsm: FSMImpl) {
                 super(srcState, tgtState, fsm);
                 this.parent = dlFSM;
             }

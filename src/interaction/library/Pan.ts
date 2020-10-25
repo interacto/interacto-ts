@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSM} from "../../fsm/FSM";
+import {FSMImpl} from "../../fsm/FSMImpl";
 import {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {InteractionBase} from "../InteractionBase";
 import {SrcTgtTouchData, SrcTgtTouchDataImpl} from "./SrcTgtTouchData";
@@ -26,7 +26,7 @@ import {TouchMoveTransition} from "../../fsm/TouchMoveTransition";
 /**
  * The FSM for the Pan interaction
  */
-export class PanFSM extends FSM {
+export class PanFSM extends FSMImpl {
     protected readonly horizontal: boolean;
 
     protected readonly minLength: number;

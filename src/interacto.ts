@@ -52,6 +52,7 @@ export * from "./fsm/Events";
 export * from "./fsm/FSM";
 export * from "./fsm/FSMDataHandler";
 export * from "./fsm/FSMHandler";
+export * from "./fsm/FSMImpl";
 export * from "./fsm/HyperLinkTransition";
 export * from "./fsm/InitState";
 export * from "./fsm/InputState";

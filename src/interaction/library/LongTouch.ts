@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSM} from "../../fsm/FSM";
+import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {SrcTgtTouchDataImpl} from "./SrcTgtTouchData";
 import {FSMDataHandler} from "../../fsm/FSMDataHandler";
@@ -27,7 +27,7 @@ import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 /**
  * The FSM for the LongTouch interaction
  */
-class LongTouchFSM extends FSM {
+class LongTouchFSM extends FSMImpl {
     private readonly duration: number;
 
     private currentTouchID: number | undefined;

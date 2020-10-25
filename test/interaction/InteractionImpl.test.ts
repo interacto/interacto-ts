@@ -13,7 +13,7 @@
  */
 
 import {Subject} from "rxjs";
-import {FSM} from "../../src/fsm/FSM";
+import {FSMImpl} from "../../src/fsm/FSMImpl";
 import {InitState} from "../../src/fsm/InitState";
 import {OutputState} from "../../src/fsm/OutputState";
 import {StdState} from "../../src/fsm/StdState";
@@ -21,13 +21,13 @@ import {InteractionStub} from "./InteractionStub";
 import {mock, MockProxy} from "jest-mock-extended";
 
 let interaction: InteractionStub;
-let fsm: FSM & MockProxy<FSM>;
+let fsm: FSMImpl & MockProxy<FSMImpl>;
 let currentStateObs: Subject<[OutputState, OutputState]>;
 let currentState: OutputState;
 
 beforeEach(() => {
     currentStateObs = new Subject();
-    fsm = mock<FSM>();
+    fsm = mock<FSMImpl>();
     fsm.currentStateObservable.mockReturnValue(currentStateObs);
     fsm.getCurrentState.mockImplementation(() => currentState);
     interaction = new InteractionStub(fsm);
@@ -113,7 +113,7 @@ test("currentState", () => {
 test("register to node children", async () => {
     expect.assertions(1);
 
-    interaction = new InteractionStub(new FSM());
+    interaction = new InteractionStub(new FSMImpl());
     document.documentElement.innerHTML = "<html><div><svg id='doc'></svg>svg></html>";
     const doc: HTMLElement = document.getElementById("doc") as HTMLElement;
 

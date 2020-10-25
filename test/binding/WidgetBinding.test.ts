@@ -13,7 +13,7 @@
  */
 
 import {Subscription} from "rxjs";
-import {CancelFSMException, CmdStatus, CommandsRegistry, ErrorCatcher, FSM, InteractionData,
+import {CancelFSMException, CmdStatus, CommandsRegistry, ErrorCatcher, FSMImpl, InteractionData,
     MustBeUndoableCmdException, RegistrationPolicy, Undoable, WidgetBindingBase} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {InteractionStub} from "../interaction/InteractionStub";
@@ -65,7 +65,7 @@ let errorStream: Subscription;
 let errors: Array<Error>;
 
 beforeEach(() => {
-    binding = new WidgetBindingStub(false, () => new StubCmd(), new InteractionStub(new FSM()));
+    binding = new WidgetBindingStub(false, () => new StubCmd(), new InteractionStub(new FSMImpl()));
     binding.setActivated(true);
     errors = [];
     errorStream = ErrorCatcher.getInstance().getErrors()
@@ -96,7 +96,7 @@ test("testExecuteNope", () => {
 });
 
 test("testExecuteOK", () => {
-    binding = new WidgetBindingStub(true, () => new StubCmd(), new InteractionStub(new FSM()));
+    binding = new WidgetBindingStub(true, () => new StubCmd(), new InteractionStub(new FSMImpl()));
     expect(binding.isContinuousCmdExec()).toBeTruthy();
 });
 
@@ -110,7 +110,7 @@ test("execute crash", () => {
         throw ex;
     };
 
-    binding = new WidgetBindingStub(true, supplier, new InteractionStub(new FSM()));
+    binding = new WidgetBindingStub(true, supplier, new InteractionStub(new FSMImpl()));
     binding.conditionRespected = true;
     jest.spyOn(binding, "first");
     binding.fsmStarts();
@@ -127,7 +127,7 @@ test("execute crash and interaction stops", () => {
         throw ex;
     };
 
-    binding = new WidgetBindingStub(true, supplier, new InteractionStub(new FSM()));
+    binding = new WidgetBindingStub(true, supplier, new InteractionStub(new FSMImpl()));
     binding.conditionRespected = true;
     binding.fsmStops();
     expect(binding.getCommand()).toBeUndefined();
@@ -263,7 +263,7 @@ test("cancel interaction two times", () => {
 });
 
 test("cancel interaction continuous", () => {
-    binding = new WidgetBindingStub(true, () => new StubCmd(), new InteractionStub(new FSM()));
+    binding = new WidgetBindingStub(true, () => new StubCmd(), new InteractionStub(new FSMImpl()));
     binding.conditionRespected = true;
     binding.fsmStarts();
     // eslint-disable-next-line no-unused-expressions
@@ -272,7 +272,7 @@ test("cancel interaction continuous", () => {
 });
 
 test("cancel interaction continuous no effect", () => {
-    binding = new WidgetBindingStub(true, () => new StubCmd(), new InteractionStub(new FSM()));
+    binding = new WidgetBindingStub(true, () => new StubCmd(), new InteractionStub(new FSMImpl()));
     binding.conditionRespected = true;
     binding.fsmStarts();
     const cmd = binding.getCommand();
@@ -283,7 +283,7 @@ test("cancel interaction continuous no effect", () => {
 test("cancel interaction continuous undoable", () => {
     const cmd = new CmdStubUndoable();
     jest.spyOn(cmd, "undo");
-    binding = new WidgetBindingStub(true, () => cmd, new InteractionStub(new FSM()));
+    binding = new WidgetBindingStub(true, () => cmd, new InteractionStub(new FSMImpl()));
     binding.conditionRespected = true;
     binding.setLogCmd(true);
     binding.fsmStarts();
@@ -294,7 +294,7 @@ test("cancel interaction continuous undoable", () => {
 test("cancel interaction continuous undoable no log", () => {
     const cmd = new CmdStubUndoable();
     jest.spyOn(cmd, "undo");
-    binding = new WidgetBindingStub(true, () => cmd, new InteractionStub(new FSM()));
+    binding = new WidgetBindingStub(true, () => cmd, new InteractionStub(new FSMImpl()));
     binding.conditionRespected = true;
     binding.fsmStarts();
     binding.fsmCancels();
@@ -354,7 +354,7 @@ test("update with cmd crash", () => {
     const supplier = (): StubCmd => {
         throw ex;
     };
-    binding = new WidgetBindingStub(true, supplier, new InteractionStub(new FSM()));
+    binding = new WidgetBindingStub(true, supplier, new InteractionStub(new FSMImpl()));
     jest.spyOn(binding, "first");
     binding.conditionRespected = false;
     binding.fsmStarts();
@@ -366,7 +366,7 @@ test("update with cmd crash", () => {
 });
 
 test("update continuous with log cannotDo", () => {
-    binding = new WidgetBindingStub(true, () => new StubCmd(), new InteractionStub(new FSM()));
+    binding = new WidgetBindingStub(true, () => new StubCmd(), new InteractionStub(new FSMImpl()));
     jest.spyOn(binding, "ifCannotExecuteCmd");
     binding.conditionRespected = true;
     binding.setLogCmd(true);
@@ -378,7 +378,7 @@ test("update continuous with log cannotDo", () => {
 });
 
 test("update continuous not log canDo", () => {
-    binding = new WidgetBindingStub(true, () => new StubCmd(), new InteractionStub(new FSM()));
+    binding = new WidgetBindingStub(true, () => new StubCmd(), new InteractionStub(new FSMImpl()));
     jest.spyOn(binding, "ifCannotExecuteCmd");
     binding.conditionRespected = true;
     binding.fsmStarts();
@@ -428,7 +428,7 @@ test("uninstall Binding", () => {
 });
 
 test("after exec cmd had effects", () => {
-    binding = new WidgetBindingStub(true, () => new CmdStubUndoable(), new InteractionStub(new FSM()));
+    binding = new WidgetBindingStub(true, () => new CmdStubUndoable(), new InteractionStub(new FSMImpl()));
     binding.conditionRespected = true;
     jest.spyOn(binding, "ifCmdHadEffects");
     binding.fsmStarts();
@@ -444,7 +444,7 @@ test("after exec cmd had effects with none policy", () => {
         public getRegistrationPolicy(): RegistrationPolicy {
             return RegistrationPolicy.none;
         }
-    }(), new InteractionStub(new FSM()));
+    }(), new InteractionStub(new FSMImpl()));
     jest.spyOn(binding, "ifCmdHadEffects");
     binding.conditionRespected = true;
     binding.fsmStarts();

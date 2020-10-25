@@ -13,7 +13,7 @@
  */
 
 import {InteractionBase} from "../InteractionBase";
-import {FSM} from "../../fsm/FSM";
+import {FSMImpl} from "../../fsm/FSMImpl";
 import {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {TerminalState} from "../../fsm/TerminalState";
 import {StdState} from "../../fsm/StdState";
@@ -26,7 +26,7 @@ import {TouchReleaseTransition} from "../../fsm/TouchReleaseTransition";
 /**
  * The FSM for the Tap interaction
  */
-class TapFSM extends FSM {
+class TapFSM extends FSMImpl {
     private countTaps: number;
 
     private readonly nbTaps: number;

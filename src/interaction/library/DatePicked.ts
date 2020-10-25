@@ -17,10 +17,10 @@ import {isDatePicker} from "../../fsm/Events";
 import {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {WidgetData, WidgetDataImpl} from "./WidgetData";
 import {DatePickedTransition} from "../../fsm/DatePickedTransition";
-import {FSM} from "../../fsm/FSM";
+import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 
-export class DatePickedFSM extends FSM {
+export class DatePickedFSM extends FSMImpl {
     public constructor() {
         super();
     }

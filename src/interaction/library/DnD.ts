@@ -19,7 +19,7 @@ import {CancellingState} from "../../fsm/CancellingState";
 import {MoveTransition} from "../../fsm/MoveTransition";
 import {EscapeKeyPressureTransition} from "../../fsm/EscapeKeyPressureTransition";
 import {SrcTgtPointsData, SrcTgtPointsDataImpl} from "./SrcTgtPointsData";
-import {FSM} from "../../fsm/FSM";
+import {FSMImpl} from "../../fsm/FSMImpl";
 import {PressureTransition} from "../../fsm/PressureTransition";
 import {ReleaseTransition} from "../../fsm/ReleaseTransition";
 import {InteractionBase} from "../InteractionBase";
@@ -27,7 +27,7 @@ import {InteractionBase} from "../InteractionBase";
 /**
  * The FSM for DnD interactions.
  */
-export class DnDFSM extends FSM {
+export class DnDFSM extends FSMImpl {
     private readonly cancellable: boolean;
 
     private buttonToCheck?: number;

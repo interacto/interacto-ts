@@ -18,14 +18,14 @@ import {TerminalState} from "../../fsm/TerminalState";
 import {CancellingState} from "../../fsm/CancellingState";
 import {StdState} from "../../fsm/StdState";
 import {SubFSMTransition} from "../../fsm/SubFSMTransition";
-import {FSM} from "../../fsm/FSM";
+import {FSMImpl} from "../../fsm/FSMImpl";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 import {MoveTransition} from "../../fsm/MoveTransition";
 import {PointData} from "./PointData";
 import {InteractionBase} from "../InteractionBase";
 import {PointDataImpl} from "./PointDataImpl";
 
-export class DoubleClickFSM extends FSM {
+export class DoubleClickFSM extends FSMImpl {
     /** The time gap between the two spinner events. */
     private static timeGap = 300;
 

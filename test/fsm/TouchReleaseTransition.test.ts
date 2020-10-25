@@ -15,14 +15,14 @@
 import {TouchReleaseTransition} from "../../src/fsm/TouchReleaseTransition";
 import {createMouseEvent, createTouchEvent} from "../interaction/StubEvents";
 import {EventRegistrationToken} from "../../src/fsm/Events";
-import {FSM} from "../../src/fsm/FSM";
+import {FSMImpl} from "../../src/fsm/FSMImpl";
 import {StdState} from "../../src/fsm/StdState";
 import {mock} from "jest-mock-extended";
 
 let tr: TouchReleaseTransition;
 
 beforeEach(() => {
-    tr = new TouchReleaseTransition(new StdState(mock<FSM>(), "a"), new StdState(mock<FSM>(), "b"));
+    tr = new TouchReleaseTransition(new StdState(mock<FSMImpl>(), "a"), new StdState(mock<FSMImpl>(), "b"));
     document.documentElement.innerHTML = "<html><div><canvas id='canvas' /></div></html>";
 });
 

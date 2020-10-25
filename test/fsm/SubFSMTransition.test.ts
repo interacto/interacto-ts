@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSM} from "../../src/fsm/FSM";
+import {FSMImpl} from "../../src/fsm/FSMImpl";
 import {InputState} from "../../src/fsm/InputState";
 import {StdState} from "../../src/fsm/StdState";
 import {SubFSMTransition} from "../../src/fsm/SubFSMTransition";
@@ -24,16 +24,16 @@ import {SubStubTransition1} from "./StubTransitionOK";
 jest.mock("../../src/fsm/StdState");
 
 let tr: SubFSMTransition;
-let fsm: FSM;
-let mainfsm: FSM;
+let fsm: FSMImpl;
+let mainfsm: FSMImpl;
 let s1: StdState;
 let s2: StdState;
 let subS: TerminalState;
 
 beforeEach(() => {
     jest.clearAllMocks();
-    fsm = new FSM();
-    mainfsm = new FSM();
+    fsm = new FSMImpl();
+    mainfsm = new FSMImpl();
     s1 = new StdState(mainfsm, "s1");
     s2 = new StdState(mainfsm, "s2");
     s1.getFSM = jest.fn().mockReturnValue(mainfsm);

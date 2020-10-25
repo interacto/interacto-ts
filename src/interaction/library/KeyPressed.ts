@@ -16,14 +16,14 @@ import {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {TerminalState} from "../../fsm/TerminalState";
 import {KeyPressureTransition} from "../../fsm/KeyPressureTransition";
 import {KeyData} from "./KeyData";
-import {FSM} from "../../fsm/FSM";
+import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {KeyDataImpl} from "./KeyDataImpl";
 
 /**
  * An FSM for a single key pressure.
  */
-export class KeyPressedFSM extends FSM {
+export class KeyPressedFSM extends FSMImpl {
     private readonly modifiersAccepted: boolean;
 
     /**

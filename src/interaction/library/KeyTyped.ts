@@ -18,14 +18,14 @@ import {KeyPressureTransition} from "../../fsm/KeyPressureTransition";
 import {KeyData} from "./KeyData";
 import {StdState} from "../../fsm/StdState";
 import {KeyReleaseTransition} from "../../fsm/KeyReleaseTransition";
-import {FSM} from "../../fsm/FSM";
+import {FSMImpl} from "../../fsm/FSMImpl";
 import {KeyDataImpl} from "./KeyDataImpl";
 import {InteractionBase} from "../InteractionBase";
 
 /**
  * The FSM that describes a keyboard touch typed.
  */
-export class KeyTypedFSM extends FSM {
+export class KeyTypedFSM extends FSMImpl {
     private checkKey?: string;
 
     public buildFSM(dataHandler?: KeyTypedFSMHandler): void {

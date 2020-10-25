@@ -13,15 +13,15 @@
  */
 
 import {CancellingState} from "../../src/fsm/CancellingState";
-import {FSM} from "../../src/fsm/FSM";
+import {FSMImpl} from "../../src/fsm/FSMImpl";
 import {OutputState} from "../../src/fsm/OutputState";
 import {mock, MockProxy} from "jest-mock-extended";
 
 let state: CancellingState;
-let fsm: MockProxy<FSM> & FSM;
+let fsm: MockProxy<FSMImpl> & FSMImpl;
 
 beforeEach(() => {
-    fsm = mock<FSM>();
+    fsm = mock<FSMImpl>();
     state = new CancellingState(fsm, "os");
 });
 

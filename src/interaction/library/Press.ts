@@ -17,11 +17,11 @@ import {TerminalState} from "../../fsm/TerminalState";
 import {PressureTransition} from "../../fsm/PressureTransition";
 import {isMouseDownEvent} from "../../fsm/Events";
 import {PointData} from "./PointData";
-import {FSM} from "../../fsm/FSM";
+import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {PointDataImpl} from "./PointDataImpl";
 
-export class PressFSM extends FSM {
+export class PressFSM extends FSMImpl {
     public buildFSM(dataHandler?: PressFSMHandler): void {
         if (this.states.length > 1) {
             return;

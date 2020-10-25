@@ -121,15 +121,18 @@ export class SubFSMTransition extends Transition {
     }
 
     private findTransition(event: Event): Transition | undefined {
-        return this.subFSM.initState.getTransitions().find(tr => tr.accept(event));
+        return this.subFSM
+            .getInitState()
+            .getTransitions()
+            .find(tr => tr.accept(event));
     }
 
     public getAcceptedEvents(): Set<string> {
-        if (this.subFSM.initState.getTransitions().length === 0) {
+        if (this.subFSM.getInitState().getTransitions().length === 0) {
             return new Set();
         }
 
-        return this.subFSM.initState
+        return this.subFSM.getInitState()
             .getTransitions()
             .map(tr => tr.getAcceptedEvents())
             .reduce((a, b) => new Set([...a, ...b]));

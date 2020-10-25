@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSM} from "../../src/fsm/FSM";
+import {FSMImpl} from "../../src/fsm/FSMImpl";
 import {InputState} from "../../src/fsm/InputState";
 import {OutputStateBase} from "../../src/fsm/OutputStateBase";
 import {StubTransitionOK} from "./StubTransitionOK";
@@ -21,10 +21,10 @@ import {Transition} from "../../src/fsm/Transition";
 import {mock, MockProxy} from "jest-mock-extended";
 
 let state: OutputStateBase;
-let fsm: MockProxy<FSM> & FSM;
+let fsm: MockProxy<FSMImpl> & FSMImpl;
 
 beforeEach(() => {
-    fsm = mock<FSM>();
+    fsm = mock<FSMImpl>();
     state = new class extends OutputStateBase {
         public constructor() {
             super(fsm, "os");

@@ -14,7 +14,7 @@
 
 import {TerminalState} from "../../fsm/TerminalState";
 import {StdState} from "../../fsm/StdState";
-import {FSM} from "../../fsm/FSM";
+import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 import {KeysData} from "./KeysData";
@@ -27,7 +27,7 @@ import {KeyReleaseTransition} from "../../fsm/KeyReleaseTransition";
  * One can type on multiple keys. The FSM ends after a timeout (a delay after the latest
  * typed key).
  */
-export class KeysTypedFSM extends FSM {
+export class KeysTypedFSM extends FSMImpl {
     /** The time gap between the two spinner events. */
     private static readonly timeGap: number = 1000;
 

@@ -14,7 +14,7 @@
 
 import {ErrorCatcher} from "../../src/error/ErrorCatcher";
 import {CancelFSMException} from "../../src/fsm/CancelFSMException";
-import {FSM} from "../../src/fsm/FSM";
+import {FSMImpl} from "../../src/fsm/FSMImpl";
 import {InputState} from "../../src/fsm/InputState";
 import {OutputState} from "../../src/fsm/OutputState";
 import {TimeoutTransition} from "../../src/fsm/TimeoutTransition";
@@ -23,11 +23,11 @@ import {mock, MockProxy} from "jest-mock-extended";
 let evt: TimeoutTransition;
 let src: OutputState & MockProxy<OutputState>;
 let tgt: InputState & MockProxy<InputState>;
-let fsm: FSM & MockProxy<FSM>;
+let fsm: FSMImpl & MockProxy<FSMImpl>;
 
 beforeEach(() => {
     jest.useFakeTimers();
-    fsm = mock<FSM>();
+    fsm = mock<FSMImpl>();
     src = mock<OutputState>();
     tgt = mock<InputState>();
     src.getFSM.mockReturnValue(fsm);

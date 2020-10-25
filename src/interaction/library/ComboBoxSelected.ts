@@ -17,10 +17,10 @@ import {isComboBox} from "../../fsm/Events";
 import {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {WidgetData, WidgetDataImpl} from "./WidgetData";
 import {ComboBoxTransition} from "../../fsm/ComboBoxTransition";
-import {FSM} from "../../fsm/FSM";
+import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 
-export class ComboBoxSelectedFSM extends FSM {
+export class ComboBoxSelectedFSM extends FSMImpl {
     public constructor() {
         super();
     }

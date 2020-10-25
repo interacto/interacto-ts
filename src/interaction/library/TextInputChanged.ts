@@ -19,10 +19,10 @@ import {WidgetData, WidgetDataImpl} from "./WidgetData";
 import {StdState} from "../../fsm/StdState";
 import {TextInputChangedTransition} from "../../fsm/TextInputChangedTransition";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
-import {FSM} from "../../fsm/FSM";
+import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 
-export class TextInputChangedFSM extends FSM {
+export class TextInputChangedFSM extends FSMImpl {
     /** The time gap between the two spinner events. */
     private readonly _timeGap: number = 1000;
 

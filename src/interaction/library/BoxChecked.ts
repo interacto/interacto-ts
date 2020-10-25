@@ -17,10 +17,10 @@ import {BoxCheckPressedTransition} from "../../fsm/BoxCheckPressedTransition";
 import {isCheckBox} from "../../fsm/Events";
 import {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {WidgetData, WidgetDataImpl} from "./WidgetData";
-import {FSM} from "../../fsm/FSM";
+import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 
-export class BoxCheckedFSM extends FSM {
+export class BoxCheckedFSM extends FSMImpl {
 
     public constructor() {
         super();

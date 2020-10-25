@@ -14,8 +14,8 @@
 
 import {
     CmdStatus,
-    CommandsRegistry,
-    FSM,
+    CommandsRegistry, FSM,
+    FSMImpl,
     InteractionData,
     TerminalState,
     Transition,
@@ -47,7 +47,7 @@ class TrStub extends Transition {
     }
 }
 
-class OneTrFSM extends FSM {
+class OneTrFSM extends FSMImpl {
     public constructor() {
         super();
         const s1 = new TerminalState(this, "s1");

@@ -13,7 +13,7 @@
  */
 
 import {ConcurrentFSM} from "../../src/fsm/ConcurrentFSM";
-import {FSM} from "../../src/fsm/FSM";
+import {FSMImpl} from "../../src/fsm/FSMImpl";
 import {FSMHandler} from "../../src/fsm/FSMHandler";
 import {StdState} from "../../src/fsm/StdState";
 import {TerminalState} from "../../src/fsm/TerminalState";
@@ -21,7 +21,7 @@ import {CancellingState} from "../../src/fsm/CancellingState";
 import {Transition} from "../../src/fsm/Transition";
 import {mock} from "jest-mock-extended";
 
-class StubTouchFSM extends FSM {
+class StubTouchFSM extends FSMImpl {
     public cpt: number;
 
     public constructor(cpt: number) {
@@ -133,7 +133,7 @@ test("cons OK error", () => {
 });
 
 test("cons OK error empty", () => {
-    expect(() => new ConcurrentFSM(Array<FSM>())).toThrow(Error);
+    expect(() => new ConcurrentFSM(Array<FSMImpl>())).toThrow(Error);
 });
 
 test("nb FSMs OK", () => {

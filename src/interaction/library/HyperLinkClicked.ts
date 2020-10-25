@@ -17,10 +17,10 @@ import {isHyperLink} from "../../fsm/Events";
 import {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {WidgetData, WidgetDataImpl} from "./WidgetData";
 import {HyperLinkTransition} from "../../fsm/HyperLinkTransition";
-import {FSM} from "../../fsm/FSM";
+import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 
-export class HyperLinkClickedFSM extends FSM {
+export class HyperLinkClickedFSM extends FSMImpl {
     public constructor() {
         super();
     }

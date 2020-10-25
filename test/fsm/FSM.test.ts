@@ -15,7 +15,7 @@
 import {Subject} from "rxjs";
 import {CancelFSMException} from "../../src/fsm/CancelFSMException";
 import {CancellingState} from "../../src/fsm/CancellingState";
-import {FSM} from "../../src/fsm/FSM";
+import {FSMImpl} from "../../src/fsm/FSMImpl";
 import {InitState} from "../../src/fsm/InitState";
 import {InputState} from "../../src/fsm/InputState";
 import {OutputState} from "../../src/fsm/OutputState";
@@ -29,12 +29,12 @@ import {StubTransitionOK} from "./StubTransitionOK";
 import {FSMHandler} from "../../src/fsm/FSMHandler";
 import {mock} from "jest-mock-extended";
 
-let fsm: FSM;
+let fsm: FSMImpl;
 let handler: FSMHandler;
 
 beforeEach(() => {
     jest.clearAllMocks();
-    fsm = new FSM();
+    fsm = new FSMImpl();
     handler = mock<FSMHandler>();
 });
 
@@ -510,7 +510,7 @@ describe("testWithTimeoutTransition", () => {
 
 
 describe("testWithSubFSM", () => {
-    let mainfsm: FSM;
+    let mainfsm: FSMImpl;
     let s1: StdState;
     let subS1: StdState;
     let subS2: StdState;
@@ -519,8 +519,8 @@ describe("testWithSubFSM", () => {
 
     beforeEach(() => {
         jest.clearAllMocks();
-        fsm = new FSM();
-        mainfsm = new FSM();
+        fsm = new FSMImpl();
+        mainfsm = new FSMImpl();
         s1 = new StdState(mainfsm, "s1");
         mainfsm.addState(s1);
         new SubFSMTransition(mainfsm.initState, s1, fsm);
@@ -603,7 +603,7 @@ describe("testWithSubFSM", () => {
                 return "foo";
             }
 
-            public getFSM(): FSM {
+            public getFSM(): FSMImpl {
                 return mainfsm;
             }
 

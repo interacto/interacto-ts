@@ -17,14 +17,14 @@ import {TerminalState} from "../../fsm/TerminalState";
 import {isScrollEvent} from "../../fsm/Events";
 import {ScrollTransition} from "../../fsm/ScrollTransition";
 import {ScrollData} from "./ScrollData";
-import {FSM} from "../../fsm/FSM";
+import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {ScrollDataImpl} from "./ScrollDataImpl";
 
 /**
  * An FSM for scrolling.
  */
-export class ScrollFSM extends FSM {
+export class ScrollFSM extends FSMImpl {
     public buildFSM(dataHandler?: ScrollFSMHandler): void {
         if (this.states.length > 1) {
             return;

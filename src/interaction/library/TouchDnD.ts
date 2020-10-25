@@ -14,7 +14,7 @@
 
 import {InteractionBase} from "../InteractionBase";
 import {SrcTgtTouchData, SrcTgtTouchDataImpl} from "./SrcTgtTouchData";
-import {FSM} from "../../fsm/FSM";
+import {FSMImpl} from "../../fsm/FSMImpl";
 import {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {StdState} from "../../fsm/StdState";
 import {TerminalState} from "../../fsm/TerminalState";
@@ -26,7 +26,7 @@ import {getTouch} from "../../fsm/Events";
 /**
  * The FSM that defines a touch interaction (that works like a DnD)
  */
-export class TouchDnDFSM extends FSM {
+export class TouchDnDFSM extends FSMImpl {
     private touchID: number | undefined;
 
     /**

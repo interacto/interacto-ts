@@ -17,13 +17,13 @@ import {ButtonPressedTransition} from "../../fsm/ButtonPressedTransition";
 import {TerminalState} from "../../fsm/TerminalState";
 import {isButton} from "../../fsm/Events";
 import {WidgetData, WidgetDataImpl} from "./WidgetData";
-import {FSM} from "../../fsm/FSM";
+import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 
 /**
  * The FSM for button pressures.
  */
-export class ButtonPressedFSM extends FSM {
+export class ButtonPressedFSM extends FSMImpl {
     /**
      * Creates the FSM
      */

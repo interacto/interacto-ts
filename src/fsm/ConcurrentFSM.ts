@@ -14,11 +14,12 @@
 
 import {FSM} from "./FSM";
 import {FSMHandler} from "./FSMHandler";
+import {FSMImpl} from "./FSMImpl";
 
 /**
  * A concurrent FSM: an FSM that contains multiple FSMs that run concurrently.
  */
-export class ConcurrentFSM<F extends FSM> extends FSM {
+export class ConcurrentFSM<F extends FSM> extends FSMImpl {
     private readonly conccurFSMs: Array<F>;
 
     public constructor(fsms: Array<F>) {

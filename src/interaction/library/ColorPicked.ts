@@ -16,10 +16,10 @@ import {isColorChoice} from "../../fsm/Events";
 import {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {WidgetData, WidgetDataImpl} from "./WidgetData";
 import {ColorPickedTransition} from "../../fsm/ColorPickedTransition";
-import {FSM} from "../../fsm/FSM";
+import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 
-export class ColorPickedFSM extends FSM {
+export class ColorPickedFSM extends FSMImpl {
     public constructor() {
         super();
     }

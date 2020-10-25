@@ -12,15 +12,15 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSM} from "../../src/fsm/FSM";
+import {FSMImpl} from "../../src/fsm/FSMImpl";
 import {StateBase} from "../../src/fsm/StateBase";
 import {StdState} from "../../src/fsm/StdState";
 
 let state: StateBase;
-let fsm: FSM;
+let fsm: FSMImpl;
 
 beforeEach(() => {
-    fsm = new FSM();
+    fsm = new FSMImpl();
     state = new StdState(fsm, "s1");
 });
 

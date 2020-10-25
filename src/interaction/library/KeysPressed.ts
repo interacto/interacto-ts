@@ -18,7 +18,7 @@ import {KeyPressureTransition} from "../../fsm/KeyPressureTransition";
 import {KeyReleaseTransition} from "../../fsm/KeyReleaseTransition";
 import {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {KeysData} from "./KeysData";
-import {FSM} from "../../fsm/FSM";
+import {FSMImpl} from "../../fsm/FSMImpl";
 import {KeysDataImpl} from "./KeysDataImpl";
 import {InteractionBase} from "../InteractionBase";
 
@@ -26,7 +26,7 @@ import {InteractionBase} from "../InteractionBase";
  * This interaction permits to define combo a key pressed that can be used to define shortcuts, etc.
  * @author Arnaud BLOUIN
  */
-export class KeysPressedFSM extends FSM {
+export class KeysPressedFSM extends FSMImpl {
     private readonly currentCodes: Array<string>;
 
     /**

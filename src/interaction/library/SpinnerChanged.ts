@@ -17,12 +17,12 @@ import {isSpinner} from "../../fsm/Events";
 import {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {WidgetData, WidgetDataImpl} from "./WidgetData";
 import {SpinnerChangedTransition} from "../../fsm/SpinnerChangedTransition";
-import {FSM} from "../../fsm/FSM";
+import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {StdState} from "../../fsm/StdState";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 
-export class SpinnerChangedFSM extends FSM {
+export class SpinnerChangedFSM extends FSMImpl {
     /** The time gap between the two spinner events. */
     private static timeGap = 300;
 
