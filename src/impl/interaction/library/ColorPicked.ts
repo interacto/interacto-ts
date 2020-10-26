@@ -13,7 +13,7 @@
  */
 import {TerminalState} from "../../fsm/TerminalState";
 import {isColorChoice} from "../../fsm/Events";
-import {FSMDataHandler} from "../../../api/fsm/FSMDataHandler";
+import {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {WidgetData} from "../../../api/interaction/WidgetData";
 import {ColorPickedTransition} from "../../fsm/ColorPickedTransition";
 import {FSMImpl} from "../../fsm/FSMImpl";

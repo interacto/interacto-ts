@@ -19,7 +19,7 @@ import {InteractionBase} from "../InteractionBase";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 import {KeysData} from "../../../api/interaction/KeysData";
 import {KeysDataImpl} from "./KeysDataImpl";
-import {FSMDataHandler} from "../../../api/fsm/FSMDataHandler";
+import {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {KeyReleaseTransition} from "../../fsm/KeyReleaseTransition";
 
 /**

@@ -15,7 +15,6 @@ import {Subscription} from "rxjs";
 import {
     comboBoxBinder,
     CommandsRegistry,
-    FSM,
     Interaction,
     InteractionData,
     isComboBox,
@@ -27,7 +26,7 @@ import {StubCmd} from "../command/StubCmd";
 
 let widget1: HTMLSelectElement;
 let widget2: HTMLSelectElement;
-let binding: WidgetBinding<StubCmd, Interaction<InteractionData, FSM>, InteractionData> | undefined;
+let binding: WidgetBinding<StubCmd, Interaction<InteractionData>, InteractionData> | undefined;
 let cmd: StubCmd;
 let producedCmds: Array<StubCmd>;
 let disposable: Subscription | undefined;

@@ -12,7 +12,6 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 import {Command} from "../command/Command";
-import {FSM} from "../fsm/FSM";
 import {InteractionData} from "../interaction/InteractionData";
 import {KeyInteractionBinderBuilder} from "./KeyInteractionBinderBuilder";
 import {InteractionCmdBinder} from "./InteractionCmdBinder";
@@ -20,7 +19,7 @@ import {LogLevel} from "../logging/LogLevel";
 import {WidgetBinding} from "../binding/WidgetBinding";
 import {Interaction} from "../interaction/Interaction";
 
-export interface KeyInteractionCmdBinder<C extends Command, I extends Interaction<D, FSM>, D extends InteractionData>
+export interface KeyInteractionCmdBinder<C extends Command, I extends Interaction<D>, D extends InteractionData>
     extends KeyInteractionBinderBuilder<I, D>, InteractionCmdBinder<C, I, D> {
 
     first(initCmdFct: (c: C, i: D) => void): KeyInteractionCmdBinder<C, I, D>;

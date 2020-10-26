@@ -14,7 +14,7 @@
 
 import {TerminalState} from "../../fsm/TerminalState";
 import {isSpinner} from "../../fsm/Events";
-import {FSMDataHandler} from "../../../api/fsm/FSMDataHandler";
+import {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {WidgetData} from "../../../api/interaction/WidgetData";
 import {SpinnerChangedTransition} from "../../fsm/SpinnerChangedTransition";
 import {FSMImpl} from "../../fsm/FSMImpl";

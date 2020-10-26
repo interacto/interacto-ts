@@ -13,7 +13,6 @@
  */
 
 import {Command} from "../command/Command";
-import {FSM} from "../fsm/FSM";
 import {InteractionData} from "../interaction/InteractionData";
 import {Interaction} from "../interaction/Interaction";
 import {WidgetBinding} from "./WidgetBinding";
@@ -26,7 +25,7 @@ export interface BindingsObserver {
      * Adds a widget binding to observe.
      * @param binding The binding to observe.
      */
-    observeBinding(binding: WidgetBinding<Command, Interaction<InteractionData, FSM>, InteractionData>): void;
+    observeBinding(binding: WidgetBinding<Command, Interaction<InteractionData>, InteractionData>): void;
 
     /**
      * Clear all the observed bindings and uninstall them.

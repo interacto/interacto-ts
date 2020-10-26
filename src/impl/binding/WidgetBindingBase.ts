@@ -16,7 +16,6 @@ import {Observable, Subject} from "rxjs";
 import {CmdStatus, Command, RegistrationPolicy} from "../../api/command/Command";
 import {CommandsRegistry} from "../command/CommandsRegistry";
 import {CancelFSMException} from "../fsm/CancelFSMException";
-import {FSM} from "../../api/fsm/FSM";
 import {InteractionData} from "../../api/interaction/InteractionData";
 import {catBinder, catCommand} from "../../api/logging/ConfigLog";
 import {isUndoableType} from "../../api/undo/Undoable";
@@ -30,7 +29,7 @@ import {Interaction} from "../../api/interaction/Interaction";
  * @param <I> The type of the interaction that will use this widget binding.
  * @author Arnaud BLOUIN
  */
-export abstract class WidgetBindingBase<C extends Command, I extends Interaction<D, FSM>, D extends InteractionData>
+export abstract class WidgetBindingBase<C extends Command, I extends Interaction<D>, D extends InteractionData>
 implements WidgetBinding<C, I, D> {
 
     protected timeEnded: number;

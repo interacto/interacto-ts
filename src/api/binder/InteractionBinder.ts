@@ -11,7 +11,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import {FSM} from "../fsm/FSM";
+
 import {InteractionData} from "../interaction/InteractionData";
 import {InteractionBinderBuilder} from "./InteractionBinderBuilder";
 import {LogLevel} from "../logging/LogLevel";
@@ -20,7 +20,7 @@ import {InteractionCmdBinder} from "./InteractionCmdBinder";
 import {Interaction} from "../interaction/Interaction";
 
 
-export interface InteractionBinder<I extends Interaction<D, FSM>, D extends InteractionData>
+export interface InteractionBinder<I extends Interaction<D>, D extends InteractionData>
     extends InteractionBinderBuilder<I, D> {
 
     when(whenPredicate: (i: D) => boolean): InteractionBinder<I, D>;

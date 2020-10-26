@@ -18,10 +18,9 @@ import {CmdUpdateBinderBuilder} from "./CmdUpdateBinderBuilder";
 import {InteractionUpdateBinderBuilder} from "./InteractionUpdateBinderBuilder";
 import {LogLevel} from "../logging/LogLevel";
 import {WidgetBinding} from "../binding/WidgetBinding";
-import {FSM} from "../fsm/FSM";
 import {Interaction} from "../interaction/Interaction";
 
-export interface InteractionCmdUpdateBinder<C extends Command, I extends Interaction<D, FSM>, D extends InteractionData>
+export interface InteractionCmdUpdateBinder<C extends Command, I extends Interaction<D>, D extends InteractionData>
     extends InteractionCmdBinder<C, I, D>, CmdUpdateBinderBuilder<C>, InteractionUpdateBinderBuilder<I, D> {
     /**
     * Specifies the update of the command on interaction command.

@@ -11,10 +11,10 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 import {Subscription} from "rxjs";
 import {
     CommandsRegistry,
-    FSM,
     Interaction,
     InteractionData,
     isTextInput,
@@ -25,7 +25,7 @@ import {
 import {StubCmd} from "../command/StubCmd";
 
 let txt1: HTMLInputElement | HTMLTextAreaElement;
-let binding: WidgetBinding<StubCmd, Interaction<InteractionData, FSM>, InteractionData> | undefined;
+let binding: WidgetBinding<StubCmd, Interaction<InteractionData>, InteractionData> | undefined;
 let cmd: StubCmd;
 let producedCmds: Array<StubCmd>;
 let disposable: Subscription | undefined;

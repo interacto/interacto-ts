@@ -14,7 +14,6 @@
 import {Command} from "../command/Command";
 import {CmdUpdateBinderBuilder} from "./CmdUpdateBinderBuilder";
 import {LogLevel} from "../logging/LogLevel";
-import {FSM} from "../fsm/FSM";
 import {InteractionData} from "../interaction/InteractionData";
 import {InteractionCmdUpdateBinder} from "./InteractionCmdUpdateBinder";
 import {Interaction} from "../interaction/Interaction";
@@ -40,7 +39,7 @@ export interface CmdUpdateBinder<C extends Command> extends CmdUpdateBinderBuild
 
     end(onEnd: (c: C) => void): CmdUpdateBinder<C>;
 
-    usingInteraction<I extends Interaction<D, FSM>, D extends InteractionData>
+    usingInteraction<I extends Interaction<D>, D extends InteractionData>
     (interactionSupplier: () => I): InteractionCmdUpdateBinder<C, I, D>;
 
     stopImmediatePropagation(): CmdUpdateBinder<C>;

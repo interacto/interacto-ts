@@ -12,7 +12,6 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 import {Command} from "../command/Command";
-import {FSM} from "../fsm/FSM";
 import {InteractionData} from "../interaction/InteractionData";
 import {CmdBinderBuilder} from "./CmdBinderBuilder";
 import {InteractionBinderBuilder} from "./InteractionBinderBuilder";
@@ -20,7 +19,7 @@ import {LogLevel} from "../logging/LogLevel";
 import {WidgetBinding} from "../binding/WidgetBinding";
 import {Interaction} from "../interaction/Interaction";
 
-export interface InteractionCmdBinder<C extends Command, I extends Interaction<D, FSM>, D extends InteractionData>
+export interface InteractionCmdBinder<C extends Command, I extends Interaction<D>, D extends InteractionData>
     extends CmdBinderBuilder<C>, InteractionBinderBuilder<I, D> {
     /**
     * Specifies the initialisation of the command when the interaction starts.

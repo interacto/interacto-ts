@@ -13,7 +13,6 @@
  */
 import {Command} from "../command/Command";
 import {InteractionData} from "../interaction/InteractionData";
-import {FSM} from "../fsm/FSM";
 import {CmdBinderBuilder} from "./CmdBinderBuilder";
 import {InteractionCmdBinder} from "./InteractionCmdBinder";
 import {LogLevel} from "../logging/LogLevel";
@@ -45,7 +44,7 @@ export interface CmdBinder<C extends Command> extends CmdBinderBuilder<C> {
      * @type <I> The user interaction type
      * @return A clone of the current builder to chain the building configuration.
      */
-    usingInteraction<I extends Interaction<D, FSM>, D extends InteractionData>(interactionSupplier: () => I):
+    usingInteraction<I extends Interaction<D>, D extends InteractionData>(interactionSupplier: () => I):
     InteractionCmdBinder<C, I, D>;
 
     stopImmediatePropagation(): CmdBinder<C>;

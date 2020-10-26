@@ -15,7 +15,7 @@
 import {InteractionData} from "./InteractionData";
 import {FSM} from "../fsm/FSM";
 
-export interface Interaction<D extends InteractionData, F extends FSM> {
+export interface Interaction<D extends InteractionData> {
     /**
      * Sets whether the user interaction will stop immediately the propagation
      * of events processed by this user interaction to others listeners.
@@ -34,7 +34,7 @@ export interface Interaction<D extends InteractionData, F extends FSM> {
     /**
      * @return The FSM of the user interaction.
      */
-    getFsm(): F;
+    getFsm(): FSM;
 
     /**
      * @return The interaction data of the user interaction. Cannot be null.

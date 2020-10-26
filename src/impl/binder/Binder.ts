@@ -13,7 +13,6 @@
  */
 
 import {LogLevel} from "../../api/logging/LogLevel";
-import {FSM} from "../../api/fsm/FSM";
 import {InteractionData} from "../../api/interaction/InteractionData";
 import {Command} from "../../api/command/Command";
 import {CmdBinder} from "../../api/binder/CmdBinder";
@@ -29,7 +28,7 @@ import {Interaction} from "../../api/interaction/Interaction";
  * @param <I> The type of the user interaction to bind.
  * @author Arnaud Blouin
  */
-export abstract class Binder<C extends Command, I extends Interaction<D, FSM>, D extends InteractionData>
+export abstract class Binder<C extends Command, I extends Interaction<D>, D extends InteractionData>
 implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> {
 
     protected initCmd?: (c: C, i: D) => void;
@@ -145,7 +144,7 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
         return dup;
     }
 
-    public usingInteraction<I2 extends Interaction<D2, FSM>, D2 extends InteractionData>
+    public usingInteraction<I2 extends Interaction<D2>, D2 extends InteractionData>
     (interactionSupplier: () => I2): Binder<C, I2, D2> {
         const dup = this.duplicate();
         dup.interactionSupplier = interactionSupplier as unknown as () => I;

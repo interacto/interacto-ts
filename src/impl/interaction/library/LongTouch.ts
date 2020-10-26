@@ -14,7 +14,7 @@
 
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
-import {FSMDataHandler} from "../../../api/fsm/FSMDataHandler";
+import {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {StdState} from "../../fsm/StdState";
 import {TerminalState} from "../../fsm/TerminalState";
 import {CancellingState} from "../../fsm/CancellingState";

@@ -13,7 +13,7 @@
  */
 
 import {FSMImpl} from "../../fsm/FSMImpl";
-import {FSMDataHandler} from "../../../api/fsm/FSMDataHandler";
+import {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {InteractionBase} from "../InteractionBase";
 import {SrcTgtTouchData} from "../../../api/interaction/SrcTgtTouchData";
 import {StdState} from "../../fsm/StdState";

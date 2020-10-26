@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSMDataHandler} from "../../../api/fsm/FSMDataHandler";
+import {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {DoubleClick, DoubleClickFSM} from "./DoubleClick";
 import {TerminalState} from "../../fsm/TerminalState";
 import {CancellingState} from "../../fsm/CancellingState";

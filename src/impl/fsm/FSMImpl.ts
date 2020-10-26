@@ -20,7 +20,7 @@ import {TimeoutTransition} from "./TimeoutTransition";
 import {InputState} from "../../api/fsm/InputState";
 import {OutputStateBase} from "./OutputStateBase";
 import {catFSM} from "../../api/logging/ConfigLog";
-import {FSMDataHandler} from "../../api/fsm/FSMDataHandler";
+import {FSMDataHandler} from "./FSMDataHandler";
 import {isKeyDownEvent, isKeyUpEvent} from "./Events";
 import {Observable, Subject} from "rxjs";
 import {remove, removeAt} from "../util/ArrayUtil";

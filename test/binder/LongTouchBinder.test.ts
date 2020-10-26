@@ -26,7 +26,7 @@ import {
 import {StubCmd} from "../command/StubCmd";
 import {createTouchEvent} from "../interaction/StubEvents";
 
-let binding: WidgetBinding<StubCmd, Interaction<InteractionData, FSM>, InteractionData> | undefined;
+let binding: WidgetBinding<StubCmd, Interaction<InteractionData>, InteractionData> | undefined;
 let cmd: StubCmd;
 let producedCmds: Array<StubCmd>;
 let disposable: Subscription | undefined;

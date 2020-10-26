@@ -14,7 +14,6 @@
 import {Subscription} from "rxjs";
 import {
     CommandsRegistry,
-    FSM,
     Interaction,
     InteractionData,
     isSpinner,
@@ -28,7 +27,7 @@ import {StubCmd} from "../command/StubCmd";
 
 let widget1: HTMLInputElement;
 let widget2: HTMLInputElement;
-let binding: WidgetBinding<StubCmd, Interaction<InteractionData, FSM>, InteractionData> | undefined;
+let binding: WidgetBinding<StubCmd, Interaction<InteractionData>, InteractionData> | undefined;
 let cmd: StubCmd;
 let producedCmds: Array<StubCmd>;
 let disposable: Subscription | undefined;

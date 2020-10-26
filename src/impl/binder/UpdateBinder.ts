@@ -12,7 +12,6 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSM} from "../../api/fsm/FSM";
 import {Binder} from "./Binder";
 import {InteractionData} from "../../api/interaction/InteractionData";
 import {Command} from "../../api/command/Command";
@@ -29,7 +28,7 @@ import {Interaction} from "../../api/interaction/Interaction";
  * @param <C> The type of the command to produce.
  * @author Arnaud Blouin
  */
-export class UpdateBinder<C extends Command, I extends Interaction<D, FSM>, D extends InteractionData>
+export class UpdateBinder<C extends Command, I extends Interaction<D>, D extends InteractionData>
     extends Binder<C, I, D> implements CmdUpdateBinder<C>, InteractionCmdUpdateBinder<C, I, D> {
 
     protected updateFct?: (c: C, i: D) => void;
@@ -137,7 +136,7 @@ export class UpdateBinder<C extends Command, I extends Interaction<D, FSM>, D ex
         return super.preventDefault() as UpdateBinder<C, I, D>;
     }
 
-    public usingInteraction<I2 extends Interaction<D2, FSM>, D2 extends InteractionData>
+    public usingInteraction<I2 extends Interaction<D2>, D2 extends InteractionData>
     (interactionSupplier: () => I2): UpdateBinder<C, I2, D2> {
         return super.usingInteraction(interactionSupplier) as UpdateBinder<C, I2, D2>;
     }

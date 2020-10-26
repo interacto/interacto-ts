@@ -17,7 +17,6 @@ import {createTouchEvent} from "../interaction/StubEvents";
 import {
     CommandsRegistry,
     EventRegistrationToken,
-    FSM,
     Interaction,
     InteractionData,
     panBinder,
@@ -25,7 +24,7 @@ import {
     WidgetBinding
 } from "../../src/interacto";
 
-let binding: WidgetBinding<StubCmd, Interaction<InteractionData, FSM>, InteractionData> | undefined;
+let binding: WidgetBinding<StubCmd, Interaction<InteractionData>, InteractionData> | undefined;
 let producedCmds: Array<StubCmd>;
 let disposable: Subscription | undefined;
 let c1: HTMLElement;

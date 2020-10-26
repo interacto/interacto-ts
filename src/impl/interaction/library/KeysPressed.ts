@@ -16,7 +16,7 @@ import {StdState} from "../../fsm/StdState";
 import {TerminalState} from "../../fsm/TerminalState";
 import {KeyPressureTransition} from "../../fsm/KeyPressureTransition";
 import {KeyReleaseTransition} from "../../fsm/KeyReleaseTransition";
-import {FSMDataHandler} from "../../../api/fsm/FSMDataHandler";
+import {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {KeysData} from "../../../api/interaction/KeysData";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {KeysDataImpl} from "./KeysDataImpl";

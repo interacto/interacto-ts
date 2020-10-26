@@ -15,7 +15,6 @@ import {Subscription} from "rxjs";
 import {
     buttonBinder,
     CommandsRegistry,
-    FSM,
     Interaction,
     InteractionData,
     isButton,
@@ -27,7 +26,7 @@ import {StubCmd} from "../command/StubCmd";
 
 let button1: HTMLButtonElement;
 let button2: HTMLButtonElement;
-let binding: WidgetBinding<StubCmd, Interaction<InteractionData, FSM>, InteractionData> | undefined;
+let binding: WidgetBinding<StubCmd, Interaction<InteractionData>, InteractionData> | undefined;
 let cmd: StubCmd;
 let producedCmds: Array<StubCmd>;
 let disposable: Subscription | undefined;

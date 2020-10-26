@@ -21,7 +21,6 @@ import {
     dndBinder,
     dragLockBinder,
     EventRegistrationToken,
-    FSM,
     Interaction,
     InteractionData,
     keyPressBinder,
@@ -45,7 +44,7 @@ import {createKeyEvent, createMouseEvent, createTouchEvent} from "../interaction
 let elt: HTMLElement;
 let producedCmds: Array<Command>;
 let disposable: Subscription;
-let binding: WidgetBinding<Command, Interaction<InteractionData, FSM>, InteractionData>;
+let binding: WidgetBinding<Command, Interaction<InteractionData>, InteractionData>;
 
 beforeEach(() => {
     jest.useFakeTimers();
@@ -246,7 +245,7 @@ test("touch DnD binding", () => {
 describe("tap and longPress conflict", () => {
     let producedCmds2: Array<Command>;
     let disposable2: Subscription;
-    let binding2: WidgetBinding<Command, Interaction<InteractionData, FSM>, InteractionData>;
+    let binding2: WidgetBinding<Command, Interaction<InteractionData>, InteractionData>;
 
     beforeEach(() => {
         producedCmds2 = [];
@@ -294,7 +293,7 @@ describe("tap and longPress conflict", () => {
 describe("two longTouch", () => {
     let producedCmds2: Array<Command>;
     let disposable2: Subscription;
-    let binding2: WidgetBinding<Command, Interaction<InteractionData, FSM>, InteractionData>;
+    let binding2: WidgetBinding<Command, Interaction<InteractionData>, InteractionData>;
 
 
     beforeEach(() => {

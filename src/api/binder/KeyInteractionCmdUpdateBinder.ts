@@ -12,7 +12,6 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSM} from "../fsm/FSM";
 import {InteractionData} from "../interaction/InteractionData";
 import {KeyInteractionBinderBuilder} from "./KeyInteractionBinderBuilder";
 import {LogLevel} from "../logging/LogLevel";
@@ -21,7 +20,7 @@ import {InteractionUpdateBinder} from "./InteractionUpdateBinder";
 import {Command} from "../command/Command";
 import {Interaction} from "../interaction/Interaction";
 
-export interface KeyInteractionCmdUpdateBinder<C extends Command, I extends Interaction<D, FSM>, D extends InteractionData>
+export interface KeyInteractionCmdUpdateBinder<C extends Command, I extends Interaction<D>, D extends InteractionData>
     extends KeyInteractionBinderBuilder<I, D>, InteractionUpdateBinder<I, D> {
 
     with(...codes: Array<string>): KeyInteractionCmdUpdateBinder<C, I, D>;

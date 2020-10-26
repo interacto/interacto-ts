@@ -24,7 +24,6 @@ import {InteractionUpdateBinder} from "../binder/InteractionUpdateBinder";
 import {DatePicked} from "../../impl/interaction/library/DatePicked";
 import {Interaction} from "../interaction/Interaction";
 import {InteractionData} from "../interaction/InteractionData";
-import {FSM} from "../fsm/FSM";
 import {CommandBase} from "../../impl/command/CommandBase";
 import {BaseUpdateBinder} from "../binder/BaseUpdateBinder";
 import {BindingsObserver} from "./BindingsObserver";
@@ -62,7 +61,7 @@ import {TouchDnD} from "../../impl/interaction/library/TouchDnD";
 let observer: BindingsObserver | undefined;
 
 export function nodeBinder(): BaseUpdateBinder {
-    return new UpdateBinder<CommandBase, Interaction<InteractionData, FSM>, InteractionData>(observer) as BaseUpdateBinder;
+    return new UpdateBinder<CommandBase, Interaction<InteractionData>, InteractionData>(observer) as BaseUpdateBinder;
 }
 
 /**
@@ -70,42 +69,42 @@ export function nodeBinder(): BaseUpdateBinder {
  * Do not forget to call bind() at the end of the build to execute the builder.
  * @return The binding builder.
  */
-export function buttonBinder(): InteractionBinder<Interaction<WidgetData<HTMLButtonElement>, FSM>, WidgetData<HTMLButtonElement>> {
+export function buttonBinder(): InteractionBinder<Interaction<WidgetData<HTMLButtonElement>>, WidgetData<HTMLButtonElement>> {
     return new UpdateBinder(observer)
         .usingInteraction<ButtonPressed, WidgetData<HTMLButtonElement>>(() => new ButtonPressed());
 }
 
-export function checkboxBinder(): InteractionBinder<Interaction<WidgetData<HTMLInputElement>, FSM>, WidgetData<HTMLInputElement>> {
+export function checkboxBinder(): InteractionBinder<Interaction<WidgetData<HTMLInputElement>>, WidgetData<HTMLInputElement>> {
     return new UpdateBinder(observer)
         .usingInteraction<BoxChecked, WidgetData<HTMLInputElement>>(() => new BoxChecked());
 }
 
-export function colorPickerBinder(): InteractionBinder<Interaction<WidgetData<HTMLInputElement>, FSM>, WidgetData<HTMLInputElement>> {
+export function colorPickerBinder(): InteractionBinder<Interaction<WidgetData<HTMLInputElement>>, WidgetData<HTMLInputElement>> {
     return new UpdateBinder(observer)
         .usingInteraction<ColorPicked, WidgetData<HTMLInputElement>>(() => new ColorPicked());
 }
 
-export function comboBoxBinder(): InteractionBinder<Interaction<WidgetData<HTMLSelectElement>, FSM>, WidgetData<HTMLSelectElement>> {
+export function comboBoxBinder(): InteractionBinder<Interaction<WidgetData<HTMLSelectElement>>, WidgetData<HTMLSelectElement>> {
     return new UpdateBinder(observer)
         .usingInteraction<ComboBoxSelected, WidgetData<HTMLSelectElement>>(() => new ComboBoxSelected());
 }
 
-export function spinnerBinder(): InteractionUpdateBinder<Interaction<WidgetData<HTMLInputElement>, FSM>, WidgetData<HTMLInputElement>> {
+export function spinnerBinder(): InteractionUpdateBinder<Interaction<WidgetData<HTMLInputElement>>, WidgetData<HTMLInputElement>> {
     return new UpdateBinder(observer)
         .usingInteraction<SpinnerChanged, WidgetData<HTMLInputElement>>(() => new SpinnerChanged());
 }
 
-export function dateBinder(): InteractionBinder<Interaction<WidgetData<HTMLInputElement>, FSM>, WidgetData<HTMLInputElement>> {
+export function dateBinder(): InteractionBinder<Interaction<WidgetData<HTMLInputElement>>, WidgetData<HTMLInputElement>> {
     return new UpdateBinder(observer)
         .usingInteraction<DatePicked, WidgetData<HTMLInputElement>>(() => new DatePicked());
 }
 
-export function hyperlinkBinder(): InteractionBinder<Interaction<WidgetData<HTMLAnchorElement>, FSM>, WidgetData<HTMLAnchorElement>> {
+export function hyperlinkBinder(): InteractionBinder<Interaction<WidgetData<HTMLAnchorElement>>, WidgetData<HTMLAnchorElement>> {
     return new UpdateBinder(observer)
         .usingInteraction<HyperLinkClicked, WidgetData<HTMLAnchorElement>>(() => new HyperLinkClicked());
 }
 
-export function textInputBinder(): InteractionUpdateBinder<Interaction<WidgetData<HTMLInputElement | HTMLTextAreaElement>, FSM>,
+export function textInputBinder(): InteractionUpdateBinder<Interaction<WidgetData<HTMLInputElement | HTMLTextAreaElement>>,
 WidgetData<HTMLInputElement | HTMLTextAreaElement>> {
     return new UpdateBinder(observer)
         .usingInteraction<TextInputChanged, WidgetData<HTMLInputElement | HTMLTextAreaElement>>(() => new TextInputChanged());
@@ -115,7 +114,7 @@ WidgetData<HTMLInputElement | HTMLTextAreaElement>> {
  * Creates a widget binding that uses the touch DnD interaction (a DnD interaction that uses one touch).
  * This interaction works as a Drag-and-Drop interaction.
  */
-export function touchDnDBinder(): InteractionUpdateBinder<Interaction<SrcTgtTouchData, FSM>, SrcTgtTouchData> {
+export function touchDnDBinder(): InteractionUpdateBinder<Interaction<SrcTgtTouchData>, SrcTgtTouchData> {
     return new UpdateBinder(observer)
         .usingInteraction<TouchDnD, SrcTgtTouchData>(() => new TouchDnD());
 }
@@ -126,7 +125,7 @@ export function touchDnDBinder(): InteractionUpdateBinder<Interaction<SrcTgtTouc
  * A multi-touch starts when all its touches have started.
  * A multi-touch ends when the number of required touches is greater than the number of touches.
  */
-export function multiTouchBinder(nbTouches: number): InteractionUpdateBinder<Interaction<MultiTouchData, FSM>, MultiTouchData> {
+export function multiTouchBinder(nbTouches: number): InteractionUpdateBinder<Interaction<MultiTouchData>, MultiTouchData> {
     return new UpdateBinder(observer)
         .usingInteraction<MultiTouch, MultiTouchData>(() => new MultiTouch(nbTouches));
 }
@@ -136,7 +135,7 @@ export function multiTouchBinder(nbTouches: number): InteractionUpdateBinder<Int
  * @param nbTap The number of required taps.
  * If this number is not reached after a timeout, the interaction is cancelled.
  */
-export function tapBinder(nbTap: number): InteractionUpdateBinder<Interaction<TapData, FSM>, TapData> {
+export function tapBinder(nbTap: number): InteractionUpdateBinder<Interaction<TapData>, TapData> {
     return new UpdateBinder(observer)
         .usingInteraction<Tap, TapData>(() => new Tap(nbTap));
 }
@@ -146,7 +145,7 @@ export function tapBinder(nbTap: number): InteractionUpdateBinder<Interaction<Ta
  * @param duration The duration of the touch to end the user interaction.
  * If this duration is not reached, the interaction is cancelled.
  */
-export function longTouchBinder(duration: number): InteractionUpdateBinder<Interaction<TouchData, FSM>, TouchData> {
+export function longTouchBinder(duration: number): InteractionUpdateBinder<Interaction<TouchData>, TouchData> {
     return new UpdateBinder(observer)
         .usingInteraction<LongTouch, TouchData>(() => new LongTouch(duration));
 }
@@ -160,7 +159,7 @@ export function longTouchBinder(duration: number): InteractionUpdateBinder<Inter
  * @param pxTolerance The tolerance rate in pixels accepted while executing the swipe
  */
 export function swipeBinder(horizontal: boolean, minVelocity: number, minLength: number, pxTolerance: number):
-InteractionUpdateBinder<Interaction<SrcTgtTouchData, FSM>, SrcTgtTouchData> {
+InteractionUpdateBinder<Interaction<SrcTgtTouchData>, SrcTgtTouchData> {
     return new UpdateBinder(observer)
         .usingInteraction<Swipe, SrcTgtTouchData>(() => new Swipe(horizontal, minVelocity, minLength, pxTolerance));
 }
@@ -172,7 +171,7 @@ InteractionUpdateBinder<Interaction<SrcTgtTouchData, FSM>, SrcTgtTouchData> {
  * @param pxTolerance The tolerance rate in pixels accepted while executing the pan
  */
 export function panBinder(horizontal: boolean, minLength: number, pxTolerance: number):
-InteractionUpdateBinder<Interaction<SrcTgtTouchData, FSM>, SrcTgtTouchData> {
+InteractionUpdateBinder<Interaction<SrcTgtTouchData>, SrcTgtTouchData> {
     return new UpdateBinder(observer)
         .usingInteraction<Pan, SrcTgtTouchData>(() => new Pan(horizontal, minLength, pxTolerance));
 }
@@ -180,7 +179,7 @@ InteractionUpdateBinder<Interaction<SrcTgtTouchData, FSM>, SrcTgtTouchData> {
 /**
  * Creates a widget binding that uses the click interaction.
  */
-export function clickBinder(): InteractionBinder<Interaction<PointData, FSM>, PointData> {
+export function clickBinder(): InteractionBinder<Interaction<PointData>, PointData> {
     return new UpdateBinder(observer)
         .usingInteraction<Click, PointData>(() => new Click());
 }
@@ -188,7 +187,7 @@ export function clickBinder(): InteractionBinder<Interaction<PointData, FSM>, Po
 /**
  * Creates a widget binding that uses the double click interaction.
  */
-export function dbleClickBinder(): InteractionUpdateBinder<Interaction<PointData, FSM>, PointData> {
+export function dbleClickBinder(): InteractionUpdateBinder<Interaction<PointData>, PointData> {
     return new UpdateBinder(observer)
         .usingInteraction<DoubleClick, PointData>(() => new DoubleClick());
 }
@@ -196,7 +195,7 @@ export function dbleClickBinder(): InteractionUpdateBinder<Interaction<PointData
 /**
  * Creates a widget binding that uses the mouse press interaction.
  */
-export function pressBinder(): InteractionBinder<Interaction<PointData, FSM>, PointData> {
+export function pressBinder(): InteractionBinder<Interaction<PointData>, PointData> {
     return new UpdateBinder(observer)
         .usingInteraction<Press, PointData>(() => new Press());
 }
@@ -204,7 +203,7 @@ export function pressBinder(): InteractionBinder<Interaction<PointData, FSM>, Po
 /**
  * Creates a widget binding that uses the mouse scroll interaction.
  */
-export function scrollBinder(): InteractionBinder<Interaction<ScrollData, FSM>, ScrollData> {
+export function scrollBinder(): InteractionBinder<Interaction<ScrollData>, ScrollData> {
     return new UpdateBinder(observer)
         .usingInteraction<Scroll, ScrollData>(() => new Scroll());
 }
@@ -213,7 +212,7 @@ export function scrollBinder(): InteractionBinder<Interaction<ScrollData, FSM>, 
  * Creates a widget binding that uses the DnD interaction.
  * @param cancellable True: the escape key will cancels the DnD.
  */
-export function dndBinder(cancellable: boolean): InteractionUpdateBinder<Interaction<SrcTgtPointsData, FSM>, SrcTgtPointsData> {
+export function dndBinder(cancellable: boolean): InteractionUpdateBinder<Interaction<SrcTgtPointsData>, SrcTgtPointsData> {
     return new UpdateBinder(observer)
         .usingInteraction<DnD, SrcTgtPointsData>(() => new DnD(cancellable));
 }
@@ -221,7 +220,7 @@ export function dndBinder(cancellable: boolean): InteractionUpdateBinder<Interac
 /**
  * Creates a widget binding that uses the drag lock interaction.
  */
-export function dragLockBinder(): InteractionUpdateBinder<Interaction<SrcTgtPointsData, FSM>, SrcTgtPointsData> {
+export function dragLockBinder(): InteractionUpdateBinder<Interaction<SrcTgtPointsData>, SrcTgtPointsData> {
     return new UpdateBinder(observer)
         .usingInteraction<DragLock, SrcTgtPointsData>(() => new DragLock());
 }
@@ -230,7 +229,7 @@ export function dragLockBinder(): InteractionUpdateBinder<Interaction<SrcTgtPoin
  * Creates a widget binding that uses the key pressure interaction.
  * @param modifierAccepted True: the interaction will consider key modifiers.
  */
-export function keyPressBinder(modifierAccepted: boolean): KeyInteractionBinder<Interaction<KeyData, FSM>, KeyData> {
+export function keyPressBinder(modifierAccepted: boolean): KeyInteractionBinder<Interaction<KeyData>, KeyData> {
     return new KeysBinder(observer)
         .usingInteraction<KeyPressed, KeyData>(() => new KeyPressed(modifierAccepted));
 }
@@ -238,7 +237,7 @@ export function keyPressBinder(modifierAccepted: boolean): KeyInteractionBinder<
 /**
  * Creates a widget binding that uses the multiple key pressures interaction.
  */
-export function keysPressBinder(): KeyInteractionUpdateBinder<Interaction<KeysData, FSM>, KeysData> {
+export function keysPressBinder(): KeyInteractionUpdateBinder<Interaction<KeysData>, KeysData> {
     return new KeysBinder(observer)
         .usingInteraction<KeysPressed, KeysData>(() => new KeysPressed());
 }
@@ -246,7 +245,7 @@ export function keysPressBinder(): KeyInteractionUpdateBinder<Interaction<KeysDa
 /**
  * Creates a widget binding that uses the multiple key typings interaction.
  */
-export function keysTypeBinder(): KeyInteractionUpdateBinder<Interaction<KeysData, FSM>, KeysData> {
+export function keysTypeBinder(): KeyInteractionUpdateBinder<Interaction<KeysData>, KeysData> {
     return new KeysBinder(observer)
         .usingInteraction<KeysTyped, KeysData>(() => new KeysTyped());
 }
@@ -254,7 +253,7 @@ export function keysTypeBinder(): KeyInteractionUpdateBinder<Interaction<KeysDat
 /**
  * Creates a widget binding that uses the key typing interaction.
  */
-export function keyTypeBinder(): KeyInteractionBinder<Interaction<KeyData, FSM>, KeyData> {
+export function keyTypeBinder(): KeyInteractionBinder<Interaction<KeyData>, KeyData> {
     return new KeysBinder(observer)
         .usingInteraction<KeyTyped, KeyData>(() => new KeyTyped());
 }
