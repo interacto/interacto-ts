@@ -56,7 +56,7 @@ class CmdStubUndoable extends StubCmd implements Undoable {
         return true;
     }
 
-    public canDo(): boolean {
+    public canExecute(): boolean {
         return true;
     }
 

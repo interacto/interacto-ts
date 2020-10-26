@@ -81,7 +81,7 @@ afterEach(() => {
 });
 
 test("testNothingDoneIsDeactivated", () => {
-    const dotItSpy = jest.spyOn(cmd, "doIt");
+    const dotItSpy = jest.spyOn(cmd, "execute");
     binding.setActivated(false);
     jest.spyOn(binding, "ifCmdHadNoEffect");
     jest.spyOn(binding, "ifCmdHadEffects");
@@ -96,7 +96,7 @@ test("testNothingDoneIsDeactivated", () => {
 });
 
 test("testCmdCreatedExecSavedWhenActivated", () => {
-    const dotItSpy = jest.spyOn(cmd, "doIt");
+    const dotItSpy = jest.spyOn(cmd, "execute");
     jest.spyOn(binding, "ifCmdHadNoEffect");
     jest.spyOn(binding, "ifCmdHadEffects");
     jest.spyOn(binding, "ifCannotExecuteCmd");
@@ -111,7 +111,7 @@ test("testCmdCreatedExecSavedWhenActivated", () => {
 
 test("testCmdKOWhenNotWhenOK", () => {
     whenValue = (): boolean => false;
-    const dotItSpy = jest.spyOn(cmd, "doIt");
+    const dotItSpy = jest.spyOn(cmd, "execute");
     jest.spyOn(binding, "ifCmdHadNoEffect");
     jest.spyOn(binding, "ifCmdHadEffects");
     jest.spyOn(binding, "ifCannotExecuteCmd");
@@ -138,7 +138,7 @@ test("testCmdKOWhenCannotDoCmd", () => {
 });
 
 test("testWhenOKCanDoButNoEffect", () => {
-    const dotItSpy = jest.spyOn(cmd, "doIt");
+    const dotItSpy = jest.spyOn(cmd, "execute");
     jest.spyOn(binding, "ifCmdHadNoEffect");
     jest.spyOn(binding, "ifCmdHadEffects");
     jest.spyOn(binding, "ifCannotExecuteCmd");

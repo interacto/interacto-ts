@@ -19,7 +19,7 @@ let cmd: AnonCmd;
 
 test("testCanDoOKCmd", () => {
     cmd = new AnonCmd(() => { });
-    expect(cmd.canDo()).toBeTruthy();
+    expect(cmd.canExecute()).toBeTruthy();
 });
 
 test("testExecute", () => {
@@ -27,13 +27,13 @@ test("testExecute", () => {
     cmd = new AnonCmd(() => {
         ok = true;
     });
-    cmd.doIt();
+    cmd.execute();
     expect(ok).toBeTruthy();
 });
 
 test("testHadEffect", () => {
     cmd = new AnonCmd(() => { });
-    cmd.doIt();
+    cmd.execute();
     cmd.done();
     expect(cmd.hadEffect()).toBeTruthy();
 });

@@ -35,7 +35,7 @@ describe("base redo testing", () => {
 
     test("testCannotDo", () => {
         collector.getLastRedo.mockReturnValue(undefined);
-        expect(cmd.canDo()).toBeFalsy();
+        expect(cmd.canExecute()).toBeFalsy();
     });
 
     describe("with undoable", () => {
@@ -47,16 +47,16 @@ describe("base redo testing", () => {
         });
 
         test("testCanDo", () => {
-            expect(cmd.canDo()).toBeTruthy();
+            expect(cmd.canExecute()).toBeTruthy();
         });
 
         test("testDo", () => {
-            cmd.doIt();
+            cmd.execute();
             expect(collector.redo).toHaveBeenCalledTimes(1);
         });
 
         test("testHadEffects", () => {
-            cmd.doIt();
+            cmd.execute();
             cmd.done();
             expect(cmd.hadEffect()).toBeTruthy();
         });

@@ -24,11 +24,11 @@ export class Redo extends CommandBase {
         super();
     }
 
-    public canDo(): boolean {
+    public canExecute(): boolean {
         return UndoCollector.getInstance().getLastRedo() !== undefined;
     }
 
-    protected doCmdBody(): void {
+    protected execution(): void {
         UndoCollector.getInstance().redo();
     }
 }

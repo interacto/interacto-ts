@@ -24,11 +24,11 @@ export class StubCmd extends CommandBase {
         this.candoValue = candoValue ?? false;
     }
 
-    protected doCmdBody(): void {
+    protected execution(): void {
         this.exec++;
     }
 
-    public canDo(): boolean {
+    public canExecute(): boolean {
         return this.candoValue;
     }
 }

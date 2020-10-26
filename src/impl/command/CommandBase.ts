@@ -46,14 +46,14 @@ export abstract class CommandBase implements Command {
     protected createMemento(): void {
     }
 
-    public doIt(): boolean {
+    public execute(): boolean {
         let ok: boolean;
-        if ((this.status === CmdStatus.created || this.status === CmdStatus.executed) && this.canDo()) {
+        if ((this.status === CmdStatus.created || this.status === CmdStatus.executed) && this.canExecute()) {
             if (this.status === CmdStatus.created) {
                 this.createMemento();
             }
             ok = true;
-            this.doCmdBody();
+            this.execution();
             this.status = CmdStatus.executed;
         } else {
             ok = false;
@@ -63,9 +63,9 @@ export abstract class CommandBase implements Command {
 
     /**
      * This method contains the statements to execute the command.
-     * This method is automatically called by DoIt and must not be called explicitly.
+     * This method is automatically called by 'execute' and must not be called explicitly.
      */
-    protected abstract doCmdBody(): void;
+    protected abstract execution(): void;
 
     public getRegistrationPolicy(): RegistrationPolicy {
         return this.hadEffect() ? RegistrationPolicy.limited : RegistrationPolicy.none;
@@ -93,7 +93,7 @@ export abstract class CommandBase implements Command {
         return this.status;
     }
 
-    public canDo(): boolean {
+    public canExecute(): boolean {
         return true;
     }
 }

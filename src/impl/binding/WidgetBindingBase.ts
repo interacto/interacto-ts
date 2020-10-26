@@ -246,7 +246,7 @@ implements WidgetBinding<C, I, D> {
                 if (this.asLogCmd) {
                     catCommand.info("Try to execute command (continuous execution)");
                 }
-                const ok = this.cmd?.doIt() ?? false;
+                const ok = this.cmd?.execute() ?? false;
 
                 if (this.asLogCmd) {
                     catCommand.info(`Continuous command execution had this result: ${String(ok)}`);
@@ -318,7 +318,7 @@ implements WidgetBinding<C, I, D> {
     }
 
     private executeCmd(cmd: C): void {
-        this.afterCmdExecuted(cmd, cmd.doIt());
+        this.afterCmdExecuted(cmd, cmd.execute());
     }
 
     protected afterCmdExecuted(cmd: C, ok: boolean): void {

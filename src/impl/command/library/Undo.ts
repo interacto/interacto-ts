@@ -24,11 +24,11 @@ export class Undo extends CommandBase {
         super();
     }
 
-    public canDo(): boolean {
+    public canExecute(): boolean {
         return UndoCollector.getInstance().getLastUndo() !== undefined;
     }
 
-    protected doCmdBody(): void {
+    protected execution(): void {
         UndoCollector.getInstance().undo();
     }
 }

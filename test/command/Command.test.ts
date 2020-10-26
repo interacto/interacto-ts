@@ -29,11 +29,11 @@ beforeEach(() => {
 
 test("cando default", () => {
     const command = new class extends CommandBase {
-        protected doCmdBody(): void {
+        protected execution(): void {
         }
     }();
 
-    expect(command.canDo()).toBeTruthy();
+    expect(command.canExecute()).toBeTruthy();
 });
 
 test("testCommandStatusAfterCreation", () => {
@@ -47,30 +47,30 @@ test("testCommandStatusAfterFlush", () => {
 
 test("testCommandCannotDoItWhenFlushed", () => {
     cmd.flush();
-    expect(cmd.doIt()).toBeFalsy();
+    expect(cmd.execute()).toBeFalsy();
 });
 
 test("testCommandCannotDoItWhenDone", () => {
     cmd.done();
-    expect(cmd.doIt()).toBeFalsy();
+    expect(cmd.execute()).toBeFalsy();
 });
 
 test("testCommandCannotDoItWhenCancelled", () => {
     cmd.cancel();
-    expect(cmd.doIt()).toBeFalsy();
+    expect(cmd.execute()).toBeFalsy();
 });
 
 test("testCommandCannotDoItWhenCannotDoAndCreated", () => {
     cmd.candoValue = false;
-    expect(cmd.doIt()).toBeFalsy();
+    expect(cmd.execute()).toBeFalsy();
 });
 
 test("testCommandCanDoItWhenCanDo", () => {
-    expect(cmd.doIt()).toBeTruthy();
+    expect(cmd.execute()).toBeTruthy();
 });
 
 test("testCommandIsExecutedWhenDoIt", () => {
-    cmd.doIt();
+    cmd.execute();
     expect(cmd.getStatus()).toStrictEqual(CmdStatus.executed);
 });
 
@@ -95,7 +95,7 @@ test("testCommandHadEffectWhenNotDoneAndFlushed", () => {
 
 test("testCommandHadEffectWhenNotDoneAndExecuted", () => {
     cmd.candoValue = true;
-    cmd.doIt();
+    cmd.execute();
     expect(cmd.hadEffect()).toBeFalsy();
 });
 
@@ -126,7 +126,7 @@ test("testCommandDoneWhenCreated", () => {
 });
 
 test("testCommandDoneWhenExecuted", () => {
-    cmd.doIt();
+    cmd.execute();
     cmd.done();
     expect(cmd.getStatus()).toStrictEqual(CmdStatus.done);
 });
@@ -151,7 +151,7 @@ test("testIsDoneWhenDone", () => {
 });
 
 test("testIsDoneWhenExecuted", () => {
-    cmd.doIt();
+    cmd.execute();
     expect(cmd.isDone()).toBeFalsy();
 });
 
@@ -165,7 +165,7 @@ test("testCancel", () => {
 });
 
 test("testExecutedTwoTimes", () => {
-    cmd.doIt();
-    cmd.doIt();
+    cmd.execute();
+    cmd.execute();
     expect(cmd.exec).toStrictEqual(2);
 });

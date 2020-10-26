@@ -19,9 +19,6 @@ import {CommandBase} from "./CommandBase";
  * An anonymous command that takes an anonymous function as a parameter corresponding to the command to execute.
  * The goal of this command is to avoid the creation of a command class for a small command.
  * @author Arnaud Blouin
- * @param {() => void} function
- * @class
- * @extends CommandBase
  */
 export class AnonCmd extends CommandBase {
     private readonly exec: () => void;
@@ -31,15 +28,11 @@ export class AnonCmd extends CommandBase {
         this.exec = fct;
     }
 
-    /**
-     *
-     * @return {boolean}
-     */
-    public canDo(): boolean {
+    public canExecute(): boolean {
         return true;
     }
 
-    protected doCmdBody(): void {
+    protected execution(): void {
         this.exec();
     }
 }

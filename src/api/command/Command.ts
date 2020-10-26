@@ -37,13 +37,13 @@ export interface Command {
      * Executes (if possible) the commands.
      * @return True: the command has been executed.
      */
-    doIt(): boolean;
+    execute(): boolean;
 
     /**
      * Checks whether the command can be executed.
      * @return True if the command can be executed.
      */
-    canDo(): boolean;
+    canExecute(): boolean;
 
     /**
      * State whether the execution of this command has effects on the system.
