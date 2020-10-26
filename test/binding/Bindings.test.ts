@@ -13,7 +13,7 @@
  */
 
 import {
-    AnonCmd,
+    AnonCmd, catBinder,
     clickBinder,
     Command,
     CommandsRegistry,
@@ -21,7 +21,7 @@ import {
     dndBinder,
     dragLockBinder,
     EventRegistrationToken,
-    Interaction,
+    Interaction, InteractionCmdUpdateBinder,
     InteractionData,
     keyPressBinder,
     keyTypeBinder,
@@ -239,6 +239,161 @@ test("touch DnD binding", () => {
     elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 1, elt, 11, 23, 110, 230));
 
     expect(producedCmds).toHaveLength(1);
+});
+
+describe("check when it crashes in routines", () => {
+    let baseBinder: InteractionCmdUpdateBinder<StubCmd, Interaction<SrcTgtTouchData>, SrcTgtTouchData>;
+    let err: Error;
+    let cmd: StubCmd;
+
+    beforeEach(() => {
+        jest.spyOn(catBinder, "error");
+        err = new Error("It crashed");
+        cmd = new StubCmd(true);
+        baseBinder = touchDnDBinder()
+            .on(elt)
+            .toProduce((_i: SrcTgtTouchData) => cmd);
+    });
+
+    test("when it crashes in 'first'", () => {
+        binding = baseBinder
+            .first((_c: StubCmd, _i: SrcTgtTouchData) => {
+                throw err;
+            })
+            .bind();
+
+        disposable = binding.produces().subscribe(c => producedCmds.push(c));
+
+        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchmove, 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 1, elt, 11, 23, 110, 230));
+
+        expect(producedCmds).toHaveLength(1);
+        expect(catBinder.error).toHaveBeenCalledWith("Crash in 'first'", err);
+    });
+
+    test("when it crashes in 'then'", () => {
+        binding = baseBinder
+            .then((_c: StubCmd, _i: SrcTgtTouchData) => {
+                throw err;
+            })
+            .bind();
+
+        disposable = binding.produces().subscribe(c => producedCmds.push(c));
+
+        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchmove, 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 1, elt, 11, 23, 110, 230));
+
+        expect(producedCmds).toHaveLength(1);
+        expect(catBinder.error).toHaveBeenCalledWith("Crash in 'then'", err);
+    });
+
+    test("when it crashes in 'end'", () => {
+        binding = baseBinder
+            .end((_c: StubCmd, _i: SrcTgtTouchData) => {
+                throw err;
+            })
+            .bind();
+
+        disposable = binding.produces().subscribe(c => producedCmds.push(c));
+
+        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchmove, 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 1, elt, 11, 23, 110, 230));
+
+        expect(producedCmds).toHaveLength(1);
+        expect(catBinder.error).toHaveBeenCalledWith("Crash in 'end'", err);
+    });
+
+    test("when it crashes in 'endOrCancel'", () => {
+        binding = baseBinder
+            .endOrCancel((_i: SrcTgtTouchData) => {
+                throw err;
+            })
+            .bind();
+
+        disposable = binding.produces().subscribe(c => producedCmds.push(c));
+
+        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchmove, 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 1, elt, 11, 23, 110, 230));
+
+        expect(producedCmds).toHaveLength(1);
+        expect(catBinder.error).toHaveBeenCalledWith("Crash in 'endOrCancel'", err);
+    });
+
+    test("when it crashes in 'cancel'", () => {
+        binding = dndBinder(true)
+            .on(elt)
+            .toProduce((_i: SrcTgtTouchData) => new StubCmd(true))
+            .cancel((_i: SrcTgtTouchData) => {
+                throw err;
+            })
+            .bind();
+
+        disposable = binding.produces().subscribe(c => producedCmds.push(c));
+
+        elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, elt));
+        elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, elt));
+        elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "Escape"));
+
+        expect(producedCmds).toHaveLength(0);
+        expect(catBinder.error).toHaveBeenCalledWith("Crash in 'cancel'", err);
+    });
+
+    test("when it crashes in 'ifHadNoEffect'", () => {
+        jest.spyOn(cmd, "hadEffect").mockReturnValue(false);
+        binding = baseBinder
+            .ifHadNoEffect((_c, _i: SrcTgtTouchData) => {
+                throw err;
+            })
+            .bind();
+
+        disposable = binding.produces().subscribe(c => producedCmds.push(c));
+
+        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchmove, 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 1, elt, 11, 23, 110, 230));
+
+        expect(producedCmds).toHaveLength(1);
+        expect(catBinder.error).toHaveBeenCalledWith("Crash in 'ifHadNoEffect'", err);
+    });
+
+    test("when it crashes in 'ifHadEffect'", () => {
+        jest.spyOn(cmd, "hadEffect").mockReturnValue(true);
+        binding = baseBinder
+            .ifHadEffects((_c, _i: SrcTgtTouchData) => {
+                throw err;
+            })
+            .bind();
+
+        disposable = binding.produces().subscribe(c => producedCmds.push(c));
+
+        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchmove, 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 1, elt, 11, 23, 110, 230));
+
+        expect(producedCmds).toHaveLength(1);
+        expect(catBinder.error).toHaveBeenCalledWith("Crash in 'ifHadEffects'", err);
+    });
+
+    test("when it crashes in 'when'", () => {
+        binding = baseBinder
+            .when((_i: SrcTgtTouchData) => {
+                throw err;
+            })
+            .bind();
+
+        disposable = binding.produces().subscribe(c => producedCmds.push(c));
+
+        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchmove, 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 1, elt, 11, 23, 110, 230));
+
+        expect(producedCmds).toHaveLength(0);
+        expect(catBinder.error).toHaveBeenCalledWith("Crash in 'when'", err);
+    });
 });
 
 

@@ -87,47 +87,75 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
     public first(): void {
         const cmd = this.getCommand();
         if (this.execInitCmd !== undefined && cmd !== undefined) {
-            this.execInitCmd(cmd, this.getInteraction().getData());
+            try {
+                this.execInitCmd(cmd, this.getInteraction().getData());
+            } catch (ex) {
+                catBinder.error("Crash in 'first'", ex);
+            }
         }
     }
 
     public then(): void {
         const cmd = this.getCommand();
         if (this.execUpdateCmd !== undefined && cmd !== undefined) {
-            this.execUpdateCmd(cmd, this.getInteraction().getData());
+            try {
+                this.execUpdateCmd(cmd, this.getInteraction().getData());
+            } catch (ex) {
+                catBinder.error("Crash in 'then'", ex);
+            }
         }
     }
 
     public end(): void {
         const cmd = this.getCommand();
         if (this.onEnd !== undefined && cmd !== undefined) {
-            this.onEnd(cmd, this.getInteraction().getData());
+            try {
+                this.onEnd(cmd, this.getInteraction().getData());
+            } catch (ex) {
+                catBinder.error("Crash in 'end'", ex);
+            }
         }
     }
 
     public cancel(): void {
         if (this.cancelFct !== undefined) {
-            this.cancelFct(this.getInteraction().getData());
+            try {
+                this.cancelFct(this.getInteraction().getData());
+            } catch (ex) {
+                catBinder.error("Crash in 'cancel'", ex);
+            }
         }
     }
 
     public endOrCancel(): void {
         if (this.endOrCancelFct !== undefined) {
-            this.endOrCancelFct(this.getInteraction().getData());
+            try {
+                this.endOrCancelFct(this.getInteraction().getData());
+            } catch (ex) {
+                catBinder.error("Crash in 'endOrCancel'", ex);
+            }
         }
     }
 
     public ifCmdHadNoEffect(): void {
         const cmd = this.getCommand();
         if (this.hadNoEffectFct !== undefined && cmd !== undefined) {
-            this.hadNoEffectFct(cmd, this.getInteraction().getData());
+            try {
+                this.hadNoEffectFct(cmd, this.getInteraction().getData());
+            } catch (ex) {
+                catBinder.error("Crash in 'ifHadNoEffect'", ex);
+            }
         }
     }
 
     public ifCmdHadEffects(): void {
         const cmd = this.getCommand();
         if (this.hadEffectsFct !== undefined && cmd !== undefined) {
-            this.hadEffectsFct(cmd, this.getInteraction().getData());
+            try {
+                this.hadEffectsFct(cmd, this.getInteraction().getData());
+            } catch (ex) {
+                catBinder.error("Crash in 'ifHadEffects'", ex);
+            }
         }
     }
 
@@ -139,7 +167,13 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
     }
 
     public when(): boolean {
-        const ok = this.checkInteraction === undefined || this.checkInteraction(this.getInteraction().getData());
+        let ok;
+        try {
+            ok = this.checkInteraction === undefined || this.checkInteraction(this.getInteraction().getData());
+        } catch (ex) {
+            ok = false;
+            catBinder.error("Crash in 'when'", ex);
+        }
         if (this.asLogBinding) {
             catBinder.info(`Checking condition:  ${String(ok)}`);
         }
