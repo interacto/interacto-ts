@@ -12,13 +12,11 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export function remove<T>(array: Array<T>, elt: T): boolean {
+export function remove<T>(array: Array<T>, elt: T): void {
     const index = array.indexOf(elt);
     if (index > -1) {
         array.splice(index, 1);
-        return true;
     }
-    return false;
 }
 
 export function removeAt<T>(array: Array<T>, index: number): T | undefined {
