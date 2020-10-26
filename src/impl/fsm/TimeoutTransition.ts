@@ -15,7 +15,7 @@
 import {TransitionBase} from "./TransitionBase";
 import {OutputState} from "../../api/fsm/OutputState";
 import {InputState} from "../../api/fsm/InputState";
-import {ErrorCatcher} from "../error/ErrorCatcher";
+import {catFSM} from "../../api/logging/ConfigLog";
 
 
 /**
@@ -65,7 +65,7 @@ export class TimeoutTransition extends TransitionBase {
                     this.timeouted = true;
                     this.src.getFSM().onTimeout();
                 } catch (ex) {
-                    ErrorCatcher.getInstance().reportError(ex);
+                    catFSM.error("Exception on timeout of a timeout transition", ex);
                 }
             }, time);
         }

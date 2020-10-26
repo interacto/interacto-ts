@@ -59,7 +59,6 @@ export * from "./impl/command/CommandBase";
 export * from "./impl/command/CommandsRegistry";
 export * from "./impl/command/library/Redo";
 export * from "./impl/command/library/Undo";
-export * from "./impl/error/ErrorCatcher";
 export * from "./impl/fsm/BoxCheckPressedTransition";
 export * from "./impl/fsm/ButtonPressedTransition";
 export * from "./impl/fsm/CancelFSMException";

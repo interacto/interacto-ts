@@ -15,7 +15,6 @@
 import {Observable, Subject} from "rxjs";
 import {CmdStatus, Command, RegistrationPolicy} from "../../api/command/Command";
 import {CommandsRegistry} from "../command/CommandsRegistry";
-import {ErrorCatcher} from "../error/ErrorCatcher";
 import {CancelFSMException} from "../fsm/CancelFSMException";
 import {FSM} from "../../api/fsm/FSM";
 import {InteractionData} from "../../api/interaction/InteractionData";
@@ -106,7 +105,7 @@ implements WidgetBinding<C, I, D> {
         try {
             return this.cmdProducer(this.interaction.getData());
         } catch (ex) {
-            ErrorCatcher.getInstance().reportError(ex);
+            catBinder.error("Error while creating a command", ex);
             return undefined;
         }
     }

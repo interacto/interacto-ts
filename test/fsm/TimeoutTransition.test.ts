@@ -12,13 +12,13 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {ErrorCatcher} from "../../src/impl/error/ErrorCatcher";
 import {CancelFSMException} from "../../src/impl/fsm/CancelFSMException";
 import {FSMImpl} from "../../src/impl/fsm/FSMImpl";
 import {InputState} from "../../src/api/fsm/InputState";
 import {OutputState} from "../../src/api/fsm/OutputState";
 import {TimeoutTransition} from "../../src/impl/fsm/TimeoutTransition";
 import {mock, MockProxy} from "jest-mock-extended";
+import {catFSM} from "../../src/api/logging/ConfigLog";
 
 let evt: TimeoutTransition;
 let src: OutputState & MockProxy<OutputState>;
@@ -37,7 +37,7 @@ beforeEach(() => {
 
 afterEach(() => {
     jest.clearAllTimers();
-    ErrorCatcher.setInstance(new ErrorCatcher());
+    jest.clearAllMocks();
 });
 
 test("testIsGuardOKAfterTimeout", () => {
@@ -141,18 +141,14 @@ test("execute cancels", () => {
 
 test("fsm throws exception in thread", () => {
     const ex = new Error("foo");
-    const errors: Array<Error> = [];
-    const disposable = ErrorCatcher.getInstance().getErrors()
-        .subscribe(err => errors.push(err));
+    jest.spyOn(catFSM, "error");
     jest.spyOn(fsm, "onTimeout");
     fsm.onTimeout.mockImplementation((): void => {
         throw ex;
     });
     evt.startTimeout();
     jest.runOnlyPendingTimers();
-    disposable.unsubscribe();
-    expect(errors).toHaveLength(1);
-    expect(errors[0]).toBe(ex);
+    expect(catFSM.error).toHaveBeenCalledWith("Exception on timeout of a timeout transition", ex);
 });
 
 test("testExecuteCallFSMTimeout", () => {
