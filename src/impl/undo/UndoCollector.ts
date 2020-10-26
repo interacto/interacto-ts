@@ -100,8 +100,7 @@ export class UndoCollector {
 
     /**
      * Adds an undoable object to the collector.
-     * @param {*} undoable The undoable object to add.
-     * @param {*} undoHandler The handler that produced or is associated to the undoable object.
+     * @param undoable The undoable object to add.
      */
     public add(undoable: Undoable): void {
         if (this.sizeMax > 0) {
@@ -186,14 +185,14 @@ export class UndoCollector {
     }
 
     /**
-     * @return {number} The max number of saved undoable objects.
+     * @return The max number of saved undoable objects.
      */
     public getSizeMax(): number {
         return this.sizeMax;
     }
 
     /**
-     * @param {number} max The max number of saved undoable objects. Must be great than 0.
+     * @param max The max number of saved undoable objects. Must be great than 0.
      */
     public setSizeMax(max: number): void {
         if (max >= 0) {
@@ -210,14 +209,14 @@ export class UndoCollector {
     }
 
     /**
-     * @return {*[]} The stack of saved undoable objects.
+     * @return The stack of saved undoable objects.
      */
     public getUndo(): Array<Undoable> {
         return this.undos;
     }
 
     /**
-     * @return {*[]} The stack of saved redoable objects
+     * @return The stack of saved redoable objects
      */
     public getRedo(): Array<Undoable> {
         return this.redos;

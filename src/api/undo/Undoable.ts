@@ -28,7 +28,7 @@ export interface Undoable {
     redo(): void;
 
     /**
-     * @return {string} The name of the undo command.
+     * @return The name of the undo command.
      */
     getUndoName(): string;
 }

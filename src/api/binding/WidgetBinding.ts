@@ -69,7 +69,7 @@ export interface WidgetBinding<C extends Command, I extends Interaction<D>, D ex
     ifCannotExecuteCmd(): void;
 
     /**
-     * @return {boolean} True if the condition of the widget binding is respected.
+     * @return True if the condition of the widget binding is respected.
      */
     when(): boolean;
 
@@ -79,34 +79,33 @@ export interface WidgetBinding<C extends Command, I extends Interaction<D>, D ex
     getInteraction(): I;
 
     /**
-     * @return {*} The command in progress or null.
+     * @return The command in progress or null.
      */
     getCommand(): C | undefined;
 
     /**
-     * @return {boolean} True if the widget binding is activated.
+     * @return True if the widget binding is activated.
      */
     isActivated(): boolean;
 
     /**
      * Activates the widget binding.
-     * @param {boolean} activated True: the widget binding is activated. Otherwise, it is desactivated.
+     * @param activated True: the widget binding is activated. Otherwise, it is desactivated.
      */
     setActivated(activated: boolean): void;
 
     /**
-     * @return {boolean} True: if the widget binding is currently used.
+     * @return True: if the widget binding is currently used.
      */
     isRunning(): boolean;
 
     /**
      * States whether the interaction must continue to run while the condition of the binding is not fulfilled at the interaction start.
-     * @return {boolean}
      */
     isStrictStart(): boolean;
 
     /**
-     * @return {boolean} True: the command must be executed on each step of the interaction.
+     * @return True: the command must be executed on each step of the interaction.
      */
     isContinuousCmdExec(): boolean;
 

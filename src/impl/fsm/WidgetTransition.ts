@@ -36,7 +36,7 @@ export abstract class WidgetTransition<T> extends TransitionBase {
     }
 
     /**
-     * @return {*} The widget used.
+     * @return The widget used.
      */
     public getWidget(): T {
         return this.widget;
@@ -44,7 +44,7 @@ export abstract class WidgetTransition<T> extends TransitionBase {
 
     /**
      * Sets the widget.
-     * @param {*} widget The widget to set. Nothign done if null.
+     * @param widget The widget to set. Nothing done if null.
      */
     public setWidget(widget: T): void {
         this.widget = widget;

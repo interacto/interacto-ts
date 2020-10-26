@@ -14,8 +14,6 @@
 
 /**
  * The default constructor of the exception.
- * @param {*} clazz The class of the command that want to be undone/redone.
- * @extends Error
  * @author Arnaud BLOUIN
  */
 export class MustBeUndoableCmdException extends Error {

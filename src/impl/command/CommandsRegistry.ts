@@ -63,7 +63,7 @@ export class CommandsRegistry {
     }
 
     /**
-     * @return {*[]} The stored commands. Cannot be null. Because of concurrency, you should not modify this list.
+     * @return The stored commands. Cannot be null. Because of concurrency, you should not modify this list.
      */
     public getCommands(): Array<Command> {
         return this.cmds;
@@ -100,7 +100,7 @@ export class CommandsRegistry {
 
     /**
      * Removes the command from the register. The command is then flushed.
-     * @param {*} cmd The command to remove.
+     * @param cmd The command to remove.
      */
     public removeCommand(cmd: Command): void {
         remove(this.cmds, cmd);
@@ -119,7 +119,7 @@ export class CommandsRegistry {
     /**
      * Aborts the given command, i.e. the command is cancelled and removed from the register.
      * Handlers are then notified. The command is finally flushed.
-     * @param {*} cmd The command to cancel.
+     * @param cmd The command to cancel.
      */
     public cancelCmd(cmd: Command): void {
         cmd.cancel();
@@ -128,7 +128,7 @@ export class CommandsRegistry {
     }
 
     /**
-     * @return {number} The maximal number of commands that the register can contain.
+     * @return The maximal number of commands that the register can contain.
      */
     public getSizeMax(): number {
         return this.sizeMax;
@@ -139,7 +139,7 @@ export class CommandsRegistry {
      * In the case that commands have to be removed (because the new size is smaller than the old one),
      * the necessary number of the oldest and cleanable commands (cf. Command::getRegistrationPolicy)
      * are flushed and removed from the register.
-     * @param {number} newSizeMax The max number of commands that can contain the register. Must be equal or greater than 0.
+     * @param newSizeMax The max number of commands that can contain the register. Must be equal or greater than 0.
      */
     public setSizeMax(newSizeMax: number): void {
         if (newSizeMax >= 0) {
