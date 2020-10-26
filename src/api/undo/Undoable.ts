@@ -15,7 +15,6 @@
 /**
  * An interface for undoable objects.
  * @author Arnaud BLOUIN
- * @class
  */
 export interface Undoable {
     /**

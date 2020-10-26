@@ -15,7 +15,6 @@
 /**
  * Logging level to log interactions, bindings, and commands.
  * @author Arnaud Blouin
- * @enum
  * @property {LogLevel} interaction
  * @property {LogLevel} binding
  * @property {LogLevel} command
