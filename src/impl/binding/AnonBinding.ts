@@ -162,7 +162,11 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
     public ifCannotExecuteCmd(): void {
         const cmd = this.getCommand();
         if (this.cannotExecFct !== undefined && cmd !== undefined) {
-            this.cannotExecFct(cmd, this.getInteraction().getData());
+            try {
+                this.cannotExecFct(cmd, this.getInteraction().getData());
+            } catch (ex) {
+                catBinder.error("Crash in 'ifCannotExecute'", ex);
+            }
         }
     }
 

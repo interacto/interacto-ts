@@ -120,6 +120,12 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
         return dup;
     }
 
+    public ifCannotExecute(cannotExec: (c: C, i: D) => void): Binder<C, I, D> {
+        const dup = this.duplicate();
+        dup.cannotExecFct = cannotExec;
+        return dup;
+    }
+
     public end(onEndFct: (c: C, i: D) => void): Binder<C, I, D> {
         const dup = this.duplicate();
         dup.onEnd = onEndFct;

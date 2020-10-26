@@ -120,6 +120,10 @@ export class UpdateBinder<C extends Command, I extends Interaction<D>, D extends
         return super.ifHadNoEffect(noEffectFct) as UpdateBinder<C, I, D>;
     }
 
+    public ifCannotExecute(cannotExec: (c: C, i: D) => void): UpdateBinder<C, I, D> {
+        return super.ifCannotExecute(cannotExec) as UpdateBinder<C, I, D>;
+    }
+
     public end(onEndFct: (c: C, i: D) => void): UpdateBinder<C, I, D> {
         return super.end(onEndFct) as UpdateBinder<C, I, D>;
     }

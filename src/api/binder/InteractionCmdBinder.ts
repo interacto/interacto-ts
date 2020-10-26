@@ -34,6 +34,8 @@ export interface InteractionCmdBinder<C extends Command, I extends Interaction<D
 
     ifHadNoEffect(noEffectFct: (c: C, i: D) => void): InteractionCmdBinder<C, I, D>;
 
+    ifCannotExecute(cannotExec: (c: C, i: D) => void): InteractionCmdBinder<C, I, D>;
+
     /**
     * Specifies what to do end when an interaction ends (when the last event of the interaction has occurred, but just after
     * the interaction is reinitialised and the command finally executed and discarded / saved).

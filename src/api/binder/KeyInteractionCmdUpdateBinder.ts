@@ -51,6 +51,8 @@ export interface KeyInteractionCmdUpdateBinder<C extends Command, I extends Inte
 
     ifHadNoEffect(noEffectFct: (c: C, i: D) => void): KeyInteractionCmdUpdateBinder<C, I, D>;
 
+    ifCannotExecute(cannotExec: (c: C, i: D) => void): KeyInteractionCmdUpdateBinder<C, I, D>;
+
     end(onEnd: (c: C, i: D) => void): KeyInteractionCmdUpdateBinder<C, I, D>;
 
     stopImmediatePropagation(): KeyInteractionCmdUpdateBinder<C, I, D>;

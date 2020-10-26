@@ -36,6 +36,8 @@ export interface KeyInteractionCmdBinder<C extends Command, I extends Interactio
 
     ifHadNoEffect(noEffectFct: (c: C, i: D) => void): KeyInteractionCmdBinder<C, I, D>;
 
+    ifCannotExecute(cannotExec: (c: C, i: D) => void): KeyInteractionCmdBinder<C, I, D>;
+
     end(onEnd: (c: C, i: D) => void): KeyInteractionCmdBinder<C, I, D>;
 
     with(...codes: Array<string>): KeyInteractionCmdBinder<C, I, D>;

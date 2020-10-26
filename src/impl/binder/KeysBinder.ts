@@ -93,6 +93,10 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, D extends I
         return super.ifHadNoEffect(noEffectFct) as KeysBinder<C, I, D>;
     }
 
+    public ifCannotExecute(cannotExec: (c: C, i: D) => void): KeysBinder<C, I, D> {
+        return super.ifCannotExecute(cannotExec) as KeysBinder<C, I, D>;
+    }
+
     public end(onEndFct: (c: C, i: D) => void): KeysBinder<C, I, D> {
         return super.end(onEndFct) as KeysBinder<C, I, D>;
     }

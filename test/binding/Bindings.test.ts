@@ -241,6 +241,25 @@ test("touch DnD binding", () => {
     expect(producedCmds).toHaveLength(1);
 });
 
+
+test("when it crashes in 'ifCannotExecute'", () => {
+    const mockFn = jest.fn();
+    const cmd = new StubCmd(false);
+    binding = pressBinder()
+        .on(elt)
+        .toProduce((_i: SrcTgtTouchData) => cmd)
+        .ifCannotExecute(mockFn)
+        .bind();
+
+    disposable = binding.produces().subscribe(c => producedCmds.push(c));
+
+    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, elt, 11, 23, 110, 230));
+
+    expect(mockFn).toHaveBeenCalledTimes(1);
+    expect(producedCmds).toHaveLength(0);
+    expect(producedCmds).toHaveLength(0);
+});
+
 describe("check when it crashes in routines", () => {
     let baseBinder: InteractionCmdUpdateBinder<StubCmd, Interaction<SrcTgtTouchData>, SrcTgtTouchData>;
     let err: Error;
@@ -393,6 +412,24 @@ describe("check when it crashes in routines", () => {
 
         expect(producedCmds).toHaveLength(0);
         expect(catBinder.error).toHaveBeenCalledWith("Crash in 'when'", err);
+    });
+
+    test("when it crashes in 'ifCannotExecute'", () => {
+        cmd = new StubCmd(false);
+        binding = baseBinder
+            .ifCannotExecute((_c: StubCmd, _i: SrcTgtTouchData) => {
+                throw err;
+            })
+            .bind();
+
+        disposable = binding.produces().subscribe(c => producedCmds.push(c));
+
+        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchmove, 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 1, elt, 11, 23, 110, 230));
+
+        expect(producedCmds).toHaveLength(0);
+        expect(catBinder.error).toHaveBeenCalledWith("Crash in 'ifCannotExecute'", err);
     });
 });
 

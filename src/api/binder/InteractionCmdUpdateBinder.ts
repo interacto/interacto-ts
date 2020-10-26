@@ -54,6 +54,8 @@ export interface InteractionCmdUpdateBinder<C extends Command, I extends Interac
 
     ifHadNoEffect(noEffectFct: (c: C, i: D) => void): InteractionCmdUpdateBinder<C, I, D>;
 
+    ifCannotExecute(cannotExec: (c: C, i: D) => void): InteractionCmdUpdateBinder<C, I, D>;
+
     end(onEnd: (c: C, i: D) => void): InteractionCmdUpdateBinder<C, I, D>;
 
     stopImmediatePropagation(): InteractionCmdUpdateBinder<C, I, D>;
