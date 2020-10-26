@@ -20,26 +20,26 @@ import {
     dbleClickBinder,
     dndBinder,
     dragLockBinder,
-    EventRegistrationToken,
+    EventRegistrationToken, hyperlinkBinder,
     Interaction, InteractionCmdUpdateBinder,
     InteractionData,
-    keyPressBinder,
+    keyPressBinder, KeysData, keysPressBinder,
     keyTypeBinder,
     LogLevel,
     longTouchBinder,
     PointData,
-    pressBinder,
-    SrcTgtTouchData,
+    pressBinder, scrollBinder, ScrollData,
+    SrcTgtTouchData, swipeBinder,
     tapBinder,
     TapData,
     TouchData,
     touchDnDBinder,
     UndoCollector,
-    WidgetBinding
+    WidgetBinding, WidgetData
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {Subscription} from "rxjs";
-import {createKeyEvent, createMouseEvent, createTouchEvent} from "../interaction/StubEvents";
+import {createKeyEvent, createMouseEvent, createTouchEvent, createUIEvent} from "../interaction/StubEvents";
 
 let elt: HTMLElement;
 let producedCmds: Array<Command>;
@@ -241,8 +241,72 @@ test("touch DnD binding", () => {
     expect(producedCmds).toHaveLength(1);
 });
 
+test("that hyperlink binder works", () => {
+    document.documentElement.innerHTML = "<html><div><a id='url' href=''>Foo</a> </div></html>";
+    const url = document.getElementById("url") as HTMLElement;
 
-test("when it crashes in 'ifCannotExecute'", () => {
+    binding = hyperlinkBinder()
+        .toProduce((_i: WidgetData<HTMLAnchorElement>) => new StubCmd(true))
+        .on(url)
+        .bind();
+
+    disposable = binding.produces().subscribe(c => producedCmds.push(c));
+
+    url.dispatchEvent(new Event("input"));
+
+    expect(producedCmds).toHaveLength(1);
+});
+
+test("that swipe binder works", () => {
+    binding = swipeBinder(true, 400, 200, 10)
+        .toProduce((_i: SrcTgtTouchData) => new StubCmd(true))
+        .on(elt)
+        .bind();
+
+    disposable = binding.produces().subscribe(c => producedCmds.push(c));
+
+    elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 2, elt,
+        50, 20, 100, 200, 5000));
+    elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchmove, 2, elt,
+        170, 30, 161, 202, 5500));
+    elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchmove, 2, elt,
+        450, 30, 500, 210, 6000));
+    elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 2, elt,
+        450, 30, 500, 210, 6000));
+
+    expect(producedCmds).toHaveLength(1);
+});
+
+test("that scroll binder works", () => {
+    binding = scrollBinder()
+        .on(elt)
+        .toProduce((_i: ScrollData) => new StubCmd(true))
+        .bind();
+
+    disposable = binding.produces().subscribe(c => producedCmds.push(c));
+
+    elt.dispatchEvent(createUIEvent("scroll"));
+
+    expect(producedCmds).toHaveLength(1);
+});
+
+test("that keysPress binder works", () => {
+    binding = keysPressBinder()
+        .on(elt)
+        .toProduce((_i: KeysData) => new StubCmd(true))
+        .bind();
+
+    disposable = binding.produces().subscribe(c => producedCmds.push(c));
+
+    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "A"));
+    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "B"));
+    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "B"));
+
+    expect(producedCmds).toHaveLength(1);
+});
+
+
+test("that 'ifCannotExecute' is correctly called", () => {
     const mockFn = jest.fn();
     const cmd = new StubCmd(false);
     binding = pressBinder()
