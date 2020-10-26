@@ -45,15 +45,4 @@ export class KeysDataImpl implements KeysData {
     public addKeysDataKey(event: KeyboardEvent): void {
         this.keys === undefined ? this.keys = [event.code] : this.keys.push(event.code);
     }
-
-    public removeKeysDataKey(event: KeyboardEvent): void {
-        if (this.keys === undefined) {
-            this.keys = [];
-        } else {
-            const index = this.keys.indexOf(event.code, 0);
-            if (index > -1) {
-                this.keys.splice(index, 1);
-            }
-        }
-    }
 }

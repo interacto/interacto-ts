@@ -13,7 +13,7 @@
  */
 
 import {TransitionBase} from "../../src/impl/fsm/TransitionBase";
-import {StubEvent, StubSubEvent1, StubSubEvent2, StubSubEvent3} from "./StubEvent";
+import {StubEvent, StubSubEvent1, StubSubEvent2} from "./StubEvent";
 import {InputState} from "../../src/api/fsm/InputState";
 import {OutputState} from "../../src/api/fsm/OutputState";
 
@@ -55,15 +55,5 @@ export class SubStubTransition2 extends StubTransitionOK {
 
     public getAcceptedEvents(): Set<string> {
         return new Set(["StubSubEvent2"]);
-    }
-}
-
-export class SubStubTransition3 extends StubTransitionOK {
-    public accept(event: StubEvent): boolean {
-        return event instanceof StubSubEvent3;
-    }
-
-    public getAcceptedEvents(): Set<string> {
-        return new Set(["StubSubEvent3"]);
     }
 }
