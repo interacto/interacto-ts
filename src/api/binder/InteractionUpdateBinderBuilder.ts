@@ -44,5 +44,7 @@ export interface InteractionUpdateBinderBuilder<I extends Interaction<D>, D exte
 
     stopImmediatePropagation(): InteractionUpdateBinderBuilder<I, D>;
 
+    strictStart(): InteractionUpdateBinderBuilder<I, D>;
+
     preventDefault(): InteractionUpdateBinderBuilder<I, D>;
 }

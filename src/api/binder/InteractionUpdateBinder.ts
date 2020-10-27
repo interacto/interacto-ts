@@ -39,5 +39,7 @@ export interface InteractionUpdateBinder<I extends Interaction<D>, D extends Int
 
     preventDefault(): InteractionUpdateBinder<I, D>;
 
+    strictStart(): InteractionUpdateBinder<I, D>;
+
     toProduce<C extends Command>(cmdSupplier: (i: D) => C): InteractionCmdUpdateBinder<C, I, D>;
 }
