@@ -31,6 +31,8 @@ export interface KeyInteractionUpdateBinder<I extends Interaction<D>, D extends 
 
     when(whenPredicate: (i: D) => boolean): KeyInteractionUpdateBinder<I, D>;
 
+    strictStart(): KeyInteractionUpdateBinder<I, D>;
+
     with(...codes: Array<string>): KeyInteractionUpdateBinder<I, D>;
 
     stopImmediatePropagation(): KeyInteractionUpdateBinder<I, D>;

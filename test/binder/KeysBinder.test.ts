@@ -23,11 +23,16 @@ import {EventRegistrationToken} from "../../src/impl/fsm/Events";
 import {UndoCollector} from "../../src/impl/undo/UndoCollector";
 import {CommandsRegistry} from "../../src/impl/command/CommandsRegistry";
 import {Interaction} from "../../src/api/interaction/Interaction";
+import {mock} from "jest-mock-extended";
+import {BindingsObserver} from "../../src/api/binding/BindingsObserver";
+import {KeysBinder} from "../../src/impl/binder/KeysBinder";
+import {KeyPressed} from "../../src/impl/interaction/library/KeyPressed";
+import {KeysData} from "../../src/api/interaction/KeysData";
 
 let elt: HTMLElement;
 let producedCmds: Array<Command>;
-let disposable: Subscription;
-let binding: WidgetBinding<Command, Interaction<InteractionData>, InteractionData>;
+let disposable: Subscription | undefined;
+let binding: WidgetBinding<Command, Interaction<InteractionData>, InteractionData> | undefined;
 
 beforeEach(() => {
     jest.useFakeTimers();
@@ -41,10 +46,31 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-    binding.uninstallBinding();
-    disposable.unsubscribe();
+    binding?.uninstallBinding();
+    disposable?.unsubscribe();
     CommandsRegistry.getInstance().clear();
     UndoCollector.getInstance().clear();
+});
+
+
+test("that is crashes when calling bind without an interaction supplier", () => {
+    expect(() => new KeysBinder().bind()).toThrow("The interaction supplier cannot be undefined here");
+});
+
+test("that is crashes when calling bind without a command supplier", () => {
+    const binder = new KeysBinder().usingInteraction(() => mock<Interaction<InteractionData>>());
+    expect(() => binder.bind()).toThrow("The command supplier cannot be undefined here");
+});
+
+test("that observer is used on bind", () => {
+    const obs = mock<BindingsObserver>();
+    const binder = new KeysBinder(obs)
+        .usingInteraction(() => new KeyPressed(false))
+        .toProduce(() => mock<Command>());
+
+    binding = binder.bind();
+    expect(obs.observeBinding).toHaveBeenCalledTimes(1);
+    expect(obs.observeBinding).toHaveBeenCalledWith(binding);
 });
 
 test("key press std key", () => {
@@ -330,5 +356,23 @@ test("keys type with 3 mixed keydown up", () => {
     elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "z"));
     elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "b"));
     jest.runOnlyPendingTimers();
+    expect(producedCmds).toHaveLength(1);
+});
+
+test("that 'strictStart' works correctly when no 'when' routine with key binder", () => {
+    binding = keysTypeBinder()
+        .strictStart()
+        .on(elt)
+        .toProduce((_i: KeysData) => new StubCmd(true))
+        .bind();
+
+    disposable = binding.produces().subscribe(c => producedCmds.push(c));
+
+    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "c"));
+    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "b"));
+    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "c"));
+    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "b"));
+    jest.runOnlyPendingTimers();
+
     expect(producedCmds).toHaveLength(1);
 });
