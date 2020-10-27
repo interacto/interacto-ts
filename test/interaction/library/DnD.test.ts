@@ -31,6 +31,16 @@ beforeEach(() => {
     canvas = document.getElementById("canvas1") as HTMLElement;
 });
 
+test("is not running at start", () => {
+    expect(interaction.isRunning()).toBeFalsy();
+});
+
+test("is running on press", () => {
+    interaction.registerToNodes([canvas]);
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, canvas, undefined, undefined, 15, 20, 0));
+    expect(interaction.isRunning()).toBeTruthy();
+});
+
 test("press event don't trigger the interaction DnD", () => {
     interaction.registerToNodes([canvas]);
     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, canvas));

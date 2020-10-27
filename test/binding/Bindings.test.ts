@@ -28,7 +28,7 @@ import {
     LogLevel,
     longTouchBinder,
     PointData,
-    pressBinder, scrollBinder, ScrollData,
+    pressBinder, scrollBinder, ScrollData, SrcTgtPointsData,
     SrcTgtTouchData, swipeBinder,
     tapBinder,
     TapData,
@@ -321,7 +321,88 @@ test("that 'ifCannotExecute' is correctly called", () => {
 
     expect(mockFn).toHaveBeenCalledTimes(1);
     expect(producedCmds).toHaveLength(0);
+});
+
+
+test("that 'strictStart' works correctly when no 'when' routine", () => {
+    binding = dndBinder(false)
+        .strictStart()
+        .on(elt)
+        .toProduce((_i: SrcTgtPointsData) => new StubCmd(true))
+        .bind();
+
+    disposable = binding.produces().subscribe(c => producedCmds.push(c));
+
+    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, elt, 11, 23, 110, 230));
+    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, elt, 12, 24, 111, 231));
+    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseUp, elt, 12, 24, 111, 231));
+
+    expect(producedCmds).toHaveLength(1);
+});
+
+test("that 'strictStart' works correctly when the 'when' routine returns true", () => {
+    binding = dndBinder(false)
+        .when((_i: SrcTgtPointsData) => true)
+        .on(elt)
+        .toProduce((_i: SrcTgtPointsData) => new StubCmd(true))
+        .strictStart()
+        .bind();
+
+    disposable = binding.produces().subscribe(c => producedCmds.push(c));
+
+    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, elt, 11, 23, 110, 230));
+    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, elt, 12, 24, 111, 231));
+    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseUp, elt, 12, 24, 111, 231));
+
+    expect(producedCmds).toHaveLength(1);
+});
+
+test("that 'strictStart' works correctly when the 'when' routine returns false", () => {
+    binding = dndBinder(false)
+        .on(elt)
+        .strictStart()
+        .toProduce((_i: SrcTgtPointsData) => new StubCmd(true))
+        .when((_i: SrcTgtPointsData) => false)
+        .bind();
+
+    disposable = binding.produces().subscribe(c => producedCmds.push(c));
+
+    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, elt, 11, 23, 110, 230));
+    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, elt, 12, 24, 111, 231));
+    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseUp, elt, 12, 24, 111, 231));
+
     expect(producedCmds).toHaveLength(0);
+    expect(binding.getInteraction().isRunning()).toBeFalsy();
+});
+
+test("that 'strictStart' stops the interaction", () => {
+    binding = dndBinder(false)
+        .on(elt)
+        .toProduce((_i: SrcTgtPointsData) => new StubCmd(true))
+        .when((_i: SrcTgtPointsData) => false)
+        .strictStart()
+        .bind();
+    disposable = binding.produces().subscribe(c => producedCmds.push(c));
+
+    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, elt, 11, 23, 110, 230));
+    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, elt, 12, 24, 111, 231));
+
+    expect(binding.getInteraction().isRunning()).toBeFalsy();
+});
+
+test("that 'when' is not called on the first event of a DnD", () => {
+    const when = jest.fn().mockReturnValue(false);
+    binding = dndBinder(false)
+        .on(elt)
+        .toProduce((_i: SrcTgtPointsData) => new StubCmd(true))
+        .when(() => false)
+        .strictStart()
+        .bind();
+    disposable = binding.produces().subscribe(c => producedCmds.push(c));
+
+    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, elt, 11, 23, 110, 230));
+
+    expect(when).not.toHaveBeenCalled();
 });
 
 describe("check when it crashes in routines", () => {
