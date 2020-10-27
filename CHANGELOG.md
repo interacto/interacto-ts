@@ -1,3 +1,44 @@
+# 5.0.0
+
+* feat(binding): new binder shortcut for touch DnD
+* feat(binding): new routine 'ifCannotExecute' to use for processing when the command cannot be executed (canExecute)
+
+* change(api): execution methods of commands renamed to be more explicit
+* change(api): separation API / implementation for the whole lib
+* change(api): the interaction API does not expose an FSM generic type any more
+* change(binding): to create an anonymous binding, use the AnonCmd class. AnonBinder removed
+* change(cmd): library commands Zoom, ModifyValue and PositionCommand removed
+* change(cmd): renamed base implementation classes with 'base' postfix (InteractionBase, etc.)
+* change(error): no more error catcher single instance
+* change(interaction): removing this strange feature of the DnD (update source point)
+
+* clean(all): useless code removed
+* clean(all): useless documentation tags removed
+* clean(interaction): use arrow functions instead of anon classes
+
+* config(build): new script command for compiling tests
+* config(ci): increasing the code coverage level
+* config(deps): various dependencies updated
+
+* doc(code): doc typo fixed
+* doc(readme): readme updated
+
+* fix(binder): bindings should not expose concrete user interaction in its routines return types
+* fix(binding): errors (exceptions) in routines are now captured and logged
+* fix(binding): key binders do not allow the 'with', 'then', etc. routines
+* fix(binding): key bindings should be able to use strictStart
+* fix(binding): the routine StrictStart should be available in interaction binders
+* fix(interaction): FSMs that use a sub-FSM do not work when the starting state is not the one by default
+* fix(interaction): keys typed interaction must also flush and log its sub interaction
+* fix(interaction): the keys typed interaction do not work properly when keys are pressed to be released later
+* fix(interaction): the tap interaction should use touchend and not touchstart
+* fix(doc): changelog headers fixed
+* fix(pkg): main file updated
+
+* test(all): multiple tests added
+* test(mock): use the lib jest-mock-extended for mocking objects
+
+
 # 4.4.0
 
 * fix(binding): no more optional parameters in binding routines
