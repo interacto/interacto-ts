@@ -376,3 +376,42 @@ test("that 'strictStart' works correctly when no 'when' routine with key binder"
 
     expect(producedCmds).toHaveLength(1);
 });
+
+test("that 'strictStart' works correctly when the 'when' routine returns false", () => {
+    binding = keysTypeBinder()
+        .on(elt)
+        .strictStart()
+        .toProduce((_i: KeysData) => new StubCmd(true))
+        .when((_i: KeysData) => false)
+        .bind();
+
+    disposable = binding.produces().subscribe(c => producedCmds.push(c));
+
+    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "g"));
+    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "y"));
+    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "g"));
+    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "y"));
+    jest.runOnlyPendingTimers();
+
+    expect(producedCmds).toHaveLength(0);
+    expect(binding.getInteraction().isRunning()).toBeFalsy();
+});
+
+test("that 'strictStart' works correctly when the 'when' routine returns true", () => {
+    binding = keysTypeBinder()
+        .when((_i: KeysData) => true)
+        .on(elt)
+        .toProduce((_i: KeysData) => new StubCmd(true))
+        .strictStart()
+        .bind();
+
+    disposable = binding.produces().subscribe(c => producedCmds.push(c));
+
+    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "g"));
+    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "y"));
+    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "g"));
+    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "y"));
+    jest.runOnlyPendingTimers();
+
+    expect(producedCmds).toHaveLength(1);
+});

@@ -13,29 +13,39 @@
  */
 
 import {
-    AnonCmd, catBinder,
+    AnonCmd,
+    catBinder,
     clickBinder,
     Command,
     CommandsRegistry,
     dbleClickBinder,
     dndBinder,
     dragLockBinder,
-    EventRegistrationToken, hyperlinkBinder,
-    Interaction, InteractionCmdUpdateBinder,
+    EventRegistrationToken,
+    hyperlinkBinder,
+    Interaction,
+    InteractionCmdUpdateBinder,
     InteractionData,
-    keyPressBinder, KeysData, keysPressBinder,
+    keyPressBinder,
+    KeysData,
+    keysPressBinder,
     keyTypeBinder,
     LogLevel,
     longTouchBinder,
     PointData,
-    pressBinder, scrollBinder, ScrollData, SrcTgtPointsData,
-    SrcTgtTouchData, swipeBinder,
+    pressBinder,
+    scrollBinder,
+    ScrollData,
+    SrcTgtPointsData,
+    SrcTgtTouchData,
+    swipeBinder,
     tapBinder,
     TapData,
     TouchData,
     touchDnDBinder,
     UndoCollector,
-    WidgetBinding, WidgetData
+    WidgetBinding,
+    WidgetData
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {Subscription} from "rxjs";
