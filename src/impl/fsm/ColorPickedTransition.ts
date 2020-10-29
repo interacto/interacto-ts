@@ -34,10 +34,6 @@ export class ColorPickedTransition extends TransitionBase {
         return event.target !== null && isColorChoice(event.target);
     }
 
-    public isGuardOK(_event: Event): boolean {
-        return true;
-    }
-
     public getAcceptedEvents(): Set<string> {
         return new Set([EventRegistrationToken.input]);
     }

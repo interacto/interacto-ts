@@ -38,10 +38,6 @@ class TrStub extends TransitionBase {
         return event instanceof StubSubEvent1;
     }
 
-    public isGuardOK(_event: StubEvent): boolean {
-        return true;
-    }
-
     public getAcceptedEvents(): Set<string> {
         return new Set(["StubSubEvent1"]);
     }

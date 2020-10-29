@@ -33,10 +33,6 @@ export class KeyReleaseTransition extends TransitionBase {
         return event instanceof KeyboardEvent && event.type === EventRegistrationToken.keyUp;
     }
 
-    public isGuardOK(_event: Event): boolean {
-        return true;
-    }
-
     public getAcceptedEvents(): Set<string> {
         return new Set([EventRegistrationToken.keyUp]);
     }

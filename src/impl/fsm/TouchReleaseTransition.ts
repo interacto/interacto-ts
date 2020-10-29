@@ -38,8 +38,4 @@ export class TouchReleaseTransition extends TransitionBase {
     public getAcceptedEvents(): Set<string> {
         return new Set([EventRegistrationToken.touchend]);
     }
-
-    public isGuardOK(_event: Event): boolean {
-        return true;
-    }
 }

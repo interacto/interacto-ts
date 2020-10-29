@@ -34,10 +34,6 @@ export class ComboBoxTransition extends TransitionBase {
         return event.target !== null && isComboBox(event.target);
     }
 
-    public isGuardOK(_event: Event): boolean {
-        return true;
-    }
-
     public getAcceptedEvents(): Set<string> {
         return new Set([EventRegistrationToken.input]);
     }

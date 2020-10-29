@@ -37,8 +37,4 @@ export class PressureTransition extends TransitionBase {
     public getAcceptedEvents(): Set<string> {
         return new Set([EventRegistrationToken.mouseDown]);
     }
-
-    public isGuardOK(_event: Event): boolean {
-        return true;
-    }
 }

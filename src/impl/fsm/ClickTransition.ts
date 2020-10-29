@@ -33,10 +33,6 @@ export class ClickTransition extends TransitionBase {
         return this.getAcceptedEvents().has(event.type);
     }
 
-    public isGuardOK(_event: Event): boolean {
-        return true;
-    }
-
     public getAcceptedEvents(): Set<string> {
         return new Set([EventRegistrationToken.click, EventRegistrationToken.auxclick]);
     }

@@ -34,10 +34,6 @@ export class SpinnerChangedTransition extends TransitionBase {
         return event.target !== null && isSpinner(event.target);
     }
 
-    public isGuardOK(_event: Event): boolean {
-        return true;
-    }
-
     public getAcceptedEvents(): Set<string> {
         return new Set([EventRegistrationToken.input]);
     }

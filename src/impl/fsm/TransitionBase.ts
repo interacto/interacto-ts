@@ -51,7 +51,9 @@ export abstract class TransitionBase implements Transition {
 
     public abstract accept(event: Event): boolean;
 
-    public abstract isGuardOK(event: Event): boolean;
+    public isGuardOK(_event: Event): boolean {
+        return true;
+    }
 
     public abstract getAcceptedEvents(): Set<string>;
 

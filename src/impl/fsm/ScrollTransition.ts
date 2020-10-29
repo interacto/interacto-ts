@@ -33,10 +33,6 @@ export class ScrollTransition extends TransitionBase {
         return event.type === "scroll";
     }
 
-    public isGuardOK(_event: Event): boolean {
-        return true;
-    }
-
     public getAcceptedEvents(): Set<string> {
         return new Set([EventRegistrationToken.scroll]);
     }

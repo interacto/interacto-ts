@@ -34,10 +34,6 @@ export class HyperLinkTransition extends TransitionBase {
         return event.target !== null && isHyperLink(event.target);
     }
 
-    public isGuardOK(_event: Event): boolean {
-        return true;
-    }
-
     public getAcceptedEvents(): Set<string> {
         return new Set([EventRegistrationToken.click, EventRegistrationToken.auxclick]);
     }

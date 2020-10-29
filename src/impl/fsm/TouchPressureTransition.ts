@@ -37,8 +37,4 @@ export class TouchPressureTransition extends TransitionBase {
     public getAcceptedEvents(): Set<string> {
         return new Set([EventRegistrationToken.touchstart]);
     }
-
-    public isGuardOK(_event: Event): boolean {
-        return true;
-    }
 }

@@ -37,8 +37,4 @@ export class TouchMoveTransition extends TransitionBase {
     public getAcceptedEvents(): Set<string> {
         return new Set([EventRegistrationToken.touchmove]);
     }
-
-    public isGuardOK(_event: Event): boolean {
-        return true;
-    }
 }

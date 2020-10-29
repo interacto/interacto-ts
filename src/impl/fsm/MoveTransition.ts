@@ -33,10 +33,6 @@ export class MoveTransition extends TransitionBase {
         return event instanceof MouseEvent && event.type === EventRegistrationToken.mouseMove;
     }
 
-    public isGuardOK(_event: Event): boolean {
-        return true;
-    }
-
     public getAcceptedEvents(): Set<string> {
         return new Set([EventRegistrationToken.mouseMove]);
     }

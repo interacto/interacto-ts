@@ -33,10 +33,6 @@ export class KeyPressureTransition extends TransitionBase {
         return event instanceof KeyboardEvent && event.type === EventRegistrationToken.keyDown;
     }
 
-    public isGuardOK(_event: Event): boolean {
-        return true;
-    }
-
     public getAcceptedEvents(): Set<string> {
         return new Set([EventRegistrationToken.keyDown]);
     }

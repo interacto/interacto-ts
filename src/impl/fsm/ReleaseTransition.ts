@@ -38,8 +38,4 @@ export class ReleaseTransition extends TransitionBase {
     public getAcceptedEvents(): Set<string> {
         return new Set([EventRegistrationToken.mouseUp]);
     }
-
-    public isGuardOK(_event: Event): boolean {
-        return true;
-    }
 }
