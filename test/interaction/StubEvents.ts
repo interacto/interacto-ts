@@ -99,3 +99,33 @@ export function createUIEvent(type: string): UIEvent {
         "view": window
     });
 }
+
+export function createEventWithTarget(target: EventTarget | null, type: string): Event {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    return {"currentTarget": null,
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        "AT_TARGET": 0,
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        "BUBBLING_PHASE": 0,
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        "CAPTURING_PHASE": 0,
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        "NONE": 0,
+        "composedPath": (): Array<EventTarget> => [],
+        "initEvent": (_type: string, _bubbles: boolean | undefined, _cancelable: boolean | undefined): void => {},
+        "preventDefault": (): void => {},
+        "stopImmediatePropagation": (): void => {},
+        "stopPropagation": (): void => {},
+        "bubbles": false,
+        "cancelBubble": false,
+        "cancelable": false,
+        "composed": false,
+        "defaultPrevented": false,
+        "eventPhase": 0,
+        "isTrusted": false,
+        "returnValue": false,
+        "srcElement": null,
+        "timeStamp": 0,
+        type,
+        target};
+}
