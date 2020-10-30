@@ -33,12 +33,6 @@ export class StdState extends OutputStateBase implements InputState {
         super(stateMachine, stateName);
     }
 
-    public checkStartingState(): void {
-        if (!this.getFSM().isStarted() && this.getFSM().getStartingState() === this) {
-            this.getFSM().onStarting();
-        }
-    }
-
     public enter(): void {
         this.checkStartingState();
         this.fsm.enterStdState(this);

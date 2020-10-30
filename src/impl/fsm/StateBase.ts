@@ -34,8 +34,8 @@ export abstract class StateBase implements State {
     }
 
     public checkStartingState(): void {
-        if (!this.fsm.isStarted() && this.fsm.getStartingState() === this) {
-            this.fsm.onStarting();
+        if (!this.getFSM().isStarted() && this.getFSM().getStartingState() === this) {
+            this.getFSM().onStarting();
         }
     }
 

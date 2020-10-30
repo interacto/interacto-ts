@@ -45,12 +45,6 @@ export abstract class OutputStateBase extends StateBase implements OutputState {
         }) !== undefined;
     }
 
-    public checkStartingState(): void {
-        if (!this.getFSM().isStarted() && this.getFSM().getStartingState() === this) {
-            this.getFSM().onStarting();
-        }
-    }
-
     public clearTransitions(): void {
         this.transitions.length = 0;
     }
