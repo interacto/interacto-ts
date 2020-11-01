@@ -14,11 +14,10 @@
 
 import {State} from "../../api/fsm/State";
 import {InitState} from "./InitState";
-import {OutputState} from "../../api/fsm/OutputState";
+import {isOutputStateType, OutputState} from "../../api/fsm/OutputState";
 import {FSMHandler} from "../../api/fsm/FSMHandler";
 import {TimeoutTransition} from "./TimeoutTransition";
 import {InputState} from "../../api/fsm/InputState";
-import {OutputStateBase} from "./OutputStateBase";
 import {catFSM} from "../../api/logging/ConfigLog";
 import {FSMDataHandler} from "./FSMDataHandler";
 import {isKeyDownEvent, isKeyUpEvent} from "./Events";
@@ -305,7 +304,7 @@ export class FSMImpl implements FSM {
                 catFSM.info(`Timeout: ${this.constructor.name}`);
             }
             const state = this.currentTimeout.execute();
-            if (state instanceof OutputStateBase) {
+            if (isOutputStateType(state)) {
                 this.setCurrentState(state);
                 this.checkTimeoutTransition();
             }
