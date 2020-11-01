@@ -63,9 +63,7 @@ export class DnDFSM extends FSMImpl {
         const press = new PressureTransition(this.initState, pressed);
         press.action = (event: MouseEvent): void => {
             this.buttonToCheck = event.button;
-            if (dataHandler !== undefined) {
-                dataHandler.onPress(event);
-            }
+            dataHandler?.onPress(event);
         };
 
         const relCancel = new ReleaseTransition(pressed, cancelled);

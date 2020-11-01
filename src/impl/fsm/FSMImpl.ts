@@ -282,16 +282,11 @@ export class FSMImpl implements FSM {
         if (this.asLogFSM) {
             catFSM.info(`FSM reinitialised: ${this.constructor.name}`);
         }
-        if (this.currentTimeout !== undefined) {
-            this.currentTimeout.stopTimeout();
-        }
+        this.currentTimeout?.stopTimeout();
         this.started = false;
         this.setCurrentState(this.initState);
         this.currentTimeout = undefined;
-
-        if (this.currentSubFSM !== undefined) {
-            this.currentSubFSM.reinit();
-        }
+        this.currentSubFSM?.reinit();
 
         if (this.dataHandler !== undefined && !this._inner) {
             this.dataHandler.reinitData();
@@ -301,9 +296,7 @@ export class FSMImpl implements FSM {
     public fullReinit(): void {
         this.eventsToProcess.length = 0;
         this.reinit();
-        if (this.currentSubFSM !== undefined) {
-            this.currentSubFSM.fullReinit();
-        }
+        this.currentSubFSM?.fullReinit();
     }
 
     public onTimeout(): void {
