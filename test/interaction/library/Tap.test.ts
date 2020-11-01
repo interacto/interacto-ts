@@ -23,8 +23,7 @@ let handler: FSMHandler;
 beforeEach(() => {
     jest.useFakeTimers();
     handler = mock<FSMHandler>();
-    document.documentElement.innerHTML = "<html><div><canvas id='canvas1' /></div></html>";
-    canvas = document.getElementById("canvas1") as HTMLElement;
+    canvas = document.createElement("canvas");
 });
 
 afterEach(() => {

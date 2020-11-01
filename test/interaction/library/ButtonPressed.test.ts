@@ -25,8 +25,7 @@ beforeEach(() => {
     interaction.log(true);
     interaction.getFsm().log(true);
     interaction.getFsm().addHandler(handler);
-    document.documentElement.innerHTML = "<html><div><button id='b1'>A Button</button></div></html>";
-    button = document.getElementById("b1") as HTMLButtonElement;
+    button = document.createElement("button");
 });
 
 test("click event start and stop the interaction ButtonPressed", () => {

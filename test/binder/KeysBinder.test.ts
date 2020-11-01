@@ -36,12 +36,7 @@ let binding: WidgetBinding<Command, Interaction<InteractionData>, InteractionDat
 
 beforeEach(() => {
     jest.useFakeTimers();
-
-    document.documentElement.innerHTML = "<html><canvas id='div'></canvas></html>";
-    const elt1 = document.getElementById("div");
-    if (elt1 !== null) {
-        elt = elt1;
-    }
+    elt = document.createElement("canvas");
     producedCmds = [];
 });
 

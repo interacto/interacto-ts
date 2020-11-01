@@ -17,7 +17,6 @@ import {
     CommandsRegistry,
     Interaction,
     InteractionData,
-    isCheckBox,
     UndoCollector,
     WidgetBinding
 } from "../../src/interacto";
@@ -31,16 +30,10 @@ let producedCmds: Array<StubCmd>;
 let disposable: Subscription | undefined;
 
 beforeEach(() => {
-    document.documentElement.innerHTML =
-        "<html><div><input type='checkbox' id='b1'>CB</input><input type='checkbox' id='b2'>CB2</input></div></html>";
-    const elt1 = document.getElementById("b1");
-    if (elt1 !== null && isCheckBox(elt1)) {
-        widget1 = elt1;
-    }
-    const elt2 = document.getElementById("b2");
-    if (elt2 !== null && isCheckBox(elt2)) {
-        widget2 = elt2;
-    }
+    widget1 = document.createElement("input");
+    widget2 = document.createElement("input");
+    widget1.type = "checkbox";
+    widget2.type = "checkbox";
     cmd = new StubCmd(true);
     producedCmds = [];
 });

@@ -20,25 +20,26 @@ import {StdState} from "../../src/impl/fsm/StdState";
 import {mock} from "jest-mock-extended";
 
 let tr: TouchPressureTransition;
+let canvas: HTMLCanvasElement;
 
 beforeEach(() => {
     tr = new TouchPressureTransition(new StdState(mock<FSMImpl>(), "a"), new StdState(mock<FSMImpl>(), "b"));
-    document.documentElement.innerHTML = "<html><div><canvas id='canvas' /></div></html>";
+    canvas = document.createElement("canvas");
 });
 
 test("invalid event", () => {
-    expect(tr.accept(createMouseEvent(EventRegistrationToken.mouseDown, document.getElementById("canvas") as EventTarget,
+    expect(tr.accept(createMouseEvent(EventRegistrationToken.mouseDown, canvas,
         11, 23, 11, 23, 0))).toBeFalsy();
 });
 
 test("valid event", () => {
     expect(tr.accept(createTouchEvent(EventRegistrationToken.touchstart, 3,
-        document.getElementById("canvas") as EventTarget, 11, 23, 12, 25))).toBeTruthy();
+        canvas, 11, 23, 12, 25))).toBeTruthy();
 });
 
 test("guard OK", () => {
     expect(tr.isGuardOK(createTouchEvent(EventRegistrationToken.touchstart, 3,
-        document.getElementById("canvas") as EventTarget, 11, 23, 12, 25))).toBeTruthy();
+        canvas, 11, 23, 12, 25))).toBeTruthy();
 });
 
 test("accepted events", () => {

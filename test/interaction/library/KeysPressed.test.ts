@@ -26,8 +26,7 @@ beforeEach(() => {
     interaction.log(true);
     interaction.getFsm().log(true);
     interaction.getFsm().addHandler(handler);
-    document.documentElement.innerHTML = "<html><div><textarea id='text1'></textarea></div></html>";
-    text = document.getElementById("text1") as HTMLElement;
+    text = document.createElement("textarea");
 });
 
 

@@ -16,7 +16,7 @@ import {BoxChecked, FSMHandler} from "../../../src/interacto";
 import {mock} from "jest-mock-extended";
 
 let interaction: BoxChecked;
-let boxCheck: HTMLElement;
+let boxCheck: HTMLInputElement;
 let handler: FSMHandler;
 
 beforeEach(() => {
@@ -26,8 +26,8 @@ beforeEach(() => {
     interaction.log(true);
     interaction.getFsm().log(true);
     interaction.getFsm().addHandler(handler);
-    document.documentElement.innerHTML = "<html><div><input id='bc1' type='checkbox'></div></html>";
-    boxCheck = document.getElementById("bc1") as HTMLElement;
+    boxCheck = document.createElement("input");
+    boxCheck.type = "checkbox";
 });
 
 test("click event start and stop the interaction CheckBox", () => {

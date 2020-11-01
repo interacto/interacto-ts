@@ -114,8 +114,7 @@ test("register to node children", async () => {
     expect.assertions(1);
 
     interaction = new InteractionStub(new FSMImpl());
-    document.documentElement.innerHTML = "<html><div><svg id='doc'></svg>svg></html>";
-    const doc: HTMLElement = document.getElementById("doc") as HTMLElement;
+    const doc = document.createElement("svg");
 
     jest.spyOn(interaction, "onNewNodeRegistered");
 

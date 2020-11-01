@@ -16,7 +16,6 @@ import {
     CommandsRegistry,
     Interaction,
     InteractionData,
-    isSpinner,
     spinnerBinder,
     SpinnerChangedFSM,
     UndoCollector,
@@ -35,18 +34,10 @@ let disposable: Subscription | undefined;
 beforeEach(() => {
     jest.clearAllTimers();
     jest.useFakeTimers();
-    document.documentElement.innerHTML =
-        "<html><div><input id='sp1' type='number'>" +
-        "<input id='sp2' type='number'>" +
-        "</div></html>";
-    const elt1 = document.getElementById("sp1");
-    if (elt1 !== null && isSpinner(elt1)) {
-        widget1 = elt1;
-    }
-    const elt2 = document.getElementById("sp2");
-    if (elt2 !== null && isSpinner(elt2)) {
-        widget2 = elt2;
-    }
+    widget1 = document.createElement("input");
+    widget2 = document.createElement("input");
+    widget1.type = "number";
+    widget2.type = "number";
     cmd = new StubCmd(true);
     producedCmds = [];
 });

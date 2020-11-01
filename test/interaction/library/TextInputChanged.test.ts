@@ -27,9 +27,7 @@ beforeEach(() => {
     interaction.log(true);
     interaction.getFsm().log(true);
     interaction.getFsm().addHandler(handler);
-    document.documentElement.innerHTML =
-        "<html><div><input id='inT' type='text'/></div><div><textarea id='teA'/></textarea></div></html>";
-    textArea = document.getElementById("teA") as HTMLElement;
+    textArea = document.createElement("textarea");
 });
 
 test("type in a text area starts and stops the interaction", () => {

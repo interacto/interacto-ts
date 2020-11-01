@@ -31,11 +31,10 @@ let producedCmds: Array<StubCmd>;
 let disposable: Subscription | undefined;
 
 beforeEach(() => {
-    document.documentElement.innerHTML =
-        "<html><div><input id='dt1' type='date' />" +
-        "<input id='dt2' type='date' /></div></html>";
-    widget1 = document.getElementById("dt1") as HTMLInputElement;
-    widget2 = document.getElementById("dt2") as HTMLInputElement;
+    widget1 = document.createElement("input");
+    widget2 = document.createElement("input");
+    widget1.type = "date";
+    widget2.type = "date";
     cmd = new StubCmd(true);
     producedCmds = [];
 });

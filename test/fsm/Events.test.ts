@@ -58,104 +58,91 @@ describe("checking event token", () => {
 
 describe("checking is widget functions", () => {
     test("isButton OK", () => {
-        document.documentElement.innerHTML = "<html><div><button id='b'>A Button</button></div></html>";
-        const elt1 = document.getElementById("b") as Element;
+        const elt1 = document.createElement("button");
         expect(isButton(elt1)).toBeTruthy();
     });
     test("isButton KO", () => {
-        document.documentElement.innerHTML = "<html><div><input id='cb' type='checkbox'/></div></html>";
-        const elt1 = document.getElementById("cb") as Element;
+        const elt1 = document.createElement("input");
         expect(isButton(elt1)).toBeFalsy();
     });
 
     test("isCheckBox OK", () => {
-        document.documentElement.innerHTML = "<html><div><input id='cb' type='checkbox'/></div></html>";
-        const elt1 = document.getElementById("cb") as Element;
+        const elt1 = document.createElement("input");
+        elt1.type = "checkbox";
         expect(isCheckBox(elt1)).toBeTruthy();
     });
 
     test("isCheckBox KO", () => {
-        document.documentElement.innerHTML = "<html><div><button id='b'>A Button</button></div></html>";
-        const elt1 = document.getElementById("b") as Element;
+        const elt1 = document.createElement("button");
         expect(isCheckBox(elt1)).toBeFalsy();
     });
 
     test("isColorChoice KO", () => {
-        document.documentElement.innerHTML = "<html><div><button id='b'>A Button</button></div></html>";
-        const elt1 = document.getElementById("b") as Element;
+        const elt1 = document.createElement("button");
         expect(isColorChoice(elt1)).toBeFalsy();
     });
 
     test("isColorChoice OK", () => {
-        document.documentElement.innerHTML = "<html><div><input id='col1' type='color'/></div></html>";
-        const elt1 = document.getElementById("col1") as Element;
+        const elt1 = document.createElement("input");
+        elt1.type = "color";
         expect(isColorChoice(elt1)).toBeTruthy();
     });
 
     test("isComboBox KO", () => {
-        document.documentElement.innerHTML = "<html><div><input id='comb1' list='test'><datalist id='test'>" +
-        "<option value='test1'>Test1</option> </datalist></input></div></html>";
-        const elt1 = document.getElementById("comb1") as Element;
+        const elt1 = document.createElement("input");
         expect(isComboBox(elt1)).toBeFalsy();
     });
 
     test("isComboBox OK", () => {
-        document.documentElement.innerHTML = "<html><div><select id='id'><option value='v1'>Volvo</option></select>/div></html>";
-        const elt1 = document.getElementById("id") as Element;
+        const elt1 = document.createElement("select");
         expect(isComboBox(elt1)).toBeTruthy();
     });
 
     test("isDatePicker KO", () => {
-        document.documentElement.innerHTML = "<html><div><button id='b'>A Button</button></div></html>";
-        const elt1 = document.getElementById("b") as Element;
+        const elt1 = document.createElement("button");
         expect(isDatePicker(elt1)).toBeFalsy();
     });
 
     test("isDatePicker OK", () => {
-        document.documentElement.innerHTML = "<html><div><input id='dt1' type='date' /></div></html>";
-        const elt1 = document.getElementById("dt1") as Element;
+        const elt1 = document.createElement("input");
+        elt1.type = "date";
         expect(isDatePicker(elt1)).toBeTruthy();
     });
 
     test("isSpinner KO", () => {
-        document.documentElement.innerHTML = "<html><div><button id='b'>A Button</button></div></html>";
-        const elt1 = document.getElementById("b") as Element;
+        const elt1 = document.createElement("button");
         expect(isSpinner(elt1)).toBeFalsy();
     });
 
     test("isSpinner OK", () => {
-        document.documentElement.innerHTML = "<html><div><input id='sp1' type='number'></div></html>";
-        const elt1 = document.getElementById("sp1") as Element;
+        const elt1 = document.createElement("input");
+        elt1.type = "number";
         expect(isSpinner(elt1)).toBeTruthy();
     });
 
     test("isHyperLink KO", () => {
-        document.documentElement.innerHTML = "<html><div><button id='b'>A Button</button></div></html>";
-        const elt1 = document.getElementById("b") as Element;
+        const elt1 = document.createElement("button");
         expect(isHyperLink(elt1)).toBeFalsy();
     });
 
     test("isHyperLink OK", () => {
-        document.documentElement.innerHTML = "<html><div><a id='url1' href=''>Test</a></div></html>";
-        const elt1 = document.getElementById("url1") as Element;
+        const elt1 = document.createElement("a");
         expect(isHyperLink(elt1)).toBeTruthy();
     });
 
     test("isTextInput KO", () => {
-        document.documentElement.innerHTML = "<html><div><button id='b'>A Button</button></div></html>";
-        const elt1 = document.getElementById("b") as Element;
+        const elt1 = document.createElement("button");
         expect(isTextInput(elt1)).toBeFalsy();
     });
 
     test("isTextInput OK input", () => {
-        document.documentElement.innerHTML = "<html><div><input id='txt' type='text'/></div></html>";
-        const elt1 = document.getElementById("txt") as Element;
+        const elt1 = document.createElement("input");
+        elt1.type = "text";
         expect(isTextInput(elt1)).toBeTruthy();
     });
 
     test("isTextInput OK textarea", () => {
-        document.documentElement.innerHTML = "<html><div><textarea id='txt' /></div></html>";
-        const elt1 = document.getElementById("txt") as Element;
+        const elt1 = document.createElement("textarea");
         expect(isTextInput(elt1)).toBeTruthy();
     });
 });
@@ -179,14 +166,12 @@ describe("checking event functions", () => {
     });
 
     test("isMouseDownEvent KO", () => {
-        document.documentElement.innerHTML = "<html><div><textarea id='txt' /></div></html>";
-        const elt1 = document.getElementById("txt") as Element;
+        const elt1 = document.createElement("textarea");
         expect(isMouseDownEvent(createMouseEvent(EventRegistrationToken.mouseUp, elt1))).toBeFalsy();
     });
 
     test("isMouseDownEvent OK", () => {
-        document.documentElement.innerHTML = "<html><div><textarea id='txt' /></div></html>";
-        const elt1 = document.getElementById("txt") as Element;
+        const elt1 = document.createElement("textarea");
         expect(isMouseDownEvent(createMouseEvent(EventRegistrationToken.mouseDown, elt1))).toBeTruthy();
     });
 

@@ -17,7 +17,6 @@ import {
     CommandsRegistry,
     Interaction,
     InteractionData,
-    isColorChoice,
     UndoCollector,
     WidgetBinding,
     WidgetData
@@ -32,16 +31,10 @@ let producedCmds: Array<StubCmd>;
 let disposable: Subscription | undefined;
 
 beforeEach(() => {
-    document.documentElement.innerHTML =
-        "<html><div><input id='col1' type='color'/><input id='col2' type='color'/></div></html>";
-    const elt1 = document.getElementById("col1");
-    if (elt1 !== null && isColorChoice(elt1)) {
-        widget1 = elt1;
-    }
-    const elt2 = document.getElementById("col2");
-    if (elt2 !== null && isColorChoice(elt2)) {
-        widget2 = elt2;
-    }
+    widget1 = document.createElement("input");
+    widget2 = document.createElement("input");
+    widget1.type = "color";
+    widget2.type = "color";
     cmd = new StubCmd(true);
     producedCmds = [];
 });

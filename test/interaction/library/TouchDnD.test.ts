@@ -28,8 +28,7 @@ beforeEach(() => {
     interaction.log(true);
     interaction.getFsm().log(true);
     interaction.getFsm().addHandler(handler);
-    document.documentElement.innerHTML = "<html><div><canvas id='canvas1' /></div></html>";
-    canvas = document.getElementById("canvas1") as HTMLElement;
+    canvas = document.createElement("canvas");
 });
 
 test("pressure", () => {

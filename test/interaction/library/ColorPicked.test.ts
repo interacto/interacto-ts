@@ -16,7 +16,7 @@ import {ColorPicked, FSMHandler} from "../../../src/interacto";
 import {mock} from "jest-mock-extended";
 
 let interaction: ColorPicked;
-let colorBox: HTMLElement;
+let colorBox: HTMLInputElement;
 let handler: FSMHandler;
 
 beforeEach(() => {
@@ -25,8 +25,8 @@ beforeEach(() => {
     interaction.log(true);
     interaction.getFsm().log(true);
     interaction.getFsm().addHandler(handler);
-    document.documentElement.innerHTML = "<html><div><input id='col1' type='color'></div></html>";
-    colorBox = document.getElementById("col1") as HTMLElement;
+    colorBox = document.createElement("input");
+    colorBox.type = "color";
 });
 
 test("input event starts and stops the interaction ColorPicked", () => {

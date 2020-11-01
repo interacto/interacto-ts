@@ -16,7 +16,7 @@ import {DatePicked, FSMHandler} from "../../../src/interacto";
 import {mock} from "jest-mock-extended";
 
 let interaction: DatePicked;
-let date: HTMLElement;
+let date: HTMLInputElement;
 let handler: FSMHandler;
 
 beforeEach(() => {
@@ -25,8 +25,8 @@ beforeEach(() => {
     interaction.log(true);
     interaction.getFsm().log(true);
     interaction.getFsm().addHandler(handler);
-    document.documentElement.innerHTML = "<html><div><input id='dt1' type='date' /></div></html>";
-    date = document.getElementById("dt1") as HTMLElement;
+    date = document.createElement("input");
+    date.type = "date";
 });
 
 test("input event starts and stops the interaction DatePicked.", () => {

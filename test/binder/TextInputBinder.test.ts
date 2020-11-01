@@ -17,7 +17,6 @@ import {
     CommandsRegistry,
     Interaction,
     InteractionData,
-    isTextInput,
     textInputBinder,
     UndoCollector,
     WidgetBinding
@@ -32,11 +31,7 @@ let disposable: Subscription | undefined;
 
 beforeEach(() => {
     jest.useFakeTimers();
-    document.documentElement.innerHTML = "<html><div><textarea id='txt1'/><textarea id='txt2'/></div></html>";
-    const elt1 = document.getElementById("txt1");
-    if (elt1 !== null && isTextInput(elt1)) {
-        txt1 = elt1;
-    }
+    txt1 = document.createElement("textarea");
     cmd = new StubCmd(true);
     producedCmds = [];
 });

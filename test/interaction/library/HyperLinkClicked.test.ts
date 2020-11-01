@@ -25,8 +25,7 @@ beforeEach(() => {
     interaction.log(true);
     interaction.getFsm().log(true);
     interaction.getFsm().addHandler(handler);
-    document.documentElement.innerHTML = "<html><div><a id='url1' href=''>Test</a> </div></html>";
-    url = document.getElementById("url1") as HTMLElement;
+    url = document.createElement("a");
 });
 
 test("click on url starts and stops the interaction", () => {

@@ -58,12 +58,7 @@ let binding: WidgetBinding<Command, Interaction<InteractionData>, InteractionDat
 
 beforeEach(() => {
     jest.useFakeTimers();
-
-    document.documentElement.innerHTML = "<html><div id='div'></div></html>";
-    const elt1 = document.getElementById("div");
-    if (elt1 !== null) {
-        elt = elt1;
-    }
+    elt = document.createElement("div");
     producedCmds = [];
 });
 
@@ -252,8 +247,7 @@ test("touch DnD binding", () => {
 });
 
 test("that hyperlink binder works", () => {
-    document.documentElement.innerHTML = "<html><div><a id='url' href=''>Foo</a> </div></html>";
-    const url = document.getElementById("url") as HTMLElement;
+    const url = document.createElement("a");
 
     binding = hyperlinkBinder()
         .toProduce((_i: WidgetData<HTMLAnchorElement>) => new StubCmd(true))

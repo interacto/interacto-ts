@@ -46,8 +46,7 @@ beforeEach(() => {
     handler = mock<FSMHandler>();
     interaction = new MultiTouch(3);
     interaction.getFsm().addHandler(handler);
-    document.documentElement.innerHTML = "<html><div><canvas id='canvas1' /></div></html>";
-    canvas = document.getElementById("canvas1") as HTMLElement;
+    canvas = document.createElement("canvas");
 });
 
 test("touch1", () => {

@@ -17,7 +17,6 @@ import {
     CommandsRegistry,
     Interaction,
     InteractionData,
-    isComboBox,
     UndoCollector,
     WidgetBinding,
     WidgetData
@@ -32,17 +31,8 @@ let producedCmds: Array<StubCmd>;
 let disposable: Subscription | undefined;
 
 beforeEach(() => {
-    document.documentElement.innerHTML =
-        "<html><div><select id='comb1'><option value='v1'>Volvo</option></select>" +
-        "<select id='comb2'><option value='v1'>Volvo</option></select></div></html>";
-    const elt1 = document.getElementById("comb1");
-    if (elt1 !== null && isComboBox(elt1)) {
-        widget1 = elt1;
-    }
-    const elt2 = document.getElementById("comb2");
-    if (elt2 !== null && isComboBox(elt2)) {
-        widget2 = elt2;
-    }
+    widget1 = document.createElement("select");
+    widget2 = document.createElement("select");
     cmd = new StubCmd(true);
     producedCmds = [];
 });

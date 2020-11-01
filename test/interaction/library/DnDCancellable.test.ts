@@ -26,8 +26,7 @@ beforeEach(() => {
     interaction.log(true);
     interaction.getFsm().log(true);
     interaction.getFsm().addHandler(handler);
-    document.documentElement.innerHTML = "<html><canvas id='cv1'></canvas></html>";
-    canvas = document.getElementById("cv1") as HTMLElement;
+    canvas = document.createElement("canvas");
 });
 
 test("press execution", () => {

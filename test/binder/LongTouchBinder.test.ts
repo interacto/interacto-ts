@@ -48,8 +48,7 @@ describe("on canvas", () => {
     let c1: HTMLElement;
 
     beforeEach(() => {
-        document.documentElement.innerHTML = "<html><div><canvas id='c1'/></html>";
-        c1 = document.getElementById("c1") as HTMLElement;
+        c1 = document.createElement("canvas");
     });
 
     test("run long touch produces cmd", () => {
@@ -122,8 +121,7 @@ describe("on svg doc for dynamic registration", () => {
     let doc: HTMLElement;
 
     beforeEach(() => {
-        document.documentElement.innerHTML = "<html><div><svg id='doc'></svg>svg></html>";
-        doc = document.getElementById("doc") as HTMLElement;
+        doc = document.createElement("svg");
     });
 
     test("tap does not produce long touch on dynamic array", async () => {

@@ -37,8 +37,7 @@ test("cannot build the interaction with 1 click", () => {
         beforeEach(() => {
             jest.useFakeTimers();
             handler = mock<FSMHandler>();
-            document.documentElement.innerHTML = "<html><div><canvas id='canvas'/></div></html>";
-            canvas = document.getElementById("canvas") as HTMLElement;
+            canvas = document.createElement("canvas");
             interaction = new Clicks(nb);
             interaction.getFsm().addHandler(handler);
         });

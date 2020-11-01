@@ -17,7 +17,6 @@ import {
     CommandsRegistry,
     Interaction,
     InteractionData,
-    isButton,
     LogLevel,
     UndoCollector,
     WidgetBinding
@@ -32,15 +31,8 @@ let producedCmds: Array<StubCmd>;
 let disposable: Subscription | undefined;
 
 beforeEach(() => {
-    document.documentElement.innerHTML = "<html><div><button id='b1'>A Button</button><button id='b2'>A Button2</button></div></html>";
-    const elt1 = document.getElementById("b1");
-    if (elt1 !== null && isButton(elt1)) {
-        button1 = elt1;
-    }
-    const elt2 = document.getElementById("b2");
-    if (elt2 !== null && isButton(elt2)) {
-        button2 = elt2;
-    }
+    button1 = document.createElement("button");
+    button2 = document.createElement("button");
     cmd = new StubCmd(true);
     producedCmds = [];
 });

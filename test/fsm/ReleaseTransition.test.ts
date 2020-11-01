@@ -20,30 +20,31 @@ import {createMouseEvent, createTouchEvent} from "../interaction/StubEvents";
 import {mock} from "jest-mock-extended";
 
 let tr: ReleaseTransition;
+let canvas: HTMLCanvasElement;
 
 beforeEach(() => {
     tr = new ReleaseTransition(new StdState(mock<FSMImpl>(), "a"), new StdState(mock<FSMImpl>(), "b"));
-    document.documentElement.innerHTML = "<html><div><canvas id='canvas' /></div></html>";
+    canvas = document.createElement("canvas");
 });
 
 test("invalid move event", () => {
-    expect(tr.accept(createMouseEvent(EventRegistrationToken.mouseMove, document.getElementById("canvas") as EventTarget,
+    expect(tr.accept(createMouseEvent(EventRegistrationToken.mouseMove, canvas,
         11, 23, 11, 23, 0))).toBeFalsy();
 });
 
 test("invalid event type", () => {
     expect(tr.accept(createTouchEvent(EventRegistrationToken.touchstart, 3,
-        document.getElementById("canvas") as EventTarget, 11, 23, 12, 25))).toBeFalsy();
+        canvas, 11, 23, 12, 25))).toBeFalsy();
 });
 
 test("valid event", () => {
     expect(tr.accept(createMouseEvent(EventRegistrationToken.mouseUp,
-        document.getElementById("canvas") as EventTarget, 11, 23, 12, 25, 1))).toBeTruthy();
+        canvas, 11, 23, 12, 25, 1))).toBeTruthy();
 });
 
 test("guard OK", () => {
     expect(tr.isGuardOK(createMouseEvent(EventRegistrationToken.mouseUp,
-        document.getElementById("canvas") as EventTarget, 11, 23, 12, 25, 1))).toBeTruthy();
+        canvas, 11, 23, 12, 25, 1))).toBeTruthy();
 });
 
 test("accepted events", () => {

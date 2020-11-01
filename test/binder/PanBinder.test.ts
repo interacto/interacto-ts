@@ -32,8 +32,7 @@ let c1: HTMLElement;
 beforeEach(() => {
     jest.useFakeTimers();
     producedCmds = [];
-    document.documentElement.innerHTML = "<html><div><canvas id='c1'/></html>";
-    c1 = document.getElementById("c1") as HTMLElement;
+    c1 = document.createElement("canvas");
 });
 
 afterEach(() => {

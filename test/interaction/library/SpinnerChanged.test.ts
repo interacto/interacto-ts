@@ -16,7 +16,7 @@ import {FSMHandler, SpinnerChanged, SpinnerChangedFSM} from "../../../src/intera
 import {mock} from "jest-mock-extended";
 
 let interaction: SpinnerChanged;
-let spinner: HTMLElement;
+let spinner: HTMLInputElement;
 let handler: FSMHandler;
 let timer: number;
 
@@ -28,8 +28,8 @@ beforeEach(() => {
     interaction.getFsm().log(true);
     interaction.getFsm().addHandler(handler);
     timer = SpinnerChangedFSM.getTimeGap();
-    document.documentElement.innerHTML = "<html><div><input id='sp1' type='number' step='1' value='1'/></div></html>";
-    spinner = document.getElementById("sp1") as HTMLElement;
+    spinner = document.createElement("input");
+    spinner.type = "number";
 });
 
 afterEach(() => {

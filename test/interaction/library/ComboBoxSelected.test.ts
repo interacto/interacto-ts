@@ -25,9 +25,7 @@ beforeEach(() => {
     interaction.log(true);
     interaction.getFsm().log(true);
     interaction.getFsm().addHandler(handler);
-    document.documentElement.innerHTML =
-        "<html><div><select id='comb1'><option value='v1'>Volvo</option></select></html>";
-    comboBox = document.getElementById("comb1") as HTMLElement;
+    comboBox = document.createElement("select");
 });
 
 test("input event starts and stops the interaction ComboBoxSelected", () => {
