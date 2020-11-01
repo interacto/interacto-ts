@@ -353,8 +353,7 @@ export class FSMImpl implements FSM {
         try {
             this.handlers.forEach(handler => handler.fsmStarts());
         } catch (ex) {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-            if (ex.constructor !== CancelFSMException) {
+            if (!(ex instanceof CancelFSMException)) {
                 FSMImpl.exLog.error("crash in notifyHandlerOnStart", ex);
             }
             this.onCancelling();
@@ -369,8 +368,7 @@ export class FSMImpl implements FSM {
         try {
             this.handlers.forEach(handler => handler.fsmUpdates());
         } catch (ex) {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-            if (ex.constructor !== CancelFSMException) {
+            if (!(ex instanceof CancelFSMException)) {
                 FSMImpl.exLog.error("crash in notifyHandlerOnUpdate", ex);
             }
             this.onCancelling();
@@ -385,8 +383,7 @@ export class FSMImpl implements FSM {
         try {
             [...this.handlers].forEach(handler => handler.fsmStops());
         } catch (ex) {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-            if (ex.constructor !== CancelFSMException) {
+            if (!(ex instanceof CancelFSMException)) {
                 FSMImpl.exLog.error("crash in notifyHandlerOnStop", ex);
             }
             this.onCancelling();
