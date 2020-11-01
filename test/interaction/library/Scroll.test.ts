@@ -17,7 +17,7 @@ import {createUIEvent} from "../StubEvents";
 import {mock} from "jest-mock-extended";
 
 let interaction: Scroll;
-let scroll: Window;
+let scroll: HTMLElement;
 let handler: FSMHandler;
 
 beforeEach(() => {
@@ -26,8 +26,7 @@ beforeEach(() => {
     interaction.log(true);
     interaction.getFsm().log(true);
     interaction.getFsm().addHandler(handler);
-    document.documentElement.innerHTML = "<html><div></div></html>";
-    scroll = document.defaultView as Window;
+    scroll = document.createElement("canvas");
 });
 
 test("scroll event start and stop the interaction", () => {
