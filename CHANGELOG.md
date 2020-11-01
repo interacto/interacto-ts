@@ -1,8 +1,18 @@
+# 5.1.0
+
+* change(interaction): API change. Transition has now a generic type used by its methods. 
+This allowed code simplification in interactions implementations.
+* feat(interaction): long press interaction
+* feat(interaction): N-clicks interaction
+* doc(readme): readme file updated
+* test(fsm): tests added
+* update(deps): jest deps updated
+* Code cleaning operations
+
 # 5.0.0
 
 * feat(binding): new binder shortcut for touch DnD
-* feat(binding): new routine 'ifCannotExecute' to use for processing when the command cannot be executed (canExecute)
-
+* feat(binding): new routine 'ifCannotExecute' to use for processing when the command cannot be executed (canExecute)<br/><br/>
 * change(api): execution methods of commands renamed to be more explicit
 * change(api): separation API / implementation for the whole lib
 * change(api): the interaction API does not expose an FSM generic type any more
@@ -10,19 +20,15 @@
 * change(cmd): library commands Zoom, ModifyValue and PositionCommand removed
 * change(cmd): renamed base implementation classes with 'base' postfix (InteractionBase, etc.)
 * change(error): no more error catcher single instance
-* change(interaction): removing this strange feature of the DnD (update source point)
-
+* change(interaction): removing this strange feature of the DnD (update source point)<br/><br/>
 * clean(all): useless code removed
 * clean(all): useless documentation tags removed
-* clean(interaction): use arrow functions instead of anon classes
-
+* clean(interaction): use arrow functions instead of anon classes<br/><br/>
 * config(build): new script command for compiling tests
 * config(ci): increasing the code coverage level
-* config(deps): various dependencies updated
-
+* config(deps): various dependencies updated<br/><br/>
 * doc(code): doc typo fixed
-* doc(readme): readme updated
-
+* doc(readme): readme updated<br/><br/>
 * fix(binder): bindings should not expose concrete user interaction in its routines return types
 * fix(binding): errors (exceptions) in routines are now captured and logged
 * fix(binding): key binders do not allow the 'with', 'then', etc. routines
@@ -33,8 +39,7 @@
 * fix(interaction): the keys typed interaction do not work properly when keys are pressed to be released later
 * fix(interaction): the tap interaction should use touchend and not touchstart
 * fix(doc): changelog headers fixed
-* fix(pkg): main file updated
-
+* fix(pkg): main file updated<br/><br/>
 * test(all): multiple tests added
 * test(mock): use the lib jest-mock-extended for mocking objects
 
