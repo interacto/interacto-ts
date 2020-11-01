@@ -27,10 +27,10 @@ import {catFSM} from "../../src/api/logging/ConfigLog";
 import {StubEvent, StubSubEvent1, StubSubEvent2, StubSubEvent3} from "./StubEvent";
 import {StubTransitionOK} from "./StubTransitionOK";
 import {FSMHandler} from "../../src/api/fsm/FSMHandler";
-import {mock} from "jest-mock-extended";
+import {mock, MockProxy} from "jest-mock-extended";
 
 let fsm: FSMImpl;
-let handler: FSMHandler;
+let handler: FSMHandler & MockProxy<FSMHandler>;
 
 beforeEach(() => {
     jest.clearAllMocks();
@@ -121,6 +121,45 @@ test("testOnTimeoutWithoutTimeout", () => {
     jest.spyOn(catFSM, "info");
     fsm.onTimeout();
     expect(catFSM.info).not.toHaveBeenCalled();
+});
+
+test("that errors caught on start", () => {
+    handler.fsmStarts.mockImplementation(() => {
+        throw new Error("crash provoked");
+    });
+    fsm.addHandler(handler);
+
+    expect(() => fsm.onStarting()).toThrow("crash provoked");
+});
+
+test("that errors caught on update", () => {
+    handler.fsmUpdates.mockImplementation(() => {
+        throw new Error("crash provoked on update");
+    });
+    fsm.onStarting();
+    fsm.addHandler(handler);
+
+    expect(() => fsm.onUpdating()).toThrow("crash provoked on update");
+});
+
+test("that errors caught on end", () => {
+    handler.fsmStops.mockImplementation(() => {
+        throw new Error("crash provoked on end");
+    });
+    fsm.onStarting();
+    fsm.addHandler(handler);
+
+    expect(() => fsm.onTerminating()).toThrow("crash provoked on end");
+});
+
+test("that errors caught on cancel", () => {
+    handler.fsmCancels.mockImplementation(() => {
+        throw new Error("crash provoked on cancel");
+    });
+    fsm.onStarting();
+    fsm.addHandler(handler);
+
+    expect(() => fsm.onCancelling()).toThrow("crash provoked on cancel");
 });
 
 
@@ -224,7 +263,7 @@ describe("testProcessUniqueEvent", () => {
     });
 
     test("testCancelOnStart", () => {
-        handler.fsmStarts = jest.fn(() => {
+        handler.fsmStarts.mockImplementation(() => {
             throw new CancelFSMException();
         });
         fsm.process(new StubEvent());
@@ -236,7 +275,7 @@ describe("testProcessUniqueEvent", () => {
     });
 
     test("testCancelOnUpdate", () => {
-        handler.fsmUpdates = jest.fn(() => {
+        handler.fsmUpdates.mockImplementation(() => {
             throw new CancelFSMException();
         });
         fsm.process(new StubEvent());
@@ -248,7 +287,7 @@ describe("testProcessUniqueEvent", () => {
     });
 
     test("testCancelOnEnd", () => {
-        handler.fsmStops = jest.fn(() => {
+        handler.fsmStops.mockImplementation(() => {
             throw new CancelFSMException();
         });
         fsm.process(new StubEvent());
@@ -498,7 +537,7 @@ describe("testWithTimeoutTransition", () => {
     });
 
     test("testTimeoutChangeStateThenCancel", () => {
-        handler.fsmUpdates = jest.fn().mockImplementation(() => {
+        handler.fsmUpdates.mockImplementation(() => {
             throw new CancelFSMException();
         });
         fsm.process(new StubEvent());

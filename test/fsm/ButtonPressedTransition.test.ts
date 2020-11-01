@@ -44,6 +44,6 @@ test("that accept KO target not button", () => {
 });
 
 test("that accept OK", () => {
-    expect(tr.accept(createEventWithTarget(mock<HTMLButtonElement>(), "input"))).toBeFalsy();
+    expect(tr.accept(createEventWithTarget(document.createElement("button"), "input"))).toBeTruthy();
 });
 

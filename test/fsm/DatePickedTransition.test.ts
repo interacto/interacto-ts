@@ -12,14 +12,14 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {BoxCheckPressedTransition} from "../../src/impl/fsm/BoxCheckPressedTransition";
 import {OutputState} from "../../src/api/fsm/OutputState";
 import {mock, MockProxy} from "jest-mock-extended";
 import {InputState} from "../../src/api/fsm/InputState";
 import {EventRegistrationToken} from "../../src/impl/fsm/Events";
 import {createEventWithTarget} from "../interaction/StubEvents";
+import {DatePickedTransition} from "../../src/impl/fsm/DatePickedTransition";
 
-let tr: BoxCheckPressedTransition;
+let tr: DatePickedTransition;
 let src: OutputState & MockProxy<OutputState>;
 let tgt: InputState & MockProxy<InputState>;
 let evt: Event;
@@ -28,7 +28,7 @@ beforeEach(() => {
     src = mock<OutputState>();
     tgt = mock<InputState>();
     evt = mock<Event>();
-    tr = new BoxCheckPressedTransition(src, tgt);
+    tr = new DatePickedTransition(src, tgt);
 });
 
 test("that getAcceptedEvents works", () => {
@@ -39,13 +39,13 @@ test("that accept KO null target", () => {
     expect(tr.accept(evt)).toBeFalsy();
 });
 
-test("that accept KO target not checkbox", () => {
-    expect(tr.accept(createEventWithTarget(mock<HTMLInputElement>(), "foo"))).toBeFalsy();
+test("that accept KO target not button", () => {
+    expect(tr.accept(createEventWithTarget(mock<HTMLSelectElement>(), "input"))).toBeFalsy();
 });
 
 test("that accept OK", () => {
     const target = document.createElement("input");
-    target.type = "checkbox";
+    target.type = "date";
     expect(tr.accept(createEventWithTarget(target, "input"))).toBeTruthy();
 });
 
