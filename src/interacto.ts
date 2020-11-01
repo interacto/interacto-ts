@@ -112,6 +112,7 @@ export * from "./impl/interaction/library/KeyTyped";
 export * from "./impl/interaction/library/KeysDataImpl";
 export * from "./impl/interaction/library/KeysPressed";
 export * from "./impl/interaction/library/KeysTyped";
+export * from "./impl/interaction/library/LongPress";
 export * from "./impl/interaction/library/LongTouch";
 export * from "./impl/interaction/library/MultiTouch";
 export * from "./impl/interaction/library/MultiTouchDataImpl";
