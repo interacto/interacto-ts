@@ -1,6 +1,6 @@
 [![Build Status](https://ci.inria.fr/malai/buildStatus/icon?job=interacto-ts)](https://ci.inria.fr/malai/view/Latexdraw/job/interacto-ts) 
-![npm](https://img.shields.io/npm/v/interacto)
-![npm](https://img.shields.io/npm/dm/interacto)
+[![npm](https://img.shields.io/npm/v/interacto)](https://www.npmjs.com/package/interacto)
+[![npm](https://img.shields.io/npm/dm/interacto)](https://www.npmjs.com/package/interacto)
 
 # Interacto
 
