@@ -15,7 +15,6 @@
 import {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {TerminalState} from "../../fsm/TerminalState";
 import {PressureTransition} from "../../fsm/PressureTransition";
-import {isMouseDownEvent} from "../../fsm/Events";
 import {PointData} from "../../../api/interaction/PointData";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
@@ -31,16 +30,14 @@ export class PressFSM extends FSMImpl {
         this.addState(pressed);
 
         const pressure = new PressureTransition(this.initState, pressed);
-        pressure.action = (event: Event): void => {
-            if (event.target !== null && isMouseDownEvent(event) && dataHandler !== undefined) {
-                dataHandler.initToPress(event);
-            }
+        pressure.action = (event: MouseEvent): void => {
+            dataHandler?.initToPress(event);
         };
     }
 }
 
 interface PressFSMHandler extends FSMDataHandler {
-    initToPress(event: Event): void;
+    initToPress(event: MouseEvent): void;
 }
 
 /**

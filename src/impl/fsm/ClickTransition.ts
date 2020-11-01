@@ -21,7 +21,7 @@ import {TransitionBase} from "./TransitionBase";
  * This transition corresponds to a pressure of a button of a pointing device.
  * @author Arnaud BLOUIN
  */
-export class ClickTransition extends TransitionBase {
+export class ClickTransition extends TransitionBase<MouseEvent> {
     /**
      * Creates the transition.
      */
@@ -29,8 +29,8 @@ export class ClickTransition extends TransitionBase {
         super(srcState, tgtState);
     }
 
-    public accept(event: Event): boolean {
-        return this.getAcceptedEvents().has(event.type);
+    public accept(event: Event): event is MouseEvent {
+        return event instanceof MouseEvent && this.getAcceptedEvents().has(event.type);
     }
 
     public getAcceptedEvents(): Set<string> {

@@ -21,7 +21,7 @@ import {TransitionBase} from "./TransitionBase";
  * This transition defines a touch release.
 
  */
-export class TouchReleaseTransition extends TransitionBase {
+export class TouchReleaseTransition extends TransitionBase<TouchEvent> {
     /**
      * Defines a transition.
      * @param srcState The source state of the transition.
@@ -31,7 +31,7 @@ export class TouchReleaseTransition extends TransitionBase {
         super(srcState, tgtState);
     }
 
-    public accept(e: Event): boolean {
+    public accept(e: Event): e is TouchEvent {
         return e instanceof TouchEvent && e.type === EventRegistrationToken.touchend;
     }
 

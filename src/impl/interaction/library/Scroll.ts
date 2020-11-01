@@ -14,7 +14,6 @@
 
 import {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {TerminalState} from "../../fsm/TerminalState";
-import {isScrollEvent} from "../../fsm/Events";
 import {ScrollTransition} from "../../fsm/ScrollTransition";
 import {ScrollData} from "../../../api/interaction/ScrollData";
 import {FSMImpl} from "../../fsm/FSMImpl";
@@ -34,17 +33,15 @@ export class ScrollFSM extends FSMImpl {
         this.addState(scrolled);
 
         const scroll = new ScrollTransition(this.initState, scrolled);
-        scroll.action = (event: Event): void => {
-            if (event.target !== null && isScrollEvent(event) && dataHandler !== undefined) {
-                dataHandler.initToScroll(event);
-            }
+        scroll.action = (event: UIEvent): void => {
+            dataHandler?.initToScroll(event);
         };
     }
 }
 
 
 interface ScrollFSMHandler extends FSMDataHandler {
-    initToScroll(event: Event): void;
+    initToScroll(event: UIEvent): void;
 }
 
 /**
@@ -61,7 +58,7 @@ export class Scroll extends InteractionBase<ScrollData, ScrollFSM> {
         super(new ScrollFSM());
 
         this.handler = {
-            "initToScroll": (event: MouseEvent): void => (this.getData() as ScrollDataImpl).setScrollData(event),
+            "initToScroll": (event: UIEvent): void => (this.getData() as ScrollDataImpl).setScrollData(event),
             "reinitData": (): void => this.reinitData()
         };
 

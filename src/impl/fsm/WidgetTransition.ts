@@ -20,7 +20,7 @@ import {InputState} from "../../api/fsm/InputState";
  * This transition must be used to use a widget within an interaction.
  * @author Arnaud BLOUIN
  */
-export abstract class WidgetTransition<T> extends TransitionBase {
+export abstract class WidgetTransition<T> extends TransitionBase<Event> {
     /**
      * The pressed button.
      */

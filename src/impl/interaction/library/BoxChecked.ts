@@ -37,10 +37,8 @@ export class BoxCheckedFSM extends FSMImpl {
         this.addState(checked);
 
         const tr = new BoxCheckPressedTransition(this.initState, checked);
-        tr.action = (event: Event): void => {
-            if (event.target !== null && isCheckBox(event.target) && dataHandler !== undefined) {
-                dataHandler.initToCheckHandler(event);
-            }
+        tr.action = (event: InputEvent): void => {
+            dataHandler?.initToCheckHandler(event);
         };
     }
 }
@@ -64,9 +62,7 @@ export class BoxChecked extends InteractionBase<WidgetData<HTMLInputElement>, Bo
 
         this.handler = {
             "initToCheckHandler": (event: Event): void => {
-                if (event.target !== null && isCheckBox(event.target)) {
-                    (this.data as WidgetDataImpl<HTMLInputElement>).setWidget(event.target);
-                }
+                (this.data as WidgetDataImpl<HTMLInputElement>).setWidget(event.target as HTMLInputElement);
             },
             "reinitData": (): void => this.reinitData()
         };

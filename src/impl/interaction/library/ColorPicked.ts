@@ -36,9 +36,7 @@ export class ColorPickedFSM extends FSMImpl {
 
         const tr = new ColorPickedTransition(this.initState, picked);
         tr.action = (event: Event): void => {
-            if (event.target !== null && isColorChoice(event.target) && dataHandler !== undefined) {
-                dataHandler.initToPickedHandler(event);
-            }
+            dataHandler?.initToPickedHandler(event);
         };
     }
 }
@@ -64,9 +62,7 @@ export class ColorPicked extends InteractionBase<WidgetData<HTMLInputElement>, C
 
         this.handler = {
             "initToPickedHandler": (event: Event): void => {
-                if (event.target !== null && isColorChoice(event.target)) {
-                    (this.data as WidgetDataImpl<HTMLInputElement>).setWidget(event.target);
-                }
+                (this.data as WidgetDataImpl<HTMLInputElement>).setWidget(event.target as HTMLInputElement);
             },
             "reinitData": (): void => this.reinitData()
         };

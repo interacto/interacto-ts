@@ -27,7 +27,7 @@ import {Transition} from "../../api/fsm/Transition";
  * Entering this transition starts the underlying sub-FSM.
  * To leave the transition, the sub-FSM must end.
  */
-export class SubFSMTransition extends TransitionBase {
+export class SubFSMTransition extends TransitionBase<Event> {
     private readonly subFSM: FSM;
 
     private readonly subFSMHandler: FSMHandler;
@@ -101,7 +101,7 @@ export class SubFSMTransition extends TransitionBase {
     }
 
     public execute(event: Event): InputState | undefined {
-        const transition: Transition | undefined = this.findTransition(event);
+        const transition: Transition<Event> | undefined = this.findTransition(event);
 
         if (transition === undefined) {
             return undefined;
@@ -113,7 +113,7 @@ export class SubFSMTransition extends TransitionBase {
         return transition.getTarget();
     }
 
-    public accept(event: Event): boolean {
+    public accept(event: Event): event is Event {
         return this.findTransition(event) !== undefined;
     }
 
@@ -121,7 +121,7 @@ export class SubFSMTransition extends TransitionBase {
         return this.findTransition(event)?.isGuardOK(event) ?? false;
     }
 
-    private findTransition(event: Event): Transition | undefined {
+    private findTransition(event: Event): Transition<Event> | undefined {
         return this.subFSM
             .getInitState()
             .getTransitions()

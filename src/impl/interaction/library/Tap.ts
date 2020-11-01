@@ -56,38 +56,29 @@ class TapFSM extends FSMImpl {
         this.addState(timeouted);
 
         const touchInit = new TouchReleaseTransition(this.initState, ended);
-        const touchInitAction = (event: Event): void => {
-            if (event instanceof TouchEvent && dataHandler !== undefined) {
-                dataHandler.tap(event);
-            }
+        const touchInitAction = (event: TouchEvent): void => {
+            dataHandler?.tap(event);
         };
         touchInit.action = touchInitAction;
-        touchInit.isGuardOK = (_event: Event): boolean => this.nbTaps === 1;
+        touchInit.isGuardOK = (_event: TouchEvent): boolean => this.nbTaps === 1;
 
         const touchTouched = new TouchReleaseTransition(this.initState, touched);
-        touchTouched.action = (event: Event): void => {
-            if (event instanceof TouchEvent) {
-                this.countTaps++;
-
-                if (dataHandler !== undefined) {
-                    dataHandler.tap(event);
-                }
-            }
+        touchTouched.action = (event: TouchEvent): void => {
+            this.countTaps++;
+            dataHandler?.tap(event);
         };
         touchTouched.isGuardOK = (_event: Event): boolean => this.nbTaps > 1;
 
         const touchTouchedTouched = new TouchReleaseTransition(touched, touched);
-        touchTouchedTouched.action = (event: Event): void => {
+        touchTouchedTouched.action = (event: TouchEvent): void => {
             this.countTaps++;
-            if (event instanceof TouchEvent && dataHandler !== undefined) {
-                dataHandler.tap(event);
-            }
+            dataHandler?.tap(event);
         };
-        touchTouchedTouched.isGuardOK = (_event: Event): boolean => (this.countTaps + 1) < this.nbTaps;
+        touchTouchedTouched.isGuardOK = (_event: TouchEvent): boolean => (this.countTaps + 1) < this.nbTaps;
 
         const touchEnded = new TouchReleaseTransition(touched, ended);
         touchEnded.action = touchInitAction;
-        touchEnded.isGuardOK = (_event: Event): boolean => (this.countTaps + 1) === this.nbTaps;
+        touchEnded.isGuardOK = (_event: TouchEvent): boolean => (this.countTaps + 1) === this.nbTaps;
 
         new TimeoutTransition(touched, timeouted, () => 1000);
     }

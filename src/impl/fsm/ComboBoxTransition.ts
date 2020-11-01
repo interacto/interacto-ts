@@ -21,7 +21,7 @@ import {TransitionBase} from "./TransitionBase";
  * An FSM transition for the ComboBox HTML element.
  * @author Gwendal DIDOT
  */
-export class ComboBoxTransition extends TransitionBase {
+export class ComboBoxTransition extends TransitionBase<Event> {
 
     /**
      * Creates the transition.
@@ -30,7 +30,7 @@ export class ComboBoxTransition extends TransitionBase {
         super(srcState, tgtState);
     }
 
-    public accept(event: Event): boolean {
+    public accept(event: Event): event is Event {
         return event.target !== null && isComboBox(event.target);
     }
 

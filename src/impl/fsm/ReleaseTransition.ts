@@ -21,7 +21,7 @@ import {TransitionBase} from "./TransitionBase";
  * This transition corresponds to a release of a button of a pointing device.
  * @author Gwendal DIDOT
  */
-export class ReleaseTransition extends TransitionBase {
+export class ReleaseTransition extends TransitionBase<MouseEvent> {
     /**
      * Defines a transition.
      * @param srcState The source state of the transition.
@@ -31,8 +31,8 @@ export class ReleaseTransition extends TransitionBase {
         super(srcState, tgtState);
     }
 
-    public accept(e: Event): boolean {
-        return e instanceof MouseEvent && e.type === EventRegistrationToken.mouseUp;
+    public accept(event: Event): event is MouseEvent {
+        return event instanceof MouseEvent && event.type === EventRegistrationToken.mouseUp;
     }
 
     public getAcceptedEvents(): Set<string> {

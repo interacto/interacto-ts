@@ -17,8 +17,8 @@ import {InputState} from "../../src/api/fsm/InputState";
 import {OutputStateBase} from "../../src/impl/fsm/OutputStateBase";
 import {StubTransitionOK} from "./StubTransitionOK";
 import {StdState} from "../../src/impl/fsm/StdState";
-import {TransitionBase} from "../../src/impl/fsm/TransitionBase";
 import {mock, MockProxy} from "jest-mock-extended";
+import {Transition} from "../../src/api/fsm/Transition";
 
 let state: OutputStateBase;
 let fsm: MockProxy<FSMImpl> & FSMImpl;
@@ -43,16 +43,16 @@ test("getTransitions", () => {
 });
 
 test("addTransition OK", () => {
-    const t1 = mock<TransitionBase>();
-    const t2 = mock<TransitionBase>();
+    const t1 = mock<Transition<Event>>();
+    const t2 = mock<Transition<Event>>();
     state.addTransition(t2);
     state.addTransition(t1);
     expect(state.getTransitions()).toStrictEqual([t2, t1]);
 });
 
 test("uninstall", () => {
-    const t1 = mock<TransitionBase>();
-    const t2 = mock<TransitionBase>();
+    const t1 = mock<Transition<Event>>();
+    const t2 = mock<Transition<Event>>();
     state.addTransition(t1);
     state.addTransition(t2);
     state.uninstall();

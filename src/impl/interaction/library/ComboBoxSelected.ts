@@ -37,9 +37,7 @@ export class ComboBoxSelectedFSM extends FSMImpl {
 
         const tr = new ComboBoxTransition(this.initState, selected);
         tr.action = (event: Event): void => {
-            if (event.target !== null && isComboBox(event.target) && dataHandler !== undefined) {
-                dataHandler.initToSelectedHandler(event);
-            }
+            dataHandler?.initToSelectedHandler(event);
         };
     }
 }
@@ -65,9 +63,7 @@ export class ComboBoxSelected extends InteractionBase<WidgetData<HTMLSelectEleme
 
         this.handler = {
             "initToSelectedHandler": (event: Event): void => {
-                if (event.target !== null && isComboBox(event.target)) {
-                    (this.data as WidgetDataImpl<HTMLSelectElement>).setWidget(event.target);
-                }
+                (this.data as WidgetDataImpl<HTMLSelectElement>).setWidget(event.target as HTMLSelectElement);
             },
             "reinitData": (): void => this.reinitData()
         };

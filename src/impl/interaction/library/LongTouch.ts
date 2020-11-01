@@ -62,18 +62,13 @@ class LongTouchFSM extends FSMImpl {
         this.addState(timeouted);
 
         const press = new TouchPressureTransition(this.initState, touched);
-        press.action = (event: Event): void => {
-            if (event instanceof TouchEvent) {
-                this.currentTouchID = event.changedTouches[0].identifier;
-                if (dataHandler !== undefined) {
-                    dataHandler.tap(event);
-                }
-            }
+        press.action = (event: TouchEvent): void => {
+            this.currentTouchID = event.changedTouches[0].identifier;
+            dataHandler?.tap(event);
         };
 
         const release = new TouchReleaseTransition(touched, releasedTooEarly);
-        release.isGuardOK = (event: Event): boolean => event instanceof TouchEvent &&
-            event.changedTouches[0].identifier === this.currentTouchID;
+        release.isGuardOK = (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.currentTouchID;
 
         new TimeoutTransition(touched, timeouted, () => this.duration);
 

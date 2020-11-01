@@ -61,23 +61,19 @@ export class DnDFSM extends FSMImpl {
         this.setStartingState(dragged);
 
         const press = new PressureTransition(this.initState, pressed);
-        press.action = (event: Event): void => {
-            if (event instanceof MouseEvent) {
-                this.buttonToCheck = event.button;
-                if (dataHandler !== undefined) {
-                    dataHandler.onPress(event);
-                }
+        press.action = (event: MouseEvent): void => {
+            this.buttonToCheck = event.button;
+            if (dataHandler !== undefined) {
+                dataHandler.onPress(event);
             }
         };
 
         const relCancel = new ReleaseTransition(pressed, cancelled);
-        relCancel.isGuardOK = (event: Event): boolean => event instanceof MouseEvent && event.button === this.buttonToCheck;
+        relCancel.isGuardOK = (event: MouseEvent): boolean => event.button === this.buttonToCheck;
 
-        const guardMove = (event: Event): boolean => event instanceof MouseEvent && event.button === this.buttonToCheck;
-        const actionMove = (event: Event): void => {
-            if (dataHandler !== undefined && event instanceof MouseEvent) {
-                dataHandler.onDrag(event);
-            }
+        const guardMove = (event: MouseEvent): boolean => event.button === this.buttonToCheck;
+        const actionMove = (event: MouseEvent): void => {
+            dataHandler?.onDrag(event);
         };
 
         const move = new MoveTransition(pressed, dragged);
@@ -89,11 +85,9 @@ export class DnDFSM extends FSMImpl {
         moveDrag.action = actionMove;
 
         const release = new ReleaseTransition(dragged, released);
-        release.isGuardOK = (event: Event): boolean => event instanceof MouseEvent && event.button === this.buttonToCheck;
-        release.action = (event: Event): void => {
-            if (dataHandler !== undefined && event instanceof MouseEvent) {
-                dataHandler.onRelease(event);
-            }
+        release.isGuardOK = (event: MouseEvent): boolean => event.button === this.buttonToCheck;
+        release.action = (event: MouseEvent): void => {
+            dataHandler?.onRelease(event);
         };
 
         if (this.cancellable) {

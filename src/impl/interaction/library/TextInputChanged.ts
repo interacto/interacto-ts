@@ -57,16 +57,12 @@ export class TextInputChangedFSM extends FSMImpl {
 
         const trInit = new TextInputChangedTransition(this.initState, changed);
         trInit.action = (event: Event): void => {
-            if (event.target !== null && isTextInput(event.target) && dataHandler !== undefined) {
-                dataHandler.initToChangedHandler(event);
-            }
+            dataHandler?.initToChangedHandler(event);
         };
 
         const trChanged = new TextInputChangedTransition(changed, changed);
         trChanged.action = (event: Event): void => {
-            if (event.target !== null && isTextInput(event.target) && dataHandler !== undefined) {
-                dataHandler.initToChangedHandler(event);
-            }
+            dataHandler?.initToChangedHandler(event);
         };
 
         new TimeoutTransition(changed, ended, this.timeGapSupplier);

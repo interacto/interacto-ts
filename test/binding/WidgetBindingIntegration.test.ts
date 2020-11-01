@@ -33,8 +33,8 @@ let cmd: StubCmd;
 let whenValue: () => boolean;
 
 
-class TrStub extends TransitionBase {
-    public accept(event: StubEvent): boolean {
+class TrStub extends TransitionBase<StubSubEvent1> {
+    public accept(event: StubEvent): event is StubSubEvent1 {
         return event instanceof StubSubEvent1;
     }
 

@@ -41,16 +41,14 @@ export class ButtonPressedFSM extends FSMImpl {
         this.addState(pressed);
 
         const tr = new ButtonPressedTransition(this.initState, pressed);
-        tr.action = (event: Event): void => {
-            if (event.target !== null && isButton(event.target) && dataHandler !== undefined) {
-                dataHandler.initToPressedHandler(event);
-            }
+        tr.action = (event: InputEvent): void => {
+            dataHandler?.initToPressedHandler(event);
         };
     }
 }
 
 interface ButtonPressedFSMHandler extends FSMDataHandler {
-    initToPressedHandler(event: Event): void;
+    initToPressedHandler(event: InputEvent): void;
 }
 
 /**
@@ -67,10 +65,8 @@ export class ButtonPressed extends InteractionBase<WidgetData<HTMLButtonElement>
         super(new ButtonPressedFSM());
 
         this.handler = {
-            "initToPressedHandler": (event: Event): void => {
-                if (event.target !== null && isButton(event.target)) {
-                    (this.data as WidgetDataImpl<HTMLButtonElement>).setWidget(event.target);
-                }
+            "initToPressedHandler": (event: InputEvent): void => {
+                (this.data as WidgetDataImpl<HTMLButtonElement>).setWidget(event.target as HTMLButtonElement);
             },
             "reinitData": (): void => this.reinitData()
         };

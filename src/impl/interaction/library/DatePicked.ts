@@ -37,9 +37,7 @@ export class DatePickedFSM extends FSMImpl {
 
         const tr = new DatePickedTransition(this.initState, picked);
         tr.action = (event: Event): void => {
-            if (event.target !== null && isDatePicker(event.target) && dataHandler !== undefined) {
-                dataHandler.initToPickedHandler(event);
-            }
+            dataHandler?.initToPickedHandler(event);
         };
     }
 }
@@ -65,9 +63,7 @@ export class DatePicked extends InteractionBase<WidgetData<HTMLInputElement>, Da
 
         this.handler = {
             "initToPickedHandler": (event: Event): void => {
-                if (event.target !== null && isDatePicker(event.target)) {
-                    (this.data as WidgetDataImpl<HTMLInputElement>).setWidget(event.target);
-                }
+                (this.data as WidgetDataImpl<HTMLInputElement>).setWidget(event.target as HTMLInputElement);
             },
             "reinitData": (): void => this.reinitData()
         };

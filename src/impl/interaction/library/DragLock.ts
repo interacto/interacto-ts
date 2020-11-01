@@ -100,11 +100,8 @@ export class DragLockFSM extends FSMImpl {
 
         new SubFSMTransition(locked, cancelled, cancelDbleClick);
 
-        const moveAction = (event: Event): void => {
-            const handler = this.getDataHandler();
-            if (handler !== undefined && event instanceof MouseEvent) {
-                handler.onMove(event);
-            }
+        const moveAction = (event: MouseEvent): void => {
+            this.getDataHandler()?.onMove(event);
         };
         const movelock = new MoveTransition(locked, moved);
         movelock.action = moveAction;

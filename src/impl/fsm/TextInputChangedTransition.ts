@@ -20,7 +20,7 @@ import {TransitionBase} from "./TransitionBase";
 /**
  * An FSM transition for the different text input HTML element.
  */
-export class TextInputChangedTransition extends TransitionBase {
+export class TextInputChangedTransition extends TransitionBase<Event> {
 
     /**
      * Creates the transition.
@@ -29,7 +29,7 @@ export class TextInputChangedTransition extends TransitionBase {
         super(srcState, tgtState);
     }
 
-    public accept(event: Event): boolean {
+    public accept(event: Event): event is Event {
         return event.target !== null && isTextInput(event.target);
     }
 

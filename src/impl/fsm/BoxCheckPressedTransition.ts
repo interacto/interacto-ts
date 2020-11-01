@@ -21,7 +21,7 @@ import {TransitionBase} from "./TransitionBase";
  * An FSM transition for the CheckBox HTML element.
  * @author Gwendal DIDOT
  */
-export class BoxCheckPressedTransition extends TransitionBase {
+export class BoxCheckPressedTransition extends TransitionBase<Event> {
 
     /**
      * Creates the transition.
@@ -30,7 +30,7 @@ export class BoxCheckPressedTransition extends TransitionBase {
         super(srcState, tgtState);
     }
 
-    public accept(event: Event): boolean {
+    public accept(event: Event): event is Event {
         return event.target !== null && isCheckBox(event.target);
     }
 

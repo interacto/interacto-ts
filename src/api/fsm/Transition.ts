@@ -17,7 +17,7 @@ import {InputState} from "./InputState";
 /**
  * The concept of FSM transition.
  */
-export interface Transition {
+export interface Transition<E extends Event> {
     /**
      * Executes the transition.
      * @param event The event to process.
@@ -26,9 +26,9 @@ export interface Transition {
      */
     execute(event: Event): InputState | undefined;
 
-    isGuardOK(event: Event): boolean;
+    isGuardOK(event: E): boolean;
 
-    accept(event: Event): boolean;
+    accept(event: Event): event is E;
 
     /**
      * @return The set of events accepted by the transition.

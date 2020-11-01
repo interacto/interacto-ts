@@ -14,14 +14,14 @@
 
 import {InputState} from "../../api/fsm/InputState";
 import {OutputState} from "../../api/fsm/OutputState";
-import {EventRegistrationToken} from "./Events";
+import {EventRegistrationToken, isScrollEvent} from "./Events";
 import {TransitionBase} from "./TransitionBase";
 
 /**
  * This transition corresponds to the scroll of a window
  * @author Gwendal DIDOT
  */
-export class ScrollTransition extends TransitionBase {
+export class ScrollTransition extends TransitionBase<UIEvent> {
     /**
      * Creates the transition.
      */
@@ -29,8 +29,8 @@ export class ScrollTransition extends TransitionBase {
         super(srcState, tgtState);
     }
 
-    public accept(event: Event): boolean {
-        return event.type === "scroll";
+    public accept(event: Event): event is UIEvent {
+        return isScrollEvent(event);
     }
 
     public getAcceptedEvents(): Set<string> {

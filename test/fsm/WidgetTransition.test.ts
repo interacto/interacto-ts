@@ -24,7 +24,7 @@ class WTransition extends WidgetTransition<string> {
         super(new StdState(mock<FSMImpl>(), "a"), new StdState(mock<FSMImpl>(), "b"));
     }
 
-    public accept(_event: StubEvent): boolean {
+    public accept(event: StubEvent): event is StubEvent {
         return false;
     }
 

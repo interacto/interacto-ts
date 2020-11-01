@@ -21,7 +21,7 @@ import {TransitionBase} from "./TransitionBase";
  * This transition corresponds to a move of a button of a pointing device.
  * @author Arnaud BLOUIN
  */
-export class MoveTransition extends TransitionBase {
+export class MoveTransition extends TransitionBase<MouseEvent> {
     /**
      * Creates the transition.
      */
@@ -29,7 +29,7 @@ export class MoveTransition extends TransitionBase {
         super(srcState, tgtState);
     }
 
-    public accept(event: Event): boolean {
+    public accept(event: Event): event is MouseEvent {
         return event instanceof MouseEvent && event.type === EventRegistrationToken.mouseMove;
     }
 

@@ -20,7 +20,7 @@ import {TransitionBase} from "./TransitionBase";
 /**
  * This transition defines a touch pressure.
  */
-export class TouchPressureTransition extends TransitionBase {
+export class TouchPressureTransition extends TransitionBase<TouchEvent> {
     /**
      * Defines a transition.
      * @param srcState The source state of the transition.
@@ -30,7 +30,7 @@ export class TouchPressureTransition extends TransitionBase {
         super(srcState, tgtState);
     }
 
-    public accept(e: Event): boolean {
+    public accept(e: Event): e is TouchEvent {
         return e instanceof TouchEvent && e.type === EventRegistrationToken.touchstart;
     }
 

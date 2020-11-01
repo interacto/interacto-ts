@@ -58,10 +58,8 @@ export class KeysTypedFSM extends FSMImpl {
         this.addState(keyup);
         this.addState(timeouted);
 
-        const action = (event: Event): void => {
-            if (event instanceof KeyboardEvent) {
-                dataHandler?.onKeyTyped(event);
-            }
+        const action = (event: KeyboardEvent): void => {
+            dataHandler?.onKeyTyped(event);
         };
         const keyupInit = new KeyReleaseTransition(this.initState, keyup);
         const keyupSeq = new KeyReleaseTransition(keyup, keyup);

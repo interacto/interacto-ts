@@ -19,7 +19,7 @@ import {Transition} from "../../api/fsm/Transition";
 /**
  * The base implementation of a FSM transition.
  */
-export abstract class TransitionBase implements Transition {
+export abstract class TransitionBase<E extends Event> implements Transition<E> {
     public readonly src: OutputState;
 
     public readonly tgt: InputState;
@@ -46,12 +46,12 @@ export abstract class TransitionBase implements Transition {
         return undefined;
     }
 
-    public action(_event?: Event): void {
+    public action(_event?: E): void {
     }
 
-    public abstract accept(event: Event): boolean;
+    public abstract accept(event: Event): event is E;
 
-    public isGuardOK(_event: Event): boolean {
+    public isGuardOK(_event: E): boolean {
         return true;
     }
 

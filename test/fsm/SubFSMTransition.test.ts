@@ -17,9 +17,9 @@ import {InputState} from "../../src/api/fsm/InputState";
 import {StdState} from "../../src/impl/fsm/StdState";
 import {SubFSMTransition} from "../../src/impl/fsm/SubFSMTransition";
 import {TerminalState} from "../../src/impl/fsm/TerminalState";
-import {TransitionBase} from "../../src/impl/fsm/TransitionBase";
 import {StubSubEvent1, StubSubEvent2} from "./StubEvent";
 import {SubStubTransition1} from "./StubTransitionOK";
+import {Transition} from "../../src/api/fsm/Transition";
 
 jest.mock("../../src/impl/fsm/StdState");
 
@@ -92,7 +92,7 @@ test("uninstall", () => {
 });
 
 test("get accepted events", () => {
-    const tr2 = {} as TransitionBase;
+    const tr2 = {} as Transition<Event>;
     tr2.getAcceptedEvents = jest.fn(() => new Set(["foo", "bar"]));
     fsm.initState.addTransition(tr2);
     const evts = tr.getAcceptedEvents();

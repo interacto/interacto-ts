@@ -14,7 +14,6 @@
 
 import {StateBase} from "./StateBase";
 import {OutputState} from "../../api/fsm/OutputState";
-import {TransitionBase} from "./TransitionBase";
 import {FSM} from "../../api/fsm/FSM";
 import {Transition} from "../../api/fsm/Transition";
 
@@ -22,7 +21,7 @@ import {Transition} from "../../api/fsm/Transition";
  * Base implementation of the OutputState interface.
  */
 export abstract class OutputStateBase extends StateBase implements OutputState {
-    protected readonly transitions: Array<Transition>;
+    protected readonly transitions: Array<Transition<Event>>;
 
     /**
      * Creates the state.
@@ -49,11 +48,11 @@ export abstract class OutputStateBase extends StateBase implements OutputState {
         this.transitions.length = 0;
     }
 
-    public getTransitions(): Array<Transition> {
+    public getTransitions(): Array<Transition<Event>> {
         return [...this.transitions];
     }
 
-    public addTransition(tr: TransitionBase): void {
+    public addTransition(tr: Transition<Event>): void {
         this.transitions.push(tr);
     }
 

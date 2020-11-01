@@ -18,7 +18,7 @@ import {FSMImpl} from "../../src/impl/fsm/FSMImpl";
 import {StubTransitionOK} from "./StubTransitionOK";
 import {mock} from "jest-mock-extended";
 
-let tr: TransitionBase;
+let tr: TransitionBase<Event>;
 let state1: StdState;
 let state2: StdState;
 

@@ -48,13 +48,9 @@ export class KeysPressedFSM extends FSMImpl {
         this.addState(pressed);
         this.addState(ended);
 
-        const actionkp = (event: Event): void => {
-            if (event instanceof KeyboardEvent) {
-                this.currentCodes.push(event.code);
-                if (dataHandler !== undefined) {
-                    dataHandler.onKeyPressed(event);
-                }
-            }
+        const actionkp = (event: KeyboardEvent): void => {
+            this.currentCodes.push(event.code);
+            dataHandler?.onKeyPressed(event);
         };
         const kpInit = new KeyPressureTransition(this.initState, pressed);
         kpInit.action = actionkp;
@@ -63,8 +59,7 @@ export class KeysPressedFSM extends FSMImpl {
         kpPressed.action = actionkp;
 
         const kr = new KeyReleaseTransition(pressed, ended);
-        kr.isGuardOK = (event: Event): boolean => event instanceof KeyboardEvent &&
-            (this.currentCodes.find(value => value === event.code) !== undefined);
+        kr.isGuardOK = (event: KeyboardEvent): boolean => this.currentCodes.find(value => value === event.code) !== undefined;
     }
 
     public reinit(): void {

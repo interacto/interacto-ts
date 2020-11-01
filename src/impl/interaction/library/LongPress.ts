@@ -63,15 +63,13 @@ export class LongPressFSM extends FSMImpl {
         this.addState(timeouted);
 
         const press = new PressureTransition(this.initState, down);
-        press.action = (event: Event): void => {
-            if (event instanceof MouseEvent) {
-                this.currentButton = event.button;
-                dataHandler?.press(event);
-            }
+        press.action = (event: MouseEvent): void => {
+            this.currentButton = event.button;
+            dataHandler?.press(event);
         };
 
         const release = new ReleaseTransition(down, releasedTooEarly);
-        release.isGuardOK = (event: Event): boolean => event instanceof MouseEvent && event.button === this.currentButton;
+        release.isGuardOK = (event: MouseEvent): boolean => event.button === this.currentButton;
 
         new TimeoutTransition(down, timeouted, () => this.duration);
     }

@@ -43,17 +43,14 @@ export class ClickFSM extends FSMImpl {
         this.addState(clicked);
 
         const clickt = new ClickTransition(this.initState, clicked);
-        clickt.action = (event: Event): void => {
-            if (event instanceof MouseEvent) {
-                this.setCheckButton(event.button);
+        clickt.action = (event: MouseEvent): void => {
+            this.setCheckButton(event.button);
 
-                if (dataHandler !== undefined) {
-                    dataHandler.initToClicked(event);
-                }
+            if (dataHandler !== undefined) {
+                dataHandler.initToClicked(event);
             }
         };
-        clickt.isGuardOK = (event: Event): boolean => this.checkButton === undefined ||
-            (event instanceof MouseEvent && event.button === this.checkButton);
+        clickt.isGuardOK = (event: MouseEvent): boolean => this.checkButton === undefined || event.button === this.checkButton;
     }
 
     public getCheckButton(): number {

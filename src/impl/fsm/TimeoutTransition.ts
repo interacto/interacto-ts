@@ -22,7 +22,7 @@ import {catFSM} from "../../api/logging/ConfigLog";
  * A timeout transition is an FSM transition that is not executed by an event:
  * the FSM goes through such a transition on a timeout.
  */
-export class TimeoutTransition extends TransitionBase {
+export class TimeoutTransition extends TransitionBase<Event> {
     /**
      * The timeoutDuration in ms.
      */
@@ -81,7 +81,7 @@ export class TimeoutTransition extends TransitionBase {
         }
     }
 
-    public accept(_event?: Event): boolean {
+    public accept(event?: Event): event is Event {
         return this.timeouted;
     }
 

@@ -17,7 +17,7 @@ import {StubEvent, StubSubEvent1, StubSubEvent2} from "./StubEvent";
 import {InputState} from "../../src/api/fsm/InputState";
 import {OutputState} from "../../src/api/fsm/OutputState";
 
-export class StubTransitionOK extends TransitionBase {
+export class StubTransitionOK<E extends StubEvent> extends TransitionBase<E> {
     public guard: boolean;
 
     public constructor(srcState: OutputState, tgtState: InputState, guard?: boolean) {
@@ -25,11 +25,11 @@ export class StubTransitionOK extends TransitionBase {
         this.guard = guard ?? true;
     }
 
-    public accept(_event: StubEvent): boolean {
+    public accept(event: StubEvent): event is E {
         return true;
     }
 
-    public isGuardOK(_event: StubEvent): boolean {
+    public isGuardOK(_event: E): boolean {
         return this.guard;
     }
 
@@ -38,8 +38,8 @@ export class StubTransitionOK extends TransitionBase {
     }
 }
 
-export class SubStubTransition1 extends StubTransitionOK {
-    public accept(event: StubEvent): boolean {
+export class SubStubTransition1 extends StubTransitionOK<StubSubEvent1> {
+    public accept(event: StubEvent): event is StubSubEvent1 {
         return event instanceof StubSubEvent1;
     }
 
@@ -48,8 +48,8 @@ export class SubStubTransition1 extends StubTransitionOK {
     }
 }
 
-export class SubStubTransition2 extends StubTransitionOK {
-    public accept(event: StubEvent): boolean {
+export class SubStubTransition2 extends StubTransitionOK<StubSubEvent2> {
+    public accept(event: StubEvent): event is StubSubEvent2 {
         return event instanceof StubSubEvent2;
     }
 

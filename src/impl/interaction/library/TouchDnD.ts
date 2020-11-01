@@ -52,31 +52,21 @@ export class TouchDnDFSM extends FSMImpl {
         this.addState(released);
 
         const pressure = new TouchPressureTransition(this.initState, touched);
-        pressure.action = (event: Event): void => {
-            if (event instanceof TouchEvent) {
-                this.touchID = event.changedTouches[0].identifier;
-                if (dataHandler !== undefined) {
-                    dataHandler.onTouch(event);
-                }
-            }
+        pressure.action = (event: TouchEvent): void => {
+            this.touchID = event.changedTouches[0].identifier;
+            dataHandler?.onTouch(event);
         };
 
         const move = new TouchMoveTransition(touched, touched);
-        move.isGuardOK = (event: Event): boolean => event instanceof TouchEvent &&
-            event.changedTouches[0].identifier === this.touchID;
-        move.action = (event: Event): void => {
-            if (dataHandler !== undefined && event instanceof TouchEvent) {
-                dataHandler.onMove(event);
-            }
+        move.isGuardOK = (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.touchID;
+        move.action = (event: TouchEvent): void => {
+            dataHandler?.onMove(event);
         };
 
         const release = new TouchReleaseTransition(touched, released);
-        release.isGuardOK = (event: Event): boolean => event instanceof TouchEvent &&
-            event.changedTouches[0].identifier === this.touchID;
-        release.action = (event: Event): void => {
-            if (dataHandler !== undefined && event instanceof TouchEvent) {
-                dataHandler.onRelease(event);
-            }
+        release.isGuardOK = (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.touchID;
+        release.action = (event: TouchEvent): void => {
+            dataHandler?.onRelease(event);
         };
 
         super.buildFSM(dataHandler);

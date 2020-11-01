@@ -14,14 +14,14 @@
 
 import {InputState} from "../../api/fsm/InputState";
 import {OutputState} from "../../api/fsm/OutputState";
-import {EventRegistrationToken} from "./Events";
+import {EventRegistrationToken, isKeyDownEvent} from "./Events";
 import {TransitionBase} from "./TransitionBase";
 
 /**
  * A transition for a pressure of a key of a keyboard.
  * @author Arnaud BLOUIN
  */
-export class KeyPressureTransition extends TransitionBase {
+export class KeyPressureTransition extends TransitionBase<KeyboardEvent> {
     /**
      * Creates the transition.
      */
@@ -29,8 +29,8 @@ export class KeyPressureTransition extends TransitionBase {
         super(srcState, tgtState);
     }
 
-    public accept(event: Event): boolean {
-        return event instanceof KeyboardEvent && event.type === EventRegistrationToken.keyDown;
+    public accept(event: Event): event is KeyboardEvent {
+        return isKeyDownEvent(event);
     }
 
     public getAcceptedEvents(): Set<string> {

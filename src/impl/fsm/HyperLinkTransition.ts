@@ -21,7 +21,7 @@ import {TransitionBase} from "./TransitionBase";
  * An FSM transition for the Hyperlink.
  * @author Gwendal DIDOT
  */
-export class HyperLinkTransition extends TransitionBase {
+export class HyperLinkTransition extends TransitionBase<Event> {
 
     /**
      * Creates the transition.
@@ -30,7 +30,7 @@ export class HyperLinkTransition extends TransitionBase {
         super(srcState, tgtState);
     }
 
-    public accept(event: Event): boolean {
+    public accept(event: Event): event is Event {
         return event.target !== null && isHyperLink(event.target);
     }
 

@@ -36,13 +36,13 @@ export interface OutputState extends State {
     /**
      * @return The list of outgoing transitions of the state.
      */
-    getTransitions(): Array<Transition>;
+    getTransitions(): Array<Transition<Event>>;
 
     /**
      * Adds the given transitions to the list of outgoing transitions of the state.
      * @param tr The transition to add.
      */
-    addTransition(tr: Transition): void;
+    addTransition(tr: Transition<Event>): void;
 }
 
 export function isOutputStateType(obj: unknown): obj is OutputState {

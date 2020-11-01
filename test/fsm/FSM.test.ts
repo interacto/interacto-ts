@@ -310,8 +310,8 @@ describe("testProcessUniqueEvent -- cancel", () => {
 });
 
 
-class SubStubTransition1 extends StubTransitionOK {
-    public accept(event: StubEvent): boolean {
+class SubStubTransition1 extends StubTransitionOK<StubSubEvent1> {
+    public accept(event: StubEvent): event is StubSubEvent1 {
         return event instanceof StubSubEvent1;
     }
 
@@ -320,8 +320,8 @@ class SubStubTransition1 extends StubTransitionOK {
     }
 }
 
-class SubStubTransition2 extends StubTransitionOK {
-    public accept(event: StubEvent): boolean {
+class SubStubTransition2 extends StubTransitionOK<StubSubEvent2> {
+    public accept(event: StubEvent): event is StubSubEvent2 {
         return event instanceof StubSubEvent2;
     }
 
@@ -330,8 +330,8 @@ class SubStubTransition2 extends StubTransitionOK {
     }
 }
 
-class SubStubTransition3 extends StubTransitionOK {
-    public accept(event: StubEvent): boolean {
+class SubStubTransition3 extends StubTransitionOK<StubSubEvent3> {
+    public accept(event: StubEvent): event is StubSubEvent3 {
         return event instanceof StubSubEvent3;
     }
 
@@ -345,7 +345,7 @@ describe("testMultipleTransitionChoice", () => {
     let std: StdState;
     let terminal: TerminalState;
     let cancel: CancellingState;
-    let iToS: StubTransitionOK;
+    let iToS: StubTransitionOK<StubEvent>;
 
     beforeEach(() => {
         fsm.addHandler(handler);

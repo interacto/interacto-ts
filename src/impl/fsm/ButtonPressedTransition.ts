@@ -21,7 +21,7 @@ import {TransitionBase} from "./TransitionBase";
  * An FSM transition for the Button HTML element.
  * @author Arnaud BLOUIN
  */
-export class ButtonPressedTransition extends TransitionBase {
+export class ButtonPressedTransition extends TransitionBase<Event> {
 
     /**
      * Creates the transition.
@@ -30,7 +30,7 @@ export class ButtonPressedTransition extends TransitionBase {
         super(srcState, tgtState);
     }
 
-    public accept(e: Event): boolean {
+    public accept(e: Event): e is Event {
         return e.target !== null && isButton(e.target);
     }
 

@@ -83,21 +83,15 @@ export class PanFSM extends FSMImpl {
         this._startingState = moved;
 
         const press = new TouchPressureTransition(this.initState, touched);
-        press.action = (event: Event): void => {
-            if (event instanceof TouchEvent) {
-                this.setInitialValueOnTouch(event);
-                if (dataHandler !== undefined) {
-                    dataHandler.touch(event);
-                }
-            }
+        press.action = (event: TouchEvent): void => {
+            this.setInitialValueOnTouch(event);
+            dataHandler?.touch(event);
         };
 
         const releaseTouched = new TouchReleaseTransition(touched, cancelled);
-        releaseTouched.isGuardOK = (event: Event): boolean => event instanceof TouchEvent &&
-            event.changedTouches[0].identifier === this.touchID;
+        releaseTouched.isGuardOK = (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.touchID;
 
-        const isGuardMoveKO = (evt: Event): boolean => evt instanceof TouchEvent &&
-                evt.changedTouches[0].identifier === this.touchID &&
+        const isGuardMoveKO = (evt: TouchEvent): boolean => evt.changedTouches[0].identifier === this.touchID &&
                 !this.isStable(evt.changedTouches[0].clientX, evt.changedTouches[0].clientY);
 
         const moveTouched = new TouchMoveTransition(touched, cancelled);
@@ -106,13 +100,10 @@ export class PanFSM extends FSMImpl {
         const moveCancelled = new TouchMoveTransition(moved, cancelled);
         moveCancelled.isGuardOK = isGuardMoveKO;
 
-        const isGuardMoveOK = (evt: Event): boolean => evt instanceof TouchEvent &&
-            evt.changedTouches[0].identifier === this.touchID &&
+        const isGuardMoveOK = (evt: TouchEvent): boolean => evt.changedTouches[0].identifier === this.touchID &&
             this.isStable(evt.changedTouches[0].clientX, evt.changedTouches[0].clientY);
-        const actionMoveOK = (event: Event): void => {
-            if (event instanceof TouchEvent && dataHandler !== undefined) {
-                dataHandler.panning(event);
-            }
+        const actionMoveOK = (event: TouchEvent): void => {
+            dataHandler?.panning(event);
         };
 
         const moveTouchedOK = new TouchMoveTransition(touched, moved);
@@ -124,16 +115,14 @@ export class PanFSM extends FSMImpl {
         moveMovedOK.action = actionMoveOK;
 
         const releaseMoved = new TouchReleaseTransition(moved, cancelled);
-        releaseMoved.isGuardOK = (evt: Event): boolean => evt instanceof TouchEvent &&
-            evt.changedTouches[0].identifier === this.touchID && !this.checkFinalPanConditions(evt);
+        releaseMoved.isGuardOK = (evt: TouchEvent): boolean => evt.changedTouches[0].identifier === this.touchID &&
+            !this.checkFinalPanConditions(evt);
 
         const releaseFinal = new TouchReleaseTransition(moved, released);
-        releaseFinal.isGuardOK = (evt: Event): boolean => evt instanceof TouchEvent &&
-            evt.changedTouches[0].identifier === this.touchID && this.checkFinalPanConditions(evt);
-        releaseFinal.action = (event: Event): void => {
-            if (dataHandler !== undefined && event instanceof TouchEvent) {
-                dataHandler.panned(event);
-            }
+        releaseFinal.isGuardOK = (evt: TouchEvent): boolean => evt.changedTouches[0].identifier === this.touchID &&
+            this.checkFinalPanConditions(evt);
+        releaseFinal.action = (event: TouchEvent): void => {
+            dataHandler?.panned(event);
         };
 
         super.buildFSM(dataHandler);

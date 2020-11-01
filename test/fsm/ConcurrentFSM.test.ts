@@ -36,8 +36,8 @@ class StubTouchFSM extends FSMImpl {
         this.addState(released);
         this.addState(cancelled);
 
-        new class extends TransitionBase {
-            public accept(_event: Event): boolean {
+        new class extends TransitionBase<Event> {
+            public accept(event: Event): event is Event {
                 return true;
             }
 
@@ -50,8 +50,8 @@ class StubTouchFSM extends FSMImpl {
             }
         }(this.initState, touched);
 
-        new class extends TransitionBase {
-            public accept(_event: Event): boolean {
+        new class extends TransitionBase<Event> {
+            public accept(event: Event): event is Event {
                 return true;
             }
 
@@ -64,8 +64,8 @@ class StubTouchFSM extends FSMImpl {
             }
         }(touched, moved);
 
-        new class extends TransitionBase {
-            public accept(_event: Event): boolean {
+        new class extends TransitionBase<Event> {
+            public accept(event: Event): event is Event {
                 return true;
             }
 
@@ -78,8 +78,8 @@ class StubTouchFSM extends FSMImpl {
             }
         }(moved, moved);
 
-        new class extends TransitionBase {
-            public accept(_event: Event): boolean {
+        new class extends TransitionBase<Event> {
+            public accept(event: Event): event is Event {
                 return true;
             }
 
@@ -92,8 +92,8 @@ class StubTouchFSM extends FSMImpl {
             }
         }(moved, released);
 
-        new class extends TransitionBase {
-            public accept(_event: Event): boolean {
+        new class extends TransitionBase<Event> {
+            public accept(event: Event): event is Event {
                 return true;
             }
 

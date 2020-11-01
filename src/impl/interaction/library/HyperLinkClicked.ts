@@ -37,9 +37,7 @@ export class HyperLinkClickedFSM extends FSMImpl {
 
         const tr = new HyperLinkTransition(this.initState, clicked);
         tr.action = (event: Event): void => {
-            if (event.target !== null && isHyperLink(event.target) && dataHandler !== undefined) {
-                dataHandler.initToClickedHandler(event);
-            }
+            dataHandler?.initToClickedHandler(event);
         };
     }
 }
@@ -64,9 +62,7 @@ export class HyperLinkClicked extends InteractionBase<WidgetData<HTMLAnchorEleme
 
         this.handler = {
             "initToClickedHandler": (event: Event): void => {
-                if (event.target !== null && isHyperLink(event.target)) {
-                    (this.data as WidgetDataImpl<HTMLAnchorElement>).setWidget(event.target);
-                }
+                (this.data as WidgetDataImpl<HTMLAnchorElement>).setWidget(event.target as HTMLAnchorElement);
             },
             "reinitData": (): void => this.reinitData()
         };

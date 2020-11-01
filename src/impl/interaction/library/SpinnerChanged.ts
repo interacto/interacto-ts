@@ -60,9 +60,7 @@ export class SpinnerChangedFSM extends FSMImpl {
         this.addState(ended);
 
         const spinnerAction: (_: Event) => void = (event: Event) => {
-            if (event.target !== null && isSpinner(event.target) && dataHandler !== undefined) {
-                dataHandler.initToChangedHandler(event);
-            }
+            dataHandler?.initToChangedHandler(event);
         };
 
         const changedInit = new SpinnerChangedTransition(this.initState, changed);
@@ -94,9 +92,7 @@ export class SpinnerChanged extends InteractionBase<WidgetData<HTMLInputElement>
 
         this.handler = {
             "initToChangedHandler": (event: Event): void => {
-                if (event.target !== null && isSpinner(event.target)) {
-                    (this.data as WidgetDataImpl<HTMLInputElement>).setWidget(event.target);
-                }
+                (this.data as WidgetDataImpl<HTMLInputElement>).setWidget(event.target as HTMLInputElement);
             },
             "reinitData": (): void => this.reinitData()
         };
