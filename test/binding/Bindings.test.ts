@@ -15,7 +15,7 @@
 import {
     AnonCmd,
     catBinder,
-    clickBinder,
+    clickBinder, clicksBinder,
     Command,
     CommandsRegistry,
     dbleClickBinder,
@@ -30,9 +30,9 @@ import {
     KeysData,
     keysPressBinder,
     keyTypeBinder,
-    LogLevel,
+    LogLevel, longPressBinder,
     longTouchBinder,
-    PointData,
+    PointData, PointsData,
     pressBinder,
     scrollBinder,
     ScrollData,
@@ -242,6 +242,43 @@ test("touch DnD binding", () => {
     elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, elt, 11, 23, 110, 230));
     elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchmove, 1, elt, 11, 23, 110, 230));
     elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 1, elt, 11, 23, 110, 230));
+
+    expect(producedCmds).toHaveLength(1);
+});
+
+test("clicks binding work", () => {
+    binding = clicksBinder(3)
+        .on(elt)
+        .when(_i => true)
+        .toProduce((_i: PointsData) => new StubCmd(true))
+        .then((_c, _i) => {
+        })
+        .bind();
+
+    disposable = binding.produces().subscribe(c => producedCmds.push(c));
+
+    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.click, elt, 1, 2, 3, 4, 0));
+    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.click, elt, 1, 2, 3, 4, 0));
+    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.click, elt, 1, 2, 3, 4, 0));
+
+    expect(producedCmds).toHaveLength(1);
+});
+
+test("longpress binding work", () => {
+    binding = longPressBinder(500)
+        .on(elt)
+        .when(_i => true)
+        .toProduce((_i: PointData) => new StubCmd(true))
+        .then((_c, _i) => {
+        })
+        .first((_c, _i) => {
+        })
+        .bind();
+
+    disposable = binding.produces().subscribe(c => producedCmds.push(c));
+
+    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, elt, 1, 2, 3, 4, 0));
+    jest.runAllTimers();
 
     expect(producedCmds).toHaveLength(1);
 });

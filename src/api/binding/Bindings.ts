@@ -57,6 +57,9 @@ import {KeyInteractionBinder} from "../binder/KeyInteractionBinder";
 import {KeysBinder} from "../../impl/binder/KeysBinder";
 import {KeyInteractionUpdateBinder} from "../binder/KeyInteractionUpdateBinder";
 import {TouchDnD} from "../../impl/interaction/library/TouchDnD";
+import {LongPress} from "../../impl/interaction/library/LongPress";
+import {Clicks} from "../../impl/interaction/library/Clicks";
+import {PointsData} from "../interaction/PointsData";
 
 let observer: BindingsObserver | undefined;
 
@@ -198,6 +201,26 @@ export function dbleClickBinder(): InteractionUpdateBinder<Interaction<PointData
 export function pressBinder(): InteractionBinder<Interaction<PointData>, PointData> {
     return new UpdateBinder(observer)
         .usingInteraction<Press, PointData>(() => new Press());
+}
+
+/**
+ * Creates a widget binding that uses the long press interaction.
+ * @param duration The duration of the pressure to end the user interaction.
+ * If this duration is not reached, the interaction is cancelled.
+ */
+export function longPressBinder(duration: number): InteractionUpdateBinder<Interaction<PointData>, PointData> {
+    return new UpdateBinder(observer)
+        .usingInteraction<LongPress, PointData>(() => new LongPress(duration));
+}
+
+/**
+ * Creates a binding for clicking n times.
+ * @param nbClicks The number of clicks to do.
+ * If this number is not reached, the interaction is cancelled after a timeout of 1s.
+ */
+export function clicksBinder(nbClicks: number): InteractionUpdateBinder<Interaction<PointsData>, PointsData> {
+    return new UpdateBinder(observer)
+        .usingInteraction<Clicks, PointsData>(() => new Clicks(nbClicks));
 }
 
 /**
