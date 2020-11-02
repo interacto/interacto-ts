@@ -1,3 +1,12 @@
+# 5.1.1
+
+* fix(binding): the new interactions do not have binding shortcuts
+* doc(readme): links fixed in readme
+* update(deps): type def dep updated
+* clean(fsm): code optimisation
+* test(interaction,binding): test fixture simplification
+
+
 # 5.1.0
 
 * change(interaction): API change. Transition has now a generic type used by its methods. 
