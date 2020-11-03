@@ -99,7 +99,7 @@ test("stop when not started", () => {
 });
 
 test("testGetAcceptEventsEmpty", () => {
-    expect(evt.getAcceptedEvents().size).toStrictEqual(0);
+    expect(evt.getAcceptedEvents()).toHaveLength(0);
 });
 
 test("testExecuteWithoutTimeout", () => {

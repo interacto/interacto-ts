@@ -19,7 +19,6 @@ import {InteractionData} from "../../src/api/interaction/InteractionData";
 import {keyPressBinder, keysTypeBinder} from "../../src/api/binding/Bindings";
 import {StubCmd} from "../command/StubCmd";
 import {createKeyEvent} from "../interaction/StubEvents";
-import {EventRegistrationToken} from "../../src/impl/fsm/Events";
 import {UndoCollector} from "../../src/impl/undo/UndoCollector";
 import {CommandsRegistry} from "../../src/impl/command/CommandsRegistry";
 import {Interaction} from "../../src/api/interaction/Interaction";
@@ -74,7 +73,7 @@ test("key press std key", () => {
         .toProduce(() => new StubCmd(true))
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "A"));
+    elt.dispatchEvent(createKeyEvent("keydown", "A"));
     expect(producedCmds).toHaveLength(1);
 });
 
@@ -85,7 +84,7 @@ test("key press std key when false", () => {
         .toProduce(() => new StubCmd(true))
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "A"));
+    elt.dispatchEvent(createKeyEvent("keydown", "A"));
     expect(producedCmds).toHaveLength(0);
 });
 
@@ -96,7 +95,7 @@ test("key press std key when true", () => {
         .toProduce(() => new StubCmd(true))
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "A"));
+    elt.dispatchEvent(createKeyEvent("keydown", "A"));
     expect(producedCmds).toHaveLength(1);
 });
 
@@ -106,7 +105,7 @@ test("key press modifier KO", () => {
         .toProduce(() => new StubCmd(true))
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
-    const key = createKeyEvent(EventRegistrationToken.keyDown, "Shift");
+    const key = createKeyEvent("keydown", "Shift");
     jest.spyOn(key, "shiftKey", "get").mockReturnValue(true);
     elt.dispatchEvent(key);
     expect(producedCmds).toHaveLength(0);
@@ -118,7 +117,7 @@ test("key press modifier OK", () => {
         .toProduce(() => new StubCmd(true))
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
-    const key = createKeyEvent(EventRegistrationToken.keyDown, "Shift");
+    const key = createKeyEvent("keydown", "Shift");
     jest.spyOn(key, "shiftKey", "get").mockReturnValue(true);
     elt.dispatchEvent(key);
     expect(producedCmds).toHaveLength(1);
@@ -131,7 +130,7 @@ test("key press with routine OK", () => {
         .toProduce(() => new StubCmd(true))
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "b"));
+    elt.dispatchEvent(createKeyEvent("keydown", "b"));
     expect(producedCmds).toHaveLength(1);
 });
 
@@ -143,7 +142,7 @@ test("key press std key with when false", () => {
         .toProduce(() => new StubCmd(true))
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "b"));
+    elt.dispatchEvent(createKeyEvent("keydown", "b"));
     expect(producedCmds).toHaveLength(0);
 });
 
@@ -155,7 +154,7 @@ test("key press std key with when true", () => {
         .when(i => i.getKey() === "c")
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "c"));
+    elt.dispatchEvent(createKeyEvent("keydown", "c"));
     expect(producedCmds).toHaveLength(1);
 });
 
@@ -166,7 +165,7 @@ test("key press with routine KO 1", () => {
         .toProduce(() => new StubCmd(true))
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "d"));
+    elt.dispatchEvent(createKeyEvent("keydown", "d"));
     expect(producedCmds).toHaveLength(0);
 });
 
@@ -177,7 +176,7 @@ test("key press with routine KO several keys", () => {
         .toProduce(() => new StubCmd(true))
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "d"));
+    elt.dispatchEvent(createKeyEvent("keydown", "d"));
     expect(producedCmds).toHaveLength(0);
 });
 
@@ -188,7 +187,7 @@ test("key press with routine OK modifier", () => {
         .toProduce(() => new StubCmd(true))
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
-    const key = createKeyEvent(EventRegistrationToken.keyDown, "Alt");
+    const key = createKeyEvent("keydown", "Alt");
     jest.spyOn(key, "altKey", "get").mockReturnValue(true);
     elt.dispatchEvent(key);
     expect(producedCmds).toHaveLength(1);
@@ -205,7 +204,7 @@ test("key press first then end", () => {
         .end(end)
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "f"));
+    elt.dispatchEvent(createKeyEvent("keydown", "f"));
     expect(first).toHaveBeenCalledTimes(1);
     expect(end).toHaveBeenCalledTimes(1);
 });
@@ -216,12 +215,12 @@ test("keys type std keys", () => {
         .toProduce(() => new StubCmd(true))
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "a"));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "a"));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "x"));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "x"));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "y"));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "y"));
+    elt.dispatchEvent(createKeyEvent("keydown", "a"));
+    elt.dispatchEvent(createKeyEvent("keyup", "a"));
+    elt.dispatchEvent(createKeyEvent("keydown", "x"));
+    elt.dispatchEvent(createKeyEvent("keyup", "x"));
+    elt.dispatchEvent(createKeyEvent("keydown", "y"));
+    elt.dispatchEvent(createKeyEvent("keyup", "y"));
     jest.runOnlyPendingTimers();
     expect(producedCmds).toHaveLength(1);
 });
@@ -240,12 +239,12 @@ test("keys type first end", () => {
         .then(then)
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "b"));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "b"));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "y"));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "y"));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "r"));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "r"));
+    elt.dispatchEvent(createKeyEvent("keydown", "b"));
+    elt.dispatchEvent(createKeyEvent("keyup", "b"));
+    elt.dispatchEvent(createKeyEvent("keydown", "y"));
+    elt.dispatchEvent(createKeyEvent("keyup", "y"));
+    elt.dispatchEvent(createKeyEvent("keydown", "r"));
+    elt.dispatchEvent(createKeyEvent("keyup", "r"));
     jest.runOnlyPendingTimers();
     expect(first).toHaveBeenCalledTimes(1);
     expect(end).toHaveBeenCalledTimes(1);
@@ -260,10 +259,10 @@ test("keys type with 1", () => {
         .toProduce(() => new StubCmd(true))
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "a"));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "a"));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "x"));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "x"));
+    elt.dispatchEvent(createKeyEvent("keydown", "a"));
+    elt.dispatchEvent(createKeyEvent("keyup", "a"));
+    elt.dispatchEvent(createKeyEvent("keydown", "x"));
+    elt.dispatchEvent(createKeyEvent("keyup", "x"));
     jest.runOnlyPendingTimers();
     expect(producedCmds).toHaveLength(0);
 });
@@ -275,10 +274,10 @@ test("keys type with 2", () => {
         .toProduce(() => new StubCmd(true))
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "a"));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "a"));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "b"));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "b"));
+    elt.dispatchEvent(createKeyEvent("keydown", "a"));
+    elt.dispatchEvent(createKeyEvent("keyup", "a"));
+    elt.dispatchEvent(createKeyEvent("keydown", "b"));
+    elt.dispatchEvent(createKeyEvent("keyup", "b"));
     jest.runOnlyPendingTimers();
     expect(producedCmds).toHaveLength(0);
 });
@@ -290,10 +289,10 @@ test("keys type with 3", () => {
         .toProduce(() => new StubCmd(true))
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "z"));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "z"));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "b"));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "b"));
+    elt.dispatchEvent(createKeyEvent("keydown", "z"));
+    elt.dispatchEvent(createKeyEvent("keyup", "z"));
+    elt.dispatchEvent(createKeyEvent("keydown", "b"));
+    elt.dispatchEvent(createKeyEvent("keyup", "b"));
     jest.runOnlyPendingTimers();
     expect(producedCmds).toHaveLength(1);
 });
@@ -305,10 +304,10 @@ test("keys type with 4", () => {
         .toProduce(() => new StubCmd(true))
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "b"));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "b"));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "z"));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "z"));
+    elt.dispatchEvent(createKeyEvent("keydown", "b"));
+    elt.dispatchEvent(createKeyEvent("keyup", "b"));
+    elt.dispatchEvent(createKeyEvent("keydown", "z"));
+    elt.dispatchEvent(createKeyEvent("keyup", "z"));
     jest.runOnlyPendingTimers();
     expect(producedCmds).toHaveLength(1);
 });
@@ -320,8 +319,8 @@ test("keys type with nothing", () => {
         .toProduce(() => new StubCmd(true))
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "b"));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "b"));
+    elt.dispatchEvent(createKeyEvent("keydown", "b"));
+    elt.dispatchEvent(createKeyEvent("keyup", "b"));
     jest.runOnlyPendingTimers();
     expect(producedCmds).toHaveLength(1);
 });
@@ -333,8 +332,8 @@ test("keys type with 5", () => {
         .toProduce(() => new StubCmd(true))
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "b"));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "b"));
+    elt.dispatchEvent(createKeyEvent("keydown", "b"));
+    elt.dispatchEvent(createKeyEvent("keyup", "b"));
     jest.runOnlyPendingTimers();
     expect(producedCmds).toHaveLength(1);
 });
@@ -346,10 +345,10 @@ test("keys type with 3 mixed keydown up", () => {
         .toProduce(() => new StubCmd(true))
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "z"));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "b"));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "z"));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "b"));
+    elt.dispatchEvent(createKeyEvent("keydown", "z"));
+    elt.dispatchEvent(createKeyEvent("keydown", "b"));
+    elt.dispatchEvent(createKeyEvent("keyup", "z"));
+    elt.dispatchEvent(createKeyEvent("keyup", "b"));
     jest.runOnlyPendingTimers();
     expect(producedCmds).toHaveLength(1);
 });
@@ -363,10 +362,10 @@ test("that 'strictStart' works correctly when no 'when' routine with key binder"
 
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "c"));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "b"));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "c"));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "b"));
+    elt.dispatchEvent(createKeyEvent("keydown", "c"));
+    elt.dispatchEvent(createKeyEvent("keydown", "b"));
+    elt.dispatchEvent(createKeyEvent("keyup", "c"));
+    elt.dispatchEvent(createKeyEvent("keyup", "b"));
     jest.runOnlyPendingTimers();
 
     expect(producedCmds).toHaveLength(1);
@@ -382,10 +381,10 @@ test("that 'strictStart' works correctly when the 'when' routine returns false",
 
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "g"));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "y"));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "g"));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "y"));
+    elt.dispatchEvent(createKeyEvent("keydown", "g"));
+    elt.dispatchEvent(createKeyEvent("keydown", "y"));
+    elt.dispatchEvent(createKeyEvent("keyup", "g"));
+    elt.dispatchEvent(createKeyEvent("keyup", "y"));
     jest.runOnlyPendingTimers();
 
     expect(producedCmds).toHaveLength(0);
@@ -402,10 +401,10 @@ test("that 'strictStart' works correctly when the 'when' routine returns true", 
 
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "g"));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "y"));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "g"));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "y"));
+    elt.dispatchEvent(createKeyEvent("keydown", "g"));
+    elt.dispatchEvent(createKeyEvent("keydown", "y"));
+    elt.dispatchEvent(createKeyEvent("keyup", "g"));
+    elt.dispatchEvent(createKeyEvent("keyup", "y"));
     jest.runOnlyPendingTimers();
 
     expect(producedCmds).toHaveLength(1);

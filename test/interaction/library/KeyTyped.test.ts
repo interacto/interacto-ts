@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {EventRegistrationToken, FSMHandler, KeyTyped} from "../../../src/interacto";
+import {FSMHandler, KeyTyped} from "../../../src/interacto";
 import {createKeyEvent} from "../StubEvents";
 import {mock} from "jest-mock-extended";
 
@@ -37,23 +37,23 @@ test("cannot create several times the FSM", () => {
 
 test("type 'a' in the textarea starts and stops the interaction.", () => {
     interaction.registerToNodes([text]);
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "a"));
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "a"));
+    text.dispatchEvent(createKeyEvent("keydown", "a"));
+    text.dispatchEvent(createKeyEvent("keyup", "a"));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
 });
 
 test("only press the key don't stop the interaction.", () => {
     interaction.registerToNodes([text]);
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "a"));
+    text.dispatchEvent(createKeyEvent("keydown", "a"));
     expect(handler.fsmStarts).not.toHaveBeenCalled();
     expect(handler.fsmStops).not.toHaveBeenCalled();
 });
 
 test("if you release a key different that the one you press, the interaction don't stop", () => {
     interaction.registerToNodes([text]);
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "a"));
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "b"));
+    text.dispatchEvent(createKeyEvent("keydown", "a"));
+    text.dispatchEvent(createKeyEvent("keyup", "b"));
     expect(handler.fsmStarts).not.toHaveBeenCalled();
     expect(handler.fsmStops).not.toHaveBeenCalled();
 });

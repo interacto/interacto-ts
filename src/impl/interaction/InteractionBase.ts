@@ -17,9 +17,10 @@ import {OutputState} from "../../api/fsm/OutputState";
 import {InitState} from "../fsm/InitState";
 import {catInteraction} from "../../api/logging/ConfigLog";
 import {InteractionData} from "../../api/interaction/InteractionData";
-import {EventRegistrationToken, isKeyEvent, isMouseEvent, isTouchEvent} from "../fsm/Events";
+import {isKeyEvent, isMouseEvent, isTouchEvent} from "../fsm/Events";
 import {Subscription} from "rxjs";
 import {Interaction} from "../../api/interaction/Interaction";
+import {EventType} from "../../api/fsm/EventType";
 
 /**
  * The base implementation of a user interaction.
@@ -97,10 +98,10 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
             return;
         }
 
-        const currEvents: Array<string> = this.getCurrentAcceptedEvents(newState);
-        const events: Array<string> = [...this.getEventTypesOf(oldState)];
-        const eventsToRemove: Array<string> = events.filter(e => !currEvents.includes(e));
-        const eventsToAdd: Array<string> = currEvents.filter(e => !events.includes(e));
+        const currEvents: Array<EventType> = this.getCurrentAcceptedEvents(newState);
+        const events: Array<EventType> = [...this.getEventTypesOf(oldState)];
+        const eventsToRemove: Array<EventType> = events.filter(e => !currEvents.includes(e));
+        const eventsToAdd: Array<EventType> = currEvents.filter(e => !events.includes(e));
         this.registeredNodes.forEach(n => {
             eventsToRemove.forEach(type => this.unregisterEventToNode(type, n));
             eventsToAdd.forEach(type => this.registerEventToNode(type, n));
@@ -114,7 +115,7 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
         });
     }
 
-    protected getCurrentAcceptedEvents(state: OutputState): Array<string> {
+    protected getCurrentAcceptedEvents(state: OutputState): Array<EventType> {
         return [...this.getEventTypesOf(state)];
     }
 
@@ -125,13 +126,13 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
         });
     }
 
-    protected getEventTypesOf(state: OutputState): Set<string> {
+    protected getEventTypesOf(state: OutputState): Array<EventType> {
         if (state.getTransitions().length === 0) {
-            return new Set();
+            return [];
         }
 
         return state.getTransitions().map(t => t.getAcceptedEvents())
-            .reduce((a, b) => new Set([...a, ...b]));
+            .reduce((a, b) => [...a, ...b]);
     }
 
     public registerToNodes(widgets: Array<EventTarget>): void {
@@ -166,7 +167,7 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
         this.mutationObservers.push(newMutationObserver);
     }
 
-    protected registerEventToNode(eventType: string, node: EventTarget): void {
+    protected registerEventToNode(eventType: EventType, node: EventTarget): void {
         if (isMouseEvent(eventType)) {
             node.addEventListener(eventType, this.getMouseHandler());
             return;
@@ -179,13 +180,13 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
             node.addEventListener(eventType, this.getKeyHandler());
             return;
         }
-        if (EventRegistrationToken.scroll === eventType) {
-            node.addEventListener(EventRegistrationToken.scroll, this.getUIHandler());
+        if (eventType === "scroll") {
+            node.addEventListener(eventType, this.getUIHandler());
 
         }
     }
 
-    protected unregisterEventToNode(eventType: string, node: EventTarget): void {
+    protected unregisterEventToNode(eventType: EventType, node: EventTarget): void {
         if (isMouseEvent(eventType)) {
             node.removeEventListener(eventType, this.getMouseHandler());
             return;
@@ -198,28 +199,28 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
             node.removeEventListener(eventType, this.getKeyHandler());
             return;
         }
-        if (EventRegistrationToken.scroll === eventType) {
-            node.removeEventListener(EventRegistrationToken.scroll, this.getUIHandler());
+        if (eventType === "scroll") {
+            node.removeEventListener(eventType, this.getUIHandler());
 
         }
     }
 
     protected registerActionHandlerClick(node: EventTarget): void {
-        node.addEventListener(EventRegistrationToken.click, this.getActionHandler());
-        node.addEventListener(EventRegistrationToken.auxclick, this.getActionHandler());
+        node.addEventListener("click", this.getActionHandler());
+        node.addEventListener("auxclick", this.getActionHandler());
     }
 
     protected unregisterActionHandlerClick(node: EventTarget): void {
-        node.removeEventListener(EventRegistrationToken.click, this.getActionHandler());
-        node.removeEventListener(EventRegistrationToken.auxclick, this.getActionHandler());
+        node.removeEventListener("click", this.getActionHandler());
+        node.removeEventListener("auxclick", this.getActionHandler());
     }
 
     protected registerActionHandlerInput(node: EventTarget): void {
-        node.addEventListener(EventRegistrationToken.input, this.getActionHandler());
+        node.addEventListener("input", this.getActionHandler());
     }
 
     protected unregisterActionHandlerInput(node: EventTarget): void {
-        node.removeEventListener(EventRegistrationToken.input, this.getActionHandler());
+        node.removeEventListener("input", this.getActionHandler());
     }
 
     protected getActionHandler(): EventListener {

@@ -14,8 +14,9 @@
 import {Subscription} from "rxjs";
 import {
     CommandsRegistry,
-    EventRegistrationToken, FSM,
-    Interaction, InteractionBase,
+    FSM,
+    Interaction,
+    InteractionBase,
     InteractionData,
     multiTouchBinder,
     UndoCollector,
@@ -51,10 +52,10 @@ test("run multi-touch produces cmd", () => {
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
-    c1.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, c1, 11, 23, 110, 230));
-    c1.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 2, c1, 31, 13, 310, 130));
-    c1.dispatchEvent(createTouchEvent(EventRegistrationToken.touchmove, 2, c1, 15, 30, 150, 300));
-    c1.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 2, c1, 15, 30, 150, 300));
+    c1.dispatchEvent(createTouchEvent("touchstart", 1, c1, 11, 23, 110, 230));
+    c1.dispatchEvent(createTouchEvent("touchstart", 2, c1, 31, 13, 310, 130));
+    c1.dispatchEvent(createTouchEvent("touchmove", 2, c1, 15, 30, 150, 300));
+    c1.dispatchEvent(createTouchEvent("touchend", 2, c1, 15, 30, 150, 300));
 
     expect(binding).toBeDefined();
     expect(cmd.exec).toStrictEqual(1);
@@ -79,13 +80,13 @@ test("run multi-touch two times recycle events", () => {
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
-    c1.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, c1, 11, 23, 110, 230));
-    c1.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 2, c1, 31, 13, 310, 130));
-    c1.dispatchEvent(createTouchEvent(EventRegistrationToken.touchmove, 2, c1, 15, 30, 150, 300));
-    c1.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 2, c1, 15, 30, 150, 300));
-    c1.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 3, c1, 31, 13, 310, 130));
-    c1.dispatchEvent(createTouchEvent(EventRegistrationToken.touchmove, 3, c1, 15, 30, 150, 300));
-    c1.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 1, c1, 15, 30, 150, 300));
+    c1.dispatchEvent(createTouchEvent("touchstart", 1, c1, 11, 23, 110, 230));
+    c1.dispatchEvent(createTouchEvent("touchstart", 2, c1, 31, 13, 310, 130));
+    c1.dispatchEvent(createTouchEvent("touchmove", 2, c1, 15, 30, 150, 300));
+    c1.dispatchEvent(createTouchEvent("touchend", 2, c1, 15, 30, 150, 300));
+    c1.dispatchEvent(createTouchEvent("touchstart", 3, c1, 31, 13, 310, 130));
+    c1.dispatchEvent(createTouchEvent("touchmove", 3, c1, 15, 30, 150, 300));
+    c1.dispatchEvent(createTouchEvent("touchend", 1, c1, 15, 30, 150, 300));
 
     expect(binding).toBeDefined();
     expect(producedCmds).toHaveLength(2);
@@ -106,8 +107,8 @@ test("unsubscribe does not trigger the binding", () => {
 
     (binding.getInteraction() as InteractionBase<InteractionData, FSM>).onNodeUnregistered(c1);
 
-    c1.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, c1, 11, 23, 110, 230));
-    c1.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 2, c1, 31, 13, 310, 130));
+    c1.dispatchEvent(createTouchEvent("touchstart", 1, c1, 11, 23, 110, 230));
+    c1.dispatchEvent(createTouchEvent("touchstart", 2, c1, 31, 13, 310, 130));
 
     expect(binding.isRunning()).toBeFalsy();
 });

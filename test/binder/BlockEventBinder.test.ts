@@ -14,7 +14,6 @@
 import {Subscription} from "rxjs";
 import {
     CommandsRegistry,
-    EventRegistrationToken,
     nodeBinder,
     PointData,
     Press,
@@ -59,7 +58,7 @@ test("event bubbling works", () => {
         .on(canvas1)
         .bind();
 
-    canvas2.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, canvas2));
+    canvas2.dispatchEvent(createMouseEvent("mousedown", canvas2));
 
     expect(binding2.getTimesEnded()).toStrictEqual(1);
     expect(binding1.getTimesEnded()).toStrictEqual(1);
@@ -78,7 +77,7 @@ test("event bubbling respects physical laws", () => {
         .on(canvas1)
         .bind();
 
-    canvas1.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, canvas1));
+    canvas1.dispatchEvent(createMouseEvent("mousedown", canvas1));
 
     expect(binding1.getTimesEnded()).toStrictEqual(1);
     expect(binding2.getTimesEnded()).toStrictEqual(0);
@@ -98,7 +97,7 @@ test("stop propagation prevents bubbling", () => {
         .on(canvas1)
         .bind();
 
-    canvas2.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, canvas2));
+    canvas2.dispatchEvent(createMouseEvent("mousedown", canvas2));
 
     expect(binding2.getTimesEnded()).toStrictEqual(1);
     expect(binding1.getTimesEnded()).toStrictEqual(0);
@@ -118,7 +117,7 @@ test("stop propagation prevents bubbling using cloned builders", () => {
         .on(canvas2)
         .bind();
 
-    canvas2.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, canvas2));
+    canvas2.dispatchEvent(createMouseEvent("mousedown", canvas2));
 
     expect(binding2.getTimesEnded()).toStrictEqual(1);
     expect(binding1.getTimesEnded()).toStrictEqual(0);

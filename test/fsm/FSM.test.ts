@@ -24,10 +24,10 @@ import {SubFSMTransition} from "../../src/impl/fsm/SubFSMTransition";
 import {TerminalState} from "../../src/impl/fsm/TerminalState";
 import {TimeoutTransition} from "../../src/impl/fsm/TimeoutTransition";
 import {catFSM} from "../../src/api/logging/ConfigLog";
-import {StubEvent, StubSubEvent1, StubSubEvent2, StubSubEvent3} from "./StubEvent";
-import {StubTransitionOK} from "./StubTransitionOK";
+import {StubTransitionOK, SubStubTransition1, SubStubTransition2, SubStubTransition3} from "./StubTransitionOK";
 import {FSMHandler} from "../../src/api/fsm/FSMHandler";
 import {mock, MockProxy} from "jest-mock-extended";
+import {createKeyEvent, createMouseEvent, createTouchEvent} from "../interaction/StubEvents";
 
 let fsm: FSMImpl;
 let handler: FSMHandler & MockProxy<FSMHandler>;
@@ -63,7 +63,7 @@ test("testAddState", () => {
 
 
 test("testAddRemainingNotNull", () => {
-    const evt = new StubEvent();
+    const evt = mock<Event>();
     fsm.addRemaningEventsToProcess(evt);
     expect(fsm.getEventsToProcess()).toStrictEqual([evt]);
 });
@@ -84,7 +84,7 @@ test("testSetInnerFalse", () => {
 });
 
 test("testProcessRemainingEvents", () => {
-    const evt = new StubEvent();
+    const evt = mock<Event>();
     fsm.addRemaningEventsToProcess(evt);
     fsm.onTerminating();
     expect(fsm.getEventsToProcess()).toHaveLength(0);
@@ -169,7 +169,7 @@ test("testUninstall", () => {
     jest.spyOn(s1, "uninstall");
     jest.spyOn(subj, "complete");
     fsm.addState(s1);
-    fsm.addRemaningEventsToProcess(new StubEvent());
+    fsm.addRemaningEventsToProcess(mock<Event>());
     fsm.uninstall();
 
     expect(fsm.getStates()).toHaveLength(0);
@@ -209,7 +209,7 @@ describe("testProcessUniqueEvent", () => {
     });
 
     test("testFireEventTriggerFSMStartUpdate", () => {
-        fsm.process(new StubEvent());
+        fsm.process(mock<Event>());
         expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmCancels).not.toHaveBeenCalled();
@@ -217,14 +217,14 @@ describe("testProcessUniqueEvent", () => {
     });
 
     test("testFire2EventsToEnd", () => {
-        fsm.process(new StubEvent());
-        fsm.process(new StubEvent());
+        fsm.process(mock<Event>());
+        fsm.process(mock<Event>());
         expect(fsm.getCurrentState()).toBe(fsm.initState);
     });
 
     test("testFireEventTriggerFSMUpdate", () => {
-        fsm.process(new StubEvent());
-        fsm.process(new StubEvent());
+        fsm.process(mock<Event>());
+        fsm.process(mock<Event>());
         expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmStops).toHaveBeenCalledTimes(1);
@@ -232,16 +232,16 @@ describe("testProcessUniqueEvent", () => {
     });
 
     test("testFireThreeEventRestartOK", () => {
-        fsm.process(new StubEvent());
-        fsm.process(new StubEvent());
-        fsm.process(new StubEvent());
+        fsm.process(mock<Event>());
+        fsm.process(mock<Event>());
+        fsm.process(mock<Event>());
         expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
     });
 
     test("testRecycleEvent", () => {
-        fsm.process(new StubEvent());
-        fsm.addRemaningEventsToProcess(new StubEvent());
-        fsm.process(new StubEvent());
+        fsm.process(mock<Event>());
+        fsm.addRemaningEventsToProcess(mock<Event>());
+        fsm.process(mock<Event>());
 
         expect(fsm.getCurrentState()).toBe(std);
         expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
@@ -249,14 +249,14 @@ describe("testProcessUniqueEvent", () => {
     });
 
     test("testReinit", () => {
-        fsm.process(new StubEvent());
+        fsm.process(mock<Event>());
         fsm.reinit();
         expect(fsm.getCurrentState()).toBe(fsm.initState);
     });
 
     test("testFullReinit", () => {
-        fsm.process(new StubEvent());
-        fsm.addRemaningEventsToProcess(new StubEvent());
+        fsm.process(mock<Event>());
+        fsm.addRemaningEventsToProcess(mock<Event>());
         fsm.fullReinit();
         expect(fsm.getEventsToProcess()).toHaveLength(0);
         expect(fsm.getCurrentState()).toBe(fsm.initState);
@@ -266,7 +266,7 @@ describe("testProcessUniqueEvent", () => {
         handler.fsmStarts.mockImplementation(() => {
             throw new CancelFSMException();
         });
-        fsm.process(new StubEvent());
+        fsm.process(mock<Event>());
         expect(fsm.getCurrentState()).toBe(fsm.initState);
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
@@ -278,7 +278,7 @@ describe("testProcessUniqueEvent", () => {
         handler.fsmUpdates.mockImplementation(() => {
             throw new CancelFSMException();
         });
-        fsm.process(new StubEvent());
+        fsm.process(mock<Event>());
         expect(fsm.getCurrentState()).toBe(fsm.initState);
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
@@ -290,8 +290,8 @@ describe("testProcessUniqueEvent", () => {
         handler.fsmStops.mockImplementation(() => {
             throw new CancelFSMException();
         });
-        fsm.process(new StubEvent());
-        fsm.process(new StubEvent());
+        fsm.process(mock<Event>());
+        fsm.process(mock<Event>());
         expect(fsm.getCurrentState()).toBe(fsm.initState);
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
@@ -300,13 +300,13 @@ describe("testProcessUniqueEvent", () => {
     });
 
     test("testHasStartedReinit", () => {
-        fsm.process(new StubEvent());
-        fsm.process(new StubEvent());
+        fsm.process(mock<Event>());
+        fsm.process(mock<Event>());
         expect(fsm.isStarted()).toBeFalsy();
     });
 
     test("testHasStarted", () => {
-        fsm.process(new StubEvent());
+        fsm.process(mock<Event>());
         expect(fsm.isStarted()).toBeTruthy();
     });
 });
@@ -328,8 +328,8 @@ describe("testProcessUniqueEvent -- cancel", () => {
     });
 
     test("testCancellation", () => {
-        fsm.process(new StubEvent());
-        fsm.process(new StubEvent());
+        fsm.process(mock<Event>());
+        fsm.process(mock<Event>());
 
         expect(fsm.getCurrentState()).toBe(fsm.initState);
         expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
@@ -337,9 +337,9 @@ describe("testProcessUniqueEvent -- cancel", () => {
     });
 
     test("testNoRecycleEventOnCancel", () => {
-        fsm.process(new StubEvent());
-        fsm.addRemaningEventsToProcess(new StubEvent());
-        fsm.process(new StubEvent());
+        fsm.process(mock<Event>());
+        fsm.addRemaningEventsToProcess(mock<Event>());
+        fsm.process(mock<Event>());
 
         expect(fsm.getCurrentState()).toBe(fsm.initState);
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
@@ -349,42 +349,11 @@ describe("testProcessUniqueEvent -- cancel", () => {
 });
 
 
-class SubStubTransition1 extends StubTransitionOK<StubSubEvent1> {
-    public accept(event: StubEvent): event is StubSubEvent1 {
-        return event instanceof StubSubEvent1;
-    }
-
-    public getAcceptedEvents(): Set<string> {
-        return new Set(["StubSubEvent1"]);
-    }
-}
-
-class SubStubTransition2 extends StubTransitionOK<StubSubEvent2> {
-    public accept(event: StubEvent): event is StubSubEvent2 {
-        return event instanceof StubSubEvent2;
-    }
-
-    public getAcceptedEvents(): Set<string> {
-        return new Set(["StubSubEvent2"]);
-    }
-}
-
-class SubStubTransition3 extends StubTransitionOK<StubSubEvent3> {
-    public accept(event: StubEvent): event is StubSubEvent3 {
-        return event instanceof StubSubEvent3;
-    }
-
-    public getAcceptedEvents(): Set<string> {
-        return new Set(["StubSubEvent3"]);
-    }
-}
-
-
 describe("testMultipleTransitionChoice", () => {
     let std: StdState;
     let terminal: TerminalState;
     let cancel: CancellingState;
-    let iToS: StubTransitionOK<StubEvent>;
+    let iToS: StubTransitionOK<Event>;
 
     beforeEach(() => {
         fsm.addHandler(handler);
@@ -403,15 +372,15 @@ describe("testMultipleTransitionChoice", () => {
 
     test("testNotTriggeredIfGuardKO", () => {
         iToS.guard = false;
-        fsm.process(new StubEvent());
+        fsm.process(mock<Event>());
 
         expect(fsm.getCurrentState()).toBe(fsm.initState);
         expect(handler.fsmStarts).not.toHaveBeenCalled();
     });
 
     test("testNotTriggeredIfNotGoodEvent", () => {
-        fsm.process(new StubEvent());
-        fsm.process(new StubEvent());
+        fsm.process(mock<Event>());
+        fsm.process(mock<Event>());
 
         expect(fsm.getCurrentState()).toBe(std);
         expect(handler.fsmCancels).not.toHaveBeenCalled();
@@ -421,8 +390,8 @@ describe("testMultipleTransitionChoice", () => {
     });
 
     test("testTriggerGoodChoice", () => {
-        fsm.process(new StubEvent());
-        fsm.process(new StubSubEvent2());
+        fsm.process(mock<Event>());
+        fsm.process(createKeyEvent("keydown", "a"));
 
         expect(fsm.getCurrentState()).toBe(fsm.initState);
         expect(handler.fsmStops).not.toHaveBeenCalled();
@@ -432,15 +401,15 @@ describe("testMultipleTransitionChoice", () => {
     });
 
     test("testHasStartedReinitOnCancel", () => {
-        fsm.process(new StubEvent());
-        fsm.process(new StubSubEvent2());
+        fsm.process(mock<Event>());
+        fsm.process(createKeyEvent("keydown", "a"));
 
         expect(fsm.isStarted()).toBeFalsy();
     });
 
     test("testTriggerGoodChoice2", () => {
-        fsm.process(new StubEvent());
-        fsm.process(new StubSubEvent1());
+        fsm.process(mock<Event>());
+        fsm.process(createMouseEvent("click", document.createElement("button")));
 
         expect(fsm.getCurrentState()).toBe(fsm.initState);
         expect(handler.fsmCancels).not.toHaveBeenCalled();
@@ -451,30 +420,30 @@ describe("testMultipleTransitionChoice", () => {
 
     test("check onstart not called when starting state diff", () => {
         fsm.setStartingState(terminal);
-        fsm.process(new StubEvent());
+        fsm.process(mock<Event>());
 
         expect(handler.fsmStarts).not.toHaveBeenCalled();
     });
 
     test("testStartingStateNotTriggeredSoNoUpdate", () => {
         fsm.setStartingState(terminal);
-        fsm.process(new StubEvent());
+        fsm.process(mock<Event>());
 
         expect(handler.fsmUpdates).not.toHaveBeenCalled();
     });
 
     test("testStartingStateNotTriggeredSoNoCancel", () => {
         fsm.setStartingState(terminal);
-        fsm.process(new StubEvent());
-        fsm.process(new StubSubEvent2());
+        fsm.process(mock<Event>());
+        fsm.process(createKeyEvent("keydown", "a"));
 
         expect(handler.fsmCancels).not.toHaveBeenCalled();
     });
 
     test("testStartingStateTriggeredOnTerminal", () => {
         fsm.setStartingState(terminal);
-        fsm.process(new StubEvent());
-        fsm.process(new StubSubEvent1());
+        fsm.process(mock<Event>());
+        fsm.process(createMouseEvent("click", document.createElement("button")));
 
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmStops).toHaveBeenCalledTimes(1);
@@ -482,8 +451,8 @@ describe("testMultipleTransitionChoice", () => {
 
     test("testStartingStateOnRecursion", () => {
         fsm.setStartingState(std);
-        fsm.process(new StubEvent());
-        fsm.process(new StubSubEvent3());
+        fsm.process(mock<Event>());
+        fsm.process(createTouchEvent("touchstart", 1, document.createElement("button")));
 
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     });
@@ -513,7 +482,7 @@ describe("testWithTimeoutTransition", () => {
 
     test("testTimeoutChangeState", () => {
         fsm.log(true);
-        fsm.process(new StubEvent());
+        fsm.process(mock<Event>());
         jest.runOnlyPendingTimers();
         expect(setTimeout).toHaveBeenCalledTimes(1);
         expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), 100);
@@ -522,15 +491,15 @@ describe("testWithTimeoutTransition", () => {
 
     test("testTimeoutStoppedOnOtherTransitionWithLog", () => {
         fsm.log(true);
-        fsm.process(new StubEvent());
-        fsm.process(new StubEvent());
+        fsm.process(mock<Event>());
+        fsm.process(mock<Event>());
         jest.runOnlyPendingTimers();
         expect(fsm.getCurrentState()).toStrictEqual(fsm.initState);
     });
 
     test("testTimeoutStoppedOnOtherTransition", () => {
-        fsm.process(new StubEvent());
-        fsm.process(new StubEvent());
+        fsm.process(mock<Event>());
+        fsm.process(mock<Event>());
         expect(setTimeout).toHaveBeenCalledTimes(1);
         expect(clearTimeout).toHaveBeenCalledTimes(1);
         expect(fsm.getCurrentState()).toStrictEqual(fsm.initState);
@@ -540,7 +509,7 @@ describe("testWithTimeoutTransition", () => {
         handler.fsmUpdates.mockImplementation(() => {
             throw new CancelFSMException();
         });
-        fsm.process(new StubEvent());
+        fsm.process(mock<Event>());
         jest.runOnlyPendingTimers();
         expect(fsm.getCurrentState()).toStrictEqual(fsm.initState);
         expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
@@ -579,24 +548,24 @@ describe("testWithSubFSM", () => {
     });
 
     test("testEntersSubGoodCurrState", () => {
-        mainfsm.process(new StubSubEvent1());
+        mainfsm.process(createMouseEvent("click", document.createElement("button")));
         expect(mainfsm.getCurrentState()).toStrictEqual(subS1);
         expect(fsm.getCurrentState()).toStrictEqual(subS1);
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     });
 
     test("testNextSubStarteChangesMainCurrState", () => {
-        mainfsm.process(new StubSubEvent1());
-        mainfsm.process(new StubSubEvent2());
+        mainfsm.process(createMouseEvent("click", document.createElement("button")));
+        mainfsm.process(createKeyEvent("keydown", "a"));
         expect(mainfsm.getCurrentState()).toStrictEqual(subS2);
         expect(fsm.getCurrentState()).toStrictEqual(subS2);
         expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
     });
 
     test("testEntersSubTerminalGoNextMain", () => {
-        mainfsm.process(new StubSubEvent1());
-        mainfsm.process(new StubSubEvent2());
-        mainfsm.process(new StubSubEvent1());
+        mainfsm.process(createMouseEvent("click", document.createElement("button")));
+        mainfsm.process(createKeyEvent("keydown", "a"));
+        mainfsm.process(createMouseEvent("click", document.createElement("button")));
         expect(mainfsm.getCurrentState()).toStrictEqual(s1);
         expect(fsm.getCurrentState()).toStrictEqual(fsm.initState);
         expect(handler.fsmStops).not.toHaveBeenCalled();
@@ -604,9 +573,9 @@ describe("testWithSubFSM", () => {
     });
 
     test("testEntersSubCancelCancelsMain", () => {
-        mainfsm.process(new StubSubEvent1());
-        mainfsm.process(new StubSubEvent2());
-        mainfsm.process(new StubSubEvent2());
+        mainfsm.process(createMouseEvent("click", document.createElement("button")));
+        mainfsm.process(createKeyEvent("keydown", "a"));
+        mainfsm.process(createKeyEvent("keydown", "b"));
         expect(mainfsm.getCurrentState()).toStrictEqual(mainfsm.initState);
         expect(fsm.getCurrentState()).toStrictEqual(fsm.initState);
         expect(handler.fsmStops).not.toHaveBeenCalled();
@@ -614,8 +583,8 @@ describe("testWithSubFSM", () => {
     });
 
     test("testReinitAlsoSubFSM", () => {
-        mainfsm.process(new StubSubEvent1());
-        mainfsm.process(new StubSubEvent2());
+        mainfsm.process(createMouseEvent("click", document.createElement("button")));
+        mainfsm.process(createKeyEvent("keydown", "a"));
         mainfsm.fullReinit();
         expect(fsm.getCurrentState()).toStrictEqual(fsm.initState);
     });
@@ -625,9 +594,9 @@ describe("testWithSubFSM", () => {
         mainfsm.addState(cancel);
         mainfsm.initState.clearTransitions();
         new SubFSMTransition(mainfsm.initState, cancel, fsm);
-        mainfsm.process(new StubSubEvent1());
-        mainfsm.process(new StubSubEvent2());
-        mainfsm.process(new StubSubEvent1());
+        mainfsm.process(createMouseEvent("click", document.createElement("button")));
+        mainfsm.process(createKeyEvent("keydown", "a"));
+        mainfsm.process(createMouseEvent("click", document.createElement("button")));
         expect(mainfsm.getCurrentState()).toStrictEqual(mainfsm.initState);
         expect(fsm.getCurrentState()).toStrictEqual(fsm.initState);
         expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
@@ -655,9 +624,9 @@ describe("testWithSubFSM", () => {
         mainfsm.addState(stateKO);
         mainfsm.initState.clearTransitions();
         new SubFSMTransition(mainfsm.initState, stateKO, fsm);
-        mainfsm.process(new StubSubEvent1());
-        mainfsm.process(new StubSubEvent2());
-        mainfsm.process(new StubSubEvent1());
+        mainfsm.process(createMouseEvent("click", document.createElement("button")));
+        mainfsm.process(createKeyEvent("keydown", "a"));
+        mainfsm.process(createMouseEvent("click", document.createElement("button")));
         expect(mainfsm.getCurrentState().getName()).toStrictEqual("sub2");
         expect(fsm.getCurrentState()).toBe(fsm.initState);
     });
@@ -667,9 +636,9 @@ describe("testWithSubFSM", () => {
         mainfsm.addState(terminal);
         mainfsm.initState.clearTransitions();
         new SubFSMTransition(mainfsm.initState, terminal, fsm);
-        mainfsm.process(new StubSubEvent1());
-        mainfsm.process(new StubSubEvent2());
-        mainfsm.process(new StubSubEvent1());
+        mainfsm.process(createMouseEvent("click", document.createElement("button")));
+        mainfsm.process(createKeyEvent("keydown", "a"));
+        mainfsm.process(createMouseEvent("click", document.createElement("button")));
         expect(mainfsm.getCurrentState()).toStrictEqual(mainfsm.initState);
         expect(fsm.getCurrentState()).toStrictEqual(fsm.initState);
         expect(handler.fsmStops).toHaveBeenCalledTimes(1);

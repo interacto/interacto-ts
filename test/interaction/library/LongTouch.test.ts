@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {EventRegistrationToken, FSMHandler, LongTouch} from "../../../src/interacto";
+import {FSMHandler, LongTouch} from "../../../src/interacto";
 import {createTouchEvent} from "../StubEvents";
 import {mock} from "jest-mock-extended";
 
@@ -59,7 +59,7 @@ describe("long touch test", () => {
                     touchData = {...interaction.getData()};
                 });
                 interaction.getFsm().addHandler(newHandler);
-                interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 3, canvas, 15, 20, 160, 21));
+                interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 15, 20, 160, 21));
                 expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
                 expect(handler.fsmStops).not.toHaveBeenCalled();
                 expect(handler.fsmCancels).not.toHaveBeenCalled();
@@ -72,15 +72,15 @@ describe("long touch test", () => {
             });
 
             test("touch with early release", () => {
-                interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 3, canvas));
-                interaction.processEvent(createTouchEvent(EventRegistrationToken.touchend, 3, canvas));
+                interaction.processEvent(createTouchEvent("touchstart", 3, canvas));
+                interaction.processEvent(createTouchEvent("touchend", 3, canvas));
                 expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
                 expect(handler.fsmStops).not.toHaveBeenCalled();
                 expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
             });
 
             test("touch with timeout", () => {
-                interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 3, canvas));
+                interaction.processEvent(createTouchEvent("touchstart", 3, canvas));
                 jest.runOnlyPendingTimers();
                 expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
                 expect(handler.fsmStops).toHaveBeenCalledTimes(1);
@@ -89,8 +89,8 @@ describe("long touch test", () => {
 
 
             test("two taps then timeout", () => {
-                interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 3, canvas));
-                interaction.processEvent(createTouchEvent(EventRegistrationToken.touchend, 3, canvas));
+                interaction.processEvent(createTouchEvent("touchstart", 3, canvas));
+                interaction.processEvent(createTouchEvent("touchend", 3, canvas));
                 jest.runOnlyPendingTimers();
                 expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
                 expect(handler.fsmStops).not.toHaveBeenCalled();

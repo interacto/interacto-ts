@@ -15,7 +15,6 @@
 import {OutputState} from "../../src/api/fsm/OutputState";
 import {mock, MockProxy} from "jest-mock-extended";
 import {InputState} from "../../src/api/fsm/InputState";
-import {EventRegistrationToken} from "../../src/impl/fsm/Events";
 import {createEventWithTarget} from "../interaction/StubEvents";
 import {HyperLinkTransition} from "../../src/impl/fsm/HyperLinkTransition";
 
@@ -32,7 +31,7 @@ beforeEach(() => {
 });
 
 test("that getAcceptedEvents works", () => {
-    expect(tr.getAcceptedEvents()).toStrictEqual(new Set([EventRegistrationToken.click, EventRegistrationToken.auxclick]));
+    expect(tr.getAcceptedEvents()).toStrictEqual(["click", "auxclick"]);
 });
 
 test("that accept KO null target", () => {

@@ -14,8 +14,9 @@
 
 import {InputState} from "../../api/fsm/InputState";
 import {OutputState} from "../../api/fsm/OutputState";
-import {EventRegistrationToken, isKeyDownEvent} from "./Events";
+import {isKeyDownEvent} from "./Events";
 import {TransitionBase} from "./TransitionBase";
+import {EventType} from "../../api/fsm/EventType";
 
 /**
  * A transition for a pressure of a key of a keyboard.
@@ -33,7 +34,7 @@ export class KeyPressureTransition extends TransitionBase<KeyboardEvent> {
         return isKeyDownEvent(event);
     }
 
-    public getAcceptedEvents(): Set<string> {
-        return new Set([EventRegistrationToken.keyDown]);
+    public getAcceptedEvents(): Array<EventType> {
+        return ["keydown"];
     }
 }

@@ -21,7 +21,6 @@ import {
     dbleClickBinder,
     dndBinder,
     dragLockBinder,
-    EventRegistrationToken,
     hyperlinkBinder,
     Interaction,
     InteractionCmdUpdateBinder,
@@ -76,7 +75,7 @@ test("press binder", () => {
         .toProduce(() => new StubCmd(true))
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, elt));
+    elt.dispatchEvent(createMouseEvent("mousedown", elt));
     expect(producedCmds).toHaveLength(1);
 });
 
@@ -86,7 +85,7 @@ test("click binder", () => {
         .toProduce(() => new StubCmd(true))
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.click, elt));
+    elt.dispatchEvent(createMouseEvent("click", elt));
     expect(producedCmds).toHaveLength(1);
 });
 
@@ -96,8 +95,8 @@ test("double click binder", () => {
         .toProduce(() => new StubCmd(true))
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.click, elt));
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.click, elt));
+    elt.dispatchEvent(createMouseEvent("click", elt));
+    elt.dispatchEvent(createMouseEvent("click", elt));
     expect(producedCmds).toHaveLength(1);
 });
 
@@ -107,11 +106,11 @@ test("drag lock binder", () => {
         .toProduce(() => new StubCmd(true))
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.click, elt));
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.click, elt));
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, elt));
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.click, elt));
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.click, elt));
+    elt.dispatchEvent(createMouseEvent("click", elt));
+    elt.dispatchEvent(createMouseEvent("click", elt));
+    elt.dispatchEvent(createMouseEvent("mousemove", elt));
+    elt.dispatchEvent(createMouseEvent("click", elt));
+    elt.dispatchEvent(createMouseEvent("click", elt));
     expect(producedCmds).toHaveLength(1);
 });
 
@@ -121,9 +120,9 @@ test("dnd binder", () => {
         .toProduce(() => new StubCmd(true))
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, elt));
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, elt));
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseUp, elt));
+    elt.dispatchEvent(createMouseEvent("mousedown", elt));
+    elt.dispatchEvent(createMouseEvent("mousemove", elt));
+    elt.dispatchEvent(createMouseEvent("mouseup", elt));
     expect(producedCmds).toHaveLength(1);
 });
 
@@ -133,7 +132,7 @@ test("key press binder", () => {
         .toProduce(() => new StubCmd(true))
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "A"));
+    elt.dispatchEvent(createKeyEvent("keydown", "A"));
     expect(producedCmds).toHaveLength(1);
 });
 
@@ -143,8 +142,8 @@ test("key type binder", () => {
         .toProduce(() => new StubCmd(true))
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "A"));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "A"));
+    elt.dispatchEvent(createKeyEvent("keydown", "A"));
+    elt.dispatchEvent(createKeyEvent("keyup", "A"));
     expect(producedCmds).toHaveLength(1);
 });
 
@@ -158,14 +157,14 @@ test("click must not block drag lock", () => {
 
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.click, elt, 1, 2, 3, 4, 1));
+    elt.dispatchEvent(createMouseEvent("click", elt, 1, 2, 3, 4, 1));
     jest.runOnlyPendingTimers();
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.auxclick, elt, 1, 2, 3, 4, 2));
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.auxclick, elt, 1, 2, 3, 4, 2));
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, elt));
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, elt));
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.auxclick, elt, 1, 2, 3, 4, 2));
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.auxclick, elt, 1, 2, 3, 4, 2));
+    elt.dispatchEvent(createMouseEvent("auxclick", elt, 1, 2, 3, 4, 2));
+    elt.dispatchEvent(createMouseEvent("auxclick", elt, 1, 2, 3, 4, 2));
+    elt.dispatchEvent(createMouseEvent("mousemove", elt));
+    elt.dispatchEvent(createMouseEvent("mousemove", elt));
+    elt.dispatchEvent(createMouseEvent("auxclick", elt, 1, 2, 3, 4, 2));
+    elt.dispatchEvent(createMouseEvent("auxclick", elt, 1, 2, 3, 4, 2));
 
     expect(producedCmds).toHaveLength(1);
 });
@@ -179,8 +178,8 @@ test("drag lock: double click does not cancel", () => {
 
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.click, elt, 1, 2, 3, 4, 0));
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.click, elt, 1, 2, 3, 4, 0));
+    elt.dispatchEvent(createMouseEvent("click", elt, 1, 2, 3, 4, 0));
+    elt.dispatchEvent(createMouseEvent("click", elt, 1, 2, 3, 4, 0));
 
     expect(binding.getInteraction().isRunning()).toBeTruthy();
 });
@@ -200,14 +199,14 @@ test("drag lock: first then end", () => {
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.click, elt, 1, 2, 3, 4, 1));
+    elt.dispatchEvent(createMouseEvent("click", elt, 1, 2, 3, 4, 1));
     jest.runOnlyPendingTimers();
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.auxclick, elt, 1, 2, 3, 4, 2));
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.auxclick, elt, 1, 2, 3, 4, 2));
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, elt));
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, elt));
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.auxclick, elt, 1, 2, 3, 4, 2));
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.auxclick, elt, 1, 2, 3, 4, 2));
+    elt.dispatchEvent(createMouseEvent("auxclick", elt, 1, 2, 3, 4, 2));
+    elt.dispatchEvent(createMouseEvent("auxclick", elt, 1, 2, 3, 4, 2));
+    elt.dispatchEvent(createMouseEvent("mousemove", elt));
+    elt.dispatchEvent(createMouseEvent("mousemove", elt));
+    elt.dispatchEvent(createMouseEvent("auxclick", elt, 1, 2, 3, 4, 2));
+    elt.dispatchEvent(createMouseEvent("auxclick", elt, 1, 2, 3, 4, 2));
 
     expect(first).toHaveBeenCalledTimes(1);
     expect(end).toHaveBeenCalledTimes(1);
@@ -226,7 +225,7 @@ test("binding with anon command", () => {
 
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.click, elt, 1, 2, 3, 4, 0));
+    elt.dispatchEvent(createMouseEvent("click", elt, 1, 2, 3, 4, 0));
 
     expect(producedCmds).toHaveLength(1);
 });
@@ -239,9 +238,9 @@ test("touch DnD binding", () => {
 
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
-    elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, elt, 11, 23, 110, 230));
-    elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchmove, 1, elt, 11, 23, 110, 230));
-    elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 1, elt, 11, 23, 110, 230));
+    elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
+    elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
+    elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
 
     expect(producedCmds).toHaveLength(1);
 });
@@ -257,9 +256,9 @@ test("clicks binding work", () => {
 
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.click, elt, 1, 2, 3, 4, 0));
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.click, elt, 1, 2, 3, 4, 0));
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.click, elt, 1, 2, 3, 4, 0));
+    elt.dispatchEvent(createMouseEvent("click", elt, 1, 2, 3, 4, 0));
+    elt.dispatchEvent(createMouseEvent("click", elt, 1, 2, 3, 4, 0));
+    elt.dispatchEvent(createMouseEvent("click", elt, 1, 2, 3, 4, 0));
 
     expect(producedCmds).toHaveLength(1);
 });
@@ -277,7 +276,7 @@ test("longpress binding work", () => {
 
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, elt, 1, 2, 3, 4, 0));
+    elt.dispatchEvent(createMouseEvent("mousedown", elt, 1, 2, 3, 4, 0));
     jest.runAllTimers();
 
     expect(producedCmds).toHaveLength(1);
@@ -306,13 +305,13 @@ test("that swipe binder works", () => {
 
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
-    elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 2, elt,
+    elt.dispatchEvent(createTouchEvent("touchstart", 2, elt,
         50, 20, 100, 200, 5000));
-    elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchmove, 2, elt,
+    elt.dispatchEvent(createTouchEvent("touchmove", 2, elt,
         170, 30, 161, 202, 5500));
-    elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchmove, 2, elt,
+    elt.dispatchEvent(createTouchEvent("touchmove", 2, elt,
         450, 30, 500, 210, 6000));
-    elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 2, elt,
+    elt.dispatchEvent(createTouchEvent("touchend", 2, elt,
         450, 30, 500, 210, 6000));
 
     expect(producedCmds).toHaveLength(1);
@@ -339,9 +338,9 @@ test("that keysPress binder works", () => {
 
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "A"));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "B"));
-    elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "B"));
+    elt.dispatchEvent(createKeyEvent("keydown", "A"));
+    elt.dispatchEvent(createKeyEvent("keydown", "B"));
+    elt.dispatchEvent(createKeyEvent("keyup", "B"));
 
     expect(producedCmds).toHaveLength(1);
 });
@@ -358,7 +357,7 @@ test("that 'ifCannotExecute' is correctly called", () => {
 
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, elt, 11, 23, 110, 230));
+    elt.dispatchEvent(createMouseEvent("mousedown", elt, 11, 23, 110, 230));
 
     expect(mockFn).toHaveBeenCalledTimes(1);
     expect(producedCmds).toHaveLength(0);
@@ -374,9 +373,9 @@ test("that 'strictStart' works correctly when no 'when' routine", () => {
 
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, elt, 11, 23, 110, 230));
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, elt, 12, 24, 111, 231));
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseUp, elt, 12, 24, 111, 231));
+    elt.dispatchEvent(createMouseEvent("mousedown", elt, 11, 23, 110, 230));
+    elt.dispatchEvent(createMouseEvent("mousemove", elt, 12, 24, 111, 231));
+    elt.dispatchEvent(createMouseEvent("mouseup", elt, 12, 24, 111, 231));
 
     expect(producedCmds).toHaveLength(1);
 });
@@ -391,9 +390,9 @@ test("that 'strictStart' works correctly when the 'when' routine returns true", 
 
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, elt, 11, 23, 110, 230));
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, elt, 12, 24, 111, 231));
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseUp, elt, 12, 24, 111, 231));
+    elt.dispatchEvent(createMouseEvent("mousedown", elt, 11, 23, 110, 230));
+    elt.dispatchEvent(createMouseEvent("mousemove", elt, 12, 24, 111, 231));
+    elt.dispatchEvent(createMouseEvent("mouseup", elt, 12, 24, 111, 231));
 
     expect(producedCmds).toHaveLength(1);
 });
@@ -408,9 +407,9 @@ test("that 'strictStart' works correctly when the 'when' routine returns false",
 
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, elt, 11, 23, 110, 230));
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, elt, 12, 24, 111, 231));
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseUp, elt, 12, 24, 111, 231));
+    elt.dispatchEvent(createMouseEvent("mousedown", elt, 11, 23, 110, 230));
+    elt.dispatchEvent(createMouseEvent("mousemove", elt, 12, 24, 111, 231));
+    elt.dispatchEvent(createMouseEvent("mouseup", elt, 12, 24, 111, 231));
 
     expect(producedCmds).toHaveLength(0);
     expect(binding.getInteraction().isRunning()).toBeFalsy();
@@ -425,8 +424,8 @@ test("that 'strictStart' stops the interaction", () => {
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, elt, 11, 23, 110, 230));
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, elt, 12, 24, 111, 231));
+    elt.dispatchEvent(createMouseEvent("mousedown", elt, 11, 23, 110, 230));
+    elt.dispatchEvent(createMouseEvent("mousemove", elt, 12, 24, 111, 231));
 
     expect(binding.getInteraction().isRunning()).toBeFalsy();
 });
@@ -441,7 +440,7 @@ test("that 'when' is not called on the first event of a DnD", () => {
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
-    elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, elt, 11, 23, 110, 230));
+    elt.dispatchEvent(createMouseEvent("mousedown", elt, 11, 23, 110, 230));
 
     expect(when).not.toHaveBeenCalled();
 });
@@ -469,9 +468,9 @@ describe("check when it crashes in routines", () => {
 
         disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
-        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchmove, 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
 
         expect(producedCmds).toHaveLength(1);
         expect(catBinder.error).toHaveBeenCalledWith("Crash in 'first'", err);
@@ -486,9 +485,9 @@ describe("check when it crashes in routines", () => {
 
         disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
-        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchmove, 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
 
         expect(producedCmds).toHaveLength(1);
         expect(catBinder.error).toHaveBeenCalledWith("Crash in 'then'", err);
@@ -503,9 +502,9 @@ describe("check when it crashes in routines", () => {
 
         disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
-        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchmove, 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
 
         expect(producedCmds).toHaveLength(1);
         expect(catBinder.error).toHaveBeenCalledWith("Crash in 'end'", err);
@@ -520,9 +519,9 @@ describe("check when it crashes in routines", () => {
 
         disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
-        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchmove, 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
 
         expect(producedCmds).toHaveLength(1);
         expect(catBinder.error).toHaveBeenCalledWith("Crash in 'endOrCancel'", err);
@@ -539,9 +538,9 @@ describe("check when it crashes in routines", () => {
 
         disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
-        elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, elt));
-        elt.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, elt));
-        elt.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "Escape"));
+        elt.dispatchEvent(createMouseEvent("mousedown", elt));
+        elt.dispatchEvent(createMouseEvent("mousemove", elt));
+        elt.dispatchEvent(createKeyEvent("keydown", "Escape"));
 
         expect(producedCmds).toHaveLength(0);
         expect(catBinder.error).toHaveBeenCalledWith("Crash in 'cancel'", err);
@@ -557,9 +556,9 @@ describe("check when it crashes in routines", () => {
 
         disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
-        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchmove, 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
 
         expect(producedCmds).toHaveLength(1);
         expect(catBinder.error).toHaveBeenCalledWith("Crash in 'ifHadNoEffect'", err);
@@ -575,9 +574,9 @@ describe("check when it crashes in routines", () => {
 
         disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
-        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchmove, 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
 
         expect(producedCmds).toHaveLength(1);
         expect(catBinder.error).toHaveBeenCalledWith("Crash in 'ifHadEffects'", err);
@@ -592,9 +591,9 @@ describe("check when it crashes in routines", () => {
 
         disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
-        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchmove, 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
 
         expect(producedCmds).toHaveLength(0);
         expect(catBinder.error).toHaveBeenCalledWith("Crash in 'when'", err);
@@ -610,9 +609,9 @@ describe("check when it crashes in routines", () => {
 
         disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
-        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchmove, 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
 
         expect(producedCmds).toHaveLength(0);
         expect(catBinder.error).toHaveBeenCalledWith("Crash in 'ifCannotExecute'", err);
@@ -646,23 +645,23 @@ describe("tap and longPress conflict", () => {
     });
 
     test("touchstart and wait", () => {
-        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
         jest.runOnlyPendingTimers();
         expect(producedCmds2).toHaveLength(1);
         expect(producedCmds).toHaveLength(0);
     });
 
     test("touchstart and touchend", () => {
-        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
         expect(producedCmds2).toHaveLength(0);
         expect(producedCmds).toHaveLength(1);
     });
 
     test("touchstart, wait, touchend", () => {
-        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
         jest.runOnlyPendingTimers();
-        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
         expect(producedCmds2).toHaveLength(1);
         expect(producedCmds).toHaveLength(1);
     });
@@ -697,9 +696,9 @@ describe("two longTouch", () => {
         disposable = binding.produces().subscribe(c => producedCmds.push(c));
         disposable2 = binding2.produces().subscribe(c => producedCmds2.push(c));
 
-        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
         jest.runOnlyPendingTimers();
-        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
         expect(producedCmds2).toHaveLength(1);
         expect(producedCmds).toHaveLength(0);
     });
@@ -717,9 +716,9 @@ describe("two longTouch", () => {
         disposable = binding.produces().subscribe(c => producedCmds.push(c));
         disposable2 = binding2.produces().subscribe(c => producedCmds2.push(c));
 
-        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
         jest.runOnlyPendingTimers();
-        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
         expect(producedCmds2).toHaveLength(1);
         expect(producedCmds).toHaveLength(1);
     });
@@ -738,9 +737,9 @@ describe("two longTouch", () => {
         disposable = binding.produces().subscribe(c => producedCmds.push(c));
         disposable2 = binding2.produces().subscribe(c => producedCmds2.push(c));
 
-        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
         jest.runOnlyPendingTimers();
-        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
         expect(producedCmds2).toHaveLength(1);
         expect(producedCmds).toHaveLength(0);
     });
@@ -759,9 +758,9 @@ describe("two longTouch", () => {
         disposable = binding.produces().subscribe(c => producedCmds.push(c));
         disposable2 = binding2.produces().subscribe(c => producedCmds2.push(c));
 
-        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
         jest.runOnlyPendingTimers();
-        elt.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
         expect(producedCmds2).toHaveLength(1);
         expect(producedCmds).toHaveLength(1);
     });

@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {DragLock, EventRegistrationToken, FSMHandler} from "../../../src/interacto";
+import {DragLock, FSMHandler} from "../../../src/interacto";
 import {createMouseEvent} from "../StubEvents";
 import {mock} from "jest-mock-extended";
 
@@ -39,11 +39,11 @@ beforeEach(() => {
 
 test("dragLock in a SVG environment", () => {
     interaction.registerToNodes([rect1, rect2]);
-    rect2.dispatchEvent(createMouseEvent(EventRegistrationToken.click, rect2));
-    rect2.dispatchEvent(createMouseEvent(EventRegistrationToken.click, rect2));
-    rect2.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, rect2));
-    rect1.dispatchEvent(createMouseEvent(EventRegistrationToken.click, rect1));
-    rect1.dispatchEvent(createMouseEvent(EventRegistrationToken.click, rect1));
+    rect2.dispatchEvent(createMouseEvent("click", rect2));
+    rect2.dispatchEvent(createMouseEvent("click", rect2));
+    rect2.dispatchEvent(createMouseEvent("mousemove", rect2));
+    rect1.dispatchEvent(createMouseEvent("click", rect1));
+    rect1.dispatchEvent(createMouseEvent("click", rect1));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
@@ -63,11 +63,11 @@ test("dragLock data in a SVG environment", () => {
         ty = interaction.getData().getTgtClientY();
     });
     interaction.getFsm().addHandler(newHandler);
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.click, rect1, undefined, undefined, 11, 23));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.click, rect1, undefined, undefined, 11, 23));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseMove, svg, undefined, undefined, 20, 30));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.click, rect2, undefined, undefined, 22, 33));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.click, rect2, undefined, undefined, 22, 33));
+    interaction.processEvent(createMouseEvent("click", rect1, undefined, undefined, 11, 23));
+    interaction.processEvent(createMouseEvent("click", rect1, undefined, undefined, 11, 23));
+    interaction.processEvent(createMouseEvent("mousemove", svg, undefined, undefined, 20, 30));
+    interaction.processEvent(createMouseEvent("click", rect2, undefined, undefined, 22, 33));
+    interaction.processEvent(createMouseEvent("click", rect2, undefined, undefined, 22, 33));
     expect(sx).toBe(11);
     expect(sy).toBe(23);
     expect(tx).toBe(22);

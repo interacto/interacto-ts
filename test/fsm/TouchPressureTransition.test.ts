@@ -14,7 +14,6 @@
 
 import {TouchPressureTransition} from "../../src/impl/fsm/TouchPressureTransition";
 import {createMouseEvent, createTouchEvent} from "../interaction/StubEvents";
-import {EventRegistrationToken} from "../../src/impl/fsm/Events";
 import {FSMImpl} from "../../src/impl/fsm/FSMImpl";
 import {StdState} from "../../src/impl/fsm/StdState";
 import {mock} from "jest-mock-extended";
@@ -28,20 +27,20 @@ beforeEach(() => {
 });
 
 test("invalid event", () => {
-    expect(tr.accept(createMouseEvent(EventRegistrationToken.mouseDown, canvas,
+    expect(tr.accept(createMouseEvent("mousedown", canvas,
         11, 23, 11, 23, 0))).toBeFalsy();
 });
 
 test("valid event", () => {
-    expect(tr.accept(createTouchEvent(EventRegistrationToken.touchstart, 3,
+    expect(tr.accept(createTouchEvent("touchstart", 3,
         canvas, 11, 23, 12, 25))).toBeTruthy();
 });
 
 test("guard OK", () => {
-    expect(tr.isGuardOK(createTouchEvent(EventRegistrationToken.touchstart, 3,
+    expect(tr.isGuardOK(createTouchEvent("touchstart", 3,
         canvas, 11, 23, 12, 25))).toBeTruthy();
 });
 
 test("accepted events", () => {
-    expect(tr.getAcceptedEvents()).toStrictEqual(new Set([EventRegistrationToken.touchstart]));
+    expect(tr.getAcceptedEvents()).toStrictEqual(["touchstart"]);
 });

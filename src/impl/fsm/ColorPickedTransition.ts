@@ -14,8 +14,9 @@
 
 import {OutputState} from "../../api/fsm/OutputState";
 import {InputState} from "../../api/fsm/InputState";
-import {EventRegistrationToken, isColorChoice} from "./Events";
+import {isColorChoice} from "./Events";
 import {TransitionBase} from "./TransitionBase";
+import {EventType} from "../../api/fsm/EventType";
 
 /**
  * An FSM transition for the ColorPicked HTML element.
@@ -34,7 +35,7 @@ export class ColorPickedTransition extends TransitionBase<Event> {
         return event.target !== null && isColorChoice(event.target);
     }
 
-    public getAcceptedEvents(): Set<string> {
-        return new Set([EventRegistrationToken.input]);
+    public getAcceptedEvents(): Array<EventType> {
+        return ["input"];
     }
 }

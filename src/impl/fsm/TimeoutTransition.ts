@@ -16,6 +16,7 @@ import {TransitionBase} from "./TransitionBase";
 import {OutputState} from "../../api/fsm/OutputState";
 import {InputState} from "../../api/fsm/InputState";
 import {catFSM} from "../../api/logging/ConfigLog";
+import {EventType} from "../../api/fsm/EventType";
 
 
 /**
@@ -105,7 +106,7 @@ export class TimeoutTransition extends TransitionBase<Event> {
         }
     }
 
-    public getAcceptedEvents(): Set<string> {
-        return new Set();
+    public getAcceptedEvents(): Array<EventType> {
+        return [];
     }
 }

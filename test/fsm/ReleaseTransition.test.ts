@@ -12,7 +12,6 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {EventRegistrationToken} from "../../src/impl/fsm/Events";
 import {FSMImpl} from "../../src/impl/fsm/FSMImpl";
 import {ReleaseTransition} from "../../src/impl/fsm/ReleaseTransition";
 import {StdState} from "../../src/impl/fsm/StdState";
@@ -28,25 +27,25 @@ beforeEach(() => {
 });
 
 test("invalid move event", () => {
-    expect(tr.accept(createMouseEvent(EventRegistrationToken.mouseMove, canvas,
+    expect(tr.accept(createMouseEvent("mousemove", canvas,
         11, 23, 11, 23, 0))).toBeFalsy();
 });
 
 test("invalid event type", () => {
-    expect(tr.accept(createTouchEvent(EventRegistrationToken.touchstart, 3,
+    expect(tr.accept(createTouchEvent("touchstart", 3,
         canvas, 11, 23, 12, 25))).toBeFalsy();
 });
 
 test("valid event", () => {
-    expect(tr.accept(createMouseEvent(EventRegistrationToken.mouseUp,
+    expect(tr.accept(createMouseEvent("mouseup",
         canvas, 11, 23, 12, 25, 1))).toBeTruthy();
 });
 
 test("guard OK", () => {
-    expect(tr.isGuardOK(createMouseEvent(EventRegistrationToken.mouseUp,
+    expect(tr.isGuardOK(createMouseEvent("mouseup",
         canvas, 11, 23, 12, 25, 1))).toBeTruthy();
 });
 
 test("accepted events", () => {
-    expect(tr.getAcceptedEvents()).toStrictEqual(new Set([EventRegistrationToken.mouseUp]));
+    expect(tr.getAcceptedEvents()).toStrictEqual(["mouseup"]);
 });

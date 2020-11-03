@@ -14,8 +14,9 @@
 
 import {InputState} from "../../api/fsm/InputState";
 import {OutputState} from "../../api/fsm/OutputState";
-import {EventRegistrationToken, isKeyUpEvent} from "./Events";
+import {isKeyUpEvent} from "./Events";
 import {TransitionBase} from "./TransitionBase";
+import {EventType} from "../../api/fsm/EventType";
 
 /**
  * A transition for a release of a key of a keyboard.
@@ -33,7 +34,7 @@ export class KeyReleaseTransition extends TransitionBase<KeyboardEvent> {
         return isKeyUpEvent(event);
     }
 
-    public getAcceptedEvents(): Set<string> {
-        return new Set([EventRegistrationToken.keyUp]);
+    public getAcceptedEvents(): Array<EventType> {
+        return ["keyup"];
     }
 }

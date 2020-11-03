@@ -16,7 +16,6 @@ import {mock} from "jest-mock-extended";
 import {FSMHandler} from "../../../src/api/fsm/FSMHandler";
 import {Clicks} from "../../../src/impl/interaction/library/Clicks";
 import {createMouseEvent} from "../StubEvents";
-import {EventRegistrationToken} from "../../../src/impl/fsm/Events";
 
 let interaction: Clicks;
 let canvas: HTMLElement;
@@ -58,7 +57,7 @@ test("cannot build the interaction with 1 click", () => {
         [...Array(nb).keys()].slice(1).forEach(nbClick => {
             test(`that ${nbClick} on ${nb} is not enough`, () => {
                 [...Array(nbClick).keys()].forEach(_ => {
-                    interaction.processEvent(createMouseEvent(EventRegistrationToken.click, canvas, 15, 21, 160, 21, 2));
+                    interaction.processEvent(createMouseEvent("click", canvas, 15, 21, 160, 21, 2));
                 });
 
                 expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
@@ -69,7 +68,7 @@ test("cannot build the interaction with 1 click", () => {
 
             test(`that ${nbClick} on ${nb} is not enough with timeout`, () => {
                 [...Array(nbClick).keys()].forEach(_ => {
-                    interaction.processEvent(createMouseEvent(EventRegistrationToken.click, canvas, 15, 21, 160, 21, 3));
+                    interaction.processEvent(createMouseEvent("click", canvas, 15, 21, 160, 21, 3));
                 });
                 jest.runAllTimers();
 
@@ -82,7 +81,7 @@ test("cannot build the interaction with 1 click", () => {
 
         test(`that ${nb} clicks is OK`, () => {
             [...Array(nb).keys()].forEach(_ => {
-                interaction.processEvent(createMouseEvent(EventRegistrationToken.click, canvas, 15, 21, 160, 21, 3));
+                interaction.processEvent(createMouseEvent("click", canvas, 15, 21, 160, 21, 3));
             });
 
             expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
@@ -92,7 +91,7 @@ test("cannot build the interaction with 1 click", () => {
         });
 
         test("that data first click ok", () => {
-            interaction.processEvent(createMouseEvent(EventRegistrationToken.click, canvas, 125, 21, 140, 121, 1));
+            interaction.processEvent(createMouseEvent("click", canvas, 125, 21, 140, 121, 1));
 
             const data = interaction.getData().getPointsData();
 
@@ -105,8 +104,8 @@ test("cannot build the interaction with 1 click", () => {
         });
 
         test("that data two clicks ok", () => {
-            interaction.processEvent(createMouseEvent(EventRegistrationToken.click, canvas, 1025, 210, 1040, 1201, 1));
-            interaction.processEvent(createMouseEvent(EventRegistrationToken.click, canvas, 1250, 201, 1040, 1021, 1));
+            interaction.processEvent(createMouseEvent("click", canvas, 1025, 210, 1040, 1201, 1));
+            interaction.processEvent(createMouseEvent("click", canvas, 1250, 201, 1040, 1021, 1));
 
             const data = interaction.getData().getPointsData();
 

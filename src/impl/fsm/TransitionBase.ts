@@ -15,6 +15,7 @@
 import {OutputState} from "../../api/fsm/OutputState";
 import {InputState} from "../../api/fsm/InputState";
 import {Transition} from "../../api/fsm/Transition";
+import {EventType} from "../../api/fsm/EventType";
 
 /**
  * The base implementation of a FSM transition.
@@ -55,7 +56,7 @@ export abstract class TransitionBase<E extends Event> implements Transition<E> {
         return true;
     }
 
-    public abstract getAcceptedEvents(): Set<string>;
+    public abstract getAcceptedEvents(): Array<EventType>;
 
     public getTarget(): InputState {
         return this.tgt;

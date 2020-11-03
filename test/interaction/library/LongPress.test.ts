@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {EventRegistrationToken, FSMDataHandler, FSMHandler, LongPress} from "../../../src/interacto";
+import {FSMDataHandler, FSMHandler, LongPress} from "../../../src/interacto";
 import {createMouseEvent} from "../StubEvents";
 import {mock} from "jest-mock-extended";
 
@@ -54,7 +54,7 @@ describe("long press test", () => {
     test("that reinit cleans data", () => {
         interaction = new LongPress(100);
         jest.spyOn(interaction.getFsm().getDataHandler() as FSMDataHandler, "reinitData");
-        interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseDown, canvas, 15, 20, 160, 21, 2));
+        interaction.processEvent(createMouseEvent("mousedown", canvas, 15, 20, 160, 21, 2));
         interaction.reinit();
         expect(interaction.getData().getButton()).toBeUndefined();
         expect(interaction.getData().getCurrentTarget()).toBeUndefined();
@@ -74,7 +74,7 @@ describe("long press test", () => {
                     pressData = {...interaction.getData()};
                 });
                 interaction.getFsm().addHandler(newHandler);
-                interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseDown, canvas, 15, 20, 160, 21, 2));
+                interaction.processEvent(createMouseEvent("mousedown", canvas, 15, 20, 160, 21, 2));
                 expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
                 expect(handler.fsmStops).not.toHaveBeenCalled();
                 expect(handler.fsmCancels).not.toHaveBeenCalled();
@@ -86,16 +86,16 @@ describe("long press test", () => {
             });
 
             test("press with early release", () => {
-                interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseDown, canvas, 15, 20, 160, 21, 2));
-                interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseUp, canvas, 15, 20, 160, 21, 2));
+                interaction.processEvent(createMouseEvent("mousedown", canvas, 15, 20, 160, 21, 2));
+                interaction.processEvent(createMouseEvent("mouseup", canvas, 15, 20, 160, 21, 2));
                 expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
                 expect(handler.fsmStops).not.toHaveBeenCalled();
                 expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
             });
 
             test("press, release with other button with timeout", () => {
-                interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseDown, canvas, 15, 20, 160, 21, 2));
-                interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseUp, canvas, 15, 20, 160, 21, 1));
+                interaction.processEvent(createMouseEvent("mousedown", canvas, 15, 20, 160, 21, 2));
+                interaction.processEvent(createMouseEvent("mouseup", canvas, 15, 20, 160, 21, 1));
                 jest.runOnlyPendingTimers();
                 expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
                 expect(handler.fsmStops).toHaveBeenCalledTimes(1);
@@ -104,9 +104,9 @@ describe("long press test", () => {
 
 
             test("two presses with timeout", () => {
-                interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseDown, canvas, 15, 20, 160, 21, 2));
-                interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseUp, canvas, 15, 20, 160, 21, 2));
-                interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseDown, canvas, 15, 20, 160, 21, 1));
+                interaction.processEvent(createMouseEvent("mousedown", canvas, 15, 20, 160, 21, 2));
+                interaction.processEvent(createMouseEvent("mouseup", canvas, 15, 20, 160, 21, 2));
+                interaction.processEvent(createMouseEvent("mousedown", canvas, 15, 20, 160, 21, 1));
                 jest.runOnlyPendingTimers();
                 expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
                 expect(handler.fsmStops).toHaveBeenCalledTimes(1);

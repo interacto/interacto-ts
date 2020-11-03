@@ -14,7 +14,6 @@
 
 import {TouchReleaseTransition} from "../../src/impl/fsm/TouchReleaseTransition";
 import {createMouseEvent, createTouchEvent} from "../interaction/StubEvents";
-import {EventRegistrationToken} from "../../src/impl/fsm/Events";
 import {FSMImpl} from "../../src/impl/fsm/FSMImpl";
 import {StdState} from "../../src/impl/fsm/StdState";
 import {mock} from "jest-mock-extended";
@@ -28,20 +27,20 @@ beforeEach(() => {
 });
 
 test("invalid event", () => {
-    expect(tr.accept(createMouseEvent(EventRegistrationToken.mouseUp, canvas,
+    expect(tr.accept(createMouseEvent("mouseup", canvas,
         11, 23, 11, 23, 0))).toBeFalsy();
 });
 
 test("valid event", () => {
-    expect(tr.accept(createTouchEvent(EventRegistrationToken.touchend, 3,
+    expect(tr.accept(createTouchEvent("touchend", 3,
         canvas, 11, 23, 12, 25))).toBeTruthy();
 });
 
 test("guard OK", () => {
-    expect(tr.isGuardOK(createTouchEvent(EventRegistrationToken.touchend, 3,
+    expect(tr.isGuardOK(createTouchEvent("touchend", 3,
         canvas, 11, 23, 12, 25))).toBeTruthy();
 });
 
 test("accepted events", () => {
-    expect(tr.getAcceptedEvents()).toStrictEqual(new Set([EventRegistrationToken.touchend]));
+    expect(tr.getAcceptedEvents()).toStrictEqual(["touchend"]);
 });

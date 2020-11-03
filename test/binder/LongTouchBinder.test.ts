@@ -14,7 +14,6 @@
 import {Subscription} from "rxjs";
 import {
     CommandsRegistry,
-    EventRegistrationToken,
     FSM,
     Interaction, InteractionBase,
     InteractionData,
@@ -58,7 +57,7 @@ describe("on canvas", () => {
             .bind();
         disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
-        c1.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, c1, 11, 23, 110, 230));
+        c1.dispatchEvent(createTouchEvent("touchstart", 1, c1, 11, 23, 110, 230));
         jest.runOnlyPendingTimers();
 
         expect(binding).toBeDefined();
@@ -75,8 +74,8 @@ describe("on canvas", () => {
             .bind();
         disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
-        c1.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, c1, 11, 23, 110, 230));
-        c1.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 1, c1, 11, 23, 110, 230));
+        c1.dispatchEvent(createTouchEvent("touchstart", 1, c1, 11, 23, 110, 230));
+        c1.dispatchEvent(createTouchEvent("touchend", 1, c1, 11, 23, 110, 230));
         jest.runOnlyPendingTimers();
 
         expect(binding).toBeDefined();
@@ -91,10 +90,10 @@ describe("on canvas", () => {
             .bind();
         disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
-        c1.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, c1, 11, 23, 110, 230));
+        c1.dispatchEvent(createTouchEvent("touchstart", 1, c1, 11, 23, 110, 230));
         jest.runOnlyPendingTimers();
 
-        c1.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, c1, 11, 23, 110, 230));
+        c1.dispatchEvent(createTouchEvent("touchstart", 1, c1, 11, 23, 110, 230));
         jest.runOnlyPendingTimers();
 
         expect(binding).toBeDefined();
@@ -110,7 +109,7 @@ describe("on canvas", () => {
 
         (binding.getInteraction() as InteractionBase<InteractionData, FSM>).onNodeUnregistered(c1);
 
-        c1.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, c1, 11, 23, 110, 230));
+        c1.dispatchEvent(createTouchEvent("touchstart", 1, c1, 11, 23, 110, 230));
 
         expect(binding.isRunning()).toBeFalsy();
     });
@@ -138,8 +137,8 @@ describe("on svg doc for dynamic registration", () => {
         // Waiting for the mutation changes to be done.
         await Promise.resolve();
 
-        rect.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, rect, 11, 23, 110, 230));
-        rect.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 1, rect, 11, 23, 110, 230));
+        rect.dispatchEvent(createTouchEvent("touchstart", 1, rect, 11, 23, 110, 230));
+        rect.dispatchEvent(createTouchEvent("touchend", 1, rect, 11, 23, 110, 230));
         jest.runOnlyPendingTimers();
 
         expect(binding).toBeDefined();
@@ -160,8 +159,8 @@ describe("on svg doc for dynamic registration", () => {
             .bind();
         disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
-        rect.dispatchEvent(createTouchEvent(EventRegistrationToken.touchstart, 1, rect, 11, 23, 110, 230));
-        rect.dispatchEvent(createTouchEvent(EventRegistrationToken.touchend, 1, rect, 11, 23, 110, 230));
+        rect.dispatchEvent(createTouchEvent("touchstart", 1, rect, 11, 23, 110, 230));
+        rect.dispatchEvent(createTouchEvent("touchend", 1, rect, 11, 23, 110, 230));
         jest.runOnlyPendingTimers();
 
         expect(binding).toBeDefined();

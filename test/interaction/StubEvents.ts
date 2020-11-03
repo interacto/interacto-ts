@@ -12,7 +12,10 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export function createTouchEvent(type: string, id: number, target: EventTarget, screenX?: number, screenY?: number,
+import {EventType} from "../../src/api/fsm/EventType";
+
+export function createTouchEvent(type: "touchstart" | "touchend" | "touchmove", id: number, target: EventTarget,
+                                 screenX?: number, screenY?: number,
                                  clientX?: number, clientY?: number, timeStamp?: number): TouchEvent {
     const screenXvalue = screenX ?? 0;
     const screenYvalue = screenY ?? 0;
@@ -56,7 +59,8 @@ export function createTouchEvent(type: string, id: number, target: EventTarget, 
 }
 
 
-export function createMouseEvent(type: string, target: EventTarget, screenX?: number, screenY?: number, clientX?: number,
+export function createMouseEvent(type: "mousedown" | "mouseup" | "mousemove" | "click" | "auxclick",
+                                 target: EventTarget, screenX?: number, screenY?: number, clientX?: number,
                                  clientY?: number, button?: number): MouseEvent {
     const screenXvalue = screenX ?? 0;
     const screenYvalue = screenY ?? 0;
@@ -81,7 +85,7 @@ export function createMouseEvent(type: string, target: EventTarget, screenX?: nu
     });
 }
 
-export function createKeyEvent(type: string, keyCode: string): KeyboardEvent {
+export function createKeyEvent(type: "keydown" | "keyup", keyCode: string): KeyboardEvent {
     return new KeyboardEvent(type, {
         "cancelable": false,
         "bubbles": true,
@@ -91,7 +95,7 @@ export function createKeyEvent(type: string, keyCode: string): KeyboardEvent {
     });
 }
 
-export function createUIEvent(type: string): UIEvent {
+export function createUIEvent(type: EventType): UIEvent {
     return new UIEvent(type, {
         "detail": 0,
         "bubbles": true,

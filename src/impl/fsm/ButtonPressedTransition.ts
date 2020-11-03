@@ -14,8 +14,9 @@
 
 import {OutputState} from "../../api/fsm/OutputState";
 import {InputState} from "../../api/fsm/InputState";
-import {EventRegistrationToken, isButton} from "./Events";
+import {isButton} from "./Events";
 import {TransitionBase} from "./TransitionBase";
+import {EventType} from "../../api/fsm/EventType";
 
 /**
  * An FSM transition for the Button HTML element.
@@ -34,7 +35,7 @@ export class ButtonPressedTransition extends TransitionBase<Event> {
         return e.target !== null && isButton(e.target);
     }
 
-    public getAcceptedEvents(): Set<string> {
-        return new Set([EventRegistrationToken.click, EventRegistrationToken.auxclick]);
+    public getAcceptedEvents(): Array<EventType> {
+        return ["click", "auxclick"];
     }
 }

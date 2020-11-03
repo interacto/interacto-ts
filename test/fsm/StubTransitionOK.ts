@@ -13,11 +13,12 @@
  */
 
 import {TransitionBase} from "../../src/impl/fsm/TransitionBase";
-import {StubEvent, StubSubEvent1, StubSubEvent2} from "./StubEvent";
 import {InputState} from "../../src/api/fsm/InputState";
 import {OutputState} from "../../src/api/fsm/OutputState";
+import {EventType} from "../../src/api/fsm/EventType";
+import {isEventType} from "../../src/impl/fsm/Events";
 
-export class StubTransitionOK<E extends StubEvent> extends TransitionBase<E> {
+export class StubTransitionOK<E extends Event> extends TransitionBase<E> {
     public guard: boolean;
 
     public constructor(srcState: OutputState, tgtState: InputState, guard?: boolean) {
@@ -25,7 +26,7 @@ export class StubTransitionOK<E extends StubEvent> extends TransitionBase<E> {
         this.guard = guard ?? true;
     }
 
-    public accept(event: StubEvent): event is E {
+    public accept(event: Event): event is E {
         return true;
     }
 
@@ -33,27 +34,37 @@ export class StubTransitionOK<E extends StubEvent> extends TransitionBase<E> {
         return this.guard;
     }
 
-    public getAcceptedEvents(): Set<string> {
-        return new Set(["StubEvent"]);
+    public getAcceptedEvents(): Array<EventType> {
+        return ["input"];
     }
 }
 
-export class SubStubTransition1 extends StubTransitionOK<StubSubEvent1> {
-    public accept(event: StubEvent): event is StubSubEvent1 {
-        return event instanceof StubSubEvent1;
+export class SubStubTransition1 extends StubTransitionOK<MouseEvent> {
+    public accept(event: Event): event is MouseEvent {
+        return event instanceof MouseEvent && isEventType(event.type) && this.getAcceptedEvents().includes(event.type);
     }
 
-    public getAcceptedEvents(): Set<string> {
-        return new Set(["StubSubEvent1"]);
+    public getAcceptedEvents(): Array<EventType> {
+        return ["click"];
     }
 }
 
-export class SubStubTransition2 extends StubTransitionOK<StubSubEvent2> {
-    public accept(event: StubEvent): event is StubSubEvent2 {
-        return event instanceof StubSubEvent2;
+export class SubStubTransition2 extends StubTransitionOK<KeyboardEvent> {
+    public accept(event: Event): event is KeyboardEvent {
+        return event instanceof KeyboardEvent && isEventType(event.type) && this.getAcceptedEvents().includes(event.type);
     }
 
-    public getAcceptedEvents(): Set<string> {
-        return new Set(["StubSubEvent2"]);
+    public getAcceptedEvents(): Array<EventType> {
+        return ["keydown"];
+    }
+}
+
+export class SubStubTransition3 extends StubTransitionOK<TouchEvent> {
+    public accept(event: Event): event is TouchEvent {
+        return event instanceof TouchEvent && isEventType(event.type) && this.getAcceptedEvents().includes(event.type);
+    }
+
+    public getAcceptedEvents(): Array<EventType> {
+        return ["touchstart"];
     }
 }

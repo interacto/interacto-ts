@@ -21,6 +21,7 @@ import {TerminalState} from "./TerminalState";
 import {CancellingState} from "./CancellingState";
 import {Subscription} from "rxjs";
 import {Transition} from "../../api/fsm/Transition";
+import {EventType} from "../../api/fsm/EventType";
 
 /**
  * A transition that refers to another FSM.
@@ -128,15 +129,15 @@ export class SubFSMTransition extends TransitionBase<Event> {
             .find(tr => tr.accept(event));
     }
 
-    public getAcceptedEvents(): Set<string> {
+    public getAcceptedEvents(): Array<EventType> {
         if (this.subFSM.getInitState().getTransitions().length === 0) {
-            return new Set();
+            return [];
         }
 
         return this.subFSM.getInitState()
             .getTransitions()
             .map(tr => tr.getAcceptedEvents())
-            .reduce((a, b) => new Set([...a, ...b]));
+            .reduce((a, b) => [...a, ...b]);
     }
 
     public uninstall(): void {

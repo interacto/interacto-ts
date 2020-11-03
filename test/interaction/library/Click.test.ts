@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {Click, EventRegistrationToken, FSMHandler} from "../../../src/interacto";
+import {Click, FSMHandler} from "../../../src/interacto";
 import {createMouseEvent} from "../StubEvents";
 import {mock, MockProxy} from "jest-mock-extended";
 
@@ -44,8 +44,8 @@ test("other event don't trigger the interaction.", () => {
 
 test("press on a canvas then move don't starts the interaction", () => {
     interaction.registerToNodes([canvas]);
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseDown, canvas));
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas));
+    canvas.dispatchEvent(createMouseEvent("mousedown", canvas));
+    canvas.dispatchEvent(createMouseEvent("mousemove", canvas));
     expect(handler.fsmStarts).not.toHaveBeenCalled();
 });
 

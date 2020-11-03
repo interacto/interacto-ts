@@ -16,7 +16,6 @@ import {BoxCheckPressedTransition} from "../../src/impl/fsm/BoxCheckPressedTrans
 import {OutputState} from "../../src/api/fsm/OutputState";
 import {mock, MockProxy} from "jest-mock-extended";
 import {InputState} from "../../src/api/fsm/InputState";
-import {EventRegistrationToken} from "../../src/impl/fsm/Events";
 import {createEventWithTarget} from "../interaction/StubEvents";
 
 let tr: BoxCheckPressedTransition;
@@ -32,7 +31,7 @@ beforeEach(() => {
 });
 
 test("that getAcceptedEvents works", () => {
-    expect(tr.getAcceptedEvents()).toStrictEqual(new Set([EventRegistrationToken.input]));
+    expect(tr.getAcceptedEvents()).toStrictEqual(["input"]);
 });
 
 test("that accept KO null target", () => {

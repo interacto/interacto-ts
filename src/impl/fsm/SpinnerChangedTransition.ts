@@ -14,8 +14,9 @@
 
 import {OutputState} from "../../api/fsm/OutputState";
 import {InputState} from "../../api/fsm/InputState";
-import {EventRegistrationToken, isSpinner} from "./Events";
+import {isSpinner} from "./Events";
 import {TransitionBase} from "./TransitionBase";
+import {EventType} from "../../api/fsm/EventType";
 
 /**
  * An FSM transition for the Spinner HTML element.
@@ -34,7 +35,7 @@ export class SpinnerChangedTransition extends TransitionBase<Event> {
         return event.target !== null && isSpinner(event.target);
     }
 
-    public getAcceptedEvents(): Set<string> {
-        return new Set([EventRegistrationToken.input]);
+    public getAcceptedEvents(): Array<EventType> {
+        return ["input"];
     }
 }

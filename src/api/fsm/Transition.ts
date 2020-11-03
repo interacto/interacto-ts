@@ -13,6 +13,7 @@
  */
 
 import {InputState} from "./InputState";
+import {EventType} from "./EventType";
 
 /**
  * The concept of FSM transition.
@@ -33,7 +34,7 @@ export interface Transition<E extends Event> {
     /**
      * @return The set of events accepted by the transition.
      */
-    getAcceptedEvents(): Set<string>;
+    getAcceptedEvents(): Array<EventType>;
 
     getTarget(): InputState;
 

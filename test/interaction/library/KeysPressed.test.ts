@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {EventRegistrationToken, FSMHandler, KeysPressed} from "../../../src/interacto";
+import {FSMHandler, KeysPressed} from "../../../src/interacto";
 import {createKeyEvent} from "../StubEvents";
 import {mock} from "jest-mock-extended";
 
@@ -32,7 +32,7 @@ beforeEach(() => {
 
 test("testKeyPressExecution", () => {
     interaction.registerToNodes([text]);
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "A"));
+    text.dispatchEvent(createKeyEvent("keydown", "A"));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).not.toHaveBeenCalled();
 });
@@ -49,15 +49,15 @@ test("testKeyPressData", () => {
     });
     interaction.getFsm().addHandler(newHandler);
 
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "A"));
+    text.dispatchEvent(createKeyEvent("keydown", "A"));
     expect(length).toStrictEqual(1);
     expect(txt).toStrictEqual("A");
 });
 
 test("testTwoKeyPressExecution", () => {
     interaction.registerToNodes([text]);
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "A"));
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "B"));
+    text.dispatchEvent(createKeyEvent("keydown", "A"));
+    text.dispatchEvent(createKeyEvent("keydown", "B"));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
     expect(handler.fsmStops).not.toHaveBeenCalled();
@@ -73,8 +73,8 @@ test("testTwoKeyPressData", () => {
     });
     interaction.getFsm().addHandler(newHandler);
 
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "A"));
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "B"));
+    text.dispatchEvent(createKeyEvent("keydown", "A"));
+    text.dispatchEvent(createKeyEvent("keydown", "B"));
     expect(data).toHaveLength(2);
     expect(data[0]).toStrictEqual("A");
     expect(data[1]).toStrictEqual("B");
@@ -82,9 +82,9 @@ test("testTwoKeyPressData", () => {
 
 test("testTwoKeyPressReleaseExecution", () => {
     interaction.registerToNodes([text]);
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "A"));
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "B"));
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "B"));
+    text.dispatchEvent(createKeyEvent("keydown", "A"));
+    text.dispatchEvent(createKeyEvent("keydown", "B"));
+    text.dispatchEvent(createKeyEvent("keyup", "B"));
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(3);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
 });
@@ -94,32 +94,32 @@ test("testTwoKeyPressReleaseData", () => {
     interaction.registerToNodes([text]);
     let data: Array<string> = [];
 
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "A"));
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "B"));
+    text.dispatchEvent(createKeyEvent("keydown", "A"));
+    text.dispatchEvent(createKeyEvent("keydown", "B"));
     const newHandler = mock<FSMHandler>();
     newHandler.fsmUpdates.mockImplementation(() => {
         data = [...interaction.getData().getKeys()];
     });
     interaction.getFsm().addHandler(newHandler);
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "B"));
+    text.dispatchEvent(createKeyEvent("keyup", "B"));
     expect(data).toHaveLength(1);
     expect(data[0]).toStrictEqual("A");
 });
 
 test("testTwoKeyPressReleaseRecycle", () => {
     interaction.registerToNodes([text]);
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "A"));
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "B"));
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "B"));
+    text.dispatchEvent(createKeyEvent("keydown", "A"));
+    text.dispatchEvent(createKeyEvent("keydown", "B"));
+    text.dispatchEvent(createKeyEvent("keyup", "B"));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
 });
 
 test("testTwoKeyPressTwoReleasesExecution", () => {
     interaction.registerToNodes([text]);
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "A"));
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "B"));
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "A"));
-    text.dispatchEvent(createKeyEvent(EventRegistrationToken.keyUp, "B"));
+    text.dispatchEvent(createKeyEvent("keydown", "A"));
+    text.dispatchEvent(createKeyEvent("keydown", "B"));
+    text.dispatchEvent(createKeyEvent("keyup", "A"));
+    text.dispatchEvent(createKeyEvent("keyup", "B"));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
     expect(handler.fsmStops).toHaveBeenCalledTimes(2);
 });

@@ -14,8 +14,9 @@
 
 import {OutputState} from "../../api/fsm/OutputState";
 import {InputState} from "../../api/fsm/InputState";
-import {EventRegistrationToken} from "./Events";
+import {isEventType} from "./Events";
 import {TransitionBase} from "./TransitionBase";
+import {EventType} from "../../api/fsm/EventType";
 
 /**
  * This transition defines a touch release.
@@ -31,11 +32,11 @@ export class TouchReleaseTransition extends TransitionBase<TouchEvent> {
         super(srcState, tgtState);
     }
 
-    public accept(e: Event): e is TouchEvent {
-        return e instanceof TouchEvent && e.type === EventRegistrationToken.touchend;
+    public accept(evt: Event): evt is TouchEvent {
+        return evt instanceof TouchEvent && isEventType(evt.type) && this.getAcceptedEvents().includes(evt.type);
     }
 
-    public getAcceptedEvents(): Set<string> {
-        return new Set([EventRegistrationToken.touchend]);
+    public getAcceptedEvents(): Array<EventType> {
+        return ["touchend"];
     }
 }

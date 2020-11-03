@@ -17,9 +17,9 @@ import {InputState} from "../../src/api/fsm/InputState";
 import {StdState} from "../../src/impl/fsm/StdState";
 import {SubFSMTransition} from "../../src/impl/fsm/SubFSMTransition";
 import {TerminalState} from "../../src/impl/fsm/TerminalState";
-import {StubSubEvent1, StubSubEvent2} from "./StubEvent";
 import {SubStubTransition1} from "./StubTransitionOK";
 import {Transition} from "../../src/api/fsm/Transition";
+import {createMouseEvent} from "../interaction/StubEvents";
 
 jest.mock("../../src/impl/fsm/StdState");
 
@@ -53,34 +53,34 @@ test("testInner", () => {
 });
 
 test("testAcceptFirstEvent", () => {
-    expect(tr.accept(new StubSubEvent1())).toBeTruthy();
+    expect(tr.accept(createMouseEvent("click", document.createElement("button")))).toBeTruthy();
 });
 
 test("testNotAcceptFirstEvent", () => {
-    expect(tr.accept(new StubSubEvent2())).toBeFalsy();
+    expect(tr.accept(createMouseEvent("mousemove", document.createElement("button")))).toBeFalsy();
 });
 
 test("testGuardOKFirstEvent", () => {
-    expect(tr.isGuardOK(new StubSubEvent1())).toBeTruthy();
+    expect(tr.isGuardOK(createMouseEvent("click", document.createElement("button")))).toBeTruthy();
 });
 
 test("testGuardKOFirstEvent", () => {
-    expect(tr.isGuardOK(new StubSubEvent2())).toBeFalsy();
+    expect(tr.isGuardOK(createMouseEvent("mousemove", document.createElement("button")))).toBeFalsy();
 });
 
 test("testExecuteFirstEventReturnsSubState", () => {
-    const state: InputState | undefined = tr.execute(new StubSubEvent1());
+    const state: InputState | undefined = tr.execute(createMouseEvent("click", document.createElement("button")));
     expect(state).not.toBeUndefined();
     expect(state).toStrictEqual(subS);
 });
 
 test("execute no transition", () => {
-    const state: InputState | undefined = tr.execute(new StubSubEvent2());
+    const state: InputState | undefined = tr.execute(createMouseEvent("mousemove", document.createElement("button")));
     expect(state).toBeUndefined();
 });
 
 test("testExecuteFirstEventKO", () => {
-    const state: InputState | undefined = tr.execute(new StubSubEvent2());
+    const state: InputState | undefined = tr.execute(createMouseEvent("mousemove", document.createElement("button")));
     expect(state).toBeUndefined();
 });
 
@@ -93,13 +93,13 @@ test("uninstall", () => {
 
 test("get accepted events", () => {
     const tr2 = {} as Transition<Event>;
-    tr2.getAcceptedEvents = jest.fn(() => new Set(["foo", "bar"]));
+    tr2.getAcceptedEvents = jest.fn(() => ["click", "auxclick"]);
     fsm.initState.addTransition(tr2);
     const evts = tr.getAcceptedEvents();
     expect([...evts]).toHaveLength(3);
-    expect(evts.has("foo")).toBeTruthy();
-    expect(evts.has("bar")).toBeTruthy();
-    expect(evts.has([...fsm.initState.getTransitions()[0].getAcceptedEvents()][0])).toBeTruthy();
+    expect(evts.includes("click")).toBeTruthy();
+    expect(evts.includes("auxclick")).toBeTruthy();
+    expect(evts.includes([...fsm.initState.getTransitions()[0].getAcceptedEvents()][0])).toBeTruthy();
 });
 
 test("get accepted events when nothing to return", () => {
@@ -109,12 +109,12 @@ test("get accepted events when nothing to return", () => {
 });
 
 test("testExecuteExitSrcState", () => {
-    tr.execute(new StubSubEvent1());
+    tr.execute(createMouseEvent("click", document.createElement("button")));
     expect(s1.exit).toHaveBeenCalledTimes(1);
 });
 
 test("testExecuteEnterTgtState", () => {
-    tr.execute(new StubSubEvent1());
+    tr.execute(createMouseEvent("click", document.createElement("button")));
     expect(s2.enter).toHaveBeenCalledTimes(1);
 });
 

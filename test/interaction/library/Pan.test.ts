@@ -13,7 +13,7 @@
  */
 
 import {createTouchEvent} from "../StubEvents";
-import {EventRegistrationToken, FSMHandler, Pan} from "../../../src/interacto";
+import {FSMHandler, Pan} from "../../../src/interacto";
 import {mock} from "jest-mock-extended";
 
 let interaction: Pan;
@@ -44,7 +44,7 @@ describe("horizontal", () => {
     });
 
     test("touch", () => {
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 2, canvas));
+        interaction.processEvent(createTouchEvent("touchstart", 2, canvas));
         expect(handler.fsmStarts).not.toHaveBeenCalled();
         expect(handler.fsmStops).not.toHaveBeenCalled();
         expect(handler.fsmCancels).not.toHaveBeenCalled();
@@ -57,8 +57,8 @@ describe("horizontal", () => {
         });
         interaction.getFsm().addHandler(newHandler);
 
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 3, canvas, 15, 20, 150, 200));
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchmove, 3, canvas, 16, 30, 160, 210));
+        interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 15, 20, 150, 200));
+        interaction.processEvent(createTouchEvent("touchmove", 3, canvas, 16, 30, 160, 210));
 
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmStops).not.toHaveBeenCalled();
@@ -78,9 +78,9 @@ describe("horizontal", () => {
 
     [11, -11].forEach((y: number) => {
         test("touch move KO not horizontal enough", () => {
-            interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 3, canvas, 15,
+            interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 15,
                 20, 150, 200));
-            interaction.processEvent(createTouchEvent(EventRegistrationToken.touchmove, 3, canvas, 16,
+            interaction.processEvent(createTouchEvent("touchmove", 3, canvas, 16,
                 20 + y, 160, 200 + y));
             expect(handler.fsmStarts).not.toHaveBeenCalled();
             expect(handler.fsmStops).not.toHaveBeenCalled();
@@ -89,16 +89,16 @@ describe("horizontal", () => {
     });
 
     test("touch release", () => {
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 2, canvas));
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchend, 2, canvas));
+        interaction.processEvent(createTouchEvent("touchstart", 2, canvas));
+        interaction.processEvent(createTouchEvent("touchend", 2, canvas));
         expect(handler.fsmStarts).not.toHaveBeenCalled();
         expect(handler.fsmStops).not.toHaveBeenCalled();
         expect(handler.fsmCancels).not.toHaveBeenCalled();
     });
 
     test("touch move KO not same ID", () => {
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 2, canvas));
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchmove, 1, canvas));
+        interaction.processEvent(createTouchEvent("touchstart", 2, canvas));
+        interaction.processEvent(createTouchEvent("touchmove", 1, canvas));
         expect(handler.fsmStarts).not.toHaveBeenCalled();
         expect(handler.fsmStops).not.toHaveBeenCalled();
         expect(handler.fsmCancels).not.toHaveBeenCalled();
@@ -107,11 +107,11 @@ describe("horizontal", () => {
 
     [11, -11].forEach((y: number) => {
         test("touch move move cancelled not horizontal enough", () => {
-            interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 3, canvas, 15,
+            interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 15,
                 20, 150, 200));
-            interaction.processEvent(createTouchEvent(EventRegistrationToken.touchmove, 3, canvas, 16,
+            interaction.processEvent(createTouchEvent("touchmove", 3, canvas, 16,
                 20, 160, 200));
-            interaction.processEvent(createTouchEvent(EventRegistrationToken.touchmove, 3, canvas, 16,
+            interaction.processEvent(createTouchEvent("touchmove", 3, canvas, 16,
                 20 + y, 160, 200 + y));
             expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
             expect(handler.fsmStops).not.toHaveBeenCalled();
@@ -126,9 +126,9 @@ describe("horizontal", () => {
         });
         interaction.getFsm().addHandler(newHandler);
 
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 3, canvas, 15, 20, 150, 200));
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchmove, 3, canvas, 16, 30, 160, 201));
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchmove, 3, canvas, 17, 30, 170, 210));
+        interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 15, 20, 150, 200));
+        interaction.processEvent(createTouchEvent("touchmove", 3, canvas, 16, 30, 160, 201));
+        interaction.processEvent(createTouchEvent("touchmove", 3, canvas, 17, 30, 170, 210));
 
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
@@ -148,9 +148,9 @@ describe("horizontal", () => {
     });
 
     test("touch move move not horiz", () => {
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 3, canvas, 15, 20, 150, 200));
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchmove, 3, canvas, 16, 30, 160, 201));
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchmove, 3, canvas, 17, 41, 170, 212));
+        interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 15, 20, 150, 200));
+        interaction.processEvent(createTouchEvent("touchmove", 3, canvas, 16, 30, 160, 201));
+        interaction.processEvent(createTouchEvent("touchmove", 3, canvas, 17, 41, 170, 212));
 
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
@@ -159,10 +159,10 @@ describe("horizontal", () => {
     });
 
     test("touch move move release before distance min", () => {
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 3, canvas, 15, 20, 150, 200));
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchmove, 3, canvas, 16, 30, 160, 201));
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchmove, 3, canvas, 17, 30, 170, 210));
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchend, 3, canvas, 114, 30, 249, 210));
+        interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 15, 20, 150, 200));
+        interaction.processEvent(createTouchEvent("touchmove", 3, canvas, 16, 30, 160, 201));
+        interaction.processEvent(createTouchEvent("touchmove", 3, canvas, 17, 30, 170, 210));
+        interaction.processEvent(createTouchEvent("touchend", 3, canvas, 114, 30, 249, 210));
 
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmStops).not.toHaveBeenCalled();
@@ -177,10 +177,10 @@ describe("horizontal", () => {
         });
         interaction.getFsm().addHandler(newHandler);
 
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchstart, 3, canvas, 15, 20, 150, 200));
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchmove, 3, canvas, 16, 30, 160, 201));
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchmove, 3, canvas, 115, 30, 250, 210));
-        interaction.processEvent(createTouchEvent(EventRegistrationToken.touchend, 3, canvas, 115, 30, 250, 210));
+        interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 15, 20, 150, 200));
+        interaction.processEvent(createTouchEvent("touchmove", 3, canvas, 16, 30, 160, 201));
+        interaction.processEvent(createTouchEvent("touchmove", 3, canvas, 115, 30, 250, 210));
+        interaction.processEvent(createTouchEvent("touchend", 3, canvas, 115, 30, 250, 210));
 
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmStops).toHaveBeenCalledTimes(1);

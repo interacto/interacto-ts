@@ -12,20 +12,12 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export enum EventRegistrationToken {
-    mouseDown = "mousedown",
-    mouseUp = "mouseup",
-    mouseMove = "mousemove",
-    keyDown = "keydown",
-    keyUp = "keyup",
-    click = "click",
-    auxclick = "auxclick",
-    input = "input",
-    scroll = "scroll",
-    change = "change",
-    touchstart = "touchstart",
-    touchend = "touchend",
-    touchmove = "touchmove"
+
+import {EventType, eventTypes} from "../../api/fsm/EventType";
+
+
+export function isEventType(evtType: string): evtType is EventType {
+    return eventTypes.includes(evtType as EventType);
 }
 
 /**
@@ -47,31 +39,25 @@ export function getTouch(touches: TouchList, idToFind: number | undefined): Touc
  * Checks whether the given event type is a touch event.
  * @param eventType The event type to check.
  */
-export function isTouchEvent(eventType: string): boolean {
-    return eventType === EventRegistrationToken.touchstart ||
-    eventType === EventRegistrationToken.touchend ||
-    eventType === EventRegistrationToken.touchmove;
+export function isTouchEvent(eventType: EventType): boolean {
+    return eventType === "touchstart" || eventType === "touchend" || eventType === "touchmove";
 }
 
 /**
  * Checks whether the given event type is a mouse event.
  * @param eventType The event type to check.
  */
-export function isMouseEvent(eventType: string): boolean {
-    return eventType === EventRegistrationToken.mouseDown ||
-    eventType === EventRegistrationToken.mouseUp ||
-    eventType === EventRegistrationToken.mouseMove ||
-    eventType === EventRegistrationToken.click ||
-    eventType === EventRegistrationToken.auxclick;
+export function isMouseEvent(eventType: EventType): boolean {
+    return eventType === "mousedown" || eventType === "mouseup" || eventType === "mousemove" ||
+    eventType === "click" || eventType === "auxclick";
 }
 
 /**
  * Checks whether the given event type is a key event.
  * @param eventType The event type to check.
  */
-export function isKeyEvent(eventType: string): boolean {
-    return eventType === EventRegistrationToken.keyDown ||
-    eventType === EventRegistrationToken.keyUp;
+export function isKeyEvent(eventType: EventType): boolean {
+    return eventType === "keydown" || eventType === "keyup";
 }
 
 export function isButton(target: EventTarget): target is HTMLButtonElement {
@@ -108,19 +94,19 @@ export function isTextInput(target: EventTarget): target is HTMLInputElement | H
 }
 
 export function isKeyDownEvent(event: Event): event is KeyboardEvent {
-    return event instanceof KeyboardEvent && event.type === EventRegistrationToken.keyDown;
+    return event instanceof KeyboardEvent && isEventType(event.type) && event.type === "keydown";
 }
 
 export function isKeyUpEvent(event: Event): event is KeyboardEvent {
-    return event instanceof KeyboardEvent && event.type === EventRegistrationToken.keyUp;
+    return event instanceof KeyboardEvent && isEventType(event.type) && event.type === "keyup";
 }
 
 export function isMouseDownEvent(event: Event): event is MouseEvent {
-    return event instanceof MouseEvent && event.type === EventRegistrationToken.mouseDown;
+    return event instanceof MouseEvent && isEventType(event.type) && event.type === "mousedown";
 }
 
 export function isScrollEvent(event: Event): event is UIEvent {
-    return event instanceof UIEvent && event.type === EventRegistrationToken.scroll;
+    return event instanceof UIEvent && isEventType(event.type) && event.type === "scroll";
 }
 
 export enum KeyCode {

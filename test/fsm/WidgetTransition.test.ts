@@ -16,24 +16,24 @@
 import {FSMImpl} from "../../src/impl/fsm/FSMImpl";
 import {StdState} from "../../src/impl/fsm/StdState";
 import {WidgetTransition} from "../../src/impl/fsm/WidgetTransition";
-import {StubEvent} from "./StubEvent";
 import {mock} from "jest-mock-extended";
+import {EventType} from "../../src/api/fsm/EventType";
 
 class WTransition extends WidgetTransition<string> {
     public constructor() {
         super(new StdState(mock<FSMImpl>(), "a"), new StdState(mock<FSMImpl>(), "b"));
     }
 
-    public accept(event: StubEvent): event is StubEvent {
+    public accept(event: Event): event is Event {
         return false;
     }
 
-    public isGuardOK(_event: StubEvent): boolean {
+    public isGuardOK(_event: Event): boolean {
         return false;
     }
 
-    public getAcceptedEvents(): Set<string> {
-        return new Set();
+    public getAcceptedEvents(): Array<EventType> {
+        return [];
     }
 }
 

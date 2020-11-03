@@ -14,8 +14,9 @@
 
 import {OutputState} from "../../api/fsm/OutputState";
 import {InputState} from "../../api/fsm/InputState";
-import {EventRegistrationToken} from "./Events";
+import {isEventType} from "./Events";
 import {TransitionBase} from "./TransitionBase";
+import {EventType} from "../../api/fsm/EventType";
 
 /**
  * This transition corresponds to a release of a button of a pointing device.
@@ -32,10 +33,10 @@ export class ReleaseTransition extends TransitionBase<MouseEvent> {
     }
 
     public accept(event: Event): event is MouseEvent {
-        return event instanceof MouseEvent && event.type === EventRegistrationToken.mouseUp;
+        return event instanceof MouseEvent && isEventType(event.type) && this.getAcceptedEvents().includes(event.type);
     }
 
-    public getAcceptedEvents(): Set<string> {
-        return new Set([EventRegistrationToken.mouseUp]);
+    public getAcceptedEvents(): Array<EventType> {
+        return ["mouseup"];
     }
 }

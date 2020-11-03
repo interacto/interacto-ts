@@ -12,49 +12,11 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {EventRegistrationToken, isButton, isCheckBox, isColorChoice, isComboBox, isDatePicker,
+import {isButton, isCheckBox, isColorChoice, isComboBox, isDatePicker,
     isHyperLink, isKeyDownEvent, isKeyUpEvent, isMouseDownEvent, isScrollEvent, isSpinner,
     isTextInput, KeyCode} from "../../src/impl/fsm/Events";
 import {createKeyEvent, createMouseEvent, createUIEvent} from "../interaction/StubEvents";
 
-
-describe("checking event token", () => {
-    test("check event token mouse down", () => {
-        expect(EventRegistrationToken.mouseDown).toStrictEqual("mousedown");
-    });
-
-    test("check event token mouse up", () => {
-        expect(EventRegistrationToken.mouseUp).toStrictEqual("mouseup");
-    });
-
-    test("check event token mouse move", () => {
-        expect(EventRegistrationToken.mouseMove).toStrictEqual("mousemove");
-    });
-
-    test("check event token key up", () => {
-        expect(EventRegistrationToken.keyUp).toStrictEqual("keyup");
-    });
-
-    test("check event token key down", () => {
-        expect(EventRegistrationToken.keyDown).toStrictEqual("keydown");
-    });
-
-    test("check event token change", () => {
-        expect(EventRegistrationToken.change).toStrictEqual("change");
-    });
-
-    test("check event token click", () => {
-        expect(EventRegistrationToken.click).toStrictEqual("click");
-    });
-
-    test("check event token scroll", () => {
-        expect(EventRegistrationToken.scroll).toStrictEqual("scroll");
-    });
-
-    test("check event token input", () => {
-        expect(EventRegistrationToken.input).toStrictEqual("input");
-    });
-});
 
 describe("checking is widget functions", () => {
     test("isButton OK", () => {
@@ -149,38 +111,38 @@ describe("checking is widget functions", () => {
 
 describe("checking event functions", () => {
     test("isKeyDownEvent KO", () => {
-        expect(isKeyDownEvent(createKeyEvent(EventRegistrationToken.keyUp, "a"))).toBeFalsy();
+        expect(isKeyDownEvent(createKeyEvent("keyup", "a"))).toBeFalsy();
     });
 
     test("isKeyDownEvent OK", () => {
-        expect(isKeyDownEvent(createKeyEvent(EventRegistrationToken.keyDown, "a"))).toBeTruthy();
+        expect(isKeyDownEvent(createKeyEvent("keydown", "a"))).toBeTruthy();
     });
 
 
     test("isKeyUpEvent KO", () => {
-        expect(isKeyUpEvent(createKeyEvent(EventRegistrationToken.keyDown, "b"))).toBeFalsy();
+        expect(isKeyUpEvent(createKeyEvent("keydown", "b"))).toBeFalsy();
     });
 
     test("isKeyUpEvent OK", () => {
-        expect(isKeyUpEvent(createKeyEvent(EventRegistrationToken.keyUp, "b"))).toBeTruthy();
+        expect(isKeyUpEvent(createKeyEvent("keyup", "b"))).toBeTruthy();
     });
 
     test("isMouseDownEvent KO", () => {
         const elt1 = document.createElement("textarea");
-        expect(isMouseDownEvent(createMouseEvent(EventRegistrationToken.mouseUp, elt1))).toBeFalsy();
+        expect(isMouseDownEvent(createMouseEvent("mouseup", elt1))).toBeFalsy();
     });
 
     test("isMouseDownEvent OK", () => {
         const elt1 = document.createElement("textarea");
-        expect(isMouseDownEvent(createMouseEvent(EventRegistrationToken.mouseDown, elt1))).toBeTruthy();
+        expect(isMouseDownEvent(createMouseEvent("mousedown", elt1))).toBeTruthy();
     });
 
     test("isScrollEvent KO", () => {
-        expect(isScrollEvent(createUIEvent(EventRegistrationToken.mouseUp))).toBeFalsy();
+        expect(isScrollEvent(createUIEvent("mouseup"))).toBeFalsy();
     });
 
     test("isScrollEvent OK", () => {
-        expect(isScrollEvent(createUIEvent(EventRegistrationToken.scroll))).toBeTruthy();
+        expect(isScrollEvent(createUIEvent("scroll"))).toBeTruthy();
     });
 });
 

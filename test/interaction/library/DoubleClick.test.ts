@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {DoubleClick, EventRegistrationToken, FSMHandler} from "../../../src/interacto";
+import {DoubleClick, FSMHandler} from "../../../src/interacto";
 import {createMouseEvent} from "../StubEvents";
 import {mock} from "jest-mock-extended";
 
@@ -53,8 +53,8 @@ test("check data of the interaction.", () => {
         obj = interaction.getData().getSrcObject() as HTMLCanvasElement;
     });
     interaction.getFsm().addHandler(newHandler);
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.click, canvas, undefined, undefined, 11, 23));
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.click, canvas, undefined, undefined, 11, 23));
+    canvas.dispatchEvent(createMouseEvent("click", canvas, undefined, undefined, 11, 23));
+    canvas.dispatchEvent(createMouseEvent("click", canvas, undefined, undefined, 11, 23));
     expect(sx).toBe(11);
     expect(sy).toBe(23);
     expect(button).toBe(0);
@@ -64,7 +64,7 @@ test("check data of the interaction.", () => {
 test("move between clicks cancels the double click", () => {
     interaction.registerToNodes([canvas]);
     canvas.click();
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas));
+    canvas.dispatchEvent(createMouseEvent("mousemove", canvas));
     canvas.click();
     expect(handler.fsmStarts).not.toHaveBeenCalled();
     expect(handler.fsmStops).not.toHaveBeenCalled();
@@ -81,9 +81,9 @@ test("timout cancels the double click", () => {
 
 test("double click with two different mouse button for each click don't start the interaction", () => {
     interaction.registerToNodes([canvas]);
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.click, canvas, undefined, undefined,
+    canvas.dispatchEvent(createMouseEvent("click", canvas, undefined, undefined,
         undefined, undefined, 0));
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.click, canvas, undefined, undefined,
+    canvas.dispatchEvent(createMouseEvent("click", canvas, undefined, undefined,
         undefined, undefined, 2));
     expect(handler.fsmStarts).not.toHaveBeenCalled();
 });
@@ -91,7 +91,7 @@ test("double click with two different mouse button for each click don't start th
 test("check if the interaction is recycled after a cancel", () => {
     interaction.registerToNodes([canvas]);
     canvas.click();
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas));
+    canvas.dispatchEvent(createMouseEvent("mousemove", canvas));
     canvas.click();
     canvas.click();
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
@@ -101,7 +101,7 @@ test("check if the interaction is recycled after a cancel", () => {
 test("check if the interaction work fine with bad move", () => {
     interaction.registerToNodes([canvas]);
     canvas.click();
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, undefined,
+    canvas.dispatchEvent(createMouseEvent("mousemove", canvas, undefined, undefined, undefined,
         undefined, 1));
     canvas.click();
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);

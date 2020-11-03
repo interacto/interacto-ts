@@ -18,6 +18,7 @@ import {FSM} from "../../api/fsm/FSM";
 import {OutputState} from "../../api/fsm/OutputState";
 import {InteractionData} from "../../api/interaction/InteractionData";
 import {InteractionBase} from "./InteractionBase";
+import {EventType} from "../../api/fsm/EventType";
 
 /**
  * The base implementation of a user interaction that uses concurrent FSMs.
@@ -50,8 +51,8 @@ export abstract class ConcurrentInteraction<D extends InteractionData, F extends
         this.getCurrentAcceptedEvents().forEach(type => this.registerEventToNode(type, node));
     }
 
-    public getCurrentAcceptedEvents(_state?: OutputState): Array<string> {
-        return [...new Set(...[this.fsm.getConccurFSMs().flatMap(concFSM => [...this.getEventTypesOf(concFSM.getCurrentState())])])];
+    public getCurrentAcceptedEvents(_state?: OutputState): Array<EventType> {
+        return this.fsm.getConccurFSMs().flatMap(concFSM => [...this.getEventTypesOf(concFSM.getCurrentState())]);
     }
 
     public uninstall(): void {

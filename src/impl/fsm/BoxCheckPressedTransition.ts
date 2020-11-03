@@ -14,8 +14,9 @@
 
 import {OutputState} from "../../api/fsm/OutputState";
 import {InputState} from "../../api/fsm/InputState";
-import {EventRegistrationToken, isCheckBox} from "./Events";
 import {TransitionBase} from "./TransitionBase";
+import {isCheckBox} from "./Events";
+import {EventType} from "../../api/fsm/EventType";
 
 /**
  * An FSM transition for the CheckBox HTML element.
@@ -34,7 +35,7 @@ export class BoxCheckPressedTransition extends TransitionBase<Event> {
         return event.target !== null && isCheckBox(event.target);
     }
 
-    public getAcceptedEvents(): Set<string> {
-        return new Set([EventRegistrationToken.input]);
+    public getAcceptedEvents(): Array<EventType> {
+        return ["input"];
     }
 }

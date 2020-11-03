@@ -14,8 +14,9 @@
 
 import {OutputState} from "../../api/fsm/OutputState";
 import {InputState} from "../../api/fsm/InputState";
-import {EventRegistrationToken, isHyperLink} from "./Events";
+import {isHyperLink} from "./Events";
 import {TransitionBase} from "./TransitionBase";
+import {EventType} from "../../api/fsm/EventType";
 
 /**
  * An FSM transition for the Hyperlink.
@@ -34,7 +35,7 @@ export class HyperLinkTransition extends TransitionBase<Event> {
         return event.target !== null && isHyperLink(event.target);
     }
 
-    public getAcceptedEvents(): Set<string> {
-        return new Set([EventRegistrationToken.click, EventRegistrationToken.auxclick]);
+    public getAcceptedEvents(): Array<EventType> {
+        return ["click", "auxclick"];
     }
 }

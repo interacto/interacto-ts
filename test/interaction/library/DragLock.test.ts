@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {DragLock, EventRegistrationToken, FSMHandler, KeyCode} from "../../../src/interacto";
+import {DragLock, FSMHandler, KeyCode} from "../../../src/interacto";
 import {createKeyEvent, createMouseEvent} from "../StubEvents";
 import {mock} from "jest-mock-extended";
 
@@ -37,7 +37,7 @@ test("drag lock is ok", () => {
     interaction.registerToNodes([canvas]);
     canvas.click();
     canvas.click();
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas));
+    canvas.dispatchEvent(createMouseEvent("mousemove", canvas));
     canvas.click();
     canvas.click();
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
@@ -60,7 +60,7 @@ test("drag lock canceled on ESC", () => {
     interaction.registerToNodes([canvas]);
     canvas.click();
     canvas.click();
-    canvas.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, String(KeyCode.escape)));
+    canvas.dispatchEvent(createKeyEvent("keydown", String(KeyCode.escape)));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).not.toHaveBeenCalled();
     expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
@@ -75,11 +75,11 @@ test("check data with a normal execution", () => {
         ty = interaction.getData().getTgtClientY();
     });
     interaction.getFsm().addHandler(newHandler);
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.click, canvas, undefined, undefined, 11, 23));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.click, canvas, undefined, undefined, 11, 23));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 20, 30));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.click, canvas, undefined, undefined, 22, 33));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.click, canvas, undefined, undefined, 22, 33));
+    interaction.processEvent(createMouseEvent("click", canvas, undefined, undefined, 11, 23));
+    interaction.processEvent(createMouseEvent("click", canvas, undefined, undefined, 11, 23));
+    interaction.processEvent(createMouseEvent("mousemove", canvas, undefined, undefined, 20, 30));
+    interaction.processEvent(createMouseEvent("click", canvas, undefined, undefined, 22, 33));
+    interaction.processEvent(createMouseEvent("click", canvas, undefined, undefined, 22, 33));
     expect(sx).toBe(11);
     expect(sy).toBe(23);
     expect(tx).toBe(22);
@@ -94,21 +94,21 @@ test("check update work during move", () => {
     interaction.registerToNodes([canvas]);
     canvas.click();
     canvas.click();
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas));
+    canvas.dispatchEvent(createMouseEvent("mousemove", canvas));
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
 });
 
 test("check data update during a move", () => {
     interaction.registerToNodes([canvas]);
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.click, canvas, undefined, undefined, 11, 23));
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.click, canvas, undefined, undefined, 11, 23));
+    canvas.dispatchEvent(createMouseEvent("click", canvas, undefined, undefined, 11, 23));
+    canvas.dispatchEvent(createMouseEvent("click", canvas, undefined, undefined, 11, 23));
     const newHandler = mock<FSMHandler>();
     newHandler.fsmUpdates.mockImplementation(() => {
         tx = interaction.getData().getTgtClientX();
         ty = interaction.getData().getTgtClientY();
     });
     interaction.getFsm().addHandler(newHandler);
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 30, 40));
+    canvas.dispatchEvent(createMouseEvent("mousemove", canvas, undefined, undefined, 30, 40));
     expect(handler.fsmCancels).not.toHaveBeenCalled();
     expect(tx).toBe(30);
     expect(ty).toBe(40);
@@ -118,7 +118,7 @@ test("check data reinitialisation", () => {
     interaction.registerToNodes([canvas]);
     canvas.click();
     canvas.click();
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas));
+    canvas.dispatchEvent(createMouseEvent("mousemove", canvas));
     canvas.click();
     canvas.click();
     expect(interaction.getData().getSrcClientX()).toBe(0);
@@ -131,8 +131,8 @@ test("check if canceled with Esc after a move", () => {
     interaction.registerToNodes([canvas]);
     canvas.click();
     canvas.click();
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas));
-    canvas.dispatchEvent(createKeyEvent(EventRegistrationToken.keyDown, "Escape"));
+    canvas.dispatchEvent(createMouseEvent("mousemove", canvas));
+    canvas.dispatchEvent(createKeyEvent("keydown", "Escape"));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).not.toHaveBeenCalled();
@@ -140,49 +140,49 @@ test("check if canceled with Esc after a move", () => {
 
 test("check if the last DoubleClick with a different button don't stop the interaction", () => {
     interaction.registerToNodes([canvas]);
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.click, canvas, undefined, undefined, 11, 23, 1));
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.click, canvas, undefined, undefined, 11, 23, 1));
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 20, 30, 1));
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.click, canvas, undefined, undefined, 20, 30, 0));
-    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.click, canvas, undefined, undefined, 20, 30, 0));
+    canvas.dispatchEvent(createMouseEvent("click", canvas, undefined, undefined, 11, 23, 1));
+    canvas.dispatchEvent(createMouseEvent("click", canvas, undefined, undefined, 11, 23, 1));
+    canvas.dispatchEvent(createMouseEvent("mousemove", canvas, undefined, undefined, 20, 30, 1));
+    canvas.dispatchEvent(createMouseEvent("click", canvas, undefined, undefined, 20, 30, 0));
+    canvas.dispatchEvent(createMouseEvent("click", canvas, undefined, undefined, 20, 30, 0));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).not.toHaveBeenCalled();
 });
 
 test("specific mouse button checking OK", () => {
     interaction.registerToNodes([canvas]);
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 20, 30));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 22, 33));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 22, 33));
+    interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23));
+    interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23));
+    interaction.processEvent(createMouseEvent("mousemove", canvas, undefined, undefined, 20, 30));
+    interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 22, 33));
+    interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 22, 33));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
 });
 
 test("several moves ok", () => {
     interaction.registerToNodes([canvas]);
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 20, 30));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 20, 30));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 20, 30));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 20, 30));
+    interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23));
+    interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23));
+    interaction.processEvent(createMouseEvent("mousemove", canvas, undefined, undefined, 20, 30));
+    interaction.processEvent(createMouseEvent("mousemove", canvas, undefined, undefined, 20, 30));
+    interaction.processEvent(createMouseEvent("mousemove", canvas, undefined, undefined, 20, 30));
+    interaction.processEvent(createMouseEvent("mousemove", canvas, undefined, undefined, 20, 30));
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(5);
 });
 
 test("several moves ok with specific mouse button", () => {
     interaction.registerToNodes([canvas]);
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23, 2));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23, 2));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 21, 30, 0));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 22, 30, 0));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 23, 30, 0));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 25, 30, 0));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 20, 30, 0));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 20, 30, 0));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23, 2));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23, 2));
+    interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
+    interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
+    interaction.processEvent(createMouseEvent("mousemove", canvas, undefined, undefined, 21, 30, 0));
+    interaction.processEvent(createMouseEvent("mousemove", canvas, undefined, undefined, 22, 30, 0));
+    interaction.processEvent(createMouseEvent("mousemove", canvas, undefined, undefined, 23, 30, 0));
+    interaction.processEvent(createMouseEvent("mousemove", canvas, undefined, undefined, 25, 30, 0));
+    interaction.processEvent(createMouseEvent("mousemove", canvas, undefined, undefined, 20, 30, 0));
+    interaction.processEvent(createMouseEvent("mousemove", canvas, undefined, undefined, 20, 30, 0));
+    interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
+    interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(7);
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
@@ -190,11 +190,11 @@ test("several moves ok with specific mouse button", () => {
 
 test("timeout first double click", () => {
     interaction.registerToNodes([canvas]);
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.click, canvas, undefined, undefined, 11, 23, 1));
+    interaction.processEvent(createMouseEvent("click", canvas, undefined, undefined, 11, 23, 1));
     jest.runOnlyPendingTimers();
 
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23, 2));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23, 2));
+    interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
+    interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmCancels).not.toHaveBeenCalled();
     expect(handler.fsmStops).not.toHaveBeenCalled();
@@ -203,12 +203,12 @@ test("timeout first double click", () => {
 
 test("timeout first Click Update Still OK", () => {
     interaction.registerToNodes([canvas]);
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.click, canvas, undefined, undefined, 11, 23, 1));
+    interaction.processEvent(createMouseEvent("click", canvas, undefined, undefined, 11, 23, 1));
     jest.runOnlyPendingTimers();
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23, 2));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23, 2));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 21, 30, 2));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 21, 30, 2));
+    interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
+    interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
+    interaction.processEvent(createMouseEvent("mousemove", canvas, undefined, undefined, 21, 30, 2));
+    interaction.processEvent(createMouseEvent("mousemove", canvas, undefined, undefined, 21, 30, 2));
 
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(3);
@@ -219,14 +219,14 @@ test("timeout first Click Update Still OK", () => {
 test("timeout first Click end Still OK", () => {
     interaction.log(true);
     interaction.registerToNodes([canvas]);
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.click, canvas, undefined, undefined, 11, 23, 1));
+    interaction.processEvent(createMouseEvent("click", canvas, undefined, undefined, 11, 23, 1));
     jest.runOnlyPendingTimers();
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23, 2));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23, 2));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 21, 30, 2));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 21, 30, 2));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23, 2));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23, 2));
+    interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
+    interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
+    interaction.processEvent(createMouseEvent("mousemove", canvas, undefined, undefined, 21, 30, 2));
+    interaction.processEvent(createMouseEvent("mousemove", canvas, undefined, undefined, 21, 30, 2));
+    interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
+    interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
 
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(3);
@@ -236,25 +236,25 @@ test("timeout first Click end Still OK", () => {
 
 test("timeout Second Click KO", () => {
     interaction.registerToNodes([canvas]);
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23, 2));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23, 2));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 21, 30, 2));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23, 2));
+    interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
+    interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
+    interaction.processEvent(createMouseEvent("mousemove", canvas, undefined, undefined, 21, 30, 2));
+    interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
     jest.runOnlyPendingTimers();
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23, 2));
+    interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
 
     expect(handler.fsmStops).not.toHaveBeenCalled();
 });
 
 test("timeout Second Click OK", () => {
     interaction.registerToNodes([canvas]);
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23, 2));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23, 2));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 21, 30, 2));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23, 2));
+    interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
+    interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
+    interaction.processEvent(createMouseEvent("mousemove", canvas, undefined, undefined, 21, 30, 2));
+    interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
     jest.runOnlyPendingTimers();
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23, 2));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23, 2));
+    interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
+    interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
 
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
 });
@@ -269,8 +269,8 @@ test("first Click Has Target object", () => {
 
 test("first Click Has Target Values", () => {
     interaction.registerToNodes([canvas]);
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23, 2));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23, 2));
+    interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
+    interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
 
     expect(interaction.getData().getTgtClientX()).toBe(11);
     expect(interaction.getData().getTgtClientY()).toBe(23);
@@ -279,9 +279,9 @@ test("first Click Has Target Values", () => {
 
 test("move Has Still Src Values", () => {
     interaction.registerToNodes([canvas]);
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23, 2));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.auxclick, canvas, undefined, undefined, 11, 23, 2));
-    interaction.processEvent(createMouseEvent(EventRegistrationToken.mouseMove, canvas, undefined, undefined, 21, 30, 2));
+    interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
+    interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
+    interaction.processEvent(createMouseEvent("mousemove", canvas, undefined, undefined, 21, 30, 2));
 
     expect(interaction.getData().getTgtClientX()).toBe(21);
     expect(interaction.getData().getTgtClientY()).toBe(30);

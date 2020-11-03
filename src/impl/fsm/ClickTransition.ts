@@ -14,8 +14,9 @@
 
 import {InputState} from "../../api/fsm/InputState";
 import {OutputState} from "../../api/fsm/OutputState";
-import {EventRegistrationToken} from "./Events";
 import {TransitionBase} from "./TransitionBase";
+import {EventType} from "../../api/fsm/EventType";
+import {isEventType} from "./Events";
 
 /**
  * This transition corresponds to a pressure of a button of a pointing device.
@@ -30,10 +31,10 @@ export class ClickTransition extends TransitionBase<MouseEvent> {
     }
 
     public accept(event: Event): event is MouseEvent {
-        return event instanceof MouseEvent && this.getAcceptedEvents().has(event.type);
+        return event instanceof MouseEvent && isEventType(event.type) && this.getAcceptedEvents().includes(event.type);
     }
 
-    public getAcceptedEvents(): Set<string> {
-        return new Set([EventRegistrationToken.click, EventRegistrationToken.auxclick]);
+    public getAcceptedEvents(): Array<EventType> {
+        return ["click", "auxclick"];
     }
 }

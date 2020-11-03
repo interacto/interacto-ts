@@ -14,8 +14,9 @@
 
 import {OutputState} from "../../api/fsm/OutputState";
 import {InputState} from "../../api/fsm/InputState";
-import {EventRegistrationToken} from "./Events";
+import {isEventType} from "./Events";
 import {TransitionBase} from "./TransitionBase";
+import {EventType} from "../../api/fsm/EventType";
 
 /**
  * This transition defines a touch move.
@@ -30,11 +31,11 @@ export class TouchMoveTransition extends TransitionBase<TouchEvent> {
         super(srcState, tgtState);
     }
 
-    public accept(e: Event): e is TouchEvent {
-        return e instanceof TouchEvent && e.type === EventRegistrationToken.touchmove;
+    public accept(evt: Event): evt is TouchEvent {
+        return evt instanceof TouchEvent && isEventType(evt.type) && this.getAcceptedEvents().includes(evt.type);
     }
 
-    public getAcceptedEvents(): Set<string> {
-        return new Set([EventRegistrationToken.touchmove]);
+    public getAcceptedEvents(): Array<EventType> {
+        return ["touchmove"];
     }
 }

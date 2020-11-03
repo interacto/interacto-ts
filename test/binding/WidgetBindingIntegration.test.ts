@@ -13,17 +13,18 @@
  */
 
 import {
+    ClickTransition,
     CmdStatus,
-    CommandsRegistry, FSM,
+    CommandsRegistry,
+    FSM,
     FSMImpl,
     InteractionData,
     TerminalState,
-    TransitionBase,
     WidgetBindingBase
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
-import {StubEvent, StubSubEvent1} from "../fsm/StubEvent";
 import {InteractionStub} from "../interaction/InteractionStub";
+import {createMouseEvent} from "../interaction/StubEvents";
 
 
 let interaction: InteractionStub;
@@ -33,22 +34,12 @@ let cmd: StubCmd;
 let whenValue: () => boolean;
 
 
-class TrStub extends TransitionBase<StubSubEvent1> {
-    public accept(event: StubEvent): event is StubSubEvent1 {
-        return event instanceof StubSubEvent1;
-    }
-
-    public getAcceptedEvents(): Set<string> {
-        return new Set(["StubSubEvent1"]);
-    }
-}
-
 class OneTrFSM extends FSMImpl {
     public constructor() {
         super();
         const s1 = new TerminalState(this, "s1");
         this.addState(s1);
-        new TrStub(this.initState, s1);
+        new ClickTransition(this.initState, s1);
     }
 }
 
@@ -82,7 +73,7 @@ test("testNothingDoneIsDeactivated", () => {
     jest.spyOn(binding, "ifCmdHadNoEffect");
     jest.spyOn(binding, "ifCmdHadEffects");
     jest.spyOn(binding, "ifCannotExecuteCmd");
-    fsm.process(new StubSubEvent1());
+    fsm.process(createMouseEvent("click", document.createElement("button")));
 
     expect(dotItSpy).not.toHaveBeenCalled();
     expect(binding.ifCmdHadEffects).not.toHaveBeenCalledWith();
@@ -96,7 +87,7 @@ test("testCmdCreatedExecSavedWhenActivated", () => {
     jest.spyOn(binding, "ifCmdHadNoEffect");
     jest.spyOn(binding, "ifCmdHadEffects");
     jest.spyOn(binding, "ifCannotExecuteCmd");
-    fsm.process(new StubSubEvent1());
+    fsm.process(createMouseEvent("click", document.createElement("button")));
 
     expect(dotItSpy).toHaveBeenCalledTimes(1);
     expect(binding.ifCmdHadEffects).toHaveBeenCalledTimes(1);
@@ -111,7 +102,7 @@ test("testCmdKOWhenNotWhenOK", () => {
     jest.spyOn(binding, "ifCmdHadNoEffect");
     jest.spyOn(binding, "ifCmdHadEffects");
     jest.spyOn(binding, "ifCannotExecuteCmd");
-    fsm.process(new StubSubEvent1());
+    fsm.process(createMouseEvent("click", document.createElement("button")));
 
     expect(dotItSpy).not.toHaveBeenCalled();
     expect(binding.ifCmdHadEffects).not.toHaveBeenCalledWith();
@@ -125,7 +116,7 @@ test("testCmdKOWhenCannotDoCmd", () => {
     jest.spyOn(binding, "ifCmdHadNoEffect");
     jest.spyOn(binding, "ifCmdHadEffects");
     jest.spyOn(binding, "ifCannotExecuteCmd");
-    fsm.process(new StubSubEvent1());
+    fsm.process(createMouseEvent("click", document.createElement("button")));
 
     expect(cmd.getStatus()).toStrictEqual(CmdStatus.created);
     expect(binding.ifCmdHadEffects).not.toHaveBeenCalledWith();
@@ -139,7 +130,7 @@ test("testWhenOKCanDoButNoEffect", () => {
     jest.spyOn(binding, "ifCmdHadEffects");
     jest.spyOn(binding, "ifCannotExecuteCmd");
     jest.spyOn(cmd, "hadEffect").mockImplementation(() => false);
-    fsm.process(new StubSubEvent1());
+    fsm.process(createMouseEvent("click", document.createElement("button")));
 
     expect(dotItSpy).toHaveBeenCalledTimes(1);
     expect(binding.ifCmdHadNoEffect).toHaveBeenCalledTimes(1);
@@ -152,7 +143,7 @@ test("testProducedNone", () => {
     const cmds = new Array<StubCmd>();
     binding.produces().subscribe(elt => cmds.push(elt));
 
-    fsm.process(new StubSubEvent1());
+    fsm.process(createMouseEvent("click", document.createElement("button")));
     expect(cmds).toHaveLength(0);
 });
 
@@ -160,7 +151,7 @@ test("testProducedOne", () => {
     const cmds = new Array<StubCmd>();
     binding.produces().subscribe(elt => cmds.push(elt));
 
-    fsm.process(new StubSubEvent1());
+    fsm.process(createMouseEvent("click", document.createElement("button")));
     expect(cmds).toHaveLength(1);
 });
 
@@ -168,10 +159,10 @@ test("testProducedTwo", () => {
     const cmds = new Array<StubCmd>();
     binding.produces().subscribe(elt => cmds.push(elt));
 
-    fsm.process(new StubSubEvent1());
+    fsm.process(createMouseEvent("click", document.createElement("button")));
     cmd = new StubCmd();
     cmd.candoValue = true;
-    fsm.process(new StubSubEvent1());
+    fsm.process(createMouseEvent("click", document.createElement("button")));
     expect(cmds).toHaveLength(2);
     expect(cmds[0]).not.toBe(cmds[1]);
 });

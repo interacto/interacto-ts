@@ -14,8 +14,9 @@
 
 import {InputState} from "../../api/fsm/InputState";
 import {OutputState} from "../../api/fsm/OutputState";
-import {EventRegistrationToken, isScrollEvent} from "./Events";
+import {isScrollEvent} from "./Events";
 import {TransitionBase} from "./TransitionBase";
+import {EventType} from "../../api/fsm/EventType";
 
 /**
  * This transition corresponds to the scroll of a window
@@ -33,7 +34,7 @@ export class ScrollTransition extends TransitionBase<UIEvent> {
         return isScrollEvent(event);
     }
 
-    public getAcceptedEvents(): Set<string> {
-        return new Set([EventRegistrationToken.scroll]);
+    public getAcceptedEvents(): Array<EventType> {
+        return ["scroll"];
     }
 }

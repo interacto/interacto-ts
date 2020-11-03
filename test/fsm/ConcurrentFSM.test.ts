@@ -18,8 +18,12 @@ import {FSMHandler} from "../../src/api/fsm/FSMHandler";
 import {StdState} from "../../src/impl/fsm/StdState";
 import {TerminalState} from "../../src/impl/fsm/TerminalState";
 import {CancellingState} from "../../src/impl/fsm/CancellingState";
-import {TransitionBase} from "../../src/impl/fsm/TransitionBase";
 import {mock} from "jest-mock-extended";
+import {createMouseEvent} from "../interaction/StubEvents";
+import {MoveTransition} from "../../src/impl/fsm/MoveTransition";
+import {ReleaseTransition} from "../../src/impl/fsm/ReleaseTransition";
+import {ClickTransition} from "../../src/impl/fsm/ClickTransition";
+import {PressureTransition} from "../../src/impl/fsm/PressureTransition";
 
 class StubTouchFSM extends FSMImpl {
     public cpt: number;
@@ -36,73 +40,33 @@ class StubTouchFSM extends FSMImpl {
         this.addState(released);
         this.addState(cancelled);
 
-        new class extends TransitionBase<Event> {
-            public accept(event: Event): event is Event {
-                return true;
-            }
-
-            public isGuardOK(event: Event): boolean {
-                return `touch${String(cpt)}` === event.type;
-            }
-
-            public getAcceptedEvents(): Set<string> {
-                return new Set(`touch${String(cpt)}`);
+        new class extends PressureTransition {
+            public isGuardOK(event: MouseEvent): boolean {
+                return event.button === cpt;
             }
         }(this.initState, touched);
 
-        new class extends TransitionBase<Event> {
-            public accept(event: Event): event is Event {
-                return true;
-            }
-
-            public isGuardOK(event: Event): boolean {
-                return `move${String(cpt)}` === event.type;
-            }
-
-            public getAcceptedEvents(): Set<string> {
-                return new Set(`move${String(cpt)}`);
+        new class extends MoveTransition {
+            public isGuardOK(event: MouseEvent): boolean {
+                return event.button === cpt;
             }
         }(touched, moved);
 
-        new class extends TransitionBase<Event> {
-            public accept(event: Event): event is Event {
-                return true;
-            }
-
-            public isGuardOK(event: Event): boolean {
-                return `move${String(cpt)}` === event.type;
-            }
-
-            public getAcceptedEvents(): Set<string> {
-                return new Set(`move${String(cpt)}`);
+        new class extends MoveTransition {
+            public isGuardOK(event: MouseEvent): boolean {
+                return event.button === cpt;
             }
         }(moved, moved);
 
-        new class extends TransitionBase<Event> {
-            public accept(event: Event): event is Event {
-                return true;
-            }
-
-            public isGuardOK(event: Event): boolean {
-                return `release${String(cpt)}` === event.type;
-            }
-
-            public getAcceptedEvents(): Set<string> {
-                return new Set(`release${String(cpt)}`);
+        new class extends ReleaseTransition {
+            public isGuardOK(event: MouseEvent): boolean {
+                return event.button === cpt;
             }
         }(moved, released);
 
-        new class extends TransitionBase<Event> {
-            public accept(event: Event): event is Event {
-                return true;
-            }
-
-            public isGuardOK(event: Event): boolean {
-                return `cancel${String(cpt)}` === event.type;
-            }
-
-            public getAcceptedEvents(): Set<string> {
-                return new Set(`cancel${String(cpt)}`);
+        new class extends ClickTransition {
+            public isGuardOK(event: MouseEvent): boolean {
+                return event.button === cpt;
             }
         }(moved, cancelled);
     }
@@ -163,46 +127,50 @@ test("log false", () => {
 });
 
 test("incorrect Event Does Nothing", () => {
-    fsm.process(new Event("touchNothing"));
+    fsm.process(new Event("foo"));
     expect(fsm.isStarted()).toBeFalsy();
     expect(fsm1.isStarted()).toBeFalsy();
     expect(fsm2.isStarted()).toBeFalsy();
 });
 
-test("one touch1 Does Not Start", () => {
-    fsm.process(new Event("touch1"));
+test("one mouse1 Does Not Start", () => {
+    fsm.process(createMouseEvent("mousedown", document.createElement("button"), 0, 0, 0, 0, 1));
     expect(fsm.isStarted()).toBeFalsy();
     expect(fsm1.isStarted()).toBeTruthy();
     expect(fsm2.isStarted()).toBeFalsy();
 });
 
-test("one Event2 Does Not Start", () => {
-    fsm.process(new Event("touch2"));
+test("one mouse2 Does Not Start", () => {
+    const b = document.createElement("button");
+    fsm.process(createMouseEvent("mousedown", b, 0, 0, 0, 0, 2));
     expect(fsm.isStarted()).toBeFalsy();
     expect(fsm1.isStarted()).toBeFalsy();
     expect(fsm2.isStarted()).toBeTruthy();
 });
 
-test("twoDifferntsTouchEventsStart", () => {
-    fsm.process(new Event("touch1"));
-    fsm.process(new Event("touch2"));
+test("two differents Touch Events Start", () => {
+    const b = document.createElement("button");
+    fsm.process(createMouseEvent("mousedown", b, 0, 0, 0, 0, 1));
+    fsm.process(createMouseEvent("mousedown", b, 0, 0, 0, 0, 2));
     expect(fsm.isStarted()).toBeTruthy();
     expect(fsm1.isStarted()).toBeTruthy();
     expect(fsm2.isStarted()).toBeTruthy();
 });
 
 test("twoDifferntsTouchEventsStart2", () => {
-    fsm.process(new Event("touch2"));
-    fsm.process(new Event("touch1"));
+    const b = document.createElement("button");
+    fsm.process(createMouseEvent("mousedown", b, 0, 0, 0, 0, 2));
+    fsm.process(createMouseEvent("mousedown", b, 0, 0, 0, 0, 1));
     expect(fsm.isStarted()).toBeTruthy();
     expect(fsm1.isStarted()).toBeTruthy();
     expect(fsm2.isStarted()).toBeTruthy();
 });
 
 test("oneFullSequenceDoesNotRunTheFSM", () => {
-    fsm.process(new Event("touch1"));
-    fsm.process(new Event("move1"));
-    fsm.process(new Event("release1"));
+    const b = document.createElement("button");
+    fsm.process(createMouseEvent("mousedown", b, 0, 0, 0, 0, 1));
+    fsm.process(createMouseEvent("mousemove", b, 0, 0, 0, 0, 1));
+    fsm.process(createMouseEvent("mouseup", b, 0, 0, 0, 0, 1));
     expect(handler.fsmStarts).not.toHaveBeenCalledWith();
     expect(handler1.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler1.fsmStops).toHaveBeenCalledTimes(1);
@@ -210,10 +178,11 @@ test("oneFullSequenceDoesNotRunTheFSM", () => {
 });
 
 test("oneSequencePlusOtherStartedOK", () => {
-    fsm.process(new Event("touch1"));
-    fsm.process(new Event("move1"));
-    fsm.process(new Event("touch2"));
-    fsm.process(new Event("release1"));
+    const b = document.createElement("button");
+    fsm.process(createMouseEvent("mousedown", b, 0, 0, 0, 0, 1));
+    fsm.process(createMouseEvent("mousemove", b, 0, 0, 0, 0, 1));
+    fsm.process(createMouseEvent("mousedown", b, 0, 0, 0, 0, 2));
+    fsm.process(createMouseEvent("mouseup", b, 0, 0, 0, 0, 1));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     expect(handler1.fsmStarts).toHaveBeenCalledTimes(1);
@@ -224,24 +193,26 @@ test("oneSequencePlusOtherStartedOK", () => {
 });
 
 test("recyclingEventsOK", () => {
-    fsm.process(new Event("touch1"));
-    fsm.process(new Event("move1"));
-    fsm.process(new Event("touch2"));
-    fsm.process(new Event("release1"));
-    fsm.process(new Event("touch1"));
+    const b = document.createElement("button");
+    fsm.process(createMouseEvent("mousedown", b, 0, 0, 0, 0, 1));
+    fsm.process(createMouseEvent("mousemove", b, 0, 0, 0, 0, 1));
+    fsm.process(createMouseEvent("mousedown", b, 0, 0, 0, 0, 2));
+    fsm.process(createMouseEvent("mouseup", b, 0, 0, 0, 0, 1));
+    fsm.process(createMouseEvent("mousedown", b, 0, 0, 0, 0, 1));
     expect(fsm.isStarted()).toBeTruthy();
     expect(fsm1.isStarted()).toBeTruthy();
     expect(fsm2.isStarted()).toBeTruthy();
 });
 
 test("recyclingEventsOK2", () => {
-    fsm.process(new Event("touch1"));
-    fsm.process(new Event("move1"));
-    fsm.process(new Event("touch2"));
-    fsm.process(new Event("move2"));
-    fsm.process(new Event("release1"));
-    fsm.process(new Event("touch1"));
-    fsm.process(new Event("release2"));
+    const b = document.createElement("button");
+    fsm.process(createMouseEvent("mousedown", b, 0, 0, 0, 0, 1));
+    fsm.process(createMouseEvent("mousemove", b, 0, 0, 0, 0, 1));
+    fsm.process(createMouseEvent("mousedown", b, 0, 0, 0, 0, 2));
+    fsm.process(createMouseEvent("mousemove", b, 0, 0, 0, 0, 2));
+    fsm.process(createMouseEvent("mouseup", b, 0, 0, 0, 0, 1));
+    fsm.process(createMouseEvent("mousedown", b, 0, 0, 0, 0, 1));
+    fsm.process(createMouseEvent("mouseup", b, 0, 0, 0, 0, 2));
     expect(fsm.isStarted()).toBeFalsy();
     expect(fsm1.isStarted()).toBeTruthy();
     expect(fsm2.isStarted()).toBeFalsy();
@@ -254,10 +225,11 @@ test("recyclingEventsOK2", () => {
 });
 
 test("oneSequencePlusOtherThenCancel", () => {
-    fsm.process(new Event("touch1"));
-    fsm.process(new Event("move1"));
-    fsm.process(new Event("touch2"));
-    fsm.process(new Event("cancel1"));
+    const b = document.createElement("button");
+    fsm.process(createMouseEvent("mousedown", b, 0, 0, 0, 0, 1));
+    fsm.process(createMouseEvent("mousemove", b, 0, 0, 0, 0, 1));
+    fsm.process(createMouseEvent("mousedown", b, 0, 0, 0, 0, 2));
+    fsm.process(createMouseEvent("click", b, 0, 0, 0, 0, 1));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
     expect(handler1.fsmStarts).toHaveBeenCalledTimes(1);

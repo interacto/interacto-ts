@@ -14,12 +14,13 @@
 
 import {OutputState} from "../../api/fsm/OutputState";
 import {InputState} from "../../api/fsm/InputState";
-import {EventRegistrationToken, isMouseDownEvent} from "./Events";
+import {isMouseDownEvent} from "./Events";
 import {TransitionBase} from "./TransitionBase";
+import {EventType} from "../../api/fsm/EventType";
 
 /**
  * This transition corresponds to a pressure of a button of a pointing device.
- * @author Gwedak DIDOT
+ * @author Gwendal DIDOT
  */
 export class PressureTransition extends TransitionBase<MouseEvent> {
 
@@ -34,7 +35,7 @@ export class PressureTransition extends TransitionBase<MouseEvent> {
         return isMouseDownEvent(event);
     }
 
-    public getAcceptedEvents(): Set<string> {
-        return new Set([EventRegistrationToken.mouseDown]);
+    public getAcceptedEvents(): Array<EventType> {
+        return ["mousedown"];
     }
 }
