@@ -6,6 +6,20 @@
   "contributors": [
     "Gwendal Didot <didotgwendal@gmail.com>"
   ],
+  "keywords": [
+    "event processing",
+    "user interaction",
+    "user interface",
+    "ui",
+    "undo",
+    "redo",
+    "front-end",
+    "framework",
+    "touch",
+    "dnd",
+    "drag and drop",
+    "typescript"
+  ],
   "bugs": {
     "url": "https://github.com/interacto/interacto-ts/issues"
   },
