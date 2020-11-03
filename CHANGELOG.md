@@ -1,3 +1,11 @@
+# 5.2.0
+
+* change(binding): no reason for the WidgetBinding class to be abstract
+* change(binding): widget binding renamed to binding
+* change(fsm): a transition supports predefined event types not string type
+* fix(config): tests were included in the dist bundle
+
+
 # 5.1.1
 
 * fix(binding): the new interactions do not have binding shortcuts
