@@ -18,15 +18,15 @@ import {
     PointData,
     Press,
     UndoCollector,
-    WidgetBinding
+    Binding
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {createMouseEvent} from "../interaction/StubEvents";
 
 let canvas1: HTMLElement;
 let canvas2: HTMLElement;
-let binding1: WidgetBinding<StubCmd, Press, PointData>;
-let binding2: WidgetBinding<StubCmd, Press, PointData>;
+let binding1: Binding<StubCmd, Press, PointData>;
+let binding2: Binding<StubCmd, Press, PointData>;
 let disposable: Subscription | undefined;
 
 beforeEach(() => {

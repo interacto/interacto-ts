@@ -19,10 +19,10 @@ import {Observable} from "rxjs";
 import {InteractionData} from "../interaction/InteractionData";
 
 /**
- * The concept of widget binding and its related services.
+ * The concept of binding and its related services.
  * @author Arnaud BLOUIN
  */
-export interface WidgetBinding<C extends Command, I extends Interaction<D>, D extends InteractionData> extends FSMHandler {
+export interface Binding<C extends Command, I extends Interaction<D>, D extends InteractionData> extends FSMHandler {
     /**
      * Stops the interaction and clears all its events waiting for a process.
      */
@@ -69,7 +69,7 @@ export interface WidgetBinding<C extends Command, I extends Interaction<D>, D ex
     ifCannotExecuteCmd(): void;
 
     /**
-     * @return True if the condition of the widget binding is respected.
+     * @return True if the condition of the binding is respected.
      */
     when(): boolean;
 
@@ -84,18 +84,18 @@ export interface WidgetBinding<C extends Command, I extends Interaction<D>, D ex
     getCommand(): C | undefined;
 
     /**
-     * @return True if the widget binding is activated.
+     * @return True if the binding is activated.
      */
     isActivated(): boolean;
 
     /**
-     * Activates the widget binding.
-     * @param activated True: the widget binding is activated. Otherwise, it is desactivated.
+     * Activates the binding.
+     * @param activated True: the binding is activated. Otherwise, it is desactivated.
      */
     setActivated(activated: boolean): void;
 
     /**
-     * @return True: if the widget binding is currently used.
+     * @return True: if the binding is currently used.
      */
     isRunning(): boolean;
 
@@ -116,13 +116,13 @@ export interface WidgetBinding<C extends Command, I extends Interaction<D>, D ex
 
     /**
      * Information method.
-     * @return The number of times the widget binding successfully ended (nevermind a command was created or not).
+     * @return The number of times the binding successfully ended (nevermind a command was created or not).
      */
     getTimesEnded(): number;
 
     /**
      * Information method.
-     * @return The number of times the widget binding was cancelled (nevermind a command was created or not).
+     * @return The number of times the binding was cancelled (nevermind a command was created or not).
      */
     getTimesCancelled(): number;
 }

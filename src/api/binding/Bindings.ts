@@ -114,7 +114,7 @@ WidgetData<HTMLInputElement | HTMLTextAreaElement>> {
 }
 
 /**
- * Creates a widget binding that uses the touch DnD interaction (a DnD interaction that uses one touch).
+ * Creates a binding that uses the touch DnD interaction (a DnD interaction that uses one touch).
  * This interaction works as a Drag-and-Drop interaction.
  */
 export function touchDnDBinder(): InteractionUpdateBinder<Interaction<SrcTgtTouchData>, SrcTgtTouchData> {
@@ -123,7 +123,7 @@ export function touchDnDBinder(): InteractionUpdateBinder<Interaction<SrcTgtTouc
 }
 
 /**
- * Creates a widget binding that uses the multi-touch user interaction.
+ * Creates a binding that uses the multi-touch user interaction.
  * @param nbTouches The number of required touches.
  * A multi-touch starts when all its touches have started.
  * A multi-touch ends when the number of required touches is greater than the number of touches.
@@ -134,7 +134,7 @@ export function multiTouchBinder(nbTouches: number): InteractionUpdateBinder<Int
 }
 
 /**
- * Creates a widget binding that uses the tap user interaction.
+ * Creates a binding that uses the tap user interaction.
  * @param nbTap The number of required taps.
  * If this number is not reached after a timeout, the interaction is cancelled.
  */
@@ -144,7 +144,7 @@ export function tapBinder(nbTap: number): InteractionUpdateBinder<Interaction<Ta
 }
 
 /**
- * Creates a widget binding that uses the long touch interaction.
+ * Creates a binding that uses the long touch interaction.
  * @param duration The duration of the touch to end the user interaction.
  * If this duration is not reached, the interaction is cancelled.
  */
@@ -154,7 +154,7 @@ export function longTouchBinder(duration: number): InteractionUpdateBinder<Inter
 }
 
 /**
- * Creates a widget binding that uses the swipe interaction.
+ * Creates a binding that uses the swipe interaction.
  * If this velocity is not reached, the interaction is cancelled.
  * @param horizontal Defines whether the swipe is horizontal or vertical
  * @param minVelocity The minimal minVelocity to reach for validating the swipe. In pixels per second.
@@ -168,7 +168,7 @@ InteractionUpdateBinder<Interaction<SrcTgtTouchData>, SrcTgtTouchData> {
 }
 
 /**
- * Creates a widget binding that uses the pan interaction.
+ * Creates a binding that uses the pan interaction.
  * @param horizontal Defines whether the pan is horizontal or vertical
  * @param minLength The minimal distance from the starting point to the release point for validating the pan
  * @param pxTolerance The tolerance rate in pixels accepted while executing the pan
@@ -180,7 +180,7 @@ InteractionUpdateBinder<Interaction<SrcTgtTouchData>, SrcTgtTouchData> {
 }
 
 /**
- * Creates a widget binding that uses the click interaction.
+ * Creates a binding that uses the click interaction.
  */
 export function clickBinder(): InteractionBinder<Interaction<PointData>, PointData> {
     return new UpdateBinder(observer)
@@ -188,7 +188,7 @@ export function clickBinder(): InteractionBinder<Interaction<PointData>, PointDa
 }
 
 /**
- * Creates a widget binding that uses the double click interaction.
+ * Creates a binding that uses the double click interaction.
  */
 export function dbleClickBinder(): InteractionUpdateBinder<Interaction<PointData>, PointData> {
     return new UpdateBinder(observer)
@@ -196,7 +196,7 @@ export function dbleClickBinder(): InteractionUpdateBinder<Interaction<PointData
 }
 
 /**
- * Creates a widget binding that uses the mouse press interaction.
+ * Creates a binding that uses the mouse press interaction.
  */
 export function pressBinder(): InteractionBinder<Interaction<PointData>, PointData> {
     return new UpdateBinder(observer)
@@ -204,7 +204,7 @@ export function pressBinder(): InteractionBinder<Interaction<PointData>, PointDa
 }
 
 /**
- * Creates a widget binding that uses the long press interaction.
+ * Creates a binding that uses the long press interaction.
  * @param duration The duration of the pressure to end the user interaction.
  * If this duration is not reached, the interaction is cancelled.
  */
@@ -224,7 +224,7 @@ export function clicksBinder(nbClicks: number): InteractionUpdateBinder<Interact
 }
 
 /**
- * Creates a widget binding that uses the mouse scroll interaction.
+ * Creates a binding that uses the mouse scroll interaction.
  */
 export function scrollBinder(): InteractionBinder<Interaction<ScrollData>, ScrollData> {
     return new UpdateBinder(observer)
@@ -232,7 +232,7 @@ export function scrollBinder(): InteractionBinder<Interaction<ScrollData>, Scrol
 }
 
 /**
- * Creates a widget binding that uses the DnD interaction.
+ * Creates a binding that uses the DnD interaction.
  * @param cancellable True: the escape key will cancels the DnD.
  */
 export function dndBinder(cancellable: boolean): InteractionUpdateBinder<Interaction<SrcTgtPointsData>, SrcTgtPointsData> {
@@ -241,7 +241,7 @@ export function dndBinder(cancellable: boolean): InteractionUpdateBinder<Interac
 }
 
 /**
- * Creates a widget binding that uses the drag lock interaction.
+ * Creates a binding that uses the drag lock interaction.
  */
 export function dragLockBinder(): InteractionUpdateBinder<Interaction<SrcTgtPointsData>, SrcTgtPointsData> {
     return new UpdateBinder(observer)
@@ -249,7 +249,7 @@ export function dragLockBinder(): InteractionUpdateBinder<Interaction<SrcTgtPoin
 }
 
 /**
- * Creates a widget binding that uses the key pressure interaction.
+ * Creates a binding that uses the key pressure interaction.
  * @param modifierAccepted True: the interaction will consider key modifiers.
  */
 export function keyPressBinder(modifierAccepted: boolean): KeyInteractionBinder<Interaction<KeyData>, KeyData> {
@@ -258,7 +258,7 @@ export function keyPressBinder(modifierAccepted: boolean): KeyInteractionBinder<
 }
 
 /**
- * Creates a widget binding that uses the multiple key pressures interaction.
+ * Creates a binding that uses the multiple key pressures interaction.
  */
 export function keysPressBinder(): KeyInteractionUpdateBinder<Interaction<KeysData>, KeysData> {
     return new KeysBinder(observer)
@@ -266,7 +266,7 @@ export function keysPressBinder(): KeyInteractionUpdateBinder<Interaction<KeysDa
 }
 
 /**
- * Creates a widget binding that uses the multiple key typings interaction.
+ * Creates a binding that uses the multiple key typings interaction.
  */
 export function keysTypeBinder(): KeyInteractionUpdateBinder<Interaction<KeysData>, KeysData> {
     return new KeysBinder(observer)
@@ -274,7 +274,7 @@ export function keysTypeBinder(): KeyInteractionUpdateBinder<Interaction<KeysDat
 }
 
 /**
- * Creates a widget binding that uses the key typing interaction.
+ * Creates a binding that uses the key typing interaction.
  */
 export function keyTypeBinder(): KeyInteractionBinder<Interaction<KeyData>, KeyData> {
     return new KeysBinder(observer)

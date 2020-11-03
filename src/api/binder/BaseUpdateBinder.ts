@@ -21,7 +21,7 @@ import {BaseBinder} from "./BaseBinder";
 import {Interaction} from "../interaction/Interaction";
 
 /**
- * The base interface for building widget bindings based on non-trivial user interactions (eg DnD) with routines
+ * The base interface for building bindings based on non-trivial user interactions (eg DnD) with routines
  * for defining the UI command and the user interaction to use.
  */
 export interface BaseUpdateBinder extends BaseUpdateBinderBuilder, BaseBinder {

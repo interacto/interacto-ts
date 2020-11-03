@@ -14,7 +14,7 @@
 
 import {Command} from "../../src/api/command/Command";
 import {Subscription} from "rxjs";
-import {WidgetBinding} from "../../src/api/binding/WidgetBinding";
+import {Binding} from "../../src/api/binding/Binding";
 import {InteractionData} from "../../src/api/interaction/InteractionData";
 import {keyPressBinder, keysTypeBinder} from "../../src/api/binding/Bindings";
 import {StubCmd} from "../command/StubCmd";
@@ -31,7 +31,7 @@ import {KeysData} from "../../src/api/interaction/KeysData";
 let elt: HTMLElement;
 let producedCmds: Array<Command>;
 let disposable: Subscription | undefined;
-let binding: WidgetBinding<Command, Interaction<InteractionData>, InteractionData> | undefined;
+let binding: Binding<Command, Interaction<InteractionData>, InteractionData> | undefined;
 
 beforeEach(() => {
     jest.useFakeTimers();

@@ -18,7 +18,7 @@ import {Command} from "../../api/command/Command";
 import {CmdBinder} from "../../api/binder/CmdBinder";
 import {InteractionBinder} from "../../api/binder/InteractionBinder";
 import {InteractionCmdBinder} from "../../api/binder/InteractionCmdBinder";
-import {WidgetBinding} from "../../api/binding/WidgetBinding";
+import {Binding} from "../../api/binding/Binding";
 import {BindingsObserver} from "../../api/binding/BindingsObserver";
 import {Interaction} from "../../api/interaction/Interaction";
 
@@ -163,5 +163,5 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
         return dup as unknown as Binder<C2, I, D>;
     }
 
-    public abstract bind(): WidgetBinding<C, I, D>;
+    public abstract bind(): Binding<C, I, D>;
 }

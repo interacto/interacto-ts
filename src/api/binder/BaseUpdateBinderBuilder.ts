@@ -15,7 +15,7 @@ import {BaseBinderBuilder} from "./BaseBinderBuilder";
 import {LogLevel} from "../logging/LogLevel";
 
 /**
- * The base interface for building widget bindings based on non-trivial user interactions (eg DnD).
+ * The base interface for building bindings based on non-trivial user interactions (eg DnD).
  */
 export interface BaseUpdateBinderBuilder extends BaseBinderBuilder {
     /**

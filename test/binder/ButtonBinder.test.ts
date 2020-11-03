@@ -19,13 +19,13 @@ import {
     InteractionData,
     LogLevel,
     UndoCollector,
-    WidgetBinding
+    Binding
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 
 let button1: HTMLButtonElement;
 let button2: HTMLButtonElement;
-let binding: WidgetBinding<StubCmd, Interaction<InteractionData>, InteractionData> | undefined;
+let binding: Binding<StubCmd, Interaction<InteractionData>, InteractionData> | undefined;
 let cmd: StubCmd;
 let producedCmds: Array<StubCmd>;
 let disposable: Subscription | undefined;

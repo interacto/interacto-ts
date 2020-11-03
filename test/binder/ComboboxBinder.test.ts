@@ -18,14 +18,14 @@ import {
     Interaction,
     InteractionData,
     UndoCollector,
-    WidgetBinding,
+    Binding,
     WidgetData
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 
 let widget1: HTMLSelectElement;
 let widget2: HTMLSelectElement;
-let binding: WidgetBinding<StubCmd, Interaction<InteractionData>, InteractionData> | undefined;
+let binding: Binding<StubCmd, Interaction<InteractionData>, InteractionData> | undefined;
 let cmd: StubCmd;
 let producedCmds: Array<StubCmd>;
 let disposable: Subscription | undefined;

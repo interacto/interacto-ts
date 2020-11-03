@@ -16,8 +16,8 @@ import {BaseBinderBuilder} from "./BaseBinderBuilder";
 import {LogLevel} from "../logging/LogLevel";
 
 /**
- * The widget binding builder API already knows the type of UI command
- * the widget bindings will produce
+ * The binding builder API already knows the type of UI command
+ * the bindings will produce
  * @param <C> The type of the produced UI Commands
  */
 export interface CmdBinderBuilder<C extends Command> extends BaseBinderBuilder {

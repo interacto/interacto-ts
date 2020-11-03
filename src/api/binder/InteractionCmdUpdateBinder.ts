@@ -17,7 +17,7 @@ import {InteractionCmdBinder} from "./InteractionCmdBinder";
 import {CmdUpdateBinderBuilder} from "./CmdUpdateBinderBuilder";
 import {InteractionUpdateBinderBuilder} from "./InteractionUpdateBinderBuilder";
 import {LogLevel} from "../logging/LogLevel";
-import {WidgetBinding} from "../binding/WidgetBinding";
+import {Binding} from "../binding/Binding";
 import {Interaction} from "../interaction/Interaction";
 
 export interface InteractionCmdUpdateBinder<C extends Command, I extends Interaction<D>, D extends InteractionData>
@@ -62,5 +62,5 @@ export interface InteractionCmdUpdateBinder<C extends Command, I extends Interac
 
     preventDefault(): InteractionCmdUpdateBinder<C, I, D>;
 
-    bind(): WidgetBinding<C, I, D>;
+    bind(): Binding<C, I, D>;
 }

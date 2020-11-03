@@ -20,7 +20,7 @@ import {
     FSMImpl,
     InteractionData,
     TerminalState,
-    WidgetBindingImpl
+    BindingImpl
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {InteractionStub} from "../interaction/InteractionStub";
@@ -28,7 +28,7 @@ import {createMouseEvent} from "../interaction/StubEvents";
 
 
 let interaction: InteractionStub;
-let binding: WidgetBindingImpl<StubCmd, InteractionStub, InteractionData>;
+let binding: BindingImpl<StubCmd, InteractionStub, InteractionData>;
 let fsm: FSM;
 let cmd: StubCmd;
 
@@ -47,7 +47,7 @@ beforeEach(() => {
     cmd.candoValue = true;
     fsm = new OneTrFSM();
     interaction = new InteractionStub(fsm);
-    binding = new WidgetBindingImpl(false, interaction, () => cmd, []);
+    binding = new BindingImpl(false, interaction, () => cmd, []);
 });
 
 afterEach(() => {

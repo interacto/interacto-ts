@@ -16,7 +16,7 @@ import {InteractionData} from "../interaction/InteractionData";
 import {CmdBinderBuilder} from "./CmdBinderBuilder";
 import {InteractionBinderBuilder} from "./InteractionBinderBuilder";
 import {LogLevel} from "../logging/LogLevel";
-import {WidgetBinding} from "../binding/WidgetBinding";
+import {Binding} from "../binding/Binding";
 import {Interaction} from "../interaction/Interaction";
 
 export interface InteractionCmdBinder<C extends Command, I extends Interaction<D>, D extends InteractionData>
@@ -59,5 +59,5 @@ export interface InteractionCmdBinder<C extends Command, I extends Interaction<D
     /**
     * Executes the builder to create and install the binding on the instrument.
     */
-    bind(): WidgetBinding<C, I, D>;
+    bind(): Binding<C, I, D>;
 }

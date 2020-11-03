@@ -19,12 +19,12 @@ import {
     InteractionData,
     textInputBinder,
     UndoCollector,
-    WidgetBinding
+    Binding
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 
 let txt1: HTMLInputElement | HTMLTextAreaElement;
-let binding: WidgetBinding<StubCmd, Interaction<InteractionData>, InteractionData> | undefined;
+let binding: Binding<StubCmd, Interaction<InteractionData>, InteractionData> | undefined;
 let cmd: StubCmd;
 let producedCmds: Array<StubCmd>;
 let disposable: Subscription | undefined;

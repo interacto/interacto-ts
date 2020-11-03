@@ -16,7 +16,7 @@ import {InteractionData} from "../interaction/InteractionData";
 import {KeyInteractionBinderBuilder} from "./KeyInteractionBinderBuilder";
 import {InteractionCmdBinder} from "./InteractionCmdBinder";
 import {LogLevel} from "../logging/LogLevel";
-import {WidgetBinding} from "../binding/WidgetBinding";
+import {Binding} from "../binding/Binding";
 import {Interaction} from "../interaction/Interaction";
 
 export interface KeyInteractionCmdBinder<C extends Command, I extends Interaction<D>, D extends InteractionData>
@@ -46,5 +46,5 @@ export interface KeyInteractionCmdBinder<C extends Command, I extends Interactio
 
     preventDefault(): KeyInteractionCmdBinder<C, I, D>;
 
-    bind(): WidgetBinding<C, I, D>;
+    bind(): Binding<C, I, D>;
 }

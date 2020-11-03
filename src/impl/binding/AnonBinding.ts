@@ -14,13 +14,13 @@
 
 import {InteractionData} from "../../api/interaction/InteractionData";
 import {LogLevel} from "../../api/logging/LogLevel";
-import {WidgetBindingImpl} from "./WidgetBindingImpl";
+import {BindingImpl} from "./BindingImpl";
 import {catBinder} from "../../api/logging/ConfigLog";
 import {Command} from "../../api/command/Command";
 import {Interaction} from "../../api/interaction/Interaction";
 
 export class AnonBinding<C extends Command, I extends Interaction<D>, D extends InteractionData>
-    extends WidgetBindingImpl<C, I, D> {
+    extends BindingImpl<C, I, D> {
 
     private readonly execInitCmd?: ((c: C, i: D) => void);
 

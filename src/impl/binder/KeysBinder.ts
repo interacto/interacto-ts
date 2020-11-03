@@ -14,7 +14,7 @@
 
 import {Command} from "../../api/command/Command";
 import {LogLevel} from "../../api/logging/LogLevel";
-import {WidgetBinding} from "../../api/binding/WidgetBinding";
+import {Binding} from "../../api/binding/Binding";
 import {AnonBinding} from "../binding/AnonBinding";
 import {BindingsObserver} from "../../api/binding/BindingsObserver";
 import {InteractionData} from "../../api/interaction/InteractionData";
@@ -155,7 +155,7 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, D extends I
             [...this.codes], this.stopPropaNow, this.prevDef);
     }
 
-    public bind(): WidgetBinding<C, I, D> {
+    public bind(): Binding<C, I, D> {
         if (this.interactionSupplier === undefined) {
             throw new Error("The interaction supplier cannot be undefined here");
         }

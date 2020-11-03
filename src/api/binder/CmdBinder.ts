@@ -19,8 +19,8 @@ import {LogLevel} from "../logging/LogLevel";
 import {Interaction} from "../interaction/Interaction";
 
 /**
- * The widget binding builder API already knows the type of UI command
- * the widget bindings will produce, with routines
+ * The binding builder API already knows the type of UI command
+ * the bindings will produce, with routines
  * for defining the UI command and the user interaction to use.
  * @param <C> The type of the produced UI Commands
  */
@@ -38,7 +38,7 @@ export interface CmdBinder<C extends Command> extends CmdBinderBuilder<C> {
     log(...level: Array<LogLevel>): CmdBinder<C>;
 
     /**
-     * Defines how to create the user interaction that the widget binding will use to create UI commands.
+     * Defines how to create the user interaction that the binding will use to create UI commands.
      * @param interactionSupplier The supplier that will return a new user interaction.
      * @type <D> The user interaction data type
      * @type <I> The user interaction type

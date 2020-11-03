@@ -20,10 +20,10 @@ import {
     InteractionData,
     panBinder,
     UndoCollector,
-    WidgetBinding
+    Binding
 } from "../../src/interacto";
 
-let binding: WidgetBinding<StubCmd, Interaction<InteractionData>, InteractionData> | undefined;
+let binding: Binding<StubCmd, Interaction<InteractionData>, InteractionData> | undefined;
 let producedCmds: Array<StubCmd>;
 let disposable: Subscription | undefined;
 let c1: HTMLElement;

@@ -14,7 +14,7 @@
 
 export interface KeyBinderBuilder {
     /**
-     * Defines key code the widget binding will check. On a key interaction, the typed keys will be check against
+     * Defines key code the binding will check. On a key interaction, the typed keys will be check against
      * the given key code. The set of typed codes must matches the given key codes.
      * @param codes The key codes to match.
      * @return The builder.

@@ -15,17 +15,17 @@
 import {Command} from "../command/Command";
 import {InteractionData} from "../interaction/InteractionData";
 import {Interaction} from "../interaction/Interaction";
-import {WidgetBinding} from "./WidgetBinding";
+import {Binding} from "./Binding";
 
 /**
- * Permits widget bindings produced by Bindings to be observed.
+ * Permits bindings produced by Bindings to be observed.
  */
 export interface BindingsObserver {
     /**
-     * Adds a widget binding to observe.
+     * Adds a binding to observe.
      * @param binding The binding to observe.
      */
-    observeBinding(binding: WidgetBinding<Command, Interaction<InteractionData>, InteractionData>): void;
+    observeBinding(binding: Binding<Command, Interaction<InteractionData>, InteractionData>): void;
 
     /**
      * Clear all the observed bindings and uninstall them.

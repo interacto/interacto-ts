@@ -14,7 +14,7 @@
 import {LogLevel} from "../logging/LogLevel";
 
 /**
- * The base interface for building widget bindings.
+ * The base interface for building bindings.
  */
 export interface BaseBinderBuilder {
     /**
@@ -43,8 +43,8 @@ export interface BaseBinderBuilder {
     when(whenPredicate: () => boolean): BaseBinderBuilder;
 
     /**
-     * Defines actions to perform with a widget binding ends.
-     * @param endFct The command to execute on each widget binding end.
+     * Defines actions to perform with a binding ends.
+     * @param endFct The command to execute on each binding end.
      * @return A clone of the current builder to chain the building configuration.
      */
     end(endFct: () => void): BaseBinderBuilder;

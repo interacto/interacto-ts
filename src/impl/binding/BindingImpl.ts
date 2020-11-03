@@ -20,17 +20,17 @@ import {InteractionData} from "../../api/interaction/InteractionData";
 import {catBinder, catCommand} from "../../api/logging/ConfigLog";
 import {isUndoableType} from "../../api/undo/Undoable";
 import {MustBeUndoableCmdException} from "../../api/binding/MustBeUndoableCmdException";
-import {WidgetBinding} from "../../api/binding/WidgetBinding";
+import {Binding} from "../../api/binding/Binding";
 import {Interaction} from "../../api/interaction/Interaction";
 
 /**
- * The base class to do widget bindings, i.e. bindings between user interactions and (undoable) commands.
- * @param <C> The type of the command that will produce this widget binding.
- * @param <I> The type of the interaction that will use this widget binding.
+ * The base class to do bindings, i.e. bindings between user interactions and (undoable) commands.
+ * @param <C> The type of the command that will produce this binding.
+ * @param <I> The type of the interaction that will use this binding.
  * @author Arnaud BLOUIN
  */
-export class WidgetBindingImpl<C extends Command, I extends Interaction<D>, D extends InteractionData>
-implements WidgetBinding<C, I, D> {
+export class BindingImpl<C extends Command, I extends Interaction<D>, D extends InteractionData>
+implements Binding<C, I, D> {
 
     protected timeEnded: number;
 
@@ -65,7 +65,7 @@ implements WidgetBinding<C, I, D> {
     protected readonly cmdsProduced: Subject<C>;
 
     /**
-     * Creates a widget binding.
+     * Creates a binding.
      * @param continuousExecution Specifies whether the command must be executed on each step of the interaction.
      * @param cmdProducer The type of the command that will be created. Used to instantiate the command by reflexivity.
      * The class must be public and must have a constructor with no parameter.
@@ -97,7 +97,7 @@ implements WidgetBinding<C, I, D> {
     }
 
     /**
-     * creates the command of the widget binding. If the attribute 'cmd' is not null, nothing will be done.
+     * creates the command of the binding. If the attribute 'cmd' is not null, nothing will be done.
      * @return The created command or undefined if an error occurred
      */
     protected createCommand(): C | undefined {

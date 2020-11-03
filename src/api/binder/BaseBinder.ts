@@ -20,7 +20,7 @@ import {CmdBinder} from "./CmdBinder";
 import {Interaction} from "../interaction/Interaction";
 
 /**
- * The base interface for building widget bindings with routines
+ * The base interface for building bindings with routines
  * for defining the UI command and the user interaction to use.
  */
 export interface BaseBinder extends BaseBinderBuilder {
@@ -35,7 +35,7 @@ export interface BaseBinder extends BaseBinderBuilder {
     log(...level: Array<LogLevel>): BaseBinder;
 
     /**
-     * Defines how to create the UI command that will produce the widget binding.
+     * Defines how to create the UI command that will produce the binding.
      * @param cmdSupplier The supplier that will return a new UI command on each call.
      * @type <C> The type of the UI command
      * @return A clone of the current builder to chain the building configuration.
@@ -43,7 +43,7 @@ export interface BaseBinder extends BaseBinderBuilder {
     toProduce<C extends Command>(cmdSupplier: () => C): CmdBinder<C>;
 
     /**
-     * Defines how to create the user interaction that the widget binding will use to create UI commands.
+     * Defines how to create the user interaction that the binding will use to create UI commands.
      * @param interactionSupplier The supplier that will return a new user interaction.
      * @type <D> The user interaction data type
      * @type <I> The user interaction type

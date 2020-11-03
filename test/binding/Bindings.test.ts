@@ -43,7 +43,7 @@ import {
     TouchData,
     touchDnDBinder,
     UndoCollector,
-    WidgetBinding,
+    Binding,
     WidgetData
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
@@ -53,7 +53,7 @@ import {createKeyEvent, createMouseEvent, createTouchEvent, createUIEvent} from 
 let elt: HTMLElement;
 let producedCmds: Array<Command>;
 let disposable: Subscription;
-let binding: WidgetBinding<Command, Interaction<InteractionData>, InteractionData>;
+let binding: Binding<Command, Interaction<InteractionData>, InteractionData>;
 
 beforeEach(() => {
     jest.useFakeTimers();
@@ -622,7 +622,7 @@ describe("check when it crashes in routines", () => {
 describe("tap and longPress conflict", () => {
     let producedCmds2: Array<Command>;
     let disposable2: Subscription;
-    let binding2: WidgetBinding<Command, Interaction<InteractionData>, InteractionData>;
+    let binding2: Binding<Command, Interaction<InteractionData>, InteractionData>;
 
     beforeEach(() => {
         producedCmds2 = [];
@@ -670,7 +670,7 @@ describe("tap and longPress conflict", () => {
 describe("two longTouch", () => {
     let producedCmds2: Array<Command>;
     let disposable2: Subscription;
-    let binding2: WidgetBinding<Command, Interaction<InteractionData>, InteractionData>;
+    let binding2: Binding<Command, Interaction<InteractionData>, InteractionData>;
 
 
     beforeEach(() => {

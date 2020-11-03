@@ -20,13 +20,13 @@ import {
     InteractionData,
     multiTouchBinder,
     UndoCollector,
-    WidgetBinding
+    Binding
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {createTouchEvent} from "../interaction/StubEvents";
 
 let c1: HTMLElement;
-let binding: WidgetBinding<StubCmd, Interaction<InteractionData>, InteractionData> | undefined;
+let binding: Binding<StubCmd, Interaction<InteractionData>, InteractionData> | undefined;
 let cmd: StubCmd;
 let producedCmds: Array<StubCmd>;
 let disposable: Subscription | undefined;
