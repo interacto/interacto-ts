@@ -24,13 +24,13 @@ import {
     MustBeUndoableCmdException,
     RegistrationPolicy,
     Undoable,
-    WidgetBindingBase
+    WidgetBindingImpl
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {InteractionStub} from "../interaction/InteractionStub";
 
 
-class WidgetBindingStub extends WidgetBindingBase<StubCmd, InteractionStub, InteractionData> {
+class WidgetBindingStub extends WidgetBindingImpl<StubCmd, InteractionStub, InteractionData> {
     public conditionRespected: boolean;
 
     public mustCancel: boolean;

@@ -20,7 +20,7 @@ import {
     FSMImpl,
     InteractionData,
     TerminalState,
-    WidgetBindingBase
+    WidgetBindingImpl
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {InteractionStub} from "../interaction/InteractionStub";
@@ -28,11 +28,9 @@ import {createMouseEvent} from "../interaction/StubEvents";
 
 
 let interaction: InteractionStub;
-let binding: WidgetBindingBase<StubCmd, InteractionStub, InteractionData>;
+let binding: WidgetBindingImpl<StubCmd, InteractionStub, InteractionData>;
 let fsm: FSM;
 let cmd: StubCmd;
-let whenValue: () => boolean;
-
 
 class OneTrFSM extends FSMImpl {
     public constructor() {
@@ -43,24 +41,13 @@ class OneTrFSM extends FSMImpl {
     }
 }
 
-class StubWidgetBinding extends WidgetBindingBase<StubCmd, InteractionStub, InteractionData> {
-    public constructor() {
-        super(false, interaction, () => cmd, []);
-    }
-
-    public when(): boolean {
-        return whenValue();
-    }
-}
-
 beforeEach(() => {
     jest.clearAllMocks();
-    whenValue = (): boolean => true;
     cmd = new StubCmd();
     cmd.candoValue = true;
     fsm = new OneTrFSM();
     interaction = new InteractionStub(fsm);
-    binding = new StubWidgetBinding();
+    binding = new WidgetBindingImpl(false, interaction, () => cmd, []);
 });
 
 afterEach(() => {
@@ -97,7 +84,7 @@ test("testCmdCreatedExecSavedWhenActivated", () => {
 });
 
 test("testCmdKOWhenNotWhenOK", () => {
-    whenValue = (): boolean => false;
+    jest.spyOn(binding, "when").mockReturnValue(false);
     const dotItSpy = jest.spyOn(cmd, "execute");
     jest.spyOn(binding, "ifCmdHadNoEffect");
     jest.spyOn(binding, "ifCmdHadEffects");

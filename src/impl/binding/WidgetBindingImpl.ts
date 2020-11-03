@@ -29,7 +29,7 @@ import {Interaction} from "../../api/interaction/Interaction";
  * @param <I> The type of the interaction that will use this widget binding.
  * @author Arnaud BLOUIN
  */
-export abstract class WidgetBindingBase<C extends Command, I extends Interaction<D>, D extends InteractionData>
+export class WidgetBindingImpl<C extends Command, I extends Interaction<D>, D extends InteractionData>
 implements WidgetBinding<C, I, D> {
 
     protected timeEnded: number;
@@ -72,7 +72,7 @@ implements WidgetBinding<C, I, D> {
      * @param interaction The user interaction of the binding.
      * @param widgets The widgets on which the binding will operate.
      */
-    protected constructor(continuousExecution: boolean, interaction: I, cmdProducer: (i?: D) => C, widgets: Array<EventTarget>) {
+    public constructor(continuousExecution: boolean, interaction: I, cmdProducer: (i?: D) => C, widgets: Array<EventTarget>) {
         this.asLogBinding = false;
         this.asLogCmd = false;
         this.continuousCmdExec = false;
