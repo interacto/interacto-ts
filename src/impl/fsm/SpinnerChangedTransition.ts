@@ -20,7 +20,6 @@ import {EventType} from "../../api/fsm/EventType";
 
 /**
  * An FSM transition for the Spinner HTML element.
- * @author Gwendal DIDOT
  */
 export class SpinnerChangedTransition extends TransitionBase<Event> {
 

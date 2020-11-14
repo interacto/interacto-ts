@@ -49,7 +49,6 @@ interface HyperLinkClickedFSMHandler extends FSMDataHandler {
 
 /**
  * A user interaction for CheckBox
- * @author Gwendal DIDOT
  */
 export class HyperLinkClicked extends InteractionBase<WidgetData<HTMLAnchorElement>, HyperLinkClickedFSM> {
     private readonly handler: HyperLinkClickedFSMHandler;

@@ -103,7 +103,7 @@ export class Tap extends InteractionBase<TapData, TapFSM> {
 
     /**
      * Creates the tap interaction
-     * @param numberTaps The number of taps expected to end the interaction.
+     * @param numberTaps - The number of taps expected to end the interaction.
      * If this number is not reached after a timeout, the interaction is cancelled.
      */
     public constructor(numberTaps: number) {

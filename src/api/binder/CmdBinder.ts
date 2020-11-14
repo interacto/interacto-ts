@@ -22,7 +22,7 @@ import {Interaction} from "../interaction/Interaction";
  * The binding builder API already knows the type of UI command
  * the bindings will produce, with routines
  * for defining the UI command and the user interaction to use.
- * @param <C> The type of the produced UI Commands
+ * @typeParam C - The type of the produced UI Commands
  */
 export interface CmdBinder<C extends Command> extends CmdBinderBuilder<C> {
     first(initCmdFct: (c: C) => void): CmdBinder<C>;
@@ -39,10 +39,10 @@ export interface CmdBinder<C extends Command> extends CmdBinderBuilder<C> {
 
     /**
      * Defines how to create the user interaction that the binding will use to create UI commands.
-     * @param interactionSupplier The supplier that will return a new user interaction.
-     * @type <D> The user interaction data type
-     * @type <I> The user interaction type
-     * @return A clone of the current builder to chain the building configuration.
+     * @param interactionSupplier - The supplier that will return a new user interaction.
+     * @typeParam D - The user interaction data type
+     * @typeParam I - The user interaction type
+     * @returns A clone of the current builder to chain the building configuration.
      */
     usingInteraction<I extends Interaction<D>, D extends InteractionData>(interactionSupplier: () => I):
     InteractionCmdBinder<C, I, D>;

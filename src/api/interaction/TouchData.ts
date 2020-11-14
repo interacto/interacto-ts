@@ -19,7 +19,7 @@ import {PointData} from "./PointData";
  */
 export interface TouchData extends PointData {
     /**
-     * @return The ID of the touch.
+     * @returns The ID of the touch.
      */
     getTouchId(): number | undefined;
 }

@@ -21,8 +21,8 @@ import {EventType} from "./EventType";
 export interface Transition<E extends Event> {
     /**
      * Executes the transition.
-     * @param event The event to process.
-     * @return The potential output state.
+     * @param event - The event to process.
+     * @returns The potential output state.
      * @throws CancelFSMException If the execution cancels the FSM execution.
      */
     execute(event: Event): InputState | undefined;
@@ -32,7 +32,7 @@ export interface Transition<E extends Event> {
     accept(event: Event): event is E;
 
     /**
-     * @return The set of events accepted by the transition.
+     * @returns The set of events accepted by the transition.
      */
     getAcceptedEvents(): Array<EventType>;
 

@@ -20,7 +20,6 @@ import {EventType} from "../../api/fsm/EventType";
 
 /**
  * An FSM transition for the CheckBox HTML element.
- * @author Gwendal DIDOT
  */
 export class BoxCheckPressedTransition extends TransitionBase<Event> {
 

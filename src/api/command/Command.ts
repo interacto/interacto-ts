@@ -17,7 +17,6 @@
  * It follows the command design pattern.
  * It contains statements to execute to perform the command.
  * The interface Undoable can be used to add undo/redo features to a command.
- * @author Arnaud Blouin
  */
 export interface Command {
     /**
@@ -29,25 +28,25 @@ export interface Command {
     /**
      * Specifies whether the command must be saved in the command register. For instance,
      * some commands, such as a scroll, should not be saved or put in the undo/redo manager. Such commands should not be registrable.
-     * @return The registration policy.
+     * @returns The registration policy.
      */
     getRegistrationPolicy(): RegistrationPolicy;
 
     /**
      * Executes (if possible) the commands.
-     * @return True: the command has been executed.
+     * @returns True: the command has been executed.
      */
     execute(): boolean;
 
     /**
      * Checks whether the command can be executed.
-     * @return True if the command can be executed.
+     * @returns True if the command can be executed.
      */
     canExecute(): boolean;
 
     /**
      * State whether the execution of this command has effects on the system.
-     * @return True: the command has effects on the system.
+     * @returns True: the command has effects on the system.
      */
     hadEffect(): boolean;
 
@@ -58,7 +57,7 @@ export interface Command {
 
     /**
      * To know whether the command has been marked as 'done'.
-     * @return True: the command has been marked as 'done'.
+     * @returns True: the command has been marked as 'done'.
      */
     isDone(): boolean;
 
@@ -69,7 +68,7 @@ export interface Command {
 
     /**
      * Provides the status of the command.
-     * @return The status of the command.
+     * @returns The status of the command.
      */
     getStatus(): CmdStatus;
 }

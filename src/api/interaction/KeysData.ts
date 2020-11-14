@@ -16,12 +16,12 @@ import {InteractionData} from "./InteractionData";
 
 export interface KeysData extends InteractionData {
     /**
-     * @return The component that produce the interaction
+     * @returns The component that produce the interaction
      */
     getTarget(): EventTarget | undefined;
 
     /**
-     * @return The keys use by the interaction
+     * @returns The keys use by the interaction
      */
     getKeys(): Array<string>;
 }

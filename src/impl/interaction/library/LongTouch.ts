@@ -35,7 +35,7 @@ class LongTouchFSM extends FSMImpl {
 
     /**
      * Creates the long touch FSM
-     * @param duration Defines the duration of the touch interaction.
+     * @param duration - Defines the duration of the touch interaction.
      */
     public constructor(duration: number) {
         super();
@@ -90,7 +90,7 @@ export class LongTouch extends InteractionBase<TouchData, LongTouchFSM> {
 
     /**
      * Creates the long tap interaction
-     * @param duration The duration of the touch required to ends the user interaction
+     * @param duration - The duration of the touch required to ends the user interaction
      * If this duration is not reached, the interaction is cancelled.
      */
     public constructor(duration: number) {

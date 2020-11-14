@@ -17,7 +17,6 @@ import {CommandBase} from "../CommandBase";
 
 /**
  * An Undo command.
- * @author Arnaud BLOUIN
  */
 export class Undo extends CommandBase {
     public constructor() {

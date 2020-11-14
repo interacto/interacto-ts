@@ -35,7 +35,7 @@ export class MultiTouchDataImpl implements MultiTouchData {
 
     /**
      * Adds a touch data to this multi-touch data
-     * @param data The touch data to add
+     * @param data - The touch data to add
      */
     public addTouchData(data: SrcTgtTouchDataImpl): void {
         const id = data.getTouchId();
@@ -61,7 +61,7 @@ export class MultiTouchDataImpl implements MultiTouchData {
      * Sets new value for the given touch point.
      * The identifier of the given event point is used to find the corresponding
      * touch data.
-     * @param tp The touch event to use.
+     * @param tp - The touch event to use.
      */
     public setTouch(tp: Touch | null): void {
         if (tp !== null) {

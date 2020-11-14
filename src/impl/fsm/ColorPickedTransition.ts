@@ -20,7 +20,6 @@ import {EventType} from "../../api/fsm/EventType";
 
 /**
  * An FSM transition for the ColorPicked HTML element.
- * @author Gwendal DIDOT
  */
 export class ColorPickedTransition extends TransitionBase<Event> {
 

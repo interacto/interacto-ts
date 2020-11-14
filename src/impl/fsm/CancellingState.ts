@@ -23,8 +23,8 @@ import {FSM} from "../../api/fsm/FSM";
 export class CancellingState extends StateBase implements InputState {
     /**
      * Creates the state.
-     * @param stateMachine The FSM that will contain the state.
-     * @param stateName The name of this state.
+     * @param stateMachine - The FSM that will contain the state.
+     * @param stateName - The name of this state.
      */
     public constructor(stateMachine: FSM, stateName: string) {
         super(stateMachine, stateName);

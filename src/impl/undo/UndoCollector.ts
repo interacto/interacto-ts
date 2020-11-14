@@ -18,7 +18,6 @@ import {peek} from "../util/ArrayUtil";
 
 /**
  * A collector of undone/redone objects.
- * @author Arnaud BLOUIN
  */
 export class UndoCollector {
     /**
@@ -64,7 +63,7 @@ export class UndoCollector {
 
     /**
      * A stream for observing changes regarding the last undoable object.
-     * @return An observable value of optional undoable objects: if empty, this means
+     * @returns An observable value of optional undoable objects: if empty, this means
      * that no undoable object are stored anymore.
      */
     public undosObservable(): Observable<Undoable | undefined> {
@@ -73,7 +72,7 @@ export class UndoCollector {
 
     /**
      * A stream for observing changes regarding the last redoable object.
-     * @return An observable value of optional redoable objects: if empty, this means
+     * @returns An observable value of optional redoable objects: if empty, this means
      * that no redoable object are stored anymore.
      */
     public redosObservable(): Observable<Undoable | undefined> {
@@ -100,7 +99,7 @@ export class UndoCollector {
 
     /**
      * Adds an undoable object to the collector.
-     * @param undoable The undoable object to add.
+     * @param undoable - The undoable object to add.
      */
     public add(undoable: Undoable): void {
         if (this.sizeMax > 0) {
@@ -143,56 +142,56 @@ export class UndoCollector {
     }
 
     /**
-     * @return The last undoable object name or undefined if there is no last object.
+     * @returns The last undoable object name or undefined if there is no last object.
      */
     public getLastUndoMessage(): string | undefined {
         return peek(this.undos)?.getUndoName();
     }
 
     /**
-     * @return The last redoable object name or undefined if there is no last object.
+     * @returns The last redoable object name or undefined if there is no last object.
      */
     public getLastRedoMessage(): string | undefined {
         return peek(this.redos)?.getUndoName();
     }
 
     /**
-     * @return The last undoable object name or an empty string if there is no last object.
+     * @returns The last undoable object name or an empty string if there is no last object.
      */
     public getLastOrEmptyUndoMessage(): string {
         return this.getLastUndoMessage() ?? "";
     }
 
     /**
-     * @return The last redoable object name or an empty string if there is no last object.
+     * @returns The last redoable object name or an empty string if there is no last object.
      */
     public getLastOrEmptyRedoMessage(): string {
         return this.getLastRedoMessage() ?? "";
     }
 
     /**
-     * @return The last undoable object or undefined if there is no last object.
+     * @returns The last undoable object or undefined if there is no last object.
      */
     public getLastUndo(): Undoable | undefined {
         return peek(this.undos);
     }
 
     /**
-     * @return The last redoable object or undefined if there is no last object.
+     * @returns The last redoable object or undefined if there is no last object.
      */
     public getLastRedo(): Undoable | undefined {
         return peek(this.redos);
     }
 
     /**
-     * @return The max number of saved undoable objects.
+     * @returns The max number of saved undoable objects.
      */
     public getSizeMax(): number {
         return this.sizeMax;
     }
 
     /**
-     * @param max The max number of saved undoable objects. Must be great than 0.
+     * @param max - The max number of saved undoable objects. Must be great than 0.
      */
     public setSizeMax(max: number): void {
         if (max >= 0) {
@@ -209,14 +208,14 @@ export class UndoCollector {
     }
 
     /**
-     * @return The stack of saved undoable objects.
+     * @returns The stack of saved undoable objects.
      */
     public getUndo(): Array<Undoable> {
         return this.undos;
     }
 
     /**
-     * @return The stack of saved redoable objects
+     * @returns The stack of saved redoable objects
      */
     public getRedo(): Array<Undoable> {
         return this.redos;

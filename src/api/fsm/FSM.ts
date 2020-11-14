@@ -23,20 +23,20 @@ import {InputState} from "./InputState";
  */
 export interface FSM {
     /**
-     * @return The set of the states that compose the FSM.
+     * @returns The set of the states that compose the FSM.
      * This returns a copy of the real set.
      */
     getStates(): Array<State>;
 
     /**
-     * @return The current state of FSM during its execution.
+     * @returns The current state of FSM during its execution.
      */
     getCurrentState(): OutputState;
 
     setCurrentState(state: OutputState): void;
 
     /**
-     * @return An observable value for observing the current state of FSM during its execution.
+     * @returns An observable value for observing the current state of FSM during its execution.
      */
     currentStateObservable(): Observable<[OutputState, OutputState]>;
 
@@ -44,19 +44,19 @@ export interface FSM {
 
     /**
      * Processes the provided event to run the FSM.
-     * @param event The event to process.
-     * @return True: the FSM correctly processed the event.
+     * @param event - The event to process.
+     * @returns True: the FSM correctly processed the event.
      */
     process(event: Event): boolean;
 
     /**
      * Logs (or not) information about the execution of the FSM.
-     * @param log True: logging activated.
+     * @param log - True: logging activated.
      */
     log(log: boolean): void;
 
     /**
-     * @return True: The FSM started.
+     * @returns True: The FSM started.
      */
     isStarted(): boolean;
 
@@ -100,12 +100,12 @@ export interface FSM {
     /**
      * States whether the FSM is an inner FSM (ie, whether it is included into another FSM as
      * a sub-FSM transition).
-     * @param inner True: this FSM will be considered as an inner FSM.
+     * @param inner - True: this FSM will be considered as an inner FSM.
      */
     setInner(inner: boolean): void;
 
     /**
-     * @return True: this FSM is an inner FSM.
+     * @returns True: this FSM is an inner FSM.
      */
     getInner(): boolean;
 
@@ -113,13 +113,13 @@ export interface FSM {
 
     /**
      * Adds an FSM handler.
-     * @param handler The handler to add.
+     * @param handler - The handler to add.
      */
     addHandler(handler: FSMHandler): void;
 
     /**
      * Removes the given FSM handler from this FSM.
-     * @param handler The handler to remove.
+     * @param handler - The handler to remove.
      */
     removeHandler(handler: FSMHandler): void;
 

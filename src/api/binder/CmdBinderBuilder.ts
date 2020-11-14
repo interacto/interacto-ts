@@ -18,15 +18,15 @@ import {LogLevel} from "../logging/LogLevel";
 /**
  * The binding builder API already knows the type of UI command
  * the bindings will produce
- * @param <C> The type of the produced UI Commands
+ * @typeParam C - The type of the produced UI Commands
  */
 export interface CmdBinderBuilder<C extends Command> extends BaseBinderBuilder {
     /**
      * Specifies the initialisation of the command when the interaction starts.
      * Each time the interaction starts, an instance of the command is created and configured by the given callback.
-     * @param initCmdFct The callback method that initialises the command.
+     * @param initCmdFct - The callback method that initialises the command.
      * This callback takes as arguments the command to configure.
-     * @return The builder to chain the building configuration.
+     * @returns The builder to chain the building configuration.
      */
     first(initCmdFct: (c: C) => void): CmdBinderBuilder<C>;
 

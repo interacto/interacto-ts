@@ -19,13 +19,13 @@ import {FSM} from "../../api/fsm/FSM";
 /**
  * An FSM state.
  * A terminal state ends normally an FSM.
- * @param <E> The type of events the FSM processes.
+ * @typeParam E - The type of events the FSM processes.
  */
 export class TerminalState extends StateBase implements InputState {
     /**
      * Creates the terminal state.
-     * @param stateMachine The FSM that will contain the state.
-     * @param stateName The name of this state.
+     * @param stateMachine - The FSM that will contain the state.
+     * @param stateName - The name of this state.
      */
     public constructor(stateMachine: FSM, stateName: string) {
         super(stateMachine, stateName);

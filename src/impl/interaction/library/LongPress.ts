@@ -34,7 +34,7 @@ export class LongPressFSM extends FSMImpl {
 
     /**
      * Creates the long press FSM
-     * @param duration Defines the duration of the long press interaction (in ms).
+     * @param duration - Defines the duration of the long press interaction (in ms).
      */
     public constructor(duration: number) {
         super();
@@ -89,7 +89,7 @@ export class LongPress extends InteractionBase<PointData, LongPressFSM> {
 
     /**
      * Creates the long press interaction
-     * @param duration The duration of the pressure required to ends the user interaction (in ms)
+     * @param duration - The duration of the pressure required to ends the user interaction (in ms)
      * If this duration is not reached, the interaction is cancelled.
      */
     public constructor(duration: number) {

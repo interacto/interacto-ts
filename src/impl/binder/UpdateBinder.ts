@@ -25,8 +25,7 @@ import {Interaction} from "../../api/interaction/Interaction";
 
 /**
  * The base binding builder for bindings where commands can be updated while the user interaction is running.
- * @param <C> The type of the command to produce.
- * @author Arnaud Blouin
+ * @typeParam C - The type of the command to produce.
  */
 export class UpdateBinder<C extends Command, I extends Interaction<D>, D extends InteractionData>
     extends Binder<C, I, D> implements CmdUpdateBinder<C>, InteractionCmdUpdateBinder<C, I, D> {

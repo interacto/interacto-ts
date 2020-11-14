@@ -20,7 +20,6 @@ import {EventType} from "../../api/fsm/EventType";
 
 /**
  * An FSM transition for the ComboBox HTML element.
- * @author Gwendal DIDOT
  */
 export class ComboBoxTransition extends TransitionBase<Event> {
 

@@ -17,7 +17,6 @@ import {CommandBase} from "../CommandBase";
 
 /**
  * A Redo action.
- * @author Arnaud BLOUIN
  */
 export class Redo extends CommandBase {
     public constructor() {

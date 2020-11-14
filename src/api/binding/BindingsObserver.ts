@@ -23,7 +23,7 @@ import {Binding} from "./Binding";
 export interface BindingsObserver {
     /**
      * Adds a binding to observe.
-     * @param binding The binding to observe.
+     * @param binding - The binding to observe.
      */
     observeBinding(binding: Binding<Command, Interaction<InteractionData>, InteractionData>): void;
 

@@ -20,27 +20,27 @@ import {PointData} from "./PointData";
  */
 export interface SrcTgtPointsData extends PointData {
     /**
-     * @return The object picked at the target location.
+     * @returns The object picked at the target location.
      */
     getTgtObject(): EventTarget | undefined;
 
     /**
-     * @return The last X-client position.
+     * @returns The last X-client position.
      */
     getTgtClientX(): number;
 
     /**
-     * @return The last Y-client position.
+     * @returns The last Y-client position.
      */
     getTgtClientY(): number;
 
     /**
-     * @return The last X-screen position.
+     * @returns The last X-screen position.
      */
     getTgtScreenX(): number;
 
     /**
-     * @return The last Y-screen position.
+     * @returns The last Y-screen position.
      */
     getTgtScreenY(): number;
 }

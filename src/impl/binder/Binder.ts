@@ -24,9 +24,8 @@ import {Interaction} from "../../api/interaction/Interaction";
 
 /**
  * The base class that defines the concept of binding builder (called binder).
- * @param <C> The type of the action to produce.
- * @param <I> The type of the user interaction to bind.
- * @author Arnaud Blouin
+ * @typeParam C - The type of the action to produce.
+ * @typeParam I - The type of the user interaction to bind.
  */
 export abstract class Binder<C extends Command, I extends Interaction<D>, D extends InteractionData>
 implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> {

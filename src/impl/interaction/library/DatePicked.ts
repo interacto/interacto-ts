@@ -49,7 +49,6 @@ interface DatePickedHandler extends FSMDataHandler {
 
 /**
  * A user interaction for Date input.
- * @author Gwendal DIDOT
  */
 
 export class DatePicked extends InteractionBase<WidgetData<HTMLInputElement>, DatePickedFSM> {

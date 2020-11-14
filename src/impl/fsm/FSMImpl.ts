@@ -169,7 +169,7 @@ export class FSMImpl implements FSM {
 
     /**
      * Removes the given KeyPress event from the events 'still in process' list.
-     * @param key The key code of the event to remove.
+     * @param key - The key code of the event to remove.
      */
     private removeKeyEvent(key: string): void {
         let removed = false;
@@ -267,7 +267,7 @@ export class FSMImpl implements FSM {
 
     /**
      * Adds a state to the state machine.
-     * @param state The state to add. Must not be null.
+     * @param state - The state to add. Must not be null.
      */
     public addState(state: InputState): void {
         this.states.push(state);

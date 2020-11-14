@@ -20,13 +20,12 @@ import {EventType} from "../../api/fsm/EventType";
 
 /**
  * This transition corresponds to a release of a button of a pointing device.
- * @author Gwendal DIDOT
  */
 export class ReleaseTransition extends TransitionBase<MouseEvent> {
     /**
      * Defines a transition.
-     * @param srcState The source state of the transition.
-     * @param tgtState The srcObject state of the transition.
+     * @param srcState - The source state of the transition.
+     * @param tgtState - The srcObject state of the transition.
      */
     public constructor(srcState: OutputState, tgtState: InputState) {
         super(srcState, tgtState);

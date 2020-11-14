@@ -20,7 +20,6 @@ import {EventType} from "../../api/fsm/EventType";
 
 /**
  * A transition for a pressure of a key of a keyboard.
- * @author Arnaud BLOUIN
  */
 export class KeyPressureTransition extends TransitionBase<KeyboardEvent> {
     /**

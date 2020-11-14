@@ -20,7 +20,6 @@ import {EventType} from "../../api/fsm/EventType";
 
 /**
  * An FSM transition for the Hyperlink.
- * @author Gwendal DIDOT
  */
 export class HyperLinkTransition extends TransitionBase<Event> {
 

@@ -24,9 +24,9 @@ export interface InteractionCmdBinder<C extends Command, I extends Interaction<D
     /**
     * Specifies the initialisation of the command when the interaction starts.
     * Each time the interaction starts, an instance of the command is created and configured by the given callback.
-    * @param initCmdFct The callback method that initialises the command.
+    * @param initCmdFct - The callback method that initialises the command.
     * This callback takes as arguments both the command and interaction involved in the binding.
-    * @return The builder to chain the building configuration.
+    * @returns The builder to chain the building configuration.
     */
     first(initCmdFct: (c: C, i: D) => void): InteractionCmdBinder<C, I, D>;
 
@@ -39,8 +39,8 @@ export interface InteractionCmdBinder<C extends Command, I extends Interaction<D
     /**
     * Specifies what to do end when an interaction ends (when the last event of the interaction has occurred, but just after
     * the interaction is reinitialised and the command finally executed and discarded / saved).
-    * @param onEnd The callback method to specify what to do when an interaction ends.
-    * @return The builder to chain the building configuration.
+    * @param onEnd - The callback method to specify what to do when an interaction ends.
+    * @returns The builder to chain the building configuration.
     */
     end(onEnd: (c: C, i: D) => void): InteractionCmdBinder<C, I, D>;
 

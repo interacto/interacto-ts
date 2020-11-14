@@ -20,7 +20,6 @@ import {EventType} from "../../api/fsm/EventType";
 
 /**
  * This transition corresponds to a move of a button of a pointing device.
- * @author Arnaud BLOUIN
  */
 export class MoveTransition extends TransitionBase<MouseEvent> {
     /**

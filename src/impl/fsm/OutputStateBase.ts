@@ -25,8 +25,8 @@ export abstract class OutputStateBase extends StateBase implements OutputState {
 
     /**
      * Creates the state.
-     * @param stateMachine The FSM that will contain the state.
-     * @param stateName The name of this state.
+     * @param stateMachine - The FSM that will contain the state.
+     * @param stateName - The name of this state.
      */
     protected constructor(stateMachine: FSM, stateName: string) {
         super(stateMachine, stateName);

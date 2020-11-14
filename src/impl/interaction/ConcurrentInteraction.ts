@@ -22,15 +22,15 @@ import {EventType} from "../../api/fsm/EventType";
 
 /**
  * The base implementation of a user interaction that uses concurrent FSMs.
- * @param <D> The type of the interaction data.
- * @param <F> The type of the FSM.
+ * @typeParam D - The type of the interaction data.
+ * @typeParam F - The type of the FSM.
  */
 export abstract class ConcurrentInteraction<D extends InteractionData, F extends ConcurrentFSM<FSM>> extends InteractionBase<D, F> {
     private readonly subscriptions: Array<Subscription>;
 
     /**
      * Creates the concurrent interaction.
-     * @param fsm The concurrent FSM that defines the behavior of the user interaction.
+     * @param fsm - The concurrent FSM that defines the behavior of the user interaction.
      */
     public constructor(fsm: F) {
         super(fsm);

@@ -26,8 +26,7 @@ import {Interaction} from "../../api/interaction/Interaction";
 
 /**
  * The base binding builder to create bindings between a keys pressure interaction and a given command.
- * @param <C> The type of the command to produce.
- * @author Arnaud Blouin
+ * @typeParam C - The type of the command to produce.
  */
 export class KeysBinder<C extends Command, I extends Interaction<D>, D extends InteractionData>
     extends UpdateBinder<C, I, D> implements KeyInteractionCmdUpdateBinder<C, I, D> {

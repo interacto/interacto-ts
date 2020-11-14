@@ -20,7 +20,6 @@ import {EventType} from "../../api/fsm/EventType";
 
 /**
  * A transition for a release of a key of a keyboard.
- * @author Gwendal DIDOT
  */
 export class KeyReleaseTransition extends TransitionBase<KeyboardEvent> {
     /**

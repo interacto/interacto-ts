@@ -20,7 +20,6 @@ import {EventType} from "../../api/fsm/EventType";
 
 /**
  * An FSM transition for the DatePicker HTML element.
- * @author Gwendal DIDOT
  */
 export class DatePickedTransition extends TransitionBase<Event> {
 

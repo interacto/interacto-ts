@@ -35,7 +35,7 @@ export class DnDFSM extends FSMImpl {
 
     /**
      * Creates the FSM
-     * @param cancellable True: the FSM can be cancelled using the ESC key.
+     * @param cancellable - True: the FSM can be cancelled using the ESC key.
      */
     public constructor(cancellable: boolean) {
         super();
@@ -108,7 +108,6 @@ interface DnDFSMHandler extends FSMDataHandler {
 
 /**
  * A user interaction for Drag and Drop
- * @author Gwendal DIDOT
  */
 export class DnD extends InteractionBase<SrcTgtPointsData, DnDFSM> {
     private readonly handler: DnDFSMHandler;

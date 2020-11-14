@@ -94,7 +94,7 @@ export class Clicks extends InteractionBase<PointsData, ClicksFSM> {
 
     /**
      * Creates the clicks interaction
-     * @param numberClicks The number of clicks expected to end the interaction.
+     * @param numberClicks - The number of clicks expected to end the interaction.
      * If this number is not reached after a timeout, the interaction is cancelled.
      */
     public constructor(numberClicks: number) {

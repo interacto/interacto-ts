@@ -61,7 +61,7 @@ export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouch
 
     /**
      * Creates the multi-touch interaction
-     * @param nbTouches The number of touches.
+     * @param nbTouches - The number of touches.
      */
     public constructor(nbTouches: number) {
         super(new MultiTouchFSM(nbTouches));

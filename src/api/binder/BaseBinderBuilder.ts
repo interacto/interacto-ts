@@ -21,8 +21,8 @@ export interface BaseBinderBuilder {
      * Specifies the widgets on which the binding must operate.
      * When a widget is added to this list, the added widget is binded to this binding.
      * When widget is removed from this list, this widget is unbinded from this binding.
-     * @param widgets The list of the widgets involved in the bindings.
-     * @return A clone of the current builder to chain the building configuration.
+     * @param widgets - The list of the widgets involved in the bindings.
+     * @returns A clone of the current builder to chain the building configuration.
      */
     on(...widgets: Array<EventTarget>): BaseBinderBuilder;
 
@@ -30,22 +30,22 @@ export interface BaseBinderBuilder {
      * Specifies the node which children will be observed by the binding.
      * The children list is observed by the binding, so that additions and removals
      * from it are managed by the binding.
-     * @param node The node which children will be observed by the binding dynamically.
-     * @return A clone of the current builder to chain the building configuration.
+     * @param node - The node which children will be observed by the binding dynamically.
+     * @returns A clone of the current builder to chain the building configuration.
      */
     onDynamic(node: Node): BaseBinderBuilder;
 
     /**
      * Specifies the conditions to fulfill to initialise, update, or execute the command while the interaction is running.
-     * @param whenPredicate The predicate that checks whether the command can be initialised, updated, or executed.
-     * @return A clone of the current builder to chain the building configuration.
+     * @param whenPredicate - The predicate that checks whether the command can be initialised, updated, or executed.
+     * @returns A clone of the current builder to chain the building configuration.
      */
     when(whenPredicate: () => boolean): BaseBinderBuilder;
 
     /**
      * Defines actions to perform with a binding ends.
-     * @param endFct The command to execute on each binding end.
-     * @return A clone of the current builder to chain the building configuration.
+     * @param endFct - The command to execute on each binding end.
+     * @returns A clone of the current builder to chain the building configuration.
      */
     end(endFct: () => void): BaseBinderBuilder;
 
@@ -53,15 +53,15 @@ export interface BaseBinderBuilder {
      * Specifies the logging level to use.
      * Several call to 'log' can be done to log different parts:
      * log(LogLevel.INTERACTION).log(LogLevel.COMMAND)
-     * @param level The logging level to use.
-     * @return A clone of the current builder to chain the building configuration.
+     * @param level - The logging level to use.
+     * @returns A clone of the current builder to chain the building configuration.
      */
     log(...level: Array<LogLevel>): BaseBinderBuilder;
 
     /**
      * If called, all the events the interaction will process will be consumed and
      * not progagated to next listeners.
-     * @return A clone of the current builder to chain the building configuration.
+     * @returns A clone of the current builder to chain the building configuration.
      */
     stopImmediatePropagation(): BaseBinderBuilder;
 

@@ -46,7 +46,6 @@ interface ScrollFSMHandler extends FSMDataHandler {
 
 /**
  * A user interaction for pressing down the mouse button.
- * @author Gwendal DIDOT
  */
 export class Scroll extends InteractionBase<ScrollData, ScrollFSM> {
     /**

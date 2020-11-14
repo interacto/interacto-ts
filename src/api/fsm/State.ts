@@ -19,12 +19,12 @@ import {FSM} from "./FSM";
  */
 export interface State {
     /**
-     * @return The name of the state.
+     * @returns The name of the state.
      */
     getName(): string;
 
     /**
-     * @return The FSM that contains the state.
+     * @returns The FSM that contains the state.
      */
     getFSM(): FSM;
 

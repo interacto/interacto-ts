@@ -49,7 +49,7 @@ export class ConcurrentFSM<F extends FSM> extends FSMImpl {
     }
 
     /**
-     * @return All the FSMs in an copy of the original array.
+     * @returns All the FSMs in an copy of the original array.
      */
     public getConccurFSMs(): Array<F> {
         return [...this.conccurFSMs];

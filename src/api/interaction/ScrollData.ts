@@ -19,22 +19,22 @@ import {InteractionData} from "./InteractionData";
  */
 export interface ScrollData extends InteractionData {
     /**
-     * @return The object on witch the scroll is performed.
+     * @returns The object on witch the scroll is performed.
      */
     getScrolledNode(): EventTarget | undefined;
 
     /**
-     * @return  The X-coordinate of the scroll position.
+     * @returns  The X-coordinate of the scroll position.
      */
     getPx(): number;
 
     /**
-     * @return The Y-coordinate of the scroll position.
+     * @returns The Y-coordinate of the scroll position.
      */
     getPy(): number;
 
     /**
-     * @return The total increment of the scrolling.
+     * @returns The total increment of the scrolling.
      */
     getIncrement(): number;
 }

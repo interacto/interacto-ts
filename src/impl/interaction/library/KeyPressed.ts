@@ -28,7 +28,7 @@ export class KeyPressedFSM extends FSMImpl {
 
     /**
      * Creates the FSM.
-     * @param modifierAccepted True: the FSM will consider key modifiers.
+     * @param modifierAccepted - True: the FSM will consider key modifiers.
      */
     public constructor(modifierAccepted: boolean) {
         super();
@@ -65,7 +65,6 @@ interface KeyPressedFSMHandler extends FSMDataHandler {
 
 /**
  * A user interaction for pressing a key on a keyboard
- * @author Gwendal DIDOT
  */
 export class KeyPressed extends InteractionBase<KeyData, KeyPressedFSM> {
 

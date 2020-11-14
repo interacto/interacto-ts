@@ -18,7 +18,6 @@ import {InputState} from "../../api/fsm/InputState";
 
 /**
  * This transition must be used to use a widget within an interaction.
- * @author Arnaud BLOUIN
  */
 export abstract class WidgetTransition<T> extends TransitionBase<Event> {
     /**
@@ -28,15 +27,15 @@ export abstract class WidgetTransition<T> extends TransitionBase<Event> {
 
     /**
      * Creates the widget transition.
-     * @param srcState The source state of the transition.
-     * @param tgtState The output state of the transition.
+     * @param srcState - The source state of the transition.
+     * @param tgtState - The output state of the transition.
      */
     protected constructor(srcState: OutputState, tgtState: InputState) {
         super(srcState, tgtState);
     }
 
     /**
-     * @return The widget used.
+     * @returns The widget used.
      */
     public getWidget(): T {
         return this.widget;
@@ -44,7 +43,7 @@ export abstract class WidgetTransition<T> extends TransitionBase<Event> {
 
     /**
      * Sets the widget.
-     * @param widget The widget to set. Nothing done if null.
+     * @param widget - The widget to set. Nothing done if null.
      */
     public setWidget(widget: T): void {
         this.widget = widget;

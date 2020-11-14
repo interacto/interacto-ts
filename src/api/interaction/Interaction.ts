@@ -19,35 +19,35 @@ export interface Interaction<D extends InteractionData> {
     /**
      * Sets whether the user interaction will stop immediately the propagation
      * of events processed by this user interaction to others listeners.
-     * @param stop True: the propagation of the events will stop immediately.
+     * @param stop - True: the propagation of the events will stop immediately.
      */
     stopImmediatePropagation: boolean;
 
     /**
      * Sets whether the default behavior associated to the event
      * will be executed.
-     * @param prevent True: the default behavior associated to the event
+     * @param prevent - True: the default behavior associated to the event
      * will be ignored.
      */
     preventDefault: boolean;
 
     /**
-     * @return The FSM of the user interaction.
+     * @returns The FSM of the user interaction.
      */
     getFsm(): FSM;
 
     /**
-     * @return The interaction data of the user interaction. Cannot be null.
+     * @returns The interaction data of the user interaction. Cannot be null.
      */
     getData(): D;
 
     /**
-     * @return Whether the user interaction is running.
+     * @returns Whether the user interaction is running.
      */
     isRunning(): boolean;
 
     /**
-     * @return True if the user interaction is activated.
+     * @returns True if the user interaction is activated.
      */
     isActivated(): boolean;
 
@@ -55,13 +55,13 @@ export interface Interaction<D extends InteractionData> {
      * Sets whether the user interaction is activated.
      * When not activated, a user interaction does not process
      * input events any more.
-     * @param activated True: the user interaction will be activated.
+     * @param activated - True: the user interaction will be activated.
      */
     setActivated(activated: boolean): void;
 
     /**
      * Sets the logging of the user interaction.
-     * @param log True: the user interaction will log information.
+     * @param log - True: the user interaction will log information.
      */
     log(log: boolean): void;
 
@@ -72,7 +72,7 @@ export interface Interaction<D extends InteractionData> {
      * For all child nodes of the given node, this interaction subscribes to it.
      * This is dynamic: on new child nodes, the interaction registers to them.
      * On child removals, the interaction unregisters to them.
-     * @param elementToObserve The node which children will be observed by the interaction.
+     * @param elementToObserve - The node which children will be observed by the interaction.
      */
     registerToNodeChildren(elementToObserve: Node): void;
 

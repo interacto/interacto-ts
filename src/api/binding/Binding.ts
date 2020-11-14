@@ -20,7 +20,6 @@ import {InteractionData} from "../interaction/InteractionData";
 
 /**
  * The concept of binding and its related services.
- * @author Arnaud BLOUIN
  */
 export interface Binding<C extends Command, I extends Interaction<D>, D extends InteractionData> extends FSMHandler {
     /**
@@ -69,33 +68,33 @@ export interface Binding<C extends Command, I extends Interaction<D>, D extends 
     ifCannotExecuteCmd(): void;
 
     /**
-     * @return True if the condition of the binding is respected.
+     * @returns True if the condition of the binding is respected.
      */
     when(): boolean;
 
     /**
-     * @return The interaction.
+     * @returns The interaction.
      */
     getInteraction(): I;
 
     /**
-     * @return The command in progress or null.
+     * @returns The command in progress or null.
      */
     getCommand(): C | undefined;
 
     /**
-     * @return True if the binding is activated.
+     * @returns True if the binding is activated.
      */
     isActivated(): boolean;
 
     /**
      * Activates the binding.
-     * @param activated True: the binding is activated. Otherwise, it is desactivated.
+     * @param activated - True: the binding is activated. Otherwise, it is desactivated.
      */
     setActivated(activated: boolean): void;
 
     /**
-     * @return True: if the binding is currently used.
+     * @returns True: if the binding is currently used.
      */
     isRunning(): boolean;
 
@@ -105,7 +104,7 @@ export interface Binding<C extends Command, I extends Interaction<D>, D extends 
     isStrictStart(): boolean;
 
     /**
-     * @return True: the command must be executed on each step of the interaction.
+     * @returns True: the command must be executed on each step of the interaction.
      */
     isContinuousCmdExec(): boolean;
 
@@ -116,13 +115,13 @@ export interface Binding<C extends Command, I extends Interaction<D>, D extends 
 
     /**
      * Information method.
-     * @return The number of times the binding successfully ended (nevermind a command was created or not).
+     * @returns The number of times the binding successfully ended (nevermind a command was created or not).
      */
     getTimesEnded(): number;
 
     /**
      * Information method.
-     * @return The number of times the binding was cancelled (nevermind a command was created or not).
+     * @returns The number of times the binding was cancelled (nevermind a command was created or not).
      */
     getTimesCancelled(): number;
 }

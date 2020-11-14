@@ -14,7 +14,6 @@
 
 /**
  * The default constructor of the exception.
- * @author Arnaud BLOUIN
  */
 export class MustBeUndoableCmdException extends Error {
     public constructor(cmdProducer: unknown) {

@@ -70,7 +70,7 @@ export function nodeBinder(): BaseUpdateBinder {
 /**
  * Creates binding builder to build a binding between a button interaction and the given command type.
  * Do not forget to call bind() at the end of the build to execute the builder.
- * @return The binding builder.
+ * @returns The binding builder.
  */
 export function buttonBinder(): InteractionBinder<Interaction<WidgetData<HTMLButtonElement>>, WidgetData<HTMLButtonElement>> {
     return new UpdateBinder(observer)
@@ -124,7 +124,7 @@ export function touchDnDBinder(): InteractionUpdateBinder<Interaction<SrcTgtTouc
 
 /**
  * Creates a binding that uses the multi-touch user interaction.
- * @param nbTouches The number of required touches.
+ * @param nbTouches - The number of required touches.
  * A multi-touch starts when all its touches have started.
  * A multi-touch ends when the number of required touches is greater than the number of touches.
  */
@@ -135,7 +135,7 @@ export function multiTouchBinder(nbTouches: number): InteractionUpdateBinder<Int
 
 /**
  * Creates a binding that uses the tap user interaction.
- * @param nbTap The number of required taps.
+ * @param nbTap - The number of required taps.
  * If this number is not reached after a timeout, the interaction is cancelled.
  */
 export function tapBinder(nbTap: number): InteractionUpdateBinder<Interaction<TapData>, TapData> {
@@ -145,7 +145,7 @@ export function tapBinder(nbTap: number): InteractionUpdateBinder<Interaction<Ta
 
 /**
  * Creates a binding that uses the long touch interaction.
- * @param duration The duration of the touch to end the user interaction.
+ * @param duration - The duration of the touch to end the user interaction.
  * If this duration is not reached, the interaction is cancelled.
  */
 export function longTouchBinder(duration: number): InteractionUpdateBinder<Interaction<TouchData>, TouchData> {
@@ -156,10 +156,10 @@ export function longTouchBinder(duration: number): InteractionUpdateBinder<Inter
 /**
  * Creates a binding that uses the swipe interaction.
  * If this velocity is not reached, the interaction is cancelled.
- * @param horizontal Defines whether the swipe is horizontal or vertical
- * @param minVelocity The minimal minVelocity to reach for validating the swipe. In pixels per second.
- * @param minLength The minimal distance from the starting point to the release point for validating the swipe
- * @param pxTolerance The tolerance rate in pixels accepted while executing the swipe
+ * @param horizontal - Defines whether the swipe is horizontal or vertical
+ * @param minVelocity - The minimal minVelocity to reach for validating the swipe. In pixels per second.
+ * @param minLength - The minimal distance from the starting point to the release point for validating the swipe
+ * @param pxTolerance - The tolerance rate in pixels accepted while executing the swipe
  */
 export function swipeBinder(horizontal: boolean, minVelocity: number, minLength: number, pxTolerance: number):
 InteractionUpdateBinder<Interaction<SrcTgtTouchData>, SrcTgtTouchData> {
@@ -169,9 +169,9 @@ InteractionUpdateBinder<Interaction<SrcTgtTouchData>, SrcTgtTouchData> {
 
 /**
  * Creates a binding that uses the pan interaction.
- * @param horizontal Defines whether the pan is horizontal or vertical
- * @param minLength The minimal distance from the starting point to the release point for validating the pan
- * @param pxTolerance The tolerance rate in pixels accepted while executing the pan
+ * @param horizontal - Defines whether the pan is horizontal or vertical
+ * @param minLength - The minimal distance from the starting point to the release point for validating the pan
+ * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
  */
 export function panBinder(horizontal: boolean, minLength: number, pxTolerance: number):
 InteractionUpdateBinder<Interaction<SrcTgtTouchData>, SrcTgtTouchData> {
@@ -205,7 +205,7 @@ export function pressBinder(): InteractionBinder<Interaction<PointData>, PointDa
 
 /**
  * Creates a binding that uses the long press interaction.
- * @param duration The duration of the pressure to end the user interaction.
+ * @param duration - The duration of the pressure to end the user interaction.
  * If this duration is not reached, the interaction is cancelled.
  */
 export function longPressBinder(duration: number): InteractionUpdateBinder<Interaction<PointData>, PointData> {
@@ -215,7 +215,7 @@ export function longPressBinder(duration: number): InteractionUpdateBinder<Inter
 
 /**
  * Creates a binding for clicking n times.
- * @param nbClicks The number of clicks to do.
+ * @param nbClicks - The number of clicks to do.
  * If this number is not reached, the interaction is cancelled after a timeout of 1s.
  */
 export function clicksBinder(nbClicks: number): InteractionUpdateBinder<Interaction<PointsData>, PointsData> {
@@ -233,7 +233,7 @@ export function scrollBinder(): InteractionBinder<Interaction<ScrollData>, Scrol
 
 /**
  * Creates a binding that uses the DnD interaction.
- * @param cancellable True: the escape key will cancels the DnD.
+ * @param cancellable - True: the escape key will cancels the DnD.
  */
 export function dndBinder(cancellable: boolean): InteractionUpdateBinder<Interaction<SrcTgtPointsData>, SrcTgtPointsData> {
     return new UpdateBinder(observer)
@@ -250,7 +250,7 @@ export function dragLockBinder(): InteractionUpdateBinder<Interaction<SrcTgtPoin
 
 /**
  * Creates a binding that uses the key pressure interaction.
- * @param modifierAccepted True: the interaction will consider key modifiers.
+ * @param modifierAccepted - True: the interaction will consider key modifiers.
  */
 export function keyPressBinder(modifierAccepted: boolean): KeyInteractionBinder<Interaction<KeyData>, KeyData> {
     return new KeysBinder(observer)

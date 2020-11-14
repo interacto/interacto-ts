@@ -20,7 +20,6 @@ import {EventType} from "../../api/fsm/EventType";
 
 /**
  * This transition corresponds to a pressure of a button of a pointing device.
- * @author Gwendal DIDOT
  */
 export class PressureTransition extends TransitionBase<MouseEvent> {
 

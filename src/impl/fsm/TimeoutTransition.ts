@@ -38,9 +38,9 @@ export class TimeoutTransition extends TransitionBase<Event> {
 
     /**
      * Creates the timeout transition.
-     * @param srcState The source state of the transition.
-     * @param tgtState The output state of the transition.
-     * @param timeout The function that returns the timeout value in ms.
+     * @param srcState - The source state of the transition.
+     * @param tgtState - The output state of the transition.
+     * @param timeout - The function that returns the timeout value in ms.
      */
     public constructor(srcState: OutputState, tgtState: InputState, timeout: () => number) {
         super(srcState, tgtState);

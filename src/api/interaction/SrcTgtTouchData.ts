@@ -16,7 +16,7 @@ import {SrcTgtPointsData} from "./SrcTgtPointsData";
 
 export interface SrcTgtTouchData extends SrcTgtPointsData {
     /**
-     * @return The ID of the touch.
+     * @returns The ID of the touch.
      */
     getTouchId(): number | undefined;
 }

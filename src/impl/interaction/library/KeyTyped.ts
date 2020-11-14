@@ -65,7 +65,6 @@ interface KeyTypedFSMHandler extends FSMDataHandler {
 
 /**
  * A user interaction for pressing and releasing a keyboard key
- * @author Gwendal DIDOT
  */
 export class KeyTyped extends InteractionBase<KeyData, KeyTypedFSM> {
     private readonly handler: KeyTypedFSMHandler;

@@ -22,7 +22,7 @@ import {TouchData} from "./TouchData";
  */
 export interface TapData extends InteractionData {
     /**
-     * @return The list of touches data.
+     * @returns The list of touches data.
      */
     getTapData(): Array<TouchData>;
 }

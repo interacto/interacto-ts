@@ -20,7 +20,6 @@ import {EventType} from "../../api/fsm/EventType";
 
 /**
  * This transition corresponds to the scroll of a window
- * @author Gwendal DIDOT
  */
 export class ScrollTransition extends TransitionBase<UIEvent> {
     /**

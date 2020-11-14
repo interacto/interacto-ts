@@ -42,7 +42,6 @@ interface PressFSMHandler extends FSMDataHandler {
 
 /**
  * A user interaction for pressing down the mouse button.
- * @author Gwendal DIDOT
  */
 export class Press extends InteractionBase<PointData, PressFSM> {
     /**

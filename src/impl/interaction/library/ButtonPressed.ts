@@ -53,7 +53,6 @@ interface ButtonPressedFSMHandler extends FSMDataHandler {
 
 /**
  * A user interaction for buttons.
- * @author Arnaud BLOUIN
  */
 export class ButtonPressed extends InteractionBase<WidgetData<HTMLButtonElement>, ButtonPressedFSM> {
     private readonly handler: ButtonPressedFSMHandler;

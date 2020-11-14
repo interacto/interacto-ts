@@ -22,8 +22,8 @@ export function isEventType(evtType: string): evtType is EventType {
 
 /**
  * Searches for a touch.
- * @param idToFind The ID of the touch to find.
- * @param touches The list of touches to search in.
+ * @param idToFind - The ID of the touch to find.
+ * @param touches - The list of touches to search in.
  */
 export function getTouch(touches: TouchList, idToFind: number | undefined): Touch | undefined {
     // eslint-disable-next-line @typescript-eslint/prefer-for-of
@@ -37,7 +37,7 @@ export function getTouch(touches: TouchList, idToFind: number | undefined): Touc
 
 /**
  * Checks whether the given event type is a touch event.
- * @param eventType The event type to check.
+ * @param eventType - The event type to check.
  */
 export function isTouchEvent(eventType: EventType): boolean {
     return eventType === "touchstart" || eventType === "touchend" || eventType === "touchmove";
@@ -45,7 +45,7 @@ export function isTouchEvent(eventType: EventType): boolean {
 
 /**
  * Checks whether the given event type is a mouse event.
- * @param eventType The event type to check.
+ * @param eventType - The event type to check.
  */
 export function isMouseEvent(eventType: EventType): boolean {
     return eventType === "mousedown" || eventType === "mouseup" || eventType === "mousemove" ||
@@ -54,7 +54,7 @@ export function isMouseEvent(eventType: EventType): boolean {
 
 /**
  * Checks whether the given event type is a key event.
- * @param eventType The event type to check.
+ * @param eventType - The event type to check.
  */
 export function isKeyEvent(eventType: EventType): boolean {
     return eventType === "keydown" || eventType === "keyup";

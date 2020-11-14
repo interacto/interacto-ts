@@ -20,7 +20,6 @@ import {isEventType} from "./Events";
 
 /**
  * This transition corresponds to a pressure of a button of a pointing device.
- * @author Arnaud BLOUIN
  */
 export class ClickTransition extends TransitionBase<MouseEvent> {
     /**

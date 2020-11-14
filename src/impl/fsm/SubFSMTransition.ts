@@ -40,9 +40,9 @@ export class SubFSMTransition extends TransitionBase<Event> {
 
     /**
      * Creates the transition.
-     * @param srcState The source state of the transition.
-     * @param tgtState The output state of the transition.
-     * @param fsm The inner FSM that composes the transition.
+     * @param srcState - The source state of the transition.
+     * @param tgtState - The output state of the transition.
+     * @param fsm - The inner FSM that composes the transition.
      */
     public constructor(srcState: OutputState, tgtState: InputState, fsm: FSM) {
         super(srcState, tgtState);

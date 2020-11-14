@@ -17,7 +17,7 @@ import {Transition} from "./Transition";
 
 /**
  * Defines a type of state that can produce as output events.
- * @param <E> The type of events the FSM processes.
+ * @typeParam E - The type of events the FSM processes.
  */
 export interface OutputState extends State {
     /**
@@ -29,18 +29,18 @@ export interface OutputState extends State {
 
     /**
      * Asks to the state to process of the given event.
-     * @param event The event to process. Can be null.
+     * @param event - The event to process. Can be null.
      */
     process(event: Event): boolean;
 
     /**
-     * @return The list of outgoing transitions of the state.
+     * @returns The list of outgoing transitions of the state.
      */
     getTransitions(): Array<Transition<Event>>;
 
     /**
      * Adds the given transitions to the list of outgoing transitions of the state.
-     * @param tr The transition to add.
+     * @param tr - The transition to add.
      */
     addTransition(tr: Transition<Event>): void;
 }

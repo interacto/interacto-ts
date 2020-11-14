@@ -20,17 +20,17 @@ import {PointData} from "./PointData";
  */
 export interface PointsData extends InteractionData {
     /**
-     * @return The series of points.
+     * @returns The series of points.
      */
     getPointsData(): Array<PointData>;
 
     /**
-     * @return The current position of the pointing device.
+     * @returns The current position of the pointing device.
      */
     getCurrentPosition(): [number, number] | undefined;
 
     /**
-     * @return The last button used to produce the points.
+     * @returns The last button used to produce the points.
      */
     getLastButton(): number | undefined;
 }

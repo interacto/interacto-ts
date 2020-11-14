@@ -35,7 +35,7 @@ export class TapDataImpl implements TapData {
 
     /**
      * Adds a touch data to this multi-touch data
-     * @param data The touch data to add
+     * @param data - The touch data to add
      */
     public addTapData(data: TouchDataImpl): void {
         this.tapsData.push(data);

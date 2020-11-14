@@ -31,7 +31,7 @@ export class SpinnerChangedFSM extends FSMImpl {
     private static readonly timeGapSupplier: () => number = () => SpinnerChangedFSM.getTimeGap();
 
     /**
-     * @return The time gap between the two spinner events.
+     * @returns The time gap between the two spinner events.
      */
     public static getTimeGap(): number {
         return SpinnerChangedFSM.timeGap;
@@ -39,7 +39,7 @@ export class SpinnerChangedFSM extends FSMImpl {
 
     /**
      * Sets The time gap between the two spinner events.
-     * @param timeGapBetweenClicks The time gap between the two spinner events. Not done if negative.
+     * @param timeGapBetweenClicks - The time gap between the two spinner events. Not done if negative.
      */
     public static setTimeGap(timeGapBetweenClicks: number): void {
         if (timeGapBetweenClicks > 0) {
@@ -79,7 +79,6 @@ interface SpinnerChangedHandler extends FSMDataHandler {
 
 /**
  * A user interaction for Number input.
- * @author Gwendal DIDOT
  */
 export class SpinnerChanged extends InteractionBase<WidgetData<HTMLInputElement>, SpinnerChangedFSM> {
     private readonly handler: SpinnerChangedHandler;

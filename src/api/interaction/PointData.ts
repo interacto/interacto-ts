@@ -19,52 +19,52 @@ import {InteractionData} from "./InteractionData";
  */
 export interface PointData extends InteractionData {
     /**
-     * @return True: the alt key is pressed.
+     * @returns True: the alt key is pressed.
      */
     isAltPressed(): boolean;
 
     /**
-     * @return True: the control key is pressed.
+     * @returns True: the control key is pressed.
      */
     isCtrlPressed(): boolean;
 
     /**
-     * @return True: the shift key is pressed.
+     * @returns True: the shift key is pressed.
      */
     isShiftPressed(): boolean;
 
     /**
-     * @return True: the meta key is pressed.
+     * @returns True: the meta key is pressed.
      */
     isMetaPressed(): boolean;
 
     /**
-     * @return The pressed X-client position.
+     * @returns The pressed X-client position.
      */
     getSrcClientX(): number;
 
     /**
-     * @return The pressed Y-client position.
+     * @returns The pressed Y-client position.
      */
     getSrcClientY(): number;
 
     /**
-     * @return The pressed X-screen position.
+     * @returns The pressed X-screen position.
      */
     getSrcScreenX(): number;
 
     /**
-     * @return The pressed Y-screen position.
+     * @returns The pressed Y-screen position.
      */
     getSrcScreenY(): number;
 
     /**
-     * @return The button used for the pressure.
+     * @returns The button used for the pressure.
      */
     getButton(): number | undefined;
 
     /**
-     * @return The object picked at the pressed position.
+     * @returns The object picked at the pressed position.
      */
     getSrcObject(): EventTarget | undefined;
 

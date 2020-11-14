@@ -19,7 +19,6 @@ import {KeyPressureTransition} from "./KeyPressureTransition";
 
 /**
  * This transition should be used to cancel an interaction using key ESCAPE.
- * @author Arnaud BLOUIN
  */
 export class EscapeKeyPressureTransition extends KeyPressureTransition {
     public constructor(srcState: OutputState, tgtState: InputState) {

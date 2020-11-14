@@ -20,7 +20,6 @@ import {EventType} from "../../api/fsm/EventType";
 
 /**
  * An FSM transition for the Button HTML element.
- * @author Arnaud BLOUIN
  */
 export class ButtonPressedTransition extends TransitionBase<Event> {
 

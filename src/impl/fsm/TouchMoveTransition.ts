@@ -24,8 +24,8 @@ import {EventType} from "../../api/fsm/EventType";
 export class TouchMoveTransition extends TransitionBase<TouchEvent> {
     /**
      * Defines a transition.
-     * @param srcState The source state of the transition.
-     * @param tgtState The srcObject state of the transition.
+     * @param srcState - The source state of the transition.
+     * @param tgtState - The srcObject state of the transition.
      */
     public constructor(srcState: OutputState, tgtState: InputState) {
         super(srcState, tgtState);

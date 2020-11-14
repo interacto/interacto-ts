@@ -25,9 +25,8 @@ import {Interaction} from "../../api/interaction/Interaction";
 
 /**
  * The base class to do bindings, i.e. bindings between user interactions and (undoable) commands.
- * @param <C> The type of the command that will produce this binding.
- * @param <I> The type of the interaction that will use this binding.
- * @author Arnaud BLOUIN
+ * @typeParam C - The type of the command that will produce this binding.
+ * @typeParam I - The type of the interaction that will use this binding.
  */
 export class BindingImpl<C extends Command, I extends Interaction<D>, D extends InteractionData>
 implements Binding<C, I, D> {
@@ -66,11 +65,11 @@ implements Binding<C, I, D> {
 
     /**
      * Creates a binding.
-     * @param continuousExecution Specifies whether the command must be executed on each step of the interaction.
-     * @param cmdProducer The type of the command that will be created. Used to instantiate the command by reflexivity.
+     * @param continuousExecution - Specifies whether the command must be executed on each step of the interaction.
+     * @param cmdProducer - The type of the command that will be created. Used to instantiate the command by reflexivity.
      * The class must be public and must have a constructor with no parameter.
-     * @param interaction The user interaction of the binding.
-     * @param widgets The widgets on which the binding will operate.
+     * @param interaction - The user interaction of the binding.
+     * @param widgets - The widgets on which the binding will operate.
      */
     public constructor(continuousExecution: boolean, interaction: I, cmdProducer: (i?: D) => C, widgets: Array<EventTarget>) {
         this.asLogBinding = false;
@@ -98,7 +97,7 @@ implements Binding<C, I, D> {
 
     /**
      * creates the command of the binding. If the attribute 'cmd' is not null, nothing will be done.
-     * @return The created command or undefined if an error occurred
+     * @returns The created command or undefined if an error occurred
      */
     protected createCommand(): C | undefined {
         try {
@@ -391,7 +390,7 @@ implements Binding<C, I, D> {
 
     /**
      * Logs information related to the binding.
-     * @param log True: information will be logged
+     * @param log - True: information will be logged
      */
     public setLogBinding(log: boolean): void {
         this.asLogBinding = log;
@@ -399,7 +398,7 @@ implements Binding<C, I, D> {
 
     /**
      * Logs information related to the command creation.
-     * @param log True: information related to the command creation will be logged
+     * @param log - True: information related to the command creation will be logged
      */
     public setLogCmd(log: boolean): void {
         this.asLogCmd = log;
@@ -407,7 +406,7 @@ implements Binding<C, I, D> {
 
     /**
      * Logs information related to the user interaction.
-     * @param log True: information related to the user interaction will be logged
+     * @param log - True: information related to the user interaction will be logged
      */
     public logInteraction(log: boolean): void {
         this.interaction.log(log);

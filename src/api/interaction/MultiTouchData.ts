@@ -20,7 +20,7 @@ import {SrcTgtTouchData} from "./SrcTgtTouchData";
  */
 export interface MultiTouchData extends InteractionData {
     /**
-     * @return The list of touch data.
+     * @returns The list of touch data.
      */
     getTouchData(): Array<SrcTgtTouchData>;
 }

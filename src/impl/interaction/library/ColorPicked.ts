@@ -48,7 +48,6 @@ interface ColorPickedHandler extends FSMDataHandler {
 
 /**
  * A user interaction for CheckBox
- * @author Gwendal DIDOT
  */
 
 export class ColorPicked extends InteractionBase<WidgetData<HTMLInputElement>, ColorPickedFSM> {

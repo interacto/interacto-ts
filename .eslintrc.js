@@ -7,7 +7,8 @@ module.exports = {
     sourceType: 'module',
   },
   plugins: [
-    '@typescript-eslint'
+    '@typescript-eslint',
+    'eslint-plugin-tsdoc'
   ],
   env: {
     browser: true,
@@ -56,6 +57,7 @@ module.exports = {
     "@typescript-eslint/consistent-type-imports": "off",
     "@typescript-eslint/no-implicit-any-catch": "off",
 
+    "tsdoc/syntax": "error",
 
     "func-style": "off",
     "max-lines": "off",

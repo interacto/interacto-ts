@@ -24,8 +24,8 @@ import {EventType} from "../../api/fsm/EventType";
 
 /**
  * The base implementation of a user interaction.
- * @param <D> The type of the interaction data.
- * @param <F> The type of the FSM.
+ * @typeParam D - The type of the interaction data.
+ * @typeParam F - The type of the FSM.
  */
 export abstract class InteractionBase<D extends InteractionData, F extends FSM> implements Interaction<D> {
     protected readonly fsm: F;
@@ -66,7 +66,7 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
 
     /**
      * Creates the interaction.
-     * @param fsm The FSM that defines the behavior of the user interaction.
+     * @param fsm - The FSM that defines the behavior of the user interaction.
      */
     public constructor(fsm: F) {
         this.activated = false;
@@ -271,7 +271,7 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
     }
 
     /**
-     * @return True if the user interaction will stop immidiately the propagation
+     * @returns True if the user interaction will stop immidiately the propagation
      * of events processed by this user interaction to others listeners.
      */
     public get stopImmediatePropagation(): boolean {
@@ -283,7 +283,7 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
     }
 
     /**
-     * @return True if the default behavior associated to the event will be executed.
+     * @returns True if the default behavior associated to the event will be executed.
      */
     public get preventDefault(): boolean {
         return this.preventDef;
@@ -291,7 +291,7 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
 
     /**
      * Processes the given UI event.
-     * @param event The event to process.
+     * @param event - The event to process.
      */
     public processEvent(event: Event): void {
         if (this.isActivated()) {

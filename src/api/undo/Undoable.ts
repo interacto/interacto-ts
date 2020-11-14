@@ -14,7 +14,6 @@
 
 /**
  * An interface for undoable objects.
- * @author Arnaud BLOUIN
  */
 export interface Undoable {
     /**
@@ -28,7 +27,7 @@ export interface Undoable {
     redo(): void;
 
     /**
-     * @return The name of the undo command.
+     * @returns The name of the undo command.
      */
     getUndoName(): string;
 }

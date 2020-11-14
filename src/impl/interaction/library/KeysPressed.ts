@@ -24,7 +24,6 @@ import {InteractionBase} from "../InteractionBase";
 
 /**
  * This interaction permits to define combo a key pressed that can be used to define shortcuts, etc.
- * @author Arnaud BLOUIN
  */
 export class KeysPressedFSM extends FSMImpl {
     private readonly currentCodes: Array<string>;
