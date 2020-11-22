@@ -56,7 +56,7 @@ export abstract class TransitionBase<E extends Event> implements Transition<E> {
         return true;
     }
 
-    public abstract getAcceptedEvents(): Array<EventType>;
+    public abstract getAcceptedEvents(): ReadonlyArray<EventType>;
 
     public getTarget(): InputState {
         return this.tgt;

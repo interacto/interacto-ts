@@ -34,7 +34,7 @@ export class BoxCheckPressedTransition extends TransitionBase<Event> {
         return event.target !== null && isCheckBox(event.target);
     }
 
-    public getAcceptedEvents(): Array<EventType> {
+    public getAcceptedEvents(): ReadonlyArray<EventType> {
         return ["input"];
     }
 }

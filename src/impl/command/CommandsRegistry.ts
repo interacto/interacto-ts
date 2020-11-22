@@ -64,7 +64,7 @@ export class CommandsRegistry {
     /**
      * @returns The stored commands. Cannot be null. Because of concurrency, you should not modify this list.
      */
-    public getCommands(): Array<Command> {
+    public getCommands(): ReadonlyArray<Command> {
         return this.cmds;
     }
 

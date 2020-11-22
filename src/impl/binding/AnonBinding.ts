@@ -44,9 +44,9 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
 
 
     public constructor(continuousExec: boolean, interaction: I, cmdProducer: (d: D) => C,
-                       widgets: Array<EventTarget>, dynamicNodes: Array<Node>,
+                       widgets: ReadonlyArray<EventTarget>, dynamicNodes: ReadonlyArray<Node>,
                        // eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
-                       strict: boolean, loggers: Array<LogLevel>, timeoutThrottle: number,
+                       strict: boolean, loggers: ReadonlyArray<LogLevel>, timeoutThrottle: number,
                        stopPropa: boolean, prevDef: boolean,
                        initCmdFct?: (c: C, i: D) => void,
                        updateCmdFct?: (c: C, i: D) => void, check?: (i: D) => boolean,
@@ -72,7 +72,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
         dynamicNodes.forEach(node => interaction.registerToNodeChildren(node));
     }
 
-    private configureLoggers(loggers: Array<LogLevel>): void {
+    private configureLoggers(loggers: ReadonlyArray<LogLevel>): void {
         if (loggers.length !== 0) {
             this.setLogCmd(loggers.includes(LogLevel.command.valueOf()));
             this.setLogBinding(loggers.includes(LogLevel.binding.valueOf()));

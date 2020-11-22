@@ -44,11 +44,11 @@ export interface InteractionCmdBinder<C extends Command, I extends Interaction<D
     */
     end(onEnd: (c: C, i: D) => void): InteractionCmdBinder<C, I, D>;
 
-    on(...widgets: Array<EventTarget>): InteractionCmdBinder<C, I, D>;
+    on(...widgets: ReadonlyArray<EventTarget>): InteractionCmdBinder<C, I, D>;
 
     onDynamic(node: Node): InteractionCmdBinder<C, I, D>;
 
-    log(...level: Array<LogLevel>): InteractionCmdBinder<C, I, D>;
+    log(...level: ReadonlyArray<LogLevel>): InteractionCmdBinder<C, I, D>;
 
     when(whenPredicate: (i: D) => boolean): InteractionCmdBinder<C, I, D>;
 

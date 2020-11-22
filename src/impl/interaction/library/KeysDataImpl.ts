@@ -30,7 +30,7 @@ export class KeysDataImpl implements KeysData {
         this.target = undefined;
     }
 
-    public getKeys(): Array<string> {
+    public getKeys(): ReadonlyArray<string> {
         return this.keys ?? [];
     }
 

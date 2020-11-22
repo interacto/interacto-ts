@@ -106,7 +106,7 @@ export class TimeoutTransition extends TransitionBase<Event> {
         }
     }
 
-    public getAcceptedEvents(): Array<EventType> {
+    public getAcceptedEvents(): ReadonlyArray<EventType> {
         return [];
     }
 }

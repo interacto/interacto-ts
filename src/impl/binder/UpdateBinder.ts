@@ -44,9 +44,9 @@ export class UpdateBinder<C extends Command, I extends Interaction<D>, D extends
 
     public constructor(observer?: BindingsObserver, throttleTimeout?: number, continuousCmdExecution?: boolean, strict?: boolean,
                        initCmd?: (c: C, i: D) => void, checkConditions?: (i: D) => boolean, cmdProducer?: (i: D) => C,
-                       widgets?: Array<EventTarget>, dynamicNodes?: Array<Node>,
+                       widgets?: ReadonlyArray<EventTarget>, dynamicNodes?: ReadonlyArray<Node>,
                        interactionSupplier?: () => I, onEnd?: (c: C, i: D) => void,
-                       logLevels?: Array<LogLevel>, hadNoEffectFct?: (c: C, i: D) => void, hadEffectsFct?: (c: C, i: D) => void,
+                       logLevels?: ReadonlyArray<LogLevel>, hadNoEffectFct?: (c: C, i: D) => void, hadEffectsFct?: (c: C, i: D) => void,
                        cannotExecFct?: (c: C, i: D) => void, updateFct?: (c: C, i: D) => void, cancelFct?: (i: D) => void,
                        endOrCancelFct?: (i: D) => void, stopProga?: boolean, prevent?: boolean) {
         super(observer, initCmd, checkConditions, cmdProducer, widgets, dynamicNodes, interactionSupplier, onEnd,
@@ -95,7 +95,7 @@ export class UpdateBinder<C extends Command, I extends Interaction<D>, D extends
         return dup;
     }
 
-    public on(...widget: Array<EventTarget>): UpdateBinder<C, I, D> {
+    public on(...widget: ReadonlyArray<EventTarget>): UpdateBinder<C, I, D> {
         return super.on(...widget) as UpdateBinder<C, I, D>;
     }
 
@@ -127,7 +127,7 @@ export class UpdateBinder<C extends Command, I extends Interaction<D>, D extends
         return super.end(onEndFct) as UpdateBinder<C, I, D>;
     }
 
-    public log(...level: Array<LogLevel>): UpdateBinder<C, I, D> {
+    public log(...level: ReadonlyArray<LogLevel>): UpdateBinder<C, I, D> {
         return super.log(...level) as UpdateBinder<C, I, D>;
     }
 

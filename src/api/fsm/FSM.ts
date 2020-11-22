@@ -26,7 +26,7 @@ export interface FSM {
      * @returns The set of the states that compose the FSM.
      * This returns a copy of the real set.
      */
-    getStates(): Array<State>;
+    getStates(): ReadonlyArray<State>;
 
     /**
      * @returns The current state of FSM during its execution.

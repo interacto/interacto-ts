@@ -129,7 +129,7 @@ export class SubFSMTransition extends TransitionBase<Event> {
             .find(tr => tr.accept(event));
     }
 
-    public getAcceptedEvents(): Array<EventType> {
+    public getAcceptedEvents(): ReadonlyArray<EventType> {
         if (this.subFSM.getInitState().getTransitions().length === 0) {
             return [];
         }

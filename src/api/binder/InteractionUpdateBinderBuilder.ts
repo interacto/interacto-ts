@@ -36,11 +36,11 @@ export interface InteractionUpdateBinderBuilder<I extends Interaction<D>, D exte
 
     end(endFct: () => void): InteractionUpdateBinderBuilder<I, D>;
 
-    on(...widgets: Array<EventTarget>): InteractionUpdateBinderBuilder<I, D>;
+    on(...widgets: ReadonlyArray<EventTarget>): InteractionUpdateBinderBuilder<I, D>;
 
     onDynamic(node: Node): InteractionUpdateBinderBuilder<I, D>;
 
-    log(...level: Array<LogLevel>): InteractionUpdateBinderBuilder<I, D>;
+    log(...level: ReadonlyArray<LogLevel>): InteractionUpdateBinderBuilder<I, D>;
 
     stopImmediatePropagation(): InteractionUpdateBinderBuilder<I, D>;
 

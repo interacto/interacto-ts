@@ -31,17 +31,17 @@ import {Interaction} from "../../api/interaction/Interaction";
 export class KeysBinder<C extends Command, I extends Interaction<D>, D extends InteractionData>
     extends UpdateBinder<C, I, D> implements KeyInteractionCmdUpdateBinder<C, I, D> {
 
-    private codes: Array<string>;
+    private codes: ReadonlyArray<string>;
 
     private readonly checkCode: (i: InteractionData) => boolean;
 
     public constructor(observer?: BindingsObserver, throttleTimeout?: number, continuousCmdExecution?: boolean, strict?: boolean,
                        initCmd?: (c: C, i: D) => void, whenPredicate?: (i: D) => boolean,
-                       cmdProducer?: (i: D) => C, widgets?: Array<EventTarget>, dynamicNodes?: Array<Node>,
-                       interactionSupplier?: () => I, onEnd?: (c: C, i: D) => void, logLevels?: Array<LogLevel>,
+                       cmdProducer?: (i: D) => C, widgets?: ReadonlyArray<EventTarget>, dynamicNodes?: ReadonlyArray<Node>,
+                       interactionSupplier?: () => I, onEnd?: (c: C, i: D) => void, logLevels?: ReadonlyArray<LogLevel>,
                        hadNoEffectFct?: (c: C, i: D) => void, hadEffectsFct?: (c: C, i: D) => void,
                        cannotExecFct?: (c: C, i: D) => void, updateFct?: (c: C, i: D) => void, cancelFct?: (i: D) => void,
-                       endOrCancelFct?: (i: D) => void, keyCodes?: Array<string>, stopProga?: boolean, prevent?: boolean) {
+                       endOrCancelFct?: (i: D) => void, keyCodes?: ReadonlyArray<string>, stopProga?: boolean, prevent?: boolean) {
         super(observer, throttleTimeout, continuousCmdExecution, strict, initCmd, whenPredicate, cmdProducer, widgets,
             dynamicNodes, interactionSupplier, onEnd, logLevels, hadNoEffectFct, hadEffectsFct, cannotExecFct,
             updateFct, cancelFct, endOrCancelFct, stopProga, prevent);
@@ -62,13 +62,13 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, D extends I
         };
     }
 
-    public with(...keyCodes: Array<string>): KeysBinder<C, I, D> {
+    public with(...keyCodes: ReadonlyArray<string>): KeysBinder<C, I, D> {
         const dup = this.duplicate();
         dup.codes = [...keyCodes];
         return dup;
     }
 
-    public on(...widget: Array<EventTarget>): KeysBinder<C, I, D> {
+    public on(...widget: ReadonlyArray<EventTarget>): KeysBinder<C, I, D> {
         return super.on(...widget) as KeysBinder<C, I, D>;
     }
 
@@ -100,7 +100,7 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, D extends I
         return super.end(onEndFct) as KeysBinder<C, I, D>;
     }
 
-    public log(...level: Array<LogLevel>): KeysBinder<C, I, D> {
+    public log(...level: ReadonlyArray<LogLevel>): KeysBinder<C, I, D> {
         return super.log(...level) as KeysBinder<C, I, D>;
     }
 

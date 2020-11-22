@@ -27,7 +27,7 @@ export class PointsDataImpl extends PointDataImpl implements PointsData {
         this.pointsData = [];
     }
 
-    public getPointsData(): Array<PointData> {
+    public getPointsData(): ReadonlyArray<PointData> {
         return [...this.pointsData];
     }
 

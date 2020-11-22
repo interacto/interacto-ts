@@ -37,8 +37,6 @@ beforeEach(() => {
 
 test("getTransitions", () => {
     state.addTransition(new StubTransitionOK(new StdState(fsm, "s"), mock<InputState>()));
-    const tr = state.getTransitions();
-    tr.length = 0;
     expect(state.getTransitions()).toHaveLength(1);
 });
 

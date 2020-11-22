@@ -51,7 +51,7 @@ export abstract class ConcurrentInteraction<D extends InteractionData, F extends
         this.getCurrentAcceptedEvents().forEach(type => this.registerEventToNode(type, node));
     }
 
-    public getCurrentAcceptedEvents(_state?: OutputState): Array<EventType> {
+    public getCurrentAcceptedEvents(_state?: OutputState): ReadonlyArray<EventType> {
         return this.fsm.getConccurFSMs().flatMap(concFSM => [...this.getEventTypesOf(concFSM.getCurrentState())]);
     }
 

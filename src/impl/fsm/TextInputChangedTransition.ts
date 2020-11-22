@@ -34,7 +34,7 @@ export class TextInputChangedTransition extends TransitionBase<Event> {
         return event.target !== null && isTextInput(event.target);
     }
 
-    public getAcceptedEvents(): Array<EventType> {
+    public getAcceptedEvents(): ReadonlyArray<EventType> {
         return ["input"];
     }
 }

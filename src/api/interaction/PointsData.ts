@@ -22,7 +22,7 @@ export interface PointsData extends InteractionData {
     /**
      * @returns The series of points.
      */
-    getPointsData(): Array<PointData>;
+    getPointsData(): ReadonlyArray<PointData>;
 
     /**
      * @returns The current position of the pointing device.

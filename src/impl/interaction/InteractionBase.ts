@@ -78,8 +78,8 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
         this.activated = true;
         this.asLog = false;
         this.registeredNodes = new Set<EventTarget>();
-        this.additionalNodes = new Array<Node>();
-        this.mutationObservers = new Array<MutationObserver>();
+        this.additionalNodes = [];
+        this.mutationObservers = [];
     }
 
     protected abstract createDataObject(): D;
@@ -98,10 +98,10 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
             return;
         }
 
-        const currEvents: Array<EventType> = this.getCurrentAcceptedEvents(newState);
-        const events: Array<EventType> = [...this.getEventTypesOf(oldState)];
-        const eventsToRemove: Array<EventType> = events.filter(e => !currEvents.includes(e));
-        const eventsToAdd: Array<EventType> = currEvents.filter(e => !events.includes(e));
+        const currEvents: ReadonlyArray<EventType> = this.getCurrentAcceptedEvents(newState);
+        const events: ReadonlyArray<EventType> = [...this.getEventTypesOf(oldState)];
+        const eventsToRemove: ReadonlyArray<EventType> = events.filter(e => !currEvents.includes(e));
+        const eventsToAdd: ReadonlyArray<EventType> = currEvents.filter(e => !events.includes(e));
         this.registeredNodes.forEach(n => {
             eventsToRemove.forEach(type => this.unregisterEventToNode(type, n));
             eventsToAdd.forEach(type => this.registerEventToNode(type, n));
@@ -115,18 +115,18 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
         });
     }
 
-    protected getCurrentAcceptedEvents(state: OutputState): Array<EventType> {
+    protected getCurrentAcceptedEvents(state: OutputState): ReadonlyArray<EventType> {
         return [...this.getEventTypesOf(state)];
     }
 
-    private callBackMutationObserver(mutationList: Array<MutationRecord>): void {
+    private callBackMutationObserver(mutationList: ReadonlyArray<MutationRecord>): void {
         mutationList.forEach(mutation => {
             mutation.addedNodes.forEach(node => this.registerToNodes([node]));
             mutation.removedNodes.forEach(node => this.unregisterFromNodes([node]));
         });
     }
 
-    protected getEventTypesOf(state: OutputState): Array<EventType> {
+    protected getEventTypesOf(state: OutputState): ReadonlyArray<EventType> {
         if (state.getTransitions().length === 0) {
             return [];
         }
@@ -135,14 +135,14 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
             .reduce((a, b) => [...a, ...b]);
     }
 
-    public registerToNodes(widgets: Array<EventTarget>): void {
+    public registerToNodes(widgets: ReadonlyArray<EventTarget>): void {
         widgets.forEach(w => {
             this.registeredNodes.add(w);
             this.onNewNodeRegistered(w);
         });
     }
 
-    protected unregisterFromNodes(widgets: Array<EventTarget>): void {
+    protected unregisterFromNodes(widgets: ReadonlyArray<EventTarget>): void {
         widgets.forEach(w => {
             this.registeredNodes.delete(w);
             this.onNodeUnregistered(w);

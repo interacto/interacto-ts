@@ -24,5 +24,5 @@ export interface TapData extends InteractionData {
     /**
      * @returns The list of touches data.
      */
-    getTapData(): Array<TouchData>;
+    getTapData(): ReadonlyArray<TouchData>;
 }

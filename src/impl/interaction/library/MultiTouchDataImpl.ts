@@ -29,7 +29,7 @@ export class MultiTouchDataImpl implements MultiTouchData {
         this.touchesData = new Map<number, SrcTgtTouchDataImpl>();
     }
 
-    public getTouchData(): Array<SrcTgtTouchData> {
+    public getTouchData(): ReadonlyArray<SrcTgtTouchData> {
         return [...this.touchesData.values()];
     }
 

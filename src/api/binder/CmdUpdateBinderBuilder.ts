@@ -33,7 +33,7 @@ export interface CmdUpdateBinderBuilder<C extends Command> extends CmdBinderBuil
 
     first(initCmdFct: (c: C) => void): CmdUpdateBinderBuilder<C>;
 
-    on(...widgets: Array<EventTarget>): CmdUpdateBinderBuilder<C>;
+    on(...widgets: ReadonlyArray<EventTarget>): CmdUpdateBinderBuilder<C>;
 
     onDynamic(node: Node): CmdUpdateBinderBuilder<C>;
 
@@ -41,7 +41,7 @@ export interface CmdUpdateBinderBuilder<C extends Command> extends CmdBinderBuil
 
     when(whenPredicate: () => boolean): CmdUpdateBinderBuilder<C>;
 
-    log(...level: Array<LogLevel>): CmdUpdateBinderBuilder<C>;
+    log(...level: ReadonlyArray<LogLevel>): CmdUpdateBinderBuilder<C>;
 
     stopImmediatePropagation(): CmdUpdateBinderBuilder<C>;
 

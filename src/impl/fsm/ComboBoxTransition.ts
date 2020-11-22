@@ -34,7 +34,7 @@ export class ComboBoxTransition extends TransitionBase<Event> {
         return event.target !== null && isComboBox(event.target);
     }
 
-    public getAcceptedEvents(): Array<EventType> {
+    public getAcceptedEvents(): ReadonlyArray<EventType> {
         return ["input"];
     }
 }

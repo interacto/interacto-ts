@@ -104,11 +104,6 @@ test("nb FSMs OK", () => {
     expect(fsm.getConccurFSMs()).toHaveLength(2);
 });
 
-test("returns copy FSMs", () => {
-    fsm.getConccurFSMs().length = 0;
-    expect(fsm.getConccurFSMs()).toHaveLength(2);
-});
-
 test("log OK", () => {
     jest.spyOn(fsm1, "log");
     jest.spyOn(fsm2, "log");

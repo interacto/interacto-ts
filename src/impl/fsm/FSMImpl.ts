@@ -94,7 +94,7 @@ export class FSMImpl implements FSM {
         this._inner = false;
         this.started = false;
         this.initState = new InitState(this, "init");
-        this.states = new Array<State>(this.initState);
+        this.states = [this.initState];
         this._startingState = this.initState;
         this._currentState = this.initState;
         this.currentStatePublisher = new Subject();
@@ -206,7 +206,7 @@ export class FSMImpl implements FSM {
      * The end of the FSM execution, the events still (eg keyPress) in process must be recycled to be reused in the FSM.
      */
     protected processRemainingEvents(): void {
-        const list: Array<Event> = [...this.eventsToProcess];
+        const list: ReadonlyArray<Event> = [...this.eventsToProcess];
 
         list.forEach(event => {
             removeAt(this.eventsToProcess, 0);
@@ -398,7 +398,7 @@ export class FSMImpl implements FSM {
         [...this.handlers].forEach(handler => handler.fsmCancels());
     }
 
-    public getStates(): Array<State> {
+    public getStates(): ReadonlyArray<State> {
         return [...this.states];
     }
 
@@ -410,7 +410,7 @@ export class FSMImpl implements FSM {
         this._startingState = state;
     }
 
-    public getEventsToProcess(): Array<Event> {
+    public getEventsToProcess(): ReadonlyArray<Event> {
         return [...this.eventsToProcess];
     }
 

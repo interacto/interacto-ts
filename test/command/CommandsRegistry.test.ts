@@ -109,7 +109,7 @@ test("testRemoveCommand", () => {
 
 test("add Command Cannot Add Because Exist", () => {
     const command = mock<Command>();
-    instance.getCommands().push(command);
+    instance.addCommand(command);
     instance.addCommand(command);
     expect(instance.getCommands()).toHaveLength(1);
 });
@@ -118,7 +118,7 @@ test("add Command Removes Command When Max Capacity", () => {
     const command = mock<Command>();
     const command2 = new StubCmd();
     instance.setSizeMax(1);
-    instance.getCommands().push(command2);
+    instance.addCommand(command2);
     instance.addCommand(command);
     expect(instance.getCommands()).toHaveLength(1);
     expect(instance.getCommands()[0]).toBe(command);

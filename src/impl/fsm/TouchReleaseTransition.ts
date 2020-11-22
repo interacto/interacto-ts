@@ -36,7 +36,7 @@ export class TouchReleaseTransition extends TransitionBase<TouchEvent> {
         return evt instanceof TouchEvent && isEventType(evt.type) && this.getAcceptedEvents().includes(evt.type);
     }
 
-    public getAcceptedEvents(): Array<EventType> {
+    public getAcceptedEvents(): ReadonlyArray<EventType> {
         return ["touchend"];
     }
 }

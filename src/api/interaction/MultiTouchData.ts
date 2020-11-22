@@ -22,5 +22,5 @@ export interface MultiTouchData extends InteractionData {
     /**
      * @returns The list of touch data.
      */
-    getTouchData(): Array<SrcTgtTouchData>;
+    getTouchData(): ReadonlyArray<SrcTgtTouchData>;
 }

@@ -29,7 +29,7 @@ export class TapDataImpl implements TapData {
         this.tapsData = new Array<TouchDataImpl>();
     }
 
-    public getTapData(): Array<TouchData> {
+    public getTapData(): ReadonlyArray<TouchData> {
         return [...this.tapsData];
     }
 

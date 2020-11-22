@@ -71,7 +71,7 @@ implements Binding<C, I, D> {
      * @param interaction - The user interaction of the binding.
      * @param widgets - The widgets on which the binding will operate.
      */
-    public constructor(continuousExecution: boolean, interaction: I, cmdProducer: (i?: D) => C, widgets: Array<EventTarget>) {
+    public constructor(continuousExecution: boolean, interaction: I, cmdProducer: (i?: D) => C, widgets: ReadonlyArray<EventTarget>) {
         this.asLogBinding = false;
         this.asLogCmd = false;
         this.continuousCmdExec = false;

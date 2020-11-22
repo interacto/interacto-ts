@@ -24,7 +24,7 @@ import {Interaction} from "../interaction/Interaction";
  * for defining the UI command and the user interaction to use.
  */
 export interface BaseBinder extends BaseBinderBuilder {
-    on(...widgets: Array<EventTarget>): BaseBinder;
+    on(...widgets: ReadonlyArray<EventTarget>): BaseBinder;
 
     onDynamic(node: Node): BaseBinder;
 
@@ -32,7 +32,7 @@ export interface BaseBinder extends BaseBinderBuilder {
 
     end(endFct: () => void): BaseBinder;
 
-    log(...level: Array<LogLevel>): BaseBinder;
+    log(...level: ReadonlyArray<LogLevel>): BaseBinder;
 
     /**
      * Defines how to create the UI command that will produce the binding.

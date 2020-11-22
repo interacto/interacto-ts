@@ -21,11 +21,11 @@ import {Interaction} from "../interaction/Interaction";
 export interface InteractionUpdateBinder<I extends Interaction<D>, D extends InteractionData>
     extends InteractionUpdateBinderBuilder<I, D> {
 
-    on(...widgets: Array<EventTarget>): InteractionUpdateBinder<I, D>;
+    on(...widgets: ReadonlyArray<EventTarget>): InteractionUpdateBinder<I, D>;
 
     onDynamic(node: Node): InteractionUpdateBinder<I, D>;
 
-    log(...level: Array<LogLevel>): InteractionUpdateBinder<I, D>;
+    log(...level: ReadonlyArray<LogLevel>): InteractionUpdateBinder<I, D>;
 
     when(whenPredicate: (i: D) => boolean): InteractionUpdateBinder<I, D>;
 

@@ -210,14 +210,14 @@ export class UndoCollector {
     /**
      * @returns The stack of saved undoable objects.
      */
-    public getUndo(): Array<Undoable> {
+    public getUndo(): ReadonlyArray<Undoable> {
         return this.undos;
     }
 
     /**
      * @returns The stack of saved redoable objects
      */
-    public getRedo(): Array<Undoable> {
+    public getRedo(): ReadonlyArray<Undoable> {
         return this.redos;
     }
 }

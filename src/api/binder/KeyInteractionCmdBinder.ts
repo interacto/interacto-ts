@@ -24,11 +24,11 @@ export interface KeyInteractionCmdBinder<C extends Command, I extends Interactio
 
     first(initCmdFct: (c: C, i: D) => void): KeyInteractionCmdBinder<C, I, D>;
 
-    on(...widgets: Array<EventTarget>): KeyInteractionCmdBinder<C, I, D>;
+    on(...widgets: ReadonlyArray<EventTarget>): KeyInteractionCmdBinder<C, I, D>;
 
     onDynamic(node: Node): KeyInteractionCmdBinder<C, I, D>;
 
-    log(...level: Array<LogLevel>): KeyInteractionCmdBinder<C, I, D>;
+    log(...level: ReadonlyArray<LogLevel>): KeyInteractionCmdBinder<C, I, D>;
 
     when(whenPredicate: (i: D) => boolean): KeyInteractionCmdBinder<C, I, D>;
 
@@ -40,7 +40,7 @@ export interface KeyInteractionCmdBinder<C extends Command, I extends Interactio
 
     end(onEnd: (c: C, i: D) => void): KeyInteractionCmdBinder<C, I, D>;
 
-    with(...codes: Array<string>): KeyInteractionCmdBinder<C, I, D>;
+    with(...codes: ReadonlyArray<string>): KeyInteractionCmdBinder<C, I, D>;
 
     stopImmediatePropagation(): KeyInteractionCmdBinder<C, I, D>;
 

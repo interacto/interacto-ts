@@ -34,7 +34,7 @@ export class ColorPickedTransition extends TransitionBase<Event> {
         return event.target !== null && isColorChoice(event.target);
     }
 
-    public getAcceptedEvents(): Array<EventType> {
+    public getAcceptedEvents(): ReadonlyArray<EventType> {
         return ["input"];
     }
 }

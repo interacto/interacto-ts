@@ -34,7 +34,7 @@ export interface Transition<E extends Event> {
     /**
      * @returns The set of events accepted by the transition.
      */
-    getAcceptedEvents(): Array<EventType>;
+    getAcceptedEvents(): ReadonlyArray<EventType>;
 
     getTarget(): InputState;
 

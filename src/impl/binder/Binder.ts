@@ -36,9 +36,9 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
 
     protected cmdProducer?: (i: D) => C;
 
-    protected widgets: Array<EventTarget>;
+    protected widgets: ReadonlyArray<EventTarget>;
 
-    protected dynamicNodes: Array<Node>;
+    protected dynamicNodes: ReadonlyArray<Node>;
 
     protected interactionSupplier?: () => I;
 
@@ -50,7 +50,7 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
 
     protected onEnd?: (c: C, i: D) => void;
 
-    protected logLevels: Array<LogLevel>;
+    protected logLevels: ReadonlyArray<LogLevel>;
 
     protected stopPropaNow: boolean;
 
@@ -60,9 +60,9 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
 
 
     protected constructor(observer?: BindingsObserver, initCmd?: (c: C, i: D) => void, checkConditions?: (i: D) => boolean,
-                          cmdProducer?: (i: D) => C, widgets?: Array<EventTarget>, dynamicNodes?: Array<Node>,
+                          cmdProducer?: (i: D) => C, widgets?: ReadonlyArray<EventTarget>, dynamicNodes?: ReadonlyArray<Node>,
                           interactionSupplier?: () => I, onEnd?: (c: C, i: D) => void,
-                          logLevels?: Array<LogLevel>, hadNoEffectFct?: (c: C, i: D) => void, hadEffectsFct?: (c: C, i: D) => void,
+                          logLevels?: ReadonlyArray<LogLevel>, hadNoEffectFct?: (c: C, i: D) => void, hadEffectsFct?: (c: C, i: D) => void,
                           cannotExecFct?: (c: C, i: D) => void, stopProga?: boolean, prevent?: boolean) {
         this.initCmd = initCmd;
         this.checkConditions = checkConditions;
@@ -82,8 +82,8 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
 
     protected abstract duplicate(): Binder<C, I, D>;
 
-    public on(...widget: Array<EventTarget>): Binder<C, I, D> {
-        const w: Array<EventTarget> = this.widgets.length === 0 ? widget : [...this.widgets].concat(widget);
+    public on(...widget: ReadonlyArray<EventTarget>): Binder<C, I, D> {
+        const w: ReadonlyArray<EventTarget> = this.widgets.length === 0 ? widget : [...this.widgets].concat(widget);
         const dup = this.duplicate();
         dup.widgets = w;
         return dup;
@@ -131,7 +131,7 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
         return dup;
     }
 
-    public log(...level: Array<LogLevel>): Binder<C, I, D> {
+    public log(...level: ReadonlyArray<LogLevel>): Binder<C, I, D> {
         const dup = this.duplicate();
         dup.logLevels = [...level];
         return dup;

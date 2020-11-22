@@ -29,13 +29,13 @@ export interface CmdBinder<C extends Command> extends CmdBinderBuilder<C> {
 
     end(onEnd: (c: C) => void): CmdBinder<C>;
 
-    on(...widgets: Array<EventTarget>): CmdBinder<C>;
+    on(...widgets: ReadonlyArray<EventTarget>): CmdBinder<C>;
 
     onDynamic(node: Node): CmdBinder<C>;
 
     when(whenPredicate: () => boolean): CmdBinder<C>;
 
-    log(...level: Array<LogLevel>): CmdBinder<C>;
+    log(...level: ReadonlyArray<LogLevel>): CmdBinder<C>;
 
     /**
      * Defines how to create the user interaction that the binding will use to create UI commands.

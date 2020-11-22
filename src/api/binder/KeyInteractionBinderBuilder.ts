@@ -23,15 +23,15 @@ export interface KeyInteractionBinderBuilder<I extends Interaction<D>, D extends
 
     when(whenPredicate: (i: D) => boolean): KeyInteractionBinderBuilder<I, D>;
 
-    on(...widgets: Array<EventTarget>): KeyInteractionBinderBuilder<I, D>;
+    on(...widgets: ReadonlyArray<EventTarget>): KeyInteractionBinderBuilder<I, D>;
 
     onDynamic(node: Node): KeyInteractionBinderBuilder<I, D>;
 
-    log(...level: Array<LogLevel>): KeyInteractionBinderBuilder<I, D>;
+    log(...level: ReadonlyArray<LogLevel>): KeyInteractionBinderBuilder<I, D>;
 
     end(endFct: () => void): KeyInteractionBinderBuilder<I, D>;
 
-    with(...codes: Array<string>): KeyInteractionBinderBuilder<I, D>;
+    with(...codes: ReadonlyArray<string>): KeyInteractionBinderBuilder<I, D>;
 
     stopImmediatePropagation(): KeyInteractionBinderBuilder<I, D>;
 

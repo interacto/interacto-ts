@@ -33,7 +33,7 @@ export class ClickTransition extends TransitionBase<MouseEvent> {
         return event instanceof MouseEvent && isEventType(event.type) && this.getAcceptedEvents().includes(event.type);
     }
 
-    public getAcceptedEvents(): Array<EventType> {
+    public getAcceptedEvents(): ReadonlyArray<EventType> {
         return ["click", "auxclick"];
     }
 }

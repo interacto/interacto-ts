@@ -24,7 +24,7 @@ export interface BaseBinderBuilder {
      * @param widgets - The list of the widgets involved in the bindings.
      * @returns A clone of the current builder to chain the building configuration.
      */
-    on(...widgets: Array<EventTarget>): BaseBinderBuilder;
+    on(...widgets: ReadonlyArray<EventTarget>): BaseBinderBuilder;
 
     /**
      * Specifies the node which children will be observed by the binding.
@@ -56,7 +56,7 @@ export interface BaseBinderBuilder {
      * @param level - The logging level to use.
      * @returns A clone of the current builder to chain the building configuration.
      */
-    log(...level: Array<LogLevel>): BaseBinderBuilder;
+    log(...level: ReadonlyArray<LogLevel>): BaseBinderBuilder;
 
     /**
      * If called, all the events the interaction will process will be consumed and

@@ -19,5 +19,5 @@ export interface KeyBinderBuilder {
      * @param codes - The key codes to match.
      * @returns The builder.
      */
-    with(...codes: Array<string>): KeyBinderBuilder;
+    with(...codes: ReadonlyArray<string>): KeyBinderBuilder;
 }

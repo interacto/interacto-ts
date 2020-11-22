@@ -65,7 +65,7 @@ export interface Interaction<D extends InteractionData> {
      */
     log(log: boolean): void;
 
-    registerToNodes(widgets: Array<EventTarget>): void;
+    registerToNodes(widgets: ReadonlyArray<EventTarget>): void;
 
     /**
      * Permits to listen any change in the content (ie children) of the given node.

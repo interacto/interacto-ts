@@ -36,7 +36,7 @@ export interface OutputState extends State {
     /**
      * @returns The list of outgoing transitions of the state.
      */
-    getTransitions(): Array<Transition<Event>>;
+    getTransitions(): ReadonlyArray<Transition<Event>>;
 
     /**
      * Adds the given transitions to the list of outgoing transitions of the state.

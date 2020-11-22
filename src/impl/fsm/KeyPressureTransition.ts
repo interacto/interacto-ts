@@ -33,7 +33,7 @@ export class KeyPressureTransition extends TransitionBase<KeyboardEvent> {
         return isKeyDownEvent(event);
     }
 
-    public getAcceptedEvents(): Array<EventType> {
+    public getAcceptedEvents(): ReadonlyArray<EventType> {
         return ["keydown"];
     }
 }

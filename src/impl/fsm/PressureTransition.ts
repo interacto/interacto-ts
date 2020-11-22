@@ -34,7 +34,7 @@ export class PressureTransition extends TransitionBase<MouseEvent> {
         return isMouseDownEvent(event);
     }
 
-    public getAcceptedEvents(): Array<EventType> {
+    public getAcceptedEvents(): ReadonlyArray<EventType> {
         return ["mousedown"];
     }
 }

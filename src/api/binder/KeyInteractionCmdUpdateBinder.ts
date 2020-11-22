@@ -23,7 +23,7 @@ import {Interaction} from "../interaction/Interaction";
 export interface KeyInteractionCmdUpdateBinder<C extends Command, I extends Interaction<D>, D extends InteractionData>
     extends KeyInteractionBinderBuilder<I, D>, InteractionUpdateBinder<I, D> {
 
-    with(...codes: Array<string>): KeyInteractionCmdUpdateBinder<C, I, D>;
+    with(...codes: ReadonlyArray<string>): KeyInteractionCmdUpdateBinder<C, I, D>;
 
     then(update: ((c: C, i: D) => void) | ((c: C) => void)): KeyInteractionCmdUpdateBinder<C, I, D>;
 
@@ -35,11 +35,11 @@ export interface KeyInteractionCmdUpdateBinder<C extends Command, I extends Inte
 
     first(initCmdFct: (c: C, i: D) => void): KeyInteractionCmdUpdateBinder<C, I, D>;
 
-    on(...widgets: Array<EventTarget>): KeyInteractionCmdUpdateBinder<C, I, D>;
+    on(...widgets: ReadonlyArray<EventTarget>): KeyInteractionCmdUpdateBinder<C, I, D>;
 
     onDynamic(node: Node): KeyInteractionCmdUpdateBinder<C, I, D>;
 
-    log(...level: Array<LogLevel>): KeyInteractionCmdUpdateBinder<C, I, D>;
+    log(...level: ReadonlyArray<LogLevel>): KeyInteractionCmdUpdateBinder<C, I, D>;
 
     cancel(cancel: (i: D) => void): KeyInteractionCmdUpdateBinder<C, I, D>;
 

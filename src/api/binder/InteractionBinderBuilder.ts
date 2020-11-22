@@ -27,13 +27,13 @@ export interface InteractionBinderBuilder<I extends Interaction<D>, D extends In
      */
     when(whenPredicate: (i: D) => boolean): InteractionBinderBuilder<I, D>;
 
-    on(...widgets: Array<EventTarget>): InteractionBinderBuilder<I, D>;
+    on(...widgets: ReadonlyArray<EventTarget>): InteractionBinderBuilder<I, D>;
 
     onDynamic(node: Node): InteractionBinderBuilder<I, D>;
 
     end(endFct: () => void): InteractionBinderBuilder<I, D>;
 
-    log(...level: Array<LogLevel>): InteractionBinderBuilder<I, D>;
+    log(...level: ReadonlyArray<LogLevel>): InteractionBinderBuilder<I, D>;
 
     stopImmediatePropagation(): InteractionBinderBuilder<I, D>;
 

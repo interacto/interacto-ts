@@ -38,11 +38,11 @@ export interface InteractionCmdUpdateBinder<C extends Command, I extends Interac
 
     first(initCmdFct: (c: C, i: D) => void): InteractionCmdUpdateBinder<C, I, D>;
 
-    on(...widgets: Array<EventTarget>): InteractionCmdUpdateBinder<C, I, D>;
+    on(...widgets: ReadonlyArray<EventTarget>): InteractionCmdUpdateBinder<C, I, D>;
 
     onDynamic(node: Node): InteractionCmdUpdateBinder<C, I, D>;
 
-    log(...level: Array<LogLevel>): InteractionCmdUpdateBinder<C, I, D>;
+    log(...level: ReadonlyArray<LogLevel>): InteractionCmdUpdateBinder<C, I, D>;
 
     cancel(cancel: (i: D) => void): InteractionCmdUpdateBinder<C, I, D>;
 

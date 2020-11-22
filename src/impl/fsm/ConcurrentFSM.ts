@@ -20,9 +20,9 @@ import {FSMImpl} from "./FSMImpl";
  * A concurrent FSM: an FSM that contains multiple FSMs that run concurrently.
  */
 export class ConcurrentFSM<F extends FSM> extends FSMImpl {
-    private readonly conccurFSMs: Array<F>;
+    private readonly conccurFSMs: ReadonlyArray<F>;
 
-    public constructor(fsms: Array<F>) {
+    public constructor(fsms: ReadonlyArray<F>) {
         super();
         if (fsms.length < 2) {
             throw new Error(`Requires more that 1 FSM: ${String(fsms)}`);
@@ -51,7 +51,7 @@ export class ConcurrentFSM<F extends FSM> extends FSMImpl {
     /**
      * @returns All the FSMs in an copy of the original array.
      */
-    public getConccurFSMs(): Array<F> {
+    public getConccurFSMs(): ReadonlyArray<F> {
         return [...this.conccurFSMs];
     }
 

@@ -33,7 +33,7 @@ export class ScrollTransition extends TransitionBase<UIEvent> {
         return isScrollEvent(event);
     }
 
-    public getAcceptedEvents(): Array<EventType> {
+    public getAcceptedEvents(): ReadonlyArray<EventType> {
         return ["scroll"];
     }
 }

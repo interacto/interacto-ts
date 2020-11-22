@@ -34,7 +34,7 @@ export class HyperLinkTransition extends TransitionBase<Event> {
         return event.target !== null && isHyperLink(event.target);
     }
 
-    public getAcceptedEvents(): Array<EventType> {
+    public getAcceptedEvents(): ReadonlyArray<EventType> {
         return ["click", "auxclick"];
     }
 }
