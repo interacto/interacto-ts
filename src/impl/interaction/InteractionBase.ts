@@ -32,9 +32,10 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
 
     protected asLog: boolean;
 
+    /**
+     * The current nodes that the interaction works on
+     */
     protected readonly registeredNodes: Set<EventTarget>;
-
-    protected readonly additionalNodes: Array<Node>;
 
     /** The current list of mutation observers. Used for listening changes in node lists. */
     protected readonly mutationObservers: Array<MutationObserver>;
@@ -78,7 +79,7 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
         this.activated = true;
         this.asLog = false;
         this.registeredNodes = new Set<EventTarget>();
-        this.additionalNodes = [];
+        // this.additionalNodes = [];
         this.mutationObservers = [];
     }
 
@@ -106,13 +107,13 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
             eventsToRemove.forEach(type => this.unregisterEventToNode(type, n));
             eventsToAdd.forEach(type => this.registerEventToNode(type, n));
         });
-        this.additionalNodes.forEach(n => {
-            n.childNodes.forEach(child => {
-                // update the content of the additionalNode
-                eventsToRemove.forEach(type => this.unregisterEventToNode(type, child));
-                eventsToAdd.forEach(type => this.registerEventToNode(type, child));
-            });
-        });
+        // this.additionalNodes.forEach(n => {
+        //     n.childNodes.forEach(child => {
+        //         // update the content of the additionalNode
+        //         eventsToRemove.forEach(type => this.unregisterEventToNode(type, child));
+        //         eventsToAdd.forEach(type => this.registerEventToNode(type, child));
+        //     });
+        // });
     }
 
     protected getCurrentAcceptedEvents(state: OutputState): ReadonlyArray<EventType> {
@@ -338,8 +339,6 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
         this.disposable.unsubscribe();
         this.registeredNodes.forEach(n => this.onNodeUnregistered(n));
         this.registeredNodes.clear();
-        this.additionalNodes.forEach(n => this.onNodeUnregistered(n));
-        this.additionalNodes.length = 0;
         this.mutationObservers.forEach(m => m.disconnect());
         this.mutationObservers.length = 0;
         this.setActivated(false);
