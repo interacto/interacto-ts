@@ -27,7 +27,7 @@ export interface PointsData extends InteractionData {
     /**
      * @returns The current position of the pointing device.
      */
-    getCurrentPosition(): [number, number] | undefined;
+    getCurrentPosition(): readonly [number, number] | undefined;
 
     /**
      * @returns The last button used to produce the points.

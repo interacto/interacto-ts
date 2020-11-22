@@ -18,7 +18,7 @@ import {PointData} from "../../../api/interaction/PointData";
 
 export class PointsDataImpl extends PointDataImpl implements PointsData {
     /** The current position of the pointing device. */
-    protected currentPosition: [number, number] | undefined;
+    protected currentPosition: readonly [number, number] | undefined;
 
     protected readonly pointsData: Array<PointData>;
 
@@ -31,11 +31,11 @@ export class PointsDataImpl extends PointDataImpl implements PointsData {
         return [...this.pointsData];
     }
 
-    public getCurrentPosition(): [number, number] | undefined {
+    public getCurrentPosition(): readonly [number, number] | undefined {
         return this.currentPosition;
     }
 
-    public setCurrentPosition(currentPosition: [number, number]): void {
+    public setCurrentPosition(currentPosition: readonly [number, number]): void {
         this.currentPosition = currentPosition;
     }
 
