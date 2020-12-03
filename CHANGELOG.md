@@ -1,3 +1,14 @@
+# 5.3.0
+
+* feat(binding): can set the timeout value of textinput binder
+* fix(interaction): n-click interaction only worked on time
+* fix(tsdoc): add typedoc eslinter and doc fixed
+
+* improv(code): should use ReadonlyArray when possible
+* improv(interaction): should use readonly tuples when possible
+* clean(interaction): useless attribute removed
+* update(config): keywords added in package.json
+
 # 5.2.0
 
 * change(binding): no reason for the WidgetBinding class to be abstract
