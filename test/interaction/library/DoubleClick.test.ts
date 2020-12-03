@@ -61,6 +61,18 @@ test("check data of the interaction.", () => {
     expect(obj).toBe(canvas);
 });
 
+test("that two double clicks ok", () => {
+    interaction.registerToNodes([canvas]);
+    canvas.click();
+    canvas.click();
+    jest.runAllTimers();
+    canvas.click();
+    canvas.click();
+    expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
+    expect(handler.fsmCancels).not.toHaveBeenCalled();
+    expect(handler.fsmStops).toHaveBeenCalledTimes(2);
+});
+
 test("move between clicks cancels the double click", () => {
     interaction.registerToNodes([canvas]);
     canvas.click();

@@ -47,6 +47,12 @@ export class ClicksFSM extends FSMImpl {
         this.nbClicks = nbClicks;
     }
 
+
+    public reinit(): void {
+        super.reinit();
+        this.countClicks = 0;
+    }
+
     public buildFSM(dataHandler?: ClicksFSMHandler): void {
         if (this.states.length > 1) {
             return;

@@ -90,6 +90,21 @@ test("cannot build the interaction with 1 click", () => {
             expect(handler.fsmCancels).not.toHaveBeenCalled();
         });
 
+        test(`that ${nb} clicks is OK two times`, () => {
+            [...Array(nb).keys()].forEach(_ => {
+                interaction.processEvent(createMouseEvent("click", canvas, 15, 21, 160, 21, 3));
+            });
+            jest.runAllTimers();
+            [...Array(nb).keys()].forEach(_ => {
+                interaction.processEvent(createMouseEvent("click", canvas, 15, 21, 160, 21, 3));
+            });
+            jest.runAllTimers();
+
+            expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
+            expect(handler.fsmCancels).not.toHaveBeenCalled();
+            expect(handler.fsmStops).toHaveBeenCalledTimes(2);
+        });
+
         test("that data first click ok", () => {
             interaction.processEvent(createMouseEvent("click", canvas, 125, 21, 140, 121, 1));
 
