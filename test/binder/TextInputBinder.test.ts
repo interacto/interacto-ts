@@ -74,6 +74,28 @@ test("type text create command", () => {
     expect(textonUpdate).toStrictEqual(["f", "fo", "foo", "foo"]);
 });
 
+
+test("type text create command with a delay of 2 seconds", () => {
+    // eslint-disable-next-line jest/valid-expect-in-promise
+    binding = textInputBinder(2)
+        .toProduce(() => cmd)
+        .on(txt1)
+        .bind();
+    disposable = binding.produces().subscribe(c => producedCmds.push(c));
+
+    txt1.value = "f";
+    txt1.dispatchEvent(new InputEvent("input"));
+    txt1.value = "fo";
+    txt1.dispatchEvent(new InputEvent("input"));
+    txt1.value = "foo";
+    txt1.dispatchEvent(new InputEvent("input"));
+    txt1.value = "foo";
+    txt1.dispatchEvent(new InputEvent("input"));
+    jest.runOnlyPendingTimers();
+    expect(producedCmds).toHaveLength(1);
+    expect(producedCmds[0]).toBe(cmd);
+});
+
 test("type text exec several times the command", () => {
     const textonUpdate = Array<string>();
 

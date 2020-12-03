@@ -107,10 +107,17 @@ export function hyperlinkBinder(): InteractionBinder<Interaction<WidgetData<HTML
         .usingInteraction<HyperLinkClicked, WidgetData<HTMLAnchorElement>>(() => new HyperLinkClicked());
 }
 
-export function textInputBinder(): InteractionUpdateBinder<Interaction<WidgetData<HTMLInputElement | HTMLTextAreaElement>>,
+/**
+ * Creates a binding that uses a text interaction. This binder takes as argument a timeout value:
+ * using this text writing interaction, a user can write a sequence of letters and then stops for
+ * more than x seconds (x is the value of timeout). After this delay the binding executes the command.
+ * This is a mainstream optimisation that many text processing tools implement to limit the number of editing actions.
+ * @param timeout - The timeout after which the interaction stops and the command produced.
+ */
+export function textInputBinder(timeout?: number): InteractionUpdateBinder<Interaction<WidgetData<HTMLInputElement | HTMLTextAreaElement>>,
 WidgetData<HTMLInputElement | HTMLTextAreaElement>> {
     return new UpdateBinder(observer)
-        .usingInteraction<TextInputChanged, WidgetData<HTMLInputElement | HTMLTextAreaElement>>(() => new TextInputChanged());
+        .usingInteraction<TextInputChanged, WidgetData<HTMLInputElement | HTMLTextAreaElement>>(() => new TextInputChanged(timeout));
 }
 
 /**
