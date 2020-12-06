@@ -21,6 +21,7 @@ import {isKeyEvent, isMouseEvent, isTouchEvent} from "../fsm/Events";
 import {Subscription} from "rxjs";
 import {Interaction} from "../../api/interaction/Interaction";
 import {EventType} from "../../api/fsm/EventType";
+import {isFlushable} from "./library/Flushable";
 
 /**
  * The base implementation of a user interaction.
@@ -86,7 +87,9 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
     protected abstract createDataObject(): D;
 
     public reinitData(): void {
-        this.data.flush();
+        if (isFlushable(this.data)) {
+            this.data.flush();
+        }
     }
 
     public getData(): D {

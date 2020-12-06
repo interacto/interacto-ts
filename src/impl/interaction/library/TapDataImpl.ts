@@ -15,11 +15,12 @@
 import {TouchData} from "../../../api/interaction/TouchData";
 import {TapData} from "../../../api/interaction/TapData";
 import {TouchDataImpl} from "./TouchDataImpl";
+import {Flushable} from "./Flushable";
 
 /**
  * Tapping interaction data implementation
  */
-export class TapDataImpl implements TapData {
+export class TapDataImpl implements TapData, Flushable {
     private readonly tapsData: Array<TouchDataImpl>;
 
     /**

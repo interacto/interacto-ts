@@ -13,11 +13,12 @@
  */
 
 import {PointData} from "../../../api/interaction/PointData";
+import {Flushable} from "./Flushable";
 
 /**
  * Single point interaction data implementation with write accesses.
  */
-export class PointDataImpl implements PointData {
+export class PointDataImpl implements PointData, Flushable {
     /** The pressed X-local position. */
     protected srcClientX?: number;
 

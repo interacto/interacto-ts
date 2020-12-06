@@ -26,6 +26,7 @@ import {SrcTgtPointsData} from "../../../api/interaction/SrcTgtPointsData";
 import {InteractionBase} from "../InteractionBase";
 import {PointDataImpl} from "./PointDataImpl";
 import {EscapeKeyPressureTransition} from "../../fsm/EscapeKeyPressureTransition";
+import {Flushable} from "./Flushable";
 
 export class DragLockFSM extends FSMImpl {
     public readonly firstDbleClick: DoubleClickFSM;
@@ -153,7 +154,7 @@ export class DragLock extends InteractionBase<SrcTgtPointsData, DragLockFSM> {
         this.sndClick.reinitData();
     }
 
-    public createDataObject(): SrcTgtPointsData {
+    public createDataObject(): SrcTgtPointsData & Flushable {
         return {
             "getTgtObject": (): EventTarget | undefined => (this.sndClick.getData().getButton() === undefined
                 ? this.firstClick.getData().getSrcObject()
@@ -194,8 +195,8 @@ export class DragLock extends InteractionBase<SrcTgtPointsData, DragLockFSM> {
             "getCurrentTarget": (): EventTarget | undefined => this.firstClick.getData().getCurrentTarget(),
 
             "flush": (): void => {
-                this.firstClick.getData().flush();
-                this.sndClick.getData().flush();
+                (this.firstClick.getData() as unknown as Flushable).flush();
+                (this.sndClick.getData() as unknown as Flushable).flush();
             }
         };
     }

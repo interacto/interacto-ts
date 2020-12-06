@@ -12,21 +12,12 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {WidgetData} from "../../../api/interaction/WidgetData";
-import {Flushable} from "./Flushable";
+export interface Flushable {
+    flush(): void;
+}
 
-export class WidgetDataImpl<T> implements WidgetData<T>, Flushable {
-    private widget?: T;
-
-    public getWidget(): T | undefined {
-        return this.widget;
-    }
-
-    public setWidget(widget?: T): void {
-        this.widget = widget;
-    }
-
-    public flush(): void {
-        this.widget = undefined;
-    }
+export function isFlushable(o: unknown): o is Flushable {
+    const flushable = o as Flushable;
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    return flushable.flush !== undefined;
 }

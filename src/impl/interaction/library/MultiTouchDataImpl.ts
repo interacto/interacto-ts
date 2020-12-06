@@ -15,11 +15,12 @@
 import {SrcTgtTouchData} from "../../../api/interaction/SrcTgtTouchData";
 import {MultiTouchData} from "../../../api/interaction/MultiTouchData";
 import {SrcTgtTouchDataImpl} from "./SrcTgtTouchDataImpl";
+import {Flushable} from "./Flushable";
 
 /**
  * Multi-touch interaction data implementation
  */
-export class MultiTouchDataImpl implements MultiTouchData {
+export class MultiTouchDataImpl implements MultiTouchData, Flushable {
     private readonly touchesData: Map<number, SrcTgtTouchDataImpl>;
 
     /**

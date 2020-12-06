@@ -13,8 +13,9 @@
  */
 
 import {KeyData} from "../../../api/interaction/KeyData";
+import {Flushable} from "./Flushable";
 
-export class KeyDataImpl implements KeyData {
+export class KeyDataImpl implements KeyData, Flushable {
     /**
      * The key involve in the interaction
      */

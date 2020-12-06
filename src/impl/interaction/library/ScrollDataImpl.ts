@@ -13,11 +13,12 @@
  */
 
 import {ScrollData} from "../../../api/interaction/ScrollData";
+import {Flushable} from "./Flushable";
 
 /**
  * Scrolling interaction data implementation with write access.
  */
-export class ScrollDataImpl implements ScrollData {
+export class ScrollDataImpl implements ScrollData, Flushable {
     protected scrolledNode?: EventTarget;
 
     protected px?: number;
