@@ -21,7 +21,7 @@ import {Interaction} from "../interaction/Interaction";
 export interface InteractionUpdateBinder<I extends Interaction<D>, D extends InteractionData>
     extends InteractionUpdateBinderBuilder<I, D> {
 
-    on(...widgets: ReadonlyArray<EventTarget>): InteractionUpdateBinder<I, D>;
+    on(widget: EventTarget, ...widgets: ReadonlyArray<EventTarget>): InteractionUpdateBinder<I, D>;
 
     onDynamic(node: Node): InteractionUpdateBinder<I, D>;
 

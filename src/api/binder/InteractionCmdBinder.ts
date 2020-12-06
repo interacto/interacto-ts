@@ -44,7 +44,7 @@ export interface InteractionCmdBinder<C extends Command, I extends Interaction<D
     */
     end(onEnd: (c: C, i: D) => void): InteractionCmdBinder<C, I, D>;
 
-    on(...widgets: ReadonlyArray<EventTarget>): InteractionCmdBinder<C, I, D>;
+    on(widget: EventTarget, ...widgets: ReadonlyArray<EventTarget>): InteractionCmdBinder<C, I, D>;
 
     onDynamic(node: Node): InteractionCmdBinder<C, I, D>;
 

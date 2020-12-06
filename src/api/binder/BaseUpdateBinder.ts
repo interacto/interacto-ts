@@ -25,7 +25,7 @@ import {Interaction} from "../interaction/Interaction";
  * for defining the UI command and the user interaction to use.
  */
 export interface BaseUpdateBinder extends BaseUpdateBinderBuilder, BaseBinder {
-    on(...widgets: ReadonlyArray<EventTarget>): BaseUpdateBinder;
+    on(widget: EventTarget, ...widgets: ReadonlyArray<EventTarget>): BaseUpdateBinder;
 
     onDynamic(node: Node): BaseUpdateBinder;
 

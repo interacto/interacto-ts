@@ -29,7 +29,7 @@ export interface CmdUpdateBinder<C extends Command> extends CmdUpdateBinderBuild
 
     first(initCmdFct: (c: C) => void): CmdUpdateBinder<C>;
 
-    on(...widgets: ReadonlyArray<EventTarget>): CmdUpdateBinder<C>;
+    on(widget: EventTarget, ...widgets: ReadonlyArray<EventTarget>): CmdUpdateBinder<C>;
 
     onDynamic(node: Node): CmdUpdateBinder<C>;
 

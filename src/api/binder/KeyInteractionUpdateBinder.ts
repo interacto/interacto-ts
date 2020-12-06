@@ -23,7 +23,7 @@ import {Interaction} from "../interaction/Interaction";
 export interface KeyInteractionUpdateBinder<I extends Interaction<D>, D extends InteractionData>
     extends InteractionUpdateBinderBuilder<I, D>, KeyBinderBuilder {
 
-    on(...widgets: ReadonlyArray<EventTarget>): KeyInteractionUpdateBinder<I, D>;
+    on(widget: EventTarget, ...widgets: ReadonlyArray<EventTarget>): KeyInteractionUpdateBinder<I, D>;
 
     onDynamic(node: Node): KeyInteractionUpdateBinder<I, D>;
 

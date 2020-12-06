@@ -21,10 +21,11 @@ export interface BaseBinderBuilder {
      * Specifies the widgets on which the binding must operate.
      * When a widget is added to this list, the added widget is binded to this binding.
      * When widget is removed from this list, this widget is unbinded from this binding.
+     * @param widget - The mandatory first widget
      * @param widgets - The list of the widgets involved in the bindings.
      * @returns A clone of the current builder to chain the building configuration.
      */
-    on(...widgets: ReadonlyArray<EventTarget>): BaseBinderBuilder;
+    on(widget: EventTarget, ...widgets: ReadonlyArray<EventTarget>): BaseBinderBuilder;
 
     /**
      * Specifies the node which children will be observed by the binding.

@@ -25,7 +25,7 @@ export interface InteractionBinder<I extends Interaction<D>, D extends Interacti
 
     when(whenPredicate: (i: D) => boolean): InteractionBinder<I, D>;
 
-    on(...widgets: ReadonlyArray<EventTarget>): InteractionBinder<I, D>;
+    on(widget: EventTarget, ...widgets: ReadonlyArray<EventTarget>): InteractionBinder<I, D>;
 
     onDynamic(node: Node): InteractionBinder<I, D>;
 
