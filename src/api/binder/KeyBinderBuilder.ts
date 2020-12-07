@@ -17,7 +17,7 @@ export interface KeyBinderBuilder {
      * Defines key code the binding will check. On a key interaction, the typed keys will be check against
      * the given key code. The set of typed codes must matches the given key codes.
      * @param codes - The key codes to match.
-     * @returns The builder.
+     * @returns A clone of the current builder to chain the building configuration.
      */
     with(...codes: ReadonlyArray<string>): KeyBinderBuilder;
 }

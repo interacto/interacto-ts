@@ -19,9 +19,8 @@ import {LogLevel} from "../logging/LogLevel";
 import {Interaction} from "../interaction/Interaction";
 
 /**
- * The binding builder API already knows the type of UI command
- * the bindings will produce, with routines
- * for defining the UI command and the user interaction to use.
+ * The binder API that already knows the type of UI command
+ * the bindings will produce.
  * @typeParam C - The type of the produced UI Commands
  */
 export interface CmdBinder<C extends Command> extends CmdBinderBuilder<C> {

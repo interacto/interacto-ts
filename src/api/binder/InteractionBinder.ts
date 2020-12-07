@@ -19,7 +19,11 @@ import {Command} from "../command/Command";
 import {InteractionCmdBinder} from "./InteractionCmdBinder";
 import {Interaction} from "../interaction/Interaction";
 
-
+/**
+ * The binder API that already knows the type of user interaction the bindings will use.
+ * @typeParam I - The type of the user interaction
+ * @typeParam D - The type of the interaction data of the user interaction
+ */
 export interface InteractionBinder<I extends Interaction<D>, D extends InteractionData>
     extends InteractionBinderBuilder<I, D> {
 

@@ -26,7 +26,7 @@ export interface CmdBinderBuilder<C extends Command> extends BaseBinderBuilder {
      * Each time the interaction starts, an instance of the command is created and configured by the given callback.
      * @param initCmdFct - The callback method that initialises the command.
      * This callback takes as arguments the command to configure.
-     * @returns The builder to chain the building configuration.
+     * @returns A clone of the current builder to chain the building configuration.
      */
     first(initCmdFct: (c: C) => void): CmdBinderBuilder<C>;
 

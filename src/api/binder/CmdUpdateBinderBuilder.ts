@@ -16,12 +16,17 @@ import {CmdBinderBuilder} from "./CmdBinderBuilder";
 import {BaseUpdateBinderBuilder} from "./BaseUpdateBinderBuilder";
 import {LogLevel} from "../logging/LogLevel";
 
+/**
+ * The binding builder API already knows the type of UI command
+ * the bindings will produce. Routines related to interactions that can be updated are provided (then).
+ * @typeParam C - The type of the produced UI Commands
+ */
 export interface CmdUpdateBinderBuilder<C extends Command> extends CmdBinderBuilder<C>, BaseUpdateBinderBuilder {
     /**
      * Specifies the update of the command on interaction updates.
      * @param update - The callback method that updates the command.
      * This callback takes as arguments the command to update.
-     * @returns The builder to chain the building configuration.
+     * @returns A clone of the current builder to chain the building configuration.
      */
     then(update: (c: C) => void): CmdUpdateBinderBuilder<C>;
 

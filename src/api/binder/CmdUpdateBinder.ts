@@ -18,6 +18,11 @@ import {InteractionData} from "../interaction/InteractionData";
 import {InteractionCmdUpdateBinder} from "./InteractionCmdUpdateBinder";
 import {Interaction} from "../interaction/Interaction";
 
+/**
+ * The binder API that already knows the type of UI command
+ * the bindings will produce. Routines related to interactions that can be updated are provided (then).
+ * @typeParam C - The type of the produced UI Commands
+ */
 export interface CmdUpdateBinder<C extends Command> extends CmdUpdateBinderBuilder<C> {
     then(update: (c: C) => void): CmdUpdateBinder<C>;
 

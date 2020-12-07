@@ -61,13 +61,14 @@ export interface BaseBinderBuilder {
 
     /**
      * If called, all the events the interaction will process will be consumed and
-     * not progagated to next listeners.
+     * not propagated to next listeners.
      * @returns A clone of the current builder to chain the building configuration.
      */
     stopImmediatePropagation(): BaseBinderBuilder;
 
     /**
      * The default behavior associated to the event will be ignored.
+     * @returns A clone of the current builder to chain the building configuration.
      */
     preventDefault(): BaseBinderBuilder;
 }
