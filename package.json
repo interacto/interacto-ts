@@ -62,7 +62,7 @@
     "lint": "eslint src test --ext .ts",
     "lint-fix": "eslint src test --ext .ts --fix",
     "coverage": "jest --coverage --collectCoverageFrom=src*/**/*.ts",
-    "doc": "typedoc --out docs",
+    "doc": "typedoc --mode file --theme minimal --out docs",
     "test-publish": "npm pack"
   },
   "dependencies": {
