@@ -19,13 +19,14 @@ import {KeyInteractionCmdUpdateBinder} from "./KeyInteractionCmdUpdateBinder";
 import {InteractionUpdateBinderBuilder} from "./InteractionUpdateBinderBuilder";
 import {KeyBinderBuilder} from "./KeyBinderBuilder";
 import {Interaction} from "../interaction/Interaction";
+import {NodeWidget, Widget} from "./BaseBinderBuilder";
 
 export interface KeyInteractionUpdateBinder<I extends Interaction<D>, D extends InteractionData>
     extends InteractionUpdateBinderBuilder<I, D>, KeyBinderBuilder {
 
-    on(widget: EventTarget, ...widgets: ReadonlyArray<EventTarget>): KeyInteractionUpdateBinder<I, D>;
+    on(widget: Widget | ReadonlyArray<Widget>, ...widgets: ReadonlyArray<Widget>): KeyInteractionUpdateBinder<I, D>;
 
-    onDynamic(node: Node): KeyInteractionUpdateBinder<I, D>;
+    onDynamic(node: NodeWidget): KeyInteractionUpdateBinder<I, D>;
 
     log(...level: ReadonlyArray<LogLevel>): KeyInteractionUpdateBinder<I, D>;
 

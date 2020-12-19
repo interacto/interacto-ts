@@ -19,7 +19,7 @@ import {
     InteractionData,
     LogLevel,
     UndoCollector,
-    Binding
+    Binding, EltRef
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 
@@ -89,6 +89,77 @@ test("testCommandExecutedOnTwoButtons", () => {
     expect(producedCmds[0]).not.toBe(producedCmds[1]);
     expect(producedCmds[0].exec).toStrictEqual(1);
     expect(producedCmds[1].exec).toStrictEqual(1);
+});
+
+test("command executed on two buttons with one array", () => {
+    binding = buttonBinder()
+        .toProduce(() => new StubCmd(true))
+        .on([button1, button2])
+        .bind();
+
+    disposable = binding.produces().subscribe(c => producedCmds.push(c));
+
+    button2.click();
+    button1.click();
+
+    expect(producedCmds).toHaveLength(2);
+});
+
+test("command executed on two buttons with one ElementRef", () => {
+    const eltRef: EltRef<EventTarget> = {
+        "nativeElement": button1
+    };
+
+    binding = buttonBinder()
+        .toProduce(() => new StubCmd(true))
+        .on(eltRef, button2)
+        .bind();
+
+    disposable = binding.produces().subscribe(c => producedCmds.push(c));
+    button2.click();
+    button1.click();
+
+    expect(producedCmds).toHaveLength(2);
+});
+
+test("command executed on two buttons with two ElementRef", () => {
+    const eltRef1: EltRef<EventTarget> = {
+        "nativeElement": button1
+    };
+    const eltRef2: EltRef<EventTarget> = {
+        "nativeElement": button2
+    };
+
+    binding = buttonBinder()
+        .toProduce(() => new StubCmd(true))
+        .on(eltRef1, eltRef2)
+        .bind();
+
+    disposable = binding.produces().subscribe(c => producedCmds.push(c));
+    button2.click();
+    button1.click();
+
+    expect(producedCmds).toHaveLength(2);
+});
+
+test("command executed on two buttons with one array of ElementRef", () => {
+    const eltRef1: EltRef<EventTarget> = {
+        "nativeElement": button1
+    };
+    const eltRef2: EltRef<EventTarget> = {
+        "nativeElement": button2
+    };
+
+    binding = buttonBinder()
+        .toProduce(() => new StubCmd(true))
+        .on([eltRef1, eltRef2])
+        .bind();
+
+    disposable = binding.produces().subscribe(c => producedCmds.push(c));
+    button2.click();
+    button1.click();
+
+    expect(producedCmds).toHaveLength(2);
 });
 
 test("command executed on 2 buttons using several on", () => {

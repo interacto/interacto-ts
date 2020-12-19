@@ -106,6 +106,7 @@ export * from "./impl/interaction/library/DatePicked";
 export * from "./impl/interaction/library/DnD";
 export * from "./impl/interaction/library/DoubleClick";
 export * from "./impl/interaction/library/DragLock";
+export * from "./impl/interaction/library/Flushable";
 export * from "./impl/interaction/library/HyperLinkClicked";
 export * from "./impl/interaction/library/KeyDataImpl";
 export * from "./impl/interaction/library/KeyPressed";

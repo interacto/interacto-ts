@@ -18,15 +18,16 @@ import {InteractionCmdBinder} from "./InteractionCmdBinder";
 import {LogLevel} from "../logging/LogLevel";
 import {Binding} from "../binding/Binding";
 import {Interaction} from "../interaction/Interaction";
+import {NodeWidget, Widget} from "./BaseBinderBuilder";
 
 export interface KeyInteractionCmdBinder<C extends Command, I extends Interaction<D>, D extends InteractionData>
     extends KeyInteractionBinderBuilder<I, D>, InteractionCmdBinder<C, I, D> {
 
     first(initCmdFct: (c: C, i: D) => void): KeyInteractionCmdBinder<C, I, D>;
 
-    on(widget: EventTarget, ...widgets: ReadonlyArray<EventTarget>): KeyInteractionCmdBinder<C, I, D>;
+    on(widget: Widget | ReadonlyArray<Widget>, ...widgets: ReadonlyArray<Widget>): KeyInteractionCmdBinder<C, I, D>;
 
-    onDynamic(node: Node): KeyInteractionCmdBinder<C, I, D>;
+    onDynamic(node: NodeWidget): KeyInteractionCmdBinder<C, I, D>;
 
     log(...level: ReadonlyArray<LogLevel>): KeyInteractionCmdBinder<C, I, D>;
 

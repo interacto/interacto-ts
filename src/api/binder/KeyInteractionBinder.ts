@@ -17,15 +17,16 @@ import {LogLevel} from "../logging/LogLevel";
 import {Command} from "../command/Command";
 import {KeyInteractionCmdBinder} from "./KeyInteractionCmdBinder";
 import {Interaction} from "../interaction/Interaction";
+import {NodeWidget, Widget} from "./BaseBinderBuilder";
 
 export interface KeyInteractionBinder<I extends Interaction<D>, D extends InteractionData>
     extends KeyInteractionBinderBuilder<I, D> {
 
     when(whenPredicate: (i: D) => boolean): KeyInteractionBinder<I, D>;
 
-    on(widget: EventTarget, ...widgets: ReadonlyArray<EventTarget>): KeyInteractionBinder<I, D>;
+    on(widget: Widget | ReadonlyArray<Widget>, ...widgets: ReadonlyArray<Widget>): KeyInteractionBinder<I, D>;
 
-    onDynamic(node: Node): KeyInteractionBinder<I, D>;
+    onDynamic(node: NodeWidget): KeyInteractionBinder<I, D>;
 
     log(...level: ReadonlyArray<LogLevel>): KeyInteractionBinder<I, D>;
 

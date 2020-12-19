@@ -11,7 +11,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import {BaseBinderBuilder} from "./BaseBinderBuilder";
+import {BaseBinderBuilder, NodeWidget, Widget} from "./BaseBinderBuilder";
 import {LogLevel} from "../logging/LogLevel";
 
 /**
@@ -50,9 +50,9 @@ export interface BaseUpdateBinderBuilder extends BaseBinderBuilder {
 
     log(...level: ReadonlyArray<LogLevel>): BaseUpdateBinderBuilder;
 
-    on(widget: EventTarget, ...widgets: ReadonlyArray<EventTarget>): BaseUpdateBinderBuilder;
+    on(widget: Widget | ReadonlyArray<Widget>, ...widgets: ReadonlyArray<Widget>): BaseUpdateBinderBuilder;
 
-    onDynamic(node: Node): BaseUpdateBinderBuilder;
+    onDynamic(node: NodeWidget): BaseUpdateBinderBuilder;
 
     stopImmediatePropagation(): BaseUpdateBinderBuilder;
 

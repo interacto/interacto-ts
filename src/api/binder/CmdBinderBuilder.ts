@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 import {Command} from "../command/Command";
-import {BaseBinderBuilder} from "./BaseBinderBuilder";
+import {BaseBinderBuilder, NodeWidget, Widget} from "./BaseBinderBuilder";
 import {LogLevel} from "../logging/LogLevel";
 
 /**
@@ -32,9 +32,9 @@ export interface CmdBinderBuilder<C extends Command> extends BaseBinderBuilder {
 
     end(onEnd: (c: C) => void): CmdBinderBuilder<C>;
 
-    on(widget: EventTarget, ...widgets: ReadonlyArray<EventTarget>): CmdBinderBuilder<C>;
+    on(widget: Widget | ReadonlyArray<Widget>, ...widgets: ReadonlyArray<Widget>): CmdBinderBuilder<C>;
 
-    onDynamic(node: Node): CmdBinderBuilder<C>;
+    onDynamic(node: NodeWidget): CmdBinderBuilder<C>;
 
     when(whenPredicate: () => boolean): CmdBinderBuilder<C>;
 

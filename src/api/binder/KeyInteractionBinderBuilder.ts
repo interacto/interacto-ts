@@ -16,6 +16,7 @@ import {InteractionBinderBuilder} from "./InteractionBinderBuilder";
 import {KeyBinderBuilder} from "./KeyBinderBuilder";
 import {LogLevel} from "../logging/LogLevel";
 import {Interaction} from "../interaction/Interaction";
+import {NodeWidget, Widget} from "./BaseBinderBuilder";
 
 
 export interface KeyInteractionBinderBuilder<I extends Interaction<D>, D extends InteractionData>
@@ -23,9 +24,9 @@ export interface KeyInteractionBinderBuilder<I extends Interaction<D>, D extends
 
     when(whenPredicate: (i: D) => boolean): KeyInteractionBinderBuilder<I, D>;
 
-    on(widget: EventTarget, ...widgets: ReadonlyArray<EventTarget>): KeyInteractionBinderBuilder<I, D>;
+    on(widget: Widget | ReadonlyArray<Widget>, ...widgets: ReadonlyArray<Widget>): KeyInteractionBinderBuilder<I, D>;
 
-    onDynamic(node: Node): KeyInteractionBinderBuilder<I, D>;
+    onDynamic(node: NodeWidget): KeyInteractionBinderBuilder<I, D>;
 
     log(...level: ReadonlyArray<LogLevel>): KeyInteractionBinderBuilder<I, D>;
 

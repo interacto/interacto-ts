@@ -18,6 +18,7 @@ import {InteractionBinderBuilder} from "./InteractionBinderBuilder";
 import {LogLevel} from "../logging/LogLevel";
 import {Binding} from "../binding/Binding";
 import {Interaction} from "../interaction/Interaction";
+import {NodeWidget, Widget} from "./BaseBinderBuilder";
 
 export interface InteractionCmdBinder<C extends Command, I extends Interaction<D>, D extends InteractionData>
     extends CmdBinderBuilder<C>, InteractionBinderBuilder<I, D> {
@@ -44,9 +45,9 @@ export interface InteractionCmdBinder<C extends Command, I extends Interaction<D
     */
     end(onEnd: (c: C, i: D) => void): InteractionCmdBinder<C, I, D>;
 
-    on(widget: EventTarget, ...widgets: ReadonlyArray<EventTarget>): InteractionCmdBinder<C, I, D>;
+    on(widget: Widget | ReadonlyArray<Widget>, ...widgets: ReadonlyArray<Widget>): InteractionCmdBinder<C, I, D>;
 
-    onDynamic(node: Node): InteractionCmdBinder<C, I, D>;
+    onDynamic(node: NodeWidget): InteractionCmdBinder<C, I, D>;
 
     log(...level: ReadonlyArray<LogLevel>): InteractionCmdBinder<C, I, D>;
 

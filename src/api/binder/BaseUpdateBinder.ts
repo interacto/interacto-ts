@@ -19,15 +19,16 @@ import {CmdUpdateBinder} from "./CmdUpdateBinder";
 import {InteractionUpdateBinder} from "./InteractionUpdateBinder";
 import {BaseBinder} from "./BaseBinder";
 import {Interaction} from "../interaction/Interaction";
+import {NodeWidget, Widget} from "./BaseBinderBuilder";
 
 /**
  * The base interface for building bindings based on non-trivial user interactions (eg DnD) with routines
  * for defining the UI command and the user interaction to use.
  */
 export interface BaseUpdateBinder extends BaseUpdateBinderBuilder, BaseBinder {
-    on(widget: EventTarget, ...widgets: ReadonlyArray<EventTarget>): BaseUpdateBinder;
+    on(widget: Widget | ReadonlyArray<Widget>, ...widgets: ReadonlyArray<Widget>): BaseUpdateBinder;
 
-    onDynamic(node: Node): BaseUpdateBinder;
+    onDynamic(node: NodeWidget): BaseUpdateBinder;
 
     when(whenPredicate: () => boolean): BaseUpdateBinder;
 

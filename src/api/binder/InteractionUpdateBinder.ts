@@ -17,13 +17,14 @@ import {LogLevel} from "../logging/LogLevel";
 import {Command} from "../command/Command";
 import {InteractionCmdUpdateBinder} from "./InteractionCmdUpdateBinder";
 import {Interaction} from "../interaction/Interaction";
+import {NodeWidget, Widget} from "./BaseBinderBuilder";
 
 export interface InteractionUpdateBinder<I extends Interaction<D>, D extends InteractionData>
     extends InteractionUpdateBinderBuilder<I, D> {
 
-    on(widget: EventTarget, ...widgets: ReadonlyArray<EventTarget>): InteractionUpdateBinder<I, D>;
+    on(widget: Widget | ReadonlyArray<Widget>, ...widgets: ReadonlyArray<Widget>): InteractionUpdateBinder<I, D>;
 
-    onDynamic(node: Node): InteractionUpdateBinder<I, D>;
+    onDynamic(node: NodeWidget): InteractionUpdateBinder<I, D>;
 
     log(...level: ReadonlyArray<LogLevel>): InteractionUpdateBinder<I, D>;
 

@@ -14,6 +14,35 @@
 import {LogLevel} from "../logging/LogLevel";
 
 /**
+ * For supporting Angular ElementReference without
+ * any dependency to Angular.
+ */
+export interface EltRef<T> {
+    nativeElement: T;
+}
+
+/**
+ * Checks whether the given object matches the EltRef structure.
+ * @param o - The object to check
+ */
+export function isEltRef(o: unknown): o is EltRef<EventTarget> {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    return (o as EltRef<EventTarget>).nativeElement instanceof EventTarget;
+}
+
+/**
+ * This alias refers to either an EvenTarget object of a reference to an EvenTarget object.
+ */
+// eslint-disable-next-line @typescript-eslint/no-type-alias
+export type Widget = EltRef<EventTarget> | EventTarget;
+
+/**
+ * This alias refers to either a Node object of a reference to a Node object.
+ */
+// eslint-disable-next-line @typescript-eslint/no-type-alias
+export type NodeWidget = EltRef<Node> | Node;
+
+/**
  * The base interface for building bindings.
  */
 export interface BaseBinderBuilder {
@@ -25,7 +54,7 @@ export interface BaseBinderBuilder {
      * @param widgets - The list of the widgets involved in the bindings.
      * @returns A clone of the current builder to chain the building configuration.
      */
-    on(widget: EventTarget, ...widgets: ReadonlyArray<EventTarget>): BaseBinderBuilder;
+    on(widget: Widget | ReadonlyArray<Widget>, ...widgets: ReadonlyArray<Widget>): BaseBinderBuilder;
 
     /**
      * Specifies the node which children will be observed by the binding.
@@ -34,7 +63,7 @@ export interface BaseBinderBuilder {
      * @param node - The node which children will be observed by the binding dynamically.
      * @returns A clone of the current builder to chain the building configuration.
      */
-    onDynamic(node: Node): BaseBinderBuilder;
+    onDynamic(node: NodeWidget): BaseBinderBuilder;
 
     /**
      * Specifies the conditions to fulfill to initialise, update, or execute the command while the interaction is running.

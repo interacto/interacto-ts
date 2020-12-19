@@ -44,7 +44,7 @@ import {
     touchDnDBinder,
     UndoCollector,
     Binding,
-    WidgetData
+    WidgetData, EltRef
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {Subscription} from "rxjs";
@@ -72,6 +72,19 @@ afterEach(() => {
 test("press binder", () => {
     binding = pressBinder()
         .on(elt)
+        .toProduce(() => new StubCmd(true))
+        .bind();
+    disposable = binding.produces().subscribe(c => producedCmds.push(c));
+    elt.dispatchEvent(createMouseEvent("mousedown", elt));
+    expect(producedCmds).toHaveLength(1);
+});
+
+test("press binder with ElementRef", () => {
+    const eltRef: EltRef<EventTarget> = {
+        "nativeElement": elt
+    };
+    binding = pressBinder()
+        .on(eltRef)
         .toProduce(() => new StubCmd(true))
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));

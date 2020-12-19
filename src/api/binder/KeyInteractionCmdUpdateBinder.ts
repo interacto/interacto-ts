@@ -19,6 +19,7 @@ import {Binding} from "../binding/Binding";
 import {InteractionUpdateBinder} from "./InteractionUpdateBinder";
 import {Command} from "../command/Command";
 import {Interaction} from "../interaction/Interaction";
+import {NodeWidget, Widget} from "./BaseBinderBuilder";
 
 export interface KeyInteractionCmdUpdateBinder<C extends Command, I extends Interaction<D>, D extends InteractionData>
     extends KeyInteractionBinderBuilder<I, D>, InteractionUpdateBinder<I, D> {
@@ -35,9 +36,9 @@ export interface KeyInteractionCmdUpdateBinder<C extends Command, I extends Inte
 
     first(initCmdFct: (c: C, i: D) => void): KeyInteractionCmdUpdateBinder<C, I, D>;
 
-    on(widget: EventTarget, ...widgets: ReadonlyArray<EventTarget>): KeyInteractionCmdUpdateBinder<C, I, D>;
+    on(widget: Widget | ReadonlyArray<Widget>, ...widgets: ReadonlyArray<Widget>): KeyInteractionCmdUpdateBinder<C, I, D>;
 
-    onDynamic(node: Node): KeyInteractionCmdUpdateBinder<C, I, D>;
+    onDynamic(node: NodeWidget): KeyInteractionCmdUpdateBinder<C, I, D>;
 
     log(...level: ReadonlyArray<LogLevel>): KeyInteractionCmdUpdateBinder<C, I, D>;
 
