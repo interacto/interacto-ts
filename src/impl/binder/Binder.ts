@@ -21,7 +21,7 @@ import {InteractionCmdBinder} from "../../api/binder/InteractionCmdBinder";
 import {Binding} from "../../api/binding/Binding";
 import {BindingsObserver} from "../../api/binding/BindingsObserver";
 import {Interaction} from "../../api/interaction/Interaction";
-import {isEltRef, NodeWidget, Widget} from "../../api/binder/BaseBinderBuilder";
+import {isEltRef, Widget} from "../../api/binder/BaseBinderBuilder";
 
 /**
  * The base class that defines the concept of binding builder (called binder).
@@ -83,7 +83,8 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
 
     protected abstract duplicate(): Binder<C, I, D>;
 
-    public on(widget: Widget | ReadonlyArray<Widget>, ...widgets: ReadonlyArray<Widget>): Binder<C, I, D> {
+    public on(widget: Widget<EventTarget> | ReadonlyArray<Widget<EventTarget>>, ...widgets: ReadonlyArray<Widget<EventTarget>>):
+    Binder<C, I, D> {
         const ws = [...widgets].concat(widget).map(w => {
             if (isEltRef(w)) {
                 return w.nativeElement;
@@ -96,7 +97,7 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
         return dup;
     }
 
-    public onDynamic(node: NodeWidget): Binder<C, I, D> {
+    public onDynamic(node: Widget<Node>): Binder<C, I, D> {
         const dup = this.duplicate();
         const nodeEvt = isEltRef(node) ? node.nativeElement : node;
         dup.dynamicNodes = [...this.dynamicNodes].concat(nodeEvt);

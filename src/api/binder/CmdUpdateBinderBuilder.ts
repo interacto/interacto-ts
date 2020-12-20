@@ -15,7 +15,7 @@ import {Command} from "../command/Command";
 import {CmdBinderBuilder} from "./CmdBinderBuilder";
 import {BaseUpdateBinderBuilder} from "./BaseUpdateBinderBuilder";
 import {LogLevel} from "../logging/LogLevel";
-import {NodeWidget, Widget} from "./BaseBinderBuilder";
+import {Widget} from "./BaseBinderBuilder";
 
 /**
  * The binding builder API already knows the type of UI command
@@ -39,9 +39,9 @@ export interface CmdUpdateBinderBuilder<C extends Command> extends CmdBinderBuil
 
     first(initCmdFct: (c: C) => void): CmdUpdateBinderBuilder<C>;
 
-    on(widget: Widget | ReadonlyArray<Widget>, ...widgets: ReadonlyArray<Widget>): CmdUpdateBinderBuilder<C>;
+    on(widget: Widget<EventTarget> | ReadonlyArray<Widget<EventTarget>>, ...widgets: ReadonlyArray<Widget<EventTarget>>): CmdUpdateBinderBuilder<C>;
 
-    onDynamic(node: NodeWidget): CmdUpdateBinderBuilder<C>;
+    onDynamic(node: Widget<Node>): CmdUpdateBinderBuilder<C>;
 
     end(onEnd: (c: C) => void): CmdUpdateBinderBuilder<C>;
 

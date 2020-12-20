@@ -13,7 +13,7 @@
  */
 
 import {InteractionData} from "../interaction/InteractionData";
-import {BaseBinderBuilder, NodeWidget, Widget} from "./BaseBinderBuilder";
+import {BaseBinderBuilder, Widget} from "./BaseBinderBuilder";
 import {LogLevel} from "../logging/LogLevel";
 import {Interaction} from "../interaction/Interaction";
 
@@ -32,9 +32,10 @@ export interface InteractionBinderBuilder<I extends Interaction<D>, D extends In
      */
     when(whenPredicate: (i: D) => boolean): InteractionBinderBuilder<I, D>;
 
-    on(widget: Widget | ReadonlyArray<Widget>, ...widgets: ReadonlyArray<Widget>): InteractionBinderBuilder<I, D>;
+    on(widget: Widget<EventTarget> | ReadonlyArray<Widget<EventTarget>>, ...widgets: ReadonlyArray<Widget<EventTarget>>):
+    InteractionBinderBuilder<I, D>;
 
-    onDynamic(node: NodeWidget): InteractionBinderBuilder<I, D>;
+    onDynamic(node: Widget<Node>): InteractionBinderBuilder<I, D>;
 
     end(endFct: () => void): InteractionBinderBuilder<I, D>;
 

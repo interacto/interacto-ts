@@ -17,7 +17,7 @@ import {CmdBinderBuilder} from "./CmdBinderBuilder";
 import {InteractionCmdBinder} from "./InteractionCmdBinder";
 import {LogLevel} from "../logging/LogLevel";
 import {Interaction} from "../interaction/Interaction";
-import {NodeWidget, Widget} from "./BaseBinderBuilder";
+import {Widget} from "./BaseBinderBuilder";
 
 /**
  * The binder API that already knows the type of UI command
@@ -29,9 +29,9 @@ export interface CmdBinder<C extends Command> extends CmdBinderBuilder<C> {
 
     end(onEnd: (c: C) => void): CmdBinder<C>;
 
-    on(widget: Widget | ReadonlyArray<Widget>, ...widgets: ReadonlyArray<Widget>): CmdBinder<C>;
+    on(widget: Widget<EventTarget> | ReadonlyArray<Widget<EventTarget>>, ...widgets: ReadonlyArray<Widget<EventTarget>>): CmdBinder<C>;
 
-    onDynamic(node: NodeWidget): CmdBinder<C>;
+    onDynamic(node: Widget<Node>): CmdBinder<C>;
 
     when(whenPredicate: () => boolean): CmdBinder<C>;
 

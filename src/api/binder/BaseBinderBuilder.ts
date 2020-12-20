@@ -34,13 +34,7 @@ export function isEltRef(o: unknown): o is EltRef<EventTarget> {
  * This alias refers to either an EvenTarget object of a reference to an EvenTarget object.
  */
 // eslint-disable-next-line @typescript-eslint/no-type-alias
-export type Widget = EltRef<EventTarget> | EventTarget;
-
-/**
- * This alias refers to either a Node object of a reference to a Node object.
- */
-// eslint-disable-next-line @typescript-eslint/no-type-alias
-export type NodeWidget = EltRef<Node> | Node;
+export type Widget<T extends EventTarget> = EltRef<T> | T;
 
 /**
  * The base interface for building bindings.
@@ -54,7 +48,7 @@ export interface BaseBinderBuilder {
      * @param widgets - The list of the widgets involved in the bindings.
      * @returns A clone of the current builder to chain the building configuration.
      */
-    on(widget: Widget | ReadonlyArray<Widget>, ...widgets: ReadonlyArray<Widget>): BaseBinderBuilder;
+    on(widget: Widget<EventTarget> | ReadonlyArray<Widget<EventTarget>>, ...widgets: ReadonlyArray<Widget<EventTarget>>): BaseBinderBuilder;
 
     /**
      * Specifies the node which children will be observed by the binding.
@@ -63,7 +57,7 @@ export interface BaseBinderBuilder {
      * @param node - The node which children will be observed by the binding dynamically.
      * @returns A clone of the current builder to chain the building configuration.
      */
-    onDynamic(node: NodeWidget): BaseBinderBuilder;
+    onDynamic(node: Widget<Node>): BaseBinderBuilder;
 
     /**
      * Specifies the conditions to fulfill to initialise, update, or execute the command while the interaction is running.

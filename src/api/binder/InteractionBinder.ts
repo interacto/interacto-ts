@@ -18,7 +18,7 @@ import {LogLevel} from "../logging/LogLevel";
 import {Command} from "../command/Command";
 import {InteractionCmdBinder} from "./InteractionCmdBinder";
 import {Interaction} from "../interaction/Interaction";
-import {NodeWidget, Widget} from "./BaseBinderBuilder";
+import {Widget} from "./BaseBinderBuilder";
 
 /**
  * The binder API that already knows the type of user interaction the bindings will use.
@@ -30,9 +30,9 @@ export interface InteractionBinder<I extends Interaction<D>, D extends Interacti
 
     when(whenPredicate: (i: D) => boolean): InteractionBinder<I, D>;
 
-    on(widget: Widget | ReadonlyArray<Widget>, ...widgets: ReadonlyArray<Widget>): InteractionBinder<I, D>;
+    on(widget: Widget<EventTarget> | ReadonlyArray<Widget<EventTarget>>, ...widgets: ReadonlyArray<Widget<EventTarget>>): InteractionBinder<I, D>;
 
-    onDynamic(node: NodeWidget): InteractionBinder<I, D>;
+    onDynamic(node: Widget<Node>): InteractionBinder<I, D>;
 
     log(...level: ReadonlyArray<LogLevel>): InteractionBinder<I, D>;
 

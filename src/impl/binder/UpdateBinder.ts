@@ -22,7 +22,7 @@ import {Binding} from "../../api/binding/Binding";
 import {AnonBinding} from "../binding/AnonBinding";
 import {BindingsObserver} from "../../api/binding/BindingsObserver";
 import {Interaction} from "../../api/interaction/Interaction";
-import {NodeWidget, Widget} from "../../api/binder/BaseBinderBuilder";
+import {Widget} from "../../api/binder/BaseBinderBuilder";
 
 /**
  * The base binding builder for bindings where commands can be updated while the user interaction is running.
@@ -96,11 +96,11 @@ export class UpdateBinder<C extends Command, I extends Interaction<D>, D extends
         return dup;
     }
 
-    public on(widget: Widget | ReadonlyArray<Widget>, ...widgets: ReadonlyArray<Widget>): UpdateBinder<C, I, D> {
+    public on(widget: Widget<EventTarget> | ReadonlyArray<Widget<EventTarget>>, ...widgets: ReadonlyArray<Widget<EventTarget>>): UpdateBinder<C, I, D> {
         return super.on(widget, ...widgets) as UpdateBinder<C, I, D>;
     }
 
-    public onDynamic(node: NodeWidget): UpdateBinder<C, I, D> {
+    public onDynamic(node: Widget<Node>): UpdateBinder<C, I, D> {
         return super.onDynamic(node) as UpdateBinder<C, I, D>;
     }
 

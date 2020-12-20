@@ -15,7 +15,7 @@ import {InteractionData} from "../interaction/InteractionData";
 import {InteractionBinderBuilder} from "./InteractionBinderBuilder";
 import {LogLevel} from "../logging/LogLevel";
 import {Interaction} from "../interaction/Interaction";
-import {NodeWidget, Widget} from "./BaseBinderBuilder";
+import {Widget} from "./BaseBinderBuilder";
 
 export interface InteractionUpdateBinderBuilder<I extends Interaction<D>, D extends InteractionData>
     extends InteractionBinderBuilder <I, D> {
@@ -37,9 +37,10 @@ export interface InteractionUpdateBinderBuilder<I extends Interaction<D>, D exte
 
     end(endFct: () => void): InteractionUpdateBinderBuilder<I, D>;
 
-    on(widget: Widget | ReadonlyArray<Widget>, ...widgets: ReadonlyArray<Widget>): InteractionUpdateBinderBuilder<I, D>;
+    on(widget: Widget<EventTarget> | ReadonlyArray<Widget<EventTarget>>, ...widgets: ReadonlyArray<Widget<EventTarget>>):
+    InteractionUpdateBinderBuilder<I, D>;
 
-    onDynamic(node: NodeWidget): InteractionUpdateBinderBuilder<I, D>;
+    onDynamic(node: Widget<Node>): InteractionUpdateBinderBuilder<I, D>;
 
     log(...level: ReadonlyArray<LogLevel>): InteractionUpdateBinderBuilder<I, D>;
 

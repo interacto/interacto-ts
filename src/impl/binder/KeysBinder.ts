@@ -23,7 +23,7 @@ import {KeyDataImpl} from "../interaction/library/KeyDataImpl";
 import {UpdateBinder} from "./UpdateBinder";
 import {KeyInteractionCmdUpdateBinder} from "../../api/binder/KeyInteractionCmdUpdateBinder";
 import {Interaction} from "../../api/interaction/Interaction";
-import {NodeWidget, Widget} from "../../api/binder/BaseBinderBuilder";
+import {Widget} from "../../api/binder/BaseBinderBuilder";
 
 /**
  * The base binding builder to create bindings between a keys pressure interaction and a given command.
@@ -69,11 +69,12 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, D extends I
         return dup;
     }
 
-    public on(widget: Widget | ReadonlyArray<Widget>, ...widgets: ReadonlyArray<Widget>): KeysBinder<C, I, D> {
+    public on(widget: Widget<EventTarget> | ReadonlyArray<Widget<EventTarget>>, ...widgets: ReadonlyArray<Widget<EventTarget>>):
+    KeysBinder<C, I, D> {
         return super.on(widget, ...widgets) as KeysBinder<C, I, D>;
     }
 
-    public onDynamic(node: NodeWidget): KeysBinder<C, I, D> {
+    public onDynamic(node: Widget<Node>): KeysBinder<C, I, D> {
         return super.onDynamic(node) as KeysBinder<C, I, D>;
     }
 

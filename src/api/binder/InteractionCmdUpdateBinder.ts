@@ -19,7 +19,7 @@ import {InteractionUpdateBinderBuilder} from "./InteractionUpdateBinderBuilder";
 import {LogLevel} from "../logging/LogLevel";
 import {Binding} from "../binding/Binding";
 import {Interaction} from "../interaction/Interaction";
-import {NodeWidget, Widget} from "./BaseBinderBuilder";
+import {Widget} from "./BaseBinderBuilder";
 
 export interface InteractionCmdUpdateBinder<C extends Command, I extends Interaction<D>, D extends InteractionData>
     extends InteractionCmdBinder<C, I, D>, CmdUpdateBinderBuilder<C>, InteractionUpdateBinderBuilder<I, D> {
@@ -39,9 +39,10 @@ export interface InteractionCmdUpdateBinder<C extends Command, I extends Interac
 
     first(initCmdFct: (c: C, i: D) => void): InteractionCmdUpdateBinder<C, I, D>;
 
-    on(widget: Widget | ReadonlyArray<Widget>, ...widgets: ReadonlyArray<Widget>): InteractionCmdUpdateBinder<C, I, D>;
+    on(widget: Widget<EventTarget> | ReadonlyArray<Widget<EventTarget>>, ...widgets: ReadonlyArray<Widget<EventTarget>>):
+    InteractionCmdUpdateBinder<C, I, D>;
 
-    onDynamic(node: NodeWidget): InteractionCmdUpdateBinder<C, I, D>;
+    onDynamic(node: Widget<Node>): InteractionCmdUpdateBinder<C, I, D>;
 
     log(...level: ReadonlyArray<LogLevel>): InteractionCmdUpdateBinder<C, I, D>;
 

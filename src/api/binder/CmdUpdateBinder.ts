@@ -17,7 +17,7 @@ import {LogLevel} from "../logging/LogLevel";
 import {InteractionData} from "../interaction/InteractionData";
 import {InteractionCmdUpdateBinder} from "./InteractionCmdUpdateBinder";
 import {Interaction} from "../interaction/Interaction";
-import {NodeWidget, Widget} from "./BaseBinderBuilder";
+import {Widget} from "./BaseBinderBuilder";
 
 /**
  * The binder API that already knows the type of UI command
@@ -35,9 +35,9 @@ export interface CmdUpdateBinder<C extends Command> extends CmdUpdateBinderBuild
 
     first(initCmdFct: (c: C) => void): CmdUpdateBinder<C>;
 
-    on(widget: Widget | ReadonlyArray<Widget>, ...widgets: ReadonlyArray<Widget>): CmdUpdateBinder<C>;
+    on(widget: Widget<EventTarget> | ReadonlyArray<Widget<EventTarget>>, ...widgets: ReadonlyArray<Widget<EventTarget>>): CmdUpdateBinder<C>;
 
-    onDynamic(node: NodeWidget): CmdUpdateBinder<C>;
+    onDynamic(node: Widget<Node>): CmdUpdateBinder<C>;
 
     when(whenPredicate: () => boolean): CmdUpdateBinder<C>;
 

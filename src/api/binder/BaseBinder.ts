@@ -14,7 +14,7 @@
 import {LogLevel} from "../logging/LogLevel";
 import {Command} from "../command/Command";
 import {InteractionData} from "../interaction/InteractionData";
-import {BaseBinderBuilder, NodeWidget, Widget} from "./BaseBinderBuilder";
+import {BaseBinderBuilder, Widget} from "./BaseBinderBuilder";
 import {InteractionBinder} from "./InteractionBinder";
 import {CmdBinder} from "./CmdBinder";
 import {Interaction} from "../interaction/Interaction";
@@ -24,9 +24,9 @@ import {Interaction} from "../interaction/Interaction";
  * for defining the UI command and the user interaction to use.
  */
 export interface BaseBinder extends BaseBinderBuilder {
-    on(widget: Widget | ReadonlyArray<Widget>, ...widgets: ReadonlyArray<Widget>): BaseBinder;
+    on(widget: Widget<EventTarget> | ReadonlyArray<Widget<EventTarget>>, ...widgets: ReadonlyArray<Widget<EventTarget>>): BaseBinder;
 
-    onDynamic(node: NodeWidget): BaseBinder;
+    onDynamic(node: Widget<Node>): BaseBinder;
 
     when(whenPredicate: () => boolean): BaseBinder;
 
