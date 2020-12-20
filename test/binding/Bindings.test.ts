@@ -14,13 +14,16 @@
 
 import {
     AnonCmd,
+    Binding,
     catBinder,
-    clickBinder, clicksBinder,
+    clickBinder,
+    clicksBinder,
     Command,
     CommandsRegistry,
     dbleClickBinder,
     dndBinder,
     dragLockBinder,
+    EltRef,
     hyperlinkBinder,
     Interaction,
     InteractionCmdUpdateBinder,
@@ -29,9 +32,11 @@ import {
     KeysData,
     keysPressBinder,
     keyTypeBinder,
-    LogLevel, longPressBinder,
+    LogLevel,
+    longPressBinder,
     longTouchBinder,
-    PointData, PointsData,
+    PointData,
+    PointsData,
     pressBinder,
     scrollBinder,
     ScrollData,
@@ -43,10 +48,10 @@ import {
     TouchData,
     touchDnDBinder,
     UndoCollector,
-    Binding,
-    WidgetData, EltRef
+    undoRedoBinder,
+    WidgetData
 } from "../../src/interacto";
-import {StubCmd} from "../command/StubCmd";
+import {StubCmd, StubUndoableCmd} from "../command/StubCmd";
 import {Subscription} from "rxjs";
 import {createKeyEvent, createMouseEvent, createTouchEvent, createUIEvent} from "../interaction/StubEvents";
 
@@ -76,6 +81,49 @@ test("press binder", () => {
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
     elt.dispatchEvent(createMouseEvent("mousedown", elt));
+    expect(producedCmds).toHaveLength(1);
+});
+
+test("undoable command registered", () => {
+    binding = pressBinder()
+        .on(elt)
+        .toProduce(() => new StubUndoableCmd(true))
+        .bind();
+    disposable = binding.produces().subscribe(c => producedCmds.push(c));
+    elt.dispatchEvent(createMouseEvent("mousedown", elt));
+    expect(UndoCollector.getInstance().getLastUndo()).not.toBeUndefined();
+});
+
+test("undo redo binders on undo", () => {
+    const undo = document.createElement("button");
+    const redo = document.createElement("button");
+    binding = pressBinder()
+        .on(elt)
+        .toProduce(() => new StubUndoableCmd(true))
+        .bind();
+    const bindings = undoRedoBinder(undo, redo);
+    disposable = bindings[0].produces().subscribe(c => producedCmds.push(c));
+    elt.dispatchEvent(createMouseEvent("mousedown", elt));
+    undo.click();
+    expect(UndoCollector.getInstance().getLastRedo()).not.toBeUndefined();
+    expect(UndoCollector.getInstance().getLastUndo()).toBeUndefined();
+    expect(producedCmds).toHaveLength(1);
+});
+
+test("undo redo binders on redo", () => {
+    const undo = document.createElement("button");
+    const redo = document.createElement("button");
+    binding = pressBinder()
+        .on(elt)
+        .toProduce(() => new StubUndoableCmd(true))
+        .bind();
+    const bindings = undoRedoBinder(undo, redo);
+    disposable = bindings[1].produces().subscribe(c => producedCmds.push(c));
+    elt.dispatchEvent(createMouseEvent("mousedown", elt));
+    undo.click();
+    redo.click();
+    expect(UndoCollector.getInstance().getLastRedo()).toBeUndefined();
+    expect(UndoCollector.getInstance().getLastUndo()).not.toBeUndefined();
     expect(producedCmds).toHaveLength(1);
 });
 

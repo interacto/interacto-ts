@@ -13,6 +13,7 @@
  */
 
 import {CommandBase} from "../../src/impl/command/CommandBase";
+import {Undoable} from "../../src/api/undo/Undoable";
 
 export class StubCmd extends CommandBase {
     public candoValue: boolean;
@@ -30,5 +31,21 @@ export class StubCmd extends CommandBase {
 
     public canExecute(): boolean {
         return this.candoValue;
+    }
+}
+
+export class StubUndoableCmd extends StubCmd implements Undoable {
+    public constructor(candoValue?: boolean) {
+        super(candoValue);
+    }
+
+    public getUndoName(): string {
+        return "";
+    }
+
+    public redo(): void {
+    }
+
+    public undo(): void {
     }
 }

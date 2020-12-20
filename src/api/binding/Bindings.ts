@@ -60,6 +60,10 @@ import {TouchDnD} from "../../impl/interaction/library/TouchDnD";
 import {LongPress} from "../../impl/interaction/library/LongPress";
 import {Clicks} from "../../impl/interaction/library/Clicks";
 import {PointsData} from "../interaction/PointsData";
+import {Widget} from "../binder/BaseBinderBuilder";
+import {Undo} from "../../impl/command/library/Undo";
+import {Binding} from "./Binding";
+import {Redo} from "../../impl/command/library/Redo";
 
 let observer: BindingsObserver | undefined;
 
@@ -286,4 +290,24 @@ export function keysTypeBinder(): KeyInteractionUpdateBinder<Interaction<KeysDat
 export function keyTypeBinder(): KeyInteractionBinder<Interaction<KeyData>, KeyData> {
     return new KeysBinder(observer)
         .usingInteraction<KeyTyped, KeyData>(() => new KeyTyped());
+}
+
+/**
+ * Creates two bindings for undo and redo operations with buttons.
+ * @param undo - The undo button
+ * @param redo - The redo button
+ */
+export function undoRedoBinder(undo: Widget<HTMLButtonElement>, redo: Widget<HTMLButtonElement>):
+[Binding<Undo, Interaction<WidgetData<HTMLButtonElement>>, WidgetData<HTMLButtonElement>>,
+    Binding<Redo, Interaction<WidgetData<HTMLButtonElement>>, WidgetData<HTMLButtonElement>>] {
+    return [
+        buttonBinder()
+            .on(undo)
+            .toProduce(() => new Undo())
+            .bind(),
+        buttonBinder()
+            .on(redo)
+            .toProduce(() => new Redo())
+            .bind()
+    ];
 }
