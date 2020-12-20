@@ -96,7 +96,8 @@ export class UpdateBinder<C extends Command, I extends Interaction<D>, D extends
         return dup;
     }
 
-    public on(widget: Widget<EventTarget> | ReadonlyArray<Widget<EventTarget>>, ...widgets: ReadonlyArray<Widget<EventTarget>>): UpdateBinder<C, I, D> {
+    public on(widget: Widget<EventTarget> | ReadonlyArray<Widget<EventTarget>>, ...widgets: ReadonlyArray<Widget<EventTarget>>):
+    UpdateBinder<C, I, D> {
         return super.on(widget, ...widgets) as UpdateBinder<C, I, D>;
     }
 
