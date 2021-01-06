@@ -2,6 +2,7 @@
 [![npm](https://img.shields.io/npm/v/interacto)](https://www.npmjs.com/package/interacto)
 [![npm](https://img.shields.io/npm/dm/interacto)](https://www.npmjs.com/package/interacto)
 
+
 # Interacto
 
 The TypeScript implementation of [Interacto](https://github.com/interacto/).
