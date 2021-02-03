@@ -19,7 +19,7 @@ import {
     Interaction,
     InteractionData,
     panBinder,
-    UndoCollector,
+    UndoHistory,
     Binding
 } from "../../src/interacto";
 
@@ -40,7 +40,7 @@ afterEach(() => {
     disposable?.unsubscribe();
     binding?.uninstallBinding();
     CommandsRegistry.getInstance().clear();
-    UndoCollector.getInstance().clear();
+    UndoHistory.getInstance().clear();
 });
 
 test("pan horizontal right", () => {

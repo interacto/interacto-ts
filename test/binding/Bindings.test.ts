@@ -47,7 +47,7 @@ import {
     TapData,
     TouchData,
     touchDnDBinder,
-    UndoCollector,
+    UndoHistory,
     undoRedoBinder,
     WidgetData
 } from "../../src/interacto";
@@ -70,7 +70,7 @@ afterEach(() => {
     binding.uninstallBinding();
     disposable.unsubscribe();
     CommandsRegistry.getInstance().clear();
-    UndoCollector.getInstance().clear();
+    UndoHistory.getInstance().clear();
     jest.clearAllTimers();
 });
 
@@ -91,7 +91,7 @@ test("undoable command registered", () => {
         .bind();
     disposable = binding.produces().subscribe(c => producedCmds.push(c));
     elt.dispatchEvent(createMouseEvent("mousedown", elt));
-    expect(UndoCollector.getInstance().getLastUndo()).not.toBeUndefined();
+    expect(UndoHistory.getInstance().getLastUndo()).not.toBeUndefined();
 });
 
 test("undo redo binders on undo", () => {
@@ -105,8 +105,8 @@ test("undo redo binders on undo", () => {
     disposable = bindings[0].produces().subscribe(c => producedCmds.push(c));
     elt.dispatchEvent(createMouseEvent("mousedown", elt));
     undo.click();
-    expect(UndoCollector.getInstance().getLastRedo()).not.toBeUndefined();
-    expect(UndoCollector.getInstance().getLastUndo()).toBeUndefined();
+    expect(UndoHistory.getInstance().getLastRedo()).not.toBeUndefined();
+    expect(UndoHistory.getInstance().getLastUndo()).toBeUndefined();
     expect(producedCmds).toHaveLength(1);
 });
 
@@ -122,8 +122,8 @@ test("undo redo binders on redo", () => {
     elt.dispatchEvent(createMouseEvent("mousedown", elt));
     undo.click();
     redo.click();
-    expect(UndoCollector.getInstance().getLastRedo()).toBeUndefined();
-    expect(UndoCollector.getInstance().getLastUndo()).not.toBeUndefined();
+    expect(UndoHistory.getInstance().getLastRedo()).toBeUndefined();
+    expect(UndoHistory.getInstance().getLastUndo()).not.toBeUndefined();
     expect(producedCmds).toHaveLength(1);
 });
 

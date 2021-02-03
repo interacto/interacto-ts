@@ -13,7 +13,7 @@
  */
 
 import {isUndoableType} from "../../api/undo/Undoable";
-import {UndoCollector} from "../undo/UndoCollector";
+import {UndoHistory} from "../undo/UndoHistory";
 import {Command, RegistrationPolicy} from "../../api/command/Command";
 import {Subject, Observable} from "rxjs";
 import {removeAt, remove} from "../util/ArrayUtil";
@@ -92,7 +92,7 @@ export class CommandsRegistry {
             this.cmdPublisher.next(cmd);
 
             if (isUndoableType(cmd)) {
-                UndoCollector.getInstance().add(cmd);
+                UndoHistory.getInstance().add(cmd);
             }
         }
     }

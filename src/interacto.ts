@@ -134,5 +134,5 @@ export * from "./impl/interaction/library/TextInputChanged";
 export * from "./impl/interaction/library/TouchDataImpl";
 export * from "./impl/interaction/library/TouchDnD";
 export * from "./impl/interaction/library/WidgetDataImpl";
-export * from "./impl/undo/UndoCollector";
+export * from "./impl/undo/UndoHistory";
 export * from "./impl/util/ArrayUtil";

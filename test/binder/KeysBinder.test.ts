@@ -19,7 +19,7 @@ import {InteractionData} from "../../src/api/interaction/InteractionData";
 import {keyPressBinder, keysTypeBinder} from "../../src/api/binding/Bindings";
 import {StubCmd} from "../command/StubCmd";
 import {createKeyEvent} from "../interaction/StubEvents";
-import {UndoCollector} from "../../src/impl/undo/UndoCollector";
+import {UndoHistory} from "../../src/impl/undo/UndoHistory";
 import {CommandsRegistry} from "../../src/impl/command/CommandsRegistry";
 import {Interaction} from "../../src/api/interaction/Interaction";
 import {mock} from "jest-mock-extended";
@@ -43,7 +43,7 @@ afterEach(() => {
     binding?.uninstallBinding();
     disposable?.unsubscribe();
     CommandsRegistry.getInstance().clear();
-    UndoCollector.getInstance().clear();
+    UndoHistory.getInstance().clear();
 });
 
 

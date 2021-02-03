@@ -17,7 +17,7 @@ import {
     CommandsRegistry,
     Interaction,
     InteractionData,
-    UndoCollector,
+    UndoHistory,
     Binding
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
@@ -43,7 +43,7 @@ afterEach(() => {
         disposable.unsubscribe();
     }
     CommandsRegistry.getInstance().clear();
-    UndoCollector.getInstance().clear();
+    UndoHistory.getInstance().clear();
     if (binding !== undefined) {
         binding.uninstallBinding();
     }

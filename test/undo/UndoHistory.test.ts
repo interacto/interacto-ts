@@ -13,24 +13,24 @@
  */
 
 import {Undoable} from "../../src/api/undo/Undoable";
-import {UndoCollector} from "../../src/impl/undo/UndoCollector";
+import {UndoHistory} from "../../src/impl/undo/UndoHistory";
 import {mock, MockProxy} from "jest-mock-extended";
 
 jest.mock("../../src/api/undo/Undoable");
 
 let undoable: Undoable & MockProxy<Undoable>;
-let instance: UndoCollector;
+let instance: UndoHistory;
 
 beforeEach(() => {
-    instance = new UndoCollector();
+    instance = new UndoHistory();
     instance.setSizeMax(10);
     undoable = mock<Undoable>();
     undoable.getUndoName.mockReturnValue("undoredomsg");
 });
 
 test("testGetSetInstanceOK", () => {
-    UndoCollector.setInstance(instance);
-    expect(UndoCollector.getInstance()).toBe(instance);
+    UndoHistory.setInstance(instance);
+    expect(UndoHistory.getInstance()).toBe(instance);
 });
 
 test("testUndoCallundo", () => {

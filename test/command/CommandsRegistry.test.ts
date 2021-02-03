@@ -14,7 +14,7 @@
 
 import {Command, CmdStatus, RegistrationPolicy} from "../../src/api/command/Command";
 import {CommandsRegistry} from "../../src/impl/command/CommandsRegistry";
-import {UndoCollector} from "../../src/impl/undo/UndoCollector";
+import {UndoHistory} from "../../src/impl/undo/UndoHistory";
 import {StubCmd} from "./StubCmd";
 import {mock} from "jest-mock-extended";
 import {Undoable} from "../../src/api/undo/Undoable";
@@ -24,7 +24,7 @@ let instance: CommandsRegistry;
 beforeEach(() => {
     instance = new CommandsRegistry();
     instance.setSizeMax(30);
-    UndoCollector.getInstance().clear();
+    UndoHistory.getInstance().clear();
 });
 
 test("testGetSetSizeMaxOK", () => {
@@ -134,7 +134,7 @@ test("testAddCommandRemovesCommandWhenMaxCapacity0", () => {
 test("testAddCommandAddsUndoableCollector", () => {
     const command = mock<Command & Undoable>();
     instance.addCommand(command);
-    expect(UndoCollector.getInstance().getLastUndo()).toBe(command);
+    expect(UndoHistory.getInstance().getLastUndo()).toBe(command);
 });
 
 

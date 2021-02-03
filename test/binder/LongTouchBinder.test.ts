@@ -19,7 +19,7 @@ import {
     InteractionData,
     LogLevel,
     longTouchBinder,
-    UndoCollector,
+    UndoHistory,
     Binding
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
@@ -40,7 +40,7 @@ afterEach(() => {
     disposable?.unsubscribe();
     binding?.uninstallBinding();
     CommandsRegistry.getInstance().clear();
-    UndoCollector.getInstance().clear();
+    UndoHistory.getInstance().clear();
 });
 
 describe("on canvas", () => {

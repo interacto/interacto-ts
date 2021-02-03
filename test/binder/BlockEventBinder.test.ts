@@ -17,7 +17,7 @@ import {
     nodeBinder,
     PointData,
     Press,
-    UndoCollector,
+    UndoHistory,
     Binding
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
@@ -40,7 +40,7 @@ afterEach(() => {
         disposable.unsubscribe();
     }
     CommandsRegistry.getInstance().clear();
-    UndoCollector.getInstance().clear();
+    UndoHistory.getInstance().clear();
     binding1.uninstallBinding();
     binding2.uninstallBinding();
 });

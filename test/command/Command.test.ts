@@ -14,7 +14,7 @@
 import {CmdStatus, RegistrationPolicy} from "../../src/api/command/Command";
 import {CommandBase} from "../../src/impl/command/CommandBase";
 import {CommandsRegistry} from "../../src/impl/command/CommandsRegistry";
-import {UndoCollector} from "../../src/impl/undo/UndoCollector";
+import {UndoHistory} from "../../src/impl/undo/UndoHistory";
 import {StubCmd} from "./StubCmd";
 
 let cmd: StubCmd;
@@ -24,7 +24,7 @@ beforeEach(() => {
     cmd = new StubCmd();
     cmd.candoValue = true;
     CommandsRegistry.getInstance().clear();
-    UndoCollector.getInstance().clear();
+    UndoHistory.getInstance().clear();
 });
 
 test("cando default", () => {

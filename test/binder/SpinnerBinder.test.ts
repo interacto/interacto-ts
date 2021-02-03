@@ -18,7 +18,7 @@ import {
     InteractionData,
     spinnerBinder,
     SpinnerChangedFSM,
-    UndoCollector,
+    UndoHistory,
     Binding,
     WidgetData
 } from "../../src/interacto";
@@ -47,7 +47,7 @@ afterEach(() => {
         disposable.unsubscribe();
     }
     CommandsRegistry.getInstance().clear();
-    UndoCollector.getInstance().clear();
+    UndoHistory.getInstance().clear();
     if (binding !== undefined) {
         binding.uninstallBinding();
     }

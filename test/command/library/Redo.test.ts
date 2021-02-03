@@ -13,24 +13,24 @@
  */
 
 import {Redo} from "../../../src/impl/command/library/Redo";
-import {UndoCollector} from "../../../src/impl/undo/UndoCollector";
+import {UndoHistory} from "../../../src/impl/undo/UndoHistory";
 import {Undoable} from "../../../src/api/undo/Undoable";
 import {mock, MockProxy} from "jest-mock-extended";
 
 let cmd: Redo;
-let collector: UndoCollector & MockProxy<UndoCollector>;
+let collector: UndoHistory & MockProxy<UndoHistory>;
 
 
 describe("base redo testing", () => {
     beforeEach(() => {
         cmd = new Redo();
-        collector = mock<UndoCollector>();
-        UndoCollector.setInstance(collector);
-        UndoCollector.getInstance = jest.fn().mockImplementation(() => collector);
+        collector = mock<UndoHistory>();
+        UndoHistory.setInstance(collector);
+        UndoHistory.getInstance = jest.fn().mockImplementation(() => collector);
     });
 
     afterAll(() => {
-        UndoCollector.setInstance(new UndoCollector());
+        UndoHistory.setInstance(new UndoHistory());
     });
 
     test("testCannotDo", () => {

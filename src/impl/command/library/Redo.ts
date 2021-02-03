@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {UndoCollector} from "../../undo/UndoCollector";
+import {UndoHistory} from "../../undo/UndoHistory";
 import {CommandBase} from "../CommandBase";
 
 /**
@@ -24,10 +24,10 @@ export class Redo extends CommandBase {
     }
 
     public canExecute(): boolean {
-        return UndoCollector.getInstance().getLastRedo() !== undefined;
+        return UndoHistory.getInstance().getLastRedo() !== undefined;
     }
 
     protected execution(): void {
-        UndoCollector.getInstance().redo();
+        UndoHistory.getInstance().redo();
     }
 }

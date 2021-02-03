@@ -17,19 +17,19 @@ import {Subject, Observable} from "rxjs";
 import {peek} from "../util/ArrayUtil";
 
 /**
- * A collector of undone/redone objects.
+ * A history of undone/redone objects.
  */
-export class UndoCollector {
+export class UndoHistory {
     /**
      * The default undo/redo collector.
      */
-    private static instance: UndoCollector = new UndoCollector();
+    private static instance: UndoHistory = new UndoHistory();
 
-    public static setInstance(newInstance: UndoCollector): void {
+    public static setInstance(newInstance: UndoHistory): void {
         this.instance = newInstance;
     }
 
-    public static getInstance(): UndoCollector {
+    public static getInstance(): UndoHistory {
         return this.instance;
     }
 
