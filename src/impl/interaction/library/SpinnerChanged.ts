@@ -93,7 +93,9 @@ export class SpinnerChanged extends InteractionBase<WidgetData<HTMLInputElement>
             "initToChangedHandler": (event: Event): void => {
                 (this.data as WidgetDataImpl<HTMLInputElement>).setWidget(event.target as HTMLInputElement);
             },
-            "reinitData": (): void => this.reinitData()
+            "reinitData": (): void => {
+                this.reinitData();
+            }
         };
 
         this.fsm.buildFSM(this.handler);

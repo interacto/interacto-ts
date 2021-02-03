@@ -14,7 +14,7 @@
 
 import {EventType} from "../../src/api/fsm/EventType";
 
-export function createTouchEvent(type: "touchstart" | "touchend" | "touchmove", id: number, target: EventTarget,
+export function createTouchEvent(type: "touchend" | "touchmove" | "touchstart", id: number, target: EventTarget,
                                  screenX?: number, screenY?: number,
                                  clientX?: number, clientY?: number, timeStamp?: number): TouchEvent {
     const screenXvalue = screenX ?? 0;
@@ -59,7 +59,7 @@ export function createTouchEvent(type: "touchstart" | "touchend" | "touchmove", 
 }
 
 
-export function createMouseEvent(type: "mousedown" | "mouseup" | "mousemove" | "click" | "auxclick",
+export function createMouseEvent(type: "auxclick" | "click" | "mousedown" | "mousemove" | "mouseup",
                                  target: EventTarget, screenX?: number, screenY?: number, clientX?: number,
                                  clientY?: number, button?: number): MouseEvent {
     const screenXvalue = screenX ?? 0;

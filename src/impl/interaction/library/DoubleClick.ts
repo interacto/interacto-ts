@@ -86,7 +86,9 @@ export class DoubleClickFSM extends FSMImpl {
         this.setStartingState(dbleclicked);
 
         const firstClick = new SubFSMTransition(this.initState, clicked, this.firstClickFSM);
-        firstClick.action = (): void => this.setCheckButton(this.firstClickFSM.getCheckButton());
+        firstClick.action = (): void => {
+            this.setCheckButton(this.firstClickFSM.getCheckButton());
+        };
 
         const move = new MoveTransition(clicked, cancelled);
         move.isGuardOK = (event: Event): boolean => (this.checkButton === undefined || event instanceof MouseEvent &&

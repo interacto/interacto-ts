@@ -35,20 +35,20 @@
     "@rollup/plugin-node-resolve": "^9.0.0",
     "@types/jest": "^26.0.19",
     "@types/node": "^14.14.6",
-    "@typescript-eslint/eslint-plugin": "^4.6.0",
-    "@typescript-eslint/parser": "^4.6.0",
+    "@typescript-eslint/eslint-plugin": "^4.14.2",
+    "@typescript-eslint/parser": "^4.14.2",
     "barrelsby": "^2.2.0",
-    "eslint": "^7.12.1",
-    "eslint-plugin-jest": "^24.1.0",
-    "eslint-plugin-tsdoc": "^0.2.7",
+    "eslint": "^7.19.0",
+    "eslint-plugin-jest": "^24.1.3",
+    "eslint-plugin-tsdoc": "^0.2.11",
     "jest": "^26.6.3",
     "jest-mock-extended": "^1.0.10",
     "rollup": "^2.28.1",
     "rollup-plugin-sourcemaps": "^0.6.2",
     "rollup-plugin-typescript2": "^0.27.2",
-    "ts-jest": "^26.4.4",
-    "typedoc": "^0.18.0",
-    "typescript": "^3.8.3"
+    "ts-jest": "^26.5.0",
+    "typedoc": "^0.20.20",
+    "typescript": "^4.1.3"
   },
   "scripts": {
     "package": "npm run pre-build && npm run build && npm run doc",
@@ -62,7 +62,7 @@
     "lint": "eslint src test --ext .ts",
     "lint-fix": "eslint src test --ext .ts --fix",
     "coverage": "jest --coverage --collectCoverageFrom=src*/**/*.ts",
-    "doc": "typedoc --mode file --theme minimal --out docs",
+    "doc": "typedoc --theme minimal --out docs src/interacto.ts",
     "test-publish": "npm pack"
   },
   "dependencies": {

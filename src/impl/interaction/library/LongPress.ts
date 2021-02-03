@@ -101,7 +101,9 @@ export class LongPress extends InteractionBase<PointData, LongPressFSM> {
                     evt.clientX, evt.clientY, evt.screenX, evt.screenY, evt.button, evt.target ?? undefined,
                     evt.currentTarget ?? undefined);
             },
-            "reinitData": (): void => this.reinitData()
+            "reinitData": (): void => {
+                this.reinitData();
+            }
         };
 
         this.getFsm().buildFSM(this.handler);

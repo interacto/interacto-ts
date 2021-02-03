@@ -64,7 +64,9 @@ export class ComboBoxSelected extends InteractionBase<WidgetData<HTMLSelectEleme
             "initToSelectedHandler": (event: Event): void => {
                 (this.data as WidgetDataImpl<HTMLSelectElement>).setWidget(event.target as HTMLSelectElement);
             },
-            "reinitData": (): void => this.reinitData()
+            "reinitData": (): void => {
+                this.reinitData();
+            }
         };
 
         this.fsm.buildFSM(this.handler);

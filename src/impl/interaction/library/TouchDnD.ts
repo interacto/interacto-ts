@@ -110,9 +110,15 @@ export class TouchDnD extends InteractionBase<SrcTgtTouchData, TouchDnDFSM> {
                 (this.data as (SrcTgtTouchDataImpl)).setTouchId(touch.identifier);
                 this.setTgtData(evt);
             },
-            "onMove": (evt: TouchEvent): void => this.setTgtData(evt),
-            "onRelease": (evt: TouchEvent): void => this.setTgtData(evt),
-            "reinitData": (): void => this.reinitData()
+            "onMove": (evt: TouchEvent): void => {
+                this.setTgtData(evt);
+            },
+            "onRelease": (evt: TouchEvent): void => {
+                this.setTgtData(evt);
+            },
+            "reinitData": (): void => {
+                this.reinitData();
+            }
         };
 
         this.getFsm().buildFSM(this.handler);

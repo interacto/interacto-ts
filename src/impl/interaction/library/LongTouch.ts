@@ -106,7 +106,9 @@ export class LongTouch extends InteractionBase<TouchData, LongTouchFSM> {
                     (this.data as (SrcTgtTouchDataImpl)).setTouchId(touch.identifier);
                 }
             },
-            "reinitData": (): void => this.reinitData()
+            "reinitData": (): void => {
+                this.reinitData();
+            }
         };
 
         this.getFsm().buildFSM(this.handler);

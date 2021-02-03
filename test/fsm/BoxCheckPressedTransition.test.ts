@@ -19,7 +19,7 @@ import {InputState} from "../../src/api/fsm/InputState";
 import {createEventWithTarget} from "../interaction/StubEvents";
 
 let tr: BoxCheckPressedTransition;
-let src: OutputState & MockProxy<OutputState>;
+let src: MockProxy<OutputState> & OutputState;
 let tgt: InputState & MockProxy<InputState>;
 let evt: Event;
 

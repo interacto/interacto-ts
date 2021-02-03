@@ -71,7 +71,9 @@ export class SubFSMTransition extends TransitionBase<Event> {
                     this.tgt.enter();
                 }
             },
-            "fsmCancels": (): void => this.cancelsFSM()
+            "fsmCancels": (): void => {
+                this.cancelsFSM();
+            }
         };
     }
 

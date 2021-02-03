@@ -69,7 +69,9 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
         this.interaction.stopImmediatePropagation = stopPropa;
         this.interaction.preventDefault = prevDef;
         // this.interaction.setThrottleTimeout(timeoutThrottle);
-        dynamicNodes.forEach(node => interaction.registerToNodeChildren(node));
+        dynamicNodes.forEach(node => {
+            interaction.registerToNodeChildren(node);
+        });
     }
 
     private configureLoggers(loggers: ReadonlyArray<LogLevel>): void {

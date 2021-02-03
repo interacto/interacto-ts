@@ -76,7 +76,9 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
         this.preventDef = false;
         this.data = this.createDataObject();
         this.fsm = fsm;
-        this.disposable = this.fsm.currentStateObservable().subscribe(current => this.updateEventsRegistered(current[1], current[0]));
+        this.disposable = this.fsm.currentStateObservable().subscribe(current => {
+            this.updateEventsRegistered(current[1], current[0]);
+        });
         this.activated = true;
         this.asLog = false;
         this.registeredNodes = new Set<EventTarget>();
@@ -107,8 +109,12 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
         const eventsToRemove: ReadonlyArray<EventType> = events.filter(e => !currEvents.includes(e));
         const eventsToAdd: ReadonlyArray<EventType> = currEvents.filter(e => !events.includes(e));
         this.registeredNodes.forEach(n => {
-            eventsToRemove.forEach(type => this.unregisterEventToNode(type, n));
-            eventsToAdd.forEach(type => this.registerEventToNode(type, n));
+            eventsToRemove.forEach(type => {
+                this.unregisterEventToNode(type, n);
+            });
+            eventsToAdd.forEach(type => {
+                this.registerEventToNode(type, n);
+            });
         });
         // this.additionalNodes.forEach(n => {
         //     n.childNodes.forEach(child => {
@@ -125,8 +131,12 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
 
     private callBackMutationObserver(mutationList: ReadonlyArray<MutationRecord>): void {
         mutationList.forEach(mutation => {
-            mutation.addedNodes.forEach(node => this.registerToNodes([node]));
-            mutation.removedNodes.forEach(node => this.unregisterFromNodes([node]));
+            mutation.addedNodes.forEach(node => {
+                this.registerToNodes([node]);
+            });
+            mutation.removedNodes.forEach(node => {
+                this.unregisterFromNodes([node]);
+            });
         });
     }
 
@@ -154,11 +164,15 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
     }
 
     public onNodeUnregistered(node: EventTarget): void {
-        this.getEventTypesOf(this.fsm.getCurrentState()).forEach(type => this.unregisterEventToNode(type, node));
+        this.getEventTypesOf(this.fsm.getCurrentState()).forEach(type => {
+            this.unregisterEventToNode(type, node);
+        });
     }
 
     public onNewNodeRegistered(node: EventTarget): void {
-        this.getEventTypesOf(this.fsm.getCurrentState()).forEach(type => this.registerEventToNode(type, node));
+        this.getEventTypesOf(this.fsm.getCurrentState()).forEach(type => {
+            this.registerEventToNode(type, node);
+        });
     }
 
     public registerToNodeChildren(elementToObserve: Node): void {
@@ -166,7 +180,9 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
             this.registerToNodes([node]);
         });
 
-        const newMutationObserver = new MutationObserver(mutations => this.callBackMutationObserver(mutations));
+        const newMutationObserver = new MutationObserver(mutations => {
+            this.callBackMutationObserver(mutations);
+        });
         newMutationObserver.observe(elementToObserve, {"childList": true});
         this.mutationObservers.push(newMutationObserver);
     }
@@ -229,35 +245,45 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
 
     protected getActionHandler(): EventListener {
         if (this.actionHandler === undefined) {
-            this.actionHandler = (evt): void => this.processEvent(evt);
+            this.actionHandler = (evt): void => {
+                this.processEvent(evt);
+            };
         }
         return this.actionHandler;
     }
 
     protected getMouseHandler(): (e: MouseEvent) => void {
         if (this.mouseHandler === undefined) {
-            this.mouseHandler = (evt: MouseEvent): void => this.processEvent(evt);
+            this.mouseHandler = (evt: MouseEvent): void => {
+                this.processEvent(evt);
+            };
         }
         return this.mouseHandler;
     }
 
     protected getTouchHandler(): (e: TouchEvent) => void {
         if (this.touchHandler === undefined) {
-            this.touchHandler = (evt: TouchEvent): void => this.processEvent(evt);
+            this.touchHandler = (evt: TouchEvent): void => {
+                this.processEvent(evt);
+            };
         }
         return this.touchHandler;
     }
 
     protected getKeyHandler(): (e: KeyboardEvent) => void {
         if (this.keyHandler === undefined) {
-            this.keyHandler = (evt: KeyboardEvent): void => this.processEvent(evt);
+            this.keyHandler = (evt: KeyboardEvent): void => {
+                this.processEvent(evt);
+            };
         }
         return this.keyHandler;
     }
 
     protected getUIHandler(): (e: UIEvent) => void {
         if (this.uiHandler === undefined) {
-            this.uiHandler = (evt: UIEvent): void => this.processEvent(evt);
+            this.uiHandler = (evt: UIEvent): void => {
+                this.processEvent(evt);
+            };
         }
         return this.uiHandler;
     }
@@ -340,9 +366,13 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
 
     public uninstall(): void {
         this.disposable.unsubscribe();
-        this.registeredNodes.forEach(n => this.onNodeUnregistered(n));
+        this.registeredNodes.forEach(n => {
+            this.onNodeUnregistered(n);
+        });
         this.registeredNodes.clear();
-        this.mutationObservers.forEach(m => m.disconnect());
+        this.mutationObservers.forEach(m => {
+            m.disconnect();
+        });
         this.mutationObservers.length = 0;
         this.setActivated(false);
     }

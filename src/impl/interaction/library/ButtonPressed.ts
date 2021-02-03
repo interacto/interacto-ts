@@ -67,7 +67,9 @@ export class ButtonPressed extends InteractionBase<WidgetData<HTMLButtonElement>
             "initToPressedHandler": (event: InputEvent): void => {
                 (this.data as WidgetDataImpl<HTMLButtonElement>).setWidget(event.target as HTMLButtonElement);
             },
-            "reinitData": (): void => this.reinitData()
+            "reinitData": (): void => {
+                this.reinitData();
+            }
         };
 
         this.fsm.buildFSM(this.handler);

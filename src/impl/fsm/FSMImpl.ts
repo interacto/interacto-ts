@@ -184,7 +184,7 @@ export class FSMImpl implements FSM {
         }
     }
 
-    public enterStdState(state: OutputState & InputState): void {
+    public enterStdState(state: InputState & OutputState): void {
         this.setCurrentState(state);
         this.checkTimeoutTransition();
         if (this.started) {
@@ -351,7 +351,9 @@ export class FSMImpl implements FSM {
      */
     protected notifyHandlerOnStart(): void {
         try {
-            this.handlers.forEach(handler => handler.fsmStarts());
+            this.handlers.forEach(handler => {
+                handler.fsmStarts();
+            });
         } catch (ex) {
             if (!(ex instanceof CancelFSMException)) {
                 FSMImpl.exLog.error("crash in notifyHandlerOnStart", ex);
@@ -366,7 +368,9 @@ export class FSMImpl implements FSM {
      */
     protected notifyHandlerOnUpdate(): void {
         try {
-            this.handlers.forEach(handler => handler.fsmUpdates());
+            this.handlers.forEach(handler => {
+                handler.fsmUpdates();
+            });
         } catch (ex) {
             if (!(ex instanceof CancelFSMException)) {
                 FSMImpl.exLog.error("crash in notifyHandlerOnUpdate", ex);
@@ -381,7 +385,9 @@ export class FSMImpl implements FSM {
      */
     public notifyHandlerOnStop(): void {
         try {
-            [...this.handlers].forEach(handler => handler.fsmStops());
+            [...this.handlers].forEach(handler => {
+                handler.fsmStops();
+            });
         } catch (ex) {
             if (!(ex instanceof CancelFSMException)) {
                 FSMImpl.exLog.error("crash in notifyHandlerOnStop", ex);
@@ -395,7 +401,9 @@ export class FSMImpl implements FSM {
      * Notifies handler that the interaction is cancelled.
      */
     protected notifyHandlerOnCancel(): void {
-        [...this.handlers].forEach(handler => handler.fsmCancels());
+        [...this.handlers].forEach(handler => {
+            handler.fsmCancels();
+        });
     }
 
     public getStates(): ReadonlyArray<State> {
@@ -423,7 +431,9 @@ export class FSMImpl implements FSM {
         this.asLogFSM = false;
         this.currentStatePublisher.complete();
         this.currentSubFSM = undefined;
-        this.states.forEach(state => state.uninstall());
+        this.states.forEach(state => {
+            state.uninstall();
+        });
         this.states.length = 0;
         this.dataHandler = undefined;
     }

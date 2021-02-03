@@ -63,7 +63,9 @@ export class HyperLinkClicked extends InteractionBase<WidgetData<HTMLAnchorEleme
             "initToClickedHandler": (event: Event): void => {
                 (this.data as WidgetDataImpl<HTMLAnchorElement>).setWidget(event.target as HTMLAnchorElement);
             },
-            "reinitData": (): void => this.reinitData()
+            "reinitData": (): void => {
+                this.reinitData();
+            }
         };
 
         this.fsm.buildFSM(this.handler);

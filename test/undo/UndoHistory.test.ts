@@ -18,7 +18,7 @@ import {mock, MockProxy} from "jest-mock-extended";
 
 jest.mock("../../src/api/undo/Undoable");
 
-let undoable: Undoable & MockProxy<Undoable>;
+let undoable: MockProxy<Undoable> & Undoable;
 let instance: UndoHistory;
 
 beforeEach(() => {

@@ -21,7 +21,7 @@ import {mock, MockProxy} from "jest-mock-extended";
 import {catFSM} from "../../src/api/logging/ConfigLog";
 
 let evt: TimeoutTransition;
-let src: OutputState & MockProxy<OutputState>;
+let src: MockProxy<OutputState> & OutputState;
 let tgt: InputState & MockProxy<InputState>;
 let fsm: FSMImpl & MockProxy<FSMImpl>;
 

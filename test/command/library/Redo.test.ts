@@ -18,7 +18,7 @@ import {Undoable} from "../../../src/api/undo/Undoable";
 import {mock, MockProxy} from "jest-mock-extended";
 
 let cmd: Redo;
-let collector: UndoHistory & MockProxy<UndoHistory>;
+let collector: MockProxy<UndoHistory> & UndoHistory;
 
 
 describe("base redo testing", () => {

@@ -36,7 +36,7 @@ export interface KeyInteractionCmdUpdateBinder<C extends Command, I extends Inte
 
     first(initCmdFct: (c: C, i: D) => void): KeyInteractionCmdUpdateBinder<C, I, D>;
 
-    on(widget: Widget<EventTarget> | ReadonlyArray<Widget<EventTarget>>, ...widgets: ReadonlyArray<Widget<EventTarget>>):
+    on(widget: ReadonlyArray<Widget<EventTarget>> | Widget<EventTarget>, ...widgets: ReadonlyArray<Widget<EventTarget>>):
     KeyInteractionCmdUpdateBinder<C, I, D>;
 
     onDynamic(node: Widget<Node>): KeyInteractionCmdUpdateBinder<C, I, D>;

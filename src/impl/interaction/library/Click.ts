@@ -84,7 +84,9 @@ export class Click extends InteractionBase<PointData, ClickFSM> {
                 (this.data as PointDataImpl).setPointData(evt.clientX, evt.clientY, evt.screenX, evt.screenY,
                     evt.button, evt.target ?? undefined, evt.currentTarget ?? undefined);
             },
-            "reinitData": (): void => this.reinitData()
+            "reinitData": (): void => {
+                this.reinitData();
+            }
         };
 
         this.getFsm().buildFSM(this.handler);

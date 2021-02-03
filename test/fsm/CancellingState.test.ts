@@ -18,7 +18,7 @@ import {OutputState} from "../../src/api/fsm/OutputState";
 import {mock, MockProxy} from "jest-mock-extended";
 
 let state: CancellingState;
-let fsm: MockProxy<FSMImpl> & FSMImpl;
+let fsm: FSMImpl & MockProxy<FSMImpl>;
 
 beforeEach(() => {
     fsm = mock<FSMImpl>();

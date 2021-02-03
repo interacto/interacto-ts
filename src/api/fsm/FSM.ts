@@ -95,7 +95,7 @@ export interface FSM {
      */
     stopCurrentTimeout(): void;
 
-    enterStdState(state: OutputState & InputState): void;
+    enterStdState(state: InputState & OutputState): void;
 
     /**
      * States whether the FSM is an inner FSM (ie, whether it is included into another FSM as

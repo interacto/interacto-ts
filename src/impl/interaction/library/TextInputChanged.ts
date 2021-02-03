@@ -90,7 +90,9 @@ export class TextInputChanged extends
                     (this.data as WidgetDataImpl<HTMLInputElement | HTMLTextAreaElement>).setWidget(event.target);
                 }
             },
-            "reinitData": (): void => this.reinitData()
+            "reinitData": (): void => {
+                this.reinitData();
+            }
         };
 
         this.fsm.buildFSM(this.handler);

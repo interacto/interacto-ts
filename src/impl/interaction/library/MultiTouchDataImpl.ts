@@ -54,7 +54,9 @@ export class MultiTouchDataImpl implements MultiTouchData, Flushable {
     }
 
     public flush(): void {
-        this.touchesData.forEach(data => data.flush());
+        this.touchesData.forEach(data => {
+            data.flush();
+        });
         this.touchesData.clear();
     }
 

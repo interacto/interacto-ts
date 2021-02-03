@@ -19,7 +19,7 @@ import {createEventWithTarget} from "../interaction/StubEvents";
 import {DatePickedTransition} from "../../src/impl/fsm/DatePickedTransition";
 
 let tr: DatePickedTransition;
-let src: OutputState & MockProxy<OutputState>;
+let src: MockProxy<OutputState> & OutputState;
 let tgt: InputState & MockProxy<InputState>;
 let evt: Event;
 

@@ -36,7 +36,9 @@ export abstract class ConcurrentInteraction<D extends InteractionData, F extends
         super(fsm);
         this.subscriptions = this.fsm.getConccurFSMs()
             .map(conc => conc.currentStateObservable()
-                .subscribe(current => this.updateEventsRegistered(current[1], current[0])));
+                .subscribe(current => {
+                    this.updateEventsRegistered(current[1], current[0]);
+                }));
     }
 
     public isRunning(): boolean {
@@ -44,11 +46,15 @@ export abstract class ConcurrentInteraction<D extends InteractionData, F extends
     }
 
     public onNodeUnregistered(node: EventTarget): void {
-        this.getCurrentAcceptedEvents().forEach(type => this.unregisterEventToNode(type, node));
+        this.getCurrentAcceptedEvents().forEach(type => {
+            this.unregisterEventToNode(type, node);
+        });
     }
 
     public onNewNodeRegistered(node: EventTarget): void {
-        this.getCurrentAcceptedEvents().forEach(type => this.registerEventToNode(type, node));
+        this.getCurrentAcceptedEvents().forEach(type => {
+            this.registerEventToNode(type, node);
+        });
     }
 
     public getCurrentAcceptedEvents(_state?: OutputState): ReadonlyArray<EventType> {
@@ -57,6 +63,8 @@ export abstract class ConcurrentInteraction<D extends InteractionData, F extends
 
     public uninstall(): void {
         super.uninstall();
-        this.subscriptions.forEach(sub => sub.unsubscribe());
+        this.subscriptions.forEach(sub => {
+            sub.unsubscribe();
+        });
     }
 }

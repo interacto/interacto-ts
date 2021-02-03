@@ -111,7 +111,9 @@ export class CommandsRegistry {
      * Flushes and removes all the stored commands.
      */
     public clear(): void {
-        this.cmds.forEach(cmd => cmd.flush());
+        this.cmds.forEach(cmd => {
+            cmd.flush();
+        });
         this.cmds.length = 0;
     }
 

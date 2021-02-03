@@ -77,7 +77,9 @@ export class KeyPressed extends InteractionBase<KeyData, KeyPressedFSM> {
             "onKeyPressed": (event: KeyboardEvent): void => {
                 (this.getData() as KeyDataImpl).setKeyData(event);
             },
-            "reinitData": (): void => this.reinitData()
+            "reinitData": (): void => {
+                this.reinitData();
+            }
         };
 
         this.getFsm().buildFSM(this.handler);

@@ -53,10 +53,14 @@ export class Press extends InteractionBase<PointData, PressFSM> {
         super(new PressFSM());
 
         this.handler = {
-            "initToPress": (evt: MouseEvent): void => (this.data as PointDataImpl)
-                .setPointData(evt.clientX, evt.clientY, evt.screenX, evt.screenY, evt.button,
-                    evt.target ?? undefined, evt.currentTarget ?? undefined),
-            "reinitData": (): void => this.reinitData()
+            "initToPress": (evt: MouseEvent): void => {
+                (this.data as PointDataImpl)
+                    .setPointData(evt.clientX, evt.clientY, evt.screenX, evt.screenY, evt.button,
+                        evt.target ?? undefined, evt.currentTarget ?? undefined);
+            },
+            "reinitData": (): void => {
+                this.reinitData();
+            }
         };
 
         this.getFsm().buildFSM(this.handler);

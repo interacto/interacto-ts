@@ -62,6 +62,7 @@ test("peek of non empty array", () => {
 });
 
 test("peek of empty array", () => {
-    const res = peek([]);
+    const array: Array<string> = [];
+    const res = peek(array);
     expect(res).toBeUndefined();
 });

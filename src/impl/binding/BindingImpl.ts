@@ -276,9 +276,9 @@ implements Binding<C, I, D> {
                 }
             }
 
-            // We are sure here that the command is not undefined
-            // (this is the goal of createAndInitCommand)
-            this.executeCmd(this.cmd as C);
+            if (this.cmd !== undefined) {
+                this.afterCmdExecuted(this.cmd, this.cmd.execute());
+            }
             this.cmd = undefined;
             this.timeEnded++;
         } else {
@@ -314,10 +314,6 @@ implements Binding<C, I, D> {
         }
 
         return ok;
-    }
-
-    private executeCmd(cmd: C): void {
-        this.afterCmdExecuted(cmd, cmd.execute());
     }
 
     protected afterCmdExecuted(cmd: C, ok: boolean): void {

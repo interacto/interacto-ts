@@ -129,7 +129,9 @@ test("that errors caught on start", () => {
     });
     fsm.addHandler(handler);
 
-    expect(() => fsm.onStarting()).toThrow("crash provoked");
+    expect(() => {
+        fsm.onStarting();
+    }).toThrow("crash provoked");
 });
 
 test("that errors caught on update", () => {
@@ -139,7 +141,9 @@ test("that errors caught on update", () => {
     fsm.onStarting();
     fsm.addHandler(handler);
 
-    expect(() => fsm.onUpdating()).toThrow("crash provoked on update");
+    expect(() => {
+        fsm.onUpdating();
+    }).toThrow("crash provoked on update");
 });
 
 test("that errors caught on end", () => {
@@ -149,7 +153,9 @@ test("that errors caught on end", () => {
     fsm.onStarting();
     fsm.addHandler(handler);
 
-    expect(() => fsm.onTerminating()).toThrow("crash provoked on end");
+    expect(() => {
+        fsm.onTerminating();
+    }).toThrow("crash provoked on end");
 });
 
 test("that errors caught on cancel", () => {
@@ -159,7 +165,9 @@ test("that errors caught on cancel", () => {
     fsm.onStarting();
     fsm.addHandler(handler);
 
-    expect(() => fsm.onCancelling()).toThrow("crash provoked on cancel");
+    expect(() => {
+        fsm.onCancelling();
+    }).toThrow("crash provoked on cancel");
 });
 
 

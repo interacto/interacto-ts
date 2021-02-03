@@ -45,7 +45,9 @@ export class ConcurrentFSM<F extends FSM> extends FSMImpl {
             }
         };
         this.conccurFSMs = [...fsms];
-        this.conccurFSMs.forEach(fsm => fsm.addHandler(handler));
+        this.conccurFSMs.forEach(fsm => {
+            fsm.addHandler(handler);
+        });
     }
 
     /**
@@ -65,11 +67,15 @@ export class ConcurrentFSM<F extends FSM> extends FSMImpl {
 
     public log(log: boolean): void {
         super.log(log);
-        this.conccurFSMs.forEach(fsm => fsm.log(log));
+        this.conccurFSMs.forEach(fsm => {
+            fsm.log(log);
+        });
     }
 
     public uninstall(): void {
         super.uninstall();
-        this.conccurFSMs.forEach(fsm => fsm.uninstall());
+        this.conccurFSMs.forEach(fsm => {
+            fsm.uninstall();
+        });
     }
 }

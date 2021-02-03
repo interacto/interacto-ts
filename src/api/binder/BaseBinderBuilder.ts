@@ -48,7 +48,7 @@ export interface BaseBinderBuilder {
      * @param widgets - The list of the widgets involved in the bindings.
      * @returns A clone of the current builder to chain the building configuration.
      */
-    on(widget: Widget<EventTarget> | ReadonlyArray<Widget<EventTarget>>, ...widgets: ReadonlyArray<Widget<EventTarget>>): BaseBinderBuilder;
+    on(widget: ReadonlyArray<Widget<EventTarget>> | Widget<EventTarget>, ...widgets: ReadonlyArray<Widget<EventTarget>>): BaseBinderBuilder;
 
     /**
      * Specifies the node which children will be observed by the binding.

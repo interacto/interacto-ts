@@ -19,7 +19,7 @@ import {createEventWithTarget} from "../interaction/StubEvents";
 import {ColorPickedTransition} from "../../src/impl/fsm/ColorPickedTransition";
 
 let tr: ColorPickedTransition;
-let src: OutputState & MockProxy<OutputState>;
+let src: MockProxy<OutputState> & OutputState;
 let tgt: InputState & MockProxy<InputState>;
 let evt: Event;
 

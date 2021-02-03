@@ -19,7 +19,7 @@ import {createEventWithTarget} from "../interaction/StubEvents";
 import {HyperLinkTransition} from "../../src/impl/fsm/HyperLinkTransition";
 
 let tr: HyperLinkTransition;
-let src: OutputState & MockProxy<OutputState>;
+let src: MockProxy<OutputState> & OutputState;
 let tgt: InputState & MockProxy<InputState>;
 let evt: Event;
 

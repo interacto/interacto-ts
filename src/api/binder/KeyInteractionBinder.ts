@@ -24,7 +24,7 @@ export interface KeyInteractionBinder<I extends Interaction<D>, D extends Intera
 
     when(whenPredicate: (i: D) => boolean): KeyInteractionBinder<I, D>;
 
-    on(widget: Widget<EventTarget> | ReadonlyArray<Widget<EventTarget>>, ...widgets: ReadonlyArray<Widget<EventTarget>>): KeyInteractionBinder<I, D>;
+    on(widget: ReadonlyArray<Widget<EventTarget>> | Widget<EventTarget>, ...widgets: ReadonlyArray<Widget<EventTarget>>): KeyInteractionBinder<I, D>;
 
     onDynamic(node: Widget<Node>): KeyInteractionBinder<I, D>;
 

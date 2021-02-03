@@ -19,7 +19,7 @@ import {createEventWithTarget} from "../interaction/StubEvents";
 import {ButtonPressedTransition} from "../../src/impl/fsm/ButtonPressedTransition";
 
 let tr: ButtonPressedTransition;
-let src: OutputState & MockProxy<OutputState>;
+let src: MockProxy<OutputState> & OutputState;
 let tgt: InputState & MockProxy<InputState>;
 let evt: Event;
 

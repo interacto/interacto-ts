@@ -118,7 +118,9 @@ export class Tap extends InteractionBase<TapData, TapFSM> {
                             touch.screenX, touch.screenY, touch.target));
                 }
             },
-            "reinitData": (): void => this.reinitData()
+            "reinitData": (): void => {
+                this.reinitData();
+            }
         };
 
         this.getFsm().buildFSM(this.handler);

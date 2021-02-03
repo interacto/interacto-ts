@@ -32,7 +32,9 @@ export class MultiTouchFSM extends ConcurrentFSM<TouchDnDFSM> {
 
     public buildFSM(dataHandler: TouchDnDFSMHandler): void {
         super.buildFSM(dataHandler);
-        this.getConccurFSMs().forEach(fsm => fsm.buildFSM(dataHandler));
+        this.getConccurFSMs().forEach(fsm => {
+            fsm.buildFSM(dataHandler);
+        });
     }
 
     public process(event: Event): boolean {
@@ -74,9 +76,13 @@ export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouch
                         new SrcTgtTouchDataImpl(touch.identifier, touch.clientX, touch.clientY, touch.screenX, touch.screenY, touch.target));
                 }
             },
-            "onMove": (event: TouchEvent): void => (this.data as MultiTouchDataImpl).setTouch(event.changedTouches[0]),
+            "onMove": (event: TouchEvent): void => {
+                (this.data as MultiTouchDataImpl).setTouch(event.changedTouches[0]);
+            },
 
-            "onRelease": (event: TouchEvent): void => (this.data as MultiTouchDataImpl).setTouch(event.changedTouches[0]),
+            "onRelease": (event: TouchEvent): void => {
+                (this.data as MultiTouchDataImpl).setTouch(event.changedTouches[0]);
+            },
 
             "reinitData": (): void => {
                 const currentIDs = this.getFsm().getConccurFSMs()
@@ -86,8 +92,9 @@ export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouch
                 this.getData()
                     .getTouchData()
                     .filter(data => !currentIDs.includes(data.getTouchId()))
-                    .forEach(data => (this.getData() as MultiTouchDataImpl)
-                        .removeTouchData(data.getTouchId() as number));
+                    .forEach(data => {
+                        (this.getData() as MultiTouchDataImpl).removeTouchData(data.getTouchId() ?? -1);
+                    });
             }
         };
 

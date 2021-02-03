@@ -127,8 +127,12 @@ export class DnD extends InteractionBase<SrcTgtPointsData, DnDFSM> {
             "onDrag": (evt: MouseEvent): void => {
                 this.setTgt(evt);
             },
-            "onRelease": (evt: MouseEvent): void => this.setTgt(evt),
-            "reinitData": (): void => this.reinitData()
+            "onRelease": (evt: MouseEvent): void => {
+                this.setTgt(evt);
+            },
+            "reinitData": (): void => {
+                this.reinitData();
+            }
         };
 
         this.getFsm().buildFSM(this.handler);

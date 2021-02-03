@@ -22,7 +22,7 @@ import {Widget} from "./BaseBinderBuilder";
 export interface InteractionUpdateBinder<I extends Interaction<D>, D extends InteractionData>
     extends InteractionUpdateBinderBuilder<I, D> {
 
-    on(widget: Widget<EventTarget> | ReadonlyArray<Widget<EventTarget>>, ...widgets: ReadonlyArray<Widget<EventTarget>>):
+    on(widget: ReadonlyArray<Widget<EventTarget>> | Widget<EventTarget>, ...widgets: ReadonlyArray<Widget<EventTarget>>):
     InteractionUpdateBinder<I, D>;
 
     onDynamic(node: Widget<Node>): InteractionUpdateBinder<I, D>;

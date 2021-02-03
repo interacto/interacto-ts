@@ -69,7 +69,7 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, D extends I
         return dup;
     }
 
-    public on(widget: Widget<EventTarget> | ReadonlyArray<Widget<EventTarget>>, ...widgets: ReadonlyArray<Widget<EventTarget>>):
+    public on(widget: ReadonlyArray<Widget<EventTarget>> | Widget<EventTarget>, ...widgets: ReadonlyArray<Widget<EventTarget>>):
     KeysBinder<C, I, D> {
         return super.on(widget, ...widgets) as KeysBinder<C, I, D>;
     }
@@ -82,7 +82,7 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, D extends I
         return super.first(initCmdFct) as KeysBinder<C, I, D>;
     }
 
-    public when(checkCmd: ((i: D) => boolean) | (() => boolean)): KeysBinder<C, I, D> {
+    public when(checkCmd: (() => boolean) | ((i: D) => boolean)): KeysBinder<C, I, D> {
         return super.when(checkCmd) as KeysBinder<C, I, D>;
     }
 

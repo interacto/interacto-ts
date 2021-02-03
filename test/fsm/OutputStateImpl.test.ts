@@ -21,7 +21,7 @@ import {mock, MockProxy} from "jest-mock-extended";
 import {Transition} from "../../src/api/fsm/Transition";
 
 let state: OutputStateBase;
-let fsm: MockProxy<FSMImpl> & FSMImpl;
+let fsm: FSMImpl & MockProxy<FSMImpl>;
 
 beforeEach(() => {
     fsm = mock<FSMImpl>();

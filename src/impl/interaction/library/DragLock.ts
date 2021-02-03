@@ -140,7 +140,9 @@ export class DragLock extends InteractionBase<SrcTgtPointsData, DragLockFSM> {
                     evt.screenY, evt.button, evt.target ?? undefined, evt.currentTarget ?? undefined);
                 (this.sndClick.firstClick.getData() as (PointDataImpl)).setModifiersData(evt);
             },
-            "reinitData": (): void => this.reinitData()
+            "reinitData": (): void => {
+                this.reinitData();
+            }
         };
 
         this.firstClick = new DoubleClick(this.getFsm().firstDbleClick);
@@ -154,7 +156,7 @@ export class DragLock extends InteractionBase<SrcTgtPointsData, DragLockFSM> {
         this.sndClick.reinitData();
     }
 
-    public createDataObject(): SrcTgtPointsData & Flushable {
+    public createDataObject(): Flushable & SrcTgtPointsData {
         return {
             "getTgtObject": (): EventTarget | undefined => (this.sndClick.getData().getButton() === undefined
                 ? this.firstClick.getData().getSrcObject()

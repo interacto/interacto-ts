@@ -188,7 +188,9 @@ export class Pan extends InteractionBase<SrcTgtTouchData, PanFSM> {
                 (this.data as (SrcTgtTouchDataImpl)).setTgtData(touch.clientX, touch.clientY, touch.screenX,
                     touch.screenY, touch.target);
             },
-            "reinitData": (): void => this.reinitData()
+            "reinitData": (): void => {
+                this.reinitData();
+            }
         };
 
         this.getFsm().buildFSM(this.handler);

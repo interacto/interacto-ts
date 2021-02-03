@@ -92,7 +92,9 @@ export class KeysTyped extends InteractionBase<KeysData, KeysTypedFSM> {
                 (this.data as (KeysDataImpl)).setKeysDataTarget(event);
                 (this.data as (KeysDataImpl)).addKeysDataKey(event);
             },
-            "reinitData": (): void => this.reinitData()
+            "reinitData": (): void => {
+                this.reinitData();
+            }
         };
 
         this.getFsm().buildFSM(handler);

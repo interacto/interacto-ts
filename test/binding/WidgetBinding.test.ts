@@ -159,13 +159,17 @@ describe("nominal cases", () => {
 
     test("interaction starts throw MustCancelStateMachineException", () => {
         binding.mustCancel = true;
-        expect(() => binding.fsmStarts()).toThrow(CancelFSMException);
+        expect(() => {
+            binding.fsmStarts();
+        }).toThrow(CancelFSMException);
     });
 
     test("interaction starts throw MustCancelStateMachineException with log", () => {
         binding.mustCancel = true;
         binding.setLogBinding(true);
-        expect(() => binding.fsmStarts()).toThrow(CancelFSMException);
+        expect(() => {
+            binding.fsmStarts();
+        }).toThrow(CancelFSMException);
     });
 
     test("testInteractionStartsOk", () => {
@@ -255,7 +259,9 @@ describe("nominal cases", () => {
         binding.fsmStarts();
         // eslint-disable-next-line no-unused-expressions
         binding.getCommand()?.done();
-        expect(() => binding.fsmCancels()).toThrow(MustBeUndoableCmdException);
+        expect(() => {
+            binding.fsmCancels();
+        }).toThrow(MustBeUndoableCmdException);
     });
 
     test("cancel interaction continuous no effect", () => {

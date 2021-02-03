@@ -83,7 +83,7 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
 
     protected abstract duplicate(): Binder<C, I, D>;
 
-    public on(widget: Widget<EventTarget> | ReadonlyArray<Widget<EventTarget>>, ...widgets: ReadonlyArray<Widget<EventTarget>>):
+    public on(widget: ReadonlyArray<Widget<EventTarget>> | Widget<EventTarget>, ...widgets: ReadonlyArray<Widget<EventTarget>>):
     Binder<C, I, D> {
         const ws = [...widgets].concat(widget).map(w => {
             if (isEltRef(w)) {
