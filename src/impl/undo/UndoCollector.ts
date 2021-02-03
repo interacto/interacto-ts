@@ -104,7 +104,7 @@ export class UndoCollector {
     public add(undoable: Undoable): void {
         if (this.sizeMax > 0) {
             if (this.undos.length === this.sizeMax) {
-                this.undos.pop();
+                this.undos.shift();
             }
 
             this.undos.push(undoable);
@@ -195,12 +195,8 @@ export class UndoCollector {
      */
     public setSizeMax(max: number): void {
         if (max >= 0) {
-            let removed = false;
-            for (let i = 0, nb = this.undos.length - max; i < nb; i++) {
-                this.undos.pop();
-                removed = true;
-            }
-            if (removed && this.undos.length === 0) {
+            const removed = this.undos.splice(0, this.undos.length - max);
+            if (this.undos.length === 0 && removed.length > 0) {
                 this.undoPublisher.next(undefined);
             }
             this.sizeMax = max;

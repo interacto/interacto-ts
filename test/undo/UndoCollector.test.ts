@@ -66,6 +66,19 @@ test("testRedoCallredo", () => {
 });
 
 
+test("history limit works as expected on new undoable instances", () => {
+    const undoable2 = mock<Undoable>();
+    const undoable3 = mock<Undoable>();
+    instance.setSizeMax(2);
+    instance.add(undoable);
+    instance.add(undoable2);
+    instance.add(undoable3);
+    expect(instance.getUndo()).toHaveLength(2);
+    expect(instance.getUndo()[0]).toBe(undoable2);
+    expect(instance.getUndo()[1]).toBe(undoable3);
+});
+
+
 test("testSetSizeMaxKO", () => {
     instance.setSizeMax(-1);
     instance.add(undoable);
@@ -85,19 +98,13 @@ test("testAddUndoablewith0SizeUndoable", () => {
     expect(instance.getRedo()).toHaveLength(0);
 });
 
-test("testAddUndoablewithLimitedUndoSize", () => {
-    const undoable2 = mock<Undoable>();
-    instance.setSizeMax(1);
-    instance.add(undoable);
-    instance.add(undoable2);
-    expect(instance.getUndo()).toHaveLength(1);
-    expect(instance.getUndo()[0]).toBe(undoable2);
-});
 
 test("testSizeMaxMutatorsUndoableRemoved", () => {
     instance.setSizeMax(5);
     instance.add(undoable);
-    expect(instance.getLastUndo()).not.toBeUndefined();
+    expect(instance.getUndo()).toHaveLength(1);
+    expect(instance.getRedo()).toHaveLength(0);
+    expect(instance.getLastUndo()).toBe(undoable);
 });
 
 test("testSizeMaxRemovedWhen0", () => {
@@ -112,18 +119,52 @@ test("testSizeMaxRemovedWhen0", () => {
     expect(undos[0]).toBeUndefined();
 });
 
-test("testSizeMaxRemovedWhen1", () => {
+test("changing the history size clears two oldest undoable instances", () => {
     const undoable2 = mock<Undoable>();
-    const undos = new Array<Undoable | undefined>();
-    instance.setSizeMax(5);
+    const undoable3 = mock<Undoable>();
     instance.add(undoable);
     instance.add(undoable2);
-    const undosStream = instance.undosObservable().subscribe((e: Undoable | undefined) => undos.push(e));
+    instance.add(undoable3);
     instance.setSizeMax(1);
-    undosStream.unsubscribe();
-    expect(instance.getLastUndo()).not.toBeUndefined();
-    expect(instance.getLastUndo()).toStrictEqual(undoable);
-    expect(undos).toHaveLength(0);
+
+    expect(instance.getUndo()).toHaveLength(1);
+    expect(instance.getLastUndo()).toBe(undoable3);
+});
+
+test("changing the history size clears one oldest undoable instances", () => {
+    const undoable2 = mock<Undoable>();
+    const undoable3 = mock<Undoable>();
+    instance.add(undoable);
+    instance.add(undoable2);
+    instance.add(undoable3);
+    instance.setSizeMax(2);
+
+    expect(instance.getUndo()).toHaveLength(2);
+    expect(instance.getUndo()[0]).toBe(undoable2);
+    expect(instance.getUndo()[1]).toBe(undoable3);
+});
+
+test("changing the history size clears all oldest undoable instances", () => {
+    const undoable2 = mock<Undoable>();
+    const undoable3 = mock<Undoable>();
+    instance.add(undoable);
+    instance.add(undoable2);
+    instance.add(undoable3);
+    instance.setSizeMax(0);
+
+    expect(instance.getUndo()).toHaveLength(0);
+    expect(instance.getLastUndo()).toBeUndefined();
+});
+
+test("changing the history size does not remove undoable instances", () => {
+    const undoable2 = mock<Undoable>();
+    const undoable3 = mock<Undoable>();
+    instance.add(undoable);
+    instance.add(undoable2);
+    instance.add(undoable3);
+    instance.setSizeMax(3);
+
+    expect(instance.getUndo()).toHaveLength(3);
 });
 
 test("testSizeMaxMutatorsSizeOK", () => {
