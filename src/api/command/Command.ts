@@ -36,7 +36,7 @@ export interface Command {
      * Executes (if possible) the commands.
      * @returns True: the command has been executed.
      */
-    execute(): boolean;
+    execute(): Promise<boolean> | boolean;
 
     /**
      * Checks whether the command can be executed.

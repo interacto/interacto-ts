@@ -242,18 +242,39 @@ implements Binding<C, I, D> {
             this.then();
 
             if (this.continuousCmdExec) {
-                if (this.asLogCmd) {
-                    catCommand.info("Try to execute command (continuous execution)");
-                }
-                const ok = this.cmd?.execute() ?? false;
+                this.continuousExecutionOnFSMUpdate();
+            }
+        }
+    }
 
-                if (this.asLogCmd) {
-                    catCommand.info(`Continuous command execution had this result: ${String(ok)}`);
-                }
 
-                if (!ok) {
+    private continuousExecutionOnFSMUpdate(): void {
+        const ok = this.cmd?.execute() ?? false;
+
+        if (this.asLogCmd) {
+            catCommand.info(
+                `Try to execute command (continuous execution), is cmd undefined? ${String(this.cmd === undefined)}`);
+        }
+
+        if (ok instanceof Promise) {
+            ok.then(executed => {
+                if (!executed) {
                     this.ifCannotExecuteCmd();
                 }
+
+                if (this.asLogCmd) {
+                    catCommand.info(`Continuous command execution had this result: ${String(executed)}`);
+                }
+            }).catch(ex => {
+                catCommand.error("Error while executing the command continuously", ex);
+            });
+        } else {
+            if (!ok) {
+                this.ifCannotExecuteCmd();
+            }
+
+            if (this.asLogCmd) {
+                catCommand.info(`Continuous command execution had this result: ${String(ok)}`);
             }
         }
     }
@@ -269,18 +290,7 @@ implements Binding<C, I, D> {
         }
 
         if (this.createAndInitCommand()) {
-            if (!this.continuousCmdExec) {
-                this.then();
-                if (this.asLogCmd) {
-                    catCommand.info("Command updated");
-                }
-            }
-
-            if (this.cmd !== undefined) {
-                this.afterCmdExecuted(this.cmd, this.cmd.execute());
-            }
-            this.cmd = undefined;
-            this.timeEnded++;
+            this.executeCommandOnFSMStop();
         } else {
             if (this.cmd !== undefined) {
                 if (this.asLogCmd) {
@@ -293,7 +303,43 @@ implements Binding<C, I, D> {
         }
     }
 
-    protected createAndInitCommand(): boolean {
+    private executeCommandOnFSMStop(): void {
+        if (!this.continuousCmdExec) {
+            this.then();
+            if (this.asLogCmd) {
+                catCommand.info("Command updated");
+            }
+        }
+
+        if (this.cmd !== undefined) {
+            // Required to keep the command as because of async it may be set
+            // to undefined right after
+            const cmdToExecute = this.cmd;
+            const result = this.cmd.execute();
+
+            if (result instanceof Promise) {
+                result.then(executed => {
+                    this.cmd = cmdToExecute;
+                    this.afterCmdExecuted(cmdToExecute, executed);
+                    // Cannot put these two lines in a finally block:
+                    // tests will failed as finally is called *after* the promise is resolved
+                    // provoking sync issues (treatments are done as soon as the promise is resolved)
+                    this.cmd = undefined;
+                    this.timeEnded++;
+                }).catch(ex => {
+                    catCommand.error("Error while executing the command", ex);
+                    this.cmd = undefined;
+                    this.timeEnded++;
+                });
+            } else {
+                this.afterCmdExecuted(this.cmd, result);
+                this.cmd = undefined;
+                this.timeEnded++;
+            }
+        }
+    }
+
+    private createAndInitCommand(): boolean {
         let ok = this.when();
 
         if (this.asLogBinding) {
@@ -316,7 +362,7 @@ implements Binding<C, I, D> {
         return ok;
     }
 
-    protected afterCmdExecuted(cmd: C, ok: boolean): void {
+    private afterCmdExecuted(cmd: C, ok: boolean): void {
         if (this.asLogCmd) {
             catCommand.info(`Command execution had this result: ${String(ok)}`);
         }

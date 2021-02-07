@@ -22,18 +22,18 @@ test("testCanDoOKCmd", () => {
     expect(cmd.canExecute()).toBeTruthy();
 });
 
-test("testExecute", () => {
+test("testExecute", async () => {
     let ok = false;
     cmd = new AnonCmd(() => {
         ok = true;
     });
-    cmd.execute();
+    await cmd.execute();
     expect(ok).toBeTruthy();
 });
 
-test("testHadEffect", () => {
+test("testHadEffect", async () => {
     cmd = new AnonCmd(() => { });
-    cmd.execute();
+    await cmd.execute();
     cmd.done();
     expect(cmd.hadEffect()).toBeTruthy();
 });

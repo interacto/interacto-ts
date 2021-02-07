@@ -46,18 +46,31 @@ export abstract class CommandBase implements Command {
     protected createMemento(): void {
     }
 
-    public execute(): boolean {
+    public execute(): Promise<boolean> | boolean {
         let ok: boolean;
         if ((this.status === CmdStatus.created || this.status === CmdStatus.executed) && this.canExecute()) {
             if (this.status === CmdStatus.created) {
                 this.createMemento();
             }
             ok = true;
-            this.execution();
+            const result = this.execution();
+
+            if (result instanceof Promise) {
+                return result
+                    .then(() => {
+                        this.status = CmdStatus.executed;
+                        return true;
+                    })
+                    .catch(() => {
+                        this.status = CmdStatus.executed;
+                        return false;
+                    });
+            }
             this.status = CmdStatus.executed;
         } else {
             ok = false;
         }
+
         return ok;
     }
 
@@ -65,7 +78,7 @@ export abstract class CommandBase implements Command {
      * This method contains the statements to execute the command.
      * This method is automatically called by 'execute' and must not be called explicitly.
      */
-    protected abstract execution(): void;
+    protected abstract execution(): Promise<void> | void;
 
     public getRegistrationPolicy(): RegistrationPolicy {
         return this.hadEffect() ? RegistrationPolicy.limited : RegistrationPolicy.none;

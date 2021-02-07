@@ -51,11 +51,13 @@ describe("base undo testing", () => {
         });
 
         test("testDo", () => {
+            // eslint-disable-next-line @typescript-eslint/no-floating-promises
             cmd.execute();
             expect(collector.undo).toHaveBeenCalledTimes(1);
         });
 
         test("testHadEffects", () => {
+            // eslint-disable-next-line @typescript-eslint/no-floating-promises
             cmd.execute();
             cmd.done();
             expect(cmd.hadEffect()).toBeTruthy();

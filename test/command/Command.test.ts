@@ -69,8 +69,8 @@ test("testCommandCanDoItWhenCanDo", () => {
     expect(cmd.execute()).toBeTruthy();
 });
 
-test("testCommandIsExecutedWhenDoIt", () => {
-    cmd.execute();
+test("testCommandIsExecutedWhenDoIt", async () => {
+    await cmd.execute();
     expect(cmd.getStatus()).toStrictEqual(CmdStatus.executed);
 });
 
@@ -93,9 +93,9 @@ test("testCommandHadEffectWhenNotDoneAndFlushed", () => {
     expect(cmd.hadEffect()).toBeFalsy();
 });
 
-test("testCommandHadEffectWhenNotDoneAndExecuted", () => {
+test("testCommandHadEffectWhenNotDoneAndExecuted", async () => {
     cmd.candoValue = true;
-    cmd.execute();
+    await cmd.execute();
     expect(cmd.hadEffect()).toBeFalsy();
 });
 
@@ -125,8 +125,8 @@ test("testCommandDoneWhenCreated", () => {
     expect(cmd.getStatus()).toStrictEqual(CmdStatus.done);
 });
 
-test("testCommandDoneWhenExecuted", () => {
-    cmd.execute();
+test("testCommandDoneWhenExecuted", async () => {
+    await cmd.execute();
     cmd.done();
     expect(cmd.getStatus()).toStrictEqual(CmdStatus.done);
 });
@@ -150,8 +150,8 @@ test("testIsDoneWhenDone", () => {
     expect(cmd.isDone()).toBeTruthy();
 });
 
-test("testIsDoneWhenExecuted", () => {
-    cmd.execute();
+test("testIsDoneWhenExecuted", async () => {
+    await cmd.execute();
     expect(cmd.isDone()).toBeFalsy();
 });
 
@@ -164,8 +164,8 @@ test("testCancel", () => {
     expect(cmd.getStatus()).toStrictEqual(CmdStatus.cancelled);
 });
 
-test("testExecutedTwoTimes", () => {
-    cmd.execute();
-    cmd.execute();
+test("testExecutedTwoTimes", async () => {
+    await cmd.execute();
+    await cmd.execute();
     expect(cmd.exec).toStrictEqual(2);
 });
