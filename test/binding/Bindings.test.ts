@@ -473,6 +473,8 @@ describe("check when it crashes in routines", () => {
 
     beforeEach(() => {
         jest.spyOn(catBinder, "error");
+        jest.spyOn(catBinder, "warn");
+        jest.spyOn(catBinder, "info");
         err = new Error("It crashed");
         cmd = new StubCmd(true);
         baseBinder = touchDnDBinder()
@@ -480,7 +482,7 @@ describe("check when it crashes in routines", () => {
             .toProduce((_i: SrcTgtTouchData) => cmd);
     });
 
-    test("when it crashes in 'first'", () => {
+    test("when it crashes in 'first' with an error", () => {
         baseBinder
             .first((_c: StubCmd, _i: SrcTgtTouchData) => {
                 throw err;
@@ -495,7 +497,23 @@ describe("check when it crashes in routines", () => {
         expect(catBinder.error).toHaveBeenCalledWith("Crash in 'first'", err);
     });
 
-    test("when it crashes in 'then'", () => {
+    test("when it crashes in 'first' with not an error", () => {
+        baseBinder
+            .first((_c: StubCmd, _i: SrcTgtTouchData) => {
+                // eslint-disable-next-line @typescript-eslint/no-throw-literal
+                throw 42;
+            })
+            .bind();
+
+        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+
+        expect(ctx.commands).toHaveLength(1);
+        expect(catBinder.warn).toHaveBeenCalledWith("Crash in 'first': 42");
+    });
+
+    test("when it crashes in 'then' with an error", () => {
         baseBinder
             .then((_c: StubCmd, _i: SrcTgtTouchData) => {
                 throw err;
@@ -510,7 +528,23 @@ describe("check when it crashes in routines", () => {
         expect(catBinder.error).toHaveBeenCalledWith("Crash in 'then'", err);
     });
 
-    test("when it crashes in 'end'", () => {
+    test("when it crashes in 'then' with not an error", () => {
+        baseBinder
+            .then((_c: StubCmd, _i: SrcTgtTouchData) => {
+                // eslint-disable-next-line @typescript-eslint/no-throw-literal
+                throw "foo";
+            })
+            .bind();
+
+        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+
+        expect(ctx.commands).toHaveLength(1);
+        expect(catBinder.warn).toHaveBeenCalledWith("Crash in 'then': foo");
+    });
+
+    test("when it crashes in 'end' with an error", () => {
         baseBinder
             .end((_c: StubCmd, _i: SrcTgtTouchData) => {
                 throw err;
@@ -525,7 +559,23 @@ describe("check when it crashes in routines", () => {
         expect(catBinder.error).toHaveBeenCalledWith("Crash in 'end'", err);
     });
 
-    test("when it crashes in 'endOrCancel'", () => {
+    test("when it crashes in 'end' with not an error", () => {
+        baseBinder
+            .end(() => {
+                // eslint-disable-next-line @typescript-eslint/no-throw-literal
+                throw 21;
+            })
+            .bind();
+
+        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+
+        expect(ctx.commands).toHaveLength(1);
+        expect(catBinder.warn).toHaveBeenCalledWith("Crash in 'end': 21");
+    });
+
+    test("when it crashes in 'endOrCancel' with an error", () => {
         baseBinder
             .endOrCancel((_i: SrcTgtTouchData) => {
                 throw err;
@@ -540,7 +590,23 @@ describe("check when it crashes in routines", () => {
         expect(catBinder.error).toHaveBeenCalledWith("Crash in 'endOrCancel'", err);
     });
 
-    test("when it crashes in 'cancel'", () => {
+    test("when it crashes in 'endOrCancel' with not an error", () => {
+        baseBinder
+            .endOrCancel((_i: SrcTgtTouchData) => {
+                // eslint-disable-next-line @typescript-eslint/no-throw-literal
+                throw true;
+            })
+            .bind();
+
+        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+
+        expect(ctx.commands).toHaveLength(1);
+        expect(catBinder.warn).toHaveBeenCalledWith("Crash in 'endOrCancel': true");
+    });
+
+    test("when it crashes in 'cancel' with an error", () => {
         dndBinder(true)
             .on(elt)
             .toProduce((_i: SrcTgtTouchData) => new StubCmd(true))
@@ -557,7 +623,25 @@ describe("check when it crashes in routines", () => {
         expect(catBinder.error).toHaveBeenCalledWith("Crash in 'cancel'", err);
     });
 
-    test("when it crashes in 'ifHadNoEffect'", () => {
+    test("when it crashes in 'cancel' with not an error", () => {
+        dndBinder(true)
+            .on(elt)
+            .toProduce((_i: SrcTgtTouchData) => new StubCmd(true))
+            .cancel(() => {
+                // eslint-disable-next-line @typescript-eslint/no-throw-literal
+                throw "bar";
+            })
+            .bind();
+
+        elt.dispatchEvent(createMouseEvent("mousedown", elt));
+        elt.dispatchEvent(createMouseEvent("mousemove", elt));
+        elt.dispatchEvent(createKeyEvent("keydown", "Escape"));
+
+        expect(ctx.commands).toHaveLength(0);
+        expect(catBinder.warn).toHaveBeenCalledWith("Crash in 'cancel': bar");
+    });
+
+    test("when it crashes in 'ifHadNoEffect' with an error", () => {
         jest.spyOn(cmd, "hadEffect").mockReturnValue(false);
         baseBinder
             .ifHadNoEffect((_c, _i: SrcTgtTouchData) => {
@@ -573,7 +657,24 @@ describe("check when it crashes in routines", () => {
         expect(catBinder.error).toHaveBeenCalledWith("Crash in 'ifHadNoEffect'", err);
     });
 
-    test("when it crashes in 'ifHadEffect'", () => {
+    test("when it crashes in 'ifHadNoEffect' with not an error", () => {
+        jest.spyOn(cmd, "hadEffect").mockReturnValue(false);
+        baseBinder
+            .ifHadNoEffect(() => {
+                // eslint-disable-next-line @typescript-eslint/no-throw-literal
+                throw 11;
+            })
+            .bind();
+
+        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+
+        expect(ctx.commands).toHaveLength(1);
+        expect(catBinder.warn).toHaveBeenCalledWith("Crash in 'ifHadNoEffect': 11");
+    });
+
+    test("when it crashes in 'ifHadEffect' with an error", () => {
         jest.spyOn(cmd, "hadEffect").mockReturnValue(true);
         baseBinder
             .ifHadEffects((_c, _i: SrcTgtTouchData) => {
@@ -589,7 +690,24 @@ describe("check when it crashes in routines", () => {
         expect(catBinder.error).toHaveBeenCalledWith("Crash in 'ifHadEffects'", err);
     });
 
-    test("when it crashes in 'when'", () => {
+    test("when it crashes in 'ifHadEffect' with not an error", () => {
+        jest.spyOn(cmd, "hadEffect").mockReturnValue(true);
+        baseBinder
+            .ifHadEffects(() => {
+                // eslint-disable-next-line @typescript-eslint/no-throw-literal
+                throw "YOLO";
+            })
+            .bind();
+
+        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+
+        expect(ctx.commands).toHaveLength(1);
+        expect(catBinder.warn).toHaveBeenCalledWith("Crash in 'ifHadEffects': YOLO");
+    });
+
+    test("when it crashes in 'when' with an error", () => {
         baseBinder
             .when((_i: SrcTgtTouchData) => {
                 throw err;
@@ -604,7 +722,31 @@ describe("check when it crashes in routines", () => {
         expect(catBinder.error).toHaveBeenCalledWith("Crash in 'when'", err);
     });
 
-    test("when it crashes in 'ifCannotExecute'", () => {
+    test("when it crashes in 'when' with not an error", () => {
+        baseBinder
+            .when(() => {
+                // eslint-disable-next-line @typescript-eslint/no-throw-literal
+                throw "msg";
+            })
+            .bind();
+
+        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
+
+        expect(ctx.commands).toHaveLength(0);
+        expect(catBinder.warn).toHaveBeenCalledWith("Crash in 'when': msg");
+    });
+
+    test("call to 'when' should log", () => {
+        baseBinder
+            .log(LogLevel.binding)
+            .bind();
+
+        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
+
+        expect(catBinder.info).toHaveBeenNthCalledWith(1, "Checking condition: true");
+    });
+
+    test("when it crashes in 'ifCannotExecute' with an error", () => {
         cmd = new StubCmd(false);
         baseBinder
             .ifCannotExecute((_c: StubCmd, _i: SrcTgtTouchData) => {
@@ -618,6 +760,23 @@ describe("check when it crashes in routines", () => {
 
         expect(ctx.commands).toHaveLength(0);
         expect(catBinder.error).toHaveBeenCalledWith("Crash in 'ifCannotExecute'", err);
+    });
+
+    test("when it crashes in 'ifCannotExecute' with not an error", () => {
+        cmd = new StubCmd(false);
+        baseBinder
+            .ifCannotExecute(() => {
+                // eslint-disable-next-line @typescript-eslint/no-throw-literal
+                throw 1;
+            })
+            .bind();
+
+        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+
+        expect(ctx.commands).toHaveLength(0);
+        expect(catBinder.warn).toHaveBeenCalledWith("Crash in 'ifCannotExecute': 1");
     });
 });
 

@@ -23,7 +23,6 @@ import {FSMDataHandler} from "./FSMDataHandler";
 import {isKeyDownEvent, isKeyUpEvent} from "./Events";
 import {Observable, Subject} from "rxjs";
 import {remove, removeAt} from "../util/ArrayUtil";
-import {Category} from "typescript-logging";
 import {CancelFSMException} from "./CancelFSMException";
 import {FSM} from "../../api/fsm/FSM";
 
@@ -31,8 +30,6 @@ import {FSM} from "../../api/fsm/FSM";
  * A finite state machine that defines the behavior of a user interaction.
  */
 export class FSMImpl implements FSM {
-    private static readonly exLog = new Category("FSM Exception");
-
     protected dataHandler?: FSMDataHandler;
 
     protected asLogFSM: boolean;
@@ -354,12 +351,17 @@ export class FSMImpl implements FSM {
             this.handlers.forEach(handler => {
                 handler.fsmStarts();
             });
-        } catch (ex) {
-            if (!(ex instanceof CancelFSMException)) {
-                FSMImpl.exLog.error("crash in notifyHandlerOnStart", ex);
+        } catch (ex: unknown) {
+            if (ex instanceof CancelFSMException) {
+                this.onCancelling();
+                throw ex;
+            }
+            if (ex instanceof Error) {
+                catFSM.error("An 'fsmStarts' produced an error", ex);
+            } else {
+                catFSM.warn(`crash in an 'fsmStarts': ${String(ex)}`);
             }
             this.onCancelling();
-            throw ex;
         }
     }
 
@@ -371,12 +373,17 @@ export class FSMImpl implements FSM {
             this.handlers.forEach(handler => {
                 handler.fsmUpdates();
             });
-        } catch (ex) {
-            if (!(ex instanceof CancelFSMException)) {
-                FSMImpl.exLog.error("crash in notifyHandlerOnUpdate", ex);
+        } catch (ex: unknown) {
+            if (ex instanceof CancelFSMException) {
+                this.onCancelling();
+                throw ex;
+            }
+            if (ex instanceof Error) {
+                catFSM.error("An 'fsmUpdates' produced an error", ex);
+            } else {
+                catFSM.warn(`crash in an 'fsmUpdates': ${String(ex)}`);
             }
             this.onCancelling();
-            throw ex;
         }
     }
 
@@ -388,12 +395,17 @@ export class FSMImpl implements FSM {
             [...this.handlers].forEach(handler => {
                 handler.fsmStops();
             });
-        } catch (ex) {
-            if (!(ex instanceof CancelFSMException)) {
-                FSMImpl.exLog.error("crash in notifyHandlerOnStop", ex);
+        } catch (ex: unknown) {
+            if (ex instanceof CancelFSMException) {
+                this.onCancelling();
+                throw ex;
+            }
+            if (ex instanceof Error) {
+                catFSM.error("An 'fsmStops' produced an error", ex);
+            } else {
+                catFSM.warn(`crash in an 'fsmStops': ${String(ex)}`);
             }
             this.onCancelling();
-            throw ex;
         }
     }
 
@@ -401,9 +413,17 @@ export class FSMImpl implements FSM {
      * Notifies handler that the interaction is cancelled.
      */
     protected notifyHandlerOnCancel(): void {
-        [...this.handlers].forEach(handler => {
-            handler.fsmCancels();
-        });
+        try {
+            [...this.handlers].forEach(handler => {
+                handler.fsmCancels();
+            });
+        } catch (ex: unknown) {
+            if (ex instanceof Error) {
+                catFSM.error("An 'fsmCancels' produced an error", ex);
+            } else {
+                catFSM.warn(`crash in an 'fsmCancels': ${String(ex)}`);
+            }
+        }
     }
 
     public getStates(): ReadonlyArray<State> {

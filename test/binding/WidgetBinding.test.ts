@@ -75,6 +75,7 @@ let binding: BindingStub;
 
 beforeEach(() => {
     jest.spyOn(catBinder, "error");
+    jest.spyOn(catBinder, "warn");
     jest.spyOn(catFSM, "error");
     jest.spyOn(catCommand, "error");
     jest.spyOn(catInteraction, "error");
@@ -445,7 +446,7 @@ describe("crash in binding", () => {
         expect(catFSM.error).not.toHaveBeenCalled();
     });
 
-    test("execute crash", () => {
+    test("execute crash with an error", () => {
         const ex = new Error();
         const supplier = (): StubCmd => {
             throw ex;
@@ -457,6 +458,21 @@ describe("crash in binding", () => {
         binding.fsmStarts();
         expect(binding.getCommand()).toBeUndefined();
         expect(catBinder.error).toHaveBeenCalledWith("Error while creating a command", ex);
+        expect(binding.first).not.toHaveBeenCalled();
+    });
+
+    test("execute crash with not an error", () => {
+        const supplier = (): StubCmd => {
+            // eslint-disable-next-line @typescript-eslint/no-throw-literal
+            throw "yolo";
+        };
+
+        binding = new BindingStub(true, supplier, new InteractionStub(new FSMImpl()));
+        binding.conditionRespected = true;
+        jest.spyOn(binding, "first");
+        binding.fsmStarts();
+        expect(binding.getCommand()).toBeUndefined();
+        expect(catBinder.warn).toHaveBeenCalledWith("Error while creating a command: yolo");
         expect(binding.first).not.toHaveBeenCalled();
     });
 

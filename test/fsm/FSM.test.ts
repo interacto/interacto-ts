@@ -123,7 +123,8 @@ test("testOnTimeoutWithoutTimeout", () => {
     expect(catFSM.info).not.toHaveBeenCalled();
 });
 
-test("that errors caught on start", () => {
+test("that errors caught on start with an error", () => {
+    jest.spyOn(catFSM, "error");
     handler.fsmStarts.mockImplementation(() => {
         throw new Error("crash provoked");
     });
@@ -131,10 +132,26 @@ test("that errors caught on start", () => {
 
     expect(() => {
         fsm.onStarting();
-    }).toThrow("crash provoked");
+    }).not.toThrow();
+    expect(catFSM.error).toHaveBeenCalledTimes(1);
 });
 
-test("that errors caught on update", () => {
+test("that errors caught on start with not an error", () => {
+    jest.spyOn(catFSM, "warn");
+    handler.fsmStarts.mockImplementation(() => {
+        // eslint-disable-next-line @typescript-eslint/no-throw-literal
+        throw "42";
+    });
+    fsm.addHandler(handler);
+
+    expect(() => {
+        fsm.onStarting();
+    }).not.toThrow();
+    expect(catFSM.warn).toHaveBeenCalledTimes(1);
+});
+
+test("that errors caught on update with an error", () => {
+    jest.spyOn(catFSM, "error");
     handler.fsmUpdates.mockImplementation(() => {
         throw new Error("crash provoked on update");
     });
@@ -143,10 +160,27 @@ test("that errors caught on update", () => {
 
     expect(() => {
         fsm.onUpdating();
-    }).toThrow("crash provoked on update");
+    }).not.toThrow();
+    expect(catFSM.error).toHaveBeenCalledTimes(1);
 });
 
-test("that errors caught on end", () => {
+test("that errors caught on update with not an error", () => {
+    jest.spyOn(catFSM, "warn");
+    handler.fsmUpdates.mockImplementation(() => {
+        // eslint-disable-next-line @typescript-eslint/no-throw-literal
+        throw "err";
+    });
+    fsm.onStarting();
+    fsm.addHandler(handler);
+
+    expect(() => {
+        fsm.onUpdating();
+    }).not.toThrow();
+    expect(catFSM.warn).toHaveBeenCalledTimes(1);
+});
+
+test("that errors caught on end with an error", () => {
+    jest.spyOn(catFSM, "error");
     handler.fsmStops.mockImplementation(() => {
         throw new Error("crash provoked on end");
     });
@@ -155,10 +189,27 @@ test("that errors caught on end", () => {
 
     expect(() => {
         fsm.onTerminating();
-    }).toThrow("crash provoked on end");
+    }).not.toThrow();
+    expect(catFSM.error).toHaveBeenCalledTimes(1);
 });
 
-test("that errors caught on cancel", () => {
+test("that errors caught on end with not an error", () => {
+    jest.spyOn(catFSM, "warn");
+    handler.fsmStops.mockImplementation(() => {
+        // eslint-disable-next-line @typescript-eslint/no-throw-literal
+        throw "foo";
+    });
+    fsm.onStarting();
+    fsm.addHandler(handler);
+
+    expect(() => {
+        fsm.onTerminating();
+    }).not.toThrow();
+    expect(catFSM.warn).toHaveBeenCalledTimes(1);
+});
+
+test("that errors caught on cancel with an error", () => {
+    jest.spyOn(catFSM, "error");
     handler.fsmCancels.mockImplementation(() => {
         throw new Error("crash provoked on cancel");
     });
@@ -167,7 +218,23 @@ test("that errors caught on cancel", () => {
 
     expect(() => {
         fsm.onCancelling();
-    }).toThrow("crash provoked on cancel");
+    }).not.toThrow();
+    expect(catFSM.error).toHaveBeenCalledTimes(1);
+});
+
+test("that errors caught on cancel with not an error", () => {
+    jest.spyOn(catFSM, "warn");
+    handler.fsmCancels.mockImplementation(() => {
+        // eslint-disable-next-line @typescript-eslint/no-throw-literal
+        throw "yolo";
+    });
+    fsm.onStarting();
+    fsm.addHandler(handler);
+
+    expect(() => {
+        fsm.onCancelling();
+    }).not.toThrow();
+    expect(catFSM.warn).toHaveBeenCalledTimes(1);
 });
 
 

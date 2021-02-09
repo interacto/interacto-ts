@@ -65,8 +65,12 @@ export class TimeoutTransition extends TransitionBase<Event> {
                 try {
                     this.timeouted = true;
                     this.src.getFSM().onTimeout();
-                } catch (ex) {
-                    catFSM.error("Exception on timeout of a timeout transition", ex);
+                } catch (ex: unknown) {
+                    if (ex instanceof Error) {
+                        catFSM.error("Exception on timeout of a timeout transition", ex);
+                    } else {
+                        catFSM.warn(`Exception on timeout of a timeout transition: ${String(ex)}`);
+                    }
                 }
             }, time);
         }
@@ -100,7 +104,7 @@ export class TimeoutTransition extends TransitionBase<Event> {
                 return this.tgt;
             }
             return undefined;
-        } catch (ex) {
+        } catch (ex: unknown) {
             this.timeouted = false;
             throw ex;
         }

@@ -91,8 +91,12 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
         if (this.execInitCmd !== undefined && cmd !== undefined) {
             try {
                 this.execInitCmd(cmd, this.getInteraction().getData());
-            } catch (ex) {
-                catBinder.error("Crash in 'first'", ex);
+            } catch (ex: unknown) {
+                if (ex instanceof Error) {
+                    catBinder.error("Crash in 'first'", ex);
+                } else {
+                    catBinder.warn(`Crash in 'first': ${String(ex)}`);
+                }
             }
         }
     }
@@ -102,8 +106,12 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
         if (this.execUpdateCmd !== undefined && cmd !== undefined) {
             try {
                 this.execUpdateCmd(cmd, this.getInteraction().getData());
-            } catch (ex) {
-                catBinder.error("Crash in 'then'", ex);
+            } catch (ex: unknown) {
+                if (ex instanceof Error) {
+                    catBinder.error("Crash in 'then'", ex);
+                } else {
+                    catBinder.warn(`Crash in 'then': ${String(ex)}`);
+                }
             }
         }
     }
@@ -113,8 +121,12 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
         if (this.onEnd !== undefined && cmd !== undefined) {
             try {
                 this.onEnd(cmd, this.getInteraction().getData());
-            } catch (ex) {
-                catBinder.error("Crash in 'end'", ex);
+            } catch (ex: unknown) {
+                if (ex instanceof Error) {
+                    catBinder.error("Crash in 'end'", ex);
+                } else {
+                    catBinder.warn(`Crash in 'end': ${String(ex)}`);
+                }
             }
         }
     }
@@ -123,8 +135,12 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
         if (this.cancelFct !== undefined) {
             try {
                 this.cancelFct(this.getInteraction().getData());
-            } catch (ex) {
-                catBinder.error("Crash in 'cancel'", ex);
+            } catch (ex: unknown) {
+                if (ex instanceof Error) {
+                    catBinder.error("Crash in 'cancel'", ex);
+                } else {
+                    catBinder.warn(`Crash in 'cancel': ${String(ex)}`);
+                }
             }
         }
     }
@@ -133,8 +149,12 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
         if (this.endOrCancelFct !== undefined) {
             try {
                 this.endOrCancelFct(this.getInteraction().getData());
-            } catch (ex) {
-                catBinder.error("Crash in 'endOrCancel'", ex);
+            } catch (ex: unknown) {
+                if (ex instanceof Error) {
+                    catBinder.error("Crash in 'endOrCancel'", ex);
+                } else {
+                    catBinder.warn(`Crash in 'endOrCancel': ${String(ex)}`);
+                }
             }
         }
     }
@@ -144,8 +164,12 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
         if (this.hadNoEffectFct !== undefined && cmd !== undefined) {
             try {
                 this.hadNoEffectFct(cmd, this.getInteraction().getData());
-            } catch (ex) {
-                catBinder.error("Crash in 'ifHadNoEffect'", ex);
+            } catch (ex: unknown) {
+                if (ex instanceof Error) {
+                    catBinder.error("Crash in 'ifHadNoEffect'", ex);
+                } else {
+                    catBinder.warn(`Crash in 'ifHadNoEffect': ${String(ex)}`);
+                }
             }
         }
     }
@@ -155,8 +179,12 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
         if (this.hadEffectsFct !== undefined && cmd !== undefined) {
             try {
                 this.hadEffectsFct(cmd, this.getInteraction().getData());
-            } catch (ex) {
-                catBinder.error("Crash in 'ifHadEffects'", ex);
+            } catch (ex: unknown) {
+                if (ex instanceof Error) {
+                    catBinder.error("Crash in 'ifHadEffects'", ex);
+                } else {
+                    catBinder.warn(`Crash in 'ifHadEffects': ${String(ex)}`);
+                }
             }
         }
     }
@@ -166,8 +194,12 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
         if (this.cannotExecFct !== undefined && cmd !== undefined) {
             try {
                 this.cannotExecFct(cmd, this.getInteraction().getData());
-            } catch (ex) {
-                catBinder.error("Crash in 'ifCannotExecute'", ex);
+            } catch (ex: unknown) {
+                if (ex instanceof Error) {
+                    catBinder.error("Crash in 'ifCannotExecute'", ex);
+                } else {
+                    catBinder.warn(`Crash in 'ifCannotExecute': ${String(ex)}`);
+                }
             }
         }
     }
@@ -176,12 +208,16 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
         let ok;
         try {
             ok = this.checkInteraction === undefined || this.checkInteraction(this.getInteraction().getData());
-        } catch (ex) {
+        } catch (ex: unknown) {
             ok = false;
-            catBinder.error("Crash in 'when'", ex);
+            if (ex instanceof Error) {
+                catBinder.error("Crash in 'when'", ex);
+            } else {
+                catBinder.warn(`Crash in 'when': ${String(ex)}`);
+            }
         }
         if (this.asLogBinding) {
-            catBinder.info(`Checking condition:  ${String(ok)}`);
+            catBinder.info(`Checking condition: ${String(ok)}`);
         }
         return ok;
     }

@@ -139,7 +139,7 @@ test("execute cancels", () => {
     expect(() => evt.execute(undefined)).toThrow(CancelFSMException);
 });
 
-test("fsm throws exception in thread", () => {
+test("fsm throws error in thread", () => {
     const ex = new Error("foo");
     jest.spyOn(catFSM, "error");
     jest.spyOn(fsm, "onTimeout");
@@ -149,6 +149,18 @@ test("fsm throws exception in thread", () => {
     evt.startTimeout();
     jest.runOnlyPendingTimers();
     expect(catFSM.error).toHaveBeenCalledWith("Exception on timeout of a timeout transition", ex);
+});
+
+test("fsm throws not an error in thread", () => {
+    jest.spyOn(catFSM, "warn");
+    jest.spyOn(fsm, "onTimeout");
+    fsm.onTimeout.mockImplementation((): void => {
+        // eslint-disable-next-line @typescript-eslint/no-throw-literal
+        throw 42;
+    });
+    evt.startTimeout();
+    jest.runOnlyPendingTimers();
+    expect(catFSM.warn).toHaveBeenCalledWith("Exception on timeout of a timeout transition: 42");
 });
 
 test("testExecuteCallFSMTimeout", () => {

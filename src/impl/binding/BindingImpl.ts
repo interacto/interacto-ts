@@ -102,8 +102,12 @@ implements Binding<C, I, D> {
     protected createCommand(): C | undefined {
         try {
             return this.cmdProducer(this.interaction.getData());
-        } catch (ex) {
-            catBinder.error("Error while creating a command", ex);
+        } catch (ex: unknown) {
+            if (ex instanceof Error) {
+                catBinder.error("Error while creating a command", ex);
+            } else {
+                catBinder.warn(`Error while creating a command: ${String(ex)}`);
+            }
             return undefined;
         }
     }

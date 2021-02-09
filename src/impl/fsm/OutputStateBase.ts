@@ -37,7 +37,7 @@ export abstract class OutputStateBase extends StateBase implements OutputState {
         return this.getTransitions().find(tr => {
             try {
                 return tr.execute(event) !== undefined;
-            } catch (ignored) {
+            } catch (ignored: unknown) {
                 // Already processed
                 return false;
             }

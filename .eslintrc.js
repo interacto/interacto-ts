@@ -58,7 +58,6 @@ module.exports = {
     "no-useless-constructor": "off",
     "@typescript-eslint/prefer-readonly-parameter-types": "off",
     "@typescript-eslint/consistent-type-imports": "off",
-    "@typescript-eslint/no-implicit-any-catch": "off",
 
     "tsdoc/syntax": "error",
 
