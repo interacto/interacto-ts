@@ -27,67 +27,6 @@ import {
 import {StubCmd} from "../command/StubCmd";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
 
-// expect.extend({
-//     // eslint-disable-next-line @typescript-eslint/ban-types
-//     oneCmdProduced(received: BindingsContext, expected: Function): CustomMatcherResult {
-//         if (!(received instanceof BindingsContext)) {
-//             throw Error("'oneCmdProduced' requires a BindingsContext object");
-//         }
-//
-//         if (received.commands.length !== 1) {
-//             return {
-//                 "message": (): string => `We registered ${received.commands.length} produced commands instead of a single one`,
-//                 "pass": false
-//
-//             };
-//         }
-//
-//         if (received.commands[0] instanceof expected) {
-//             return {
-//                 "message": (): string => "",
-//                 "pass": true
-//             };
-//         }
-//
-//         return {
-//             "message": (): string => `The produced command is of type ${String(received.commands[0].constructor.name)}` +
-//                 ` while a command of type ${String(expected.name)} is expected.`,
-//             "pass": false
-//         };
-//     },
-//
-//     noCmdProduced(received: BindingsContext): CustomMatcherResult {
-//         if (received.commands.length === 0) {
-//             return {
-//                 "message": (): string => "",
-//                 "pass": true
-//             };
-//         }
-//
-//         return {
-//             "message": (): string => `We registered ${String(received.commands.length)} produced commands` +
-//                 ` instead of zero: ${String(received.commands)}.`,
-//             "pass": false
-//         };
-//     }
-// });
-
-
-// declare global {
-//     namespace jest {
-//         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-//         interface Matchers<R> {
-//             // eslint-disable-next-line @typescript-eslint/ban-types
-//             oneCmdProduced(expected: Function): CustomMatcherResult;
-//
-//             noCmdProduced(): CustomMatcherResult;
-//
-//             cmdsProduced(nb: number): CustomMatcherResult;
-//         }
-//     }
-// }
-
-
 let button1: HTMLButtonElement;
 let button2: HTMLButtonElement;
 let binding: Binding<StubCmd, Interaction<InteractionData>, InteractionData> | undefined;
