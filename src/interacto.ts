@@ -55,6 +55,7 @@ export * from "./impl/binder/KeysBinder";
 export * from "./impl/binder/UpdateBinder";
 export * from "./impl/binding/AnonBinding";
 export * from "./impl/binding/BindingImpl";
+export * from "./impl/binding/BindingsContext";
 export * from "./impl/command/AnonCmd";
 export * from "./impl/command/CommandBase";
 export * from "./impl/command/CommandsRegistry";
