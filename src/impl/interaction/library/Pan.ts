@@ -91,8 +91,14 @@ export class PanFSM extends FSMImpl {
         const releaseTouched = new TouchReleaseTransition(touched, cancelled);
         releaseTouched.isGuardOK = (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.touchID;
 
+        this.configMove(touched, cancelled, moved, dataHandler);
+        this.configRelease(moved, cancelled, released, dataHandler);
+    }
+
+
+    private configMove(touched: StdState, cancelled: CancellingState, moved: StdState, dataHandler?: PanFSMDataHandler): void {
         const isGuardMoveKO = (evt: TouchEvent): boolean => evt.changedTouches[0].identifier === this.touchID &&
-                !this.isStable(evt.changedTouches[0].clientX, evt.changedTouches[0].clientY);
+            !this.isStable(evt.changedTouches[0].clientX, evt.changedTouches[0].clientY);
 
         const moveTouched = new TouchMoveTransition(touched, cancelled);
         moveTouched.isGuardOK = isGuardMoveKO;
@@ -113,7 +119,10 @@ export class PanFSM extends FSMImpl {
         const moveMovedOK = new TouchMoveTransition(moved, moved);
         moveMovedOK.isGuardOK = isGuardMoveOK;
         moveMovedOK.action = actionMoveOK;
+    }
 
+
+    private configRelease(moved: StdState, cancelled: CancellingState, released: TerminalState, dataHandler?: PanFSMDataHandler): void {
         const releaseMoved = new TouchReleaseTransition(moved, cancelled);
         releaseMoved.isGuardOK = (evt: TouchEvent): boolean => evt.changedTouches[0].identifier === this.touchID &&
             !this.checkFinalPanConditions(evt);
@@ -124,8 +133,6 @@ export class PanFSM extends FSMImpl {
         releaseFinal.action = (event: TouchEvent): void => {
             dataHandler?.panned(event);
         };
-
-        super.buildFSM(dataHandler);
     }
 
     protected setInitialValueOnTouch(evt: TouchEvent): void {

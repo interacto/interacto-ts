@@ -48,18 +48,18 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, D extends I
             updateFct, cancelFct, endOrCancelFct, stopProga, prevent);
         this.codes = keyCodes === undefined ? [] : [...keyCodes];
         this.checkCode = (i: D): boolean => {
+            let keys: ReadonlyArray<string> = [];
             if (i instanceof KeysDataImpl) {
-                const keys = i.getKeys();
-                return (this.codes.length === 0 || this.codes.length === keys.length &&
-                    keys.every((v: string) => this.codes.includes(v))) &&
-                    (this.checkConditions === undefined || this.checkConditions(i));
+                keys = i.getKeys();
+            } else {
+                if (i instanceof KeyDataImpl) {
+                    keys = [i.getKey()];
+                }
             }
-            if (i instanceof KeyDataImpl) {
-                const key = (i as KeyDataImpl).getKey();
-                return (this.codes.length === 0 || this.codes.length === 1 && key === this.codes[0]) &&
-                    (this.checkConditions === undefined || this.checkConditions(i));
-            }
-            return false;
+
+            return (this.codes.length === 0 || this.codes.length === keys.length &&
+                keys.every((v: string) => this.codes.includes(v))) &&
+                (this.checkConditions === undefined || this.checkConditions(i));
         };
     }
 

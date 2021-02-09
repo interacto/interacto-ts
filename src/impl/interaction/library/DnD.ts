@@ -57,7 +57,6 @@ export class DnDFSM extends FSMImpl {
         this.addState(dragged);
         this.addState(released);
         this.addState(cancelled);
-
         this.setStartingState(dragged);
 
         const press = new PressureTransition(this.initState, pressed);

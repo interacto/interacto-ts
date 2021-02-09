@@ -38,7 +38,8 @@ module.exports = {
         "@typescript-eslint/no-unsafe-call": "off",
         "@typescript-eslint/non-nullable-type-assertion-style": "off",
         "@typescript-eslint/no-confusing-void-expression": "off",
-        "@typescript-eslint/await-thenable": "off"
+        "@typescript-eslint/await-thenable": "off",
+        "max-lines-per-function": "off"
       }
     }
   ],
@@ -52,9 +53,7 @@ module.exports = {
   "rules": {
     "id-length": "off",
     "no-new": "off",
-    "max-lines-per-function": "off",
     "no-underscore-dangle": "off",
-    "no-warning-comments": "off",
     "no-useless-constructor": "off",
     "@typescript-eslint/prefer-readonly-parameter-types": "off",
     "@typescript-eslint/consistent-type-imports": "off",
@@ -120,12 +119,11 @@ module.exports = {
         "double"
     ],
     "arrow-parens": ["error", "as-needed"],
-    "complexity": ["error", { "max": 12 }],
+    "complexity": ["error", { "max": 10 }],
     "eqeqeq": ["error", "smart"],
     "max-len": ["error", { "code": 150 }],
     "no-multiple-empty-lines": ["error", { "max": 2 }],
     "no-restricted-syntax": ["error", "ForInStatement"],
-    "no-shadow": "off",
     "one-var": ["error", "never"],
   }
 };
