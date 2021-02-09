@@ -18,7 +18,7 @@ import {Interaction} from "../interaction/Interaction";
 import {Binding} from "./Binding";
 
 /**
- * Permits bindings produced by Bindings to be observed.
+ * Permits to observe the bindings produced using `Bindings` routines.
  */
 export interface BindingsObserver {
     /**

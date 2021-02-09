@@ -19,11 +19,16 @@ import {mock} from "jest-mock-extended";
 import {Interaction} from "../../src/api/interaction/Interaction";
 import {BindingsObserver} from "../../src/api/binding/BindingsObserver";
 import {Press} from "../../src/impl/interaction/library/Press";
+import clearAllMocks = jest.clearAllMocks;
 
 let binder: UpdateBinder<Command, Interaction<InteractionData>, InteractionData>;
 
 beforeEach(() => {
     binder = new UpdateBinder();
+});
+
+afterEach(() => {
+    clearAllMocks();
 });
 
 test("that is crashes when calling bind without an interaction supplier", () => {

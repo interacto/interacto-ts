@@ -100,7 +100,7 @@ describe("testing async commands and bindings", () => {
             useFakeTimers();
             const res = cmd.execute();
 
-            expect(res).not.toBeUndefined();
+            expect(res).toBeDefined();
             expect(cmd.getStatus()).toStrictEqual(CmdStatus.created);
             expect(data.data).toStrictEqual(["Foo", "Bar", "Yo"]);
         });
@@ -109,7 +109,7 @@ describe("testing async commands and bindings", () => {
             useRealTimers();
             const res = await cmd.execute();
 
-            expect(res).not.toBeUndefined();
+            expect(res).toBeDefined();
             expect(cmd.getStatus()).toStrictEqual(CmdStatus.executed);
             expect(data.data).toStrictEqual(["Foo", "Bar"]);
         });
@@ -168,7 +168,7 @@ describe("testing async commands and bindings", () => {
             button1.click();
             advanceTimersByTime(49);
             await flushPromises();
-            expect(binding.getCommand()).not.toBeUndefined();
+            expect(binding.getCommand()).toBeDefined();
             expect(end).not.toHaveBeenCalled();
             expect(first).toHaveBeenCalledTimes(1);
             expect(data.data).toStrictEqual(["Foo", "Bar", "Yo"]);

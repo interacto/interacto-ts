@@ -70,7 +70,7 @@ test("testGuardKOFirstEvent", () => {
 
 test("testExecuteFirstEventReturnsSubState", () => {
     const state: InputState | undefined = tr.execute(createMouseEvent("click", document.createElement("button")));
-    expect(state).not.toBeUndefined();
+    expect(state).toBeDefined();
     expect(state).toStrictEqual(subS);
 });
 

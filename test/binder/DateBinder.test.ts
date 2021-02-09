@@ -11,43 +11,40 @@
  * You should have received a copy of the GNU General export function License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import {Subscription} from "rxjs";
 import {
+    Binding,
+    clearBindingObserver,
     CommandsRegistry,
     dateBinder,
     Interaction,
     InteractionData,
+    setBindingObserver,
     UndoHistory,
-    Binding,
     WidgetData
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
+import {BindingsContext} from "../../src/impl/binding/BindingsContext";
 
 let widget1: HTMLInputElement;
 let widget2: HTMLInputElement;
 let binding: Binding<StubCmd, Interaction<InteractionData>, InteractionData> | undefined;
 let cmd: StubCmd;
-let producedCmds: Array<StubCmd>;
-let disposable: Subscription | undefined;
+let ctx: BindingsContext;
 
 beforeEach(() => {
+    ctx = new BindingsContext();
+    setBindingObserver(ctx);
     widget1 = document.createElement("input");
     widget2 = document.createElement("input");
     widget1.type = "date";
     widget2.type = "date";
     cmd = new StubCmd(true);
-    producedCmds = [];
 });
 
 afterEach(() => {
-    if (disposable !== undefined) {
-        disposable.unsubscribe();
-    }
+    clearBindingObserver();
     CommandsRegistry.getInstance().clear();
     UndoHistory.getInstance().clear();
-    if (binding !== undefined) {
-        binding.uninstallBinding();
-    }
 });
 
 test("testCommandExecutedOnSingleDateFunction", () => {
@@ -66,13 +63,12 @@ test("testCommandExecutedOnTwoDates", () => {
         .on(widget1, widget2)
         .toProduce(_i => new StubCmd(true))
         .bind();
-    disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
     widget1.dispatchEvent(new Event("input"));
     widget2.dispatchEvent(new Event("input"));
 
     expect(binding).toBeDefined();
-    expect(producedCmds).toHaveLength(2);
+    expect(ctx.commands).toHaveLength(2);
 });
 
 test("testInit1Executed", () => {

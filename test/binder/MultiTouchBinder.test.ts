@@ -11,36 +11,38 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import {Subscription} from "rxjs";
 import {
+    Binding,
+    clearBindingObserver,
     CommandsRegistry,
     FSM,
     Interaction,
     InteractionBase,
     InteractionData,
     multiTouchBinder,
-    UndoHistory,
-    Binding
+    setBindingObserver,
+    UndoHistory
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {createTouchEvent} from "../interaction/StubEvents";
+import {BindingsContext} from "../../src/impl/binding/BindingsContext";
 
 let c1: HTMLElement;
 let binding: Binding<StubCmd, Interaction<InteractionData>, InteractionData> | undefined;
 let cmd: StubCmd;
-let producedCmds: Array<StubCmd>;
-let disposable: Subscription | undefined;
+let ctx: BindingsContext;
 
 beforeEach(() => {
+    ctx = new BindingsContext();
+    setBindingObserver(ctx);
     jest.useFakeTimers();
     c1 = document.createElement("canvas");
     cmd = new StubCmd(true);
-    producedCmds = [];
 });
 
 afterEach(() => {
-    disposable?.unsubscribe();
-    binding?.uninstallBinding();
+    clearBindingObserver();
+    jest.clearAllTimers();
     CommandsRegistry.getInstance().clear();
     UndoHistory.getInstance().clear();
 });
@@ -50,7 +52,6 @@ test("run multi-touch produces cmd", () => {
         .toProduce(() => cmd)
         .on(c1)
         .bind();
-    disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
     c1.dispatchEvent(createTouchEvent("touchstart", 1, c1, 11, 23, 110, 230));
     c1.dispatchEvent(createTouchEvent("touchstart", 2, c1, 31, 13, 310, 130));
@@ -59,8 +60,8 @@ test("run multi-touch produces cmd", () => {
 
     expect(binding).toBeDefined();
     expect(cmd.exec).toStrictEqual(1);
-    expect(producedCmds).toHaveLength(1);
-    expect(producedCmds[0]).toBe(cmd);
+    expect(ctx.commands).toHaveLength(1);
+    expect(ctx.getCmd(0)).toBe(cmd);
 });
 
 
@@ -78,7 +79,6 @@ test("run multi-touch two times recycle events", () => {
             data.push(i.getTouchData().length);
         })
         .bind();
-    disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
     c1.dispatchEvent(createTouchEvent("touchstart", 1, c1, 11, 23, 110, 230));
     c1.dispatchEvent(createTouchEvent("touchstart", 2, c1, 31, 13, 310, 130));
@@ -89,7 +89,7 @@ test("run multi-touch two times recycle events", () => {
     c1.dispatchEvent(createTouchEvent("touchend", 1, c1, 15, 30, 150, 300));
 
     expect(binding).toBeDefined();
-    expect(producedCmds).toHaveLength(2);
+    expect(ctx.commands).toHaveLength(2);
     expect(dataFirst).toHaveLength(2);
     expect(dataFirst[0]).toStrictEqual(2);
     expect(dataFirst[1]).toStrictEqual(2);
@@ -103,7 +103,6 @@ test("unsubscribe does not trigger the binding", () => {
         .toProduce(() => cmd)
         .on(c1)
         .bind();
-    disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
     (binding.getInteraction() as InteractionBase<InteractionData, FSM>).onNodeUnregistered(c1);
 

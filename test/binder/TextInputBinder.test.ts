@@ -12,39 +12,37 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {Subscription} from "rxjs";
 import {
+    Binding,
+    clearBindingObserver,
     CommandsRegistry,
     Interaction,
     InteractionData,
+    setBindingObserver,
     textInputBinder,
-    UndoHistory,
-    Binding
+    UndoHistory
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
+import {BindingsContext} from "../../src/impl/binding/BindingsContext";
 
 let txt1: HTMLInputElement | HTMLTextAreaElement;
 let binding: Binding<StubCmd, Interaction<InteractionData>, InteractionData> | undefined;
 let cmd: StubCmd;
-let producedCmds: Array<StubCmd>;
-let disposable: Subscription | undefined;
+let ctx: BindingsContext;
 
 beforeEach(() => {
+    ctx = new BindingsContext();
+    setBindingObserver(ctx);
     jest.useFakeTimers();
     txt1 = document.createElement("textarea");
     cmd = new StubCmd(true);
-    producedCmds = [];
 });
 
 afterEach(() => {
-    if (disposable !== undefined) {
-        disposable.unsubscribe();
-    }
+    jest.clearAllTimers();
+    clearBindingObserver();
     CommandsRegistry.getInstance().clear();
     UndoHistory.getInstance().clear();
-    if (binding !== undefined) {
-        binding.uninstallBinding();
-    }
 });
 
 test("type text create command", () => {
@@ -58,7 +56,6 @@ test("type text create command", () => {
         })
         .on(txt1)
         .bind();
-    disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
     txt1.value = "f";
     txt1.dispatchEvent(new InputEvent("input"));
@@ -69,8 +66,8 @@ test("type text create command", () => {
     jest.runOnlyPendingTimers();
     expect(binding).not.toBeNull();
     expect(cmd.exec).toStrictEqual(1);
-    expect(producedCmds).toHaveLength(1);
-    expect(producedCmds[0]).toBe(cmd);
+    expect(ctx.commands).toHaveLength(1);
+    expect(ctx.getCmd(0)).toBe(cmd);
     expect(textonUpdate).toStrictEqual(["f", "fo", "foo", "foo"]);
 });
 
@@ -81,7 +78,6 @@ test("type text create command with a delay of 2 seconds", () => {
         .toProduce(() => cmd)
         .on(txt1)
         .bind();
-    disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
     txt1.value = "f";
     txt1.dispatchEvent(new InputEvent("input"));
@@ -92,8 +88,8 @@ test("type text create command with a delay of 2 seconds", () => {
     txt1.value = "foo";
     txt1.dispatchEvent(new InputEvent("input"));
     jest.runOnlyPendingTimers();
-    expect(producedCmds).toHaveLength(1);
-    expect(producedCmds[0]).toBe(cmd);
+    expect(ctx.commands).toHaveLength(1);
+    expect(ctx.getCmd(0)).toBe(cmd);
 });
 
 test("type text exec several times the command", () => {
@@ -108,7 +104,6 @@ test("type text exec several times the command", () => {
         .on(txt1)
         .continuousExecution()
         .bind();
-    disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
     txt1.value = "f";
     txt1.dispatchEvent(new InputEvent("input"));
@@ -119,7 +114,7 @@ test("type text exec several times the command", () => {
     jest.runOnlyPendingTimers();
     expect(binding).toBeDefined();
     expect(cmd.exec).toStrictEqual(4);
-    expect(producedCmds).toHaveLength(1);
-    expect(producedCmds[0]).toBe(cmd);
+    expect(ctx.commands).toHaveLength(1);
+    expect(ctx.getCmd(0)).toBe(cmd);
     expect(textonUpdate).toStrictEqual(["f", "fo", "foo"]);
 });

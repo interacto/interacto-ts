@@ -11,41 +11,101 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import {Subscription} from "rxjs";
+
 import {
+    Binding,
     buttonBinder,
+    clearBindingObserver,
     CommandsRegistry,
+    EltRef,
     Interaction,
     InteractionData,
     LogLevel,
-    UndoHistory,
-    Binding, EltRef
+    setBindingObserver,
+    UndoHistory
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
+import {BindingsContext} from "../../src/impl/binding/BindingsContext";
+
+// expect.extend({
+//     // eslint-disable-next-line @typescript-eslint/ban-types
+//     oneCmdProduced(received: BindingsContext, expected: Function): CustomMatcherResult {
+//         if (!(received instanceof BindingsContext)) {
+//             throw Error("'oneCmdProduced' requires a BindingsContext object");
+//         }
+//
+//         if (received.commands.length !== 1) {
+//             return {
+//                 "message": (): string => `We registered ${received.commands.length} produced commands instead of a single one`,
+//                 "pass": false
+//
+//             };
+//         }
+//
+//         if (received.commands[0] instanceof expected) {
+//             return {
+//                 "message": (): string => "",
+//                 "pass": true
+//             };
+//         }
+//
+//         return {
+//             "message": (): string => `The produced command is of type ${String(received.commands[0].constructor.name)}` +
+//                 ` while a command of type ${String(expected.name)} is expected.`,
+//             "pass": false
+//         };
+//     },
+//
+//     noCmdProduced(received: BindingsContext): CustomMatcherResult {
+//         if (received.commands.length === 0) {
+//             return {
+//                 "message": (): string => "",
+//                 "pass": true
+//             };
+//         }
+//
+//         return {
+//             "message": (): string => `We registered ${String(received.commands.length)} produced commands` +
+//                 ` instead of zero: ${String(received.commands)}.`,
+//             "pass": false
+//         };
+//     }
+// });
+
+
+// declare global {
+//     namespace jest {
+//         // eslint-disable-next-line @typescript-eslint/no-unused-vars
+//         interface Matchers<R> {
+//             // eslint-disable-next-line @typescript-eslint/ban-types
+//             oneCmdProduced(expected: Function): CustomMatcherResult;
+//
+//             noCmdProduced(): CustomMatcherResult;
+//
+//             cmdsProduced(nb: number): CustomMatcherResult;
+//         }
+//     }
+// }
+
 
 let button1: HTMLButtonElement;
 let button2: HTMLButtonElement;
 let binding: Binding<StubCmd, Interaction<InteractionData>, InteractionData> | undefined;
 let cmd: StubCmd;
-let producedCmds: Array<StubCmd>;
-let disposable: Subscription | undefined;
+let ctx: BindingsContext;
 
 beforeEach(() => {
+    ctx = new BindingsContext();
+    setBindingObserver(ctx);
     button1 = document.createElement("button");
     button2 = document.createElement("button");
     cmd = new StubCmd(true);
-    producedCmds = [];
 });
 
 afterEach(() => {
-    if (disposable !== undefined) {
-        disposable.unsubscribe();
-    }
+    clearBindingObserver();
     CommandsRegistry.getInstance().clear();
     UndoHistory.getInstance().clear();
-    if (binding !== undefined) {
-        binding.uninstallBinding();
-    }
 });
 
 test("testCommandExecutedOnSingleButtonConsumer", () => {
@@ -53,13 +113,12 @@ test("testCommandExecutedOnSingleButtonConsumer", () => {
         .toProduce(() => cmd)
         .on(button1)
         .bind();
-    disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
     button1.click();
     expect(binding).toBeDefined();
     expect(cmd.exec).toStrictEqual(1);
-    expect(producedCmds).toHaveLength(1);
-    expect(producedCmds[0]).toBe(cmd);
+    expect(ctx.commands).toHaveLength(1);
+    expect(ctx.commands[0]).toBe(cmd);
 });
 
 test("testCommandExecutedOnSingleButtonConsumerConsumer", () => {
@@ -79,16 +138,14 @@ test("testCommandExecutedOnTwoButtons", () => {
         .on(button1, button2)
         .bind();
 
-    disposable = binding.produces().subscribe(c => producedCmds.push(c));
-
     button2.click();
     button1.click();
 
     expect(binding).toBeDefined();
-    expect(producedCmds).toHaveLength(2);
-    expect(producedCmds[0]).not.toBe(producedCmds[1]);
-    expect(producedCmds[0].exec).toStrictEqual(1);
-    expect(producedCmds[1].exec).toStrictEqual(1);
+    expect(ctx.commands).toHaveLength(2);
+    expect(ctx.getCmd(0)).not.toBe(ctx.getCmd(1));
+    expect(ctx.getCmd<StubCmd>(0).exec).toStrictEqual(1);
+    expect(ctx.getCmd<StubCmd>(1).exec).toStrictEqual(1);
 });
 
 test("command executed on two buttons with one array", () => {
@@ -97,12 +154,10 @@ test("command executed on two buttons with one array", () => {
         .on([button1, button2])
         .bind();
 
-    disposable = binding.produces().subscribe(c => producedCmds.push(c));
-
     button2.click();
     button1.click();
 
-    expect(producedCmds).toHaveLength(2);
+    expect(ctx.commands).toHaveLength(2);
 });
 
 test("command executed on two buttons with one ElementRef", () => {
@@ -115,11 +170,10 @@ test("command executed on two buttons with one ElementRef", () => {
         .on(eltRef, button2)
         .bind();
 
-    disposable = binding.produces().subscribe(c => producedCmds.push(c));
     button2.click();
     button1.click();
 
-    expect(producedCmds).toHaveLength(2);
+    expect(ctx.commands).toHaveLength(2);
 });
 
 test("command executed on two buttons with two ElementRef", () => {
@@ -135,11 +189,10 @@ test("command executed on two buttons with two ElementRef", () => {
         .on(eltRef1, eltRef2)
         .bind();
 
-    disposable = binding.produces().subscribe(c => producedCmds.push(c));
     button2.click();
     button1.click();
 
-    expect(producedCmds).toHaveLength(2);
+    expect(ctx.commands).toHaveLength(2);
 });
 
 test("command executed on two buttons with one array of ElementRef", () => {
@@ -155,11 +208,10 @@ test("command executed on two buttons with one array of ElementRef", () => {
         .on([eltRef1, eltRef2])
         .bind();
 
-    disposable = binding.produces().subscribe(c => producedCmds.push(c));
     button2.click();
     button1.click();
 
-    expect(producedCmds).toHaveLength(2);
+    expect(ctx.commands).toHaveLength(2);
 });
 
 test("command executed on 2 buttons using several on", () => {
@@ -169,12 +221,10 @@ test("command executed on 2 buttons using several on", () => {
         .on(button2)
         .bind();
 
-    disposable = binding.produces().subscribe(c => producedCmds.push(c));
-
     button2.click();
     button1.click();
 
-    expect(producedCmds).toHaveLength(2);
+    expect(ctx.commands).toHaveLength(2);
 });
 
 test("check ifhadeffects", () => {

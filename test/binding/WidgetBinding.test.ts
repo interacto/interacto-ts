@@ -24,7 +24,7 @@ import {
     MustBeUndoableCmdException,
     RegistrationPolicy,
     Undoable,
-    BindingImpl
+    BindingImpl, UndoHistory
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {InteractionStub} from "../interaction/InteractionStub";
@@ -83,6 +83,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+    UndoHistory.getInstance().clear();
     CommandsRegistry.getInstance().clear();
     jest.clearAllMocks();
 });

@@ -11,33 +11,36 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import {Subscription} from "rxjs";
 import {
+    Binding,
+    clearBindingObserver,
     CommandsRegistry,
     FSM,
-    Interaction, InteractionBase,
+    Interaction,
+    InteractionBase,
     InteractionData,
+    setBindingObserver,
     tapBinder,
-    UndoHistory,
-    Binding
+    UndoHistory
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {createTouchEvent} from "../interaction/StubEvents";
+import {BindingsContext} from "../../src/impl/binding/BindingsContext";
 
 let binding: Binding<StubCmd, Interaction<InteractionData>, InteractionData> | undefined;
 let cmd: StubCmd;
-let producedCmds: Array<StubCmd>;
-let disposable: Subscription | undefined;
+let ctx: BindingsContext;
 
 beforeEach(() => {
+    ctx = new BindingsContext();
+    setBindingObserver(ctx);
     jest.useFakeTimers();
     cmd = new StubCmd(true);
-    producedCmds = [];
 });
 
 afterEach(() => {
-    disposable?.unsubscribe();
-    binding?.uninstallBinding();
+    clearBindingObserver();
+    jest.clearAllTimers();
     CommandsRegistry.getInstance().clear();
     UndoHistory.getInstance().clear();
 });
@@ -54,7 +57,6 @@ describe("on canvas", () => {
             .toProduce(() => cmd)
             .on(c1)
             .bind();
-        disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
         c1.dispatchEvent(createTouchEvent("touchend", 1, c1, 11, 23, 110, 230));
         c1.dispatchEvent(createTouchEvent("touchend", 1, c1, 11, 23, 110, 230));
@@ -63,8 +65,8 @@ describe("on canvas", () => {
 
         expect(binding).toBeDefined();
         expect(cmd.exec).toStrictEqual(1);
-        expect(producedCmds).toHaveLength(1);
-        expect(producedCmds[0]).toBe(cmd);
+        expect(ctx.commands).toHaveLength(1);
+        expect(ctx.getCmd(0)).toBe(cmd);
     });
 
 
@@ -73,7 +75,6 @@ describe("on canvas", () => {
             .toProduce(() => new StubCmd(true))
             .on(c1)
             .bind();
-        disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
         c1.dispatchEvent(createTouchEvent("touchstart", 1, c1, 11, 23, 110, 230));
         c1.dispatchEvent(createTouchEvent("touchend", 1, c1, 11, 23, 110, 230));
@@ -85,7 +86,7 @@ describe("on canvas", () => {
         c1.dispatchEvent(createTouchEvent("touchend", 2, c1, 31, 13, 310, 130));
 
         expect(binding).toBeDefined();
-        expect(producedCmds).toHaveLength(2);
+        expect(ctx.commands).toHaveLength(2);
     });
 
     test("unsubscribe does not trigger the binding", () => {
@@ -93,7 +94,6 @@ describe("on canvas", () => {
             .toProduce(() => cmd)
             .on(c1)
             .bind();
-        disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
         (binding.getInteraction() as InteractionBase<InteractionData, FSM>).onNodeUnregistered(c1);
 
@@ -115,13 +115,12 @@ describe("on svg doc for dynamic registration", () => {
             .toProduce(() => cmd)
             .onDynamic(doc)
             .bind();
-        disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
         doc.dispatchEvent(createTouchEvent("touchend", 1, doc, 11, 23, 110, 230));
 
         expect(binding.isRunning()).toBeFalsy();
         expect(binding).toBeDefined();
-        expect(producedCmds).toHaveLength(0);
+        expect(ctx.commands).toHaveLength(0);
     });
 
     test("dynamic registration with a node added", async () => {
@@ -129,7 +128,6 @@ describe("on svg doc for dynamic registration", () => {
             .toProduce(() => cmd)
             .onDynamic(doc)
             .bind();
-        disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
         const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
         doc.appendChild(rect);
@@ -141,7 +139,7 @@ describe("on svg doc for dynamic registration", () => {
         rect.dispatchEvent(createTouchEvent("touchend", 1, rect, 11, 23, 110, 230));
 
         expect(binding).toBeDefined();
-        expect(producedCmds).toHaveLength(1);
+        expect(ctx.commands).toHaveLength(1);
     });
 
     test("dynamic registration with a node already added", async () => {
@@ -155,13 +153,12 @@ describe("on svg doc for dynamic registration", () => {
             .toProduce(() => cmd)
             .onDynamic(doc)
             .bind();
-        disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
         rect.dispatchEvent(createTouchEvent("touchend", 1, rect, 11, 23, 110, 230));
         rect.dispatchEvent(createTouchEvent("touchend", 1, rect, 11, 23, 110, 230));
 
         expect(binding).toBeDefined();
-        expect(producedCmds).toHaveLength(1);
+        expect(ctx.commands).toHaveLength(1);
     });
 
     test("dynamic registration with a node added and removed", async () => {
@@ -169,7 +166,6 @@ describe("on svg doc for dynamic registration", () => {
             .toProduce(() => cmd)
             .onDynamic(doc)
             .bind();
-        disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
         const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
         doc.appendChild(rect);
@@ -181,7 +177,7 @@ describe("on svg doc for dynamic registration", () => {
         rect.dispatchEvent(createTouchEvent("touchend", 1, rect, 11, 23, 110, 230));
 
         expect(binding).toBeDefined();
-        expect(producedCmds).toHaveLength(0);
+        expect(ctx.commands).toHaveLength(0);
     });
 
     test("dynamic registration with a node already added then removed", async () => {
@@ -193,7 +189,6 @@ describe("on svg doc for dynamic registration", () => {
             .toProduce(() => cmd)
             .onDynamic(doc)
             .bind();
-        disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
         doc.removeChild(rect);
         await Promise.resolve();
@@ -203,7 +198,7 @@ describe("on svg doc for dynamic registration", () => {
         rect.dispatchEvent(createTouchEvent("touchend", 1, rect, 11, 23, 110, 230));
 
         expect(binding).toBeDefined();
-        expect(producedCmds).toHaveLength(0);
+        expect(ctx.commands).toHaveLength(0);
     });
 });
 

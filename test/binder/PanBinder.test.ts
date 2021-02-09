@@ -11,34 +11,34 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import {Subscription} from "rxjs";
 import {StubCmd} from "../command/StubCmd";
 import {createTouchEvent} from "../interaction/StubEvents";
 import {
+    Binding,
+    clearBindingObserver,
     CommandsRegistry,
     Interaction,
     InteractionData,
     panBinder,
-    UndoHistory,
-    Binding
+    setBindingObserver,
+    UndoHistory
 } from "../../src/interacto";
+import {BindingsContext} from "../../src/impl/binding/BindingsContext";
 
 let binding: Binding<StubCmd, Interaction<InteractionData>, InteractionData> | undefined;
-let producedCmds: Array<StubCmd>;
-let disposable: Subscription | undefined;
 let c1: HTMLElement;
+let ctx: BindingsContext;
 
 beforeEach(() => {
+    ctx = new BindingsContext();
+    setBindingObserver(ctx);
     jest.useFakeTimers();
-    producedCmds = [];
     c1 = document.createElement("canvas");
 });
 
 afterEach(() => {
-    jest.clearAllMocks();
+    clearBindingObserver();
     jest.clearAllTimers();
-    disposable?.unsubscribe();
-    binding?.uninstallBinding();
     CommandsRegistry.getInstance().clear();
     UndoHistory.getInstance().clear();
 });
@@ -48,7 +48,6 @@ test("pan horizontal right", () => {
         .toProduce(() => new StubCmd(true))
         .on(c1)
         .bind();
-    disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
     c1.dispatchEvent(createTouchEvent("touchstart", 3, c1, 15, 20, 150, 200));
     c1.dispatchEvent(createTouchEvent("touchmove", 3, c1, 16, 21, 160, 201));
@@ -58,8 +57,8 @@ test("pan horizontal right", () => {
     expect(binding).toBeDefined();
     expect(binding.getTimesCancelled()).toStrictEqual(0);
     expect(binding.getTimesEnded()).toStrictEqual(1);
-    expect(producedCmds).toHaveLength(1);
-    expect(producedCmds[0]).toBeInstanceOf(StubCmd);
+    expect(ctx.commands).toHaveLength(1);
+    expect(ctx.getCmd(0)).toBeInstanceOf(StubCmd);
 });
 
 test("pan horizontal left", () => {
@@ -67,7 +66,6 @@ test("pan horizontal left", () => {
         .toProduce(() => new StubCmd(true))
         .on(c1)
         .bind();
-    disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
     c1.dispatchEvent(createTouchEvent("touchstart", 3, c1, 15, 20, 150, 200));
     c1.dispatchEvent(createTouchEvent("touchmove", 3, c1, 14, 19, 140, 199));
@@ -77,8 +75,8 @@ test("pan horizontal left", () => {
     expect(binding).toBeDefined();
     expect(binding.getTimesCancelled()).toStrictEqual(0);
     expect(binding.getTimesEnded()).toStrictEqual(1);
-    expect(producedCmds).toHaveLength(1);
-    expect(producedCmds[0]).toBeInstanceOf(StubCmd);
+    expect(ctx.commands).toHaveLength(1);
+    expect(ctx.getCmd(0)).toBeInstanceOf(StubCmd);
 });
 
 
@@ -87,7 +85,6 @@ test("pan vertical up", () => {
         .toProduce(() => new StubCmd(true))
         .on(c1)
         .bind();
-    disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
     c1.dispatchEvent(createTouchEvent("touchstart", 1, c1, 10, 20, 110, 230));
     c1.dispatchEvent(createTouchEvent("touchmove", 1, c1, 10, 25, 110, 233));
@@ -97,8 +94,8 @@ test("pan vertical up", () => {
     expect(binding).toBeDefined();
     expect(binding.getTimesCancelled()).toStrictEqual(0);
     expect(binding.getTimesEnded()).toStrictEqual(1);
-    expect(producedCmds).toHaveLength(1);
-    expect(producedCmds[0]).toBeInstanceOf(StubCmd);
+    expect(ctx.commands).toHaveLength(1);
+    expect(ctx.getCmd(0)).toBeInstanceOf(StubCmd);
 });
 
 test("pan vertical down", () => {
@@ -106,7 +103,6 @@ test("pan vertical down", () => {
         .toProduce(() => new StubCmd(true))
         .on(c1)
         .bind();
-    disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
     c1.dispatchEvent(createTouchEvent("touchstart", 1, c1, 10, 200, 110, 2300));
     c1.dispatchEvent(createTouchEvent("touchmove", 1, c1, 10, 250, 110, 2330));
@@ -116,6 +112,6 @@ test("pan vertical down", () => {
     expect(binding).toBeDefined();
     expect(binding.getTimesCancelled()).toStrictEqual(0);
     expect(binding.getTimesEnded()).toStrictEqual(1);
-    expect(producedCmds).toHaveLength(1);
-    expect(producedCmds[0]).toBeInstanceOf(StubCmd);
+    expect(ctx.commands).toHaveLength(1);
+    expect(ctx.getCmd(0)).toBeInstanceOf(StubCmd);
 });

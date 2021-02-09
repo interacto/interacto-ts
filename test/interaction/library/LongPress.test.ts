@@ -48,7 +48,7 @@ describe("long press test", () => {
 
     test("that has data handler", () => {
         interaction = new LongPress(1);
-        expect(interaction.getFsm().getDataHandler()).not.toBeUndefined();
+        expect(interaction.getFsm().getDataHandler()).toBeDefined();
     });
 
     test("that reinit cleans data", () => {

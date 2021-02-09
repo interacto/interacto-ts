@@ -65,7 +65,27 @@ import {Undo} from "../../impl/command/library/Undo";
 import {Binding} from "./Binding";
 import {Redo} from "../../impl/command/library/Redo";
 
+/**
+ * The global `BindingsObserver` object. To be used to monitor bindings created using the routines of this file.
+ */
 let observer: BindingsObserver | undefined;
+
+/**
+ * Clears the current global `BindingsObserver` object. Nothing is done if this objects is undefined.
+ */
+export function clearBindingObserver(): void {
+    observer?.clearObservedBindings();
+}
+
+/**
+ * Sets the global `BindingsObserver` object. Cleans the potential former global `BindingsObserver` object.
+ * @param obs - The new `BindingsObserver` object to consider. Can be undefined.
+ */
+export function setBindingObserver(obs: BindingsObserver): void {
+    clearBindingObserver();
+    observer = obs;
+}
+
 
 export function nodeBinder(): BaseUpdateBinder {
     return new UpdateBinder<CommandBase, Interaction<InteractionData>, InteractionData>(observer) as BaseUpdateBinder;
