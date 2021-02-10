@@ -450,14 +450,6 @@ implements Binding<C, I, D> {
         this.asLogCmd = log;
     }
 
-    /**
-     * Logs information related to the user interaction.
-     * @param log - True: information related to the user interaction will be logged
-     */
-    public logInteraction(log: boolean): void {
-        this.interaction.log(log);
-    }
-
     public produces(): Observable<C> {
         return this.cmdsProduced;
     }
