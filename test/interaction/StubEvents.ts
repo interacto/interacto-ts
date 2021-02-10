@@ -14,6 +14,12 @@
 
 import {EventType} from "../../src/api/fsm/EventType";
 
+
+export interface MouseEventForTest extends MouseEvent {
+    id: number;
+}
+
+
 export function createTouchEvent(type: "touchend" | "touchmove" | "touchstart", id: number, target: EventTarget,
                                  screenX?: number, screenY?: number,
                                  clientX?: number, clientY?: number, timeStamp?: number): TouchEvent {

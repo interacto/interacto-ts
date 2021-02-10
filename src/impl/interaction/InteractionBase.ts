@@ -23,6 +23,11 @@ import {Interaction} from "../../api/interaction/Interaction";
 import {EventType} from "../../api/fsm/EventType";
 import {isFlushable} from "./library/Flushable";
 
+
+interface CancellablePromise extends Promise<void> {
+    cancel: () => void;
+}
+
 /**
  * The base implementation of a user interaction.
  * @typeParam D - The type of the interaction data.
@@ -66,6 +71,12 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
      */
     protected activated: boolean;
 
+    protected throttleTimeout: number;
+
+    protected currentThrottling: CancellablePromise | undefined;
+
+    protected latestThrottledEvent: Event | undefined;
+
     /**
      * Creates the interaction.
      * @param fsm - The FSM that defines the behavior of the user interaction.
@@ -82,8 +93,8 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
         this.activated = true;
         this.asLog = false;
         this.registeredNodes = new Set<EventTarget>();
-        // this.additionalNodes = [];
         this.mutationObservers = [];
+        this.throttleTimeout = 0;
     }
 
     protected abstract createDataObject(): D;
@@ -96,6 +107,69 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
 
     public getData(): D {
         return this.data;
+    }
+
+    public setThrottleTimeout(timeout: number): void {
+        this.throttleTimeout = timeout;
+    }
+
+
+    private createThrottleTimeout(): void {
+        this.currentThrottling?.cancel();
+        this.currentThrottling = undefined;
+
+        const currTimeout = this.throttleTimeout;
+        let rejection: (reason?: unknown) => void;
+        let timeout: NodeJS.Timeout;
+
+        this.currentThrottling = new Promise<void>(
+            (resolve, reject) => {
+                rejection = reject;
+                timeout = setTimeout(() => {
+                    try {
+                        // Do not put this code into the then block
+                        // as it must be executed BEFORE resolving the promise.
+                        const evt: Event | undefined = this.latestThrottledEvent;
+                        this.latestThrottledEvent = undefined;
+                        if (evt !== undefined) {
+                            this.directEventProcess(evt);
+                        }
+                        resolve();
+                    } catch (ex: unknown) {
+                        rejection(ex);
+                    }
+                }, currTimeout);
+            }
+        ).catch((ex: unknown) => {
+            if (ex instanceof Error) {
+                if (ex.message !== "cancellation") {
+                    catInteraction.error("Error during the throttling process", ex);
+                }
+            } else {
+                catInteraction.warn(`Error during the throttling process: ${String(ex)}`);
+            }
+        }) as CancellablePromise;
+
+        this.currentThrottling.cancel = (): void => {
+            clearTimeout(timeout);
+            rejection(new Error("cancellation"));
+        };
+    }
+
+
+    private checkThrottlingEvent(event: Event): void {
+        const latestEvt = this.latestThrottledEvent;
+
+        if (latestEvt === undefined || latestEvt.type !== event.type) {
+            if (latestEvt !== undefined) {
+                this.directEventProcess(latestEvt);
+            }
+            this.latestThrottledEvent = event;
+            this.createThrottleTimeout();
+        } else {
+            // The previous throttled event is ignored
+            this.latestThrottledEvent = event;
+        }
     }
 
     protected updateEventsRegistered(newState: OutputState, oldState: OutputState): void {
@@ -116,13 +190,6 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
                 this.registerEventToNode(type, n);
             });
         });
-        // this.additionalNodes.forEach(n => {
-        //     n.childNodes.forEach(child => {
-        //         // update the content of the additionalNode
-        //         eventsToRemove.forEach(type => this.unregisterEventToNode(type, child));
-        //         eventsToAdd.forEach(type => this.registerEventToNode(type, child));
-        //     });
-        // });
     }
 
     protected getCurrentAcceptedEvents(state: OutputState): ReadonlyArray<EventType> {
@@ -301,7 +368,7 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
     }
 
     /**
-     * @returns True if the user interaction will stop immidiately the propagation
+     * @returns True if the user interaction will stop immediately the propagation
      * of events processed by this user interaction to others listeners.
      */
     public get stopImmediatePropagation(): boolean {
@@ -325,13 +392,21 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
      */
     public processEvent(event: Event): void {
         if (this.isActivated()) {
-            this.fsm.process(event);
-            if (this.preventDef) {
-                event.preventDefault();
+            if (this.throttleTimeout <= 0) {
+                this.directEventProcess(event);
+            } else {
+                this.checkThrottlingEvent(event);
             }
-            if (this.stopImmediatePropag) {
-                event.stopImmediatePropagation();
-            }
+        }
+    }
+
+    private directEventProcess(event: Event): void {
+        this.fsm.process(event);
+        if (this.preventDef) {
+            event.preventDefault();
+        }
+        if (this.stopImmediatePropag) {
+            event.stopImmediatePropagation();
         }
     }
 

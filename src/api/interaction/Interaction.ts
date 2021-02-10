@@ -77,6 +77,12 @@ export interface Interaction<D extends InteractionData> {
     registerToNodeChildren(elementToObserve: Node): void;
 
     /**
+     * Sets the timeout (in ms) to be used by the throttling.
+     * @param timeout - The throttling timeout in ms.
+     */
+    setThrottleTimeout(timeout: number): void;
+
+    /**
      * Reinitialises the user interaction
      */
     fullReinit(): void;
