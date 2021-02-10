@@ -14,7 +14,7 @@
 
 import {
     CancelFSMException,
-    catBinder,
+    catBinding,
     catCommand,
     catFSM, catInteraction,
     CmdStatus,
@@ -74,8 +74,8 @@ class CmdStubUndoable extends StubCmd implements Undoable {
 let binding: BindingStub;
 
 beforeEach(() => {
-    jest.spyOn(catBinder, "error");
-    jest.spyOn(catBinder, "warn");
+    jest.spyOn(catBinding, "error");
+    jest.spyOn(catBinding, "warn");
     jest.spyOn(catFSM, "error");
     jest.spyOn(catCommand, "error");
     jest.spyOn(catInteraction, "error");
@@ -96,7 +96,7 @@ describe("nominal cases", () => {
         // eslint-disable-next-line jest/no-standalone-expect
         expect(catCommand.error).not.toHaveBeenCalled();
         // eslint-disable-next-line jest/no-standalone-expect
-        expect(catBinder.error).not.toHaveBeenCalled();
+        expect(catBinding.error).not.toHaveBeenCalled();
         // eslint-disable-next-line jest/no-standalone-expect
         expect(catFSM.error).not.toHaveBeenCalled();
     });
@@ -457,7 +457,7 @@ describe("crash in binding", () => {
         jest.spyOn(binding, "first");
         binding.fsmStarts();
         expect(binding.getCommand()).toBeUndefined();
-        expect(catBinder.error).toHaveBeenCalledWith("Error while creating a command", ex);
+        expect(catBinding.error).toHaveBeenCalledWith("Error while creating a command", ex);
         expect(binding.first).not.toHaveBeenCalled();
     });
 
@@ -472,7 +472,7 @@ describe("crash in binding", () => {
         jest.spyOn(binding, "first");
         binding.fsmStarts();
         expect(binding.getCommand()).toBeUndefined();
-        expect(catBinder.warn).toHaveBeenCalledWith("Error while creating a command: yolo");
+        expect(catBinding.warn).toHaveBeenCalledWith("Error while creating a command: yolo");
         expect(binding.first).not.toHaveBeenCalled();
     });
 
@@ -485,7 +485,7 @@ describe("crash in binding", () => {
         binding = new BindingStub(true, supplier, new InteractionStub(new FSMImpl()));
         binding.conditionRespected = true;
         binding.fsmStops();
-        expect(catBinder.error).toHaveBeenCalledWith("Error while creating a command", ex);
+        expect(catBinding.error).toHaveBeenCalledWith("Error while creating a command", ex);
         expect(binding.getCommand()).toBeUndefined();
     });
 
@@ -500,7 +500,7 @@ describe("crash in binding", () => {
         binding.fsmStarts();
         binding.conditionRespected = true;
         binding.fsmUpdates();
-        expect(catBinder.error).toHaveBeenCalledWith("Error while creating a command", ex);
+        expect(catBinding.error).toHaveBeenCalledWith("Error while creating a command", ex);
         expect(binding.first).not.toHaveBeenCalledWith();
         expect(binding.getCommand()).toBeUndefined();
     });

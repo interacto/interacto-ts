@@ -17,7 +17,7 @@ import {CmdStatus, Command, RegistrationPolicy} from "../../api/command/Command"
 import {CommandsRegistry} from "../command/CommandsRegistry";
 import {CancelFSMException} from "../fsm/CancelFSMException";
 import {InteractionData} from "../../api/interaction/InteractionData";
-import {catBinder, catCommand} from "../../api/logging/ConfigLog";
+import {catBinding, catCommand} from "../../api/logging/ConfigLog";
 import {isUndoableType} from "../../api/undo/Undoable";
 import {MustBeUndoableCmdException} from "../../api/binding/MustBeUndoableCmdException";
 import {Binding} from "../../api/binding/Binding";
@@ -104,9 +104,9 @@ implements Binding<C, I, D> {
             return this.cmdProducer(this.interaction.getData());
         } catch (ex: unknown) {
             if (ex instanceof Error) {
-                catBinder.error("Error while creating a command", ex);
+                catBinding.error("Error while creating a command", ex);
             } else {
-                catBinder.warn(`Error while creating a command: ${String(ex)}`);
+                catBinding.warn(`Error while creating a command: ${String(ex)}`);
             }
             return undefined;
         }
@@ -171,7 +171,7 @@ implements Binding<C, I, D> {
     public fsmCancels(): void {
         if (this.cmd !== undefined) {
             if (this.asLogBinding) {
-                catBinder.info("Binding cancelled");
+                catBinding.info("Binding cancelled");
             }
             const hadEffects = this.cmd.hadEffect();
             this.cmd.cancel();
@@ -209,7 +209,7 @@ implements Binding<C, I, D> {
         const ok: boolean = this.when();
 
         if (this.asLogBinding) {
-            catBinder.info(`Starting binding: ${String(ok)}`);
+            catBinding.info(`Starting binding: ${String(ok)}`);
         }
         if (ok) {
             this.cmd = this.createCommand();
@@ -222,7 +222,7 @@ implements Binding<C, I, D> {
         } else {
             if (this.isStrictStart()) {
                 if (this.asLogBinding) {
-                    catBinder.info(`Cancelling starting interaction: ${this.interaction.constructor.name}`);
+                    catBinding.info(`Cancelling starting interaction: ${this.interaction.constructor.name}`);
                 }
                 throw new CancelFSMException();
             }
@@ -235,7 +235,7 @@ implements Binding<C, I, D> {
         }
 
         if (this.asLogBinding) {
-            catBinder.info("Binding updates");
+            catBinding.info("Binding updates");
         }
 
         if (this.createAndInitCommand()) {
@@ -290,7 +290,7 @@ implements Binding<C, I, D> {
         }
 
         if (this.asLogBinding) {
-            catBinder.info("Binding stops");
+            catBinding.info("Binding stops");
         }
 
         if (this.createAndInitCommand()) {
@@ -347,7 +347,7 @@ implements Binding<C, I, D> {
         let ok = this.when();
 
         if (this.asLogBinding) {
-            catBinder.info(`when predicate is ${String(ok)}`);
+            catBinding.info(`when predicate is ${String(ok)}`);
         }
 
         if (ok) {
@@ -424,7 +424,7 @@ implements Binding<C, I, D> {
 
     public setActivated(activated: boolean): void {
         if (this.asLogBinding) {
-            catBinder.info(`Binding Activated: ${String(activated)}`);
+            catBinding.info(`Binding Activated: ${String(activated)}`);
         }
         this.activated = activated;
         this.interaction.setActivated(activated);

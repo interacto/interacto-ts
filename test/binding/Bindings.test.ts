@@ -15,7 +15,7 @@
 import {
     AnonCmd,
     Binding,
-    catBinder, catCommand,
+    catBinding, catCommand,
     clearBindingObserver,
     clickBinder,
     clicksBinder,
@@ -94,7 +94,7 @@ test("press binder", () => {
 
 test("log cmd binding", () => {
     jest.spyOn(catCommand, "info");
-    jest.spyOn(catBinder, "info");
+    jest.spyOn(catBinding, "info");
     pressBinder()
         .on(elt)
         .toProduce(() => new StubCmd(true))
@@ -102,7 +102,7 @@ test("log cmd binding", () => {
         .bind();
     elt.dispatchEvent(createMouseEvent("mousedown", elt));
     expect(catCommand.info).toHaveBeenCalledTimes(4);
-    expect(catBinder.info).toHaveBeenCalledTimes(5);
+    expect(catBinding.info).toHaveBeenCalledTimes(5);
 });
 
 test("undoable command registered", () => {
@@ -541,9 +541,9 @@ describe("check when it crashes in routines", () => {
     let cmd: StubCmd;
 
     beforeEach(() => {
-        jest.spyOn(catBinder, "error");
-        jest.spyOn(catBinder, "warn");
-        jest.spyOn(catBinder, "info");
+        jest.spyOn(catBinding, "error");
+        jest.spyOn(catBinding, "warn");
+        jest.spyOn(catBinding, "info");
         err = new Error("It crashed");
         cmd = new StubCmd(true);
         baseBinder = touchDnDBinder()
@@ -563,7 +563,7 @@ describe("check when it crashes in routines", () => {
         elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
 
         expect(ctx.commands).toHaveLength(1);
-        expect(catBinder.error).toHaveBeenCalledWith("Crash in 'first'", err);
+        expect(catBinding.error).toHaveBeenCalledWith("Crash in 'first'", err);
     });
 
     test("when it crashes in 'first' with not an error", () => {
@@ -579,7 +579,7 @@ describe("check when it crashes in routines", () => {
         elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
 
         expect(ctx.commands).toHaveLength(1);
-        expect(catBinder.warn).toHaveBeenCalledWith("Crash in 'first': 42");
+        expect(catBinding.warn).toHaveBeenCalledWith("Crash in 'first': 42");
     });
 
     test("when it crashes in 'then' with an error", () => {
@@ -594,7 +594,7 @@ describe("check when it crashes in routines", () => {
         elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
 
         expect(ctx.commands).toHaveLength(1);
-        expect(catBinder.error).toHaveBeenCalledWith("Crash in 'then'", err);
+        expect(catBinding.error).toHaveBeenCalledWith("Crash in 'then'", err);
     });
 
     test("when it crashes in 'then' with not an error", () => {
@@ -610,7 +610,7 @@ describe("check when it crashes in routines", () => {
         elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
 
         expect(ctx.commands).toHaveLength(1);
-        expect(catBinder.warn).toHaveBeenCalledWith("Crash in 'then': foo");
+        expect(catBinding.warn).toHaveBeenCalledWith("Crash in 'then': foo");
     });
 
     test("when it crashes in 'end' with an error", () => {
@@ -625,7 +625,7 @@ describe("check when it crashes in routines", () => {
         elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
 
         expect(ctx.commands).toHaveLength(1);
-        expect(catBinder.error).toHaveBeenCalledWith("Crash in 'end'", err);
+        expect(catBinding.error).toHaveBeenCalledWith("Crash in 'end'", err);
     });
 
     test("when it crashes in 'end' with not an error", () => {
@@ -641,7 +641,7 @@ describe("check when it crashes in routines", () => {
         elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
 
         expect(ctx.commands).toHaveLength(1);
-        expect(catBinder.warn).toHaveBeenCalledWith("Crash in 'end': 21");
+        expect(catBinding.warn).toHaveBeenCalledWith("Crash in 'end': 21");
     });
 
     test("when it crashes in 'endOrCancel' with an error", () => {
@@ -656,7 +656,7 @@ describe("check when it crashes in routines", () => {
         elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
 
         expect(ctx.commands).toHaveLength(1);
-        expect(catBinder.error).toHaveBeenCalledWith("Crash in 'endOrCancel'", err);
+        expect(catBinding.error).toHaveBeenCalledWith("Crash in 'endOrCancel'", err);
     });
 
     test("when it crashes in 'endOrCancel' with not an error", () => {
@@ -672,7 +672,7 @@ describe("check when it crashes in routines", () => {
         elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
 
         expect(ctx.commands).toHaveLength(1);
-        expect(catBinder.warn).toHaveBeenCalledWith("Crash in 'endOrCancel': true");
+        expect(catBinding.warn).toHaveBeenCalledWith("Crash in 'endOrCancel': true");
     });
 
     test("when it crashes in 'cancel' with an error", () => {
@@ -689,7 +689,7 @@ describe("check when it crashes in routines", () => {
         elt.dispatchEvent(createKeyEvent("keydown", "Escape"));
 
         expect(ctx.commands).toHaveLength(0);
-        expect(catBinder.error).toHaveBeenCalledWith("Crash in 'cancel'", err);
+        expect(catBinding.error).toHaveBeenCalledWith("Crash in 'cancel'", err);
     });
 
     test("when it crashes in 'cancel' with not an error", () => {
@@ -707,7 +707,7 @@ describe("check when it crashes in routines", () => {
         elt.dispatchEvent(createKeyEvent("keydown", "Escape"));
 
         expect(ctx.commands).toHaveLength(0);
-        expect(catBinder.warn).toHaveBeenCalledWith("Crash in 'cancel': bar");
+        expect(catBinding.warn).toHaveBeenCalledWith("Crash in 'cancel': bar");
     });
 
     test("when it crashes in 'ifHadNoEffect' with an error", () => {
@@ -723,7 +723,7 @@ describe("check when it crashes in routines", () => {
         elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
 
         expect(ctx.commands).toHaveLength(1);
-        expect(catBinder.error).toHaveBeenCalledWith("Crash in 'ifHadNoEffect'", err);
+        expect(catBinding.error).toHaveBeenCalledWith("Crash in 'ifHadNoEffect'", err);
     });
 
     test("when it crashes in 'ifHadNoEffect' with not an error", () => {
@@ -740,7 +740,7 @@ describe("check when it crashes in routines", () => {
         elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
 
         expect(ctx.commands).toHaveLength(1);
-        expect(catBinder.warn).toHaveBeenCalledWith("Crash in 'ifHadNoEffect': 11");
+        expect(catBinding.warn).toHaveBeenCalledWith("Crash in 'ifHadNoEffect': 11");
     });
 
     test("when it crashes in 'ifHadEffect' with an error", () => {
@@ -756,7 +756,7 @@ describe("check when it crashes in routines", () => {
         elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
 
         expect(ctx.commands).toHaveLength(1);
-        expect(catBinder.error).toHaveBeenCalledWith("Crash in 'ifHadEffects'", err);
+        expect(catBinding.error).toHaveBeenCalledWith("Crash in 'ifHadEffects'", err);
     });
 
     test("when it crashes in 'ifHadEffect' with not an error", () => {
@@ -773,7 +773,7 @@ describe("check when it crashes in routines", () => {
         elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
 
         expect(ctx.commands).toHaveLength(1);
-        expect(catBinder.warn).toHaveBeenCalledWith("Crash in 'ifHadEffects': YOLO");
+        expect(catBinding.warn).toHaveBeenCalledWith("Crash in 'ifHadEffects': YOLO");
     });
 
     test("when it crashes in 'when' with an error", () => {
@@ -788,7 +788,7 @@ describe("check when it crashes in routines", () => {
         elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
 
         expect(ctx.commands).toHaveLength(0);
-        expect(catBinder.error).toHaveBeenCalledWith("Crash in 'when'", err);
+        expect(catBinding.error).toHaveBeenCalledWith("Crash in 'when'", err);
     });
 
     test("when it crashes in 'when' with not an error", () => {
@@ -802,7 +802,7 @@ describe("check when it crashes in routines", () => {
         elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
 
         expect(ctx.commands).toHaveLength(0);
-        expect(catBinder.warn).toHaveBeenCalledWith("Crash in 'when': msg");
+        expect(catBinding.warn).toHaveBeenCalledWith("Crash in 'when': msg");
     });
 
     test("call to 'when' should log", () => {
@@ -812,7 +812,7 @@ describe("check when it crashes in routines", () => {
 
         elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
 
-        expect(catBinder.info).toHaveBeenNthCalledWith(1, "Checking condition: true");
+        expect(catBinding.info).toHaveBeenNthCalledWith(1, "Checking condition: true");
     });
 
     test("when it crashes in 'ifCannotExecute' with an error", () => {
@@ -828,7 +828,7 @@ describe("check when it crashes in routines", () => {
         elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
 
         expect(ctx.commands).toHaveLength(0);
-        expect(catBinder.error).toHaveBeenCalledWith("Crash in 'ifCannotExecute'", err);
+        expect(catBinding.error).toHaveBeenCalledWith("Crash in 'ifCannotExecute'", err);
     });
 
     test("when it crashes in 'ifCannotExecute' with not an error", () => {
@@ -845,7 +845,7 @@ describe("check when it crashes in routines", () => {
         elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
 
         expect(ctx.commands).toHaveLength(0);
-        expect(catBinder.warn).toHaveBeenCalledWith("Crash in 'ifCannotExecute': 1");
+        expect(catBinding.warn).toHaveBeenCalledWith("Crash in 'ifCannotExecute': 1");
     });
 });
 

@@ -18,6 +18,6 @@ CategoryServiceFactory.setDefaultConfiguration(new CategoryConfiguration(LogLeve
 
 export const catInteraction = new Category("interaction");
 export const catCommand = new Category("command");
-export const catBinder = new Category("binder");
+export const catBinding = new Category("binding");
 export const catFSM = new Category("fsm", catInteraction);
 
