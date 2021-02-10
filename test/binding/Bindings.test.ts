@@ -15,7 +15,7 @@
 import {
     AnonCmd,
     Binding,
-    catBinder,
+    catBinder, catCommand,
     clearBindingObserver,
     clickBinder,
     clicksBinder,
@@ -90,6 +90,19 @@ test("press binder", () => {
     elt.dispatchEvent(createMouseEvent("mousedown", elt));
     expect(ctx.bindings).toHaveLength(1);
     expect(ctx.commands).toHaveLength(1);
+});
+
+test("log cmd binding", () => {
+    jest.spyOn(catCommand, "info");
+    jest.spyOn(catBinder, "info");
+    pressBinder()
+        .on(elt)
+        .toProduce(() => new StubCmd(true))
+        .log(LogLevel.command, LogLevel.binding)
+        .bind();
+    elt.dispatchEvent(createMouseEvent("mousedown", elt));
+    expect(catCommand.info).toHaveBeenCalledTimes(4);
+    expect(catBinder.info).toHaveBeenCalledTimes(5);
 });
 
 test("undoable command registered", () => {
