@@ -34,6 +34,8 @@ export interface BaseBinder extends BaseBinderBuilder {
 
     log(...level: ReadonlyArray<LogLevel>): BaseBinder;
 
+    catch(fn: (ex: unknown) => void): BaseBinder;
+
     /**
      * Defines how to create the UI command that will produce the binding.
      * @param cmdSupplier - The supplier that will return a new UI command on each call.

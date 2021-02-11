@@ -50,4 +50,6 @@ export interface BaseUpdateBinder extends BaseUpdateBinderBuilder, BaseBinder {
     stopImmediatePropagation(): BaseUpdateBinder;
 
     preventDefault(): BaseUpdateBinder;
+
+    catch(fn: (ex: unknown) => void): BaseUpdateBinder;
 }

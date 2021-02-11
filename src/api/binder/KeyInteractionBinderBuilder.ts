@@ -38,4 +38,6 @@ export interface KeyInteractionBinderBuilder<I extends Interaction<D>, D extends
     stopImmediatePropagation(): KeyInteractionBinderBuilder<I, D>;
 
     preventDefault(): KeyInteractionBinderBuilder<I, D>;
+
+    catch(fn: (ex: unknown) => void): KeyInteractionBinderBuilder<I, D>;
 }

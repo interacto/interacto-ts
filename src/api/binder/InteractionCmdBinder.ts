@@ -58,6 +58,8 @@ export interface InteractionCmdBinder<C extends Command, I extends Interaction<D
 
     preventDefault(): InteractionCmdBinder<C, I, D>;
 
+    catch(fn: (ex: unknown) => void): InteractionCmdBinder<C, I, D>;
+
     /**
     * Executes the builder to create and install the binding on the instrument.
     */

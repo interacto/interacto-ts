@@ -57,4 +57,6 @@ export interface BaseUpdateBinderBuilder extends BaseBinderBuilder {
     stopImmediatePropagation(): BaseUpdateBinderBuilder;
 
     preventDefault(): BaseUpdateBinderBuilder;
+
+    catch(fn: (ex: unknown) => void): BaseUpdateBinderBuilder;
 }

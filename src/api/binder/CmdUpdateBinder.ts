@@ -51,4 +51,6 @@ export interface CmdUpdateBinder<C extends Command> extends CmdUpdateBinderBuild
     stopImmediatePropagation(): CmdUpdateBinder<C>;
 
     preventDefault(): CmdUpdateBinder<C>;
+
+    catch(fn: (ex: unknown) => void): CmdUpdateBinder<C>;
 }

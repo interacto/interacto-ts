@@ -42,5 +42,7 @@ export interface InteractionBinder<I extends Interaction<D>, D extends Interacti
 
     preventDefault(): InteractionBinder<I, D>;
 
+    catch(fn: (ex: unknown) => void): InteractionBinder<I, D>;
+
     toProduce<C extends Command>(cmdSupplier: (i: D) => C): InteractionCmdBinder<C, I, D>;
 }

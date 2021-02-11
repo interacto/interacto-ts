@@ -51,6 +51,8 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
 
     protected onEnd?: (c: C, i: D) => void;
 
+    protected onErr?: (ex: unknown) => void;
+
     protected logLevels: ReadonlyArray<LogLevel>;
 
     protected stopPropaNow: boolean;
@@ -60,24 +62,14 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
     protected observer?: BindingsObserver;
 
 
-    protected constructor(observer?: BindingsObserver, initCmd?: (c: C, i: D) => void, checkConditions?: (i: D) => boolean,
-                          cmdProducer?: (i: D) => C, widgets?: ReadonlyArray<EventTarget>, dynamicNodes?: ReadonlyArray<Node>,
-                          interactionSupplier?: () => I, onEnd?: (c: C, i: D) => void,
-                          logLevels?: ReadonlyArray<LogLevel>, hadNoEffectFct?: (c: C, i: D) => void, hadEffectsFct?: (c: C, i: D) => void,
-                          cannotExecFct?: (c: C, i: D) => void, stopProga?: boolean, prevent?: boolean) {
-        this.initCmd = initCmd;
-        this.checkConditions = checkConditions;
-        this.cmdProducer = cmdProducer;
-        this.widgets = widgets ?? [];
-        this.dynamicNodes = dynamicNodes ?? [];
-        this.interactionSupplier = interactionSupplier;
-        this.onEnd = onEnd;
-        this.hadEffectsFct = hadEffectsFct;
-        this.hadNoEffectFct = hadNoEffectFct;
-        this.cannotExecFct = cannotExecFct;
-        this.logLevels = logLevels ?? [];
-        this.stopPropaNow = stopProga ?? false;
-        this.prevDef = prevent ?? false;
+    protected constructor(observer?: BindingsObserver, binder?: Partial<Binder<C, I, D>>) {
+        Object.assign(this, binder);
+
+        this.widgets ??= [];
+        this.dynamicNodes ??= [];
+        this.logLevels ??= [];
+        this.stopPropaNow ??= false;
+        this.prevDef ??= false;
         this.observer = observer;
     }
 
@@ -155,6 +147,12 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
     public preventDefault(): Binder<C, I, D> {
         const dup = this.duplicate();
         dup.prevDef = true;
+        return dup;
+    }
+
+    public catch(fn: (ex: unknown) => void): Binder<C, I, D> {
+        const dup = this.duplicate();
+        dup.onErr = fn;
         return dup;
     }
 

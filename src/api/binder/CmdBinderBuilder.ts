@@ -43,4 +43,6 @@ export interface CmdBinderBuilder<C extends Command> extends BaseBinderBuilder {
     stopImmediatePropagation(): CmdBinderBuilder<C>;
 
     preventDefault(): CmdBinderBuilder<C>;
+
+    catch(fn: (ex: unknown) => void): CmdBinderBuilder<C>;
 }

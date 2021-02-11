@@ -61,5 +61,7 @@ export interface KeyInteractionCmdUpdateBinder<C extends Command, I extends Inte
 
     preventDefault(): KeyInteractionCmdUpdateBinder<C, I, D>;
 
+    catch(fn: (ex: unknown) => void): KeyInteractionCmdUpdateBinder<C, I, D>;
+
     bind(): Binding<C, I, D>;
 }

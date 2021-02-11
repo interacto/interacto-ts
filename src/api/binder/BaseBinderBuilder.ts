@@ -94,4 +94,12 @@ export interface BaseBinderBuilder {
      * @returns A clone of the current builder to chain the building configuration.
      */
     preventDefault(): BaseBinderBuilder;
+
+    /**
+     * Allows the processing of errors during the execution of the binding.
+     * Errors reported here are errors thrown in arrow functions provided to the
+     * the different routines of the binder.
+     * @param fn - The function to process the error caught by the binding during its execution
+     */
+    catch(fn: (ex: unknown) => void): BaseBinderBuilder;
 }

@@ -566,6 +566,63 @@ describe("check when it crashes in routines", () => {
         expect(catBinding.error).toHaveBeenCalledWith("Crash in 'first'", err);
     });
 
+    test("when it crashes in 'first' with an error caught by 'catch'", () => {
+        const fn = jest.fn();
+        baseBinder
+            .first((_c: StubCmd, _i: SrcTgtTouchData) => {
+                throw err;
+            })
+            .catch(fn)
+            .bind();
+
+        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+
+        expect(ctx.commands).toHaveLength(1);
+        expect(fn).toHaveBeenCalledTimes(1);
+        expect(fn).toHaveBeenCalledWith(err);
+    });
+
+    test("when 'catch' crashes, logged", () => {
+        baseBinder
+            .first(() => {
+                throw err;
+            })
+            .catch(() => {
+                throw err;
+            })
+            .bind();
+
+        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+
+        expect(ctx.commands).toHaveLength(1);
+        expect(catBinding.error).toHaveBeenCalledWith("Crash in 'first'", err);
+        expect(catBinding.error).toHaveBeenCalledWith("Crash in 'catch'", err);
+    });
+
+    test("when 'catch' crashes with not an error, logged", () => {
+        baseBinder
+            .first(() => {
+                throw err;
+            })
+            .catch(() => {
+                // eslint-disable-next-line @typescript-eslint/no-throw-literal
+                throw "YOLO";
+            })
+            .bind();
+
+        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+
+        expect(ctx.commands).toHaveLength(1);
+        expect(catBinding.error).toHaveBeenCalledWith("Crash in 'first'", err);
+        expect(catBinding.warn).toHaveBeenCalledWith("Crash in 'catch': YOLO");
+    });
+
     test("when it crashes in 'first' with not an error", () => {
         baseBinder
             .first((_c: StubCmd, _i: SrcTgtTouchData) => {
@@ -595,6 +652,24 @@ describe("check when it crashes in routines", () => {
 
         expect(ctx.commands).toHaveLength(1);
         expect(catBinding.error).toHaveBeenCalledWith("Crash in 'then'", err);
+    });
+
+    test("when it crashes in 'then' with an error caught by 'catch'", () => {
+        const fn = jest.fn();
+        baseBinder
+            .then(() => {
+                throw err;
+            })
+            .catch(fn)
+            .bind();
+
+        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+
+        expect(ctx.commands).toHaveLength(1);
+        expect(fn).toHaveBeenCalledTimes(3);
+        expect(fn).toHaveBeenCalledWith(err);
     });
 
     test("when it crashes in 'then' with not an error", () => {
@@ -628,6 +703,24 @@ describe("check when it crashes in routines", () => {
         expect(catBinding.error).toHaveBeenCalledWith("Crash in 'end'", err);
     });
 
+    test("when it crashes in 'end' with an error caught by 'catch'", () => {
+        const fn = jest.fn();
+        baseBinder
+            .end(() => {
+                throw err;
+            })
+            .catch(fn)
+            .bind();
+
+        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+
+        expect(ctx.commands).toHaveLength(1);
+        expect(fn).toHaveBeenCalledTimes(1);
+        expect(fn).toHaveBeenCalledWith(err);
+    });
+
     test("when it crashes in 'end' with not an error", () => {
         baseBinder
             .end(() => {
@@ -657,6 +750,24 @@ describe("check when it crashes in routines", () => {
 
         expect(ctx.commands).toHaveLength(1);
         expect(catBinding.error).toHaveBeenCalledWith("Crash in 'endOrCancel'", err);
+    });
+
+    test("when it crashes in 'endOrCancel' with an error caught by 'catch'", () => {
+        const fn = jest.fn();
+        baseBinder
+            .catch(fn)
+            .endOrCancel(() => {
+                throw err;
+            })
+            .bind();
+
+        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+
+        expect(ctx.commands).toHaveLength(1);
+        expect(fn).toHaveBeenCalledTimes(1);
+        expect(fn).toHaveBeenCalledWith(err);
     });
 
     test("when it crashes in 'endOrCancel' with not an error", () => {
@@ -690,6 +801,26 @@ describe("check when it crashes in routines", () => {
 
         expect(ctx.commands).toHaveLength(0);
         expect(catBinding.error).toHaveBeenCalledWith("Crash in 'cancel'", err);
+    });
+
+    test("when it crashes in 'cancel' with an error caught by 'catch'", () => {
+        const fn = jest.fn();
+        dndBinder(true)
+            .toProduce(() => new StubCmd(true))
+            .on(elt)
+            .catch(fn)
+            .cancel(() => {
+                throw err;
+            })
+            .bind();
+
+        elt.dispatchEvent(createMouseEvent("mousedown", elt));
+        elt.dispatchEvent(createMouseEvent("mousemove", elt));
+        elt.dispatchEvent(createKeyEvent("keydown", "Escape"));
+
+        expect(ctx.commands).toHaveLength(0);
+        expect(fn).toHaveBeenCalledTimes(1);
+        expect(fn).toHaveBeenCalledWith(err);
     });
 
     test("when it crashes in 'cancel' with not an error", () => {
@@ -726,6 +857,25 @@ describe("check when it crashes in routines", () => {
         expect(catBinding.error).toHaveBeenCalledWith("Crash in 'ifHadNoEffect'", err);
     });
 
+    test("when it crashes in 'ifHadNoEffect' with an error caught by 'catch'", () => {
+        jest.spyOn(cmd, "hadEffect").mockReturnValue(false);
+        const fn = jest.fn();
+        baseBinder
+            .catch(fn)
+            .ifHadNoEffect(() => {
+                throw err;
+            })
+            .bind();
+
+        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+
+        expect(ctx.commands).toHaveLength(1);
+        expect(fn).toHaveBeenCalledTimes(1);
+        expect(fn).toHaveBeenCalledWith(err);
+    });
+
     test("when it crashes in 'ifHadNoEffect' with not an error", () => {
         jest.spyOn(cmd, "hadEffect").mockReturnValue(false);
         baseBinder
@@ -759,6 +909,25 @@ describe("check when it crashes in routines", () => {
         expect(catBinding.error).toHaveBeenCalledWith("Crash in 'ifHadEffects'", err);
     });
 
+    test("when it crashes in 'ifHadEffect' with an error caught by 'catch'", () => {
+        jest.spyOn(cmd, "hadEffect").mockReturnValue(true);
+        const fn = jest.fn();
+        baseBinder
+            .catch(fn)
+            .ifHadEffects(() => {
+                throw err;
+            })
+            .bind();
+
+        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+
+        expect(ctx.commands).toHaveLength(1);
+        expect(fn).toHaveBeenCalledTimes(1);
+        expect(fn).toHaveBeenCalledWith(err);
+    });
+
     test("when it crashes in 'ifHadEffect' with not an error", () => {
         jest.spyOn(cmd, "hadEffect").mockReturnValue(true);
         baseBinder
@@ -789,6 +958,23 @@ describe("check when it crashes in routines", () => {
 
         expect(ctx.commands).toHaveLength(0);
         expect(catBinding.error).toHaveBeenCalledWith("Crash in 'when'", err);
+    });
+
+    test("when it crashes in 'when' with an error caught by 'catch'", () => {
+        const fn = jest.fn();
+        baseBinder
+            .catch(fn)
+            .when(() => {
+                throw err;
+            })
+            .bind();
+
+        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+
+        expect(fn).toHaveBeenCalledTimes(4);
+        expect(fn).toHaveBeenCalledWith(err);
     });
 
     test("when it crashes in 'when' with not an error", () => {
@@ -829,6 +1015,24 @@ describe("check when it crashes in routines", () => {
 
         expect(ctx.commands).toHaveLength(0);
         expect(catBinding.error).toHaveBeenCalledWith("Crash in 'ifCannotExecute'", err);
+    });
+
+    test("when it crashes in 'ifCannotExecute' with an error caught by 'catch'", () => {
+        const fn = jest.fn();
+        cmd = new StubCmd(false);
+        baseBinder
+            .catch(fn)
+            .ifCannotExecute(() => {
+                throw err;
+            })
+            .bind();
+
+        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
+        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+
+        expect(fn).toHaveBeenCalledTimes(1);
+        expect(fn).toHaveBeenCalledWith(err);
     });
 
     test("when it crashes in 'ifCannotExecute' with not an error", () => {

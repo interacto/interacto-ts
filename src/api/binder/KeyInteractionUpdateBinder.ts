@@ -45,5 +45,7 @@ export interface KeyInteractionUpdateBinder<I extends Interaction<D>, D extends 
 
     endOrCancel(endOrCancel: (i: D) => void): KeyInteractionUpdateBinder<I, D>;
 
+    catch(fn: (ex: unknown) => void): KeyInteractionUpdateBinder<I, D>;
+
     toProduce<C extends Command>(cmdSupplier: (i: D) => C): KeyInteractionCmdUpdateBinder<C, I, D>;
 }

@@ -40,6 +40,8 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
 
     private readonly onEnd?: (c: C, i: D) => void;
 
+    private readonly onErr?: (ex: unknown) => void;
+
     private readonly strictStart: boolean;
 
 
@@ -51,7 +53,8 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
                        updateCmdFct?: (c: C, i: D) => void, check?: (i: D) => boolean,
                        onEndFct?: (c: C, i: D) => void, cancel?: (i: D) => void,
                        endOrCancel?: (i: D) => void, hadEffectsFct?: (c: C, i: D) => void,
-                       hadNoEffectFct?: (c: C, i: D) => void, cannotExecFct?: (c: C, i: D) => void) {
+                       hadNoEffectFct?: (c: C, i: D) => void, cannotExecFct?: (c: C, i: D) => void,
+                       onErrFn?: (ex: unknown) => void) {
         super(continuousExec, interaction, cmdProducer, widgets);
         this.configureLoggers(loggers);
         this.execInitCmd = initCmdFct;
@@ -64,6 +67,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
         this.hadEffectsFct = hadEffectsFct;
         this.hadNoEffectFct = hadNoEffectFct;
         this.cannotExecFct = cannotExecFct;
+        this.onErr = onErrFn;
 
         this.interaction.stopImmediatePropagation = stopPropa;
         this.interaction.preventDefault = prevDef;
@@ -91,6 +95,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
             try {
                 this.execInitCmd(cmd, this.getInteraction().getData());
             } catch (ex: unknown) {
+                this.catch(ex);
                 if (ex instanceof Error) {
                     catBinding.error("Crash in 'first'", ex);
                 } else {
@@ -106,6 +111,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
             try {
                 this.execUpdateCmd(cmd, this.getInteraction().getData());
             } catch (ex: unknown) {
+                this.catch(ex);
                 if (ex instanceof Error) {
                     catBinding.error("Crash in 'then'", ex);
                 } else {
@@ -121,6 +127,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
             try {
                 this.onEnd(cmd, this.getInteraction().getData());
             } catch (ex: unknown) {
+                this.catch(ex);
                 if (ex instanceof Error) {
                     catBinding.error("Crash in 'end'", ex);
                 } else {
@@ -135,6 +142,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
             try {
                 this.cancelFct(this.getInteraction().getData());
             } catch (ex: unknown) {
+                this.catch(ex);
                 if (ex instanceof Error) {
                     catBinding.error("Crash in 'cancel'", ex);
                 } else {
@@ -149,6 +157,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
             try {
                 this.endOrCancelFct(this.getInteraction().getData());
             } catch (ex: unknown) {
+                this.catch(ex);
                 if (ex instanceof Error) {
                     catBinding.error("Crash in 'endOrCancel'", ex);
                 } else {
@@ -164,6 +173,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
             try {
                 this.hadNoEffectFct(cmd, this.getInteraction().getData());
             } catch (ex: unknown) {
+                this.catch(ex);
                 if (ex instanceof Error) {
                     catBinding.error("Crash in 'ifHadNoEffect'", ex);
                 } else {
@@ -179,6 +189,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
             try {
                 this.hadEffectsFct(cmd, this.getInteraction().getData());
             } catch (ex: unknown) {
+                this.catch(ex);
                 if (ex instanceof Error) {
                     catBinding.error("Crash in 'ifHadEffects'", ex);
                 } else {
@@ -194,6 +205,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
             try {
                 this.cannotExecFct(cmd, this.getInteraction().getData());
             } catch (ex: unknown) {
+                this.catch(ex);
                 if (ex instanceof Error) {
                     catBinding.error("Crash in 'ifCannotExecute'", ex);
                 } else {
@@ -209,6 +221,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
             ok = this.checkInteraction === undefined || this.checkInteraction(this.getInteraction().getData());
         } catch (ex: unknown) {
             ok = false;
+            this.catch(ex);
             if (ex instanceof Error) {
                 catBinding.error("Crash in 'when'", ex);
             } else {
@@ -219,5 +232,20 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
             catBinding.info(`Checking condition: ${String(ok)}`);
         }
         return ok;
+    }
+
+
+    public catch(err: unknown): void {
+        if (this.onErr !== undefined) {
+            try {
+                this.onErr(err);
+            } catch (ex: unknown) {
+                if (ex instanceof Error) {
+                    catBinding.error("Crash in 'catch'", ex);
+                } else {
+                    catBinding.warn(`Crash in 'catch': ${String(ex)}`);
+                }
+            }
+        }
     }
 }

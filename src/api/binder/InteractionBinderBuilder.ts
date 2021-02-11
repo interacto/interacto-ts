@@ -44,4 +44,6 @@ export interface InteractionBinderBuilder<I extends Interaction<D>, D extends In
     stopImmediatePropagation(): InteractionBinderBuilder<I, D>;
 
     preventDefault(): InteractionBinderBuilder<I, D>;
+
+    catch(fn: (ex: unknown) => void): InteractionBinderBuilder<I, D>;
 }

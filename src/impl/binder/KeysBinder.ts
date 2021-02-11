@@ -16,7 +16,6 @@ import {Command} from "../../api/command/Command";
 import {LogLevel} from "../../api/logging/LogLevel";
 import {Binding} from "../../api/binding/Binding";
 import {AnonBinding} from "../binding/AnonBinding";
-import {BindingsObserver} from "../../api/binding/BindingsObserver";
 import {InteractionData} from "../../api/interaction/InteractionData";
 import {KeysDataImpl} from "../interaction/library/KeysDataImpl";
 import {KeyDataImpl} from "../interaction/library/KeyDataImpl";
@@ -24,6 +23,7 @@ import {UpdateBinder} from "./UpdateBinder";
 import {KeyInteractionCmdUpdateBinder} from "../../api/binder/KeyInteractionCmdUpdateBinder";
 import {Interaction} from "../../api/interaction/Interaction";
 import {Widget} from "../../api/binder/BaseBinderBuilder";
+import {BindingsObserver} from "../../api/binding/BindingsObserver";
 
 /**
  * The base binding builder to create bindings between a keys pressure interaction and a given command.
@@ -36,17 +36,13 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, D extends I
 
     private readonly checkCode: (i: InteractionData) => boolean;
 
-    public constructor(observer?: BindingsObserver, throttleTimeout?: number, continuousCmdExecution?: boolean, strict?: boolean,
-                       initCmd?: (c: C, i: D) => void, whenPredicate?: (i: D) => boolean,
-                       cmdProducer?: (i: D) => C, widgets?: ReadonlyArray<EventTarget>, dynamicNodes?: ReadonlyArray<Node>,
-                       interactionSupplier?: () => I, onEnd?: (c: C, i: D) => void, logLevels?: ReadonlyArray<LogLevel>,
-                       hadNoEffectFct?: (c: C, i: D) => void, hadEffectsFct?: (c: C, i: D) => void,
-                       cannotExecFct?: (c: C, i: D) => void, updateFct?: (c: C, i: D) => void, cancelFct?: (i: D) => void,
-                       endOrCancelFct?: (i: D) => void, keyCodes?: ReadonlyArray<string>, stopProga?: boolean, prevent?: boolean) {
-        super(observer, throttleTimeout, continuousCmdExecution, strict, initCmd, whenPredicate, cmdProducer, widgets,
-            dynamicNodes, interactionSupplier, onEnd, logLevels, hadNoEffectFct, hadEffectsFct, cannotExecFct,
-            updateFct, cancelFct, endOrCancelFct, stopProga, prevent);
-        this.codes = keyCodes === undefined ? [] : [...keyCodes];
+    public constructor(observer?: BindingsObserver, binder?: Partial<KeysBinder<C, I, D>>) {
+        super(observer, binder);
+
+        Object.assign(this, binder);
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        this.codes = this.codes === undefined ? [] : [...this.codes];
+        this.codes ??= [];
         this.checkCode = (i: D): boolean => {
             let keys: ReadonlyArray<string> = [];
             if (i instanceof KeysDataImpl) {
@@ -138,6 +134,10 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, D extends I
         return super.endOrCancel(endOrCancel) as KeysBinder<C, I, D>;
     }
 
+    public catch(fn: (ex: unknown) => void): KeysBinder<C, I, D> {
+        return super.catch(fn) as KeysBinder<C, I, D>;
+    }
+
     public toProduce<C2 extends Command>(cmdCreation: (i: D) => C2): KeysBinder<C2, I, D> {
         return super.toProduce(cmdCreation) as KeysBinder<C2, I, D>;
     }
@@ -148,12 +148,7 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, D extends I
     }
 
     protected duplicate(): KeysBinder<C, I, D> {
-        return new KeysBinder(this.observer, this.throttleTimeout, this.continuousCmdExecution,
-            this._strictStart, this.initCmd, this.checkConditions, this.cmdProducer,
-            this.widgets, this.dynamicNodes, this.interactionSupplier, this.onEnd,
-            this.logLevels, this.hadNoEffectFct, this.hadEffectsFct,
-            this.cannotExecFct, this.updateFct, this.cancelFct, this.endOrCancelFct,
-            [...this.codes], this.stopPropaNow, this.prevDef);
+        return new KeysBinder(this.observer, this);
     }
 
     public bind(): Binding<C, I, D> {
@@ -170,7 +165,7 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, D extends I
             this._strictStart, [...this.logLevels], this.throttleTimeout,
             this.stopPropaNow, this.prevDef, this.initCmd, this.updateFct, this.checkCode,
             this.onEnd, this.cancelFct, this.endOrCancelFct, this.hadEffectsFct,
-            this.hadNoEffectFct, this.cannotExecFct);
+            this.hadNoEffectFct, this.cannotExecFct, this.onErr);
 
         this.observer?.observeBinding(binding);
 

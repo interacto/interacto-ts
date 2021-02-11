@@ -112,6 +112,10 @@ implements Binding<C, I, D> {
         }
     }
 
+    public catch(_err: undefined): void {
+        // To override.
+    }
+
     public first(): void {
         // To override.
     }

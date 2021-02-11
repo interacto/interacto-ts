@@ -20,9 +20,9 @@ import {InteractionCmdUpdateBinder} from "../../api/binder/InteractionCmdUpdateB
 import {LogLevel} from "../../api/logging/LogLevel";
 import {Binding} from "../../api/binding/Binding";
 import {AnonBinding} from "../binding/AnonBinding";
-import {BindingsObserver} from "../../api/binding/BindingsObserver";
 import {Interaction} from "../../api/interaction/Interaction";
 import {Widget} from "../../api/binder/BaseBinderBuilder";
+import {BindingsObserver} from "../../api/binding/BindingsObserver";
 
 /**
  * The base binding builder for bindings where commands can be updated while the user interaction is running.
@@ -43,21 +43,13 @@ export class UpdateBinder<C extends Command, I extends Interaction<D>, D extends
 
     protected throttleTimeout: number;
 
-    public constructor(observer?: BindingsObserver, throttleTimeout?: number, continuousCmdExecution?: boolean, strict?: boolean,
-                       initCmd?: (c: C, i: D) => void, checkConditions?: (i: D) => boolean, cmdProducer?: (i: D) => C,
-                       widgets?: ReadonlyArray<EventTarget>, dynamicNodes?: ReadonlyArray<Node>,
-                       interactionSupplier?: () => I, onEnd?: (c: C, i: D) => void,
-                       logLevels?: ReadonlyArray<LogLevel>, hadNoEffectFct?: (c: C, i: D) => void, hadEffectsFct?: (c: C, i: D) => void,
-                       cannotExecFct?: (c: C, i: D) => void, updateFct?: (c: C, i: D) => void, cancelFct?: (i: D) => void,
-                       endOrCancelFct?: (i: D) => void, stopProga?: boolean, prevent?: boolean) {
-        super(observer, initCmd, checkConditions, cmdProducer, widgets, dynamicNodes, interactionSupplier, onEnd,
-            logLevels, hadNoEffectFct, hadEffectsFct, cannotExecFct, stopProga, prevent);
-        this.updateFct = updateFct;
-        this.cancelFct = cancelFct;
-        this.endOrCancelFct = endOrCancelFct;
-        this.continuousCmdExecution = continuousCmdExecution ?? false;
-        this._strictStart = strict ?? false;
-        this.throttleTimeout = throttleTimeout ?? 0;
+    public constructor(observer?: BindingsObserver, binder?: Partial<UpdateBinder<C, I, D>>) {
+        super(observer, binder);
+
+        Object.assign(this, binder);
+        this.continuousCmdExecution ??= false;
+        this._strictStart ??= false;
+        this.throttleTimeout ??= 0;
     }
 
     public then(update: (c: C, i: D) => void): UpdateBinder<C, I, D> {
@@ -141,6 +133,10 @@ export class UpdateBinder<C extends Command, I extends Interaction<D>, D extends
         return super.preventDefault() as UpdateBinder<C, I, D>;
     }
 
+    public catch(fn: (ex: unknown) => void): UpdateBinder<C, I, D> {
+        return super.catch(fn) as UpdateBinder<C, I, D>;
+    }
+
     public usingInteraction<I2 extends Interaction<D2>, D2 extends InteractionData>
     (interactionSupplier: () => I2): UpdateBinder<C, I2, D2> {
         return super.usingInteraction(interactionSupplier) as UpdateBinder<C, I2, D2>;
@@ -151,12 +147,7 @@ export class UpdateBinder<C extends Command, I extends Interaction<D>, D extends
     }
 
     protected duplicate(): UpdateBinder<C, I, D> {
-        return new UpdateBinder<C, I, D>(this.observer, this.throttleTimeout, this.continuousCmdExecution,
-            this._strictStart, this.initCmd, this.checkConditions, this.cmdProducer,
-            this.widgets, this.dynamicNodes, this.interactionSupplier, this.onEnd,
-            this.logLevels, this.hadNoEffectFct, this.hadEffectsFct,
-            this.cannotExecFct, this.updateFct, this.cancelFct, this.endOrCancelFct,
-            this.stopPropaNow, this.prevDef);
+        return new UpdateBinder<C, I, D>(this.observer, this);
     }
 
     public bind(): Binding<C, I, D> {
@@ -172,7 +163,7 @@ export class UpdateBinder<C extends Command, I extends Interaction<D>, D extends
             [...this.widgets], [...this.dynamicNodes], this._strictStart, [...this.logLevels],
             this.throttleTimeout, this.stopPropaNow, this.prevDef, this.initCmd, this.updateFct, this.checkConditions,
             this.onEnd, this.cancelFct, this.endOrCancelFct, this.hadEffectsFct,
-            this.hadNoEffectFct, this.cannotExecFct);
+            this.hadNoEffectFct, this.cannotExecFct, this.onErr);
 
         this.observer?.observeBinding(binding);
 

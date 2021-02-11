@@ -49,4 +49,6 @@ export interface InteractionUpdateBinderBuilder<I extends Interaction<D>, D exte
     strictStart(): InteractionUpdateBinderBuilder<I, D>;
 
     preventDefault(): InteractionUpdateBinderBuilder<I, D>;
+
+    catch(fn: (ex: unknown) => void): InteractionUpdateBinderBuilder<I, D>;
 }
