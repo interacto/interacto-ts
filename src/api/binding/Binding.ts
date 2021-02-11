@@ -23,56 +23,6 @@ import {InteractionData} from "../interaction/InteractionData";
  */
 export interface Binding<C extends Command, I extends Interaction<D>, D extends InteractionData> extends FSMHandler {
     /**
-     * Stops the interaction and clears all its events waiting for a process.
-     */
-    clearEvents(): void;
-
-    /**
-     * After being created by method createCommand, the command can be initialised by this method.
-     */
-    first(): void;
-
-    /**
-     * Updates the current command. To override.
-     */
-    then(): void;
-
-    /**
-     * On end
-     */
-    end(): void;
-
-    /**
-     * On cancellation
-     */
-    cancel(): void;
-
-    /**
-     * On end or cancellation
-     */
-    endOrCancel(): void;
-
-    /**
-     * Called when an executed command did not had effect
-     */
-    ifCmdHadNoEffect(): void;
-
-    /**
-     * Called when an executed command had effects
-     */
-    ifCmdHadEffects(): void;
-
-    /**
-     * Called when an ongoing command cannot be executed
-     */
-    ifCannotExecuteCmd(): void;
-
-    /**
-     * @returns True if the condition of the binding is respected.
-     */
-    when(): boolean;
-
-    /**
      * @returns The interaction.
      */
     getInteraction(): I;
@@ -102,11 +52,6 @@ export interface Binding<C extends Command, I extends Interaction<D>, D extends 
      * States whether the interaction must continue to run while the condition of the binding is not fulfilled at the interaction start.
      */
     isStrictStart(): boolean;
-
-    /**
-     * @returns True: the command must be executed on each step of the interaction.
-     */
-    isContinuousCmdExec(): boolean;
 
     uninstallBinding(): void;
 

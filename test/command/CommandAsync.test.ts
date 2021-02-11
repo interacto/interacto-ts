@@ -31,6 +31,7 @@ import runAllTimers = jest.runAllTimers;
 import advanceTimersByTime = jest.advanceTimersByTime;
 import fn = jest.fn;
 import clearAllMocks = jest.clearAllMocks;
+import {BindingImpl} from "../../dist/impl/binding/BindingImpl";
 
 class Model {
     public data: Array<string> = ["Foo", "Bar", "Yo"];
@@ -435,7 +436,8 @@ describe("testing async commands and bindings", () => {
 
             disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
-            jest.spyOn(binding, "ifCannotExecuteCmd").mockImplementation(() => {
+            jest.spyOn(binding as BindingImpl<StubAsyncCmd, Interaction<InteractionData>, InteractionData>,
+                "ifCannotExecuteCmd").mockImplementation(() => {
                 throw new Error("Error");
             });
 

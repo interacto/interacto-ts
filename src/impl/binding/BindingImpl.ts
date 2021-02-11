@@ -86,10 +86,16 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
         interaction.registerToNodes(widgets);
     }
 
+    /**
+     * @returns True if the condition of the binding is respected.
+     */
     public when(): boolean {
         return true;
     }
 
+    /**
+     * Stops the interaction and clears all its events waiting for a process.
+     */
     public clearEvents(): void {
         this.interaction.fullReinit();
     }
@@ -111,38 +117,66 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
         }
     }
 
+    /**
+     * Called when an error appeared during the execution of the binding. To override.
+     * @param _err - The error.
+     */
     public catch(_err: undefined): void {
         // To override.
     }
 
+    /**
+     * After being created, this method initialises the command. To override.
+     */
     public first(): void {
         // To override.
     }
 
+    /**
+     * Updates the current command. To override.
+     */
     public then(): void {
         // To override.
     }
 
+    /**
+     * When the interaction ends. To override.
+     */
     public end(): void {
         // To override.
     }
 
+    /**
+     * When the interaction is cancelled. To override.
+     */
     public cancel(): void {
         // To override.
     }
 
+    /**
+     * When the interaction ends or is cancelled. To override.
+     */
     public endOrCancel(): void {
         // To override.
     }
 
+    /**
+     * Called when an executed command did not had effect. To override.
+     */
     public ifCmdHadNoEffect(): void {
         // To override.
     }
 
+    /**
+     * Called when an executed command had effects. To override.
+     */
     public ifCmdHadEffects(): void {
         // to override.
     }
 
+    /**
+     * Called when an ongoing command cannot be executed. To override.
+     */
     public ifCannotExecuteCmd(): void {
         // to override.
     }
@@ -419,7 +453,9 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
         this.interaction.uninstall();
     }
 
-
+    /**
+     * @returns True: the command must be executed on each step of the interaction.
+     */
     public isContinuousCmdExec(): boolean {
         return this.continuousCmdExec;
     }
