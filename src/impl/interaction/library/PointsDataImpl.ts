@@ -35,10 +35,6 @@ export class PointsDataImpl extends PointDataImpl implements PointsData {
         return this.currentPosition;
     }
 
-    public setCurrentPosition(currentPosition: readonly [number, number]): void {
-        this.currentPosition = currentPosition;
-    }
-
     public getLastButton(): number | undefined {
         return this.pointsData.length === 0 ? undefined : this.pointsData[this.pointsData.length - 1].getButton();
     }

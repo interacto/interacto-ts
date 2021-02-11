@@ -30,7 +30,7 @@ export abstract class TransitionBase<E extends Event> implements Transition<E> {
      * @param srcState - The source state of the transition.
      * @param tgtState - The output state of the transition.
      */
-    public constructor(srcState: OutputState, tgtState: InputState) {
+    protected constructor(srcState: OutputState, tgtState: InputState) {
         this.src = srcState;
         this.tgt = tgtState;
         this.src.addTransition(this);

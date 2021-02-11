@@ -172,6 +172,7 @@ export class Pan extends InteractionBase<SrcTgtTouchData, PanFSM> {
      * @param horizontal - Defines whether the pan is horizontal or vertical
      * @param minLength - The minimal distance from the starting point to the release point for validating the pan
      * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
+     * @param fsm - The finiste-state machine to use for this interaction (can be undefined)
      */
     public constructor(horizontal: boolean, minLength: number, pxTolerance: number, fsm?: PanFSM) {
         super(fsm ?? new PanFSM(horizontal, minLength, pxTolerance));

@@ -44,6 +44,10 @@ export class KeysDataImpl implements KeysData, Flushable {
     }
 
     public addKeysDataKey(event: KeyboardEvent): void {
-        this.keys === undefined ? this.keys = [event.code] : this.keys.push(event.code);
+        if (this.keys === undefined) {
+            this.keys = [event.code];
+        } else {
+            this.keys.push(event.code);
+        }
     }
 }
