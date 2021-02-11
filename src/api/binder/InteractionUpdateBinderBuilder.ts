@@ -24,18 +24,18 @@ export interface InteractionUpdateBinderBuilder<I extends Interaction<D>, D exte
     * The undoable command is automatically cancelled so that nothing must be done on the command.
      * @returns A clone of the current builder to chain the building configuration.
     */
-    cancel(cancel: (i: D) => void): InteractionUpdateBinderBuilder<I, D>;
+    cancel(fn: (i: D) => void): InteractionUpdateBinderBuilder<I, D>;
 
     /**
     * Defines what to do when a command is cancelled (because the interaction is cancelled).
     * The undoable command is automatically cancelled so that nothing must be done on the command.
      * @returns A clone of the current builder to chain the building configuration.
     */
-    endOrCancel(endOrCancel: (i: D) => void): InteractionUpdateBinderBuilder<I, D>;
+    endOrCancel(fn: (i: D) => void): InteractionUpdateBinderBuilder<I, D>;
 
-    when(whenPredicate: (i: D) => boolean): InteractionUpdateBinderBuilder<I, D>;
+    when(fn: (i: D) => boolean): InteractionUpdateBinderBuilder<I, D>;
 
-    end(endFct: () => void): InteractionUpdateBinderBuilder<I, D>;
+    end(fn: () => void): InteractionUpdateBinderBuilder<I, D>;
 
     on(widget: ReadonlyArray<Widget<EventTarget>> | Widget<EventTarget>, ...widgets: ReadonlyArray<Widget<EventTarget>>):
     InteractionUpdateBinderBuilder<I, D>;

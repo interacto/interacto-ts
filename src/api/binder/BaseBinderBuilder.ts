@@ -61,17 +61,17 @@ export interface BaseBinderBuilder {
 
     /**
      * Specifies the conditions to fulfill to initialise, update, or execute the command while the interaction is running.
-     * @param whenPredicate - The predicate that checks whether the command can be initialised, updated, or executed.
+     * @param fn - The predicate that checks whether the command can be initialised, updated, or executed.
      * @returns A clone of the current builder to chain the building configuration.
      */
-    when(whenPredicate: () => boolean): BaseBinderBuilder;
+    when(fn: () => boolean): BaseBinderBuilder;
 
     /**
      * Defines actions to perform with a binding ends.
-     * @param endFct - The command to execute on each binding end.
+     * @param fn - The command to execute on each binding end.
      * @returns A clone of the current builder to chain the building configuration.
      */
-    end(endFct: () => void): BaseBinderBuilder;
+    end(fn: () => void): BaseBinderBuilder;
 
     /**
      * Specifies the logging level to use.

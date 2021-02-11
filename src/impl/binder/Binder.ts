@@ -31,33 +31,33 @@ import {isEltRef, Widget} from "../../api/binder/BaseBinderBuilder";
 export abstract class Binder<C extends Command, I extends Interaction<D>, D extends InteractionData>
 implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> {
 
-    protected initCmd?: (c: C, i: D) => void;
+    protected firstFn?: (c: C, i: D) => void;
 
-    protected checkConditions?: (i: D) => boolean;
+    protected whenFn?: (i: D) => boolean;
 
-    protected cmdProducer?: (i: D) => C;
+    protected produceFn?: (i: D) => C;
 
     protected widgets: ReadonlyArray<EventTarget>;
 
     protected dynamicNodes: ReadonlyArray<Node>;
 
-    protected interactionSupplier?: () => I;
+    protected usingFn?: () => I;
 
-    protected hadEffectsFct?: (c: C, i: D) => void;
+    protected hadEffectsFn?: (c: C, i: D) => void;
 
-    protected hadNoEffectFct?: (c: C, i: D) => void;
+    protected hadNoEffectFn?: (c: C, i: D) => void;
 
-    protected cannotExecFct?: (c: C, i: D) => void;
+    protected cannotExecFn?: (c: C, i: D) => void;
 
-    protected onEnd?: (c: C, i: D) => void;
+    protected endFn?: (c: C, i: D) => void;
 
-    protected onErr?: (ex: unknown) => void;
+    protected onErrFn?: (ex: unknown) => void;
 
     protected logLevels: ReadonlyArray<LogLevel>;
 
-    protected stopPropaNow: boolean;
+    protected stopPropagation: boolean;
 
-    protected prevDef: boolean;
+    protected prevDefault: boolean;
 
     protected observer?: BindingsObserver;
 
@@ -68,8 +68,8 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
         this.widgets ??= [];
         this.dynamicNodes ??= [];
         this.logLevels ??= [];
-        this.stopPropaNow ??= false;
-        this.prevDef ??= false;
+        this.stopPropagation ??= false;
+        this.prevDefault ??= false;
         this.observer = observer;
     }
 
@@ -96,39 +96,39 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
         return dup;
     }
 
-    public first(initCmdFct: (c: C, i: D) => void): Binder<C, I, D> {
+    public first(fn: (c: C, i: D) => void): Binder<C, I, D> {
         const dup = this.duplicate();
-        dup.initCmd = initCmdFct;
+        dup.firstFn = fn;
         return dup;
     }
 
-    public when(checkCmd: (i: D) => boolean): Binder<C, I, D> {
+    public when(fn: (i: D) => boolean): Binder<C, I, D> {
         const dup = this.duplicate();
-        dup.checkConditions = checkCmd;
+        dup.whenFn = fn;
         return dup;
     }
 
-    public ifHadEffects(hadEffectFct: (c: C, i: D) => void): Binder<C, I, D> {
+    public ifHadEffects(fn: (c: C, i: D) => void): Binder<C, I, D> {
         const dup = this.duplicate();
-        dup.hadEffectsFct = hadEffectFct;
+        dup.hadEffectsFn = fn;
         return dup;
     }
 
-    public ifHadNoEffect(noEffectFct: (c: C, i: D) => void): Binder<C, I, D> {
+    public ifHadNoEffect(fn: (c: C, i: D) => void): Binder<C, I, D> {
         const dup = this.duplicate();
-        dup.hadNoEffectFct = noEffectFct;
+        dup.hadNoEffectFn = fn;
         return dup;
     }
 
-    public ifCannotExecute(cannotExec: (c: C, i: D) => void): Binder<C, I, D> {
+    public ifCannotExecute(fn: (c: C, i: D) => void): Binder<C, I, D> {
         const dup = this.duplicate();
-        dup.cannotExecFct = cannotExec;
+        dup.cannotExecFn = fn;
         return dup;
     }
 
-    public end(onEndFct: (c: C, i: D) => void): Binder<C, I, D> {
+    public end(fn: (c: C, i: D) => void): Binder<C, I, D> {
         const dup = this.duplicate();
-        dup.onEnd = onEndFct;
+        dup.endFn = fn;
         return dup;
     }
 
@@ -140,32 +140,31 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
 
     public stopImmediatePropagation(): Binder<C, I, D> {
         const dup = this.duplicate();
-        dup.stopPropaNow = true;
+        dup.stopPropagation = true;
         return dup;
     }
 
     public preventDefault(): Binder<C, I, D> {
         const dup = this.duplicate();
-        dup.prevDef = true;
+        dup.prevDefault = true;
         return dup;
     }
 
     public catch(fn: (ex: unknown) => void): Binder<C, I, D> {
         const dup = this.duplicate();
-        dup.onErr = fn;
+        dup.onErrFn = fn;
         return dup;
     }
 
-    public usingInteraction<I2 extends Interaction<D2>, D2 extends InteractionData>
-    (interactionSupplier: () => I2): Binder<C, I2, D2> {
+    public usingInteraction<I2 extends Interaction<D2>, D2 extends InteractionData>(fn: () => I2): Binder<C, I2, D2> {
         const dup = this.duplicate();
-        dup.interactionSupplier = interactionSupplier as unknown as () => I;
+        dup.usingFn = fn as unknown as () => I;
         return dup as unknown as Binder<C, I2, D2>;
     }
 
-    public toProduce<C2 extends Command>(cmdCreation: (i: D) => C2): Binder<C2, I, D> {
+    public toProduce<C2 extends Command>(fn: (i: D) => C2): Binder<C2, I, D> {
         const dup = this.duplicate();
-        dup.cmdProducer = cmdCreation as unknown as (i: D) => C;
+        dup.produceFn = fn as unknown as (i: D) => C;
         return dup as unknown as Binder<C2, I, D>;
     }
 

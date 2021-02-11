@@ -23,7 +23,7 @@ import {Widget} from "./BaseBinderBuilder";
 export interface KeyInteractionCmdBinder<C extends Command, I extends Interaction<D>, D extends InteractionData>
     extends KeyInteractionBinderBuilder<I, D>, InteractionCmdBinder<C, I, D> {
 
-    first(initCmdFct: (c: C, i: D) => void): KeyInteractionCmdBinder<C, I, D>;
+    first(fn: (c: C, i: D) => void): KeyInteractionCmdBinder<C, I, D>;
 
     on(widget: ReadonlyArray<Widget<EventTarget>> | Widget<EventTarget>, ...widgets: ReadonlyArray<Widget<EventTarget>>):
     KeyInteractionCmdBinder<C, I, D>;
@@ -32,15 +32,15 @@ export interface KeyInteractionCmdBinder<C extends Command, I extends Interactio
 
     log(...level: ReadonlyArray<LogLevel>): KeyInteractionCmdBinder<C, I, D>;
 
-    when(whenPredicate: (i: D) => boolean): KeyInteractionCmdBinder<C, I, D>;
+    when(fn: (i: D) => boolean): KeyInteractionCmdBinder<C, I, D>;
 
-    ifHadEffects(hadEffectFct: (c: C, i: D) => void): KeyInteractionCmdBinder<C, I, D>;
+    ifHadEffects(fn: (c: C, i: D) => void): KeyInteractionCmdBinder<C, I, D>;
 
-    ifHadNoEffect(noEffectFct: (c: C, i: D) => void): KeyInteractionCmdBinder<C, I, D>;
+    ifHadNoEffect(fn: (c: C, i: D) => void): KeyInteractionCmdBinder<C, I, D>;
 
-    ifCannotExecute(cannotExec: (c: C, i: D) => void): KeyInteractionCmdBinder<C, I, D>;
+    ifCannotExecute(fn: (c: C, i: D) => void): KeyInteractionCmdBinder<C, I, D>;
 
-    end(onEnd: (c: C, i: D) => void): KeyInteractionCmdBinder<C, I, D>;
+    end(fn: (c: C, i: D) => void): KeyInteractionCmdBinder<C, I, D>;
 
     with(...codes: ReadonlyArray<string>): KeyInteractionCmdBinder<C, I, D>;
 

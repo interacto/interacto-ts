@@ -28,7 +28,7 @@ import {Widget} from "./BaseBinderBuilder";
 export interface InteractionBinder<I extends Interaction<D>, D extends InteractionData>
     extends InteractionBinderBuilder<I, D> {
 
-    when(whenPredicate: (i: D) => boolean): InteractionBinder<I, D>;
+    when(fn: (i: D) => boolean): InteractionBinder<I, D>;
 
     on(widget: ReadonlyArray<Widget<EventTarget>> | Widget<EventTarget>, ...widgets: ReadonlyArray<Widget<EventTarget>>): InteractionBinder<I, D>;
 
@@ -36,7 +36,7 @@ export interface InteractionBinder<I extends Interaction<D>, D extends Interacti
 
     log(...level: ReadonlyArray<LogLevel>): InteractionBinder<I, D>;
 
-    end(endFct: () => void): InteractionBinder<I, D>;
+    end(fn: () => void): InteractionBinder<I, D>;
 
     stopImmediatePropagation(): InteractionBinder<I, D>;
 
@@ -44,5 +44,5 @@ export interface InteractionBinder<I extends Interaction<D>, D extends Interacti
 
     catch(fn: (ex: unknown) => void): InteractionBinder<I, D>;
 
-    toProduce<C extends Command>(cmdSupplier: (i: D) => C): InteractionCmdBinder<C, I, D>;
+    toProduce<C extends Command>(fn: (i: D) => C): InteractionCmdBinder<C, I, D>;
 }

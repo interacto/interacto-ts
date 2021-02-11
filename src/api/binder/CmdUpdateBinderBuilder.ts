@@ -25,11 +25,11 @@ import {Widget} from "./BaseBinderBuilder";
 export interface CmdUpdateBinderBuilder<C extends Command> extends CmdBinderBuilder<C>, BaseUpdateBinderBuilder {
     /**
      * Specifies the update of the command on interaction updates.
-     * @param update - The callback method that updates the command.
+     * @param fn - The callback method that updates the command.
      * This callback takes as arguments the command to update.
      * @returns A clone of the current builder to chain the building configuration.
      */
-    then(update: (c: C) => void): CmdUpdateBinderBuilder<C>;
+    then(fn: (c: C) => void): CmdUpdateBinderBuilder<C>;
 
     continuousExecution(): CmdUpdateBinderBuilder<C>;
 
@@ -37,15 +37,15 @@ export interface CmdUpdateBinderBuilder<C extends Command> extends CmdBinderBuil
 
     throttle(timeout: number): CmdUpdateBinderBuilder<C>;
 
-    first(initCmdFct: (c: C) => void): CmdUpdateBinderBuilder<C>;
+    first(fn: (c: C) => void): CmdUpdateBinderBuilder<C>;
 
     on(widget: ReadonlyArray<Widget<EventTarget>> | Widget<EventTarget>, ...widgets: ReadonlyArray<Widget<EventTarget>>): CmdUpdateBinderBuilder<C>;
 
     onDynamic(node: Widget<Node>): CmdUpdateBinderBuilder<C>;
 
-    end(onEnd: (c: C) => void): CmdUpdateBinderBuilder<C>;
+    end(fn: (c: C) => void): CmdUpdateBinderBuilder<C>;
 
-    when(whenPredicate: () => boolean): CmdUpdateBinderBuilder<C>;
+    when(fn: () => boolean): CmdUpdateBinderBuilder<C>;
 
     log(...level: ReadonlyArray<LogLevel>): CmdUpdateBinderBuilder<C>;
 

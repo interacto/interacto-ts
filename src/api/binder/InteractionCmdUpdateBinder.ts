@@ -25,11 +25,11 @@ export interface InteractionCmdUpdateBinder<C extends Command, I extends Interac
     extends InteractionCmdBinder<C, I, D>, CmdUpdateBinderBuilder<C>, InteractionUpdateBinderBuilder<I, D> {
     /**
     * Specifies the update of the command on interaction command.
-    * @param update - The callback method that updates the action.
+    * @param fn - The callback method that updates the action.
     * This callback takes as arguments the command to update and the ongoing interactions (and its parameters).
     * @returns The builder to chain the building configuration.
     */
-    then(update: ((c: C, i: D) => void) | ((c: C) => void)): InteractionCmdUpdateBinder<C, I, D>;
+    then(fn: ((c: C, i: D) => void) | ((c: C) => void)): InteractionCmdUpdateBinder<C, I, D>;
 
     continuousExecution(): InteractionCmdUpdateBinder<C, I, D>;
 
@@ -37,7 +37,7 @@ export interface InteractionCmdUpdateBinder<C extends Command, I extends Interac
 
     throttle(timeout: number): InteractionCmdUpdateBinder<C, I, D>;
 
-    first(initCmdFct: (c: C, i: D) => void): InteractionCmdUpdateBinder<C, I, D>;
+    first(fn: (c: C, i: D) => void): InteractionCmdUpdateBinder<C, I, D>;
 
     on(widget: ReadonlyArray<Widget<EventTarget>> | Widget<EventTarget>, ...widgets: ReadonlyArray<Widget<EventTarget>>):
     InteractionCmdUpdateBinder<C, I, D>;
@@ -46,19 +46,19 @@ export interface InteractionCmdUpdateBinder<C extends Command, I extends Interac
 
     log(...level: ReadonlyArray<LogLevel>): InteractionCmdUpdateBinder<C, I, D>;
 
-    cancel(cancel: (i: D) => void): InteractionCmdUpdateBinder<C, I, D>;
+    cancel(fn: (i: D) => void): InteractionCmdUpdateBinder<C, I, D>;
 
-    endOrCancel(endOrCancel: (i: D) => void): InteractionCmdUpdateBinder<C, I, D>;
+    endOrCancel(fn: (i: D) => void): InteractionCmdUpdateBinder<C, I, D>;
 
-    when(whenPredicate: (i: D) => boolean): InteractionCmdUpdateBinder<C, I, D>;
+    when(fn: (i: D) => boolean): InteractionCmdUpdateBinder<C, I, D>;
 
-    ifHadEffects(hadEffectFct: (c: C, i: D) => void): InteractionCmdUpdateBinder<C, I, D>;
+    ifHadEffects(fn: (c: C, i: D) => void): InteractionCmdUpdateBinder<C, I, D>;
 
-    ifHadNoEffect(noEffectFct: (c: C, i: D) => void): InteractionCmdUpdateBinder<C, I, D>;
+    ifHadNoEffect(fn: (c: C, i: D) => void): InteractionCmdUpdateBinder<C, I, D>;
 
-    ifCannotExecute(cannotExec: (c: C, i: D) => void): InteractionCmdUpdateBinder<C, I, D>;
+    ifCannotExecute(fn: (c: C, i: D) => void): InteractionCmdUpdateBinder<C, I, D>;
 
-    end(onEnd: (c: C, i: D) => void): InteractionCmdUpdateBinder<C, I, D>;
+    end(fn: (c: C, i: D) => void): InteractionCmdUpdateBinder<C, I, D>;
 
     stopImmediatePropagation(): InteractionCmdUpdateBinder<C, I, D>;
 

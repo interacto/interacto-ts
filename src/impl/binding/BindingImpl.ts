@@ -28,8 +28,7 @@ import {Interaction} from "../../api/interaction/Interaction";
  * @typeParam C - The type of the command that will produce this binding.
  * @typeParam I - The type of the interaction that will use this binding.
  */
-export class BindingImpl<C extends Command, I extends Interaction<D>, D extends InteractionData>
-implements Binding<C, I, D> {
+export class BindingImpl<C extends Command, I extends Interaction<D>, D extends InteractionData> implements Binding<C, I, D> {
 
     protected timeEnded: number;
 

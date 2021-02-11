@@ -24,19 +24,19 @@ export interface CmdBinderBuilder<C extends Command> extends BaseBinderBuilder {
     /**
      * Specifies the initialisation of the command when the interaction starts.
      * Each time the interaction starts, an instance of the command is created and configured by the given callback.
-     * @param initCmdFct - The callback method that initialises the command.
+     * @param fn - The callback method that initialises the command.
      * This callback takes as arguments the command to configure.
      * @returns A clone of the current builder to chain the building configuration.
      */
-    first(initCmdFct: (c: C) => void): CmdBinderBuilder<C>;
+    first(fn: (c: C) => void): CmdBinderBuilder<C>;
 
-    end(onEnd: (c: C) => void): CmdBinderBuilder<C>;
+    end(fn: (c: C) => void): CmdBinderBuilder<C>;
 
     on(widget: ReadonlyArray<Widget<EventTarget>> | Widget<EventTarget>, ...widgets: ReadonlyArray<Widget<EventTarget>>): CmdBinderBuilder<C>;
 
     onDynamic(node: Widget<Node>): CmdBinderBuilder<C>;
 
-    when(whenPredicate: () => boolean): CmdBinderBuilder<C>;
+    when(fn: () => boolean): CmdBinderBuilder<C>;
 
     log(...level: ReadonlyArray<LogLevel>): CmdBinderBuilder<C>;
 

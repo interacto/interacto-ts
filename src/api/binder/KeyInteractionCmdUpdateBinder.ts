@@ -26,7 +26,7 @@ export interface KeyInteractionCmdUpdateBinder<C extends Command, I extends Inte
 
     with(...codes: ReadonlyArray<string>): KeyInteractionCmdUpdateBinder<C, I, D>;
 
-    then(update: ((c: C, i: D) => void) | ((c: C) => void)): KeyInteractionCmdUpdateBinder<C, I, D>;
+    then(fn: ((c: C, i: D) => void) | ((c: C) => void)): KeyInteractionCmdUpdateBinder<C, I, D>;
 
     continuousExecution(): KeyInteractionCmdUpdateBinder<C, I, D>;
 
@@ -34,7 +34,7 @@ export interface KeyInteractionCmdUpdateBinder<C extends Command, I extends Inte
 
     throttle(timeout: number): KeyInteractionCmdUpdateBinder<C, I, D>;
 
-    first(initCmdFct: (c: C, i: D) => void): KeyInteractionCmdUpdateBinder<C, I, D>;
+    first(fn: (c: C, i: D) => void): KeyInteractionCmdUpdateBinder<C, I, D>;
 
     on(widget: ReadonlyArray<Widget<EventTarget>> | Widget<EventTarget>, ...widgets: ReadonlyArray<Widget<EventTarget>>):
     KeyInteractionCmdUpdateBinder<C, I, D>;
@@ -43,19 +43,19 @@ export interface KeyInteractionCmdUpdateBinder<C extends Command, I extends Inte
 
     log(...level: ReadonlyArray<LogLevel>): KeyInteractionCmdUpdateBinder<C, I, D>;
 
-    cancel(cancel: (i: D) => void): KeyInteractionCmdUpdateBinder<C, I, D>;
+    cancel(fn: (i: D) => void): KeyInteractionCmdUpdateBinder<C, I, D>;
 
-    endOrCancel(endOrCancel: (i: D) => void): KeyInteractionCmdUpdateBinder<C, I, D>;
+    endOrCancel(fn: (i: D) => void): KeyInteractionCmdUpdateBinder<C, I, D>;
 
-    when(whenPredicate: (i: D) => boolean): KeyInteractionCmdUpdateBinder<C, I, D>;
+    when(fn: (i: D) => boolean): KeyInteractionCmdUpdateBinder<C, I, D>;
 
-    ifHadEffects(hadEffectFct: (c: C, i: D) => void): KeyInteractionCmdUpdateBinder<C, I, D>;
+    ifHadEffects(fn: (c: C, i: D) => void): KeyInteractionCmdUpdateBinder<C, I, D>;
 
-    ifHadNoEffect(noEffectFct: (c: C, i: D) => void): KeyInteractionCmdUpdateBinder<C, I, D>;
+    ifHadNoEffect(fn: (c: C, i: D) => void): KeyInteractionCmdUpdateBinder<C, I, D>;
 
-    ifCannotExecute(cannotExec: (c: C, i: D) => void): KeyInteractionCmdUpdateBinder<C, I, D>;
+    ifCannotExecute(fn: (c: C, i: D) => void): KeyInteractionCmdUpdateBinder<C, I, D>;
 
-    end(onEnd: (c: C, i: D) => void): KeyInteractionCmdUpdateBinder<C, I, D>;
+    end(fn: (c: C, i: D) => void): KeyInteractionCmdUpdateBinder<C, I, D>;
 
     stopImmediatePropagation(): KeyInteractionCmdUpdateBinder<C, I, D>;
 

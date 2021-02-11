@@ -44,9 +44,9 @@ export interface BaseUpdateBinderBuilder extends BaseBinderBuilder {
      */
     throttle(timeout: number): BaseUpdateBinderBuilder;
 
-    when(whenPredicate: () => boolean): BaseUpdateBinderBuilder;
+    when(fn: () => boolean): BaseUpdateBinderBuilder;
 
-    end(endFct: () => void): BaseUpdateBinderBuilder;
+    end(fn: () => void): BaseUpdateBinderBuilder;
 
     log(...level: ReadonlyArray<LogLevel>): BaseUpdateBinderBuilder;
 

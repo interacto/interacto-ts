@@ -25,7 +25,7 @@ import {Widget} from "./BaseBinderBuilder";
  * @typeParam C - The type of the produced UI Commands
  */
 export interface CmdUpdateBinder<C extends Command> extends CmdUpdateBinderBuilder<C> {
-    then(update: (c: C) => void): CmdUpdateBinder<C>;
+    then(fn: (c: C) => void): CmdUpdateBinder<C>;
 
     continuousExecution(): CmdUpdateBinder<C>;
 
@@ -33,20 +33,19 @@ export interface CmdUpdateBinder<C extends Command> extends CmdUpdateBinderBuild
 
     throttle(timeout: number): CmdUpdateBinder<C>;
 
-    first(initCmdFct: (c: C) => void): CmdUpdateBinder<C>;
+    first(fn: (c: C) => void): CmdUpdateBinder<C>;
 
     on(widget: ReadonlyArray<Widget<EventTarget>> | Widget<EventTarget>, ...widgets: ReadonlyArray<Widget<EventTarget>>): CmdUpdateBinder<C>;
 
     onDynamic(node: Widget<Node>): CmdUpdateBinder<C>;
 
-    when(whenPredicate: () => boolean): CmdUpdateBinder<C>;
+    when(fn: () => boolean): CmdUpdateBinder<C>;
 
     log(...level: ReadonlyArray<LogLevel>): CmdUpdateBinder<C>;
 
-    end(onEnd: (c: C) => void): CmdUpdateBinder<C>;
+    end(fn: (c: C) => void): CmdUpdateBinder<C>;
 
-    usingInteraction<I extends Interaction<D>, D extends InteractionData>
-    (interactionSupplier: () => I): InteractionCmdUpdateBinder<C, I, D>;
+    usingInteraction<I extends Interaction<D>, D extends InteractionData> (fn: () => I): InteractionCmdUpdateBinder<C, I, D>;
 
     stopImmediatePropagation(): CmdUpdateBinder<C>;
 

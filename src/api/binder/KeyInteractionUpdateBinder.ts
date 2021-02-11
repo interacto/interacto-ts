@@ -31,7 +31,7 @@ export interface KeyInteractionUpdateBinder<I extends Interaction<D>, D extends 
 
     log(...level: ReadonlyArray<LogLevel>): KeyInteractionUpdateBinder<I, D>;
 
-    when(whenPredicate: (i: D) => boolean): KeyInteractionUpdateBinder<I, D>;
+    when(fn: (i: D) => boolean): KeyInteractionUpdateBinder<I, D>;
 
     strictStart(): KeyInteractionUpdateBinder<I, D>;
 
@@ -41,11 +41,11 @@ export interface KeyInteractionUpdateBinder<I extends Interaction<D>, D extends 
 
     preventDefault(): KeyInteractionUpdateBinder<I, D>;
 
-    cancel(cancel: (i: D) => void): KeyInteractionUpdateBinder<I, D>;
+    cancel(fn: (i: D) => void): KeyInteractionUpdateBinder<I, D>;
 
-    endOrCancel(endOrCancel: (i: D) => void): KeyInteractionUpdateBinder<I, D>;
+    endOrCancel(fn: (i: D) => void): KeyInteractionUpdateBinder<I, D>;
 
     catch(fn: (ex: unknown) => void): KeyInteractionUpdateBinder<I, D>;
 
-    toProduce<C extends Command>(cmdSupplier: (i: D) => C): KeyInteractionCmdUpdateBinder<C, I, D>;
+    toProduce<C extends Command>(fn: (i: D) => C): KeyInteractionCmdUpdateBinder<C, I, D>;
 }

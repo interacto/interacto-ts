@@ -29,13 +29,13 @@ export interface InteractionUpdateBinder<I extends Interaction<D>, D extends Int
 
     log(...level: ReadonlyArray<LogLevel>): InteractionUpdateBinder<I, D>;
 
-    when(whenPredicate: (i: D) => boolean): InteractionUpdateBinder<I, D>;
+    when(fn: (i: D) => boolean): InteractionUpdateBinder<I, D>;
 
-    end(endFct: () => void): InteractionUpdateBinder<I, D>;
+    end(fn: () => void): InteractionUpdateBinder<I, D>;
 
-    cancel(cancel: (i: D) => void): InteractionUpdateBinder<I, D>;
+    cancel(fn: (i: D) => void): InteractionUpdateBinder<I, D>;
 
-    endOrCancel(endOrCancel: (i: D) => void): InteractionUpdateBinder<I, D>;
+    endOrCancel(fn: (i: D) => void): InteractionUpdateBinder<I, D>;
 
     stopImmediatePropagation(): InteractionUpdateBinder<I, D>;
 
@@ -45,5 +45,5 @@ export interface InteractionUpdateBinder<I extends Interaction<D>, D extends Int
 
     catch(fn: (ex: unknown) => void): InteractionUpdateBinder<I, D>;
 
-    toProduce<C extends Command>(cmdSupplier: (i: D) => C): InteractionCmdUpdateBinder<C, I, D>;
+    toProduce<C extends Command>(fn: (i: D) => C): InteractionCmdUpdateBinder<C, I, D>;
 }

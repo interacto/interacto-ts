@@ -26,18 +26,18 @@ export interface InteractionBinderBuilder<I extends Interaction<D>, D extends In
     extends BaseBinderBuilder {
     /**
      * Specifies the conditions to fulfill to initialise, update, or execute the command while the interaction is running.
-     * @param whenPredicate - The predicate that checks whether the command can be initialised, updated, or executed.
+     * @param fn - The predicate that checks whether the command can be initialised, updated, or executed.
      * This predicate takes as arguments the ongoing user interaction involved in the binding.
      * @returns A clone of the current builder to chain the building configuration.
      */
-    when(whenPredicate: (i: D) => boolean): InteractionBinderBuilder<I, D>;
+    when(fn: (i: D) => boolean): InteractionBinderBuilder<I, D>;
 
     on(widget: ReadonlyArray<Widget<EventTarget>> | Widget<EventTarget>, ...widgets: ReadonlyArray<Widget<EventTarget>>):
     InteractionBinderBuilder<I, D>;
 
     onDynamic(node: Widget<Node>): InteractionBinderBuilder<I, D>;
 
-    end(endFct: () => void): InteractionBinderBuilder<I, D>;
+    end(fn: () => void): InteractionBinderBuilder<I, D>;
 
     log(...level: ReadonlyArray<LogLevel>): InteractionBinderBuilder<I, D>;
 

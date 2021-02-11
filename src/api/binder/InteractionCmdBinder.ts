@@ -25,25 +25,25 @@ export interface InteractionCmdBinder<C extends Command, I extends Interaction<D
     /**
     * Specifies the initialisation of the command when the interaction starts.
     * Each time the interaction starts, an instance of the command is created and configured by the given callback.
-    * @param initCmdFct - The callback method that initialises the command.
+    * @param fn - The callback method that initialises the command.
     * This callback takes as arguments both the command and interaction involved in the binding.
     * @returns The builder to chain the building configuration.
     */
-    first(initCmdFct: (c: C, i: D) => void): InteractionCmdBinder<C, I, D>;
+    first(fn: (c: C, i: D) => void): InteractionCmdBinder<C, I, D>;
 
-    ifHadEffects(hadEffectFct: (c: C, i: D) => void): InteractionCmdBinder<C, I, D>;
+    ifHadEffects(fn: (c: C, i: D) => void): InteractionCmdBinder<C, I, D>;
 
-    ifHadNoEffect(noEffectFct: (c: C, i: D) => void): InteractionCmdBinder<C, I, D>;
+    ifHadNoEffect(fn: (c: C, i: D) => void): InteractionCmdBinder<C, I, D>;
 
-    ifCannotExecute(cannotExec: (c: C, i: D) => void): InteractionCmdBinder<C, I, D>;
+    ifCannotExecute(fn: (c: C, i: D) => void): InteractionCmdBinder<C, I, D>;
 
     /**
     * Specifies what to do end when an interaction ends (when the last event of the interaction has occurred, but just after
     * the interaction is reinitialised and the command finally executed and discarded / saved).
-    * @param onEnd - The callback method to specify what to do when an interaction ends.
+    * @param fn - The callback method to specify what to do when an interaction ends.
     * @returns The builder to chain the building configuration.
     */
-    end(onEnd: (c: C, i: D) => void): InteractionCmdBinder<C, I, D>;
+    end(fn: (c: C, i: D) => void): InteractionCmdBinder<C, I, D>;
 
     on(widget: ReadonlyArray<Widget<EventTarget>> | Widget<EventTarget>, ...widgets: ReadonlyArray<Widget<EventTarget>>):
     InteractionCmdBinder<C, I, D>;
@@ -52,7 +52,7 @@ export interface InteractionCmdBinder<C extends Command, I extends Interaction<D
 
     log(...level: ReadonlyArray<LogLevel>): InteractionCmdBinder<C, I, D>;
 
-    when(whenPredicate: (i: D) => boolean): InteractionCmdBinder<C, I, D>;
+    when(fn: (i: D) => boolean): InteractionCmdBinder<C, I, D>;
 
     stopImmediatePropagation(): InteractionCmdBinder<C, I, D>;
 

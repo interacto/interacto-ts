@@ -30,9 +30,9 @@ export interface BaseUpdateBinder extends BaseUpdateBinderBuilder, BaseBinder {
 
     onDynamic(node: Widget<Node>): BaseUpdateBinder;
 
-    when(whenPredicate: () => boolean): BaseUpdateBinder;
+    when(fn: () => boolean): BaseUpdateBinder;
 
-    end(endFct: () => void): BaseUpdateBinder;
+    end(fn: () => void): BaseUpdateBinder;
 
     log(...level: ReadonlyArray<LogLevel>): BaseUpdateBinder;
 
@@ -42,10 +42,9 @@ export interface BaseUpdateBinder extends BaseUpdateBinderBuilder, BaseBinder {
 
     throttle(timeout: number): BaseUpdateBinder;
 
-    toProduce<C extends Command>(cmdSupplier: () => C): CmdUpdateBinder<C>;
+    toProduce<C extends Command>(fn: () => C): CmdUpdateBinder<C>;
 
-    usingInteraction<I extends Interaction<D>, D extends InteractionData>
-    (interactionSupplier: () => I): InteractionUpdateBinder<I, D>;
+    usingInteraction<I extends Interaction<D>, D extends InteractionData> (fn: () => I): InteractionUpdateBinder<I, D>;
 
     stopImmediatePropagation(): BaseUpdateBinder;
 

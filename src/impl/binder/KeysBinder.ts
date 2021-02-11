@@ -34,7 +34,7 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, D extends I
 
     private codes: ReadonlyArray<string>;
 
-    private readonly checkCode: (i: InteractionData) => boolean;
+    private readonly checkCodeFn: (i: InteractionData) => boolean;
 
     public constructor(observer?: BindingsObserver, binder?: Partial<KeysBinder<C, I, D>>) {
         super(observer, binder);
@@ -43,7 +43,7 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, D extends I
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         this.codes = this.codes === undefined ? [] : [...this.codes];
         this.codes ??= [];
-        this.checkCode = (i: D): boolean => {
+        this.checkCodeFn = (i: D): boolean => {
             let keys: ReadonlyArray<string> = [];
             if (i instanceof KeysDataImpl) {
                 keys = i.getKeys();
@@ -55,7 +55,7 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, D extends I
 
             return (this.codes.length === 0 || this.codes.length === keys.length &&
                 keys.every((v: string) => this.codes.includes(v))) &&
-                (this.checkConditions === undefined || this.checkConditions(i));
+                (this.whenFn === undefined || this.whenFn(i));
         };
     }
 
@@ -74,28 +74,28 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, D extends I
         return super.onDynamic(node) as KeysBinder<C, I, D>;
     }
 
-    public first(initCmdFct: (c: C, i: D) => void): KeysBinder<C, I, D> {
-        return super.first(initCmdFct) as KeysBinder<C, I, D>;
+    public first(fn: (c: C, i: D) => void): KeysBinder<C, I, D> {
+        return super.first(fn) as KeysBinder<C, I, D>;
     }
 
-    public when(checkCmd: (() => boolean) | ((i: D) => boolean)): KeysBinder<C, I, D> {
-        return super.when(checkCmd) as KeysBinder<C, I, D>;
+    public when(fn: (() => boolean) | ((i: D) => boolean)): KeysBinder<C, I, D> {
+        return super.when(fn) as KeysBinder<C, I, D>;
     }
 
-    public ifHadEffects(hadEffectFct: (c: C, i: D) => void): KeysBinder<C, I, D> {
-        return super.ifHadEffects(hadEffectFct) as KeysBinder<C, I, D>;
+    public ifHadEffects(fn: (c: C, i: D) => void): KeysBinder<C, I, D> {
+        return super.ifHadEffects(fn) as KeysBinder<C, I, D>;
     }
 
-    public ifHadNoEffect(noEffectFct: (c: C, i: D) => void): KeysBinder<C, I, D> {
-        return super.ifHadNoEffect(noEffectFct) as KeysBinder<C, I, D>;
+    public ifHadNoEffect(fn: (c: C, i: D) => void): KeysBinder<C, I, D> {
+        return super.ifHadNoEffect(fn) as KeysBinder<C, I, D>;
     }
 
-    public ifCannotExecute(cannotExec: (c: C, i: D) => void): KeysBinder<C, I, D> {
-        return super.ifCannotExecute(cannotExec) as KeysBinder<C, I, D>;
+    public ifCannotExecute(fn: (c: C, i: D) => void): KeysBinder<C, I, D> {
+        return super.ifCannotExecute(fn) as KeysBinder<C, I, D>;
     }
 
-    public end(onEndFct: (c: C, i: D) => void): KeysBinder<C, I, D> {
-        return super.end(onEndFct) as KeysBinder<C, I, D>;
+    public end(fn: (c: C, i: D) => void): KeysBinder<C, I, D> {
+        return super.end(fn) as KeysBinder<C, I, D>;
     }
 
     public log(...level: ReadonlyArray<LogLevel>): KeysBinder<C, I, D> {
@@ -110,8 +110,8 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, D extends I
         return super.preventDefault() as KeysBinder<C, I, D>;
     }
 
-    public then(update: ((c: C, i: D) => void) | ((c: C) => void)): KeysBinder<C, I, D> {
-        return super.then(update) as KeysBinder<C, I, D>;
+    public then(fn: ((c: C, i: D) => void) | ((c: C) => void)): KeysBinder<C, I, D> {
+        return super.then(fn) as KeysBinder<C, I, D>;
     }
 
     public continuousExecution(): KeysBinder<C, I, D> {
@@ -126,25 +126,24 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, D extends I
         return super.throttle(timeout) as KeysBinder<C, I, D>;
     }
 
-    public cancel(cancel: (i: D) => void): KeysBinder<C, I, D> {
-        return super.cancel(cancel) as KeysBinder<C, I, D>;
+    public cancel(fn: (i: D) => void): KeysBinder<C, I, D> {
+        return super.cancel(fn) as KeysBinder<C, I, D>;
     }
 
-    public endOrCancel(endOrCancel: (i: D) => void): KeysBinder<C, I, D> {
-        return super.endOrCancel(endOrCancel) as KeysBinder<C, I, D>;
+    public endOrCancel(fn: (i: D) => void): KeysBinder<C, I, D> {
+        return super.endOrCancel(fn) as KeysBinder<C, I, D>;
     }
 
     public catch(fn: (ex: unknown) => void): KeysBinder<C, I, D> {
         return super.catch(fn) as KeysBinder<C, I, D>;
     }
 
-    public toProduce<C2 extends Command>(cmdCreation: (i: D) => C2): KeysBinder<C2, I, D> {
-        return super.toProduce(cmdCreation) as KeysBinder<C2, I, D>;
+    public toProduce<C2 extends Command>(fn: (i: D) => C2): KeysBinder<C2, I, D> {
+        return super.toProduce(fn) as KeysBinder<C2, I, D>;
     }
 
-    public usingInteraction<I2 extends Interaction<D2>, D2 extends InteractionData>
-    (interactionSupplier: () => I2): KeysBinder<C, I2, D2> {
-        return super.usingInteraction(interactionSupplier) as unknown as KeysBinder<C, I2, D2>;
+    public usingInteraction<I2 extends Interaction<D2>, D2 extends InteractionData>(fn: () => I2): KeysBinder<C, I2, D2> {
+        return super.usingInteraction(fn) as unknown as KeysBinder<C, I2, D2>;
     }
 
     protected duplicate(): KeysBinder<C, I, D> {
@@ -152,20 +151,20 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, D extends I
     }
 
     public bind(): Binding<C, I, D> {
-        if (this.interactionSupplier === undefined) {
+        if (this.usingFn === undefined) {
             throw new Error("The interaction supplier cannot be undefined here");
         }
 
-        if (this.cmdProducer === undefined) {
+        if (this.produceFn === undefined) {
             throw new Error("The command supplier cannot be undefined here");
         }
 
-        const binding = new AnonBinding(this.continuousCmdExecution, this.interactionSupplier(),
-            this.cmdProducer, [...this.widgets], [...this.dynamicNodes],
+        const binding = new AnonBinding(this.continuousCmdExecution, this.usingFn(),
+            this.produceFn, [...this.widgets], [...this.dynamicNodes],
             this._strictStart, [...this.logLevels], this.throttleTimeout,
-            this.stopPropaNow, this.prevDef, this.initCmd, this.updateFct, this.checkCode,
-            this.onEnd, this.cancelFct, this.endOrCancelFct, this.hadEffectsFct,
-            this.hadNoEffectFct, this.cannotExecFct, this.onErr);
+            this.stopPropagation, this.prevDefault, this.firstFn, this.thenFn, this.checkCodeFn,
+            this.endFn, this.cancelFn, this.endOrCancelFn, this.hadEffectsFn,
+            this.hadNoEffectFn, this.cannotExecFn, this.onErrFn);
 
         this.observer?.observeBinding(binding);
 

@@ -22,55 +22,54 @@ import {Interaction} from "../../api/interaction/Interaction";
 export class AnonBinding<C extends Command, I extends Interaction<D>, D extends InteractionData>
     extends BindingImpl<C, I, D> {
 
-    private readonly execInitCmd?: ((c: C, i: D) => void);
+    private readonly firstFn?: ((c: C, i: D) => void);
 
-    private readonly execUpdateCmd?: (c: C, i: D) => void;
+    private readonly thenFn?: (c: C, i: D) => void;
 
-    private readonly checkInteraction?: (i: D) => boolean;
+    private readonly whenFn?: (i: D) => boolean;
 
-    private readonly cancelFct?: (i: D) => void;
+    private readonly cancelFn?: (i: D) => void;
 
-    private readonly endOrCancelFct?: (i: D) => void;
+    private readonly endOrCancelFn?: (i: D) => void;
 
-    private readonly hadEffectsFct?: (c: C, i: D) => void;
+    private readonly hadEffectsFn?: (c: C, i: D) => void;
 
-    private readonly hadNoEffectFct?: (c: C, i: D) => void;
+    private readonly hadNoEffectFn?: (c: C, i: D) => void;
 
-    private readonly cannotExecFct?: (c: C, i: D) => void;
+    private readonly cannotExecFn?: (c: C, i: D) => void;
 
-    private readonly onEnd?: (c: C, i: D) => void;
+    private readonly onEndFn?: (c: C, i: D) => void;
 
-    private readonly onErr?: (ex: unknown) => void;
+    private readonly onErrFn?: (ex: unknown) => void;
 
     private readonly strictStart: boolean;
 
 
-    public constructor(continuousExec: boolean, interaction: I, cmdProducer: (d: D) => C,
+    public constructor(continuousExec: boolean, interaction: I, cmdSupplierFn: (d: D) => C,
                        widgets: ReadonlyArray<EventTarget>, dynamicNodes: ReadonlyArray<Node>,
                        strict: boolean, loggers: ReadonlyArray<LogLevel>, timeoutThrottle: number,
-                       stopPropa: boolean, prevDef: boolean,
-                       initCmdFct?: (c: C, i: D) => void,
-                       updateCmdFct?: (c: C, i: D) => void, check?: (i: D) => boolean,
-                       onEndFct?: (c: C, i: D) => void, cancel?: (i: D) => void,
-                       endOrCancel?: (i: D) => void, hadEffectsFct?: (c: C, i: D) => void,
-                       hadNoEffectFct?: (c: C, i: D) => void, cannotExecFct?: (c: C, i: D) => void,
+                       stopPropagation: boolean, prevDefault: boolean, firstFn?: (c: C, i: D) => void,
+                       thenFn?: (c: C, i: D) => void, whenFn?: (i: D) => boolean,
+                       endFn?: (c: C, i: D) => void, cancelFn?: (i: D) => void,
+                       endOrCancelFn?: (i: D) => void, hadEffectsFn?: (c: C, i: D) => void,
+                       hadNoEffectFn?: (c: C, i: D) => void, cannotExecFn?: (c: C, i: D) => void,
                        onErrFn?: (ex: unknown) => void) {
-        super(continuousExec, interaction, cmdProducer, widgets);
+        super(continuousExec, interaction, cmdSupplierFn, widgets);
         this.configureLoggers(loggers);
-        this.execInitCmd = initCmdFct;
-        this.execUpdateCmd = updateCmdFct;
-        this.cancelFct = cancel;
-        this.endOrCancelFct = endOrCancel;
-        this.checkInteraction = check;
-        this.onEnd = onEndFct;
+        this.firstFn = firstFn;
+        this.thenFn = thenFn;
+        this.cancelFn = cancelFn;
+        this.endOrCancelFn = endOrCancelFn;
+        this.whenFn = whenFn;
+        this.onEndFn = endFn;
         this.strictStart = strict;
-        this.hadEffectsFct = hadEffectsFct;
-        this.hadNoEffectFct = hadNoEffectFct;
-        this.cannotExecFct = cannotExecFct;
-        this.onErr = onErrFn;
+        this.hadEffectsFn = hadEffectsFn;
+        this.hadNoEffectFn = hadNoEffectFn;
+        this.cannotExecFn = cannotExecFn;
+        this.onErrFn = onErrFn;
 
-        this.interaction.stopImmediatePropagation = stopPropa;
-        this.interaction.preventDefault = prevDef;
+        this.interaction.stopImmediatePropagation = stopPropagation;
+        this.interaction.preventDefault = prevDefault;
         this.interaction.setThrottleTimeout(timeoutThrottle);
         dynamicNodes.forEach(node => {
             interaction.registerToNodeChildren(node);
@@ -91,9 +90,9 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
 
     public first(): void {
         const cmd = this.getCommand();
-        if (this.execInitCmd !== undefined && cmd !== undefined) {
+        if (this.firstFn !== undefined && cmd !== undefined) {
             try {
-                this.execInitCmd(cmd, this.getInteraction().getData());
+                this.firstFn(cmd, this.getInteraction().getData());
             } catch (ex: unknown) {
                 this.catch(ex);
                 if (ex instanceof Error) {
@@ -107,9 +106,9 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
 
     public then(): void {
         const cmd = this.getCommand();
-        if (this.execUpdateCmd !== undefined && cmd !== undefined) {
+        if (this.thenFn !== undefined && cmd !== undefined) {
             try {
-                this.execUpdateCmd(cmd, this.getInteraction().getData());
+                this.thenFn(cmd, this.getInteraction().getData());
             } catch (ex: unknown) {
                 this.catch(ex);
                 if (ex instanceof Error) {
@@ -123,9 +122,9 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
 
     public end(): void {
         const cmd = this.getCommand();
-        if (this.onEnd !== undefined && cmd !== undefined) {
+        if (this.onEndFn !== undefined && cmd !== undefined) {
             try {
-                this.onEnd(cmd, this.getInteraction().getData());
+                this.onEndFn(cmd, this.getInteraction().getData());
             } catch (ex: unknown) {
                 this.catch(ex);
                 if (ex instanceof Error) {
@@ -138,9 +137,9 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
     }
 
     public cancel(): void {
-        if (this.cancelFct !== undefined) {
+        if (this.cancelFn !== undefined) {
             try {
-                this.cancelFct(this.getInteraction().getData());
+                this.cancelFn(this.getInteraction().getData());
             } catch (ex: unknown) {
                 this.catch(ex);
                 if (ex instanceof Error) {
@@ -153,9 +152,9 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
     }
 
     public endOrCancel(): void {
-        if (this.endOrCancelFct !== undefined) {
+        if (this.endOrCancelFn !== undefined) {
             try {
-                this.endOrCancelFct(this.getInteraction().getData());
+                this.endOrCancelFn(this.getInteraction().getData());
             } catch (ex: unknown) {
                 this.catch(ex);
                 if (ex instanceof Error) {
@@ -169,9 +168,9 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
 
     public ifCmdHadNoEffect(): void {
         const cmd = this.getCommand();
-        if (this.hadNoEffectFct !== undefined && cmd !== undefined) {
+        if (this.hadNoEffectFn !== undefined && cmd !== undefined) {
             try {
-                this.hadNoEffectFct(cmd, this.getInteraction().getData());
+                this.hadNoEffectFn(cmd, this.getInteraction().getData());
             } catch (ex: unknown) {
                 this.catch(ex);
                 if (ex instanceof Error) {
@@ -185,9 +184,9 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
 
     public ifCmdHadEffects(): void {
         const cmd = this.getCommand();
-        if (this.hadEffectsFct !== undefined && cmd !== undefined) {
+        if (this.hadEffectsFn !== undefined && cmd !== undefined) {
             try {
-                this.hadEffectsFct(cmd, this.getInteraction().getData());
+                this.hadEffectsFn(cmd, this.getInteraction().getData());
             } catch (ex: unknown) {
                 this.catch(ex);
                 if (ex instanceof Error) {
@@ -201,9 +200,9 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
 
     public ifCannotExecuteCmd(): void {
         const cmd = this.getCommand();
-        if (this.cannotExecFct !== undefined && cmd !== undefined) {
+        if (this.cannotExecFn !== undefined && cmd !== undefined) {
             try {
-                this.cannotExecFct(cmd, this.getInteraction().getData());
+                this.cannotExecFn(cmd, this.getInteraction().getData());
             } catch (ex: unknown) {
                 this.catch(ex);
                 if (ex instanceof Error) {
@@ -218,7 +217,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
     public when(): boolean {
         let ok;
         try {
-            ok = this.checkInteraction === undefined || this.checkInteraction(this.getInteraction().getData());
+            ok = this.whenFn === undefined || this.whenFn(this.getInteraction().getData());
         } catch (ex: unknown) {
             ok = false;
             this.catch(ex);
@@ -236,9 +235,9 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
 
 
     public catch(err: unknown): void {
-        if (this.onErr !== undefined) {
+        if (this.onErrFn !== undefined) {
             try {
-                this.onErr(err);
+                this.onErrFn(err);
             } catch (ex: unknown) {
                 if (ex instanceof Error) {
                     catBinding.error("Crash in 'catch'", ex);

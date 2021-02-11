@@ -25,27 +25,26 @@ import {Widget} from "./BaseBinderBuilder";
  * @typeParam C - The type of the produced UI Commands
  */
 export interface CmdBinder<C extends Command> extends CmdBinderBuilder<C> {
-    first(initCmdFct: (c: C) => void): CmdBinder<C>;
+    first(fn: (c: C) => void): CmdBinder<C>;
 
-    end(onEnd: (c: C) => void): CmdBinder<C>;
+    end(fn: (c: C) => void): CmdBinder<C>;
 
     on(widget: ReadonlyArray<Widget<EventTarget>> | Widget<EventTarget>, ...widgets: ReadonlyArray<Widget<EventTarget>>): CmdBinder<C>;
 
     onDynamic(node: Widget<Node>): CmdBinder<C>;
 
-    when(whenPredicate: () => boolean): CmdBinder<C>;
+    when(fn: () => boolean): CmdBinder<C>;
 
     log(...level: ReadonlyArray<LogLevel>): CmdBinder<C>;
 
     /**
      * Defines how to create the user interaction that the binding will use to create UI commands.
-     * @param interactionSupplier - The supplier that will return a new user interaction.
+     * @param fn - The supplier that will return a new user interaction.
      * @typeParam D - The user interaction data type
      * @typeParam I - The user interaction type
      * @returns A clone of the current builder to chain the building configuration.
      */
-    usingInteraction<I extends Interaction<D>, D extends InteractionData>(interactionSupplier: () => I):
-    InteractionCmdBinder<C, I, D>;
+    usingInteraction<I extends Interaction<D>, D extends InteractionData>(fn: () => I): InteractionCmdBinder<C, I, D>;
 
     stopImmediatePropagation(): CmdBinder<C>;
 

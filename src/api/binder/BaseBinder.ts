@@ -30,7 +30,7 @@ export interface BaseBinder extends BaseBinderBuilder {
 
     when(whenPredicate: () => boolean): BaseBinder;
 
-    end(endFct: () => void): BaseBinder;
+    end(fn: () => void): BaseBinder;
 
     log(...level: ReadonlyArray<LogLevel>): BaseBinder;
 
@@ -38,18 +38,18 @@ export interface BaseBinder extends BaseBinderBuilder {
 
     /**
      * Defines how to create the UI command that will produce the binding.
-     * @param cmdSupplier - The supplier that will return a new UI command on each call.
+     * @param fn - The supplier that will return a new UI command on each call.
      * @typeParam C - The type of the UI command
      * @returns A clone of the current builder to chain the building configuration.
      */
-    toProduce<C extends Command>(cmdSupplier: () => C): CmdBinder<C>;
+    toProduce<C extends Command>(fn: () => C): CmdBinder<C>;
 
     /**
      * Defines how to create the user interaction that the binding will use to create UI commands.
-     * @param interactionSupplier - The supplier that will return a new user interaction.
+     * @param fn - The supplier that will return a new user interaction.
      * @typeParam D - The user interaction data type
      * @typeParam I - The user interaction type
      * @returns A clone of the current builder to chain the building configuration.
      */
-    usingInteraction<I extends Interaction<D>, D extends InteractionData>(interactionSupplier: () => I): InteractionBinder<I, D>;
+    usingInteraction<I extends Interaction<D>, D extends InteractionData>(fn: () => I): InteractionBinder<I, D>;
 }

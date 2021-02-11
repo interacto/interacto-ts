@@ -22,7 +22,7 @@ import {Widget} from "./BaseBinderBuilder";
 export interface KeyInteractionBinderBuilder<I extends Interaction<D>, D extends InteractionData>
     extends InteractionBinderBuilder<I, D>, KeyBinderBuilder {
 
-    when(whenPredicate: (i: D) => boolean): KeyInteractionBinderBuilder<I, D>;
+    when(fn: (i: D) => boolean): KeyInteractionBinderBuilder<I, D>;
 
     on(widget: ReadonlyArray<Widget<EventTarget>> | Widget<EventTarget>, ...widgets: ReadonlyArray<Widget<EventTarget>>):
     KeyInteractionBinderBuilder<I, D>;
@@ -31,7 +31,7 @@ export interface KeyInteractionBinderBuilder<I extends Interaction<D>, D extends
 
     log(...level: ReadonlyArray<LogLevel>): KeyInteractionBinderBuilder<I, D>;
 
-    end(endFct: () => void): KeyInteractionBinderBuilder<I, D>;
+    end(fn: () => void): KeyInteractionBinderBuilder<I, D>;
 
     with(...codes: ReadonlyArray<string>): KeyInteractionBinderBuilder<I, D>;
 
