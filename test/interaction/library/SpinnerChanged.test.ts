@@ -14,6 +14,7 @@
 
 import {FSMHandler, SpinnerChanged, SpinnerChangedFSM} from "../../../src/interacto";
 import {mock} from "jest-mock-extended";
+import {robot} from "../StubEvents";
 
 let interaction: SpinnerChanged;
 let spinner: HTMLInputElement;
@@ -38,7 +39,7 @@ afterEach(() => {
 
 test("testSpinnerChangedGoodState", () => {
     interaction.registerToNodes([spinner]);
-    spinner.dispatchEvent(new Event("input"));
+    robot(spinner).input();
     jest.runAllTimers();
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
@@ -47,8 +48,9 @@ test("testSpinnerChangedGoodState", () => {
 
 test("testSpinnerChange2TimesGoodState", () => {
     interaction.registerToNodes([spinner]);
-    spinner.dispatchEvent(new Event("input"));
-    spinner.dispatchEvent(new Event("input"));
+    robot(spinner)
+        .input()
+        .input();
     jest.runAllTimers();
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
@@ -58,7 +60,7 @@ test("testSpinnerChange2TimesGoodState", () => {
 test("testSpinnerChangedGoodStateWithTimeGap", () => {
     SpinnerChangedFSM.setTimeGap(50);
     interaction.registerToNodes([spinner]);
-    spinner.dispatchEvent(new Event("input"));
+    robot(spinner).input();
     jest.runAllTimers();
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
@@ -67,9 +69,10 @@ test("testSpinnerChangedGoodStateWithTimeGap", () => {
 
 test("testSpinnerChangeTwoTimesWith500GoodState", () => {
     interaction.registerToNodes([spinner]);
-    spinner.dispatchEvent(new Event("input"));
-    jest.runAllTimers();
-    spinner.dispatchEvent(new Event("input"));
+    robot(spinner)
+        .input()
+        .do(() => jest.runAllTimers())
+        .input();
     jest.runAllTimers();
     expect(handler.fsmStops).toHaveBeenCalledTimes(2);
     expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
@@ -77,7 +80,7 @@ test("testSpinnerChangeTwoTimesWith500GoodState", () => {
 });
 
 test("testNoActionWhenNotRegistered", () => {
-    spinner.dispatchEvent(new Event("input"));
+    robot(spinner).input();
     jest.runAllTimers();
     expect(handler.fsmStops).not.toHaveBeenCalled();
     expect(handler.fsmStarts).not.toHaveBeenCalled();
@@ -85,7 +88,7 @@ test("testNoActionWhenNotRegistered", () => {
 
 test("spinner Registered twice", () => {
     interaction.registerToNodes([spinner, spinner]);
-    spinner.dispatchEvent(new Event("input"));
+    robot(spinner).input();
     jest.runAllTimers();
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);

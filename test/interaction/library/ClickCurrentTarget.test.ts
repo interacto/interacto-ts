@@ -13,8 +13,8 @@
  */
 
 import {Click, FSMHandler} from "../../../src/interacto";
-import {createMouseEvent} from "../StubEvents";
 import {mock} from "jest-mock-extended";
+import {robot} from "../StubEvents";
 
 let interaction: Click;
 let groupe: HTMLElement;
@@ -34,6 +34,6 @@ beforeEach(() => {
 
 test("current target with group tag", () => {
     interaction.registerToNodes([groupe]);
-    circle.dispatchEvent(createMouseEvent("click", circle));
+    robot().click(circle);
     expect(interaction.getData().getCurrentTarget()).toBe(groupe);
 });

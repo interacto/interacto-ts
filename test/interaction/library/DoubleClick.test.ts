@@ -13,7 +13,7 @@
  */
 
 import {DoubleClick, FSMHandler} from "../../../src/interacto";
-import {createMouseEvent} from "../StubEvents";
+import {robot} from "../StubEvents";
 import {mock} from "jest-mock-extended";
 
 let interaction: DoubleClick;
@@ -32,8 +32,9 @@ beforeEach(() => {
 
 test("double click on a canvas starts and stops the interaction", () => {
     interaction.registerToNodes([canvas]);
-    canvas.click();
-    canvas.click();
+    robot(canvas)
+        .click()
+        .click();
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
 });
@@ -53,8 +54,9 @@ test("check data of the interaction.", () => {
         obj = interaction.getData().getSrcObject() as HTMLCanvasElement;
     });
     interaction.getFsm().addHandler(newHandler);
-    canvas.dispatchEvent(createMouseEvent("click", canvas, undefined, undefined, 11, 23));
-    canvas.dispatchEvent(createMouseEvent("click", canvas, undefined, undefined, 11, 23));
+    robot(canvas)
+        .click({"clientX": 11, "clientY": 23})
+        .click({"clientX": 11, "clientY": 23});
     expect(sx).toBe(11);
     expect(sy).toBe(23);
     expect(button).toBe(0);
@@ -63,11 +65,12 @@ test("check data of the interaction.", () => {
 
 test("that two double clicks ok", () => {
     interaction.registerToNodes([canvas]);
-    canvas.click();
-    canvas.click();
-    jest.runAllTimers();
-    canvas.click();
-    canvas.click();
+    robot(canvas)
+        .click()
+        .click()
+        .do(() => jest.runAllTimers())
+        .click()
+        .click();
     expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
     expect(handler.fsmCancels).not.toHaveBeenCalled();
     expect(handler.fsmStops).toHaveBeenCalledTimes(2);
@@ -75,47 +78,49 @@ test("that two double clicks ok", () => {
 
 test("move between clicks cancels the double click", () => {
     interaction.registerToNodes([canvas]);
-    canvas.click();
-    canvas.dispatchEvent(createMouseEvent("mousemove", canvas));
-    canvas.click();
+    robot(canvas)
+        .click()
+        .mousemove()
+        .click();
     expect(handler.fsmStarts).not.toHaveBeenCalled();
     expect(handler.fsmStops).not.toHaveBeenCalled();
 });
 
 test("timout cancels the double click", () => {
     interaction.registerToNodes([canvas]);
-    canvas.click();
-    jest.runOnlyPendingTimers();
-    canvas.click();
+    robot(canvas)
+        .click()
+        .do(() => jest.runOnlyPendingTimers())
+        .click();
     expect(handler.fsmStarts).not.toHaveBeenCalled();
     expect(handler.fsmStops).not.toHaveBeenCalled();
 });
 
 test("double click with two different mouse button for each click don't start the interaction", () => {
     interaction.registerToNodes([canvas]);
-    canvas.dispatchEvent(createMouseEvent("click", canvas, undefined, undefined,
-        undefined, undefined, 0));
-    canvas.dispatchEvent(createMouseEvent("click", canvas, undefined, undefined,
-        undefined, undefined, 2));
+    robot(canvas)
+        .click({"button": 0})
+        .click({"button": 2});
     expect(handler.fsmStarts).not.toHaveBeenCalled();
 });
 
 test("check if the interaction is recycled after a cancel", () => {
     interaction.registerToNodes([canvas]);
-    canvas.click();
-    canvas.dispatchEvent(createMouseEvent("mousemove", canvas));
-    canvas.click();
-    canvas.click();
+    robot(canvas)
+        .click()
+        .mousemove()
+        .click()
+        .click();
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
 });
 
 test("check if the interaction work fine with bad move", () => {
     interaction.registerToNodes([canvas]);
-    canvas.click();
-    canvas.dispatchEvent(createMouseEvent("mousemove", canvas, undefined, undefined, undefined,
-        undefined, 1));
-    canvas.click();
+    robot()
+        .click(canvas)
+        .mousemove({"button": 1})
+        .click();
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     expect(handler.fsmCancels).not.toHaveBeenCalled();
@@ -123,18 +128,20 @@ test("check if the interaction work fine with bad move", () => {
 
 test("specific mouse button checking OK", () => {
     interaction.registerToNodes([canvas]);
-    canvas.dispatchEvent(createMouseEvent("auxclick", canvas, 111, 222, 11, 22, 2));
-    canvas.dispatchEvent(createMouseEvent("auxclick", canvas, 111, 222, 11, 22, 2));
+    robot(canvas)
+        .auxclick({"button": 2})
+        .auxclick({"button": 2});
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
 });
 
 test("dble Click OK After Delay", () => {
     interaction.registerToNodes([canvas]);
-    canvas.dispatchEvent(createMouseEvent("auxclick", canvas, 111, 222, 11, 22, 2));
-    jest.runOnlyPendingTimers();
-    canvas.dispatchEvent(createMouseEvent("click", canvas, 111, 222, 11, 22, 1));
-    canvas.dispatchEvent(createMouseEvent("click", canvas, 111, 222, 11, 22, 1));
+    robot(canvas)
+        .auxclick({"button": 2})
+        .do(() => jest.runOnlyPendingTimers())
+        .click({"button": 1})
+        .click({"button": 1});
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
 });

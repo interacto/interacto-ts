@@ -17,7 +17,7 @@ import {Binding} from "../../src/api/binding/Binding";
 import {InteractionData} from "../../src/api/interaction/InteractionData";
 import {clearBindingObserver, keyPressBinder, keysTypeBinder, setBindingObserver} from "../../src/api/binding/Bindings";
 import {StubCmd} from "../command/StubCmd";
-import {createKeyEvent} from "../interaction/StubEvents";
+import {createKeyEvent, robot} from "../interaction/StubEvents";
 import {UndoHistory} from "../../src/impl/undo/UndoHistory";
 import {CommandsRegistry} from "../../src/impl/command/CommandsRegistry";
 import {Interaction} from "../../src/api/interaction/Interaction";
@@ -73,7 +73,7 @@ test("key press std key", () => {
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
-    elt.dispatchEvent(createKeyEvent("keydown", "A"));
+    robot(elt).keydown({"code": "A"});
     expect(ctx.commands).toHaveLength(1);
 });
 
@@ -83,7 +83,7 @@ test("key press std key when false", () => {
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
-    elt.dispatchEvent(createKeyEvent("keydown", "A"));
+    robot(elt).keydown({"code": "A"});
     expect(ctx.commands).toHaveLength(0);
 });
 
@@ -93,7 +93,7 @@ test("key press std key when true", () => {
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
-    elt.dispatchEvent(createKeyEvent("keydown", "A"));
+    robot(elt).keydown({"code": "A"});
     expect(ctx.commands).toHaveLength(1);
 });
 
@@ -125,7 +125,7 @@ test("key press with routine OK", () => {
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
-    elt.dispatchEvent(createKeyEvent("keydown", "b"));
+    robot(elt).keydown({"code": "b"});
     expect(ctx.commands).toHaveLength(1);
 });
 
@@ -136,7 +136,7 @@ test("key press std key with when false", () => {
         .when(_i => false)
         .toProduce(() => new StubCmd(true))
         .bind();
-    elt.dispatchEvent(createKeyEvent("keydown", "b"));
+    robot(elt).keydown({"code": "b"});
     expect(ctx.commands).toHaveLength(0);
 });
 
@@ -147,7 +147,7 @@ test("key press std key with when true", () => {
         .with("c")
         .when(i => i.getKey() === "c")
         .bind();
-    elt.dispatchEvent(createKeyEvent("keydown", "c"));
+    robot(elt).keydown({"code": "c"});
     expect(ctx.commands).toHaveLength(1);
 });
 
@@ -157,7 +157,7 @@ test("key press with routine KO 1", () => {
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
-    elt.dispatchEvent(createKeyEvent("keydown", "d"));
+    robot(elt).keydown({"code": "d"});
     expect(ctx.commands).toHaveLength(0);
 });
 
@@ -167,7 +167,7 @@ test("key press with routine KO several keys", () => {
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
-    elt.dispatchEvent(createKeyEvent("keydown", "d"));
+    robot(elt).keydown({"code": "d"});
     expect(ctx.commands).toHaveLength(0);
 });
 
@@ -193,7 +193,7 @@ test("key press first then end", () => {
         .first(first)
         .end(end)
         .bind();
-    elt.dispatchEvent(createKeyEvent("keydown", "f"));
+    robot(elt).keydown({"code": "f"});
     expect(first).toHaveBeenCalledTimes(1);
     expect(end).toHaveBeenCalledTimes(1);
 });
@@ -203,12 +203,13 @@ test("keys type std keys", () => {
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
-    elt.dispatchEvent(createKeyEvent("keydown", "a"));
-    elt.dispatchEvent(createKeyEvent("keyup", "a"));
-    elt.dispatchEvent(createKeyEvent("keydown", "x"));
-    elt.dispatchEvent(createKeyEvent("keyup", "x"));
-    elt.dispatchEvent(createKeyEvent("keydown", "y"));
-    elt.dispatchEvent(createKeyEvent("keyup", "y"));
+    robot(elt)
+        .keydown({"code": "a"})
+        .keyup({"code": "a"})
+        .keydown({"code": "x"})
+        .keyup({"code": "x"})
+        .keydown({"code": "y"})
+        .keyup({"code": "y"});
     jest.runOnlyPendingTimers();
     expect(ctx.commands).toHaveLength(1);
 });
@@ -226,12 +227,14 @@ test("keys type first end", () => {
         .first(first)
         .then(then)
         .bind();
-    elt.dispatchEvent(createKeyEvent("keydown", "b"));
-    elt.dispatchEvent(createKeyEvent("keyup", "b"));
-    elt.dispatchEvent(createKeyEvent("keydown", "y"));
-    elt.dispatchEvent(createKeyEvent("keyup", "y"));
-    elt.dispatchEvent(createKeyEvent("keydown", "r"));
-    elt.dispatchEvent(createKeyEvent("keyup", "r"));
+
+    robot(elt)
+        .keydown({"code": "b"})
+        .keyup({"code": "b"})
+        .keydown({"code": "y"})
+        .keyup({"code": "y"})
+        .keydown({"code": "r"})
+        .keyup({"code": "r"});
     jest.runOnlyPendingTimers();
     expect(first).toHaveBeenCalledTimes(1);
     expect(end).toHaveBeenCalledTimes(1);
@@ -245,6 +248,11 @@ test("keys type with 1", () => {
         .with("a", "b")
         .toProduce(() => new StubCmd(true))
         .bind();
+    robot(elt)
+        .keydown({"code": "a"})
+        .keyup({"code": "a"})
+        .keydown({"code": "x"})
+        .keyup({"code": "x"});
     elt.dispatchEvent(createKeyEvent("keydown", "a"));
     elt.dispatchEvent(createKeyEvent("keyup", "a"));
     elt.dispatchEvent(createKeyEvent("keydown", "x"));
@@ -259,6 +267,11 @@ test("keys type with 2", () => {
         .with("a")
         .toProduce(() => new StubCmd(true))
         .bind();
+    robot(elt)
+        .keydown({"code": "a"})
+        .keyup({"code": "a"})
+        .keydown({"code": "b"})
+        .keyup({"code": "b"});
     elt.dispatchEvent(createKeyEvent("keydown", "a"));
     elt.dispatchEvent(createKeyEvent("keyup", "a"));
     elt.dispatchEvent(createKeyEvent("keydown", "b"));
@@ -273,10 +286,11 @@ test("keys type with 3", () => {
         .with("z", "b")
         .toProduce(() => new StubCmd(true))
         .bind();
-    elt.dispatchEvent(createKeyEvent("keydown", "z"));
-    elt.dispatchEvent(createKeyEvent("keyup", "z"));
-    elt.dispatchEvent(createKeyEvent("keydown", "b"));
-    elt.dispatchEvent(createKeyEvent("keyup", "b"));
+    robot(elt)
+        .keydown({"code": "z"})
+        .keyup({"code": "z"})
+        .keydown({"code": "b"})
+        .keyup({"code": "b"});
     jest.runOnlyPendingTimers();
     expect(ctx.commands).toHaveLength(1);
 });
@@ -287,10 +301,11 @@ test("keys type with 4", () => {
         .with("z", "b")
         .toProduce(() => new StubCmd(true))
         .bind();
-    elt.dispatchEvent(createKeyEvent("keydown", "b"));
-    elt.dispatchEvent(createKeyEvent("keyup", "b"));
-    elt.dispatchEvent(createKeyEvent("keydown", "z"));
-    elt.dispatchEvent(createKeyEvent("keyup", "z"));
+    robot(elt)
+        .keydown({"code": "b"})
+        .keyup({"code": "b"})
+        .keydown({"code": "z"})
+        .keyup({"code": "z"});
     jest.runOnlyPendingTimers();
     expect(ctx.commands).toHaveLength(1);
 });
@@ -301,8 +316,9 @@ test("keys type with nothing", () => {
         .with()
         .toProduce(() => new StubCmd(true))
         .bind();
-    elt.dispatchEvent(createKeyEvent("keydown", "b"));
-    elt.dispatchEvent(createKeyEvent("keyup", "b"));
+    robot(elt)
+        .keydown({"code": "b"})
+        .keyup({"code": "b"});
     jest.runOnlyPendingTimers();
     expect(ctx.commands).toHaveLength(1);
 });
@@ -313,8 +329,9 @@ test("keys type with 5", () => {
         .with("b")
         .toProduce(() => new StubCmd(true))
         .bind();
-    elt.dispatchEvent(createKeyEvent("keydown", "b"));
-    elt.dispatchEvent(createKeyEvent("keyup", "b"));
+    robot(elt)
+        .keydown({"code": "b"})
+        .keyup({"code": "b"});
     jest.runOnlyPendingTimers();
     expect(ctx.commands).toHaveLength(1);
 });
@@ -325,10 +342,11 @@ test("keys type with 3 mixed keydown up", () => {
         .with("z", "b")
         .toProduce(() => new StubCmd(true))
         .bind();
-    elt.dispatchEvent(createKeyEvent("keydown", "z"));
-    elt.dispatchEvent(createKeyEvent("keydown", "b"));
-    elt.dispatchEvent(createKeyEvent("keyup", "z"));
-    elt.dispatchEvent(createKeyEvent("keyup", "b"));
+    robot(elt)
+        .keydown({"code": "z"})
+        .keydown({"code": "b"})
+        .keyup({"code": "z"})
+        .keyup({"code": "b"});
     jest.runOnlyPendingTimers();
     expect(ctx.commands).toHaveLength(1);
 });
@@ -340,10 +358,11 @@ test("that 'strictStart' works correctly when no 'when' routine with key binder"
         .toProduce((_i: KeysData) => new StubCmd(true))
         .bind();
 
-    elt.dispatchEvent(createKeyEvent("keydown", "c"));
-    elt.dispatchEvent(createKeyEvent("keydown", "b"));
-    elt.dispatchEvent(createKeyEvent("keyup", "c"));
-    elt.dispatchEvent(createKeyEvent("keyup", "b"));
+    robot(elt)
+        .keydown({"code": "c"})
+        .keydown({"code": "b"})
+        .keyup({"code": "c"})
+        .keyup({"code": "b"});
     jest.runOnlyPendingTimers();
 
     expect(ctx.commands).toHaveLength(1);
@@ -357,10 +376,11 @@ test("that 'strictStart' works correctly when the 'when' routine returns false",
         .when((_i: KeysData) => false)
         .bind();
 
-    elt.dispatchEvent(createKeyEvent("keydown", "g"));
-    elt.dispatchEvent(createKeyEvent("keydown", "y"));
-    elt.dispatchEvent(createKeyEvent("keyup", "g"));
-    elt.dispatchEvent(createKeyEvent("keyup", "y"));
+    robot(elt)
+        .keydown({"code": "g"})
+        .keydown({"code": "y"})
+        .keyup({"code": "g"})
+        .keyup({"code": "y"});
     jest.runOnlyPendingTimers();
 
     expect(ctx.commands).toHaveLength(0);
@@ -375,10 +395,11 @@ test("that 'strictStart' works correctly when the 'when' routine returns true", 
         .strictStart()
         .bind();
 
-    elt.dispatchEvent(createKeyEvent("keydown", "g"));
-    elt.dispatchEvent(createKeyEvent("keydown", "y"));
-    elt.dispatchEvent(createKeyEvent("keyup", "g"));
-    elt.dispatchEvent(createKeyEvent("keyup", "y"));
+    robot(elt)
+        .keydown({"code": "g"})
+        .keydown({"code": "y"})
+        .keyup({"code": "g"})
+        .keyup({"code": "y"});
     jest.runOnlyPendingTimers();
 
     expect(ctx.commands).toHaveLength(1);

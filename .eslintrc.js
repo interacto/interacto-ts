@@ -39,7 +39,8 @@ module.exports = {
         "@typescript-eslint/non-nullable-type-assertion-style": "off",
         "@typescript-eslint/no-confusing-void-expression": "off",
         "@typescript-eslint/await-thenable": "off",
-        "max-lines-per-function": "off"
+        "max-lines-per-function": "off",
+        "object-property-newline": "off"
       }
     }
   ],

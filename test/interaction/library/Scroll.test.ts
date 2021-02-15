@@ -13,11 +13,11 @@
  */
 
 import {FSMHandler, Scroll} from "../../../src/interacto";
-import {createUIEvent} from "../StubEvents";
+import {robot} from "../StubEvents";
 import {mock} from "jest-mock-extended";
 
 let interaction: Scroll;
-let scroll: HTMLElement;
+let canvas: HTMLElement;
 let handler: FSMHandler;
 
 beforeEach(() => {
@@ -26,21 +26,29 @@ beforeEach(() => {
     interaction.log(true);
     interaction.getFsm().log(true);
     interaction.getFsm().addHandler(handler);
-    scroll = document.createElement("canvas");
+    canvas = document.createElement("canvas");
 });
 
 test("scroll event start and stop the interaction", () => {
-    interaction.registerToNodes([scroll]);
-    scroll.dispatchEvent(createUIEvent("scroll"));
+    interaction.registerToNodes([canvas]);
+    robot(canvas).scroll();
+    expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+});
+
+test("scroll event start and stop the interaction with widget", () => {
+    interaction.registerToNodes([canvas]);
+    robot(canvas).scroll();
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
 });
 
 test("multiple scroll trigger multiple interaction that start and stop", () => {
-    interaction.registerToNodes([scroll]);
-    scroll.dispatchEvent(createUIEvent("scroll"));
-    scroll.dispatchEvent(createUIEvent("scroll"));
-    scroll.dispatchEvent(createUIEvent("scroll"));
+    interaction.registerToNodes([canvas]);
+    robot(canvas)
+        .scroll()
+        .scroll()
+        .scroll();
     expect(handler.fsmStops).toHaveBeenCalledTimes(3);
     expect(handler.fsmStarts).toHaveBeenCalledTimes(3);
 });

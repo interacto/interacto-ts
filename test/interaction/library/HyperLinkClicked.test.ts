@@ -14,6 +14,7 @@
 
 import {FSMHandler, HyperLinkClicked} from "../../../src/interacto";
 import {mock} from "jest-mock-extended";
+import {robot} from "../StubEvents";
 
 let interaction: HyperLinkClicked;
 let url: HTMLElement;
@@ -30,7 +31,7 @@ beforeEach(() => {
 
 test("click on url starts and stops the interaction", () => {
     interaction.registerToNodes([url]);
-    url.dispatchEvent(new Event("input"));
+    robot(url).input();
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
 });

@@ -13,7 +13,7 @@
  */
 
 import {FSMHandler, KeyTyped} from "../../../src/interacto";
-import {createKeyEvent} from "../StubEvents";
+import {robot} from "../StubEvents";
 import {mock} from "jest-mock-extended";
 
 let interaction: KeyTyped;
@@ -37,23 +37,26 @@ test("cannot create several times the FSM", () => {
 
 test("type 'a' in the textarea starts and stops the interaction.", () => {
     interaction.registerToNodes([text]);
-    text.dispatchEvent(createKeyEvent("keydown", "a"));
-    text.dispatchEvent(createKeyEvent("keyup", "a"));
+    robot(text)
+        .keydown({"code": "a"})
+        .keyup({"code": "a"});
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
 });
 
 test("only press the key don't stop the interaction.", () => {
     interaction.registerToNodes([text]);
-    text.dispatchEvent(createKeyEvent("keydown", "a"));
+    robot(text)
+        .keydown({"code": "a"});
     expect(handler.fsmStarts).not.toHaveBeenCalled();
     expect(handler.fsmStops).not.toHaveBeenCalled();
 });
 
 test("if you release a key different that the one you press, the interaction don't stop", () => {
     interaction.registerToNodes([text]);
-    text.dispatchEvent(createKeyEvent("keydown", "a"));
-    text.dispatchEvent(createKeyEvent("keyup", "b"));
+    robot(text)
+        .keydown({"code": "a"})
+        .keyup({"code": "b"});
     expect(handler.fsmStarts).not.toHaveBeenCalled();
     expect(handler.fsmStops).not.toHaveBeenCalled();
 });

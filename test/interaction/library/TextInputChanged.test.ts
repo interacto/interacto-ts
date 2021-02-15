@@ -14,6 +14,7 @@
 
 import {FSMHandler, TextInputChanged} from "../../../src/interacto";
 import {mock} from "jest-mock-extended";
+import {robot} from "../StubEvents";
 
 jest.useFakeTimers();
 
@@ -32,7 +33,7 @@ beforeEach(() => {
 
 test("type in a text area starts and stops the interaction", () => {
     interaction.registerToNodes([textArea]);
-    textArea.dispatchEvent(new InputEvent("input"));
+    robot(textArea).input();
     jest.runOnlyPendingTimers();
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);

@@ -13,7 +13,7 @@
  */
 
 import {Click, FSMHandler} from "../../../src/interacto";
-import {createMouseEvent} from "../StubEvents";
+import {createMouseEvent, robot} from "../StubEvents";
 import {mock, MockProxy} from "jest-mock-extended";
 
 let interaction: Click;
@@ -38,20 +38,21 @@ test("click on a element starts and stops the interaction Click", () => {
 
 test("other event don't trigger the interaction.", () => {
     interaction.registerToNodes([canvas]);
-    canvas.dispatchEvent(new Event("input"));
+    robot().input(canvas);
     expect(handler.fsmStarts).not.toHaveBeenCalled();
 });
 
 test("press on a canvas then move don't starts the interaction", () => {
     interaction.registerToNodes([canvas]);
-    canvas.dispatchEvent(createMouseEvent("mousedown", canvas));
-    canvas.dispatchEvent(createMouseEvent("mousemove", canvas));
+    robot(canvas)
+        .mousedown()
+        .mousemove();
     expect(handler.fsmStarts).not.toHaveBeenCalled();
 });
 
 test("specific mouse button checking OK", () => {
     interaction.registerToNodes([canvas]);
-    canvas.dispatchEvent(createMouseEvent("auxclick", canvas, 111, 222, 11, 22, 2));
+    robot().auxclick({"target": canvas, "button": 2});
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
 });
@@ -93,7 +94,7 @@ test("testClickOnWidgetData", () => {
         sy = interaction.getData().getSrcScreenY();
     });
     interaction.registerToNodes([canvas]);
-    canvas.dispatchEvent(createMouseEvent("click", canvas, 111, 222, 11, 22, 1));
+    robot().click({"target": canvas, "button": 1, "screenX": 111, "screenY": 222, "clientX": 11, "clientY": 22});
     expect(x).toStrictEqual(11);
     expect(y).toStrictEqual(22);
     expect(sx).toStrictEqual(111);

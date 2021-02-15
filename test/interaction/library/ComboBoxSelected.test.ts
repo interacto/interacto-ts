@@ -14,6 +14,7 @@
 
 import {ComboBoxSelected, FSMHandler} from "../../../src/interacto";
 import {mock} from "jest-mock-extended";
+import {robot} from "../StubEvents";
 
 let interaction: ComboBoxSelected;
 let comboBox: HTMLElement;
@@ -30,13 +31,13 @@ beforeEach(() => {
 
 test("input event starts and stops the interaction ComboBoxSelected", () => {
     interaction.registerToNodes([comboBox]);
-    comboBox.dispatchEvent(new Event("input"));
+    robot().input(comboBox);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
 });
 
 test("other event don't trigger the interaction", () => {
     interaction.registerToNodes([comboBox]);
-    comboBox.dispatchEvent(new Event("change"));
+    robot().change(comboBox);
     expect(handler.fsmStarts).not.toHaveBeenCalled();
 });

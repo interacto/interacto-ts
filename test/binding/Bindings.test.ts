@@ -15,7 +15,8 @@
 import {
     AnonCmd,
     Binding,
-    catBinding, catCommand,
+    catBinding,
+    catCommand,
     clearBindingObserver,
     clickBinder,
     clicksBinder,
@@ -54,13 +55,7 @@ import {
     WidgetData
 } from "../../src/interacto";
 import {StubCmd, StubUndoableCmd} from "../command/StubCmd";
-import {
-    createKeyEvent,
-    createMouseEvent,
-    createTouchEvent,
-    createUIEvent,
-    MouseEventForTest
-} from "../interaction/StubEvents";
+import {createMouseEvent, MouseEventForTest, robot} from "../interaction/StubEvents";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
 import {flushPromises} from "../Utils";
 
@@ -87,7 +82,7 @@ test("press binder", () => {
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
-    elt.dispatchEvent(createMouseEvent("mousedown", elt));
+    robot(elt).mousedown();
     expect(ctx.bindings).toHaveLength(1);
     expect(ctx.commands).toHaveLength(1);
 });
@@ -100,7 +95,7 @@ test("log cmd binding", () => {
         .toProduce(() => new StubCmd(true))
         .log(LogLevel.command, LogLevel.binding)
         .bind();
-    elt.dispatchEvent(createMouseEvent("mousedown", elt));
+    robot(elt).mousedown();
     expect(catCommand.info).toHaveBeenCalledTimes(4);
     expect(catBinding.info).toHaveBeenCalledTimes(5);
 });
@@ -110,7 +105,7 @@ test("undoable command registered", () => {
         .on(elt)
         .toProduce(() => new StubUndoableCmd(true))
         .bind();
-    elt.dispatchEvent(createMouseEvent("mousedown", elt));
+    robot(elt).mousedown();
     expect(UndoHistory.getInstance().getLastUndo()).toBeDefined();
 });
 
@@ -122,8 +117,10 @@ test("undo redo binders on undo", () => {
         .toProduce(() => new StubUndoableCmd(true))
         .bind();
     const bindings = undoRedoBinder(undo, redo);
-    elt.dispatchEvent(createMouseEvent("mousedown", elt));
-    undo.click();
+    robot()
+        .mousedown(elt)
+        .click(undo);
+
     expect(UndoHistory.getInstance().getLastRedo()).toBeDefined();
     expect(UndoHistory.getInstance().getLastUndo()).toBeUndefined();
     expect(ctx.getCmdsProducedBy(bindings[0])).toHaveLength(1);
@@ -137,9 +134,11 @@ test("undo redo binders on redo", () => {
         .toProduce(() => new StubUndoableCmd(true))
         .bind();
     const bindings = undoRedoBinder(undo, redo);
-    elt.dispatchEvent(createMouseEvent("mousedown", elt));
-    undo.click();
-    redo.click();
+
+    robot()
+        .mousedown(elt)
+        .click(undo)
+        .click(redo);
     expect(UndoHistory.getInstance().getLastRedo()).toBeUndefined();
     expect(UndoHistory.getInstance().getLastUndo()).toBeDefined();
     expect(ctx.getCmdsProducedBy(bindings[1])).toHaveLength(1);
@@ -153,7 +152,7 @@ test("press binder with ElementRef", () => {
         .on(eltRef)
         .toProduce(() => new StubCmd(true))
         .bind();
-    elt.dispatchEvent(createMouseEvent("mousedown", elt));
+    robot().mousedown(elt);
     expect(ctx.commands).toHaveLength(1);
 });
 
@@ -162,7 +161,7 @@ test("click binder", () => {
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
-    elt.dispatchEvent(createMouseEvent("click", elt));
+    robot().click(elt);
     expect(ctx.commands).toHaveLength(1);
 });
 
@@ -171,8 +170,9 @@ test("double click binder", () => {
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
-    elt.dispatchEvent(createMouseEvent("click", elt));
-    elt.dispatchEvent(createMouseEvent("click", elt));
+    robot(elt)
+        .click()
+        .click();
     expect(ctx.commands).toHaveLength(1);
 });
 
@@ -181,11 +181,12 @@ test("drag lock binder", () => {
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
-    elt.dispatchEvent(createMouseEvent("click", elt));
-    elt.dispatchEvent(createMouseEvent("click", elt));
-    elt.dispatchEvent(createMouseEvent("mousemove", elt));
-    elt.dispatchEvent(createMouseEvent("click", elt));
-    elt.dispatchEvent(createMouseEvent("click", elt));
+    robot(elt)
+        .click()
+        .click()
+        .mousemove()
+        .click()
+        .click();
     expect(ctx.commands).toHaveLength(1);
 });
 
@@ -194,9 +195,10 @@ test("dnd binder", () => {
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
-    elt.dispatchEvent(createMouseEvent("mousedown", elt));
-    elt.dispatchEvent(createMouseEvent("mousemove", elt));
-    elt.dispatchEvent(createMouseEvent("mouseup", elt));
+    robot(elt)
+        .mousedown()
+        .mousemove()
+        .mouseup();
     expect(ctx.commands).toHaveLength(1);
 });
 
@@ -254,7 +256,7 @@ test("key press binder", () => {
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
-    elt.dispatchEvent(createKeyEvent("keydown", "A"));
+    robot(elt).keydown({"code": "A"});
     expect(ctx.commands).toHaveLength(1);
 });
 
@@ -263,8 +265,9 @@ test("key type binder", () => {
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
-    elt.dispatchEvent(createKeyEvent("keydown", "A"));
-    elt.dispatchEvent(createKeyEvent("keyup", "A"));
+    robot(elt)
+        .keydown({"code": "A"})
+        .keyup({"code": "A"});
     expect(ctx.commands).toHaveLength(1);
 });
 
@@ -276,14 +279,15 @@ test("click must not block drag lock", () => {
         .log(LogLevel.interaction)
         .bind();
 
-    elt.dispatchEvent(createMouseEvent("click", elt, 1, 2, 3, 4, 1));
-    jest.runOnlyPendingTimers();
-    elt.dispatchEvent(createMouseEvent("auxclick", elt, 1, 2, 3, 4, 2));
-    elt.dispatchEvent(createMouseEvent("auxclick", elt, 1, 2, 3, 4, 2));
-    elt.dispatchEvent(createMouseEvent("mousemove", elt));
-    elt.dispatchEvent(createMouseEvent("mousemove", elt));
-    elt.dispatchEvent(createMouseEvent("auxclick", elt, 1, 2, 3, 4, 2));
-    elt.dispatchEvent(createMouseEvent("auxclick", elt, 1, 2, 3, 4, 2));
+    robot(elt)
+        .click({"button": 1})
+        .do(() => jest.runOnlyPendingTimers())
+        .auxclick({"button": 2})
+        .auxclick({"button": 2})
+        .mousemove()
+        .mousemove()
+        .auxclick({"button": 2})
+        .auxclick({"button": 2});
 
     expect(ctx.commands).toHaveLength(1);
 });
@@ -295,8 +299,9 @@ test("drag lock: double click does not cancel", () => {
         .log(LogLevel.interaction)
         .bind();
 
-    elt.dispatchEvent(createMouseEvent("click", elt, 1, 2, 3, 4, 0));
-    elt.dispatchEvent(createMouseEvent("click", elt, 1, 2, 3, 4, 0));
+    robot(elt)
+        .click({"button": 0})
+        .click({"button": 0});
 
     expect(binding.getInteraction().isRunning()).toBeTruthy();
 });
@@ -315,14 +320,15 @@ test("drag lock: first then end", () => {
         .then(then)
         .bind();
 
-    elt.dispatchEvent(createMouseEvent("click", elt, 1, 2, 3, 4, 1));
-    jest.runOnlyPendingTimers();
-    elt.dispatchEvent(createMouseEvent("auxclick", elt, 1, 2, 3, 4, 2));
-    elt.dispatchEvent(createMouseEvent("auxclick", elt, 1, 2, 3, 4, 2));
-    elt.dispatchEvent(createMouseEvent("mousemove", elt));
-    elt.dispatchEvent(createMouseEvent("mousemove", elt));
-    elt.dispatchEvent(createMouseEvent("auxclick", elt, 1, 2, 3, 4, 2));
-    elt.dispatchEvent(createMouseEvent("auxclick", elt, 1, 2, 3, 4, 2));
+    robot(elt)
+        .click({"button": 1})
+        .do(() => jest.runOnlyPendingTimers())
+        .auxclick({"button": 2})
+        .auxclick({"button": 2})
+        .mousemove()
+        .mousemove()
+        .auxclick({"button": 2})
+        .auxclick({"button": 2});
 
     expect(first).toHaveBeenCalledTimes(1);
     expect(end).toHaveBeenCalledTimes(1);
@@ -339,7 +345,7 @@ test("binding with anon command", () => {
         .log(LogLevel.interaction)
         .bind();
 
-    elt.dispatchEvent(createMouseEvent("click", elt, 1, 2, 3, 4, 0));
+    robot(elt).click();
 
     expect(ctx.commands).toHaveLength(1);
 });
@@ -350,9 +356,10 @@ test("touch DnD binding", () => {
         .toProduce((_i: SrcTgtTouchData) => new StubCmd(true))
         .bind();
 
-    elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
-    elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
-    elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+    robot(elt)
+        .touchstart({}, [{"identifier": 1, "target": elt}])
+        .touchmove({}, [{"identifier": 1, "target": elt}])
+        .touchend({}, [{"identifier": 1, "target": elt}]);
 
     expect(ctx.commands).toHaveLength(1);
 });
@@ -366,9 +373,10 @@ test("clicks binding work", () => {
         })
         .bind();
 
-    elt.dispatchEvent(createMouseEvent("click", elt, 1, 2, 3, 4, 0));
-    elt.dispatchEvent(createMouseEvent("click", elt, 1, 2, 3, 4, 0));
-    elt.dispatchEvent(createMouseEvent("click", elt, 1, 2, 3, 4, 0));
+    robot(elt)
+        .click()
+        .click()
+        .click();
 
     expect(ctx.commands).toHaveLength(1);
 });
@@ -384,7 +392,7 @@ test("longpress binding work", () => {
         })
         .bind();
 
-    elt.dispatchEvent(createMouseEvent("mousedown", elt, 1, 2, 3, 4, 0));
+    robot(elt).mousedown();
     jest.runAllTimers();
 
     expect(ctx.commands).toHaveLength(1);
@@ -398,7 +406,7 @@ test("that hyperlink binder works", () => {
         .on(url)
         .bind();
 
-    url.dispatchEvent(new Event("input"));
+    robot(url).input();
 
     expect(ctx.commands).toHaveLength(1);
 });
@@ -409,14 +417,15 @@ test("that swipe binder works", () => {
         .on(elt)
         .bind();
 
-    elt.dispatchEvent(createTouchEvent("touchstart", 2, elt,
-        50, 20, 100, 200, 5000));
-    elt.dispatchEvent(createTouchEvent("touchmove", 2, elt,
-        170, 30, 161, 202, 5500));
-    elt.dispatchEvent(createTouchEvent("touchmove", 2, elt,
-        450, 30, 500, 210, 6000));
-    elt.dispatchEvent(createTouchEvent("touchend", 2, elt,
-        450, 30, 500, 210, 6000));
+    robot(elt)
+        .touchstart({},
+            [{"screenX": 50, "screenY": 20, "clientX": 100, "clientY": 200, "identifier": 2, "target": elt}], 5000)
+        .touchmove({},
+            [{"screenX": 170, "screenY": 30, "clientX": 161, "clientY": 202, "identifier": 2, "target": elt}], 5500)
+        .touchmove({},
+            [{"screenX": 450, "screenY": 30, "clientX": 500, "clientY": 210, "identifier": 2, "target": elt}], 6000)
+        .touchend({},
+            [{"screenX": 450, "screenY": 30, "clientX": 500, "clientY": 210, "identifier": 2, "target": elt}], 6000);
 
     expect(ctx.commands).toHaveLength(1);
 });
@@ -427,7 +436,7 @@ test("that scroll binder works", () => {
         .toProduce((_i: ScrollData) => new StubCmd(true))
         .bind();
 
-    elt.dispatchEvent(createUIEvent("scroll"));
+    robot(elt).scroll();
 
     expect(ctx.commands).toHaveLength(1);
 });
@@ -438,9 +447,10 @@ test("that keysPress binder works", () => {
         .toProduce((_i: KeysData) => new StubCmd(true))
         .bind();
 
-    elt.dispatchEvent(createKeyEvent("keydown", "A"));
-    elt.dispatchEvent(createKeyEvent("keydown", "B"));
-    elt.dispatchEvent(createKeyEvent("keyup", "B"));
+    robot(elt)
+        .keydown({"code": "A"})
+        .keydown({"code": "B"})
+        .keyup({"code": "B"});
 
     expect(ctx.commands).toHaveLength(1);
 });
@@ -455,7 +465,7 @@ test("that 'ifCannotExecute' is correctly called", () => {
         .ifCannotExecute(mockFn)
         .bind();
 
-    elt.dispatchEvent(createMouseEvent("mousedown", elt, 11, 23, 110, 230));
+    robot(elt).mousedown();
 
     expect(mockFn).toHaveBeenCalledTimes(1);
     expect(ctx.commands).toHaveLength(0);
@@ -469,9 +479,10 @@ test("that 'strictStart' works correctly when no 'when' routine", () => {
         .toProduce((_i: SrcTgtPointsData) => new StubCmd(true))
         .bind();
 
-    elt.dispatchEvent(createMouseEvent("mousedown", elt, 11, 23, 110, 230));
-    elt.dispatchEvent(createMouseEvent("mousemove", elt, 12, 24, 111, 231));
-    elt.dispatchEvent(createMouseEvent("mouseup", elt, 12, 24, 111, 231));
+    robot(elt)
+        .mousedown()
+        .mousemove()
+        .mouseup();
 
     expect(ctx.commands).toHaveLength(1);
 });
@@ -484,9 +495,10 @@ test("that 'strictStart' works correctly when the 'when' routine returns true", 
         .strictStart()
         .bind();
 
-    elt.dispatchEvent(createMouseEvent("mousedown", elt, 11, 23, 110, 230));
-    elt.dispatchEvent(createMouseEvent("mousemove", elt, 12, 24, 111, 231));
-    elt.dispatchEvent(createMouseEvent("mouseup", elt, 12, 24, 111, 231));
+    robot(elt)
+        .mousedown()
+        .mousemove()
+        .mouseup();
 
     expect(ctx.commands).toHaveLength(1);
 });
@@ -499,9 +511,10 @@ test("that 'strictStart' works correctly when the 'when' routine returns false",
         .when((_i: SrcTgtPointsData) => false)
         .bind();
 
-    elt.dispatchEvent(createMouseEvent("mousedown", elt, 11, 23, 110, 230));
-    elt.dispatchEvent(createMouseEvent("mousemove", elt, 12, 24, 111, 231));
-    elt.dispatchEvent(createMouseEvent("mouseup", elt, 12, 24, 111, 231));
+    robot(elt)
+        .mousedown()
+        .mousemove()
+        .mouseup();
 
     expect(ctx.commands).toHaveLength(0);
     expect(binding.getInteraction().isRunning()).toBeFalsy();
@@ -515,8 +528,9 @@ test("that 'strictStart' stops the interaction", () => {
         .strictStart()
         .bind();
 
-    elt.dispatchEvent(createMouseEvent("mousedown", elt, 11, 23, 110, 230));
-    elt.dispatchEvent(createMouseEvent("mousemove", elt, 12, 24, 111, 231));
+    robot(elt)
+        .mousedown()
+        .mousemove();
 
     expect(binding.getInteraction().isRunning()).toBeFalsy();
 });
@@ -530,7 +544,7 @@ test("that 'when' is not called on the first event of a DnD", () => {
         .strictStart()
         .bind();
 
-    elt.dispatchEvent(createMouseEvent("mousedown", elt, 11, 23, 110, 230));
+    robot(elt).mousedown();
 
     expect(when).not.toHaveBeenCalled();
 });
@@ -558,9 +572,10 @@ describe("check when it crashes in routines", () => {
             })
             .bind();
 
-        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+        robot(elt)
+            .touchstart({}, [{"identifier": 3, "target": elt}])
+            .touchmove({}, [{"identifier": 3, "target": elt}])
+            .touchend({}, [{"identifier": 3, "target": elt}]);
 
         expect(ctx.commands).toHaveLength(1);
         expect(catBinding.error).toHaveBeenCalledWith("Crash in 'first'", err);
@@ -575,9 +590,10 @@ describe("check when it crashes in routines", () => {
             .catch(fn)
             .bind();
 
-        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+        robot(elt)
+            .touchstart({}, [{"identifier": 1, "target": elt}])
+            .touchmove({}, [{"identifier": 1, "target": elt}])
+            .touchend({}, [{"identifier": 1, "target": elt}]);
 
         expect(ctx.commands).toHaveLength(1);
         expect(fn).toHaveBeenCalledTimes(1);
@@ -594,9 +610,10 @@ describe("check when it crashes in routines", () => {
             })
             .bind();
 
-        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+        robot(elt)
+            .touchstart({}, [{"identifier": 1, "target": elt}])
+            .touchmove({}, [{"identifier": 1, "target": elt}])
+            .touchend({}, [{"identifier": 1, "target": elt}]);
 
         expect(ctx.commands).toHaveLength(1);
         expect(catBinding.error).toHaveBeenCalledWith("Crash in 'first'", err);
@@ -614,9 +631,10 @@ describe("check when it crashes in routines", () => {
             })
             .bind();
 
-        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+        robot(elt)
+            .touchstart({}, [{"identifier": 1, "target": elt}])
+            .touchmove({}, [{"identifier": 1, "target": elt}])
+            .touchend({}, [{"identifier": 1, "target": elt}]);
 
         expect(ctx.commands).toHaveLength(1);
         expect(catBinding.error).toHaveBeenCalledWith("Crash in 'first'", err);
@@ -631,9 +649,10 @@ describe("check when it crashes in routines", () => {
             })
             .bind();
 
-        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+        robot(elt)
+            .touchstart({}, [{"identifier": 1, "target": elt}])
+            .touchmove({}, [{"identifier": 1, "target": elt}])
+            .touchend({}, [{"identifier": 1, "target": elt}]);
 
         expect(ctx.commands).toHaveLength(1);
         expect(catBinding.warn).toHaveBeenCalledWith("Crash in 'first': 42");
@@ -646,9 +665,10 @@ describe("check when it crashes in routines", () => {
             })
             .bind();
 
-        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+        robot(elt)
+            .touchstart({}, [{"identifier": 1, "target": elt}])
+            .touchmove({}, [{"identifier": 1, "target": elt}])
+            .touchend({}, [{"identifier": 1, "target": elt}]);
 
         expect(ctx.commands).toHaveLength(1);
         expect(catBinding.error).toHaveBeenCalledWith("Crash in 'then'", err);
@@ -663,9 +683,10 @@ describe("check when it crashes in routines", () => {
             .catch(fn)
             .bind();
 
-        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+        robot(elt)
+            .touchstart({}, [{"identifier": 1, "target": elt}])
+            .touchmove({}, [{"identifier": 1, "target": elt}])
+            .touchend({}, [{"identifier": 1, "target": elt}]);
 
         expect(ctx.commands).toHaveLength(1);
         expect(fn).toHaveBeenCalledTimes(3);
@@ -680,9 +701,10 @@ describe("check when it crashes in routines", () => {
             })
             .bind();
 
-        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+        robot(elt)
+            .touchstart({}, [{"identifier": 1, "target": elt}])
+            .touchmove({}, [{"identifier": 1, "target": elt}])
+            .touchend({}, [{"identifier": 1, "target": elt}]);
 
         expect(ctx.commands).toHaveLength(1);
         expect(catBinding.warn).toHaveBeenCalledWith("Crash in 'then': foo");
@@ -695,9 +717,10 @@ describe("check when it crashes in routines", () => {
             })
             .bind();
 
-        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+        robot(elt)
+            .touchstart({}, [{"identifier": 1, "target": elt}])
+            .touchmove({}, [{"identifier": 1, "target": elt}])
+            .touchend({}, [{"identifier": 1, "target": elt}]);
 
         expect(ctx.commands).toHaveLength(1);
         expect(catBinding.error).toHaveBeenCalledWith("Crash in 'end'", err);
@@ -712,9 +735,10 @@ describe("check when it crashes in routines", () => {
             .catch(fn)
             .bind();
 
-        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+        robot(elt)
+            .touchstart({}, [{"identifier": 1, "target": elt}])
+            .touchmove({}, [{"identifier": 1, "target": elt}])
+            .touchend({}, [{"identifier": 1, "target": elt}]);
 
         expect(ctx.commands).toHaveLength(1);
         expect(fn).toHaveBeenCalledTimes(1);
@@ -729,9 +753,10 @@ describe("check when it crashes in routines", () => {
             })
             .bind();
 
-        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+        robot(elt)
+            .touchstart({}, [{"identifier": 1, "target": elt}])
+            .touchmove({}, [{"identifier": 1, "target": elt}])
+            .touchend({}, [{"identifier": 1, "target": elt}]);
 
         expect(ctx.commands).toHaveLength(1);
         expect(catBinding.warn).toHaveBeenCalledWith("Crash in 'end': 21");
@@ -744,9 +769,10 @@ describe("check when it crashes in routines", () => {
             })
             .bind();
 
-        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+        robot(elt)
+            .touchstart({}, [{"identifier": 1, "target": elt}])
+            .touchmove({}, [{"identifier": 1, "target": elt}])
+            .touchend({}, [{"identifier": 1, "target": elt}]);
 
         expect(ctx.commands).toHaveLength(1);
         expect(catBinding.error).toHaveBeenCalledWith("Crash in 'endOrCancel'", err);
@@ -761,9 +787,10 @@ describe("check when it crashes in routines", () => {
             })
             .bind();
 
-        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+        robot(elt)
+            .touchstart({}, [{"identifier": 1, "target": elt}])
+            .touchmove({}, [{"identifier": 1, "target": elt}])
+            .touchend({}, [{"identifier": 1, "target": elt}]);
 
         expect(ctx.commands).toHaveLength(1);
         expect(fn).toHaveBeenCalledTimes(1);
@@ -778,9 +805,10 @@ describe("check when it crashes in routines", () => {
             })
             .bind();
 
-        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+        robot(elt)
+            .touchstart({}, [{"identifier": 1, "target": elt}])
+            .touchmove({}, [{"identifier": 1, "target": elt}])
+            .touchend({}, [{"identifier": 1, "target": elt}]);
 
         expect(ctx.commands).toHaveLength(1);
         expect(catBinding.warn).toHaveBeenCalledWith("Crash in 'endOrCancel': true");
@@ -795,9 +823,10 @@ describe("check when it crashes in routines", () => {
             })
             .bind();
 
-        elt.dispatchEvent(createMouseEvent("mousedown", elt));
-        elt.dispatchEvent(createMouseEvent("mousemove", elt));
-        elt.dispatchEvent(createKeyEvent("keydown", "Escape"));
+        robot(elt)
+            .mousedown()
+            .mousemove()
+            .keydown({"code": "Escape"});
 
         expect(ctx.commands).toHaveLength(0);
         expect(catBinding.error).toHaveBeenCalledWith("Crash in 'cancel'", err);
@@ -814,9 +843,10 @@ describe("check when it crashes in routines", () => {
             })
             .bind();
 
-        elt.dispatchEvent(createMouseEvent("mousedown", elt));
-        elt.dispatchEvent(createMouseEvent("mousemove", elt));
-        elt.dispatchEvent(createKeyEvent("keydown", "Escape"));
+        robot(elt)
+            .mousedown()
+            .mousemove()
+            .keydown({"code": "Escape"});
 
         expect(ctx.commands).toHaveLength(0);
         expect(fn).toHaveBeenCalledTimes(1);
@@ -833,9 +863,10 @@ describe("check when it crashes in routines", () => {
             })
             .bind();
 
-        elt.dispatchEvent(createMouseEvent("mousedown", elt));
-        elt.dispatchEvent(createMouseEvent("mousemove", elt));
-        elt.dispatchEvent(createKeyEvent("keydown", "Escape"));
+        robot(elt)
+            .mousedown()
+            .mousemove()
+            .keydown({"code": "Escape"});
 
         expect(ctx.commands).toHaveLength(0);
         expect(catBinding.warn).toHaveBeenCalledWith("Crash in 'cancel': bar");
@@ -849,9 +880,10 @@ describe("check when it crashes in routines", () => {
             })
             .bind();
 
-        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+        robot(elt)
+            .touchstart({}, [{"identifier": 1, "target": elt}])
+            .touchmove({}, [{"identifier": 1, "target": elt}])
+            .touchend({}, [{"identifier": 1, "target": elt}]);
 
         expect(ctx.commands).toHaveLength(1);
         expect(catBinding.error).toHaveBeenCalledWith("Crash in 'ifHadNoEffect'", err);
@@ -867,9 +899,10 @@ describe("check when it crashes in routines", () => {
             })
             .bind();
 
-        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+        robot(elt)
+            .touchstart({}, [{"identifier": 1, "target": elt}])
+            .touchmove({}, [{"identifier": 1, "target": elt}])
+            .touchend({}, [{"identifier": 1, "target": elt}]);
 
         expect(ctx.commands).toHaveLength(1);
         expect(fn).toHaveBeenCalledTimes(1);
@@ -885,9 +918,10 @@ describe("check when it crashes in routines", () => {
             })
             .bind();
 
-        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+        robot(elt)
+            .touchstart({}, [{"identifier": 1, "target": elt}])
+            .touchmove({}, [{"identifier": 1, "target": elt}])
+            .touchend({}, [{"identifier": 1, "target": elt}]);
 
         expect(ctx.commands).toHaveLength(1);
         expect(catBinding.warn).toHaveBeenCalledWith("Crash in 'ifHadNoEffect': 11");
@@ -901,9 +935,10 @@ describe("check when it crashes in routines", () => {
             })
             .bind();
 
-        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+        robot(elt)
+            .touchstart({}, [{"identifier": 1, "target": elt}])
+            .touchmove({}, [{"identifier": 1, "target": elt}])
+            .touchend({}, [{"identifier": 1, "target": elt}]);
 
         expect(ctx.commands).toHaveLength(1);
         expect(catBinding.error).toHaveBeenCalledWith("Crash in 'ifHadEffects'", err);
@@ -919,9 +954,10 @@ describe("check when it crashes in routines", () => {
             })
             .bind();
 
-        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+        robot(elt)
+            .touchstart({}, [{"identifier": 1, "target": elt}])
+            .touchmove({}, [{"identifier": 1, "target": elt}])
+            .touchend({}, [{"identifier": 1, "target": elt}]);
 
         expect(ctx.commands).toHaveLength(1);
         expect(fn).toHaveBeenCalledTimes(1);
@@ -937,9 +973,10 @@ describe("check when it crashes in routines", () => {
             })
             .bind();
 
-        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+        robot(elt)
+            .touchstart({}, [{"identifier": 1, "target": elt}])
+            .touchmove({}, [{"identifier": 1, "target": elt}])
+            .touchend({}, [{"identifier": 1, "target": elt}]);
 
         expect(ctx.commands).toHaveLength(1);
         expect(catBinding.warn).toHaveBeenCalledWith("Crash in 'ifHadEffects': YOLO");
@@ -952,9 +989,10 @@ describe("check when it crashes in routines", () => {
             })
             .bind();
 
-        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+        robot(elt)
+            .touchstart({}, [{"identifier": 1, "target": elt}])
+            .touchmove({}, [{"identifier": 1, "target": elt}])
+            .touchend({}, [{"identifier": 1, "target": elt}]);
 
         expect(ctx.commands).toHaveLength(0);
         expect(catBinding.error).toHaveBeenCalledWith("Crash in 'when'", err);
@@ -969,9 +1007,10 @@ describe("check when it crashes in routines", () => {
             })
             .bind();
 
-        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+        robot(elt)
+            .touchstart({}, [{"identifier": 1, "target": elt}])
+            .touchmove({}, [{"identifier": 1, "target": elt}])
+            .touchend({}, [{"identifier": 1, "target": elt}]);
 
         expect(fn).toHaveBeenCalledTimes(4);
         expect(fn).toHaveBeenCalledWith(err);
@@ -985,7 +1024,7 @@ describe("check when it crashes in routines", () => {
             })
             .bind();
 
-        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
+        robot(elt).touchstart({}, [{"identifier": 1, "target": elt}]);
 
         expect(ctx.commands).toHaveLength(0);
         expect(catBinding.warn).toHaveBeenCalledWith("Crash in 'when': msg");
@@ -996,7 +1035,7 @@ describe("check when it crashes in routines", () => {
             .log(LogLevel.binding)
             .bind();
 
-        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
+        robot(elt).touchstart({}, [{"identifier": 1, "target": elt}]);
 
         expect(catBinding.info).toHaveBeenNthCalledWith(1, "Checking condition: true");
     });
@@ -1009,9 +1048,10 @@ describe("check when it crashes in routines", () => {
             })
             .bind();
 
-        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+        robot(elt)
+            .touchstart({}, [{"identifier": 1, "target": elt}])
+            .touchmove({}, [{"identifier": 1, "target": elt}])
+            .touchend({}, [{"identifier": 1, "target": elt}]);
 
         expect(ctx.commands).toHaveLength(0);
         expect(catBinding.error).toHaveBeenCalledWith("Crash in 'ifCannotExecute'", err);
@@ -1027,9 +1067,10 @@ describe("check when it crashes in routines", () => {
             })
             .bind();
 
-        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+        robot(elt)
+            .touchstart({}, [{"identifier": 1, "target": elt}])
+            .touchmove({}, [{"identifier": 1, "target": elt}])
+            .touchend({}, [{"identifier": 1, "target": elt}]);
 
         expect(fn).toHaveBeenCalledTimes(1);
         expect(fn).toHaveBeenCalledWith(err);
@@ -1044,9 +1085,10 @@ describe("check when it crashes in routines", () => {
             })
             .bind();
 
-        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchmove", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+        robot(elt)
+            .touchstart({}, [{"identifier": 1, "target": elt}])
+            .touchmove({}, [{"identifier": 1, "target": elt}])
+            .touchend({}, [{"identifier": 1, "target": elt}]);
 
         expect(ctx.commands).toHaveLength(0);
         expect(catBinding.warn).toHaveBeenCalledWith("Crash in 'ifCannotExecute': 1");
@@ -1070,23 +1112,25 @@ describe("tap and longPress conflict", () => {
     });
 
     test("touchstart and wait", () => {
-        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
+        robot(elt).touchstart({}, [{"identifier": 1, "target": elt}]);
         jest.runOnlyPendingTimers();
         expect(ctx.getCmdsProducedBy(binding2)).toHaveLength(1);
         expect(ctx.getCmdsProducedBy(binding)).toHaveLength(0);
     });
 
     test("touchstart and touchend", () => {
-        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
-        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+        robot(elt)
+            .touchstart({}, [{"identifier": 1, "target": elt}])
+            .touchend({}, [{"identifier": 1, "target": elt}]);
         expect(ctx.getCmdsProducedBy(binding2)).toHaveLength(0);
         expect(ctx.getCmdsProducedBy(binding)).toHaveLength(1);
     });
 
     test("touchstart, wait, touchend", () => {
-        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
-        jest.runOnlyPendingTimers();
-        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+        robot(elt)
+            .touchstart({}, [{"identifier": 1, "target": elt}])
+            .do(() => jest.runOnlyPendingTimers())
+            .touchend({}, [{"identifier": 1, "target": elt}]);
         expect(ctx.getCmdsProducedBy(binding2)).toHaveLength(1);
         expect(ctx.getCmdsProducedBy(binding)).toHaveLength(1);
     });
@@ -1107,9 +1151,10 @@ describe("two longTouch", () => {
             .on(elt)
             .bind();
 
-        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
-        jest.runOnlyPendingTimers();
-        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+        robot(elt)
+            .touchstart({}, [{"identifier": 1, "target": elt}])
+            .do(() => jest.runOnlyPendingTimers())
+            .touchend({}, [{"identifier": 1, "target": elt}]);
         expect(ctx.getCmdsProducedBy(binding2)).toHaveLength(1);
         expect(ctx.getCmdsProducedBy(binding)).toHaveLength(0);
     });
@@ -1124,9 +1169,10 @@ describe("two longTouch", () => {
             .on(elt)
             .bind();
 
-        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
-        jest.runOnlyPendingTimers();
-        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+        robot(elt)
+            .touchstart({}, [{"identifier": 1, "target": elt}])
+            .do(() => jest.runOnlyPendingTimers())
+            .touchend({}, [{"identifier": 1, "target": elt}]);
         expect(ctx.getCmdsProducedBy(binding2)).toHaveLength(1);
         expect(ctx.getCmdsProducedBy(binding)).toHaveLength(1);
     });
@@ -1142,9 +1188,10 @@ describe("two longTouch", () => {
             .on(elt)
             .bind();
 
-        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
-        jest.runOnlyPendingTimers();
-        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+        robot(elt)
+            .touchstart({}, [{"identifier": 1, "target": elt}])
+            .do(() => jest.runOnlyPendingTimers())
+            .touchend({}, [{"identifier": 1, "target": elt}]);
         expect(ctx.getCmdsProducedBy(binding2)).toHaveLength(1);
         expect(ctx.getCmdsProducedBy(binding)).toHaveLength(0);
     });
@@ -1160,9 +1207,10 @@ describe("two longTouch", () => {
             .stopImmediatePropagation()
             .bind();
 
-        elt.dispatchEvent(createTouchEvent("touchstart", 1, elt, 11, 23, 110, 230));
-        jest.runOnlyPendingTimers();
-        elt.dispatchEvent(createTouchEvent("touchend", 1, elt, 11, 23, 110, 230));
+        robot(elt)
+            .touchstart({}, [{"identifier": 1, "target": elt}])
+            .do(() => jest.runOnlyPendingTimers())
+            .touchend({}, [{"identifier": 1, "target": elt}]);
         expect(ctx.getCmdsProducedBy(binding2)).toHaveLength(1);
         expect(ctx.getCmdsProducedBy(binding)).toHaveLength(1);
     });

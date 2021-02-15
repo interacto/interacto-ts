@@ -13,7 +13,7 @@
  */
 
 import {FSMHandler, KeysTyped} from "../../../src/interacto";
-import {createKeyEvent} from "../StubEvents";
+import {robot} from "../StubEvents";
 import {mock} from "jest-mock-extended";
 
 let interaction: KeysTyped;
@@ -37,8 +37,9 @@ test("cannot create several times the FSM", () => {
 
 test("type 'b' and wait for timeout stops the interaction", () => {
     interaction.registerToNodes([text]);
-    text.dispatchEvent(createKeyEvent("keydown", "b"));
-    text.dispatchEvent(createKeyEvent("keyup", "b"));
+    robot(text)
+        .keydown({"code": "b"})
+        .keyup({"code": "b"});
     jest.runOnlyPendingTimers();
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
@@ -54,8 +55,9 @@ test("type 'b' and wait for timeout stops the interaction: data", () => {
     interaction.getFsm().addHandler(newHandler);
 
     interaction.registerToNodes([text]);
-    text.dispatchEvent(createKeyEvent("keydown", "b"));
-    text.dispatchEvent(createKeyEvent("keyup", "b"));
+    robot(text)
+        .keydown({"code": "b"})
+        .keyup({"code": "b"});
     jest.runOnlyPendingTimers();
     expect(keys).toHaveLength(1);
     expect(keys[0]).toStrictEqual("b");
@@ -63,12 +65,13 @@ test("type 'b' and wait for timeout stops the interaction: data", () => {
 
 test("type text and wait for timeout stops the interaction", () => {
     interaction.registerToNodes([text]);
-    text.dispatchEvent(createKeyEvent("keydown", "b"));
-    text.dispatchEvent(createKeyEvent("keyup", "b"));
-    text.dispatchEvent(createKeyEvent("keydown", "c"));
-    text.dispatchEvent(createKeyEvent("keyup", "c"));
-    text.dispatchEvent(createKeyEvent("keydown", "a"));
-    text.dispatchEvent(createKeyEvent("keyup", "a"));
+    robot(text)
+        .keydown({"code": "b"})
+        .keyup({"code": "b"})
+        .keydown({"code": "c"})
+        .keyup({"code": "c"})
+        .keydown({"code": "a"})
+        .keyup({"code": "a"});
     jest.runOnlyPendingTimers();
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
@@ -85,12 +88,13 @@ test("type text and wait for timeout stops the interaction: data", () => {
     interaction.getFsm().addHandler(newHandler);
 
     interaction.registerToNodes([text]);
-    text.dispatchEvent(createKeyEvent("keydown", "b"));
-    text.dispatchEvent(createKeyEvent("keyup", "b"));
-    text.dispatchEvent(createKeyEvent("keydown", "c"));
-    text.dispatchEvent(createKeyEvent("keyup", "c"));
-    text.dispatchEvent(createKeyEvent("keydown", "a"));
-    text.dispatchEvent(createKeyEvent("keyup", "a"));
+    robot(text)
+        .keydown({"code": "b"})
+        .keyup({"code": "b"})
+        .keydown({"code": "c"})
+        .keyup({"code": "c"})
+        .keydown({"code": "a"})
+        .keyup({"code": "a"});
     jest.runOnlyPendingTimers();
     expect(keys).toHaveLength(3);
     expect(keys).toStrictEqual(["b", "c", "a"]);
@@ -106,8 +110,9 @@ test("type 'b' does not stop the interaction", () => {
     interaction.getFsm().addHandler(newHandler);
 
     interaction.registerToNodes([text]);
-    text.dispatchEvent(createKeyEvent("keydown", "z"));
-    text.dispatchEvent(createKeyEvent("keyup", "z"));
+    robot(text)
+        .keydown({"code": "z"})
+        .keyup({"code": "z"});
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).not.toHaveBeenCalledWith();
     expect(keys).toHaveLength(1);

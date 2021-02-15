@@ -13,7 +13,7 @@
  */
 
 import {FSMDataHandler, FSMHandler, LongPress} from "../../../src/interacto";
-import {createMouseEvent} from "../StubEvents";
+import {createMouseEvent, robot} from "../StubEvents";
 import {mock} from "jest-mock-extended";
 
 let interaction: LongPress;
@@ -102,7 +102,6 @@ describe("long press test", () => {
                 expect(handler.fsmCancels).not.toHaveBeenCalled();
             });
 
-
             test("two presses with timeout", () => {
                 interaction.processEvent(createMouseEvent("mousedown", canvas, 15, 20, 160, 21, 2));
                 interaction.processEvent(createMouseEvent("mouseup", canvas, 15, 20, 160, 21, 2));
@@ -111,6 +110,16 @@ describe("long press test", () => {
                 expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
                 expect(handler.fsmStops).toHaveBeenCalledTimes(1);
                 expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
+            });
+
+            test("one long press on canvas", () => {
+                interaction.registerToNodes([canvas]);
+                robot(canvas)
+                    .mousedown()
+                    .do(() => jest.runOnlyPendingTimers());
+                expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+                expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+                expect(handler.fsmCancels).toHaveBeenCalledTimes(0);
             });
         });
     });

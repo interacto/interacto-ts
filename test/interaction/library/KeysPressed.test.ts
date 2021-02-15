@@ -13,7 +13,7 @@
  */
 
 import {FSMHandler, KeysPressed} from "../../../src/interacto";
-import {createKeyEvent} from "../StubEvents";
+import {robot} from "../StubEvents";
 import {mock} from "jest-mock-extended";
 
 let interaction: KeysPressed;
@@ -32,7 +32,7 @@ beforeEach(() => {
 
 test("testKeyPressExecution", () => {
     interaction.registerToNodes([text]);
-    text.dispatchEvent(createKeyEvent("keydown", "A"));
+    robot(text).keydown({"code": "A"});
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).not.toHaveBeenCalled();
 });
@@ -49,15 +49,16 @@ test("testKeyPressData", () => {
     });
     interaction.getFsm().addHandler(newHandler);
 
-    text.dispatchEvent(createKeyEvent("keydown", "A"));
+    robot(text).keydown({"code": "A"});
     expect(length).toStrictEqual(1);
     expect(txt).toStrictEqual("A");
 });
 
 test("testTwoKeyPressExecution", () => {
     interaction.registerToNodes([text]);
-    text.dispatchEvent(createKeyEvent("keydown", "A"));
-    text.dispatchEvent(createKeyEvent("keydown", "B"));
+    robot(text)
+        .keydown({"code": "A"})
+        .keydown({"code": "B"});
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
     expect(handler.fsmStops).not.toHaveBeenCalled();
@@ -72,9 +73,9 @@ test("testTwoKeyPressData", () => {
         data = [...interaction.getData().getKeys()];
     });
     interaction.getFsm().addHandler(newHandler);
-
-    text.dispatchEvent(createKeyEvent("keydown", "A"));
-    text.dispatchEvent(createKeyEvent("keydown", "B"));
+    robot(text)
+        .keydown({"code": "A"})
+        .keydown({"code": "B"});
     expect(data).toHaveLength(2);
     expect(data[0]).toStrictEqual("A");
     expect(data[1]).toStrictEqual("B");
@@ -82,9 +83,10 @@ test("testTwoKeyPressData", () => {
 
 test("testTwoKeyPressReleaseExecution", () => {
     interaction.registerToNodes([text]);
-    text.dispatchEvent(createKeyEvent("keydown", "A"));
-    text.dispatchEvent(createKeyEvent("keydown", "B"));
-    text.dispatchEvent(createKeyEvent("keyup", "B"));
+    robot(text)
+        .keydown({"code": "A"})
+        .keydown({"code": "B"})
+        .keyup({"code": "B"});
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(3);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
 });
@@ -93,33 +95,35 @@ test("testTwoKeyPressReleaseExecution", () => {
 test("testTwoKeyPressReleaseData", () => {
     interaction.registerToNodes([text]);
     let data: Array<string> = [];
-
-    text.dispatchEvent(createKeyEvent("keydown", "A"));
-    text.dispatchEvent(createKeyEvent("keydown", "B"));
+    robot(text)
+        .keydown({"code": "A"})
+        .keydown({"code": "B"});
     const newHandler = mock<FSMHandler>();
     newHandler.fsmUpdates.mockImplementation(() => {
         data = [...interaction.getData().getKeys()];
     });
     interaction.getFsm().addHandler(newHandler);
-    text.dispatchEvent(createKeyEvent("keyup", "B"));
+    robot(text).keyup({"code": "B"});
     expect(data).toHaveLength(1);
     expect(data[0]).toStrictEqual("A");
 });
 
 test("testTwoKeyPressReleaseRecycle", () => {
     interaction.registerToNodes([text]);
-    text.dispatchEvent(createKeyEvent("keydown", "A"));
-    text.dispatchEvent(createKeyEvent("keydown", "B"));
-    text.dispatchEvent(createKeyEvent("keyup", "B"));
+    robot(text)
+        .keydown({"code": "A"})
+        .keydown({"code": "B"})
+        .keyup({"code": "B"});
     expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
 });
 
 test("testTwoKeyPressTwoReleasesExecution", () => {
     interaction.registerToNodes([text]);
-    text.dispatchEvent(createKeyEvent("keydown", "A"));
-    text.dispatchEvent(createKeyEvent("keydown", "B"));
-    text.dispatchEvent(createKeyEvent("keyup", "A"));
-    text.dispatchEvent(createKeyEvent("keyup", "B"));
+    robot(text)
+        .keydown({"code": "A"})
+        .keydown({"code": "B"})
+        .keyup({"code": "A"})
+        .keyup({"code": "B"});
     expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
     expect(handler.fsmStops).toHaveBeenCalledTimes(2);
 });

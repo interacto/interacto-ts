@@ -13,7 +13,7 @@
  */
 
 import {FSMHandler, KeyPressed} from "../../../src/interacto";
-import {createKeyEvent} from "../StubEvents";
+import {robot} from "../StubEvents";
 import {mock} from "jest-mock-extended";
 
 let interaction: KeyPressed;
@@ -31,7 +31,7 @@ beforeEach(() => {
 
 test("type 'a' in the textarea starts and stops the interaction.", () => {
     interaction.registerToNodes([text]);
-    text.dispatchEvent(createKeyEvent("keydown", "a"));
+    robot(text).keydown({"code": "a"});
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
 });
@@ -44,14 +44,15 @@ test("the key typed in the textarea is the same key in the data of the interacti
         data = interaction.getData().getKey();
     });
     interaction.getFsm().addHandler(newHandler);
-    text.dispatchEvent(createKeyEvent("keydown", "a"));
+    robot(text).keydown({"code": "a"});
     expect(data).toStrictEqual("a");
 });
 
 test("testTwoKeyPressEnds", () => {
     interaction.registerToNodes([text]);
-    text.dispatchEvent(createKeyEvent("keydown", "a"));
-    text.dispatchEvent(createKeyEvent("keydown", "b"));
+    robot(text)
+        .keydown({"code": "a"})
+        .keydown({"code": "b"});
     expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
     expect(handler.fsmStops).toHaveBeenCalledTimes(2);
 });

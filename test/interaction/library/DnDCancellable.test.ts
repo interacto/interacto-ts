@@ -13,7 +13,7 @@
  */
 
 import {DnD, FSMHandler} from "../../../src/interacto";
-import {createKeyEvent, createMouseEvent} from "../StubEvents";
+import {robot} from "../StubEvents";
 import {mock} from "jest-mock-extended";
 
 let interaction: DnD;
@@ -31,7 +31,7 @@ beforeEach(() => {
 
 test("press execution", () => {
     interaction.registerToNodes([canvas]);
-    canvas.dispatchEvent(createMouseEvent("mousedown", canvas));
+    robot(canvas).mousedown();
     expect(handler.fsmStarts).not.toHaveBeenCalled();
     expect(handler.fsmStops).not.toHaveBeenCalled();
     expect(handler.fsmCancels).not.toHaveBeenCalled();
@@ -39,8 +39,9 @@ test("press execution", () => {
 
 test("press escape key while press don't trigger the interaction", () => {
     interaction.registerToNodes([canvas]);
-    canvas.dispatchEvent(createMouseEvent("mousedown", canvas, undefined, undefined, 11, 23));
-    canvas.dispatchEvent(createKeyEvent("keydown", "Escape"));
+    robot(canvas)
+        .mousedown({"clientX": 11, "clientY": 23})
+        .keydown({"code": "Escape"});
     expect(handler.fsmStarts).not.toHaveBeenCalled();
     expect(handler.fsmStops).not.toHaveBeenCalled();
     expect(handler.fsmCancels).not.toHaveBeenCalled();
@@ -48,9 +49,10 @@ test("press escape key while press don't trigger the interaction", () => {
 
 test("press escape after moving cancel the interaction", () => {
     interaction.registerToNodes([canvas]);
-    canvas.dispatchEvent(createMouseEvent("mousedown", canvas, undefined, undefined, 11, 23));
-    canvas.dispatchEvent(createMouseEvent("mousemove", canvas, undefined, undefined, 11, 23));
-    canvas.dispatchEvent(createKeyEvent("keydown", "Escape"));
+    robot(canvas)
+        .mousedown()
+        .mousemove()
+        .keydown({"code": "Escape"});
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).not.toHaveBeenCalled();
@@ -58,10 +60,11 @@ test("press escape after moving cancel the interaction", () => {
 
 test("press escape after multiple move cancel the interaction.", () => {
     interaction.registerToNodes([canvas]);
-    canvas.dispatchEvent(createMouseEvent("mousedown", canvas, undefined, undefined, 11, 23));
-    canvas.dispatchEvent(createMouseEvent("mousemove", canvas, undefined, undefined, 11, 23));
-    canvas.dispatchEvent(createMouseEvent("mousemove", canvas, undefined, undefined, 11, 23));
-    canvas.dispatchEvent(createKeyEvent("keydown", "Escape"));
+    robot(canvas)
+        .mousedown()
+        .mousemove()
+        .mousemove()
+        .keydown({"code": "Escape"});
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).not.toHaveBeenCalled();
@@ -69,10 +72,11 @@ test("press escape after multiple move cancel the interaction.", () => {
 
 test("interaction restart after cancel", () => {
     interaction.registerToNodes([canvas]);
-    canvas.dispatchEvent(createMouseEvent("mousedown", canvas));
-    canvas.dispatchEvent(createMouseEvent("mousemove", canvas));
-    canvas.dispatchEvent(createKeyEvent("keydown", "Escape"));
-    canvas.dispatchEvent(createMouseEvent("mousedown", canvas));
-    canvas.dispatchEvent(createMouseEvent("mousemove", canvas));
+    robot(canvas)
+        .mousedown()
+        .mousemove()
+        .keydown({"code": "Escape"})
+        .mousedown()
+        .mousemove();
     expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
 });

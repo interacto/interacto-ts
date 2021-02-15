@@ -13,7 +13,7 @@
  */
 
 import {DragLock, FSMHandler} from "../../../src/interacto";
-import {createMouseEvent} from "../StubEvents";
+import {createMouseEvent, robot} from "../StubEvents";
 import {mock} from "jest-mock-extended";
 
 let interaction: DragLock;
@@ -39,11 +39,12 @@ beforeEach(() => {
 
 test("dragLock in a SVG environment", () => {
     interaction.registerToNodes([rect1, rect2]);
-    rect2.dispatchEvent(createMouseEvent("click", rect2));
-    rect2.dispatchEvent(createMouseEvent("click", rect2));
-    rect2.dispatchEvent(createMouseEvent("mousemove", rect2));
-    rect1.dispatchEvent(createMouseEvent("click", rect1));
-    rect1.dispatchEvent(createMouseEvent("click", rect1));
+    robot(rect2)
+        .click()
+        .click()
+        .mousemove()
+        .click(rect1)
+        .click();
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);

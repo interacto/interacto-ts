@@ -13,7 +13,7 @@
  */
 
 import {FSMHandler, Press} from "../../../src/interacto";
-import {createMouseEvent} from "../StubEvents";
+import {robot} from "../StubEvents";
 import {mock} from "jest-mock-extended";
 
 let interaction: Press;
@@ -31,7 +31,7 @@ beforeEach(() => {
 
 test("press on the canvas starts and stops interaction Press", () => {
     interaction.registerToNodes([canvas]);
-    canvas.dispatchEvent(createMouseEvent("mousedown", canvas));
+    robot(canvas).mousedown();
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
 });

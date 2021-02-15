@@ -14,6 +14,7 @@
 
 import {ButtonPressed, FSMHandler} from "../../../src/interacto";
 import {mock} from "jest-mock-extended";
+import {robot} from "../StubEvents";
 
 let interaction: ButtonPressed;
 let button: HTMLButtonElement;
@@ -38,7 +39,6 @@ test("click event start and stop the interaction ButtonPressed", () => {
 
 test("other event don't trigger the interaction ButtonPressed", () => {
     interaction.registerToNodes([button]);
-    button.dispatchEvent(new Event("input"));
-    button.dispatchEvent(new Event("change"));
+    robot().change(button);
     expect(handler.fsmStarts).not.toHaveBeenCalled();
 });

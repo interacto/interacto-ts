@@ -14,6 +14,7 @@
 
 import {BoxChecked, FSMHandler} from "../../../src/interacto";
 import {mock} from "jest-mock-extended";
+import {robot} from "../StubEvents";
 
 let interaction: BoxChecked;
 let boxCheck: HTMLInputElement;
@@ -39,14 +40,13 @@ test("click event start and stop the interaction CheckBox", () => {
 
 test("input event trigger the interaction CheckBox", () => {
     interaction.registerToNodes([boxCheck]);
-    boxCheck.dispatchEvent(new Event("input"));
+    robot().input(boxCheck);
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
 });
 
 test("other event don't trigger the interaction CheckBox", () => {
     interaction.registerToNodes([boxCheck]);
-    boxCheck.dispatchEvent(new Event("change"));
-    boxCheck.dispatchEvent(new Event("update"));
+    robot().change(boxCheck);
     expect(handler.fsmStarts).not.toHaveBeenCalled();
 });

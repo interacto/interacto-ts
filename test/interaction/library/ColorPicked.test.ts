@@ -14,6 +14,7 @@
 
 import {ColorPicked, FSMHandler} from "../../../src/interacto";
 import {mock} from "jest-mock-extended";
+import {robot} from "../StubEvents";
 
 let interaction: ColorPicked;
 let colorBox: HTMLInputElement;
@@ -31,13 +32,13 @@ beforeEach(() => {
 
 test("input event starts and stops the interaction ColorPicked", () => {
     interaction.registerToNodes([colorBox]);
-    colorBox.dispatchEvent(new Event("input"));
+    robot().input(colorBox);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
 });
 
 test("other event don't trigger the interaction", () => {
     interaction.registerToNodes([colorBox]);
-    colorBox.dispatchEvent(new Event("click"));
+    robot().click(colorBox);
     expect(handler.fsmStarts).not.toHaveBeenCalled();
 });

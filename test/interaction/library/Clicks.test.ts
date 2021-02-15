@@ -15,7 +15,7 @@
 import {mock} from "jest-mock-extended";
 import {FSMHandler} from "../../../src/api/fsm/FSMHandler";
 import {Clicks} from "../../../src/impl/interaction/library/Clicks";
-import {createMouseEvent} from "../StubEvents";
+import {createMouseEvent, robot} from "../StubEvents";
 
 let interaction: Clicks;
 let canvas: HTMLElement;
@@ -119,8 +119,10 @@ test("cannot build the interaction with 1 click", () => {
         });
 
         test("that data two clicks ok", () => {
-            interaction.processEvent(createMouseEvent("click", canvas, 1025, 210, 1040, 1201, 1));
-            interaction.processEvent(createMouseEvent("click", canvas, 1250, 201, 1040, 1021, 1));
+            interaction.registerToNodes([canvas]);
+            robot(canvas)
+                .click({"screenX": 1025, "screenY": 210, "clientX": 1040, "clientY": 1201, "button": 1})
+                .click({"screenX": 1250, "screenY": 201, "clientX": 1040, "clientY": 1021, "button": 1});
 
             const data = interaction.getData().getPointsData();
 

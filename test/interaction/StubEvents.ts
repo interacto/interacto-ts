@@ -19,6 +19,27 @@ export interface MouseEventForTest extends MouseEvent {
     id: number;
 }
 
+export interface EventTargetInit {
+    target?: EventTarget;
+}
+
+export interface NonoRobot {
+    mousedown(params?: EventTarget | (EventTargetInit & MouseEventInit)): this;
+    click(params?: EventTarget | (EventTargetInit & MouseEventInit)): this;
+    dblclick(params?: EventTarget | (EventTargetInit & MouseEventInit)): this;
+    auxclick(params?: EventTarget | (EventTargetInit & MouseEventInit)): this;
+    mousemove(params?: EventTarget | (EventTargetInit & MouseEventInit)): this;
+    mouseup(params?: EventTarget | (EventTargetInit & MouseEventInit)): this;
+    input(params?: EventTarget | (EventTargetInit & InputEventInit)): this;
+    change(params?: EventTarget | (EventTargetInit & InputEventInit)): this;
+    keydown(params?: EventTarget | (EventTargetInit & KeyboardEventInit)): this;
+    keyup(params?: EventTarget | (EventTargetInit & KeyboardEventInit)): this;
+    scroll(params?: EventTarget | (EventTargetInit & UIEventInit)): this;
+    touchstart(params?: EventTarget | (EventTargetInit & TouchEventInit), touches?: Array<TouchInit>, timestamp?: number): this;
+    touchmove(params?: EventTarget | (EventTargetInit & TouchEventInit), touches?: Array<TouchInit>, timestamp?: number): this;
+    touchend(params?: EventTarget | (EventTargetInit & TouchEventInit), touches?: Array<TouchInit>, timestamp?: number): this;
+    do(fn: () => void): this;
+}
 
 export function createTouchEvent(type: "touchend" | "touchmove" | "touchstart", id: number, target: EventTarget,
                                  screenX?: number, screenY?: number,
@@ -137,4 +158,161 @@ export function createEventWithTarget(target: EventTarget | null, type: string):
         "timeStamp": 0,
         type,
         target};
+}
+
+class NonoRobotImpl implements NonoRobot {
+    private currentTarget: EventTarget | undefined;
+
+    public constructor(target?: EventTarget) {
+        this.currentTarget = target;
+    }
+
+    private checkEventTarget(target?: EventTarget | EventTargetInit): EventTarget {
+        let evtTarget: EventTarget | undefined;
+
+        if (target instanceof EventTarget) {
+            evtTarget = target;
+        } else {
+            if (target?.target !== undefined) {
+                evtTarget = target.target;
+            }
+        }
+
+        if (this.currentTarget === undefined && evtTarget === undefined) {
+            throw new Error("You must specify the event target");
+        }
+        if (evtTarget !== undefined) {
+            this.currentTarget = evtTarget;
+        }
+
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        return this.currentTarget!;
+    }
+
+    private fixingParameters<T extends EventInit>(params: EventTarget | T): T {
+        const parameters: T = params instanceof EventTarget ? {} as T : {...params};
+        // Requires for bubbling
+        parameters.bubbles ??= true;
+        return parameters;
+
+    }
+
+    private processMouseEvent(type: "auxclick" | "click" | "dblclick" | "mousedown" | "mousemove" | "mouseup",
+                              params?: EventTarget | (EventTargetInit & MouseEventInit)): this {
+        this.checkEventTarget(params).dispatchEvent(new MouseEvent(type, this.fixingParameters(params ?? {})));
+        return this;
+    }
+
+    private processKeyEvent(type: "keydown" | "keyup", params?: EventTarget | (EventTargetInit & MouseEventInit)): this {
+        this.checkEventTarget(params).dispatchEvent(new KeyboardEvent(type, this.fixingParameters(params ?? {})));
+        return this;
+    }
+
+    private processTouchEvent(type: "touchend" | "touchmove" | "touchstart",
+                              params?: EventTarget | (EventTargetInit & TouchEventInit), touchInits?: Array<TouchInit>,
+                              timestamp?: number): this {
+        const paramsToUse = this.fixingParameters(params ?? {});
+        if (touchInits !== undefined && touchInits.length > 0) {
+            // eslint-disable-next-line complexity
+            const touches: Array<Touch> = touchInits.map(init => ({
+                "altitudeAngle": init.altitudeAngle ?? 0,
+                "azimuthAngle": init.azimuthAngle ?? 0,
+                "identifier": init.identifier,
+                "screenX": init.screenX ?? 0,
+                "screenY": init.screenY ?? 0,
+                "clientX": init.clientX ?? 0,
+                "clientY": init.clientY ?? 0,
+                "force": init.force ?? 0,
+                "pageX": init.pageX ?? 0,
+                "pageY": init.pageY ?? 0,
+                "radiusX": init.radiusX ?? 0,
+                "radiusY": init.radiusY ?? 0,
+                "rotationAngle": init.rotationAngle ?? 0,
+                "target": this.checkEventTarget(params),
+                "touchType": init.touchType ?? "direct"
+            } as Touch));
+            if (paramsToUse.changedTouches === undefined) {
+                paramsToUse.changedTouches = touches;
+            } else {
+                paramsToUse.changedTouches.push(...touches);
+            }
+        }
+
+        const evt = new TouchEvent(type, paramsToUse);
+
+        if (timestamp !== undefined) {
+            Object.defineProperty(evt, "timeStamp", {"value": timestamp});
+        }
+
+        this.checkEventTarget(params).dispatchEvent(evt);
+        return this;
+    }
+
+    public click(params?: EventTarget | (EventTargetInit & MouseEventInit)): this {
+        return this.processMouseEvent("click", params);
+    }
+
+    public dblclick(params?: EventTarget | (EventTargetInit & MouseEventInit)): this {
+        return this.processMouseEvent("dblclick", params);
+    }
+
+    public auxclick(params?: EventTarget | (EventTargetInit & MouseEventInit)): this {
+        return this.processMouseEvent("auxclick", params);
+    }
+
+    public mousemove(params?: EventTarget | (EventTargetInit & MouseEventInit)): this {
+        return this.processMouseEvent("mousemove", params);
+    }
+
+    public mousedown(params?: EventTarget | (EventTargetInit & MouseEventInit)): this {
+        return this.processMouseEvent("mousedown", params);
+    }
+
+    public mouseup(params?: EventTarget | (EventTargetInit & MouseEventInit)): this {
+        return this.processMouseEvent("mouseup", params);
+    }
+
+    public scroll(params?: EventTarget | (EventTargetInit & UIEventInit)): this {
+        this.checkEventTarget(params).dispatchEvent(new UIEvent("scroll", this.fixingParameters(params ?? {})));
+        return this;
+    }
+
+    public input(params?: EventTarget | (EventTargetInit & InputEventInit)): this {
+        this.checkEventTarget(params).dispatchEvent(new InputEvent("input", this.fixingParameters(params ?? {})));
+        return this;
+    }
+
+    public change(params?: EventTarget | (EventTargetInit & InputEventInit)): this {
+        this.checkEventTarget(params).dispatchEvent(new Event("change", this.fixingParameters(params ?? {})));
+        return this;
+    }
+
+    public keydown(params?: EventTarget | (EventTargetInit & KeyboardEventInit)): this {
+        return this.processKeyEvent("keydown", params);
+    }
+
+    public keyup(params?: EventTarget | (EventTargetInit & KeyboardEventInit)): this {
+        return this.processKeyEvent("keyup", params);
+    }
+
+    public touchstart(params?: EventTarget | (EventTargetInit & TouchEventInit), touches?: Array<TouchInit>, timestamp?: number): this {
+        return this.processTouchEvent("touchstart", params, touches, timestamp);
+    }
+
+    public touchmove(params?: EventTarget | (EventTargetInit & TouchEventInit), touches?: Array<TouchInit>, timestamp?: number): this {
+        return this.processTouchEvent("touchmove", params, touches, timestamp);
+    }
+
+    public touchend(params?: EventTarget | (EventTargetInit & TouchEventInit), touches?: Array<TouchInit>, timestamp?: number): this {
+        return this.processTouchEvent("touchend", params, touches, timestamp);
+    }
+
+    public do(fn: () => void): this {
+        fn();
+        return this;
+    }
+}
+
+export function robot(target?: EventTarget): NonoRobot {
+    return new NonoRobotImpl(target);
 }

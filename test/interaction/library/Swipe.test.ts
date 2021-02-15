@@ -13,7 +13,7 @@
  */
 
 import {FSMHandler, Swipe} from "../../../src/interacto";
-import {createTouchEvent} from "../StubEvents";
+import {createTouchEvent, robot} from "../StubEvents";
 import {mock} from "jest-mock-extended";
 
 let interaction: Swipe;
@@ -193,6 +193,24 @@ describe("horizontal", () => {
             450, 30, 500, 210, 6000));
         interaction.processEvent(createTouchEvent("touchend", 3, canvas,
             450, 30, 500, 210, 6000));
+
+        expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+        expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
+        expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+        expect(handler.fsmCancels).not.toHaveBeenCalled();
+    });
+
+    test("touch move move release distance velocity OK 1s with widget", () => {
+        interaction.registerToNodes([canvas]);
+        robot(canvas)
+            .touchstart({},
+                [{"screenX": 50, "screenY": 20, "clientX": 100, "clientY": 200, "identifier": 3, "target": canvas}], 5000)
+            .touchmove({},
+                [{"screenX": 160, "screenY": 30, "clientX": 160, "clientY": 201, "identifier": 3, "target": canvas}], 5500)
+            .touchmove({},
+                [{"screenX": 450, "screenY": 30, "clientX": 500, "clientY": 210, "identifier": 3, "target": canvas}], 6000)
+            .touchend({},
+                [{"screenX": 450, "screenY": 30, "clientX": 500, "clientY": 210, "identifier": 3, "target": canvas}], 6000);
 
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
