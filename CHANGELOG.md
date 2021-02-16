@@ -1,3 +1,7 @@
+# 5.4.1
+
+* fix(release): incorrect release on NPM
+
 # 5.4.0
 
 * feat(cmd): async command support
