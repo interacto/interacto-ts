@@ -58,7 +58,7 @@ export class ComboBoxSelected extends InteractionBase<WidgetData<HTMLSelectEleme
      * Creates the interaction.
      */
     public constructor() {
-        super(new ComboBoxSelectedFSM());
+        super(new ComboBoxSelectedFSM(), new WidgetDataImpl<HTMLSelectElement>());
 
         this.handler = {
             "initToSelectedHandler": (event: Event): void => {
@@ -82,9 +82,5 @@ export class ComboBoxSelected extends InteractionBase<WidgetData<HTMLSelectEleme
         if (isComboBox(node)) {
             this.unregisterActionHandlerInput(node);
         }
-    }
-
-    protected createDataObject(): WidgetDataImpl<HTMLSelectElement> {
-        return new WidgetDataImpl<HTMLSelectElement>();
     }
 }

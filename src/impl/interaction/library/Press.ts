@@ -50,7 +50,7 @@ export class Press extends InteractionBase<PointData, PointDataImpl, PressFSM> {
     private readonly handler: PressFSMHandler;
 
     public constructor() {
-        super(new PressFSM());
+        super(new PressFSM(), new PointDataImpl());
 
         this.handler = {
             "initToPress": (evt: MouseEvent): void => {
@@ -63,9 +63,5 @@ export class Press extends InteractionBase<PointData, PointDataImpl, PressFSM> {
         };
 
         this.getFsm().buildFSM(this.handler);
-    }
-
-    protected createDataObject(): PointDataImpl {
-        return new PointDataImpl();
     }
 }

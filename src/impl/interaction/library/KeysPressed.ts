@@ -82,7 +82,7 @@ export class KeysPressed extends InteractionBase<KeysData, KeysDataImpl, KeysPre
      * Creates the user interaction.
      */
     public constructor() {
-        super(new KeysPressedFSM());
+        super(new KeysPressedFSM(), new KeysDataImpl());
 
         this.handler = {
             "onKeyPressed": (event: KeyboardEvent): void => {
@@ -95,9 +95,5 @@ export class KeysPressed extends InteractionBase<KeysData, KeysDataImpl, KeysPre
         };
 
         this.getFsm().buildFSM(this.handler);
-    }
-
-    protected createDataObject(): KeysDataImpl {
-        return new KeysDataImpl();
     }
 }

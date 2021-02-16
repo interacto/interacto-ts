@@ -128,7 +128,7 @@ export class DoubleClick extends InteractionBase<PointData, PointDataImpl, Doubl
     public readonly firstClick: Click;
 
     public constructor(fsm?: DoubleClickFSM) {
-        super(fsm ?? new DoubleClickFSM());
+        super(fsm ?? new DoubleClickFSM(), new PointDataImpl());
 
         this.firstClick = new Click(this.getFsm().firstClickFSM);
         this.getFsm().buildFSM(this);
@@ -141,9 +141,5 @@ export class DoubleClick extends InteractionBase<PointData, PointDataImpl, Doubl
 
     public getData(): PointData {
         return this.firstClick.getData();
-    }
-
-    protected createDataObject(): PointDataImpl {
-        return new PointDataImpl();
     }
 }

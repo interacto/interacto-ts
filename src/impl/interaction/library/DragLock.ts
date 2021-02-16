@@ -122,7 +122,34 @@ export class DragLock extends InteractionBase<SrcTgtPointsData, Flushable & SrcT
      * Creates a drag lock.
      */
     public constructor() {
-        super(new DragLockFSM());
+        super(new DragLockFSM(), {
+            "getTgtObject": (): EventTarget | undefined => (this.sndClick.getData().getButton() === undefined
+                ? this.firstClick.getData().getSrcObject()
+                : this.sndClick.getData().getSrcObject()),
+            "getTgtClientX": (): number => (this.sndClick.getData().getButton() === undefined ? this.data.getSrcClientX()
+                : this.sndClick.getData().getSrcClientX()),
+            "getTgtClientY": (): number => (this.sndClick.getData().getButton() === undefined ? this.data.getSrcClientY()
+                : this.sndClick.getData().getSrcClientY()),
+            "getTgtScreenX": (): number => (this.sndClick.getData().getButton() === undefined ? this.data.getSrcScreenX()
+                : this.sndClick.getData().getSrcScreenX()),
+            "getTgtScreenY": (): number => (this.sndClick.getData().getButton() === undefined ? this.data.getSrcScreenY()
+                : this.sndClick.getData().getSrcScreenY()),
+            "isAltPressed": (): boolean => this.firstClick.getData().isAltPressed(),
+            "isCtrlPressed": (): boolean => this.firstClick.getData().isCtrlPressed(),
+            "isShiftPressed": (): boolean => this.firstClick.getData().isShiftPressed(),
+            "isMetaPressed": (): boolean => this.firstClick.getData().isMetaPressed(),
+            "getButton": (): number | undefined => this.firstClick.getData().getButton(),
+            "getSrcClientX": (): number => this.firstClick.getData().getSrcClientX(),
+            "getSrcClientY": (): number => this.firstClick.getData().getSrcClientY(),
+            "getSrcObject": (): EventTarget | undefined => this.firstClick.getData().getSrcObject(),
+            "getSrcScreenX": (): number => this.firstClick.getData().getSrcScreenX(),
+            "getSrcScreenY": (): number => this.firstClick.getData().getSrcScreenY(),
+            "getCurrentTarget": (): EventTarget | undefined => this.firstClick.getData().getCurrentTarget(),
+            "flush": (): void => {
+                (this.firstClick.getData() as unknown as Flushable).flush();
+                (this.sndClick.getData() as unknown as Flushable).flush();
+            }
+        });
 
         this.handler = {
             "onMove": (evt: MouseEvent): void => {
@@ -144,52 +171,5 @@ export class DragLock extends InteractionBase<SrcTgtPointsData, Flushable & SrcT
         super.reinitData();
         this.firstClick.reinitData();
         this.sndClick.reinitData();
-    }
-
-    protected createDataObject(): Flushable & SrcTgtPointsData {
-        return {
-            "getTgtObject": (): EventTarget | undefined => (this.sndClick.getData().getButton() === undefined
-                ? this.firstClick.getData().getSrcObject()
-                : this.sndClick.getData().getSrcObject()),
-
-            "getTgtClientX": (): number => (this.sndClick.getData().getButton() === undefined ? this.data.getSrcClientX()
-                : this.sndClick.getData().getSrcClientX()),
-
-            "getTgtClientY": (): number => (this.sndClick.getData().getButton() === undefined ? this.data.getSrcClientY()
-                : this.sndClick.getData().getSrcClientY()),
-
-            "getTgtScreenX": (): number => (this.sndClick.getData().getButton() === undefined ? this.data.getSrcScreenX()
-                : this.sndClick.getData().getSrcScreenX()),
-
-            "getTgtScreenY": (): number => (this.sndClick.getData().getButton() === undefined ? this.data.getSrcScreenY()
-                : this.sndClick.getData().getSrcScreenY()),
-
-            "isAltPressed": (): boolean => this.firstClick.getData().isAltPressed(),
-
-            "isCtrlPressed": (): boolean => this.firstClick.getData().isCtrlPressed(),
-
-            "isShiftPressed": (): boolean => this.firstClick.getData().isShiftPressed(),
-
-            "isMetaPressed": (): boolean => this.firstClick.getData().isMetaPressed(),
-
-            "getButton": (): number | undefined => this.firstClick.getData().getButton(),
-
-            "getSrcClientX": (): number => this.firstClick.getData().getSrcClientX(),
-
-            "getSrcClientY": (): number => this.firstClick.getData().getSrcClientY(),
-
-            "getSrcObject": (): EventTarget | undefined => this.firstClick.getData().getSrcObject(),
-
-            "getSrcScreenX": (): number => this.firstClick.getData().getSrcScreenX(),
-
-            "getSrcScreenY": (): number => this.firstClick.getData().getSrcScreenY(),
-
-            "getCurrentTarget": (): EventTarget | undefined => this.firstClick.getData().getCurrentTarget(),
-
-            "flush": (): void => {
-                (this.firstClick.getData() as unknown as Flushable).flush();
-                (this.sndClick.getData() as unknown as Flushable).flush();
-            }
-        };
     }
 }

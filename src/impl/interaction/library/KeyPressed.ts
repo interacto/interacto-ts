@@ -71,7 +71,7 @@ export class KeyPressed extends InteractionBase<KeyData, KeyDataImpl, KeyPressed
     private readonly handler: KeyPressedFSMHandler;
 
     public constructor(modifierAccepted: boolean, fsm?: KeyPressedFSM) {
-        super(fsm ?? new KeyPressedFSM(modifierAccepted));
+        super(fsm ?? new KeyPressedFSM(modifierAccepted), new KeyDataImpl());
 
         this.handler = {
             "onKeyPressed": (event: KeyboardEvent): void => {
@@ -83,9 +83,5 @@ export class KeyPressed extends InteractionBase<KeyData, KeyDataImpl, KeyPressed
         };
 
         this.getFsm().buildFSM(this.handler);
-    }
-
-    public createDataObject(): KeyDataImpl {
-        return new KeyDataImpl();
     }
 }

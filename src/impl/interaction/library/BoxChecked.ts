@@ -57,7 +57,7 @@ export class BoxChecked extends InteractionBase<WidgetData<HTMLInputElement>, Wi
      * Creates the interaction.
      */
     public constructor() {
-        super(new BoxCheckedFSM());
+        super(new BoxCheckedFSM(), new WidgetDataImpl<HTMLInputElement>());
 
         this.handler = {
             "initToCheckHandler": (event: Event): void => {
@@ -81,9 +81,5 @@ export class BoxChecked extends InteractionBase<WidgetData<HTMLInputElement>, Wi
         if (isCheckBox(node)) {
             this.unregisterActionHandlerInput(node);
         }
-    }
-
-    protected createDataObject(): WidgetDataImpl<HTMLInputElement> {
-        return new WidgetDataImpl<HTMLInputElement>();
     }
 }

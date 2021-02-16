@@ -93,7 +93,7 @@ export class LongPress extends InteractionBase<PointData, PointDataImpl, LongPre
      * If this duration is not reached, the interaction is cancelled.
      */
     public constructor(duration: number) {
-        super(new LongPressFSM(duration));
+        super(new LongPressFSM(duration), new PointDataImpl());
 
         this.handler = {
             "press": (evt: MouseEvent): void => {
@@ -107,9 +107,5 @@ export class LongPress extends InteractionBase<PointData, PointDataImpl, LongPre
         };
 
         this.getFsm().buildFSM(this.handler);
-    }
-
-    protected createDataObject(): PointDataImpl {
-        return new PointDataImpl();
     }
 }

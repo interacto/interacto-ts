@@ -33,9 +33,10 @@ export abstract class ConcurrentInteraction<D extends InteractionData, DImpl ext
     /**
      * Creates the concurrent interaction.
      * @param fsm - The concurrent FSM that defines the behavior of the user interaction.
+     * @param data - The interaction data.
      */
-    protected constructor(fsm: F) {
-        super(fsm);
+    protected constructor(fsm: F, data: DImpl) {
+        super(fsm, data);
         this.subscriptions = this.fsm.getConccurFSMs()
             .map(conc => conc.currentStateObservable()
                 .subscribe(current => {

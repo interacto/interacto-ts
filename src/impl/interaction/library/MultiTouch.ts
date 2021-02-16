@@ -66,7 +66,7 @@ export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouch
      * @param nbTouches - The number of touches.
      */
     public constructor(nbTouches: number) {
-        super(new MultiTouchFSM(nbTouches));
+        super(new MultiTouchFSM(nbTouches), new MultiTouchDataImpl());
 
         this.handler = {
             "onTouch": (event: TouchEvent): void => {
@@ -99,9 +99,5 @@ export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouch
         };
 
         this.fsm.buildFSM(this.handler);
-    }
-
-    protected createDataObject(): MultiTouchDataImpl {
-        return new MultiTouchDataImpl();
     }
 }

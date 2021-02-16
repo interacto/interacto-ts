@@ -77,7 +77,7 @@ export class Click extends InteractionBase<PointData, PointDataImpl, ClickFSM> {
      * Creates the interaction.
      */
     public constructor(fsm?: ClickFSM) {
-        super(fsm ?? new ClickFSM());
+        super(fsm ?? new ClickFSM(), new PointDataImpl());
 
         this.handler = {
             "initToClicked": (evt: MouseEvent): void => {
@@ -90,9 +90,5 @@ export class Click extends InteractionBase<PointData, PointDataImpl, ClickFSM> {
         };
 
         this.getFsm().buildFSM(this.handler);
-    }
-
-    protected createDataObject(): PointDataImpl {
-        return new PointDataImpl();
     }
 }

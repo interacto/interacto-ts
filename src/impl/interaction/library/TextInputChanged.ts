@@ -82,7 +82,7 @@ WidgetDataImpl<HTMLInputElement | HTMLTextAreaElement>, TextInputChangedFSM> {
     private readonly handler: TextInputChangedHandler;
 
     public constructor(timeGap?: number) {
-        super(new TextInputChangedFSM(timeGap));
+        super(new TextInputChangedFSM(timeGap), new WidgetDataImpl<HTMLInputElement | HTMLTextAreaElement>());
 
         this.handler = {
             "initToChangedHandler": (event: Event): void => {
@@ -108,9 +108,5 @@ WidgetDataImpl<HTMLInputElement | HTMLTextAreaElement>, TextInputChangedFSM> {
         if (isTextInput(node)) {
             this.unregisterActionHandlerInput(node);
         }
-    }
-
-    protected createDataObject(): WidgetDataImpl<HTMLInputElement | HTMLTextAreaElement> {
-        return new WidgetDataImpl<HTMLInputElement | HTMLTextAreaElement>();
     }
 }

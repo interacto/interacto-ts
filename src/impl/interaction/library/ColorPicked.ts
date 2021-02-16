@@ -57,7 +57,7 @@ export class ColorPicked extends InteractionBase<WidgetData<HTMLInputElement>, W
      * Creates the interaction.
      */
     public constructor() {
-        super(new ColorPickedFSM());
+        super(new ColorPickedFSM(), new WidgetDataImpl<HTMLInputElement>());
 
         this.handler = {
             "initToPickedHandler": (event: Event): void => {
@@ -81,9 +81,5 @@ export class ColorPicked extends InteractionBase<WidgetData<HTMLInputElement>, W
         if (isColorChoice(node)) {
             this.unregisterActionHandlerInput(node);
         }
-    }
-
-    protected createDataObject(): WidgetDataImpl<HTMLInputElement> {
-        return new WidgetDataImpl<HTMLInputElement>();
     }
 }

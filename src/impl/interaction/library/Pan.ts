@@ -175,7 +175,7 @@ export class Pan extends InteractionBase<SrcTgtTouchData, SrcTgtTouchDataImpl, P
      * @param fsm - The finiste-state machine to use for this interaction (can be undefined)
      */
     public constructor(horizontal: boolean, minLength: number, pxTolerance: number, fsm?: PanFSM) {
-        super(fsm ?? new PanFSM(horizontal, minLength, pxTolerance));
+        super(fsm ?? new PanFSM(horizontal, minLength, pxTolerance), new SrcTgtTouchDataImpl());
 
         this.handler = {
             "touch": (evt: TouchEvent): void => {
@@ -199,9 +199,5 @@ export class Pan extends InteractionBase<SrcTgtTouchData, SrcTgtTouchDataImpl, P
         };
 
         this.getFsm().buildFSM(this.handler);
-    }
-
-    protected createDataObject(): SrcTgtTouchDataImpl {
-        return new SrcTgtTouchDataImpl();
     }
 }

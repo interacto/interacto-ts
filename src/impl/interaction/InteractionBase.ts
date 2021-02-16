@@ -80,12 +80,13 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
     /**
      * Creates the interaction.
      * @param fsm - The FSM that defines the behavior of the user interaction.
+     * @param data - The interaction data.
      */
-    public constructor(fsm: F) {
+    public constructor(fsm: F, data: DImpl) {
         this.activated = false;
         this.stopImmediatePropag = false;
         this.preventDef = false;
-        this.data = this.createDataObject();
+        this.data = data;
         this.fsm = fsm;
         this.disposable = this.fsm.currentStateObservable().subscribe(current => {
             this.updateEventsRegistered(current[1], current[0]);
@@ -96,8 +97,6 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
         this.mutationObservers = [];
         this.throttleTimeout = 0;
     }
-
-    protected abstract createDataObject(): DImpl;
 
     public reinitData(): void {
         this.data.flush();

@@ -87,7 +87,7 @@ export class SpinnerChanged extends InteractionBase<WidgetData<HTMLInputElement>
      * Creates the interaction.
      */
     public constructor() {
-        super(new SpinnerChangedFSM());
+        super(new SpinnerChangedFSM(), new WidgetDataImpl<HTMLInputElement>());
 
         this.handler = {
             "initToChangedHandler": (event: Event): void => {
@@ -111,9 +111,5 @@ export class SpinnerChanged extends InteractionBase<WidgetData<HTMLInputElement>
         if (isSpinner(node)) {
             this.unregisterActionHandlerInput(node);
         }
-    }
-
-    protected createDataObject(): WidgetDataImpl<HTMLInputElement> {
-        return new WidgetDataImpl<HTMLInputElement>();
     }
 }

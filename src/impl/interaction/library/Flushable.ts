@@ -15,9 +15,3 @@
 export interface Flushable {
     flush(): void;
 }
-
-// export function isFlushable(o: unknown): o is Flushable {
-//     const flushable = o as Flushable;
-//     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-//     return flushable.flush !== undefined;
-// }

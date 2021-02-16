@@ -61,7 +61,7 @@ export class ButtonPressed extends InteractionBase<WidgetData<HTMLButtonElement>
      * Creates the interaction.
      */
     public constructor() {
-        super(new ButtonPressedFSM());
+        super(new ButtonPressedFSM(), new WidgetDataImpl<HTMLButtonElement>());
 
         this.handler = {
             "initToPressedHandler": (event: InputEvent): void => {
@@ -85,9 +85,5 @@ export class ButtonPressed extends InteractionBase<WidgetData<HTMLButtonElement>
         if (isButton(node)) {
             this.unregisterActionHandlerClick(node);
         }
-    }
-
-    protected createDataObject(): WidgetDataImpl<HTMLButtonElement> {
-        return new WidgetDataImpl<HTMLButtonElement>();
     }
 }

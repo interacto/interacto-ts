@@ -57,7 +57,7 @@ export class HyperLinkClicked extends InteractionBase<WidgetData<HTMLAnchorEleme
      * Creates the interaction.
      */
     public constructor() {
-        super(new HyperLinkClickedFSM());
+        super(new HyperLinkClickedFSM(), new WidgetDataImpl<HTMLAnchorElement>());
 
         this.handler = {
             "initToClickedHandler": (event: Event): void => {
@@ -81,9 +81,5 @@ export class HyperLinkClicked extends InteractionBase<WidgetData<HTMLAnchorEleme
         if (isHyperLink(node)) {
             this.unregisterActionHandlerInput(node);
         }
-    }
-
-    protected createDataObject(): WidgetDataImpl<HTMLAnchorElement> {
-        return new WidgetDataImpl<HTMLAnchorElement>();
     }
 }

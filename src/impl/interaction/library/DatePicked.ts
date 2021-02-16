@@ -58,7 +58,7 @@ export class DatePicked extends InteractionBase<WidgetData<HTMLInputElement>, Wi
      * Creates the interaction.
      */
     public constructor() {
-        super(new DatePickedFSM());
+        super(new DatePickedFSM(), new WidgetDataImpl<HTMLInputElement>());
 
         this.handler = {
             "initToPickedHandler": (event: Event): void => {
@@ -82,9 +82,5 @@ export class DatePicked extends InteractionBase<WidgetData<HTMLInputElement>, Wi
         if (isDatePicker(node)) {
             this.unregisterActionHandlerInput(node);
         }
-    }
-
-    protected createDataObject(): WidgetDataImpl<HTMLInputElement> {
-        return new WidgetDataImpl<HTMLInputElement>();
     }
 }

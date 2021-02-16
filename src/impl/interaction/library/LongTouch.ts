@@ -93,7 +93,7 @@ export class LongTouch extends InteractionBase<TouchData, TouchDataImpl, LongTou
      * If this duration is not reached, the interaction is cancelled.
      */
     public constructor(duration: number) {
-        super(new LongTouchFSM(duration));
+        super(new LongTouchFSM(duration), new TouchDataImpl());
 
         this.handler = {
             "tap": (evt: TouchEvent): void => {
@@ -110,9 +110,5 @@ export class LongTouch extends InteractionBase<TouchData, TouchDataImpl, LongTou
         };
 
         this.getFsm().buildFSM(this.handler);
-    }
-
-    protected createDataObject(): TouchDataImpl {
-        return new TouchDataImpl();
     }
 }

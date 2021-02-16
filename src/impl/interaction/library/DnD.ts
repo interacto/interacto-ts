@@ -115,7 +115,7 @@ export class DnD extends InteractionBase<SrcTgtPointsData, SrcTgtPointsDataImpl,
      * Creates the interaction.
      */
     public constructor(cancellable: boolean) {
-        super(new DnDFSM(cancellable));
+        super(new DnDFSM(cancellable), new SrcTgtPointsDataImpl());
 
         this.handler = {
             "onPress": (evt: MouseEvent): void => {
@@ -140,9 +140,5 @@ export class DnD extends InteractionBase<SrcTgtPointsData, SrcTgtPointsDataImpl,
     private setTgt(evt: MouseEvent): void {
         this.data.setTgtData(evt.clientX, evt.clientY, evt.screenX, evt.screenY, evt.target ?? undefined);
         this.data.setModifiersData(evt);
-    }
-
-    protected createDataObject(): SrcTgtPointsDataImpl {
-        return new SrcTgtPointsDataImpl();
     }
 }

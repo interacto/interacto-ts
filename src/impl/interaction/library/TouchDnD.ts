@@ -100,7 +100,7 @@ export class TouchDnD extends InteractionBase<SrcTgtTouchData, SrcTgtTouchDataIm
      * Creates the interaction.
      */
     public constructor(fsm?: TouchDnDFSM) {
-        super(fsm ?? new TouchDnDFSM());
+        super(fsm ?? new TouchDnDFSM(), new SrcTgtTouchDataImpl());
 
         this.handler = {
             "onTouch": (evt: TouchEvent): void => {
@@ -129,9 +129,5 @@ export class TouchDnD extends InteractionBase<SrcTgtTouchData, SrcTgtTouchDataIm
         if (touch !== undefined) {
             this.data.setTgtData(touch.clientX, touch.clientY, touch.screenX, touch.screenY, touch.target);
         }
-    }
-
-    protected createDataObject(): SrcTgtTouchDataImpl {
-        return new SrcTgtTouchDataImpl();
     }
 }

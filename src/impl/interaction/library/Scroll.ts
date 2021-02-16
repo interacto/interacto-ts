@@ -54,7 +54,7 @@ export class Scroll extends InteractionBase<ScrollData, ScrollDataImpl, ScrollFS
     private readonly handler: ScrollFSMHandler;
 
     public constructor() {
-        super(new ScrollFSM());
+        super(new ScrollFSM(), new ScrollDataImpl());
 
         this.handler = {
             "initToScroll": (event: UIEvent): void => {
@@ -66,9 +66,5 @@ export class Scroll extends InteractionBase<ScrollData, ScrollDataImpl, ScrollFS
         };
 
         this.getFsm().buildFSM(this.handler);
-    }
-
-    protected createDataObject(): ScrollDataImpl {
-        return new ScrollDataImpl();
     }
 }

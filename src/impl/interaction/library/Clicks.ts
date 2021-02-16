@@ -104,7 +104,7 @@ export class Clicks extends InteractionBase<PointsData, PointsDataImpl, ClicksFS
      * If this number is not reached after a timeout, the interaction is cancelled.
      */
     public constructor(numberClicks: number) {
-        super(new ClicksFSM(numberClicks));
+        super(new ClicksFSM(numberClicks), new PointsDataImpl());
 
         this.handler = {
             "click": (evt: MouseEvent): void => {
@@ -120,9 +120,5 @@ export class Clicks extends InteractionBase<PointsData, PointsDataImpl, ClicksFS
         };
 
         this.getFsm().buildFSM(this.handler);
-    }
-
-    protected createDataObject(): PointsDataImpl {
-        return new PointsDataImpl();
     }
 }

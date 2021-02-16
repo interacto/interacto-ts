@@ -107,7 +107,7 @@ export class Tap extends InteractionBase<TapData, TapDataImpl, TapFSM> {
      * If this number is not reached after a timeout, the interaction is cancelled.
      */
     public constructor(numberTaps: number) {
-        super(new TapFSM(numberTaps));
+        super(new TapFSM(numberTaps), new TapDataImpl());
 
         this.handler = {
             "tap": (evt: TouchEvent): void => {
@@ -123,9 +123,5 @@ export class Tap extends InteractionBase<TapData, TapDataImpl, TapFSM> {
         };
 
         this.getFsm().buildFSM(this.handler);
-    }
-
-    protected createDataObject(): TapDataImpl {
-        return new TapDataImpl();
     }
 }
