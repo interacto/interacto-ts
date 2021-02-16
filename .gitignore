@@ -2,10 +2,11 @@ node_modules/
 .idea/
 *.iml
 .tscache/
-coverage/
 .rpt2_cache/
 dist/
 docs/
 *.tgz
 .vscode
 out-test/
+reports
+.stryker-tmp

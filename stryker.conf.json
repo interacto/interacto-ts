@@ -1,0 +1,15 @@
+{
+  "$schema": "./node_modules/@stryker-mutator/core/schema/stryker-schema.json",
+  "packageManager": "npm",
+  "reporters": [
+    "html",
+    "clear-text",
+    "progress"
+  ],
+  "testRunner": "jest",
+  "coverageAnalysis": "perTest",
+  "mutator": { "plugins": ["classProperties"],
+    "excludedMutations": ["ArithmeticOperator", "ArrayDeclaration", "AssignmentExpression",
+      "BooleanLiteral", "CheckedStatement", "ConditionalExpression", "EqualityOperator",
+      "LogicalOperator", "MethodExpression", "StringLiteral", "UnaryOperator", "UpdateOperator"] }
+}
