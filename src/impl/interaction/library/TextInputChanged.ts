@@ -77,8 +77,8 @@ interface TextInputChangedHandler extends FSMDataHandler {
 /**
  * A user interaction for Number input.
  */
-export class TextInputChanged extends
-    InteractionBase<WidgetData<HTMLInputElement | HTMLTextAreaElement>, TextInputChangedFSM> {
+export class TextInputChanged extends InteractionBase<WidgetData<HTMLInputElement | HTMLTextAreaElement>,
+WidgetDataImpl<HTMLInputElement | HTMLTextAreaElement>, TextInputChangedFSM> {
     private readonly handler: TextInputChangedHandler;
 
     public constructor(timeGap?: number) {
@@ -87,7 +87,7 @@ export class TextInputChanged extends
         this.handler = {
             "initToChangedHandler": (event: Event): void => {
                 if (event.target !== null && isTextInput(event.target)) {
-                    (this.data as WidgetDataImpl<HTMLInputElement | HTMLTextAreaElement>).setWidget(event.target);
+                    this.data.setWidget(event.target);
                 }
             },
             "reinitData": (): void => {
@@ -110,7 +110,7 @@ export class TextInputChanged extends
         }
     }
 
-    public createDataObject(): WidgetData<HTMLInputElement | HTMLTextAreaElement> {
+    protected createDataObject(): WidgetDataImpl<HTMLInputElement | HTMLTextAreaElement> {
         return new WidgetDataImpl<HTMLInputElement | HTMLTextAreaElement>();
     }
 }

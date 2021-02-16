@@ -108,7 +108,7 @@ interface DnDFSMHandler extends FSMDataHandler {
 /**
  * A user interaction for Drag and Drop
  */
-export class DnD extends InteractionBase<SrcTgtPointsData, DnDFSM> {
+export class DnD extends InteractionBase<SrcTgtPointsData, SrcTgtPointsDataImpl, DnDFSM> {
     private readonly handler: DnDFSMHandler;
 
     /**
@@ -119,7 +119,7 @@ export class DnD extends InteractionBase<SrcTgtPointsData, DnDFSM> {
 
         this.handler = {
             "onPress": (evt: MouseEvent): void => {
-                (this.data as (SrcTgtPointsDataImpl)).setPointData(evt.clientX, evt.clientY, evt.screenX, evt.screenY,
+                this.data.setPointData(evt.clientX, evt.clientY, evt.screenX, evt.screenY,
                     evt.button, evt.target ?? undefined, evt.currentTarget ?? undefined);
                 this.setTgt(evt);
             },
@@ -138,11 +138,11 @@ export class DnD extends InteractionBase<SrcTgtPointsData, DnDFSM> {
     }
 
     private setTgt(evt: MouseEvent): void {
-        (this.data as (SrcTgtPointsDataImpl)).setTgtData(evt.clientX, evt.clientY, evt.screenX, evt.screenY, evt.target ?? undefined);
-        (this.data as (SrcTgtPointsDataImpl)).setModifiersData(evt);
+        this.data.setTgtData(evt.clientX, evt.clientY, evt.screenX, evt.screenY, evt.target ?? undefined);
+        this.data.setModifiersData(evt);
     }
 
-    public createDataObject(): SrcTgtPointsData {
+    protected createDataObject(): SrcTgtPointsDataImpl {
         return new SrcTgtPointsDataImpl();
     }
 }

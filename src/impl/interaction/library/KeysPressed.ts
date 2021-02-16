@@ -75,7 +75,7 @@ interface KeysPressedFSMHandler extends FSMDataHandler {
  * Several keys pressed at the same time.
  * Starts on a key pressure. Ends as soon as one of the pressed keys is released.
  */
-export class KeysPressed extends InteractionBase<KeysData, KeysPressedFSM> {
+export class KeysPressed extends InteractionBase<KeysData, KeysDataImpl, KeysPressedFSM> {
     private readonly handler: KeysPressedFSMHandler;
 
     /**
@@ -86,8 +86,8 @@ export class KeysPressed extends InteractionBase<KeysData, KeysPressedFSM> {
 
         this.handler = {
             "onKeyPressed": (event: KeyboardEvent): void => {
-                (this.data as (KeysDataImpl)).setKeysDataTarget(event);
-                (this.data as (KeysDataImpl)).addKeysDataKey(event);
+                this.data.setKeysDataTarget(event);
+                this.data.addKeysDataKey(event);
             },
             "reinitData": (): void => {
                 this.reinitData();
@@ -97,7 +97,7 @@ export class KeysPressed extends InteractionBase<KeysData, KeysPressedFSM> {
         this.getFsm().buildFSM(this.handler);
     }
 
-    public createDataObject(): KeysData {
+    protected createDataObject(): KeysDataImpl {
         return new KeysDataImpl();
     }
 }

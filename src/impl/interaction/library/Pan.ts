@@ -163,7 +163,7 @@ interface PanFSMDataHandler extends FSMDataHandler {
 /**
  * A Pan user interaction.
  */
-export class Pan extends InteractionBase<SrcTgtTouchData, PanFSM> {
+export class Pan extends InteractionBase<SrcTgtTouchData, SrcTgtTouchDataImpl, PanFSM> {
     private readonly handler: PanFSMDataHandler;
 
 
@@ -180,21 +180,18 @@ export class Pan extends InteractionBase<SrcTgtTouchData, PanFSM> {
         this.handler = {
             "touch": (evt: TouchEvent): void => {
                 const touch: Touch = evt.changedTouches[0];
-                const data = (this.data as (SrcTgtTouchDataImpl));
-                data.setPointData(touch.clientX, touch.clientY, touch.screenX, touch.screenY,
+                this.data.setPointData(touch.clientX, touch.clientY, touch.screenX, touch.screenY,
                     undefined, touch.target, touch.target);
-                data.setTouchId(touch.identifier);
-                data.setTgtData(touch.clientX, touch.clientY, touch.screenX, touch.screenY, touch.target);
+                this.data.setTouchId(touch.identifier);
+                this.data.setTgtData(touch.clientX, touch.clientY, touch.screenX, touch.screenY, touch.target);
             },
             "panning": (evt: TouchEvent): void => {
                 const touch: Touch = evt.changedTouches[0];
-                (this.data as (SrcTgtTouchDataImpl)).setTgtData(touch.clientX, touch.clientY, touch.screenX,
-                    touch.screenY, touch.target);
+                this.data.setTgtData(touch.clientX, touch.clientY, touch.screenX, touch.screenY, touch.target);
             },
             "panned": (evt: TouchEvent): void => {
                 const touch: Touch = evt.changedTouches[0];
-                (this.data as (SrcTgtTouchDataImpl)).setTgtData(touch.clientX, touch.clientY, touch.screenX,
-                    touch.screenY, touch.target);
+                this.data.setTgtData(touch.clientX, touch.clientY, touch.screenX, touch.screenY, touch.target);
             },
             "reinitData": (): void => {
                 this.reinitData();
@@ -204,7 +201,7 @@ export class Pan extends InteractionBase<SrcTgtTouchData, PanFSM> {
         this.getFsm().buildFSM(this.handler);
     }
 
-    public createDataObject(): SrcTgtTouchData {
+    protected createDataObject(): SrcTgtTouchDataImpl {
         return new SrcTgtTouchDataImpl();
     }
 }

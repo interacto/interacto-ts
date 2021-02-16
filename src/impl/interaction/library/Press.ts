@@ -43,7 +43,7 @@ interface PressFSMHandler extends FSMDataHandler {
 /**
  * A user interaction for pressing down the mouse button.
  */
-export class Press extends InteractionBase<PointData, PressFSM> {
+export class Press extends InteractionBase<PointData, PointDataImpl, PressFSM> {
     /**
      * Creates the interaction.
      */
@@ -54,9 +54,8 @@ export class Press extends InteractionBase<PointData, PressFSM> {
 
         this.handler = {
             "initToPress": (evt: MouseEvent): void => {
-                (this.data as PointDataImpl)
-                    .setPointData(evt.clientX, evt.clientY, evt.screenX, evt.screenY, evt.button,
-                        evt.target ?? undefined, evt.currentTarget ?? undefined);
+                this.data.setPointData(evt.clientX, evt.clientY, evt.screenX, evt.screenY, evt.button,
+                    evt.target ?? undefined, evt.currentTarget ?? undefined);
             },
             "reinitData": (): void => {
                 this.reinitData();
@@ -66,7 +65,7 @@ export class Press extends InteractionBase<PointData, PressFSM> {
         this.getFsm().buildFSM(this.handler);
     }
 
-    public createDataObject(): PointData {
+    protected createDataObject(): PointDataImpl {
         return new PointDataImpl();
     }
 }

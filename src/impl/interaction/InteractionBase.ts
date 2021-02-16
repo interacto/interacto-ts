@@ -21,7 +21,7 @@ import {isKeyEvent, isMouseEvent, isTouchEvent} from "../fsm/Events";
 import {Subscription} from "rxjs";
 import {Interaction} from "../../api/interaction/Interaction";
 import {EventType} from "../../api/fsm/EventType";
-import {isFlushable} from "./library/Flushable";
+import {Flushable} from "./library/Flushable";
 
 
 interface CancellablePromise extends Promise<void> {
@@ -33,7 +33,7 @@ interface CancellablePromise extends Promise<void> {
  * @typeParam D - The type of the interaction data.
  * @typeParam F - The type of the FSM.
  */
-export abstract class InteractionBase<D extends InteractionData, F extends FSM> implements Interaction<D> {
+export abstract class InteractionBase<D extends InteractionData, DImpl extends D & Flushable, F extends FSM> implements Interaction<D> {
     protected readonly fsm: F;
 
     protected asLog: boolean;
@@ -47,7 +47,7 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
     protected readonly mutationObservers: Array<MutationObserver>;
 
     /** The interaction data */
-    protected readonly data: D;
+    protected readonly data: DImpl;
 
     private mouseHandler?: ((e: MouseEvent) => void);
 
@@ -97,12 +97,10 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
         this.throttleTimeout = 0;
     }
 
-    protected abstract createDataObject(): D;
+    protected abstract createDataObject(): DImpl;
 
     public reinitData(): void {
-        if (isFlushable(this.data)) {
-            this.data.flush();
-        }
+        this.data.flush();
     }
 
     public getData(): D {

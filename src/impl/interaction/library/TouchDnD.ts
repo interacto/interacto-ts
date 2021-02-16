@@ -93,7 +93,7 @@ export interface TouchDnDFSMHandler extends FSMDataHandler {
 /**
  * A touch interaction (that works as a DnD)
  */
-export class TouchDnD extends InteractionBase<SrcTgtTouchData, TouchDnDFSM> {
+export class TouchDnD extends InteractionBase<SrcTgtTouchData, SrcTgtTouchDataImpl, TouchDnDFSM> {
     private readonly handler: TouchDnDFSMHandler;
 
     /**
@@ -105,9 +105,9 @@ export class TouchDnD extends InteractionBase<SrcTgtTouchData, TouchDnDFSM> {
         this.handler = {
             "onTouch": (evt: TouchEvent): void => {
                 const touch: Touch = evt.changedTouches[0];
-                (this.data as (SrcTgtTouchDataImpl)).setPointData(touch.clientX, touch.clientY, touch.screenX, touch.screenY,
+                this.data.setPointData(touch.clientX, touch.clientY, touch.screenX, touch.screenY,
                     undefined, touch.target, touch.target);
-                (this.data as (SrcTgtTouchDataImpl)).setTouchId(touch.identifier);
+                this.data.setTouchId(touch.identifier);
                 this.setTgtData(evt);
             },
             "onMove": (evt: TouchEvent): void => {
@@ -125,14 +125,13 @@ export class TouchDnD extends InteractionBase<SrcTgtTouchData, TouchDnDFSM> {
     }
 
     private setTgtData(evt: TouchEvent): void {
-        const data = this.data as (SrcTgtTouchDataImpl);
-        const touch: Touch | undefined = getTouch(evt.changedTouches, data.getTouchId());
+        const touch: Touch | undefined = getTouch(evt.changedTouches, this.data.getTouchId());
         if (touch !== undefined) {
-            data.setTgtData(touch.clientX, touch.clientY, touch.screenX, touch.screenY, touch.target);
+            this.data.setTgtData(touch.clientX, touch.clientY, touch.screenX, touch.screenY, touch.target);
         }
     }
 
-    public createDataObject(): SrcTgtTouchData {
+    protected createDataObject(): SrcTgtTouchDataImpl {
         return new SrcTgtTouchDataImpl();
     }
 }

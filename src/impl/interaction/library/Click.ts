@@ -70,7 +70,7 @@ interface ClickFSMHandler extends FSMDataHandler {
     initToClicked(event: MouseEvent): void;
 }
 
-export class Click extends InteractionBase<PointData, ClickFSM> {
+export class Click extends InteractionBase<PointData, PointDataImpl, ClickFSM> {
     private readonly handler: ClickFSMHandler;
 
     /**
@@ -81,7 +81,7 @@ export class Click extends InteractionBase<PointData, ClickFSM> {
 
         this.handler = {
             "initToClicked": (evt: MouseEvent): void => {
-                (this.data as PointDataImpl).setPointData(evt.clientX, evt.clientY, evt.screenX, evt.screenY,
+                this.data.setPointData(evt.clientX, evt.clientY, evt.screenX, evt.screenY,
                     evt.button, evt.target ?? undefined, evt.currentTarget ?? undefined);
             },
             "reinitData": (): void => {
@@ -92,7 +92,7 @@ export class Click extends InteractionBase<PointData, ClickFSM> {
         this.getFsm().buildFSM(this.handler);
     }
 
-    public createDataObject(): PointData {
+    protected createDataObject(): PointDataImpl {
         return new PointDataImpl();
     }
 }

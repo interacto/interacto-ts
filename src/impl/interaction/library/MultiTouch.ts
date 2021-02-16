@@ -58,7 +58,7 @@ export class MultiTouchFSM extends ConcurrentFSM<TouchDnDFSM> {
  * A multi-touch starts when all its touches have started.
  * A multi-touch ends when the number of required touches is greater than the number of touches.
  */
-export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouchFSM> {
+export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouchDataImpl, MultiTouchFSM> {
     private readonly handler: TouchDnDFSMHandler;
 
     /**
@@ -72,16 +72,16 @@ export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouch
             "onTouch": (event: TouchEvent): void => {
                 if (event.changedTouches.length > 0) {
                     const touch = event.changedTouches[0];
-                    (this.data as (MultiTouchDataImpl)).addTouchData(
-                        new SrcTgtTouchDataImpl(touch.identifier, touch.clientX, touch.clientY, touch.screenX, touch.screenY, touch.target));
+                    this.data.addTouchData(new SrcTgtTouchDataImpl(touch.identifier, touch.clientX, touch.clientY,
+                        touch.screenX, touch.screenY, touch.target));
                 }
             },
             "onMove": (event: TouchEvent): void => {
-                (this.data as MultiTouchDataImpl).setTouch(event.changedTouches[0]);
+                this.data.setTouch(event.changedTouches[0]);
             },
 
             "onRelease": (event: TouchEvent): void => {
-                (this.data as MultiTouchDataImpl).setTouch(event.changedTouches[0]);
+                this.data.setTouch(event.changedTouches[0]);
             },
 
             "reinitData": (): void => {
@@ -101,7 +101,7 @@ export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouch
         this.fsm.buildFSM(this.handler);
     }
 
-    protected createDataObject(): MultiTouchData {
+    protected createDataObject(): MultiTouchDataImpl {
         return new MultiTouchDataImpl();
     }
 }

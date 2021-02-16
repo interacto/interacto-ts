@@ -95,7 +95,7 @@ interface ClicksFSMHandler extends FSMDataHandler {
 }
 
 
-export class Clicks extends InteractionBase<PointsData, ClicksFSM> {
+export class Clicks extends InteractionBase<PointsData, PointsDataImpl, ClicksFSM> {
     private readonly handler: ClicksFSMHandler;
 
     /**
@@ -112,7 +112,7 @@ export class Clicks extends InteractionBase<PointsData, ClicksFSM> {
                 pt.setPointData(evt.clientX, evt.clientY, evt.screenX, evt.screenY,
                     evt.button, evt.target ?? undefined, evt.currentTarget ?? undefined);
                 pt.setModifiersData(evt);
-                (this.data as PointsDataImpl).addPoint(pt);
+                this.data.addPoint(pt);
             },
             "reinitData": (): void => {
                 this.reinitData();
@@ -122,7 +122,7 @@ export class Clicks extends InteractionBase<PointsData, ClicksFSM> {
         this.getFsm().buildFSM(this.handler);
     }
 
-    protected createDataObject(): PointsData {
+    protected createDataObject(): PointsDataImpl {
         return new PointsDataImpl();
     }
 }

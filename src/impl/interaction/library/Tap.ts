@@ -98,7 +98,7 @@ interface TapFSMHandler extends FSMDataHandler {
  * This touch interaction takes as input the number of taps expected to end the interaction.
  * If this number is not reached after a timeout, the interaction is cancelled.
  */
-export class Tap extends InteractionBase<TapData, TapFSM> {
+export class Tap extends InteractionBase<TapData, TapDataImpl, TapFSM> {
     private readonly handler: TapFSMHandler;
 
     /**
@@ -113,9 +113,8 @@ export class Tap extends InteractionBase<TapData, TapFSM> {
             "tap": (evt: TouchEvent): void => {
                 if (evt.changedTouches.length > 0) {
                     const touch = evt.changedTouches[0];
-                    (this.data as (TapDataImpl)).addTapData(
-                        new TouchDataImpl(touch.identifier, touch.clientX, touch.clientY,
-                            touch.screenX, touch.screenY, touch.target));
+                    this.data.addTapData(new TouchDataImpl(touch.identifier, touch.clientX, touch.clientY,
+                        touch.screenX, touch.screenY, touch.target));
                 }
             },
             "reinitData": (): void => {
@@ -126,7 +125,7 @@ export class Tap extends InteractionBase<TapData, TapFSM> {
         this.getFsm().buildFSM(this.handler);
     }
 
-    protected createDataObject(): TapData {
+    protected createDataObject(): TapDataImpl {
         return new TapDataImpl();
     }
 }

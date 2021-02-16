@@ -50,7 +50,7 @@ interface ColorPickedHandler extends FSMDataHandler {
  * A user interaction for CheckBox
  */
 
-export class ColorPicked extends InteractionBase<WidgetData<HTMLInputElement>, ColorPickedFSM> {
+export class ColorPicked extends InteractionBase<WidgetData<HTMLInputElement>, WidgetDataImpl<HTMLInputElement>, ColorPickedFSM> {
     private readonly handler: ColorPickedHandler;
 
     /**
@@ -61,7 +61,7 @@ export class ColorPicked extends InteractionBase<WidgetData<HTMLInputElement>, C
 
         this.handler = {
             "initToPickedHandler": (event: Event): void => {
-                (this.data as WidgetDataImpl<HTMLInputElement>).setWidget(event.target as HTMLInputElement);
+                this.data.setWidget(event.target as HTMLInputElement);
             },
             "reinitData": (): void => {
                 this.reinitData();
@@ -83,7 +83,7 @@ export class ColorPicked extends InteractionBase<WidgetData<HTMLInputElement>, C
         }
     }
 
-    public createDataObject(): WidgetData<HTMLInputElement> {
+    protected createDataObject(): WidgetDataImpl<HTMLInputElement> {
         return new WidgetDataImpl<HTMLInputElement>();
     }
 }

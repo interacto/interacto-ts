@@ -22,7 +22,6 @@ import {TouchPressureTransition} from "../../fsm/TouchPressureTransition";
 import {TouchReleaseTransition} from "../../fsm/TouchReleaseTransition";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 import {TouchData} from "../../../api/interaction/TouchData";
-import {SrcTgtTouchDataImpl} from "./SrcTgtTouchDataImpl";
 import {TouchDataImpl} from "./TouchDataImpl";
 
 /**
@@ -85,7 +84,7 @@ interface LongTouchFSMHandler extends FSMDataHandler {
     tap(evt: TouchEvent): void;
 }
 
-export class LongTouch extends InteractionBase<TouchData, LongTouchFSM> {
+export class LongTouch extends InteractionBase<TouchData, TouchDataImpl, LongTouchFSM> {
     private readonly handler: LongTouchFSMHandler;
 
     /**
@@ -100,10 +99,9 @@ export class LongTouch extends InteractionBase<TouchData, LongTouchFSM> {
             "tap": (evt: TouchEvent): void => {
                 if (evt.changedTouches.length > 0) {
                     const touch = evt.changedTouches[0];
-                    (this.data as (SrcTgtTouchDataImpl)).setPointData(
-                        touch.clientX, touch.clientY, touch.screenX, touch.screenY, undefined,
+                    this.data.setPointData(touch.clientX, touch.clientY, touch.screenX, touch.screenY, undefined,
                         touch.target, touch.target);
-                    (this.data as (SrcTgtTouchDataImpl)).setTouchId(touch.identifier);
+                    this.data.setTouchId(touch.identifier);
                 }
             },
             "reinitData": (): void => {
@@ -114,7 +112,7 @@ export class LongTouch extends InteractionBase<TouchData, LongTouchFSM> {
         this.getFsm().buildFSM(this.handler);
     }
 
-    protected createDataObject(): TouchData {
+    protected createDataObject(): TouchDataImpl {
         return new TouchDataImpl();
     }
 }

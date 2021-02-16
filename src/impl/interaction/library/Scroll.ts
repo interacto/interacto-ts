@@ -47,7 +47,7 @@ interface ScrollFSMHandler extends FSMDataHandler {
 /**
  * A user interaction for pressing down the mouse button.
  */
-export class Scroll extends InteractionBase<ScrollData, ScrollFSM> {
+export class Scroll extends InteractionBase<ScrollData, ScrollDataImpl, ScrollFSM> {
     /**
      * Creates the interaction.
      */
@@ -58,7 +58,7 @@ export class Scroll extends InteractionBase<ScrollData, ScrollFSM> {
 
         this.handler = {
             "initToScroll": (event: UIEvent): void => {
-                (this.getData() as ScrollDataImpl).setScrollData(event);
+                this.data.setScrollData(event);
             },
             "reinitData": (): void => {
                 this.reinitData();
@@ -68,7 +68,7 @@ export class Scroll extends InteractionBase<ScrollData, ScrollFSM> {
         this.getFsm().buildFSM(this.handler);
     }
 
-    public createDataObject(): ScrollData {
+    protected createDataObject(): ScrollDataImpl {
         return new ScrollDataImpl();
     }
 }

@@ -84,7 +84,7 @@ interface LongPressFSMHandler extends FSMDataHandler {
     press(evt: MouseEvent): void;
 }
 
-export class LongPress extends InteractionBase<PointData, LongPressFSM> {
+export class LongPress extends InteractionBase<PointData, PointDataImpl, LongPressFSM> {
     private readonly handler: LongPressFSMHandler;
 
     /**
@@ -97,7 +97,7 @@ export class LongPress extends InteractionBase<PointData, LongPressFSM> {
 
         this.handler = {
             "press": (evt: MouseEvent): void => {
-                (this.data as (PointDataImpl)).setPointData(
+                this.data.setPointData(
                     evt.clientX, evt.clientY, evt.screenX, evt.screenY, evt.button, evt.target ?? undefined,
                     evt.currentTarget ?? undefined);
             },
@@ -109,7 +109,7 @@ export class LongPress extends InteractionBase<PointData, LongPressFSM> {
         this.getFsm().buildFSM(this.handler);
     }
 
-    protected createDataObject(): PointData {
+    protected createDataObject(): PointDataImpl {
         return new PointDataImpl();
     }
 }

@@ -27,6 +27,7 @@ import {
 import {StubCmd} from "../command/StubCmd";
 import {createTouchEvent} from "../interaction/StubEvents";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
+import {Flushable} from "../../src/impl/interaction/library/Flushable";
 
 let binding: Binding<StubCmd, Interaction<InteractionData>, InteractionData> | undefined;
 let cmd: StubCmd;
@@ -105,7 +106,7 @@ describe("on canvas", () => {
             .on(c1)
             .bind();
 
-        (binding.getInteraction() as InteractionBase<InteractionData, FSM>).onNodeUnregistered(c1);
+        (binding.getInteraction() as InteractionBase<InteractionData, Flushable & InteractionData, FSM>).onNodeUnregistered(c1);
 
         c1.dispatchEvent(createTouchEvent("touchstart", 1, c1, 11, 23, 110, 230));
 

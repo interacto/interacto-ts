@@ -111,7 +111,7 @@ interface DragLockFSMHandler extends FSMDataHandler {
 /**
  * The drag-lock user interaction
  */
-export class DragLock extends InteractionBase<SrcTgtPointsData, DragLockFSM> {
+export class DragLock extends InteractionBase<SrcTgtPointsData, Flushable & SrcTgtPointsData, DragLockFSM> {
     private readonly handler: DragLockFSMHandler;
 
     private readonly firstClick: DoubleClick;
@@ -146,7 +146,7 @@ export class DragLock extends InteractionBase<SrcTgtPointsData, DragLockFSM> {
         this.sndClick.reinitData();
     }
 
-    public createDataObject(): Flushable & SrcTgtPointsData {
+    protected createDataObject(): Flushable & SrcTgtPointsData {
         return {
             "getTgtObject": (): EventTarget | undefined => (this.sndClick.getData().getButton() === undefined
                 ? this.firstClick.getData().getSrcObject()

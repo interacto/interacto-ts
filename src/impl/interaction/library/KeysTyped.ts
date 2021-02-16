@@ -80,7 +80,7 @@ interface KeyTypedFSMHandler extends FSMDataHandler {
  * One can type on multiple keys. The interaction ends after a timeout (a delay after the latest
  * typed key).
  */
-export class KeysTyped extends InteractionBase<KeysData, KeysTypedFSM> {
+export class KeysTyped extends InteractionBase<KeysData, KeysDataImpl, KeysTypedFSM> {
     /**
      * Creates the user interaction.
      */
@@ -89,8 +89,8 @@ export class KeysTyped extends InteractionBase<KeysData, KeysTypedFSM> {
 
         const handler: KeyTypedFSMHandler = {
             "onKeyTyped": (event: KeyboardEvent): void => {
-                (this.data as (KeysDataImpl)).setKeysDataTarget(event);
-                (this.data as (KeysDataImpl)).addKeysDataKey(event);
+                this.data.setKeysDataTarget(event);
+                this.data.addKeysDataKey(event);
             },
             "reinitData": (): void => {
                 this.reinitData();
@@ -100,7 +100,7 @@ export class KeysTyped extends InteractionBase<KeysData, KeysTypedFSM> {
         this.getFsm().buildFSM(handler);
     }
 
-    public createDataObject(): KeysData {
+    protected createDataObject(): KeysDataImpl {
         return new KeysDataImpl();
     }
 }

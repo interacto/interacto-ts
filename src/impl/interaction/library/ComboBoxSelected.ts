@@ -51,7 +51,7 @@ interface ComboBoxSelectedHandler extends FSMDataHandler {
  * A user interaction for CheckBox
  */
 
-export class ComboBoxSelected extends InteractionBase<WidgetData<HTMLSelectElement>, ComboBoxSelectedFSM> {
+export class ComboBoxSelected extends InteractionBase<WidgetData<HTMLSelectElement>, WidgetDataImpl<HTMLSelectElement>, ComboBoxSelectedFSM> {
     private readonly handler: ComboBoxSelectedHandler;
 
     /**
@@ -62,7 +62,7 @@ export class ComboBoxSelected extends InteractionBase<WidgetData<HTMLSelectEleme
 
         this.handler = {
             "initToSelectedHandler": (event: Event): void => {
-                (this.data as WidgetDataImpl<HTMLSelectElement>).setWidget(event.target as HTMLSelectElement);
+                this.data.setWidget(event.target as HTMLSelectElement);
             },
             "reinitData": (): void => {
                 this.reinitData();
@@ -84,7 +84,7 @@ export class ComboBoxSelected extends InteractionBase<WidgetData<HTMLSelectEleme
         }
     }
 
-    public createDataObject(): WidgetData<HTMLSelectElement> {
+    protected createDataObject(): WidgetDataImpl<HTMLSelectElement> {
         return new WidgetDataImpl<HTMLSelectElement>();
     }
 }

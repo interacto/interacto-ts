@@ -17,15 +17,16 @@ import {InteractionData} from "../../src/api/interaction/InteractionData";
 import {FSM} from "../../src/api/fsm/FSM";
 import {OutputState} from "../../src/api/fsm/OutputState";
 import {PointDataImpl} from "../../src/impl/interaction/library/PointDataImpl";
+import {Flushable} from "../../dist/impl/interaction/library/Flushable";
 
-export class InteractionStub extends InteractionBase<InteractionData, FSM> {
+export class InteractionStub extends InteractionBase<InteractionData, Flushable & InteractionData, FSM> {
     public updateEventsRegistered(_newState: OutputState, _oldState: OutputState): void {
     }
 
     public reinitData(): void {
     }
 
-    protected createDataObject(): InteractionData {
+    protected createDataObject(): Flushable & InteractionData {
         return new PointDataImpl();
     }
 }
