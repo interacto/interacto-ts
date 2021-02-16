@@ -1,3 +1,33 @@
+# 5.4.0
+
+* feat(cmd): async command support
+* feat(binding): new routine for catching errors, catch #3
+* feat(interaction): throttling implemented
+* feat(binding): a predefined function for producing two undo/redo bindings
+* feat(binding): better support of Angular widget references in 'on'
+
+* change(api): hiding some methods from the binding API
+* change(api): interaction data does not expose flush anymore
+* change(api): the on routine should take at least one argument
+* change(undo): undo collector renamed as undo history
+  
+* build(deps): dependencies updated
+
+* clean(code): code and test cleaned
+  
+* doc(api): documentation updated
+* doc(config): better documentation generation
+  
+* fix(undo): error while removing oldest undoable instances
+* fix(doc): incorrect documentation on binders
+
+* test(all): new API for testing UI code
+* test(binding): implementation of a binding observer to ease unit UI testing
+* test(binding): tests added
+
+* config(test): add mutation testing
+
+
 # 5.3.0
 
 * feat(binding): can set the timeout value of textinput binder
