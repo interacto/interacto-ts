@@ -19,11 +19,19 @@ import {CommandBase} from "../../src/impl/command/CommandBase";
 import {Binding} from "../../src/api/binding/Binding";
 import {Interaction} from "../../src/api/interaction/Interaction";
 import {InteractionData} from "../../src/api/interaction/InteractionData";
-import {Subject, Subscription} from "rxjs";
-import {buttonBinder, dndBinder, multiTouchBinder} from "../../src/api/binding/Bindings";
+import {Subject} from "rxjs";
+import {
+    buttonBinder,
+    clearBindingObserver,
+    dndBinder,
+    multiTouchBinder,
+    setBindingObserver
+} from "../../src/api/binding/Bindings";
 import {flushPromises} from "../Utils";
 import {createMouseEvent, createTouchEvent} from "../interaction/StubEvents";
 import {LogLevel} from "../../src/api/logging/LogLevel";
+import {BindingImpl} from "../../dist/impl/binding/BindingImpl";
+import {BindingsContext} from "../../src/impl/binding/BindingsContext";
 import useFakeTimers = jest.useFakeTimers;
 import clearAllTimers = jest.clearAllTimers;
 import useRealTimers = jest.useRealTimers;
@@ -31,7 +39,6 @@ import runAllTimers = jest.runAllTimers;
 import advanceTimersByTime = jest.advanceTimersByTime;
 import fn = jest.fn;
 import clearAllMocks = jest.clearAllMocks;
-import {BindingImpl} from "../../dist/impl/binding/BindingImpl";
 
 class Model {
     public data: Array<string> = ["Foo", "Bar", "Yo"];
@@ -77,22 +84,22 @@ class StubAsyncCmd extends CommandBase {
 let cmd: StubAsyncCmd;
 let data: Model;
 let binding: Binding<StubAsyncCmd, Interaction<InteractionData>, InteractionData> | undefined;
-let producedCmds: Array<StubAsyncCmd>;
-let disposable: Subscription | undefined;
+let ctx: BindingsContext;
 
 describe("testing async commands and bindings", () => {
     beforeEach(() => {
+        ctx = new BindingsContext();
+        setBindingObserver(ctx);
         data = new Model();
         cmd = new StubAsyncCmd(data);
     });
 
     afterEach(async () => {
+        clearBindingObserver();
         CommandsRegistry.getInstance().clear();
         UndoHistory.getInstance().clear();
         clearAllTimers();
         clearAllMocks();
-        disposable?.unsubscribe();
-        binding?.uninstallBinding();
         await flushPromises();
     });
 
@@ -131,7 +138,6 @@ describe("testing async commands and bindings", () => {
         beforeEach(() => {
             useFakeTimers();
             button1 = document.createElement("button");
-            producedCmds = [];
         });
 
 
@@ -141,16 +147,14 @@ describe("testing async commands and bindings", () => {
                 .on(button1)
                 .bind();
 
-            disposable = binding.produces().subscribe(c => producedCmds.push(c));
-
             button1.click();
             runAllTimers();
             await flushPromises();
 
             expect(binding).toBeDefined();
             expect(binding.getCommand()).toBeUndefined();
-            expect(producedCmds).toHaveLength(1);
-            expect(producedCmds[0].getStatus()).toStrictEqual(CmdStatus.done);
+            expect(ctx.commands).toHaveLength(1);
+            expect(ctx.commands[0].getStatus()).toStrictEqual(CmdStatus.done);
             expect(data.data).toStrictEqual(["Foo", "Bar"]);
         });
 
@@ -204,8 +208,6 @@ describe("testing async commands and bindings", () => {
                 .on(button1)
                 .bind();
 
-            disposable = binding.produces().subscribe(c => producedCmds.push(c));
-
             button1.click();
             button1.click();
             advanceTimersByTime(10);
@@ -215,11 +217,11 @@ describe("testing async commands and bindings", () => {
 
             expect(binding).toBeDefined();
             expect(binding.getCommand()).toBeUndefined();
-            expect(producedCmds).toHaveLength(2);
-            expect(producedCmds[0].getStatus()).toStrictEqual(CmdStatus.done);
-            expect(producedCmds[1].getStatus()).toStrictEqual(CmdStatus.done);
-            expect(producedCmds[0].timeout).toStrictEqual(5);
-            expect(producedCmds[1].timeout).toStrictEqual(100);
+            expect(ctx.commands).toHaveLength(2);
+            expect(ctx.commands[0].getStatus()).toStrictEqual(CmdStatus.done);
+            expect(ctx.commands[1].getStatus()).toStrictEqual(CmdStatus.done);
+            expect(ctx.getCmd<StubAsyncCmd>(0).timeout).toStrictEqual(5);
+            expect(ctx.getCmd<StubAsyncCmd>(1).timeout).toStrictEqual(100);
             expect(data.data).toStrictEqual(["Foo"]);
         });
 
@@ -231,8 +233,6 @@ describe("testing async commands and bindings", () => {
                 .on(button1)
                 .bind();
 
-            disposable = binding.produces().subscribe(c => producedCmds.push(c));
-
             button1.click();
             button1.click();
             advanceTimersByTime(10);
@@ -241,9 +241,9 @@ describe("testing async commands and bindings", () => {
             await flushPromises();
 
             expect(binding.getCommand()).toBeUndefined();
-            expect(producedCmds).toHaveLength(2);
-            expect(producedCmds[0].timeout).toStrictEqual(5);
-            expect(producedCmds[1].timeout).toStrictEqual(100);
+            expect(ctx.commands).toHaveLength(2);
+            expect(ctx.getCmd<StubAsyncCmd>(0).timeout).toStrictEqual(5);
+            expect(ctx.getCmd<StubAsyncCmd>(1).timeout).toStrictEqual(100);
             expect(data.data).toStrictEqual(["Foo"]);
         });
 
@@ -323,8 +323,6 @@ describe("testing async commands and bindings", () => {
                 .on(button1)
                 .bind();
 
-            disposable = binding.produces().subscribe(c => producedCmds.push(c));
-
             button1.click();
             runAllTimers();
             await flushPromises();
@@ -332,7 +330,7 @@ describe("testing async commands and bindings", () => {
             expect(binding).toBeDefined();
             expect(binding.getTimesEnded()).toStrictEqual(1);
             expect(binding.getCommand()).toBeUndefined();
-            expect(producedCmds).toHaveLength(1);
+            expect(ctx.commands).toHaveLength(1);
         });
 
         test("button binding with async command OK when 'end' crashes", async () => {
@@ -340,8 +338,6 @@ describe("testing async commands and bindings", () => {
                 .toProduce(() => new StubAsyncCmd(data))
                 .on(button1)
                 .bind();
-
-            disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
             // Need to provoke an error. So closing a stream
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -359,7 +355,44 @@ describe("testing async commands and bindings", () => {
             expect(binding).toBeDefined();
             expect(binding.getCommand()).toBeUndefined();
             expect(binding.getTimesEnded()).toStrictEqual(1);
-            expect(producedCmds).toHaveLength(0);
+            expect(ctx.commands).toHaveLength(0);
+        });
+
+        test("button deactivated on command production", () => {
+            buttonBinder()
+                .toProduce(() => new StubAsyncCmd(data))
+                .first(() => {
+                    button1.disabled = true;
+                })
+                .end(() => {
+                    button1.disabled = false;
+                })
+                .on(button1)
+                .bind();
+
+            button1.click();
+            jest.advanceTimersByTime(49);
+            expect(button1.disabled).toBeTruthy();
+        });
+
+        test("button deactivated and then activated", async () => {
+            buttonBinder()
+                .toProduce(() => new StubAsyncCmd(data))
+                .first(() => {
+                    button1.disabled = true;
+                })
+                .end(() => {
+                    button1.disabled = false;
+                })
+                .on(button1)
+                .bind();
+
+            button1.click();
+            button1.click();
+            runAllTimers();
+            await flushPromises();
+            expect(button1.disabled).toBeFalsy();
+            expect(ctx.commands).toHaveLength(1);
         });
     });
 
@@ -369,7 +402,6 @@ describe("testing async commands and bindings", () => {
         beforeEach(() => {
             useFakeTimers();
             canvas = document.createElement("canvas");
-            producedCmds = [];
         });
 
         test("dnd binding with async command OK when 'end' crashes", async () => {
@@ -377,8 +409,6 @@ describe("testing async commands and bindings", () => {
                 .toProduce(() => new StubAsyncCmd(data))
                 .on(canvas)
                 .bind();
-
-            disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
             canvas.dispatchEvent(createMouseEvent("mousedown", canvas));
             canvas.dispatchEvent(createMouseEvent("mousemove", canvas));
@@ -390,7 +420,7 @@ describe("testing async commands and bindings", () => {
             expect(binding).toBeDefined();
             expect(binding.getCommand()).toBeUndefined();
             expect(binding.getTimesEnded()).toStrictEqual(1);
-            expect(producedCmds).toHaveLength(1);
+            expect(ctx.commands).toHaveLength(1);
         });
 
         test("dnd binding with async command and continuous execution", async () => {
@@ -404,8 +434,6 @@ describe("testing async commands and bindings", () => {
                 .ifCannotExecute(cannot)
                 .bind();
 
-            disposable = binding.produces().subscribe(c => producedCmds.push(c));
-
             canvas.dispatchEvent(createMouseEvent("mousedown", canvas));
             canvas.dispatchEvent(createMouseEvent("mousemove", canvas));
             canvas.dispatchEvent(createMouseEvent("mousemove", canvas));
@@ -418,7 +446,7 @@ describe("testing async commands and bindings", () => {
             expect(binding).toBeDefined();
             expect(binding.getCommand()).toBeUndefined();
             expect(binding.getTimesEnded()).toStrictEqual(1);
-            expect(producedCmds).toHaveLength(1);
+            expect(ctx.commands).toHaveLength(1);
             expect(cannot).not.toHaveBeenCalled();
             expect(data.data).toHaveLength(0);
         });
@@ -434,8 +462,6 @@ describe("testing async commands and bindings", () => {
                 .log(LogLevel.command)
                 .bind();
 
-            disposable = binding.produces().subscribe(c => producedCmds.push(c));
-
             jest.spyOn(binding as BindingImpl<StubAsyncCmd, Interaction<InteractionData>, InteractionData>,
                 "ifCannotExecuteCmd").mockImplementation(() => {
                 throw new Error("Error");
@@ -450,7 +476,7 @@ describe("testing async commands and bindings", () => {
 
             expect(binding.getCommand()).toBeUndefined();
             expect(binding.getTimesEnded()).toStrictEqual(1);
-            expect(producedCmds).toHaveLength(0);
+            expect(ctx.commands).toHaveLength(0);
             expect(data.data).toStrictEqual(["Foo", "Bar", "Yo"]);
         });
     });
@@ -462,7 +488,6 @@ describe("testing async commands and bindings", () => {
         beforeEach(() => {
             useFakeTimers();
             canvas = document.createElement("canvas");
-            producedCmds = [];
         });
 
         test("button binding with async command OK when 'end' crashes", async () => {
@@ -470,8 +495,6 @@ describe("testing async commands and bindings", () => {
                 .toProduce(() => new StubAsyncCmd(data))
                 .on(canvas)
                 .bind();
-
-            disposable = binding.produces().subscribe(c => producedCmds.push(c));
 
             canvas.dispatchEvent(createTouchEvent("touchstart", 1, canvas, 11, 23, 110, 230));
             canvas.dispatchEvent(createTouchEvent("touchstart", 2, canvas, 31, 13, 310, 130));
@@ -486,7 +509,7 @@ describe("testing async commands and bindings", () => {
             await flushPromises();
 
             expect(binding).toBeDefined();
-            expect(producedCmds).toHaveLength(2);
+            expect(ctx.commands).toHaveLength(2);
         });
     });
 });
