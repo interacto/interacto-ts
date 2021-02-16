@@ -18,9 +18,7 @@ import {TerminalState} from "../../fsm/TerminalState";
 import {CancellingState} from "../../fsm/CancellingState";
 import {StdState} from "../../fsm/StdState";
 import {SubFSMTransition} from "../../fsm/SubFSMTransition";
-import {InputState} from "../../../api/fsm/InputState";
 import {FSMImpl} from "../../fsm/FSMImpl";
-import {OutputState} from "../../../api/fsm/OutputState";
 import {MoveTransition} from "../../fsm/MoveTransition";
 import {SrcTgtPointsData} from "../../../api/interaction/SrcTgtPointsData";
 import {InteractionBase} from "../InteractionBase";
@@ -84,20 +82,12 @@ export class DragLockFSM extends FSMImpl {
         this.addState(locked);
         this.addState(moved);
 
-        new class extends SubFSMTransition {
-            private readonly parent: DragLockFSM;
-
-            public constructor(dlFSM: DragLockFSM, srcState: OutputState, tgtState: InputState, fsm: FSMImpl) {
-                super(srcState, tgtState, fsm);
-                this.parent = dlFSM;
-            }
-
-            public action(): void {
-                const checkButton = this.parent.firstDbleClick.getCheckButton();
-                this.parent.sndDbleClick.setCheckButton(checkButton);
-                cancelDbleClick.setCheckButton(checkButton);
-            }
-        }(this, this.initState, locked, this.firstDbleClick);
+        const subTr = new SubFSMTransition(this.initState, locked, this.firstDbleClick);
+        subTr.action = (): void => {
+            const checkButton = this.firstDbleClick.getCheckButton();
+            this.sndDbleClick.setCheckButton(checkButton);
+            cancelDbleClick.setCheckButton(checkButton);
+        };
 
         new SubFSMTransition(locked, cancelled, cancelDbleClick);
 
