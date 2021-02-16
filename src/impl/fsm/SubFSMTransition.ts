@@ -36,7 +36,7 @@ export class SubFSMTransition extends TransitionBase<Event> {
     /**
      * Temporary subscription to the current state of the sub-FSM.
      */
-    private subStateSubscription: Subscription | undefined;
+    private subStateSubscription?: Subscription;
 
     /**
      * Creates the transition.

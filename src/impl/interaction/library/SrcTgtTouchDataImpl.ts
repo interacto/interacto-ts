@@ -16,7 +16,7 @@ import {SrcTgtTouchData} from "../../../api/interaction/SrcTgtTouchData";
 import {SrcTgtPointsDataImpl} from "./SrcTgtPointsDataImpl";
 
 export class SrcTgtTouchDataImpl extends SrcTgtPointsDataImpl implements SrcTgtTouchData {
-    private touchID: number | undefined;
+    private touchID?: number;
 
     public constructor(id?: number, cx?: number, cy?: number, sx?: number, sy?: number, target?: EventTarget) {
         super();

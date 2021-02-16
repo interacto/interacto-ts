@@ -33,7 +33,7 @@ export class DragLockFSM extends FSMImpl {
 
     public readonly sndDbleClick: DoubleClickFSM;
 
-    protected checkButton: number | undefined;
+    protected checkButton?: number;
 
     public constructor() {
         super();

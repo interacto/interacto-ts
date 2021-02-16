@@ -30,7 +30,7 @@ import {PointDataImpl} from "./PointDataImpl";
 export class LongPressFSM extends FSMImpl {
     private readonly duration: number;
 
-    private currentButton: number | undefined;
+    private currentButton?: number;
 
     /**
      * Creates the long press FSM

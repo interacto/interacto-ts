@@ -18,7 +18,7 @@ import {PointData} from "../../../api/interaction/PointData";
 
 export class PointsDataImpl extends PointDataImpl implements PointsData {
     /** The current position of the pointing device. */
-    protected currentPosition: readonly [number, number] | undefined;
+    protected currentPosition?: readonly [number, number];
 
     protected readonly pointsData: Array<PointData>;
 

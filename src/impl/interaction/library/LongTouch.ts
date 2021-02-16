@@ -31,7 +31,7 @@ import {TouchDataImpl} from "./TouchDataImpl";
 class LongTouchFSM extends FSMImpl {
     private readonly duration: number;
 
-    private currentTouchID: number | undefined;
+    private currentTouchID?: number;
 
     /**
      * Creates the long touch FSM

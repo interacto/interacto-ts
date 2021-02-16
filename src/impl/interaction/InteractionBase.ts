@@ -73,9 +73,9 @@ export abstract class InteractionBase<D extends InteractionData, F extends FSM> 
 
     protected throttleTimeout: number;
 
-    protected currentThrottling: CancellablePromise | undefined;
+    protected currentThrottling?: CancellablePromise;
 
-    protected latestThrottledEvent: Event | undefined;
+    protected latestThrottledEvent?: Event;
 
     /**
      * Creates the interaction.

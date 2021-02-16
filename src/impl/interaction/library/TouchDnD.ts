@@ -28,7 +28,7 @@ import {SrcTgtTouchDataImpl} from "./SrcTgtTouchDataImpl";
  * The FSM that defines a touch interaction (that works like a DnD)
  */
 export class TouchDnDFSM extends FSMImpl {
-    private touchID: number | undefined;
+    private touchID?: number;
 
     /**
      * Creates the FSM.

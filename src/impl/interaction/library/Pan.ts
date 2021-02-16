@@ -34,11 +34,11 @@ export class PanFSM extends FSMImpl {
 
     protected readonly pxTolerance: number;
 
-    protected touchID: number | undefined;
+    protected touchID?: number;
 
-    protected stableAxe: number | undefined;
+    protected stableAxe?: number;
 
-    protected moveAxe: number | undefined;
+    protected moveAxe?: number;
 
     /**
      * Creates the FSM.
