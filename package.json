@@ -58,7 +58,7 @@
     "generate-barrels": "barrelsby -c ./barrelsby-config.json --delete",
     "compile": "tsc",
     "compile-test": "tsc -p tsconfig4tests.json",
-    "pre-build": "npm run clean && npm run lint && npm run compile && npm run compile-test && npm run coverage",
+    "pre-build": "npm run clean && npm run generate-barrels && npm run lint && npm run compile && npm run compile-test && npm run coverage",
     "clean": "rm -rf dist out-test",
     "clean-all": "npm run clean && rm -rf reports docs",
     "test": "jest",
