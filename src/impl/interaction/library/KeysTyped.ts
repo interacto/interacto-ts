@@ -89,8 +89,7 @@ export class KeysTyped extends InteractionBase<KeysData, KeysDataImpl, KeysTyped
 
         const handler: KeyTypedFSMHandler = {
             "onKeyTyped": (event: KeyboardEvent): void => {
-                this.data.setKeysDataTarget(event);
-                this.data.addKeysDataKey(event);
+                this.data.addKey(event);
             },
             "reinitData": (): void => {
                 this.reinitData();

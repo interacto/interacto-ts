@@ -76,13 +76,12 @@ export class Click extends InteractionBase<PointData, PointDataImpl, ClickFSM> {
     /**
      * Creates the interaction.
      */
-    public constructor(fsm?: ClickFSM) {
-        super(fsm ?? new ClickFSM(), new PointDataImpl());
+    public constructor(fsm?: ClickFSM, data?: PointDataImpl) {
+        super(fsm ?? new ClickFSM(), data ?? new PointDataImpl());
 
         this.handler = {
             "initToClicked": (evt: MouseEvent): void => {
-                this.data.setPointData(evt.clientX, evt.clientY, evt.screenX, evt.screenY,
-                    evt.button, evt.target ?? undefined, evt.currentTarget ?? undefined);
+                this.data.copy(evt);
             },
             "reinitData": (): void => {
                 this.reinitData();

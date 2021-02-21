@@ -44,7 +44,6 @@ import {
     ScrollData,
     setBindingObserver,
     SrcTgtPointsData,
-    SrcTgtTouchData,
     swipeBinder,
     tapBinder,
     TapData,
@@ -274,8 +273,8 @@ test("key type binder", () => {
 test("click must not block drag lock", () => {
     dragLockBinder()
         .on(elt)
-        .toProduce((_i: PointData) => new StubCmd(true))
-        .when(i => i.getButton() === 2)
+        .toProduce((_i: SrcTgtPointsData<PointData>) => new StubCmd(true))
+        .when(i => i.src.button === 2 && i.tgt.button === 2)
         .log(LogLevel.interaction)
         .bind();
 
@@ -295,7 +294,7 @@ test("click must not block drag lock", () => {
 test("drag lock: double click does not cancel", () => {
     const binding = dragLockBinder()
         .on(elt)
-        .toProduce((_i: PointData) => new StubCmd(true))
+        .toProduce((_i: SrcTgtPointsData<PointData>) => new StubCmd(true))
         .log(LogLevel.interaction)
         .bind();
 
@@ -313,7 +312,7 @@ test("drag lock: first then end", () => {
     const endcancel = jest.fn();
     dragLockBinder()
         .on(elt)
-        .toProduce((_i: PointData) => new StubCmd(true))
+        .toProduce((_i: SrcTgtPointsData<PointData>) => new StubCmd(true))
         .end(end)
         .endOrCancel(endcancel)
         .first(first)
@@ -353,7 +352,7 @@ test("binding with anon command", () => {
 test("touch DnD binding", () => {
     touchDnDBinder()
         .on(elt)
-        .toProduce((_i: SrcTgtTouchData) => new StubCmd(true))
+        .toProduce((_i: SrcTgtPointsData<TouchData>) => new StubCmd(true))
         .bind();
 
     robot(elt)
@@ -413,7 +412,7 @@ test("that hyperlink binder works", () => {
 
 test("that swipe binder works", () => {
     swipeBinder(true, 400, 200, 10)
-        .toProduce((_i: SrcTgtTouchData) => new StubCmd(true))
+        .toProduce((_i: SrcTgtPointsData<TouchData>) => new StubCmd(true))
         .on(elt)
         .bind();
 
@@ -461,7 +460,7 @@ test("that 'ifCannotExecute' is correctly called", () => {
     const cmd = new StubCmd(false);
     pressBinder()
         .on(elt)
-        .toProduce((_i: SrcTgtTouchData) => cmd)
+        .toProduce((_i: PointData) => cmd)
         .ifCannotExecute(mockFn)
         .bind();
 
@@ -476,7 +475,7 @@ test("that 'strictStart' works correctly when no 'when' routine", () => {
     dndBinder(false)
         .strictStart()
         .on(elt)
-        .toProduce((_i: SrcTgtPointsData) => new StubCmd(true))
+        .toProduce((_i: SrcTgtPointsData<PointData>) => new StubCmd(true))
         .bind();
 
     robot(elt)
@@ -489,9 +488,9 @@ test("that 'strictStart' works correctly when no 'when' routine", () => {
 
 test("that 'strictStart' works correctly when the 'when' routine returns true", () => {
     dndBinder(false)
-        .when((_i: SrcTgtPointsData) => true)
+        .when((_i: SrcTgtPointsData<PointData>) => true)
         .on(elt)
-        .toProduce((_i: SrcTgtPointsData) => new StubCmd(true))
+        .toProduce((_i: SrcTgtPointsData<PointData>) => new StubCmd(true))
         .strictStart()
         .bind();
 
@@ -507,8 +506,8 @@ test("that 'strictStart' works correctly when the 'when' routine returns false",
     const binding = dndBinder(false)
         .on(elt)
         .strictStart()
-        .toProduce((_i: SrcTgtPointsData) => new StubCmd(true))
-        .when((_i: SrcTgtPointsData) => false)
+        .toProduce((_i: SrcTgtPointsData<PointData>) => new StubCmd(true))
+        .when((_i: SrcTgtPointsData<PointData>) => false)
         .bind();
 
     robot(elt)
@@ -523,8 +522,8 @@ test("that 'strictStart' works correctly when the 'when' routine returns false",
 test("that 'strictStart' stops the interaction", () => {
     const binding = dndBinder(false)
         .on(elt)
-        .toProduce((_i: SrcTgtPointsData) => new StubCmd(true))
-        .when((_i: SrcTgtPointsData) => false)
+        .toProduce((_i: SrcTgtPointsData<PointData>) => new StubCmd(true))
+        .when((_i: SrcTgtPointsData<PointData>) => false)
         .strictStart()
         .bind();
 
@@ -539,7 +538,7 @@ test("that 'when' is not called on the first event of a DnD", () => {
     const when = jest.fn().mockReturnValue(false);
     dndBinder(false)
         .on(elt)
-        .toProduce((_i: SrcTgtPointsData) => new StubCmd(true))
+        .toProduce((_i: SrcTgtPointsData<PointData>) => new StubCmd(true))
         .when(() => false)
         .strictStart()
         .bind();
@@ -550,7 +549,7 @@ test("that 'when' is not called on the first event of a DnD", () => {
 });
 
 describe("check when it crashes in routines", () => {
-    let baseBinder: InteractionCmdUpdateBinder<StubCmd, Interaction<SrcTgtTouchData>, SrcTgtTouchData>;
+    let baseBinder: InteractionCmdUpdateBinder<StubCmd, Interaction<SrcTgtPointsData<TouchData>>, SrcTgtPointsData<TouchData>>;
     let err: Error;
     let cmd: StubCmd;
 
@@ -562,12 +561,12 @@ describe("check when it crashes in routines", () => {
         cmd = new StubCmd(true);
         baseBinder = touchDnDBinder()
             .on(elt)
-            .toProduce((_i: SrcTgtTouchData) => cmd);
+            .toProduce((_i: SrcTgtPointsData<TouchData>) => cmd);
     });
 
     test("when it crashes in 'first' with an error", () => {
         baseBinder
-            .first((_c: StubCmd, _i: SrcTgtTouchData) => {
+            .first((_c: StubCmd, _i: SrcTgtPointsData<TouchData>) => {
                 throw err;
             })
             .bind();
@@ -584,7 +583,7 @@ describe("check when it crashes in routines", () => {
     test("when it crashes in 'first' with an error caught by 'catch'", () => {
         const fn = jest.fn();
         baseBinder
-            .first((_c: StubCmd, _i: SrcTgtTouchData) => {
+            .first((_c: StubCmd, _i: SrcTgtPointsData<TouchData>) => {
                 throw err;
             })
             .catch(fn)
@@ -643,7 +642,7 @@ describe("check when it crashes in routines", () => {
 
     test("when it crashes in 'first' with not an error", () => {
         baseBinder
-            .first((_c: StubCmd, _i: SrcTgtTouchData) => {
+            .first((_c: StubCmd, _i: SrcTgtPointsData<TouchData>) => {
                 // eslint-disable-next-line @typescript-eslint/no-throw-literal
                 throw 42;
             })
@@ -660,7 +659,7 @@ describe("check when it crashes in routines", () => {
 
     test("when it crashes in 'then' with an error", () => {
         baseBinder
-            .then((_c: StubCmd, _i: SrcTgtTouchData) => {
+            .then((_c: StubCmd, _i: SrcTgtPointsData<TouchData>) => {
                 throw err;
             })
             .bind();
@@ -695,7 +694,7 @@ describe("check when it crashes in routines", () => {
 
     test("when it crashes in 'then' with not an error", () => {
         baseBinder
-            .then((_c: StubCmd, _i: SrcTgtTouchData) => {
+            .then((_c: StubCmd, _i: SrcTgtPointsData<TouchData>) => {
                 // eslint-disable-next-line @typescript-eslint/no-throw-literal
                 throw "foo";
             })
@@ -712,7 +711,7 @@ describe("check when it crashes in routines", () => {
 
     test("when it crashes in 'end' with an error", () => {
         baseBinder
-            .end((_c: StubCmd, _i: SrcTgtTouchData) => {
+            .end((_c: StubCmd, _i: SrcTgtPointsData<TouchData>) => {
                 throw err;
             })
             .bind();
@@ -764,7 +763,7 @@ describe("check when it crashes in routines", () => {
 
     test("when it crashes in 'endOrCancel' with an error", () => {
         baseBinder
-            .endOrCancel((_i: SrcTgtTouchData) => {
+            .endOrCancel((_i: SrcTgtPointsData<TouchData>) => {
                 throw err;
             })
             .bind();
@@ -799,7 +798,7 @@ describe("check when it crashes in routines", () => {
 
     test("when it crashes in 'endOrCancel' with not an error", () => {
         baseBinder
-            .endOrCancel((_i: SrcTgtTouchData) => {
+            .endOrCancel((_i: SrcTgtPointsData<TouchData>) => {
                 // eslint-disable-next-line @typescript-eslint/no-throw-literal
                 throw true;
             })
@@ -817,8 +816,8 @@ describe("check when it crashes in routines", () => {
     test("when it crashes in 'cancel' with an error", () => {
         dndBinder(true)
             .on(elt)
-            .toProduce((_i: SrcTgtTouchData) => new StubCmd(true))
-            .cancel((_i: SrcTgtTouchData) => {
+            .toProduce((_i: SrcTgtPointsData<PointData>) => new StubCmd(true))
+            .cancel((_i: SrcTgtPointsData<PointData>) => {
                 throw err;
             })
             .bind();
@@ -856,7 +855,7 @@ describe("check when it crashes in routines", () => {
     test("when it crashes in 'cancel' with not an error", () => {
         dndBinder(true)
             .on(elt)
-            .toProduce((_i: SrcTgtTouchData) => new StubCmd(true))
+            .toProduce((_i: SrcTgtPointsData<PointData>) => new StubCmd(true))
             .cancel(() => {
                 // eslint-disable-next-line @typescript-eslint/no-throw-literal
                 throw "bar";
@@ -875,7 +874,7 @@ describe("check when it crashes in routines", () => {
     test("when it crashes in 'ifHadNoEffect' with an error", () => {
         jest.spyOn(cmd, "hadEffect").mockReturnValue(false);
         baseBinder
-            .ifHadNoEffect((_c, _i: SrcTgtTouchData) => {
+            .ifHadNoEffect((_c, _i: SrcTgtPointsData<TouchData>) => {
                 throw err;
             })
             .bind();
@@ -930,7 +929,7 @@ describe("check when it crashes in routines", () => {
     test("when it crashes in 'ifHadEffect' with an error", () => {
         jest.spyOn(cmd, "hadEffect").mockReturnValue(true);
         baseBinder
-            .ifHadEffects((_c, _i: SrcTgtTouchData) => {
+            .ifHadEffects((_c, _i: SrcTgtPointsData<TouchData>) => {
                 throw err;
             })
             .bind();
@@ -984,7 +983,7 @@ describe("check when it crashes in routines", () => {
 
     test("when it crashes in 'when' with an error", () => {
         baseBinder
-            .when((_i: SrcTgtTouchData) => {
+            .when((_i: SrcTgtPointsData<TouchData>) => {
                 throw err;
             })
             .bind();
@@ -1043,7 +1042,7 @@ describe("check when it crashes in routines", () => {
     test("when it crashes in 'ifCannotExecute' with an error", () => {
         cmd = new StubCmd(false);
         baseBinder
-            .ifCannotExecute((_c: StubCmd, _i: SrcTgtTouchData) => {
+            .ifCannotExecute((_c: StubCmd, _i: SrcTgtPointsData<TouchData>) => {
                 throw err;
             })
             .bind();

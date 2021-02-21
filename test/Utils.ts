@@ -14,6 +14,8 @@
 
 // This files contains helper routines for testing the library.
 
+import {TouchData} from "../src/api/interaction/TouchData";
+
 /**
  * Flushes the ongoing promises
  */
@@ -21,4 +23,13 @@ export async function flushPromises(): Promise<unknown> {
     return new Promise(resolve => {
         setImmediate(resolve);
     });
+}
+
+export function checkTouchPoint(data: TouchData, lx: number, ly: number, sx: number, sy: number, id: number, o: EventTarget): void {
+    expect(data.clientX).toStrictEqual(lx);
+    expect(data.clientY).toStrictEqual(ly);
+    expect(data.screenX).toStrictEqual(sx);
+    expect(data.screenY).toStrictEqual(sy);
+    expect(data.identifier).toStrictEqual(id);
+    expect(data.target).toBe(o);
 }

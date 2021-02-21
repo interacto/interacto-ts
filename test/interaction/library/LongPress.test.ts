@@ -12,15 +12,13 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSMDataHandler, FSMHandler, LongPress} from "../../../src/interacto";
+import {FSMDataHandler, FSMHandler, LongPress, PointDataImpl} from "../../../src/interacto";
 import {createMouseEvent, robot} from "../StubEvents";
 import {mock} from "jest-mock-extended";
 
 let interaction: LongPress;
 let canvas: HTMLElement;
 let handler: FSMHandler;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-let pressData: any;
 
 
 test("cannot create 0 or less duration", () => {
@@ -56,8 +54,8 @@ describe("long press test", () => {
         jest.spyOn(interaction.getFsm().getDataHandler() as FSMDataHandler, "reinitData");
         interaction.processEvent(createMouseEvent("mousedown", canvas, 15, 20, 160, 21, 2));
         interaction.reinit();
-        expect(interaction.getData().getButton()).toBeUndefined();
-        expect(interaction.getData().getCurrentTarget()).toBeUndefined();
+        expect(interaction.getData().button).toStrictEqual(0);
+        expect(interaction.getData().currentTarget).toBeNull();
         expect(interaction.getFsm().getDataHandler()?.reinitData).toHaveBeenCalledWith();
     });
 
@@ -69,19 +67,22 @@ describe("long press test", () => {
             });
 
             test("touch does not end", () => {
+                const pressData = new PointDataImpl();
+
                 const newHandler = mock<FSMHandler>();
                 newHandler.fsmStarts.mockImplementation(() => {
-                    pressData = {...interaction.getData()};
+                    pressData.copy(interaction.getData());
                 });
                 interaction.getFsm().addHandler(newHandler);
                 interaction.processEvent(createMouseEvent("mousedown", canvas, 15, 20, 160, 21, 2));
                 expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
                 expect(handler.fsmStops).not.toHaveBeenCalled();
                 expect(handler.fsmCancels).not.toHaveBeenCalled();
-                expect(pressData.srcClientX).toBe(160);
-                expect(pressData.srcClientY).toBe(21);
-                expect(pressData.srcScreenX).toBe(15);
-                expect(pressData.srcScreenY).toBe(20);
+
+                expect(pressData.clientX).toBe(160);
+                expect(pressData.clientY).toBe(21);
+                expect(pressData.screenX).toBe(15);
+                expect(pressData.screenY).toBe(20);
                 expect(pressData.button).toBe(2);
             });
 

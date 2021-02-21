@@ -14,33 +14,80 @@
 
 import {KeyData} from "../../../api/interaction/KeyData";
 import {Flushable} from "./Flushable";
+import {InteractionDataBase} from "./InteractionDataBase";
 
-export class KeyDataImpl implements KeyData, Flushable {
-    /**
-     * The key involve in the interaction
-     */
-    protected key?: string;
+export class KeyDataImpl extends InteractionDataBase implements KeyData, Flushable {
+    private codeData: string = "";
 
-    /**
-     * The target of the event that trigger the interaction
-     */
-    protected target?: EventTarget;
+    private keyData: string = "";
+
+    private locationData: number = 0;
+
+    private repeatData: boolean = false;
+
+    private altKeyData: boolean = false;
+
+    private ctrlKeyData: boolean = false;
+
+    private metaKeyData: boolean = false;
+
+    private shiftKeyData: boolean = false;
 
     public flush(): void {
-        this.key = undefined;
-        this.target = undefined;
+        super.flush();
+        this.codeData = "";
+        this.keyData = "";
+        this.locationData = 0;
+        this.repeatData = false;
+        this.altKeyData = false;
+        this.ctrlKeyData = false;
+        this.metaKeyData = false;
+        this.shiftKeyData = false;
     }
 
-    public getTarget(): EventTarget | undefined {
-        return this.target;
+    public copy(data: KeyData): void {
+        super.copy(data);
+        // Cannot use Object.assign because of a strange implementation of Event
+        // that prevents accessing the properties
+        this.codeData = data.code;
+        this.keyData = data.key;
+        this.locationData = data.location;
+        this.repeatData = data.repeat;
+        this.altKeyData = data.altKey;
+        this.ctrlKeyData = data.ctrlKey;
+        this.metaKeyData = data.metaKey;
+        this.shiftKeyData = data.shiftKey;
     }
 
-    public getKey(): string {
-        return this.key ?? "";
+    public get altKey(): boolean {
+        return this.altKeyData;
     }
 
-    public setKeyData(event: KeyboardEvent): void {
-        this.target = event.target ?? undefined;
-        this.key = event.code;
+    public get code(): string {
+        return this.codeData;
+    }
+
+    public get ctrlKey(): boolean {
+        return this.ctrlKeyData;
+    }
+
+    public get key(): string {
+        return this.keyData;
+    }
+
+    public get location(): number {
+        return this.locationData;
+    }
+
+    public get metaKey(): boolean {
+        return this.metaKeyData;
+    }
+
+    public get repeat(): boolean {
+        return this.repeatData;
+    }
+
+    public get shiftKey(): boolean {
+        return this.shiftKeyData;
     }
 }

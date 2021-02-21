@@ -89,7 +89,7 @@ test("key press std key when false", () => {
 
 test("key press std key when true", () => {
     binding = keyPressBinder(false)
-        .when(i => i.getKey() === "A")
+        .when(i => i.code === "A")
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
@@ -145,7 +145,7 @@ test("key press std key with when true", () => {
         .toProduce(() => new StubCmd(true))
         .on(elt)
         .with("c")
-        .when(i => i.getKey() === "c")
+        .when(i => i.code === "c")
         .bind();
     robot(elt).keydown({"code": "c"});
     expect(ctx.commands).toHaveLength(1);

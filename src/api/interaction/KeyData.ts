@@ -12,18 +12,34 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {InteractionData} from "./InteractionData";
+import {UnitInteractionData} from "./UnitInteractionData";
+import {EventModifierData} from "./EventModifierData";
 
-export interface KeyData extends InteractionData {
+/**
+ * The data of keyboard-based user interactions.
+ * Based on: https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent (documentation extracted from here)
+ */
+export interface KeyData extends UnitInteractionData, EventModifierData {
     /**
-     *
-     * @returns The component that produce the interaction
+     * A string with the code value of the physical key represented by the event.
+     * Warning: This ignores the user's keyboard layout, so that if the user presses
+     * the key at the "Y" position in a QWERTY keyboard layout this will always return "KeyY",
+     * even if the user has a QWERTZ keyboard.
      */
-    getTarget(): EventTarget | undefined;
+    readonly code: string;
 
     /**
-     *
-     * @returns The key use by the interaction
+     * A string that represents the key value of the key represented by the event.
      */
-    getKey(): string;
+    readonly key: string;
+
+    /**
+     * A number that represents the location of the key on the keyboard or other input device.
+     */
+    readonly location: number;
+
+    /**
+     * A boolean that is true if the key is being held down such that it is automatically repeating.
+     */
+    readonly repeat: boolean;
 }

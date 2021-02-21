@@ -91,7 +91,7 @@ export class SpinnerChanged extends InteractionBase<WidgetData<HTMLInputElement>
 
         this.handler = {
             "initToChangedHandler": (event: Event): void => {
-                this.data.setWidget(event.target as HTMLInputElement);
+                this.data.copy(event);
             },
             "reinitData": (): void => {
                 this.reinitData();

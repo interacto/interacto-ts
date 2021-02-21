@@ -13,14 +13,15 @@
  */
 
 import {InteractionData} from "./InteractionData";
-import {SrcTgtTouchData} from "./SrcTgtTouchData";
+import {SrcTgtPointsData} from "./SrcTgtPointsData";
+import {TouchData} from "./TouchData";
 
 /**
  * Multi-touch interaction data interface
  */
 export interface MultiTouchData extends InteractionData {
     /**
-     * @returns The list of touch data.
+     * The list of touch data.
      */
-    getTouchData(): ReadonlyArray<SrcTgtTouchData>;
+    readonly touches: ReadonlyArray<SrcTgtPointsData<TouchData>>;
 }

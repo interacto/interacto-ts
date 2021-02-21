@@ -61,7 +61,7 @@ export class HyperLinkClicked extends InteractionBase<WidgetData<HTMLAnchorEleme
 
         this.handler = {
             "initToClickedHandler": (event: Event): void => {
-                this.data.setWidget(event.target as HTMLAnchorElement);
+                this.data.copy(event);
             },
             "reinitData": (): void => {
                 this.reinitData();

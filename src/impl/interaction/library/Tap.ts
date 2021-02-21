@@ -112,9 +112,9 @@ export class Tap extends InteractionBase<TapData, TapDataImpl, TapFSM> {
         this.handler = {
             "tap": (evt: TouchEvent): void => {
                 if (evt.changedTouches.length > 0) {
-                    const touch = evt.changedTouches[0];
-                    this.data.addTapData(new TouchDataImpl(touch.identifier, touch.clientX, touch.clientY,
-                        touch.screenX, touch.screenY, touch.target));
+                    const touch = new TouchDataImpl();
+                    touch.copy(TouchDataImpl.mergeTouchEventData(evt.changedTouches[0], evt));
+                    this.data.addTapData(touch);
                 }
             },
             "reinitData": (): void => {

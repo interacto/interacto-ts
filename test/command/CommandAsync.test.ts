@@ -30,7 +30,7 @@ import {
 import {flushPromises} from "../Utils";
 import {createMouseEvent, createTouchEvent} from "../interaction/StubEvents";
 import {LogLevel} from "../../src/api/logging/LogLevel";
-import {BindingImpl} from "../../dist/impl/binding/BindingImpl";
+import {BindingImpl} from "../../src/impl/binding/BindingImpl";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
 import useFakeTimers = jest.useFakeTimers;
 import clearAllTimers = jest.clearAllTimers;

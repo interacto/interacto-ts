@@ -71,17 +71,18 @@ export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouch
         this.handler = {
             "onTouch": (event: TouchEvent): void => {
                 if (event.changedTouches.length > 0) {
-                    const touch = event.changedTouches[0];
-                    this.data.addTouchData(new SrcTgtTouchDataImpl(touch.identifier, touch.clientX, touch.clientY,
-                        touch.screenX, touch.screenY, touch.target));
+                    const data = new SrcTgtTouchDataImpl();
+                    data.copySrc(event.changedTouches[0], event);
+                    data.copyTgt(event.changedTouches[0], event);
+                    this.data.addTouchData(data);
                 }
             },
             "onMove": (event: TouchEvent): void => {
-                this.data.setTouch(event.changedTouches[0]);
+                this.data.setTouch(event.changedTouches[0], event);
             },
 
             "onRelease": (event: TouchEvent): void => {
-                this.data.setTouch(event.changedTouches[0]);
+                this.data.setTouch(event.changedTouches[0], event);
             },
 
             "reinitData": (): void => {
@@ -90,10 +91,10 @@ export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouch
                     .map(fsm => fsm.getTouchId());
 
                 this.getData()
-                    .getTouchData()
-                    .filter(data => !currentIDs.includes(data.getTouchId()))
+                    .touches
+                    .filter(data => !currentIDs.includes(data.src.identifier))
                     .forEach(data => {
-                        (this.getData() as MultiTouchDataImpl).removeTouchData(data.getTouchId() ?? -1);
+                        (this.getData() as MultiTouchDataImpl).removeTouchData(data.src.identifier);
                     });
             }
         };

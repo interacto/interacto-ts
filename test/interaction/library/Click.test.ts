@@ -12,8 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {Click, FSMHandler} from "../../../src/interacto";
-import {createMouseEvent, robot} from "../StubEvents";
+import {Click, FSMHandler, PointDataImpl} from "../../../src/interacto";
+import {createMouseEvent2, robot} from "../StubEvents";
 import {mock, MockProxy} from "jest-mock-extended";
 
 let interaction: Click;
@@ -58,47 +58,50 @@ test("specific mouse button checking OK", () => {
 });
 
 test("testClickData", () => {
-    let x: number | undefined;
-    let y: number | undefined;
-    let sx: number | undefined;
-    let sy: number | undefined;
-    let button: number | undefined;
+    const data = new PointDataImpl();
+    const expected = new PointDataImpl();
+    expected.copy({
+        "altKey": true,
+        "button": 1,
+        "buttons": 0,
+        "clientX": 11,
+        "clientY": 22,
+        "ctrlKey": false,
+        "currentTarget": canvas,
+        "metaKey": true,
+        "movementX": 10,
+        "movementY": 20,
+        "offsetX": 30,
+        "offsetY": 40,
+        "pageX": 50,
+        "pageY": 60,
+        "relatedTarget": canvas,
+        "screenX": 111,
+        "screenY": 222,
+        "shiftKey": true,
+        "target": canvas,
+        "timeStamp": 0
+    });
 
     handler.fsmStops.mockImplementation(() => {
-        button = interaction.getData().getButton();
-        x = interaction.getData().getSrcClientX();
-        y = interaction.getData().getSrcClientY();
-        sx = interaction.getData().getSrcScreenX();
-        sy = interaction.getData().getSrcScreenY();
+        data.copy(interaction.getData());
     });
-    interaction.processEvent(createMouseEvent("click", canvas, 111, 222, 11, 22, 1));
-    expect(x).toStrictEqual(11);
-    expect(y).toStrictEqual(22);
-    expect(sx).toStrictEqual(111);
-    expect(sy).toStrictEqual(222);
-    expect(button).toStrictEqual(1);
+    interaction.processEvent(createMouseEvent2("click", expected));
+    expect(data).toStrictEqual(expected);
 });
 
 test("testClickOnWidgetData", () => {
-    let x: number | undefined;
-    let y: number | undefined;
-    let sx: number | undefined;
-    let sy: number | undefined;
-    let button: number | undefined;
+    const data = new PointDataImpl();
 
     handler.fsmStops.mockImplementation(() => {
-        button = interaction.getData().getButton();
-        x = interaction.getData().getSrcClientX();
-        y = interaction.getData().getSrcClientY();
-        sx = interaction.getData().getSrcScreenX();
-        sy = interaction.getData().getSrcScreenY();
+        data.copy(interaction.getData());
     });
     interaction.registerToNodes([canvas]);
     robot().click({"target": canvas, "button": 1, "screenX": 111, "screenY": 222, "clientX": 11, "clientY": 22});
-    expect(x).toStrictEqual(11);
-    expect(y).toStrictEqual(22);
-    expect(sx).toStrictEqual(111);
-    expect(sy).toStrictEqual(222);
-    expect(button).toStrictEqual(1);
+    expect(data.clientX).toStrictEqual(11);
+    expect(data.clientY).toStrictEqual(22);
+    expect(data.screenX).toStrictEqual(111);
+    expect(data.screenY).toStrictEqual(222);
+    expect(data.button).toStrictEqual(1);
 });
 

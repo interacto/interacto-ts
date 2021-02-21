@@ -14,40 +14,21 @@
 
 import {KeysData} from "../../../api/interaction/KeysData";
 import {Flushable} from "./Flushable";
+import {KeyData} from "../../../api/interaction/KeyData";
 
 export class KeysDataImpl implements KeysData, Flushable {
-    /**
-     * The keys involve in the interaction
-     */
-    protected keys?: Array<string>;
+    private readonly keysData: Array<KeyData> = [];
 
-    /**
-     * The target of the event that trigger the interaction
-     */
-    protected target?: EventTarget;
 
     public flush(): void {
-        this.keys = undefined;
-        this.target = undefined;
+        this.keysData.length = 0;
     }
 
-    public getKeys(): ReadonlyArray<string> {
-        return this.keys ?? [];
+    public get keys(): ReadonlyArray<KeyData> {
+        return this.keysData;
     }
 
-    public getTarget(): EventTarget | undefined {
-        return this.target;
-    }
-
-    public setKeysDataTarget(event: KeyboardEvent): void {
-        this.target = event.target ?? undefined;
-    }
-
-    public addKeysDataKey(event: KeyboardEvent): void {
-        if (this.keys === undefined) {
-            this.keys = [event.code];
-        } else {
-            this.keys.push(event.code);
-        }
+    public addKey(key: KeyData): void {
+        this.keysData.push(key);
     }
 }

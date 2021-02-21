@@ -12,16 +12,18 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSMHandler, KeysTyped} from "../../../src/interacto";
+import {FSMHandler, KeyData, KeysDataImpl, KeysTyped, peek} from "../../../src/interacto";
 import {robot} from "../StubEvents";
 import {mock} from "jest-mock-extended";
 
 let interaction: KeysTyped;
 let text: HTMLElement;
 let handler: FSMHandler;
+let data: KeysDataImpl;
 
 beforeEach(() => {
     jest.useFakeTimers();
+    data = new KeysDataImpl();
     handler = mock<FSMHandler>();
     interaction = new KeysTyped();
     interaction.log(true);
@@ -46,11 +48,9 @@ test("type 'b' and wait for timeout stops the interaction", () => {
 });
 
 test("type 'b' and wait for timeout stops the interaction: data", () => {
-    let keys: Array<string> = [];
-
     const newHandler = mock<FSMHandler>();
     newHandler.fsmStops.mockImplementation(() => {
-        keys = [...interaction.getData().getKeys()];
+        data.addKey(peek(interaction.getData().keys) as KeyData);
     });
     interaction.getFsm().addHandler(newHandler);
 
@@ -59,8 +59,8 @@ test("type 'b' and wait for timeout stops the interaction: data", () => {
         .keydown({"code": "b"})
         .keyup({"code": "b"});
     jest.runOnlyPendingTimers();
-    expect(keys).toHaveLength(1);
-    expect(keys[0]).toStrictEqual("b");
+    expect(data.keys).toHaveLength(1);
+    expect(data.keys[0].code).toStrictEqual("b");
 });
 
 test("type text and wait for timeout stops the interaction", () => {
@@ -79,11 +79,11 @@ test("type text and wait for timeout stops the interaction", () => {
 });
 
 test("type text and wait for timeout stops the interaction: data", () => {
-    let keys: Array<string> = [];
-
     const newHandler = mock<FSMHandler>();
     newHandler.fsmStops.mockImplementation(() => {
-        keys = [...interaction.getData().getKeys()];
+        interaction.getData().keys.forEach(k => {
+            data.addKey(k);
+        });
     });
     interaction.getFsm().addHandler(newHandler);
 
@@ -96,16 +96,16 @@ test("type text and wait for timeout stops the interaction: data", () => {
         .keydown({"code": "a"})
         .keyup({"code": "a"});
     jest.runOnlyPendingTimers();
-    expect(keys).toHaveLength(3);
-    expect(keys).toStrictEqual(["b", "c", "a"]);
+    expect(data.keys).toHaveLength(3);
+    expect(data.keys[0].code).toStrictEqual("b");
+    expect(data.keys[1].code).toStrictEqual("c");
+    expect(data.keys[2].code).toStrictEqual("a");
 });
 
 test("type 'b' does not stop the interaction", () => {
-    let keys: Array<string> = [];
-
     const newHandler = mock<FSMHandler>();
     newHandler.fsmUpdates.mockImplementation(() => {
-        keys = [...interaction.getData().getKeys()];
+        data.addKey(peek(interaction.getData().keys) as KeyData);
     });
     interaction.getFsm().addHandler(newHandler);
 
@@ -115,6 +115,6 @@ test("type 'b' does not stop the interaction", () => {
         .keyup({"code": "z"});
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).not.toHaveBeenCalledWith();
-    expect(keys).toHaveLength(1);
-    expect(keys[0]).toStrictEqual("z");
+    expect(data.keys).toHaveLength(1);
+    expect(data.keys[0].code).toStrictEqual("z");
 });

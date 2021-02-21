@@ -12,29 +12,19 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {InteractionData} from "./InteractionData";
+import {UnitInteractionData} from "./UnitInteractionData";
 
 /**
  * Scrolling interaction data
  */
-export interface ScrollData extends InteractionData {
+export interface ScrollData extends UnitInteractionData {
     /**
-     * @returns The object on witch the scroll is performed.
+     * The number of pixels that the document has already been scrolled horizontally.
      */
-    getScrolledNode(): EventTarget | undefined;
+    readonly scrollX: number;
 
     /**
-     * @returns  The X-coordinate of the scroll position.
+     * The number of pixels that the document has already been scrolled vertically.
      */
-    getPx(): number;
-
-    /**
-     * @returns The Y-coordinate of the scroll position.
-     */
-    getPy(): number;
-
-    /**
-     * @returns The total increment of the scrolling.
-     */
-    getIncrement(): number;
+    readonly scrollY: number;
 }

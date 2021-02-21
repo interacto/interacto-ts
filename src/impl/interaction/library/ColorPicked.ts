@@ -61,7 +61,7 @@ export class ColorPicked extends InteractionBase<WidgetData<HTMLInputElement>, W
 
         this.handler = {
             "initToPickedHandler": (event: Event): void => {
-                this.data.setWidget(event.target as HTMLInputElement);
+                this.data.copy(event);
             },
             "reinitData": (): void => {
                 this.reinitData();

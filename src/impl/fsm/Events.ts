@@ -25,7 +25,7 @@ export function isEventType(evtType: string): evtType is EventType {
  * @param idToFind - The ID of the touch to find.
  * @param touches - The list of touches to search in.
  */
-export function getTouch(touches: TouchList, idToFind: number | undefined): Touch | undefined {
+export function getTouch(touches: TouchList, idToFind?: number): Touch | undefined {
     // eslint-disable-next-line @typescript-eslint/prefer-for-of
     for (let i = 0; i < touches.length; i++) {
         if (touches[i].identifier === idToFind) {

@@ -109,9 +109,7 @@ export class Clicks extends InteractionBase<PointsData, PointsDataImpl, ClicksFS
         this.handler = {
             "click": (evt: MouseEvent): void => {
                 const pt = new PointDataImpl();
-                pt.setPointData(evt.clientX, evt.clientY, evt.screenX, evt.screenY,
-                    evt.button, evt.target ?? undefined, evt.currentTarget ?? undefined);
-                pt.setModifiersData(evt);
+                pt.copy(evt);
                 this.data.addPoint(pt);
             },
             "reinitData": (): void => {

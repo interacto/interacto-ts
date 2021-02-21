@@ -14,23 +14,22 @@
 
 import {TouchData} from "../../../api/interaction/TouchData";
 import {TapData} from "../../../api/interaction/TapData";
-import {TouchDataImpl} from "./TouchDataImpl";
 import {Flushable} from "./Flushable";
 
 /**
  * Tapping interaction data implementation
  */
 export class TapDataImpl implements TapData, Flushable {
-    private readonly tapsData: Array<TouchDataImpl>;
+    private readonly tapsData: Array<TouchData>;
 
     /**
      * Creates the interaction data
      */
     public constructor() {
-        this.tapsData = new Array<TouchDataImpl>();
+        this.tapsData = [];
     }
 
-    public getTapData(): ReadonlyArray<TouchData> {
+    public get taps(): ReadonlyArray<TouchData> {
         return [...this.tapsData];
     }
 
@@ -38,7 +37,7 @@ export class TapDataImpl implements TapData, Flushable {
      * Adds a touch data to this multi-touch data
      * @param data - The touch data to add
      */
-    public addTapData(data: TouchDataImpl): void {
+    public addTapData(data: TouchData): void {
         this.tapsData.push(data);
     }
 

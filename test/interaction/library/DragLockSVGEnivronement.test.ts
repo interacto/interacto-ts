@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {DragLock, FSMHandler} from "../../../src/interacto";
+import {DragLock, FSMHandler, SrcTgtPointsDataImpl} from "../../../src/interacto";
 import {createMouseEvent, robot} from "../StubEvents";
 import {mock} from "jest-mock-extended";
 
@@ -52,16 +52,11 @@ test("dragLock in a SVG environment", () => {
 });
 
 test("dragLock data in a SVG environment", () => {
-    let tx: number | undefined;
-    let ty: number | undefined;
-    let sx: number | undefined;
-    let sy: number | undefined;
+    const data = new SrcTgtPointsDataImpl();
     const newHandler = mock<FSMHandler>();
     newHandler.fsmStops.mockImplementation(() => {
-        sx = interaction.getData().getSrcClientX();
-        sy = interaction.getData().getSrcClientY();
-        tx = interaction.getData().getTgtClientX();
-        ty = interaction.getData().getTgtClientY();
+        data.copySrc(interaction.getData().src);
+        data.copyTgt(interaction.getData().tgt);
     });
     interaction.getFsm().addHandler(newHandler);
     interaction.processEvent(createMouseEvent("click", rect1, undefined, undefined, 11, 23));
@@ -69,10 +64,10 @@ test("dragLock data in a SVG environment", () => {
     interaction.processEvent(createMouseEvent("mousemove", svg, undefined, undefined, 20, 30));
     interaction.processEvent(createMouseEvent("click", rect2, undefined, undefined, 22, 33));
     interaction.processEvent(createMouseEvent("click", rect2, undefined, undefined, 22, 33));
-    expect(sx).toBe(11);
-    expect(sy).toBe(23);
-    expect(tx).toBe(22);
-    expect(ty).toBe(33);
+    expect(data.src.clientX).toBe(11);
+    expect(data.src.clientY).toBe(23);
+    expect(data.tgt.clientX).toBe(22);
+    expect(data.tgt.clientY).toBe(33);
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);

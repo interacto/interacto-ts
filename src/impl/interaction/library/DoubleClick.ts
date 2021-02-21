@@ -125,21 +125,13 @@ export class DoubleClickFSM extends FSMImpl {
 }
 
 export class DoubleClick extends InteractionBase<PointData, PointDataImpl, DoubleClickFSM> {
-    public readonly firstClick: Click;
+    public constructor(fsm?: DoubleClickFSM, data?: PointDataImpl) {
+        super(fsm ?? new DoubleClickFSM(), data ?? new PointDataImpl());
 
-    public constructor(fsm?: DoubleClickFSM) {
-        super(fsm ?? new DoubleClickFSM(), new PointDataImpl());
-
-        this.firstClick = new Click(this.getFsm().firstClickFSM);
+        // We give the interaction to the first click as this click interaction
+        // will contains the data: so that this interaction will fill the data
+        // of the double-click.
+        new Click(this.getFsm().firstClickFSM, this.data);
         this.getFsm().buildFSM(this);
-    }
-
-    public reinitData(): void {
-        super.reinitData();
-        this.firstClick.reinitData();
-    }
-
-    public getData(): PointData {
-        return this.firstClick.getData();
     }
 }

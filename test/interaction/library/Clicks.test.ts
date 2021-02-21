@@ -108,14 +108,14 @@ test("cannot build the interaction with 1 click", () => {
         test("that data first click ok", () => {
             interaction.processEvent(createMouseEvent("click", canvas, 125, 21, 140, 121, 1));
 
-            const data = interaction.getData().getPointsData();
+            const data = interaction.getData().points;
 
             expect(data).toHaveLength(1);
-            expect(data[0].getSrcClientX()).toBe(140);
-            expect(data[0].getSrcClientY()).toBe(121);
-            expect(data[0].getSrcScreenX()).toBe(125);
-            expect(data[0].getSrcScreenY()).toBe(21);
-            expect(data[0].getButton()).toBe(1);
+            expect(data[0].clientX).toBe(140);
+            expect(data[0].clientY).toBe(121);
+            expect(data[0].screenX).toBe(125);
+            expect(data[0].screenY).toBe(21);
+            expect(data[0].button).toBe(1);
         });
 
         test("that data two clicks ok", () => {
@@ -124,19 +124,19 @@ test("cannot build the interaction with 1 click", () => {
                 .click({"screenX": 1025, "screenY": 210, "clientX": 1040, "clientY": 1201, "button": 1})
                 .click({"screenX": 1250, "screenY": 201, "clientX": 1040, "clientY": 1021, "button": 1});
 
-            const data = interaction.getData().getPointsData();
+            const data = interaction.getData().points;
 
             expect(data).toHaveLength(2);
-            expect(data[0].getSrcClientX()).toBe(1040);
-            expect(data[0].getSrcClientY()).toBe(1201);
-            expect(data[0].getSrcScreenX()).toBe(1025);
-            expect(data[0].getSrcScreenY()).toBe(210);
-            expect(data[0].getButton()).toBe(1);
-            expect(data[1].getSrcClientX()).toBe(1040);
-            expect(data[1].getSrcClientY()).toBe(1021);
-            expect(data[1].getSrcScreenX()).toBe(1250);
-            expect(data[1].getSrcScreenY()).toBe(201);
-            expect(data[1].getButton()).toBe(1);
+            expect(data[0].clientX).toBe(1040);
+            expect(data[0].clientY).toBe(1201);
+            expect(data[0].screenX).toBe(1025);
+            expect(data[0].screenY).toBe(210);
+            expect(data[0].button).toBe(1);
+            expect(data[1].clientX).toBe(1040);
+            expect(data[1].clientY).toBe(1021);
+            expect(data[1].screenX).toBe(1250);
+            expect(data[1].screenY).toBe(201);
+            expect(data[1].button).toBe(1);
         });
     });
 });

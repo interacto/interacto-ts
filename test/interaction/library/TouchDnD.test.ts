@@ -15,14 +15,17 @@
 import {FSMHandler, TouchDnD} from "../../../src/interacto";
 import {createTouchEvent} from "../StubEvents";
 import {mock} from "jest-mock-extended";
+import {TouchDataImpl} from "../../../src/impl/interaction/library/TouchDataImpl";
 
 let interaction: TouchDnD;
 let canvas: HTMLElement;
 let handler: FSMHandler;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-let data: any;
+let srcData: TouchDataImpl;
+let tgtData: TouchDataImpl;
 
 beforeEach(() => {
+    srcData = new TouchDataImpl();
+    tgtData = new TouchDataImpl();
     handler = mock<FSMHandler>();
     interaction = new TouchDnD();
     interaction.log(true);
@@ -40,22 +43,27 @@ test("pressure", () => {
 
 test("pressure data", () => {
     const newHandler = mock<FSMHandler>();
+
     newHandler.fsmUpdates.mockImplementation(() => {
-        data = {...interaction.getData()};
+        srcData.copy(interaction.getData().src);
+        tgtData.copy(interaction.getData().tgt);
     });
     interaction.getFsm().addHandler(newHandler);
     interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 15, 20, 16, 21));
-    expect(data.srcClientX).toBe(16);
-    expect(data.srcClientY).toBe(21);
-    expect(data.srcScreenX).toBe(15);
-    expect(data.srcScreenY).toBe(20);
-    expect(data.tgtClientX).toBe(16);
-    expect(data.tgtClientY).toBe(21);
-    expect(data.tgtScreenX).toBe(15);
-    expect(data.tgtScreenY).toBe(20);
-    expect(data.touchID).toBe(3);
-    expect(data.button).toBeUndefined();
-    expect(data.tgtObject).toBe(canvas);
+    expect(srcData.clientX).toBe(16);
+    expect(srcData.clientY).toBe(21);
+    expect(srcData.screenX).toBe(15);
+    expect(srcData.screenY).toBe(20);
+    expect(tgtData.clientX).toBe(16);
+    expect(tgtData.clientY).toBe(21);
+    expect(tgtData.screenX).toBe(15);
+    expect(tgtData.screenY).toBe(20);
+    expect(srcData.identifier).toBe(3);
+    expect(tgtData.identifier).toBe(3);
+    expect(srcData.target).toBe(canvas);
+    expect(srcData.currentTarget).toBeNull();
+    expect(tgtData.target).toBe(canvas);
+    expect(tgtData.currentTarget).toBeNull();
 });
 
 test("pressure release", () => {
@@ -79,22 +87,26 @@ test("pressure move data", () => {
     interaction.processEvent(createTouchEvent("touchstart", 2, canvas, 11, 23, 12, 25));
     const newHandler = mock<FSMHandler>();
     newHandler.fsmUpdates.mockImplementation(() => {
-        data = {...interaction.getData()};
+        srcData.copy(interaction.getData().src);
+        tgtData.copy(interaction.getData().tgt);
     });
     interaction.getFsm().addHandler(newHandler);
 
     interaction.processEvent(createTouchEvent("touchmove", 2, canvas, 141, 24, 14, 28));
-    expect(data.srcClientX).toBe(12);
-    expect(data.srcClientY).toBe(25);
-    expect(data.srcScreenX).toBe(11);
-    expect(data.srcScreenY).toBe(23);
-    expect(data.tgtClientX).toBe(14);
-    expect(data.tgtClientY).toBe(28);
-    expect(data.tgtScreenX).toBe(141);
-    expect(data.tgtScreenY).toBe(24);
-    expect(data.touchID).toBe(2);
-    expect(data.button).toBeUndefined();
-    expect(data.tgtObject).toBe(canvas);
+    expect(srcData.clientX).toBe(12);
+    expect(srcData.clientY).toBe(25);
+    expect(srcData.screenX).toBe(11);
+    expect(srcData.screenY).toBe(23);
+    expect(tgtData.clientX).toBe(14);
+    expect(tgtData.clientY).toBe(28);
+    expect(tgtData.screenX).toBe(141);
+    expect(tgtData.screenY).toBe(24);
+    expect(srcData.identifier).toBe(2);
+    expect(tgtData.identifier).toBe(2);
+    expect(srcData.target).toBe(canvas);
+    expect(srcData.currentTarget).toBeNull();
+    expect(tgtData.target).toBe(canvas);
+    expect(tgtData.currentTarget).toBeNull();
 });
 
 test("pressure move move KO", () => {
@@ -123,22 +135,25 @@ test("pressure move move OK data", () => {
 
     const newHandler = mock<FSMHandler>();
     newHandler.fsmUpdates.mockImplementation(() => {
-        data = {...interaction.getData()};
+        srcData.copy(interaction.getData().src);
+        tgtData.copy(interaction.getData().tgt);
     });
     interaction.getFsm().addHandler(newHandler);
 
     interaction.processEvent(createTouchEvent("touchmove", 4, canvas, 110, 240, 140, 280));
-    expect(data.srcClientX).toBe(112);
-    expect(data.srcClientY).toBe(215);
-    expect(data.srcScreenX).toBe(111);
-    expect(data.srcScreenY).toBe(213);
-    expect(data.tgtClientX).toBe(140);
-    expect(data.tgtClientY).toBe(280);
-    expect(data.tgtScreenX).toBe(110);
-    expect(data.tgtScreenY).toBe(240);
-    expect(data.touchID).toBe(4);
-    expect(data.button).toBeUndefined();
-    expect(data.tgtObject).toBe(canvas);
+    expect(srcData.clientX).toBe(112);
+    expect(srcData.clientY).toBe(215);
+    expect(srcData.screenX).toBe(111);
+    expect(srcData.screenY).toBe(213);
+    expect(tgtData.clientX).toBe(140);
+    expect(tgtData.clientY).toBe(280);
+    expect(tgtData.screenX).toBe(110);
+    expect(tgtData.screenY).toBe(240);
+    expect(srcData.identifier).toBe(4);
+    expect(srcData.target).toBe(canvas);
+    expect(srcData.currentTarget).toBeNull();
+    expect(tgtData.target).toBe(canvas);
+    expect(tgtData.currentTarget).toBeNull();
 });
 
 test("pressure move release", () => {
@@ -152,14 +167,16 @@ test("pressure move release", () => {
 });
 
 test("pressure move release data", () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let data2: any;
+    const srcData2 = new TouchDataImpl();
+    const tgtData2 = new TouchDataImpl();
     const newHandler = mock<FSMHandler>();
     newHandler.fsmUpdates.mockImplementation(() => {
-        data = {...interaction.getData()};
+        srcData.copy(interaction.getData().src);
+        tgtData.copy(interaction.getData().tgt);
     });
     newHandler.fsmStops.mockImplementation(() => {
-        data2 = {...interaction.getData()};
+        srcData2.copy(interaction.getData().src);
+        tgtData2.copy(interaction.getData().tgt);
     });
     interaction.getFsm().addHandler(newHandler);
 
@@ -167,29 +184,33 @@ test("pressure move release data", () => {
     interaction.processEvent(createTouchEvent("touchmove", 0, canvas, 11, 24, 14, 28));
     interaction.processEvent(createTouchEvent("touchend", 0, canvas, 110, 240, 140, 280));
 
-    expect(data.srcClientX).toBe(121);
-    expect(data.srcClientY).toBe(251);
-    expect(data.srcScreenX).toBe(111);
-    expect(data.srcScreenY).toBe(231);
-    expect(data.tgtClientX).toBe(14);
-    expect(data.tgtClientY).toBe(28);
-    expect(data.tgtScreenX).toBe(11);
-    expect(data.tgtScreenY).toBe(24);
-    expect(data.touchID).toBe(0);
-    expect(data.button).toBeUndefined();
-    expect(data.tgtObject).toBe(canvas);
+    expect(srcData.clientX).toBe(121);
+    expect(srcData.clientY).toBe(251);
+    expect(srcData.screenX).toBe(111);
+    expect(srcData.screenY).toBe(231);
+    expect(tgtData.clientX).toBe(14);
+    expect(tgtData.clientY).toBe(28);
+    expect(tgtData.screenX).toBe(11);
+    expect(tgtData.screenY).toBe(24);
+    expect(srcData.identifier).toBe(0);
+    expect(tgtData.identifier).toBe(0);
+    expect(srcData.target).toBe(canvas);
+    expect(srcData.currentTarget).toBeNull();
+    expect(tgtData.target).toBe(canvas);
+    expect(tgtData.currentTarget).toBeNull();
 
-    expect(data2.srcClientX).toBe(121);
-    expect(data2.srcClientY).toBe(251);
-    expect(data2.srcScreenX).toBe(111);
-    expect(data2.srcScreenY).toBe(231);
-    expect(data2.tgtClientX).toBe(140);
-    expect(data2.tgtClientY).toBe(280);
-    expect(data2.tgtScreenX).toBe(110);
-    expect(data2.tgtScreenY).toBe(240);
-    expect(data2.touchID).toBe(0);
-    expect(data2.button).toBeUndefined();
-    expect(data2.tgtObject).toBe(canvas);
+    expect(srcData2.clientX).toBe(121);
+    expect(srcData2.clientY).toBe(251);
+    expect(srcData2.screenX).toBe(111);
+    expect(srcData2.screenY).toBe(231);
+    expect(tgtData2.clientX).toBe(140);
+    expect(tgtData2.clientY).toBe(280);
+    expect(tgtData2.screenX).toBe(110);
+    expect(tgtData2.screenY).toBe(240);
+    expect(srcData2.identifier).toBe(0);
+    expect(tgtData2.identifier).toBe(0);
+    expect(srcData2.target).toBe(canvas);
+    expect(tgtData2.target).toBe(canvas);
 });
 
 test("pressure move release KO", () => {
@@ -237,9 +258,8 @@ test("touch restart", () => {
 });
 
 test("no modifiers and button", () => {
-    expect(interaction.getData().isAltPressed()).toBeFalsy();
-    expect(interaction.getData().isCtrlPressed()).toBeFalsy();
-    expect(interaction.getData().isMetaPressed()).toBeFalsy();
-    expect(interaction.getData().isShiftPressed()).toBeFalsy();
-    expect(interaction.getData().getButton()).toBeUndefined();
+    expect(interaction.getData().src.altKey).toBeFalsy();
+    expect(interaction.getData().src.ctrlKey).toBeFalsy();
+    expect(interaction.getData().src.metaKey).toBeFalsy();
+    expect(interaction.getData().src.shiftKey).toBeFalsy();
 });

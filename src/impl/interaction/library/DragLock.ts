@@ -24,7 +24,8 @@ import {SrcTgtPointsData} from "../../../api/interaction/SrcTgtPointsData";
 import {InteractionBase} from "../InteractionBase";
 import {PointDataImpl} from "./PointDataImpl";
 import {EscapeKeyPressureTransition} from "../../fsm/EscapeKeyPressureTransition";
-import {Flushable} from "./Flushable";
+import {SrcTgtPointsDataImpl} from "./SrcTgtPointsDataImpl";
+import {PointData} from "../../../api/interaction/PointData";
 
 export class DragLockFSM extends FSMImpl {
     public readonly firstDbleClick: DoubleClickFSM;
@@ -87,6 +88,7 @@ export class DragLockFSM extends FSMImpl {
             const checkButton = this.firstDbleClick.getCheckButton();
             this.sndDbleClick.setCheckButton(checkButton);
             cancelDbleClick.setCheckButton(checkButton);
+            dataHandler.onFirstDbleClick();
         };
 
         new SubFSMTransition(locked, cancelled, cancelDbleClick);
@@ -106,70 +108,36 @@ export class DragLockFSM extends FSMImpl {
 
 interface DragLockFSMHandler extends FSMDataHandler {
     onMove(event: MouseEvent): void;
+    onFirstDbleClick(): void;
 }
 
 /**
  * The drag-lock user interaction
  */
-export class DragLock extends InteractionBase<SrcTgtPointsData, Flushable & SrcTgtPointsData, DragLockFSM> {
-    private readonly handler: DragLockFSMHandler;
-
-    private readonly firstClick: DoubleClick;
-
-    private readonly sndClick: DoubleClick;
-
+export class DragLock extends InteractionBase<SrcTgtPointsData<PointData>, SrcTgtPointsDataImpl, DragLockFSM> {
     /**
      * Creates a drag lock.
      */
     public constructor() {
-        super(new DragLockFSM(), {
-            "getTgtObject": (): EventTarget | undefined => (this.sndClick.getData().getButton() === undefined
-                ? this.firstClick.getData().getSrcObject()
-                : this.sndClick.getData().getSrcObject()),
-            "getTgtClientX": (): number => (this.sndClick.getData().getButton() === undefined ? this.data.getSrcClientX()
-                : this.sndClick.getData().getSrcClientX()),
-            "getTgtClientY": (): number => (this.sndClick.getData().getButton() === undefined ? this.data.getSrcClientY()
-                : this.sndClick.getData().getSrcClientY()),
-            "getTgtScreenX": (): number => (this.sndClick.getData().getButton() === undefined ? this.data.getSrcScreenX()
-                : this.sndClick.getData().getSrcScreenX()),
-            "getTgtScreenY": (): number => (this.sndClick.getData().getButton() === undefined ? this.data.getSrcScreenY()
-                : this.sndClick.getData().getSrcScreenY()),
-            "isAltPressed": (): boolean => this.firstClick.getData().isAltPressed(),
-            "isCtrlPressed": (): boolean => this.firstClick.getData().isCtrlPressed(),
-            "isShiftPressed": (): boolean => this.firstClick.getData().isShiftPressed(),
-            "isMetaPressed": (): boolean => this.firstClick.getData().isMetaPressed(),
-            "getButton": (): number | undefined => this.firstClick.getData().getButton(),
-            "getSrcClientX": (): number => this.firstClick.getData().getSrcClientX(),
-            "getSrcClientY": (): number => this.firstClick.getData().getSrcClientY(),
-            "getSrcObject": (): EventTarget | undefined => this.firstClick.getData().getSrcObject(),
-            "getSrcScreenX": (): number => this.firstClick.getData().getSrcScreenX(),
-            "getSrcScreenY": (): number => this.firstClick.getData().getSrcScreenY(),
-            "getCurrentTarget": (): EventTarget | undefined => this.firstClick.getData().getCurrentTarget(),
-            "flush": (): void => {
-                (this.firstClick.getData() as unknown as Flushable).flush();
-                (this.sndClick.getData() as unknown as Flushable).flush();
-            }
-        });
+        super(new DragLockFSM(), new SrcTgtPointsDataImpl());
 
-        this.handler = {
+        const handler: DragLockFSMHandler = {
             "onMove": (evt: MouseEvent): void => {
-                (this.sndClick.firstClick.getData() as (PointDataImpl)).setPointData(evt.clientX, evt.clientY, evt.screenX,
-                    evt.screenY, evt.button, evt.target ?? undefined, evt.currentTarget ?? undefined);
-                (this.sndClick.firstClick.getData() as (PointDataImpl)).setModifiersData(evt);
+                (this.data.tgt as PointDataImpl).copy(evt);
+            },
+            "onFirstDbleClick": (): void => {
+                // On the first double-click we have to set the tgt point by copying the src data.
+                (this.data.tgt as PointDataImpl).copy(this.data.src);
             },
             "reinitData": (): void => {
                 this.reinitData();
             }
         };
 
-        this.firstClick = new DoubleClick(this.getFsm().firstDbleClick);
-        this.sndClick = new DoubleClick(this.getFsm().sndDbleClick);
-        this.getFsm().buildFSM(this.handler);
-    }
-
-    public reinitData(): void {
-        super.reinitData();
-        this.firstClick.reinitData();
-        this.sndClick.reinitData();
+        // We give the interactions to the initial and final double-clicks as these interactions
+        // will contain the data: so that these interactions will fill the data of the draglock.
+        new DoubleClick(this.getFsm().firstDbleClick, this.data.src as PointDataImpl);
+        new DoubleClick(this.getFsm().sndDbleClick, this.data.tgt as PointDataImpl);
+        this.getFsm().buildFSM(handler);
     }
 }

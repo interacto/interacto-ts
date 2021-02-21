@@ -12,35 +12,23 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {PointData} from "./PointData";
+import {InteractionData} from "./InteractionData";
+import {PointBaseData} from "./PointBaseData";
 
 /**
  * Interaction data for a single pointing device that moves from a source
  * position to a target position.
  */
-export interface SrcTgtPointsData extends PointData {
+export interface SrcTgtPointsData<T extends PointBaseData> extends InteractionData {
     /**
-     * @returns The object picked at the target location.
+     * The source point data.
      */
-    getTgtObject(): EventTarget | undefined;
+    readonly src: T;
 
     /**
-     * @returns The last X-client position.
+     * The target point data.
+     * At the beginning of the interaction, the target data have the same values
+     * than the source data.
      */
-    getTgtClientX(): number;
-
-    /**
-     * @returns The last Y-client position.
-     */
-    getTgtClientY(): number;
-
-    /**
-     * @returns The last X-screen position.
-     */
-    getTgtScreenX(): number;
-
-    /**
-     * @returns The last Y-screen position.
-     */
-    getTgtScreenY(): number;
+    readonly tgt: T;
 }

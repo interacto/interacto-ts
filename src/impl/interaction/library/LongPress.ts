@@ -97,9 +97,7 @@ export class LongPress extends InteractionBase<PointData, PointDataImpl, LongPre
 
         this.handler = {
             "press": (evt: MouseEvent): void => {
-                this.data.setPointData(
-                    evt.clientX, evt.clientY, evt.screenX, evt.screenY, evt.button, evt.target ?? undefined,
-                    evt.currentTarget ?? undefined);
+                this.data.copy(evt);
             },
             "reinitData": (): void => {
                 this.reinitData();

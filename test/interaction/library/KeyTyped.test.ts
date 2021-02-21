@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSMHandler, KeyTyped} from "../../../src/interacto";
+import {FSMHandler, KeyDataImpl, KeyTyped} from "../../../src/interacto";
 import {robot} from "../StubEvents";
 import {mock} from "jest-mock-extended";
 
@@ -59,4 +59,18 @@ test("if you release a key different that the one you press, the interaction don
         .keyup({"code": "b"});
     expect(handler.fsmStarts).not.toHaveBeenCalled();
     expect(handler.fsmStops).not.toHaveBeenCalled();
+});
+
+test("data is ok", () => {
+    const data = new KeyDataImpl();
+    interaction.registerToNodes([text]);
+    const newHandler = mock<FSMHandler>();
+    newHandler.fsmStops.mockImplementation(() => {
+        data.copy(interaction.getData());
+    });
+    interaction.getFsm().addHandler(newHandler);
+    robot(text)
+        .keydown({"code": "z"})
+        .keyup({"code": "z"});
+    expect(data.code).toStrictEqual("z");
 });

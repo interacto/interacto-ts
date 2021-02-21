@@ -13,126 +13,75 @@
  */
 
 import {PointData} from "../../../api/interaction/PointData";
-import {Flushable} from "./Flushable";
+import {PointingDataBase} from "./PointingDataBase";
 
 /**
  * Single point interaction data implementation with write accesses.
  */
-export class PointDataImpl implements PointData, Flushable {
-    /** The pressed X-local position. */
-    protected srcClientX?: number;
+export class PointDataImpl extends PointingDataBase implements PointData {
+    private buttonData: number = 0;
 
-    /** The pressed Y-local position. */
-    protected srcClientY?: number;
+    private buttonsData: number = 0;
 
-    /** The pressed X-screen position. */
-    protected srcScreenX?: number;
+    private movementXData: number = 0;
 
-    /** The pressed Y-screen position. */
-    protected srcScreenY?: number;
+    private movementYData: number = 0;
 
-    /** The button used for the pressure. */
-    protected button?: number;
+    private offsetXData: number = 0;
 
-    protected altPressed: boolean;
+    private offsetYData: number = 0;
 
-    protected ctrlPressed: boolean;
-
-    protected shiftPressed: boolean;
-
-    protected metaPressed: boolean;
-
-    /** The object picked at the pressed position. */
-    protected srcObject?: EventTarget;
-
-    protected currentTarget?: EventTarget;
+    private relatedTargetData: EventTarget | null = null;
 
     public flush(): void {
-        this.button = undefined;
-        this.altPressed = false;
-        this.ctrlPressed = false;
-        this.shiftPressed = false;
-        this.metaPressed = false;
-        this.srcClientX = undefined;
-        this.srcClientY = undefined;
-        this.srcScreenX = undefined;
-        this.srcScreenY = undefined;
+        super.flush();
+        this.buttonData = 0;
+        this.buttonsData = 0;
+        this.movementXData = 0;
+        this.movementYData = 0;
+        this.offsetXData = 0;
+        this.offsetYData = 0;
+        this.relatedTargetData = null;
     }
 
-    public isAltPressed(): boolean {
-        return this.altPressed;
+    public copy(data: PointData): void {
+        super.copy(data);
+        // Cannot use Object.assign because of a strange implementation of Event
+        // that prevents accessing the properties
+        this.buttonData = data.button;
+        this.buttonsData = data.buttons;
+        this.movementXData = data.movementX;
+        this.movementYData = data.movementY;
+        this.offsetXData = data.offsetX;
+        this.offsetYData = data.offsetY;
+        this.relatedTargetData = data.relatedTarget;
     }
 
-    public isCtrlPressed(): boolean {
-        return this.ctrlPressed;
+    public get button(): number {
+        return this.buttonData;
     }
 
-    public isShiftPressed(): boolean {
-        return this.shiftPressed;
+    public get buttons(): number {
+        return this.buttonsData;
     }
 
-    public isMetaPressed(): boolean {
-        return this.metaPressed;
+    public get movementX(): number {
+        return this.movementXData;
     }
 
-    public getButton(): number | undefined {
-        return this.button;
+    public get movementY(): number {
+        return this.movementYData;
     }
 
-    public getSrcObject(): EventTarget | undefined {
-        return this.srcObject;
+    public get offsetX(): number {
+        return this.offsetXData;
     }
 
-    public getSrcScreenY(): number {
-        return this.srcScreenY ?? 0;
+    public get offsetY(): number {
+        return this.offsetYData;
     }
 
-    public getSrcScreenX(): number {
-        return this.srcScreenX ?? 0;
-    }
-
-    public getSrcClientX(): number {
-        return this.srcClientX ?? 0;
-    }
-
-    public getSrcClientY(): number {
-        return this.srcClientY ?? 0;
-    }
-
-    /**
-     * Sets the possible modifiers of this point data used in the mouse event.
-     * @param event - The mouse event to use to set this interaction data.
-     */
-    public setModifiersData(event: MouseEvent): void {
-        this.altPressed = event.altKey;
-        this.shiftPressed = event.shiftKey;
-        this.ctrlPressed = event.ctrlKey;
-        this.metaPressed = event.metaKey;
-    }
-
-    /**
-     * Sets the point data (the coordinates, the mouse button and the targeted node).
-     * Key modifiers are not set here.
-     * @param cx - The x local position
-     * @param cy - The y local position
-     * @param sx - The x scene position
-     * @param sy - The y scene position
-     * @param button - The mouse button
-     * @param target - The targeted object
-     * @param currTarget - The current targeted object
-     */
-    public setPointData(cx?: number, cy?: number, sx?: number, sy?: number, button?: number,
-                        target?: EventTarget, currTarget?: EventTarget): void {
-        this.srcClientX = cx;
-        this.srcClientY = cy;
-        this.srcScreenX = sx;
-        this.srcScreenY = sy;
-        this.button = button;
-        this.srcObject = target;
-        this.currentTarget = currTarget;
-    }
-
-    public getCurrentTarget(): EventTarget | undefined {
-        return this.currentTarget;
+    public get relatedTarget(): EventTarget | null {
+        return this.relatedTargetData;
     }
 }

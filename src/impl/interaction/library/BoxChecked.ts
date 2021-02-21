@@ -61,7 +61,7 @@ export class BoxChecked extends InteractionBase<WidgetData<HTMLInputElement>, Wi
 
         this.handler = {
             "initToCheckHandler": (event: Event): void => {
-                this.data.setWidget(event.target as HTMLInputElement);
+                this.data.copy(event);
             },
             "reinitData": (): void => {
                 this.reinitData();

@@ -14,52 +14,36 @@
 
 import {ScrollData} from "../../../api/interaction/ScrollData";
 import {Flushable} from "./Flushable";
+import {InteractionDataBase} from "./InteractionDataBase";
 
 /**
  * Scrolling interaction data implementation with write access.
  */
-export class ScrollDataImpl implements ScrollData, Flushable {
-    protected scrolledNode?: EventTarget;
+export class ScrollDataImpl extends InteractionDataBase implements ScrollData, Flushable {
+    protected scrollXData: number = 0;
 
-    protected px?: number;
-
-    protected py?: number;
-
-    protected increment?: number;
+    protected scrollYData: number = 0;
 
     public flush(): void {
-        this.increment = undefined;
-        this.px = undefined;
-        this.py = undefined;
-        this.scrolledNode = undefined;
+        super.flush();
+        this.scrollXData = 0;
+        this.scrollYData = 0;
     }
 
-    public getIncrement(): number {
-        return this.increment ?? 0;
+    public get scrollX(): number {
+        return this.scrollXData;
     }
 
-    public getPx(): number {
-        return this.px ?? 0;
-    }
-
-    public getPy(): number {
-        return this.py ?? 0;
-    }
-
-    public getScrolledNode(): EventTarget | undefined {
-        return this.scrolledNode;
+    public get scrollY(): number {
+        return this.scrollYData;
     }
 
     public setScrollData(event: UIEvent): void {
-        this.scrolledNode = event.target ?? undefined;
+        super.copy(event);
 
         if (event.view !== null) {
-            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-            this.increment = this.getIncrement() + (event.view.scrollY === undefined ||
-                event.view.scrollY < this.getIncrement() ? 0
-                : event.view.scrollY - (this.py === undefined || event.view.scrollY < this.getIncrement() ? 0 : this.py));
-            this.px = event.view.scrollX;
-            this.py = event.view.scrollY;
+            this.scrollXData = event.view.scrollX;
+            this.scrollYData = event.view.scrollY;
         }
     }
 }

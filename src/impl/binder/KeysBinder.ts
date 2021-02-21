@@ -42,19 +42,18 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, D extends I
         Object.assign(this, binder);
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         this.codes = this.codes === undefined ? [] : [...this.codes];
-        this.codes ??= [];
         this.checkCodeFn = (i: D): boolean => {
-            let keys: ReadonlyArray<string> = [];
+            let currentCodes: ReadonlyArray<string> = [];
             if (i instanceof KeysDataImpl) {
-                keys = i.getKeys();
+                currentCodes = i.keys.map(k => k.code);
             } else {
                 if (i instanceof KeyDataImpl) {
-                    keys = [i.getKey()];
+                    currentCodes = [i.code];
                 }
             }
 
-            return (this.codes.length === 0 || this.codes.length === keys.length &&
-                keys.every((v: string) => this.codes.includes(v))) &&
+            return (this.codes.length === 0 || this.codes.length === currentCodes.length &&
+                currentCodes.every((v: string) => this.codes.includes(v))) &&
                 (this.whenFn === undefined || this.whenFn(i));
         };
     }

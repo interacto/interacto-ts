@@ -15,14 +15,18 @@
 import {FSMHandler, Swipe} from "../../../src/interacto";
 import {createTouchEvent, robot} from "../StubEvents";
 import {mock} from "jest-mock-extended";
+import {checkTouchPoint} from "../../Utils";
+import {TouchDataImpl} from "../../../src/impl/interaction/library/TouchDataImpl";
 
 let interaction: Swipe;
 let canvas: HTMLElement;
 let handler: FSMHandler;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-let data: any;
+let dataSrc: TouchDataImpl;
+let dataTgt: TouchDataImpl;
 
 beforeEach(() => {
+    dataSrc = new TouchDataImpl();
+    dataTgt = new TouchDataImpl();
     handler = mock<FSMHandler>();
     canvas = document.createElement("canvas");
 });
@@ -54,7 +58,8 @@ describe("horizontal", () => {
     test("touch move: too slow too short", () => {
         const newHandler = mock<FSMHandler>();
         newHandler.fsmStarts.mockImplementation(() => {
-            data = {...interaction.getData()};
+            dataSrc.copy(interaction.getData().src);
+            dataTgt.copy(interaction.getData().tgt);
         });
         interaction.getFsm().addHandler(newHandler);
 
@@ -67,17 +72,8 @@ describe("horizontal", () => {
         expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
         expect(handler.fsmStops).not.toHaveBeenCalled();
         expect(handler.fsmCancels).not.toHaveBeenCalled();
-        expect(data.srcClientX).toBe(150);
-        expect(data.srcClientY).toBe(200);
-        expect(data.srcScreenX).toBe(15);
-        expect(data.srcScreenY).toBe(20);
-        expect(data.tgtClientX).toBe(160);
-        expect(data.tgtClientY).toBe(210);
-        expect(data.tgtScreenX).toBe(16);
-        expect(data.tgtScreenY).toBe(30);
-        expect(data.touchID).toBe(3);
-        expect(data.button).toBeUndefined();
-        expect(data.tgtObject).toBe(canvas);
+        checkTouchPoint(dataSrc, 150, 200, 15, 20, 3, canvas);
+        checkTouchPoint(dataTgt, 160, 210, 16, 30, 3, canvas);
     });
 
     [20, -30].forEach((y: number) => {
@@ -128,7 +124,8 @@ describe("horizontal", () => {
     test("touch move move too short too slow", () => {
         const newHandler = mock<FSMHandler>();
         newHandler.fsmUpdates.mockImplementation(() => {
-            data = {...interaction.getData()};
+            dataSrc.copy(interaction.getData().src);
+            dataTgt.copy(interaction.getData().tgt);
         });
         interaction.getFsm().addHandler(newHandler);
 
@@ -143,17 +140,8 @@ describe("horizontal", () => {
         expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
         expect(handler.fsmStops).not.toHaveBeenCalled();
         expect(handler.fsmCancels).not.toHaveBeenCalled();
-        expect(data.srcClientX).toBe(150);
-        expect(data.srcClientY).toBe(200);
-        expect(data.srcScreenX).toBe(100);
-        expect(data.srcScreenY).toBe(20);
-        expect(data.tgtClientX).toBe(349);
-        expect(data.tgtClientY).toBe(210);
-        expect(data.tgtScreenX).toBe(299);
-        expect(data.tgtScreenY).toBe(30);
-        expect(data.touchID).toBe(3);
-        expect(data.button).toBeUndefined();
-        expect(data.tgtObject).toBe(canvas);
+        checkTouchPoint(dataSrc, 150, 200, 100, 20, 3, canvas);
+        checkTouchPoint(dataTgt, 349, 210, 299, 30, 3, canvas);
     });
 
     test("touch move move too short velocity OK", () => {

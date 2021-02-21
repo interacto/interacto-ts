@@ -12,61 +12,46 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {InteractionData} from "./InteractionData";
+
+import {PointBaseData} from "./PointBaseData";
 
 /**
- * Interaction data for a single pointing device at a single position.
+ * Interaction data for a single pointing device with buttons at a single position.
+ * See: https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent (documentation extracted from here)
  */
-export interface PointData extends InteractionData {
+export interface PointData extends PointBaseData {
     /**
-     * @returns True: the alt key is pressed.
+     * The button number that was pressed (if applicable) when the mouse event was fired.
      */
-    isAltPressed(): boolean;
+    readonly button: number;
 
     /**
-     * @returns True: the control key is pressed.
+     * The buttons being depressed (if any) when the mouse event was fired.
      */
-    isCtrlPressed(): boolean;
+    readonly buttons: number;
 
     /**
-     * @returns True: the shift key is pressed.
+     * The X coordinate of the mouse pointer relative to the position of the last mousemove event.
      */
-    isShiftPressed(): boolean;
+    readonly movementX: number;
 
     /**
-     * @returns True: the meta key is pressed.
+     * The Y coordinate of the mouse pointer relative to the position of the last mousemove event.
      */
-    isMetaPressed(): boolean;
+    readonly movementY: number;
 
     /**
-     * @returns The pressed X-client position.
+     * The X coordinate of the mouse pointer relative to the position of the padding edge of the target node.
      */
-    getSrcClientX(): number;
+    readonly offsetX: number;
 
     /**
-     * @returns The pressed Y-client position.
+     * The Y coordinate of the mouse pointer relative to the position of the padding edge of the target node.
      */
-    getSrcClientY(): number;
+    readonly offsetY: number;
 
     /**
-     * @returns The pressed X-screen position.
+     * The secondary target for the event, if there is one.
      */
-    getSrcScreenX(): number;
-
-    /**
-     * @returns The pressed Y-screen position.
-     */
-    getSrcScreenY(): number;
-
-    /**
-     * @returns The button used for the pressure.
-     */
-    getButton(): number | undefined;
-
-    /**
-     * @returns The object picked at the pressed position.
-     */
-    getSrcObject(): EventTarget | undefined;
-
-    getCurrentTarget(): EventTarget | undefined;
+    readonly relatedTarget: EventTarget | null;
 }

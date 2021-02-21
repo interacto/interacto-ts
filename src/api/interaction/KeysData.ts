@@ -13,15 +13,14 @@
  */
 
 import {InteractionData} from "./InteractionData";
+import {KeyData} from "./KeyData";
 
+/**
+ * The data of keyboard-based user interactions that use several keys.
+ */
 export interface KeysData extends InteractionData {
     /**
-     * @returns The component that produce the interaction
+     * The keys used by the interaction
      */
-    getTarget(): EventTarget | undefined;
-
-    /**
-     * @returns The keys use by the interaction
-     */
-    getKeys(): ReadonlyArray<string>;
+    readonly keys: ReadonlyArray<KeyData>;
 }

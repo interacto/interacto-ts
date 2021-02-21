@@ -98,10 +98,7 @@ export class LongTouch extends InteractionBase<TouchData, TouchDataImpl, LongTou
         this.handler = {
             "tap": (evt: TouchEvent): void => {
                 if (evt.changedTouches.length > 0) {
-                    const touch = evt.changedTouches[0];
-                    this.data.setPointData(touch.clientX, touch.clientY, touch.screenX, touch.screenY, undefined,
-                        touch.target, touch.target);
-                    this.data.setTouchId(touch.identifier);
+                    this.data.copy(TouchDataImpl.mergeTouchEventData(evt.changedTouches[0], evt));
                 }
             },
             "reinitData": (): void => {

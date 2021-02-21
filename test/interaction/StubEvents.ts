@@ -13,6 +13,7 @@
  */
 
 import {EventType} from "../../src/api/fsm/EventType";
+import {PointData} from "../../src/api/interaction/PointData";
 
 
 export interface MouseEventForTest extends MouseEvent {
@@ -80,6 +81,29 @@ export function createTouchEvent(type: "touchend" | "touchmove" | "touchstart", 
 
     if (timeStamp !== undefined) {
         Object.defineProperty(evt, "timeStamp", {"value": timeStamp});
+    }
+
+    return evt;
+}
+
+
+export function createMouseEvent2(type: "auxclick" | "click" | "mousedown" | "mousemove" | "mouseup",
+                                  data: Partial<PointData>): MouseEvent {
+    const evt = new MouseEvent("click", data);
+
+    Object.defineProperty(evt, "offsetX", {"value": data.offsetX});
+    Object.defineProperty(evt, "offsetY", {"value": data.offsetY});
+    Object.defineProperty(evt, "screenX", {"value": data.screenX});
+    Object.defineProperty(evt, "screenY", {"value": data.screenY});
+    Object.defineProperty(evt, "movementX", {"value": data.movementX});
+    Object.defineProperty(evt, "movementY", {"value": data.movementY});
+    Object.defineProperty(evt, "target", {"value": data.target});
+    Object.defineProperty(evt, "currentTarget", {"value": data.currentTarget});
+    Object.defineProperty(evt, "pageX", {"value": data.pageX});
+    Object.defineProperty(evt, "pageY", {"value": data.pageY});
+
+    if (data.timeStamp !== undefined) {
+        Object.defineProperty(evt, "timeStamp", {"value": data.timeStamp});
     }
 
     return evt;

@@ -12,14 +12,60 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {PointData} from "./PointData";
+import {UnitInteractionData} from "./UnitInteractionData";
+import {PointBaseData} from "./PointBaseData";
 
 /**
  * The touch interaction data interface
+ * See https://developer.mozilla.org/en-US/docs/Web/API/TouchEvent and
+ * https://developer.mozilla.org/en-US/docs/Web/API/Touch
+ * (documentation extracted from there)
  */
-export interface TouchData extends PointData {
+export interface TouchData extends PointBaseData, UnitInteractionData {
+    readonly altitudeAngle: number;
+
+    readonly azimuthAngle: number;
+
     /**
-     * @returns The ID of the touch.
+     * The amount of pressure being applied to the surface by the user,
+     * as a float between 0.0 (no pressure) and 1.0 (maximum pressure).
      */
-    getTouchId(): number | undefined;
+    readonly force: number;
+
+    /**
+     * A unique identifier for the implied touch object.
+     */
+    readonly identifier: number;
+
+    /**
+     * The X coordinate of the touch point relative to the left edge of the document.
+     * Unlike clientX, this value includes the horizontal scroll offset, if any.
+     */
+    readonly pageX: number;
+
+    /**
+     * The Y coordinate of the touch point relative to the top of the document.
+     * Unlike clientY, this value includes the vertical scroll offset, if any.
+     */
+    readonly pageY: number;
+
+    /**
+     * The X radius of the ellipse that most closely circumscribes the area of contact with the screen.
+     * The value is in pixels of the same scale as screenX.
+     */
+    readonly radiusX: number;
+
+    /**
+     * The Y radius of the ellipse that most closely circumscribes the area of contact with the screen.
+     * The value is in pixels of the same scale as screenY.
+     */
+    readonly radiusY: number;
+
+    /**
+     * The angle (in degrees) that the ellipse described by radiusX and radiusY must be rotated, clockwise,
+     * to most accurately cover the area of contact between the user and the surface.
+     */
+    readonly rotationAngle: number;
+
+    readonly touchType: TouchType;
 }

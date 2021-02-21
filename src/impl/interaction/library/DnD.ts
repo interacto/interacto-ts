@@ -24,6 +24,7 @@ import {PressureTransition} from "../../fsm/PressureTransition";
 import {ReleaseTransition} from "../../fsm/ReleaseTransition";
 import {InteractionBase} from "../InteractionBase";
 import {SrcTgtPointsDataImpl} from "./SrcTgtPointsDataImpl";
+import {PointData} from "../../../api/interaction/PointData";
 
 /**
  * The FSM for DnD interactions.
@@ -108,7 +109,7 @@ interface DnDFSMHandler extends FSMDataHandler {
 /**
  * A user interaction for Drag and Drop
  */
-export class DnD extends InteractionBase<SrcTgtPointsData, SrcTgtPointsDataImpl, DnDFSM> {
+export class DnD extends InteractionBase<SrcTgtPointsData<PointData>, SrcTgtPointsDataImpl, DnDFSM> {
     private readonly handler: DnDFSMHandler;
 
     /**
@@ -119,15 +120,14 @@ export class DnD extends InteractionBase<SrcTgtPointsData, SrcTgtPointsDataImpl,
 
         this.handler = {
             "onPress": (evt: MouseEvent): void => {
-                this.data.setPointData(evt.clientX, evt.clientY, evt.screenX, evt.screenY,
-                    evt.button, evt.target ?? undefined, evt.currentTarget ?? undefined);
-                this.setTgt(evt);
+                this.data.copySrc(evt);
+                this.data.copyTgt(evt);
             },
             "onDrag": (evt: MouseEvent): void => {
-                this.setTgt(evt);
+                this.data.copyTgt(evt);
             },
             "onRelease": (evt: MouseEvent): void => {
-                this.setTgt(evt);
+                this.data.copyTgt(evt);
             },
             "reinitData": (): void => {
                 this.reinitData();
@@ -135,10 +135,5 @@ export class DnD extends InteractionBase<SrcTgtPointsData, SrcTgtPointsDataImpl,
         };
 
         this.getFsm().buildFSM(this.handler);
-    }
-
-    private setTgt(evt: MouseEvent): void {
-        this.data.setTgtData(evt.clientX, evt.clientY, evt.screenX, evt.screenY, evt.target ?? undefined);
-        this.data.setModifiersData(evt);
     }
 }

@@ -69,12 +69,12 @@ test("data of the  press and drag part of the interaction", () => {
     robot(canvas).mousedown({"screenX": 1, "screenY": 2, "clientX": 15, "clientY": 20, "button": 0});
     const newHandler = mock<FSMHandler>();
     newHandler.fsmUpdates.mockImplementation(() => {
-        sx = interaction.getData().getSrcClientX();
-        sy = interaction.getData().getSrcClientY();
-        tx = interaction.getData().getTgtClientX();
-        ty = interaction.getData().getTgtClientY();
-        button = interaction.getData().getButton();
-        obj = interaction.getData().getTgtObject() as HTMLCanvasElement;
+        sx = interaction.getData().src.clientX;
+        sy = interaction.getData().src.clientY;
+        tx = interaction.getData().tgt.clientX;
+        ty = interaction.getData().tgt.clientY;
+        button = interaction.getData().src.button;
+        obj = interaction.getData().tgt.currentTarget as HTMLCanvasElement;
     });
     interaction.getFsm().addHandler(newHandler);
     robot(canvas).mousemove({"screenX": 3, "screenY": 4, "clientX": 16, "clientY": 21, "button": 0});
@@ -159,12 +159,12 @@ test("check data with multiple drag", () => {
 
     interaction.getFsm().addHandler(new class extends StubFSMHandler {
         public fsmUpdates(): void {
-            sx = interaction.getData().getSrcClientX();
-            sy = interaction.getData().getSrcClientY();
-            tx = interaction.getData().getTgtClientX();
-            ty = interaction.getData().getTgtClientY();
-            button = interaction.getData().getButton();
-            obj = interaction.getData().getTgtObject() as HTMLCanvasElement;
+            sx = interaction.getData().src.clientX;
+            sy = interaction.getData().src.clientY;
+            tx = interaction.getData().tgt.clientX;
+            ty = interaction.getData().tgt.clientY;
+            button = interaction.getData().src.button;
+            obj = interaction.getData().tgt.currentTarget as HTMLCanvasElement;
         }
     }());
 
@@ -228,10 +228,10 @@ test("check data with one move.", () => {
     interaction.registerToNodes([canvas]);
     interaction.getFsm().addHandler(new class extends StubFSMHandler {
         public fsmStops(): void {
-            sx = interaction.getData().getSrcClientX();
-            sy = interaction.getData().getSrcClientY();
-            tx = interaction.getData().getTgtClientX();
-            ty = interaction.getData().getTgtClientY();
+            sx = interaction.getData().src.clientX;
+            sy = interaction.getData().src.clientY;
+            tx = interaction.getData().tgt.clientX;
+            ty = interaction.getData().tgt.clientY;
         }
     }());
     robot(canvas)

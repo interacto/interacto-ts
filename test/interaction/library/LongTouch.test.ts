@@ -12,15 +12,14 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSMHandler, LongTouch} from "../../../src/interacto";
+import {FSMHandler, LongTouch, TouchDataImpl} from "../../../src/interacto";
 import {createTouchEvent} from "../StubEvents";
 import {mock} from "jest-mock-extended";
+import {checkTouchPoint} from "../../Utils";
 
 let interaction: LongTouch;
 let canvas: HTMLElement;
 let handler: FSMHandler;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-let touchData: any;
 
 
 test("cannot create 0 or less duration", () => {
@@ -54,21 +53,17 @@ describe("long touch test", () => {
             });
 
             test("touch does not end", () => {
+                const touchData = new TouchDataImpl();
                 const newHandler = mock<FSMHandler>();
                 newHandler.fsmStarts.mockImplementation(() => {
-                    touchData = {...interaction.getData()};
+                    touchData.copy(interaction.getData());
                 });
                 interaction.getFsm().addHandler(newHandler);
                 interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 15, 20, 160, 21));
                 expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
                 expect(handler.fsmStops).not.toHaveBeenCalled();
                 expect(handler.fsmCancels).not.toHaveBeenCalled();
-                expect(touchData.srcClientX).toBe(160);
-                expect(touchData.srcClientY).toBe(21);
-                expect(touchData.srcScreenX).toBe(15);
-                expect(touchData.srcScreenY).toBe(20);
-                expect(touchData.touchID).toBe(3);
-                expect(touchData.srcObject).toBe(canvas);
+                checkTouchPoint(touchData, 160, 21, 15, 20, 3, canvas);
             });
 
             test("touch with early release", () => {

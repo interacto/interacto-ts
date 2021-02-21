@@ -20,7 +20,7 @@ import {InteractionData} from "./InteractionData";
  */
 export interface WidgetData<T> extends InteractionData {
     /**
-     * @returns The widget used during the interaction.
+     * The widget used during the interaction.
      */
-    getWidget(): T | undefined;
+    readonly widget: T | undefined;
 }

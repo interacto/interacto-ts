@@ -14,11 +14,11 @@
 
 import {FSMHandler, Scroll} from "../../../src/interacto";
 import {robot} from "../StubEvents";
-import {mock} from "jest-mock-extended";
+import {mock, MockProxy} from "jest-mock-extended";
 
 let interaction: Scroll;
 let canvas: HTMLElement;
-let handler: FSMHandler;
+let handler: FSMHandler & MockProxy<FSMHandler>;
 
 beforeEach(() => {
     handler = mock<FSMHandler>();
@@ -34,6 +34,16 @@ test("scroll event start and stop the interaction", () => {
     robot(canvas).scroll();
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+});
+
+test("scroll data", () => {
+    let target: EventTarget | null = null;
+    interaction.registerToNodes([canvas]);
+    handler.fsmStops.mockImplementation(() => {
+        target = interaction.getData().target;
+    });
+    robot(canvas).scroll();
+    expect(target).toBe(canvas);
 });
 
 test("scroll event start and stop the interaction with widget", () => {

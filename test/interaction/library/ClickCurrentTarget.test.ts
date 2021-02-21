@@ -12,14 +12,14 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {Click, FSMHandler} from "../../../src/interacto";
-import {mock} from "jest-mock-extended";
+import {Click, FSMHandler, PointDataImpl} from "../../../src/interacto";
+import {mock, MockProxy} from "jest-mock-extended";
 import {robot} from "../StubEvents";
 
 let interaction: Click;
 let groupe: HTMLElement;
 let circle: HTMLElement;
-let handler: FSMHandler;
+let handler: FSMHandler & MockProxy<FSMHandler>;
 
 beforeEach(() => {
     handler = mock<FSMHandler>();
@@ -33,7 +33,12 @@ beforeEach(() => {
 });
 
 test("current target with group tag", () => {
+    const data = new PointDataImpl();
+    handler.fsmStops.mockImplementation(() => {
+        data.copy(interaction.getData());
+    });
+
     interaction.registerToNodes([groupe]);
     robot().click(circle);
-    expect(interaction.getData().getCurrentTarget()).toBe(groupe);
+    expect(data.target).toBe(circle);
 });

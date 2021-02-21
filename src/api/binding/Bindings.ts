@@ -35,7 +35,6 @@ import {TapData} from "../interaction/TapData";
 import {LongTouch} from "../../impl/interaction/library/LongTouch";
 import {TouchData} from "../interaction/TouchData";
 import {Swipe} from "../../impl/interaction/library/Swipe";
-import {SrcTgtTouchData} from "../interaction/SrcTgtTouchData";
 import {Pan} from "../../impl/interaction/library/Pan";
 import {Click} from "../../impl/interaction/library/Click";
 import {PointData} from "../interaction/PointData";
@@ -148,9 +147,9 @@ WidgetData<HTMLInputElement | HTMLTextAreaElement>> {
  * Creates a binding that uses the touch DnD interaction (a DnD interaction that uses one touch).
  * This interaction works as a Drag-and-Drop interaction.
  */
-export function touchDnDBinder(): InteractionUpdateBinder<Interaction<SrcTgtTouchData>, SrcTgtTouchData> {
+export function touchDnDBinder(): InteractionUpdateBinder<Interaction<SrcTgtPointsData<TouchData>>, SrcTgtPointsData<TouchData>> {
     return new UpdateBinder(observer)
-        .usingInteraction<TouchDnD, SrcTgtTouchData>(() => new TouchDnD());
+        .usingInteraction<TouchDnD, SrcTgtPointsData<TouchData>>(() => new TouchDnD());
 }
 
 /**
@@ -193,9 +192,9 @@ export function longTouchBinder(duration: number): InteractionUpdateBinder<Inter
  * @param pxTolerance - The tolerance rate in pixels accepted while executing the swipe
  */
 export function swipeBinder(horizontal: boolean, minVelocity: number, minLength: number, pxTolerance: number):
-InteractionUpdateBinder<Interaction<SrcTgtTouchData>, SrcTgtTouchData> {
+InteractionUpdateBinder<Interaction<SrcTgtPointsData<TouchData>>, SrcTgtPointsData<TouchData>> {
     return new UpdateBinder(observer)
-        .usingInteraction<Swipe, SrcTgtTouchData>(() => new Swipe(horizontal, minVelocity, minLength, pxTolerance));
+        .usingInteraction<Swipe, SrcTgtPointsData<TouchData>>(() => new Swipe(horizontal, minVelocity, minLength, pxTolerance));
 }
 
 /**
@@ -205,9 +204,9 @@ InteractionUpdateBinder<Interaction<SrcTgtTouchData>, SrcTgtTouchData> {
  * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
  */
 export function panBinder(horizontal: boolean, minLength: number, pxTolerance: number):
-InteractionUpdateBinder<Interaction<SrcTgtTouchData>, SrcTgtTouchData> {
+InteractionUpdateBinder<Interaction<SrcTgtPointsData<TouchData>>, SrcTgtPointsData<TouchData>> {
     return new UpdateBinder(observer)
-        .usingInteraction<Pan, SrcTgtTouchData>(() => new Pan(horizontal, minLength, pxTolerance));
+        .usingInteraction<Pan, SrcTgtPointsData<TouchData>>(() => new Pan(horizontal, minLength, pxTolerance));
 }
 
 /**
@@ -266,17 +265,17 @@ export function scrollBinder(): InteractionBinder<Interaction<ScrollData>, Scrol
  * Creates a binding that uses the DnD interaction.
  * @param cancellable - True: the escape key will cancels the DnD.
  */
-export function dndBinder(cancellable: boolean): InteractionUpdateBinder<Interaction<SrcTgtPointsData>, SrcTgtPointsData> {
+export function dndBinder(cancellable: boolean): InteractionUpdateBinder<Interaction<SrcTgtPointsData<PointData>>, SrcTgtPointsData<PointData>> {
     return new UpdateBinder(observer)
-        .usingInteraction<DnD, SrcTgtPointsData>(() => new DnD(cancellable));
+        .usingInteraction<DnD, SrcTgtPointsData<PointData>>(() => new DnD(cancellable));
 }
 
 /**
  * Creates a binding that uses the drag lock interaction.
  */
-export function dragLockBinder(): InteractionUpdateBinder<Interaction<SrcTgtPointsData>, SrcTgtPointsData> {
+export function dragLockBinder(): InteractionUpdateBinder<Interaction<SrcTgtPointsData<PointData>>, SrcTgtPointsData<PointData>> {
     return new UpdateBinder(observer)
-        .usingInteraction<DragLock, SrcTgtPointsData>(() => new DragLock());
+        .usingInteraction<DragLock, SrcTgtPointsData<PointData>>(() => new DragLock());
 }
 
 /**

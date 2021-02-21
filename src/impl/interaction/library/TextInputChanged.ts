@@ -86,9 +86,7 @@ WidgetDataImpl<HTMLInputElement | HTMLTextAreaElement>, TextInputChangedFSM> {
 
         this.handler = {
             "initToChangedHandler": (event: Event): void => {
-                if (event.target !== null && isTextInput(event.target)) {
-                    this.data.setWidget(event.target);
-                }
+                this.data.copy(event);
             },
             "reinitData": (): void => {
                 this.reinitData();

@@ -14,19 +14,10 @@
 
 import {WidgetData} from "../../../api/interaction/WidgetData";
 import {Flushable} from "./Flushable";
+import {InteractionDataBase} from "./InteractionDataBase";
 
-export class WidgetDataImpl<T> implements WidgetData<T>, Flushable {
-    private widget?: T;
-
-    public getWidget(): T | undefined {
-        return this.widget;
-    }
-
-    public setWidget(widget?: T): void {
-        this.widget = widget;
-    }
-
-    public flush(): void {
-        this.widget = undefined;
+export class WidgetDataImpl<T> extends InteractionDataBase implements WidgetData<T>, Flushable {
+    public get widget(): T | undefined {
+        return this.targetData as unknown as T;
     }
 }

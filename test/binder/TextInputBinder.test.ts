@@ -52,7 +52,7 @@ test("type text create command", () => {
     binding = textInputBinder()
         .toProduce(() => cmd)
         .then((c, i) => {
-            textonUpdate.push(i.getWidget()?.value ?? "");
+            textonUpdate.push(i.widget?.value ?? "");
         })
         .on(txt1)
         .bind();
@@ -99,7 +99,7 @@ test("type text exec several times the command", () => {
     binding = textInputBinder()
         .toProduce(() => cmd)
         .then((c, i) => {
-            textonUpdate.push(i.getWidget()?.value ?? "");
+            textonUpdate.push(i.widget?.value ?? "");
         })
         .on(txt1)
         .continuousExecution()

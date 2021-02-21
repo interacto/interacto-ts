@@ -13,7 +13,6 @@
  */
 
 import {InteractionBase} from "../InteractionBase";
-import {SrcTgtTouchData} from "../../../api/interaction/SrcTgtTouchData";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {StdState} from "../../fsm/StdState";
@@ -23,6 +22,8 @@ import {TouchMoveTransition} from "../../fsm/TouchMoveTransition";
 import {TouchReleaseTransition} from "../../fsm/TouchReleaseTransition";
 import {getTouch} from "../../fsm/Events";
 import {SrcTgtTouchDataImpl} from "./SrcTgtTouchDataImpl";
+import {SrcTgtPointsData} from "../../../api/interaction/SrcTgtPointsData";
+import {TouchData} from "../../../api/interaction/TouchData";
 
 /**
  * The FSM that defines a touch interaction (that works like a DnD)
@@ -93,7 +94,7 @@ export interface TouchDnDFSMHandler extends FSMDataHandler {
 /**
  * A touch interaction (that works as a DnD)
  */
-export class TouchDnD extends InteractionBase<SrcTgtTouchData, SrcTgtTouchDataImpl, TouchDnDFSM> {
+export class TouchDnD extends InteractionBase<SrcTgtPointsData<TouchData>, SrcTgtTouchDataImpl, TouchDnDFSM> {
     private readonly handler: TouchDnDFSMHandler;
 
     /**
@@ -105,10 +106,8 @@ export class TouchDnD extends InteractionBase<SrcTgtTouchData, SrcTgtTouchDataIm
         this.handler = {
             "onTouch": (evt: TouchEvent): void => {
                 const touch: Touch = evt.changedTouches[0];
-                this.data.setPointData(touch.clientX, touch.clientY, touch.screenX, touch.screenY,
-                    undefined, touch.target, touch.target);
-                this.data.setTouchId(touch.identifier);
-                this.setTgtData(evt);
+                this.data.copySrc(touch, evt);
+                this.data.copyTgt(touch, evt);
             },
             "onMove": (evt: TouchEvent): void => {
                 this.setTgtData(evt);
@@ -125,9 +124,9 @@ export class TouchDnD extends InteractionBase<SrcTgtTouchData, SrcTgtTouchDataIm
     }
 
     private setTgtData(evt: TouchEvent): void {
-        const touch: Touch | undefined = getTouch(evt.changedTouches, this.data.getTouchId());
+        const touch: Touch | undefined = getTouch(evt.changedTouches, this.data.src.identifier);
         if (touch !== undefined) {
-            this.data.setTgtData(touch.clientX, touch.clientY, touch.screenX, touch.screenY, touch.target);
+            this.data.copyTgt(touch, evt);
         }
     }
 }

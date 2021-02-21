@@ -75,7 +75,7 @@ export class KeyPressed extends InteractionBase<KeyData, KeyDataImpl, KeyPressed
 
         this.handler = {
             "onKeyPressed": (event: KeyboardEvent): void => {
-                this.data.setKeyData(event);
+                this.data.copy(event);
             },
             "reinitData": (): void => {
                 this.reinitData();

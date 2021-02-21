@@ -12,10 +12,11 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {SrcTgtTouchData} from "../../../api/interaction/SrcTgtTouchData";
 import {MultiTouchData} from "../../../api/interaction/MultiTouchData";
 import {SrcTgtTouchDataImpl} from "./SrcTgtTouchDataImpl";
 import {Flushable} from "./Flushable";
+import {SrcTgtPointsData} from "../../../api/interaction/SrcTgtPointsData";
+import {TouchData} from "../../../api/interaction/TouchData";
 
 /**
  * Multi-touch interaction data implementation
@@ -30,7 +31,7 @@ export class MultiTouchDataImpl implements MultiTouchData, Flushable {
         this.touchesData = new Map<number, SrcTgtTouchDataImpl>();
     }
 
-    public getTouchData(): ReadonlyArray<SrcTgtTouchData> {
+    public get touches(): ReadonlyArray<SrcTgtPointsData<TouchData>> {
         return [...this.touchesData.values()];
     }
 
@@ -39,10 +40,7 @@ export class MultiTouchDataImpl implements MultiTouchData, Flushable {
      * @param data - The touch data to add
      */
     public addTouchData(data: SrcTgtTouchDataImpl): void {
-        const id = data.getTouchId();
-        if (id !== undefined) {
-            this.touchesData.set(id, data);
-        }
+        this.touchesData.set(data.src.identifier, data);
     }
 
     public removeTouchData(id: number): void {
@@ -66,12 +64,10 @@ export class MultiTouchDataImpl implements MultiTouchData, Flushable {
      * touch data.
      * @param tp - The touch event to use.
      */
-    public setTouch(tp: Touch | null): void {
-        if (tp !== null) {
-            const tdata = this.touchesData.get(tp.identifier);
-            if (tdata !== undefined) {
-                tdata.setTgtData(tp.clientX, tp.clientY, tp.screenX, tp.screenY, tp.target);
-            }
+    public setTouch(tp: Touch, evt: TouchEvent): void {
+        const tdata = this.touchesData.get(tp.identifier);
+        if (tdata !== undefined) {
+            tdata.copyTgt(tp, evt);
         }
     }
 }

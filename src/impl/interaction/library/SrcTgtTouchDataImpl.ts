@@ -12,49 +12,40 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {SrcTgtTouchData} from "../../../api/interaction/SrcTgtTouchData";
-import {SrcTgtPointsDataImpl} from "./SrcTgtPointsDataImpl";
+import {SrcTgtPointsData} from "../../../api/interaction/SrcTgtPointsData";
+import {TouchData} from "../../../api/interaction/TouchData";
+import {TouchDataImpl} from "./TouchDataImpl";
+import {EventModifierData} from "../../../api/interaction/EventModifierData";
+import {UnitInteractionData} from "../../../api/interaction/UnitInteractionData";
 
-export class SrcTgtTouchDataImpl extends SrcTgtPointsDataImpl implements SrcTgtTouchData {
-    private touchID?: number;
+export class SrcTgtTouchDataImpl implements SrcTgtPointsData<TouchData> {
+    private readonly srcData: TouchDataImpl;
 
-    public constructor(id?: number, cx?: number, cy?: number, sx?: number, sy?: number, target?: EventTarget) {
-        super();
-        this.touchID = id;
-        this.setPointData(cx, cy, sx, sy, undefined, target, target);
-        this.setTgtData(cx, cy, sx, sy, target);
+    private readonly tgtData: TouchDataImpl;
+
+    public constructor() {
+        this.srcData = new TouchDataImpl();
+        this.tgtData = new TouchDataImpl();
     }
 
-    public getTouchId(): number | undefined {
-        return this.touchID;
+    public get src(): TouchData {
+        return this.srcData;
     }
 
-    public setTouchId(id: number): void {
-        this.touchID = id;
+    public get tgt(): TouchData {
+        return this.tgtData;
     }
 
     public flush(): void {
-        super.flush();
-        this.touchID = undefined;
+        this.srcData.flush();
+        this.tgtData.flush();
     }
 
-    public getButton(): number | undefined {
-        return undefined;
+    public copySrc(data: Touch, evt: EventModifierData & UnitInteractionData): void {
+        this.srcData.copy(TouchDataImpl.mergeTouchEventData(data, evt));
     }
 
-    public isAltPressed(): boolean {
-        return false;
-    }
-
-    public isCtrlPressed(): boolean {
-        return false;
-    }
-
-    public isShiftPressed(): boolean {
-        return false;
-    }
-
-    public isMetaPressed(): boolean {
-        return false;
+    public copyTgt(data: Touch, evt: EventModifierData & UnitInteractionData): void {
+        this.tgtData.copy(TouchDataImpl.mergeTouchEventData(data, evt));
     }
 }

@@ -40,7 +40,8 @@ module.exports = {
         "@typescript-eslint/no-confusing-void-expression": "off",
         "@typescript-eslint/await-thenable": "off",
         "max-lines-per-function": "off",
-        "object-property-newline": "off"
+        "object-property-newline": "off",
+        "complexity": ["error", { "max": 20 }],
       }
     }
   ],
@@ -93,6 +94,7 @@ module.exports = {
     "no-magic-numbers": "off",
     "indent": "off",
 
+    "@typescript-eslint/no-inferrable-types": "off",
     "@typescript-eslint/no-magic-numbers": "off",
     "@typescript-eslint/init-declarations": "off",
     "@typescript-eslint/space-before-function-paren": "off",

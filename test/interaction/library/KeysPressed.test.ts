@@ -12,15 +12,17 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSMHandler, KeysPressed} from "../../../src/interacto";
+import {FSMHandler, KeyData, KeysDataImpl, KeysPressed, peek} from "../../../src/interacto";
 import {robot} from "../StubEvents";
 import {mock} from "jest-mock-extended";
 
 let interaction: KeysPressed;
 let text: HTMLElement;
 let handler: FSMHandler;
+let data: KeysDataImpl;
 
 beforeEach(() => {
+    data = new KeysDataImpl();
     handler = mock<FSMHandler>();
     interaction = new KeysPressed();
     interaction.log(true);
@@ -39,19 +41,17 @@ test("testKeyPressExecution", () => {
 
 test("testKeyPressData", () => {
     interaction.registerToNodes([text]);
-    let length = 0;
-    let txt = "";
 
     const newHandler = mock<FSMHandler>();
     newHandler.fsmUpdates.mockImplementation(() => {
-        length = interaction.getData().getKeys().length;
-        txt = interaction.getData().getKeys()[0];
+        data.addKey(peek(interaction.getData().keys) as KeyData);
     });
     interaction.getFsm().addHandler(newHandler);
 
     robot(text).keydown({"code": "A"});
-    expect(length).toStrictEqual(1);
-    expect(txt).toStrictEqual("A");
+
+    expect(data.keys).toHaveLength(1);
+    expect(data.keys[0].code).toStrictEqual("A");
 });
 
 test("testTwoKeyPressExecution", () => {
@@ -66,19 +66,18 @@ test("testTwoKeyPressExecution", () => {
 
 test("testTwoKeyPressData", () => {
     interaction.registerToNodes([text]);
-    let data: Array<string> = [];
 
     const newHandler = mock<FSMHandler>();
     newHandler.fsmUpdates.mockImplementation(() => {
-        data = [...interaction.getData().getKeys()];
+        data.addKey(peek(interaction.getData().keys) as KeyData);
     });
     interaction.getFsm().addHandler(newHandler);
     robot(text)
         .keydown({"code": "A"})
         .keydown({"code": "B"});
-    expect(data).toHaveLength(2);
-    expect(data[0]).toStrictEqual("A");
-    expect(data[1]).toStrictEqual("B");
+    expect(data.keys).toHaveLength(2);
+    expect(data.keys[0].code).toStrictEqual("A");
+    expect(data.keys[1].code).toStrictEqual("B");
 });
 
 test("testTwoKeyPressReleaseExecution", () => {
@@ -94,18 +93,18 @@ test("testTwoKeyPressReleaseExecution", () => {
 
 test("testTwoKeyPressReleaseData", () => {
     interaction.registerToNodes([text]);
-    let data: Array<string> = [];
+
     robot(text)
         .keydown({"code": "A"})
         .keydown({"code": "B"});
     const newHandler = mock<FSMHandler>();
     newHandler.fsmUpdates.mockImplementation(() => {
-        data = [...interaction.getData().getKeys()];
+        data.addKey(peek(interaction.getData().keys) as KeyData);
     });
     interaction.getFsm().addHandler(newHandler);
     robot(text).keyup({"code": "B"});
-    expect(data).toHaveLength(1);
-    expect(data[0]).toStrictEqual("A");
+    expect(data.keys).toHaveLength(1);
+    expect(data.keys[0].code).toStrictEqual("A");
 });
 
 test("testTwoKeyPressReleaseRecycle", () => {

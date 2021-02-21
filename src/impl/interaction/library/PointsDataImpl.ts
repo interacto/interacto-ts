@@ -13,30 +13,28 @@
  */
 
 import {PointsData} from "../../../api/interaction/PointsData";
-import {PointDataImpl} from "./PointDataImpl";
 import {PointData} from "../../../api/interaction/PointData";
+import {peek} from "../../util/ArrayUtil";
 
-export class PointsDataImpl extends PointDataImpl implements PointsData {
-    /** The current position of the pointing device. */
-    protected currentPosition?: readonly [number, number];
+export class PointsDataImpl implements PointsData {
+    private currentPositionData?: readonly [number, number];
 
-    protected readonly pointsData: Array<PointData>;
+    private readonly pointsData: Array<PointData>;
 
     public constructor() {
-        super();
         this.pointsData = [];
     }
 
-    public getPointsData(): ReadonlyArray<PointData> {
+    public get points(): ReadonlyArray<PointData> {
         return [...this.pointsData];
     }
 
-    public getCurrentPosition(): readonly [number, number] | undefined {
-        return this.currentPosition;
+    public get currentPosition(): readonly [number, number] | undefined {
+        return this.currentPositionData;
     }
 
-    public getLastButton(): number | undefined {
-        return this.pointsData.length === 0 ? undefined : this.pointsData[this.pointsData.length - 1].getButton();
+    public get lastButton(): number | undefined {
+        return peek(this.pointsData)?.button;
     }
 
     public addPoint(ptData: PointData): void {
@@ -45,6 +43,6 @@ export class PointsDataImpl extends PointDataImpl implements PointsData {
 
     public flush(): void {
         this.pointsData.length = 0;
-        this.currentPosition = undefined;
+        this.currentPositionData = undefined;
     }
 }

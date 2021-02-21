@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {DoubleClick, FSMHandler} from "../../../src/interacto";
+import {DoubleClick, FSMHandler, PointDataImpl} from "../../../src/interacto";
 import {robot} from "../StubEvents";
 import {mock} from "jest-mock-extended";
 
@@ -40,27 +40,21 @@ test("double click on a canvas starts and stops the interaction", () => {
 });
 
 test("check data of the interaction.", () => {
-    let sx: number | undefined;
-    let sy: number | undefined;
-    let button: number | undefined;
-    let obj: HTMLCanvasElement | undefined;
+    const data = new PointDataImpl();
 
     interaction.registerToNodes([canvas]);
     const newHandler = mock<FSMHandler>();
     newHandler.fsmStops.mockImplementation(() => {
-        sx = interaction.getData().getSrcClientX();
-        sy = interaction.getData().getSrcClientY();
-        button = interaction.getData().getButton();
-        obj = interaction.getData().getSrcObject() as HTMLCanvasElement;
+        data.copy(interaction.getData());
     });
     interaction.getFsm().addHandler(newHandler);
     robot(canvas)
         .click({"clientX": 11, "clientY": 23})
         .click({"clientX": 11, "clientY": 23});
-    expect(sx).toBe(11);
-    expect(sy).toBe(23);
-    expect(button).toBe(0);
-    expect(obj).toBe(canvas);
+    expect(data.clientX).toBe(11);
+    expect(data.clientY).toBe(23);
+    expect(data.button).toBe(0);
+    expect(data.currentTarget).toBe(canvas);
 });
 
 test("that two double clicks ok", () => {

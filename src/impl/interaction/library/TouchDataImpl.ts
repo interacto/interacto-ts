@@ -12,32 +12,97 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {PointDataImpl} from "./PointDataImpl";
 import {TouchData} from "../../../api/interaction/TouchData";
+import {PointingDataBase} from "./PointingDataBase";
+import {UnitInteractionData} from "../../../api/interaction/UnitInteractionData";
+import {EventModifierData} from "../../../api/interaction/EventModifierData";
 
-export class TouchDataImpl extends PointDataImpl implements TouchData {
-    private touchID?: number;
+export class TouchDataImpl extends PointingDataBase implements TouchData {
+    private altitudeAngleData: number = 0;
 
-    public constructor(id?: number, cx?: number, cy?: number, sx?: number, sy?: number, target?: EventTarget) {
-        super();
-        this.touchID = id;
-        this.setPointData(cx, cy, sx, sy, undefined, target, target);
+    private azimuthAngleData: number = 0;
+
+    private forceData: number = 0;
+
+    private identifierData: number = 0;
+
+    private radiusXData: number = 0;
+
+    private radiusYData: number = 0;
+
+    private rotationAngleData: number = 0;
+
+    private touchTypeData: TouchType = "direct";
+
+
+    public get altitudeAngle(): number {
+        return this.altitudeAngleData;
     }
 
-    public getTouchId(): number | undefined {
-        return this.touchID;
+    public get azimuthAngle(): number {
+        return this.azimuthAngleData;
     }
 
-    public setTouchId(id: number): void {
-        this.touchID = id;
+    public get force(): number {
+        return this.forceData;
+    }
+
+    public get identifier(): number {
+        return this.identifierData;
+    }
+
+    public get radiusX(): number {
+        return this.radiusXData;
+    }
+
+    public get radiusY(): number {
+        return this.radiusYData;
+    }
+
+    public get rotationAngle(): number {
+        return this.rotationAngleData;
+    }
+
+    public get touchType(): TouchType {
+        return this.touchTypeData;
+    }
+
+
+    public copy(data: TouchData): void {
+        super.copy(data);
+        this.altitudeAngleData = data.altitudeAngle;
+        this.azimuthAngleData = data.azimuthAngle;
+        this.forceData = data.force;
+        this.identifierData = data.identifier;
+        this.radiusXData = data.radiusX;
+        this.radiusYData = data.radiusY;
+        this.rotationAngleData = data.rotationAngle;
+        this.touchTypeData = data.touchType;
     }
 
     public flush(): void {
         super.flush();
-        this.touchID = undefined;
+        this.altitudeAngleData = 0;
+        this.azimuthAngleData = 0;
+        this.forceData = 0;
+        this.identifierData = 0;
+        this.radiusXData = 0;
+        this.radiusYData = 0;
+        this.rotationAngleData = 0;
+        this.touchTypeData = "direct";
     }
 
-    public getButton(): number | undefined {
-        return undefined;
+    public static mergeTouchEventData(touch: Touch, evt: EventModifierData & UnitInteractionData): TouchData {
+        const data = new TouchDataImpl();
+        data.copy({...touch,
+            ...{
+                "altKey": evt.altKey,
+                "shiftKey": evt.shiftKey,
+                "ctrlKey": evt.ctrlKey,
+                "metaKey": evt.metaKey,
+                "timeStamp": evt.timeStamp,
+                "currentTarget": evt.currentTarget
+            }});
+        return data;
     }
 }

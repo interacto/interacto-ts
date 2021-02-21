@@ -12,11 +12,30 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {SrcTgtPointsData} from "./SrcTgtPointsData";
+import {UnitInteractionData} from "./UnitInteractionData";
 
-export interface SrcTgtTouchData extends SrcTgtPointsData {
+/**
+ * Data of user interactions that have key modifires.
+ * Documentation from the Mozilla Web API website.
+ */
+export interface EventModifierData extends UnitInteractionData {
     /**
-     * @returns The ID of the touch.
+     * True if the alt key was down when the mouse event was fired.
      */
-    getTouchId(): number | undefined;
+    readonly altKey: boolean;
+
+    /**
+     * True if the control key was down when the mouse event was fired.
+     */
+    readonly ctrlKey: boolean;
+
+    /**
+     * True if the meta key was down when the mouse event was fired.
+     */
+    readonly metaKey: boolean;
+
+    /**
+     * True if the shift key was down when the mouse event was fired.
+     */
+    readonly shiftKey: boolean;
 }

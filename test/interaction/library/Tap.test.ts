@@ -12,9 +12,10 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSMHandler, Tap, TouchData} from "../../../src/interacto";
+import {FSMHandler, Tap, TapDataImpl, TouchDataImpl} from "../../../src/interacto";
 import {createTouchEvent} from "../StubEvents";
 import {mock} from "jest-mock-extended";
+import {checkTouchPoint} from "../../Utils";
 
 let interaction: Tap;
 let canvas: HTMLElement;
@@ -84,21 +85,17 @@ describe("tap 1", () => {
         expect(handler.fsmCancels).not.toHaveBeenCalled();
     });
 
+    // eslint-disable-next-line jest/expect-expect
     test("one touch data", () => {
-        let touch: Array<TouchData> = [];
+        const touch = new TouchDataImpl();
         const newHandler = mock<FSMHandler>();
         newHandler.fsmStarts.mockImplementation(() => {
-            touch = [...interaction.getData().getTapData()];
+            touch.copy(interaction.getData().taps[0]);
         });
         interaction.getFsm().addHandler(newHandler);
-        interaction.processEvent(createTouchEvent("touchend", 3, canvas, 15, 20, 16, 21));
+        interaction.processEvent(createTouchEvent("touchend", 5, canvas, 14, 20, 15, 21));
 
-        expect(touch).toHaveLength(1);
-        expect(touch[0].getSrcClientX()).toBe(16);
-        expect(touch[0].getSrcClientY()).toBe(21);
-        expect(touch[0].getSrcScreenX()).toBe(15);
-        expect(touch[0].getSrcScreenY()).toBe(20);
-        expect(touch[0].getSrcObject()).toBe(canvas);
+        checkTouchPoint(touch, 15, 21, 14, 20, 5, canvas);
     });
 });
 
@@ -150,22 +147,20 @@ describe("tap 2", () => {
     });
 
     test("two touches data", () => {
-        let touch: Array<TouchData> = [];
+        const touch = new TapDataImpl();
 
         const newHandler = mock<FSMHandler>();
         newHandler.fsmStops.mockImplementation(() => {
-            touch = [...interaction.getData().getTapData()];
+            interaction.getData().taps.forEach(t => {
+                touch.addTapData(t);
+            });
         });
         interaction.getFsm().addHandler(newHandler);
         interaction.processEvent(createTouchEvent("touchend", 3, canvas, 15, 20, 16, 21));
         interaction.processEvent(createTouchEvent("touchend", 2, canvas, 12, 27, 14, 28));
 
-        expect(touch).toHaveLength(2);
-        expect(touch[0].getSrcClientX()).toBe(16);
-        expect(touch[0].getSrcClientY()).toBe(21);
-        expect(touch[0].getSrcScreenX()).toBe(15);
-        expect(touch[0].getSrcScreenY()).toBe(20);
-        expect(touch[0].getSrcObject()).toBe(canvas);
+        expect(touch.taps).toHaveLength(2);
+        checkTouchPoint(touch.taps[0], 16, 21, 15, 20, 3, canvas);
     });
 });
 
@@ -223,22 +218,20 @@ describe("tap 3", () => {
     });
 
     test("three touches data", () => {
-        let touch: Array<TouchData> = [];
+        const touch = new TapDataImpl();
 
         const newHandler = mock<FSMHandler>();
         newHandler.fsmStops.mockImplementation(() => {
-            touch = [...interaction.getData().getTapData()];
+            interaction.getData().taps.forEach(t => {
+                touch.addTapData(t);
+            });
         });
         interaction.getFsm().addHandler(newHandler);
         interaction.processEvent(createTouchEvent("touchend", 3, canvas, 15, 20, 16, 21));
         interaction.processEvent(createTouchEvent("touchend", 2, canvas, 12, 27, 14, 28));
         interaction.processEvent(createTouchEvent("touchend", 2, canvas, 112, 217, 114, 128));
 
-        expect(touch).toHaveLength(3);
-        expect(touch[0].getSrcClientX()).toBe(16);
-        expect(touch[0].getSrcClientY()).toBe(21);
-        expect(touch[0].getSrcScreenX()).toBe(15);
-        expect(touch[0].getSrcScreenY()).toBe(20);
-        expect(touch[0].getSrcObject()).toBe(canvas);
+        expect(touch.taps).toHaveLength(3);
+        checkTouchPoint(touch.taps[0], 16, 21, 15, 20, 3, canvas);
     });
 });

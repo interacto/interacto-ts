@@ -22,15 +22,15 @@ export interface PointsData extends InteractionData {
     /**
      * @returns The series of points.
      */
-    getPointsData(): ReadonlyArray<PointData>;
+    readonly points: ReadonlyArray<PointData>;
 
     /**
      * @returns The current position of the pointing device.
      */
-    getCurrentPosition(): readonly [number, number] | undefined;
+    readonly currentPosition: readonly [number, number] | undefined;
 
     /**
      * @returns The last button used to produce the points.
      */
-    getLastButton(): number | undefined;
+    readonly lastButton: number | undefined;
 }
