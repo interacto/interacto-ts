@@ -19,7 +19,7 @@ import {WidgetData} from "../../../api/interaction/WidgetData";
 import {HyperLinkTransition} from "../../fsm/HyperLinkTransition";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
-import {WidgetDataImpl} from "./WidgetDataImpl";
+import {WidgetDataImpl} from "../WidgetDataImpl";
 
 export class HyperLinkClickedFSM extends FSMImpl {
     public constructor() {

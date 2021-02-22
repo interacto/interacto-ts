@@ -22,9 +22,9 @@ import {FSMImpl} from "../../fsm/FSMImpl";
 import {MoveTransition} from "../../fsm/MoveTransition";
 import {SrcTgtPointsData} from "../../../api/interaction/SrcTgtPointsData";
 import {InteractionBase} from "../InteractionBase";
-import {PointDataImpl} from "./PointDataImpl";
+import {PointDataImpl} from "../PointDataImpl";
 import {EscapeKeyPressureTransition} from "../../fsm/EscapeKeyPressureTransition";
-import {SrcTgtPointsDataImpl} from "./SrcTgtPointsDataImpl";
+import {SrcTgtPointsDataImpl} from "../SrcTgtPointsDataImpl";
 import {PointData} from "../../../api/interaction/PointData";
 
 export class DragLockFSM extends FSMImpl {

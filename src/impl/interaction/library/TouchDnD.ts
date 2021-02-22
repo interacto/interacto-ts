@@ -21,7 +21,7 @@ import {TouchPressureTransition} from "../../fsm/TouchPressureTransition";
 import {TouchMoveTransition} from "../../fsm/TouchMoveTransition";
 import {TouchReleaseTransition} from "../../fsm/TouchReleaseTransition";
 import {getTouch} from "../../fsm/Events";
-import {SrcTgtTouchDataImpl} from "./SrcTgtTouchDataImpl";
+import {SrcTgtTouchDataImpl} from "../SrcTgtTouchDataImpl";
 import {SrcTgtPointsData} from "../../../api/interaction/SrcTgtPointsData";
 import {TouchData} from "../../../api/interaction/TouchData";
 

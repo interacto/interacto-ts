@@ -21,8 +21,8 @@ import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 import {CancellingState} from "../../fsm/CancellingState";
 import {TapData} from "../../../api/interaction/TapData";
 import {TouchReleaseTransition} from "../../fsm/TouchReleaseTransition";
-import {TapDataImpl} from "./TapDataImpl";
-import {TouchDataImpl} from "./TouchDataImpl";
+import {TapDataImpl} from "../TapDataImpl";
+import {TouchDataImpl} from "../TouchDataImpl";
 
 /**
  * The FSM for the Tap interaction

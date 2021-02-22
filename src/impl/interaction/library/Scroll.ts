@@ -18,7 +18,7 @@ import {ScrollTransition} from "../../fsm/ScrollTransition";
 import {ScrollData} from "../../../api/interaction/ScrollData";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
-import {ScrollDataImpl} from "./ScrollDataImpl";
+import {ScrollDataImpl} from "../ScrollDataImpl";
 
 /**
  * An FSM for scrolling.

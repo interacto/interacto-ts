@@ -23,7 +23,7 @@ import {FSMImpl} from "../../fsm/FSMImpl";
 import {PressureTransition} from "../../fsm/PressureTransition";
 import {ReleaseTransition} from "../../fsm/ReleaseTransition";
 import {InteractionBase} from "../InteractionBase";
-import {SrcTgtPointsDataImpl} from "./SrcTgtPointsDataImpl";
+import {SrcTgtPointsDataImpl} from "../SrcTgtPointsDataImpl";
 import {PointData} from "../../../api/interaction/PointData";
 
 /**

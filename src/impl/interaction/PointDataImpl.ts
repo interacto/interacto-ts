@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {PointData} from "../../../api/interaction/PointData";
+import {PointData} from "../../api/interaction/PointData";
 import {PointingDataBase} from "./PointingDataBase";
 
 /**

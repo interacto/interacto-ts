@@ -19,7 +19,7 @@ import {KeyData} from "../../../api/interaction/KeyData";
 import {StdState} from "../../fsm/StdState";
 import {KeyReleaseTransition} from "../../fsm/KeyReleaseTransition";
 import {FSMImpl} from "../../fsm/FSMImpl";
-import {KeyDataImpl} from "./KeyDataImpl";
+import {KeyDataImpl} from "../KeyDataImpl";
 import {InteractionBase} from "../InteractionBase";
 
 /**

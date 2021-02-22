@@ -22,7 +22,7 @@ import {InteractionBase} from "../InteractionBase";
 import {PointData} from "../../../api/interaction/PointData";
 import {PressureTransition} from "../../fsm/PressureTransition";
 import {ReleaseTransition} from "../../fsm/ReleaseTransition";
-import {PointDataImpl} from "./PointDataImpl";
+import {PointDataImpl} from "../PointDataImpl";
 
 /**
  * The FSM for the LongPress interaction

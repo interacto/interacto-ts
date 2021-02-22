@@ -19,7 +19,7 @@ import {WidgetData} from "../../../api/interaction/WidgetData";
 import {DatePickedTransition} from "../../fsm/DatePickedTransition";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
-import {WidgetDataImpl} from "./WidgetDataImpl";
+import {WidgetDataImpl} from "../WidgetDataImpl";
 
 export class DatePickedFSM extends FSMImpl {
     public constructor() {

@@ -15,7 +15,7 @@
 import {FSMHandler, MultiTouch} from "../../../src/interacto";
 import {createTouchEvent} from "../StubEvents";
 import {mock} from "jest-mock-extended";
-import {TouchDataImpl} from "../../../src/impl/interaction/library/TouchDataImpl";
+import {TouchDataImpl} from "../../../src/impl/interaction/TouchDataImpl";
 import {checkTouchPoint} from "../../Utils";
 
 let interaction: MultiTouch;

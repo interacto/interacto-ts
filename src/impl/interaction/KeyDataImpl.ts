@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {KeyData} from "../../../api/interaction/KeyData";
+import {KeyData} from "../../api/interaction/KeyData";
 import {Flushable} from "./Flushable";
 import {InteractionDataBase} from "./InteractionDataBase";
 

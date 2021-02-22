@@ -20,9 +20,9 @@ import {ClickTransition} from "../../fsm/ClickTransition";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 import {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {InteractionBase} from "../InteractionBase";
-import {PointDataImpl} from "./PointDataImpl";
+import {PointDataImpl} from "../PointDataImpl";
 import {PointsData} from "../../../api/interaction/PointsData";
-import {PointsDataImpl} from "./PointsDataImpl";
+import {PointsDataImpl} from "../PointsDataImpl";
 
 export class ClicksFSM extends FSMImpl {
     private countClicks: number;

@@ -18,7 +18,7 @@ import {WidgetData} from "../../../api/interaction/WidgetData";
 import {ColorPickedTransition} from "../../fsm/ColorPickedTransition";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
-import {WidgetDataImpl} from "./WidgetDataImpl";
+import {WidgetDataImpl} from "../WidgetDataImpl";
 
 export class ColorPickedFSM extends FSMImpl {
     public constructor() {

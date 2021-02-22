@@ -19,7 +19,7 @@ import {WidgetData} from "../../../api/interaction/WidgetData";
 import {ComboBoxTransition} from "../../fsm/ComboBoxTransition";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
-import {WidgetDataImpl} from "./WidgetDataImpl";
+import {WidgetDataImpl} from "../WidgetDataImpl";
 
 export class ComboBoxSelectedFSM extends FSMImpl {
     public constructor() {

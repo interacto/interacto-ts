@@ -21,7 +21,7 @@ import {isKeyEvent, isMouseEvent, isTouchEvent} from "../fsm/Events";
 import {Subscription} from "rxjs";
 import {Interaction} from "../../api/interaction/Interaction";
 import {EventType} from "../../api/fsm/EventType";
-import {Flushable} from "./library/Flushable";
+import {Flushable} from "./Flushable";
 
 
 interface CancellablePromise extends Promise<void> {

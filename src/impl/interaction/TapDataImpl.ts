@@ -12,8 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {TouchData} from "../../../api/interaction/TouchData";
-import {TapData} from "../../../api/interaction/TapData";
+import {TouchData} from "../../api/interaction/TouchData";
+import {TapData} from "../../api/interaction/TapData";
 import {Flushable} from "./Flushable";
 
 /**

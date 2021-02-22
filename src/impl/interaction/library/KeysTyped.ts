@@ -18,7 +18,7 @@ import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 import {KeysData} from "../../../api/interaction/KeysData";
-import {KeysDataImpl} from "./KeysDataImpl";
+import {KeysDataImpl} from "../KeysDataImpl";
 import {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {KeyReleaseTransition} from "../../fsm/KeyReleaseTransition";
 

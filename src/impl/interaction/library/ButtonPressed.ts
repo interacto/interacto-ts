@@ -19,7 +19,7 @@ import {isButton} from "../../fsm/Events";
 import {WidgetData} from "../../../api/interaction/WidgetData";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
-import {WidgetDataImpl} from "./WidgetDataImpl";
+import {WidgetDataImpl} from "../WidgetDataImpl";
 
 /**
  * The FSM for button pressures.

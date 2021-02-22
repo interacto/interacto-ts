@@ -21,7 +21,7 @@ import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {StdState} from "../../fsm/StdState";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
-import {WidgetDataImpl} from "./WidgetDataImpl";
+import {WidgetDataImpl} from "../WidgetDataImpl";
 
 export class SpinnerChangedFSM extends FSMImpl {
     /** The time gap between the two spinner events. */

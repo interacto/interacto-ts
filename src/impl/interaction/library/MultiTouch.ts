@@ -16,8 +16,8 @@ import {ConcurrentFSM} from "../../fsm/ConcurrentFSM";
 import {ConcurrentInteraction} from "../ConcurrentInteraction";
 import {MultiTouchData} from "../../../api/interaction/MultiTouchData";
 import {TouchDnDFSM, TouchDnDFSMHandler} from "./TouchDnD";
-import {MultiTouchDataImpl} from "./MultiTouchDataImpl";
-import {SrcTgtTouchDataImpl} from "./SrcTgtTouchDataImpl";
+import {MultiTouchDataImpl} from "../MultiTouchDataImpl";
+import {SrcTgtTouchDataImpl} from "../SrcTgtTouchDataImpl";
 
 /**
  * The FSM that defines a multi-touch interaction (that works like a DnD)

@@ -15,7 +15,7 @@
 import {FSMHandler, TouchDnD} from "../../../src/interacto";
 import {createTouchEvent} from "../StubEvents";
 import {mock} from "jest-mock-extended";
-import {TouchDataImpl} from "../../../src/impl/interaction/library/TouchDataImpl";
+import {TouchDataImpl} from "../../../src/impl/interaction/TouchDataImpl";
 
 let interaction: TouchDnD;
 let canvas: HTMLElement;

@@ -1,5 +1,5 @@
 import {Flushable} from "./Flushable";
-import {UnitInteractionData} from "../../../api/interaction/UnitInteractionData";
+import {UnitInteractionData} from "../../api/interaction/UnitInteractionData";
 
 export abstract class InteractionDataBase implements UnitInteractionData, Flushable {
     protected currentTargetData: EventTarget | null;

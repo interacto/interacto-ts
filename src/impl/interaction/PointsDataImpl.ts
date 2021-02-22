@@ -12,9 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {PointsData} from "../../../api/interaction/PointsData";
-import {PointData} from "../../../api/interaction/PointData";
-import {peek} from "../../util/ArrayUtil";
+import {PointsData} from "../../api/interaction/PointsData";
+import {PointData} from "../../api/interaction/PointData";
+import {peek} from "../util/ArrayUtil";
 
 export class PointsDataImpl implements PointsData {
     private currentPositionData?: readonly [number, number];

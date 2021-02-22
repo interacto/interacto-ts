@@ -18,7 +18,7 @@ import {KeyPressureTransition} from "../../fsm/KeyPressureTransition";
 import {KeyData} from "../../../api/interaction/KeyData";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
-import {KeyDataImpl} from "./KeyDataImpl";
+import {KeyDataImpl} from "../KeyDataImpl";
 
 /**
  * An FSM for a single key pressure.

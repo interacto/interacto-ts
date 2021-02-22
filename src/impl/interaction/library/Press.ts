@@ -18,7 +18,7 @@ import {PressureTransition} from "../../fsm/PressureTransition";
 import {PointData} from "../../../api/interaction/PointData";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
-import {PointDataImpl} from "./PointDataImpl";
+import {PointDataImpl} from "../PointDataImpl";
 
 export class PressFSM extends FSMImpl {
     public buildFSM(dataHandler?: PressFSMHandler): void {

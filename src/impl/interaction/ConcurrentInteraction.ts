@@ -19,7 +19,7 @@ import {OutputState} from "../../api/fsm/OutputState";
 import {InteractionData} from "../../api/interaction/InteractionData";
 import {InteractionBase} from "./InteractionBase";
 import {EventType} from "../../api/fsm/EventType";
-import {Flushable} from "./library/Flushable";
+import {Flushable} from "./Flushable";
 
 /**
  * The base implementation of a user interaction that uses concurrent FSMs.

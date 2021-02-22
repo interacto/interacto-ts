@@ -16,8 +16,8 @@ import {InteractionBase} from "../../src/impl/interaction/InteractionBase";
 import {InteractionData} from "../../src/api/interaction/InteractionData";
 import {FSM} from "../../src/api/fsm/FSM";
 import {OutputState} from "../../src/api/fsm/OutputState";
-import {Flushable} from "../../src/impl/interaction/library/Flushable";
-import {PointDataImpl} from "../../src/impl/interaction/library/PointDataImpl";
+import {Flushable} from "../../src/impl/interaction/Flushable";
+import {PointDataImpl} from "../../src/impl/interaction/PointDataImpl";
 
 export class InteractionStub extends InteractionBase<InteractionData, Flushable & InteractionData, FSM> {
     public constructor(fsm: FSM) {

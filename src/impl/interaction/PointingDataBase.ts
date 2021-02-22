@@ -13,7 +13,7 @@
  */
 
 import {InteractionDataBase} from "./InteractionDataBase";
-import {PointBaseData} from "../../../api/interaction/PointBaseData";
+import {PointBaseData} from "../../api/interaction/PointBaseData";
 
 export abstract class PointingDataBase extends InteractionDataBase implements PointBaseData {
     protected clientXData: number = 0;

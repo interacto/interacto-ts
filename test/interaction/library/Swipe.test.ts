@@ -16,7 +16,7 @@ import {FSMHandler, Swipe} from "../../../src/interacto";
 import {createTouchEvent, robot} from "../StubEvents";
 import {mock} from "jest-mock-extended";
 import {checkTouchPoint} from "../../Utils";
-import {TouchDataImpl} from "../../../src/impl/interaction/library/TouchDataImpl";
+import {TouchDataImpl} from "../../../src/impl/interaction/TouchDataImpl";
 
 let interaction: Swipe;
 let canvas: HTMLElement;

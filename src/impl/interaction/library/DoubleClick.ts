@@ -23,7 +23,7 @@ import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 import {MoveTransition} from "../../fsm/MoveTransition";
 import {PointData} from "../../../api/interaction/PointData";
 import {InteractionBase} from "../InteractionBase";
-import {PointDataImpl} from "./PointDataImpl";
+import {PointDataImpl} from "../PointDataImpl";
 
 export class DoubleClickFSM extends FSMImpl {
     /** The time gap between the two spinner events. */

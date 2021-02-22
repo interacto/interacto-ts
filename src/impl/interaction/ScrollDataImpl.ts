@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {ScrollData} from "../../../api/interaction/ScrollData";
+import {ScrollData} from "../../api/interaction/ScrollData";
 import {Flushable} from "./Flushable";
 import {InteractionDataBase} from "./InteractionDataBase";
 

@@ -12,12 +12,23 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {WidgetData} from "../../../api/interaction/WidgetData";
+import {KeysData} from "../../api/interaction/KeysData";
 import {Flushable} from "./Flushable";
-import {InteractionDataBase} from "./InteractionDataBase";
+import {KeyData} from "../../api/interaction/KeyData";
 
-export class WidgetDataImpl<T> extends InteractionDataBase implements WidgetData<T>, Flushable {
-    public get widget(): T | undefined {
-        return this.targetData as unknown as T;
+export class KeysDataImpl implements KeysData, Flushable {
+    private readonly keysData: Array<KeyData> = [];
+
+
+    public flush(): void {
+        this.keysData.length = 0;
+    }
+
+    public get keys(): ReadonlyArray<KeyData> {
+        return this.keysData;
+    }
+
+    public addKey(key: KeyData): void {
+        this.keysData.push(key);
     }
 }

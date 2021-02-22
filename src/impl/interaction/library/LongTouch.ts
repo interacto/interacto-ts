@@ -22,7 +22,7 @@ import {TouchPressureTransition} from "../../fsm/TouchPressureTransition";
 import {TouchReleaseTransition} from "../../fsm/TouchReleaseTransition";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 import {TouchData} from "../../../api/interaction/TouchData";
-import {TouchDataImpl} from "./TouchDataImpl";
+import {TouchDataImpl} from "../TouchDataImpl";
 
 /**
  * The FSM for the LongTouch interaction

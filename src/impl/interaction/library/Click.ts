@@ -18,7 +18,7 @@ import {ClickTransition} from "../../fsm/ClickTransition";
 import {PointData} from "../../../api/interaction/PointData";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
-import {PointDataImpl} from "./PointDataImpl";
+import {PointDataImpl} from "../PointDataImpl";
 
 /**
  * The FSM for click interactions
