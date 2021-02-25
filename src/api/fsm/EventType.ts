@@ -34,5 +34,4 @@ export const eventTypes = [
 /**
  * The supported event types as a type
  */
-// eslint-disable-next-line @typescript-eslint/no-type-alias
 export type EventType = typeof eventTypes[number];

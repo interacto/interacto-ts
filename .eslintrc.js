@@ -93,6 +93,7 @@ module.exports = {
     "no-magic-numbers": "off",
     "indent": "off",
 
+    "@typescript-eslint/no-type-alias": "off",
     "@typescript-eslint/no-inferrable-types": "off",
     "@typescript-eslint/no-magic-numbers": "off",
     "@typescript-eslint/init-declarations": "off",

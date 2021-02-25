@@ -33,7 +33,6 @@ export function isEltRef(o: unknown): o is EltRef<EventTarget> {
 /**
  * This alias refers to either an EvenTarget object of a reference to an EvenTarget object.
  */
-// eslint-disable-next-line @typescript-eslint/no-type-alias
 export type Widget<T extends EventTarget> = EltRef<T> | T;
 
 /**
