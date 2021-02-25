@@ -27,14 +27,10 @@ export class UndoHistory {
     private static instance: UndoHistory = new UndoHistory();
 
     public static setInstance(newInstance: UndoHistory): void {
-        // eslint-disable-next-line no-console
-        console.log("setInstance");
         this.instance = newInstance;
     }
 
     public static getInstance(): UndoHistory {
-        // eslint-disable-next-line no-console
-        console.log("getInstance");
         return this.instance;
     }
 
@@ -64,8 +60,6 @@ export class UndoHistory {
         this.sizeMax = 20;
         this.undoPublisher = new Subject();
         this.redoPublisher = new Subject();
-        // eslint-disable-next-line no-console
-        console.log("constructor");
     }
 
     /**
@@ -201,8 +195,6 @@ export class UndoHistory {
      * @param max - The max number of saved undoable objects. Must be great than 0.
      */
     public setSizeMax(max: number): void {
-        // eslint-disable-next-line no-console
-        console.log("setSizeMax");
         if (max >= 0) {
             const removed = this.undos.splice(0, this.undos.length - max);
             if (this.undos.length === 0 && removed.length > 0) {
