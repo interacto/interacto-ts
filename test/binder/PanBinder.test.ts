@@ -20,7 +20,7 @@ import {
     clearBindingObserver,
     panBinder,
     setBindingObserver,
-    UndoHistory
+    UndoHistoryImpl
 } from "../../src/interacto";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
 
@@ -38,7 +38,7 @@ beforeEach(() => {
 afterEach(() => {
     clearBindingObserver();
     jest.clearAllTimers();
-    UndoHistory.getInstance().clear();
+    UndoHistoryImpl.getInstance().clear();
 });
 
 test("pan horizontal right", () => {

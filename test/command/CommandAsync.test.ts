@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {UndoHistory} from "../../src/impl/undo/UndoHistory";
+import {UndoHistoryImpl} from "../../src/impl/undo/UndoHistoryImpl";
 import {CmdStatus} from "../../src/api/command/Command";
 import {CommandBase} from "../../src/impl/command/CommandBase";
 import type {Binding} from "../../src/api/binding/Binding";
@@ -95,7 +95,7 @@ describe("testing async commands and bindings", () => {
 
     afterEach(async () => {
         clearBindingObserver();
-        UndoHistory.getInstance().clear();
+        UndoHistoryImpl.getInstance().clear();
         clearAllTimers();
         clearAllMocks();
         await flushPromises();

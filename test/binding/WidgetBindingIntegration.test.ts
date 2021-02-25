@@ -19,7 +19,7 @@ import {
     CmdStatus,
     FSMImpl,
     TerminalState,
-    BindingImpl, UndoHistory
+    BindingImpl, UndoHistoryImpl
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {InteractionStub} from "../interaction/InteractionStub";
@@ -50,7 +50,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-    UndoHistory.getInstance().clear();
+    UndoHistoryImpl.getInstance().clear();
 });
 
 test("testNothingDoneIsDeactivated", () => {

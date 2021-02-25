@@ -18,7 +18,7 @@ import type {InteractionData} from "../../src/api/interaction/InteractionData";
 import {clearBindingObserver, keyPressBinder, keysTypeBinder, setBindingObserver} from "../../src/impl/binding/Bindings";
 import {StubCmd} from "../command/StubCmd";
 import {createKeyEvent, robot} from "../interaction/StubEvents";
-import {UndoHistory} from "../../src/impl/undo/UndoHistory";
+import {UndoHistoryImpl} from "../../src/impl/undo/UndoHistoryImpl";
 import type {Interaction} from "../../src/api/interaction/Interaction";
 import {mock} from "jest-mock-extended";
 import type {BindingsObserver} from "../../src/api/binding/BindingsObserver";
@@ -41,7 +41,7 @@ beforeEach(() => {
 
 afterEach(() => {
     clearBindingObserver();
-    UndoHistory.getInstance().clear();
+    UndoHistoryImpl.getInstance().clear();
     clearAllTimers();
 });
 

@@ -23,7 +23,7 @@ import {isUndoableType} from "../../api/undo/Undoable";
 import {MustBeUndoableCmdError} from "./MustBeUndoableCmdError";
 import type {Binding} from "../../api/binding/Binding";
 import type {Interaction} from "../../api/interaction/Interaction";
-import {UndoHistory} from "../undo/UndoHistory";
+import {UndoHistoryImpl} from "../undo/UndoHistoryImpl";
 
 /**
  * The base class to do bindings, i.e. bindings between user interactions and (undoable) commands.
@@ -433,7 +433,7 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
 
         if (hadEffect) {
             if (isUndoableType(cmd)) {
-                UndoHistory.getInstance().add(cmd);
+                UndoHistoryImpl.getInstance().add(cmd);
             }
             this.ifCmdHadEffects();
         } else {

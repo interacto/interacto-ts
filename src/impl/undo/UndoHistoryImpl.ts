@@ -16,15 +16,13 @@ import type {Undoable} from "../../api/undo/Undoable";
 import type {Observable} from "rxjs";
 import {Subject} from "rxjs";
 import {peek} from "../util/ArrayUtil";
+import type {UndoHistory} from "../../api/undo/UndoHistory";
 
-/**
- * A history of undone/redone objects.
- */
-export class UndoHistory {
+export class UndoHistoryImpl implements UndoHistory {
     /**
      * The default undo/redo collector.
      */
-    private static instance: UndoHistory = new UndoHistory();
+    private static instance: UndoHistory = new UndoHistoryImpl();
 
     public static setInstance(newInstance: UndoHistory): void {
         this.instance = newInstance;
@@ -62,27 +60,14 @@ export class UndoHistory {
         this.redoPublisher = new Subject();
     }
 
-    /**
-     * A stream for observing changes regarding the last undoable object.
-     * @returns An observable value of optional undoable objects: if empty, this means
-     * that no undoable object are stored anymore.
-     */
     public undosObservable(): Observable<Undoable | undefined> {
         return this.undoPublisher;
     }
 
-    /**
-     * A stream for observing changes regarding the last redoable object.
-     * @returns An observable value of optional redoable objects: if empty, this means
-     * that no redoable object are stored anymore.
-     */
     public redosObservable(): Observable<Undoable | undefined> {
         return this.redoPublisher;
     }
 
-    /**
-     * Removes all the undoable objects of the collector.
-     */
     public clear(): void {
         if (this.undos.length > 0) {
             this.undos.length = 0;
@@ -98,10 +83,6 @@ export class UndoHistory {
         }
     }
 
-    /**
-     * Adds an undoable object to the collector.
-     * @param undoable - The undoable object to add.
-     */
     public add(undoable: Undoable): void {
         if (this.sizeMax > 0) {
             if (this.undos.length === this.sizeMax) {
@@ -114,9 +95,6 @@ export class UndoHistory {
         }
     }
 
-    /**
-     * Undoes the last undoable object.
-     */
     public undo(): void {
         const undoable = this.undos.pop();
 
@@ -128,9 +106,6 @@ export class UndoHistory {
         }
     }
 
-    /**
-     * Redoes the last undoable object.
-     */
     public redo(): void {
         const undoable = this.redos.pop();
 
@@ -142,58 +117,34 @@ export class UndoHistory {
         }
     }
 
-    /**
-     * @returns The last undoable object name or undefined if there is no last object.
-     */
     public getLastUndoMessage(): string | undefined {
         return peek(this.undos)?.getUndoName();
     }
 
-    /**
-     * @returns The last redoable object name or undefined if there is no last object.
-     */
     public getLastRedoMessage(): string | undefined {
         return peek(this.redos)?.getUndoName();
     }
 
-    /**
-     * @returns The last undoable object name or an empty string if there is no last object.
-     */
     public getLastOrEmptyUndoMessage(): string {
         return this.getLastUndoMessage() ?? "";
     }
 
-    /**
-     * @returns The last redoable object name or an empty string if there is no last object.
-     */
     public getLastOrEmptyRedoMessage(): string {
         return this.getLastRedoMessage() ?? "";
     }
 
-    /**
-     * @returns The last undoable object or undefined if there is no last object.
-     */
     public getLastUndo(): Undoable | undefined {
         return peek(this.undos);
     }
 
-    /**
-     * @returns The last redoable object or undefined if there is no last object.
-     */
     public getLastRedo(): Undoable | undefined {
         return peek(this.redos);
     }
 
-    /**
-     * @returns The max number of saved undoable objects.
-     */
     public getSizeMax(): number {
         return this.sizeMax;
     }
 
-    /**
-     * @param max - The max number of saved undoable objects. Must be great than 0.
-     */
     public setSizeMax(max: number): void {
         if (max >= 0) {
             const removed = this.undos.splice(0, this.undos.length - max);
@@ -204,16 +155,10 @@ export class UndoHistory {
         }
     }
 
-    /**
-     * @returns The stack of saved undoable objects.
-     */
     public getUndo(): ReadonlyArray<Undoable> {
         return this.undos;
     }
 
-    /**
-     * @returns The stack of saved redoable objects
-     */
     public getRedo(): ReadonlyArray<Undoable> {
         return this.redos;
     }

@@ -19,7 +19,7 @@ import {
     clearBindingObserver,
     setBindingObserver,
     textInputBinder,
-    UndoHistory
+    UndoHistoryImpl
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
@@ -40,7 +40,7 @@ beforeEach(() => {
 afterEach(() => {
     jest.clearAllTimers();
     clearBindingObserver();
-    UndoHistory.getInstance().clear();
+    UndoHistoryImpl.getInstance().clear();
 });
 
 test("type text create command", () => {

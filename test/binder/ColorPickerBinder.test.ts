@@ -20,7 +20,7 @@ import type {
 import {clearBindingObserver,
     colorPickerBinder,
     setBindingObserver,
-    UndoHistory} from "../../src/interacto";
+    UndoHistoryImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
 
@@ -42,7 +42,7 @@ beforeEach(() => {
 
 afterEach(() => {
     clearBindingObserver();
-    UndoHistory.getInstance().clear();
+    UndoHistoryImpl.getInstance().clear();
 });
 
 test("testCommandExecutedOnSinglePickerFunction", () => {

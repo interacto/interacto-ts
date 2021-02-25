@@ -19,7 +19,7 @@ import type {
 import {
     nodeBinder,
     Press,
-    UndoHistory
+    UndoHistoryImpl
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {createMouseEvent} from "../interaction/StubEvents";
@@ -40,7 +40,7 @@ afterEach(() => {
     if (disposable !== undefined) {
         disposable.unsubscribe();
     }
-    UndoHistory.getInstance().clear();
+    UndoHistoryImpl.getInstance().clear();
     binding1.uninstallBinding();
     binding2.uninstallBinding();
 });

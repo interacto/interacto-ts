@@ -13,25 +13,25 @@
  */
 
 import {Undo} from "../../../src/impl/command/library/Undo";
-import {UndoHistory} from "../../../src/impl/undo/UndoHistory";
+import {UndoHistoryImpl} from "../../../src/impl/undo/UndoHistoryImpl";
 import type {Undoable} from "../../../src/api/undo/Undoable";
 import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
 
 let cmd: Undo;
-let collector: MockProxy<UndoHistory> & UndoHistory;
+let collector: MockProxy<UndoHistoryImpl> & UndoHistoryImpl;
 
 
 describe("base undo testing", () => {
     beforeEach(() => {
         cmd = new Undo();
-        collector = mock<UndoHistory>();
-        UndoHistory.setInstance(collector);
-        UndoHistory.getInstance = jest.fn().mockImplementation(() => collector);
+        collector = mock<UndoHistoryImpl>();
+        UndoHistoryImpl.setInstance(collector);
+        UndoHistoryImpl.getInstance = jest.fn().mockImplementation(() => collector);
     });
 
     afterAll(() => {
-        UndoHistory.setInstance(new UndoHistory());
+        UndoHistoryImpl.setInstance(new UndoHistoryImpl());
     });
 
     test("testCannotDo", () => {

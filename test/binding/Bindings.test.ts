@@ -51,7 +51,7 @@ import {
     swipeBinder,
     tapBinder,
     touchDnDBinder,
-    UndoHistory,
+    UndoHistoryImpl,
     undoRedoBinder
 } from "../../src/interacto";
 import {StubCmd, StubUndoableCmd} from "../command/StubCmd";
@@ -72,7 +72,7 @@ beforeEach(() => {
 
 afterEach(() => {
     clearBindingObserver();
-    UndoHistory.getInstance().clear();
+    UndoHistoryImpl.getInstance().clear();
     jest.clearAllTimers();
     jest.clearAllMocks();
 });
@@ -106,7 +106,7 @@ test("undoable command registered", () => {
         .toProduce(() => new StubUndoableCmd(true))
         .bind();
     robot(elt).mousedown();
-    expect(UndoHistory.getInstance().getLastUndo()).toBeDefined();
+    expect(UndoHistoryImpl.getInstance().getLastUndo()).toBeDefined();
 });
 
 test("undo redo binders on undo", () => {
@@ -121,8 +121,8 @@ test("undo redo binders on undo", () => {
         .mousedown(elt)
         .click(undo);
 
-    expect(UndoHistory.getInstance().getLastRedo()).toBeDefined();
-    expect(UndoHistory.getInstance().getLastUndo()).toBeUndefined();
+    expect(UndoHistoryImpl.getInstance().getLastRedo()).toBeDefined();
+    expect(UndoHistoryImpl.getInstance().getLastUndo()).toBeUndefined();
     expect(ctx.getCmdsProducedBy(bindings[0])).toHaveLength(1);
 });
 
@@ -139,8 +139,8 @@ test("undo redo binders on redo", () => {
         .mousedown(elt)
         .click(undo)
         .click(redo);
-    expect(UndoHistory.getInstance().getLastRedo()).toBeUndefined();
-    expect(UndoHistory.getInstance().getLastUndo()).toBeDefined();
+    expect(UndoHistoryImpl.getInstance().getLastRedo()).toBeUndefined();
+    expect(UndoHistoryImpl.getInstance().getLastUndo()).toBeDefined();
     expect(ctx.getCmdsProducedBy(bindings[1])).toHaveLength(1);
 });
 

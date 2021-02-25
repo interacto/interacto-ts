@@ -20,7 +20,7 @@ import {
     clearBindingObserver,
     setBindingObserver,
     tapBinder,
-    UndoHistory
+    UndoHistoryImpl
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {createTouchEvent} from "../interaction/StubEvents";
@@ -41,7 +41,7 @@ beforeEach(() => {
 afterEach(() => {
     clearBindingObserver();
     jest.clearAllTimers();
-    UndoHistory.getInstance().clear();
+    UndoHistoryImpl.getInstance().clear();
 });
 
 describe("on canvas", () => {

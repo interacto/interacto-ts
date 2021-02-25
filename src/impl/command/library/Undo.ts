@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {UndoHistory} from "../../undo/UndoHistory";
+import {UndoHistoryImpl} from "../../undo/UndoHistoryImpl";
 import {CommandBase} from "../CommandBase";
 
 /**
@@ -24,10 +24,10 @@ export class Undo extends CommandBase {
     }
 
     public canExecute(): boolean {
-        return UndoHistory.getInstance().getLastUndo() !== undefined;
+        return UndoHistoryImpl.getInstance().getLastUndo() !== undefined;
     }
 
     protected execution(): void {
-        UndoHistory.getInstance().undo();
+        UndoHistoryImpl.getInstance().undo();
     }
 }
