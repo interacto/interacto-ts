@@ -13,9 +13,9 @@
  */
 
 /**
- * The default constructor of the exception.
+ * The error to use when the command being processsed should be undoable.
  */
-export class MustBeUndoableCmdException extends Error {
+export class MustBeUndoableCmdError extends Error {
     public constructor(cmdProducer: unknown) {
         super(`The following command must be undoable: ${String(cmdProducer)}`);
     }

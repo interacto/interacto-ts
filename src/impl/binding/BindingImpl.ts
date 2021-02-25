@@ -21,7 +21,7 @@ import {CancelFSMException} from "../fsm/CancelFSMException";
 import type {InteractionData} from "../../api/interaction/InteractionData";
 import {catBinding, catCommand} from "../../api/logging/ConfigLog";
 import {isUndoableType} from "../../api/undo/Undoable";
-import {MustBeUndoableCmdException} from "../../api/binding/MustBeUndoableCmdException";
+import {MustBeUndoableCmdError} from "./MustBeUndoableCmdError";
 import type {Binding} from "../../api/binding/Binding";
 import type {Interaction} from "../../api/interaction/Interaction";
 
@@ -236,7 +236,7 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
                 catCommand.info(`Command ${c.constructor.name} undone`);
             }
         } else {
-            throw new MustBeUndoableCmdException(c);
+            throw new MustBeUndoableCmdError(c);
         }
     }
 

@@ -22,7 +22,7 @@ import {
     CmdStatus,
     CommandsRegistry,
     FSMImpl,
-    MustBeUndoableCmdException,
+    MustBeUndoableCmdError,
     RegistrationPolicy,
     BindingImpl, UndoHistory
 } from "../../src/interacto";
@@ -263,7 +263,7 @@ describe("nominal cases", () => {
         binding.getCommand()?.done();
         expect(() => {
             binding.fsmCancels();
-        }).toThrow(MustBeUndoableCmdException);
+        }).toThrow(MustBeUndoableCmdError);
     });
 
     test("cancel interaction continuous no effect", () => {
