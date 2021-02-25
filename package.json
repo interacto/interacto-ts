@@ -1,6 +1,6 @@
 {
   "name": "interacto",
-  "description": "A novel user interaction library",
+  "description": "Front-end framework for processing user interface events in TypeScript",
   "version": "5.4.1",
   "author": "Arnaud Blouin",
   "contributors": [
