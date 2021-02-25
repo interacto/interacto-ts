@@ -15,7 +15,7 @@
 import {TransitionBase} from "./TransitionBase";
 import type {OutputState} from "../../api/fsm/OutputState";
 import type {InputState} from "../../api/fsm/InputState";
-import {catFSM} from "../../api/logging/ConfigLog";
+import {catFSM} from "../logging/ConfigLog";
 import type {EventType} from "../../api/fsm/EventType";
 
 

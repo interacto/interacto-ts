@@ -19,7 +19,7 @@ import {isOutputStateType} from "../../api/fsm/OutputState";
 import type {FSMHandler} from "../../api/fsm/FSMHandler";
 import {TimeoutTransition} from "./TimeoutTransition";
 import type {InputState} from "../../api/fsm/InputState";
-import {catFSM} from "../../api/logging/ConfigLog";
+import {catFSM} from "../logging/ConfigLog";
 import type {FSMDataHandler} from "./FSMDataHandler";
 import {isKeyDownEvent, isKeyUpEvent} from "./Events";
 import type {Observable} from "rxjs";

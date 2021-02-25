@@ -15,7 +15,7 @@
 import type {FSM} from "../../api/fsm/FSM";
 import type {OutputState} from "../../api/fsm/OutputState";
 import {InitState} from "../fsm/InitState";
-import {catInteraction} from "../../api/logging/ConfigLog";
+import {catInteraction} from "../logging/ConfigLog";
 import type {InteractionData} from "../../api/interaction/InteractionData";
 import {isKeyEvent, isMouseEvent, isTouchEvent} from "../fsm/Events";
 import type {Subscription} from "rxjs";

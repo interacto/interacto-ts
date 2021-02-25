@@ -15,7 +15,7 @@
 import type {InteractionData} from "../../api/interaction/InteractionData";
 import {LogLevel} from "../../api/logging/LogLevel";
 import {BindingImpl} from "./BindingImpl";
-import {catBinding} from "../../api/logging/ConfigLog";
+import {catBinding} from "../logging/ConfigLog";
 import type {Command} from "../../api/command/Command";
 import type {Interaction} from "../../api/interaction/Interaction";
 

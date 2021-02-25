@@ -15,7 +15,7 @@
 import type {Command} from "../../src/api/command/Command";
 import type {Binding} from "../../src/api/binding/Binding";
 import type {InteractionData} from "../../src/api/interaction/InteractionData";
-import {clearBindingObserver, keyPressBinder, keysTypeBinder, setBindingObserver} from "../../src/api/binding/Bindings";
+import {clearBindingObserver, keyPressBinder, keysTypeBinder, setBindingObserver} from "../../src/impl/binding/Bindings";
 import {StubCmd} from "../command/StubCmd";
 import {createKeyEvent, robot} from "../interaction/StubEvents";
 import {UndoHistory} from "../../src/impl/undo/UndoHistory";

@@ -23,7 +23,7 @@ import {mock} from "jest-mock-extended";
 import {flushPromises} from "../Utils";
 import type {MouseEventForTest} from "./StubEvents";
 import {createMouseEvent} from "./StubEvents";
-import {catInteraction} from "../../src/api/logging/ConfigLog";
+import {catInteraction} from "../../src/impl/logging/ConfigLog";
 import advanceTimersByTime = jest.advanceTimersByTime;
 import runAllTimers = jest.runAllTimers;
 import clearAllTimers = jest.clearAllTimers;

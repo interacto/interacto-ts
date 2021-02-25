@@ -25,7 +25,7 @@ import {
     dndBinder,
     multiTouchBinder,
     setBindingObserver
-} from "../../src/api/binding/Bindings";
+} from "../../src/impl/binding/Bindings";
 import {flushPromises} from "../Utils";
 import {createMouseEvent, createTouchEvent} from "../interaction/StubEvents";
 import {LogLevel} from "../../src/api/logging/LogLevel";

@@ -23,7 +23,7 @@ import {StdState} from "../../src/impl/fsm/StdState";
 import {SubFSMTransition} from "../../src/impl/fsm/SubFSMTransition";
 import {TerminalState} from "../../src/impl/fsm/TerminalState";
 import {TimeoutTransition} from "../../src/impl/fsm/TimeoutTransition";
-import {catFSM} from "../../src/api/logging/ConfigLog";
+import {catFSM} from "../../src/impl/logging/ConfigLog";
 import {StubTransitionOK, SubStubTransition1, SubStubTransition2, SubStubTransition3} from "./StubTransitionOK";
 import type {FSMHandler} from "../../src/api/fsm/FSMHandler";
 import type {MockProxy} from "jest-mock-extended";

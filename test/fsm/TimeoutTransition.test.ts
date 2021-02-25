@@ -19,7 +19,7 @@ import type {OutputState} from "../../src/api/fsm/OutputState";
 import {TimeoutTransition} from "../../src/impl/fsm/TimeoutTransition";
 import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
-import {catFSM} from "../../src/api/logging/ConfigLog";
+import {catFSM} from "../../src/impl/logging/ConfigLog";
 
 let evt: TimeoutTransition;
 let src: MockProxy<OutputState> & OutputState;

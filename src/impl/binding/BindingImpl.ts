@@ -18,7 +18,7 @@ import type {Command} from "../../api/command/Command";
 import {CmdStatus} from "../../api/command/Command";
 import {CancelFSMException} from "../fsm/CancelFSMException";
 import type {InteractionData} from "../../api/interaction/InteractionData";
-import {catBinding, catCommand} from "../../api/logging/ConfigLog";
+import {catBinding, catCommand} from "../logging/ConfigLog";
 import {isUndoableType} from "../../api/undo/Undoable";
 import {MustBeUndoableCmdError} from "./MustBeUndoableCmdError";
 import type {Binding} from "../../api/binding/Binding";
