@@ -12,7 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSMDataHandler, FSMHandler, LongPress, PointDataImpl} from "../../../src/interacto";
+import type {FSMDataHandler, FSMHandler} from "../../../src/interacto";
+import {LongPress, PointDataImpl} from "../../../src/interacto";
 import {createMouseEvent, robot} from "../StubEvents";
 import {mock} from "jest-mock-extended";
 

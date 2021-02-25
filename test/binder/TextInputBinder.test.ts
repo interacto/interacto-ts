@@ -12,12 +12,12 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import type {Binding,
+    Interaction,
+    InteractionData} from "../../src/interacto";
 import {
-    Binding,
     clearBindingObserver,
     CommandsRegistry,
-    Interaction,
-    InteractionData,
     setBindingObserver,
     textInputBinder,
     UndoHistory

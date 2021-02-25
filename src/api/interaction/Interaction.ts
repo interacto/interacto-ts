@@ -12,8 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {InteractionData} from "./InteractionData";
-import {FSM} from "../fsm/FSM";
+import type {InteractionData} from "./InteractionData";
+import type {FSM} from "../fsm/FSM";
 
 export interface Interaction<D extends InteractionData> {
     /**

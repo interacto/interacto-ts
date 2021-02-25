@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import {BaseBinderBuilder, Widget} from "./BaseBinderBuilder";
-import {LogLevel} from "../logging/LogLevel";
+import type {BaseBinderBuilder, Widget} from "./BaseBinderBuilder";
+import type {LogLevel} from "../logging/LogLevel";
 
 /**
  * The base interface for building bindings based on non-trivial user interactions (eg DnD).

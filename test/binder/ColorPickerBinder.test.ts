@@ -11,16 +11,17 @@
  * You should have received a copy of the GNU General export function License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import {
-    Binding, clearBindingObserver,
-    colorPickerBinder,
-    CommandsRegistry,
+import type {
+    Binding,
     Interaction,
     InteractionData,
-    setBindingObserver,
-    UndoHistory,
     WidgetData
 } from "../../src/interacto";
+import {clearBindingObserver,
+    colorPickerBinder,
+    CommandsRegistry,
+    setBindingObserver,
+    UndoHistory} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
 

@@ -13,7 +13,7 @@
  */
 
 import {CommandBase} from "../../src/impl/command/CommandBase";
-import {Undoable} from "../../src/api/undo/Undoable";
+import type {Undoable} from "../../src/api/undo/Undoable";
 
 export class StubCmd extends CommandBase {
     public candoValue: boolean;

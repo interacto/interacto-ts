@@ -12,10 +12,10 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSMDataHandler} from "../../fsm/FSMDataHandler";
+import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {TerminalState} from "../../fsm/TerminalState";
 import {KeyPressureTransition} from "../../fsm/KeyPressureTransition";
-import {KeyData} from "../../../api/interaction/KeyData";
+import type {KeyData} from "../../../api/interaction/KeyData";
 import {StdState} from "../../fsm/StdState";
 import {KeyReleaseTransition} from "../../fsm/KeyReleaseTransition";
 import {FSMImpl} from "../../fsm/FSMImpl";

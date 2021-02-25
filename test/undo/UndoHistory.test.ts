@@ -12,9 +12,10 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {Undoable} from "../../src/api/undo/Undoable";
+import type {Undoable} from "../../src/api/undo/Undoable";
 import {UndoHistory} from "../../src/impl/undo/UndoHistory";
-import {mock, MockProxy} from "jest-mock-extended";
+import type {MockProxy} from "jest-mock-extended";
+import {mock} from "jest-mock-extended";
 
 jest.mock("../../src/api/undo/Undoable");
 

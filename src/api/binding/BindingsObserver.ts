@@ -12,10 +12,10 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {Command} from "../command/Command";
-import {InteractionData} from "../interaction/InteractionData";
-import {Interaction} from "../interaction/Interaction";
-import {Binding} from "./Binding";
+import type {Command} from "../command/Command";
+import type {InteractionData} from "../interaction/InteractionData";
+import type {Interaction} from "../interaction/Interaction";
+import type {Binding} from "./Binding";
 
 /**
  * Permits to observe the bindings produced using `Bindings` routines.

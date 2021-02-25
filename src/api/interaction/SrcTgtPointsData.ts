@@ -12,8 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {InteractionData} from "./InteractionData";
-import {PointBaseData} from "./PointBaseData";
+import type {InteractionData} from "./InteractionData";
+import type {PointBaseData} from "./PointBaseData";
 
 /**
  * Interaction data for a single pointing device that moves from a source

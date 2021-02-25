@@ -13,9 +13,9 @@
  */
 
 import {StateBase} from "./StateBase";
-import {OutputState} from "../../api/fsm/OutputState";
-import {FSM} from "../../api/fsm/FSM";
-import {Transition} from "../../api/fsm/Transition";
+import type {OutputState} from "../../api/fsm/OutputState";
+import type {FSM} from "../../api/fsm/FSM";
+import type {Transition} from "../../api/fsm/Transition";
 
 /**
  * Base implementation of the OutputState interface.

@@ -12,8 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {EventType} from "../../src/api/fsm/EventType";
-import {PointData} from "../../src/api/interaction/PointData";
+import type {EventType} from "../../src/api/fsm/EventType";
+import type {PointData} from "../../src/api/interaction/PointData";
 
 
 export interface MouseEventForTest extends MouseEvent {

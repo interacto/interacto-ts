@@ -12,9 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {SrcTgtPointsData} from "../../api/interaction/SrcTgtPointsData";
+import type {SrcTgtPointsData} from "../../api/interaction/SrcTgtPointsData";
 import {PointDataImpl} from "./PointDataImpl";
-import {PointData} from "../../api/interaction/PointData";
+import type {PointData} from "../../api/interaction/PointData";
 
 export class SrcTgtPointsDataImpl implements SrcTgtPointsData<PointData> {
     private readonly srcData: PointDataImpl;

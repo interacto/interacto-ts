@@ -12,14 +12,14 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {InteractionData} from "../interaction/InteractionData";
-import {LogLevel} from "../logging/LogLevel";
-import {Command} from "../command/Command";
-import {KeyInteractionCmdUpdateBinder} from "./KeyInteractionCmdUpdateBinder";
-import {InteractionUpdateBinderBuilder} from "./InteractionUpdateBinderBuilder";
-import {KeyBinderBuilder} from "./KeyBinderBuilder";
-import {Interaction} from "../interaction/Interaction";
-import {Widget} from "./BaseBinderBuilder";
+import type {InteractionData} from "../interaction/InteractionData";
+import type {LogLevel} from "../logging/LogLevel";
+import type {Command} from "../command/Command";
+import type {KeyInteractionCmdUpdateBinder} from "./KeyInteractionCmdUpdateBinder";
+import type {InteractionUpdateBinderBuilder} from "./InteractionUpdateBinderBuilder";
+import type {KeyBinderBuilder} from "./KeyBinderBuilder";
+import type {Interaction} from "../interaction/Interaction";
+import type {Widget} from "./BaseBinderBuilder";
 
 export interface KeyInteractionUpdateBinder<I extends Interaction<D>, D extends InteractionData>
     extends InteractionUpdateBinderBuilder<I, D>, KeyBinderBuilder {

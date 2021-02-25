@@ -12,16 +12,18 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {Observable, Subject} from "rxjs";
-import {CmdStatus, Command, RegistrationPolicy} from "../../api/command/Command";
+import type {Observable} from "rxjs";
+import {Subject} from "rxjs";
+import type {Command} from "../../api/command/Command";
+import {CmdStatus, RegistrationPolicy} from "../../api/command/Command";
 import {CommandsRegistry} from "../command/CommandsRegistry";
 import {CancelFSMException} from "../fsm/CancelFSMException";
-import {InteractionData} from "../../api/interaction/InteractionData";
+import type {InteractionData} from "../../api/interaction/InteractionData";
 import {catBinding, catCommand} from "../../api/logging/ConfigLog";
 import {isUndoableType} from "../../api/undo/Undoable";
 import {MustBeUndoableCmdException} from "../../api/binding/MustBeUndoableCmdException";
-import {Binding} from "../../api/binding/Binding";
-import {Interaction} from "../../api/interaction/Interaction";
+import type {Binding} from "../../api/binding/Binding";
+import type {Interaction} from "../../api/interaction/Interaction";
 
 /**
  * The base class to do bindings, i.e. bindings between user interactions and (undoable) commands.

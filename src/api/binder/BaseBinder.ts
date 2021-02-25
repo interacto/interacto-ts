@@ -11,13 +11,13 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import {LogLevel} from "../logging/LogLevel";
-import {Command} from "../command/Command";
-import {InteractionData} from "../interaction/InteractionData";
-import {BaseBinderBuilder, Widget} from "./BaseBinderBuilder";
-import {InteractionBinder} from "./InteractionBinder";
-import {CmdBinder} from "./CmdBinder";
-import {Interaction} from "../interaction/Interaction";
+import type {LogLevel} from "../logging/LogLevel";
+import type {Command} from "../command/Command";
+import type {InteractionData} from "../interaction/InteractionData";
+import type {BaseBinderBuilder, Widget} from "./BaseBinderBuilder";
+import type {InteractionBinder} from "./InteractionBinder";
+import type {CmdBinder} from "./CmdBinder";
+import type {Interaction} from "../interaction/Interaction";
 
 /**
  * The base interface for building bindings with routines

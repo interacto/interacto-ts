@@ -12,8 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {InteractionData} from "./InteractionData";
-import {PointData} from "./PointData";
+import type {InteractionData} from "./InteractionData";
+import type {PointData} from "./PointData";
 
 /**
  * Interaction data that contains a set of points.

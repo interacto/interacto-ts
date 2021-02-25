@@ -18,10 +18,10 @@ import {TerminalState} from "../../fsm/TerminalState";
 import {CancellingState} from "../../fsm/CancellingState";
 import {ClickTransition} from "../../fsm/ClickTransition";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
-import {FSMDataHandler} from "../../fsm/FSMDataHandler";
+import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {InteractionBase} from "../InteractionBase";
 import {PointDataImpl} from "../PointDataImpl";
-import {PointsData} from "../../../api/interaction/PointsData";
+import type {PointsData} from "../../../api/interaction/PointsData";
 import {PointsDataImpl} from "../PointsDataImpl";
 
 export class ClicksFSM extends FSMImpl {

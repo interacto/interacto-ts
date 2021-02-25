@@ -13,11 +13,12 @@
  */
 
 import {CancelFSMException} from "../../src/impl/fsm/CancelFSMException";
-import {FSMImpl} from "../../src/impl/fsm/FSMImpl";
-import {InputState} from "../../src/api/fsm/InputState";
-import {OutputState} from "../../src/api/fsm/OutputState";
+import type {FSMImpl} from "../../src/impl/fsm/FSMImpl";
+import type {InputState} from "../../src/api/fsm/InputState";
+import type {OutputState} from "../../src/api/fsm/OutputState";
 import {TimeoutTransition} from "../../src/impl/fsm/TimeoutTransition";
-import {mock, MockProxy} from "jest-mock-extended";
+import type {MockProxy} from "jest-mock-extended";
+import {mock} from "jest-mock-extended";
 import {catFSM} from "../../src/api/logging/ConfigLog";
 
 let evt: TimeoutTransition;

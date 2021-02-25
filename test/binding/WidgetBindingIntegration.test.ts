@@ -12,13 +12,13 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import type {FSM,
+    InteractionData} from "../../src/interacto";
 import {
     ClickTransition,
     CmdStatus,
     CommandsRegistry,
-    FSM,
     FSMImpl,
-    InteractionData,
     TerminalState,
     BindingImpl, UndoHistory
 } from "../../src/interacto";

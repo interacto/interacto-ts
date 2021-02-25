@@ -12,6 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import type {InteractionData,
+    Undoable} from "../../src/interacto";
 import {
     CancelFSMException,
     catBinding,
@@ -20,10 +22,8 @@ import {
     CmdStatus,
     CommandsRegistry,
     FSMImpl,
-    InteractionData,
     MustBeUndoableCmdException,
     RegistrationPolicy,
-    Undoable,
     BindingImpl, UndoHistory
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";

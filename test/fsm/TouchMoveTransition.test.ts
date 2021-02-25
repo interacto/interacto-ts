@@ -14,7 +14,7 @@
 
 import {TouchMoveTransition} from "../../src/impl/fsm/TouchMoveTransition";
 import {createMouseEvent, createTouchEvent} from "../interaction/StubEvents";
-import {FSMImpl} from "../../src/impl/fsm/FSMImpl";
+import type {FSMImpl} from "../../src/impl/fsm/FSMImpl";
 import {StdState} from "../../src/impl/fsm/StdState";
 import {mock} from "jest-mock-extended";
 

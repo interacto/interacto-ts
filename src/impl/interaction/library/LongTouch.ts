@@ -14,14 +14,14 @@
 
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
-import {FSMDataHandler} from "../../fsm/FSMDataHandler";
+import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {StdState} from "../../fsm/StdState";
 import {TerminalState} from "../../fsm/TerminalState";
 import {CancellingState} from "../../fsm/CancellingState";
 import {TouchPressureTransition} from "../../fsm/TouchPressureTransition";
 import {TouchReleaseTransition} from "../../fsm/TouchReleaseTransition";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
-import {TouchData} from "../../../api/interaction/TouchData";
+import type {TouchData} from "../../../api/interaction/TouchData";
 import {TouchDataImpl} from "../TouchDataImpl";
 
 /**

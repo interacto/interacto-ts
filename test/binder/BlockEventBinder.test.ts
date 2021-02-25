@@ -11,14 +11,16 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import {Subscription} from "rxjs";
+import type {Subscription} from "rxjs";
+import type {
+    PointData,
+    Binding
+} from "../../src/interacto";
 import {
     CommandsRegistry,
     nodeBinder,
-    PointData,
     Press,
-    UndoHistory,
-    Binding
+    UndoHistory
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {createMouseEvent} from "../interaction/StubEvents";

@@ -14,7 +14,7 @@
 
 import {ConcurrentFSM} from "../../src/impl/fsm/ConcurrentFSM";
 import {FSMImpl} from "../../src/impl/fsm/FSMImpl";
-import {FSMHandler} from "../../src/api/fsm/FSMHandler";
+import type {FSMHandler} from "../../src/api/fsm/FSMHandler";
 import {StdState} from "../../src/impl/fsm/StdState";
 import {TerminalState} from "../../src/impl/fsm/TerminalState";
 import {CancellingState} from "../../src/impl/fsm/CancellingState";

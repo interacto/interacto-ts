@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSM} from "./FSM";
+import type {FSM} from "./FSM";
 
 /**
  * The base type of an FSM state.

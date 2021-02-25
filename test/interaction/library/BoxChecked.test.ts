@@ -12,7 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {BoxChecked, FSMHandler} from "../../../src/interacto";
+import type {FSMHandler} from "../../../src/interacto";
+import {BoxChecked} from "../../../src/interacto";
 import {mock} from "jest-mock-extended";
 import {robot} from "../StubEvents";
 

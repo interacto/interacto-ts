@@ -12,11 +12,11 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {OutputState} from "../../api/fsm/OutputState";
-import {InputState} from "../../api/fsm/InputState";
+import type {OutputState} from "../../api/fsm/OutputState";
+import type {InputState} from "../../api/fsm/InputState";
 import {TransitionBase} from "./TransitionBase";
 import {isCheckBox} from "./Events";
-import {EventType} from "../../api/fsm/EventType";
+import type {EventType} from "../../api/fsm/EventType";
 
 /**
  * An FSM transition for the CheckBox HTML element.

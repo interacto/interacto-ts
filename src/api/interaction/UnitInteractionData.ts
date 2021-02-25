@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {InteractionData} from "./InteractionData";
+import type {InteractionData} from "./InteractionData";
 
 /**
  * Basic data of user interactions.

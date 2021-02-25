@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSMHandler} from "../../src/api/fsm/FSMHandler";
+import type {FSMHandler} from "../../src/api/fsm/FSMHandler";
 
 export class StubFSMHandler implements FSMHandler {
     public fsmStarts(): void {

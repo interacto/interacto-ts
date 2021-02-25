@@ -12,16 +12,16 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSM} from "../../api/fsm/FSM";
-import {OutputState} from "../../api/fsm/OutputState";
+import type {FSM} from "../../api/fsm/FSM";
+import type {OutputState} from "../../api/fsm/OutputState";
 import {InitState} from "../fsm/InitState";
 import {catInteraction} from "../../api/logging/ConfigLog";
-import {InteractionData} from "../../api/interaction/InteractionData";
+import type {InteractionData} from "../../api/interaction/InteractionData";
 import {isKeyEvent, isMouseEvent, isTouchEvent} from "../fsm/Events";
-import {Subscription} from "rxjs";
-import {Interaction} from "../../api/interaction/Interaction";
-import {EventType} from "../../api/fsm/EventType";
-import {Flushable} from "./Flushable";
+import type {Subscription} from "rxjs";
+import type {Interaction} from "../../api/interaction/Interaction";
+import type {EventType} from "../../api/fsm/EventType";
+import type {Flushable} from "./Flushable";
 
 
 interface CancellablePromise extends Promise<void> {

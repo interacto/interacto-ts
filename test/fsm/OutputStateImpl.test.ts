@@ -12,13 +12,14 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSMImpl} from "../../src/impl/fsm/FSMImpl";
-import {InputState} from "../../src/api/fsm/InputState";
+import type {FSMImpl} from "../../src/impl/fsm/FSMImpl";
+import type {InputState} from "../../src/api/fsm/InputState";
 import {OutputStateBase} from "../../src/impl/fsm/OutputStateBase";
 import {StubTransitionOK} from "./StubTransitionOK";
 import {StdState} from "../../src/impl/fsm/StdState";
-import {mock, MockProxy} from "jest-mock-extended";
-import {Transition} from "../../src/api/fsm/Transition";
+import type {MockProxy} from "jest-mock-extended";
+import {mock} from "jest-mock-extended";
+import type {Transition} from "../../src/api/fsm/Transition";
 
 let state: OutputStateBase;
 let fsm: FSMImpl & MockProxy<FSMImpl>;

@@ -13,10 +13,10 @@
  */
 
 import {TransitionBase} from "./TransitionBase";
-import {OutputState} from "../../api/fsm/OutputState";
-import {InputState} from "../../api/fsm/InputState";
+import type {OutputState} from "../../api/fsm/OutputState";
+import type {InputState} from "../../api/fsm/InputState";
 import {catFSM} from "../../api/logging/ConfigLog";
-import {EventType} from "../../api/fsm/EventType";
+import type {EventType} from "../../api/fsm/EventType";
 
 
 /**

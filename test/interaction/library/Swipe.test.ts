@@ -12,7 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSMHandler, Swipe} from "../../../src/interacto";
+import type {FSMHandler} from "../../../src/interacto";
+import {Swipe} from "../../../src/interacto";
 import {createTouchEvent, robot} from "../StubEvents";
 import {mock} from "jest-mock-extended";
 import {checkTouchPoint} from "../../Utils";

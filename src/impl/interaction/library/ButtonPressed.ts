@@ -12,11 +12,11 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSMDataHandler} from "../../fsm/FSMDataHandler";
+import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {ButtonPressedTransition} from "../../fsm/ButtonPressedTransition";
 import {TerminalState} from "../../fsm/TerminalState";
 import {isButton} from "../../fsm/Events";
-import {WidgetData} from "../../../api/interaction/WidgetData";
+import type {WidgetData} from "../../../api/interaction/WidgetData";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {WidgetDataImpl} from "../WidgetDataImpl";

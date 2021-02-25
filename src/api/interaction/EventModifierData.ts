@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {UnitInteractionData} from "./UnitInteractionData";
+import type {UnitInteractionData} from "./UnitInteractionData";
 
 /**
  * Data of user interactions that have key modifires.

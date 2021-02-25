@@ -12,10 +12,10 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {InteractionData} from "../interaction/InteractionData";
-import {BaseBinderBuilder, Widget} from "./BaseBinderBuilder";
-import {LogLevel} from "../logging/LogLevel";
-import {Interaction} from "../interaction/Interaction";
+import type {InteractionData} from "../interaction/InteractionData";
+import type {BaseBinderBuilder, Widget} from "./BaseBinderBuilder";
+import type {LogLevel} from "../logging/LogLevel";
+import type {Interaction} from "../interaction/Interaction";
 
 /**
  * The binding builder API that already knows the type of user interaction the bindings will use.

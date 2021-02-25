@@ -13,12 +13,12 @@
  */
 
 import {FSMImpl} from "../../src/impl/fsm/FSMImpl";
-import {InputState} from "../../src/api/fsm/InputState";
+import type {InputState} from "../../src/api/fsm/InputState";
 import {StdState} from "../../src/impl/fsm/StdState";
 import {SubFSMTransition} from "../../src/impl/fsm/SubFSMTransition";
 import {TerminalState} from "../../src/impl/fsm/TerminalState";
 import {SubStubTransition1} from "./StubTransitionOK";
-import {Transition} from "../../src/api/fsm/Transition";
+import type {Transition} from "../../src/api/fsm/Transition";
 import {createMouseEvent} from "../interaction/StubEvents";
 
 jest.mock("../../src/impl/fsm/StdState");

@@ -11,13 +11,13 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import {Command} from "../command/Command";
-import {InteractionData} from "../interaction/InteractionData";
-import {CmdBinderBuilder} from "./CmdBinderBuilder";
-import {InteractionCmdBinder} from "./InteractionCmdBinder";
-import {LogLevel} from "../logging/LogLevel";
-import {Interaction} from "../interaction/Interaction";
-import {Widget} from "./BaseBinderBuilder";
+import type {Command} from "../command/Command";
+import type {InteractionData} from "../interaction/InteractionData";
+import type {CmdBinderBuilder} from "./CmdBinderBuilder";
+import type {InteractionCmdBinder} from "./InteractionCmdBinder";
+import type {LogLevel} from "../logging/LogLevel";
+import type {Interaction} from "../interaction/Interaction";
+import type {Widget} from "./BaseBinderBuilder";
 
 /**
  * The binder API that already knows the type of UI command

@@ -13,7 +13,7 @@
  */
 
 import {OutputStateBase} from "./OutputStateBase";
-import {FSM} from "../../api/fsm/FSM";
+import type {FSM} from "../../api/fsm/FSM";
 
 /**
  * An FSM state.

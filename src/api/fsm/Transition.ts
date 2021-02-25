@@ -12,8 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {InputState} from "./InputState";
-import {EventType} from "./EventType";
+import type {InputState} from "./InputState";
+import type {EventType} from "./EventType";
 
 /**
  * The concept of FSM transition.

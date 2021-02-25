@@ -12,11 +12,11 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {OutputState} from "../../api/fsm/OutputState";
-import {InputState} from "../../api/fsm/InputState";
+import type {OutputState} from "../../api/fsm/OutputState";
+import type {InputState} from "../../api/fsm/InputState";
 import {isHyperLink} from "./Events";
 import {TransitionBase} from "./TransitionBase";
-import {EventType} from "../../api/fsm/EventType";
+import type {EventType} from "../../api/fsm/EventType";
 
 /**
  * An FSM transition for the Hyperlink.

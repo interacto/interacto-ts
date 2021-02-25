@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSMDataHandler} from "../../fsm/FSMDataHandler";
+import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {DoubleClick, DoubleClickFSM} from "./DoubleClick";
 import {TerminalState} from "../../fsm/TerminalState";
 import {CancellingState} from "../../fsm/CancellingState";
@@ -20,12 +20,12 @@ import {StdState} from "../../fsm/StdState";
 import {SubFSMTransition} from "../../fsm/SubFSMTransition";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {MoveTransition} from "../../fsm/MoveTransition";
-import {SrcTgtPointsData} from "../../../api/interaction/SrcTgtPointsData";
+import type {SrcTgtPointsData} from "../../../api/interaction/SrcTgtPointsData";
 import {InteractionBase} from "../InteractionBase";
-import {PointDataImpl} from "../PointDataImpl";
+import type {PointDataImpl} from "../PointDataImpl";
 import {EscapeKeyPressureTransition} from "../../fsm/EscapeKeyPressureTransition";
 import {SrcTgtPointsDataImpl} from "../SrcTgtPointsDataImpl";
-import {PointData} from "../../../api/interaction/PointData";
+import type {PointData} from "../../../api/interaction/PointData";
 
 export class DragLockFSM extends FSMImpl {
     public readonly firstDbleClick: DoubleClickFSM;

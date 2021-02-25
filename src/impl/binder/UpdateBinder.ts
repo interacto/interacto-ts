@@ -13,16 +13,16 @@
  */
 
 import {Binder} from "./Binder";
-import {InteractionData} from "../../api/interaction/InteractionData";
-import {Command} from "../../api/command/Command";
-import {CmdUpdateBinder} from "../../api/binder/CmdUpdateBinder";
-import {InteractionCmdUpdateBinder} from "../../api/binder/InteractionCmdUpdateBinder";
-import {LogLevel} from "../../api/logging/LogLevel";
-import {Binding} from "../../api/binding/Binding";
+import type {InteractionData} from "../../api/interaction/InteractionData";
+import type {Command} from "../../api/command/Command";
+import type {CmdUpdateBinder} from "../../api/binder/CmdUpdateBinder";
+import type {InteractionCmdUpdateBinder} from "../../api/binder/InteractionCmdUpdateBinder";
+import type {LogLevel} from "../../api/logging/LogLevel";
+import type {Binding} from "../../api/binding/Binding";
 import {AnonBinding} from "../binding/AnonBinding";
-import {Interaction} from "../../api/interaction/Interaction";
-import {Widget} from "../../api/binder/BaseBinderBuilder";
-import {BindingsObserver} from "../../api/binding/BindingsObserver";
+import type {Interaction} from "../../api/interaction/Interaction";
+import type {Widget} from "../../api/binder/BaseBinderBuilder";
+import type {BindingsObserver} from "../../api/binding/BindingsObserver";
 
 /**
  * The base binding builder for bindings where commands can be updated while the user interaction is running.

@@ -12,7 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {DragLock, FSMHandler, SrcTgtPointsDataImpl} from "../../../src/interacto";
+import type {FSMHandler} from "../../../src/interacto";
+import {DragLock, SrcTgtPointsDataImpl} from "../../../src/interacto";
 import {createMouseEvent, robot} from "../StubEvents";
 import {mock} from "jest-mock-extended";
 

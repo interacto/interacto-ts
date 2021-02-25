@@ -12,10 +12,10 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {TouchData} from "../../api/interaction/TouchData";
+import type {TouchData} from "../../api/interaction/TouchData";
 import {PointingDataBase} from "./PointingDataBase";
-import {UnitInteractionData} from "../../api/interaction/UnitInteractionData";
-import {EventModifierData} from "../../api/interaction/EventModifierData";
+import type {UnitInteractionData} from "../../api/interaction/UnitInteractionData";
+import type {EventModifierData} from "../../api/interaction/EventModifierData";
 
 export class TouchDataImpl extends PointingDataBase implements TouchData {
     private altitudeAngleData: number = 0;

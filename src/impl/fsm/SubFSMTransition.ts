@@ -13,15 +13,16 @@
  */
 
 import {TransitionBase} from "./TransitionBase";
-import {FSM} from "../../api/fsm/FSM";
-import {FSMHandler} from "../../api/fsm/FSMHandler";
-import {isOutputStateType, OutputState} from "../../api/fsm/OutputState";
-import {InputState} from "../../api/fsm/InputState";
+import type {FSM} from "../../api/fsm/FSM";
+import type {FSMHandler} from "../../api/fsm/FSMHandler";
+import type {OutputState} from "../../api/fsm/OutputState";
+import {isOutputStateType} from "../../api/fsm/OutputState";
+import type {InputState} from "../../api/fsm/InputState";
 import {TerminalState} from "./TerminalState";
 import {CancellingState} from "./CancellingState";
-import {Subscription} from "rxjs";
-import {Transition} from "../../api/fsm/Transition";
-import {EventType} from "../../api/fsm/EventType";
+import type {Subscription} from "rxjs";
+import type {Transition} from "../../api/fsm/Transition";
+import type {EventType} from "../../api/fsm/EventType";
 
 /**
  * A transition that refers to another FSM.

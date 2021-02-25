@@ -12,12 +12,12 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {BindingsObserver} from "../../api/binding/BindingsObserver";
-import {Binding} from "../../api/binding/Binding";
-import {Command} from "../../api/command/Command";
-import {Interaction} from "../../api/interaction/Interaction";
-import {InteractionData} from "../../api/interaction/InteractionData";
-import {Subscription} from "rxjs/internal/Subscription";
+import type {BindingsObserver} from "../../api/binding/BindingsObserver";
+import type {Binding} from "../../api/binding/Binding";
+import type {Command} from "../../api/command/Command";
+import type {Interaction} from "../../api/interaction/Interaction";
+import type {InteractionData} from "../../api/interaction/InteractionData";
+import type {Subscription} from "rxjs/internal/Subscription";
 
 /**
  * An object for observing creates bindings.

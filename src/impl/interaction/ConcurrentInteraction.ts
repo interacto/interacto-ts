@@ -12,14 +12,14 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {Subscription} from "rxjs/internal/Subscription";
-import {ConcurrentFSM} from "../fsm/ConcurrentFSM";
-import {FSM} from "../../api/fsm/FSM";
-import {OutputState} from "../../api/fsm/OutputState";
-import {InteractionData} from "../../api/interaction/InteractionData";
+import type {Subscription} from "rxjs/internal/Subscription";
+import type {ConcurrentFSM} from "../fsm/ConcurrentFSM";
+import type {FSM} from "../../api/fsm/FSM";
+import type {OutputState} from "../../api/fsm/OutputState";
+import type {InteractionData} from "../../api/interaction/InteractionData";
 import {InteractionBase} from "./InteractionBase";
-import {EventType} from "../../api/fsm/EventType";
-import {Flushable} from "./Flushable";
+import type {EventType} from "../../api/fsm/EventType";
+import type {Flushable} from "./Flushable";
 
 /**
  * The base implementation of a user interaction that uses concurrent FSMs.

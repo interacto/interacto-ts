@@ -12,49 +12,52 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import type {
+    Binding,
+    Command,
+    EltRef,
+    Interaction,
+    InteractionCmdUpdateBinder,
+    InteractionData,
+    KeysData,
+    PointData,
+    PointsData,
+    ScrollData,
+    SrcTgtPointsData,
+    TapData,
+    TouchData,
+    WidgetData
+} from "../../src/interacto";
 import {
     AnonCmd,
-    Binding,
     catBinding,
     catCommand,
     clearBindingObserver,
     clickBinder,
     clicksBinder,
-    Command,
     CommandsRegistry,
     dbleClickBinder,
     dndBinder,
     dragLockBinder,
-    EltRef,
     hyperlinkBinder,
-    Interaction,
-    InteractionCmdUpdateBinder,
-    InteractionData,
     keyPressBinder,
-    KeysData,
     keysPressBinder,
     keyTypeBinder,
     LogLevel,
     longPressBinder,
     longTouchBinder,
-    PointData,
-    PointsData,
     pressBinder,
     scrollBinder,
-    ScrollData,
     setBindingObserver,
-    SrcTgtPointsData,
     swipeBinder,
     tapBinder,
-    TapData,
-    TouchData,
     touchDnDBinder,
     UndoHistory,
-    undoRedoBinder,
-    WidgetData
+    undoRedoBinder
 } from "../../src/interacto";
 import {StubCmd, StubUndoableCmd} from "../command/StubCmd";
-import {createMouseEvent, MouseEventForTest, robot} from "../interaction/StubEvents";
+import type {MouseEventForTest} from "../interaction/StubEvents";
+import {createMouseEvent, robot} from "../interaction/StubEvents";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
 import {flushPromises} from "../Utils";
 

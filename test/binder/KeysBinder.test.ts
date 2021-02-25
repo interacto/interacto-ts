@@ -12,20 +12,20 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {Command} from "../../src/api/command/Command";
-import {Binding} from "../../src/api/binding/Binding";
-import {InteractionData} from "../../src/api/interaction/InteractionData";
+import type {Command} from "../../src/api/command/Command";
+import type {Binding} from "../../src/api/binding/Binding";
+import type {InteractionData} from "../../src/api/interaction/InteractionData";
 import {clearBindingObserver, keyPressBinder, keysTypeBinder, setBindingObserver} from "../../src/api/binding/Bindings";
 import {StubCmd} from "../command/StubCmd";
 import {createKeyEvent, robot} from "../interaction/StubEvents";
 import {UndoHistory} from "../../src/impl/undo/UndoHistory";
 import {CommandsRegistry} from "../../src/impl/command/CommandsRegistry";
-import {Interaction} from "../../src/api/interaction/Interaction";
+import type {Interaction} from "../../src/api/interaction/Interaction";
 import {mock} from "jest-mock-extended";
-import {BindingsObserver} from "../../src/api/binding/BindingsObserver";
+import type {BindingsObserver} from "../../src/api/binding/BindingsObserver";
 import {KeysBinder} from "../../src/impl/binder/KeysBinder";
 import {KeyPressed} from "../../src/impl/interaction/library/KeyPressed";
-import {KeysData} from "../../src/api/interaction/KeysData";
+import type {KeysData} from "../../src/api/interaction/KeysData";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
 import clearAllTimers = jest.clearAllTimers;
 

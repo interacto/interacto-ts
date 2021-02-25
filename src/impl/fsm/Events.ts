@@ -13,7 +13,8 @@
  */
 
 
-import {EventType, eventTypes} from "../../api/fsm/EventType";
+import type {EventType} from "../../api/fsm/EventType";
+import {eventTypes} from "../../api/fsm/EventType";
 
 
 export function isEventType(evtType: string): evtType is EventType {

@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {State} from "./State";
+import type {State} from "./State";
 
 /**
  * Defines a type of state that can receive input events.

@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSMImpl} from "../../src/impl/fsm/FSMImpl";
+import type {FSMImpl} from "../../src/impl/fsm/FSMImpl";
 import {ReleaseTransition} from "../../src/impl/fsm/ReleaseTransition";
 import {StdState} from "../../src/impl/fsm/StdState";
 import {createMouseEvent, createTouchEvent} from "../interaction/StubEvents";

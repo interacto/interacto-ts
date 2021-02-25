@@ -13,11 +13,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {FSMImpl} from "../../src/impl/fsm/FSMImpl";
+import type {FSMImpl} from "../../src/impl/fsm/FSMImpl";
 import {StdState} from "../../src/impl/fsm/StdState";
 import {WidgetTransition} from "../../src/impl/fsm/WidgetTransition";
 import {mock} from "jest-mock-extended";
-import {EventType} from "../../src/api/fsm/EventType";
+import type {EventType} from "../../src/api/fsm/EventType";
 
 class WTransition extends WidgetTransition<string> {
     public constructor() {

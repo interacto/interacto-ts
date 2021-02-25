@@ -13,11 +13,11 @@
  */
 
 import {UpdateBinder} from "../../src/impl/binder/UpdateBinder";
-import {Command} from "../../src/api/command/Command";
-import {InteractionData} from "../../src/api/interaction/InteractionData";
+import type {Command} from "../../src/api/command/Command";
+import type {InteractionData} from "../../src/api/interaction/InteractionData";
 import {mock} from "jest-mock-extended";
-import {Interaction} from "../../src/api/interaction/Interaction";
-import {BindingsObserver} from "../../src/api/binding/BindingsObserver";
+import type {Interaction} from "../../src/api/interaction/Interaction";
+import type {BindingsObserver} from "../../src/api/binding/BindingsObserver";
 import {Press} from "../../src/impl/interaction/library/Press";
 import clearAllMocks = jest.clearAllMocks;
 

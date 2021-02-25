@@ -12,7 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSMHandler, KeyDataImpl, KeyPressed} from "../../../src/interacto";
+import type {FSMHandler} from "../../../src/interacto";
+import {KeyDataImpl, KeyPressed} from "../../../src/interacto";
 import {robot} from "../StubEvents";
 import {mock} from "jest-mock-extended";
 

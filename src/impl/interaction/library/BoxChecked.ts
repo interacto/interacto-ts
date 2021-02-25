@@ -15,8 +15,8 @@
 import {TerminalState} from "../../fsm/TerminalState";
 import {BoxCheckPressedTransition} from "../../fsm/BoxCheckPressedTransition";
 import {isCheckBox} from "../../fsm/Events";
-import {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import {WidgetData} from "../../../api/interaction/WidgetData";
+import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
+import type {WidgetData} from "../../../api/interaction/WidgetData";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {WidgetDataImpl} from "../WidgetDataImpl";

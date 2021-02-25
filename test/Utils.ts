@@ -14,7 +14,7 @@
 
 // This files contains helper routines for testing the library.
 
-import {TouchData} from "../src/api/interaction/TouchData";
+import type {TouchData} from "../src/api/interaction/TouchData";
 
 /**
  * Flushes the ongoing promises

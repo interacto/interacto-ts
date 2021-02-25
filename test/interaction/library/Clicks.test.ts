@@ -13,7 +13,7 @@
  */
 
 import {mock} from "jest-mock-extended";
-import {FSMHandler} from "../../../src/api/fsm/FSMHandler";
+import type {FSMHandler} from "../../../src/api/fsm/FSMHandler";
 import {Clicks} from "../../../src/impl/interaction/library/Clicks";
 import {createMouseEvent, robot} from "../StubEvents";
 

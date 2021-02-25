@@ -12,13 +12,13 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {InteractionData} from "../interaction/InteractionData";
-import {InteractionBinderBuilder} from "./InteractionBinderBuilder";
-import {LogLevel} from "../logging/LogLevel";
-import {Command} from "../command/Command";
-import {InteractionCmdBinder} from "./InteractionCmdBinder";
-import {Interaction} from "../interaction/Interaction";
-import {Widget} from "./BaseBinderBuilder";
+import type {InteractionData} from "../interaction/InteractionData";
+import type {InteractionBinderBuilder} from "./InteractionBinderBuilder";
+import type {LogLevel} from "../logging/LogLevel";
+import type {Command} from "../command/Command";
+import type {InteractionCmdBinder} from "./InteractionCmdBinder";
+import type {Interaction} from "../interaction/Interaction";
+import type {Widget} from "./BaseBinderBuilder";
 
 /**
  * The binder API that already knows the type of user interaction the bindings will use.

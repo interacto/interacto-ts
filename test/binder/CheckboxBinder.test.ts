@@ -11,12 +11,12 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
+import type {Binding,
+    Interaction,
+    InteractionData} from "../../src/interacto";
 import {
-    Binding,
     checkboxBinder, clearBindingObserver,
     CommandsRegistry,
-    Interaction,
-    InteractionData,
     setBindingObserver,
     UndoHistory
 } from "../../src/interacto";

@@ -14,8 +14,9 @@
 
 import {ConcurrentFSM} from "../../fsm/ConcurrentFSM";
 import {ConcurrentInteraction} from "../ConcurrentInteraction";
-import {MultiTouchData} from "../../../api/interaction/MultiTouchData";
-import {TouchDnDFSM, TouchDnDFSMHandler} from "./TouchDnD";
+import type {MultiTouchData} from "../../../api/interaction/MultiTouchData";
+import type {TouchDnDFSMHandler} from "./TouchDnD";
+import {TouchDnDFSM} from "./TouchDnD";
 import {MultiTouchDataImpl} from "../MultiTouchDataImpl";
 import {SrcTgtTouchDataImpl} from "../SrcTgtTouchDataImpl";
 

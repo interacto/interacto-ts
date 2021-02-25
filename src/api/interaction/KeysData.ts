@@ -12,8 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {InteractionData} from "./InteractionData";
-import {KeyData} from "./KeyData";
+import type {InteractionData} from "./InteractionData";
+import type {KeyData} from "./KeyData";
 
 /**
  * The data of keyboard-based user interactions that use several keys.

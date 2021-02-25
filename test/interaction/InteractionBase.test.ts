@@ -15,12 +15,14 @@
 import {Subject} from "rxjs";
 import {FSMImpl} from "../../src/impl/fsm/FSMImpl";
 import {InitState} from "../../src/impl/fsm/InitState";
-import {OutputState} from "../../src/api/fsm/OutputState";
+import type {OutputState} from "../../src/api/fsm/OutputState";
 import {StdState} from "../../src/impl/fsm/StdState";
 import {InteractionStub} from "./InteractionStub";
-import {mock, MockProxy} from "jest-mock-extended";
+import type {MockProxy} from "jest-mock-extended";
+import {mock} from "jest-mock-extended";
 import {flushPromises} from "../Utils";
-import {createMouseEvent, MouseEventForTest} from "./StubEvents";
+import type {MouseEventForTest} from "./StubEvents";
+import {createMouseEvent} from "./StubEvents";
 import {catInteraction} from "../../src/api/logging/ConfigLog";
 import advanceTimersByTime = jest.advanceTimersByTime;
 import runAllTimers = jest.runAllTimers;

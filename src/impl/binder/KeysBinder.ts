@@ -12,18 +12,18 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {Command} from "../../api/command/Command";
-import {LogLevel} from "../../api/logging/LogLevel";
-import {Binding} from "../../api/binding/Binding";
+import type {Command} from "../../api/command/Command";
+import type {LogLevel} from "../../api/logging/LogLevel";
+import type {Binding} from "../../api/binding/Binding";
 import {AnonBinding} from "../binding/AnonBinding";
-import {InteractionData} from "../../api/interaction/InteractionData";
+import type {InteractionData} from "../../api/interaction/InteractionData";
 import {KeysDataImpl} from "../interaction/KeysDataImpl";
 import {KeyDataImpl} from "../interaction/KeyDataImpl";
 import {UpdateBinder} from "./UpdateBinder";
-import {KeyInteractionCmdUpdateBinder} from "../../api/binder/KeyInteractionCmdUpdateBinder";
-import {Interaction} from "../../api/interaction/Interaction";
-import {Widget} from "../../api/binder/BaseBinderBuilder";
-import {BindingsObserver} from "../../api/binding/BindingsObserver";
+import type {KeyInteractionCmdUpdateBinder} from "../../api/binder/KeyInteractionCmdUpdateBinder";
+import type {Interaction} from "../../api/interaction/Interaction";
+import type {Widget} from "../../api/binder/BaseBinderBuilder";
+import type {BindingsObserver} from "../../api/binding/BindingsObserver";
 
 /**
  * The base binding builder to create bindings between a keys pressure interaction and a given command.

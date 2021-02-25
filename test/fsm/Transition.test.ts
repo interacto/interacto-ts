@@ -13,8 +13,8 @@
  */
 
 import {StdState} from "../../src/impl/fsm/StdState";
-import {TransitionBase} from "../../src/impl/fsm/TransitionBase";
-import {FSMImpl} from "../../src/impl/fsm/FSMImpl";
+import type {TransitionBase} from "../../src/impl/fsm/TransitionBase";
+import type {FSMImpl} from "../../src/impl/fsm/FSMImpl";
 import {StubTransitionOK} from "./StubTransitionOK";
 import {mock} from "jest-mock-extended";
 

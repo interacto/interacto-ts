@@ -12,12 +12,13 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {Command, CmdStatus, RegistrationPolicy} from "../../src/api/command/Command";
+import type {Command} from "../../src/api/command/Command";
+import {CmdStatus, RegistrationPolicy} from "../../src/api/command/Command";
 import {CommandsRegistry} from "../../src/impl/command/CommandsRegistry";
 import {UndoHistory} from "../../src/impl/undo/UndoHistory";
 import {StubCmd} from "./StubCmd";
 import {mock} from "jest-mock-extended";
-import {Undoable} from "../../src/api/undo/Undoable";
+import type {Undoable} from "../../src/api/undo/Undoable";
 
 let instance: CommandsRegistry;
 

@@ -14,8 +14,9 @@
 
 import {Redo} from "../../../src/impl/command/library/Redo";
 import {UndoHistory} from "../../../src/impl/undo/UndoHistory";
-import {Undoable} from "../../../src/api/undo/Undoable";
-import {mock, MockProxy} from "jest-mock-extended";
+import type {Undoable} from "../../../src/api/undo/Undoable";
+import type {MockProxy} from "jest-mock-extended";
+import {mock} from "jest-mock-extended";
 
 let cmd: Redo;
 let collector: MockProxy<UndoHistory> & UndoHistory;

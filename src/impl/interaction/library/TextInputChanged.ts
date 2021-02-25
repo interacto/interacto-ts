@@ -14,8 +14,8 @@
 
 import {TerminalState} from "../../fsm/TerminalState";
 import {isTextInput} from "../../fsm/Events";
-import {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import {WidgetData} from "../../../api/interaction/WidgetData";
+import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
+import type {WidgetData} from "../../../api/interaction/WidgetData";
 import {StdState} from "../../fsm/StdState";
 import {TextInputChangedTransition} from "../../fsm/TextInputChangedTransition";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";

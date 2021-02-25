@@ -11,14 +11,14 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import {Command} from "../command/Command";
-import {InteractionData} from "../interaction/InteractionData";
-import {KeyInteractionBinderBuilder} from "./KeyInteractionBinderBuilder";
-import {InteractionCmdBinder} from "./InteractionCmdBinder";
-import {LogLevel} from "../logging/LogLevel";
-import {Binding} from "../binding/Binding";
-import {Interaction} from "../interaction/Interaction";
-import {Widget} from "./BaseBinderBuilder";
+import type {Command} from "../command/Command";
+import type {InteractionData} from "../interaction/InteractionData";
+import type {KeyInteractionBinderBuilder} from "./KeyInteractionBinderBuilder";
+import type {InteractionCmdBinder} from "./InteractionCmdBinder";
+import type {LogLevel} from "../logging/LogLevel";
+import type {Binding} from "../binding/Binding";
+import type {Interaction} from "../interaction/Interaction";
+import type {Widget} from "./BaseBinderBuilder";
 
 export interface KeyInteractionCmdBinder<C extends Command, I extends Interaction<D>, D extends InteractionData>
     extends KeyInteractionBinderBuilder<I, D>, InteractionCmdBinder<C, I, D> {

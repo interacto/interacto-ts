@@ -13,12 +13,12 @@
  */
 import {StubCmd} from "../command/StubCmd";
 import {createTouchEvent} from "../interaction/StubEvents";
+import type {Binding,
+    Interaction,
+    InteractionData} from "../../src/interacto";
 import {
-    Binding,
     clearBindingObserver,
     CommandsRegistry,
-    Interaction,
-    InteractionData,
     panBinder,
     setBindingObserver,
     UndoHistory

@@ -12,19 +12,19 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSMDataHandler} from "../../fsm/FSMDataHandler";
+import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {StdState} from "../../fsm/StdState";
 import {TerminalState} from "../../fsm/TerminalState";
 import {CancellingState} from "../../fsm/CancellingState";
 import {MoveTransition} from "../../fsm/MoveTransition";
 import {EscapeKeyPressureTransition} from "../../fsm/EscapeKeyPressureTransition";
-import {SrcTgtPointsData} from "../../../api/interaction/SrcTgtPointsData";
+import type {SrcTgtPointsData} from "../../../api/interaction/SrcTgtPointsData";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {PressureTransition} from "../../fsm/PressureTransition";
 import {ReleaseTransition} from "../../fsm/ReleaseTransition";
 import {InteractionBase} from "../InteractionBase";
 import {SrcTgtPointsDataImpl} from "../SrcTgtPointsDataImpl";
-import {PointData} from "../../../api/interaction/PointData";
+import type {PointData} from "../../../api/interaction/PointData";
 
 /**
  * The FSM for DnD interactions.

@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {EventModifierData} from "./EventModifierData";
+import type {EventModifierData} from "./EventModifierData";
 
 /**
  * Interaction data for a single pointing device at a single position.

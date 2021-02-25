@@ -16,9 +16,9 @@ import {CommandsRegistry} from "../../src/impl/command/CommandsRegistry";
 import {UndoHistory} from "../../src/impl/undo/UndoHistory";
 import {CmdStatus} from "../../src/api/command/Command";
 import {CommandBase} from "../../src/impl/command/CommandBase";
-import {Binding} from "../../src/api/binding/Binding";
-import {Interaction} from "../../src/api/interaction/Interaction";
-import {InteractionData} from "../../src/api/interaction/InteractionData";
+import type {Binding} from "../../src/api/binding/Binding";
+import type {Interaction} from "../../src/api/interaction/Interaction";
+import type {InteractionData} from "../../src/api/interaction/InteractionData";
 import {Subject} from "rxjs";
 import {
     buttonBinder,
@@ -30,7 +30,7 @@ import {
 import {flushPromises} from "../Utils";
 import {createMouseEvent, createTouchEvent} from "../interaction/StubEvents";
 import {LogLevel} from "../../src/api/logging/LogLevel";
-import {BindingImpl} from "../../src/impl/binding/BindingImpl";
+import type {BindingImpl} from "../../src/impl/binding/BindingImpl";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
 import useFakeTimers = jest.useFakeTimers;
 import clearAllTimers = jest.clearAllTimers;

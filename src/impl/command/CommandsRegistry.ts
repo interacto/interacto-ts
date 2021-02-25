@@ -14,8 +14,10 @@
 
 import {isUndoableType} from "../../api/undo/Undoable";
 import {UndoHistory} from "../undo/UndoHistory";
-import {Command, RegistrationPolicy} from "../../api/command/Command";
-import {Subject, Observable} from "rxjs";
+import type {Command} from "../../api/command/Command";
+import {RegistrationPolicy} from "../../api/command/Command";
+import type {Observable} from "rxjs";
+import {Subject} from "rxjs";
 import {removeAt, remove} from "../util/ArrayUtil";
 
 /**

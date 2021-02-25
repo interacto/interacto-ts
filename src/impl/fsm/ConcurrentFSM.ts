@@ -12,8 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSM} from "../../api/fsm/FSM";
-import {FSMHandler} from "../../api/fsm/FSMHandler";
+import type {FSM} from "../../api/fsm/FSM";
+import type {FSMHandler} from "../../api/fsm/FSMHandler";
 import {FSMImpl} from "./FSMImpl";
 
 /**

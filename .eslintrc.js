@@ -58,7 +58,6 @@ module.exports = {
     "no-underscore-dangle": "off",
     "no-useless-constructor": "off",
     "@typescript-eslint/prefer-readonly-parameter-types": "off",
-    "@typescript-eslint/consistent-type-imports": "off",
 
     "tsdoc/syntax": "error",
 

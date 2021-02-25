@@ -12,9 +12,10 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {OutputState} from "../../src/api/fsm/OutputState";
-import {mock, MockProxy} from "jest-mock-extended";
-import {InputState} from "../../src/api/fsm/InputState";
+import type {OutputState} from "../../src/api/fsm/OutputState";
+import type {MockProxy} from "jest-mock-extended";
+import {mock} from "jest-mock-extended";
+import type {InputState} from "../../src/api/fsm/InputState";
 import {createEventWithTarget} from "../interaction/StubEvents";
 import {ComboBoxTransition} from "../../src/impl/fsm/ComboBoxTransition";
 

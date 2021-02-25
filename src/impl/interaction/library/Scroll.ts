@@ -12,10 +12,10 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSMDataHandler} from "../../fsm/FSMDataHandler";
+import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {TerminalState} from "../../fsm/TerminalState";
 import {ScrollTransition} from "../../fsm/ScrollTransition";
-import {ScrollData} from "../../../api/interaction/ScrollData";
+import type {ScrollData} from "../../../api/interaction/ScrollData";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {ScrollDataImpl} from "../ScrollDataImpl";

@@ -12,8 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {State} from "./State";
-import {Transition} from "./Transition";
+import type {State} from "./State";
+import type {Transition} from "./Transition";
 
 /**
  * Defines a type of state that can produce as output events.

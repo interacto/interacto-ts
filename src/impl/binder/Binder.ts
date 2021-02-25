@@ -12,16 +12,17 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {LogLevel} from "../../api/logging/LogLevel";
-import {InteractionData} from "../../api/interaction/InteractionData";
-import {Command} from "../../api/command/Command";
-import {CmdBinder} from "../../api/binder/CmdBinder";
-import {InteractionBinder} from "../../api/binder/InteractionBinder";
-import {InteractionCmdBinder} from "../../api/binder/InteractionCmdBinder";
-import {Binding} from "../../api/binding/Binding";
-import {BindingsObserver} from "../../api/binding/BindingsObserver";
-import {Interaction} from "../../api/interaction/Interaction";
-import {isEltRef, Widget} from "../../api/binder/BaseBinderBuilder";
+import type {LogLevel} from "../../api/logging/LogLevel";
+import type {InteractionData} from "../../api/interaction/InteractionData";
+import type {Command} from "../../api/command/Command";
+import type {CmdBinder} from "../../api/binder/CmdBinder";
+import type {InteractionBinder} from "../../api/binder/InteractionBinder";
+import type {InteractionCmdBinder} from "../../api/binder/InteractionCmdBinder";
+import type {Binding} from "../../api/binding/Binding";
+import type {BindingsObserver} from "../../api/binding/BindingsObserver";
+import type {Interaction} from "../../api/interaction/Interaction";
+import type {Widget} from "../../api/binder/BaseBinderBuilder";
+import {isEltRef} from "../../api/binder/BaseBinderBuilder";
 
 /**
  * The base class that defines the concept of binding builder (called binder).

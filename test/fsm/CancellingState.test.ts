@@ -13,9 +13,10 @@
  */
 
 import {CancellingState} from "../../src/impl/fsm/CancellingState";
-import {FSMImpl} from "../../src/impl/fsm/FSMImpl";
-import {OutputState} from "../../src/api/fsm/OutputState";
-import {mock, MockProxy} from "jest-mock-extended";
+import type {FSMImpl} from "../../src/impl/fsm/FSMImpl";
+import type {OutputState} from "../../src/api/fsm/OutputState";
+import type {MockProxy} from "jest-mock-extended";
+import {mock} from "jest-mock-extended";
 
 let state: CancellingState;
 let fsm: FSMImpl & MockProxy<FSMImpl>;

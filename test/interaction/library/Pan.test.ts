@@ -13,7 +13,8 @@
  */
 
 import {createTouchEvent} from "../StubEvents";
-import {FSMHandler, Pan, TouchDataImpl} from "../../../src/interacto";
+import type {FSMHandler} from "../../../src/interacto";
+import {Pan, TouchDataImpl} from "../../../src/interacto";
 import {mock} from "jest-mock-extended";
 import {checkTouchPoint} from "../../Utils";
 

@@ -12,8 +12,10 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {Click, FSMHandler, PointDataImpl} from "../../../src/interacto";
-import {mock, MockProxy} from "jest-mock-extended";
+import type {FSMHandler} from "../../../src/interacto";
+import {Click, PointDataImpl} from "../../../src/interacto";
+import type {MockProxy} from "jest-mock-extended";
+import {mock} from "jest-mock-extended";
 import {robot} from "../StubEvents";
 
 let interaction: Click;

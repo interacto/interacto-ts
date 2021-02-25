@@ -13,7 +13,7 @@
  */
 
 
-import {PointBaseData} from "./PointBaseData";
+import type {PointBaseData} from "./PointBaseData";
 
 /**
  * Interaction data for a single pointing device with buttons at a single position.

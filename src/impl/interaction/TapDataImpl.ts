@@ -12,9 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {TouchData} from "../../api/interaction/TouchData";
-import {TapData} from "../../api/interaction/TapData";
-import {Flushable} from "./Flushable";
+import type {TouchData} from "../../api/interaction/TouchData";
+import type {TapData} from "../../api/interaction/TapData";
+import type {Flushable} from "./Flushable";
 
 /**
  * Tapping interaction data implementation

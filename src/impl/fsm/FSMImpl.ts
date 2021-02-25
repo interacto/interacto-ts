@@ -12,19 +12,21 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {State} from "../../api/fsm/State";
+import type {State} from "../../api/fsm/State";
 import {InitState} from "./InitState";
-import {isOutputStateType, OutputState} from "../../api/fsm/OutputState";
-import {FSMHandler} from "../../api/fsm/FSMHandler";
+import type {OutputState} from "../../api/fsm/OutputState";
+import {isOutputStateType} from "../../api/fsm/OutputState";
+import type {FSMHandler} from "../../api/fsm/FSMHandler";
 import {TimeoutTransition} from "./TimeoutTransition";
-import {InputState} from "../../api/fsm/InputState";
+import type {InputState} from "../../api/fsm/InputState";
 import {catFSM} from "../../api/logging/ConfigLog";
-import {FSMDataHandler} from "./FSMDataHandler";
+import type {FSMDataHandler} from "./FSMDataHandler";
 import {isKeyDownEvent, isKeyUpEvent} from "./Events";
-import {Observable, Subject} from "rxjs";
+import type {Observable} from "rxjs";
+import {Subject} from "rxjs";
 import {remove, removeAt} from "../util/ArrayUtil";
 import {CancelFSMException} from "./CancelFSMException";
-import {FSM} from "../../api/fsm/FSM";
+import type {FSM} from "../../api/fsm/FSM";
 
 /**
  * A finite state machine that defines the behavior of a user interaction.

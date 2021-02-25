@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSMDataHandler} from "../../fsm/FSMDataHandler";
+import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {Click, ClickFSM} from "./Click";
 import {TerminalState} from "../../fsm/TerminalState";
 import {CancellingState} from "../../fsm/CancellingState";
@@ -21,7 +21,7 @@ import {SubFSMTransition} from "../../fsm/SubFSMTransition";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 import {MoveTransition} from "../../fsm/MoveTransition";
-import {PointData} from "../../../api/interaction/PointData";
+import type {PointData} from "../../../api/interaction/PointData";
 import {InteractionBase} from "../InteractionBase";
 import {PointDataImpl} from "../PointDataImpl";
 

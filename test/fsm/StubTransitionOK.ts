@@ -13,9 +13,9 @@
  */
 
 import {TransitionBase} from "../../src/impl/fsm/TransitionBase";
-import {InputState} from "../../src/api/fsm/InputState";
-import {OutputState} from "../../src/api/fsm/OutputState";
-import {EventType} from "../../src/api/fsm/EventType";
+import type {InputState} from "../../src/api/fsm/InputState";
+import type {OutputState} from "../../src/api/fsm/OutputState";
+import type {EventType} from "../../src/api/fsm/EventType";
 import {isEventType} from "../../src/impl/fsm/Events";
 
 export class StubTransitionOK<E extends Event> extends TransitionBase<E> {

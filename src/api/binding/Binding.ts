@@ -12,11 +12,11 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSMHandler} from "../fsm/FSMHandler";
-import {Interaction} from "../interaction/Interaction";
-import {Command} from "../command/Command";
-import {Observable} from "rxjs";
-import {InteractionData} from "../interaction/InteractionData";
+import type {FSMHandler} from "../fsm/FSMHandler";
+import type {Interaction} from "../interaction/Interaction";
+import type {Command} from "../command/Command";
+import type {Observable} from "rxjs";
+import type {InteractionData} from "../interaction/InteractionData";
 
 /**
  * The concept of binding and its related services.

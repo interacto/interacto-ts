@@ -11,14 +11,14 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import {
-    Binding,
-    clearBindingObserver,
-    CommandsRegistry,
+import type {Binding,
     FSM,
     Interaction,
     InteractionBase,
-    InteractionData,
+    InteractionData} from "../../src/interacto";
+import {
+    clearBindingObserver,
+    CommandsRegistry,
     setBindingObserver,
     tapBinder,
     UndoHistory
@@ -26,7 +26,7 @@ import {
 import {StubCmd} from "../command/StubCmd";
 import {createTouchEvent} from "../interaction/StubEvents";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
-import {Flushable} from "../../src/impl/interaction/Flushable";
+import type {Flushable} from "../../src/impl/interaction/Flushable";
 
 let binding: Binding<StubCmd, Interaction<InteractionData>, InteractionData> | undefined;
 let cmd: StubCmd;

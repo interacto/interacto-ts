@@ -11,7 +11,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import {LogLevel} from "../logging/LogLevel";
+import type {LogLevel} from "../logging/LogLevel";
 
 /**
  * For supporting Angular ElementReference without

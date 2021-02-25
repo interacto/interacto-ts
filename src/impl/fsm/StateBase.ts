@@ -12,8 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {State} from "../../api/fsm/State";
-import {FSM} from "../../api/fsm/FSM";
+import type {State} from "../../api/fsm/State";
+import type {FSM} from "../../api/fsm/FSM";
 
 /**
  * The base implementation of the State interface.
