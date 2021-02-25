@@ -19,7 +19,6 @@ import type {
 } from "../../src/interacto";
 import {
     clearBindingObserver,
-    CommandsRegistry,
     setBindingObserver,
     spinnerBinder,
     SpinnerChangedFSM,
@@ -48,7 +47,6 @@ beforeEach(() => {
 afterEach(() => {
     jest.clearAllTimers();
     clearBindingObserver();
-    CommandsRegistry.getInstance().clear();
     UndoHistory.getInstance().clear();
 });
 

@@ -20,10 +20,8 @@ import {
     catCommand,
     catFSM, catInteraction,
     CmdStatus,
-    CommandsRegistry,
     FSMImpl,
     MustBeUndoableCmdError,
-    RegistrationPolicy,
     BindingImpl, UndoHistory
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
@@ -85,7 +83,6 @@ beforeEach(() => {
 
 afterEach(() => {
     UndoHistory.getInstance().clear();
-    CommandsRegistry.getInstance().clear();
     jest.clearAllMocks();
 });
 
@@ -404,34 +401,6 @@ describe("nominal cases", () => {
         binding.uninstallBinding();
         expect(binding.isActivated()).toBeFalsy();
         expect(binding.getInteraction().uninstall).toHaveBeenCalledTimes(1);
-    });
-
-    test("after exec cmd had effects", () => {
-        binding = new BindingStub(true, () => new CmdStubUndoable(), new InteractionStub(new FSMImpl()));
-        binding.conditionRespected = true;
-        jest.spyOn(binding, "ifCmdHadEffects");
-        binding.fsmStarts();
-        (binding.getCommand() as CmdStubUndoable).candoValue = true;
-        binding.fsmStops();
-        expect(CommandsRegistry.getInstance().getCommands()).toHaveLength(1);
-        expect(CommandsRegistry.getInstance().getCommands()[0]).toBeInstanceOf(CmdStubUndoable);
-        expect(binding.ifCmdHadEffects).toHaveBeenCalledWith();
-    });
-
-    test("after exec cmd had effects with none policy", () => {
-        binding = new BindingStub(true, () => new class extends CmdStubUndoable {
-            public getRegistrationPolicy(): RegistrationPolicy {
-                return RegistrationPolicy.none;
-            }
-        }(), new InteractionStub(new FSMImpl()));
-        jest.spyOn(binding, "ifCmdHadEffects");
-        binding.conditionRespected = true;
-        binding.fsmStarts();
-        (binding.getCommand() as CmdStubUndoable).candoValue = true;
-        CommandsRegistry.getInstance().addCommand(binding.getCommand() as CmdStubUndoable);
-        binding.fsmStops();
-        expect(CommandsRegistry.getInstance().getCommands()).toHaveLength(0);
-        expect(binding.ifCmdHadEffects).toHaveBeenCalledWith();
     });
 });
 

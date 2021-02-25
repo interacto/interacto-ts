@@ -35,7 +35,6 @@ import {
     clearBindingObserver,
     clickBinder,
     clicksBinder,
-    CommandsRegistry,
     dbleClickBinder,
     dndBinder,
     dragLockBinder,
@@ -73,7 +72,6 @@ beforeEach(() => {
 
 afterEach(() => {
     clearBindingObserver();
-    CommandsRegistry.getInstance().clear();
     UndoHistory.getInstance().clear();
     jest.clearAllTimers();
     jest.clearAllMocks();

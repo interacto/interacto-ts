@@ -17,7 +17,6 @@ import type {FSM,
 import {
     ClickTransition,
     CmdStatus,
-    CommandsRegistry,
     FSMImpl,
     TerminalState,
     BindingImpl, UndoHistory
@@ -52,7 +51,6 @@ beforeEach(() => {
 
 afterEach(() => {
     UndoHistory.getInstance().clear();
-    CommandsRegistry.getInstance().clear();
 });
 
 test("testNothingDoneIsDeactivated", () => {

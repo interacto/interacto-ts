@@ -17,7 +17,6 @@ import type {
     Binding
 } from "../../src/interacto";
 import {
-    CommandsRegistry,
     nodeBinder,
     Press,
     UndoHistory
@@ -41,7 +40,6 @@ afterEach(() => {
     if (disposable !== undefined) {
         disposable.unsubscribe();
     }
-    CommandsRegistry.getInstance().clear();
     UndoHistory.getInstance().clear();
     binding1.uninstallBinding();
     binding2.uninstallBinding();

@@ -16,7 +16,6 @@ import type {Binding,
     InteractionData} from "../../src/interacto";
 import {
     checkboxBinder, clearBindingObserver,
-    CommandsRegistry,
     setBindingObserver,
     UndoHistory
 } from "../../src/interacto";
@@ -41,7 +40,6 @@ beforeEach(() => {
 
 afterEach(() => {
     clearBindingObserver();
-    CommandsRegistry.getInstance().clear();
     UndoHistory.getInstance().clear();
 });
 

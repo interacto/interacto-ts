@@ -19,7 +19,6 @@ import type {
 } from "../../src/interacto";
 import {
     clearBindingObserver,
-    CommandsRegistry,
     dateBinder,
     setBindingObserver,
     UndoHistory
@@ -45,7 +44,6 @@ beforeEach(() => {
 
 afterEach(() => {
     clearBindingObserver();
-    CommandsRegistry.getInstance().clear();
     UndoHistory.getInstance().clear();
 });
 

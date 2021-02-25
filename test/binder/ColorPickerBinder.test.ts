@@ -19,7 +19,6 @@ import type {
 } from "../../src/interacto";
 import {clearBindingObserver,
     colorPickerBinder,
-    CommandsRegistry,
     setBindingObserver,
     UndoHistory} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
@@ -43,7 +42,6 @@ beforeEach(() => {
 
 afterEach(() => {
     clearBindingObserver();
-    CommandsRegistry.getInstance().clear();
     UndoHistory.getInstance().clear();
 });
 

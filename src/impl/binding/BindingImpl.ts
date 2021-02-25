@@ -15,8 +15,7 @@
 import type {Observable} from "rxjs";
 import {Subject} from "rxjs";
 import type {Command} from "../../api/command/Command";
-import {CmdStatus, RegistrationPolicy} from "../../api/command/Command";
-import {CommandsRegistry} from "../command/CommandsRegistry";
+import {CmdStatus} from "../../api/command/Command";
 import {CancelFSMException} from "../fsm/CancelFSMException";
 import type {InteractionData} from "../../api/interaction/InteractionData";
 import {catBinding, catCommand} from "../../api/logging/ConfigLog";
@@ -24,6 +23,7 @@ import {isUndoableType} from "../../api/undo/Undoable";
 import {MustBeUndoableCmdError} from "./MustBeUndoableCmdError";
 import type {Binding} from "../../api/binding/Binding";
 import type {Interaction} from "../../api/interaction/Interaction";
+import {UndoHistory} from "../undo/UndoHistory";
 
 /**
  * The base class to do bindings, i.e. bindings between user interactions and (undoable) commands.
@@ -432,14 +432,8 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
         }
 
         if (hadEffect) {
-            if (cmd.getRegistrationPolicy() === RegistrationPolicy.none) {
-                // This case is possible only if the policy of the command changes during
-                // its lifecycle using continuous execution:
-                // at start, the command policy is no NONE so the command is executed and added.
-                // Then the policy changes to NONE so that we must remove it from the registry.
-                CommandsRegistry.getInstance().removeCommand(cmd);
-            } else {
-                CommandsRegistry.getInstance().addCommand(cmd);
+            if (isUndoableType(cmd)) {
+                UndoHistory.getInstance().add(cmd);
             }
             this.ifCmdHadEffects();
         } else {

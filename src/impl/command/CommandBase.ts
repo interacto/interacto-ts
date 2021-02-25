@@ -13,7 +13,7 @@
  */
 
 import type {Command} from "../../api/command/Command";
-import {CmdStatus, RegistrationPolicy} from "../../api/command/Command";
+import {CmdStatus} from "../../api/command/Command";
 
 /**
  * The base implementation class for coding UI commands.
@@ -80,10 +80,6 @@ export abstract class CommandBase implements Command {
      * This method is automatically called by 'execute' and must not be called explicitly.
      */
     protected abstract execution(): Promise<void> | void;
-
-    public getRegistrationPolicy(): RegistrationPolicy {
-        return this.hadEffect() ? RegistrationPolicy.limited : RegistrationPolicy.none;
-    }
 
     public hadEffect(): boolean {
         return this.isDone();

@@ -19,7 +19,6 @@ import type {Binding,
 import {
     buttonBinder,
     clearBindingObserver,
-    CommandsRegistry,
     LogLevel,
     setBindingObserver,
     UndoHistory
@@ -43,7 +42,6 @@ beforeEach(() => {
 
 afterEach(() => {
     clearBindingObserver();
-    CommandsRegistry.getInstance().clear();
     UndoHistory.getInstance().clear();
 });
 

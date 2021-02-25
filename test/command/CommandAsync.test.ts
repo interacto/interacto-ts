@@ -12,7 +12,6 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {CommandsRegistry} from "../../src/impl/command/CommandsRegistry";
 import {UndoHistory} from "../../src/impl/undo/UndoHistory";
 import {CmdStatus} from "../../src/api/command/Command";
 import {CommandBase} from "../../src/impl/command/CommandBase";
@@ -96,7 +95,6 @@ describe("testing async commands and bindings", () => {
 
     afterEach(async () => {
         clearBindingObserver();
-        CommandsRegistry.getInstance().clear();
         UndoHistory.getInstance().clear();
         clearAllTimers();
         clearAllMocks();

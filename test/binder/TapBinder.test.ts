@@ -18,7 +18,6 @@ import type {Binding,
     InteractionData} from "../../src/interacto";
 import {
     clearBindingObserver,
-    CommandsRegistry,
     setBindingObserver,
     tapBinder,
     UndoHistory
@@ -42,7 +41,6 @@ beforeEach(() => {
 afterEach(() => {
     clearBindingObserver();
     jest.clearAllTimers();
-    CommandsRegistry.getInstance().clear();
     UndoHistory.getInstance().clear();
 });
 

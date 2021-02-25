@@ -26,13 +26,6 @@ export interface Command {
     flush(): void;
 
     /**
-     * Specifies whether the command must be saved in the command register. For instance,
-     * some commands, such as a scroll, should not be saved or put in the undo/redo manager. Such commands should not be registrable.
-     * @returns The registration policy.
-     */
-    getRegistrationPolicy(): RegistrationPolicy;
-
-    /**
      * Executes (if possible) the commands.
      * @returns True: the command has been executed.
      */
@@ -73,23 +66,6 @@ export interface Command {
     getStatus(): CmdStatus;
 }
 
-/**
- * Defines the registration policy of the command.
- */
-export enum RegistrationPolicy {
-    /**
-     * The command is never registered.
-     */
-    none = 0,
-    /**
-     * The command is registered in the command register. The command is not flushed when the registry wants to free some commands.
-     */
-    unlimited = 1,
-    /**
-     * The command is registered in the command register. The command can be flushed by the registry.
-     */
-    limited = 2
-}
 
 /**
  * Defines the different states of the command.
