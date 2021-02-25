@@ -85,6 +85,25 @@ export function setBindingObserver(obs: BindingsObserver): void {
     observer = obs;
 }
 
+export type PartialButtonBinder = InteractionBinder<Interaction<WidgetData<HTMLButtonElement>>, WidgetData<HTMLButtonElement>>;
+export type PartialInputBinder = InteractionBinder<Interaction<WidgetData<HTMLInputElement>>, WidgetData<HTMLInputElement>>;
+export type PartialSelectBinder = InteractionBinder<Interaction<WidgetData<HTMLSelectElement>>, WidgetData<HTMLSelectElement>>;
+export type PartialSpinnerBinder = InteractionUpdateBinder<Interaction<WidgetData<HTMLInputElement>>, WidgetData<HTMLInputElement>>;
+export type PartialAnchorBinder = InteractionBinder<Interaction<WidgetData<HTMLAnchorElement>>, WidgetData<HTMLAnchorElement>>;
+export type PartialTextInputBinder = InteractionUpdateBinder<Interaction<WidgetData<HTMLInputElement | HTMLTextAreaElement>>,
+WidgetData<HTMLInputElement | HTMLTextAreaElement>>;
+export type PartialTouchSrcTgtBinder = InteractionUpdateBinder<Interaction<SrcTgtPointsData<TouchData>>, SrcTgtPointsData<TouchData>>;
+export type PartialMultiTouchBinder = InteractionUpdateBinder<Interaction<MultiTouchData>, MultiTouchData>;
+export type PartialTapBinder = InteractionUpdateBinder<Interaction<TapData>, TapData>;
+export type PartialTouchBinder = InteractionUpdateBinder<Interaction<TouchData>, TouchData>;
+export type PartialPointBinder = InteractionBinder<Interaction<PointData>, PointData>;
+export type PartialScrollBinder = InteractionBinder<Interaction<ScrollData>, ScrollData>;
+export type PartialUpdatePointBinder = InteractionUpdateBinder<Interaction<PointData>, PointData>;
+export type PartialPointsBinder = InteractionUpdateBinder<Interaction<PointsData>, PointsData>;
+export type PartialPointSrcTgtBinder = InteractionUpdateBinder<Interaction<SrcTgtPointsData<PointData>>, SrcTgtPointsData<PointData>>;
+export type PartialKeyBinder = KeyInteractionBinder<Interaction<KeyData>, KeyData>;
+export type PartialKeysBinder = KeyInteractionUpdateBinder<Interaction<KeysData>, KeysData>;
+
 
 export function nodeBinder(): BaseUpdateBinder {
     return new UpdateBinder<CommandBase, Interaction<InteractionData>, InteractionData>(observer) as BaseUpdateBinder;
@@ -95,37 +114,37 @@ export function nodeBinder(): BaseUpdateBinder {
  * Do not forget to call bind() at the end of the build to execute the builder.
  * @returns The binding builder.
  */
-export function buttonBinder(): InteractionBinder<Interaction<WidgetData<HTMLButtonElement>>, WidgetData<HTMLButtonElement>> {
+export function buttonBinder(): PartialButtonBinder {
     return new UpdateBinder(observer)
         .usingInteraction<ButtonPressed, WidgetData<HTMLButtonElement>>(() => new ButtonPressed());
 }
 
-export function checkboxBinder(): InteractionBinder<Interaction<WidgetData<HTMLInputElement>>, WidgetData<HTMLInputElement>> {
+export function checkboxBinder(): PartialInputBinder {
     return new UpdateBinder(observer)
         .usingInteraction<BoxChecked, WidgetData<HTMLInputElement>>(() => new BoxChecked());
 }
 
-export function colorPickerBinder(): InteractionBinder<Interaction<WidgetData<HTMLInputElement>>, WidgetData<HTMLInputElement>> {
+export function colorPickerBinder(): PartialInputBinder {
     return new UpdateBinder(observer)
         .usingInteraction<ColorPicked, WidgetData<HTMLInputElement>>(() => new ColorPicked());
 }
 
-export function comboBoxBinder(): InteractionBinder<Interaction<WidgetData<HTMLSelectElement>>, WidgetData<HTMLSelectElement>> {
+export function comboBoxBinder(): PartialSelectBinder {
     return new UpdateBinder(observer)
         .usingInteraction<ComboBoxSelected, WidgetData<HTMLSelectElement>>(() => new ComboBoxSelected());
 }
 
-export function spinnerBinder(): InteractionUpdateBinder<Interaction<WidgetData<HTMLInputElement>>, WidgetData<HTMLInputElement>> {
+export function spinnerBinder(): PartialSpinnerBinder {
     return new UpdateBinder(observer)
         .usingInteraction<SpinnerChanged, WidgetData<HTMLInputElement>>(() => new SpinnerChanged());
 }
 
-export function dateBinder(): InteractionBinder<Interaction<WidgetData<HTMLInputElement>>, WidgetData<HTMLInputElement>> {
+export function dateBinder(): PartialInputBinder {
     return new UpdateBinder(observer)
         .usingInteraction<DatePicked, WidgetData<HTMLInputElement>>(() => new DatePicked());
 }
 
-export function hyperlinkBinder(): InteractionBinder<Interaction<WidgetData<HTMLAnchorElement>>, WidgetData<HTMLAnchorElement>> {
+export function hyperlinkBinder(): PartialAnchorBinder {
     return new UpdateBinder(observer)
         .usingInteraction<HyperLinkClicked, WidgetData<HTMLAnchorElement>>(() => new HyperLinkClicked());
 }
@@ -137,8 +156,7 @@ export function hyperlinkBinder(): InteractionBinder<Interaction<WidgetData<HTML
  * This is a mainstream optimisation that many text processing tools implement to limit the number of editing actions.
  * @param timeout - The timeout in milliseconds after which the interaction stops and the command produced.
  */
-export function textInputBinder(timeout?: number): InteractionUpdateBinder<Interaction<WidgetData<HTMLInputElement | HTMLTextAreaElement>>,
-WidgetData<HTMLInputElement | HTMLTextAreaElement>> {
+export function textInputBinder(timeout?: number): PartialTextInputBinder {
     return new UpdateBinder(observer)
         .usingInteraction<TextInputChanged, WidgetData<HTMLInputElement | HTMLTextAreaElement>>(() => new TextInputChanged(timeout));
 }
@@ -147,7 +165,7 @@ WidgetData<HTMLInputElement | HTMLTextAreaElement>> {
  * Creates a binding that uses the touch DnD interaction (a DnD interaction that uses one touch).
  * This interaction works as a Drag-and-Drop interaction.
  */
-export function touchDnDBinder(): InteractionUpdateBinder<Interaction<SrcTgtPointsData<TouchData>>, SrcTgtPointsData<TouchData>> {
+export function touchDnDBinder(): PartialTouchSrcTgtBinder {
     return new UpdateBinder(observer)
         .usingInteraction<TouchDnD, SrcTgtPointsData<TouchData>>(() => new TouchDnD());
 }
@@ -158,7 +176,7 @@ export function touchDnDBinder(): InteractionUpdateBinder<Interaction<SrcTgtPoin
  * A multi-touch starts when all its touches have started.
  * A multi-touch ends when the number of required touches is greater than the number of touches.
  */
-export function multiTouchBinder(nbTouches: number): InteractionUpdateBinder<Interaction<MultiTouchData>, MultiTouchData> {
+export function multiTouchBinder(nbTouches: number): PartialMultiTouchBinder {
     return new UpdateBinder(observer)
         .usingInteraction<MultiTouch, MultiTouchData>(() => new MultiTouch(nbTouches));
 }
@@ -168,7 +186,7 @@ export function multiTouchBinder(nbTouches: number): InteractionUpdateBinder<Int
  * @param nbTap - The number of required taps.
  * If this number is not reached after a timeout, the interaction is cancelled.
  */
-export function tapBinder(nbTap: number): InteractionUpdateBinder<Interaction<TapData>, TapData> {
+export function tapBinder(nbTap: number): PartialTapBinder {
     return new UpdateBinder(observer)
         .usingInteraction<Tap, TapData>(() => new Tap(nbTap));
 }
@@ -178,7 +196,7 @@ export function tapBinder(nbTap: number): InteractionUpdateBinder<Interaction<Ta
  * @param duration - The duration of the touch to end the user interaction.
  * If this duration is not reached, the interaction is cancelled.
  */
-export function longTouchBinder(duration: number): InteractionUpdateBinder<Interaction<TouchData>, TouchData> {
+export function longTouchBinder(duration: number): PartialTouchBinder {
     return new UpdateBinder(observer)
         .usingInteraction<LongTouch, TouchData>(() => new LongTouch(duration));
 }
@@ -191,8 +209,7 @@ export function longTouchBinder(duration: number): InteractionUpdateBinder<Inter
  * @param minLength - The minimal distance from the starting point to the release point for validating the swipe
  * @param pxTolerance - The tolerance rate in pixels accepted while executing the swipe
  */
-export function swipeBinder(horizontal: boolean, minVelocity: number, minLength: number, pxTolerance: number):
-InteractionUpdateBinder<Interaction<SrcTgtPointsData<TouchData>>, SrcTgtPointsData<TouchData>> {
+export function swipeBinder(horizontal: boolean, minVelocity: number, minLength: number, pxTolerance: number): PartialTouchSrcTgtBinder {
     return new UpdateBinder(observer)
         .usingInteraction<Swipe, SrcTgtPointsData<TouchData>>(() => new Swipe(horizontal, minVelocity, minLength, pxTolerance));
 }
@@ -203,8 +220,7 @@ InteractionUpdateBinder<Interaction<SrcTgtPointsData<TouchData>>, SrcTgtPointsDa
  * @param minLength - The minimal distance from the starting point to the release point for validating the pan
  * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
  */
-export function panBinder(horizontal: boolean, minLength: number, pxTolerance: number):
-InteractionUpdateBinder<Interaction<SrcTgtPointsData<TouchData>>, SrcTgtPointsData<TouchData>> {
+export function panBinder(horizontal: boolean, minLength: number, pxTolerance: number): PartialTouchSrcTgtBinder {
     return new UpdateBinder(observer)
         .usingInteraction<Pan, SrcTgtPointsData<TouchData>>(() => new Pan(horizontal, minLength, pxTolerance));
 }
@@ -212,7 +228,7 @@ InteractionUpdateBinder<Interaction<SrcTgtPointsData<TouchData>>, SrcTgtPointsDa
 /**
  * Creates a binding that uses the click interaction.
  */
-export function clickBinder(): InteractionBinder<Interaction<PointData>, PointData> {
+export function clickBinder(): PartialPointBinder {
     return new UpdateBinder(observer)
         .usingInteraction<Click, PointData>(() => new Click());
 }
@@ -220,7 +236,7 @@ export function clickBinder(): InteractionBinder<Interaction<PointData>, PointDa
 /**
  * Creates a binding that uses the double click interaction.
  */
-export function dbleClickBinder(): InteractionUpdateBinder<Interaction<PointData>, PointData> {
+export function dbleClickBinder(): PartialUpdatePointBinder {
     return new UpdateBinder(observer)
         .usingInteraction<DoubleClick, PointData>(() => new DoubleClick());
 }
@@ -228,7 +244,7 @@ export function dbleClickBinder(): InteractionUpdateBinder<Interaction<PointData
 /**
  * Creates a binding that uses the mouse press interaction.
  */
-export function pressBinder(): InteractionBinder<Interaction<PointData>, PointData> {
+export function pressBinder(): PartialPointBinder {
     return new UpdateBinder(observer)
         .usingInteraction<Press, PointData>(() => new Press());
 }
@@ -238,7 +254,7 @@ export function pressBinder(): InteractionBinder<Interaction<PointData>, PointDa
  * @param duration - The duration of the pressure to end the user interaction.
  * If this duration is not reached, the interaction is cancelled.
  */
-export function longPressBinder(duration: number): InteractionUpdateBinder<Interaction<PointData>, PointData> {
+export function longPressBinder(duration: number): PartialUpdatePointBinder {
     return new UpdateBinder(observer)
         .usingInteraction<LongPress, PointData>(() => new LongPress(duration));
 }
@@ -248,7 +264,7 @@ export function longPressBinder(duration: number): InteractionUpdateBinder<Inter
  * @param nbClicks - The number of clicks to do.
  * If this number is not reached, the interaction is cancelled after a timeout of 1s.
  */
-export function clicksBinder(nbClicks: number): InteractionUpdateBinder<Interaction<PointsData>, PointsData> {
+export function clicksBinder(nbClicks: number): PartialPointsBinder {
     return new UpdateBinder(observer)
         .usingInteraction<Clicks, PointsData>(() => new Clicks(nbClicks));
 }
@@ -256,7 +272,7 @@ export function clicksBinder(nbClicks: number): InteractionUpdateBinder<Interact
 /**
  * Creates a binding that uses the mouse scroll interaction.
  */
-export function scrollBinder(): InteractionBinder<Interaction<ScrollData>, ScrollData> {
+export function scrollBinder(): PartialScrollBinder {
     return new UpdateBinder(observer)
         .usingInteraction<Scroll, ScrollData>(() => new Scroll());
 }
@@ -265,7 +281,7 @@ export function scrollBinder(): InteractionBinder<Interaction<ScrollData>, Scrol
  * Creates a binding that uses the DnD interaction.
  * @param cancellable - True: the escape key will cancels the DnD.
  */
-export function dndBinder(cancellable: boolean): InteractionUpdateBinder<Interaction<SrcTgtPointsData<PointData>>, SrcTgtPointsData<PointData>> {
+export function dndBinder(cancellable: boolean): PartialPointSrcTgtBinder {
     return new UpdateBinder(observer)
         .usingInteraction<DnD, SrcTgtPointsData<PointData>>(() => new DnD(cancellable));
 }
@@ -273,7 +289,7 @@ export function dndBinder(cancellable: boolean): InteractionUpdateBinder<Interac
 /**
  * Creates a binding that uses the drag lock interaction.
  */
-export function dragLockBinder(): InteractionUpdateBinder<Interaction<SrcTgtPointsData<PointData>>, SrcTgtPointsData<PointData>> {
+export function dragLockBinder(): PartialPointSrcTgtBinder {
     return new UpdateBinder(observer)
         .usingInteraction<DragLock, SrcTgtPointsData<PointData>>(() => new DragLock());
 }
@@ -282,7 +298,7 @@ export function dragLockBinder(): InteractionUpdateBinder<Interaction<SrcTgtPoin
  * Creates a binding that uses the key pressure interaction.
  * @param modifierAccepted - True: the interaction will consider key modifiers.
  */
-export function keyPressBinder(modifierAccepted: boolean): KeyInteractionBinder<Interaction<KeyData>, KeyData> {
+export function keyPressBinder(modifierAccepted: boolean): PartialKeyBinder {
     return new KeysBinder(observer)
         .usingInteraction<KeyPressed, KeyData>(() => new KeyPressed(modifierAccepted));
 }
@@ -290,7 +306,7 @@ export function keyPressBinder(modifierAccepted: boolean): KeyInteractionBinder<
 /**
  * Creates a binding that uses the multiple key pressures interaction.
  */
-export function keysPressBinder(): KeyInteractionUpdateBinder<Interaction<KeysData>, KeysData> {
+export function keysPressBinder(): PartialKeysBinder {
     return new KeysBinder(observer)
         .usingInteraction<KeysPressed, KeysData>(() => new KeysPressed());
 }
@@ -298,7 +314,7 @@ export function keysPressBinder(): KeyInteractionUpdateBinder<Interaction<KeysDa
 /**
  * Creates a binding that uses the multiple key typings interaction.
  */
-export function keysTypeBinder(): KeyInteractionUpdateBinder<Interaction<KeysData>, KeysData> {
+export function keysTypeBinder(): PartialKeysBinder {
     return new KeysBinder(observer)
         .usingInteraction<KeysTyped, KeysData>(() => new KeysTyped());
 }
@@ -306,7 +322,7 @@ export function keysTypeBinder(): KeyInteractionUpdateBinder<Interaction<KeysDat
 /**
  * Creates a binding that uses the key typing interaction.
  */
-export function keyTypeBinder(): KeyInteractionBinder<Interaction<KeyData>, KeyData> {
+export function keyTypeBinder(): PartialKeyBinder {
     return new KeysBinder(observer)
         .usingInteraction<KeyTyped, KeyData>(() => new KeyTyped());
 }
