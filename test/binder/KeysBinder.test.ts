@@ -15,7 +15,7 @@
 import type {Command} from "../../src/api/command/Command";
 import type {Binding} from "../../src/api/binding/Binding";
 import type {InteractionData} from "../../src/api/interaction/InteractionData";
-import {clearBindingObserver, keyPressBinder, keysTypeBinder, setBindingObserver} from "../../src/impl/binding/Bindings";
+import {BindingsImpl} from "../../src/impl/binding/BindingsImpl";
 import {StubCmd} from "../command/StubCmd";
 import {createKeyEvent, robot} from "../interaction/StubEvents";
 import {UndoHistoryImpl} from "../../src/impl/undo/UndoHistoryImpl";
@@ -26,21 +26,24 @@ import {KeysBinder} from "../../src/impl/binder/KeysBinder";
 import {KeyPressed} from "../../src/impl/interaction/library/KeyPressed";
 import type {KeysData} from "../../src/api/interaction/KeysData";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
+import type {Bindings} from "../../src/api/binding/Bindings";
 import clearAllTimers = jest.clearAllTimers;
 
 let elt: HTMLElement;
 let binding: Binding<Command, Interaction<InteractionData>, InteractionData> | undefined;
 let ctx: BindingsContext;
+let bindings: Bindings;
 
 beforeEach(() => {
+    bindings = new BindingsImpl();
     ctx = new BindingsContext();
-    setBindingObserver(ctx);
+    bindings.setBindingObserver(ctx);
     jest.useFakeTimers();
     elt = document.createElement("canvas");
 });
 
 afterEach(() => {
-    clearBindingObserver();
+    bindings.clearBindingObserver();
     UndoHistoryImpl.getInstance().clear();
     clearAllTimers();
 });
@@ -67,7 +70,7 @@ test("that observer is used on bind", () => {
 });
 
 test("key press std key", () => {
-    binding = keyPressBinder(false)
+    binding = bindings.keyPressBinder(false)
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
@@ -76,7 +79,7 @@ test("key press std key", () => {
 });
 
 test("key press std key when false", () => {
-    binding = keyPressBinder(false)
+    binding = bindings.keyPressBinder(false)
         .when(_i => false)
         .on(elt)
         .toProduce(() => new StubCmd(true))
@@ -86,7 +89,7 @@ test("key press std key when false", () => {
 });
 
 test("key press std key when true", () => {
-    binding = keyPressBinder(false)
+    binding = bindings.keyPressBinder(false)
         .when(i => i.code === "A")
         .on(elt)
         .toProduce(() => new StubCmd(true))
@@ -96,7 +99,7 @@ test("key press std key when true", () => {
 });
 
 test("key press modifier KO", () => {
-    binding = keyPressBinder(false)
+    binding = bindings.keyPressBinder(false)
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
@@ -107,7 +110,7 @@ test("key press modifier KO", () => {
 });
 
 test("key press modifier OK", () => {
-    binding = keyPressBinder(true)
+    binding = bindings.keyPressBinder(true)
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
@@ -118,7 +121,7 @@ test("key press modifier OK", () => {
 });
 
 test("key press with routine OK", () => {
-    binding = keyPressBinder(false)
+    binding = bindings.keyPressBinder(false)
         .with("b")
         .on(elt)
         .toProduce(() => new StubCmd(true))
@@ -128,7 +131,7 @@ test("key press with routine OK", () => {
 });
 
 test("key press std key with when false", () => {
-    binding = keyPressBinder(false)
+    binding = bindings.keyPressBinder(false)
         .with("b")
         .on(elt)
         .when(_i => false)
@@ -139,7 +142,7 @@ test("key press std key with when false", () => {
 });
 
 test("key press std key with when true", () => {
-    binding = keyPressBinder(false)
+    binding = bindings.keyPressBinder(false)
         .toProduce(() => new StubCmd(true))
         .on(elt)
         .with("c")
@@ -150,7 +153,7 @@ test("key press std key with when true", () => {
 });
 
 test("key press with routine KO 1", () => {
-    binding = keyPressBinder(false)
+    binding = bindings.keyPressBinder(false)
         .with("c")
         .on(elt)
         .toProduce(() => new StubCmd(true))
@@ -160,7 +163,7 @@ test("key press with routine KO 1", () => {
 });
 
 test("key press with routine KO several keys", () => {
-    binding = keyPressBinder(false)
+    binding = bindings.keyPressBinder(false)
         .with("d", "e")
         .on(elt)
         .toProduce(() => new StubCmd(true))
@@ -170,7 +173,7 @@ test("key press with routine KO several keys", () => {
 });
 
 test("key press with routine OK modifier", () => {
-    binding = keyPressBinder(true)
+    binding = bindings.keyPressBinder(true)
         .with("Alt")
         .on(elt)
         .toProduce(() => new StubCmd(true))
@@ -184,7 +187,7 @@ test("key press with routine OK modifier", () => {
 test("key press first then end", () => {
     const first = jest.fn();
     const end = jest.fn();
-    binding = keyPressBinder(false)
+    binding = bindings.keyPressBinder(false)
         .with("f")
         .on(elt)
         .toProduce(() => new StubCmd(true))
@@ -197,7 +200,7 @@ test("key press first then end", () => {
 });
 
 test("keys type std keys", () => {
-    binding = keysTypeBinder()
+    binding = bindings.keysTypeBinder()
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
@@ -217,7 +220,7 @@ test("keys type first end", () => {
     const end = jest.fn();
     const then = jest.fn();
     const endcancel = jest.fn();
-    binding = keysTypeBinder()
+    binding = bindings.keysTypeBinder()
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .end(end)
@@ -241,7 +244,7 @@ test("keys type first end", () => {
 });
 
 test("keys type with 1", () => {
-    binding = keysTypeBinder()
+    binding = bindings.keysTypeBinder()
         .on(elt)
         .with("a", "b")
         .toProduce(() => new StubCmd(true))
@@ -260,7 +263,7 @@ test("keys type with 1", () => {
 });
 
 test("keys type with 2", () => {
-    binding = keysTypeBinder()
+    binding = bindings.keysTypeBinder()
         .on(elt)
         .with("a")
         .toProduce(() => new StubCmd(true))
@@ -279,7 +282,7 @@ test("keys type with 2", () => {
 });
 
 test("keys type with 3", () => {
-    binding = keysTypeBinder()
+    binding = bindings.keysTypeBinder()
         .on(elt)
         .with("z", "b")
         .toProduce(() => new StubCmd(true))
@@ -294,7 +297,7 @@ test("keys type with 3", () => {
 });
 
 test("keys type with 4", () => {
-    binding = keysTypeBinder()
+    binding = bindings.keysTypeBinder()
         .on(elt)
         .with("z", "b")
         .toProduce(() => new StubCmd(true))
@@ -309,7 +312,7 @@ test("keys type with 4", () => {
 });
 
 test("keys type with nothing", () => {
-    binding = keysTypeBinder()
+    binding = bindings.keysTypeBinder()
         .on(elt)
         .with()
         .toProduce(() => new StubCmd(true))
@@ -322,7 +325,7 @@ test("keys type with nothing", () => {
 });
 
 test("keys type with 5", () => {
-    binding = keysTypeBinder()
+    binding = bindings.keysTypeBinder()
         .on(elt)
         .with("b")
         .toProduce(() => new StubCmd(true))
@@ -335,7 +338,7 @@ test("keys type with 5", () => {
 });
 
 test("keys type with 3 mixed keydown up", () => {
-    binding = keysTypeBinder()
+    binding = bindings.keysTypeBinder()
         .on(elt)
         .with("z", "b")
         .toProduce(() => new StubCmd(true))
@@ -350,7 +353,7 @@ test("keys type with 3 mixed keydown up", () => {
 });
 
 test("that 'strictStart' works correctly when no 'when' routine with key binder", () => {
-    binding = keysTypeBinder()
+    binding = bindings.keysTypeBinder()
         .strictStart()
         .on(elt)
         .toProduce((_i: KeysData) => new StubCmd(true))
@@ -367,7 +370,7 @@ test("that 'strictStart' works correctly when no 'when' routine with key binder"
 });
 
 test("that 'strictStart' works correctly when the 'when' routine returns false", () => {
-    binding = keysTypeBinder()
+    binding = bindings.keysTypeBinder()
         .on(elt)
         .strictStart()
         .toProduce((_i: KeysData) => new StubCmd(true))
@@ -386,7 +389,7 @@ test("that 'strictStart' works correctly when the 'when' routine returns false",
 });
 
 test("that 'strictStart' works correctly when the 'when' routine returns true", () => {
-    binding = keysTypeBinder()
+    binding = bindings.keysTypeBinder()
         .when((_i: KeysData) => true)
         .on(elt)
         .toProduce((_i: KeysData) => new StubCmd(true))

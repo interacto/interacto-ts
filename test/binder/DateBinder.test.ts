@@ -18,23 +18,24 @@ import type {
     WidgetData
 } from "../../src/interacto";
 import {
-    clearBindingObserver,
-    dateBinder,
-    setBindingObserver,
+    BindingsImpl,
     UndoHistoryImpl
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
+import type {Bindings} from "../../src/api/binding/Bindings";
 
 let widget1: HTMLInputElement;
 let widget2: HTMLInputElement;
 let binding: Binding<StubCmd, Interaction<InteractionData>, InteractionData> | undefined;
 let cmd: StubCmd;
 let ctx: BindingsContext;
+let bindings: Bindings;
 
 beforeEach(() => {
+    bindings = new BindingsImpl();
     ctx = new BindingsContext();
-    setBindingObserver(ctx);
+    bindings.setBindingObserver(ctx);
     widget1 = document.createElement("input");
     widget2 = document.createElement("input");
     widget1.type = "date";
@@ -43,12 +44,12 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-    clearBindingObserver();
+    bindings.clearBindingObserver();
     UndoHistoryImpl.getInstance().clear();
 });
 
 test("testCommandExecutedOnSingleDateFunction", () => {
-    binding = dateBinder()
+    binding = bindings.dateBinder()
         .toProduce(_i => cmd)
         .on(widget1)
         .bind();
@@ -59,7 +60,7 @@ test("testCommandExecutedOnSingleDateFunction", () => {
 });
 
 test("testCommandExecutedOnTwoDates", () => {
-    binding = dateBinder()
+    binding = bindings.dateBinder()
         .on(widget1, widget2)
         .toProduce(_i => new StubCmd(true))
         .bind();
@@ -72,7 +73,7 @@ test("testCommandExecutedOnTwoDates", () => {
 });
 
 test("testInit1Executed", () => {
-    binding = dateBinder()
+    binding = bindings.dateBinder()
         .on(widget1)
         .toProduce(_i => cmd)
         .first((c: StubCmd) => {
@@ -87,7 +88,7 @@ test("testInit1Executed", () => {
 });
 
 test("testCheckFalse", () => {
-    binding = dateBinder()
+    binding = bindings.dateBinder()
         .toProduce(_i => cmd)
         .on(widget1)
         .when((_i: WidgetData<HTMLInputElement>) => false)

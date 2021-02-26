@@ -16,22 +16,23 @@ import type {Binding,
     Interaction,
     InteractionData} from "../../src/interacto";
 import {
-    clearBindingObserver,
-    setBindingObserver,
-    textInputBinder,
+    BindingsImpl,
     UndoHistoryImpl
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
+import type {Bindings} from "../../src/api/binding/Bindings";
 
 let txt1: HTMLInputElement | HTMLTextAreaElement;
 let binding: Binding<StubCmd, Interaction<InteractionData>, InteractionData> | undefined;
 let cmd: StubCmd;
 let ctx: BindingsContext;
+let bindings: Bindings;
 
 beforeEach(() => {
+    bindings = new BindingsImpl();
     ctx = new BindingsContext();
-    setBindingObserver(ctx);
+    bindings.setBindingObserver(ctx);
     jest.useFakeTimers();
     txt1 = document.createElement("textarea");
     cmd = new StubCmd(true);
@@ -39,7 +40,7 @@ beforeEach(() => {
 
 afterEach(() => {
     jest.clearAllTimers();
-    clearBindingObserver();
+    bindings.clearBindingObserver();
     UndoHistoryImpl.getInstance().clear();
 });
 
@@ -47,7 +48,7 @@ test("type text create command", () => {
     const textonUpdate = Array<string>();
 
     // eslint-disable-next-line jest/valid-expect-in-promise
-    binding = textInputBinder()
+    binding = bindings.textInputBinder()
         .toProduce(() => cmd)
         .then((c, i) => {
             textonUpdate.push(i.widget?.value ?? "");
@@ -72,7 +73,7 @@ test("type text create command", () => {
 
 test("type text create command with a delay of 2 seconds", () => {
     // eslint-disable-next-line jest/valid-expect-in-promise
-    binding = textInputBinder(2)
+    binding = bindings.textInputBinder(2)
         .toProduce(() => cmd)
         .on(txt1)
         .bind();
@@ -94,7 +95,7 @@ test("type text exec several times the command", () => {
     const textonUpdate = Array<string>();
 
     // eslint-disable-next-line jest/valid-expect-in-promise
-    binding = textInputBinder()
+    binding = bindings.textInputBinder()
         .toProduce(() => cmd)
         .then((c, i) => {
             textonUpdate.push(i.widget?.value ?? "");

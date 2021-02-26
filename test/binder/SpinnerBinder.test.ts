@@ -18,24 +18,25 @@ import type {
     WidgetData
 } from "../../src/interacto";
 import {
-    clearBindingObserver,
-    setBindingObserver,
-    spinnerBinder,
+    BindingsImpl,
     SpinnerChangedFSM,
     UndoHistoryImpl
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
+import type {Bindings} from "../../src/api/binding/Bindings";
 
 let widget1: HTMLInputElement;
 let widget2: HTMLInputElement;
 let binding: Binding<StubCmd, Interaction<InteractionData>, InteractionData> | undefined;
 let cmd: StubCmd;
 let ctx: BindingsContext;
+let bindings: Bindings;
 
 beforeEach(() => {
+    bindings = new BindingsImpl();
     ctx = new BindingsContext();
-    setBindingObserver(ctx);
+    bindings.setBindingObserver(ctx);
     jest.useFakeTimers();
     widget1 = document.createElement("input");
     widget2 = document.createElement("input");
@@ -46,12 +47,12 @@ beforeEach(() => {
 
 afterEach(() => {
     jest.clearAllTimers();
-    clearBindingObserver();
+    bindings.clearBindingObserver();
     UndoHistoryImpl.getInstance().clear();
 });
 
 test("testCommandExecutedOnSingleSpinnerFunction", () => {
-    binding = spinnerBinder()
+    binding = bindings.spinnerBinder()
         .toProduce((_i: WidgetData<HTMLInputElement>) => cmd)
         .on(widget1)
         .bind();
@@ -63,7 +64,7 @@ test("testCommandExecutedOnSingleSpinnerFunction", () => {
 });
 
 test("testCommandExecutedOnTwoSpinners", () => {
-    binding = spinnerBinder()
+    binding = bindings.spinnerBinder()
         .on(widget1, widget2)
         .toProduce((_i: WidgetData<HTMLInputElement>) => new StubCmd(true))
         .bind();
@@ -78,7 +79,7 @@ test("testCommandExecutedOnTwoSpinners", () => {
 });
 
 test("testInit1Executed", () => {
-    binding = spinnerBinder()
+    binding = bindings.spinnerBinder()
         .on(widget1)
         .toProduce(_i => cmd)
         .first((c: StubCmd) => {
@@ -94,7 +95,7 @@ test("testInit1Executed", () => {
 });
 
 test("testCheckFalse", () => {
-    binding = spinnerBinder()
+    binding = bindings.spinnerBinder()
         .toProduce(_i => cmd)
         .on(widget1)
         .when(_i => false)
@@ -109,7 +110,7 @@ test("testCheckFalse", () => {
 test("testEndsOnThen", () => {
     let cpt = 0;
 
-    binding = spinnerBinder()
+    binding = bindings.spinnerBinder()
         .toProduce(_i => cmd)
         .on(widget1)
         .then((c: StubCmd) => {
@@ -131,7 +132,7 @@ test("testEndsOnThen", () => {
 test("testContinuousThen", () => {
     let cpt = 0;
 
-    binding = spinnerBinder()
+    binding = bindings.spinnerBinder()
         .toProduce((_i: WidgetData<HTMLInputElement>) => cmd)
         .on(widget1)
         .then((_c, _i) => cpt++)
@@ -154,7 +155,7 @@ test("testContinuousThenTimeOut", () => {
 
     SpinnerChangedFSM.setTimeGap(2000);
 
-    binding = spinnerBinder()
+    binding = bindings.spinnerBinder()
         .toProduce(_i => new StubCmd(true))
         .on(widget1)
         .first((_c, _i) => cpt1++)

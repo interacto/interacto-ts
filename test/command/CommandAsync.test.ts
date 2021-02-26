@@ -19,13 +19,6 @@ import type {Binding} from "../../src/api/binding/Binding";
 import type {Interaction} from "../../src/api/interaction/Interaction";
 import type {InteractionData} from "../../src/api/interaction/InteractionData";
 import {Subject} from "rxjs";
-import {
-    buttonBinder,
-    clearBindingObserver,
-    dndBinder,
-    multiTouchBinder,
-    setBindingObserver
-} from "../../src/impl/binding/Bindings";
 import {flushPromises} from "../Utils";
 import {createMouseEvent, createTouchEvent} from "../interaction/StubEvents";
 import {LogLevel} from "../../src/api/logging/LogLevel";
@@ -38,6 +31,8 @@ import runAllTimers = jest.runAllTimers;
 import advanceTimersByTime = jest.advanceTimersByTime;
 import fn = jest.fn;
 import clearAllMocks = jest.clearAllMocks;
+import type {Bindings} from "../../src/api/binding/Bindings";
+import {BindingsImpl} from "../../src/impl/binding/BindingsImpl";
 
 class Model {
     public data: Array<string> = ["Foo", "Bar", "Yo"];
@@ -84,17 +79,19 @@ let cmd: StubAsyncCmd;
 let data: Model;
 let binding: Binding<StubAsyncCmd, Interaction<InteractionData>, InteractionData> | undefined;
 let ctx: BindingsContext;
+let bindings: Bindings;
 
 describe("testing async commands and bindings", () => {
     beforeEach(() => {
+        bindings = new BindingsImpl();
         ctx = new BindingsContext();
-        setBindingObserver(ctx);
+        bindings.setBindingObserver(ctx);
         data = new Model();
         cmd = new StubAsyncCmd(data);
     });
 
     afterEach(async () => {
-        clearBindingObserver();
+        bindings.clearBindingObserver();
         UndoHistoryImpl.getInstance().clear();
         clearAllTimers();
         clearAllMocks();
@@ -140,7 +137,7 @@ describe("testing async commands and bindings", () => {
 
 
         test("button binding with async command works", async () => {
-            binding = buttonBinder()
+            binding = bindings.buttonBinder()
                 .toProduce(() => new StubAsyncCmd(data, 20))
                 .on(button1)
                 .bind();
@@ -161,7 +158,7 @@ describe("testing async commands and bindings", () => {
             });
             const first = jest.fn(() => {
             });
-            binding = buttonBinder()
+            binding = bindings.buttonBinder()
                 .toProduce(() => new StubAsyncCmd(data, 50))
                 .on(button1)
                 .end(end)
@@ -183,7 +180,7 @@ describe("testing async commands and bindings", () => {
             });
             const first = jest.fn(() => {
             });
-            binding = buttonBinder()
+            binding = bindings.buttonBinder()
                 .toProduce(() => new StubAsyncCmd(data, 50))
                 .on(button1)
                 .end(end)
@@ -199,7 +196,7 @@ describe("testing async commands and bindings", () => {
         });
 
         test("two button clicks with async command work in good time order (1)", async () => {
-            binding = buttonBinder()
+            binding = bindings.buttonBinder()
                 .toProduce(fn()
                     .mockReturnValueOnce(new StubAsyncCmd(data, 100))
                     .mockReturnValueOnce(new StubAsyncCmd(data, 5)))
@@ -224,7 +221,7 @@ describe("testing async commands and bindings", () => {
         });
 
         test("two button clicks with async command work in good time order (2)", async () => {
-            binding = buttonBinder()
+            binding = bindings.buttonBinder()
                 .toProduce(fn()
                     .mockReturnValueOnce(new StubAsyncCmd(data, 5))
                     .mockReturnValueOnce(new StubAsyncCmd(data, 100)))
@@ -254,7 +251,7 @@ describe("testing async commands and bindings", () => {
             const first = jest.fn(() => {
             });
 
-            binding = buttonBinder()
+            binding = bindings.buttonBinder()
                 .toProduce(fn()
                     .mockReturnValueOnce(cmd)
                     .mockReturnValueOnce(cmd2))
@@ -286,7 +283,7 @@ describe("testing async commands and bindings", () => {
             const first = jest.fn(() => {
             });
 
-            binding = buttonBinder()
+            binding = bindings.buttonBinder()
                 .toProduce(fn()
                     .mockReturnValueOnce(cmd)
                     .mockReturnValueOnce(cmd2))
@@ -316,7 +313,7 @@ describe("testing async commands and bindings", () => {
 
 
         test("button binding with async command that rejects works", async () => {
-            binding = buttonBinder()
+            binding = bindings.buttonBinder()
                 .toProduce(() => new StubAsyncCmd(data, 20, false))
                 .on(button1)
                 .bind();
@@ -332,7 +329,7 @@ describe("testing async commands and bindings", () => {
         });
 
         test("button binding with async command OK when 'end' crashes", async () => {
-            binding = buttonBinder()
+            binding = bindings.buttonBinder()
                 .toProduce(() => new StubAsyncCmd(data))
                 .on(button1)
                 .bind();
@@ -357,7 +354,7 @@ describe("testing async commands and bindings", () => {
         });
 
         test("button deactivated on command production", () => {
-            buttonBinder()
+            bindings.buttonBinder()
                 .toProduce(() => new StubAsyncCmd(data))
                 .first(() => {
                     button1.disabled = true;
@@ -374,7 +371,7 @@ describe("testing async commands and bindings", () => {
         });
 
         test("button deactivated and then activated", async () => {
-            buttonBinder()
+            bindings.buttonBinder()
                 .toProduce(() => new StubAsyncCmd(data))
                 .first(() => {
                     button1.disabled = true;
@@ -403,7 +400,7 @@ describe("testing async commands and bindings", () => {
         });
 
         test("dnd binding with async command OK when 'end' crashes", async () => {
-            binding = dndBinder(false)
+            binding = bindings.dndBinder(false)
                 .toProduce(() => new StubAsyncCmd(data))
                 .on(canvas)
                 .bind();
@@ -424,7 +421,7 @@ describe("testing async commands and bindings", () => {
         test("dnd binding with async command and continuous execution", async () => {
             const cannot = jest.fn(() => {});
 
-            binding = dndBinder(false)
+            binding = bindings.dndBinder(false)
                 .toProduce(() => new StubAsyncCmd(data))
                 .on(canvas)
                 .continuousExecution()
@@ -452,7 +449,7 @@ describe("testing async commands and bindings", () => {
         test("dnd binding with async command and continuous execution and crash", async () => {
             const cannot = jest.fn(() => {});
 
-            binding = dndBinder(false)
+            binding = bindings.dndBinder(false)
                 .toProduce(() => new StubAsyncCmd(data, 50, false))
                 .on(canvas)
                 .continuousExecution()
@@ -489,7 +486,7 @@ describe("testing async commands and bindings", () => {
         });
 
         test("button binding with async command OK when 'end' crashes", async () => {
-            binding = multiTouchBinder(2)
+            binding = bindings.multiTouchBinder(2)
                 .toProduce(() => new StubAsyncCmd(data))
                 .on(canvas)
                 .bind();

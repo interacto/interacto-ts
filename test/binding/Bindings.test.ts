@@ -28,57 +28,36 @@ import type {
     TouchData,
     WidgetData
 } from "../../src/interacto";
-import {
-    AnonCmd,
-    catBinding,
-    catCommand,
-    clearBindingObserver,
-    clickBinder,
-    clicksBinder,
-    dbleClickBinder,
-    dndBinder,
-    dragLockBinder,
-    hyperlinkBinder,
-    keyPressBinder,
-    keysPressBinder,
-    keyTypeBinder,
-    LogLevel,
-    longPressBinder,
-    longTouchBinder,
-    pressBinder,
-    scrollBinder,
-    setBindingObserver,
-    swipeBinder,
-    tapBinder,
-    touchDnDBinder,
-    UndoHistoryImpl,
-    undoRedoBinder
-} from "../../src/interacto";
+import {AnonCmd, BindingsImpl, catBinding, catCommand, UndoHistoryImpl} from "../../src/interacto";
 import {StubCmd, StubUndoableCmd} from "../command/StubCmd";
 import type {MouseEventForTest} from "../interaction/StubEvents";
 import {createMouseEvent, robot} from "../interaction/StubEvents";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
 import {flushPromises} from "../Utils";
+import type {Bindings} from "../../src/api/binding/Bindings";
+import {LogLevel} from "../../src/api/logging/LogLevel";
 
 let elt: HTMLElement;
 let ctx: BindingsContext;
+let bindings: Bindings;
 
 beforeEach(() => {
+    bindings = new BindingsImpl();
     ctx = new BindingsContext();
-    setBindingObserver(ctx);
+    bindings.setBindingObserver(ctx);
     jest.useFakeTimers();
     elt = document.createElement("div");
 });
 
 afterEach(() => {
-    clearBindingObserver();
+    bindings.clearBindingObserver();
     UndoHistoryImpl.getInstance().clear();
     jest.clearAllTimers();
     jest.clearAllMocks();
 });
 
 test("press binder", () => {
-    pressBinder()
+    bindings.pressBinder()
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
@@ -90,7 +69,7 @@ test("press binder", () => {
 test("log cmd binding", () => {
     jest.spyOn(catCommand, "info");
     jest.spyOn(catBinding, "info");
-    pressBinder()
+    bindings.pressBinder()
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .log(LogLevel.command, LogLevel.binding)
@@ -101,7 +80,7 @@ test("log cmd binding", () => {
 });
 
 test("undoable command registered", () => {
-    pressBinder()
+    bindings.pressBinder()
         .on(elt)
         .toProduce(() => new StubUndoableCmd(true))
         .bind();
@@ -112,28 +91,28 @@ test("undoable command registered", () => {
 test("undo redo binders on undo", () => {
     const undo = document.createElement("button");
     const redo = document.createElement("button");
-    pressBinder()
+    bindings.pressBinder()
         .on(elt)
         .toProduce(() => new StubUndoableCmd(true))
         .bind();
-    const bindings = undoRedoBinder(undo, redo);
+    const undos = bindings.undoRedoBinder(undo, redo);
     robot()
         .mousedown(elt)
         .click(undo);
 
     expect(UndoHistoryImpl.getInstance().getLastRedo()).toBeDefined();
     expect(UndoHistoryImpl.getInstance().getLastUndo()).toBeUndefined();
-    expect(ctx.getCmdsProducedBy(bindings[0])).toHaveLength(1);
+    expect(ctx.getCmdsProducedBy(undos[0])).toHaveLength(1);
 });
 
 test("undo redo binders on redo", () => {
     const undo = document.createElement("button");
     const redo = document.createElement("button");
-    pressBinder()
+    bindings.pressBinder()
         .on(elt)
         .toProduce(() => new StubUndoableCmd(true))
         .bind();
-    const bindings = undoRedoBinder(undo, redo);
+    const undos = bindings.undoRedoBinder(undo, redo);
 
     robot()
         .mousedown(elt)
@@ -141,14 +120,14 @@ test("undo redo binders on redo", () => {
         .click(redo);
     expect(UndoHistoryImpl.getInstance().getLastRedo()).toBeUndefined();
     expect(UndoHistoryImpl.getInstance().getLastUndo()).toBeDefined();
-    expect(ctx.getCmdsProducedBy(bindings[1])).toHaveLength(1);
+    expect(ctx.getCmdsProducedBy(undos[1])).toHaveLength(1);
 });
 
 test("press binder with ElementRef", () => {
     const eltRef: EltRef<EventTarget> = {
         "nativeElement": elt
     };
-    pressBinder()
+    bindings.pressBinder()
         .on(eltRef)
         .toProduce(() => new StubCmd(true))
         .bind();
@@ -157,7 +136,7 @@ test("press binder with ElementRef", () => {
 });
 
 test("click binder", () => {
-    clickBinder()
+    bindings.clickBinder()
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
@@ -166,7 +145,7 @@ test("click binder", () => {
 });
 
 test("double click binder", () => {
-    dbleClickBinder()
+    bindings.dbleClickBinder()
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
@@ -177,7 +156,7 @@ test("double click binder", () => {
 });
 
 test("drag lock binder", () => {
-    dragLockBinder()
+    bindings.dragLockBinder()
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
@@ -191,7 +170,7 @@ test("drag lock binder", () => {
 });
 
 test("dnd binder", () => {
-    dndBinder(false)
+    bindings.dndBinder(false)
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
@@ -203,7 +182,7 @@ test("dnd binder", () => {
 });
 
 test("dnd binder with throttling", async () => {
-    const fsm = dndBinder(false)
+    const fsm = bindings.dndBinder(false)
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .throttle(20)
@@ -252,7 +231,7 @@ test("dnd binder with throttling", async () => {
 });
 
 test("key press binder", () => {
-    keyPressBinder(false)
+    bindings.keyPressBinder(false)
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
@@ -261,7 +240,7 @@ test("key press binder", () => {
 });
 
 test("key type binder", () => {
-    keyTypeBinder()
+    bindings.keyTypeBinder()
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
@@ -272,7 +251,7 @@ test("key type binder", () => {
 });
 
 test("click must not block drag lock", () => {
-    dragLockBinder()
+    bindings.dragLockBinder()
         .on(elt)
         .toProduce((_i: SrcTgtPointsData<PointData>) => new StubCmd(true))
         .when(i => i.src.button === 2 && i.tgt.button === 2)
@@ -293,7 +272,7 @@ test("click must not block drag lock", () => {
 });
 
 test("drag lock: double click does not cancel", () => {
-    const binding = dragLockBinder()
+    const binding = bindings.dragLockBinder()
         .on(elt)
         .toProduce((_i: SrcTgtPointsData<PointData>) => new StubCmd(true))
         .log(LogLevel.interaction)
@@ -311,7 +290,7 @@ test("drag lock: first then end", () => {
     const end = jest.fn();
     const then = jest.fn();
     const endcancel = jest.fn();
-    dragLockBinder()
+    bindings.dragLockBinder()
         .on(elt)
         .toProduce((_i: SrcTgtPointsData<PointData>) => new StubCmd(true))
         .end(end)
@@ -338,7 +317,7 @@ test("drag lock: first then end", () => {
 
 
 test("binding with anon command", () => {
-    clickBinder()
+    bindings.clickBinder()
         .on(elt)
         .toProduce((_i: PointData) => new AnonCmd(() => {
         }))
@@ -351,7 +330,7 @@ test("binding with anon command", () => {
 });
 
 test("touch DnD binding", () => {
-    touchDnDBinder()
+    bindings.touchDnDBinder()
         .on(elt)
         .toProduce((_i: SrcTgtPointsData<TouchData>) => new StubCmd(true))
         .bind();
@@ -365,7 +344,7 @@ test("touch DnD binding", () => {
 });
 
 test("clicks binding work", () => {
-    clicksBinder(3)
+    bindings.clicksBinder(3)
         .on(elt)
         .when(_i => true)
         .toProduce((_i: PointsData) => new StubCmd(true))
@@ -382,7 +361,7 @@ test("clicks binding work", () => {
 });
 
 test("longpress binding work", () => {
-    longPressBinder(500)
+    bindings.longPressBinder(500)
         .on(elt)
         .when(_i => true)
         .toProduce((_i: PointData) => new StubCmd(true))
@@ -401,7 +380,7 @@ test("longpress binding work", () => {
 test("that hyperlink binder works", () => {
     const url = document.createElement("a");
 
-    hyperlinkBinder()
+    bindings.hyperlinkBinder()
         .toProduce((_i: WidgetData<HTMLAnchorElement>) => new StubCmd(true))
         .on(url)
         .bind();
@@ -412,7 +391,7 @@ test("that hyperlink binder works", () => {
 });
 
 test("that swipe binder works", () => {
-    swipeBinder(true, 400, 200, 10)
+    bindings.swipeBinder(true, 400, 200, 10)
         .toProduce((_i: SrcTgtPointsData<TouchData>) => new StubCmd(true))
         .on(elt)
         .bind();
@@ -431,7 +410,7 @@ test("that swipe binder works", () => {
 });
 
 test("that scroll binder works", () => {
-    scrollBinder()
+    bindings.scrollBinder()
         .on(elt)
         .toProduce((_i: ScrollData) => new StubCmd(true))
         .bind();
@@ -442,7 +421,7 @@ test("that scroll binder works", () => {
 });
 
 test("that keysPress binder works", () => {
-    keysPressBinder()
+    bindings.keysPressBinder()
         .on(elt)
         .toProduce((_i: KeysData) => new StubCmd(true))
         .bind();
@@ -459,7 +438,7 @@ test("that keysPress binder works", () => {
 test("that 'ifCannotExecute' is correctly called", () => {
     const mockFn = jest.fn();
     const cmd = new StubCmd(false);
-    pressBinder()
+    bindings.pressBinder()
         .on(elt)
         .toProduce((_i: PointData) => cmd)
         .ifCannotExecute(mockFn)
@@ -473,7 +452,7 @@ test("that 'ifCannotExecute' is correctly called", () => {
 
 
 test("that 'strictStart' works correctly when no 'when' routine", () => {
-    dndBinder(false)
+    bindings.dndBinder(false)
         .strictStart()
         .on(elt)
         .toProduce((_i: SrcTgtPointsData<PointData>) => new StubCmd(true))
@@ -488,7 +467,7 @@ test("that 'strictStart' works correctly when no 'when' routine", () => {
 });
 
 test("that 'strictStart' works correctly when the 'when' routine returns true", () => {
-    dndBinder(false)
+    bindings.dndBinder(false)
         .when((_i: SrcTgtPointsData<PointData>) => true)
         .on(elt)
         .toProduce((_i: SrcTgtPointsData<PointData>) => new StubCmd(true))
@@ -504,7 +483,7 @@ test("that 'strictStart' works correctly when the 'when' routine returns true", 
 });
 
 test("that 'strictStart' works correctly when the 'when' routine returns false", () => {
-    const binding = dndBinder(false)
+    const binding = bindings.dndBinder(false)
         .on(elt)
         .strictStart()
         .toProduce((_i: SrcTgtPointsData<PointData>) => new StubCmd(true))
@@ -521,7 +500,7 @@ test("that 'strictStart' works correctly when the 'when' routine returns false",
 });
 
 test("that 'strictStart' stops the interaction", () => {
-    const binding = dndBinder(false)
+    const binding = bindings.dndBinder(false)
         .on(elt)
         .toProduce((_i: SrcTgtPointsData<PointData>) => new StubCmd(true))
         .when((_i: SrcTgtPointsData<PointData>) => false)
@@ -537,7 +516,7 @@ test("that 'strictStart' stops the interaction", () => {
 
 test("that 'when' is not called on the first event of a DnD", () => {
     const when = jest.fn().mockReturnValue(false);
-    dndBinder(false)
+    bindings.dndBinder(false)
         .on(elt)
         .toProduce((_i: SrcTgtPointsData<PointData>) => new StubCmd(true))
         .when(() => false)
@@ -560,7 +539,7 @@ describe("check when it crashes in routines", () => {
         jest.spyOn(catBinding, "info");
         err = new Error("It crashed");
         cmd = new StubCmd(true);
-        baseBinder = touchDnDBinder()
+        baseBinder = bindings.touchDnDBinder()
             .on(elt)
             .toProduce((_i: SrcTgtPointsData<TouchData>) => cmd);
     });
@@ -815,7 +794,7 @@ describe("check when it crashes in routines", () => {
     });
 
     test("when it crashes in 'cancel' with an error", () => {
-        dndBinder(true)
+        bindings.dndBinder(true)
             .on(elt)
             .toProduce((_i: SrcTgtPointsData<PointData>) => new StubCmd(true))
             .cancel((_i: SrcTgtPointsData<PointData>) => {
@@ -834,7 +813,7 @@ describe("check when it crashes in routines", () => {
 
     test("when it crashes in 'cancel' with an error caught by 'catch'", () => {
         const fn = jest.fn();
-        dndBinder(true)
+        bindings.dndBinder(true)
             .toProduce(() => new StubCmd(true))
             .on(elt)
             .catch(fn)
@@ -854,7 +833,7 @@ describe("check when it crashes in routines", () => {
     });
 
     test("when it crashes in 'cancel' with not an error", () => {
-        dndBinder(true)
+        bindings.dndBinder(true)
             .on(elt)
             .toProduce((_i: SrcTgtPointsData<PointData>) => new StubCmd(true))
             .cancel(() => {
@@ -1101,11 +1080,11 @@ describe("tap and longPress conflict", () => {
     let binding2: Binding<Command, Interaction<InteractionData>, InteractionData>;
 
     beforeEach(() => {
-        binding2 = longTouchBinder(50)
+        binding2 = bindings.longTouchBinder(50)
             .on(elt)
             .toProduce((_i: TouchData) => new StubCmd(true))
             .bind();
-        binding = tapBinder(1)
+        binding = bindings.tapBinder(1)
             .toProduce((_i: TapData) => new StubCmd(true))
             .on(elt)
             .bind();
@@ -1141,12 +1120,12 @@ describe("two longTouch", () => {
     let binding2: Binding<Command, Interaction<InteractionData>, InteractionData>;
 
     test("two longTouch stopImmediatePropagation", () => {
-        binding2 = longTouchBinder(10)
+        binding2 = bindings.longTouchBinder(10)
             .on(elt)
             .toProduce((_i: TouchData) => new StubCmd(true))
             .stopImmediatePropagation()
             .bind();
-        binding = longTouchBinder(500)
+        binding = bindings.longTouchBinder(500)
             .toProduce((_i: TouchData) => new StubCmd(true))
             .on(elt)
             .bind();
@@ -1160,11 +1139,11 @@ describe("two longTouch", () => {
     });
 
     test("two longTouch std", () => {
-        binding2 = longTouchBinder(10)
+        binding2 = bindings.longTouchBinder(10)
             .on(elt)
             .toProduce((_i: TouchData) => new StubCmd(true))
             .bind();
-        binding = longTouchBinder(500)
+        binding = bindings.longTouchBinder(500)
             .toProduce((_i: TouchData) => new StubCmd(true))
             .on(elt)
             .bind();
@@ -1178,12 +1157,12 @@ describe("two longTouch", () => {
     });
 
     test("two longTouch std 2", () => {
-        binding2 = longTouchBinder(500)
+        binding2 = bindings.longTouchBinder(500)
             .on(elt)
             .toProduce((_i: TouchData) => new StubCmd(true))
             .stopImmediatePropagation()
             .bind();
-        binding = longTouchBinder(10)
+        binding = bindings.longTouchBinder(10)
             .toProduce((_i: TouchData) => new StubCmd(true))
             .on(elt)
             .bind();
@@ -1197,11 +1176,11 @@ describe("two longTouch", () => {
     });
 
     test("two longTouch std 3", () => {
-        binding2 = longTouchBinder(500)
+        binding2 = bindings.longTouchBinder(500)
             .on(elt)
             .toProduce((_i: TouchData) => new StubCmd(true))
             .bind();
-        binding = longTouchBinder(10)
+        binding = bindings.longTouchBinder(10)
             .toProduce((_i: TouchData) => new StubCmd(true))
             .on(elt)
             .stopImmediatePropagation()

@@ -12,41 +12,35 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {Binding,
-    EltRef,
-    Interaction,
-    InteractionData} from "../../src/interacto";
-import {
-    buttonBinder,
-    clearBindingObserver,
-    LogLevel,
-    setBindingObserver,
-    UndoHistoryImpl
-} from "../../src/interacto";
+import type {Binding, EltRef, Interaction, InteractionData} from "../../src/interacto";
+import {BindingsImpl, LogLevel, UndoHistoryImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
+import type {Bindings} from "../../src/api/binding/Bindings";
 
 let button1: HTMLButtonElement;
 let button2: HTMLButtonElement;
 let binding: Binding<StubCmd, Interaction<InteractionData>, InteractionData> | undefined;
 let cmd: StubCmd;
 let ctx: BindingsContext;
+let bindings: Bindings;
 
 beforeEach(() => {
+    bindings = new BindingsImpl();
     ctx = new BindingsContext();
-    setBindingObserver(ctx);
+    bindings.setBindingObserver(ctx);
     button1 = document.createElement("button");
     button2 = document.createElement("button");
     cmd = new StubCmd(true);
 });
 
 afterEach(() => {
-    clearBindingObserver();
+    bindings.clearBindingObserver();
     UndoHistoryImpl.getInstance().clear();
 });
 
 test("testCommandExecutedOnSingleButtonConsumer", () => {
-    binding = buttonBinder()
+    binding = bindings.buttonBinder()
         .toProduce(() => cmd)
         .on(button1)
         .bind();
@@ -59,7 +53,7 @@ test("testCommandExecutedOnSingleButtonConsumer", () => {
 });
 
 test("testCommandExecutedOnSingleButtonConsumerConsumer", () => {
-    binding = buttonBinder()
+    binding = bindings.buttonBinder()
         .on(button1)
         .toProduce(_i => cmd)
         .bind();
@@ -70,7 +64,7 @@ test("testCommandExecutedOnSingleButtonConsumerConsumer", () => {
 });
 
 test("testCommandExecutedOnTwoButtons", () => {
-    binding = buttonBinder()
+    binding = bindings.buttonBinder()
         .toProduce(() => new StubCmd(true))
         .on(button1, button2)
         .bind();
@@ -86,7 +80,7 @@ test("testCommandExecutedOnTwoButtons", () => {
 });
 
 test("command executed on two buttons with one array", () => {
-    binding = buttonBinder()
+    binding = bindings.buttonBinder()
         .toProduce(() => new StubCmd(true))
         .on([button1, button2])
         .bind();
@@ -102,7 +96,7 @@ test("command executed on two buttons with one ElementRef", () => {
         "nativeElement": button1
     };
 
-    binding = buttonBinder()
+    binding = bindings.buttonBinder()
         .toProduce(() => new StubCmd(true))
         .on(eltRef, button2)
         .bind();
@@ -121,7 +115,7 @@ test("command executed on two buttons with two ElementRef", () => {
         "nativeElement": button2
     };
 
-    binding = buttonBinder()
+    binding = bindings.buttonBinder()
         .toProduce(() => new StubCmd(true))
         .on(eltRef1, eltRef2)
         .bind();
@@ -140,7 +134,7 @@ test("command executed on two buttons with one array of ElementRef", () => {
         "nativeElement": button2
     };
 
-    binding = buttonBinder()
+    binding = bindings.buttonBinder()
         .toProduce(() => new StubCmd(true))
         .on([eltRef1, eltRef2])
         .bind();
@@ -152,7 +146,7 @@ test("command executed on two buttons with one array of ElementRef", () => {
 });
 
 test("command executed on 2 buttons using several on", () => {
-    binding = buttonBinder()
+    binding = bindings.buttonBinder()
         .toProduce(() => new StubCmd(true))
         .on(button1)
         .on(button2)
@@ -169,7 +163,7 @@ test("check ifhadeffects", () => {
     jest.spyOn(cmd, "hadEffect").mockReturnValue(true);
     const ifEffects = jest.fn();
     const ifNoEffects = jest.fn();
-    binding = buttonBinder()
+    binding = bindings.buttonBinder()
         .toProduce(() => cmd)
         .on(button1)
         .ifHadEffects(ifEffects)
@@ -187,7 +181,7 @@ test("check ifhadnoeffects", () => {
     jest.spyOn(cmd, "hadEffect").mockReturnValue(false);
     const ifEffects = jest.fn();
     const ifNoEffects = jest.fn();
-    binding = buttonBinder()
+    binding = bindings.buttonBinder()
         .toProduce(() => cmd)
         .on(button1)
         .ifHadEffects(ifEffects)
@@ -201,7 +195,7 @@ test("check ifhadnoeffects", () => {
 });
 
 test("testInit1Executed", () => {
-    binding = buttonBinder()
+    binding = bindings.buttonBinder()
         .on(button1)
         .toProduce(() => cmd)
         .first(c => {
@@ -216,7 +210,7 @@ test("testInit1Executed", () => {
 });
 
 test("testInit2Executed", () => {
-    binding = buttonBinder()
+    binding = bindings.buttonBinder()
         .toProduce(_i => cmd)
         .first((c, _i) => {
             c.exec = 10;
@@ -231,7 +225,7 @@ test("testInit2Executed", () => {
 });
 
 test("testCheckFalse", () => {
-    binding = buttonBinder()
+    binding = bindings.buttonBinder()
         .toProduce(_i => cmd)
         .when(_i => false)
         .on(button1)
@@ -245,7 +239,7 @@ test("testCheckFalse", () => {
 
 test("testCommandExecutedOnTwoButtonsSame", () => {
     let cpt = 0;
-    binding = buttonBinder()
+    binding = bindings.buttonBinder()
         .on(button1, button1)
         .toProduce(() => cmd)
         .end(_i => cpt++)
@@ -259,23 +253,23 @@ test("testCommandExecutedOnTwoButtonsSame", () => {
 });
 
 test("testBuilderCloned", () => {
-    const binder = buttonBinder();
+    const binder = bindings.buttonBinder();
 
-    expect(binder).not.toBe(buttonBinder);
-    expect(binder).not.toBe(buttonBinder().toProduce(() => cmd));
-    expect(binder).not.toBe(buttonBinder().toProduce(() => cmd)
+    expect(binder).not.toBe(bindings.buttonBinder);
+    expect(binder).not.toBe(bindings.buttonBinder().toProduce(() => cmd));
+    expect(binder).not.toBe(bindings.buttonBinder().toProduce(() => cmd)
         .first(() => { }));
-    expect(binder).not.toBe(buttonBinder().on(button1));
-    expect(binder).not.toBe(buttonBinder().when(() => false));
-    expect(binder).not.toBe(buttonBinder().toProduce(_i => cmd)
+    expect(binder).not.toBe(bindings.buttonBinder().on(button1));
+    expect(binder).not.toBe(bindings.buttonBinder().when(() => false));
+    expect(binder).not.toBe(bindings.buttonBinder().toProduce(_i => cmd)
         .end(_c => { }));
-    expect(binder).not.toBe(buttonBinder().log(LogLevel.command));
+    expect(binder).not.toBe(bindings.buttonBinder().log(LogLevel.command));
 });
 
 test("testClonedBuildersSameWidgetCmdOK", () => {
     let cpt1 = 0;
     let cpt2 = 0;
-    const binder = buttonBinder()
+    const binder = bindings.buttonBinder()
         .toProduce(() => new StubCmd(true))
         .on(button1);
     binding = binder
@@ -295,7 +289,7 @@ test("testClonedBuildersSameWidgetCmdOK", () => {
 test("testClonedBuildersDiffWidgetsCmdOK", () => {
     let cpt1 = 0;
     let cpt2 = 0;
-    const binder = buttonBinder()
+    const binder = bindings.buttonBinder()
         .toProduce(() => new StubCmd(true));
     binding = binder
         .on(button1)
@@ -315,7 +309,7 @@ test("testClonedBuildersDiffWidgetsCmdOK", () => {
 });
 
 test("prevent default set", () => {
-    binding = buttonBinder()
+    binding = bindings.buttonBinder()
         .preventDefault()
         .toProduce(() => cmd)
         .on(button1)
@@ -327,7 +321,7 @@ test("prevent default set", () => {
 });
 
 test("stop propag set", () => {
-    binding = buttonBinder()
+    binding = bindings.buttonBinder()
         .toProduce(() => cmd)
         .stopImmediatePropagation()
         .on(button1)

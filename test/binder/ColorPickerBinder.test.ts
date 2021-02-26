@@ -17,22 +17,25 @@ import type {
     InteractionData,
     WidgetData
 } from "../../src/interacto";
-import {clearBindingObserver,
-    colorPickerBinder,
-    setBindingObserver,
-    UndoHistoryImpl} from "../../src/interacto";
+import {
+    BindingsImpl,
+    UndoHistoryImpl
+} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
+import type {Bindings} from "../../src/api/binding/Bindings";
 
 let widget1: HTMLInputElement;
 let widget2: HTMLInputElement;
 let binding: Binding<StubCmd, Interaction<InteractionData>, InteractionData> | undefined;
 let cmd: StubCmd;
 let ctx: BindingsContext;
+let bindings: Bindings;
 
 beforeEach(() => {
+    bindings = new BindingsImpl();
     ctx = new BindingsContext();
-    setBindingObserver(ctx);
+    bindings.setBindingObserver(ctx);
     widget1 = document.createElement("input");
     widget2 = document.createElement("input");
     widget1.type = "color";
@@ -41,12 +44,12 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-    clearBindingObserver();
+    bindings.clearBindingObserver();
     UndoHistoryImpl.getInstance().clear();
 });
 
 test("testCommandExecutedOnSinglePickerFunction", () => {
-    binding = colorPickerBinder()
+    binding = bindings.colorPickerBinder()
         .toProduce((_i: WidgetData<HTMLInputElement>) => cmd)
         .on(widget1)
         .bind();
@@ -57,7 +60,7 @@ test("testCommandExecutedOnSinglePickerFunction", () => {
 });
 
 test("testCommandExecutedOnTwoPickers", () => {
-    binding = colorPickerBinder()
+    binding = bindings.colorPickerBinder()
         .on(widget1, widget2)
         .toProduce((_i: WidgetData<HTMLInputElement>) => new StubCmd(true))
         .bind();
@@ -70,7 +73,7 @@ test("testCommandExecutedOnTwoPickers", () => {
 });
 
 test("testInit1Executed", () => {
-    binding = colorPickerBinder()
+    binding = bindings.colorPickerBinder()
         .on(widget1)
         .toProduce((_i: WidgetData<HTMLInputElement>) => cmd)
         .first((c: StubCmd) => {
@@ -85,7 +88,7 @@ test("testInit1Executed", () => {
 });
 
 test("testCheckFalse", () => {
-    binding = colorPickerBinder()
+    binding = bindings.colorPickerBinder()
         .toProduce((_i: WidgetData<HTMLInputElement>) => cmd)
         .on(widget1)
         .when((_i: WidgetData<HTMLInputElement>) => false)

@@ -17,29 +17,30 @@ import type {Binding,
     InteractionBase,
     InteractionData} from "../../src/interacto";
 import {
-    clearBindingObserver,
-    setBindingObserver,
-    tapBinder,
+    BindingsImpl,
     UndoHistoryImpl
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {createTouchEvent} from "../interaction/StubEvents";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
 import type {Flushable} from "../../src/impl/interaction/Flushable";
+import type {Bindings} from "../../src/api/binding/Bindings";
 
 let binding: Binding<StubCmd, Interaction<InteractionData>, InteractionData> | undefined;
 let cmd: StubCmd;
 let ctx: BindingsContext;
+let bindings: Bindings;
 
 beforeEach(() => {
+    bindings = new BindingsImpl();
     ctx = new BindingsContext();
-    setBindingObserver(ctx);
+    bindings.setBindingObserver(ctx);
     jest.useFakeTimers();
     cmd = new StubCmd(true);
 });
 
 afterEach(() => {
-    clearBindingObserver();
+    bindings.clearBindingObserver();
     jest.clearAllTimers();
     UndoHistoryImpl.getInstance().clear();
 });
@@ -52,7 +53,7 @@ describe("on canvas", () => {
     });
 
     test("run tap produces cmd", () => {
-        binding = tapBinder(2)
+        binding = bindings.tapBinder(2)
             .toProduce(() => cmd)
             .on(c1)
             .bind();
@@ -70,7 +71,7 @@ describe("on canvas", () => {
 
 
     test("run tap two times recycle events", () => {
-        binding = tapBinder(2)
+        binding = bindings.tapBinder(2)
             .toProduce(() => new StubCmd(true))
             .on(c1)
             .bind();
@@ -89,7 +90,7 @@ describe("on canvas", () => {
     });
 
     test("unsubscribe does not trigger the binding", () => {
-        binding = tapBinder(2)
+        binding = bindings.tapBinder(2)
             .toProduce(() => cmd)
             .on(c1)
             .bind();
@@ -110,7 +111,7 @@ describe("on svg doc for dynamic registration", () => {
     });
 
     test("dynamic registration with nothing added", () => {
-        binding = tapBinder(2)
+        binding = bindings.tapBinder(2)
             .toProduce(() => cmd)
             .onDynamic(doc)
             .bind();
@@ -123,7 +124,7 @@ describe("on svg doc for dynamic registration", () => {
     });
 
     test("dynamic registration with a node added", async () => {
-        binding = tapBinder(2)
+        binding = bindings.tapBinder(2)
             .toProduce(() => cmd)
             .onDynamic(doc)
             .bind();
@@ -148,7 +149,7 @@ describe("on svg doc for dynamic registration", () => {
         // Waiting for the mutation changes to be done.
         await Promise.resolve();
 
-        binding = tapBinder(2)
+        binding = bindings.tapBinder(2)
             .toProduce(() => cmd)
             .onDynamic(doc)
             .bind();
@@ -161,7 +162,7 @@ describe("on svg doc for dynamic registration", () => {
     });
 
     test("dynamic registration with a node added and removed", async () => {
-        binding = tapBinder(1)
+        binding = bindings.tapBinder(1)
             .toProduce(() => cmd)
             .onDynamic(doc)
             .bind();
@@ -184,7 +185,7 @@ describe("on svg doc for dynamic registration", () => {
         doc.appendChild(rect);
         await Promise.resolve();
 
-        binding = tapBinder(3)
+        binding = bindings.tapBinder(3)
             .toProduce(() => cmd)
             .onDynamic(doc)
             .bind();

@@ -17,32 +17,33 @@ import type {Binding,
     Interaction,
     InteractionData} from "../../src/interacto";
 import {
-    clearBindingObserver,
-    panBinder,
-    setBindingObserver,
+    BindingsImpl,
     UndoHistoryImpl
 } from "../../src/interacto";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
+import type {Bindings} from "../../src/api/binding/Bindings";
 
 let binding: Binding<StubCmd, Interaction<InteractionData>, InteractionData> | undefined;
 let c1: HTMLElement;
 let ctx: BindingsContext;
+let bindings: Bindings;
 
 beforeEach(() => {
+    bindings = new BindingsImpl();
     ctx = new BindingsContext();
-    setBindingObserver(ctx);
+    bindings.setBindingObserver(ctx);
     jest.useFakeTimers();
     c1 = document.createElement("canvas");
 });
 
 afterEach(() => {
-    clearBindingObserver();
+    bindings.clearBindingObserver();
     jest.clearAllTimers();
     UndoHistoryImpl.getInstance().clear();
 });
 
 test("pan horizontal right", () => {
-    binding = panBinder(true, 50, 5)
+    binding = bindings.panBinder(true, 50, 5)
         .toProduce(() => new StubCmd(true))
         .on(c1)
         .bind();
@@ -60,7 +61,7 @@ test("pan horizontal right", () => {
 });
 
 test("pan horizontal left", () => {
-    binding = panBinder(true, 50, 5)
+    binding = bindings.panBinder(true, 50, 5)
         .toProduce(() => new StubCmd(true))
         .on(c1)
         .bind();
@@ -79,7 +80,7 @@ test("pan horizontal left", () => {
 
 
 test("pan vertical up", () => {
-    binding = panBinder(false, 10, 0)
+    binding = bindings.panBinder(false, 10, 0)
         .toProduce(() => new StubCmd(true))
         .on(c1)
         .bind();
@@ -97,7 +98,7 @@ test("pan vertical up", () => {
 });
 
 test("pan vertical down", () => {
-    binding = panBinder(false, 100, 1)
+    binding = bindings.panBinder(false, 100, 1)
         .toProduce(() => new StubCmd(true))
         .on(c1)
         .bind();

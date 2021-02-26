@@ -17,37 +17,38 @@ import type {Binding,
     InteractionBase,
     InteractionData} from "../../src/interacto";
 import {
-    clearBindingObserver,
-    multiTouchBinder,
-    setBindingObserver,
+    BindingsImpl,
     UndoHistoryImpl
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {createTouchEvent} from "../interaction/StubEvents";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
 import type {Flushable} from "../../src/impl/interaction/Flushable";
+import type {Bindings} from "../../src/api/binding/Bindings";
 
 let c1: HTMLElement;
 let binding: Binding<StubCmd, Interaction<InteractionData>, InteractionData> | undefined;
 let cmd: StubCmd;
 let ctx: BindingsContext;
+let bindings: Bindings;
 
 beforeEach(() => {
+    bindings = new BindingsImpl();
     ctx = new BindingsContext();
-    setBindingObserver(ctx);
+    bindings.setBindingObserver(ctx);
     jest.useFakeTimers();
     c1 = document.createElement("canvas");
     cmd = new StubCmd(true);
 });
 
 afterEach(() => {
-    clearBindingObserver();
+    bindings.clearBindingObserver();
     jest.clearAllTimers();
     UndoHistoryImpl.getInstance().clear();
 });
 
 test("run multi-touch produces cmd", () => {
-    binding = multiTouchBinder(2)
+    binding = bindings.multiTouchBinder(2)
         .toProduce(() => cmd)
         .on(c1)
         .bind();
@@ -68,7 +69,7 @@ test("run multi-touch two times recycle events", () => {
     const data: Array<number> = [];
     const dataFirst: Array<number> = [];
 
-    binding = multiTouchBinder(2)
+    binding = bindings.multiTouchBinder(2)
         .toProduce(() => new StubCmd(true))
         .first((_, i) => {
             dataFirst.push(i.touches.length);
@@ -98,7 +99,7 @@ test("run multi-touch two times recycle events", () => {
 });
 
 test("unsubscribe does not trigger the binding", () => {
-    binding = multiTouchBinder(2)
+    binding = bindings.multiTouchBinder(2)
         .toProduce(() => cmd)
         .on(c1)
         .bind();

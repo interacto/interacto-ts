@@ -15,22 +15,24 @@ import type {Binding,
     Interaction,
     InteractionData} from "../../src/interacto";
 import {
-    checkboxBinder, clearBindingObserver,
-    setBindingObserver,
+    BindingsImpl,
     UndoHistoryImpl
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
+import type {Bindings} from "../../src/api/binding/Bindings";
 
 let widget1: HTMLInputElement;
 let widget2: HTMLInputElement;
 let binding: Binding<StubCmd, Interaction<InteractionData>, InteractionData> | undefined;
 let cmd: StubCmd;
 let ctx: BindingsContext;
+let bindings: Bindings;
 
 beforeEach(() => {
+    bindings = new BindingsImpl();
     ctx = new BindingsContext();
-    setBindingObserver(ctx);
+    bindings.setBindingObserver(ctx);
     widget1 = document.createElement("input");
     widget2 = document.createElement("input");
     widget1.type = "checkbox";
@@ -39,12 +41,12 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-    clearBindingObserver();
+    bindings.clearBindingObserver();
     UndoHistoryImpl.getInstance().clear();
 });
 
 test("testCommandExecutedOnSingleButtonFunction", () => {
-    binding = checkboxBinder()
+    binding = bindings.checkboxBinder()
         .toProduce(_i => cmd)
         .on(widget1)
         .bind();
@@ -55,7 +57,7 @@ test("testCommandExecutedOnSingleButtonFunction", () => {
 });
 
 test("testCommandExecutedOnSingleButtonSupplier", () => {
-    binding = checkboxBinder()
+    binding = bindings.checkboxBinder()
         .toProduce(() => cmd)
         .on(widget1)
         .bind();
@@ -66,7 +68,7 @@ test("testCommandExecutedOnSingleButtonSupplier", () => {
 });
 
 test("testCommandExecutedOnTwoCheckboxes", () => {
-    binding = checkboxBinder()
+    binding = bindings.checkboxBinder()
         .toProduce(_i => new StubCmd(true))
         .on(widget1, widget2)
         .bind();
@@ -78,7 +80,7 @@ test("testCommandExecutedOnTwoCheckboxes", () => {
 });
 
 test("testInit1Executed", () => {
-    binding = checkboxBinder()
+    binding = bindings.checkboxBinder()
         .toProduce(_i => cmd)
         .first(c => {
             c.exec = 10;
@@ -92,7 +94,7 @@ test("testInit1Executed", () => {
 });
 
 test("testInit2Executed", () => {
-    binding = checkboxBinder()
+    binding = bindings.checkboxBinder()
         .toProduce(() => cmd)
         .on(widget1)
         .first((c, _i) => {
@@ -106,7 +108,7 @@ test("testInit2Executed", () => {
 });
 
 test("testCheckFalse", () => {
-    binding = checkboxBinder()
+    binding = bindings.checkboxBinder()
         .on(widget1)
         .when(_i => false)
         .toProduce(_i => cmd)

@@ -17,29 +17,30 @@ import type {Binding,
     InteractionBase,
     InteractionData} from "../../src/interacto";
 import {
-    clearBindingObserver,
+    BindingsImpl,
     LogLevel,
-    longTouchBinder,
-    setBindingObserver,
     UndoHistoryImpl
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {createTouchEvent} from "../interaction/StubEvents";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
 import type {Flushable} from "../../src/impl/interaction/Flushable";
+import type {Bindings} from "../../src/api/binding/Bindings";
 
 let binding: Binding<StubCmd, Interaction<InteractionData>, InteractionData> | undefined;
 let cmd: StubCmd;
 let ctx: BindingsContext;
+let bindings: Bindings;
 
 beforeEach(() => {
+    bindings = new BindingsImpl();
     ctx = new BindingsContext();
-    setBindingObserver(ctx);
+    bindings.setBindingObserver(ctx);
     jest.useFakeTimers();
 });
 
 afterEach(() => {
-    clearBindingObserver();
+    bindings.clearBindingObserver();
     jest.clearAllTimers();
     UndoHistoryImpl.getInstance().clear();
 });
@@ -52,7 +53,7 @@ describe("on canvas", () => {
     });
 
     test("run long touch produces cmd", () => {
-        binding = longTouchBinder(1000)
+        binding = bindings.longTouchBinder(1000)
             .toProduce(() => new StubCmd(true))
             .on(c1)
             .bind();
@@ -67,7 +68,7 @@ describe("on canvas", () => {
 
 
     test("tap does not produce long touch", () => {
-        binding = longTouchBinder(1000)
+        binding = bindings.longTouchBinder(1000)
             .toProduce(() => new StubCmd(true))
             .on(c1)
             .log(LogLevel.interaction)
@@ -83,7 +84,7 @@ describe("on canvas", () => {
 
 
     test("run long touch two times recycle events", () => {
-        binding = longTouchBinder(150)
+        binding = bindings.longTouchBinder(150)
             .toProduce(() => new StubCmd(true))
             .on(c1)
             .bind();
@@ -99,7 +100,7 @@ describe("on canvas", () => {
     });
 
     test("unsubscribe does not trigger the binding", () => {
-        binding = longTouchBinder(2000)
+        binding = bindings.longTouchBinder(2000)
             .toProduce(() => cmd)
             .on(c1)
             .bind();
@@ -121,7 +122,7 @@ describe("on svg doc for dynamic registration", () => {
     });
 
     test("tap does not produce long touch on dynamic array", async () => {
-        binding = longTouchBinder(1000)
+        binding = bindings.longTouchBinder(1000)
             .toProduce(() => new StubCmd(true))
             .onDynamic(doc)
             .log(LogLevel.interaction)
@@ -148,7 +149,7 @@ describe("on svg doc for dynamic registration", () => {
         // Waiting for the mutation changes to be done.
         await Promise.resolve();
 
-        binding = longTouchBinder(1000)
+        binding = bindings.longTouchBinder(1000)
             .toProduce(() => new StubCmd(true))
             .onDynamic(doc)
             .log(LogLevel.interaction)

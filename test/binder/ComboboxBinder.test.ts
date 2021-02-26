@@ -18,35 +18,36 @@ import type {
     WidgetData
 } from "../../src/interacto";
 import {
-    clearBindingObserver,
-    comboBoxBinder,
-    setBindingObserver,
+    BindingsImpl,
     UndoHistoryImpl
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
+import type {Bindings} from "../../src/api/binding/Bindings";
 
 let widget1: HTMLSelectElement;
 let widget2: HTMLSelectElement;
 let binding: Binding<StubCmd, Interaction<InteractionData>, InteractionData> | undefined;
 let cmd: StubCmd;
 let ctx: BindingsContext;
+let bindings: Bindings;
 
 beforeEach(() => {
+    bindings = new BindingsImpl();
     ctx = new BindingsContext();
-    setBindingObserver(ctx);
+    bindings.setBindingObserver(ctx);
     widget1 = document.createElement("select");
     widget2 = document.createElement("select");
     cmd = new StubCmd(true);
 });
 
 afterEach(() => {
-    clearBindingObserver();
+    bindings.clearBindingObserver();
     UndoHistoryImpl.getInstance().clear();
 });
 
 test("testCommandExecutedOnSingleComboFunction", () => {
-    binding = comboBoxBinder()
+    binding = bindings.comboBoxBinder()
         .toProduce(_i => cmd)
         .on(widget1)
         .bind();
@@ -57,7 +58,7 @@ test("testCommandExecutedOnSingleComboFunction", () => {
 });
 
 test("testCommandExecutedOnTwoCombos", () => {
-    binding = comboBoxBinder()
+    binding = bindings.comboBoxBinder()
         .on(widget1, widget2)
         .toProduce(_i => new StubCmd(true))
         .bind();
@@ -70,7 +71,7 @@ test("testCommandExecutedOnTwoCombos", () => {
 });
 
 test("testInit1Executed", () => {
-    binding = comboBoxBinder()
+    binding = bindings.comboBoxBinder()
         .on(widget1)
         .toProduce(_i => cmd)
         .first((c: StubCmd, _i: WidgetData<HTMLSelectElement>) => {
@@ -85,7 +86,7 @@ test("testInit1Executed", () => {
 });
 
 test("testCheckFalse", () => {
-    binding = comboBoxBinder()
+    binding = bindings.comboBoxBinder()
         .toProduce(_i => cmd)
         .on(widget1)
         .when((_i: WidgetData<HTMLSelectElement>) => false)

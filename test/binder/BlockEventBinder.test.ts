@@ -17,20 +17,23 @@ import type {
     Binding
 } from "../../src/interacto";
 import {
-    nodeBinder,
+    BindingsImpl,
     Press,
     UndoHistoryImpl
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {createMouseEvent} from "../interaction/StubEvents";
+import type {Bindings} from "../../src/api/binding/Bindings";
 
 let canvas1: HTMLElement;
 let canvas2: HTMLElement;
 let binding1: Binding<StubCmd, Press, PointData>;
 let binding2: Binding<StubCmd, Press, PointData>;
 let disposable: Subscription | undefined;
+let bindings: Bindings;
 
 beforeEach(() => {
+    bindings = new BindingsImpl();
     document.documentElement.innerHTML = "<html><div><canvas id='c1'> <canvas id='c2'/> </canvas></html>";
     canvas1 = document.getElementById("c1") as HTMLElement;
     canvas2 = document.getElementById("c2") as HTMLElement;
@@ -43,16 +46,17 @@ afterEach(() => {
     UndoHistoryImpl.getInstance().clear();
     binding1.uninstallBinding();
     binding2.uninstallBinding();
+    bindings.clearBindingObserver();
 });
 
 test("event bubbling works", () => {
-    binding2 = nodeBinder()
+    binding2 = bindings.nodeBinder()
         .usingInteraction(() => new Press())
         .toProduce(_i => new StubCmd())
         .on(canvas2)
         .bind();
 
-    binding1 = nodeBinder()
+    binding1 = bindings.nodeBinder()
         .usingInteraction(() => new Press())
         .toProduce(_i => new StubCmd())
         .on(canvas1)
@@ -65,13 +69,13 @@ test("event bubbling works", () => {
 });
 
 test("event bubbling respects physical laws", () => {
-    binding2 = nodeBinder()
+    binding2 = bindings.nodeBinder()
         .usingInteraction(() => new Press())
         .toProduce(() => new StubCmd())
         .on(canvas2)
         .bind();
 
-    binding1 = nodeBinder()
+    binding1 = bindings.nodeBinder()
         .usingInteraction(() => new Press())
         .toProduce(() => new StubCmd())
         .on(canvas1)
@@ -84,14 +88,14 @@ test("event bubbling respects physical laws", () => {
 });
 
 test("stop propagation prevents bubbling", () => {
-    binding2 = nodeBinder()
+    binding2 = bindings.nodeBinder()
         .usingInteraction(() => new Press())
         .toProduce(() => new StubCmd())
         .on(canvas2)
         .stopImmediatePropagation()
         .bind();
 
-    binding1 = nodeBinder()
+    binding1 = bindings.nodeBinder()
         .usingInteraction(() => new Press())
         .toProduce(() => new StubCmd())
         .on(canvas1)
@@ -104,7 +108,7 @@ test("stop propagation prevents bubbling", () => {
 });
 
 test("stop propagation prevents bubbling using cloned builders", () => {
-    const clone = nodeBinder()
+    const clone = bindings.nodeBinder()
         .usingInteraction(() => new Press())
         .toProduce(() => new StubCmd())
         .stopImmediatePropagation();
