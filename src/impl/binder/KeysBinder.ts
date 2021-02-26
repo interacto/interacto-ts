@@ -24,6 +24,7 @@ import type {KeyInteractionCmdUpdateBinder} from "../../api/binder/KeyInteractio
 import type {Interaction} from "../../api/interaction/Interaction";
 import type {Widget} from "../../api/binder/BaseBinderBuilder";
 import type {BindingsObserver} from "../../api/binding/BindingsObserver";
+import type {UndoHistory} from "../../api/undo/UndoHistory";
 
 /**
  * The base binding builder to create bindings between a keys pressure interaction and a given command.
@@ -36,8 +37,8 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, D extends I
 
     private readonly checkCodeFn: (i: InteractionData) => boolean;
 
-    public constructor(observer?: BindingsObserver, binder?: Partial<KeysBinder<C, I, D>>) {
-        super(observer, binder);
+    public constructor(undoHistory: UndoHistory, observer?: BindingsObserver, binder?: Partial<KeysBinder<C, I, D>>) {
+        super(undoHistory, observer, binder);
 
         Object.assign(this, binder);
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
@@ -146,7 +147,7 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, D extends I
     }
 
     protected duplicate(): KeysBinder<C, I, D> {
-        return new KeysBinder(this.observer, this);
+        return new KeysBinder(this.undoHistory, this.observer, this);
     }
 
     public bind(): Binding<C, I, D> {
@@ -158,7 +159,7 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, D extends I
             throw new Error("The command supplier cannot be undefined here");
         }
 
-        const binding = new AnonBinding(this.continuousCmdExecution, this.usingFn(),
+        const binding = new AnonBinding(this.continuousCmdExecution, this.usingFn(), this.undoHistory,
             this.produceFn, [...this.widgets], [...this.dynamicNodes],
             this._strictStart, [...this.logLevels], this.throttleTimeout,
             this.stopPropagation, this.prevDefault, this.firstFn, this.thenFn, this.checkCodeFn,

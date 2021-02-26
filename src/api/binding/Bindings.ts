@@ -33,6 +33,7 @@ import type {Widget} from "../binder/BaseBinderBuilder";
 import type {Binding} from "./Binding";
 import type {Undo} from "../../impl/command/library/Undo";
 import type {Redo} from "../../impl/command/library/Redo";
+import type {UndoHistory} from "../undo/UndoHistory";
 
 export type PartialButtonBinder = InteractionBinder<Interaction<WidgetData<HTMLButtonElement>>, WidgetData<HTMLButtonElement>>;
 export type PartialInputBinder = InteractionBinder<Interaction<WidgetData<HTMLInputElement>>, WidgetData<HTMLInputElement>>;
@@ -54,6 +55,11 @@ export type PartialKeyBinder = KeyInteractionBinder<Interaction<KeyData>, KeyDat
 export type PartialKeysBinder = KeyInteractionUpdateBinder<Interaction<KeysData>, KeysData>;
 
 export interface Bindings {
+    /**
+     * The undo/redo history of the current binding context
+     */
+    readonly undoHistory: UndoHistory;
+
     nodeBinder(): BaseUpdateBinder;
 
     /**
@@ -206,9 +212,11 @@ export interface Bindings {
         Binding<Redo, Interaction<WidgetData<HTMLButtonElement>>, WidgetData<HTMLButtonElement>>];
 
     /**
-     * Clears the current `BindingsObserver` object. Nothing is done if this objects is undefined.
+     * Clears all the data of this binding context:
+     * the possible current `BindingsObserver` object;
+     * the undo/redo history.
      */
-    clearBindingObserver(): void;
+    clear(): void;
 
     /**
      * Sets the current `BindingsObserver` object. Cleans the potential former global `BindingsObserver` object.

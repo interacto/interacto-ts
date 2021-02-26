@@ -18,6 +18,7 @@ import {BindingImpl} from "./BindingImpl";
 import {catBinding} from "../logging/ConfigLog";
 import type {Command} from "../../api/command/Command";
 import type {Interaction} from "../../api/interaction/Interaction";
+import type {UndoHistory} from "../../api/undo/UndoHistory";
 
 export class AnonBinding<C extends Command, I extends Interaction<D>, D extends InteractionData>
     extends BindingImpl<C, I, D> {
@@ -45,7 +46,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
     private readonly strictStart: boolean;
 
 
-    public constructor(continuousExec: boolean, interaction: I, cmdSupplierFn: (d: D) => C,
+    public constructor(continuousExec: boolean, interaction: I, undoHistory: UndoHistory, cmdSupplierFn: (d: D) => C,
                        widgets: ReadonlyArray<EventTarget>, dynamicNodes: ReadonlyArray<Node>,
                        strict: boolean, loggers: ReadonlyArray<LogLevel>, timeoutThrottle: number,
                        stopPropagation: boolean, prevDefault: boolean, firstFn?: (c: C, i: D) => void,
@@ -54,7 +55,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
                        endOrCancelFn?: (i: D) => void, hadEffectsFn?: (c: C, i: D) => void,
                        hadNoEffectFn?: (c: C, i: D) => void, cannotExecFn?: (c: C, i: D) => void,
                        onErrFn?: (ex: unknown) => void) {
-        super(continuousExec, interaction, cmdSupplierFn, widgets);
+        super(continuousExec, interaction, cmdSupplierFn, widgets, undoHistory);
         this.configureLoggers(loggers);
         this.firstFn = firstFn;
         this.thenFn = thenFn;

@@ -11,15 +11,8 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import type {Binding,
-    FSM,
-    Interaction,
-    InteractionBase,
-    InteractionData} from "../../src/interacto";
-import {
-    BindingsImpl,
-    UndoHistoryImpl
-} from "../../src/interacto";
+import type {Binding, FSM, Interaction, InteractionBase, InteractionData} from "../../src/interacto";
+import {BindingsImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {createTouchEvent} from "../interaction/StubEvents";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
@@ -40,9 +33,8 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-    bindings.clearBindingObserver();
     jest.clearAllTimers();
-    UndoHistoryImpl.getInstance().clear();
+    bindings.clear();
 });
 
 describe("on canvas", () => {

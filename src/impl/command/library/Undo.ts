@@ -12,22 +12,25 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {UndoHistoryImpl} from "../../undo/UndoHistoryImpl";
 import {CommandBase} from "../CommandBase";
+import type {UndoHistory} from "../../../api/undo/UndoHistory";
 
 /**
  * An Undo command.
  */
 export class Undo extends CommandBase {
-    public constructor() {
+    private readonly history: UndoHistory;
+
+    public constructor(undoHistory: UndoHistory) {
         super();
+        this.history = undoHistory;
     }
 
     public canExecute(): boolean {
-        return UndoHistoryImpl.getInstance().getLastUndo() !== undefined;
+        return this.history.getLastUndo() !== undefined;
     }
 
     protected execution(): void {
-        UndoHistoryImpl.getInstance().undo();
+        this.history.undo();
     }
 }

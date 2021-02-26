@@ -12,22 +12,25 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {UndoHistoryImpl} from "../../undo/UndoHistoryImpl";
 import {CommandBase} from "../CommandBase";
+import type {UndoHistory} from "../../../api/undo/UndoHistory";
 
 /**
  * A Redo action.
  */
 export class Redo extends CommandBase {
-    public constructor() {
+    private readonly history: UndoHistory;
+
+    public constructor(undoHistory: UndoHistory) {
         super();
+        this.history = undoHistory;
     }
 
     public canExecute(): boolean {
-        return UndoHistoryImpl.getInstance().getLastRedo() !== undefined;
+        return this.history.getLastRedo() !== undefined;
     }
 
     protected execution(): void {
-        UndoHistoryImpl.getInstance().redo();
+        this.history.redo();
     }
 }

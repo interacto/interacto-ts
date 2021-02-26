@@ -13,7 +13,7 @@
  */
 
 import type {Binding, EltRef, Interaction, InteractionData} from "../../src/interacto";
-import {BindingsImpl, LogLevel, UndoHistoryImpl} from "../../src/interacto";
+import {BindingsImpl, LogLevel} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
 import type {Bindings} from "../../src/api/binding/Bindings";
@@ -35,8 +35,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-    bindings.clearBindingObserver();
-    UndoHistoryImpl.getInstance().clear();
+    bindings.clear();
 });
 
 test("testCommandExecutedOnSingleButtonConsumer", () => {

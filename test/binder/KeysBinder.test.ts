@@ -18,7 +18,6 @@ import type {InteractionData} from "../../src/api/interaction/InteractionData";
 import {BindingsImpl} from "../../src/impl/binding/BindingsImpl";
 import {StubCmd} from "../command/StubCmd";
 import {createKeyEvent, robot} from "../interaction/StubEvents";
-import {UndoHistoryImpl} from "../../src/impl/undo/UndoHistoryImpl";
 import type {Interaction} from "../../src/api/interaction/Interaction";
 import {mock} from "jest-mock-extended";
 import type {BindingsObserver} from "../../src/api/binding/BindingsObserver";
@@ -43,24 +42,23 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-    bindings.clearBindingObserver();
-    UndoHistoryImpl.getInstance().clear();
+    bindings.clear();
     clearAllTimers();
 });
 
 
 test("that is crashes when calling bind without an interaction supplier", () => {
-    expect(() => new KeysBinder().bind()).toThrow("The interaction supplier cannot be undefined here");
+    expect(() => new KeysBinder(bindings.undoHistory).bind()).toThrow("The interaction supplier cannot be undefined here");
 });
 
 test("that is crashes when calling bind without a command supplier", () => {
-    const binder = new KeysBinder().usingInteraction(() => mock<Interaction<InteractionData>>());
+    const binder = new KeysBinder(bindings.undoHistory).usingInteraction(() => mock<Interaction<InteractionData>>());
     expect(() => binder.bind()).toThrow("The command supplier cannot be undefined here");
 });
 
 test("that observer is used on bind", () => {
     const obs = mock<BindingsObserver>();
-    const binder = new KeysBinder(obs)
+    const binder = new KeysBinder(bindings.undoHistory, obs)
         .usingInteraction(() => new KeyPressed(false))
         .toProduce(() => mock<Command>());
 

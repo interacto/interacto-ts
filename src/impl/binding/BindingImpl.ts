@@ -23,7 +23,7 @@ import {isUndoableType} from "../../api/undo/Undoable";
 import {MustBeUndoableCmdError} from "./MustBeUndoableCmdError";
 import type {Binding} from "../../api/binding/Binding";
 import type {Interaction} from "../../api/interaction/Interaction";
-import {UndoHistoryImpl} from "../undo/UndoHistoryImpl";
+import type {UndoHistory} from "../../api/undo/UndoHistory";
 
 /**
  * The base class to do bindings, i.e. bindings between user interactions and (undoable) commands.
@@ -64,6 +64,8 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
 
     protected readonly cmdsProduced: Subject<C>;
 
+    protected undoHistory: UndoHistory;
+
     /**
      * Creates a binding.
      * @param continuousExecution - Specifies whether the command must be executed on each step of the interaction.
@@ -71,8 +73,10 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
      * The class must be public and must have a constructor with no parameter.
      * @param interaction - The user interaction of the binding.
      * @param widgets - The widgets on which the binding will operate.
+     * @param undoHistory - The undo/redo history.
      */
-    public constructor(continuousExecution: boolean, interaction: I, cmdProducer: (i?: D) => C, widgets: ReadonlyArray<EventTarget>) {
+    public constructor(continuousExecution: boolean, interaction: I, cmdProducer: (i?: D) => C,
+                       widgets: ReadonlyArray<EventTarget>, undoHistory: UndoHistory) {
         this.asLogBinding = false;
         this.asLogCmd = false;
         this.continuousCmdExec = false;
@@ -84,6 +88,7 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
         this.cmd = undefined;
         this.continuousCmdExec = continuousExecution;
         this.activated = true;
+        this.undoHistory = undoHistory;
         this.interaction.getFsm().addHandler(this);
         interaction.registerToNodes(widgets);
     }
@@ -433,7 +438,7 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
 
         if (hadEffect) {
             if (isUndoableType(cmd)) {
-                UndoHistoryImpl.getInstance().add(cmd);
+                this.undoHistory.add(cmd);
             }
             this.ifCmdHadEffects();
         } else {

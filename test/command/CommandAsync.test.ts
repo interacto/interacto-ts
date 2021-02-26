@@ -12,7 +12,6 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {UndoHistoryImpl} from "../../src/impl/undo/UndoHistoryImpl";
 import {CmdStatus} from "../../src/api/command/Command";
 import {CommandBase} from "../../src/impl/command/CommandBase";
 import type {Binding} from "../../src/api/binding/Binding";
@@ -24,6 +23,8 @@ import {createMouseEvent, createTouchEvent} from "../interaction/StubEvents";
 import {LogLevel} from "../../src/api/logging/LogLevel";
 import type {BindingImpl} from "../../src/impl/binding/BindingImpl";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
+import type {Bindings} from "../../src/api/binding/Bindings";
+import {BindingsImpl} from "../../src/impl/binding/BindingsImpl";
 import useFakeTimers = jest.useFakeTimers;
 import clearAllTimers = jest.clearAllTimers;
 import useRealTimers = jest.useRealTimers;
@@ -31,8 +32,6 @@ import runAllTimers = jest.runAllTimers;
 import advanceTimersByTime = jest.advanceTimersByTime;
 import fn = jest.fn;
 import clearAllMocks = jest.clearAllMocks;
-import type {Bindings} from "../../src/api/binding/Bindings";
-import {BindingsImpl} from "../../src/impl/binding/BindingsImpl";
 
 class Model {
     public data: Array<string> = ["Foo", "Bar", "Yo"];
@@ -91,8 +90,7 @@ describe("testing async commands and bindings", () => {
     });
 
     afterEach(async () => {
-        bindings.clearBindingObserver();
-        UndoHistoryImpl.getInstance().clear();
+        bindings.clear();
         clearAllTimers();
         clearAllMocks();
         await flushPromises();

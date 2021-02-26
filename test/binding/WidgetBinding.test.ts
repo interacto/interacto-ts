@@ -12,8 +12,10 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {InteractionData,
-    Undoable} from "../../src/interacto";
+import type {
+    InteractionData,
+    Undoable, UndoHistory
+} from "../../src/interacto";
 import {
     CancelFSMException,
     catBinding,
@@ -34,8 +36,9 @@ class BindingStub extends BindingImpl<StubCmd, InteractionStub, InteractionData>
     public mustCancel: boolean;
 
 
-    public constructor(continuous: boolean, cmdCreation: (i?: InteractionData) => StubCmd, interaction: InteractionStub) {
-        super(continuous, interaction, cmdCreation, []);
+    public constructor(history: UndoHistory, continuous: boolean, cmdCreation: (i?: InteractionData) => StubCmd,
+                       interaction: InteractionStub) {
+        super(continuous, interaction, cmdCreation, [], history);
         this.conditionRespected = false;
         this.mustCancel = false;
     }
@@ -70,19 +73,21 @@ class CmdStubUndoable extends StubCmd implements Undoable {
 }
 
 let binding: BindingStub;
+let history: UndoHistory;
 
 beforeEach(() => {
+    history = new UndoHistoryImpl();
     jest.spyOn(catBinding, "error");
     jest.spyOn(catBinding, "warn");
     jest.spyOn(catFSM, "error");
     jest.spyOn(catCommand, "error");
     jest.spyOn(catInteraction, "error");
-    binding = new BindingStub(false, () => new StubCmd(), new InteractionStub(new FSMImpl()));
+    binding = new BindingStub(history, false, () => new StubCmd(), new InteractionStub(new FSMImpl()));
     binding.setActivated(true);
 });
 
 afterEach(() => {
-    UndoHistoryImpl.getInstance().clear();
+    history.clear();
     jest.clearAllMocks();
 });
 
@@ -115,7 +120,7 @@ describe("nominal cases", () => {
     });
 
     test("testExecuteOK", () => {
-        binding = new BindingStub(true, () => new StubCmd(), new InteractionStub(new FSMImpl()));
+        binding = new BindingStub(history, true, () => new StubCmd(), new InteractionStub(new FSMImpl()));
         expect(binding.isContinuousCmdExec()).toBeTruthy();
     });
 
@@ -253,7 +258,7 @@ describe("nominal cases", () => {
     });
 
     test("cancel interaction continuous", () => {
-        binding = new BindingStub(true, () => new StubCmd(), new InteractionStub(new FSMImpl()));
+        binding = new BindingStub(history, true, () => new StubCmd(), new InteractionStub(new FSMImpl()));
         binding.conditionRespected = true;
         binding.fsmStarts();
         // eslint-disable-next-line no-unused-expressions
@@ -264,7 +269,7 @@ describe("nominal cases", () => {
     });
 
     test("cancel interaction continuous no effect", () => {
-        binding = new BindingStub(true, () => new StubCmd(), new InteractionStub(new FSMImpl()));
+        binding = new BindingStub(history, true, () => new StubCmd(), new InteractionStub(new FSMImpl()));
         binding.conditionRespected = true;
         binding.fsmStarts();
         const cmd = binding.getCommand();
@@ -275,7 +280,7 @@ describe("nominal cases", () => {
     test("cancel interaction continuous undoable", () => {
         const cmd = new CmdStubUndoable();
         jest.spyOn(cmd, "undo");
-        binding = new BindingStub(true, () => cmd, new InteractionStub(new FSMImpl()));
+        binding = new BindingStub(history, true, () => cmd, new InteractionStub(new FSMImpl()));
         binding.conditionRespected = true;
         binding.setLogCmd(true);
         binding.fsmStarts();
@@ -286,7 +291,7 @@ describe("nominal cases", () => {
     test("cancel interaction continuous undoable no log", () => {
         const cmd = new CmdStubUndoable();
         jest.spyOn(cmd, "undo");
-        binding = new BindingStub(true, () => cmd, new InteractionStub(new FSMImpl()));
+        binding = new BindingStub(history, true, () => cmd, new InteractionStub(new FSMImpl()));
         binding.conditionRespected = true;
         binding.fsmStarts();
         binding.fsmCancels();
@@ -342,7 +347,7 @@ describe("nominal cases", () => {
     });
 
     test("update continuous with log cannotDo", () => {
-        binding = new BindingStub(true, () => new StubCmd(), new InteractionStub(new FSMImpl()));
+        binding = new BindingStub(history, true, () => new StubCmd(), new InteractionStub(new FSMImpl()));
         jest.spyOn(binding, "ifCannotExecuteCmd");
         binding.conditionRespected = true;
         binding.setLogCmd(true);
@@ -354,7 +359,7 @@ describe("nominal cases", () => {
     });
 
     test("update continuous not log canDo", () => {
-        binding = new BindingStub(true, () => new StubCmd(), new InteractionStub(new FSMImpl()));
+        binding = new BindingStub(history, true, () => new StubCmd(), new InteractionStub(new FSMImpl()));
         jest.spyOn(binding, "ifCannotExecuteCmd");
         binding.conditionRespected = true;
         binding.fsmStarts();
@@ -421,7 +426,7 @@ describe("crash in binding", () => {
             throw ex;
         };
 
-        binding = new BindingStub(true, supplier, new InteractionStub(new FSMImpl()));
+        binding = new BindingStub(history, true, supplier, new InteractionStub(new FSMImpl()));
         binding.conditionRespected = true;
         jest.spyOn(binding, "first");
         binding.fsmStarts();
@@ -436,7 +441,7 @@ describe("crash in binding", () => {
             throw "yolo";
         };
 
-        binding = new BindingStub(true, supplier, new InteractionStub(new FSMImpl()));
+        binding = new BindingStub(history, true, supplier, new InteractionStub(new FSMImpl()));
         binding.conditionRespected = true;
         jest.spyOn(binding, "first");
         binding.fsmStarts();
@@ -451,7 +456,7 @@ describe("crash in binding", () => {
             throw ex;
         };
 
-        binding = new BindingStub(true, supplier, new InteractionStub(new FSMImpl()));
+        binding = new BindingStub(history, true, supplier, new InteractionStub(new FSMImpl()));
         binding.conditionRespected = true;
         binding.fsmStops();
         expect(catBinding.error).toHaveBeenCalledWith("Error while creating a command", ex);
@@ -463,7 +468,7 @@ describe("crash in binding", () => {
         const supplier = (): StubCmd => {
             throw ex;
         };
-        binding = new BindingStub(true, supplier, new InteractionStub(new FSMImpl()));
+        binding = new BindingStub(history, true, supplier, new InteractionStub(new FSMImpl()));
         jest.spyOn(binding, "first");
         binding.conditionRespected = false;
         binding.fsmStarts();

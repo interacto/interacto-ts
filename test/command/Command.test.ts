@@ -13,7 +13,6 @@
  */
 import {CmdStatus} from "../../src/api/command/Command";
 import {CommandBase} from "../../src/impl/command/CommandBase";
-import {UndoHistoryImpl} from "../../src/impl/undo/UndoHistoryImpl";
 import {StubCmd} from "./StubCmd";
 
 let cmd: StubCmd;
@@ -22,7 +21,6 @@ let cmd: StubCmd;
 beforeEach(() => {
     cmd = new StubCmd();
     cmd.candoValue = true;
-    UndoHistoryImpl.getInstance().clear();
 });
 
 test("cando default", () => {

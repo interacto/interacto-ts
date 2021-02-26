@@ -79,57 +79,73 @@ import type {
     PartialTouchSrcTgtBinder,
     PartialUpdatePointBinder
 } from "../../api/binding/Bindings";
+import type {UndoHistory} from "../../api/undo/UndoHistory";
+import {UndoHistoryImpl} from "../undo/UndoHistoryImpl";
 
 
 export class BindingsImpl implements Bindings {
     private observer: BindingsObserver | undefined;
 
+    private undoHistoryData: UndoHistory;
+
+    public constructor() {
+        this.undoHistoryData = new UndoHistoryImpl();
+    }
+
+    public get undoHistory(): UndoHistory {
+        return this.undoHistoryData;
+    }
+
+    public set undoHistory(newHistory: UndoHistory) {
+        this.undoHistoryData = newHistory;
+    }
+
     public nodeBinder(): BaseUpdateBinder {
-        return new UpdateBinder<CommandBase, Interaction<InteractionData>, InteractionData>(this.observer) as BaseUpdateBinder;
+        return new UpdateBinder<CommandBase, Interaction<InteractionData>, InteractionData>(this.undoHistory, this.observer) as BaseUpdateBinder;
     }
 
     public buttonBinder(): PartialButtonBinder {
-        return new UpdateBinder(this.observer)
+        return new UpdateBinder(this.undoHistory, this.observer)
             .usingInteraction<ButtonPressed, WidgetData<HTMLButtonElement>>(() => new ButtonPressed());
     }
 
     public checkboxBinder(): PartialInputBinder {
-        return new UpdateBinder(this.observer)
+        return new UpdateBinder(this.undoHistory, this.observer)
             .usingInteraction<BoxChecked, WidgetData<HTMLInputElement>>(() => new BoxChecked());
     }
 
     public colorPickerBinder(): PartialInputBinder {
-        return new UpdateBinder(this.observer)
+        return new UpdateBinder(this.undoHistory, this.observer)
             .usingInteraction<ColorPicked, WidgetData<HTMLInputElement>>(() => new ColorPicked());
     }
 
     public comboBoxBinder(): PartialSelectBinder {
-        return new UpdateBinder(this.observer)
+        return new UpdateBinder(this.undoHistory, this.observer)
             .usingInteraction<ComboBoxSelected, WidgetData<HTMLSelectElement>>(() => new ComboBoxSelected());
     }
 
     public spinnerBinder(): PartialSpinnerBinder {
-        return new UpdateBinder(this.observer)
+        return new UpdateBinder(this.undoHistory, this.observer)
             .usingInteraction<SpinnerChanged, WidgetData<HTMLInputElement>>(() => new SpinnerChanged());
     }
 
     public dateBinder(): PartialInputBinder {
-        return new UpdateBinder(this.observer)
+        return new UpdateBinder(this.undoHistory, this.observer)
             .usingInteraction<DatePicked, WidgetData<HTMLInputElement>>(() => new DatePicked());
     }
 
     public hyperlinkBinder(): PartialAnchorBinder {
-        return new UpdateBinder(this.observer)
+        return new UpdateBinder(this.undoHistory, this.observer)
             .usingInteraction<HyperLinkClicked, WidgetData<HTMLAnchorElement>>(() => new HyperLinkClicked());
     }
 
     public textInputBinder(timeout?: number): PartialTextInputBinder {
-        return new UpdateBinder(this.observer)
+        return new UpdateBinder(this.undoHistory, this.observer)
             .usingInteraction<TextInputChanged, WidgetData<HTMLInputElement | HTMLTextAreaElement>>(() => new TextInputChanged(timeout));
     }
 
     public touchDnDBinder(): PartialTouchSrcTgtBinder {
-        return new UpdateBinder(this.observer)
+        return new UpdateBinder(this.undoHistory, this.observer)
             .usingInteraction<TouchDnD, SrcTgtPointsData<TouchData>>(() => new TouchDnD());
     }
 
@@ -140,7 +156,7 @@ export class BindingsImpl implements Bindings {
      * A multi-touch ends when the number of required touches is greater than the number of touches.
      */
     public multiTouchBinder(nbTouches: number): PartialMultiTouchBinder {
-        return new UpdateBinder(this.observer)
+        return new UpdateBinder(this.undoHistory, this.observer)
             .usingInteraction<MultiTouch, MultiTouchData>(() => new MultiTouch(nbTouches));
     }
 
@@ -150,7 +166,7 @@ export class BindingsImpl implements Bindings {
      * If this number is not reached after a timeout, the interaction is cancelled.
      */
     public tapBinder(nbTap: number): PartialTapBinder {
-        return new UpdateBinder(this.observer)
+        return new UpdateBinder(this.undoHistory, this.observer)
             .usingInteraction<Tap, TapData>(() => new Tap(nbTap));
     }
 
@@ -160,7 +176,7 @@ export class BindingsImpl implements Bindings {
      * If this duration is not reached, the interaction is cancelled.
      */
     public longTouchBinder(duration: number): PartialTouchBinder {
-        return new UpdateBinder(this.observer)
+        return new UpdateBinder(this.undoHistory, this.observer)
             .usingInteraction<LongTouch, TouchData>(() => new LongTouch(duration));
     }
 
@@ -173,7 +189,7 @@ export class BindingsImpl implements Bindings {
      * @param pxTolerance - The tolerance rate in pixels accepted while executing the swipe
      */
     public swipeBinder(horizontal: boolean, minVelocity: number, minLength: number, pxTolerance: number): PartialTouchSrcTgtBinder {
-        return new UpdateBinder(this.observer)
+        return new UpdateBinder(this.undoHistory, this.observer)
             .usingInteraction<Swipe, SrcTgtPointsData<TouchData>>(() => new Swipe(horizontal, minVelocity, minLength, pxTolerance));
     }
 
@@ -184,7 +200,7 @@ export class BindingsImpl implements Bindings {
      * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
      */
     public panBinder(horizontal: boolean, minLength: number, pxTolerance: number): PartialTouchSrcTgtBinder {
-        return new UpdateBinder(this.observer)
+        return new UpdateBinder(this.undoHistory, this.observer)
             .usingInteraction<Pan, SrcTgtPointsData<TouchData>>(() => new Pan(horizontal, minLength, pxTolerance));
     }
 
@@ -192,7 +208,7 @@ export class BindingsImpl implements Bindings {
      * Creates a binding that uses the click interaction.
      */
     public clickBinder(): PartialPointBinder {
-        return new UpdateBinder(this.observer)
+        return new UpdateBinder(this.undoHistory, this.observer)
             .usingInteraction<Click, PointData>(() => new Click());
     }
 
@@ -200,7 +216,7 @@ export class BindingsImpl implements Bindings {
      * Creates a binding that uses the double click interaction.
      */
     public dbleClickBinder(): PartialUpdatePointBinder {
-        return new UpdateBinder(this.observer)
+        return new UpdateBinder(this.undoHistory, this.observer)
             .usingInteraction<DoubleClick, PointData>(() => new DoubleClick());
     }
 
@@ -208,7 +224,7 @@ export class BindingsImpl implements Bindings {
      * Creates a binding that uses the mouse press interaction.
      */
     public pressBinder(): PartialPointBinder {
-        return new UpdateBinder(this.observer)
+        return new UpdateBinder(this.undoHistory, this.observer)
             .usingInteraction<Press, PointData>(() => new Press());
     }
 
@@ -218,7 +234,7 @@ export class BindingsImpl implements Bindings {
      * If this duration is not reached, the interaction is cancelled.
      */
     public longPressBinder(duration: number): PartialUpdatePointBinder {
-        return new UpdateBinder(this.observer)
+        return new UpdateBinder(this.undoHistory, this.observer)
             .usingInteraction<LongPress, PointData>(() => new LongPress(duration));
     }
 
@@ -228,7 +244,7 @@ export class BindingsImpl implements Bindings {
      * If this number is not reached, the interaction is cancelled after a timeout of 1s.
      */
     public clicksBinder(nbClicks: number): PartialPointsBinder {
-        return new UpdateBinder(this.observer)
+        return new UpdateBinder(this.undoHistory, this.observer)
             .usingInteraction<Clicks, PointsData>(() => new Clicks(nbClicks));
     }
 
@@ -236,7 +252,7 @@ export class BindingsImpl implements Bindings {
      * Creates a binding that uses the mouse scroll interaction.
      */
     public scrollBinder(): PartialScrollBinder {
-        return new UpdateBinder(this.observer)
+        return new UpdateBinder(this.undoHistory, this.observer)
             .usingInteraction<Scroll, ScrollData>(() => new Scroll());
     }
 
@@ -245,7 +261,7 @@ export class BindingsImpl implements Bindings {
      * @param cancellable - True: the escape key will cancels the DnD.
      */
     public dndBinder(cancellable: boolean): PartialPointSrcTgtBinder {
-        return new UpdateBinder(this.observer)
+        return new UpdateBinder(this.undoHistory, this.observer)
             .usingInteraction<DnD, SrcTgtPointsData<PointData>>(() => new DnD(cancellable));
     }
 
@@ -253,7 +269,7 @@ export class BindingsImpl implements Bindings {
      * Creates a binding that uses the drag lock interaction.
      */
     public dragLockBinder(): PartialPointSrcTgtBinder {
-        return new UpdateBinder(this.observer)
+        return new UpdateBinder(this.undoHistory, this.observer)
             .usingInteraction<DragLock, SrcTgtPointsData<PointData>>(() => new DragLock());
     }
 
@@ -262,7 +278,7 @@ export class BindingsImpl implements Bindings {
      * @param modifierAccepted - True: the interaction will consider key modifiers.
      */
     public keyPressBinder(modifierAccepted: boolean): PartialKeyBinder {
-        return new KeysBinder(this.observer)
+        return new KeysBinder(this.undoHistory, this.observer)
             .usingInteraction<KeyPressed, KeyData>(() => new KeyPressed(modifierAccepted));
     }
 
@@ -270,7 +286,7 @@ export class BindingsImpl implements Bindings {
      * Creates a binding that uses the multiple key pressures interaction.
      */
     public keysPressBinder(): PartialKeysBinder {
-        return new KeysBinder(this.observer)
+        return new KeysBinder(this.undoHistory, this.observer)
             .usingInteraction<KeysPressed, KeysData>(() => new KeysPressed());
     }
 
@@ -278,7 +294,7 @@ export class BindingsImpl implements Bindings {
      * Creates a binding that uses the multiple key typings interaction.
      */
     public keysTypeBinder(): PartialKeysBinder {
-        return new KeysBinder(this.observer)
+        return new KeysBinder(this.undoHistory, this.observer)
             .usingInteraction<KeysTyped, KeysData>(() => new KeysTyped());
     }
 
@@ -286,7 +302,7 @@ export class BindingsImpl implements Bindings {
      * Creates a binding that uses the key typing interaction.
      */
     public keyTypeBinder(): PartialKeyBinder {
-        return new KeysBinder(this.observer)
+        return new KeysBinder(this.undoHistory, this.observer)
             .usingInteraction<KeyTyped, KeyData>(() => new KeyTyped());
     }
 
@@ -301,21 +317,22 @@ export class BindingsImpl implements Bindings {
         return [
             this.buttonBinder()
                 .on(undo)
-                .toProduce(() => new Undo())
+                .toProduce(() => new Undo(this.undoHistory))
                 .bind(),
             this.buttonBinder()
                 .on(redo)
-                .toProduce(() => new Redo())
+                .toProduce(() => new Redo(this.undoHistory))
                 .bind()
         ];
     }
 
-    public clearBindingObserver(): void {
+    public clear(): void {
         this.observer?.clearObservedBindings();
+        this.undoHistory.clear();
     }
 
     public setBindingObserver(obs?: BindingsObserver): void {
-        this.clearBindingObserver();
+        this.observer?.clearObservedBindings();
         this.observer = obs;
     }
 }

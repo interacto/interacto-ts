@@ -20,19 +20,6 @@ import type {UndoHistory} from "../../api/undo/UndoHistory";
 
 export class UndoHistoryImpl implements UndoHistory {
     /**
-     * The default undo/redo collector.
-     */
-    private static instance: UndoHistory = new UndoHistoryImpl();
-
-    public static setInstance(newInstance: UndoHistory): void {
-        this.instance = newInstance;
-    }
-
-    public static getInstance(): UndoHistory {
-        return this.instance;
-    }
-
-    /**
      * Contains the undoable objects.
      */
     private readonly undos: Array<Undoable>;

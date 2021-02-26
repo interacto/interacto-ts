@@ -12,15 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSM,
-    InteractionData} from "../../src/interacto";
-import {
-    ClickTransition,
-    CmdStatus,
-    FSMImpl,
-    TerminalState,
-    BindingImpl, UndoHistoryImpl
-} from "../../src/interacto";
+import type {FSM, InteractionData, UndoHistory} from "../../src/interacto";
+import {BindingImpl, ClickTransition, CmdStatus, FSMImpl, TerminalState, UndoHistoryImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {InteractionStub} from "../interaction/InteractionStub";
 import {createMouseEvent} from "../interaction/StubEvents";
@@ -30,6 +23,7 @@ let interaction: InteractionStub;
 let binding: BindingImpl<StubCmd, InteractionStub, InteractionData>;
 let fsm: FSM;
 let cmd: StubCmd;
+let history: UndoHistory;
 
 class OneTrFSM extends FSMImpl {
     public constructor() {
@@ -41,16 +35,17 @@ class OneTrFSM extends FSMImpl {
 }
 
 beforeEach(() => {
+    history = new UndoHistoryImpl();
     jest.clearAllMocks();
     cmd = new StubCmd();
     cmd.candoValue = true;
     fsm = new OneTrFSM();
     interaction = new InteractionStub(fsm);
-    binding = new BindingImpl(false, interaction, () => cmd, []);
+    binding = new BindingImpl(false, interaction, () => cmd, [], history);
 });
 
 afterEach(() => {
-    UndoHistoryImpl.getInstance().clear();
+    history.clear();
 });
 
 test("testNothingDoneIsDeactivated", () => {

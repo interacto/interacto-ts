@@ -13,13 +13,8 @@
  */
 import {StubCmd} from "../command/StubCmd";
 import {createTouchEvent} from "../interaction/StubEvents";
-import type {Binding,
-    Interaction,
-    InteractionData} from "../../src/interacto";
-import {
-    BindingsImpl,
-    UndoHistoryImpl
-} from "../../src/interacto";
+import type {Binding, Interaction, InteractionData} from "../../src/interacto";
+import {BindingsImpl} from "../../src/interacto";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
 import type {Bindings} from "../../src/api/binding/Bindings";
 
@@ -37,9 +32,8 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-    bindings.clearBindingObserver();
+    bindings.clear();
     jest.clearAllTimers();
-    UndoHistoryImpl.getInstance().clear();
 });
 
 test("pan horizontal right", () => {

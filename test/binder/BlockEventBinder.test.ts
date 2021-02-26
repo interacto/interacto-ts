@@ -12,15 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 import type {Subscription} from "rxjs";
-import type {
-    PointData,
-    Binding
-} from "../../src/interacto";
-import {
-    BindingsImpl,
-    Press,
-    UndoHistoryImpl
-} from "../../src/interacto";
+import type {Binding, PointData} from "../../src/interacto";
+import {BindingsImpl, Press} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {createMouseEvent} from "../interaction/StubEvents";
 import type {Bindings} from "../../src/api/binding/Bindings";
@@ -43,10 +36,9 @@ afterEach(() => {
     if (disposable !== undefined) {
         disposable.unsubscribe();
     }
-    UndoHistoryImpl.getInstance().clear();
     binding1.uninstallBinding();
     binding2.uninstallBinding();
-    bindings.clearBindingObserver();
+    bindings.clear();
 });
 
 test("event bubbling works", () => {

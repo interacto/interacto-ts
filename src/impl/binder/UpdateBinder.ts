@@ -23,6 +23,7 @@ import {AnonBinding} from "../binding/AnonBinding";
 import type {Interaction} from "../../api/interaction/Interaction";
 import type {Widget} from "../../api/binder/BaseBinderBuilder";
 import type {BindingsObserver} from "../../api/binding/BindingsObserver";
+import type {UndoHistory} from "../../api/undo/UndoHistory";
 
 /**
  * The base binding builder for bindings where commands can be updated while the user interaction is running.
@@ -43,8 +44,8 @@ export class UpdateBinder<C extends Command, I extends Interaction<D>, D extends
 
     protected throttleTimeout: number;
 
-    public constructor(observer?: BindingsObserver, binder?: Partial<UpdateBinder<C, I, D>>) {
-        super(observer, binder);
+    public constructor(undoHistory: UndoHistory, observer?: BindingsObserver, binder?: Partial<UpdateBinder<C, I, D>>) {
+        super(undoHistory, observer, binder);
 
         Object.assign(this, binder);
         this.continuousCmdExecution ??= false;
@@ -146,7 +147,7 @@ export class UpdateBinder<C extends Command, I extends Interaction<D>, D extends
     }
 
     protected duplicate(): UpdateBinder<C, I, D> {
-        return new UpdateBinder<C, I, D>(this.observer, this);
+        return new UpdateBinder<C, I, D>(this.undoHistory, this.observer, this);
     }
 
     public bind(): Binding<C, I, D> {
@@ -158,7 +159,7 @@ export class UpdateBinder<C extends Command, I extends Interaction<D>, D extends
             throw new Error("The command supplier cannot be undefined here");
         }
 
-        const binding = new AnonBinding(this.continuousCmdExecution, this.usingFn(), this.produceFn,
+        const binding = new AnonBinding(this.continuousCmdExecution, this.usingFn(), this.undoHistory, this.produceFn,
             [...this.widgets], [...this.dynamicNodes], this._strictStart, [...this.logLevels],
             this.throttleTimeout, this.stopPropagation, this.prevDefault, this.firstFn, this.thenFn, this.whenFn,
             this.endFn, this.cancelFn, this.endOrCancelFn, this.hadEffectsFn,
