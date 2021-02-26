@@ -17,90 +17,93 @@ import type {Observable} from "rxjs";
 
 /**
  * A history of undone/redone objects.
+ * Why a pure abstract class and not an interface?
+ * Because interfaces are not retained at runtime in TS and we want DI (that thus cannot inject interface types).
+
  */
-export interface UndoHistory {
+export abstract class UndoHistory {
     /**
      * Adds an undoable object to the collector.
      * @param undoable - The undoable object to add.
      */
-    add(undoable: Undoable): void;
+    abstract add(undoable: Undoable): void;
 
     /**
      * Removes all the undoable objects of the collector.
      */
-    clear(): void;
+    abstract clear(): void;
 
     /**
      * Undoes the last undoable object.
      */
-    undo(): void;
+    abstract undo(): void;
 
     /**
      * Redoes the last undoable object.
      */
-    redo(): void;
+    abstract redo(): void;
 
     /**
      * @returns The stack of saved undoable objects.
      */
-    getUndo(): ReadonlyArray<Undoable>;
+    abstract getUndo(): ReadonlyArray<Undoable>;
 
     /**
      * @returns The stack of saved redoable objects
      */
-    getRedo(): ReadonlyArray<Undoable>;
+    abstract getRedo(): ReadonlyArray<Undoable>;
 
     /**
      * A stream for observing changes regarding the last undoable object.
      * @returns An observable value of optional undoable objects: if empty, this means
      * that no undoable object are stored anymore.
      */
-    undosObservable(): Observable<Undoable | undefined>;
+    abstract undosObservable(): Observable<Undoable | undefined>;
 
     /**
      * A stream for observing changes regarding the last redoable object.
      * @returns An observable value of optional redoable objects: if empty, this means
      * that no redoable object are stored anymore.
      */
-    redosObservable(): Observable<Undoable | undefined>;
+    abstract redosObservable(): Observable<Undoable | undefined>;
 
     /**
      * @returns The last undoable object or undefined if there is no last object.
      */
-    getLastUndo(): Undoable | undefined;
+    abstract getLastUndo(): Undoable | undefined;
 
     /**
      * @returns The last redoable object or undefined if there is no last object.
      */
-    getLastRedo(): Undoable | undefined;
+    abstract getLastRedo(): Undoable | undefined;
 
     /**
      * @returns The last undoable object name or undefined if there is no last object.
      */
-    getLastUndoMessage(): string | undefined;
+    abstract getLastUndoMessage(): string | undefined;
 
     /**
      * @returns The last redoable object name or undefined if there is no last object.
      */
-    getLastRedoMessage(): string | undefined;
+    abstract getLastRedoMessage(): string | undefined;
 
     /**
      * @returns The last undoable object name or an empty string if there is no last object.
      */
-    getLastOrEmptyUndoMessage(): string;
+    abstract getLastOrEmptyUndoMessage(): string;
 
     /**
      * @returns The last redoable object name or an empty string if there is no last object.
      */
-    getLastOrEmptyRedoMessage(): string;
+    abstract getLastOrEmptyRedoMessage(): string;
 
     /**
      * @returns The max number of saved undoable objects.
      */
-    getSizeMax(): number;
+    abstract getSizeMax(): number;
 
     /**
      * @param max - The max number of saved undoable objects. Must be great than 0.
      */
-    setSizeMax(max: number): void;
+    abstract setSizeMax(max: number): void;
 }

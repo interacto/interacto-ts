@@ -16,9 +16,9 @@ import type {Undoable} from "../../api/undo/Undoable";
 import type {Observable} from "rxjs";
 import {Subject} from "rxjs";
 import {peek} from "../util/ArrayUtil";
-import type {UndoHistory} from "../../api/undo/UndoHistory";
+import {UndoHistory} from "../../api/undo/UndoHistory";
 
-export class UndoHistoryImpl implements UndoHistory {
+export class UndoHistoryImpl extends UndoHistory {
     /**
      * Contains the undoable objects.
      */
@@ -39,6 +39,7 @@ export class UndoHistoryImpl implements UndoHistory {
     private readonly redoPublisher: Subject<Undoable | undefined>;
 
     public constructor() {
+        super();
         this.sizeMax = 0;
         this.undos = [];
         this.redos = [];

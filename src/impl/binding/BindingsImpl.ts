@@ -60,7 +60,6 @@ import {Undo} from "../command/library/Undo";
 import type {Binding} from "../../api/binding/Binding";
 import {Redo} from "../command/library/Redo";
 import type {
-    Bindings,
     PartialAnchorBinder,
     PartialButtonBinder,
     PartialInputBinder,
@@ -81,14 +80,16 @@ import type {
 } from "../../api/binding/Bindings";
 import type {UndoHistory} from "../../api/undo/UndoHistory";
 import {UndoHistoryImpl} from "../undo/UndoHistoryImpl";
+import {Bindings} from "../../api/binding/Bindings";
 
 
-export class BindingsImpl implements Bindings {
+export class BindingsImpl extends Bindings {
     private observer: BindingsObserver | undefined;
 
     private undoHistoryData: UndoHistory;
 
     public constructor() {
+        super();
         this.undoHistoryData = new UndoHistoryImpl();
     }
 

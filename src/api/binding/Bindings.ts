@@ -54,32 +54,39 @@ export type PartialPointSrcTgtBinder = InteractionUpdateBinder<Interaction<SrcTg
 export type PartialKeyBinder = KeyInteractionBinder<Interaction<KeyData>, KeyData>;
 export type PartialKeysBinder = KeyInteractionUpdateBinder<Interaction<KeysData>, KeysData>;
 
-export interface Bindings {
+/**
+ * A contextual object for creating binders and thus bindings.
+ * allows the observation of the created bindings.
+ * Provides an undo/redo history.
+ * Why a pure abstract class and not an interface?
+ * Because interfaces are not retained at runtime in TS and we want DI (that thus cannot inject interface types).
+ */
+export abstract class Bindings {
     /**
      * The undo/redo history of the current binding context
      */
-    readonly undoHistory: UndoHistory;
+    abstract readonly undoHistory: UndoHistory;
 
-    nodeBinder(): BaseUpdateBinder;
+    abstract nodeBinder(): BaseUpdateBinder;
 
     /**
      * Creates binding builder to build a binding between a button interaction and the given command type.
      * Do not forget to call bind() at the end of the build to execute the builder.
      * @returns The binding builder.
      */
-    buttonBinder(): PartialButtonBinder;
+    abstract buttonBinder(): PartialButtonBinder;
 
-    checkboxBinder(): PartialInputBinder;
+    abstract checkboxBinder(): PartialInputBinder;
 
-    colorPickerBinder(): PartialInputBinder;
+    abstract colorPickerBinder(): PartialInputBinder;
 
-    comboBoxBinder(): PartialSelectBinder;
+    abstract comboBoxBinder(): PartialSelectBinder;
 
-    spinnerBinder(): PartialSpinnerBinder;
+    abstract spinnerBinder(): PartialSpinnerBinder;
 
-    dateBinder(): PartialInputBinder;
+    abstract dateBinder(): PartialInputBinder;
 
-    hyperlinkBinder(): PartialAnchorBinder;
+    abstract hyperlinkBinder(): PartialAnchorBinder;
 
     /**
      * Creates a binding that uses a text interaction. This binder takes as argument a timeout value:
@@ -88,13 +95,13 @@ export interface Bindings {
      * This is a mainstream optimisation that many text processing tools implement to limit the number of editing actions.
      * @param timeout - The timeout in milliseconds after which the interaction stops and the command produced.
      */
-    textInputBinder(timeout?: number): PartialTextInputBinder;
+    abstract textInputBinder(timeout?: number): PartialTextInputBinder;
 
     /**
      * Creates a binding that uses the touch DnD interaction (a DnD interaction that uses one touch).
      * This interaction works as a Drag-and-Drop interaction.
      */
-    touchDnDBinder(): PartialTouchSrcTgtBinder;
+    abstract touchDnDBinder(): PartialTouchSrcTgtBinder;
 
     /**
      * Creates a binding that uses the multi-touch user interaction.
@@ -102,21 +109,21 @@ export interface Bindings {
      * A multi-touch starts when all its touches have started.
      * A multi-touch ends when the number of required touches is greater than the number of touches.
      */
-    multiTouchBinder(nbTouches: number): PartialMultiTouchBinder;
+    abstract multiTouchBinder(nbTouches: number): PartialMultiTouchBinder;
 
     /**
      * Creates a binding that uses the tap user interaction.
      * @param nbTap - The number of required taps.
      * If this number is not reached after a timeout, the interaction is cancelled.
      */
-    tapBinder(nbTap: number): PartialTapBinder;
+    abstract tapBinder(nbTap: number): PartialTapBinder;
 
     /**
      * Creates a binding that uses the long touch interaction.
      * @param duration - The duration of the touch to end the user interaction.
      * If this duration is not reached, the interaction is cancelled.
      */
-    longTouchBinder(duration: number): PartialTouchBinder;
+    abstract longTouchBinder(duration: number): PartialTouchBinder;
 
     /**
      * Creates a binding that uses the swipe interaction.
@@ -126,7 +133,7 @@ export interface Bindings {
      * @param minLength - The minimal distance from the starting point to the release point for validating the swipe
      * @param pxTolerance - The tolerance rate in pixels accepted while executing the swipe
      */
-    swipeBinder(horizontal: boolean, minVelocity: number, minLength: number, pxTolerance: number): PartialTouchSrcTgtBinder;
+    abstract swipeBinder(horizontal: boolean, minVelocity: number, minLength: number, pxTolerance: number): PartialTouchSrcTgtBinder;
 
     /**
      * Creates a binding that uses the pan interaction.
@@ -134,80 +141,80 @@ export interface Bindings {
      * @param minLength - The minimal distance from the starting point to the release point for validating the pan
      * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
      */
-    panBinder(horizontal: boolean, minLength: number, pxTolerance: number): PartialTouchSrcTgtBinder;
+    abstract panBinder(horizontal: boolean, minLength: number, pxTolerance: number): PartialTouchSrcTgtBinder;
 
     /**
      * Creates a binding that uses the click interaction.
      */
-    clickBinder(): PartialPointBinder;
+    abstract clickBinder(): PartialPointBinder;
 
     /**
      * Creates a binding that uses the double click interaction.
      */
-    dbleClickBinder(): PartialUpdatePointBinder;
+    abstract dbleClickBinder(): PartialUpdatePointBinder;
 
     /**
      * Creates a binding that uses the mouse press interaction.
      */
-    pressBinder(): PartialPointBinder;
+    abstract pressBinder(): PartialPointBinder;
 
     /**
      * Creates a binding that uses the long press interaction.
      * @param duration - The duration of the pressure to end the user interaction.
      * If this duration is not reached, the interaction is cancelled.
      */
-    longPressBinder(duration: number): PartialUpdatePointBinder;
+    abstract longPressBinder(duration: number): PartialUpdatePointBinder;
 
     /**
      * Creates a binding for clicking n times.
      * @param nbClicks - The number of clicks to do.
      * If this number is not reached, the interaction is cancelled after a timeout of 1s.
      */
-    clicksBinder(nbClicks: number): PartialPointsBinder;
+    abstract clicksBinder(nbClicks: number): PartialPointsBinder;
 
     /**
      * Creates a binding that uses the mouse scroll interaction.
      */
-    scrollBinder(): PartialScrollBinder;
+    abstract scrollBinder(): PartialScrollBinder;
 
     /**
      * Creates a binding that uses the DnD interaction.
      * @param cancellable - True: the escape key will cancels the DnD.
      */
-    dndBinder(cancellable: boolean): PartialPointSrcTgtBinder;
+    abstract dndBinder(cancellable: boolean): PartialPointSrcTgtBinder;
 
     /**
      * Creates a binding that uses the drag lock interaction.
      */
-    dragLockBinder(): PartialPointSrcTgtBinder;
+    abstract dragLockBinder(): PartialPointSrcTgtBinder;
 
     /**
      * Creates a binding that uses the key pressure interaction.
      * @param modifierAccepted - True: the interaction will consider key modifiers.
      */
-    keyPressBinder(modifierAccepted: boolean): PartialKeyBinder;
+    abstract keyPressBinder(modifierAccepted: boolean): PartialKeyBinder;
 
     /**
      * Creates a binding that uses the multiple key pressures interaction.
      */
-    keysPressBinder(): PartialKeysBinder;
+    abstract keysPressBinder(): PartialKeysBinder;
 
     /**
      * Creates a binding that uses the multiple key typings interaction.
      */
-    keysTypeBinder(): PartialKeysBinder;
+    abstract keysTypeBinder(): PartialKeysBinder;
 
     /**
      * Creates a binding that uses the key typing interaction.
      */
-    keyTypeBinder(): PartialKeyBinder;
+    abstract keyTypeBinder(): PartialKeyBinder;
 
     /**
      * Creates two bindings for undo and redo operations with buttons.
      * @param undo - The undo button
      * @param redo - The redo button
      */
-    undoRedoBinder(undo: Widget<HTMLButtonElement>, redo: Widget<HTMLButtonElement>):
+    abstract undoRedoBinder(undo: Widget<HTMLButtonElement>, redo: Widget<HTMLButtonElement>):
     [Binding<Undo, Interaction<WidgetData<HTMLButtonElement>>, WidgetData<HTMLButtonElement>>,
         Binding<Redo, Interaction<WidgetData<HTMLButtonElement>>, WidgetData<HTMLButtonElement>>];
 
@@ -216,11 +223,11 @@ export interface Bindings {
      * the possible current `BindingsObserver` object;
      * the undo/redo history.
      */
-    clear(): void;
+    abstract clear(): void;
 
     /**
      * Sets the current `BindingsObserver` object. Cleans the potential former global `BindingsObserver` object.
      * @param obs - The new `BindingsObserver` object to consider. Can be undefined.
      */
-    setBindingObserver(obs?: BindingsObserver): void;
+    abstract setBindingObserver(obs?: BindingsObserver): void;
 }
