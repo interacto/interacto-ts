@@ -67,8 +67,7 @@
     "coverage": "jest --coverage --collectCoverageFrom=src*/**/*.ts --coverageDirectory reports",
     "doc": "typedoc --theme minimal --out docs src/interacto.ts",
     "test-publish": "npm pack",
-    "gen-changelog": "git log --pretty=\"* %s\" $(git describe --tags --abbrev=0 @^)..@ | sort > commits",
-    "prepare-release": "npm run package && npm run test-publish && npm run gen-changelog"
+    "gen-changelog": "git log --pretty=\"* %s\" $(git describe --tags --abbrev=0 @^)..@ | sort > commits"
   },
   "dependencies": {
     "rxjs": "^6.5.4",
