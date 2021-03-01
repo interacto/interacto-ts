@@ -1,3 +1,29 @@
+# 5.5.0
+
+* new(binder): type aliases for shortening some writing of binders
+
+* change(api): encapsulating the bindings routines into a class
+* change(api): moving the undo/redo history into the bindings class. So removing the Single instance.
+* change(api): moving implementation classes into the impl folder
+* change(api): separating API / implementation of the UndoHistory
+* change(api): the error class must be located in the impl folder
+* change(api): the useless command registry and the registration policy removed
+* change(api): major refactoring of interaction data to match the Web API
+
+* clean(code): code simplification
+* clean(code): use 'import type' when possible
+* clean(code): use ? instead of undefined when possible
+* clean(interaction): simplification of the implementation of interactions
+
+* config(build): build the barrel during the packaging of the lib
+* config(linter): allowing type aliasing
+* config(pkg): changing the description of the lib in npm
+
+* refactor(interaction): interaction data implementation should not be located in the library folder
+
+* test(cmd): tests added or cleaned
+
+
 # 5.4.1
 
 * fix(release): incorrect release on NPM
