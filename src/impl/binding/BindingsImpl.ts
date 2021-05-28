@@ -88,9 +88,9 @@ export class BindingsImpl extends Bindings {
 
     private undoHistoryData: UndoHistory;
 
-    public constructor() {
+    public constructor(history?: UndoHistory) {
         super();
-        this.undoHistoryData = new UndoHistoryImpl();
+        this.undoHistoryData = history ?? new UndoHistoryImpl();
     }
 
     public get undoHistory(): UndoHistory {
