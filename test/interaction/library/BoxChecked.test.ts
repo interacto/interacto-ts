@@ -22,7 +22,6 @@ let boxCheck: HTMLInputElement;
 let handler: FSMHandler;
 
 beforeEach(() => {
-    jest.clearAllMocks();
     handler = mock<FSMHandler>();
     interaction = new BoxChecked();
     interaction.log(true);
@@ -30,13 +29,6 @@ beforeEach(() => {
     interaction.getFsm().addHandler(handler);
     boxCheck = document.createElement("input");
     boxCheck.type = "checkbox";
-});
-
-test("click event start and stop the interaction CheckBox", () => {
-    interaction.registerToNodes([boxCheck]);
-    boxCheck.click();
-    expect(handler.fsmStops).toHaveBeenCalledTimes(1);
-    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
 });
 
 test("input event trigger the interaction CheckBox", () => {

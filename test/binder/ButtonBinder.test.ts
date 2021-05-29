@@ -241,7 +241,9 @@ test("testCommandExecutedOnTwoButtonsSame", () => {
     binding = bindings.buttonBinder()
         .on(button1, button1)
         .toProduce(() => cmd)
-        .end(_i => cpt++)
+        .end(_i => {
+            cpt++;
+        })
         .bind();
 
     button1.click();
@@ -254,7 +256,7 @@ test("testCommandExecutedOnTwoButtonsSame", () => {
 test("testBuilderCloned", () => {
     const binder = bindings.buttonBinder();
 
-    expect(binder).not.toBe(bindings.buttonBinder);
+    expect(binder).not.toBe(bindings.buttonBinder());
     expect(binder).not.toBe(bindings.buttonBinder().toProduce(() => cmd));
     expect(binder).not.toBe(bindings.buttonBinder().toProduce(() => cmd)
         .first(() => { }));
@@ -272,10 +274,14 @@ test("testClonedBuildersSameWidgetCmdOK", () => {
         .toProduce(() => new StubCmd(true))
         .on(button1);
     binding = binder
-        .end(_i => cpt1++)
+        .end(_i => {
+            cpt1++;
+        })
         .bind();
     const binding2 = binder
-        .end(_i => cpt2++)
+        .end(_i => {
+            cpt2++;
+        })
         .bind();
 
     button1.click();
@@ -292,11 +298,15 @@ test("testClonedBuildersDiffWidgetsCmdOK", () => {
         .toProduce(() => new StubCmd(true));
     binding = binder
         .on(button1)
-        .end(_i => cpt1++)
+        .end(_i => {
+            cpt1++;
+        })
         .bind();
     const binding2 = binder
         .on(button2)
-        .end(_i => cpt2++)
+        .end(_i => {
+            cpt2++;
+        })
         .bind();
 
     button1.click();

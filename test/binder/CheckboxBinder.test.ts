@@ -16,6 +16,7 @@ import {BindingsImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
 import type {Bindings} from "../../src/api/binding/Bindings";
+import {robot} from "../interaction/StubEvents";
 
 let widget1: HTMLInputElement;
 let widget2: HTMLInputElement;
@@ -45,7 +46,7 @@ test("testCommandExecutedOnSingleButtonFunction", () => {
         .on(widget1)
         .bind();
 
-    widget1.click();
+    robot(widget1).input();
     expect(binding).toBeDefined();
     expect(cmd.exec).toStrictEqual(1);
 });
@@ -56,7 +57,7 @@ test("testCommandExecutedOnSingleButtonSupplier", () => {
         .on(widget1)
         .bind();
 
-    widget1.click();
+    robot(widget1).input();
     expect(binding).toBeDefined();
     expect(cmd.exec).toStrictEqual(1);
 });
@@ -67,8 +68,8 @@ test("testCommandExecutedOnTwoCheckboxes", () => {
         .on(widget1, widget2)
         .bind();
 
-    widget2.click();
-    widget1.click();
+    robot(widget2).input();
+    robot(widget1).input();
     expect(binding).toBeDefined();
     expect(ctx.commands).toHaveLength(2);
 });
@@ -82,7 +83,7 @@ test("testInit1Executed", () => {
         .on(widget1)
         .bind();
 
-    widget1.click();
+    robot(widget1).input();
     expect(binding).toBeDefined();
     expect(cmd.exec).toStrictEqual(11);
 });
@@ -96,7 +97,7 @@ test("testInit2Executed", () => {
         })
         .bind();
 
-    widget1.click();
+    robot(widget1).input();
     expect(binding).toBeDefined();
     expect(cmd.exec).toStrictEqual(11);
 });
@@ -108,7 +109,7 @@ test("testCheckFalse", () => {
         .toProduce(_i => cmd)
         .bind();
 
-    widget1.click();
+    robot(widget1).input();
     expect(binding).toBeDefined();
     expect(cmd.exec).toStrictEqual(0);
 });

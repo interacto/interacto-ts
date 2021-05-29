@@ -33,7 +33,6 @@ import {StubCmd, StubUndoableCmd} from "../command/StubCmd";
 import type {MouseEventForTest} from "../interaction/StubEvents";
 import {createMouseEvent, robot} from "../interaction/StubEvents";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
-import {flushPromises} from "../Utils";
 import type {Bindings} from "../../src/api/binding/Bindings";
 import {LogLevel} from "../../src/api/logging/LogLevel";
 
@@ -180,7 +179,7 @@ test("dnd binder", () => {
     expect(ctx.commands).toHaveLength(1);
 });
 
-test("dnd binder with throttling", async () => {
+test("dnd binder with throttling", () => {
     const fsm = bindings.dndBinder(false)
         .on(elt)
         .toProduce(() => new StubCmd(true))
@@ -219,7 +218,6 @@ test("dnd binder with throttling", async () => {
     jest.advanceTimersByTime(21);
     elt.dispatchEvent(evt7);
     jest.runAllTimers();
-    await flushPromises();
 
     expect(ctx.commands).toHaveLength(1);
     expect(fsm.process).toHaveBeenNthCalledWith(1, evt1);

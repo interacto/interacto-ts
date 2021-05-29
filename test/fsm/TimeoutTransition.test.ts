@@ -45,8 +45,6 @@ test("testIsGuardOKAfterTimeout", () => {
     evt.startTimeout();
     jest.runOnlyPendingTimers();
     expect(evt.isGuardOK(undefined)).toBeTruthy();
-    expect(setTimeout).toHaveBeenCalledTimes(1);
-    expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), 500);
 });
 
 test("testIsGuardKOBeforeTimeout", () => {
@@ -56,11 +54,10 @@ test("testIsGuardKOBeforeTimeout", () => {
 
 test("testacceptOKAfterTimeout", () => {
     evt.startTimeout();
-    expect(setTimeout).toHaveBeenCalledTimes(1);
-    expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), 500);
-    setTimeout(() => {
-    }, 100);
-    jest.runOnlyPendingTimers();
+    jest.advanceTimersByTime(499);
+    expect(fsm.onTimeout).not.toHaveBeenCalled();
+    jest.advanceTimersByTime(1);
+    expect(fsm.onTimeout).toHaveBeenCalledTimes(1);
     expect(evt.accept(undefined)).toBeTruthy();
 });
 

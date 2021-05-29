@@ -560,8 +560,6 @@ describe("testWithTimeoutTransition", () => {
         fsm.log(true);
         fsm.process(mock<Event>());
         jest.runOnlyPendingTimers();
-        expect(setTimeout).toHaveBeenCalledTimes(1);
-        expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), 100);
         expect(fsm.getCurrentState()).toStrictEqual(std2);
     });
 
@@ -576,8 +574,6 @@ describe("testWithTimeoutTransition", () => {
     test("testTimeoutStoppedOnOtherTransition", () => {
         fsm.process(mock<Event>());
         fsm.process(mock<Event>());
-        expect(setTimeout).toHaveBeenCalledTimes(1);
-        expect(clearTimeout).toHaveBeenCalledTimes(1);
         expect(fsm.getCurrentState()).toStrictEqual(fsm.initState);
     });
 

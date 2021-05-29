@@ -313,8 +313,12 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
                 if (this.asLogCmd) {
                     catCommand.info(`Continuous command execution had this result: ${String(executed)}`);
                 }
-            }).catch(ex => {
-                catCommand.error("Error while executing the command continuously", ex);
+            }).catch((ex: unknown) => {
+                if (ex instanceof Error) {
+                    catCommand.error("Error while executing the command continuously", ex);
+                } else {
+                    catCommand.warn(`Error while executing the command continuously: ${String(ex)}`);
+                }
             });
         } else {
             if (!ok) {
@@ -374,8 +378,12 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
                     // provoking sync issues (treatments are done as soon as the promise is resolved)
                     this.cmd = undefined;
                     this.timeEnded++;
-                }).catch(ex => {
-                    catCommand.error("Error while executing the command", ex);
+                }).catch((ex: unknown) => {
+                    if (ex instanceof Error) {
+                        catCommand.error("Error while executing the command", ex);
+                    } else {
+                        catCommand.warn(`Error while executing the command: ${String(ex)}`);
+                    }
                     this.cmd = undefined;
                     this.timeEnded++;
                 });

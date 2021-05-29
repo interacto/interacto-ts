@@ -204,7 +204,6 @@ describe("testing async commands and bindings", () => {
             button1.click();
             button1.click();
             advanceTimersByTime(10);
-            await flushPromises();
             runAllTimers();
             await flushPromises();
 
@@ -229,7 +228,6 @@ describe("testing async commands and bindings", () => {
             button1.click();
             button1.click();
             advanceTimersByTime(10);
-            await flushPromises();
             runAllTimers();
             await flushPromises();
 
@@ -260,7 +258,6 @@ describe("testing async commands and bindings", () => {
 
             button1.click();
             runAllTimers();
-            await flushPromises();
             button1.click();
             runAllTimers();
             await flushPromises();
@@ -292,11 +289,9 @@ describe("testing async commands and bindings", () => {
 
             button1.click();
             advanceTimersByTime(40);
-            await flushPromises();
             button1.click();
             // Triggering the command cmd2
             advanceTimersByTime(20);
-            await flushPromises();
             // Triggering the command cmd
             runAllTimers();
             await flushPromises();
