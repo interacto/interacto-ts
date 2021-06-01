@@ -22,10 +22,10 @@ let array2: Array<number>;
 beforeEach(() => {
     array1 = [0, 1, 2];
     array2 = [3, 4];
+    cmd = new TransferArrayItem<number>(array1, array2, 0, 1, "Transfer array item");
 });
 
 test("testCanDo", () => {
-    cmd = new TransferArrayItem<number>(array1, array2, 0, 0, "Transfer array item");
     expect(cmd.canExecute()).toBeTruthy();
 });
 
@@ -50,28 +50,60 @@ test("testCannotDoSrcIndex2TooHigh", () => {
 });
 
 test("testGetUndoName", () => {
-    cmd = new TransferArrayItem<number>(array1, array2, 0, 0, "Transfer array item");
     expect(cmd.getUndoName()).toStrictEqual("Transfer array item");
 });
 
 test("testRedo", () => {
-    cmd = new TransferArrayItem<number>(array1, array2, 0, 0, "Transfer array item");
     cmd.redo();
-    expect(array2[0]).toStrictEqual(0);
+    expect(array2[1]).toStrictEqual(0);
     expect(array1[0]).toStrictEqual(1);
 });
 
 test("testExecution", async () => {
-    cmd = new TransferArrayItem<number>(array1, array2, 0, 0, "Transfer array item");
     await cmd.execute();
-    expect(array2[0]).toStrictEqual(0);
+    expect(array2[1]).toStrictEqual(0);
     expect(array1[0]).toStrictEqual(1);
 });
 
 test("testUndo", async () => {
-    cmd = new TransferArrayItem<number>(array1, array2, 0, 0, "Transfer array item");
     await cmd.execute();
     cmd.undo();
-    expect(array2[0]).toStrictEqual(3);
+    expect(array2[1]).toStrictEqual(4);
     expect(array1[0]).toStrictEqual(0);
+});
+
+test("testGetSrcArray", () => {
+    expect(cmd.getSrcArray()).toStrictEqual(array1);
+});
+
+test("testGetTgtArray", () => {
+    expect(cmd.getTgtArray()).toStrictEqual(array2);
+});
+
+test("testSetSrcArray", () => {
+    cmd.setSrcArray(array2);
+    expect(cmd.getSrcArray()).toStrictEqual(array2);
+});
+
+test("testSetTgtArray", () => {
+    cmd.setTgtArray(array1);
+    expect(cmd.getTgtArray()).toStrictEqual(array1);
+});
+
+test("testGetSrcIndex", () => {
+    expect(cmd.getSrcIndex()).toStrictEqual(0);
+});
+
+test("testGetTgtIndex", () => {
+    expect(cmd.getTgtIndex()).toStrictEqual(1);
+});
+
+test("testSetSrcIndex", () => {
+    cmd.setSrcIndex(2);
+    expect(cmd.getSrcIndex()).toStrictEqual(2);
+});
+
+test("testSetTgtIndex", () => {
+    cmd.setTgtIndex(2);
+    expect(cmd.getTgtIndex()).toStrictEqual(2);
 });
