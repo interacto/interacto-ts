@@ -25,7 +25,10 @@ export interface InteractionCmdUpdateBinder<C extends Command, I extends Interac
     extends InteractionCmdBinder<C, I, D>, CmdUpdateBinderBuilder<C>, InteractionUpdateBinderBuilder<I, D> {
     /**
     * Specifies the update of the command on interaction command.
-    * @param fn - The callback method that updates the action.
+    * This routine is called only if 'when' returns true (ie only if
+    * the condition for producing the command is respected).
+    * See 'ifCannotExecute' for a 'then' when this condition is not respected.
+    * @param fn - The callback method that updates the command.
     * This callback takes as arguments the command to update and the ongoing interactions (and its parameters).
     * @returns The builder to chain the building configuration.
     */
