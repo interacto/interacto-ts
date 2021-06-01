@@ -73,37 +73,37 @@ test("testUndo", async () => {
 });
 
 test("testGetSrcArray", () => {
-    expect(cmd.getSrcArray()).toStrictEqual(array1);
+    expect(cmd.srcArray).toStrictEqual(array1);
 });
 
 test("testGetTgtArray", () => {
-    expect(cmd.getTgtArray()).toStrictEqual(array2);
+    expect(cmd.tgtArray).toStrictEqual(array2);
 });
 
 test("testSetSrcArray", () => {
-    cmd.setSrcArray(array2);
-    expect(cmd.getSrcArray()).toStrictEqual(array2);
+    cmd.srcArray = array2;
+    expect(cmd.srcArray).toStrictEqual(array2);
 });
 
 test("testSetTgtArray", () => {
-    cmd.setTgtArray(array1);
-    expect(cmd.getTgtArray()).toStrictEqual(array1);
+    cmd.tgtArray = array1;
+    expect(cmd.tgtArray).toStrictEqual(array1);
 });
 
 test("testGetSrcIndex", () => {
-    expect(cmd.getSrcIndex()).toStrictEqual(0);
+    expect(cmd.srcIndex).toStrictEqual(0);
 });
 
 test("testGetTgtIndex", () => {
-    expect(cmd.getTgtIndex()).toStrictEqual(1);
+    expect(cmd.tgtIndex).toStrictEqual(1);
 });
 
 test("testSetSrcIndex", () => {
-    cmd.setSrcIndex(2);
-    expect(cmd.getSrcIndex()).toStrictEqual(2);
+    cmd.srcIndex = 2;
+    expect(cmd.srcIndex).toStrictEqual(2);
 });
 
 test("testSetTgtIndex", () => {
-    cmd.setTgtIndex(2);
-    expect(cmd.getTgtIndex()).toStrictEqual(2);
+    cmd.tgtIndex = 2;
+    expect(cmd.tgtIndex).toStrictEqual(2);
 });

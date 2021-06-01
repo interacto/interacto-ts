@@ -1,3 +1,17 @@
+/*
+ * This file is part of Interacto.
+ * Interacto is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * Interacto is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 import {CommandBase} from "../CommandBase";
 import type {Undoable} from "../../../api/undo/Undoable";
 
@@ -8,22 +22,22 @@ export class TransferArrayItem<T> extends CommandBase implements Undoable {
     /**
      * The array to take the transferred element from.
      */
-    private srcArray: Array<T>;
+    private _srcArray: Array<T>;
 
     /**
      * The array to put the transferred element in.
      */
-    private tgtArray: Array<T>;
+    private _tgtArray: Array<T>;
 
     /**
      * The index at which the element is located in the source array.
      */
-    private srcIndex: number;
+    private _srcIndex: number;
 
     /**
      * The index at which the element must be put in the target array.
      */
-    private tgtIndex: number;
+    private _tgtIndex: number;
 
     /**
      * The name of the command.
@@ -44,10 +58,10 @@ export class TransferArrayItem<T> extends CommandBase implements Undoable {
                        tgtIndex: number,
                        cmdName: string) {
         super();
-        this.srcArray = srcArray;
-        this.tgtArray = tgtArray;
-        this.srcIndex = srcIndex;
-        this.tgtIndex = tgtIndex;
+        this._srcArray = srcArray;
+        this._tgtArray = tgtArray;
+        this._srcIndex = srcIndex;
+        this._tgtIndex = tgtIndex;
         this.cmdName = cmdName;
     }
 
@@ -56,8 +70,8 @@ export class TransferArrayItem<T> extends CommandBase implements Undoable {
     }
 
     public canExecute(): boolean {
-        return (this.srcIndex >= 0 && this.srcIndex < this.srcArray.length) &&
-            (this.tgtIndex >= 0 && this.tgtIndex <= this.tgtArray.length);
+        return (this._srcIndex >= 0 && this._srcIndex < this._srcArray.length) &&
+            (this._tgtIndex >= 0 && this._tgtIndex <= this._tgtArray.length);
     }
 
     public getUndoName(): string {
@@ -65,46 +79,46 @@ export class TransferArrayItem<T> extends CommandBase implements Undoable {
     }
 
     public redo(): void {
-        const elt = this.srcArray[this.srcIndex];
-        this.srcArray.splice(this.srcIndex, 1);
-        this.tgtArray.splice(this.tgtIndex, 0, elt);
+        const elt = this._srcArray[this._srcIndex];
+        this._srcArray.splice(this._srcIndex, 1);
+        this._tgtArray.splice(this._tgtIndex, 0, elt);
     }
 
     public undo(): void {
-        const elt = this.tgtArray[this.tgtIndex];
-        this.tgtArray.splice(this.tgtIndex, 1);
-        this.srcArray.splice(this.srcIndex, 0, elt);
+        const elt = this._tgtArray[this._tgtIndex];
+        this._tgtArray.splice(this._tgtIndex, 1);
+        this._srcArray.splice(this._srcIndex, 0, elt);
     }
 
-    public getSrcArray(): Array<T> {
-        return this.srcArray;
+    public get srcArray(): Array<T> {
+        return this._srcArray;
     }
 
-    public setSrcArray(array: Array<T>): void {
-        this.srcArray = array;
+    public set srcArray(value: Array<T>) {
+        this._srcArray = value;
     }
 
-    public getTgtArray(): Array<T> {
-        return this.tgtArray;
+    public get tgtArray(): Array<T> {
+        return this._tgtArray;
     }
 
-    public setTgtArray(array: Array<T>): void {
-        this.tgtArray = array;
+    public set tgtArray(value: Array<T>) {
+        this._tgtArray = value;
     }
 
-    public getSrcIndex(): number {
-        return this.srcIndex;
+    public get srcIndex(): number {
+        return this._srcIndex;
     }
 
-    public setSrcIndex(index: number): void {
-        this.srcIndex = index;
+    public set srcIndex(value: number) {
+        this._srcIndex = value;
     }
 
-    public getTgtIndex(): number {
-        return this.tgtIndex;
+    public get tgtIndex(): number {
+        return this._tgtIndex;
     }
 
-    public setTgtIndex(index: number): void {
-        this.tgtIndex = index;
+    public set tgtIndex(value: number) {
+        this._tgtIndex = value;
     }
 }
