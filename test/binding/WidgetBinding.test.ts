@@ -70,6 +70,10 @@ class CmdStubUndoable extends StubCmd implements Undoable {
     public getUndoName(): string {
         return "";
     }
+
+    public getVisualSnapshot(): SVGElement | string | undefined {
+        return undefined;
+    }
 }
 
 let binding: BindingStub;
