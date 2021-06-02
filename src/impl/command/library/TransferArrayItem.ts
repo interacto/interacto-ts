@@ -12,13 +12,12 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {CommandBase} from "../CommandBase";
-import type {Undoable} from "../../../api/undo/Undoable";
+import {UndoableCommand} from "../UndoableCommand";
 
 /**
  * An undoable command that transfers an element from one array to another.
  */
-export class TransferArrayItem<T> extends CommandBase implements Undoable {
+export class TransferArrayItem<T> extends UndoableCommand {
     /**
      * The array to take the transferred element from.
      */

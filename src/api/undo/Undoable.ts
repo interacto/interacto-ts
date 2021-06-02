@@ -30,6 +30,12 @@ export interface Undoable {
      * @returns The name of the undo command.
      */
     getUndoName(): string;
+
+    /**
+     * Gives some information about the impact of a command.
+     * @returns Information about the impact of the commmand as an SVG element or text.
+     */
+    getVisualSnapshot(): SVGElement | string | undefined;
 }
 
 export function isUndoableType(obj: unknown): obj is Undoable {
