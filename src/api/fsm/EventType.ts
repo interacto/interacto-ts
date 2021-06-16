@@ -19,6 +19,8 @@ export const eventTypes = [
     "mousedown",
     "mouseup",
     "mousemove",
+    "mouseover",
+    "mouseout",
     "keydown",
     "keyup",
     "click",

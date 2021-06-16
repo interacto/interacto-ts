@@ -110,7 +110,7 @@ export function createMouseEvent2(type: "auxclick" | "click" | "mousedown" | "mo
 }
 
 
-export function createMouseEvent(type: "auxclick" | "click" | "mousedown" | "mousemove" | "mouseup",
+export function createMouseEvent(type: "auxclick" | "click" | "mousedown" | "mousemove" | "mouseout" | "mouseover" | "mouseup",
                                  target: EventTarget, screenX?: number, screenY?: number, clientX?: number,
                                  clientY?: number, button?: number): MouseEvent {
     const screenXvalue = screenX ?? 0;
