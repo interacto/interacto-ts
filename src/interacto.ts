@@ -63,6 +63,7 @@ export * from "./impl/command/AnonCmd";
 export * from "./impl/command/CommandBase";
 export * from "./impl/command/UndoableCommand";
 export * from "./impl/command/library/Redo";
+export * from "./impl/command/library/SetProperties";
 export * from "./impl/command/library/SetProperty";
 export * from "./impl/command/library/TransferArrayItem";
 export * from "./impl/command/library/Undo";
