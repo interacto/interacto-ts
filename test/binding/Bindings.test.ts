@@ -171,6 +171,15 @@ test("mouseout binder", () => {
     expect(ctx.commands).toHaveLength(1);
 });
 
+test("mousemove binder", () => {
+    bindings.mousemoveBinder()
+        .on(elt)
+        .toProduce(() => new StubCmd(true))
+        .bind();
+    robot().mousemove(elt);
+    expect(ctx.commands).toHaveLength(1);
+});
+
 test("drag lock binder", () => {
     bindings.dragLockBinder()
         .on(elt)

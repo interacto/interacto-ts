@@ -185,6 +185,11 @@ export abstract class Bindings {
     abstract mouseoutBinder(withBubbling: boolean): PartialPointBinder;
 
     /**
+     * Creates a binding that uses the mousemove interaction.
+     */
+    abstract mousemoveBinder(): PartialPointBinder;
+
+    /**
      * Creates a binding that uses the mouse scroll interaction.
      */
     abstract scrollBinder(): PartialScrollBinder;
