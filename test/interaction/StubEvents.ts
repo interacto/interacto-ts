@@ -31,6 +31,10 @@ export interface NonoRobot {
     auxclick(params?: EventTarget | (EventTargetInit & MouseEventInit)): this;
     mousemove(params?: EventTarget | (EventTargetInit & MouseEventInit)): this;
     mouseup(params?: EventTarget | (EventTargetInit & MouseEventInit)): this;
+    mouseover(params?: EventTarget | (EventTargetInit & MouseEventInit)): this;
+    mouseout(params?: EventTarget | (EventTargetInit & MouseEventInit)): this;
+    mouseenter(params?: EventTarget | (EventTargetInit & MouseEventInit)): this;
+    mouseleave(params?: EventTarget | (EventTargetInit & MouseEventInit)): this;
     input(params?: EventTarget | (EventTargetInit & InputEventInit)): this;
     change(params?: EventTarget | (EventTargetInit & InputEventInit)): this;
     keydown(params?: EventTarget | (EventTargetInit & KeyboardEventInit)): this;
@@ -87,9 +91,9 @@ export function createTouchEvent(type: "touchend" | "touchmove" | "touchstart", 
 }
 
 
-export function createMouseEvent2(type: "auxclick" | "click" | "mousedown" | "mousemove" | "mouseup",
+export function createMouseEvent2(type: "auxclick" | "click" | "mousedown" | "mousemove" | "mouseout" | "mouseover" | "mouseup",
                                   data: Partial<PointData>): MouseEvent {
-    const evt = new MouseEvent("click", data);
+    const evt = new MouseEvent(type, data);
 
     Object.defineProperty(evt, "offsetX", {"value": data.offsetX});
     Object.defineProperty(evt, "offsetY", {"value": data.offsetY});
@@ -110,7 +114,8 @@ export function createMouseEvent2(type: "auxclick" | "click" | "mousedown" | "mo
 }
 
 
-export function createMouseEvent(type: "auxclick" | "click" | "mousedown" | "mousemove" | "mouseout" | "mouseover" | "mouseup",
+export function createMouseEvent(type: "auxclick" | "click" | "mousedown" | "mouseenter" | "mouseleave" | "mousemove" |
+"mouseout" | "mouseover" | "mouseup",
                                  target: EventTarget, screenX?: number, screenY?: number, clientX?: number,
                                  clientY?: number, button?: number): MouseEvent {
     const screenXvalue = screenX ?? 0;
@@ -221,7 +226,8 @@ class NonoRobotImpl implements NonoRobot {
 
     }
 
-    private processMouseEvent(type: "auxclick" | "click" | "dblclick" | "mousedown" | "mousemove" | "mouseup",
+    private processMouseEvent(type: "auxclick" | "click" | "dblclick" | "mousedown" | "mouseenter" | "mouseleave" |
+    "mousemove" | "mouseout" | "mouseover" | "mouseup",
                               params?: EventTarget | (EventTargetInit & MouseEventInit)): this {
         this.checkEventTarget(params).dispatchEvent(new MouseEvent(type, this.fixingParameters(params ?? {})));
         return this;
@@ -294,6 +300,22 @@ class NonoRobotImpl implements NonoRobot {
 
     public mouseup(params?: EventTarget | (EventTargetInit & MouseEventInit)): this {
         return this.processMouseEvent("mouseup", params);
+    }
+
+    public mouseover(params?: EventTarget | (EventTargetInit & MouseEventInit)): this {
+        return this.processMouseEvent("mouseover", params);
+    }
+
+    public mouseout(params?: EventTarget | (EventTargetInit & MouseEventInit)): this {
+        return this.processMouseEvent("mouseout", params);
+    }
+
+    public mouseenter(params?: EventTarget | (EventTargetInit & MouseEventInit)): this {
+        return this.processMouseEvent("mouseenter", params);
+    }
+
+    public mouseleave(params?: EventTarget | (EventTargetInit & MouseEventInit)): this {
+        return this.processMouseEvent("mouseleave", params);
     }
 
     public scroll(params?: EventTarget | (EventTargetInit & UIEventInit)): this {

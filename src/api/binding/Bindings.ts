@@ -173,6 +173,18 @@ export abstract class Bindings {
     abstract clicksBinder(nbClicks: number): PartialPointsBinder;
 
     /**
+     * Creates a binding that uses the mouseover interaction.
+     * @param withBubbling - True: event bubbling is enabled and events on child elements will be registered
+     */
+    abstract mouseoverBinder(withBubbling: boolean): PartialPointBinder;
+
+    /**
+     * Creates a binding that uses the mouseout interaction.
+     * @param withBubbling - True: event bubbling is enabled and events on child elements will be registered
+     */
+    abstract mouseoutBinder(withBubbling: boolean): PartialPointBinder;
+
+    /**
      * Creates a binding that uses the mouse scroll interaction.
      */
     abstract scrollBinder(): PartialScrollBinder;

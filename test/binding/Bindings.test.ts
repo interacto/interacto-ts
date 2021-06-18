@@ -153,6 +153,24 @@ test("double click binder", () => {
     expect(ctx.commands).toHaveLength(1);
 });
 
+test("mouseover binder", () => {
+    bindings.mouseoverBinder(true)
+        .on(elt)
+        .toProduce(() => new StubCmd(true))
+        .bind();
+    robot().mouseover(elt);
+    expect(ctx.commands).toHaveLength(1);
+});
+
+test("mouseout binder", () => {
+    bindings.mouseoutBinder(true)
+        .on(elt)
+        .toProduce(() => new StubCmd(true))
+        .bind();
+    robot().mouseout(elt);
+    expect(ctx.commands).toHaveLength(1);
+});
+
 test("drag lock binder", () => {
     bindings.dragLockBinder()
         .on(elt)
