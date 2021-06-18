@@ -56,6 +56,7 @@ import {LongPress} from "../interaction/library/LongPress";
 import {Clicks} from "../interaction/library/Clicks";
 import {Mouseout} from "../interaction/library/Mouseout";
 import {Mouseover} from "../interaction/library/Mouseover";
+import {Mousemove} from "../interaction/library/Mousemove";
 import type {PointsData} from "../../api/interaction/PointsData";
 import type {Widget} from "../../api/binder/BaseBinderBuilder";
 import {Undo} from "../command/library/Undo";
@@ -83,7 +84,6 @@ import type {
 import type {UndoHistory} from "../../api/undo/UndoHistory";
 import {UndoHistoryImpl} from "../undo/UndoHistoryImpl";
 import {Bindings} from "../../api/binding/Bindings";
-
 
 export class BindingsImpl extends Bindings {
     private observer: BindingsObserver | undefined;
@@ -267,6 +267,14 @@ export class BindingsImpl extends Bindings {
     public mouseoverBinder(withBubbling: boolean): PartialPointBinder {
         return new UpdateBinder(this.undoHistory, this.observer)
             .usingInteraction<Mouseover, PointData>(() => new Mouseover(withBubbling));
+    }
+
+    /**
+     * Creates a binding that uses the mousemove interaction.
+     */
+    public mousemoveBinder(): PartialPointBinder {
+        return new UpdateBinder(this.undoHistory, this.observer)
+            .usingInteraction<Mousemove, PointData>(() => new Mousemove());
     }
 
     /**
