@@ -54,6 +54,8 @@ import {KeysBinder} from "../binder/KeysBinder";
 import {TouchDnD} from "../interaction/library/TouchDnD";
 import {LongPress} from "../interaction/library/LongPress";
 import {Clicks} from "../interaction/library/Clicks";
+import {Mouseout} from "../interaction/library/Mouseout";
+import {Mouseover} from "../interaction/library/Mouseover";
 import type {PointsData} from "../../api/interaction/PointsData";
 import type {Widget} from "../../api/binder/BaseBinderBuilder";
 import {Undo} from "../command/library/Undo";
@@ -247,6 +249,24 @@ export class BindingsImpl extends Bindings {
     public clicksBinder(nbClicks: number): PartialPointsBinder {
         return new UpdateBinder(this.undoHistory, this.observer)
             .usingInteraction<Clicks, PointsData>(() => new Clicks(nbClicks));
+    }
+
+    /**
+     * Creates a binding that uses the mouseout interaction.
+     * @param withBubbling - True: event bubbling is enabled and events on child elements will be registered
+     */
+    public mouseoutBinder(withBubbling: boolean): PartialPointBinder {
+        return new UpdateBinder(this.undoHistory, this.observer)
+            .usingInteraction<Mouseout, PointData>(() => new Mouseout(withBubbling));
+    }
+
+    /**
+     * Creates a binding that uses the mouseover interaction.
+     * @param withBubbling - True: event bubbling is enabled and events on child elements will be registered
+     */
+    public mouseoverBinder(withBubbling: boolean): PartialPointBinder {
+        return new UpdateBinder(this.undoHistory, this.observer)
+            .usingInteraction<Mouseover, PointData>(() => new Mouseover(withBubbling));
     }
 
     /**
