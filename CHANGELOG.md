@@ -1,3 +1,21 @@
+# 5.6.0
+
+* feat(bindings): Mousemove binding and user interaction added
+* feat(bindings): mouseout and mouseover bindings and user interactions added
+* feat(command): Added new command TransferArrayItem (#14)
+* feat(command): Added UndoableCommand (#15)
+* feat(command): new command setProperties
+* feat(command): new command setProperty
+* feat(undo): can specify the undo history to the context
+  
+* config(pkg): irrelevant script cmd removed
+* config(deps): dependencies updated
+
+* doc(api): typedoc improved
+* doc(build): Added build instructions
+
+
+
 # 5.5.0
 
 * new(binder): type aliases for shortening some writing of binders
