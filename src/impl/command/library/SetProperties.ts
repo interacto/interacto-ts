@@ -23,19 +23,28 @@ import {SetProperty} from "./SetProperty";
 export class SetProperties<T> extends UndoableCommand {
     public readonly obj: T;
 
-    public readonly newvalues: Partial<T>;
+    private _newvalues: Partial<T>;
 
     public readonly compositeCmds: Array<SetProperty<T, keyof T>>;
 
     public constructor(obj: T, newvalues: Partial<T>) {
         super();
         this.obj = obj;
-        this.newvalues = newvalues;
+
         this.compositeCmds = [];
+        this.newvalues = newvalues;
+    }
+
+    public get newvalues(): Partial<T> {
+        return this._newvalues;
+    }
+
+    public set newvalues(v: Partial<T>) {
+        this._newvalues = v;
 
         // eslint-disable-next-line guard-for-in,no-restricted-syntax
-        for (const key in newvalues) {
-            this.compositeCmds.push(new SetProperty<T, keyof T>(obj, key, newvalues[key] as T[keyof T]));
+        for (const key in v) {
+            this.compositeCmds.push(new SetProperty<T, keyof T>(this.obj, key, v[key] as T[keyof T]));
         }
     }
 

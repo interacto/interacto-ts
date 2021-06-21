@@ -93,6 +93,16 @@ describe("using a public string getter/setter", () => {
         expect(obj.foo2).toBe("yolo");
     });
 
+    test("execute works when set again", async () => {
+        cmd.newvalue = "yoo";
+        const res = await cmd.execute();
+        cmd.done();
+
+        expect(res).toBeTruthy();
+        expect(cmd.hadEffect()).toBeTruthy();
+        expect(obj.foo2).toBe("yoo");
+    });
+
     test("undo works", async () => {
         obj.foo2 = "fooo";
         await cmd.execute();

@@ -72,6 +72,22 @@ describe("using properties", () => {
         expect(obj.bar).toBe(obj2);
     });
 
+    test("execute works when set again", async () => {
+        cmd.newvalues = {
+            "foo2": "ffooo",
+            "foo": 2
+        };
+        const res = await cmd.execute();
+        cmd.done();
+
+        expect(res).toBeTruthy();
+        expect(cmd.hadEffect()).toBeTruthy();
+        expect(obj.foo).toBe(2);
+        expect(obj.foo2).toBe("ffooo");
+        expect(obj["5"]).toBe(6);
+        expect(obj.bar).toBe(obj2);
+    });
+
     test("undo works", async () => {
         await cmd.execute();
         cmd.undo();

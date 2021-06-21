@@ -25,7 +25,7 @@ export class SetProperty<T, S extends keyof T> extends UndoableCommand {
 
     private readonly prop: S;
 
-    private readonly newvalue: T[S];
+    public newvalue: T[S];
 
     private mementoValue: T[S];
 
