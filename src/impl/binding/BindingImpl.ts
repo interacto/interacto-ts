@@ -24,13 +24,14 @@ import {MustBeUndoableCmdError} from "./MustBeUndoableCmdError";
 import type {Binding} from "../../api/binding/Binding";
 import type {Interaction} from "../../api/interaction/Interaction";
 import type {UndoHistory} from "../../api/undo/UndoHistory";
+import type {FSMHandler} from "../../api/fsm/FSMHandler";
 
 /**
  * The base class to do bindings, i.e. bindings between user interactions and (undoable) commands.
  * @typeParam C - The type of the command that will produce this binding.
  * @typeParam I - The type of the interaction that will use this binding.
  */
-export class BindingImpl<C extends Command, I extends Interaction<D>, D extends InteractionData> implements Binding<C, I, D> {
+export class BindingImpl<C extends Command, I extends Interaction<D>, D extends InteractionData> implements Binding<C, I, D>, FSMHandler {
 
     protected timeEnded: number;
 

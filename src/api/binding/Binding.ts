@@ -12,7 +12,6 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMHandler} from "../fsm/FSMHandler";
 import type {Interaction} from "../interaction/Interaction";
 import type {Command} from "../command/Command";
 import type {Observable} from "rxjs";
@@ -21,7 +20,7 @@ import type {InteractionData} from "../interaction/InteractionData";
 /**
  * The concept of binding and its related services.
  */
-export interface Binding<C extends Command, I extends Interaction<D>, D extends InteractionData> extends FSMHandler {
+export interface Binding<C extends Command, I extends Interaction<D>, D extends InteractionData> {
     /**
      * @returns The interaction.
      */
