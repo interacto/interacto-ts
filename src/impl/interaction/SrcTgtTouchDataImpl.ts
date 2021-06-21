@@ -48,4 +48,28 @@ export class SrcTgtTouchDataImpl implements SrcTgtPointsData<TouchData> {
     public copyTgt(data: Touch, evt: EventModifierData & UnitInteractionData): void {
         this.tgtData.copy(TouchDataImpl.mergeTouchEventData(data, evt));
     }
+
+    public get diffClientX(): number {
+        return this.tgt.clientX - this.src.clientX;
+    }
+
+    public get diffClientY(): number {
+        return this.tgt.clientY - this.src.clientY;
+    }
+
+    public get diffPageX(): number {
+        return this.tgt.pageX - this.src.pageX;
+    }
+
+    public get diffPageY(): number {
+        return this.tgt.pageY - this.src.pageY;
+    }
+
+    public get diffScreenX(): number {
+        return this.tgt.screenX - this.src.screenX;
+    }
+
+    public get diffScreenY(): number {
+        return this.tgt.screenY - this.src.screenY;
+    }
 }
