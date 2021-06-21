@@ -17,6 +17,7 @@ import {TouchDnD} from "../../../src/interacto";
 import {createTouchEvent} from "../StubEvents";
 import {mock} from "jest-mock-extended";
 import {TouchDataImpl} from "../../../src/impl/interaction/TouchDataImpl";
+import {StubFSMHandler} from "../../fsm/StubFSMHandler";
 
 let interaction: TouchDnD;
 let canvas: HTMLElement;
@@ -263,4 +264,31 @@ test("no modifiers and button", () => {
     expect(interaction.getData().src.ctrlKey).toBeFalsy();
     expect(interaction.getData().src.metaKey).toBeFalsy();
     expect(interaction.getData().src.shiftKey).toBeFalsy();
+});
+
+test("displacement data", () => {
+    let diffClientX: number | undefined;
+    let diffClientY: number | undefined;
+    let diffScreenX: number | undefined;
+    let diffScreenY: number | undefined;
+
+
+    interaction.getFsm().addHandler(new class extends StubFSMHandler {
+        public fsmStops(): void {
+            diffClientX = interaction.getData().diffClientX;
+            diffClientY = interaction.getData().diffClientY;
+            diffScreenX = interaction.getData().diffScreenX;
+            diffScreenY = interaction.getData().diffScreenY;
+        }
+    }());
+
+    interaction.registerToNodes([canvas]);
+
+    interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 11, 23, 12, 25));
+    interaction.processEvent(createTouchEvent("touchmove", 3, canvas, 11, 24, 14, 28));
+    interaction.processEvent(createTouchEvent("touchend", 3, canvas, 171, 274, 174, 278));
+    expect(diffClientX).toBe(162);
+    expect(diffClientY).toBe(253);
+    expect(diffScreenX).toBe(160);
+    expect(diffScreenY).toBe(251);
 });

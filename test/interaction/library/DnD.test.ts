@@ -244,3 +244,31 @@ test("check data with one move.", () => {
     expect(tx).toBe(15);
     expect(ty).toBe(25);
 });
+
+test("displacement data", () => {
+    let diffClientX: number | undefined;
+    let diffClientY: number | undefined;
+    let diffScreenX: number | undefined;
+    let diffScreenY: number | undefined;
+
+
+    interaction.getFsm().addHandler(new class extends StubFSMHandler {
+        public fsmStops(): void {
+            diffClientX = interaction.getData().diffClientX;
+            diffClientY = interaction.getData().diffClientY;
+            diffScreenX = interaction.getData().diffScreenX;
+            diffScreenY = interaction.getData().diffScreenY;
+        }
+    }());
+
+    interaction.registerToNodes([canvas]);
+
+    robot(canvas)
+        .mousedown({"screenX": 1, "screenY": 2, "clientX": 11, "clientY": 23, "button": 0})
+        .mousemove({"screenX": 3, "screenY": 4, "clientX": 15, "clientY": 25, "button": 0})
+        .mouseup({"screenX": 3, "screenY": 4, "clientX": 15, "clientY": 25, "button": 0});
+    expect(diffClientX).toBe(4);
+    expect(diffClientY).toBe(2);
+    expect(diffScreenX).toBe(2);
+    expect(diffScreenY).toBe(2);
+});
