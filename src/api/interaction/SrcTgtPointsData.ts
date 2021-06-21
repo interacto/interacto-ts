@@ -27,7 +27,7 @@ export interface SrcTgtPointsData<T extends PointBaseData> extends InteractionDa
 
     /**
      * The target point data.
-     * At the beginning of the interaction, the target data has the same values
+     * At the beginning of the interaction, the target data have the same values
      * as the source data.
      */
     readonly tgt: T;
