@@ -36,7 +36,7 @@ export class SetProperty<T, S extends keyof T> extends UndoableCommand {
         this.newvalue = newvalue;
     }
 
-    protected createMemento(): void {
+    protected override createMemento(): void {
         this.mementoValue = this.obj[this.prop];
     }
 
@@ -52,7 +52,7 @@ export class SetProperty<T, S extends keyof T> extends UndoableCommand {
         this.obj[this.prop] = this.mementoValue;
     }
 
-    public getUndoName(): string {
+    public override getUndoName(): string {
         return `Set ${String(this.prop)} value`;
     }
 }

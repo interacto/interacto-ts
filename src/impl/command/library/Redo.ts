@@ -26,7 +26,7 @@ export class Redo extends CommandBase {
         this.history = undoHistory;
     }
 
-    public canExecute(): boolean {
+    public override canExecute(): boolean {
         return this.history.getLastRedo() !== undefined;
     }
 

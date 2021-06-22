@@ -62,13 +62,13 @@ export class DoubleClickFSM extends FSMImpl {
     }
 
 
-    public log(log: boolean): void {
+    public override log(log: boolean): void {
         super.log(log);
         this.firstClickFSM.log(log);
         this.sndClickFSM.log(log);
     }
 
-    public buildFSM(dataHandler?: FSMDataHandler): void {
+    public override buildFSM(dataHandler?: FSMDataHandler): void {
         if (this.states.length > 1) {
             return;
         }
@@ -110,13 +110,13 @@ export class DoubleClickFSM extends FSMImpl {
     }
 
 
-    public fullReinit(): void {
+    public override fullReinit(): void {
         super.fullReinit();
         this.firstClickFSM.fullReinit();
         this.sndClickFSM.fullReinit();
     }
 
-    public reinit(): void {
+    public override reinit(): void {
         super.reinit();
         this.firstClickFSM.reinit();
         this.sndClickFSM.reinit();

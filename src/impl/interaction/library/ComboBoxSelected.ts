@@ -26,7 +26,7 @@ export class ComboBoxSelectedFSM extends FSMImpl {
         super();
     }
 
-    public buildFSM(dataHandler?: ComboBoxSelectedHandler): void {
+    public override buildFSM(dataHandler?: ComboBoxSelectedHandler): void {
         if (this.states.length > 1) {
             return;
         }
@@ -72,13 +72,13 @@ export class ComboBoxSelected extends InteractionBase<WidgetData<HTMLSelectEleme
         this.fsm.buildFSM(this.handler);
     }
 
-    public onNewNodeRegistered(node: EventTarget): void {
+    public override onNewNodeRegistered(node: EventTarget): void {
         if (isComboBox(node)) {
             this.registerActionHandlerInput(node);
         }
     }
 
-    public onNodeUnregistered(node: EventTarget): void {
+    public override onNodeUnregistered(node: EventTarget): void {
         if (isComboBox(node)) {
             this.unregisterActionHandlerInput(node);
         }

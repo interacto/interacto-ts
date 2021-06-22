@@ -47,7 +47,7 @@ class LongTouchFSM extends FSMImpl {
         this.currentTouchID = undefined;
     }
 
-    public buildFSM(dataHandler?: LongTouchFSMHandler): void {
+    public override buildFSM(dataHandler?: LongTouchFSMHandler): void {
         if (this.states.length > 1) {
             return;
         }
@@ -74,7 +74,7 @@ class LongTouchFSM extends FSMImpl {
         super.buildFSM(dataHandler);
     }
 
-    public reinit(): void {
+    public override reinit(): void {
         super.reinit();
         this.currentTouchID = undefined;
     }

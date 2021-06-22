@@ -39,7 +39,7 @@ export class MouseoverFSM extends FSMImpl {
         this.withBubbling = withBubbling;
     }
 
-    public buildFSM(dataHandler?: MouseoverFSMHandler): void {
+    public override buildFSM(dataHandler?: MouseoverFSMHandler): void {
         if (this.states.length > 1) {
             return;
         }

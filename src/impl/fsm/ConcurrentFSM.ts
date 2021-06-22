@@ -57,22 +57,22 @@ export class ConcurrentFSM<F extends FSM> extends FSMImpl {
         return [...this.conccurFSMs];
     }
 
-    public process(event: Event): boolean {
+    public override process(event: Event): boolean {
         return this.conccurFSMs.some(conccurFSM => conccurFSM.process(event));
     }
 
-    public isStarted(): boolean {
+    public override isStarted(): boolean {
         return this.conccurFSMs.every(fsm => fsm.isStarted());
     }
 
-    public log(log: boolean): void {
+    public override log(log: boolean): void {
         super.log(log);
         this.conccurFSMs.forEach(fsm => {
             fsm.log(log);
         });
     }
 
-    public uninstall(): void {
+    public override uninstall(): void {
         super.uninstall();
         this.conccurFSMs.forEach(fsm => {
             fsm.uninstall();

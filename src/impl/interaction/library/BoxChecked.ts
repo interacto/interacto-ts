@@ -27,7 +27,7 @@ export class BoxCheckedFSM extends FSMImpl {
         super();
     }
 
-    public buildFSM(dataHandler?: BoxCheckedHandler): void {
+    public override buildFSM(dataHandler?: BoxCheckedHandler): void {
         if (this.states.length > 1) {
             return;
         }
@@ -71,13 +71,13 @@ export class BoxChecked extends InteractionBase<WidgetData<HTMLInputElement>, Wi
         this.fsm.buildFSM(this.handler);
     }
 
-    public onNewNodeRegistered(node: EventTarget): void {
+    public override onNewNodeRegistered(node: EventTarget): void {
         if (isCheckBox(node)) {
             this.registerActionHandlerInput(node);
         }
     }
 
-    public onNodeUnregistered(node: EventTarget): void {
+    public override onNodeUnregistered(node: EventTarget): void {
         if (isCheckBox(node)) {
             this.unregisterActionHandlerInput(node);
         }

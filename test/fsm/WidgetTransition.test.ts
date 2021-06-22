@@ -28,7 +28,7 @@ class WTransition extends WidgetTransition<string> {
         return false;
     }
 
-    public isGuardOK(_event: Event): boolean {
+    public override isGuardOK(_event: Event): boolean {
         return false;
     }
 

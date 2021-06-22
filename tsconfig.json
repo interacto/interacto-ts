@@ -13,7 +13,8 @@
     "noUnusedLocals": true,
     "removeComments": true,
     "noImplicitReturns": true,
-    "declaration": true
+    "declaration": true,
+    "noImplicitOverride": true
   },
   "include": [
     "src/**/*"

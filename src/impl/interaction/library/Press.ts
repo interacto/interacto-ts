@@ -21,7 +21,7 @@ import {InteractionBase} from "../InteractionBase";
 import {PointDataImpl} from "../PointDataImpl";
 
 export class PressFSM extends FSMImpl {
-    public buildFSM(dataHandler?: PressFSMHandler): void {
+    public override buildFSM(dataHandler?: PressFSMHandler): void {
         if (this.states.length > 1) {
             return;
         }

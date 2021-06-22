@@ -47,7 +47,7 @@ export class LongPressFSM extends FSMImpl {
         this.currentButton = undefined;
     }
 
-    public buildFSM(dataHandler?: LongPressFSMHandler): void {
+    public override buildFSM(dataHandler?: LongPressFSMHandler): void {
         if (this.states.length > 1) {
             return;
         }
@@ -74,7 +74,7 @@ export class LongPressFSM extends FSMImpl {
         new TimeoutTransition(down, timeouted, () => this.duration);
     }
 
-    public reinit(): void {
+    public override reinit(): void {
         super.reinit();
         this.currentButton = undefined;
     }

@@ -68,7 +68,7 @@ export class TouchDataImpl extends PointingDataBase implements TouchData {
     }
 
 
-    public copy(data: TouchData): void {
+    public override copy(data: TouchData): void {
         super.copy(data);
         this.altitudeAngleData = data.altitudeAngle;
         this.azimuthAngleData = data.azimuthAngle;
@@ -80,7 +80,7 @@ export class TouchDataImpl extends PointingDataBase implements TouchData {
         this.touchTypeData = data.touchType;
     }
 
-    public flush(): void {
+    public override flush(): void {
         super.flush();
         this.altitudeAngleData = 0;
         this.azimuthAngleData = 0;

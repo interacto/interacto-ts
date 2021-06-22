@@ -25,7 +25,7 @@ export class ColorPickedFSM extends FSMImpl {
         super();
     }
 
-    public buildFSM(dataHandler?: ColorPickedHandler): void {
+    public override buildFSM(dataHandler?: ColorPickedHandler): void {
         if (this.states.length > 1) {
             return;
         }
@@ -71,13 +71,13 @@ export class ColorPicked extends InteractionBase<WidgetData<HTMLInputElement>, W
         this.fsm.buildFSM(this.handler);
     }
 
-    public onNewNodeRegistered(node: EventTarget): void {
+    public override onNewNodeRegistered(node: EventTarget): void {
         if (isColorChoice(node)) {
             this.registerActionHandlerInput(node);
         }
     }
 
-    public onNodeUnregistered(node: EventTarget): void {
+    public override onNodeUnregistered(node: EventTarget): void {
         if (isColorChoice(node)) {
             this.unregisterActionHandlerInput(node);
         }

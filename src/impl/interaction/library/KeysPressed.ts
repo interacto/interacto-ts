@@ -36,7 +36,7 @@ export class KeysPressedFSM extends FSMImpl {
         this.currentCodes = [];
     }
 
-    public buildFSM(dataHandler?: KeysPressedFSMHandler): void {
+    public override buildFSM(dataHandler?: KeysPressedFSMHandler): void {
         if (this.states.length > 1) {
             return;
         }
@@ -61,7 +61,7 @@ export class KeysPressedFSM extends FSMImpl {
         kr.isGuardOK = (event: KeyboardEvent): boolean => this.currentCodes.find(value => value === event.code) !== undefined;
     }
 
-    public reinit(): void {
+    public override reinit(): void {
         this.currentCodes.length = 0;
         super.reinit();
     }

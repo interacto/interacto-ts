@@ -64,7 +64,7 @@ export class PanFSM extends FSMImpl {
         return this.stableAxe === undefined ? false : Math.abs(this.stableAxe - stableAxe2) <= this.pxTolerance;
     }
 
-    public buildFSM(dataHandler?: PanFSMDataHandler): void {
+    public override buildFSM(dataHandler?: PanFSMDataHandler): void {
         if (this.states.length > 1) {
             return;
         }
@@ -147,7 +147,7 @@ export class PanFSM extends FSMImpl {
         return this.getPanDistance(evt.changedTouches[0].clientX, evt.changedTouches[0].clientY) >= this.minLength;
     }
 
-    public reinit(): void {
+    public override reinit(): void {
         super.reinit();
         this.touchID = undefined;
         this.stableAxe = undefined;

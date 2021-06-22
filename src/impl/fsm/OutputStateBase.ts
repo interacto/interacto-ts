@@ -58,7 +58,7 @@ export abstract class OutputStateBase extends StateBase implements OutputState {
 
     public abstract exit(): void;
 
-    public uninstall(): void {
+    public override uninstall(): void {
         super.uninstall();
         this.transitions.forEach(tr => {
             tr.uninstall();
