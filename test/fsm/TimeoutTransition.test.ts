@@ -118,7 +118,7 @@ test("execute and guard not OK", () => {
             super(src, tgt, () => 50);
         }
 
-        public isGuardOK(_event: Event): boolean {
+        public override isGuardOK(_event: Event): boolean {
             return false;
         }
     }();

@@ -89,60 +89,60 @@ export class UpdateBinder<C extends Command, I extends Interaction<D>, D extends
         return dup;
     }
 
-    public on(widget: ReadonlyArray<Widget<EventTarget>> | Widget<EventTarget>, ...widgets: ReadonlyArray<Widget<EventTarget>>):
+    public override on(widget: ReadonlyArray<Widget<EventTarget>> | Widget<EventTarget>, ...widgets: ReadonlyArray<Widget<EventTarget>>):
     UpdateBinder<C, I, D> {
         return super.on(widget, ...widgets) as UpdateBinder<C, I, D>;
     }
 
-    public onDynamic(node: Widget<Node>): UpdateBinder<C, I, D> {
+    public override onDynamic(node: Widget<Node>): UpdateBinder<C, I, D> {
         return super.onDynamic(node) as UpdateBinder<C, I, D>;
     }
 
-    public first(fn: (c: C, i: D) => void): UpdateBinder<C, I, D> {
+    public override first(fn: (c: C, i: D) => void): UpdateBinder<C, I, D> {
         return super.first(fn) as UpdateBinder<C, I, D>;
     }
 
-    public when(fn: (i: D) => boolean): UpdateBinder<C, I, D> {
+    public override when(fn: (i: D) => boolean): UpdateBinder<C, I, D> {
         return super.when(fn) as UpdateBinder<C, I, D>;
     }
 
-    public ifHadEffects(fn: (c: C, i: D) => void): UpdateBinder<C, I, D> {
+    public override ifHadEffects(fn: (c: C, i: D) => void): UpdateBinder<C, I, D> {
         return super.ifHadEffects(fn) as UpdateBinder<C, I, D>;
     }
 
-    public ifHadNoEffect(fn: (c: C, i: D) => void): UpdateBinder<C, I, D> {
+    public override ifHadNoEffect(fn: (c: C, i: D) => void): UpdateBinder<C, I, D> {
         return super.ifHadNoEffect(fn) as UpdateBinder<C, I, D>;
     }
 
-    public ifCannotExecute(fn: (c: C, i: D) => void): UpdateBinder<C, I, D> {
+    public override ifCannotExecute(fn: (c: C, i: D) => void): UpdateBinder<C, I, D> {
         return super.ifCannotExecute(fn) as UpdateBinder<C, I, D>;
     }
 
-    public end(fn: (c: C, i: D) => void): UpdateBinder<C, I, D> {
+    public override end(fn: (c: C, i: D) => void): UpdateBinder<C, I, D> {
         return super.end(fn) as UpdateBinder<C, I, D>;
     }
 
-    public log(...level: ReadonlyArray<LogLevel>): UpdateBinder<C, I, D> {
+    public override log(...level: ReadonlyArray<LogLevel>): UpdateBinder<C, I, D> {
         return super.log(...level) as UpdateBinder<C, I, D>;
     }
 
-    public stopImmediatePropagation(): UpdateBinder<C, I, D> {
+    public override stopImmediatePropagation(): UpdateBinder<C, I, D> {
         return super.stopImmediatePropagation() as UpdateBinder<C, I, D>;
     }
 
-    public preventDefault(): UpdateBinder<C, I, D> {
+    public override preventDefault(): UpdateBinder<C, I, D> {
         return super.preventDefault() as UpdateBinder<C, I, D>;
     }
 
-    public catch(fn: (ex: unknown) => void): UpdateBinder<C, I, D> {
+    public override catch(fn: (ex: unknown) => void): UpdateBinder<C, I, D> {
         return super.catch(fn) as UpdateBinder<C, I, D>;
     }
 
-    public usingInteraction<I2 extends Interaction<D2>, D2 extends InteractionData>(fn: () => I2): UpdateBinder<C, I2, D2> {
+    public override usingInteraction<I2 extends Interaction<D2>, D2 extends InteractionData>(fn: () => I2): UpdateBinder<C, I2, D2> {
         return super.usingInteraction(fn) as UpdateBinder<C, I2, D2>;
     }
 
-    public toProduce<C2 extends Command>(fn: (i: D) => C2): UpdateBinder<C2, I, D> {
+    public override toProduce<C2 extends Command>(fn: (i: D) => C2): UpdateBinder<C2, I, D> {
         return super.toProduce(fn) as UpdateBinder<C2, I, D>;
     }
 

@@ -274,7 +274,7 @@ test("displacement data", () => {
 
 
     interaction.getFsm().addHandler(new class extends StubFSMHandler {
-        public fsmStops(): void {
+        public override fsmStops(): void {
             diffClientX = interaction.getData().diffClientX;
             diffClientY = interaction.getData().diffClientY;
             diffScreenX = interaction.getData().diffScreenX;

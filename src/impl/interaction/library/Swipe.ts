@@ -37,18 +37,18 @@ class SwipeFSM extends PanFSM {
         return Math.abs(axe - value) / ((t1 - this.t0) / 1000);
     }
 
-    protected setInitialValueOnTouch(evt: TouchEvent): void {
+    protected override setInitialValueOnTouch(evt: TouchEvent): void {
         super.setInitialValueOnTouch(evt);
         this.t0 = evt.timeStamp;
     }
 
-    protected checkFinalPanConditions(evt: TouchEvent): boolean {
+    protected override checkFinalPanConditions(evt: TouchEvent): boolean {
         return super.checkFinalPanConditions(evt) &&
             this.computeVelocity(evt.timeStamp,
                 evt.changedTouches[0].clientX, evt.changedTouches[0].clientY) >= this.minVelocity;
     }
 
-    public reinit(): void {
+    public override reinit(): void {
         super.reinit();
         this.t0 = 0;
     }

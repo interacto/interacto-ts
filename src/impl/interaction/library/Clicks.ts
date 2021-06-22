@@ -48,12 +48,12 @@ export class ClicksFSM extends FSMImpl {
     }
 
 
-    public reinit(): void {
+    public override reinit(): void {
         super.reinit();
         this.countClicks = 0;
     }
 
-    public buildFSM(dataHandler?: ClicksFSMHandler): void {
+    public override buildFSM(dataHandler?: ClicksFSMHandler): void {
         if (this.states.length > 1) {
             return;
         }

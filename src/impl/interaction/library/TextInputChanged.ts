@@ -44,7 +44,7 @@ export class TextInputChangedFSM extends FSMImpl {
         }
     }
 
-    public buildFSM(dataHandler?: TextInputChangedHandler): void {
+    public override buildFSM(dataHandler?: TextInputChangedHandler): void {
         if (this.states.length > 1) {
             return;
         }
@@ -96,13 +96,13 @@ WidgetDataImpl<HTMLInputElement | HTMLTextAreaElement>, TextInputChangedFSM> {
         this.fsm.buildFSM(this.handler);
     }
 
-    public onNewNodeRegistered(node: EventTarget): void {
+    public override onNewNodeRegistered(node: EventTarget): void {
         if (isTextInput(node)) {
             this.registerActionHandlerInput(node);
         }
     }
 
-    public onNodeUnregistered(node: EventTarget): void {
+    public override onNodeUnregistered(node: EventTarget): void {
         if (isTextInput(node)) {
             this.unregisterActionHandlerInput(node);
         }

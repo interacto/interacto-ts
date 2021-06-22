@@ -37,7 +37,7 @@ export abstract class PointingDataBase extends InteractionDataBase implements Po
     protected shiftKeyData: boolean = false;
 
 
-    public flush(): void {
+    public override flush(): void {
         super.flush();
         this.clientXData = 0;
         this.clientYData = 0;
@@ -52,7 +52,7 @@ export abstract class PointingDataBase extends InteractionDataBase implements Po
     }
 
 
-    public copy(data: PointBaseData): void {
+    public override copy(data: PointBaseData): void {
         super.copy(data);
         // Cannot use Object.assign because of a strange implementation of Event
         // that prevents accessing the properties

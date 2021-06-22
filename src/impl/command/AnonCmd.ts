@@ -27,7 +27,7 @@ export class AnonCmd extends CommandBase {
         this.exec = fct;
     }
 
-    public canExecute(): boolean {
+    public override canExecute(): boolean {
         return true;
     }
 

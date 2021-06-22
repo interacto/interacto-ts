@@ -43,21 +43,21 @@ class BindingStub extends BindingImpl<StubCmd, InteractionStub, InteractionData>
         this.mustCancel = false;
     }
 
-    public when(): boolean {
+    public override when(): boolean {
         return this.conditionRespected;
     }
 
-    public isStrictStart(): boolean {
+    public override isStrictStart(): boolean {
         return this.mustCancel;
     }
 }
 
 class CmdStubUndoable extends StubCmd implements Undoable {
-    public hadEffect(): boolean {
+    public override hadEffect(): boolean {
         return true;
     }
 
-    public canExecute(): boolean {
+    public override canExecute(): boolean {
         return true;
     }
 

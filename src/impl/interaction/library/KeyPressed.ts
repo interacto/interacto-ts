@@ -35,7 +35,7 @@ export class KeyPressedFSM extends FSMImpl {
         this.modifiersAccepted = modifierAccepted;
     }
 
-    public buildFSM(dataHandler?: KeyPressedFSMHandler): void {
+    public override buildFSM(dataHandler?: KeyPressedFSMHandler): void {
         if (this.states.length > 1) {
             return;
         }
@@ -53,7 +53,7 @@ export class KeyPressedFSM extends FSMImpl {
             (!event.altKey && !event.ctrlKey && !event.shiftKey && !event.metaKey);
     }
 
-    public reinit(): void {
+    public override reinit(): void {
         super.reinit();
     }
 

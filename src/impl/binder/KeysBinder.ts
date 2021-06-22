@@ -65,92 +65,92 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, D extends I
         return dup;
     }
 
-    public on(widget: ReadonlyArray<Widget<EventTarget>> | Widget<EventTarget>, ...widgets: ReadonlyArray<Widget<EventTarget>>):
+    public override on(widget: ReadonlyArray<Widget<EventTarget>> | Widget<EventTarget>, ...widgets: ReadonlyArray<Widget<EventTarget>>):
     KeysBinder<C, I, D> {
         return super.on(widget, ...widgets) as KeysBinder<C, I, D>;
     }
 
-    public onDynamic(node: Widget<Node>): KeysBinder<C, I, D> {
+    public override onDynamic(node: Widget<Node>): KeysBinder<C, I, D> {
         return super.onDynamic(node) as KeysBinder<C, I, D>;
     }
 
-    public first(fn: (c: C, i: D) => void): KeysBinder<C, I, D> {
+    public override first(fn: (c: C, i: D) => void): KeysBinder<C, I, D> {
         return super.first(fn) as KeysBinder<C, I, D>;
     }
 
-    public when(fn: (() => boolean) | ((i: D) => boolean)): KeysBinder<C, I, D> {
+    public override when(fn: (() => boolean) | ((i: D) => boolean)): KeysBinder<C, I, D> {
         return super.when(fn) as KeysBinder<C, I, D>;
     }
 
-    public ifHadEffects(fn: (c: C, i: D) => void): KeysBinder<C, I, D> {
+    public override ifHadEffects(fn: (c: C, i: D) => void): KeysBinder<C, I, D> {
         return super.ifHadEffects(fn) as KeysBinder<C, I, D>;
     }
 
-    public ifHadNoEffect(fn: (c: C, i: D) => void): KeysBinder<C, I, D> {
+    public override ifHadNoEffect(fn: (c: C, i: D) => void): KeysBinder<C, I, D> {
         return super.ifHadNoEffect(fn) as KeysBinder<C, I, D>;
     }
 
-    public ifCannotExecute(fn: (c: C, i: D) => void): KeysBinder<C, I, D> {
+    public override ifCannotExecute(fn: (c: C, i: D) => void): KeysBinder<C, I, D> {
         return super.ifCannotExecute(fn) as KeysBinder<C, I, D>;
     }
 
-    public end(fn: (c: C, i: D) => void): KeysBinder<C, I, D> {
+    public override end(fn: (c: C, i: D) => void): KeysBinder<C, I, D> {
         return super.end(fn) as KeysBinder<C, I, D>;
     }
 
-    public log(...level: ReadonlyArray<LogLevel>): KeysBinder<C, I, D> {
+    public override log(...level: ReadonlyArray<LogLevel>): KeysBinder<C, I, D> {
         return super.log(...level) as KeysBinder<C, I, D>;
     }
 
-    public stopImmediatePropagation(): KeysBinder<C, I, D> {
+    public override stopImmediatePropagation(): KeysBinder<C, I, D> {
         return super.stopImmediatePropagation() as KeysBinder<C, I, D>;
     }
 
-    public preventDefault(): KeysBinder<C, I, D> {
+    public override preventDefault(): KeysBinder<C, I, D> {
         return super.preventDefault() as KeysBinder<C, I, D>;
     }
 
-    public then(fn: ((c: C, i: D) => void) | ((c: C) => void)): KeysBinder<C, I, D> {
+    public override then(fn: ((c: C, i: D) => void) | ((c: C) => void)): KeysBinder<C, I, D> {
         return super.then(fn) as KeysBinder<C, I, D>;
     }
 
-    public continuousExecution(): KeysBinder<C, I, D> {
+    public override continuousExecution(): KeysBinder<C, I, D> {
         return super.continuousExecution() as KeysBinder<C, I, D>;
     }
 
-    public strictStart(): KeysBinder<C, I, D> {
+    public override strictStart(): KeysBinder<C, I, D> {
         return super.strictStart() as KeysBinder<C, I, D>;
     }
 
-    public throttle(timeout: number): KeysBinder<C, I, D> {
+    public override throttle(timeout: number): KeysBinder<C, I, D> {
         return super.throttle(timeout) as KeysBinder<C, I, D>;
     }
 
-    public cancel(fn: (i: D) => void): KeysBinder<C, I, D> {
+    public override cancel(fn: (i: D) => void): KeysBinder<C, I, D> {
         return super.cancel(fn) as KeysBinder<C, I, D>;
     }
 
-    public endOrCancel(fn: (i: D) => void): KeysBinder<C, I, D> {
+    public override endOrCancel(fn: (i: D) => void): KeysBinder<C, I, D> {
         return super.endOrCancel(fn) as KeysBinder<C, I, D>;
     }
 
-    public catch(fn: (ex: unknown) => void): KeysBinder<C, I, D> {
+    public override catch(fn: (ex: unknown) => void): KeysBinder<C, I, D> {
         return super.catch(fn) as KeysBinder<C, I, D>;
     }
 
-    public toProduce<C2 extends Command>(fn: (i: D) => C2): KeysBinder<C2, I, D> {
+    public override toProduce<C2 extends Command>(fn: (i: D) => C2): KeysBinder<C2, I, D> {
         return super.toProduce(fn) as KeysBinder<C2, I, D>;
     }
 
-    public usingInteraction<I2 extends Interaction<D2>, D2 extends InteractionData>(fn: () => I2): KeysBinder<C, I2, D2> {
+    public override usingInteraction<I2 extends Interaction<D2>, D2 extends InteractionData>(fn: () => I2): KeysBinder<C, I2, D2> {
         return super.usingInteraction(fn) as unknown as KeysBinder<C, I2, D2>;
     }
 
-    protected duplicate(): KeysBinder<C, I, D> {
+    protected override duplicate(): KeysBinder<C, I, D> {
         return new KeysBinder(this.undoHistory, this.observer, this);
     }
 
-    public bind(): Binding<C, I, D> {
+    public override bind(): Binding<C, I, D> {
         if (this.usingFn === undefined) {
             throw new Error("The interaction supplier cannot be undefined here");
         }

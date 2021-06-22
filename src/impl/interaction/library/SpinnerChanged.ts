@@ -47,7 +47,7 @@ export class SpinnerChangedFSM extends FSMImpl {
         }
     }
 
-    public buildFSM(dataHandler?: SpinnerChangedHandler): void {
+    public override buildFSM(dataHandler?: SpinnerChangedHandler): void {
         if (this.states.length > 1) {
             return;
         }
@@ -101,13 +101,13 @@ export class SpinnerChanged extends InteractionBase<WidgetData<HTMLInputElement>
         this.fsm.buildFSM(this.handler);
     }
 
-    public onNewNodeRegistered(node: EventTarget): void {
+    public override onNewNodeRegistered(node: EventTarget): void {
         if (isSpinner(node)) {
             this.registerActionHandlerInput(node);
         }
     }
 
-    public onNodeUnregistered(node: EventTarget): void {
+    public override onNodeUnregistered(node: EventTarget): void {
         if (isSpinner(node)) {
             this.unregisterActionHandlerInput(node);
         }

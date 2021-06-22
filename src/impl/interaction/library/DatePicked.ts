@@ -26,7 +26,7 @@ export class DatePickedFSM extends FSMImpl {
         super();
     }
 
-    public buildFSM(dataHandler?: DatePickedHandler): void {
+    public override buildFSM(dataHandler?: DatePickedHandler): void {
         if (this.states.length > 1) {
             return;
         }
@@ -72,13 +72,13 @@ export class DatePicked extends InteractionBase<WidgetData<HTMLInputElement>, Wi
         this.fsm.buildFSM(this.handler);
     }
 
-    public onNewNodeRegistered(node: EventTarget): void {
+    public override onNewNodeRegistered(node: EventTarget): void {
         if (isDatePicker(node)) {
             this.registerActionHandlerInput(node);
         }
     }
 
-    public onNodeUnregistered(node: EventTarget): void {
+    public override onNodeUnregistered(node: EventTarget): void {
         if (isDatePicker(node)) {
             this.unregisterActionHandlerInput(node);
         }

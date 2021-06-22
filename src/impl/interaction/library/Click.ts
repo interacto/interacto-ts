@@ -33,7 +33,7 @@ export class ClickFSM extends FSMImpl {
         super();
     }
 
-    public buildFSM(dataHandler?: ClickFSMHandler): void {
+    public override buildFSM(dataHandler?: ClickFSMHandler): void {
         if (this.states.length > 1) {
             return;
         }
@@ -60,7 +60,7 @@ export class ClickFSM extends FSMImpl {
         }
     }
 
-    public reinit(): void {
+    public override reinit(): void {
         super.reinit();
         this.checkButton = undefined;
     }

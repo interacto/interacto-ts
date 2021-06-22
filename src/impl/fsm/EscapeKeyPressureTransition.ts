@@ -25,7 +25,7 @@ export class EscapeKeyPressureTransition extends KeyPressureTransition {
         super(srcState, tgtState);
     }
 
-    public isGuardOK(event: KeyboardEvent): boolean {
+    public override isGuardOK(event: KeyboardEvent): boolean {
         return event.code === "Escape" || event.code === String(KeyCode.escape);
     }
 }

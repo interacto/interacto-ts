@@ -85,11 +85,11 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
         }
     }
 
-    public isStrictStart(): boolean {
+    public override isStrictStart(): boolean {
         return this.strictStart;
     }
 
-    public first(): void {
+    public override first(): void {
         const cmd = this.getCommand();
         if (this.firstFn !== undefined && cmd !== undefined) {
             try {
@@ -105,7 +105,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
         }
     }
 
-    public then(): void {
+    public override then(): void {
         const cmd = this.getCommand();
         if (this.thenFn !== undefined && cmd !== undefined) {
             try {
@@ -121,7 +121,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
         }
     }
 
-    public end(): void {
+    public override end(): void {
         const cmd = this.getCommand();
         if (this.onEndFn !== undefined && cmd !== undefined) {
             try {
@@ -137,7 +137,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
         }
     }
 
-    public cancel(): void {
+    public override cancel(): void {
         if (this.cancelFn !== undefined) {
             try {
                 this.cancelFn(this.getInteraction().getData());
@@ -152,7 +152,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
         }
     }
 
-    public endOrCancel(): void {
+    public override endOrCancel(): void {
         if (this.endOrCancelFn !== undefined) {
             try {
                 this.endOrCancelFn(this.getInteraction().getData());
@@ -167,7 +167,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
         }
     }
 
-    public ifCmdHadNoEffect(): void {
+    public override ifCmdHadNoEffect(): void {
         const cmd = this.getCommand();
         if (this.hadNoEffectFn !== undefined && cmd !== undefined) {
             try {
@@ -183,7 +183,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
         }
     }
 
-    public ifCmdHadEffects(): void {
+    public override ifCmdHadEffects(): void {
         const cmd = this.getCommand();
         if (this.hadEffectsFn !== undefined && cmd !== undefined) {
             try {
@@ -199,7 +199,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
         }
     }
 
-    public ifCannotExecuteCmd(): void {
+    public override ifCannotExecuteCmd(): void {
         const cmd = this.getCommand();
         if (this.cannotExecFn !== undefined && cmd !== undefined) {
             try {
@@ -215,7 +215,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
         }
     }
 
-    public when(): boolean {
+    public override when(): boolean {
         let ok;
         try {
             ok = this.whenFn === undefined || this.whenFn(this.getInteraction().getData());
@@ -235,7 +235,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
     }
 
 
-    public catch(err: unknown): void {
+    public override catch(err: unknown): void {
         if (this.onErrFn !== undefined) {
             try {
                 this.onErrFn(err);

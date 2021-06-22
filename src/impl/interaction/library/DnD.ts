@@ -43,7 +43,7 @@ export class DnDFSM extends FSMImpl {
         this.cancellable = cancellable;
     }
 
-    public buildFSM(dataHandler?: DnDFSMHandler): void {
+    public override buildFSM(dataHandler?: DnDFSMHandler): void {
         if (this.states.length > 1) {
             return;
         }
@@ -94,7 +94,7 @@ export class DnDFSM extends FSMImpl {
         }
     }
 
-    public reinit(): void {
+    public override reinit(): void {
         super.reinit();
         this.buttonToCheck = undefined;
     }

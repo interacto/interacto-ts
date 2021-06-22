@@ -45,7 +45,7 @@ export class KeysTypedFSM extends FSMImpl {
         super();
     }
 
-    public buildFSM(dataHandler?: KeyTypedFSMHandler): void {
+    public override buildFSM(dataHandler?: KeyTypedFSMHandler): void {
         if (this.states.length > 1) {
             return;
         }

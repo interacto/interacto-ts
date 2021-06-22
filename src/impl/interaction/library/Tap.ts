@@ -41,7 +41,7 @@ class TapFSM extends FSMImpl {
         this.countTaps = 0;
     }
 
-    public buildFSM(dataHandler?: TapFSMHandler): void {
+    public override buildFSM(dataHandler?: TapFSMHandler): void {
         if (this.states.length > 1) {
             return;
         }
@@ -83,7 +83,7 @@ class TapFSM extends FSMImpl {
         new TimeoutTransition(touched, timeouted, () => 1000);
     }
 
-    public reinit(): void {
+    public override reinit(): void {
         super.reinit();
         this.countTaps = 0;
     }

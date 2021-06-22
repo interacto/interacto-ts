@@ -33,7 +33,7 @@ export class KeyDataImpl extends InteractionDataBase implements KeyData, Flushab
 
     private shiftKeyData: boolean = false;
 
-    public flush(): void {
+    public override flush(): void {
         super.flush();
         this.codeData = "";
         this.keyData = "";
@@ -45,7 +45,7 @@ export class KeyDataImpl extends InteractionDataBase implements KeyData, Flushab
         this.shiftKeyData = false;
     }
 
-    public copy(data: KeyData): void {
+    public override copy(data: KeyData): void {
         super.copy(data);
         // Cannot use Object.assign because of a strange implementation of Event
         // that prevents accessing the properties

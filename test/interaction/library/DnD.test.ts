@@ -159,7 +159,7 @@ test("check data with multiple drag", () => {
         .mousemove({"screenX": 3, "screenY": 4, "clientX": 12, "clientY": 22, "button": 0});
 
     interaction.getFsm().addHandler(new class extends StubFSMHandler {
-        public fsmUpdates(): void {
+        public override fsmUpdates(): void {
             sx = interaction.getData().src.clientX;
             sy = interaction.getData().src.clientY;
             tx = interaction.getData().tgt.clientX;
@@ -228,7 +228,7 @@ test("check data with one move.", () => {
 
     interaction.registerToNodes([canvas]);
     interaction.getFsm().addHandler(new class extends StubFSMHandler {
-        public fsmStops(): void {
+        public override fsmStops(): void {
             sx = interaction.getData().src.clientX;
             sy = interaction.getData().src.clientY;
             tx = interaction.getData().tgt.clientX;
@@ -253,7 +253,7 @@ test("displacement data", () => {
 
 
     interaction.getFsm().addHandler(new class extends StubFSMHandler {
-        public fsmStops(): void {
+        public override fsmStops(): void {
             diffClientX = interaction.getData().diffClientX;
             diffClientY = interaction.getData().diffClientY;
             diffScreenX = interaction.getData().diffScreenX;

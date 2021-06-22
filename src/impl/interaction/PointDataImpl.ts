@@ -33,7 +33,7 @@ export class PointDataImpl extends PointingDataBase implements PointData {
 
     private relatedTargetData: EventTarget | null = null;
 
-    public flush(): void {
+    public override flush(): void {
         super.flush();
         this.buttonData = 0;
         this.buttonsData = 0;
@@ -44,7 +44,7 @@ export class PointDataImpl extends PointingDataBase implements PointData {
         this.relatedTargetData = null;
     }
 
-    public copy(data: PointData): void {
+    public override copy(data: PointData): void {
         super.copy(data);
         // Cannot use Object.assign because of a strange implementation of Event
         // that prevents accessing the properties

@@ -39,7 +39,7 @@ export class TouchDnDFSM extends FSMImpl {
         this.touchID = undefined;
     }
 
-    public buildFSM(dataHandler?: TouchDnDFSMHandler): void {
+    public override buildFSM(dataHandler?: TouchDnDFSMHandler): void {
         if (this.states.length > 1) {
             return;
         }
@@ -77,7 +77,7 @@ export class TouchDnDFSM extends FSMImpl {
         return this.touchID;
     }
 
-    public reinit(): void {
+    public override reinit(): void {
         super.reinit();
         this.touchID = undefined;
     }

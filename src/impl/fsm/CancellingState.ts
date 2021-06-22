@@ -34,6 +34,6 @@ export class CancellingState extends StateBase implements InputState {
         this.fsm.onCancelling();
     }
 
-    public uninstall(): void {
+    public override uninstall(): void {
     }
 }

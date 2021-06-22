@@ -68,7 +68,7 @@ class StubAsyncCmd extends CommandBase {
     }
 
 
-    public hadEffect(): boolean {
+    public override hadEffect(): boolean {
         return super.hadEffect() && this.accept;
     }
 }

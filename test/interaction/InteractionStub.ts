@@ -24,10 +24,10 @@ export class InteractionStub extends InteractionBase<InteractionData, Flushable 
         super(fsm, new PointDataImpl());
     }
 
-    public updateEventsRegistered(_newState: OutputState, _oldState: OutputState): void {
+    public override updateEventsRegistered(_newState: OutputState, _oldState: OutputState): void {
     }
 
-    public reinitData(): void {
+    public override reinitData(): void {
     }
 }
 

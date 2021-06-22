@@ -41,31 +41,31 @@ class StubTouchFSM extends FSMImpl {
         this.addState(cancelled);
 
         new class extends PressureTransition {
-            public isGuardOK(event: MouseEvent): boolean {
+            public override isGuardOK(event: MouseEvent): boolean {
                 return event.button === cpt;
             }
         }(this.initState, touched);
 
         new class extends MoveTransition {
-            public isGuardOK(event: MouseEvent): boolean {
+            public override isGuardOK(event: MouseEvent): boolean {
                 return event.button === cpt;
             }
         }(touched, moved);
 
         new class extends MoveTransition {
-            public isGuardOK(event: MouseEvent): boolean {
+            public override isGuardOK(event: MouseEvent): boolean {
                 return event.button === cpt;
             }
         }(moved, moved);
 
         new class extends ReleaseTransition {
-            public isGuardOK(event: MouseEvent): boolean {
+            public override isGuardOK(event: MouseEvent): boolean {
                 return event.button === cpt;
             }
         }(moved, released);
 
         new class extends ClickTransition {
-            public isGuardOK(event: MouseEvent): boolean {
+            public override isGuardOK(event: MouseEvent): boolean {
                 return event.button === cpt;
             }
         }(moved, cancelled);

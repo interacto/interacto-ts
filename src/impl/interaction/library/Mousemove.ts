@@ -32,7 +32,7 @@ export class MousemoveFSM extends FSMImpl {
         super();
     }
 
-    public buildFSM(dataHandler?: MousemoveFSMHandler): void {
+    public override buildFSM(dataHandler?: MousemoveFSMHandler): void {
         if (this.states.length > 1) {
             return;
         }

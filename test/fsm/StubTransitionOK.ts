@@ -30,7 +30,7 @@ export class StubTransitionOK<E extends Event> extends TransitionBase<E> {
         return true;
     }
 
-    public isGuardOK(_event: E): boolean {
+    public override isGuardOK(_event: E): boolean {
         return this.guard;
     }
 
@@ -40,31 +40,31 @@ export class StubTransitionOK<E extends Event> extends TransitionBase<E> {
 }
 
 export class SubStubTransition1 extends StubTransitionOK<MouseEvent> {
-    public accept(event: Event): event is MouseEvent {
+    public override accept(event: Event): event is MouseEvent {
         return event instanceof MouseEvent && isEventType(event.type) && this.getAcceptedEvents().includes(event.type);
     }
 
-    public getAcceptedEvents(): Array<EventType> {
+    public override getAcceptedEvents(): Array<EventType> {
         return ["click"];
     }
 }
 
 export class SubStubTransition2 extends StubTransitionOK<KeyboardEvent> {
-    public accept(event: Event): event is KeyboardEvent {
+    public override accept(event: Event): event is KeyboardEvent {
         return event instanceof KeyboardEvent && isEventType(event.type) && this.getAcceptedEvents().includes(event.type);
     }
 
-    public getAcceptedEvents(): Array<EventType> {
+    public override getAcceptedEvents(): Array<EventType> {
         return ["keydown"];
     }
 }
 
 export class SubStubTransition3 extends StubTransitionOK<TouchEvent> {
-    public accept(event: Event): event is TouchEvent {
+    public override accept(event: Event): event is TouchEvent {
         return event instanceof TouchEvent && isEventType(event.type) && this.getAcceptedEvents().includes(event.type);
     }
 
-    public getAcceptedEvents(): Array<EventType> {
+    public override getAcceptedEvents(): Array<EventType> {
         return ["touchstart"];
     }
 }

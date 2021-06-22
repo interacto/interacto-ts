@@ -39,7 +39,7 @@ export class MouseoutFSM extends FSMImpl {
         this.withBubbling = withBubbling;
     }
 
-    public buildFSM(dataHandler?: MouseoutFSMHandler): void {
+    public override buildFSM(dataHandler?: MouseoutFSMHandler): void {
         if (this.states.length > 1) {
             return;
         }

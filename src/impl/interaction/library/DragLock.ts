@@ -40,30 +40,30 @@ export class DragLockFSM extends FSMImpl {
         this.sndDbleClick = new DoubleClickFSM();
     }
 
-    public log(log: boolean): void {
+    public override log(log: boolean): void {
         super.log(log);
         this.firstDbleClick.log(log);
         this.sndDbleClick.log(log);
     }
 
-    public reinit(): void {
+    public override reinit(): void {
         super.reinit();
         this.firstDbleClick.reinit();
         this.sndDbleClick.reinit();
         this.checkButton = undefined;
     }
 
-    public fullReinit(): void {
+    public override fullReinit(): void {
         super.fullReinit();
         this.firstDbleClick.fullReinit();
         this.sndDbleClick.fullReinit();
     }
 
-    public getDataHandler(): DragLockFSMHandler | undefined {
+    public override getDataHandler(): DragLockFSMHandler | undefined {
         return this.dataHandler as DragLockFSMHandler;
     }
 
-    public buildFSM(dataHandler: DragLockFSMHandler): void {
+    public override buildFSM(dataHandler: DragLockFSMHandler): void {
         if (this.states.length > 1) {
             return;
         }

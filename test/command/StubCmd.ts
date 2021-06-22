@@ -29,7 +29,7 @@ export class StubCmd extends CommandBase {
         this.exec++;
     }
 
-    public canExecute(): boolean {
+    public override canExecute(): boolean {
         return this.candoValue;
     }
 }

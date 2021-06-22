@@ -24,7 +24,7 @@ export class ScrollDataImpl extends InteractionDataBase implements ScrollData, F
 
     protected scrollYData: number = 0;
 
-    public flush(): void {
+    public override flush(): void {
         super.flush();
         this.scrollXData = 0;
         this.scrollYData = 0;

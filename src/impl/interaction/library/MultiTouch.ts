@@ -31,14 +31,14 @@ export class MultiTouchFSM extends ConcurrentFSM<TouchDnDFSM> {
         super([...Array(nbTouch).keys()].map(_ => new TouchDnDFSM()));
     }
 
-    public buildFSM(dataHandler: TouchDnDFSMHandler): void {
+    public override buildFSM(dataHandler: TouchDnDFSMHandler): void {
         super.buildFSM(dataHandler);
         this.getConccurFSMs().forEach(fsm => {
             fsm.buildFSM(dataHandler);
         });
     }
 
-    public process(event: Event): boolean {
+    public override process(event: Event): boolean {
         if (!(event instanceof TouchEvent)) {
             return false;
         }

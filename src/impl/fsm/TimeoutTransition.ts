@@ -90,11 +90,11 @@ export class TimeoutTransition extends TransitionBase<Event> {
         return this.timeouted;
     }
 
-    public isGuardOK(_event?: Event): boolean {
+    public override isGuardOK(_event?: Event): boolean {
         return this.timeouted;
     }
 
-    public execute(event?: Event): InputState | undefined {
+    public override execute(event?: Event): InputState | undefined {
         try {
             if (this.accept(event) && this.isGuardOK(event)) {
                 this.src.exit();

@@ -49,7 +49,7 @@ export class SetProperties<T> extends UndoableCommand {
     }
 
 
-    public execute(): Promise<boolean> | boolean {
+    public override execute(): Promise<boolean> | boolean {
         this.compositeCmds.forEach(cmd => {
             // eslint-disable-next-line no-void
             void cmd.execute();

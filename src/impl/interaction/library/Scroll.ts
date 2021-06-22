@@ -24,7 +24,7 @@ import {ScrollDataImpl} from "../ScrollDataImpl";
  * An FSM for scrolling.
  */
 export class ScrollFSM extends FSMImpl {
-    public buildFSM(dataHandler?: ScrollFSMHandler): void {
+    public override buildFSM(dataHandler?: ScrollFSMHandler): void {
         if (this.states.length > 1) {
             return;
         }

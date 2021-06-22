@@ -26,7 +26,7 @@ export class HyperLinkClickedFSM extends FSMImpl {
         super();
     }
 
-    public buildFSM(dataHandler?: HyperLinkClickedFSMHandler): void {
+    public override buildFSM(dataHandler?: HyperLinkClickedFSMHandler): void {
         if (this.states.length > 1) {
             return;
         }
@@ -71,13 +71,13 @@ export class HyperLinkClicked extends InteractionBase<WidgetData<HTMLAnchorEleme
         this.fsm.buildFSM(this.handler);
     }
 
-    public onNewNodeRegistered(node: EventTarget): void {
+    public override onNewNodeRegistered(node: EventTarget): void {
         if (isHyperLink(node)) {
             this.registerActionHandlerInput(node);
         }
     }
 
-    public onNodeUnregistered(node: EventTarget): void {
+    public override onNodeUnregistered(node: EventTarget): void {
         if (isHyperLink(node)) {
             this.unregisterActionHandlerInput(node);
         }

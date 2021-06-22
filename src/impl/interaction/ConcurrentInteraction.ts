@@ -44,27 +44,27 @@ export abstract class ConcurrentInteraction<D extends InteractionData, DImpl ext
                 }));
     }
 
-    public isRunning(): boolean {
+    public override isRunning(): boolean {
         return this.isActivated() && this.fsm.isStarted();
     }
 
-    public onNodeUnregistered(node: EventTarget): void {
+    public override onNodeUnregistered(node: EventTarget): void {
         this.getCurrentAcceptedEvents().forEach(type => {
             this.unregisterEventToNode(type, node);
         });
     }
 
-    public onNewNodeRegistered(node: EventTarget): void {
+    public override onNewNodeRegistered(node: EventTarget): void {
         this.getCurrentAcceptedEvents().forEach(type => {
             this.registerEventToNode(type, node);
         });
     }
 
-    public getCurrentAcceptedEvents(_state?: OutputState): ReadonlyArray<EventType> {
+    public override getCurrentAcceptedEvents(_state?: OutputState): ReadonlyArray<EventType> {
         return this.fsm.getConccurFSMs().flatMap(concFSM => [...this.getEventTypesOf(concFSM.getCurrentState())]);
     }
 
-    public uninstall(): void {
+    public override uninstall(): void {
         super.uninstall();
         this.subscriptions.forEach(sub => {
             sub.unsubscribe();

@@ -104,7 +104,7 @@ export class SubFSMTransition extends TransitionBase<Event> {
         this.src.getFSM().onCancelling();
     }
 
-    public execute(event: Event): InputState | undefined {
+    public override execute(event: Event): InputState | undefined {
         const transition: Transition<Event> | undefined = this.findTransition(event);
 
         if (transition === undefined) {
@@ -121,7 +121,7 @@ export class SubFSMTransition extends TransitionBase<Event> {
         return this.findTransition(event) !== undefined;
     }
 
-    public isGuardOK(event: Event): boolean {
+    public override isGuardOK(event: Event): boolean {
         return this.findTransition(event)?.isGuardOK(event) ?? false;
     }
 
@@ -143,7 +143,7 @@ export class SubFSMTransition extends TransitionBase<Event> {
             .reduce((a, b) => [...a, ...b]);
     }
 
-    public uninstall(): void {
+    public override uninstall(): void {
         this.unsetFSMHandler();
         this.subFSM.uninstall();
     }

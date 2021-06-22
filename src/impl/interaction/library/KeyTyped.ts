@@ -28,7 +28,7 @@ import {InteractionBase} from "../InteractionBase";
 export class KeyTypedFSM extends FSMImpl {
     private checkKey?: string;
 
-    public buildFSM(dataHandler?: KeyTypedFSMHandler): void {
+    public override buildFSM(dataHandler?: KeyTypedFSMHandler): void {
         if (this.states.length > 1) {
             return;
         }
@@ -53,7 +53,7 @@ export class KeyTypedFSM extends FSMImpl {
         };
     }
 
-    public reinit(): void {
+    public override reinit(): void {
         super.reinit();
         this.checkKey = undefined;
     }
