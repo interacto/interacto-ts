@@ -51,6 +51,7 @@ test("pointsData is empty by default", () => {
 
 test("addPoint", () => {
     data.addPoint(pointData);
+    data.currentPosition = pointData;
     expect(data.points).toHaveLength(1);
     const element = data.points[0];
     expect(element).toStrictEqual(pointData);
@@ -74,4 +75,32 @@ test("lastButton is undefined when there are no points", () => {
 
 test("currentPosition", () => {
     expect(data.currentPosition).toBeUndefined();
+});
+
+test("currentPosition set", () => {
+    const point = new PointDataImpl();
+    point.copy({
+        "altKey": false,
+        "button": 1,
+        "buttons": 2,
+        "clientX": 3,
+        "clientY": 4,
+        "ctrlKey": false,
+        "currentTarget": null,
+        "metaKey": false,
+        "movementX": 5,
+        "movementY": 6,
+        "offsetX": 7,
+        "offsetY": 8,
+        "pageX": 9,
+        "pageY": 10,
+        "relatedTarget": null,
+        "screenX": 11,
+        "screenY": 12,
+        "shiftKey": false,
+        "target": null,
+        "timeStamp": 13
+    });
+    data.currentPosition = point;
+    expect(data.currentPosition).toBe(point);
 });

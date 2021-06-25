@@ -17,7 +17,7 @@ import type {PointData} from "../../api/interaction/PointData";
 import {peek} from "../util/ArrayUtil";
 
 export class PointsDataImpl implements PointsData {
-    private currentPositionData?: readonly [number, number];
+    private currentPositionData?: PointData;
 
     private readonly pointsData: Array<PointData>;
 
@@ -29,8 +29,12 @@ export class PointsDataImpl implements PointsData {
         return [...this.pointsData];
     }
 
-    public get currentPosition(): readonly [number, number] | undefined {
+    public get currentPosition(): PointData | undefined {
         return this.currentPositionData;
+    }
+
+    public set currentPosition(position: PointData | undefined) {
+        this.currentPositionData = position;
     }
 
     public get lastButton(): number | undefined {
