@@ -19,21 +19,23 @@ import type {OutputState} from "../../src/api/fsm/OutputState";
 import {TimeoutTransition} from "../../src/impl/fsm/TimeoutTransition";
 import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
-import {catFSM} from "../../src/impl/logging/ConfigLog";
+import type {Logger} from "../../src/api/logging/Logger";
 
 let evt: TimeoutTransition;
 let src: MockProxy<OutputState> & OutputState;
 let tgt: InputState & MockProxy<InputState>;
 let fsm: FSMImpl & MockProxy<FSMImpl>;
+let logger: Logger;
 
 beforeEach(() => {
+    logger = mock<Logger>();
     jest.useFakeTimers();
     fsm = mock<FSMImpl>();
     src = mock<OutputState>();
     tgt = mock<InputState>();
     src.getFSM.mockReturnValue(fsm);
     tgt.getFSM.mockReturnValue(fsm);
-    evt = new TimeoutTransition(src, tgt, () => 500);
+    evt = new TimeoutTransition(src, tgt, () => 500, logger);
 });
 
 afterEach(() => {
@@ -139,18 +141,16 @@ test("execute cancels", () => {
 
 test("fsm throws error in thread", () => {
     const ex = new Error("foo");
-    jest.spyOn(catFSM, "error");
     jest.spyOn(fsm, "onTimeout");
     fsm.onTimeout.mockImplementation((): void => {
         throw ex;
     });
     evt.startTimeout();
     jest.runOnlyPendingTimers();
-    expect(catFSM.error).toHaveBeenCalledWith("Exception on timeout of a timeout transition", ex);
+    expect(logger.logInteractionErr).toHaveBeenCalledWith("Exception on timeout of a timeout transition", ex);
 });
 
 test("fsm throws not an error in thread", () => {
-    jest.spyOn(catFSM, "warn");
     jest.spyOn(fsm, "onTimeout");
     fsm.onTimeout.mockImplementation((): void => {
         // eslint-disable-next-line @typescript-eslint/no-throw-literal
@@ -158,7 +158,7 @@ test("fsm throws not an error in thread", () => {
     });
     evt.startTimeout();
     jest.runOnlyPendingTimers();
-    expect(catFSM.warn).toHaveBeenCalledWith("Exception on timeout of a timeout transition: 42");
+    expect(logger.logInteractionErr).toHaveBeenCalledWith("Exception on timeout of a timeout transition", 42);
 });
 
 test("testExecuteCallFSMTimeout", () => {

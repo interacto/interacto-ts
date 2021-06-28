@@ -18,10 +18,11 @@ import type {FSM} from "../../src/api/fsm/FSM";
 import type {OutputState} from "../../src/api/fsm/OutputState";
 import type {Flushable} from "../../src/impl/interaction/Flushable";
 import {PointDataImpl} from "../../src/impl/interaction/PointDataImpl";
+import type {Logger} from "../../src/api/logging/Logger";
 
 export class InteractionStub extends InteractionBase<InteractionData, Flushable & InteractionData, FSM> {
-    public constructor(fsm: FSM) {
-        super(fsm, new PointDataImpl());
+    public constructor(fsm: FSM, logger?: Logger) {
+        super(fsm, new PointDataImpl(), logger);
     }
 
     public override updateEventsRegistered(_newState: OutputState, _oldState: OutputState): void {

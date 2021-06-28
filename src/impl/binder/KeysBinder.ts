@@ -25,6 +25,7 @@ import type {Interaction} from "../../api/interaction/Interaction";
 import type {Widget} from "../../api/binder/BaseBinderBuilder";
 import type {BindingsObserver} from "../../api/binding/BindingsObserver";
 import type {UndoHistory} from "../../api/undo/UndoHistory";
+import type {Logger} from "../../api/logging/Logger";
 
 /**
  * The base binding builder to create bindings between a keys pressure interaction and a given command.
@@ -37,8 +38,8 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, D extends I
 
     private readonly checkCodeFn: (i: InteractionData) => boolean;
 
-    public constructor(undoHistory: UndoHistory, observer?: BindingsObserver, binder?: Partial<KeysBinder<C, I, D>>) {
-        super(undoHistory, observer, binder);
+    public constructor(undoHistory: UndoHistory, logger: Logger, observer?: BindingsObserver, binder?: Partial<KeysBinder<C, I, D>>) {
+        super(undoHistory, logger, observer, binder);
 
         Object.assign(this, binder);
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
@@ -147,7 +148,7 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, D extends I
     }
 
     protected override duplicate(): KeysBinder<C, I, D> {
-        return new KeysBinder(this.undoHistory, this.observer, this);
+        return new KeysBinder(this.undoHistory, this.logger, this.observer, this);
     }
 
     public override bind(): Binding<C, I, D> {
@@ -160,7 +161,7 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, D extends I
         }
 
         const binding = new AnonBinding(this.continuousCmdExecution, this.usingFn(), this.undoHistory,
-            this.produceFn, [...this.widgets], [...this.dynamicNodes],
+            this.logger, this.produceFn, [...this.widgets], [...this.dynamicNodes],
             this._strictStart, [...this.logLevels], this.throttleTimeout,
             this.stopPropagation, this.prevDefault, this.firstFn, this.thenFn, this.checkCodeFn,
             this.endFn, this.cancelFn, this.endOrCancelFn, this.hadEffectsFn,

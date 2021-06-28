@@ -24,6 +24,7 @@ import type {Interaction} from "../../api/interaction/Interaction";
 import type {Widget} from "../../api/binder/BaseBinderBuilder";
 import {isEltRef} from "../../api/binder/BaseBinderBuilder";
 import type {UndoHistory} from "../../api/undo/UndoHistory";
+import type {Logger} from "../../api/logging/Logger";
 
 /**
  * The base class that defines the concept of binding builder (called binder).
@@ -65,11 +66,14 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
 
     protected undoHistory: UndoHistory;
 
+    protected logger: Logger;
 
-    protected constructor(undoHistory: UndoHistory, observer?: BindingsObserver, binder?: Partial<Binder<C, I, D>>) {
+
+    protected constructor(undoHistory: UndoHistory, logger: Logger, observer?: BindingsObserver, binder?: Partial<Binder<C, I, D>>) {
         Object.assign(this, binder);
 
         this.undoHistory = undoHistory;
+        this.logger = logger;
         this.widgets ??= [];
         this.dynamicNodes ??= [];
         this.logLevels ??= [];

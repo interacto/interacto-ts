@@ -22,13 +22,14 @@ import {Press} from "../../src/impl/interaction/library/Press";
 import clearAllMocks = jest.clearAllMocks;
 import type {UndoHistory} from "../../src/api/undo/UndoHistory";
 import {UndoHistoryImpl} from "../../src/impl/undo/UndoHistoryImpl";
+import type {Logger} from "../../src/api/logging/Logger";
 
 let binder: UpdateBinder<Command, Interaction<InteractionData>, InteractionData>;
 let history: UndoHistory;
 
 beforeEach(() => {
     history = new UndoHistoryImpl();
-    binder = new UpdateBinder(history);
+    binder = new UpdateBinder(history, mock<Logger>());
 });
 
 afterEach(() => {
@@ -46,7 +47,7 @@ test("that is crashes when calling bind without a command supplier", () => {
 
 test("that observer is used on bind", () => {
     const obs = mock<BindingsObserver>();
-    binder = new UpdateBinder(history, obs)
+    binder = new UpdateBinder(history, mock<Logger>(), obs)
         .usingInteraction(() => new Press())
         .toProduce(() => mock<Command>());
 

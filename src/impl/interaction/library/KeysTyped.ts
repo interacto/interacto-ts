@@ -21,6 +21,7 @@ import type {KeysData} from "../../../api/interaction/KeysData";
 import {KeysDataImpl} from "../KeysDataImpl";
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {KeyReleaseTransition} from "../../fsm/KeyReleaseTransition";
+import type {Logger} from "../../../api/logging/Logger";
 
 /**
  * An FSM for typing several keyboard touches.
@@ -84,8 +85,8 @@ export class KeysTyped extends InteractionBase<KeysData, KeysDataImpl, KeysTyped
     /**
      * Creates the user interaction.
      */
-    public constructor() {
-        super(new KeysTypedFSM(), new KeysDataImpl());
+    public constructor(logger?: Logger) {
+        super(new KeysTypedFSM(), new KeysDataImpl(), logger);
 
         const handler: KeyTypedFSMHandler = {
             "onKeyTyped": (event: KeyboardEvent): void => {

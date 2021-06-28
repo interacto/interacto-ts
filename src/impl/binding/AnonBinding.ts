@@ -15,10 +15,10 @@
 import type {InteractionData} from "../../api/interaction/InteractionData";
 import {LogLevel} from "../../api/logging/LogLevel";
 import {BindingImpl} from "./BindingImpl";
-import {catBinding} from "../logging/ConfigLog";
 import type {Command} from "../../api/command/Command";
 import type {Interaction} from "../../api/interaction/Interaction";
 import type {UndoHistory} from "../../api/undo/UndoHistory";
+import type {Logger} from "../../api/logging/Logger";
 
 export class AnonBinding<C extends Command, I extends Interaction<D>, D extends InteractionData>
     extends BindingImpl<C, I, D> {
@@ -46,7 +46,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
     private readonly strictStart: boolean;
 
 
-    public constructor(continuousExec: boolean, interaction: I, undoHistory: UndoHistory, cmdSupplierFn: (d: D) => C,
+    public constructor(continuousExec: boolean, interaction: I, undoHistory: UndoHistory, logger: Logger, cmdSupplierFn: (d: D) => C,
                        widgets: ReadonlyArray<EventTarget>, dynamicNodes: ReadonlyArray<Node>,
                        strict: boolean, loggers: ReadonlyArray<LogLevel>, timeoutThrottle: number,
                        stopPropagation: boolean, prevDefault: boolean, firstFn?: (c: C, i: D) => void,
@@ -55,7 +55,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
                        endOrCancelFn?: (i: D) => void, hadEffectsFn?: (c: C, i: D) => void,
                        hadNoEffectFn?: (c: C, i: D) => void, cannotExecFn?: (c: C, i: D) => void,
                        onErrFn?: (ex: unknown) => void) {
-        super(continuousExec, interaction, cmdSupplierFn, widgets, undoHistory);
+        super(continuousExec, interaction, cmdSupplierFn, widgets, undoHistory, logger);
         this.configureLoggers(loggers);
         this.firstFn = firstFn;
         this.thenFn = thenFn;
@@ -96,11 +96,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
                 this.firstFn(cmd, this.getInteraction().getData());
             } catch (ex: unknown) {
                 this.catch(ex);
-                if (ex instanceof Error) {
-                    catBinding.error("Crash in 'first'", ex);
-                } else {
-                    catBinding.warn(`Crash in 'first': ${String(ex)}`);
-                }
+                this.logger.logBindingErr("Crash in 'first'", ex);
             }
         }
     }
@@ -112,11 +108,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
                 this.thenFn(cmd, this.getInteraction().getData());
             } catch (ex: unknown) {
                 this.catch(ex);
-                if (ex instanceof Error) {
-                    catBinding.error("Crash in 'then'", ex);
-                } else {
-                    catBinding.warn(`Crash in 'then': ${String(ex)}`);
-                }
+                this.logger.logBindingErr("Crash in 'then'", ex);
             }
         }
     }
@@ -128,11 +120,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
                 this.onEndFn(cmd, this.getInteraction().getData());
             } catch (ex: unknown) {
                 this.catch(ex);
-                if (ex instanceof Error) {
-                    catBinding.error("Crash in 'end'", ex);
-                } else {
-                    catBinding.warn(`Crash in 'end': ${String(ex)}`);
-                }
+                this.logger.logBindingErr("Crash in 'end'", ex);
             }
         }
     }
@@ -143,11 +131,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
                 this.cancelFn(this.getInteraction().getData());
             } catch (ex: unknown) {
                 this.catch(ex);
-                if (ex instanceof Error) {
-                    catBinding.error("Crash in 'cancel'", ex);
-                } else {
-                    catBinding.warn(`Crash in 'cancel': ${String(ex)}`);
-                }
+                this.logger.logBindingErr("Crash in 'cancel'", ex);
             }
         }
     }
@@ -158,11 +142,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
                 this.endOrCancelFn(this.getInteraction().getData());
             } catch (ex: unknown) {
                 this.catch(ex);
-                if (ex instanceof Error) {
-                    catBinding.error("Crash in 'endOrCancel'", ex);
-                } else {
-                    catBinding.warn(`Crash in 'endOrCancel': ${String(ex)}`);
-                }
+                this.logger.logBindingErr("Crash in 'endOrCancel'", ex);
             }
         }
     }
@@ -174,11 +154,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
                 this.hadNoEffectFn(cmd, this.getInteraction().getData());
             } catch (ex: unknown) {
                 this.catch(ex);
-                if (ex instanceof Error) {
-                    catBinding.error("Crash in 'ifHadNoEffect'", ex);
-                } else {
-                    catBinding.warn(`Crash in 'ifHadNoEffect': ${String(ex)}`);
-                }
+                this.logger.logBindingErr("Crash in 'ifHadNoEffect'", ex);
             }
         }
     }
@@ -190,11 +166,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
                 this.hadEffectsFn(cmd, this.getInteraction().getData());
             } catch (ex: unknown) {
                 this.catch(ex);
-                if (ex instanceof Error) {
-                    catBinding.error("Crash in 'ifHadEffects'", ex);
-                } else {
-                    catBinding.warn(`Crash in 'ifHadEffects': ${String(ex)}`);
-                }
+                this.logger.logBindingErr("Crash in 'ifHadEffects'", ex);
             }
         }
     }
@@ -206,11 +178,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
                 this.cannotExecFn(cmd, this.getInteraction().getData());
             } catch (ex: unknown) {
                 this.catch(ex);
-                if (ex instanceof Error) {
-                    catBinding.error("Crash in 'ifCannotExecute'", ex);
-                } else {
-                    catBinding.warn(`Crash in 'ifCannotExecute': ${String(ex)}`);
-                }
+                this.logger.logBindingErr("Crash in 'ifCannotExecute'", ex);
             }
         }
     }
@@ -222,14 +190,10 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
         } catch (ex: unknown) {
             ok = false;
             this.catch(ex);
-            if (ex instanceof Error) {
-                catBinding.error("Crash in 'when'", ex);
-            } else {
-                catBinding.warn(`Crash in 'when': ${String(ex)}`);
-            }
+            this.logger.logBindingErr("Crash in 'when'", ex);
         }
         if (this.asLogBinding) {
-            catBinding.info(`Checking condition: ${String(ok)}`);
+            this.logger.logBindingMsg(`Checking condition: ${String(ok)}`);
         }
         return ok;
     }
@@ -240,11 +204,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
             try {
                 this.onErrFn(err);
             } catch (ex: unknown) {
-                if (ex instanceof Error) {
-                    catBinding.error("Crash in 'catch'", ex);
-                } else {
-                    catBinding.warn(`Crash in 'catch': ${String(ex)}`);
-                }
+                this.logger.logBindingErr("Crash in 'catch'", ex);
             }
         }
     }

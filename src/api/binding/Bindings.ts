@@ -34,6 +34,7 @@ import type {Binding} from "./Binding";
 import type {Undo} from "../../impl/command/library/Undo";
 import type {Redo} from "../../impl/command/library/Redo";
 import type {UndoHistory} from "../undo/UndoHistory";
+import type {Logger} from "../logging/Logger";
 
 export type PartialButtonBinder = InteractionBinder<Interaction<WidgetData<HTMLButtonElement>>, WidgetData<HTMLButtonElement>>;
 export type PartialInputBinder = InteractionBinder<Interaction<WidgetData<HTMLInputElement>>, WidgetData<HTMLInputElement>>;
@@ -66,6 +67,8 @@ export abstract class Bindings {
      * The undo/redo history of the current binding context
      */
     abstract readonly undoHistory: UndoHistory;
+
+    abstract readonly logger: Logger;
 
     abstract nodeBinder(): BaseUpdateBinder;
 

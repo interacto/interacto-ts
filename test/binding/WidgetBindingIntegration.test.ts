@@ -12,11 +12,12 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSM, InteractionData, UndoHistory} from "../../src/interacto";
+import type {FSM, InteractionData, UndoHistory, Logger} from "../../src/interacto";
 import {BindingImpl, ClickTransition, CmdStatus, FSMImpl, TerminalState, UndoHistoryImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {InteractionStub} from "../interaction/InteractionStub";
 import {createMouseEvent} from "../interaction/StubEvents";
+import {mock} from "jest-mock-extended";
 
 
 let interaction: InteractionStub;
@@ -41,7 +42,7 @@ beforeEach(() => {
     cmd.candoValue = true;
     fsm = new OneTrFSM();
     interaction = new InteractionStub(fsm);
-    binding = new BindingImpl(false, interaction, () => cmd, [], history);
+    binding = new BindingImpl(false, interaction, () => cmd, [], history, mock<Logger>());
 });
 
 afterEach(() => {

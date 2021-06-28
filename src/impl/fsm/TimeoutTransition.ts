@@ -15,8 +15,8 @@
 import {TransitionBase} from "./TransitionBase";
 import type {OutputState} from "../../api/fsm/OutputState";
 import type {InputState} from "../../api/fsm/InputState";
-import {catFSM} from "../logging/ConfigLog";
 import type {EventType} from "../../api/fsm/EventType";
+import type {Logger} from "../../api/logging/Logger";
 
 
 /**
@@ -28,6 +28,8 @@ export class TimeoutTransition extends TransitionBase<Event> {
      * The timeoutDuration in ms.
      */
     private readonly timeoutDuration: () => number;
+
+    private readonly logger?: Logger;
 
     /**
      * The current thread in progress.
@@ -41,9 +43,11 @@ export class TimeoutTransition extends TransitionBase<Event> {
      * @param srcState - The source state of the transition.
      * @param tgtState - The output state of the transition.
      * @param timeout - The function that returns the timeout value in ms.
+     * @param logger - The logger to use.
      */
-    public constructor(srcState: OutputState, tgtState: InputState, timeout: () => number) {
+    public constructor(srcState: OutputState, tgtState: InputState, timeout: () => number, logger?: Logger) {
         super(srcState, tgtState);
+        this.logger = logger;
         this.timeouted = false;
         this.timeoutDuration = timeout;
         this.timeouted = false;
@@ -66,11 +70,7 @@ export class TimeoutTransition extends TransitionBase<Event> {
                     this.timeouted = true;
                     this.src.getFSM().onTimeout();
                 } catch (ex: unknown) {
-                    if (ex instanceof Error) {
-                        catFSM.error("Exception on timeout of a timeout transition", ex);
-                    } else {
-                        catFSM.warn(`Exception on timeout of a timeout transition: ${String(ex)}`);
-                    }
+                    this.logger?.logInteractionErr("Exception on timeout of a timeout transition", ex);
                 }
             }, time);
         }

@@ -26,22 +26,24 @@ import type {
     SrcTgtPointsData,
     TapData,
     TouchData,
-    WidgetData
+    WidgetData,
+    Logger,
+    Bindings
 } from "../../src/interacto";
-import {AnonCmd, BindingsImpl, catBinding, catCommand} from "../../src/interacto";
+import {AnonCmd, BindingsImpl, LogLevel, BindingsContext} from "../../src/interacto";
 import {StubCmd, StubUndoableCmd} from "../command/StubCmd";
 import type {MouseEventForTest} from "../interaction/StubEvents";
 import {createMouseEvent, robot} from "../interaction/StubEvents";
-import {BindingsContext} from "../../src/impl/binding/BindingsContext";
-import type {Bindings} from "../../src/api/binding/Bindings";
-import {LogLevel} from "../../src/api/logging/LogLevel";
+import {mock} from "jest-mock-extended";
 
 let elt: HTMLElement;
 let ctx: BindingsContext;
 let bindings: Bindings;
+let logger: Logger;
 
 beforeEach(() => {
-    bindings = new BindingsImpl();
+    logger = mock<Logger>();
+    bindings = new BindingsImpl(undefined, logger);
     ctx = new BindingsContext();
     bindings.setBindingObserver(ctx);
     jest.useFakeTimers();
@@ -65,16 +67,14 @@ test("press binder", () => {
 });
 
 test("log cmd binding", () => {
-    jest.spyOn(catCommand, "info");
-    jest.spyOn(catBinding, "info");
     bindings.pressBinder()
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .log(LogLevel.command, LogLevel.binding)
         .bind();
     robot(elt).mousedown();
-    expect(catCommand.info).toHaveBeenCalledTimes(4);
-    expect(catBinding.info).toHaveBeenCalledTimes(5);
+    expect(logger.logCmdMsg).toHaveBeenCalledTimes(4);
+    expect(logger.logBindingMsg).toHaveBeenCalledTimes(5);
 });
 
 test("undoable command registered", () => {
@@ -558,9 +558,6 @@ describe("check when it crashes in routines", () => {
     let cmd: StubCmd;
 
     beforeEach(() => {
-        jest.spyOn(catBinding, "error");
-        jest.spyOn(catBinding, "warn");
-        jest.spyOn(catBinding, "info");
         err = new Error("It crashed");
         cmd = new StubCmd(true);
         baseBinder = bindings.touchDnDBinder()
@@ -581,7 +578,7 @@ describe("check when it crashes in routines", () => {
             .touchend({}, [{"identifier": 3, "target": elt}]);
 
         expect(ctx.commands).toHaveLength(1);
-        expect(catBinding.error).toHaveBeenCalledWith("Crash in 'first'", err);
+        expect(logger.logBindingErr).toHaveBeenCalledWith("Crash in 'first'", err);
     });
 
     test("when it crashes in 'first' with an error caught by 'catch'", () => {
@@ -619,8 +616,8 @@ describe("check when it crashes in routines", () => {
             .touchend({}, [{"identifier": 1, "target": elt}]);
 
         expect(ctx.commands).toHaveLength(1);
-        expect(catBinding.error).toHaveBeenCalledWith("Crash in 'first'", err);
-        expect(catBinding.error).toHaveBeenCalledWith("Crash in 'catch'", err);
+        expect(logger.logBindingErr).toHaveBeenCalledWith("Crash in 'first'", err);
+        expect(logger.logBindingErr).toHaveBeenCalledWith("Crash in 'catch'", err);
     });
 
     test("when 'catch' crashes with not an error, logged", () => {
@@ -640,8 +637,7 @@ describe("check when it crashes in routines", () => {
             .touchend({}, [{"identifier": 1, "target": elt}]);
 
         expect(ctx.commands).toHaveLength(1);
-        expect(catBinding.error).toHaveBeenCalledWith("Crash in 'first'", err);
-        expect(catBinding.warn).toHaveBeenCalledWith("Crash in 'catch': YOLO");
+        expect(logger.logBindingErr).toHaveBeenCalledWith("Crash in 'first'", err);
     });
 
     test("when it crashes in 'first' with not an error", () => {
@@ -658,7 +654,7 @@ describe("check when it crashes in routines", () => {
             .touchend({}, [{"identifier": 1, "target": elt}]);
 
         expect(ctx.commands).toHaveLength(1);
-        expect(catBinding.warn).toHaveBeenCalledWith("Crash in 'first': 42");
+        expect(logger.logBindingErr).toHaveBeenCalledWith("Crash in 'first'", 42);
     });
 
     test("when it crashes in 'then' with an error", () => {
@@ -674,7 +670,7 @@ describe("check when it crashes in routines", () => {
             .touchend({}, [{"identifier": 1, "target": elt}]);
 
         expect(ctx.commands).toHaveLength(1);
-        expect(catBinding.error).toHaveBeenCalledWith("Crash in 'then'", err);
+        expect(logger.logBindingErr).toHaveBeenCalledWith("Crash in 'then'", err);
     });
 
     test("when it crashes in 'then' with an error caught by 'catch'", () => {
@@ -710,7 +706,7 @@ describe("check when it crashes in routines", () => {
             .touchend({}, [{"identifier": 1, "target": elt}]);
 
         expect(ctx.commands).toHaveLength(1);
-        expect(catBinding.warn).toHaveBeenCalledWith("Crash in 'then': foo");
+        expect(logger.logBindingErr).toHaveBeenCalledWith("Crash in 'then'", "foo");
     });
 
     test("when it crashes in 'end' with an error", () => {
@@ -726,7 +722,7 @@ describe("check when it crashes in routines", () => {
             .touchend({}, [{"identifier": 1, "target": elt}]);
 
         expect(ctx.commands).toHaveLength(1);
-        expect(catBinding.error).toHaveBeenCalledWith("Crash in 'end'", err);
+        expect(logger.logBindingErr).toHaveBeenCalledWith("Crash in 'end'", err);
     });
 
     test("when it crashes in 'end' with an error caught by 'catch'", () => {
@@ -762,7 +758,7 @@ describe("check when it crashes in routines", () => {
             .touchend({}, [{"identifier": 1, "target": elt}]);
 
         expect(ctx.commands).toHaveLength(1);
-        expect(catBinding.warn).toHaveBeenCalledWith("Crash in 'end': 21");
+        expect(logger.logBindingErr).toHaveBeenCalledWith("Crash in 'end'", 21);
     });
 
     test("when it crashes in 'endOrCancel' with an error", () => {
@@ -778,7 +774,7 @@ describe("check when it crashes in routines", () => {
             .touchend({}, [{"identifier": 1, "target": elt}]);
 
         expect(ctx.commands).toHaveLength(1);
-        expect(catBinding.error).toHaveBeenCalledWith("Crash in 'endOrCancel'", err);
+        expect(logger.logBindingErr).toHaveBeenCalledWith("Crash in 'endOrCancel'", err);
     });
 
     test("when it crashes in 'endOrCancel' with an error caught by 'catch'", () => {
@@ -814,7 +810,7 @@ describe("check when it crashes in routines", () => {
             .touchend({}, [{"identifier": 1, "target": elt}]);
 
         expect(ctx.commands).toHaveLength(1);
-        expect(catBinding.warn).toHaveBeenCalledWith("Crash in 'endOrCancel': true");
+        expect(logger.logBindingErr).toHaveBeenCalledWith("Crash in 'endOrCancel'", true);
     });
 
     test("when it crashes in 'cancel' with an error", () => {
@@ -832,7 +828,7 @@ describe("check when it crashes in routines", () => {
             .keydown({"code": "Escape"});
 
         expect(ctx.commands).toHaveLength(0);
-        expect(catBinding.error).toHaveBeenCalledWith("Crash in 'cancel'", err);
+        expect(logger.logBindingErr).toHaveBeenCalledWith("Crash in 'cancel'", err);
     });
 
     test("when it crashes in 'cancel' with an error caught by 'catch'", () => {
@@ -872,7 +868,7 @@ describe("check when it crashes in routines", () => {
             .keydown({"code": "Escape"});
 
         expect(ctx.commands).toHaveLength(0);
-        expect(catBinding.warn).toHaveBeenCalledWith("Crash in 'cancel': bar");
+        expect(logger.logBindingErr).toHaveBeenCalledWith("Crash in 'cancel'", "bar");
     });
 
     test("when it crashes in 'ifHadNoEffect' with an error", () => {
@@ -889,7 +885,7 @@ describe("check when it crashes in routines", () => {
             .touchend({}, [{"identifier": 1, "target": elt}]);
 
         expect(ctx.commands).toHaveLength(1);
-        expect(catBinding.error).toHaveBeenCalledWith("Crash in 'ifHadNoEffect'", err);
+        expect(logger.logBindingErr).toHaveBeenCalledWith("Crash in 'ifHadNoEffect'", err);
     });
 
     test("when it crashes in 'ifHadNoEffect' with an error caught by 'catch'", () => {
@@ -927,7 +923,7 @@ describe("check when it crashes in routines", () => {
             .touchend({}, [{"identifier": 1, "target": elt}]);
 
         expect(ctx.commands).toHaveLength(1);
-        expect(catBinding.warn).toHaveBeenCalledWith("Crash in 'ifHadNoEffect': 11");
+        expect(logger.logBindingErr).toHaveBeenCalledWith("Crash in 'ifHadNoEffect'", 11);
     });
 
     test("when it crashes in 'ifHadEffect' with an error", () => {
@@ -944,7 +940,7 @@ describe("check when it crashes in routines", () => {
             .touchend({}, [{"identifier": 1, "target": elt}]);
 
         expect(ctx.commands).toHaveLength(1);
-        expect(catBinding.error).toHaveBeenCalledWith("Crash in 'ifHadEffects'", err);
+        expect(logger.logBindingErr).toHaveBeenCalledWith("Crash in 'ifHadEffects'", err);
     });
 
     test("when it crashes in 'ifHadEffect' with an error caught by 'catch'", () => {
@@ -982,7 +978,7 @@ describe("check when it crashes in routines", () => {
             .touchend({}, [{"identifier": 1, "target": elt}]);
 
         expect(ctx.commands).toHaveLength(1);
-        expect(catBinding.warn).toHaveBeenCalledWith("Crash in 'ifHadEffects': YOLO");
+        expect(logger.logBindingErr).toHaveBeenCalledWith("Crash in 'ifHadEffects'", "YOLO");
     });
 
     test("when it crashes in 'when' with an error", () => {
@@ -998,7 +994,7 @@ describe("check when it crashes in routines", () => {
             .touchend({}, [{"identifier": 1, "target": elt}]);
 
         expect(ctx.commands).toHaveLength(0);
-        expect(catBinding.error).toHaveBeenCalledWith("Crash in 'when'", err);
+        expect(logger.logBindingErr).toHaveBeenCalledWith("Crash in 'when'", err);
     });
 
     test("when it crashes in 'when' with an error caught by 'catch'", () => {
@@ -1030,7 +1026,7 @@ describe("check when it crashes in routines", () => {
         robot(elt).touchstart({}, [{"identifier": 1, "target": elt}]);
 
         expect(ctx.commands).toHaveLength(0);
-        expect(catBinding.warn).toHaveBeenCalledWith("Crash in 'when': msg");
+        expect(logger.logBindingErr).toHaveBeenCalledWith("Crash in 'when'", "msg");
     });
 
     test("call to 'when' should log", () => {
@@ -1040,7 +1036,7 @@ describe("check when it crashes in routines", () => {
 
         robot(elt).touchstart({}, [{"identifier": 1, "target": elt}]);
 
-        expect(catBinding.info).toHaveBeenNthCalledWith(1, "Checking condition: true");
+        expect(logger.logBindingMsg).toHaveBeenNthCalledWith(1, "Checking condition: true");
     });
 
     test("when it crashes in 'ifCannotExecute' with an error", () => {
@@ -1057,7 +1053,7 @@ describe("check when it crashes in routines", () => {
             .touchend({}, [{"identifier": 1, "target": elt}]);
 
         expect(ctx.commands).toHaveLength(0);
-        expect(catBinding.error).toHaveBeenCalledWith("Crash in 'ifCannotExecute'", err);
+        expect(logger.logBindingErr).toHaveBeenCalledWith("Crash in 'ifCannotExecute'", err);
     });
 
     test("when it crashes in 'ifCannotExecute' with an error caught by 'catch'", () => {
@@ -1094,7 +1090,7 @@ describe("check when it crashes in routines", () => {
             .touchend({}, [{"identifier": 1, "target": elt}]);
 
         expect(ctx.commands).toHaveLength(0);
-        expect(catBinding.warn).toHaveBeenCalledWith("Crash in 'ifCannotExecute': 1");
+        expect(logger.logBindingErr).toHaveBeenCalledWith("Crash in 'ifCannotExecute'", 1);
     });
 });
 

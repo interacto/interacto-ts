@@ -70,8 +70,7 @@
     "gen-changelog": "git log --pretty=\"* %s\" $(git describe --tags --abbrev=0 @^)..@ | sort > commits"
   },
   "dependencies": {
-    "rxjs": "^6.6.7",
-    "typescript-logging": "^1.0.0"
+    "rxjs": "^6.6.7"
   },
   "files": [
     "dist/"

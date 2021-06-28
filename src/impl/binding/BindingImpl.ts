@@ -18,13 +18,13 @@ import type {Command} from "../../api/command/Command";
 import {CmdStatus} from "../../api/command/Command";
 import {CancelFSMException} from "../fsm/CancelFSMException";
 import type {InteractionData} from "../../api/interaction/InteractionData";
-import {catBinding, catCommand} from "../logging/ConfigLog";
 import {isUndoableType} from "../../api/undo/Undoable";
 import {MustBeUndoableCmdError} from "./MustBeUndoableCmdError";
 import type {Binding} from "../../api/binding/Binding";
 import type {Interaction} from "../../api/interaction/Interaction";
 import type {UndoHistory} from "../../api/undo/UndoHistory";
 import type {FSMHandler} from "../../api/fsm/FSMHandler";
+import type {Logger} from "../../api/logging/Logger";
 
 /**
  * The base class to do bindings, i.e. bindings between user interactions and (undoable) commands.
@@ -67,6 +67,8 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
 
     protected undoHistory: UndoHistory;
 
+    protected logger: Logger;
+
     /**
      * Creates a binding.
      * @param continuousExecution - Specifies whether the command must be executed on each step of the interaction.
@@ -75,9 +77,10 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
      * @param interaction - The user interaction of the binding.
      * @param widgets - The widgets on which the binding will operate.
      * @param undoHistory - The undo/redo history.
+     * @param logger - The logger to use
      */
     public constructor(continuousExecution: boolean, interaction: I, cmdProducer: (i?: D) => C,
-                       widgets: ReadonlyArray<EventTarget>, undoHistory: UndoHistory) {
+                       widgets: ReadonlyArray<EventTarget>, undoHistory: UndoHistory, logger: Logger) {
         this.asLogBinding = false;
         this.asLogCmd = false;
         this.continuousCmdExec = false;
@@ -90,6 +93,7 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
         this.continuousCmdExec = continuousExecution;
         this.activated = true;
         this.undoHistory = undoHistory;
+        this.logger = logger;
         this.interaction.getFsm().addHandler(this);
         interaction.registerToNodes(widgets);
     }
@@ -116,11 +120,7 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
         try {
             return this.cmdProducer(this.interaction.getData());
         } catch (ex: unknown) {
-            if (ex instanceof Error) {
-                catBinding.error("Error while creating a command", ex);
-            } else {
-                catBinding.warn(`Error while creating a command: ${String(ex)}`);
-            }
+            this.logger.logBindingErr("Error while creating a command", ex);
             return undefined;
         }
     }
@@ -216,12 +216,12 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
     public fsmCancels(): void {
         if (this.cmd !== undefined) {
             if (this.asLogBinding) {
-                catBinding.info("Binding cancelled");
+                this.logger.logBindingMsg("Binding cancelled");
             }
             const hadEffects = this.cmd.hadEffect();
             this.cmd.cancel();
             if (this.asLogCmd) {
-                catCommand.info(`Command ${this.cmd.constructor.name} cancelled`);
+                this.logger.logCmdMsg("Command cancelled", this.cmd.constructor.name);
             }
 
             if (this.isContinuousCmdExec() && hadEffects) {
@@ -239,7 +239,7 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
         if (isUndoableType(c)) {
             c.undo();
             if (this.asLogCmd) {
-                catCommand.info(`Command ${c.constructor.name} undone`);
+                this.logger.logCmdMsg("Command undone", c.constructor.name);
             }
         } else {
             throw new MustBeUndoableCmdError(c);
@@ -254,20 +254,20 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
         const ok: boolean = this.when();
 
         if (this.asLogBinding) {
-            catBinding.info(`Starting binding: ${String(ok)}`);
+            this.logger.logBindingMsg(`Starting binding: ${String(ok)}`);
         }
         if (ok) {
             this.cmd = this.createCommand();
             if (this.cmd !== undefined) {
                 this.first();
                 if (this.asLogCmd) {
-                    catCommand.info(`Command created and init: ${this.cmd.constructor.name}`);
+                    this.logger.logCmdMsg("Command created and init", this.cmd.constructor.name);
                 }
             }
         } else {
             if (this.isStrictStart()) {
                 if (this.asLogBinding) {
-                    catBinding.info(`Cancelling starting interaction: ${this.interaction.constructor.name}`);
+                    this.logger.logBindingMsg(`Cancelling starting interaction: ${this.interaction.constructor.name}`);
                 }
                 throw new CancelFSMException();
             }
@@ -280,12 +280,12 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
         }
 
         if (this.asLogBinding) {
-            catBinding.info("Binding updates");
+            this.logger.logBindingMsg("Binding updates");
         }
 
         if (this.createAndInitCommand()) {
             if (this.asLogCmd) {
-                catCommand.info("Command update");
+                this.logger.logCmdMsg("Command update");
             }
 
             this.then();
@@ -301,8 +301,7 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
         const ok = this.cmd?.execute() ?? false;
 
         if (this.asLogCmd) {
-            catCommand.info(
-                `Try to execute command (continuous execution), is cmd undefined? ${String(this.cmd === undefined)}`);
+            this.logger.logCmdMsg(`Try to execute command (continuous execution), is cmd undefined? ${String(this.cmd === undefined)}`);
         }
 
         if (ok instanceof Promise) {
@@ -312,14 +311,10 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
                 }
 
                 if (this.asLogCmd) {
-                    catCommand.info(`Continuous command execution had this result: ${String(executed)}`);
+                    this.logger.logCmdMsg(`Continuous command execution had this result: ${String(executed)}`);
                 }
             }).catch((ex: unknown) => {
-                if (ex instanceof Error) {
-                    catCommand.error("Error while executing the command continuously", ex);
-                } else {
-                    catCommand.warn(`Error while executing the command continuously: ${String(ex)}`);
-                }
+                this.logger.logCmdErr("Error while executing the command continuously", ex);
             });
         } else {
             if (!ok) {
@@ -327,7 +322,7 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
             }
 
             if (this.asLogCmd) {
-                catCommand.info(`Continuous command execution had this result: ${String(ok)}`);
+                this.logger.logCmdMsg(`Continuous command execution had this result: ${String(ok)}`);
             }
         }
     }
@@ -339,7 +334,7 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
         }
 
         if (this.asLogBinding) {
-            catBinding.info("Binding stops");
+            this.logger.logBindingMsg("Binding stops");
         }
 
         if (this.createAndInitCommand()) {
@@ -347,7 +342,7 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
         } else {
             if (this.cmd !== undefined) {
                 if (this.asLogCmd) {
-                    catCommand.info("Cancelling the command");
+                    this.logger.logCmdMsg("Cancelling the command");
                 }
                 this.cmd.cancel();
                 this.cmd = undefined;
@@ -360,7 +355,7 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
         if (!this.continuousCmdExec) {
             this.then();
             if (this.asLogCmd) {
-                catCommand.info("Command updated");
+                this.logger.logCmdMsg("Command updated");
             }
         }
 
@@ -380,11 +375,7 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
                     this.cmd = undefined;
                     this.timeEnded++;
                 }).catch((ex: unknown) => {
-                    if (ex instanceof Error) {
-                        catCommand.error("Error while executing the command", ex);
-                    } else {
-                        catCommand.warn(`Error while executing the command: ${String(ex)}`);
-                    }
+                    this.logger.logCmdErr("Error while executing the command", ex);
                     this.cmd = undefined;
                     this.timeEnded++;
                 });
@@ -400,13 +391,13 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
         let ok = this.when();
 
         if (this.asLogBinding) {
-            catBinding.info(`when predicate is ${String(ok)}`);
+            this.logger.logBindingMsg(`when predicate is ${String(ok)}`);
         }
 
         if (ok) {
             if (this.cmd === undefined) {
                 if (this.asLogCmd) {
-                    catCommand.info("Command creation");
+                    this.logger.logCmdMsg("Command creation");
                 }
                 this.cmd = this.createCommand();
                 ok = this.cmd !== undefined;
@@ -421,7 +412,7 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
 
     private afterCmdExecuted(cmd: C, ok: boolean): void {
         if (this.asLogCmd) {
-            catCommand.info(`Command execution had this result: ${String(ok)}`);
+            this.logger.logCmdMsg(`Command execution had this result: ${String(ok)}`);
         }
         if (ok) {
             this.end();
@@ -442,7 +433,7 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
         const hadEffect: boolean = cmd.hadEffect();
 
         if (this.asLogCmd) {
-            catCommand.info(`Command execution had effect: ${String(hadEffect)}`);
+            this.logger.logCmdMsg(`Command execution had effect: ${String(hadEffect)}`);
         }
 
         if (hadEffect) {
@@ -473,7 +464,7 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
 
     public setActivated(activated: boolean): void {
         if (this.asLogBinding) {
-            catBinding.info(`Binding Activated: ${String(activated)}`);
+            this.logger.logBindingMsg(`Binding Activated: ${String(activated)}`);
         }
         this.activated = activated;
         this.interaction.setActivated(activated);

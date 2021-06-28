@@ -23,22 +23,24 @@ import {mock} from "jest-mock-extended";
 import {flushPromises} from "../Utils";
 import type {MouseEventForTest} from "./StubEvents";
 import {createMouseEvent} from "./StubEvents";
-import {catInteraction} from "../../src/impl/logging/ConfigLog";
 import advanceTimersByTime = jest.advanceTimersByTime;
 import runAllTimers = jest.runAllTimers;
 import clearAllTimers = jest.clearAllTimers;
+import type {Logger} from "../../src/api/logging/Logger";
 
 let interaction: InteractionStub;
 let fsm: FSMImpl & MockProxy<FSMImpl>;
 let currentStateObs: Subject<[OutputState, OutputState]>;
 let currentState: OutputState;
+let logger: Logger;
 
 beforeEach(() => {
+    logger = mock<Logger>();
     currentStateObs = new Subject();
     fsm = mock<FSMImpl>();
     fsm.currentStateObservable.mockReturnValue(currentStateObs);
     fsm.getCurrentState.mockImplementation(() => currentState);
-    interaction = new InteractionStub(fsm);
+    interaction = new InteractionStub(fsm, logger);
 });
 
 afterEach(() => {
@@ -325,7 +327,6 @@ describe("throttling", () => {
     });
 
     test("crash with Error during throttling", async () => {
-        jest.spyOn(catInteraction, "error");
         const spy = jest.spyOn(interaction.getFsm(), "process");
         spy
             .mockReturnValueOnce(true)
@@ -337,11 +338,10 @@ describe("throttling", () => {
         interaction.processEvent(evtDiff);
         runAllTimers();
         await flushPromises();
-        expect(catInteraction.error).toHaveBeenCalledTimes(1);
+        expect(logger.logInteractionErr).toHaveBeenCalledWith("Error during the throttling process", new Error("YOLO"), "InteractionStub");
     });
 
     test("crash with not an Error during throttling", async () => {
-        jest.spyOn(catInteraction, "warn");
         const spy = jest.spyOn(interaction.getFsm(), "process");
         spy
             .mockReturnValueOnce(true)
@@ -354,6 +354,6 @@ describe("throttling", () => {
         interaction.processEvent(evtDiff);
         runAllTimers();
         await flushPromises();
-        expect(catInteraction.warn).toHaveBeenCalledTimes(1);
+        expect(logger.logInteractionErr).toHaveBeenCalledWith("Error during the throttling process", 42, "InteractionStub");
     });
 });

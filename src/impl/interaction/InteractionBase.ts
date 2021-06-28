@@ -15,13 +15,13 @@
 import type {FSM} from "../../api/fsm/FSM";
 import type {OutputState} from "../../api/fsm/OutputState";
 import {InitState} from "../fsm/InitState";
-import {catInteraction} from "../logging/ConfigLog";
 import type {InteractionData} from "../../api/interaction/InteractionData";
 import {isKeyEvent, isMouseEvent, isTouchEvent} from "../fsm/Events";
 import type {Subscription} from "rxjs";
 import type {Interaction} from "../../api/interaction/Interaction";
 import type {EventType} from "../../api/fsm/EventType";
 import type {Flushable} from "./Flushable";
+import type {Logger} from "../../api/logging/Logger";
 
 
 interface CancellablePromise extends Promise<void> {
@@ -48,6 +48,8 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
 
     /** The interaction data */
     protected readonly data: DImpl;
+
+    protected readonly logger?: Logger;
 
     private mouseHandler?: ((e: MouseEvent) => void);
 
@@ -81,8 +83,10 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
      * Creates the interaction.
      * @param fsm - The FSM that defines the behavior of the user interaction.
      * @param data - The interaction data.
+     * @param logger - The logger to use for this interaction
      */
-    protected constructor(fsm: F, data: DImpl) {
+    protected constructor(fsm: F, data: DImpl, logger?: Logger) {
+        this.logger = logger;
         this.activated = false;
         this.stopImmediatePropag = false;
         this.preventDef = false;
@@ -138,13 +142,7 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
                 }, currTimeout);
             }
         ).catch((ex: unknown) => {
-            if (ex instanceof Error) {
-                if (ex.message !== "cancellation") {
-                    catInteraction.error("Error during the throttling process", ex);
-                }
-            } else {
-                catInteraction.warn(`Error during the throttling process: ${String(ex)}`);
-            }
+            this.logger?.logInteractionErr("Error during the throttling process", ex, this.constructor.name);
         }) as CancellablePromise;
 
         this.currentThrottling.cancel = (): void => {
@@ -419,7 +417,7 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
 
     public setActivated(activated: boolean): void {
         if (this.asLog) {
-            catInteraction.info(`Interaction activation: ${String(activated)}`);
+            this.logger?.logInteractionMsg(`Interaction activation: ${String(activated)}`, this.constructor.name);
         }
         this.activated = activated;
         if (!activated) {
