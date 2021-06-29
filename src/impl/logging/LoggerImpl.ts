@@ -19,11 +19,11 @@ export class LoggingData {
     // eslint-disable-next-line @typescript-eslint/no-parameter-properties
     public constructor(public readonly date: number, public readonly msg: string, public readonly level: keyof typeof LogLevel,
                        // eslint-disable-next-line @typescript-eslint/no-parameter-properties
-                       public readonly name: string, public readonly type: "ERR" | "INFO") {
+                       public readonly name: string, public readonly type: "ERR" | "INFO", public readonly sessionID: string) {
     }
 
     public toString(): string {
-        return `${this.type} ${this.date} [${this.level}: ${this.name}] ${this.msg}`;
+        return `${this.type}[${this.level}: ${this.name}] [${this.sessionID}] at ${this.date}: '${this.msg}'`;
     }
 }
 
@@ -31,8 +31,12 @@ export class LoggingData {
 export class LoggerImpl implements Logger {
     public writeConsole: boolean;
 
+    public readonly sessionID: string;
+
     public constructor() {
         this.writeConsole = true;
+        this.sessionID = Date.now().toString(36) + Math.random().toString(36)
+            .substr(2, 6);
     }
 
     private processLoggingData(data: LoggingData): void {
@@ -51,29 +55,29 @@ export class LoggerImpl implements Logger {
 
     public logBindingErr(msg: string, ex: unknown): void {
         this.processLoggingData(new LoggingData(performance.now(), `${msg} ${this.formatError(ex)}`,
-            "binding", "", "ERR"));
+            "binding", "", "ERR", this.sessionID));
     }
 
     public logBindingMsg(msg: string): void {
-        this.processLoggingData(new LoggingData(performance.now(), msg, "binding", "", "INFO"));
+        this.processLoggingData(new LoggingData(performance.now(), msg, "binding", "", "INFO", this.sessionID));
     }
 
     public logCmdErr(msg: string, ex: unknown, cmdName: string = ""): void {
         this.processLoggingData(new LoggingData(performance.now(), `${msg} ${this.formatError(ex)}`,
-            "command", cmdName, "ERR"));
+            "command", cmdName, "ERR", this.sessionID));
     }
 
     public logCmdMsg(msg: string, cmdName: string = ""): void {
-        this.processLoggingData(new LoggingData(performance.now(), msg, "command", cmdName, "INFO"));
+        this.processLoggingData(new LoggingData(performance.now(), msg, "command", cmdName, "INFO", this.sessionID));
     }
 
     public logInteractionErr(msg: string, ex: unknown, interactionName: string = ""): void {
         this.processLoggingData(new LoggingData(performance.now(), `${msg} ${this.formatError(ex)}`,
-            "interaction", interactionName, "ERR"));
+            "interaction", interactionName, "ERR", this.sessionID));
     }
 
     public logInteractionMsg(msg: string, interactionName: string = ""): void {
-        this.processLoggingData(new LoggingData(performance.now(), msg, "interaction", interactionName, "INFO"));
+        this.processLoggingData(new LoggingData(performance.now(), msg, "interaction", interactionName, "INFO", this.sessionID));
     }
 
 }
