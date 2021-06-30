@@ -21,27 +21,27 @@ export class TransferArrayItem<T> extends UndoableCommand {
     /**
      * The array to take the transferred element from.
      */
-    private _srcArray: Array<T>;
+    protected _srcArray: Array<T>;
 
     /**
      * The array to put the transferred element in.
      */
-    private _tgtArray: Array<T>;
+    protected _tgtArray: Array<T>;
 
     /**
      * The index at which the element is located in the source array.
      */
-    private _srcIndex: number;
+    protected _srcIndex: number;
 
     /**
      * The index at which the element must be put in the target array.
      */
-    private _tgtIndex: number;
+    protected _tgtIndex: number;
 
     /**
      * The name of the command.
      */
-    private readonly cmdName: string;
+    protected readonly cmdName: string;
 
     /**
      * Creates the command.

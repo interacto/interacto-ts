@@ -23,7 +23,7 @@ import {SetProperty} from "./SetProperty";
 export class SetProperties<T> extends UndoableCommand {
     public readonly obj: T;
 
-    private _newvalues: Partial<T>;
+    protected _newvalues: Partial<T>;
 
     public readonly compositeCmds: Array<SetProperty<T, keyof T>>;
 
