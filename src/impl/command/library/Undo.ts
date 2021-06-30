@@ -19,7 +19,7 @@ import type {UndoHistory} from "../../../api/undo/UndoHistory";
  * An Undo command.
  */
 export class Undo extends CommandBase {
-    private readonly history: UndoHistory;
+    protected readonly history: UndoHistory;
 
     public constructor(undoHistory: UndoHistory) {
         super();
