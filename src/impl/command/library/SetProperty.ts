@@ -21,13 +21,13 @@ import {UndoableCommand} from "../UndoableCommand";
  * @typeParam S - The property of T to set
  */
 export class SetProperty<T, S extends keyof T> extends UndoableCommand {
-    private readonly obj: T;
+    protected readonly obj: T;
 
-    private readonly prop: S;
+    protected readonly prop: S;
 
     public newvalue: T[S];
 
-    private mementoValue: T[S];
+    protected mementoValue: T[S];
 
     public constructor(obj: T, prop: S, newvalue: T[S]) {
         super();
