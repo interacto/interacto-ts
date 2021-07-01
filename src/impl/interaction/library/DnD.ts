@@ -83,14 +83,25 @@ export class DnDFSM extends FSMImpl {
         moveDrag.action = actionMove;
 
         const release = new ReleaseTransition(dragged, released);
-        release.isGuardOK = (event: MouseEvent): boolean => event.button === this.buttonToCheck;
+        release.isGuardOK = (event: MouseEvent): boolean => {
+            const tgt = event.currentTarget;
+            return event.button === this.buttonToCheck && (!(tgt instanceof Element) || !tgt.classList.contains("ioDwellSpring"));
+        };
         release.action = (event: MouseEvent): void => {
             dataHandler?.onRelease(event);
         };
+        this.configureCancellation(pressed, dragged, cancelled);
+    }
 
+    private configureCancellation(pressed: StdState, dragged: StdState, cancelled: CancellingState): void {
         if (this.cancellable) {
             new EscapeKeyPressureTransition(pressed, cancelled);
             new EscapeKeyPressureTransition(dragged, cancelled);
+            const releaseCancel = new ReleaseTransition(dragged, cancelled);
+            releaseCancel.isGuardOK = (event: MouseEvent): boolean => {
+                const tgt = event.currentTarget;
+                return event.button === this.buttonToCheck && tgt instanceof Element && tgt.classList.contains("ioDwellSpring");
+            };
         }
     }
 

@@ -81,3 +81,22 @@ test("interaction restart after cancel", () => {
         .mousemove();
     expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
 });
+
+test("check if release on dwells-spring object, cancelled", () => {
+    const div = document.createElement("div");
+    canvas.append(div);
+    div.classList.add("ioDwellSpring");
+    interaction.registerToNodes([canvas, div]);
+    robot(canvas)
+        .mousedown({"button": 0})
+        .mousemove({"button": 0})
+        .mouseup({
+            "button": 0,
+            "target": div
+        });
+    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+    expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
+    expect(handler.fsmStops).not.toHaveBeenCalled();
+    expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
+});
+
