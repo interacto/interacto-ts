@@ -78,4 +78,9 @@ export interface Logger {
      * States whether messages are logged in the command
      */
     writeConsole: boolean;
+
+    /**
+     * The HTTP address of the logging server
+     */
+    serverAddress: string | undefined;
 }

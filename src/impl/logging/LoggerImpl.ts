@@ -19,11 +19,14 @@ export class LoggingData {
     // eslint-disable-next-line @typescript-eslint/no-parameter-properties
     public constructor(public readonly date: number, public readonly msg: string, public readonly level: keyof typeof LogLevel,
                        // eslint-disable-next-line @typescript-eslint/no-parameter-properties
-                       public readonly name: string, public readonly type: "ERR" | "INFO", public readonly sessionID: string) {
+                       public readonly name: string, public readonly type: "ERR" | "INFO",
+                       // eslint-disable-next-line @typescript-eslint/no-parameter-properties
+                       public readonly sessionID: string, public readonly stack?: string) {
     }
 
     public toString(): string {
-        return `${this.type}[${this.level}: ${this.name}] [${this.sessionID}] at ${this.date}: '${this.msg}'`;
+        const withstack = this.stack === undefined ? "" : `, ${this.stack}`;
+        return `${this.type}[${this.level}: ${this.name}] [${this.sessionID}] at ${this.date}: '${this.msg}'${withstack}`;
     }
 }
 
@@ -31,9 +34,12 @@ export class LoggingData {
 export class LoggerImpl implements Logger {
     public writeConsole: boolean;
 
+    public serverAddress: string | undefined;
+
     public readonly sessionID: string;
 
     public constructor() {
+        this.serverAddress = undefined;
         this.writeConsole = true;
         this.sessionID = Date.now().toString(36) + Math.random().toString(36)
             .substr(2, 6);
@@ -43,6 +49,18 @@ export class LoggerImpl implements Logger {
         if (this.writeConsole) {
             // eslint-disable-next-line no-console
             console.log(data.toString());
+        }
+
+        if (this.serverAddress !== undefined && data.type === "ERR") {
+            const rq = new XMLHttpRequest();
+            rq.open("POST", this.serverAddress, true);
+            rq.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            rq.send(JSON.stringify({
+                "date": data.date,
+                "msg": data.msg,
+                "stack": data.stack,
+                "id": data.sessionID
+            }));
         }
     }
 
@@ -54,8 +72,8 @@ export class LoggerImpl implements Logger {
     }
 
     public logBindingErr(msg: string, ex: unknown, bindingName: string = ""): void {
-        this.processLoggingData(new LoggingData(performance.now(), `${msg} ${this.formatError(ex)}`,
-            "binding", bindingName, "ERR", this.sessionID));
+        this.processLoggingData(new LoggingData(performance.now(), msg,
+            "binding", bindingName, "ERR", this.sessionID, this.formatError(ex)));
     }
 
     public logBindingMsg(msg: string, bindingName: string = ""): void {
@@ -63,8 +81,8 @@ export class LoggerImpl implements Logger {
     }
 
     public logCmdErr(msg: string, ex: unknown, cmdName: string = ""): void {
-        this.processLoggingData(new LoggingData(performance.now(), `${msg} ${this.formatError(ex)}`,
-            "command", cmdName, "ERR", this.sessionID));
+        this.processLoggingData(new LoggingData(performance.now(), msg,
+            "command", cmdName, "ERR", this.sessionID, this.formatError(ex)));
     }
 
     public logCmdMsg(msg: string, cmdName: string = ""): void {
@@ -72,8 +90,8 @@ export class LoggerImpl implements Logger {
     }
 
     public logInteractionErr(msg: string, ex: unknown, interactionName: string = ""): void {
-        this.processLoggingData(new LoggingData(performance.now(), `${msg} ${this.formatError(ex)}`,
-            "interaction", interactionName, "ERR", this.sessionID));
+        this.processLoggingData(new LoggingData(performance.now(), msg,
+            "interaction", interactionName, "ERR", this.sessionID, this.formatError(ex)));
     }
 
     public logInteractionMsg(msg: string, interactionName: string = ""): void {
