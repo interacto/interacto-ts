@@ -31,8 +31,9 @@ export interface Logger {
      * The logging system does not decide the information messages to log.
      * This is the job of each binding in which we can log information or not.
      * @param msg - The message to log
+     * @param bindingName - The name of the binding to log
      */
-    logBindingMsg(msg: string): void;
+    logBindingMsg(msg: string, bindingName?: string): void;
 
     /**
      * Logs command production information messages.
@@ -59,8 +60,9 @@ export interface Logger {
      * Errors are always logged in.
      * @param msg - The message to log
      * @param ex - The error
+     * @param bindingName - The name of the binding to log
      */
-    logBindingErr(msg: string, ex: unknown): void;
+    logBindingErr(msg: string, ex: unknown, bindingName?: string): void;
 
     /**
      * Logs command errors.

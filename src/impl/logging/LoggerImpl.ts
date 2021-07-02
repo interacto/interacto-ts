@@ -53,13 +53,13 @@ export class LoggerImpl implements Logger {
         return String(ex);
     }
 
-    public logBindingErr(msg: string, ex: unknown): void {
+    public logBindingErr(msg: string, ex: unknown, bindingName: string = ""): void {
         this.processLoggingData(new LoggingData(performance.now(), `${msg} ${this.formatError(ex)}`,
-            "binding", "", "ERR", this.sessionID));
+            "binding", bindingName, "ERR", this.sessionID));
     }
 
-    public logBindingMsg(msg: string): void {
-        this.processLoggingData(new LoggingData(performance.now(), msg, "binding", "", "INFO", this.sessionID));
+    public logBindingMsg(msg: string, bindingName: string = ""): void {
+        this.processLoggingData(new LoggingData(performance.now(), msg, "binding", bindingName, "INFO", this.sessionID));
     }
 
     public logCmdErr(msg: string, ex: unknown, cmdName: string = ""): void {

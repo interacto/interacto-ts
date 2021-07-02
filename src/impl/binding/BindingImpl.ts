@@ -33,6 +33,8 @@ import type {Logger} from "../../api/logging/Logger";
  */
 export class BindingImpl<C extends Command, I extends Interaction<D>, D extends InteractionData> implements Binding<C, I, D>, FSMHandler {
 
+    protected _name: string | undefined;
+
     protected timeEnded: number;
 
     protected timeCancelled: number;
@@ -81,6 +83,8 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
      */
     public constructor(continuousExecution: boolean, interaction: I, cmdProducer: (i?: D) => C,
                        widgets: ReadonlyArray<EventTarget>, undoHistory: UndoHistory, logger: Logger) {
+        // The name is partial until the binding procudes its first command
+        this._name = undefined;
         this.asLogBinding = false;
         this.asLogCmd = false;
         this.continuousCmdExec = false;
@@ -96,6 +100,10 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
         this.logger = logger;
         this.interaction.getFsm().addHandler(this);
         interaction.registerToNodes(widgets);
+    }
+
+    public get name(): string {
+        return this._name ?? this.interaction.constructor.name;
     }
 
     /**
@@ -118,7 +126,13 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
      */
     protected createCommand(): C | undefined {
         try {
-            return this.cmdProducer(this.interaction.getData());
+            const cmd = this.cmdProducer(this.interaction.getData());
+            // Updating the name of the binding according to the name of the command.
+            // Cannot be done elsewhere since we cannot access the concrete type of the command.
+            if (this._name === undefined) {
+                this._name = `${this.interaction.constructor.name}:${cmd.constructor.name}`;
+            }
+            return cmd;
         } catch (ex: unknown) {
             this.logger.logBindingErr("Error while creating a command", ex);
             return undefined;

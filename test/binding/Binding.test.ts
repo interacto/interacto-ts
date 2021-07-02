@@ -12,16 +12,14 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {
-    InteractionData,
-    Undoable, UndoHistory
-} from "../../src/interacto";
+import type {InteractionData, Undoable, UndoHistory} from "../../src/interacto";
 import {
+    BindingImpl,
     CancelFSMException,
     CmdStatus,
     FSMImpl,
     MustBeUndoableCmdError,
-    BindingImpl, UndoHistoryImpl
+    UndoHistoryImpl
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {InteractionStub} from "../interaction/InteractionStub";
@@ -115,6 +113,10 @@ describe("nominal cases", () => {
 
     test("testExecuteNope", () => {
         expect(binding.isContinuousCmdExec()).toBeFalsy();
+    });
+
+    test("name is ok when not executed", () => {
+        expect(binding.name).toStrictEqual("InteractionStub");
     });
 
     test("testExecuteOK", () => {
@@ -284,6 +286,15 @@ describe("nominal cases", () => {
         binding.fsmStarts();
         binding.fsmCancels();
         expect(cmd.undo).toHaveBeenCalledTimes(1);
+    });
+
+    test("name contains the command name on execution", () => {
+        const cmd = new CmdStubUndoable();
+        jest.spyOn(cmd, "undo");
+        binding = new BindingStub(history, logger, true, () => cmd, new InteractionStub(new FSMImpl()));
+        binding.conditionRespected = true;
+        binding.fsmStarts();
+        expect(binding.name).toStrictEqual("InteractionStub:CmdStubUndoable");
     });
 
     test("cancel interaction continuous undoable no log", () => {

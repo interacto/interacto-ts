@@ -22,6 +22,11 @@ import type {InteractionData} from "../interaction/InteractionData";
  */
 export interface Binding<C extends Command, I extends Interaction<D>, D extends InteractionData> {
     /**
+     * The name of the binding
+     */
+    readonly name: string;
+
+    /**
      * @returns The interaction.
      */
     getInteraction(): I;
