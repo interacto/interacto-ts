@@ -30,6 +30,18 @@ export class LoggingData {
     }
 }
 
+export class UsageLog {
+    public duration: number;
+
+    public cancelled: boolean;
+
+    // eslint-disable-next-line @typescript-eslint/no-parameter-properties
+    public constructor(public name: string, public readonly sessionID: string, public readonly date: number) {
+        this.duration = 0;
+        this.cancelled = false;
+    }
+}
+
 
 export class LoggerImpl implements Logger {
     public writeConsole: boolean;
@@ -38,7 +50,10 @@ export class LoggerImpl implements Logger {
 
     public readonly sessionID: string;
 
+    public ongoingBindings: Array<UsageLog>;
+
     public constructor() {
+        this.ongoingBindings = [];
         this.serverAddress = undefined;
         this.writeConsole = true;
         this.sessionID = Date.now().toString(36) + Math.random().toString(36)
@@ -98,4 +113,19 @@ export class LoggerImpl implements Logger {
         this.processLoggingData(new LoggingData(performance.now(), msg, "interaction", interactionName, "INFO", this.sessionID));
     }
 
+    public logBindingStart(bindingName: string): void {
+        this.ongoingBindings.push(new UsageLog(bindingName, this.sessionID, performance.now()));
+    }
+
+    public logBindingEnd(bindingName: string, cancelled: boolean): void {
+        const logs = this.ongoingBindings.filter(d => bindingName.includes(d.name));
+
+        this.ongoingBindings = this.ongoingBindings.filter(d => !logs.includes(d));
+
+        if (logs.length === 1) {
+            logs[0].name = bindingName;
+            logs[0].duration = logs[0].date - performance.now();
+            logs[0].cancelled = cancelled;
+        }
+    }
 }

@@ -408,6 +408,8 @@ describe("nominal cases", () => {
         binding.conditionRespected = false;
         binding.fsmStops();
         expect(binding.getTimesCancelled()).toStrictEqual(2);
+        expect(logger.logBindingStart).not.toHaveBeenCalled();
+        expect(logger.logBindingEnd).not.toHaveBeenCalled();
     });
 
     test("uninstall Binding", () => {
@@ -415,6 +417,54 @@ describe("nominal cases", () => {
         binding.uninstallBinding();
         expect(binding.isActivated()).toBeFalsy();
         expect(binding.getInteraction().uninstall).toHaveBeenCalledTimes(1);
+    });
+
+    test("log usage when binding starts but not command", () => {
+        binding.logUsage = true;
+        binding.fsmStarts();
+        expect(logger.logBindingStart).toHaveBeenCalledWith("InteractionStub");
+    });
+
+    test("log usage when binding ends but not command", () => {
+        binding.logUsage = true;
+        binding.fsmStarts();
+        binding.fsmStops();
+        expect(logger.logBindingEnd).toHaveBeenCalledWith("InteractionStub", false);
+        expect(logger.logBindingStart).toHaveBeenCalledTimes(1);
+    });
+
+    test("log usage when binding cancels but not command", () => {
+        binding.logUsage = true;
+        binding.fsmStarts();
+        binding.fsmCancels();
+        expect(logger.logBindingEnd).toHaveBeenCalledWith("InteractionStub", true);
+        expect(logger.logBindingStart).toHaveBeenCalledTimes(1);
+    });
+
+    test("log usage when binding starts and with a command", () => {
+        binding.conditionRespected = true;
+        binding.logUsage = true;
+        binding.fsmStarts();
+        expect(logger.logBindingStart).toHaveBeenCalledWith("InteractionStub:StubCmd");
+    });
+
+    test("log usage when binding ends and with a command", () => {
+        binding.conditionRespected = true;
+        binding.logUsage = true;
+        binding.fsmStarts();
+        binding.fsmUpdates();
+        binding.fsmStops();
+        expect(logger.logBindingEnd).toHaveBeenCalledWith("InteractionStub:StubCmd", false);
+        expect(logger.logBindingStart).toHaveBeenCalledTimes(1);
+    });
+
+    test("log usage when binding cancels and with a command", () => {
+        binding.conditionRespected = true;
+        binding.logUsage = true;
+        binding.fsmStarts();
+        binding.fsmCancels();
+        expect(logger.logBindingEnd).toHaveBeenCalledWith("InteractionStub:StubCmd", true);
+        expect(logger.logBindingStart).toHaveBeenCalledTimes(1);
     });
 });
 

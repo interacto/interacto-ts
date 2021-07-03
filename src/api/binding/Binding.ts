@@ -27,6 +27,11 @@ export interface Binding<C extends Command, I extends Interaction<D>, D extends 
     readonly name: string;
 
     /**
+     * Logs usage information of the binding for usage analysis
+     */
+    logUsage: boolean;
+
+    /**
      * @returns The interaction.
      */
     getInteraction(): I;

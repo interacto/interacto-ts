@@ -35,6 +35,10 @@ export interface Logger {
      */
     logBindingMsg(msg: string, bindingName?: string): void;
 
+    logBindingStart(bindingName: string): void;
+
+    logBindingEnd(bindingName: string, cancelled: boolean): void;
+
     /**
      * Logs command production information messages.
      * The logging system does not decide the information messages to log.

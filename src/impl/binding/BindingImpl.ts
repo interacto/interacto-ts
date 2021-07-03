@@ -41,7 +41,12 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
 
     protected asLogBinding: boolean;
 
+    /**
+     * Logs binding usage information, to perform data analysis on usage
+     */
     protected asLogCmd: boolean;
+
+    public logUsage: boolean;
 
     protected activated: boolean;
 
@@ -87,6 +92,7 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
         this._name = undefined;
         this.asLogBinding = false;
         this.asLogCmd = false;
+        this.logUsage = false;
         this.continuousCmdExec = false;
         this.timeCancelled = 0;
         this.timeEnded = 0;
@@ -247,6 +253,10 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
             this.endOrCancel();
             this.timeCancelled++;
         }
+
+        if (this.logUsage) {
+            this.logger.logBindingEnd(this.name, true);
+        }
     }
 
     private cancelContinousWithEffectsCmd(c: C): void {
@@ -285,6 +295,9 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
                 }
                 throw new CancelFSMException();
             }
+        }
+        if (this.logUsage) {
+            this.logger.logBindingStart(this.name);
         }
     }
 
@@ -351,6 +364,8 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
             this.logger.logBindingMsg("Binding stops");
         }
 
+        let cancelled = false;
+
         if (this.createAndInitCommand()) {
             this.executeCommandOnFSMStop();
         } else {
@@ -361,7 +376,12 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
                 this.cmd.cancel();
                 this.cmd = undefined;
                 this.timeCancelled++;
+                cancelled = true;
             }
+        }
+
+        if (this.logUsage) {
+            this.logger.logBindingEnd(this.name, cancelled);
         }
     }
 
@@ -465,6 +485,7 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
         this.cmdsProduced.complete();
         this.asLogBinding = false;
         this.asLogCmd = false;
+        this.logUsage = false;
         this.interaction.uninstall();
     }
 
