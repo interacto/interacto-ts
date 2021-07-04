@@ -106,8 +106,8 @@ export class TouchDnD extends InteractionBase<SrcTgtPointsData<TouchData>, SrcTg
         this.handler = {
             "onTouch": (evt: TouchEvent): void => {
                 const touch: Touch = evt.changedTouches[0];
-                this.data.copySrc(touch, evt);
-                this.data.copyTgt(touch, evt);
+                this._data.copySrc(touch, evt);
+                this._data.copyTgt(touch, evt);
             },
             "onMove": (evt: TouchEvent): void => {
                 this.setTgtData(evt);
@@ -120,13 +120,13 @@ export class TouchDnD extends InteractionBase<SrcTgtPointsData<TouchData>, SrcTg
             }
         };
 
-        this.getFsm().buildFSM(this.handler);
+        this.fsm.buildFSM(this.handler);
     }
 
     private setTgtData(evt: TouchEvent): void {
         const touch: Touch | undefined = getTouch(evt.changedTouches, this.data.src.identifier);
         if (touch !== undefined) {
-            this.data.copyTgt(touch, evt);
+            this._data.copyTgt(touch, evt);
         }
     }
 }

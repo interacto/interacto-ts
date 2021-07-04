@@ -33,8 +33,12 @@ beforeEach(() => {
     fsm = mock<FSMImpl>();
     src = mock<OutputState>();
     tgt = mock<InputState>();
-    src.getFSM.mockReturnValue(fsm);
-    tgt.getFSM.mockReturnValue(fsm);
+    Object.defineProperty(src, "fsm", {
+        "get": jest.fn(() => fsm)
+    });
+    Object.defineProperty(tgt, "fsm", {
+        "get": jest.fn(() => fsm)
+    });
     evt = new TimeoutTransition(src, tgt, () => 500, logger);
 });
 

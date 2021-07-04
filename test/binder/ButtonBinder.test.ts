@@ -324,8 +324,8 @@ test("prevent default set", () => {
         .on(button1)
         .bind();
 
-    expect(binding.getInteraction().preventDefault).toBeTruthy();
-    expect(binding.getInteraction().stopImmediatePropagation).toBeFalsy();
+    expect(binding.interaction.preventDefault).toBeTruthy();
+    expect(binding.interaction.stopImmediatePropagation).toBeFalsy();
     expect(binding).toBeDefined();
 });
 
@@ -336,7 +336,7 @@ test("stop propag set", () => {
         .on(button1)
         .bind();
 
-    expect(binding.getInteraction().stopImmediatePropagation).toBeTruthy();
-    expect(binding.getInteraction().preventDefault).toBeFalsy();
+    expect(binding.interaction.stopImmediatePropagation).toBeTruthy();
+    expect(binding.interaction.preventDefault).toBeFalsy();
     expect(binding).toBeDefined();
 });

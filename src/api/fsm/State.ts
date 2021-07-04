@@ -19,14 +19,14 @@ import type {FSM} from "./FSM";
  */
 export interface State {
     /**
-     * @returns The name of the state.
+     * The name of the state.
      */
-    getName(): string;
+    readonly name: string;
 
     /**
-     * @returns The FSM that contains the state.
+     * The FSM that contains the state.
      */
-    getFSM(): FSM;
+    readonly fsm: FSM;
 
     /**
      * Checks whether the starting state of the fsm is this state.

@@ -21,8 +21,6 @@ import {SubStubTransition1} from "./StubTransitionOK";
 import type {Transition} from "../../src/api/fsm/Transition";
 import {createMouseEvent} from "../interaction/StubEvents";
 
-jest.mock("../../src/impl/fsm/StdState");
-
 let tr: SubFSMTransition;
 let fsm: FSMImpl;
 let mainfsm: FSMImpl;
@@ -36,8 +34,6 @@ beforeEach(() => {
     mainfsm = new FSMImpl();
     s1 = new StdState(mainfsm, "s1");
     s2 = new StdState(mainfsm, "s2");
-    s1.getFSM = jest.fn().mockReturnValue(mainfsm);
-    s2.getFSM = jest.fn().mockReturnValue(mainfsm);
     mainfsm.addState(s1);
     mainfsm.addState(s2);
     tr = new SubFSMTransition(s1, s2, fsm);
@@ -48,8 +44,8 @@ beforeEach(() => {
 });
 
 test("testInner", () => {
-    expect(fsm.getInner()).toBeTruthy();
-    expect(mainfsm.getInner()).toBeFalsy();
+    expect(fsm.inner).toBeTruthy();
+    expect(mainfsm.inner).toBeFalsy();
 });
 
 test("testAcceptFirstEvent", () => {
@@ -99,7 +95,7 @@ test("get accepted events", () => {
     expect([...evts]).toHaveLength(3);
     expect(evts.includes("click")).toBeTruthy();
     expect(evts.includes("auxclick")).toBeTruthy();
-    expect(evts.includes([...fsm.initState.getTransitions()[0].getAcceptedEvents()][0])).toBeTruthy();
+    expect(evts.includes([...fsm.initState.transitions[0].getAcceptedEvents()][0])).toBeTruthy();
 });
 
 test("get accepted events when nothing to return", () => {
@@ -109,11 +105,13 @@ test("get accepted events when nothing to return", () => {
 });
 
 test("testExecuteExitSrcState", () => {
+    jest.spyOn(s1, "exit");
     tr.execute(createMouseEvent("click", document.createElement("button")));
     expect(s1.exit).toHaveBeenCalledTimes(1);
 });
 
 test("testExecuteEnterTgtState", () => {
+    jest.spyOn(s2, "enter");
     tr.execute(createMouseEvent("click", document.createElement("button")));
     expect(s2.enter).toHaveBeenCalledTimes(1);
 });

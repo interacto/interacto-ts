@@ -87,11 +87,11 @@ describe("on canvas", () => {
             .on(c1)
             .bind();
 
-        (binding.getInteraction() as InteractionBase<InteractionData, Flushable & InteractionData, FSM>).onNodeUnregistered(c1);
+        (binding.interaction as InteractionBase<InteractionData, Flushable & InteractionData, FSM>).onNodeUnregistered(c1);
 
         c1.dispatchEvent(createTouchEvent("touchend", 1, c1, 11, 23, 110, 230));
 
-        expect(binding.isRunning()).toBeFalsy();
+        expect(binding.running).toBeFalsy();
     });
 });
 
@@ -110,7 +110,7 @@ describe("on svg doc for dynamic registration", () => {
 
         doc.dispatchEvent(createTouchEvent("touchend", 1, doc, 11, 23, 110, 230));
 
-        expect(binding.isRunning()).toBeFalsy();
+        expect(binding.running).toBeFalsy();
         expect(binding).toBeDefined();
         expect(ctx.commands).toHaveLength(0);
     });

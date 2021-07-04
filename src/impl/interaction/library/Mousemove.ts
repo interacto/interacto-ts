@@ -63,13 +63,13 @@ export class Mousemove extends InteractionBase<PointData, PointDataImpl, Mousemo
 
         this.handler = {
             "onMove": (evt: MouseEvent): void => {
-                this.data.copy(evt);
+                this._data.copy(evt);
             },
             "reinitData": (): void => {
                 this.reinitData();
             }
         };
 
-        this.getFsm().buildFSM(this.handler);
+        this.fsm.buildFSM(this.handler);
     }
 }

@@ -32,14 +32,14 @@ export interface Interaction<D extends InteractionData> {
     preventDefault: boolean;
 
     /**
-     * @returns The FSM of the user interaction.
+     * The FSM of the user interaction.
      */
-    getFsm(): FSM;
+    readonly fsm: FSM;
 
     /**
-     * @returns The interaction data of the user interaction. Cannot be null.
+     * The interaction data of the user interaction. Cannot be null.
      */
-    getData(): D;
+    data: D;
 
     /**
      * @returns Whether the user interaction is running.

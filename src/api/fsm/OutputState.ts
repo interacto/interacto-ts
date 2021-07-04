@@ -21,6 +21,11 @@ import type {Transition} from "./Transition";
  */
 export interface OutputState extends State {
     /**
+     * The list of outgoing transitions of the state.
+     */
+    readonly transitions: ReadonlyArray<Transition<Event>>;
+
+    /**
      * Actions done when a transition of the state is executed so
      * that this state is left.
      * @throws CancelFSMException If leaving the state leads to a cancelling of the FSM execution.
@@ -34,11 +39,6 @@ export interface OutputState extends State {
     process(event: Event): boolean;
 
     /**
-     * @returns The list of outgoing transitions of the state.
-     */
-    getTransitions(): ReadonlyArray<Transition<Event>>;
-
-    /**
      * Adds the given transitions to the list of outgoing transitions of the state.
      * @param tr - The transition to add.
      */
@@ -49,5 +49,5 @@ export function isOutputStateType(obj: State | undefined): obj is OutputState {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     return (obj as OutputState).exit !== undefined && (obj as OutputState).addTransition !== undefined &&
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        (obj as OutputState).process !== undefined && (obj as OutputState).getTransitions !== undefined;
+        (obj as OutputState).process !== undefined && (obj as OutputState).transitions !== undefined;
 }

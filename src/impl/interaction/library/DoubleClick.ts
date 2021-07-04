@@ -62,10 +62,11 @@ export class DoubleClickFSM extends FSMImpl {
     }
 
 
-    public override log(log: boolean): void {
-        super.log(log);
-        this.firstClickFSM.log(log);
-        this.sndClickFSM.log(log);
+    // eslint-disable-next-line accessor-pairs
+    public override set log(log: boolean) {
+        super.log = log;
+        this.firstClickFSM.log = log;
+        this.sndClickFSM.log = log;
     }
 
     public override buildFSM(dataHandler?: FSMDataHandler): void {
@@ -83,7 +84,7 @@ export class DoubleClickFSM extends FSMImpl {
         this.addState(clicked);
         this.addState(dbleclicked);
         this.addState(cancelled);
-        this.setStartingState(dbleclicked);
+        this.startingState = dbleclicked;
 
         const firstClick = new SubFSMTransition(this.initState, clicked, this.firstClickFSM);
         firstClick.action = (): void => {
@@ -131,7 +132,7 @@ export class DoubleClick extends InteractionBase<PointData, PointDataImpl, Doubl
         // We give the interaction to the first click as this click interaction
         // will contains the data: so that this interaction will fill the data
         // of the double-click.
-        new Click(this.getFsm().firstClickFSM, this.data);
-        this.getFsm().buildFSM(this);
+        new Click(this.fsm.firstClickFSM, this._data);
+        this.fsm.buildFSM(this);
     }
 }

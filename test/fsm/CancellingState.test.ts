@@ -32,24 +32,33 @@ test("enter", () => {
 });
 
 test("checkStartingState fsm started", () => {
-    fsm.isStarted.mockReturnValue(true);
+    Object.defineProperty(fsm, "started", {
+        "get": jest.fn(() => true)
+    });
 
     state.checkStartingState();
     expect(fsm.onStarting).not.toHaveBeenCalledWith();
 });
 
 test("checkStartingState fsm not started but starting state not this state", () => {
-    fsm.isStarted.mockReturnValue(false);
-    fsm.getStartingState.mockReturnValue(mock<OutputState>());
+    Object.defineProperty(fsm, "started", {
+        "get": jest.fn(() => false)
+    });
+    Object.defineProperty(fsm, "startingState", {
+        "get": jest.fn(() => mock<OutputState>())
+    });
 
     state.checkStartingState();
     expect(fsm.onStarting).not.toHaveBeenCalledWith();
 });
 
 test("checkStartingState fsm not started and starting state is this state", () => {
-    fsm.isStarted.mockReturnValue(false);
-    fsm.getStartingState.mockReturnValue(state);
-
+    Object.defineProperty(fsm, "started", {
+        "get": jest.fn(() => false)
+    });
+    Object.defineProperty(fsm, "startingState", {
+        "get": jest.fn(() => state)
+    });
     state.checkStartingState();
     expect(fsm.onStarting).toHaveBeenCalledTimes(1);
 });

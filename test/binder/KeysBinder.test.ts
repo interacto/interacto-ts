@@ -384,7 +384,7 @@ test("that 'strictStart' works correctly when the 'when' routine returns false",
     jest.runOnlyPendingTimers();
 
     expect(ctx.commands).toHaveLength(0);
-    expect(binding.getInteraction().isRunning()).toBeFalsy();
+    expect(binding.interaction.isRunning()).toBeFalsy();
 });
 
 test("that 'strictStart' works correctly when the 'when' routine returns true", () => {

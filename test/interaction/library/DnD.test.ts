@@ -26,8 +26,8 @@ beforeEach(() => {
     handler = mock<FSMHandler>();
     interaction = new DnD(false);
     interaction.log(true);
-    interaction.getFsm().log(true);
-    interaction.getFsm().addHandler(handler);
+    interaction.fsm.log = true;
+    interaction.fsm.addHandler(handler);
     canvas = document.createElement("canvas");
 });
 
@@ -70,14 +70,14 @@ test("data of the  press and drag part of the interaction", () => {
     robot(canvas).mousedown({"screenX": 1, "screenY": 2, "clientX": 15, "clientY": 20, "button": 0});
     const newHandler = mock<FSMHandler>();
     newHandler.fsmUpdates.mockImplementation(() => {
-        sx = interaction.getData().src.clientX;
-        sy = interaction.getData().src.clientY;
-        tx = interaction.getData().tgt.clientX;
-        ty = interaction.getData().tgt.clientY;
-        button = interaction.getData().src.button;
-        obj = interaction.getData().tgt.currentTarget as HTMLCanvasElement;
+        sx = interaction.data.src.clientX;
+        sy = interaction.data.src.clientY;
+        tx = interaction.data.tgt.clientX;
+        ty = interaction.data.tgt.clientY;
+        button = interaction.data.src.button;
+        obj = interaction.data.tgt.currentTarget as HTMLCanvasElement;
     });
-    interaction.getFsm().addHandler(newHandler);
+    interaction.fsm.addHandler(newHandler);
     robot(canvas).mousemove({"screenX": 3, "screenY": 4, "clientX": 16, "clientY": 21, "button": 0});
     expect(sx).toBe(15);
     expect(sy).toBe(20);
@@ -158,14 +158,14 @@ test("check data with multiple drag", () => {
         .mousedown({"screenX": 1, "screenY": 2, "clientX": 11, "clientY": 23, "button": 0})
         .mousemove({"screenX": 3, "screenY": 4, "clientX": 12, "clientY": 22, "button": 0});
 
-    interaction.getFsm().addHandler(new class extends StubFSMHandler {
+    interaction.fsm.addHandler(new class extends StubFSMHandler {
         public override fsmUpdates(): void {
-            sx = interaction.getData().src.clientX;
-            sy = interaction.getData().src.clientY;
-            tx = interaction.getData().tgt.clientX;
-            ty = interaction.getData().tgt.clientY;
-            button = interaction.getData().src.button;
-            obj = interaction.getData().tgt.currentTarget as HTMLCanvasElement;
+            sx = interaction.data.src.clientX;
+            sy = interaction.data.src.clientY;
+            tx = interaction.data.tgt.clientX;
+            ty = interaction.data.tgt.clientY;
+            button = interaction.data.src.button;
+            obj = interaction.data.tgt.currentTarget as HTMLCanvasElement;
         }
     }());
 
@@ -227,12 +227,12 @@ test("check data with one move.", () => {
     let sy: number | undefined;
 
     interaction.registerToNodes([canvas]);
-    interaction.getFsm().addHandler(new class extends StubFSMHandler {
+    interaction.fsm.addHandler(new class extends StubFSMHandler {
         public override fsmStops(): void {
-            sx = interaction.getData().src.clientX;
-            sy = interaction.getData().src.clientY;
-            tx = interaction.getData().tgt.clientX;
-            ty = interaction.getData().tgt.clientY;
+            sx = interaction.data.src.clientX;
+            sy = interaction.data.src.clientY;
+            tx = interaction.data.tgt.clientX;
+            ty = interaction.data.tgt.clientY;
         }
     }());
     robot(canvas)
@@ -252,12 +252,12 @@ test("displacement data", () => {
     let diffScreenY: number | undefined;
 
 
-    interaction.getFsm().addHandler(new class extends StubFSMHandler {
+    interaction.fsm.addHandler(new class extends StubFSMHandler {
         public override fsmStops(): void {
-            diffClientX = interaction.getData().diffClientX;
-            diffClientY = interaction.getData().diffClientY;
-            diffScreenX = interaction.getData().diffScreenX;
-            diffScreenY = interaction.getData().diffScreenY;
+            diffClientX = interaction.data.diffClientX;
+            diffClientY = interaction.data.diffClientY;
+            diffScreenX = interaction.data.diffScreenX;
+            diffScreenY = interaction.data.diffScreenY;
         }
     }());
 

@@ -110,13 +110,13 @@ export class Clicks extends InteractionBase<PointsData, PointsDataImpl, ClicksFS
             "click": (evt: MouseEvent): void => {
                 const pt = new PointDataImpl();
                 pt.copy(evt);
-                this.data.addPoint(pt);
+                this._data.addPoint(pt);
             },
             "reinitData": (): void => {
                 this.reinitData();
             }
         };
 
-        this.getFsm().buildFSM(this.handler);
+        this.fsm.buildFSM(this.handler);
     }
 }

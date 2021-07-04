@@ -48,13 +48,13 @@ export class SubFSMTransition extends TransitionBase<Event> {
     public constructor(srcState: OutputState, tgtState: InputState, fsm: FSM) {
         super(srcState, tgtState);
         this.subFSM = fsm;
-        this.subFSM.setInner(true);
+        this.subFSM.inner = true;
         this.subFSMHandler = {
             "fsmStarts": (): void => {
                 this.src.exit();
             },
             "fsmUpdates": (): void => {
-                this.src.getFSM().onUpdating();
+                this.src.fsm.onUpdating();
             },
             "fsmStops": (): void => {
                 this.action(undefined);
@@ -68,7 +68,7 @@ export class SubFSMTransition extends TransitionBase<Event> {
                     return;
                 }
                 if (isOutputStateType(this.tgt)) {
-                    this.src.getFSM().setCurrentState(this.tgt);
+                    this.src.fsm.currentState = this.tgt;
                     this.tgt.enter();
                 }
             },
@@ -83,10 +83,10 @@ export class SubFSMTransition extends TransitionBase<Event> {
      */
     private setUpFSMHandler(): void {
         this.subFSM.addHandler(this.subFSMHandler);
-        this.src.getFSM().setCurrentSubFSM(this.subFSM);
-        this.subStateSubscription = this.subFSM.currentStateObservable()
+        this.src.fsm.currentSubFSM = this.subFSM;
+        this.subStateSubscription = this.subFSM.currentStateObservable
             .subscribe(value => {
-                this.src.getFSM().setCurrentState(value[1]);
+                this.src.fsm.currentState = value[1];
             });
     }
 
@@ -95,13 +95,13 @@ export class SubFSMTransition extends TransitionBase<Event> {
      */
     private unsetFSMHandler(): void {
         this.subFSM.removeHandler(this.subFSMHandler);
-        this.src.getFSM().setCurrentSubFSM(undefined);
+        this.src.fsm.currentSubFSM = undefined;
         this.subStateSubscription?.unsubscribe();
     }
 
     private cancelsFSM(): void {
         this.unsetFSMHandler();
-        this.src.getFSM().onCancelling();
+        this.src.fsm.onCancelling();
     }
 
     public override execute(event: Event): InputState | undefined {
@@ -111,10 +111,10 @@ export class SubFSMTransition extends TransitionBase<Event> {
             return undefined;
         }
 
-        this.src.getFSM().stopCurrentTimeout();
+        this.src.fsm.stopCurrentTimeout();
         this.setUpFSMHandler();
         this.subFSM.process(event);
-        return transition.getTarget();
+        return transition.target;
     }
 
     public accept(event: Event): event is Event {
@@ -127,18 +127,18 @@ export class SubFSMTransition extends TransitionBase<Event> {
 
     private findTransition(event: Event): Transition<Event> | undefined {
         return this.subFSM
-            .getInitState()
-            .getTransitions()
+            .initState
+            .transitions
             .find(tr => tr.accept(event));
     }
 
     public getAcceptedEvents(): ReadonlyArray<EventType> {
-        if (this.subFSM.getInitState().getTransitions().length === 0) {
+        if (this.subFSM.initState.transitions.length === 0) {
             return [];
         }
 
-        return this.subFSM.getInitState()
-            .getTransitions()
+        return this.subFSM.initState
+            .transitions
             .map(tr => tr.getAcceptedEvents())
             .reduce((a, b) => [...a, ...b]);
     }

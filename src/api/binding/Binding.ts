@@ -27,55 +27,65 @@ export interface Binding<C extends Command, I extends Interaction<D>, D extends 
     readonly name: string;
 
     /**
-     * Logs usage information of the binding for usage analysis
+     * Logs (or not) usage information of the binding for usage analysis
      */
     logUsage: boolean;
 
     /**
-     * @returns The interaction.
+     * Logs (or not) binding execution information.
      */
-    getInteraction(): I;
+    logBinding: boolean;
 
     /**
-     * @returns The command in progress or null.
+     * Logs (or not) command production information
      */
-    getCommand(): C | undefined;
+    logCmd: boolean;
 
     /**
-     * @returns True if the binding is activated.
+     * The user interaction.
      */
-    isActivated(): boolean;
+    readonly interaction: I;
 
     /**
-     * Activates the binding.
-     * @param activated - True: the binding is activated. Otherwise, it is desactivated.
+     * The command in progress or null.
      */
-    setActivated(activated: boolean): void;
+    readonly command: C | undefined;
 
     /**
-     * @returns True: if the binding is currently used.
+     * States whether the binding is activated.
      */
-    isRunning(): boolean;
+    activated: boolean;
+
+    /**
+     * States whether the binding is running.
+     */
+    readonly running: boolean;
 
     /**
      * States whether the interaction must continue to run while the condition of the binding is not fulfilled at the interaction start.
      */
-    isStrictStart(): boolean;
+    readonly strictStart: boolean;
 
-    uninstallBinding(): void;
-
-    /** An RX observable objects that will provide the commands produced by the binding. */
-    produces(): Observable<C>;
+    /**
+     * States whether the command must be executed on each step of the interaction (and not only at the
+     * end of the interaction execution).
+     */
+    readonly continuousCmdExecution: boolean;
 
     /**
      * Information method.
      * @returns The number of times the binding successfully ended (nevermind a command was created or not).
      */
-    getTimesEnded(): number;
+    readonly timesEnded: number;
 
     /**
      * Information method.
-     * @returns The number of times the binding was cancelled (nevermind a command was created or not).
+     * The number of times the binding was cancelled (nevermind a command was created or not).
      */
-    getTimesCancelled(): number;
+    readonly timesCancelled: number;
+
+    /** An RX observable objects that will provide the commands produced by the binding. */
+    readonly produces: Observable<C>;
+
+    uninstallBinding(): void;
 }

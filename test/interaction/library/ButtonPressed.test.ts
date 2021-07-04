@@ -25,8 +25,8 @@ beforeEach(() => {
     handler = mock<FSMHandler>();
     interaction = new ButtonPressed();
     interaction.log(true);
-    interaction.getFsm().log(true);
-    interaction.getFsm().addHandler(handler);
+    interaction.fsm.log = true;
+    interaction.fsm.addHandler(handler);
     button = document.createElement("button");
 });
 

@@ -43,8 +43,6 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
 
     private readonly onErrFn?: (ex: unknown) => void;
 
-    private readonly strictStart: boolean;
-
 
     public constructor(continuousExec: boolean, interaction: I, undoHistory: UndoHistory, logger: Logger, cmdSupplierFn: (d: D) => C,
                        widgets: ReadonlyArray<EventTarget>, dynamicNodes: ReadonlyArray<Node>,
@@ -55,7 +53,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
                        endOrCancelFn?: (i: D) => void, hadEffectsFn?: (c: C, i: D) => void,
                        hadNoEffectFn?: (c: C, i: D) => void, cannotExecFn?: (c: C, i: D) => void,
                        onErrFn?: (ex: unknown) => void) {
-        super(continuousExec, interaction, cmdSupplierFn, widgets, undoHistory, logger);
+        super(continuousExec, strict, interaction, cmdSupplierFn, widgets, undoHistory, logger);
         this.configureLoggers(loggers);
         this.firstFn = firstFn;
         this.thenFn = thenFn;
@@ -63,7 +61,6 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
         this.endOrCancelFn = endOrCancelFn;
         this.whenFn = whenFn;
         this.onEndFn = endFn;
-        this.strictStart = strict;
         this.hadEffectsFn = hadEffectsFn;
         this.hadNoEffectFn = hadNoEffectFn;
         this.cannotExecFn = cannotExecFn;
@@ -79,22 +76,18 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
 
     private configureLoggers(loggers: ReadonlyArray<LogLevel>): void {
         if (loggers.length !== 0) {
-            this.setLogCmd(loggers.includes(LogLevel.command.valueOf()));
-            this.setLogBinding(loggers.includes(LogLevel.binding.valueOf()));
+            this.logCmd = loggers.includes(LogLevel.command.valueOf());
+            this.logBinding = loggers.includes(LogLevel.binding.valueOf());
             this.logUsage = loggers.includes(LogLevel.usage.valueOf());
             this.interaction.log(loggers.includes(LogLevel.interaction.valueOf()));
         }
     }
 
-    public override isStrictStart(): boolean {
-        return this.strictStart;
-    }
-
     public override first(): void {
-        const cmd = this.getCommand();
+        const cmd = this.command;
         if (this.firstFn !== undefined && cmd !== undefined) {
             try {
-                this.firstFn(cmd, this.getInteraction().getData());
+                this.firstFn(cmd, this.interaction.data);
             } catch (ex: unknown) {
                 this.catch(ex);
                 this.logger.logBindingErr("Crash in 'first'", ex);
@@ -103,10 +96,10 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
     }
 
     public override then(): void {
-        const cmd = this.getCommand();
+        const cmd = this.command;
         if (this.thenFn !== undefined && cmd !== undefined) {
             try {
-                this.thenFn(cmd, this.getInteraction().getData());
+                this.thenFn(cmd, this.interaction.data);
             } catch (ex: unknown) {
                 this.catch(ex);
                 this.logger.logBindingErr("Crash in 'then'", ex);
@@ -115,10 +108,10 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
     }
 
     public override end(): void {
-        const cmd = this.getCommand();
+        const cmd = this.command;
         if (this.onEndFn !== undefined && cmd !== undefined) {
             try {
-                this.onEndFn(cmd, this.getInteraction().getData());
+                this.onEndFn(cmd, this.interaction.data);
             } catch (ex: unknown) {
                 this.catch(ex);
                 this.logger.logBindingErr("Crash in 'end'", ex);
@@ -129,7 +122,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
     public override cancel(): void {
         if (this.cancelFn !== undefined) {
             try {
-                this.cancelFn(this.getInteraction().getData());
+                this.cancelFn(this.interaction.data);
             } catch (ex: unknown) {
                 this.catch(ex);
                 this.logger.logBindingErr("Crash in 'cancel'", ex);
@@ -140,7 +133,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
     public override endOrCancel(): void {
         if (this.endOrCancelFn !== undefined) {
             try {
-                this.endOrCancelFn(this.getInteraction().getData());
+                this.endOrCancelFn(this.interaction.data);
             } catch (ex: unknown) {
                 this.catch(ex);
                 this.logger.logBindingErr("Crash in 'endOrCancel'", ex);
@@ -149,10 +142,10 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
     }
 
     public override ifCmdHadNoEffect(): void {
-        const cmd = this.getCommand();
+        const cmd = this.command;
         if (this.hadNoEffectFn !== undefined && cmd !== undefined) {
             try {
-                this.hadNoEffectFn(cmd, this.getInteraction().getData());
+                this.hadNoEffectFn(cmd, this.interaction.data);
             } catch (ex: unknown) {
                 this.catch(ex);
                 this.logger.logBindingErr("Crash in 'ifHadNoEffect'", ex);
@@ -161,10 +154,10 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
     }
 
     public override ifCmdHadEffects(): void {
-        const cmd = this.getCommand();
+        const cmd = this.command;
         if (this.hadEffectsFn !== undefined && cmd !== undefined) {
             try {
-                this.hadEffectsFn(cmd, this.getInteraction().getData());
+                this.hadEffectsFn(cmd, this.interaction.data);
             } catch (ex: unknown) {
                 this.catch(ex);
                 this.logger.logBindingErr("Crash in 'ifHadEffects'", ex);
@@ -173,10 +166,10 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
     }
 
     public override ifCannotExecuteCmd(): void {
-        const cmd = this.getCommand();
+        const cmd = this.command;
         if (this.cannotExecFn !== undefined && cmd !== undefined) {
             try {
-                this.cannotExecFn(cmd, this.getInteraction().getData());
+                this.cannotExecFn(cmd, this.interaction.data);
             } catch (ex: unknown) {
                 this.catch(ex);
                 this.logger.logBindingErr("Crash in 'ifCannotExecute'", ex);
@@ -187,13 +180,13 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
     public override when(): boolean {
         let ok;
         try {
-            ok = this.whenFn === undefined || this.whenFn(this.getInteraction().getData());
+            ok = this.whenFn === undefined || this.whenFn(this.interaction.data);
         } catch (ex: unknown) {
             ok = false;
             this.catch(ex);
             this.logger.logBindingErr("Crash in 'when'", ex);
         }
-        if (this.asLogBinding) {
+        if (this.logBinding) {
             this.logger.logBindingMsg(`Checking condition: ${String(ok)}`);
         }
         return ok;

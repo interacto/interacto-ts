@@ -75,27 +75,27 @@ export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouch
                     const data = new SrcTgtTouchDataImpl();
                     data.copySrc(event.changedTouches[0], event);
                     data.copyTgt(event.changedTouches[0], event);
-                    this.data.addTouchData(data);
+                    this._data.addTouchData(data);
                 }
             },
             "onMove": (event: TouchEvent): void => {
-                this.data.setTouch(event.changedTouches[0], event);
+                this._data.setTouch(event.changedTouches[0], event);
             },
 
             "onRelease": (event: TouchEvent): void => {
-                this.data.setTouch(event.changedTouches[0], event);
+                this._data.setTouch(event.changedTouches[0], event);
             },
 
             "reinitData": (): void => {
-                const currentIDs = this.getFsm().getConccurFSMs()
-                    .filter(fsm => fsm.isStarted())
+                const currentIDs = this.fsm.getConccurFSMs()
+                    .filter(fsm => fsm.started)
                     .map(fsm => fsm.getTouchId());
 
-                this.getData()
+                this.data
                     .touches
                     .filter(data => !currentIDs.includes(data.src.identifier))
                     .forEach(data => {
-                        (this.getData() as MultiTouchDataImpl).removeTouchData(data.src.identifier);
+                        (this.data as MultiTouchDataImpl).removeTouchData(data.src.identifier);
                     });
             }
         };

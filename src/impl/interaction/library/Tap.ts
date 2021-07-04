@@ -114,7 +114,7 @@ export class Tap extends InteractionBase<TapData, TapDataImpl, TapFSM> {
                 if (evt.changedTouches.length > 0) {
                     const touch = new TouchDataImpl();
                     touch.copy(TouchDataImpl.mergeTouchEventData(evt.changedTouches[0], evt));
-                    this.data.addTapData(touch);
+                    this._data.addTapData(touch);
                 }
             },
             "reinitData": (): void => {
@@ -122,6 +122,6 @@ export class Tap extends InteractionBase<TapData, TapDataImpl, TapFSM> {
             }
         };
 
-        this.getFsm().buildFSM(this.handler);
+        this.fsm.buildFSM(this.handler);
     }
 }

@@ -27,8 +27,8 @@ beforeEach(() => {
     handler = mock<FSMHandler>();
     interaction = new DragLock();
     interaction.log(true);
-    interaction.getFsm().log(true);
-    interaction.getFsm().addHandler(handler);
+    interaction.fsm.log = true;
+    interaction.fsm.addHandler(handler);
     document.documentElement.innerHTML = "<html></html>";
     svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     document.body.appendChild(svg);
@@ -56,10 +56,10 @@ test("dragLock data in a SVG environment", () => {
     const data = new SrcTgtPointsDataImpl();
     const newHandler = mock<FSMHandler>();
     newHandler.fsmStops.mockImplementation(() => {
-        data.copySrc(interaction.getData().src);
-        data.copyTgt(interaction.getData().tgt);
+        data.copySrc(interaction.data.src);
+        data.copyTgt(interaction.data.tgt);
     });
-    interaction.getFsm().addHandler(newHandler);
+    interaction.fsm.addHandler(newHandler);
     interaction.processEvent(createMouseEvent("click", rect1, undefined, undefined, 11, 23));
     interaction.processEvent(createMouseEvent("click", rect1, undefined, undefined, 11, 23));
     interaction.processEvent(createMouseEvent("mousemove", svg, undefined, undefined, 20, 30));

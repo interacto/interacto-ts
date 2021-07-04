@@ -81,7 +81,7 @@ export class PanFSM extends FSMImpl {
         this.addState(released);
         this.addState(cancelled);
 
-        this._startingState = moved;
+        this.startingState = moved;
 
         const press = new TouchPressureTransition(this.initState, touched);
         press.action = (event: TouchEvent): void => {
@@ -181,20 +181,20 @@ export class Pan extends InteractionBase<SrcTgtPointsData<TouchData>, SrcTgtTouc
         this.handler = {
             "touch": (evt: TouchEvent): void => {
                 const touch: Touch = evt.changedTouches[0];
-                this.data.copySrc(touch, evt);
-                this.data.copyTgt(touch, evt);
+                this._data.copySrc(touch, evt);
+                this._data.copyTgt(touch, evt);
             },
             "panning": (evt: TouchEvent): void => {
-                this.data.copyTgt(evt.changedTouches[0], evt);
+                this._data.copyTgt(evt.changedTouches[0], evt);
             },
             "panned": (evt: TouchEvent): void => {
-                this.data.copyTgt(evt.changedTouches[0], evt);
+                this._data.copyTgt(evt.changedTouches[0], evt);
             },
             "reinitData": (): void => {
                 this.reinitData();
             }
         };
 
-        this.getFsm().buildFSM(this.handler);
+        this.fsm.buildFSM(this.handler);
     }
 }

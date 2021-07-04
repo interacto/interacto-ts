@@ -40,10 +40,11 @@ export class DragLockFSM extends FSMImpl {
         this.sndDbleClick = new DoubleClickFSM();
     }
 
-    public override log(log: boolean): void {
-        super.log(log);
-        this.firstDbleClick.log(log);
-        this.sndDbleClick.log(log);
+    // eslint-disable-next-line accessor-pairs
+    public override set log(log: boolean) {
+        super.log = log;
+        this.firstDbleClick.log = log;
+        this.sndDbleClick.log = log;
     }
 
     public override reinit(): void {
@@ -136,8 +137,8 @@ export class DragLock extends InteractionBase<SrcTgtPointsData<PointData>, SrcTg
 
         // We give the interactions to the initial and final double-clicks as these interactions
         // will contain the data: so that these interactions will fill the data of the draglock.
-        new DoubleClick(this.getFsm().firstDbleClick, this.data.src as PointDataImpl);
-        new DoubleClick(this.getFsm().sndDbleClick, this.data.tgt as PointDataImpl);
-        this.getFsm().buildFSM(handler);
+        new DoubleClick(this.fsm.firstDbleClick, this.data.src as PointDataImpl);
+        new DoubleClick(this.fsm.sndDbleClick, this.data.tgt as PointDataImpl);
+        this.fsm.buildFSM(handler);
     }
 }

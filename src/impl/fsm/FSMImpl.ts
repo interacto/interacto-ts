@@ -36,25 +36,17 @@ export class FSMImpl implements FSM {
 
     protected readonly logger?: Logger;
 
-    protected asLogFSM: boolean;
+    public _log: boolean;
 
-    protected _inner: boolean;
+    public inner: boolean;
 
-    /**
-     * By default an FSM triggers its 'start' event when it leaves its initial state.
-     * In some cases, this is not the case. For example, a double-click interaction is an FSM that must trigger
-     * its start event when the FSM reaches... its terminal state. Similarly, a DnD must trigger its start event
-     * on the first move, not on the first press.
-     * The goal of this attribute is to identify the state of the FSM that must trigger the start event.
-     * By default, this attribute is set with the initial state of the FSM.
-     */
-    protected _startingState: State;
+    public startingState: State;
 
     /**
      * Goes with 'startingState'. It permits to know whether the FSM has started, ie whether the 'starting state'
      * has been reached.
      */
-    protected started: boolean;
+    protected _started: boolean;
 
     public readonly initState: InitState;
 
@@ -63,12 +55,12 @@ export class FSMImpl implements FSM {
     protected readonly currentStatePublisher: Subject<[OutputState, OutputState]>;
 
     /**
-     * The tes that compose the finite state machine.
+     * The states that compose the finite state machine.
      */
-    protected readonly states: Array<State>;
+    protected readonly _states: Array<State>;
 
     /**
-     * The handler that want to be notified when the state machine of the interaction changed.
+     * The handlers to be notified on FSM state changes.
      */
     protected readonly handlers: Array<FSMHandler>;
 
@@ -86,23 +78,24 @@ export class FSMImpl implements FSM {
      */
     protected currentTimeout?: TimeoutTransition;
 
-    protected currentSubFSM?: FSM;
+    public currentSubFSM: FSM | undefined;
 
     /**
      * Creates the FSM.
      */
     public constructor(logger?: Logger) {
         this.logger = logger;
-        this._inner = false;
-        this.started = false;
+        this.inner = false;
+        this._started = false;
         this.initState = new InitState(this, "init");
-        this.states = [this.initState];
-        this._startingState = this.initState;
+        this._states = [this.initState];
+        this.startingState = this.initState;
         this._currentState = this.initState;
         this.currentStatePublisher = new Subject();
         this.handlers = [];
         this.eventsToProcess = [];
-        this.asLogFSM = false;
+        this.currentSubFSM = undefined;
+        this._log = false;
     }
 
     protected buildFSM(dataHandler?: FSMDataHandler): void {
@@ -113,24 +106,18 @@ export class FSMImpl implements FSM {
         this.dataHandler = dataHandler;
     }
 
-    public setCurrentSubFSM(subFSM?: FSM): void {
-        this.currentSubFSM = subFSM;
-    }
-
-    public getCurrentState(): OutputState {
+    public get currentState(): OutputState {
         return this._currentState;
     }
 
-    public currentStateObservable(): Observable<[OutputState, OutputState]> {
+    public set currentState(state: OutputState) {
+        const old = this._currentState;
+        this._currentState = state;
+        this.currentStatePublisher.next([old, this._currentState]);
+    }
+
+    public get currentStateObservable(): Observable<[OutputState, OutputState]> {
         return this.currentStatePublisher;
-    }
-
-    public setInner(inner: boolean): void {
-        this._inner = inner;
-    }
-
-    public getInner(): boolean {
-        return this._inner;
     }
 
     public process(event: Event): boolean {
@@ -153,18 +140,25 @@ export class FSMImpl implements FSM {
 
     private processEvent(event: Event): boolean {
         if (this.currentSubFSM !== undefined) {
-            if (this.asLogFSM) {
+            if (this.log) {
                 this.logger?.logInteractionMsg(`processing event ${String(event.type)} in a sub-FSM`, this.constructor.name);
             }
             return this.currentSubFSM.process(event);
         }
-        if (this.asLogFSM) {
+        if (this.log) {
             this.logger?.logInteractionMsg(`processing event ${String(event.type)} at state 
-            ${this.getCurrentState().getName()}: ${this.constructor.name}`, this.constructor.name);
+            ${this.currentState.name}: ${this.constructor.name}`, this.constructor.name);
         }
-        return this.getCurrentState().process(event);
+        return this.currentState.process(event);
     }
 
+    public get log(): boolean {
+        return this._log;
+    }
+
+    public set log(log: boolean) {
+        this._log = log;
+    }
 
     public getDataHandler(): FSMDataHandler | undefined {
         return this.dataHandler;
@@ -188,22 +182,17 @@ export class FSMImpl implements FSM {
     }
 
     public enterStdState(state: InputState & OutputState): void {
-        this.setCurrentState(state);
+        this.currentState = state;
         this.checkTimeoutTransition();
         if (this.started) {
             this.onUpdating();
         }
     }
 
-    public isStarted(): boolean {
-        return this.started;
+    public get started(): boolean {
+        return this._started;
     }
 
-    public setCurrentState(state: OutputState): void {
-        const old = this.getCurrentState();
-        this._currentState = state;
-        this.currentStatePublisher.next([old, this._currentState]);
-    }
 
     /**
      * The end of the FSM execution, the events still (eg keyPress) in process must be recycled to be reused in the FSM.
@@ -213,7 +202,7 @@ export class FSMImpl implements FSM {
 
         list.forEach(event => {
             removeAt(this.eventsToProcess, 0);
-            if (this.asLogFSM) {
+            if (this.log) {
                 this.logger?.logInteractionMsg("Recycling event", this.constructor.name);
             }
             this.process(event);
@@ -228,7 +217,7 @@ export class FSMImpl implements FSM {
      * Terminates the state machine.
      */
     public onTerminating(): void {
-        if (this.asLogFSM) {
+        if (this.log) {
             this.logger?.logInteractionMsg("FSM ended", this.constructor.name);
         }
         if (this.started) {
@@ -239,7 +228,7 @@ export class FSMImpl implements FSM {
     }
 
     public onCancelling(): void {
-        if (this.asLogFSM) {
+        if (this.log) {
             this.logger?.logInteractionMsg("FSM cancelled", this.constructor.name);
         }
         if (this.started) {
@@ -249,10 +238,10 @@ export class FSMImpl implements FSM {
     }
 
     public onStarting(): void {
-        if (this.asLogFSM) {
+        if (this.log) {
             this.logger?.logInteractionMsg("FSM started", this.constructor.name);
         }
-        this.started = true;
+        this._started = true;
         this.notifyHandlerOnStart();
     }
 
@@ -261,7 +250,7 @@ export class FSMImpl implements FSM {
      */
     public onUpdating(): void {
         if (this.started) {
-            if (this.asLogFSM) {
+            if (this.log) {
                 this.logger?.logInteractionMsg("FSM updated", this.constructor.name);
             }
             this.notifyHandlerOnUpdate();
@@ -273,24 +262,20 @@ export class FSMImpl implements FSM {
      * @param state - The state to add. Must not be null.
      */
     public addState(state: InputState): void {
-        this.states.push(state);
-    }
-
-    public log(log: boolean): void {
-        this.asLogFSM = log;
+        this._states.push(state);
     }
 
     public reinit(): void {
-        if (this.asLogFSM) {
+        if (this.log) {
             this.logger?.logInteractionMsg("FSM reinitialised", this.constructor.name);
         }
         this.currentTimeout?.stopTimeout();
-        this.started = false;
-        this.setCurrentState(this.initState);
+        this._started = false;
+        this.currentState = this.initState;
         this.currentTimeout = undefined;
         this.currentSubFSM?.reinit();
 
-        if (this.dataHandler !== undefined && !this._inner) {
+        if (this.dataHandler !== undefined && !this.inner) {
             this.dataHandler.reinitData();
         }
     }
@@ -303,12 +288,12 @@ export class FSMImpl implements FSM {
 
     public onTimeout(): void {
         if (this.currentTimeout !== undefined) {
-            if (this.asLogFSM) {
+            if (this.log) {
                 this.logger?.logInteractionMsg("Timeout", this.constructor.name);
             }
             const state = this.currentTimeout.execute();
             if (isOutputStateType(state)) {
-                this.setCurrentState(state);
+                this.currentState = state;
                 this.checkTimeoutTransition();
             }
         }
@@ -316,7 +301,7 @@ export class FSMImpl implements FSM {
 
     public stopCurrentTimeout(): void {
         if (this.currentTimeout !== undefined) {
-            if (this.asLogFSM) {
+            if (this.log) {
                 this.logger?.logInteractionMsg("Timeout stopped", this.constructor.name);
             }
             this.currentTimeout.stopTimeout();
@@ -329,11 +314,11 @@ export class FSMImpl implements FSM {
      * If it is the case, the timeout transition is launched.
      */
     protected checkTimeoutTransition(): void {
-        const tr = this.getCurrentState().getTransitions()
+        const tr = this.currentState.transitions
             .find(t => t instanceof TimeoutTransition) as TimeoutTransition | undefined;
 
         if (tr !== undefined) {
-            if (this.asLogFSM) {
+            if (this.log) {
                 this.logger?.logInteractionMsg("Timeout starting", this.constructor.name);
             }
             this.currentTimeout = tr;
@@ -416,16 +401,8 @@ export class FSMImpl implements FSM {
         }
     }
 
-    public getStates(): ReadonlyArray<State> {
-        return [...this.states];
-    }
-
-    public getStartingState(): State {
-        return this._startingState;
-    }
-
-    public setStartingState(state: State): void {
-        this._startingState = state;
+    public get states(): ReadonlyArray<State> {
+        return [...this._states];
     }
 
     public getEventsToProcess(): ReadonlyArray<Event> {
@@ -438,13 +415,13 @@ export class FSMImpl implements FSM {
 
     public uninstall(): void {
         this.fullReinit();
-        this.asLogFSM = false;
+        this.log = false;
         this.currentStatePublisher.complete();
         this.currentSubFSM = undefined;
-        this.states.forEach(state => {
+        this._states.forEach(state => {
             state.uninstall();
         });
-        this.states.length = 0;
+        this._states.length = 0;
         this.dataHandler = undefined;
     }
 }

@@ -96,11 +96,11 @@ describe("on canvas", () => {
             .on(c1)
             .bind();
 
-        (binding.getInteraction() as InteractionBase<InteractionData, Flushable & InteractionData, FSM>).onNodeUnregistered(c1);
+        (binding.interaction as InteractionBase<InteractionData, Flushable & InteractionData, FSM>).onNodeUnregistered(c1);
 
         c1.dispatchEvent(createTouchEvent("touchstart", 1, c1, 11, 23, 110, 230));
 
-        expect(binding.isRunning()).toBeFalsy();
+        expect(binding.running).toBeFalsy();
     });
 });
 

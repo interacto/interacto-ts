@@ -30,7 +30,7 @@ beforeEach(() => {
     handler = mock<FSMHandler>();
     interaction = new DragLock();
     interaction.log(true);
-    interaction.getFsm().addHandler(handler);
+    interaction.fsm.addHandler(handler);
     canvas = document.createElement("canvas");
 });
 
@@ -73,12 +73,12 @@ test("drag lock canceled on ESC", () => {
 test("check data with a normal execution", () => {
     const newHandler = mock<FSMHandler>();
     newHandler.fsmStops.mockImplementation(() => {
-        sx = interaction.getData().src.clientX;
-        sy = interaction.getData().src.clientY;
-        tx = interaction.getData().tgt.clientX;
-        ty = interaction.getData().tgt.clientY;
+        sx = interaction.data.src.clientX;
+        sy = interaction.data.src.clientY;
+        tx = interaction.data.tgt.clientX;
+        ty = interaction.data.tgt.clientY;
     });
-    interaction.getFsm().addHandler(newHandler);
+    interaction.fsm.addHandler(newHandler);
     interaction.processEvent(createMouseEvent("click", canvas, undefined, undefined, 11, 23));
     interaction.processEvent(createMouseEvent("click", canvas, undefined, undefined, 11, 23));
     interaction.processEvent(createMouseEvent("mousemove", canvas, undefined, undefined, 20, 30));
@@ -110,10 +110,10 @@ test("check data update during a move", () => {
         .click({"clientX": 11, "clientY": 23});
     const newHandler = mock<FSMHandler>();
     newHandler.fsmUpdates.mockImplementation(() => {
-        tx = interaction.getData().tgt.clientX;
-        ty = interaction.getData().tgt.clientY;
+        tx = interaction.data.tgt.clientX;
+        ty = interaction.data.tgt.clientY;
     });
-    interaction.getFsm().addHandler(newHandler);
+    interaction.fsm.addHandler(newHandler);
     robot(canvas).mousemove({"clientX": 30, "clientY": 40});
     expect(handler.fsmCancels).not.toHaveBeenCalled();
     expect(tx).toBe(30);
@@ -128,10 +128,10 @@ test("check data reinitialisation", () => {
         .mousemove()
         .click()
         .click();
-    expect(interaction.getData().src.clientX).toBe(0);
-    expect(interaction.getData().src.clientY).toBe(0);
-    expect(interaction.getData().tgt.clientX).toBe(0);
-    expect(interaction.getData().tgt.clientY).toBe(0);
+    expect(interaction.data.src.clientX).toBe(0);
+    expect(interaction.data.src.clientY).toBe(0);
+    expect(interaction.data.tgt.clientX).toBe(0);
+    expect(interaction.data.tgt.clientY).toBe(0);
 });
 
 test("check if canceled with Esc after a move", () => {
@@ -273,7 +273,7 @@ test("first Click Has target object", () => {
     canvas.click();
     canvas.click();
 
-    expect(interaction.getData().tgt.target).toBe(canvas);
+    expect(interaction.data.tgt.target).toBe(canvas);
 });
 
 test("first Click Has target Values", () => {
@@ -281,9 +281,9 @@ test("first Click Has target Values", () => {
     interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
     interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
 
-    expect(interaction.getData().tgt.clientX).toBe(11);
-    expect(interaction.getData().tgt.clientY).toBe(23);
-    expect(interaction.getData().src.button).toBe(2);
+    expect(interaction.data.tgt.clientX).toBe(11);
+    expect(interaction.data.tgt.clientY).toBe(23);
+    expect(interaction.data.src.button).toBe(2);
 });
 
 test("move Has Still Src Values", () => {
@@ -292,9 +292,9 @@ test("move Has Still Src Values", () => {
     interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
     interaction.processEvent(createMouseEvent("mousemove", canvas, undefined, undefined, 21, 30, 2));
 
-    expect(interaction.getData().tgt.clientX).toBe(21);
-    expect(interaction.getData().tgt.clientY).toBe(30);
-    expect(interaction.getData().src.clientX).toBe(11);
-    expect(interaction.getData().src.clientY).toBe(23);
-    expect(interaction.getData().src.button).toBe(2);
+    expect(interaction.data.tgt.clientX).toBe(21);
+    expect(interaction.data.tgt.clientY).toBe(30);
+    expect(interaction.data.src.clientX).toBe(11);
+    expect(interaction.data.src.clientY).toBe(23);
+    expect(interaction.data.src.button).toBe(2);
 });

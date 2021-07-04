@@ -25,8 +25,8 @@ beforeEach(() => {
     handler = mock<FSMHandler>();
     interaction = new DatePicked();
     interaction.log(true);
-    interaction.getFsm().log(true);
-    interaction.getFsm().addHandler(handler);
+    interaction.fsm.log = true;
+    interaction.fsm.addHandler(handler);
     date = document.createElement("input");
     date.type = "date";
 });

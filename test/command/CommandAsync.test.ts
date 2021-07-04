@@ -145,7 +145,7 @@ describe("testing async commands and bindings", () => {
             await flushPromises();
 
             expect(binding).toBeDefined();
-            expect(binding.getCommand()).toBeUndefined();
+            expect(binding.command).toBeUndefined();
             expect(ctx.commands).toHaveLength(1);
             expect(ctx.commands[0].getStatus()).toStrictEqual(CmdStatus.done);
             expect(data.data).toStrictEqual(["Foo", "Bar"]);
@@ -166,7 +166,7 @@ describe("testing async commands and bindings", () => {
             button1.click();
             advanceTimersByTime(49);
             await flushPromises();
-            expect(binding.getCommand()).toBeDefined();
+            expect(binding.command).toBeDefined();
             expect(end).not.toHaveBeenCalled();
             expect(first).toHaveBeenCalledTimes(1);
             expect(data.data).toStrictEqual(["Foo", "Bar", "Yo"]);
@@ -188,7 +188,7 @@ describe("testing async commands and bindings", () => {
             button1.click();
             advanceTimersByTime(51);
             await flushPromises();
-            expect(binding.getCommand()).toBeUndefined();
+            expect(binding.command).toBeUndefined();
             expect(end).toHaveBeenCalledTimes(1);
             expect(first).toHaveBeenCalledTimes(1);
         });
@@ -208,7 +208,7 @@ describe("testing async commands and bindings", () => {
             await flushPromises();
 
             expect(binding).toBeDefined();
-            expect(binding.getCommand()).toBeUndefined();
+            expect(binding.command).toBeUndefined();
             expect(ctx.commands).toHaveLength(2);
             expect(ctx.commands[0].getStatus()).toStrictEqual(CmdStatus.done);
             expect(ctx.commands[1].getStatus()).toStrictEqual(CmdStatus.done);
@@ -231,7 +231,7 @@ describe("testing async commands and bindings", () => {
             runAllTimers();
             await flushPromises();
 
-            expect(binding.getCommand()).toBeUndefined();
+            expect(binding.command).toBeUndefined();
             expect(ctx.commands).toHaveLength(2);
             expect(ctx.getCmd<StubAsyncCmd>(0).timeout).toStrictEqual(5);
             expect(ctx.getCmd<StubAsyncCmd>(1).timeout).toStrictEqual(100);
@@ -297,8 +297,8 @@ describe("testing async commands and bindings", () => {
             await flushPromises();
 
             expect(first).toHaveBeenCalledTimes(2);
-            expect(binding.getCommand()).toBeUndefined();
-            expect(binding.getTimesEnded()).toStrictEqual(2);
+            expect(binding.command).toBeUndefined();
+            expect(binding.timesEnded).toStrictEqual(2);
             expect(end).toHaveBeenCalledTimes(2);
             expect(end).toHaveBeenNthCalledWith(1, cmd2, expect.anything());
             expect(end).toHaveBeenNthCalledWith(2, cmd, expect.anything());
@@ -316,8 +316,8 @@ describe("testing async commands and bindings", () => {
             await flushPromises();
 
             expect(binding).toBeDefined();
-            expect(binding.getTimesEnded()).toStrictEqual(1);
-            expect(binding.getCommand()).toBeUndefined();
+            expect(binding.timesEnded).toStrictEqual(1);
+            expect(binding.command).toBeUndefined();
             expect(ctx.commands).toHaveLength(1);
         });
 
@@ -341,8 +341,8 @@ describe("testing async commands and bindings", () => {
             (binding as unknown).cmdsProduced = new Subject();
 
             expect(binding).toBeDefined();
-            expect(binding.getCommand()).toBeUndefined();
-            expect(binding.getTimesEnded()).toStrictEqual(1);
+            expect(binding.command).toBeUndefined();
+            expect(binding.timesEnded).toStrictEqual(1);
             expect(ctx.commands).toHaveLength(0);
         });
 
@@ -406,8 +406,8 @@ describe("testing async commands and bindings", () => {
             await flushPromises();
 
             expect(binding).toBeDefined();
-            expect(binding.getCommand()).toBeUndefined();
-            expect(binding.getTimesEnded()).toStrictEqual(1);
+            expect(binding.command).toBeUndefined();
+            expect(binding.timesEnded).toStrictEqual(1);
             expect(ctx.commands).toHaveLength(1);
         });
 
@@ -432,8 +432,8 @@ describe("testing async commands and bindings", () => {
             await flushPromises();
 
             expect(binding).toBeDefined();
-            expect(binding.getCommand()).toBeUndefined();
-            expect(binding.getTimesEnded()).toStrictEqual(1);
+            expect(binding.command).toBeUndefined();
+            expect(binding.timesEnded).toStrictEqual(1);
             expect(ctx.commands).toHaveLength(1);
             expect(cannot).not.toHaveBeenCalled();
             expect(data.data).toHaveLength(0);
@@ -462,8 +462,8 @@ describe("testing async commands and bindings", () => {
             runAllTimers();
             await flushPromises();
 
-            expect(binding.getCommand()).toBeUndefined();
-            expect(binding.getTimesEnded()).toStrictEqual(1);
+            expect(binding.command).toBeUndefined();
+            expect(binding.timesEnded).toStrictEqual(1);
             expect(ctx.commands).toHaveLength(0);
             expect(data.data).toStrictEqual(["Foo", "Bar", "Yo"]);
         });

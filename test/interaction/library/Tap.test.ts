@@ -37,12 +37,12 @@ afterEach(() => {
 describe("tap 1", () => {
     beforeEach(() => {
         interaction = new Tap(1);
-        interaction.getFsm().addHandler(handler);
+        interaction.fsm.addHandler(handler);
     });
 
     test("cannot rebuild the interaction", () => {
-        interaction.getFsm().buildFSM();
-        expect(interaction.getFsm().getStates()).toHaveLength(4);
+        interaction.fsm.buildFSM();
+        expect(interaction.fsm.states).toHaveLength(4);
     });
 
     test("one touchend", () => {
@@ -91,9 +91,9 @@ describe("tap 1", () => {
         const touch = new TouchDataImpl();
         const newHandler = mock<FSMHandler>();
         newHandler.fsmStarts.mockImplementation(() => {
-            touch.copy(interaction.getData().taps[0]);
+            touch.copy(interaction.data.taps[0]);
         });
-        interaction.getFsm().addHandler(newHandler);
+        interaction.fsm.addHandler(newHandler);
         interaction.processEvent(createTouchEvent("touchend", 5, canvas, 14, 20, 15, 21));
 
         checkTouchPoint(touch, 15, 21, 14, 20, 5, canvas);
@@ -103,7 +103,7 @@ describe("tap 1", () => {
 describe("tap 2", () => {
     beforeEach(() => {
         interaction = new Tap(2);
-        interaction.getFsm().addHandler(handler);
+        interaction.fsm.addHandler(handler);
     });
 
     test("one touch", () => {
@@ -152,11 +152,11 @@ describe("tap 2", () => {
 
         const newHandler = mock<FSMHandler>();
         newHandler.fsmStops.mockImplementation(() => {
-            interaction.getData().taps.forEach(t => {
+            interaction.data.taps.forEach(t => {
                 touch.addTapData(t);
             });
         });
-        interaction.getFsm().addHandler(newHandler);
+        interaction.fsm.addHandler(newHandler);
         interaction.processEvent(createTouchEvent("touchend", 3, canvas, 15, 20, 16, 21));
         interaction.processEvent(createTouchEvent("touchend", 2, canvas, 12, 27, 14, 28));
 
@@ -168,7 +168,7 @@ describe("tap 2", () => {
 describe("tap 3", () => {
     beforeEach(() => {
         interaction = new Tap(3);
-        interaction.getFsm().addHandler(handler);
+        interaction.fsm.addHandler(handler);
     });
 
     test("two touches with same id", () => {
@@ -223,11 +223,11 @@ describe("tap 3", () => {
 
         const newHandler = mock<FSMHandler>();
         newHandler.fsmStops.mockImplementation(() => {
-            interaction.getData().taps.forEach(t => {
+            interaction.data.taps.forEach(t => {
                 touch.addTapData(t);
             });
         });
-        interaction.getFsm().addHandler(newHandler);
+        interaction.fsm.addHandler(newHandler);
         interaction.processEvent(createTouchEvent("touchend", 3, canvas, 15, 20, 16, 21));
         interaction.processEvent(createTouchEvent("touchend", 2, canvas, 12, 27, 14, 28));
         interaction.processEvent(createTouchEvent("touchend", 2, canvas, 112, 217, 114, 128));

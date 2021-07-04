@@ -39,12 +39,12 @@ afterEach(() => {
 describe("horizontal", () => {
     beforeEach(() => {
         interaction = new Pan(true, 100, 10);
-        interaction.getFsm().addHandler(handler);
+        interaction.fsm.addHandler(handler);
     });
 
     test("not created twice", () => {
-        interaction.getFsm().buildFSM();
-        expect(interaction.getFsm().getStates()).toHaveLength(5);
+        interaction.fsm.buildFSM();
+        expect(interaction.fsm.states).toHaveLength(5);
     });
 
     test("touch", () => {
@@ -57,10 +57,10 @@ describe("horizontal", () => {
     test("touch move OK", () => {
         const newHandler = mock<FSMHandler>();
         newHandler.fsmStarts.mockImplementation(() => {
-            dataSrc.copy(interaction.getData().src);
-            dataTgt.copy(interaction.getData().tgt);
+            dataSrc.copy(interaction.data.src);
+            dataTgt.copy(interaction.data.tgt);
         });
-        interaction.getFsm().addHandler(newHandler);
+        interaction.fsm.addHandler(newHandler);
 
         interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 15, 20, 150, 200));
         interaction.processEvent(createTouchEvent("touchmove", 3, canvas, 16, 30, 160, 210));
@@ -119,10 +119,10 @@ describe("horizontal", () => {
     test("touch move move OK", () => {
         const newHandler = mock<FSMHandler>();
         newHandler.fsmUpdates.mockImplementation(() => {
-            dataSrc.copy(interaction.getData().src);
-            dataTgt.copy(interaction.getData().tgt);
+            dataSrc.copy(interaction.data.src);
+            dataTgt.copy(interaction.data.tgt);
         });
-        interaction.getFsm().addHandler(newHandler);
+        interaction.fsm.addHandler(newHandler);
 
         interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 15, 20, 150, 200));
         interaction.processEvent(createTouchEvent("touchmove", 3, canvas, 16, 30, 160, 201));
@@ -163,10 +163,10 @@ describe("horizontal", () => {
     test("touch move move release OK", () => {
         const newHandler = mock<FSMHandler>();
         newHandler.fsmStops.mockImplementation(() => {
-            dataSrc.copy(interaction.getData().src);
-            dataTgt.copy(interaction.getData().tgt);
+            dataSrc.copy(interaction.data.src);
+            dataTgt.copy(interaction.data.tgt);
         });
-        interaction.getFsm().addHandler(newHandler);
+        interaction.fsm.addHandler(newHandler);
 
         interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 15, 20, 150, 200));
         interaction.processEvent(createTouchEvent("touchmove", 3, canvas, 16, 30, 160, 201));

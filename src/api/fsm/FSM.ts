@@ -23,24 +23,56 @@ import type {InputState} from "./InputState";
  */
 export interface FSM {
     /**
-     * @returns The set of the states that compose the FSM.
+     * The set of the states that compose the FSM.
      * This returns a copy of the real set.
      */
-    getStates(): ReadonlyArray<State>;
+    readonly states: ReadonlyArray<State>;
 
     /**
-     * @returns The current state of FSM during its execution.
+     * The current state of the FSM.
      */
-    getCurrentState(): OutputState;
-
-    setCurrentState(state: OutputState): void;
+    currentState: OutputState;
 
     /**
-     * @returns An observable value for observing the current state of FSM during its execution.
+     * An observable value for observing the current state of FSM during its execution.
      */
-    currentStateObservable(): Observable<[OutputState, OutputState]>;
+    readonly currentStateObservable: Observable<[OutputState, OutputState]>;
 
-    getInitState(): OutputState;
+    /**
+     * The initial state of the FSM
+     */
+    readonly initState: OutputState;
+
+    /**
+     * By default an FSM triggers its 'start' event when it leaves its initial state.
+     * In some cases, this is not the case. For example, a double-click interaction is an FSM that must trigger
+     * its start event when the FSM reaches... its terminal state. Similarly, a DnD must trigger its start event
+     * on the first move, not on the first press.
+     * The goal of this attribute is to identify the state of the FSM that must trigger the start event.
+     * By default, this attribute is set with the initial state of the FSM.
+     */
+    readonly startingState: State;
+
+    /**
+     * True: The FSM started.
+     */
+    readonly started: boolean;
+
+    /**
+     * Defines whether the FSM is an inner FSM (ie, whether it is included into another FSM as
+     * a sub-FSM transition).
+     */
+    inner: boolean;
+
+    /**
+     * The current sub FSM in which this FSM is while running.
+     */
+    currentSubFSM: FSM | undefined;
+
+    /**
+     * Logs (or not) information about the execution of the FSM.
+     */
+    log: boolean;
 
     /**
      * Processes the provided event to run the FSM.
@@ -48,19 +80,6 @@ export interface FSM {
      * @returns True: the FSM correctly processed the event.
      */
     process(event: Event): boolean;
-
-    /**
-     * Logs (or not) information about the execution of the FSM.
-     * @param log - True: logging activated.
-     */
-    log(log: boolean): void;
-
-    /**
-     * @returns True: The FSM started.
-     */
-    isStarted(): boolean;
-
-    getStartingState(): State;
 
     /**
      * Starts the state machine.
@@ -96,20 +115,6 @@ export interface FSM {
     stopCurrentTimeout(): void;
 
     enterStdState(state: InputState & OutputState): void;
-
-    /**
-     * States whether the FSM is an inner FSM (ie, whether it is included into another FSM as
-     * a sub-FSM transition).
-     * @param inner - True: this FSM will be considered as an inner FSM.
-     */
-    setInner(inner: boolean): void;
-
-    /**
-     * @returns True: this FSM is an inner FSM.
-     */
-    getInner(): boolean;
-
-    setCurrentSubFSM(subFSM?: FSM): void;
 
     /**
      * Adds an FSM handler.

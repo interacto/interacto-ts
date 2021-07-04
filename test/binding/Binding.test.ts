@@ -30,22 +30,14 @@ import {mock} from "jest-mock-extended";
 class BindingStub extends BindingImpl<StubCmd, InteractionStub, InteractionData> {
     public conditionRespected: boolean;
 
-    public mustCancel: boolean;
-
-
-    public constructor(history: UndoHistory, logger: Logger, continuous: boolean, cmdCreation: (i?: InteractionData) => StubCmd,
-                       interaction: InteractionStub) {
-        super(continuous, interaction, cmdCreation, [], history, logger);
+    public constructor(history: UndoHistory, logger: Logger, continuous: boolean, strict: boolean,
+                       cmdCreation: (i?: InteractionData) => StubCmd, interaction: InteractionStub) {
+        super(continuous, strict, interaction, cmdCreation, [], history, logger);
         this.conditionRespected = false;
-        this.mustCancel = false;
     }
 
     public override when(): boolean {
         return this.conditionRespected;
-    }
-
-    public override isStrictStart(): boolean {
-        return this.mustCancel;
     }
 }
 
@@ -80,8 +72,8 @@ let logger: Logger;
 beforeEach(() => {
     logger = mock<Logger>();
     history = new UndoHistoryImpl();
-    binding = new BindingStub(history, logger, false, () => new StubCmd(), new InteractionStub(new FSMImpl()));
-    binding.setActivated(true);
+    binding = new BindingStub(history, logger, false, false, () => new StubCmd(), new InteractionStub(new FSMImpl()));
+    binding.activated = true;
 });
 
 afterEach(() => {
@@ -100,19 +92,19 @@ describe("nominal cases", () => {
     });
 
     test("testLinkDeActivation", () => {
-        binding.setActivated(true);
-        binding.setActivated(false);
-        expect(binding.isActivated()).toBeFalsy();
+        binding.activated = true;
+        binding.activated = false;
+        expect(binding.activated).toBeFalsy();
     });
 
     test("testLinkActivation", () => {
-        binding.setActivated(false);
-        binding.setActivated(true);
-        expect(binding.isActivated()).toBeTruthy();
+        binding.activated = false;
+        binding.activated = true;
+        expect(binding.activated).toBeTruthy();
     });
 
     test("testExecuteNope", () => {
-        expect(binding.isContinuousCmdExec()).toBeFalsy();
+        expect(binding.conditionRespected).toBeFalsy();
     });
 
     test("name is ok when not executed", () => {
@@ -120,57 +112,55 @@ describe("nominal cases", () => {
     });
 
     test("testExecuteOK", () => {
-        binding = new BindingStub(history, logger, true, () => new StubCmd(), new InteractionStub(new FSMImpl()));
-        expect(binding.isContinuousCmdExec()).toBeTruthy();
+        binding = new BindingStub(history, logger, true, false, () => new StubCmd(), new InteractionStub(new FSMImpl()));
+        expect(binding.continuousCmdExecution).toBeTruthy();
     });
 
     test("testIsInteractionMustBeCancelled", () => {
-        expect(binding.isStrictStart()).toBeFalsy();
+        expect(binding.strictStart).toBeFalsy();
     });
 
     test("testNotRunning", () => {
-        expect(binding.isRunning()).toBeFalsy();
+        expect(binding.running).toBeFalsy();
     });
 
     test("testInteractionCancelsWhenNotStarted", () => {
         binding.fsmCancels();
-        expect(binding.getCommand()).toBeUndefined();
+        expect(binding.command).toBeUndefined();
     });
 
     test("testInteractionUpdatesWhenNotStarted", () => {
         binding.fsmUpdates();
-        expect(binding.getCommand()).toBeUndefined();
+        expect(binding.command).toBeUndefined();
     });
 
     test("testInteractionStopsWhenNotStarted", () => {
         binding.fsmStops();
-        expect(binding.getCommand()).toBeUndefined();
+        expect(binding.command).toBeUndefined();
     });
 
     test("testInteractionStartsWhenNoCorrectInteractionNotActivated", () => {
-        binding.mustCancel = false;
-        binding.setActivated(false);
+        binding.activated = false;
         binding.fsmStarts();
-        expect(binding.getCommand()).toBeUndefined();
+        expect(binding.command).toBeUndefined();
     });
 
     test("testInteractionStartsWhenNoCorrectInteractionActivated", () => {
-        binding.mustCancel = false;
         binding.conditionRespected = false;
         binding.fsmStarts();
-        expect(binding.getCommand()).toBeUndefined();
+        expect(binding.command).toBeUndefined();
     });
 
     test("interaction starts throw MustCancelStateMachineException", () => {
-        binding.mustCancel = true;
+        binding = new BindingStub(history, logger, true, true, () => new StubCmd(), new InteractionStub(new FSMImpl()));
         expect(() => {
             binding.fsmStarts();
         }).toThrow(CancelFSMException);
     });
 
     test("interaction starts throw MustCancelStateMachineException with log", () => {
-        binding.mustCancel = true;
-        binding.setLogBinding(true);
+        binding = new BindingStub(history, logger, true, true, () => new StubCmd(), new InteractionStub(new FSMImpl()));
+        binding.logBinding = true;
         expect(() => {
             binding.fsmStarts();
         }).toThrow(CancelFSMException);
@@ -179,20 +169,20 @@ describe("nominal cases", () => {
     test("testInteractionStartsOk", () => {
         binding.conditionRespected = true;
         binding.fsmStarts();
-        expect(binding.getCommand()).toBeDefined();
+        expect(binding.command).toBeDefined();
     });
 
     test("testCounters", () => {
-        expect(binding.getTimesEnded()).toStrictEqual(0);
-        expect(binding.getTimesCancelled()).toStrictEqual(0);
+        expect(binding.timesEnded).toStrictEqual(0);
+        expect(binding.timesCancelled).toStrictEqual(0);
     });
 
     test("testCounterEndedOnce", () => {
         binding.conditionRespected = true;
         binding.fsmStarts();
         binding.fsmStops();
-        expect(binding.getTimesEnded()).toStrictEqual(1);
-        expect(binding.getTimesCancelled()).toStrictEqual(0);
+        expect(binding.timesEnded).toStrictEqual(1);
+        expect(binding.timesCancelled).toStrictEqual(0);
     });
 
     test("testCounterEndedTwice", () => {
@@ -201,16 +191,16 @@ describe("nominal cases", () => {
         binding.fsmStops();
         binding.fsmStarts();
         binding.fsmStops();
-        expect(binding.getTimesEnded()).toStrictEqual(2);
-        expect(binding.getTimesCancelled()).toStrictEqual(0);
+        expect(binding.timesEnded).toStrictEqual(2);
+        expect(binding.timesCancelled).toStrictEqual(0);
     });
 
     test("testCounterCancelledOnce", () => {
         binding.conditionRespected = true;
         binding.fsmStarts();
         binding.fsmCancels();
-        expect(binding.getTimesCancelled()).toStrictEqual(1);
-        expect(binding.getTimesEnded()).toStrictEqual(0);
+        expect(binding.timesCancelled).toStrictEqual(1);
+        expect(binding.timesEnded).toStrictEqual(0);
     });
 
     test("testCounterCancelledTwice", () => {
@@ -219,22 +209,22 @@ describe("nominal cases", () => {
         binding.fsmCancels();
         binding.fsmStarts();
         binding.fsmCancels();
-        expect(binding.getTimesCancelled()).toStrictEqual(2);
-        expect(binding.getTimesEnded()).toStrictEqual(0);
+        expect(binding.timesCancelled).toStrictEqual(2);
+        expect(binding.timesEnded).toStrictEqual(0);
     });
 
     test("clear events", () => {
-        jest.spyOn(binding.getInteraction(), "fullReinit");
+        jest.spyOn(binding.interaction, "fullReinit");
         binding.clearEvents();
-        expect(binding.getInteraction().fullReinit).toHaveBeenCalledTimes(1);
+        expect(binding.interaction.fullReinit).toHaveBeenCalledTimes(1);
     });
 
     test("cancel interaction", () => {
         binding.conditionRespected = true;
-        binding.setLogBinding(true);
-        binding.setLogCmd(true);
+        binding.logBinding = true;
+        binding.logCmd = true;
         binding.fsmStarts();
-        const cmd = binding.getCommand();
+        const cmd = binding.command;
         jest.spyOn(binding, "cancel");
         jest.spyOn(binding, "endOrCancel");
         binding.fsmCancels();
@@ -244,7 +234,7 @@ describe("nominal cases", () => {
         expect(cmd?.getStatus()).toStrictEqual(CmdStatus.cancelled);
         expect(binding.endOrCancel).toHaveBeenCalledWith();
         expect(binding.cancel).toHaveBeenCalledTimes(1);
-        expect(binding.getCommand()).toBeUndefined();
+        expect(binding.command).toBeUndefined();
     });
 
     test("cancel interaction two times", () => {
@@ -258,21 +248,21 @@ describe("nominal cases", () => {
     });
 
     test("cancel interaction continuous", () => {
-        binding = new BindingStub(history, logger, true, () => new StubCmd(), new InteractionStub(new FSMImpl()));
+        binding = new BindingStub(history, logger, true, false, () => new StubCmd(), new InteractionStub(new FSMImpl()));
         binding.conditionRespected = true;
         binding.fsmStarts();
         // eslint-disable-next-line no-unused-expressions
-        binding.getCommand()?.done();
+        binding.command?.done();
         expect(() => {
             binding.fsmCancels();
         }).toThrow(MustBeUndoableCmdError);
     });
 
     test("cancel interaction continuous no effect", () => {
-        binding = new BindingStub(history, logger, true, () => new StubCmd(), new InteractionStub(new FSMImpl()));
+        binding = new BindingStub(history, logger, true, false, () => new StubCmd(), new InteractionStub(new FSMImpl()));
         binding.conditionRespected = true;
         binding.fsmStarts();
-        const cmd = binding.getCommand();
+        const cmd = binding.command;
         binding.fsmCancels();
         expect(CmdStatus.cancelled).toStrictEqual(cmd?.getStatus());
     });
@@ -280,9 +270,9 @@ describe("nominal cases", () => {
     test("cancel interaction continuous undoable", () => {
         const cmd = new CmdStubUndoable();
         jest.spyOn(cmd, "undo");
-        binding = new BindingStub(history, logger, true, () => cmd, new InteractionStub(new FSMImpl()));
+        binding = new BindingStub(history, logger, true, false, () => cmd, new InteractionStub(new FSMImpl()));
         binding.conditionRespected = true;
-        binding.setLogCmd(true);
+        binding.logCmd = true;
         binding.fsmStarts();
         binding.fsmCancels();
         expect(cmd.undo).toHaveBeenCalledTimes(1);
@@ -291,7 +281,7 @@ describe("nominal cases", () => {
     test("name contains the command name on execution", () => {
         const cmd = new CmdStubUndoable();
         jest.spyOn(cmd, "undo");
-        binding = new BindingStub(history, logger, true, () => cmd, new InteractionStub(new FSMImpl()));
+        binding = new BindingStub(history, logger, true, false, () => cmd, new InteractionStub(new FSMImpl()));
         binding.conditionRespected = true;
         binding.fsmStarts();
         expect(binding.name).toStrictEqual("InteractionStub:CmdStubUndoable");
@@ -300,7 +290,7 @@ describe("nominal cases", () => {
     test("cancel interaction continuous undoable no log", () => {
         const cmd = new CmdStubUndoable();
         jest.spyOn(cmd, "undo");
-        binding = new BindingStub(history, logger, true, () => cmd, new InteractionStub(new FSMImpl()));
+        binding = new BindingStub(history, logger, true, false, () => cmd, new InteractionStub(new FSMImpl()));
         binding.conditionRespected = true;
         binding.fsmStarts();
         binding.fsmCancels();
@@ -310,7 +300,7 @@ describe("nominal cases", () => {
     test("update activated with log cmd not ok", () => {
         jest.spyOn(binding, "then");
         binding.conditionRespected = false;
-        binding.setLogBinding(true);
+        binding.logBinding = true;
         binding.fsmStarts();
         binding.fsmUpdates();
         expect(binding.then).not.toHaveBeenCalledWith();
@@ -327,7 +317,7 @@ describe("nominal cases", () => {
     test("update activated with log cmd ok", () => {
         jest.spyOn(binding, "then");
         binding.conditionRespected = true;
-        binding.setLogCmd(true);
+        binding.logCmd = true;
         binding.fsmStarts();
         binding.fsmUpdates();
         expect(binding.then).toHaveBeenCalledWith();
@@ -338,7 +328,7 @@ describe("nominal cases", () => {
         binding.fsmStarts();
         jest.spyOn(binding, "first");
         jest.spyOn(binding, "then");
-        binding.setActivated(false);
+        binding.activated = false;
         binding.fsmUpdates();
         expect(binding.first).not.toHaveBeenCalledWith();
         expect(binding.then).not.toHaveBeenCalledWith();
@@ -348,58 +338,58 @@ describe("nominal cases", () => {
         jest.spyOn(binding, "first");
         binding.conditionRespected = false;
         binding.fsmStarts();
-        binding.setLogCmd(true);
+        binding.logCmd = true;
         binding.conditionRespected = true;
         binding.fsmUpdates();
         expect(binding.first).toHaveBeenCalledWith();
-        expect(binding.getCommand()).toBeDefined();
+        expect(binding.command).toBeDefined();
     });
 
     test("update continuous with log cannotDo", () => {
-        binding = new BindingStub(history, logger, true, () => new StubCmd(), new InteractionStub(new FSMImpl()));
+        binding = new BindingStub(history, logger, true, false, () => new StubCmd(), new InteractionStub(new FSMImpl()));
         jest.spyOn(binding, "ifCannotExecuteCmd");
         binding.conditionRespected = true;
-        binding.setLogCmd(true);
+        binding.logCmd = true;
         binding.fsmStarts();
-        (binding.getCommand() as StubCmd).candoValue = false;
+        (binding.command as StubCmd).candoValue = false;
         binding.fsmUpdates();
         expect(binding.ifCannotExecuteCmd).toHaveBeenCalledWith();
-        expect(binding.getCommand()?.exec).toStrictEqual(0);
+        expect(binding.command?.exec).toStrictEqual(0);
     });
 
     test("update continuous not log canDo", () => {
-        binding = new BindingStub(history, logger, true, () => new StubCmd(), new InteractionStub(new FSMImpl()));
+        binding = new BindingStub(history, logger, true, false, () => new StubCmd(), new InteractionStub(new FSMImpl()));
         jest.spyOn(binding, "ifCannotExecuteCmd");
         binding.conditionRespected = true;
         binding.fsmStarts();
-        (binding.getCommand() as StubCmd).candoValue = true;
+        (binding.command as StubCmd).candoValue = true;
         binding.fsmUpdates();
         expect(binding.ifCannotExecuteCmd).not.toHaveBeenCalledWith();
-        expect(binding.getCommand()?.exec).toStrictEqual(1);
+        expect(binding.command?.exec).toStrictEqual(1);
     });
 
     test("stop no log cmd created", () => {
         binding.conditionRespected = true;
         binding.fsmStarts();
-        const cmd = binding.getCommand();
+        const cmd = binding.command;
         binding.conditionRespected = false;
         binding.fsmStops();
         expect(cmd?.getStatus()).toStrictEqual(CmdStatus.cancelled);
-        expect(binding.getCommand()).toBeUndefined();
-        expect(binding.getTimesCancelled()).toStrictEqual(1);
+        expect(binding.command).toBeUndefined();
+        expect(binding.timesCancelled).toStrictEqual(1);
     });
 
     test("stop no cmd created", () => {
         binding.conditionRespected = false;
         binding.fsmStarts();
         binding.fsmStops();
-        expect(binding.getCommand()).toBeUndefined();
-        expect(binding.getTimesCancelled()).toStrictEqual(0);
+        expect(binding.command).toBeUndefined();
+        expect(binding.timesCancelled).toStrictEqual(0);
     });
 
     test("stop with log cmd created and cancelled two times", () => {
         binding.conditionRespected = true;
-        binding.setLogCmd(true);
+        binding.logCmd = true;
         binding.fsmStarts();
         binding.conditionRespected = false;
         binding.fsmStops();
@@ -407,16 +397,16 @@ describe("nominal cases", () => {
         binding.fsmStarts();
         binding.conditionRespected = false;
         binding.fsmStops();
-        expect(binding.getTimesCancelled()).toStrictEqual(2);
+        expect(binding.timesCancelled).toStrictEqual(2);
         expect(logger.logBindingStart).not.toHaveBeenCalled();
         expect(logger.logBindingEnd).not.toHaveBeenCalled();
     });
 
     test("uninstall Binding", () => {
-        jest.spyOn(binding.getInteraction(), "uninstall");
+        jest.spyOn(binding.interaction, "uninstall");
         binding.uninstallBinding();
-        expect(binding.isActivated()).toBeFalsy();
-        expect(binding.getInteraction().uninstall).toHaveBeenCalledTimes(1);
+        expect(binding.activated).toBeFalsy();
+        expect(binding.interaction.uninstall).toHaveBeenCalledTimes(1);
     });
 
     test("log usage when binding starts but not command", () => {
@@ -483,11 +473,11 @@ describe("crash in binding", () => {
             throw ex;
         };
 
-        binding = new BindingStub(history, logger, true, supplier, new InteractionStub(new FSMImpl()));
+        binding = new BindingStub(history, logger, true, false, supplier, new InteractionStub(new FSMImpl()));
         binding.conditionRespected = true;
         jest.spyOn(binding, "first");
         binding.fsmStarts();
-        expect(binding.getCommand()).toBeUndefined();
+        expect(binding.command).toBeUndefined();
         expect(logger.logBindingErr).toHaveBeenCalledWith("Error while creating a command", ex);
         expect(binding.first).not.toHaveBeenCalled();
     });
@@ -498,11 +488,11 @@ describe("crash in binding", () => {
             throw "yolo";
         };
 
-        binding = new BindingStub(history, logger, true, supplier, new InteractionStub(new FSMImpl()));
+        binding = new BindingStub(history, logger, true, false, supplier, new InteractionStub(new FSMImpl()));
         binding.conditionRespected = true;
         jest.spyOn(binding, "first");
         binding.fsmStarts();
-        expect(binding.getCommand()).toBeUndefined();
+        expect(binding.command).toBeUndefined();
         expect(logger.logBindingErr).toHaveBeenCalledWith("Error while creating a command", "yolo");
         expect(binding.first).not.toHaveBeenCalled();
     });
@@ -513,11 +503,11 @@ describe("crash in binding", () => {
             throw ex;
         };
 
-        binding = new BindingStub(history, logger, true, supplier, new InteractionStub(new FSMImpl()));
+        binding = new BindingStub(history, logger, true, false, supplier, new InteractionStub(new FSMImpl()));
         binding.conditionRespected = true;
         binding.fsmStops();
         expect(logger.logBindingErr).toHaveBeenCalledWith("Error while creating a command", ex);
-        expect(binding.getCommand()).toBeUndefined();
+        expect(binding.command).toBeUndefined();
     });
 
     test("update with cmd crash", () => {
@@ -525,7 +515,7 @@ describe("crash in binding", () => {
         const supplier = (): StubCmd => {
             throw ex;
         };
-        binding = new BindingStub(history, logger, true, supplier, new InteractionStub(new FSMImpl()));
+        binding = new BindingStub(history, logger, true, false, supplier, new InteractionStub(new FSMImpl()));
         jest.spyOn(binding, "first");
         binding.conditionRespected = false;
         binding.fsmStarts();
@@ -533,6 +523,6 @@ describe("crash in binding", () => {
         binding.fsmUpdates();
         expect(logger.logBindingErr).toHaveBeenCalledWith("Error while creating a command", ex);
         expect(binding.first).not.toHaveBeenCalledWith();
-        expect(binding.getCommand()).toBeUndefined();
+        expect(binding.command).toBeUndefined();
     });
 });

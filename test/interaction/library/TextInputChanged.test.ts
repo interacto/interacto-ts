@@ -27,8 +27,8 @@ beforeEach(() => {
     handler = mock<FSMHandler>();
     interaction = new TextInputChanged();
     interaction.log(true);
-    interaction.getFsm().log(true);
-    interaction.getFsm().addHandler(handler);
+    interaction.fsm.log = true;
+    interaction.fsm.addHandler(handler);
     textArea = document.createElement("textarea");
 });
 

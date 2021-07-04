@@ -27,14 +27,14 @@ let handler: FSMHandler;
 beforeEach(() => {
     handler = mock<FSMHandler>();
     interaction = new MultiTouch(3);
-    interaction.getFsm().addHandler(handler);
+    interaction.fsm.addHandler(handler);
     canvas = document.createElement("canvas");
 });
 
 test("touch1", () => {
     interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 11, 23, 11, 23));
-    expect(interaction.getFsm().getConccurFSMs()
-        .filter(fsm => fsm.isStarted())).toHaveLength(1);
+    expect(interaction.fsm.getConccurFSMs()
+        .filter(fsm => fsm.started)).toHaveLength(1);
     expect(interaction.isRunning()).toBeFalsy();
     expect(handler.fsmStarts).not.toHaveBeenCalled();
     expect(handler.fsmUpdates).not.toHaveBeenCalled();
@@ -44,16 +44,16 @@ test("touch1", () => {
 
 test("touch1 data", () => {
     interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 11, 23, 11, 23));
-    expect(interaction.getData().touches).toHaveLength(1);
-    checkTouchPoint(interaction.getData().touches[0].src, 11, 23, 11, 23, 3, canvas);
-    checkTouchPoint(interaction.getData().touches[0].tgt, 11, 23, 11, 23, 3, canvas);
+    expect(interaction.data.touches).toHaveLength(1);
+    checkTouchPoint(interaction.data.touches[0].src, 11, 23, 11, 23, 3, canvas);
+    checkTouchPoint(interaction.data.touches[0].tgt, 11, 23, 11, 23, 3, canvas);
 });
 
 test("touch2", () => {
     interaction.processEvent(createTouchEvent("touchstart", 1, canvas, 11, 23, 11, 23));
     interaction.processEvent(createTouchEvent("touchstart", 2, canvas, 11, 23, 11, 23));
-    expect(interaction.getFsm().getConccurFSMs()
-        .filter(fsm => fsm.isStarted())).toHaveLength(2);
+    expect(interaction.fsm.getConccurFSMs()
+        .filter(fsm => fsm.started)).toHaveLength(2);
     expect(interaction.isRunning()).toBeFalsy();
     expect(handler.fsmStarts).not.toHaveBeenCalled();
     expect(handler.fsmUpdates).not.toHaveBeenCalled();
@@ -64,19 +64,19 @@ test("touch2", () => {
 test("touch2 data", () => {
     interaction.processEvent(createTouchEvent("touchstart", 1, canvas, 11, 23, 11, 23));
     interaction.processEvent(createTouchEvent("touchstart", 2, canvas, 21, 13, 21, 13));
-    expect(interaction.getData().touches).toHaveLength(2);
-    checkTouchPoint(interaction.getData().touches[0].src, 11, 23, 11, 23, 1, canvas);
-    checkTouchPoint(interaction.getData().touches[1].src, 21, 13, 21, 13, 2, canvas);
-    checkTouchPoint(interaction.getData().touches[0].tgt, 11, 23, 11, 23, 1, canvas);
-    checkTouchPoint(interaction.getData().touches[1].tgt, 21, 13, 21, 13, 2, canvas);
+    expect(interaction.data.touches).toHaveLength(2);
+    checkTouchPoint(interaction.data.touches[0].src, 11, 23, 11, 23, 1, canvas);
+    checkTouchPoint(interaction.data.touches[1].src, 21, 13, 21, 13, 2, canvas);
+    checkTouchPoint(interaction.data.touches[0].tgt, 11, 23, 11, 23, 1, canvas);
+    checkTouchPoint(interaction.data.touches[1].tgt, 21, 13, 21, 13, 2, canvas);
 });
 
 test("touch3", () => {
     interaction.processEvent(createTouchEvent("touchstart", 1, canvas, 11, 23, 11, 23));
     interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 21, 13, 21, 13));
     interaction.processEvent(createTouchEvent("touchstart", 2, canvas, 210, 130, 210, 130));
-    expect(interaction.getFsm().getConccurFSMs()
-        .filter(fsm => fsm.isStarted())).toHaveLength(3);
+    expect(interaction.fsm.getConccurFSMs()
+        .filter(fsm => fsm.started)).toHaveLength(3);
     expect(interaction.isRunning()).toBeTruthy();
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
@@ -88,21 +88,21 @@ test("touch3 data", () => {
     interaction.processEvent(createTouchEvent("touchstart", 1, canvas, 11, 23, 11, 23));
     interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 21, 13, 21, 13));
     interaction.processEvent(createTouchEvent("touchstart", 2, canvas, 210, 130, 210, 130));
-    expect(interaction.getData().touches).toHaveLength(3);
-    checkTouchPoint(interaction.getData().touches[0].src, 11, 23, 11, 23, 1, canvas);
-    checkTouchPoint(interaction.getData().touches[1].src, 21, 13, 21, 13, 3, canvas);
-    checkTouchPoint(interaction.getData().touches[2].src, 210, 130, 210, 130, 2, canvas);
-    checkTouchPoint(interaction.getData().touches[0].tgt, 11, 23, 11, 23, 1, canvas);
-    checkTouchPoint(interaction.getData().touches[1].tgt, 21, 13, 21, 13, 3, canvas);
-    checkTouchPoint(interaction.getData().touches[2].tgt, 210, 130, 210, 130, 2, canvas);
+    expect(interaction.data.touches).toHaveLength(3);
+    checkTouchPoint(interaction.data.touches[0].src, 11, 23, 11, 23, 1, canvas);
+    checkTouchPoint(interaction.data.touches[1].src, 21, 13, 21, 13, 3, canvas);
+    checkTouchPoint(interaction.data.touches[2].src, 210, 130, 210, 130, 2, canvas);
+    checkTouchPoint(interaction.data.touches[0].tgt, 11, 23, 11, 23, 1, canvas);
+    checkTouchPoint(interaction.data.touches[1].tgt, 21, 13, 21, 13, 3, canvas);
+    checkTouchPoint(interaction.data.touches[2].tgt, 210, 130, 210, 130, 2, canvas);
 });
 
 test("touch3 with one error event", () => {
     interaction.processEvent(createTouchEvent("touchstart", 1, canvas, 11, 23, 11, 23));
     interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 21, 13, 21, 13));
     interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 210, 130, 210, 130));
-    expect(interaction.getFsm().getConccurFSMs()
-        .filter(fsm => fsm.isStarted())).toHaveLength(2);
+    expect(interaction.fsm.getConccurFSMs()
+        .filter(fsm => fsm.started)).toHaveLength(2);
     expect(interaction.isRunning()).toBeFalsy();
     expect(handler.fsmStarts).not.toHaveBeenCalled();
     expect(handler.fsmUpdates).not.toHaveBeenCalled();
@@ -179,13 +179,13 @@ test("touch1 touch2 touch3 move3 data", () => {
     interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 21, 13, 21, 13));
     interaction.processEvent(createTouchEvent("touchstart", 2, canvas, 210, 130, 210, 130));
     interaction.processEvent(createTouchEvent("touchmove", 3, canvas, 2100, 1300, 2100, 1300));
-    expect(interaction.getData().touches).toHaveLength(3);
-    checkTouchPoint(interaction.getData().touches[0].src, 11, 23, 11, 23, 1, canvas);
-    checkTouchPoint(interaction.getData().touches[1].src, 21, 13, 21, 13, 3, canvas);
-    checkTouchPoint(interaction.getData().touches[2].src, 210, 130, 210, 130, 2, canvas);
-    checkTouchPoint(interaction.getData().touches[0].tgt, 11, 23, 11, 23, 1, canvas);
-    checkTouchPoint(interaction.getData().touches[1].tgt, 2100, 1300, 2100, 1300, 3, canvas);
-    checkTouchPoint(interaction.getData().touches[2].tgt, 210, 130, 210, 130, 2, canvas);
+    expect(interaction.data.touches).toHaveLength(3);
+    checkTouchPoint(interaction.data.touches[0].src, 11, 23, 11, 23, 1, canvas);
+    checkTouchPoint(interaction.data.touches[1].src, 21, 13, 21, 13, 3, canvas);
+    checkTouchPoint(interaction.data.touches[2].src, 210, 130, 210, 130, 2, canvas);
+    checkTouchPoint(interaction.data.touches[0].tgt, 11, 23, 11, 23, 1, canvas);
+    checkTouchPoint(interaction.data.touches[1].tgt, 2100, 1300, 2100, 1300, 3, canvas);
+    checkTouchPoint(interaction.data.touches[2].tgt, 210, 130, 210, 130, 2, canvas);
 });
 
 test("touch end", () => {
@@ -213,14 +213,14 @@ test("touch end data", () => {
 
     const newHandler = mock<FSMHandler>();
     newHandler.fsmStops.mockImplementation(() => {
-        data1s.copy(interaction.getData().touches[0].src);
-        data1t.copy(interaction.getData().touches[0].tgt);
-        data2s.copy(interaction.getData().touches[1].src);
-        data2t.copy(interaction.getData().touches[1].tgt);
-        data3s.copy(interaction.getData().touches[2].src);
-        data3t.copy(interaction.getData().touches[2].tgt);
+        data1s.copy(interaction.data.touches[0].src);
+        data1t.copy(interaction.data.touches[0].tgt);
+        data2s.copy(interaction.data.touches[1].src);
+        data2t.copy(interaction.data.touches[1].tgt);
+        data3s.copy(interaction.data.touches[2].src);
+        data3t.copy(interaction.data.touches[2].tgt);
     });
-    interaction.getFsm().addHandler(newHandler);
+    interaction.fsm.addHandler(newHandler);
 
     interaction.processEvent(createTouchEvent("touchend", 2, canvas, 11, 23, 11, 23));
 

@@ -27,8 +27,8 @@ beforeEach(() => {
     handler = mock<FSMHandler>();
     interaction = new Click();
     interaction.log(true);
-    interaction.getFsm().log(true);
-    interaction.getFsm().addHandler(handler);
+    interaction.fsm.log = true;
+    interaction.fsm.addHandler(handler);
     document.documentElement.innerHTML = "<html><svg><g id='gro'><circle r=\"1\" id='circle'></circle><text></text></g></svg></html>";
     groupe = document.getElementById("gro") as HTMLElement;
     circle = document.getElementById("circle") as HTMLElement;
@@ -37,7 +37,7 @@ beforeEach(() => {
 test("current target with group tag", () => {
     const data = new PointDataImpl();
     handler.fsmStops.mockImplementation(() => {
-        data.copy(interaction.getData());
+        data.copy(interaction.data);
     });
 
     interaction.registerToNodes([groupe]);

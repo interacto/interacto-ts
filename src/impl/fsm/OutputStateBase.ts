@@ -21,7 +21,7 @@ import type {Transition} from "../../api/fsm/Transition";
  * Base implementation of the OutputState interface.
  */
 export abstract class OutputStateBase extends StateBase implements OutputState {
-    protected readonly transitions: Array<Transition<Event>>;
+    protected readonly _transitions: Array<Transition<Event>>;
 
     /**
      * Creates the state.
@@ -30,11 +30,11 @@ export abstract class OutputStateBase extends StateBase implements OutputState {
      */
     protected constructor(stateMachine: FSM, stateName: string) {
         super(stateMachine, stateName);
-        this.transitions = [];
+        this._transitions = [];
     }
 
     public process(event: Event): boolean {
-        return this.getTransitions().find(tr => {
+        return this.transitions.find(tr => {
             try {
                 return tr.execute(event) !== undefined;
             } catch (ignored: unknown) {
@@ -45,15 +45,15 @@ export abstract class OutputStateBase extends StateBase implements OutputState {
     }
 
     public clearTransitions(): void {
-        this.transitions.length = 0;
+        this._transitions.length = 0;
     }
 
-    public getTransitions(): ReadonlyArray<Transition<Event>> {
-        return [...this.transitions];
+    public get transitions(): ReadonlyArray<Transition<Event>> {
+        return [...this._transitions];
     }
 
     public addTransition(tr: Transition<Event>): void {
-        this.transitions.push(tr);
+        this._transitions.push(tr);
     }
 
     public abstract exit(): void;
@@ -63,6 +63,6 @@ export abstract class OutputStateBase extends StateBase implements OutputState {
         this.transitions.forEach(tr => {
             tr.uninstall();
         });
-        this.transitions.length = 0;
+        this._transitions.length = 0;
     }
 }

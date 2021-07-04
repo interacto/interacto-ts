@@ -62,7 +62,7 @@ export class DatePicked extends InteractionBase<WidgetData<HTMLInputElement>, Wi
 
         this.handler = {
             "initToPickedHandler": (event: Event): void => {
-                this.data.copy(event);
+                this._data.copy(event);
             },
             "reinitData": (): void => {
                 this.reinitData();

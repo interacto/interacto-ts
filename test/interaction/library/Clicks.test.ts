@@ -38,7 +38,7 @@ test("cannot build the interaction with 1 click", () => {
             handler = mock<FSMHandler>();
             canvas = document.createElement("canvas");
             interaction = new Clicks(nb);
-            interaction.getFsm().addHandler(handler);
+            interaction.fsm.addHandler(handler);
         });
 
         afterEach(() => {
@@ -48,8 +48,8 @@ test("cannot build the interaction with 1 click", () => {
         });
 
         test("cannot build the interaction twice", () => {
-            interaction.getFsm().buildFSM();
-            expect(interaction.getFsm().getStates()).toHaveLength(4);
+            interaction.fsm.buildFSM();
+            expect(interaction.fsm.states).toHaveLength(4);
         });
 
         // slice(1) to remove 0
@@ -108,7 +108,7 @@ test("cannot build the interaction with 1 click", () => {
         test("that data first click ok", () => {
             interaction.processEvent(createMouseEvent("click", canvas, 125, 21, 140, 121, 1));
 
-            const data = interaction.getData().points;
+            const data = interaction.data.points;
 
             expect(data).toHaveLength(1);
             expect(data[0].clientX).toBe(140);
@@ -124,7 +124,7 @@ test("cannot build the interaction with 1 click", () => {
                 .click({"screenX": 1025, "screenY": 210, "clientX": 1040, "clientY": 1201, "button": 1})
                 .click({"screenX": 1250, "screenY": 201, "clientX": 1040, "clientY": 1021, "button": 1});
 
-            const data = interaction.getData().points;
+            const data = interaction.data.points;
 
             expect(data).toHaveLength(2);
             expect(data[0].clientX).toBe(1040);

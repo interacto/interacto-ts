@@ -58,7 +58,7 @@ export class DnDFSM extends FSMImpl {
         this.addState(dragged);
         this.addState(released);
         this.addState(cancelled);
-        this.setStartingState(dragged);
+        this.startingState = dragged;
 
         const press = new PressureTransition(this.initState, pressed);
         press.action = (event: MouseEvent): void => {
@@ -131,20 +131,20 @@ export class DnD extends InteractionBase<SrcTgtPointsData<PointData>, SrcTgtPoin
 
         this.handler = {
             "onPress": (evt: MouseEvent): void => {
-                this.data.copySrc(evt);
-                this.data.copyTgt(evt);
+                this._data.copySrc(evt);
+                this._data.copyTgt(evt);
             },
             "onDrag": (evt: MouseEvent): void => {
-                this.data.copyTgt(evt);
+                this._data.copyTgt(evt);
             },
             "onRelease": (evt: MouseEvent): void => {
-                this.data.copyTgt(evt);
+                this._data.copyTgt(evt);
             },
             "reinitData": (): void => {
                 this.reinitData();
             }
         };
 
-        this.getFsm().buildFSM(this.handler);
+        this.fsm.buildFSM(this.handler);
     }
 }

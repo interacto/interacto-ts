@@ -41,12 +41,12 @@ afterEach(() => {
 describe("horizontal", () => {
     beforeEach(() => {
         interaction = new Swipe(true, 400, 200, 10);
-        interaction.getFsm().addHandler(handler);
+        interaction.fsm.addHandler(handler);
     });
 
     test("not created twice", () => {
-        interaction.getFsm().buildFSM();
-        expect(interaction.getFsm().getStates()).toHaveLength(5);
+        interaction.fsm.buildFSM();
+        expect(interaction.fsm.states).toHaveLength(5);
     });
 
     test("touch", () => {
@@ -59,10 +59,10 @@ describe("horizontal", () => {
     test("touch move: too slow too short", () => {
         const newHandler = mock<FSMHandler>();
         newHandler.fsmStarts.mockImplementation(() => {
-            dataSrc.copy(interaction.getData().src);
-            dataTgt.copy(interaction.getData().tgt);
+            dataSrc.copy(interaction.data.src);
+            dataTgt.copy(interaction.data.tgt);
         });
-        interaction.getFsm().addHandler(newHandler);
+        interaction.fsm.addHandler(newHandler);
 
         interaction.processEvent(createTouchEvent("touchstart", 3, canvas,
             15, 20, 150, 200, 100));
@@ -125,10 +125,10 @@ describe("horizontal", () => {
     test("touch move move too short too slow", () => {
         const newHandler = mock<FSMHandler>();
         newHandler.fsmUpdates.mockImplementation(() => {
-            dataSrc.copy(interaction.getData().src);
-            dataTgt.copy(interaction.getData().tgt);
+            dataSrc.copy(interaction.data.src);
+            dataTgt.copy(interaction.data.tgt);
         });
-        interaction.getFsm().addHandler(newHandler);
+        interaction.fsm.addHandler(newHandler);
 
         interaction.processEvent(createTouchEvent("touchstart", 3, canvas,
             100, 20, 150, 200, 5000));

@@ -39,6 +39,6 @@ test("testGoodTgt", () => {
 });
 
 test("testSrcStateTransitionAdded", () => {
-    expect(state1.getTransitions()).toHaveLength(1);
-    expect(state1.getTransitions()[0]).toStrictEqual(tr);
+    expect(state1.transitions).toHaveLength(1);
+    expect(state1.transitions[0]).toStrictEqual(tr);
 });

@@ -26,14 +26,14 @@ beforeEach(() => {
     handler = mock<FSMHandler>();
     interaction = new KeyTyped();
     interaction.log(true);
-    interaction.getFsm().log(true);
-    interaction.getFsm().addHandler(handler);
+    interaction.fsm.log = true;
+    interaction.fsm.addHandler(handler);
     text = document.createElement("textarea");
 });
 
 test("cannot create several times the FSM", () => {
-    interaction.getFsm().buildFSM();
-    expect(interaction.getFsm().getStates()).toHaveLength(3);
+    interaction.fsm.buildFSM();
+    expect(interaction.fsm.states).toHaveLength(3);
 });
 
 test("type 'a' in the textarea starts and stops the interaction.", () => {
@@ -67,9 +67,9 @@ test("data is ok", () => {
     interaction.registerToNodes([text]);
     const newHandler = mock<FSMHandler>();
     newHandler.fsmStops.mockImplementation(() => {
-        data.copy(interaction.getData());
+        data.copy(interaction.data);
     });
-    interaction.getFsm().addHandler(newHandler);
+    interaction.fsm.addHandler(newHandler);
     robot(text)
         .keydown({"code": "z"})
         .keyup({"code": "z"});

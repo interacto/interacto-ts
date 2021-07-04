@@ -41,30 +41,30 @@ describe("long press test", () => {
 
     test("cannot build the interaction twice", () => {
         interaction = new LongPress(200);
-        interaction.getFsm().buildFSM();
-        expect(interaction.getFsm().getStates()).toHaveLength(4);
+        interaction.fsm.buildFSM();
+        expect(interaction.fsm.states).toHaveLength(4);
     });
 
     test("that has data handler", () => {
         interaction = new LongPress(1);
-        expect(interaction.getFsm().getDataHandler()).toBeDefined();
+        expect(interaction.fsm.getDataHandler()).toBeDefined();
     });
 
     test("that reinit cleans data", () => {
         interaction = new LongPress(100);
-        jest.spyOn(interaction.getFsm().getDataHandler() as FSMDataHandler, "reinitData");
+        jest.spyOn(interaction.fsm.getDataHandler() as FSMDataHandler, "reinitData");
         interaction.processEvent(createMouseEvent("mousedown", canvas, 15, 20, 160, 21, 2));
         interaction.reinit();
-        expect(interaction.getData().button).toStrictEqual(0);
-        expect(interaction.getData().currentTarget).toBeNull();
-        expect(interaction.getFsm().getDataHandler()?.reinitData).toHaveBeenCalledWith();
+        expect(interaction.data.button).toStrictEqual(0);
+        expect(interaction.data.currentTarget).toBeNull();
+        expect(interaction.fsm.getDataHandler()?.reinitData).toHaveBeenCalledWith();
     });
 
     [1000, 2000].forEach(duration => {
         describe(`long press ${String(duration)}`, () => {
             beforeEach(() => {
                 interaction = new LongPress(duration);
-                interaction.getFsm().addHandler(handler);
+                interaction.fsm.addHandler(handler);
             });
 
             test("touch does not end", () => {
@@ -72,9 +72,9 @@ describe("long press test", () => {
 
                 const newHandler = mock<FSMHandler>();
                 newHandler.fsmStarts.mockImplementation(() => {
-                    pressData.copy(interaction.getData());
+                    pressData.copy(interaction.data);
                 });
-                interaction.getFsm().addHandler(newHandler);
+                interaction.fsm.addHandler(newHandler);
                 interaction.processEvent(createMouseEvent("mousedown", canvas, 15, 20, 160, 21, 2));
                 expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
                 expect(handler.fsmStops).not.toHaveBeenCalled();

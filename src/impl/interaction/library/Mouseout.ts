@@ -75,13 +75,13 @@ export class Mouseout extends InteractionBase<PointData, PointDataImpl, Mouseout
 
         this.handler = {
             "onExit": (evt: MouseEvent): void => {
-                this.data.copy(evt);
+                this._data.copy(evt);
             },
             "reinitData": (): void => {
                 this.reinitData();
             }
         };
 
-        this.getFsm().buildFSM(this.handler);
+        this.fsm.buildFSM(this.handler);
     }
 }

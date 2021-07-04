@@ -28,14 +28,14 @@ beforeEach(() => {
     handler = mock<FSMHandler>();
     interaction = new KeysTyped();
     interaction.log(true);
-    interaction.getFsm().log(true);
-    interaction.getFsm().addHandler(handler);
+    interaction.fsm.log = true;
+    interaction.fsm.addHandler(handler);
     text = document.createElement("textarea");
 });
 
 test("cannot create several times the FSM", () => {
-    interaction.getFsm().buildFSM();
-    expect(interaction.getFsm().getStates()).toHaveLength(3);
+    interaction.fsm.buildFSM();
+    expect(interaction.fsm.states).toHaveLength(3);
 });
 
 test("type 'b' and wait for timeout stops the interaction", () => {
@@ -51,9 +51,9 @@ test("type 'b' and wait for timeout stops the interaction", () => {
 test("type 'b' and wait for timeout stops the interaction: data", () => {
     const newHandler = mock<FSMHandler>();
     newHandler.fsmStops.mockImplementation(() => {
-        data.addKey(peek(interaction.getData().keys) as KeyData);
+        data.addKey(peek(interaction.data.keys) as KeyData);
     });
-    interaction.getFsm().addHandler(newHandler);
+    interaction.fsm.addHandler(newHandler);
 
     interaction.registerToNodes([text]);
     robot(text)
@@ -82,11 +82,11 @@ test("type text and wait for timeout stops the interaction", () => {
 test("type text and wait for timeout stops the interaction: data", () => {
     const newHandler = mock<FSMHandler>();
     newHandler.fsmStops.mockImplementation(() => {
-        interaction.getData().keys.forEach(k => {
+        interaction.data.keys.forEach(k => {
             data.addKey(k);
         });
     });
-    interaction.getFsm().addHandler(newHandler);
+    interaction.fsm.addHandler(newHandler);
 
     interaction.registerToNodes([text]);
     robot(text)
@@ -106,9 +106,9 @@ test("type text and wait for timeout stops the interaction: data", () => {
 test("type 'b' does not stop the interaction", () => {
     const newHandler = mock<FSMHandler>();
     newHandler.fsmUpdates.mockImplementation(() => {
-        data.addKey(peek(interaction.getData().keys) as KeyData);
+        data.addKey(peek(interaction.data.keys) as KeyData);
     });
-    interaction.getFsm().addHandler(newHandler);
+    interaction.fsm.addHandler(newHandler);
 
     interaction.registerToNodes([text]);
     robot(text)

@@ -212,8 +212,8 @@ test("dnd binder with throttling", () => {
         .toProduce(() => new StubCmd(true))
         .throttle(20)
         .bind()
-        .getInteraction()
-        .getFsm();
+        .interaction
+        .fsm;
     jest.spyOn(fsm, "process");
 
     const evt1: MouseEventForTest = createMouseEvent("mousedown", elt, 1, 2) as MouseEventForTest;
@@ -306,7 +306,7 @@ test("drag lock: double click does not cancel", () => {
         .click({"button": 0})
         .click({"button": 0});
 
-    expect(binding.getInteraction().isRunning()).toBeTruthy();
+    expect(binding.interaction.isRunning()).toBeTruthy();
 });
 
 test("drag lock: first then end", () => {
@@ -520,7 +520,7 @@ test("that 'strictStart' works correctly when the 'when' routine returns false",
         .mouseup();
 
     expect(ctx.commands).toHaveLength(0);
-    expect(binding.getInteraction().isRunning()).toBeFalsy();
+    expect(binding.interaction.isRunning()).toBeFalsy();
 });
 
 test("that 'strictStart' stops the interaction", () => {
@@ -535,7 +535,7 @@ test("that 'strictStart' stops the interaction", () => {
         .mousedown()
         .mousemove();
 
-    expect(binding.getInteraction().isRunning()).toBeFalsy();
+    expect(binding.interaction.isRunning()).toBeFalsy();
 });
 
 test("that 'when' is not called on the first event of a DnD", () => {

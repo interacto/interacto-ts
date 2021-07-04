@@ -26,8 +26,8 @@ beforeEach(() => {
     handler = mock<FSMHandler>();
     interaction = new Click();
     interaction.log(true);
-    interaction.getFsm().log(true);
-    interaction.getFsm().addHandler(handler);
+    interaction.fsm.log = true;
+    interaction.fsm.addHandler(handler);
     canvas = document.createElement("canvas");
 });
 
@@ -86,7 +86,7 @@ test("testClickData", () => {
     });
 
     handler.fsmStops.mockImplementation(() => {
-        data.copy(interaction.getData());
+        data.copy(interaction.data);
     });
     interaction.processEvent(createMouseEvent2("click", expected));
     expect(data).toStrictEqual(expected);
@@ -96,7 +96,7 @@ test("testClickOnWidgetData", () => {
     const data = new PointDataImpl();
 
     handler.fsmStops.mockImplementation(() => {
-        data.copy(interaction.getData());
+        data.copy(interaction.data);
     });
     interaction.registerToNodes([canvas]);
     robot().click({"target": canvas, "button": 1, "screenX": 111, "screenY": 222, "clientX": 11, "clientY": 22});

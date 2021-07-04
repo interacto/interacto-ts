@@ -47,7 +47,7 @@ export class BindingsContext implements BindingsObserver {
 
     public observeBinding(binding: Binding<Command, Interaction<InteractionData>, InteractionData>): void {
         this.binds.push(binding);
-        this.disposables.push(binding.produces().subscribe(cmd => this.cmds.push([cmd, binding])));
+        this.disposables.push(binding.produces.subscribe(cmd => this.cmds.push([cmd, binding])));
     }
 
     public clearObservedBindings(): void {

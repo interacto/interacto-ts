@@ -27,8 +27,8 @@ beforeEach(() => {
     handler = mock<FSMHandler>();
     interaction = new KeysPressed();
     interaction.log(true);
-    interaction.getFsm().log(true);
-    interaction.getFsm().addHandler(handler);
+    interaction.fsm.log = true;
+    interaction.fsm.addHandler(handler);
     text = document.createElement("textarea");
 });
 
@@ -45,9 +45,9 @@ test("testKeyPressData", () => {
 
     const newHandler = mock<FSMHandler>();
     newHandler.fsmUpdates.mockImplementation(() => {
-        data.addKey(peek(interaction.getData().keys) as KeyData);
+        data.addKey(peek(interaction.data.keys) as KeyData);
     });
-    interaction.getFsm().addHandler(newHandler);
+    interaction.fsm.addHandler(newHandler);
 
     robot(text).keydown({"code": "A"});
 
@@ -70,9 +70,9 @@ test("testTwoKeyPressData", () => {
 
     const newHandler = mock<FSMHandler>();
     newHandler.fsmUpdates.mockImplementation(() => {
-        data.addKey(peek(interaction.getData().keys) as KeyData);
+        data.addKey(peek(interaction.data.keys) as KeyData);
     });
-    interaction.getFsm().addHandler(newHandler);
+    interaction.fsm.addHandler(newHandler);
     robot(text)
         .keydown({"code": "A"})
         .keydown({"code": "B"});
@@ -100,9 +100,9 @@ test("testTwoKeyPressReleaseData", () => {
         .keydown({"code": "B"});
     const newHandler = mock<FSMHandler>();
     newHandler.fsmUpdates.mockImplementation(() => {
-        data.addKey(peek(interaction.getData().keys) as KeyData);
+        data.addKey(peek(interaction.data.keys) as KeyData);
     });
-    interaction.getFsm().addHandler(newHandler);
+    interaction.fsm.addHandler(newHandler);
     robot(text).keyup({"code": "B"});
     expect(data.keys).toHaveLength(1);
     expect(data.keys[0].code).toStrictEqual("A");

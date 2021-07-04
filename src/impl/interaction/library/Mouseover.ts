@@ -75,13 +75,13 @@ export class Mouseover extends InteractionBase<PointData, PointDataImpl, Mouseov
 
         this.handler = {
             "onEnter": (evt: MouseEvent): void => {
-                this.data.copy(evt);
+                this._data.copy(evt);
             },
             "reinitData": (): void => {
                 this.reinitData();
             }
         };
 
-        this.getFsm().buildFSM(this.handler);
+        this.fsm.buildFSM(this.handler);
     }
 }

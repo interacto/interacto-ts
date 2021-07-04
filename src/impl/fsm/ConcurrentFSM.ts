@@ -30,7 +30,7 @@ export class ConcurrentFSM<F extends FSM> extends FSMImpl {
 
         const handler: FSMHandler = {
             "fsmStarts": (): void => {
-                if (this.isStarted()) {
+                if (this.started) {
                     this.onStarting();
                 }
             },
@@ -61,14 +61,15 @@ export class ConcurrentFSM<F extends FSM> extends FSMImpl {
         return this.conccurFSMs.some(conccurFSM => conccurFSM.process(event));
     }
 
-    public override isStarted(): boolean {
-        return this.conccurFSMs.every(fsm => fsm.isStarted());
+    public override get started(): boolean {
+        return this.conccurFSMs.every(fsm => fsm.started);
     }
 
-    public override log(log: boolean): void {
-        super.log(log);
+    // eslint-disable-next-line accessor-pairs
+    public override set log(log: boolean) {
+        super.log = log;
         this.conccurFSMs.forEach(fsm => {
-            fsm.log(log);
+            fsm.log = log;
         });
     }
 

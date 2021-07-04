@@ -58,13 +58,13 @@ export class Scroll extends InteractionBase<ScrollData, ScrollDataImpl, ScrollFS
 
         this.handler = {
             "initToScroll": (event: UIEvent): void => {
-                this.data.setScrollData(event);
+                this._data.setScrollData(event);
             },
             "reinitData": (): void => {
                 this.reinitData();
             }
         };
 
-        this.getFsm().buildFSM(this.handler);
+        this.fsm.buildFSM(this.handler);
     }
 }

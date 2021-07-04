@@ -70,7 +70,7 @@ export class FittsLaw {
                        target?: Element) {
         this.data = [];
         this.providedTarget = target;
-        this.obsSrc = bSrc.produces().subscribe(_cmd1 => {
+        this.obsSrc = bSrc.produces.subscribe(_cmd1 => {
             this.reinit();
             const handler: EventListener = (evt: MouseEvent) => {
                 if (this._startX === undefined) {
@@ -81,7 +81,7 @@ export class FittsLaw {
             };
             document.body.addEventListener("mousemove", handler);
             const t0 = performance.now();
-            const obsTgt = bTgt.produces().subscribe(_cmd2 => {
+            const obsTgt = bTgt.produces.subscribe(_cmd2 => {
                 const t1 = performance.now();
                 this.data.push(new FittsLawDataImpl(
                     t1 - t0,

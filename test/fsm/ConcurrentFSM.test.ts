@@ -105,60 +105,60 @@ test("nb FSMs OK", () => {
 });
 
 test("log OK", () => {
-    jest.spyOn(fsm1, "log");
-    jest.spyOn(fsm2, "log");
-    fsm.log(true);
-    expect(fsm1.log).toHaveBeenCalledWith(true);
-    expect(fsm2.log).toHaveBeenCalledWith(true);
+    fsm1.log = false;
+    fsm2.log = false;
+    fsm.log = true;
+    expect(fsm1.log).toBeTruthy();
+    expect(fsm2.log).toBeTruthy();
 });
 
 test("log false", () => {
-    jest.spyOn(fsm1, "log");
-    jest.spyOn(fsm2, "log");
-    fsm.log(true);
-    fsm.log(false);
-    expect(fsm1.log).toHaveBeenCalledWith(false);
-    expect(fsm2.log).toHaveBeenCalledWith(false);
+    fsm1.log = true;
+    fsm2.log = true;
+    fsm.log = true;
+    fsm.log = false;
+    expect(fsm1.log).toBeFalsy();
+    expect(fsm2.log).toBeFalsy();
 });
 
 test("incorrect Event Does Nothing", () => {
     fsm.process(new Event("foo"));
-    expect(fsm.isStarted()).toBeFalsy();
-    expect(fsm1.isStarted()).toBeFalsy();
-    expect(fsm2.isStarted()).toBeFalsy();
+    expect(fsm.started).toBeFalsy();
+    expect(fsm1.started).toBeFalsy();
+    expect(fsm2.started).toBeFalsy();
 });
 
 test("one mouse1 Does Not Start", () => {
     fsm.process(createMouseEvent("mousedown", document.createElement("button"), 0, 0, 0, 0, 1));
-    expect(fsm.isStarted()).toBeFalsy();
-    expect(fsm1.isStarted()).toBeTruthy();
-    expect(fsm2.isStarted()).toBeFalsy();
+    expect(fsm.started).toBeFalsy();
+    expect(fsm1.started).toBeTruthy();
+    expect(fsm2.started).toBeFalsy();
 });
 
 test("one mouse2 Does Not Start", () => {
     const b = document.createElement("button");
     fsm.process(createMouseEvent("mousedown", b, 0, 0, 0, 0, 2));
-    expect(fsm.isStarted()).toBeFalsy();
-    expect(fsm1.isStarted()).toBeFalsy();
-    expect(fsm2.isStarted()).toBeTruthy();
+    expect(fsm.started).toBeFalsy();
+    expect(fsm1.started).toBeFalsy();
+    expect(fsm2.started).toBeTruthy();
 });
 
 test("two differents Touch Events Start", () => {
     const b = document.createElement("button");
     fsm.process(createMouseEvent("mousedown", b, 0, 0, 0, 0, 1));
     fsm.process(createMouseEvent("mousedown", b, 0, 0, 0, 0, 2));
-    expect(fsm.isStarted()).toBeTruthy();
-    expect(fsm1.isStarted()).toBeTruthy();
-    expect(fsm2.isStarted()).toBeTruthy();
+    expect(fsm.started).toBeTruthy();
+    expect(fsm1.started).toBeTruthy();
+    expect(fsm2.started).toBeTruthy();
 });
 
 test("twoDifferntsTouchEventsStart2", () => {
     const b = document.createElement("button");
     fsm.process(createMouseEvent("mousedown", b, 0, 0, 0, 0, 2));
     fsm.process(createMouseEvent("mousedown", b, 0, 0, 0, 0, 1));
-    expect(fsm.isStarted()).toBeTruthy();
-    expect(fsm1.isStarted()).toBeTruthy();
-    expect(fsm2.isStarted()).toBeTruthy();
+    expect(fsm.started).toBeTruthy();
+    expect(fsm1.started).toBeTruthy();
+    expect(fsm2.started).toBeTruthy();
 });
 
 test("oneFullSequenceDoesNotRunTheFSM", () => {
@@ -184,7 +184,7 @@ test("oneSequencePlusOtherStartedOK", () => {
     expect(handler1.fsmStops).toHaveBeenCalledTimes(1);
     expect(handler2.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler2.fsmStops).not.toHaveBeenCalled();
-    expect(fsm2.isStarted()).toBeTruthy();
+    expect(fsm2.started).toBeTruthy();
 });
 
 test("recyclingEventsOK", () => {
@@ -194,9 +194,9 @@ test("recyclingEventsOK", () => {
     fsm.process(createMouseEvent("mousedown", b, 0, 0, 0, 0, 2));
     fsm.process(createMouseEvent("mouseup", b, 0, 0, 0, 0, 1));
     fsm.process(createMouseEvent("mousedown", b, 0, 0, 0, 0, 1));
-    expect(fsm.isStarted()).toBeTruthy();
-    expect(fsm1.isStarted()).toBeTruthy();
-    expect(fsm2.isStarted()).toBeTruthy();
+    expect(fsm.started).toBeTruthy();
+    expect(fsm1.started).toBeTruthy();
+    expect(fsm2.started).toBeTruthy();
 });
 
 test("recyclingEventsOK2", () => {
@@ -208,9 +208,9 @@ test("recyclingEventsOK2", () => {
     fsm.process(createMouseEvent("mouseup", b, 0, 0, 0, 0, 1));
     fsm.process(createMouseEvent("mousedown", b, 0, 0, 0, 0, 1));
     fsm.process(createMouseEvent("mouseup", b, 0, 0, 0, 0, 2));
-    expect(fsm.isStarted()).toBeFalsy();
-    expect(fsm1.isStarted()).toBeTruthy();
-    expect(fsm2.isStarted()).toBeFalsy();
+    expect(fsm.started).toBeFalsy();
+    expect(fsm1.started).toBeTruthy();
+    expect(fsm2.started).toBeFalsy();
     expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
     expect(handler.fsmStops).toHaveBeenCalledTimes(2);
     expect(handler1.fsmStarts).toHaveBeenCalledTimes(2);
@@ -231,7 +231,7 @@ test("oneSequencePlusOtherThenCancel", () => {
     expect(handler1.fsmCancels).toHaveBeenCalledTimes(1);
     expect(handler2.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler2.fsmCancels).not.toHaveBeenCalled();
-    expect(fsm2.isStarted()).toBeTruthy();
+    expect(fsm2.started).toBeTruthy();
 });
 
 test("reinit", () => {

@@ -42,24 +42,24 @@ describe("long touch test", () => {
 
     test("cannot build the interaction twice", () => {
         interaction = new LongTouch(100);
-        interaction.getFsm().buildFSM();
-        expect(interaction.getFsm().getStates()).toHaveLength(4);
+        interaction.fsm.buildFSM();
+        expect(interaction.fsm.states).toHaveLength(4);
     });
 
     [1000, 2000].forEach(duration => {
         describe(`long touch ${String(duration)}`, () => {
             beforeEach(() => {
                 interaction = new LongTouch(duration);
-                interaction.getFsm().addHandler(handler);
+                interaction.fsm.addHandler(handler);
             });
 
             test("touch does not end", () => {
                 const touchData = new TouchDataImpl();
                 const newHandler = mock<FSMHandler>();
                 newHandler.fsmStarts.mockImplementation(() => {
-                    touchData.copy(interaction.getData());
+                    touchData.copy(interaction.data);
                 });
-                interaction.getFsm().addHandler(newHandler);
+                interaction.fsm.addHandler(newHandler);
                 interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 15, 20, 160, 21));
                 expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
                 expect(handler.fsmStops).not.toHaveBeenCalled();

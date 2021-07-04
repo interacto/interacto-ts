@@ -25,8 +25,8 @@ beforeEach(() => {
     handler = mock<FSMHandler>();
     interaction = new BoxChecked();
     interaction.log(true);
-    interaction.getFsm().log(true);
-    interaction.getFsm().addHandler(handler);
+    interaction.fsm.log = true;
+    interaction.fsm.addHandler(handler);
     boxCheck = document.createElement("input");
     boxCheck.type = "checkbox";
 });

@@ -31,8 +31,8 @@ beforeEach(() => {
     handler = mock<FSMHandler>();
     interaction = new TouchDnD();
     interaction.log(true);
-    interaction.getFsm().log(true);
-    interaction.getFsm().addHandler(handler);
+    interaction.fsm.log = true;
+    interaction.fsm.addHandler(handler);
     canvas = document.createElement("canvas");
 });
 
@@ -47,10 +47,10 @@ test("pressure data", () => {
     const newHandler = mock<FSMHandler>();
 
     newHandler.fsmUpdates.mockImplementation(() => {
-        srcData.copy(interaction.getData().src);
-        tgtData.copy(interaction.getData().tgt);
+        srcData.copy(interaction.data.src);
+        tgtData.copy(interaction.data.tgt);
     });
-    interaction.getFsm().addHandler(newHandler);
+    interaction.fsm.addHandler(newHandler);
     interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 15, 20, 16, 21));
     expect(srcData.clientX).toBe(16);
     expect(srcData.clientY).toBe(21);
@@ -89,10 +89,10 @@ test("pressure move data", () => {
     interaction.processEvent(createTouchEvent("touchstart", 2, canvas, 11, 23, 12, 25));
     const newHandler = mock<FSMHandler>();
     newHandler.fsmUpdates.mockImplementation(() => {
-        srcData.copy(interaction.getData().src);
-        tgtData.copy(interaction.getData().tgt);
+        srcData.copy(interaction.data.src);
+        tgtData.copy(interaction.data.tgt);
     });
-    interaction.getFsm().addHandler(newHandler);
+    interaction.fsm.addHandler(newHandler);
 
     interaction.processEvent(createTouchEvent("touchmove", 2, canvas, 141, 24, 14, 28));
     expect(srcData.clientX).toBe(12);
@@ -137,10 +137,10 @@ test("pressure move move OK data", () => {
 
     const newHandler = mock<FSMHandler>();
     newHandler.fsmUpdates.mockImplementation(() => {
-        srcData.copy(interaction.getData().src);
-        tgtData.copy(interaction.getData().tgt);
+        srcData.copy(interaction.data.src);
+        tgtData.copy(interaction.data.tgt);
     });
-    interaction.getFsm().addHandler(newHandler);
+    interaction.fsm.addHandler(newHandler);
 
     interaction.processEvent(createTouchEvent("touchmove", 4, canvas, 110, 240, 140, 280));
     expect(srcData.clientX).toBe(112);
@@ -173,14 +173,14 @@ test("pressure move release data", () => {
     const tgtData2 = new TouchDataImpl();
     const newHandler = mock<FSMHandler>();
     newHandler.fsmUpdates.mockImplementation(() => {
-        srcData.copy(interaction.getData().src);
-        tgtData.copy(interaction.getData().tgt);
+        srcData.copy(interaction.data.src);
+        tgtData.copy(interaction.data.tgt);
     });
     newHandler.fsmStops.mockImplementation(() => {
-        srcData2.copy(interaction.getData().src);
-        tgtData2.copy(interaction.getData().tgt);
+        srcData2.copy(interaction.data.src);
+        tgtData2.copy(interaction.data.tgt);
     });
-    interaction.getFsm().addHandler(newHandler);
+    interaction.fsm.addHandler(newHandler);
 
     interaction.processEvent(createTouchEvent("touchstart", 0, canvas, 111, 231, 121, 251));
     interaction.processEvent(createTouchEvent("touchmove", 0, canvas, 11, 24, 14, 28));
@@ -260,10 +260,10 @@ test("touch restart", () => {
 });
 
 test("no modifiers and button", () => {
-    expect(interaction.getData().src.altKey).toBeFalsy();
-    expect(interaction.getData().src.ctrlKey).toBeFalsy();
-    expect(interaction.getData().src.metaKey).toBeFalsy();
-    expect(interaction.getData().src.shiftKey).toBeFalsy();
+    expect(interaction.data.src.altKey).toBeFalsy();
+    expect(interaction.data.src.ctrlKey).toBeFalsy();
+    expect(interaction.data.src.metaKey).toBeFalsy();
+    expect(interaction.data.src.shiftKey).toBeFalsy();
 });
 
 test("displacement data", () => {
@@ -273,12 +273,12 @@ test("displacement data", () => {
     let diffScreenY: number | undefined;
 
 
-    interaction.getFsm().addHandler(new class extends StubFSMHandler {
+    interaction.fsm.addHandler(new class extends StubFSMHandler {
         public override fsmStops(): void {
-            diffClientX = interaction.getData().diffClientX;
-            diffClientY = interaction.getData().diffClientY;
-            diffScreenX = interaction.getData().diffScreenX;
-            diffScreenY = interaction.getData().diffScreenY;
+            diffClientX = interaction.data.diffClientX;
+            diffClientY = interaction.data.diffClientY;
+            diffScreenX = interaction.data.diffScreenX;
+            diffScreenY = interaction.data.diffScreenY;
         }
     }());
 

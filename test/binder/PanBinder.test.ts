@@ -48,8 +48,8 @@ test("pan horizontal right", () => {
     c1.dispatchEvent(createTouchEvent("touchend", 3, c1, 20, 25, 200, 205));
 
     expect(binding).toBeDefined();
-    expect(binding.getTimesCancelled()).toStrictEqual(0);
-    expect(binding.getTimesEnded()).toStrictEqual(1);
+    expect(binding.timesCancelled).toStrictEqual(0);
+    expect(binding.timesEnded).toStrictEqual(1);
     expect(ctx.commands).toHaveLength(1);
     expect(ctx.getCmd(0)).toBeInstanceOf(StubCmd);
 });
@@ -66,8 +66,8 @@ test("pan horizontal left", () => {
     c1.dispatchEvent(createTouchEvent("touchend", 3, c1, 10, 15, 100, 195));
 
     expect(binding).toBeDefined();
-    expect(binding.getTimesCancelled()).toStrictEqual(0);
-    expect(binding.getTimesEnded()).toStrictEqual(1);
+    expect(binding.timesCancelled).toStrictEqual(0);
+    expect(binding.timesEnded).toStrictEqual(1);
     expect(ctx.commands).toHaveLength(1);
     expect(ctx.getCmd(0)).toBeInstanceOf(StubCmd);
 });
@@ -85,8 +85,8 @@ test("pan vertical up", () => {
     c1.dispatchEvent(createTouchEvent("touchend", 1, c1, 10, 30, 110, 240));
 
     expect(binding).toBeDefined();
-    expect(binding.getTimesCancelled()).toStrictEqual(0);
-    expect(binding.getTimesEnded()).toStrictEqual(1);
+    expect(binding.timesCancelled).toStrictEqual(0);
+    expect(binding.timesEnded).toStrictEqual(1);
     expect(ctx.commands).toHaveLength(1);
     expect(ctx.getCmd(0)).toBeInstanceOf(StubCmd);
 });
@@ -103,8 +103,8 @@ test("pan vertical down", () => {
     c1.dispatchEvent(createTouchEvent("touchend", 1, c1, 11, 300, 111, 2400));
 
     expect(binding).toBeDefined();
-    expect(binding.getTimesCancelled()).toStrictEqual(0);
-    expect(binding.getTimesEnded()).toStrictEqual(1);
+    expect(binding.timesCancelled).toStrictEqual(0);
+    expect(binding.timesEnded).toStrictEqual(1);
     expect(ctx.commands).toHaveLength(1);
     expect(ctx.getCmd(0)).toBeInstanceOf(StubCmd);
 });

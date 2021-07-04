@@ -26,8 +26,8 @@ beforeEach(() => {
     handler = mock<FSMHandler>();
     interaction = new Scroll();
     interaction.log(true);
-    interaction.getFsm().log(true);
-    interaction.getFsm().addHandler(handler);
+    interaction.fsm.log = true;
+    interaction.fsm.addHandler(handler);
     canvas = document.createElement("canvas");
 });
 
@@ -42,7 +42,7 @@ test("scroll data", () => {
     let target: EventTarget | null = null;
     interaction.registerToNodes([canvas]);
     handler.fsmStops.mockImplementation(() => {
-        target = interaction.getData().target;
+        target = interaction.data.target;
     });
     robot(canvas).scroll();
     expect(target).toBe(canvas);

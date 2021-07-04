@@ -65,7 +65,7 @@ export class ButtonPressed extends InteractionBase<WidgetData<HTMLButtonElement>
 
         this.handler = {
             "initToPressedHandler": (event: InputEvent): void => {
-                this.data.copy(event);
+                this._data.copy(event);
             },
             "reinitData": (): void => {
                 this.reinitData();

@@ -98,7 +98,7 @@ export class LongTouch extends InteractionBase<TouchData, TouchDataImpl, LongTou
         this.handler = {
             "tap": (evt: TouchEvent): void => {
                 if (evt.changedTouches.length > 0) {
-                    this.data.copy(TouchDataImpl.mergeTouchEventData(evt.changedTouches[0], evt));
+                    this._data.copy(TouchDataImpl.mergeTouchEventData(evt.changedTouches[0], evt));
                 }
             },
             "reinitData": (): void => {
@@ -106,6 +106,6 @@ export class LongTouch extends InteractionBase<TouchData, TouchDataImpl, LongTou
             }
         };
 
-        this.getFsm().buildFSM(this.handler);
+        this.fsm.buildFSM(this.handler);
     }
 }

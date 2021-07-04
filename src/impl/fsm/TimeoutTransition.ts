@@ -61,14 +61,14 @@ export class TimeoutTransition extends TransitionBase<Event> {
             const time = this.timeoutDuration();
             // If incorrect duration value, no thread created
             if (time <= 0) {
-                this.src.getFSM().onTimeout();
+                this.src.fsm.onTimeout();
                 return;
             }
 
             this.timeoutThread = window.setTimeout(() => {
                 try {
                     this.timeouted = true;
-                    this.src.getFSM().onTimeout();
+                    this.src.fsm.onTimeout();
                 } catch (ex: unknown) {
                     this.logger?.logInteractionErr("Exception on timeout of a timeout transition", ex);
                 }

@@ -27,8 +27,8 @@ beforeEach(() => {
     handler = mock<FSMHandler>();
     interaction = new SpinnerChanged();
     interaction.log(true);
-    interaction.getFsm().log(true);
-    interaction.getFsm().addHandler(handler);
+    interaction.fsm.log = true;
+    interaction.fsm.addHandler(handler);
     timer = SpinnerChangedFSM.getTimeGap();
     spinner = document.createElement("input");
     spinner.type = "number";

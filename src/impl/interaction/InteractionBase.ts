@@ -34,7 +34,7 @@ interface CancellablePromise extends Promise<void> {
  * @typeParam F - The type of the FSM.
  */
 export abstract class InteractionBase<D extends InteractionData, DImpl extends D & Flushable, F extends FSM> implements Interaction<D> {
-    protected readonly fsm: F;
+    protected readonly _fsm: F;
 
     protected asLog: boolean;
 
@@ -47,7 +47,7 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
     protected readonly mutationObservers: Array<MutationObserver>;
 
     /** The interaction data */
-    protected readonly data: DImpl;
+    protected readonly _data: DImpl;
 
     protected readonly logger?: Logger;
 
@@ -90,9 +90,9 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
         this.activated = false;
         this.stopImmediatePropag = false;
         this.preventDef = false;
-        this.data = data;
-        this.fsm = fsm;
-        this.disposable = this.fsm.currentStateObservable().subscribe(current => {
+        this._data = data;
+        this._fsm = fsm;
+        this.disposable = this._fsm.currentStateObservable.subscribe(current => {
             this.updateEventsRegistered(current[1], current[0]);
         });
         this.activated = true;
@@ -103,11 +103,11 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
     }
 
     public reinitData(): void {
-        this.data.flush();
+        this._data.flush();
     }
 
-    public getData(): D {
-        return this.data;
+    public get data(): D {
+        return this._data;
     }
 
     public setThrottleTimeout(timeout: number): void {
@@ -169,7 +169,7 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
 
     protected updateEventsRegistered(newState: OutputState, oldState: OutputState): void {
         // Do nothing when the interaction has only two nodes: init node and terminal node (this is a single-event interaction).
-        if (newState === oldState || this.fsm.getStates().length === 2) {
+        if (newState === oldState || this._fsm.states.length === 2) {
             return;
         }
 
@@ -203,11 +203,13 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
     }
 
     protected getEventTypesOf(state: OutputState): ReadonlyArray<EventType> {
-        if (state.getTransitions().length === 0) {
+        const tr = state.transitions;
+
+        if (tr.length === 0) {
             return [];
         }
 
-        return state.getTransitions().map(t => t.getAcceptedEvents())
+        return tr.map(t => t.getAcceptedEvents())
             .reduce((a, b) => [...a, ...b]);
     }
 
@@ -226,13 +228,13 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
     }
 
     public onNodeUnregistered(node: EventTarget): void {
-        this.getEventTypesOf(this.fsm.getCurrentState()).forEach(type => {
+        this.getEventTypesOf(this._fsm.currentState).forEach(type => {
             this.unregisterEventToNode(type, node);
         });
     }
 
     public onNewNodeRegistered(node: EventTarget): void {
-        this.getEventTypesOf(this.fsm.getCurrentState()).forEach(type => {
+        this.getEventTypesOf(this._fsm.currentState).forEach(type => {
             this.registerEventToNode(type, node);
         });
     }
@@ -351,11 +353,11 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
     }
 
     public isRunning(): boolean {
-        return this.activated && !(this.fsm.getCurrentState() instanceof InitState);
+        return this.activated && !(this._fsm.currentState instanceof InitState);
     }
 
     public fullReinit(): void {
-        this.fsm.fullReinit();
+        this._fsm.fullReinit();
     }
 
     public set stopImmediatePropagation(stop: boolean) {
@@ -396,7 +398,7 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
     }
 
     private directEventProcess(event: Event): void {
-        this.fsm.process(event);
+        this._fsm.process(event);
         if (this.preventDef) {
             event.preventDefault();
         }
@@ -407,7 +409,7 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
 
     public log(log: boolean): void {
         this.asLog = log;
-        this.fsm.log(log);
+        this._fsm.log = log;
     }
 
 
@@ -421,16 +423,16 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
         }
         this.activated = activated;
         if (!activated) {
-            this.fsm.fullReinit();
+            this._fsm.fullReinit();
         }
     }
 
-    public getFsm(): F {
-        return this.fsm;
+    public get fsm(): F {
+        return this._fsm;
     }
 
     public reinit(): void {
-        this.fsm.reinit();
+        this._fsm.reinit();
         this.reinitData();
     }
 

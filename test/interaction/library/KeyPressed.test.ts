@@ -25,8 +25,8 @@ beforeEach(() => {
     handler = mock<FSMHandler>();
     interaction = new KeyPressed(false);
     interaction.log(true);
-    interaction.getFsm().log(true);
-    interaction.getFsm().addHandler(handler);
+    interaction.fsm.log = true;
+    interaction.fsm.addHandler(handler);
     text = document.createElement("textarea");
 });
 
@@ -42,9 +42,9 @@ test("the key typed in the textarea is the same key in the data of the interacti
     interaction.registerToNodes([text]);
     const newHandler = mock<FSMHandler>();
     newHandler.fsmStops.mockImplementation(() => {
-        data.copy(interaction.getData());
+        data.copy(interaction.data);
     });
-    interaction.getFsm().addHandler(newHandler);
+    interaction.fsm.addHandler(newHandler);
     robot(text).keydown({"code": "a"});
     expect(data.code).toStrictEqual("a");
 });

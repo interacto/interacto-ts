@@ -38,14 +38,14 @@ export abstract class ConcurrentInteraction<D extends InteractionData, DImpl ext
     protected constructor(fsm: F, data: DImpl) {
         super(fsm, data);
         this.subscriptions = this.fsm.getConccurFSMs()
-            .map(conc => conc.currentStateObservable()
+            .map(conc => conc.currentStateObservable
                 .subscribe(current => {
                     this.updateEventsRegistered(current[1], current[0]);
                 }));
     }
 
     public override isRunning(): boolean {
-        return this.isActivated() && this.fsm.isStarted();
+        return this.isActivated() && this.fsm.started;
     }
 
     public override onNodeUnregistered(node: EventTarget): void {
@@ -61,7 +61,7 @@ export abstract class ConcurrentInteraction<D extends InteractionData, DImpl ext
     }
 
     public override getCurrentAcceptedEvents(_state?: OutputState): ReadonlyArray<EventType> {
-        return this.fsm.getConccurFSMs().flatMap(concFSM => [...this.getEventTypesOf(concFSM.getCurrentState())]);
+        return this.fsm.getConccurFSMs().flatMap(concFSM => [...this.getEventTypesOf(concFSM.currentState)]);
     }
 
     public override uninstall(): void {

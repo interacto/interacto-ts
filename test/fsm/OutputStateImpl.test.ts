@@ -38,7 +38,7 @@ beforeEach(() => {
 
 test("getTransitions", () => {
     state.addTransition(new StubTransitionOK(new StdState(fsm, "s"), mock<InputState>()));
-    expect(state.getTransitions()).toHaveLength(1);
+    expect(state.transitions).toHaveLength(1);
 });
 
 test("addTransition OK", () => {
@@ -46,7 +46,7 @@ test("addTransition OK", () => {
     const t2 = mock<Transition<Event>>();
     state.addTransition(t2);
     state.addTransition(t1);
-    expect(state.getTransitions()).toStrictEqual([t2, t1]);
+    expect(state.transitions).toStrictEqual([t2, t1]);
 });
 
 test("uninstall", () => {
@@ -57,5 +57,5 @@ test("uninstall", () => {
     state.uninstall();
     expect(t1.uninstall).toHaveBeenCalledTimes(1);
     expect(t2.uninstall).toHaveBeenCalledTimes(1);
-    expect(state.getTransitions()).toHaveLength(0);
+    expect(state.transitions).toHaveLength(0);
 });

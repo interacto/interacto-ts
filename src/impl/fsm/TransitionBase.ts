@@ -38,7 +38,7 @@ export abstract class TransitionBase<E extends Event> implements Transition<E> {
 
     public execute(event: Event): InputState | undefined {
         if (this.accept(event) && this.isGuardOK(event)) {
-            this.src.getFSM().stopCurrentTimeout();
+            this.src.fsm.stopCurrentTimeout();
             this.action(event);
             this.src.exit();
             this.tgt.enter();
@@ -58,7 +58,7 @@ export abstract class TransitionBase<E extends Event> implements Transition<E> {
 
     public abstract getAcceptedEvents(): ReadonlyArray<EventType>;
 
-    public getTarget(): InputState {
+    public get target(): InputState {
         return this.tgt;
     }
 

@@ -38,8 +38,12 @@ beforeEach(() => {
     logger = mock<Logger>();
     currentStateObs = new Subject();
     fsm = mock<FSMImpl>();
-    fsm.currentStateObservable.mockReturnValue(currentStateObs);
-    fsm.getCurrentState.mockImplementation(() => currentState);
+    Object.defineProperty(fsm, "currentStateObservable", {
+        "get": jest.fn(() => currentStateObs)
+    });
+    Object.defineProperty(fsm, "currentState", {
+        "get": jest.fn(() => currentState)
+    });
     interaction = new InteractionStub(fsm, logger);
 });
 
@@ -94,7 +98,7 @@ test("not process when not activated", () => {
 });
 
 test("getFSM", () => {
-    expect(interaction.getFsm()).toBe(fsm);
+    expect(interaction.fsm).toBe(fsm);
 });
 
 test("reinit", () => {
@@ -327,7 +331,7 @@ describe("throttling", () => {
     });
 
     test("crash with Error during throttling", async () => {
-        const spy = jest.spyOn(interaction.getFsm(), "process");
+        const spy = jest.spyOn(interaction.fsm, "process");
         spy
             .mockReturnValueOnce(true)
             .mockImplementationOnce(() => {
@@ -342,7 +346,7 @@ describe("throttling", () => {
     });
 
     test("crash with not an Error during throttling", async () => {
-        const spy = jest.spyOn(interaction.getFsm(), "process");
+        const spy = jest.spyOn(interaction.fsm, "process");
         spy
             .mockReturnValueOnce(true)
             .mockImplementationOnce(() => {

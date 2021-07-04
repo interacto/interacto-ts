@@ -19,9 +19,9 @@ import type {FSM} from "../../api/fsm/FSM";
  * The base implementation of the State interface.
  */
 export abstract class StateBase implements State {
-    protected readonly fsm: FSM;
+    public readonly fsm: FSM;
 
-    protected readonly name: string;
+    public readonly name: string;
 
     /**
      * Creates the state.
@@ -34,17 +34,9 @@ export abstract class StateBase implements State {
     }
 
     public checkStartingState(): void {
-        if (!this.getFSM().isStarted() && this.getFSM().getStartingState() === this) {
-            this.getFSM().onStarting();
+        if (!this.fsm.started && this.fsm.startingState === this) {
+            this.fsm.onStarting();
         }
-    }
-
-    public getName(): string {
-        return this.name;
-    }
-
-    public getFSM(): FSM {
-        return this.fsm;
     }
 
     public uninstall(): void {

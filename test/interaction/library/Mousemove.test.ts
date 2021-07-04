@@ -27,15 +27,15 @@ beforeEach(() => {
 
     interaction = new Mousemove();
     interaction.log(true);
-    interaction.getFsm().log(true);
-    interaction.getFsm().addHandler(handler);
+    interaction.fsm.log = true;
+    interaction.fsm.addHandler(handler);
 
     canvas = document.createElement("canvas");
 });
 
 test("cannot create several times the FSM", () => {
-    interaction.getFsm().buildFSM();
-    expect(interaction.getFsm().getStates()).toHaveLength(2);
+    interaction.fsm.buildFSM();
+    expect(interaction.fsm.states).toHaveLength(2);
 });
 
 test("mousemove sent to the interaction starts and stops the Mousemove interaction", () => {
@@ -93,7 +93,7 @@ test("testMouseEventData", () => {
     });
 
     handler.fsmStops.mockImplementation(() => {
-        data.copy(interaction.getData());
+        data.copy(interaction.data);
     });
     interaction.processEvent(createMouseEvent2("mousemove", expected));
     expect(data).toStrictEqual(expected);
@@ -103,7 +103,7 @@ test("testMousemoveOnWidgetData", () => {
     const data = new PointDataImpl();
 
     handler.fsmStops.mockImplementation(() => {
-        data.copy(interaction.getData());
+        data.copy(interaction.data);
     });
     interaction.registerToNodes([canvas]);
     canvas.dispatchEvent(new MouseEvent("mousemove", {"screenX": 111, "screenY": 222, "clientX": 11, "clientY": 22}));

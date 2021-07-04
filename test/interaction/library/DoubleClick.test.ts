@@ -26,8 +26,8 @@ beforeEach(() => {
     handler = mock<FSMHandler>();
     interaction = new DoubleClick();
     interaction.log(true);
-    interaction.getFsm().log(true);
-    interaction.getFsm().addHandler(handler);
+    interaction.fsm.log = true;
+    interaction.fsm.addHandler(handler);
     canvas = document.createElement("canvas");
 });
 
@@ -46,9 +46,9 @@ test("check data of the interaction.", () => {
     interaction.registerToNodes([canvas]);
     const newHandler = mock<FSMHandler>();
     newHandler.fsmStops.mockImplementation(() => {
-        data.copy(interaction.getData());
+        data.copy(interaction.data);
     });
-    interaction.getFsm().addHandler(newHandler);
+    interaction.fsm.addHandler(newHandler);
     robot(canvas)
         .click({"clientX": 11, "clientY": 23})
         .click({"clientX": 11, "clientY": 23});

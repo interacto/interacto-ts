@@ -42,7 +42,7 @@ beforeEach(() => {
     cmd.candoValue = true;
     fsm = new OneTrFSM();
     interaction = new InteractionStub(fsm);
-    binding = new BindingImpl(false, interaction, () => cmd, [], history, mock<Logger>());
+    binding = new BindingImpl(false, false, interaction, () => cmd, [], history, mock<Logger>());
 });
 
 afterEach(() => {
@@ -51,7 +51,7 @@ afterEach(() => {
 
 test("testNothingDoneIsDeactivated", () => {
     const dotItSpy = jest.spyOn(cmd, "execute");
-    binding.setActivated(false);
+    binding.activated = false;
     jest.spyOn(binding, "ifCmdHadNoEffect");
     jest.spyOn(binding, "ifCmdHadEffects");
     jest.spyOn(binding, "ifCannotExecuteCmd");
@@ -123,7 +123,7 @@ test("testWhenOKCanDoButNoEffect", () => {
 test("testProducedNone", () => {
     cmd.candoValue = false;
     const cmds = new Array<StubCmd>();
-    binding.produces().subscribe(elt => cmds.push(elt));
+    binding.produces.subscribe(elt => cmds.push(elt));
 
     fsm.process(createMouseEvent("click", document.createElement("button")));
     expect(cmds).toHaveLength(0);
@@ -131,7 +131,7 @@ test("testProducedNone", () => {
 
 test("testProducedOne", () => {
     const cmds = new Array<StubCmd>();
-    binding.produces().subscribe(elt => cmds.push(elt));
+    binding.produces.subscribe(elt => cmds.push(elt));
 
     fsm.process(createMouseEvent("click", document.createElement("button")));
     expect(cmds).toHaveLength(1);
@@ -139,7 +139,7 @@ test("testProducedOne", () => {
 
 test("testProducedTwo", () => {
     const cmds = new Array<StubCmd>();
-    binding.produces().subscribe(elt => cmds.push(elt));
+    binding.produces.subscribe(elt => cmds.push(elt));
 
     fsm.process(createMouseEvent("click", document.createElement("button")));
     cmd = new StubCmd();

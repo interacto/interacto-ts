@@ -56,8 +56,8 @@ test("event bubbling works", () => {
 
     canvas2.dispatchEvent(createMouseEvent("mousedown", canvas2));
 
-    expect(binding2.getTimesEnded()).toStrictEqual(1);
-    expect(binding1.getTimesEnded()).toStrictEqual(1);
+    expect(binding2.timesEnded).toStrictEqual(1);
+    expect(binding1.timesEnded).toStrictEqual(1);
 });
 
 test("event bubbling respects physical laws", () => {
@@ -75,8 +75,8 @@ test("event bubbling respects physical laws", () => {
 
     canvas1.dispatchEvent(createMouseEvent("mousedown", canvas1));
 
-    expect(binding1.getTimesEnded()).toStrictEqual(1);
-    expect(binding2.getTimesEnded()).toStrictEqual(0);
+    expect(binding1.timesEnded).toStrictEqual(1);
+    expect(binding2.timesEnded).toStrictEqual(0);
 });
 
 test("stop propagation prevents bubbling", () => {
@@ -95,8 +95,8 @@ test("stop propagation prevents bubbling", () => {
 
     canvas2.dispatchEvent(createMouseEvent("mousedown", canvas2));
 
-    expect(binding2.getTimesEnded()).toStrictEqual(1);
-    expect(binding1.getTimesEnded()).toStrictEqual(0);
+    expect(binding2.timesEnded).toStrictEqual(1);
+    expect(binding1.timesEnded).toStrictEqual(0);
 });
 
 test("stop propagation prevents bubbling using cloned builders", () => {
@@ -115,6 +115,6 @@ test("stop propagation prevents bubbling using cloned builders", () => {
 
     canvas2.dispatchEvent(createMouseEvent("mousedown", canvas2));
 
-    expect(binding2.getTimesEnded()).toStrictEqual(1);
-    expect(binding1.getTimesEnded()).toStrictEqual(0);
+    expect(binding2.timesEnded).toStrictEqual(1);
+    expect(binding1.timesEnded).toStrictEqual(0);
 });

@@ -19,6 +19,8 @@ import type {EventType} from "./EventType";
  * The concept of FSM transition.
  */
 export interface Transition<E extends Event> {
+    readonly target: InputState;
+
     /**
      * Executes the transition.
      * @param event - The event to process.
@@ -35,8 +37,6 @@ export interface Transition<E extends Event> {
      * @returns The set of events accepted by the transition.
      */
     getAcceptedEvents(): ReadonlyArray<EventType>;
-
-    getTarget(): InputState;
 
     /**
      * Clean the transition when not used anymore.

@@ -30,20 +30,20 @@ beforeEach(() => {
 
     interaction = new Mouseover(true);
     interaction.log(true);
-    interaction.getFsm().log(true);
-    interaction.getFsm().addHandler(handler);
+    interaction.fsm.log = true;
+    interaction.fsm.addHandler(handler);
 
     interactionWithoutBubbling = new Mouseover(false);
     interactionWithoutBubbling.log(true);
-    interactionWithoutBubbling.getFsm().log(true);
-    interactionWithoutBubbling.getFsm().addHandler(handler2);
+    interactionWithoutBubbling.fsm.log = true;
+    interactionWithoutBubbling.fsm.addHandler(handler2);
 
     canvas = document.createElement("canvas");
 });
 
 test("cannot create several times the FSM", () => {
-    interaction.getFsm().buildFSM();
-    expect(interaction.getFsm().getStates()).toHaveLength(2);
+    interaction.fsm.buildFSM();
+    expect(interaction.fsm.states).toHaveLength(2);
 });
 
 test("mouseover sent to the interaction starts and stops the Mouseover interaction", () => {
@@ -135,7 +135,7 @@ test("testMouseEventData", () => {
     });
 
     handler.fsmStops.mockImplementation(() => {
-        data.copy(interaction.getData());
+        data.copy(interaction.data);
     });
     interaction.processEvent(createMouseEvent2("mouseover", expected));
     expect(data).toStrictEqual(expected);
@@ -145,7 +145,7 @@ test("testMouseoverOnWidgetData", () => {
     const data = new PointDataImpl();
 
     handler.fsmStops.mockImplementation(() => {
-        data.copy(interaction.getData());
+        data.copy(interaction.data);
     });
     interaction.registerToNodes([canvas]);
     canvas.dispatchEvent(new MouseEvent("mouseover", {"screenX": 111, "screenY": 222, "clientX": 11, "clientY": 22}));

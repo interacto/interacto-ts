@@ -36,7 +36,7 @@ export class KeyTypedFSM extends FSMImpl {
         super.buildFSM(dataHandler);
         const pressed: StdState = new StdState(this, "pressed");
         const typed: TerminalState = new TerminalState(this, "typed");
-        this.setStartingState(typed);
+        this.startingState = typed;
 
         this.addState(pressed);
         this.addState(typed);
@@ -77,13 +77,13 @@ export class KeyTyped extends InteractionBase<KeyData, KeyDataImpl, KeyTypedFSM>
 
         this.handler = {
             "onKeyTyped": (event: KeyboardEvent): void => {
-                this.data.copy(event);
+                this._data.copy(event);
             },
             "reinitData": (): void => {
                 this.reinitData();
             }
         };
 
-        this.getFsm().buildFSM(this.handler);
+        this.fsm.buildFSM(this.handler);
     }
 }

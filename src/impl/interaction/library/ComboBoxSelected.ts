@@ -62,7 +62,7 @@ export class ComboBoxSelected extends InteractionBase<WidgetData<HTMLSelectEleme
 
         this.handler = {
             "initToSelectedHandler": (event: Event): void => {
-                this.data.copy(event);
+                this._data.copy(event);
             },
             "reinitData": (): void => {
                 this.reinitData();
