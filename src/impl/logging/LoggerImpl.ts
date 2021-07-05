@@ -21,12 +21,15 @@ export class LoggingData {
                        // eslint-disable-next-line @typescript-eslint/no-parameter-properties
                        public readonly name: string, public readonly type: "ERR" | "INFO",
                        // eslint-disable-next-line @typescript-eslint/no-parameter-properties
-                       public readonly sessionID: string, public readonly stack?: string) {
+                       public readonly sessionID: string, public readonly stack?: string,
+                       // eslint-disable-next-line @typescript-eslint/no-parameter-properties
+                       public readonly frontVersion?: string) {
     }
 
     public toString(): string {
         const withstack = this.stack === undefined ? "" : `, ${this.stack}`;
-        return `${this.type}[${this.level}: ${this.name}] [${this.sessionID}] at ${this.date}: '${this.msg}'${withstack}`;
+        const withversion = this.frontVersion === undefined ? "" : ` ${this.frontVersion}`;
+        return `${this.type}${withversion} [${this.sessionID}] [${this.level}:${this.name}] at ${this.date}: '${this.msg}'${withstack}`;
     }
 }
 
@@ -36,7 +39,9 @@ export class UsageLog {
     public cancelled: boolean;
 
     // eslint-disable-next-line @typescript-eslint/no-parameter-properties
-    public constructor(public name: string, public readonly sessionID: string, public readonly date: number) {
+    public constructor(public name: string, public readonly sessionID: string, public readonly date: number,
+                       // eslint-disable-next-line @typescript-eslint/no-parameter-properties
+                       public readonly frontVersion?: string) {
         this.duration = 0;
         this.cancelled = false;
     }
@@ -50,9 +55,12 @@ export class LoggerImpl implements Logger {
 
     public readonly sessionID: string;
 
+    public readonly frontVersion: string | undefined;
+
     public ongoingBindings: Array<UsageLog>;
 
-    public constructor() {
+    public constructor(version?: string) {
+        this.frontVersion = version;
         this.ongoingBindings = [];
         this.serverAddress = undefined;
         this.writeConsole = true;
@@ -68,14 +76,9 @@ export class LoggerImpl implements Logger {
 
         if (this.serverAddress !== undefined && data.type === "ERR") {
             const rq = new XMLHttpRequest();
-            rq.open("POST", this.serverAddress, true);
+            rq.open("POST", `${this.serverAddress}/api/err`, true);
             rq.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-            rq.send(JSON.stringify({
-                "date": data.date,
-                "msg": data.msg,
-                "stack": data.stack,
-                "id": data.sessionID
-            }));
+            rq.send(JSON.stringify(data));
         }
     }
 
@@ -88,44 +91,56 @@ export class LoggerImpl implements Logger {
 
     public logBindingErr(msg: string, ex: unknown, bindingName: string = ""): void {
         this.processLoggingData(new LoggingData(performance.now(), msg,
-            "binding", bindingName, "ERR", this.sessionID, this.formatError(ex)));
+            "binding", bindingName, "ERR", this.sessionID, this.formatError(ex), this.frontVersion));
     }
 
     public logBindingMsg(msg: string, bindingName: string = ""): void {
-        this.processLoggingData(new LoggingData(performance.now(), msg, "binding", bindingName, "INFO", this.sessionID));
+        this.processLoggingData(new LoggingData(performance.now(), msg, "binding", bindingName, "INFO",
+            this.sessionID, undefined, this.frontVersion));
     }
 
     public logCmdErr(msg: string, ex: unknown, cmdName: string = ""): void {
         this.processLoggingData(new LoggingData(performance.now(), msg,
-            "command", cmdName, "ERR", this.sessionID, this.formatError(ex)));
+            "command", cmdName, "ERR", this.sessionID, this.formatError(ex), this.frontVersion));
     }
 
     public logCmdMsg(msg: string, cmdName: string = ""): void {
-        this.processLoggingData(new LoggingData(performance.now(), msg, "command", cmdName, "INFO", this.sessionID));
+        this.processLoggingData(new LoggingData(performance.now(), msg, "command", cmdName, "INFO",
+            this.sessionID, undefined, this.frontVersion));
     }
 
     public logInteractionErr(msg: string, ex: unknown, interactionName: string = ""): void {
         this.processLoggingData(new LoggingData(performance.now(), msg,
-            "interaction", interactionName, "ERR", this.sessionID, this.formatError(ex)));
+            "interaction", interactionName, "ERR", this.sessionID, this.formatError(ex), this.frontVersion));
     }
 
     public logInteractionMsg(msg: string, interactionName: string = ""): void {
-        this.processLoggingData(new LoggingData(performance.now(), msg, "interaction", interactionName, "INFO", this.sessionID));
+        this.processLoggingData(new LoggingData(performance.now(), msg, "interaction", interactionName, "INFO",
+            this.sessionID, undefined, this.frontVersion));
     }
 
     public logBindingStart(bindingName: string): void {
-        this.ongoingBindings.push(new UsageLog(bindingName, this.sessionID, performance.now()));
+        this.ongoingBindings.push(new UsageLog(bindingName, this.sessionID, performance.now(), this.frontVersion));
     }
 
     public logBindingEnd(bindingName: string, cancelled: boolean): void {
         const logs = this.ongoingBindings.filter(d => bindingName.includes(d.name));
 
+        // Removing these logs
         this.ongoingBindings = this.ongoingBindings.filter(d => !logs.includes(d));
 
         if (logs.length === 1) {
-            logs[0].name = bindingName;
-            logs[0].duration = logs[0].date - performance.now();
-            logs[0].cancelled = cancelled;
+            const log = logs[0];
+            log.name = bindingName;
+            log.duration = log.date - performance.now();
+            log.cancelled = cancelled;
+
+            if (this.serverAddress !== undefined) {
+                const rq = new XMLHttpRequest();
+                rq.open("POST", `${this.serverAddress}/api/usage`, true);
+                rq.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                rq.send(JSON.stringify(log));
+            }
         }
     }
 }

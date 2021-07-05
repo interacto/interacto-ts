@@ -59,6 +59,8 @@ export class FittsLaw {
 
     private _target?: Element;
 
+    private readonly handler: EventListener;
+
     /**
      * @param bSrc - The source binding.
      * @param bTgt - The target binding.
@@ -70,18 +72,20 @@ export class FittsLaw {
                        target?: Element) {
         this.data = [];
         this.providedTarget = target;
-        this.obsSrc = bSrc.produces.subscribe(_cmd1 => {
+
+        this.handler = (evt: MouseEvent): void => {
+            if (this._startX === undefined) {
+                this._startX = evt.screenX;
+                this._startY = evt.screenY;
+            }
+            this._target = this.providedTarget ?? (evt.target instanceof Element ? evt.target : undefined);
+        };
+
+        this.obsSrc = bSrc.produces.subscribe(() => {
             this.reinit();
-            const handler: EventListener = (evt: MouseEvent) => {
-                if (this._startX === undefined) {
-                    this._startX = evt.screenX;
-                    this._startY = evt.screenY;
-                }
-                this._target = this.providedTarget ?? (evt.target instanceof Element ? evt.target : undefined);
-            };
-            document.body.addEventListener("mousemove", handler);
+            document.body.addEventListener("mousemove", this.handler);
             const t0 = performance.now();
-            const obsTgt = bTgt.produces.subscribe(_cmd2 => {
+            const obsTgt = bTgt.produces.subscribe(() => {
                 const t1 = performance.now();
                 this.data.push(new FittsLawDataImpl(
                     t1 - t0,
@@ -89,7 +93,7 @@ export class FittsLaw {
                     this._target?.clientHeight ?? NaN,
                     this.computeD()));
                 obsTgt.unsubscribe();
-                document.body.removeEventListener("mousemove", handler);
+                document.body.removeEventListener("mousemove", this.handler);
             });
         });
     }

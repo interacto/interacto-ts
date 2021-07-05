@@ -17,6 +17,20 @@
  */
 export interface Logger {
     /**
+     * States whether messages are logged in the command
+     */
+    writeConsole: boolean;
+
+    /**
+     * The HTTP address of the logging server
+     */
+    serverAddress: string | undefined;
+
+    readonly frontVersion: string | undefined;
+
+    readonly sessionID: string;
+
+    /**
      * Logs interaction information messages.
      * The logging system does not decide the information messages to log.
      * This is the job of each interaction (and its FSM) in which we can
@@ -77,14 +91,4 @@ export interface Logger {
      * @param cmdName - The name of the command
      */
     logCmdErr(msg: string, ex: unknown, cmdName?: string): void;
-
-    /**
-     * States whether messages are logged in the command
-     */
-    writeConsole: boolean;
-
-    /**
-     * The HTTP address of the logging server
-     */
-    serverAddress: string | undefined;
 }
