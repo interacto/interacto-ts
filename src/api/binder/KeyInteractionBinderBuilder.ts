@@ -40,4 +40,6 @@ export interface KeyInteractionBinderBuilder<I extends Interaction<D>, D extends
     preventDefault(): KeyInteractionBinderBuilder<I, D>;
 
     catch(fn: (ex: unknown) => void): KeyInteractionBinderBuilder<I, D>;
+
+    name(name: string): KeyInteractionBinderBuilder<I, D>;
 }

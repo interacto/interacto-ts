@@ -340,3 +340,26 @@ test("stop propag set", () => {
     expect(binding.interaction.preventDefault).toBeFalsy();
     expect(binding).toBeDefined();
 });
+
+test("set name", () => {
+    binding = bindings.buttonBinder()
+        .toProduce(() => cmd)
+        .name("foo")
+        .on(button1)
+        .name("yoo")
+        .bind();
+
+    expect(binding).toBeDefined();
+    expect(binding.name).toBe("yoo");
+});
+
+test("set no name", () => {
+    binding = bindings.buttonBinder()
+        .toProduce(() => cmd)
+        .on(button1)
+        .bind();
+
+    expect(binding).toBeDefined();
+    expect(binding.name).toBe("ButtonPressed");
+});
+

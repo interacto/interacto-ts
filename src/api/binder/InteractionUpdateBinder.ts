@@ -45,5 +45,7 @@ export interface InteractionUpdateBinder<I extends Interaction<D>, D extends Int
 
     catch(fn: (ex: unknown) => void): InteractionUpdateBinder<I, D>;
 
+    name(name: string): InteractionUpdateBinder<I, D>;
+
     toProduce<C extends Command>(fn: (i: D) => C): InteractionCmdUpdateBinder<C, I, D>;
 }

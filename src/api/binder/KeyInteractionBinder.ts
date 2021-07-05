@@ -40,5 +40,7 @@ export interface KeyInteractionBinder<I extends Interaction<D>, D extends Intera
 
     catch(fn: (ex: unknown) => void): KeyInteractionBinder<I, D>;
 
+    name(name: string): KeyInteractionBinder<I, D>;
+
     toProduce<C extends Command>(fn: (i: D) => C): KeyInteractionCmdBinder<C, I, D>;
 }

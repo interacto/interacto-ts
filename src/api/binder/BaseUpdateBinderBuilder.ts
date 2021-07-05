@@ -59,4 +59,6 @@ export interface BaseUpdateBinderBuilder extends BaseBinderBuilder {
     preventDefault(): BaseUpdateBinderBuilder;
 
     catch(fn: (ex: unknown) => void): BaseUpdateBinderBuilder;
+
+    name(name: string): BaseUpdateBinderBuilder;
 }

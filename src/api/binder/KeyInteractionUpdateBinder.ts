@@ -47,5 +47,7 @@ export interface KeyInteractionUpdateBinder<I extends Interaction<D>, D extends 
 
     catch(fn: (ex: unknown) => void): KeyInteractionUpdateBinder<I, D>;
 
+    name(name: string): KeyInteractionUpdateBinder<I, D>;
+
     toProduce<C extends Command>(fn: (i: D) => C): KeyInteractionCmdUpdateBinder<C, I, D>;
 }

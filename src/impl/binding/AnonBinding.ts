@@ -52,8 +52,8 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
                        endFn?: (c: C, i: D) => void, cancelFn?: (i: D) => void,
                        endOrCancelFn?: (i: D) => void, hadEffectsFn?: (c: C, i: D) => void,
                        hadNoEffectFn?: (c: C, i: D) => void, cannotExecFn?: (c: C, i: D) => void,
-                       onErrFn?: (ex: unknown) => void) {
-        super(continuousExec, strict, interaction, cmdSupplierFn, widgets, undoHistory, logger);
+                       onErrFn?: (ex: unknown) => void, name?: string) {
+        super(continuousExec, strict, interaction, cmdSupplierFn, widgets, undoHistory, logger, name);
         this.configureLoggers(loggers);
         this.firstFn = firstFn;
         this.thenFn = thenFn;

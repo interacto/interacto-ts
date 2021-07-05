@@ -86,11 +86,12 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
      * @param widgets - The widgets on which the binding will operate.
      * @param undoHistory - The undo/redo history.
      * @param logger - The logger to use
+     * @param name - The optional name of the binding. If not provided, computed based on the interaction and command names
      */
     public constructor(continuousExecution: boolean, strict: boolean, interaction: I, cmdProducer: (i?: D) => C,
-                       widgets: ReadonlyArray<EventTarget>, undoHistory: UndoHistory, logger: Logger) {
+                       widgets: ReadonlyArray<EventTarget>, undoHistory: UndoHistory, logger: Logger, name?: string) {
         // The name is partial until the binding procudes its first command
-        this._name = undefined;
+        this._name = name;
         this.logBinding = false;
         this.logCmd = false;
         this.logUsage = false;

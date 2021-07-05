@@ -101,4 +101,12 @@ export interface BaseBinderBuilder {
      * @param fn - The function to process the error caught by the binding during its execution
      */
     catch(fn: (ex: unknown) => void): BaseBinderBuilder;
+
+    /**
+     * Specifies the name of the Interacto binding.
+     * This name will be used in the logging system.
+     * It should be unique, but no mechanism will check that.
+     * @param name - The name of the binding
+     */
+    name(name: string): BaseBinderBuilder;
 }

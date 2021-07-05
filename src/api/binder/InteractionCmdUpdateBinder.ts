@@ -69,5 +69,7 @@ export interface InteractionCmdUpdateBinder<C extends Command, I extends Interac
 
     catch(fn: (ex: unknown) => void): InteractionCmdUpdateBinder<C, I, D>;
 
+    name(name: string): InteractionCmdUpdateBinder<C, I, D>;
+
     bind(): Binding<C, I, D>;
 }

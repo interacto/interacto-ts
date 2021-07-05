@@ -36,6 +36,8 @@ export interface BaseBinder extends BaseBinderBuilder {
 
     catch(fn: (ex: unknown) => void): BaseBinder;
 
+    name(name: string): BaseBinder;
+
     /**
      * Defines how to create the UI command that will produce the binding.
      * @param fn - The supplier that will return a new UI command on each call.

@@ -45,4 +45,6 @@ export interface CmdBinderBuilder<C extends Command> extends BaseBinderBuilder {
     preventDefault(): CmdBinderBuilder<C>;
 
     catch(fn: (ex: unknown) => void): CmdBinderBuilder<C>;
+
+    name(name: string): CmdBinderBuilder<C>;
 }

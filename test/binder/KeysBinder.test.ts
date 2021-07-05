@@ -404,3 +404,27 @@ test("that 'strictStart' works correctly when the 'when' routine returns true", 
 
     expect(ctx.commands).toHaveLength(1);
 });
+
+test("set name", () => {
+    binding = bindings.keysTypeBinder()
+        .name("yolo")
+        .when((_i: KeysData) => true)
+        .name("aName")
+        .on(elt)
+        .toProduce((_i: KeysData) => new StubCmd(true))
+        .bind();
+
+    expect(binding).toBeDefined();
+    expect(binding.name).toBe("aName");
+});
+
+test("set no name", () => {
+    binding = bindings.keysTypeBinder()
+        .on(elt)
+        .toProduce((_i: KeysData) => new StubCmd(true))
+        .bind();
+
+    expect(binding).toBeDefined();
+    expect(binding.name).toBe("KeysTyped");
+});
+

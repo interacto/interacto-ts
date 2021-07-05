@@ -63,5 +63,7 @@ export interface KeyInteractionCmdUpdateBinder<C extends Command, I extends Inte
 
     catch(fn: (ex: unknown) => void): KeyInteractionCmdUpdateBinder<C, I, D>;
 
+    name(name: string): KeyInteractionCmdUpdateBinder<C, I, D>;
+
     bind(): Binding<C, I, D>;
 }

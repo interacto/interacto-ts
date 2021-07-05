@@ -139,6 +139,10 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, D extends I
         return super.catch(fn) as KeysBinder<C, I, D>;
     }
 
+    public override name(name: string): KeysBinder<C, I, D> {
+        return super.name(name) as KeysBinder<C, I, D>;
+    }
+
     public override toProduce<C2 extends Command>(fn: (i: D) => C2): KeysBinder<C2, I, D> {
         return super.toProduce(fn) as KeysBinder<C2, I, D>;
     }
@@ -165,7 +169,7 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, D extends I
             this._strictStart, [...this.logLevels], this.throttleTimeout,
             this.stopPropagation, this.prevDefault, this.firstFn, this.thenFn, this.checkCodeFn,
             this.endFn, this.cancelFn, this.endOrCancelFn, this.hadEffectsFn,
-            this.hadNoEffectFn, this.cannotExecFn, this.onErrFn);
+            this.hadNoEffectFn, this.cannotExecFn, this.onErrFn, this.bindingName);
 
         this.observer?.observeBinding(binding);
 

@@ -139,6 +139,10 @@ export class UpdateBinder<C extends Command, I extends Interaction<D>, D extends
         return super.catch(fn) as UpdateBinder<C, I, D>;
     }
 
+    public override name(name: string): UpdateBinder<C, I, D> {
+        return super.name(name) as UpdateBinder<C, I, D>;
+    }
+
     public override usingInteraction<I2 extends Interaction<D2>, D2 extends InteractionData>(fn: () => I2): UpdateBinder<C, I2, D2> {
         return super.usingInteraction(fn) as UpdateBinder<C, I2, D2>;
     }
@@ -164,7 +168,7 @@ export class UpdateBinder<C extends Command, I extends Interaction<D>, D extends
             [...this.widgets], [...this.dynamicNodes], this._strictStart, [...this.logLevels],
             this.throttleTimeout, this.stopPropagation, this.prevDefault, this.firstFn, this.thenFn, this.whenFn,
             this.endFn, this.cancelFn, this.endOrCancelFn, this.hadEffectsFn,
-            this.hadNoEffectFn, this.cannotExecFn, this.onErrFn);
+            this.hadNoEffectFn, this.cannotExecFn, this.onErrFn, this.bindingName);
 
         this.observer?.observeBinding(binding);
 

@@ -62,6 +62,8 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
 
     protected prevDefault: boolean;
 
+    protected bindingName?: string;
+
     protected observer?: BindingsObserver;
 
     protected undoHistory: UndoHistory;
@@ -162,6 +164,12 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
     public catch(fn: (ex: unknown) => void): Binder<C, I, D> {
         const dup = this.duplicate();
         dup.onErrFn = fn;
+        return dup;
+    }
+
+    public name(name: string): Binder<C, I, D> {
+        const dup = this.duplicate();
+        dup.bindingName = name;
         return dup;
     }
 

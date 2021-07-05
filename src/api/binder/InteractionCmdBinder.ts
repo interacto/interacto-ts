@@ -60,6 +60,8 @@ export interface InteractionCmdBinder<C extends Command, I extends Interaction<D
 
     catch(fn: (ex: unknown) => void): InteractionCmdBinder<C, I, D>;
 
+    name(name: string): InteractionCmdBinder<C, I, D>;
+
     /**
     * Executes the builder to create and install the binding on the instrument.
     */
