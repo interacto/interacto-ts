@@ -45,6 +45,12 @@ export class UsageLog {
         this.duration = 0;
         this.cancelled = false;
     }
+
+    public toString(): string {
+        const withversion = this.frontVersion === undefined ? "" : ` v:${this.frontVersion}`;
+        return `Usage.${withversion} id:${this.sessionID} binding:${this.name} ` +
+            `date:${this.date} duration:${this.duration} cancelled:${String(this.cancelled)}`;
+    }
 }
 
 
@@ -132,8 +138,13 @@ export class LoggerImpl implements Logger {
         if (logs.length === 1) {
             const log = logs[0];
             log.name = bindingName;
-            log.duration = log.date - performance.now();
+            log.duration = performance.now() - log.date;
             log.cancelled = cancelled;
+
+            if (this.writeConsole) {
+                // eslint-disable-next-line no-console
+                console.log(log.toString());
+            }
 
             if (this.serverAddress !== undefined) {
                 const rq = new XMLHttpRequest();
