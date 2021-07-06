@@ -47,7 +47,7 @@ export class SpinnerChangedFSM extends FSMImpl {
         }
     }
 
-    public override buildFSM(dataHandler?: SpinnerChangedHandler): void {
+    public override buildFSM(dataHandler: SpinnerChangedHandler): void {
         if (this.states.length > 1) {
             return;
         }
@@ -60,7 +60,7 @@ export class SpinnerChangedFSM extends FSMImpl {
         this.addState(ended);
 
         const spinnerAction: (_: Event) => void = (event: Event) => {
-            dataHandler?.initToChangedHandler(event);
+            dataHandler.initToChangedHandler(event);
         };
 
         const changedInit = new SpinnerChangedTransition(this.initState, changed);

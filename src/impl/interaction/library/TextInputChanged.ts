@@ -23,7 +23,7 @@ import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {WidgetDataImpl} from "../WidgetDataImpl";
 
-export class TextInputChangedFSM extends FSMImpl {
+class TextInputChangedFSM extends FSMImpl {
     /** The time gap between the two spinner events. */
     private readonly _timeGap: number = 1000;
 
@@ -44,7 +44,7 @@ export class TextInputChangedFSM extends FSMImpl {
         }
     }
 
-    public override buildFSM(dataHandler?: TextInputChangedHandler): void {
+    public override buildFSM(dataHandler: TextInputChangedHandler): void {
         if (this.states.length > 1) {
             return;
         }
@@ -57,12 +57,12 @@ export class TextInputChangedFSM extends FSMImpl {
 
         const trInit = new TextInputChangedTransition(this.initState, changed);
         trInit.action = (event: Event): void => {
-            dataHandler?.initToChangedHandler(event);
+            dataHandler.initToChangedHandler(event);
         };
 
         const trChanged = new TextInputChangedTransition(changed, changed);
         trChanged.action = (event: Event): void => {
-            dataHandler?.initToChangedHandler(event);
+            dataHandler.initToChangedHandler(event);
         };
 
         new TimeoutTransition(changed, ended, this.timeGapSupplier);

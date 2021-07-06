@@ -43,3 +43,28 @@ test("other event don't trigger the interaction ButtonPressed", () => {
     robot().change(button);
     expect(handler.fsmStarts).not.toHaveBeenCalled();
 });
+
+test("build fsm twice does not work", () => {
+    const count = interaction.fsm.states.length;
+    interaction.fsm.buildFSM({
+        initToPressedHandler(): void {
+        },
+        reinitData(): void {
+        }
+    });
+    expect(interaction.fsm.states).toHaveLength(count);
+});
+
+test("cannot register non button", () => {
+    const w = document.createElement("a");
+    jest.spyOn(w, "addEventListener");
+    interaction.onNewNodeRegistered(w);
+    expect(w.addEventListener).not.toHaveBeenCalled();
+});
+
+test("cannot unregister non button", () => {
+    const w = document.createElement("a");
+    jest.spyOn(w, "removeEventListener");
+    interaction.onNodeUnregistered(w);
+    expect(w.removeEventListener).not.toHaveBeenCalled();
+});

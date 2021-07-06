@@ -24,7 +24,7 @@ import {WidgetDataImpl} from "../WidgetDataImpl";
 /**
  * The FSM for button pressures.
  */
-export class ButtonPressedFSM extends FSMImpl {
+class ButtonPressedFSM extends FSMImpl {
     /**
      * Creates the FSM
      */
@@ -32,7 +32,7 @@ export class ButtonPressedFSM extends FSMImpl {
         super();
     }
 
-    public override buildFSM(dataHandler?: ButtonPressedFSMHandler): void {
+    public override buildFSM(dataHandler: ButtonPressedFSMHandler): void {
         if (this.states.length > 1) {
             return;
         }
@@ -42,7 +42,7 @@ export class ButtonPressedFSM extends FSMImpl {
 
         const tr = new ButtonPressedTransition(this.initState, pressed);
         tr.action = (event: InputEvent): void => {
-            dataHandler?.initToPressedHandler(event);
+            dataHandler.initToPressedHandler(event);
         };
     }
 }

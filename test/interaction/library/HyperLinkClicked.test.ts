@@ -30,9 +30,33 @@ beforeEach(() => {
     url = document.createElement("a");
 });
 
+test("build fsm twice does not work", () => {
+    const count = interaction.fsm.states.length;
+    interaction.fsm.buildFSM({
+        initToClickedHandler(): void {
+        }, reinitData(): void {
+        }
+    });
+    expect(interaction.fsm.states).toHaveLength(count);
+});
+
 test("click on url starts and stops the interaction", () => {
     interaction.registerToNodes([url]);
     robot(url).input();
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+});
+
+test("cannot register non hyperlink", () => {
+    const w = document.createElement("input");
+    jest.spyOn(w, "addEventListener");
+    interaction.onNewNodeRegistered(w);
+    expect(w.addEventListener).not.toHaveBeenCalled();
+});
+
+test("cannot unregister non hyperlink", () => {
+    const w = document.createElement("input");
+    jest.spyOn(w, "removeEventListener");
+    interaction.onNodeUnregistered(w);
+    expect(w.removeEventListener).not.toHaveBeenCalled();
 });

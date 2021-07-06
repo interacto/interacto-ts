@@ -20,12 +20,12 @@ import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {WidgetDataImpl} from "../WidgetDataImpl";
 
-export class ColorPickedFSM extends FSMImpl {
+class ColorPickedFSM extends FSMImpl {
     public constructor() {
         super();
     }
 
-    public override buildFSM(dataHandler?: ColorPickedHandler): void {
+    public override buildFSM(dataHandler: ColorPickedHandler): void {
         if (this.states.length > 1) {
             return;
         }
@@ -36,7 +36,7 @@ export class ColorPickedFSM extends FSMImpl {
 
         const tr = new ColorPickedTransition(this.initState, picked);
         tr.action = (event: Event): void => {
-            dataHandler?.initToPickedHandler(event);
+            dataHandler.initToPickedHandler(event);
         };
     }
 }

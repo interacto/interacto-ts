@@ -21,13 +21,13 @@ import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {WidgetDataImpl} from "../WidgetDataImpl";
 
-export class BoxCheckedFSM extends FSMImpl {
+class BoxCheckedFSM extends FSMImpl {
 
     public constructor() {
         super();
     }
 
-    public override buildFSM(dataHandler?: BoxCheckedHandler): void {
+    public override buildFSM(dataHandler: BoxCheckedHandler): void {
         if (this.states.length > 1) {
             return;
         }
@@ -38,7 +38,7 @@ export class BoxCheckedFSM extends FSMImpl {
 
         const tr = new BoxCheckPressedTransition(this.initState, checked);
         tr.action = (event: InputEvent): void => {
-            dataHandler?.initToCheckHandler(event);
+            dataHandler.initToCheckHandler(event);
         };
     }
 }

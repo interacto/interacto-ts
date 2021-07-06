@@ -43,3 +43,28 @@ test("other event don't trigger the interaction CheckBox", () => {
     robot().change(boxCheck);
     expect(handler.fsmStarts).not.toHaveBeenCalled();
 });
+
+test("build fsm twice does not work", () => {
+    const count = interaction.fsm.states.length;
+    interaction.fsm.buildFSM({
+        initToCheckHandler(): void {
+        },
+        reinitData(): void {
+        }
+    });
+    expect(interaction.fsm.states).toHaveLength(count);
+});
+
+test("cannot register non checkbox", () => {
+    const w = document.createElement("div");
+    jest.spyOn(w, "addEventListener");
+    interaction.onNewNodeRegistered(w);
+    expect(w.addEventListener).not.toHaveBeenCalled();
+});
+
+test("cannot unregister non checkbox", () => {
+    const w = document.createElement("div");
+    jest.spyOn(w, "removeEventListener");
+    interaction.onNodeUnregistered(w);
+    expect(w.removeEventListener).not.toHaveBeenCalled();
+});

@@ -21,12 +21,12 @@ import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {WidgetDataImpl} from "../WidgetDataImpl";
 
-export class ComboBoxSelectedFSM extends FSMImpl {
+class ComboBoxSelectedFSM extends FSMImpl {
     public constructor() {
         super();
     }
 
-    public override buildFSM(dataHandler?: ComboBoxSelectedHandler): void {
+    public override buildFSM(dataHandler: ComboBoxSelectedHandler): void {
         if (this.states.length > 1) {
             return;
         }
@@ -37,7 +37,7 @@ export class ComboBoxSelectedFSM extends FSMImpl {
 
         const tr = new ComboBoxTransition(this.initState, selected);
         tr.action = (event: Event): void => {
-            dataHandler?.initToSelectedHandler(event);
+            dataHandler.initToSelectedHandler(event);
         };
     }
 }

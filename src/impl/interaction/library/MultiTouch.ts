@@ -23,7 +23,7 @@ import {SrcTgtTouchDataImpl} from "../SrcTgtTouchDataImpl";
 /**
  * The FSM that defines a multi-touch interaction (that works like a DnD)
  */
-export class MultiTouchFSM extends ConcurrentFSM<TouchDnDFSM> {
+class MultiTouchFSM extends ConcurrentFSM<TouchDnDFSM> {
     /**
      * Creates the FSM.
      */

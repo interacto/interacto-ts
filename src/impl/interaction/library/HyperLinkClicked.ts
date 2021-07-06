@@ -21,12 +21,12 @@ import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {WidgetDataImpl} from "../WidgetDataImpl";
 
-export class HyperLinkClickedFSM extends FSMImpl {
+class HyperLinkClickedFSM extends FSMImpl {
     public constructor() {
         super();
     }
 
-    public override buildFSM(dataHandler?: HyperLinkClickedFSMHandler): void {
+    public override buildFSM(dataHandler: HyperLinkClickedFSMHandler): void {
         if (this.states.length > 1) {
             return;
         }
@@ -37,7 +37,7 @@ export class HyperLinkClickedFSM extends FSMImpl {
 
         const tr = new HyperLinkTransition(this.initState, clicked);
         tr.action = (event: Event): void => {
-            dataHandler?.initToClickedHandler(event);
+            dataHandler.initToClickedHandler(event);
         };
     }
 }

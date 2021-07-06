@@ -21,12 +21,12 @@ import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {WidgetDataImpl} from "../WidgetDataImpl";
 
-export class DatePickedFSM extends FSMImpl {
+class DatePickedFSM extends FSMImpl {
     public constructor() {
         super();
     }
 
-    public override buildFSM(dataHandler?: DatePickedHandler): void {
+    public override buildFSM(dataHandler: DatePickedHandler): void {
         if (this.states.length > 1) {
             return;
         }
@@ -37,7 +37,7 @@ export class DatePickedFSM extends FSMImpl {
 
         const tr = new DatePickedTransition(this.initState, picked);
         tr.action = (event: Event): void => {
-            dataHandler?.initToPickedHandler(event);
+            dataHandler.initToPickedHandler(event);
         };
     }
 }

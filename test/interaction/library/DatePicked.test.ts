@@ -43,3 +43,29 @@ test("other event don't trigger the interaction.", () => {
     robot().change(date);
     expect(handler.fsmStarts).not.toHaveBeenCalled();
 });
+
+test("build fsm twice does not work", () => {
+    const count = interaction.fsm.states.length;
+    interaction.fsm.buildFSM({
+        initToPickedHandler(): void {
+        },
+        reinitData(): void {
+        }
+    });
+    expect(interaction.fsm.states).toHaveLength(count);
+});
+
+test("cannot register non date picker", () => {
+    const w = document.createElement("div");
+    jest.spyOn(w, "addEventListener");
+    interaction.onNewNodeRegistered(w);
+    expect(w.addEventListener).not.toHaveBeenCalled();
+});
+
+test("cannot unregister non date picker", () => {
+    const w = document.createElement("div");
+    jest.spyOn(w, "removeEventListener");
+    interaction.onNodeUnregistered(w);
+    expect(w.removeEventListener).not.toHaveBeenCalled();
+});
+

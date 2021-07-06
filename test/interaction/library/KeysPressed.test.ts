@@ -32,6 +32,11 @@ beforeEach(() => {
     text = document.createElement("textarea");
 });
 
+test("build fsm twice does not work", () => {
+    const count = interaction.fsm.states.length;
+    interaction.fsm.buildFSM();
+    expect(interaction.fsm.states).toHaveLength(count);
+});
 
 test("testKeyPressExecution", () => {
     interaction.registerToNodes([text]);

@@ -31,6 +31,18 @@ beforeEach(() => {
     canvas = document.createElement("canvas");
 });
 
+test("build fsm twice does not work", () => {
+    const count = interaction.fsm.states.length;
+    interaction.fsm.buildFSM({
+        onDrag(): void {
+        }, onPress(): void {
+        }, onRelease(): void {
+        }, reinitData(): void {
+        }
+    });
+    expect(interaction.fsm.states).toHaveLength(count);
+});
+
 test("is not running at start", () => {
     expect(interaction.isRunning()).toBeFalsy();
 });

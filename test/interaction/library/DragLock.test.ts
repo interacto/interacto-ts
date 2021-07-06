@@ -34,6 +34,19 @@ beforeEach(() => {
     canvas = document.createElement("canvas");
 });
 
+test("build fsm twice does not work", () => {
+    const count = interaction.fsm.states.length;
+    interaction.fsm.buildFSM({
+        onFirstDbleClick(): void {
+        },
+        onMove(): void {
+        },
+        reinitData(): void {
+        }
+    });
+    expect(interaction.fsm.states).toHaveLength(count);
+});
+
 test("drag lock is ok", () => {
     interaction.registerToNodes([canvas]);
     robot(canvas)

@@ -29,7 +29,7 @@ import type {PointData} from "../../../api/interaction/PointData";
 /**
  * The FSM for DnD interactions.
  */
-export class DnDFSM extends FSMImpl {
+class DnDFSM extends FSMImpl {
     private readonly cancellable: boolean;
 
     private buttonToCheck?: number;
@@ -43,7 +43,7 @@ export class DnDFSM extends FSMImpl {
         this.cancellable = cancellable;
     }
 
-    public override buildFSM(dataHandler?: DnDFSMHandler): void {
+    public override buildFSM(dataHandler: DnDFSMHandler): void {
         if (this.states.length > 1) {
             return;
         }
@@ -63,7 +63,7 @@ export class DnDFSM extends FSMImpl {
         const press = new PressureTransition(this.initState, pressed);
         press.action = (event: MouseEvent): void => {
             this.buttonToCheck = event.button;
-            dataHandler?.onPress(event);
+            dataHandler.onPress(event);
         };
 
         const relCancel = new ReleaseTransition(pressed, cancelled);
@@ -71,7 +71,7 @@ export class DnDFSM extends FSMImpl {
 
         const guardMove = (event: MouseEvent): boolean => event.button === this.buttonToCheck;
         const actionMove = (event: MouseEvent): void => {
-            dataHandler?.onDrag(event);
+            dataHandler.onDrag(event);
         };
 
         const move = new MoveTransition(pressed, dragged);
@@ -88,7 +88,7 @@ export class DnDFSM extends FSMImpl {
             return event.button === this.buttonToCheck && (!(tgt instanceof Element) || !tgt.classList.contains("ioDwellSpring"));
         };
         release.action = (event: MouseEvent): void => {
-            dataHandler?.onRelease(event);
+            dataHandler.onRelease(event);
         };
         this.configureCancellation(pressed, dragged, cancelled);
     }

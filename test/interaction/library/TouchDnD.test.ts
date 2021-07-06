@@ -36,6 +36,12 @@ beforeEach(() => {
     canvas = document.createElement("canvas");
 });
 
+test("build fsm twice does not work", () => {
+    const count = interaction.fsm.states.length;
+    interaction.fsm.buildFSM();
+    expect(interaction.fsm.states).toHaveLength(count);
+});
+
 test("pressure", () => {
     interaction.processEvent(createTouchEvent("touchstart", 2, canvas));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);

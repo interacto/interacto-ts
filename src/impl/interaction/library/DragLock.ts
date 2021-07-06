@@ -27,7 +27,7 @@ import {EscapeKeyPressureTransition} from "../../fsm/EscapeKeyPressureTransition
 import {SrcTgtPointsDataImpl} from "../SrcTgtPointsDataImpl";
 import type {PointData} from "../../../api/interaction/PointData";
 
-export class DragLockFSM extends FSMImpl {
+class DragLockFSM extends FSMImpl {
     public readonly firstDbleClick: DoubleClickFSM;
 
     public readonly sndDbleClick: DoubleClickFSM;

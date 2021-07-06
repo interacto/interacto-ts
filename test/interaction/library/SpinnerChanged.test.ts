@@ -38,6 +38,16 @@ afterEach(() => {
     SpinnerChangedFSM.setTimeGap(timer);
 });
 
+test("build fsm twice does not work", () => {
+    const count = interaction.fsm.states.length;
+    interaction.fsm.buildFSM({
+        initToChangedHandler(): void {
+        }, reinitData(): void {
+        }
+    });
+    expect(interaction.fsm.states).toHaveLength(count);
+});
+
 test("testSpinnerChangedGoodState", () => {
     interaction.registerToNodes([spinner]);
     robot(spinner).input();
@@ -93,4 +103,18 @@ test("spinner Registered twice", () => {
     jest.runAllTimers();
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+});
+
+test("cannot register non spinner", () => {
+    const w = document.createElement("input");
+    jest.spyOn(w, "addEventListener");
+    interaction.onNewNodeRegistered(w);
+    expect(w.addEventListener).not.toHaveBeenCalled();
+});
+
+test("cannot unregister non spinner", () => {
+    const w = document.createElement("input");
+    jest.spyOn(w, "removeEventListener");
+    interaction.onNodeUnregistered(w);
+    expect(w.removeEventListener).not.toHaveBeenCalled();
 });

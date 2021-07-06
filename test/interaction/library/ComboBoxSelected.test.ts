@@ -42,3 +42,28 @@ test("other event don't trigger the interaction", () => {
     robot().change(comboBox);
     expect(handler.fsmStarts).not.toHaveBeenCalled();
 });
+
+test("build fsm twice does not work", () => {
+    const count = interaction.fsm.states.length;
+    interaction.fsm.buildFSM({
+        initToSelectedHandler(): void {
+        },
+        reinitData(): void {
+        }
+    });
+    expect(interaction.fsm.states).toHaveLength(count);
+});
+
+test("cannot register non combo box", () => {
+    const w = document.createElement("input");
+    jest.spyOn(w, "addEventListener");
+    interaction.onNewNodeRegistered(w);
+    expect(w.addEventListener).not.toHaveBeenCalled();
+});
+
+test("cannot unregister non combo box", () => {
+    const w = document.createElement("input");
+    jest.spyOn(w, "removeEventListener");
+    interaction.onNodeUnregistered(w);
+    expect(w.removeEventListener).not.toHaveBeenCalled();
+});
