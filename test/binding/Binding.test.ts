@@ -258,15 +258,6 @@ describe("nominal cases", () => {
         }).toThrow(MustBeUndoableCmdError);
     });
 
-    test("cancel interaction continuous no effect", () => {
-        binding = new BindingStub(history, logger, true, false, () => new StubCmd(), new InteractionStub(new FSMImpl()));
-        binding.conditionRespected = true;
-        binding.fsmStarts();
-        const cmd = binding.command;
-        binding.fsmCancels();
-        expect(CmdStatus.cancelled).toStrictEqual(cmd?.getStatus());
-    });
-
     test("cancel interaction continuous undoable", () => {
         const cmd = new CmdStubUndoable();
         jest.spyOn(cmd, "undo");

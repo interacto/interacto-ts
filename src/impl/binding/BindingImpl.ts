@@ -247,13 +247,12 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
             if (this.logBinding) {
                 this.logger.logBindingMsg("Binding cancelled");
             }
-            const hadEffects = this._cmd.hadEffect();
             this._cmd.cancel();
             if (this.logCmd) {
-                this.logger.logCmdMsg("Command cancelled", this._cmd.constructor.name);
+                this.logger.logCmdMsg("Cancelling command", this._cmd.constructor.name);
             }
 
-            if (this.continuousCmdExecution && hadEffects) {
+            if (this.continuousCmdExecution) {
                 this.cancelContinousWithEffectsCmd(this._cmd);
             }
 
