@@ -318,7 +318,8 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
             this.logger.logBindingMsg("Binding updates");
         }
 
-        if (this.createAndInitCommand()) {
+        const cmd = this.createAndInitCommand();
+        if (cmd !== undefined) {
             if (this.logCmd) {
                 this.logger.logCmdMsg("Command update");
             }
@@ -326,14 +327,14 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
             this.then();
 
             if (this.continuousCmdExecution) {
-                this.continuousExecutionOnFSMUpdate();
+                this.continuousExecutionOnFSMUpdate(cmd);
             }
         }
     }
 
 
-    private continuousExecutionOnFSMUpdate(): void {
-        const ok = this._cmd?.execute() ?? false;
+    private continuousExecutionOnFSMUpdate(cmd: C): void {
+        const ok = cmd.execute();
 
         if (this.logCmd) {
             this.logger.logCmdMsg(`Try to execute command (continuous execution), is cmd undefined? ${String(this._cmd === undefined)}`);
@@ -373,10 +374,9 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
         }
 
         let cancelled = false;
+        const cmd = this.createAndInitCommand();
 
-        if (this.createAndInitCommand()) {
-            this.executeCommandOnFSMStop();
-        } else {
+        if (cmd === undefined) {
             if (this._cmd !== undefined) {
                 if (this.logCmd) {
                     this.logger.logCmdMsg("Cancelling the command");
@@ -386,6 +386,8 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
                 this._timeCancelled++;
                 cancelled = true;
             }
+        } else {
+            this.executeCommandOnFSMStop(cmd);
         }
 
         if (this.logUsage) {
@@ -393,7 +395,7 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
         }
     }
 
-    private executeCommandOnFSMStop(): void {
+    private executeCommandOnFSMStop(cmd: C): void {
         if (!this.continuousCmdExecution) {
             this.then();
             if (this.logCmd) {
@@ -401,36 +403,33 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
             }
         }
 
-        if (this._cmd !== undefined) {
-            // Required to keep the command as because of async it may be set
-            // to undefined right after
-            const cmdToExecute = this._cmd;
-            const result = this._cmd.execute();
+        // Required to keep the command as because of async it may be set
+        // to undefined right after
+        const result = cmd.execute();
 
-            if (result instanceof Promise) {
-                result.then(executed => {
-                    this._cmd = cmdToExecute;
-                    this.afterCmdExecuted(cmdToExecute, executed);
-                    // Cannot put these two lines in a finally block:
-                    // tests will failed as finally is called *after* the promise is resolved
-                    // provoking sync issues (treatments are done as soon as the promise is resolved)
-                    this._cmd = undefined;
-                    this._timeEnded++;
-                }).catch((ex: unknown) => {
-                    this.logger.logCmdErr("Error while executing the command", ex);
-                    this._cmd = undefined;
-                    this._timeEnded++;
-                });
-            } else {
-                this.afterCmdExecuted(this._cmd, result);
+        if (result instanceof Promise) {
+            result.then(executed => {
+                this._cmd = cmd;
+                this.afterCmdExecuted(cmd, executed);
+                // Cannot put these two lines in a finally block:
+                // tests will failed as finally is called *after* the promise is resolved
+                // provoking sync issues (treatments are done as soon as the promise is resolved)
                 this._cmd = undefined;
                 this._timeEnded++;
-            }
+            }).catch((ex: unknown) => {
+                this.logger.logCmdErr("Error while executing the command", ex);
+                this._cmd = undefined;
+                this._timeEnded++;
+            });
+        } else {
+            this.afterCmdExecuted(cmd, result);
+            this._cmd = undefined;
+            this._timeEnded++;
         }
     }
 
-    private createAndInitCommand(): boolean {
-        let ok = this.when();
+    private createAndInitCommand(): C | undefined {
+        const ok = this.when();
 
         if (this.logBinding) {
             this.logger.logBindingMsg(`when predicate is ${String(ok)}`);
@@ -442,14 +441,15 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
                     this.logger.logCmdMsg("Command creation");
                 }
                 this._cmd = this.createCommand();
-                ok = this._cmd !== undefined;
-                if (ok) {
+                if (this._cmd !== undefined) {
                     this.first();
                 }
             }
+
+            return this._cmd;
         }
 
-        return ok;
+        return undefined;
     }
 
     private afterCmdExecuted(cmd: C, ok: boolean): void {

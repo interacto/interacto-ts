@@ -90,7 +90,7 @@ import {LoggerImpl} from "../logging/LoggerImpl";
 export class BindingsImpl extends Bindings {
     private observer: BindingsObserver | undefined;
 
-    private undoHistoryData: UndoHistory;
+    private readonly undoHistoryData: UndoHistory;
 
     public readonly logger: Logger;
 
@@ -102,10 +102,6 @@ export class BindingsImpl extends Bindings {
 
     public get undoHistory(): UndoHistory {
         return this.undoHistoryData;
-    }
-
-    public set undoHistory(newHistory: UndoHistory) {
-        this.undoHistoryData = newHistory;
     }
 
     public nodeBinder(): BaseUpdateBinder {
