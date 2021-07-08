@@ -20,9 +20,12 @@ export class StubCmd extends CommandBase {
 
     public exec = 0;
 
-    public constructor(candoValue?: boolean) {
+    public effects?: boolean;
+
+    public constructor(candoValue: boolean = false, effects?: boolean) {
         super();
-        this.candoValue = candoValue ?? false;
+        this.candoValue = candoValue;
+        this.effects = effects;
     }
 
     protected execution(): void {
@@ -31,6 +34,10 @@ export class StubCmd extends CommandBase {
 
     public override canExecute(): boolean {
         return this.candoValue;
+    }
+
+    public override hadEffect(): boolean {
+        return this.effects ?? super.hadEffect();
     }
 }
 

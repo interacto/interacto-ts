@@ -15,7 +15,7 @@ import type {Subscription} from "rxjs";
 import type {Binding, PointData} from "../../src/interacto";
 import {BindingsImpl, Press} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
-import {createMouseEvent} from "../interaction/StubEvents";
+import {createKeyEvent, createMouseEvent} from "../interaction/StubEvents";
 import type {Bindings} from "../../src/api/binding/Bindings";
 
 let canvas1: HTMLElement;
@@ -97,6 +97,24 @@ test("stop propagation prevents bubbling", () => {
 
     expect(binding2.timesEnded).toStrictEqual(1);
     expect(binding1.timesEnded).toStrictEqual(0);
+});
+
+test("stop propagation prevents bubbling with key bindings", () => {
+    const b2 = bindings.keyPressBinder(false)
+        .toProduce(() => new StubCmd())
+        .on(canvas2)
+        .stopImmediatePropagation()
+        .bind();
+
+    const b1 = bindings.keyPressBinder(false)
+        .toProduce(() => new StubCmd())
+        .on(canvas1)
+        .bind();
+
+    canvas2.dispatchEvent(createKeyEvent("keydown", "A"));
+
+    expect(b2.timesEnded).toStrictEqual(1);
+    expect(b1.timesEnded).toStrictEqual(0);
 });
 
 test("stop propagation prevents bubbling using cloned builders", () => {

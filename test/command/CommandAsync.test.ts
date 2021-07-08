@@ -439,6 +439,31 @@ describe("testing async commands and bindings", () => {
             expect(data.data).toHaveLength(0);
         });
 
+        test("dnd binding with async command and continuous execution with no log", async () => {
+            const cannot = jest.fn(() => {});
+
+            binding = bindings.dndBinder(false)
+                .toProduce(() => new StubAsyncCmd(data))
+                .on(canvas)
+                .continuousExecution()
+                .ifCannotExecute(cannot)
+                .bind();
+
+            canvas.dispatchEvent(createMouseEvent("mousedown", canvas));
+            canvas.dispatchEvent(createMouseEvent("mousemove", canvas));
+            canvas.dispatchEvent(createMouseEvent("mousemove", canvas));
+            canvas.dispatchEvent(createMouseEvent("mouseup", canvas));
+
+            runAllTimers();
+            await flushPromises();
+
+            expect(binding.command).toBeUndefined();
+            expect(binding.timesEnded).toStrictEqual(1);
+            expect(ctx.commands).toHaveLength(1);
+            expect(cannot).not.toHaveBeenCalled();
+            expect(data.data).toHaveLength(0);
+        });
+
         test("dnd binding with async command and continuous execution and crash", async () => {
             const cannot = jest.fn(() => {});
 

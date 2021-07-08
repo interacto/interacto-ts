@@ -363,3 +363,97 @@ test("set no name", () => {
     expect(binding.name).toBe("ButtonPressed");
 });
 
+test("on dynamic eltRef", async () => {
+    const div = document.createElement("div");
+    const eltRef: EltRef<HTMLDivElement> = {
+        "nativeElement": div
+    };
+    binding = bindings.buttonBinder()
+        .toProduce(() => new StubCmd(true))
+        .onDynamic(eltRef)
+        .bind();
+
+    div.appendChild(button1);
+    await Promise.resolve();
+    button1.click();
+    button2.click();
+
+    expect(binding).toBeDefined();
+    expect(ctx.commands).toHaveLength(1);
+});
+
+describe("on dynamic", () => {
+    let div: HTMLDivElement;
+    let button3: HTMLButtonElement;
+
+    beforeEach(() => {
+        div = document.createElement("div");
+        button3 = document.createElement("button");
+    });
+
+    test("on dynamic one button", async () => {
+        binding = bindings.buttonBinder()
+            .toProduce(() => new StubCmd(true))
+            .onDynamic(div)
+            .bind();
+
+        div.appendChild(button1);
+        await Promise.resolve();
+
+        button1.click();
+
+        expect(binding).toBeDefined();
+        expect(ctx.commands).toHaveLength(1);
+    });
+
+    test("on dynamic two buttons", async () => {
+        binding = bindings.buttonBinder()
+            .toProduce(() => new StubCmd(true))
+            .onDynamic(div)
+            .bind();
+
+        div.appendChild(button2);
+        await Promise.resolve();
+        div.appendChild(button3);
+        await Promise.resolve();
+
+        button2.click();
+        button3.click();
+
+        expect(binding).toBeDefined();
+        expect(ctx.commands).toHaveLength(2);
+    });
+
+    test("on dynamic nothing", () => {
+        binding = bindings.buttonBinder()
+            .toProduce(() => new StubCmd(true))
+            .onDynamic(div)
+            .bind();
+
+        div.click();
+
+        expect(binding).toBeDefined();
+        expect(ctx.commands).toHaveLength(0);
+    });
+
+    test("on dynamic when remove buttons", async () => {
+        binding = bindings.buttonBinder()
+            .onDynamic(div)
+            .toProduce(() => new StubCmd(true))
+            .bind();
+
+        div.appendChild(button2);
+        await Promise.resolve();
+        div.appendChild(button3);
+        await Promise.resolve();
+        div.removeChild(button2);
+        await Promise.resolve();
+
+        button2.click();
+        button3.click();
+
+        expect(ctx.commands).toHaveLength(1);
+    });
+});
+
+

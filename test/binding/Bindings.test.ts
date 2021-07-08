@@ -14,27 +14,29 @@
 
 import type {
     Binding,
+    Bindings,
     Command,
     EltRef,
     Interaction,
     InteractionCmdUpdateBinder,
     InteractionData,
     KeysData,
+    Logger,
     PointData,
     PointsData,
     ScrollData,
     SrcTgtPointsData,
     TapData,
     TouchData,
-    WidgetData,
-    Logger,
-    Bindings
+    WidgetData
 } from "../../src/interacto";
-import {AnonCmd, BindingsImpl, LogLevel, BindingsContext} from "../../src/interacto";
+import {AnonCmd, BindingsContext, BindingsImpl, LogLevel} from "../../src/interacto";
 import {StubCmd, StubUndoableCmd} from "../command/StubCmd";
 import type {MouseEventForTest} from "../interaction/StubEvents";
 import {createMouseEvent, robot} from "../interaction/StubEvents";
 import {mock} from "jest-mock-extended";
+import type {UndoHistory} from "../../src/api/undo/UndoHistory";
+import type {BindingsObserver} from "../../src/api/binding/BindingsObserver";
 
 let elt: HTMLElement;
 let ctx: BindingsContext;
@@ -54,6 +56,26 @@ afterEach(() => {
     bindings.clear();
     jest.clearAllTimers();
     jest.clearAllMocks();
+});
+
+test("with specific history", () => {
+    const h = mock<UndoHistory>();
+    bindings = new BindingsImpl(h);
+
+    expect(h).toBe(bindings.undoHistory);
+});
+
+test("change binding observer", () => {
+    const o1 = mock<BindingsObserver>();
+    const o2 = mock<BindingsObserver>();
+    const o3 = mock<BindingsObserver>();
+    bindings.setBindingObserver(o1);
+    bindings.setBindingObserver(o2);
+    bindings.setBindingObserver(o3);
+
+    expect(o1.clearObservedBindings).toHaveBeenCalledTimes(1);
+    expect(o2.clearObservedBindings).toHaveBeenCalledTimes(1);
+    expect(o3.clearObservedBindings).not.toHaveBeenCalled();
 });
 
 test("press binder", () => {

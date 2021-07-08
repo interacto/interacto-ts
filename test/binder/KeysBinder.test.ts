@@ -26,8 +26,10 @@ import {KeyPressed} from "../../src/impl/interaction/library/KeyPressed";
 import type {KeysData} from "../../src/api/interaction/KeysData";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
 import type {Bindings} from "../../src/api/binding/Bindings";
-import clearAllTimers = jest.clearAllTimers;
 import type {Logger} from "../../src/api/logging/Logger";
+import type {EltRef} from "../../src/api/binder/BaseBinderBuilder";
+import {LogLevel} from "../../src/api/logging/LogLevel";
+import clearAllTimers = jest.clearAllTimers;
 
 let elt: HTMLElement;
 let binding: Binding<Command, Interaction<InteractionData>, InteractionData> | undefined;
@@ -428,3 +430,179 @@ test("set no name", () => {
     expect(binding.name).toBe("KeysTyped");
 });
 
+test("on dynamic eltRef", async () => {
+    const div = document.createElement("div");
+    const eltRef: EltRef<HTMLDivElement> = {
+        "nativeElement": div
+    };
+    binding = bindings.keysTypeBinder()
+        .toProduce(() => new StubCmd(true))
+        .onDynamic(eltRef)
+        .bind();
+
+    div.appendChild(elt);
+    await Promise.resolve();
+
+    robot(elt)
+        .keydown({"code": "b"})
+        .keyup({"code": "b"});
+    jest.runOnlyPendingTimers();
+
+    expect(binding).toBeDefined();
+    expect(ctx.commands).toHaveLength(1);
+});
+
+test("on dynamic", async () => {
+    const div = document.createElement("div");
+
+    binding = bindings.keysTypeBinder()
+        .toProduce(() => new StubCmd(true))
+        .onDynamic(div)
+        .bind();
+
+    div.appendChild(elt);
+    await Promise.resolve();
+
+    robot(elt)
+        .keydown({"code": "a"})
+        .keyup({"code": "a"});
+    jest.runOnlyPendingTimers();
+
+    expect(binding).toBeDefined();
+    expect(ctx.commands).toHaveLength(1);
+});
+
+test("when it crashes in 'first' with an error caught by 'catch'", () => {
+    const fn = jest.fn();
+    const err = new Error("It crashed");
+
+    binding = bindings.keysTypeBinder()
+        .toProduce(() => new StubCmd(true))
+        .first((_c: StubCmd, _i: KeysData) => {
+            throw err;
+        })
+        .on(elt)
+        .catch(fn)
+        .bind();
+
+    robot(elt)
+        .keydown({"code": "a"})
+        .keyup({"code": "a"});
+    jest.runOnlyPendingTimers();
+
+    expect(ctx.commands).toHaveLength(1);
+    expect(fn).toHaveBeenCalledTimes(1);
+    expect(fn).toHaveBeenCalledWith(err);
+});
+
+test("ifHadEffects works", () => {
+    const fn1 = jest.fn();
+    const fn2 = jest.fn();
+
+    binding = bindings.keysTypeBinder()
+        .on(elt)
+        .toProduce((_i: KeysData) => new StubCmd(true))
+        .ifHadEffects(fn1)
+        .ifHadNoEffect(fn2)
+        .bind();
+
+    robot(elt)
+        .keydown({"code": "g"})
+        .keydown({"code": "y"})
+        .keyup({"code": "g"})
+        .keyup({"code": "y"});
+    jest.runOnlyPendingTimers();
+
+    expect(fn1).toHaveBeenCalledTimes(1);
+    expect(fn2).not.toHaveBeenCalled();
+});
+
+test("ifHadNoEffect works", () => {
+    const fn1 = jest.fn();
+    const fn2 = jest.fn();
+
+    binding = bindings.keysTypeBinder()
+        .on(elt)
+        .toProduce((_i: KeysData) => new StubCmd(true, false))
+        .ifHadEffects(fn1)
+        .ifHadNoEffect(fn2)
+        .bind();
+
+    robot(elt)
+        .keydown({"code": "g"})
+        .keydown({"code": "y"})
+        .keyup({"code": "g"})
+        .keyup({"code": "y"});
+    jest.runOnlyPendingTimers();
+
+    expect(fn1).not.toHaveBeenCalled();
+    expect(fn2).toHaveBeenCalledTimes(1);
+});
+
+test("ifCannotExecute works when cannot execute", () => {
+    const fn = jest.fn();
+
+    binding = bindings.keysTypeBinder()
+        .on(elt)
+        .toProduce((_i: KeysData) => new StubCmd(false))
+        .ifCannotExecute(fn)
+        .bind();
+
+    robot(elt)
+        .keydown({"code": "g"})
+        .keydown({"code": "y"})
+        .keyup({"code": "g"})
+        .keyup({"code": "y"});
+    jest.runOnlyPendingTimers();
+
+    expect(fn).toHaveBeenCalledTimes(1);
+});
+
+test("ifCannotExecute works when can execute", () => {
+    const fn = jest.fn();
+
+    binding = bindings.keysTypeBinder()
+        .on(elt)
+        .toProduce((_i: KeysData) => new StubCmd(true))
+        .ifCannotExecute(fn)
+        .bind();
+
+    robot(elt)
+        .keydown({"code": "y"})
+        .keyup({"code": "y"});
+    jest.runOnlyPendingTimers();
+
+    expect(fn).not.toHaveBeenCalled();
+});
+
+test("log works", () => {
+    binding = bindings.keysTypeBinder()
+        .on(elt)
+        .toProduce((_i: KeysData) => new StubCmd(true))
+        .log(LogLevel.interaction, LogLevel.usage)
+        .bind();
+
+    expect(binding.logUsage).toBeTruthy();
+    expect(binding.interaction).toBeTruthy();
+    expect(binding.command).toBeFalsy();
+});
+
+test("preventdefault works", () => {
+    binding = bindings.keysTypeBinder()
+        .on(elt)
+        .preventDefault()
+        .toProduce((_i: KeysData) => new StubCmd(true))
+        .bind();
+
+    expect(binding.interaction.preventDefault).toBeTruthy();
+});
+
+test("stopImmediatePropagation works", () => {
+    binding = bindings.keysTypeBinder()
+        .on(elt)
+        .stopImmediatePropagation()
+        .toProduce((_i: KeysData) => new StubCmd(true))
+        .bind();
+
+    expect(binding.interaction.stopImmediatePropagation).toBeTruthy();
+});
