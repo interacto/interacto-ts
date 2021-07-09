@@ -1,3 +1,23 @@
+# 5.7.0
+
+* new(binding): binding now have a name and binders can set binding's name
+* new(interaction): The DnD interaction now supports the dwell-spring cancellation
+* new(logging): new logging system, Fitts law feature preview
+* new(command): added UndoNTimes and RedoNTimes commands
+* new(interaction): X-Y deltas added to SrcTgtPointsData interaction data
+  
+* change(api): use property in interfaces instead of Java-like getter/setter
+* change(command): made private command properties protected
+  
+* fix(binding): cancelling the interaction should not rely on hadEffect of the command
+* fix(binding): the binding API should not expose FSM handling routines
+* fix(command): setProperty and SetProperties should have mutable new values
+* fix(interaction): the current position of PointsData not used correctly
+
+* clean: code simplification
+* test: tests added
+* update: updated TypeScript to version 4.3
+
 # 5.6.0
 
 * feat(bindings): Mousemove binding and user interaction added
