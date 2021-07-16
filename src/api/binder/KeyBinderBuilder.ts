@@ -14,10 +14,12 @@
 
 export interface KeyBinderBuilder {
     /**
-     * Defines key code the binding will check. On a key interaction, the typed keys will be check against
-     * the given key code. The set of typed codes must matches the given key codes.
-     * @param codes - The key codes to match.
+     * Defines the key values the binding will check. On a key interaction, the pressed keys will be checked against
+     * the given key values. The set of pressed keys must match the given key values.
+     * @param isCode - If true, key codes will be used instead of key values. Keep in mind that key codes ignore the user's keyboard layout.
+     * See {@link https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code}.
+     * @param keysOrCodes - The key values to match, or key codes if isCode is set to true.
      * @returns A clone of the current builder to chain the building configuration.
      */
-    with(...codes: ReadonlyArray<string>): KeyBinderBuilder;
+    with(isCode: boolean, ...keysOrCodes: ReadonlyArray<string>): KeyBinderBuilder;
 }

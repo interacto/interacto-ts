@@ -123,7 +123,7 @@ test("key press modifier OK", () => {
 
 test("key press with routine OK", () => {
     binding = bindings.keyPressBinder(false)
-        .with("b")
+        .with(true, "b")
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
@@ -133,7 +133,7 @@ test("key press with routine OK", () => {
 
 test("key press std key with when false", () => {
     binding = bindings.keyPressBinder(false)
-        .with("b")
+        .with(true, "b")
         .on(elt)
         .when(_i => false)
         .toProduce(() => new StubCmd(true))
@@ -146,7 +146,7 @@ test("key press std key with when true", () => {
     binding = bindings.keyPressBinder(false)
         .toProduce(() => new StubCmd(true))
         .on(elt)
-        .with("c")
+        .with(true, "c")
         .when(i => i.code === "c")
         .bind();
     robot(elt).keydown({"code": "c"});
@@ -155,7 +155,7 @@ test("key press std key with when true", () => {
 
 test("key press with routine KO 1", () => {
     binding = bindings.keyPressBinder(false)
-        .with("c")
+        .with(true, "c")
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
@@ -165,7 +165,7 @@ test("key press with routine KO 1", () => {
 
 test("key press with routine KO several keys", () => {
     binding = bindings.keyPressBinder(false)
-        .with("d", "e")
+        .with(true, "d", "e")
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
@@ -175,7 +175,7 @@ test("key press with routine KO several keys", () => {
 
 test("key press with routine OK modifier", () => {
     binding = bindings.keyPressBinder(true)
-        .with("Alt")
+        .with(true, "Alt")
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
@@ -189,7 +189,7 @@ test("key press first then end", () => {
     const first = jest.fn();
     const end = jest.fn();
     binding = bindings.keyPressBinder(false)
-        .with("f")
+        .with(true, "f")
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .first(first)
@@ -247,7 +247,7 @@ test("keys type first end", () => {
 test("keys type with 1", () => {
     binding = bindings.keysTypeBinder()
         .on(elt)
-        .with("a", "b")
+        .with(true, "a", "b")
         .toProduce(() => new StubCmd(true))
         .bind();
     robot(elt)
@@ -266,7 +266,7 @@ test("keys type with 1", () => {
 test("keys type with 2", () => {
     binding = bindings.keysTypeBinder()
         .on(elt)
-        .with("a")
+        .with(true, "a")
         .toProduce(() => new StubCmd(true))
         .bind();
     robot(elt)
@@ -285,7 +285,7 @@ test("keys type with 2", () => {
 test("keys type with 3", () => {
     binding = bindings.keysTypeBinder()
         .on(elt)
-        .with("z", "b")
+        .with(true, "z", "b")
         .toProduce(() => new StubCmd(true))
         .bind();
     robot(elt)
@@ -300,7 +300,7 @@ test("keys type with 3", () => {
 test("keys type with 4", () => {
     binding = bindings.keysTypeBinder()
         .on(elt)
-        .with("z", "b")
+        .with(true, "z", "b")
         .toProduce(() => new StubCmd(true))
         .bind();
     robot(elt)
@@ -315,7 +315,7 @@ test("keys type with 4", () => {
 test("keys type with nothing", () => {
     binding = bindings.keysTypeBinder()
         .on(elt)
-        .with()
+        .with(true)
         .toProduce(() => new StubCmd(true))
         .bind();
     robot(elt)
@@ -328,7 +328,7 @@ test("keys type with nothing", () => {
 test("keys type with 5", () => {
     binding = bindings.keysTypeBinder()
         .on(elt)
-        .with("b")
+        .with(true, "b")
         .toProduce(() => new StubCmd(true))
         .bind();
     robot(elt)
@@ -341,7 +341,7 @@ test("keys type with 5", () => {
 test("keys type with 3 mixed keydown up", () => {
     binding = bindings.keysTypeBinder()
         .on(elt)
-        .with("z", "b")
+        .with(true, "z", "b")
         .toProduce(() => new StubCmd(true))
         .bind();
     robot(elt)

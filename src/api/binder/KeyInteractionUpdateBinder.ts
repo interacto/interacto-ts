@@ -35,7 +35,7 @@ export interface KeyInteractionUpdateBinder<I extends Interaction<D>, D extends 
 
     strictStart(): KeyInteractionUpdateBinder<I, D>;
 
-    with(...codes: ReadonlyArray<string>): KeyInteractionUpdateBinder<I, D>;
+    with(isCode: boolean, ...keysOrCodes: ReadonlyArray<string>): KeyInteractionUpdateBinder<I, D>;
 
     stopImmediatePropagation(): KeyInteractionUpdateBinder<I, D>;
 

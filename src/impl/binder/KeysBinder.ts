@@ -34,7 +34,9 @@ import type {Logger} from "../../api/logging/Logger";
 export class KeysBinder<C extends Command, I extends Interaction<D>, D extends InteractionData>
     extends UpdateBinder<C, I, D> implements KeyInteractionCmdUpdateBinder<C, I, D> {
 
-    private codes: ReadonlyArray<string>;
+    private keysOrCodes: ReadonlyArray<string>;
+
+    private isCode: boolean;
 
     private readonly checkCodeFn: (i: InteractionData) => boolean;
 
@@ -43,26 +45,38 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, D extends I
 
         Object.assign(this, binder);
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        this.codes = this.codes === undefined ? [] : [...this.codes];
+        this.keysOrCodes = this.keysOrCodes === undefined ? [] : [...this.keysOrCodes];
         this.checkCodeFn = (i: D): boolean => {
-            let currentCodes: ReadonlyArray<string> = [];
-            if (i instanceof KeysDataImpl) {
-                currentCodes = i.keys.map(k => k.code);
+            let currentKeys: ReadonlyArray<string> = [];
+
+            if (this.isCode) {
+                if (i instanceof KeysDataImpl) {
+                    currentKeys = i.keys.map(k => k.code);
+                } else {
+                    if (i instanceof KeyDataImpl) {
+                        currentKeys = [i.code];
+                    }
+                }
             } else {
-                if (i instanceof KeyDataImpl) {
-                    currentCodes = [i.code];
+                if (i instanceof KeysDataImpl) {
+                    currentKeys = i.keys.map(k => k.key);
+                } else {
+                    if (i instanceof KeyDataImpl) {
+                        currentKeys = [i.key];
+                    }
                 }
             }
 
-            return (this.codes.length === 0 || this.codes.length === currentCodes.length &&
-                currentCodes.every((v: string) => this.codes.includes(v))) &&
+            return (this.keysOrCodes.length === 0 || this.keysOrCodes.length === currentKeys.length &&
+                    currentKeys.every((v: string) => this.keysOrCodes.includes(v))) &&
                 (this.whenFn === undefined || this.whenFn(i));
         };
     }
 
-    public with(...keyCodes: ReadonlyArray<string>): KeysBinder<C, I, D> {
+    public with(isCode: boolean, ...keysOrCodes: ReadonlyArray<string>): KeysBinder<C, I, D> {
         const dup = this.duplicate();
-        dup.codes = [...keyCodes];
+        dup.keysOrCodes = [...keysOrCodes];
+        dup.isCode = isCode;
         return dup;
     }
 
