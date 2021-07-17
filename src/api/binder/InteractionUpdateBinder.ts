@@ -41,6 +41,10 @@ export interface InteractionUpdateBinder<I extends Interaction<D>, D extends Int
 
     preventDefault(): InteractionUpdateBinder<I, D>;
 
+    throttle(timeout: number): InteractionUpdateBinder<I, D>;
+
+    continuousExecution(): InteractionUpdateBinder<I, D>;
+
     strictStart(): InteractionUpdateBinder<I, D>;
 
     catch(fn: (ex: unknown) => void): InteractionUpdateBinder<I, D>;
