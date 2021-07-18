@@ -35,6 +35,10 @@ export interface KeyInteractionUpdateBinder<I extends Interaction<D>, D extends 
 
     strictStart(): KeyInteractionUpdateBinder<I, D>;
 
+    continuousExecution(): KeyInteractionUpdateBinder<I, D>;
+
+    throttle(timeout: number): KeyInteractionUpdateBinder<I, D>;
+
     with(...codes: ReadonlyArray<string>): KeyInteractionUpdateBinder<I, D>;
 
     stopImmediatePropagation(): KeyInteractionUpdateBinder<I, D>;
