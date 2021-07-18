@@ -398,12 +398,16 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
     }
 
     private directEventProcess(event: Event): void {
-        this._fsm.process(event);
-        if (this.preventDef) {
-            event.preventDefault();
-        }
-        if (this.stopImmediatePropag) {
-            event.stopImmediatePropagation();
+        const processed = this._fsm.process(event);
+
+        // preventdefault or stopPropa only if the event is processed by the FSM
+        if (processed) {
+            if (this.preventDef) {
+                event.preventDefault();
+            }
+            if (this.stopImmediatePropag) {
+                event.stopImmediatePropagation();
+            }
         }
     }
 
