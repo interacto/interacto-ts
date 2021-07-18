@@ -13,9 +13,17 @@
  */
 
 import type {Subject} from "rxjs";
-import type {InputState, OutputState, FSMHandler, Logger} from "../../src/interacto";
-import {CancelFSMException, CancellingState, FSMImpl, InitState, StdState, SubFSMTransition,
-    TerminalState, TimeoutTransition} from "../../src/interacto";
+import type {FSMHandler, InputState, Logger, OutputState} from "../../src/interacto";
+import {
+    CancelFSMException,
+    CancellingState,
+    FSMImpl,
+    InitState,
+    StdState,
+    SubFSMTransition,
+    TerminalState,
+    TimeoutTransition
+} from "../../src/interacto";
 import {StubTransitionOK, SubStubTransition1, SubStubTransition2, SubStubTransition3} from "./StubTransitionOK";
 import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
@@ -35,6 +43,11 @@ beforeEach(() => {
 test("testInitState", () => {
     expect(fsm.states).toHaveLength(1);
     expect(fsm.states[0]).toBeInstanceOf(InitState);
+});
+
+test("get init state", () => {
+    expect(fsm.initState).toBeInstanceOf(InitState);
+    expect(fsm.initState).toBe(fsm.states[0]);
 });
 
 test("testInner", () => {
@@ -128,6 +141,18 @@ test("that errors caught on start with an error", () => {
     expect(logger.logInteractionErr).toHaveBeenCalledTimes(1);
 });
 
+test("that errors caught on start with an error with no logger", () => {
+    fsm = new FSMImpl();
+    handler.fsmStarts.mockImplementation(() => {
+        throw new Error("crash provoked");
+    });
+    fsm.addHandler(handler);
+
+    expect(() => {
+        fsm.onStarting();
+    }).not.toThrow();
+});
+
 test("that errors caught on start with not an error", () => {
     handler.fsmStarts.mockImplementation(() => {
         // eslint-disable-next-line @typescript-eslint/no-throw-literal
@@ -152,6 +177,19 @@ test("that errors caught on update with an error", () => {
         fsm.onUpdating();
     }).not.toThrow();
     expect(logger.logInteractionErr).toHaveBeenCalledTimes(1);
+});
+
+test("that errors caught on update with an error with no logger", () => {
+    fsm = new FSMImpl();
+    handler.fsmUpdates.mockImplementation(() => {
+        throw new Error("crash provoked on update");
+    });
+    fsm.onStarting();
+    fsm.addHandler(handler);
+
+    expect(() => {
+        fsm.onUpdating();
+    }).not.toThrow();
 });
 
 test("that errors caught on update with not an error", () => {
@@ -181,6 +219,19 @@ test("that errors caught on end with an error", () => {
     expect(logger.logInteractionErr).toHaveBeenCalledTimes(1);
 });
 
+test("that errors caught on end with an error with no logger", () => {
+    fsm = new FSMImpl();
+    handler.fsmStops.mockImplementation(() => {
+        throw new Error("crash provoked on end");
+    });
+    fsm.onStarting();
+    fsm.addHandler(handler);
+
+    expect(() => {
+        fsm.onTerminating();
+    }).not.toThrow();
+});
+
 test("that errors caught on end with not an error", () => {
     handler.fsmStops.mockImplementation(() => {
         // eslint-disable-next-line @typescript-eslint/no-throw-literal
@@ -206,6 +257,19 @@ test("that errors caught on cancel with an error", () => {
         fsm.onCancelling();
     }).not.toThrow();
     expect(logger.logInteractionErr).toHaveBeenCalledTimes(1);
+});
+
+test("that errors caught on cancel with an error with no logger", () => {
+    fsm = new FSMImpl();
+    handler.fsmCancels.mockImplementation(() => {
+        throw new Error("crash provoked on cancel");
+    });
+    fsm.onStarting();
+    fsm.addHandler(handler);
+
+    expect(() => {
+        fsm.onCancelling();
+    }).not.toThrow();
 });
 
 test("that errors caught on cancel with not an error", () => {
@@ -601,6 +665,55 @@ describe("testWithSubFSM", () => {
         fsm.addState(subS2);
         fsm.addState(subT);
         fsm.addState(subC);
+    });
+
+    test("check log when processing event with sub FSM", () => {
+        fsm = new FSMImpl(logger);
+        mainfsm = new FSMImpl(logger);
+        s1 = new StdState(mainfsm, "s1");
+        mainfsm.addState(s1);
+        new SubFSMTransition(mainfsm.initState, s1, fsm);
+        subS1 = new StdState(fsm, "sub1");
+        subS2 = new StdState(fsm, "sub2");
+        subT = new TerminalState(fsm, "t1");
+        subC = new CancellingState(fsm, "c1");
+        new SubStubTransition1(fsm.initState, subS1, true);
+        new SubStubTransition2(subS1, subS2, true);
+        new SubStubTransition1(subS2, subT, true);
+        new SubStubTransition2(subS2, subC, true);
+        fsm.addState(subS1);
+        fsm.addState(subS2);
+        fsm.addState(subT);
+        fsm.addState(subC);
+        fsm.log = true;
+        mainfsm.log = true;
+        mainfsm.process(createMouseEvent("click", document.createElement("button")));
+        mainfsm.process(createKeyEvent("keydown", "a"));
+        mainfsm.process(createMouseEvent("click", document.createElement("button")));
+        expect(logger.logInteractionMsg).toHaveBeenCalledTimes(17);
+    });
+
+    test("check no log when processing event with sub FSM", () => {
+        fsm = new FSMImpl(logger);
+        mainfsm = new FSMImpl(logger);
+        s1 = new StdState(mainfsm, "s1");
+        mainfsm.addState(s1);
+        new SubFSMTransition(mainfsm.initState, s1, fsm);
+        fsm.log = false;
+        mainfsm.log = false;
+        mainfsm.process(createMouseEvent("click", document.createElement("button")));
+        mainfsm.process(createKeyEvent("keydown", "a"));
+        mainfsm.process(createMouseEvent("click", document.createElement("button")));
+        expect(logger.logInteractionMsg).not.toHaveBeenCalled();
+    });
+
+    test("check log when processing event with no logger with sub FSM", () => {
+        fsm.log = true;
+        mainfsm.log = true;
+        mainfsm.process(createMouseEvent("click", document.createElement("button")));
+        mainfsm.process(createKeyEvent("keydown", "a"));
+        mainfsm.process(createMouseEvent("click", document.createElement("button")));
+        expect(logger.logInteractionMsg).not.toHaveBeenCalled();
     });
 
     test("testEntersSubGoodCurrState", () => {

@@ -14,15 +14,40 @@
 
 import {isButton, isCheckBox, isColorChoice, isComboBox, isDatePicker,
     isHyperLink, isKeyDownEvent, isKeyUpEvent, isMouseDownEvent, isScrollEvent, isSpinner,
-    isTextInput, KeyCode} from "../../src/impl/fsm/Events";
-import {createKeyEvent, createMouseEvent, createUIEvent} from "../interaction/StubEvents";
+    isTextInput, KeyCode, getTouch} from "../../src/impl/fsm/Events";
+import {createKeyEvent, createMouseEvent, createTouchEvent, createUIEvent} from "../interaction/StubEvents";
 
+
+describe("checking getTouch", () => {
+    let touches: TouchList;
+    let elt: HTMLButtonElement;
+
+    beforeEach(() => {
+        elt = document.createElement("button");
+        touches = createTouchEvent("touchstart", 1, elt).changedTouches;
+    });
+
+    test("does not find with no ID", () => {
+        expect(getTouch(touches)).toBeUndefined();
+    });
+
+    test("does not find with incorrect ID", () => {
+        expect(getTouch(touches, 0)).toBeUndefined();
+    });
+
+    test("find with correct ID", () => {
+        const touch = getTouch(touches, 1);
+        expect(touch).not.toBeUndefined();
+        expect(touch).toStrictEqual(touches[0]);
+    });
+});
 
 describe("checking is widget functions", () => {
     test("isButton OK", () => {
         const elt1 = document.createElement("button");
         expect(isButton(elt1)).toBeTruthy();
     });
+
     test("isButton KO", () => {
         const elt1 = document.createElement("input");
         expect(isButton(elt1)).toBeFalsy();
