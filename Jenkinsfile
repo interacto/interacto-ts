@@ -49,12 +49,9 @@ pipeline {
                     '''
                 }
 
-                step([
-                    $class: 'CloverPublisher',
-                    cloverReportDir: 'reports',
-                    cloverReportFileName: 'clover.xml',
-                    healthyTarget: [methodCoverage: 100, conditionalCoverage: 100, statementCoverage: 100],
-                ])
+                script {
+                    publishCoverageGithub(filepath:'reports/cobertura-coverage.xml', coverageXmlType: 'cobertura')
+                }
             }
         }
     }
