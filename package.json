@@ -81,6 +81,7 @@
       ".(ts|tsx)": "ts-jest"
     },
     "testEnvironment": "jsdom",
+    "coverageReporters": ["lcov", "cobertura", "clover"],
     "coverageThreshold": {
       "global": {
         "branches": 80,
