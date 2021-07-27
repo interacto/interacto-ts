@@ -27,12 +27,31 @@ import advanceTimersByTime = jest.advanceTimersByTime;
 import runAllTimers = jest.runAllTimers;
 import clearAllTimers = jest.clearAllTimers;
 import type {Logger} from "../../src/api/logging/Logger";
+import {TransitionBase} from "../../src/impl/fsm/TransitionBase";
+import type {EventType} from "../../src/api/fsm/EventType";
+import type {InputState} from "../../src/api/fsm/InputState";
+import {PressureTransition} from "../../src/impl/fsm/PressureTransition";
 
 let interaction: InteractionStub;
 let fsm: FSMImpl & MockProxy<FSMImpl>;
 let currentStateObs: Subject<[OutputState, OutputState]>;
 let currentState: OutputState;
 let logger: Logger;
+
+class StubWrongEventTransition extends TransitionBase<FocusEvent> {
+    public constructor(srcState: OutputState, tgtState: InputState) {
+        super(srcState, tgtState);
+    }
+
+    public getAcceptedEvents(): ReadonlyArray<EventType> {
+        return ["focus" as EventType];
+    }
+
+    public accept(event: Event): event is FocusEvent {
+        return event instanceof FocusEvent;
+    }
+
+}
 
 beforeEach(() => {
     logger = mock<Logger>();
@@ -64,9 +83,17 @@ test("is running not activated", () => {
 });
 
 test("is running init state", () => {
+    interaction = new InteractionStub(fsm);
+    interaction.log(true);
     interaction.setActivated(true);
     currentState = new InitState(fsm, "s");
     expect(interaction.isRunning()).toBeFalsy();
+});
+
+test("activated with logger", () => {
+    interaction.log(true);
+    interaction.setActivated(true);
+    expect(logger.logInteractionMsg).toHaveBeenCalledTimes(1);
 });
 
 test("is running OK", () => {
@@ -142,6 +169,72 @@ test("register to node children", async () => {
     expect(interaction.onNewNodeRegistered).toHaveBeenCalledTimes(1);
 });
 
+
+test("register unknown event", () => {
+    const b = document.createElement("button");
+    jest.spyOn(b, "addEventListener");
+    currentState = new InitState(fsm, "s");
+    new StubWrongEventTransition(currentState, mock<StdState>());
+    interaction.onNewNodeRegistered(b);
+    expect(b.addEventListener).not.toHaveBeenCalled();
+});
+
+test("unregister unknown event", () => {
+    const b = document.createElement("button");
+    jest.spyOn(b, "removeEventListener");
+    currentState = new InitState(fsm, "s");
+    new StubWrongEventTransition(currentState, mock<StdState>());
+    interaction.onNodeUnregistered(b);
+    expect(b.removeEventListener).not.toHaveBeenCalled();
+});
+
+test("no prevent default or propagation on unprocessed event", () => {
+    fsm.process.mockImplementationOnce(() => false);
+    const div = document.createElement("div");
+    const evt = createMouseEvent("mousedown", div);
+    jest.spyOn(evt, "preventDefault");
+    jest.spyOn(evt, "stopImmediatePropagation");
+    currentState = new InitState(fsm, "s");
+    interaction.preventDefault = true;
+    interaction.stopImmediatePropagation = true;
+    interaction.processEvent(evt);
+
+    expect(evt.preventDefault).not.toHaveBeenCalled();
+    expect(evt.stopImmediatePropagation).not.toHaveBeenCalled();
+});
+
+test("prevent default on processed event", () => {
+    fsm.process.mockImplementationOnce(() => true);
+    const div = document.createElement("div");
+    const evt = createMouseEvent("mousedown", div);
+    jest.spyOn(evt, "preventDefault");
+    jest.spyOn(evt, "stopImmediatePropagation");
+    currentState = new InitState(fsm, "s");
+    new PressureTransition(currentState, mock<StdState>());
+    interaction.preventDefault = true;
+    interaction.stopImmediatePropagation = false;
+    interaction.processEvent(evt);
+
+    expect(evt.preventDefault).toHaveBeenCalledTimes(1);
+    expect(evt.stopImmediatePropagation).not.toHaveBeenCalled();
+});
+
+test("stop propa on processed event", () => {
+    fsm.process.mockImplementationOnce(() => true);
+    const div = document.createElement("div");
+    const evt = createMouseEvent("mousedown", div);
+    jest.spyOn(evt, "preventDefault");
+    jest.spyOn(evt, "stopImmediatePropagation");
+    currentState = new InitState(fsm, "s");
+    new PressureTransition(currentState, mock<StdState>());
+    interaction.preventDefault = false;
+    interaction.stopImmediatePropagation = true;
+    interaction.processEvent(evt);
+
+    expect(evt.stopImmediatePropagation).toHaveBeenCalledTimes(1);
+    expect(evt.preventDefault).not.toHaveBeenCalled();
+});
+
 describe("throttling", () => {
     let elt: HTMLDivElement;
     let evt1: MouseEventForTest;
@@ -173,13 +266,11 @@ describe("throttling", () => {
 
 
     test("throttle with a single event > timeout", async() => {
-        interaction.processEvent(evt1);
-        // jest.advanceTimersByTime(10);
+        interaction.processEvent(undefined as never as Event);
         runAllTimers();
         await flushPromises();
 
-        expect(fsm.process).toHaveBeenNthCalledWith(1, evt1);
-        expect(fsm.process).toHaveBeenCalledTimes(1);
+        expect(logger.logInteractionErr).not.toHaveBeenCalled();
     });
 
     test("throttle with a single event < timeout", async() => {
@@ -343,6 +434,23 @@ describe("throttling", () => {
         runAllTimers();
         await flushPromises();
         expect(logger.logInteractionErr).toHaveBeenCalledWith("Error during the throttling process", new Error("YOLO"), "InteractionStub");
+    });
+
+    test("crash with Error during throttling with no logger", async () => {
+        interaction = new InteractionStub(fsm);
+        interaction.setThrottleTimeout(10);
+        const spy = jest.spyOn(interaction.fsm, "process");
+        spy
+            .mockReturnValueOnce(true)
+            .mockImplementationOnce(() => {
+                throw new Error("YOLO");
+            });
+        interaction.processEvent(evt1);
+        advanceTimersByTime(2);
+        interaction.processEvent(evtDiff);
+        runAllTimers();
+        await flushPromises();
+        expect(logger.logInteractionErr).not.toHaveBeenCalled();
     });
 
     test("crash with not an Error during throttling", async () => {

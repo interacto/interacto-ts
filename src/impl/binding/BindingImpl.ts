@@ -143,6 +143,7 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
             return cmd;
         } catch (ex: unknown) {
             this.logger.logBindingErr("Error while creating a command", ex);
+            this.catch(ex);
             return undefined;
         }
     }
@@ -151,7 +152,7 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
      * Called when an error appeared during the execution of the binding. To override.
      * @param _err - The error.
      */
-    public catch(_err: undefined): void {
+    public catch(_err: unknown): void {
         // To override.
     }
 

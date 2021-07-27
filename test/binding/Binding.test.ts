@@ -467,10 +467,12 @@ describe("crash in binding", () => {
         binding = new BindingStub(history, logger, true, false, supplier, new InteractionStub(new FSMImpl()));
         binding.conditionRespected = true;
         jest.spyOn(binding, "first");
+        jest.spyOn(binding, "catch");
         binding.fsmStarts();
         expect(binding.command).toBeUndefined();
         expect(logger.logBindingErr).toHaveBeenCalledWith("Error while creating a command", ex);
         expect(binding.first).not.toHaveBeenCalled();
+        expect(binding.catch).toHaveBeenCalledWith(ex);
     });
 
     test("execute crash with not an error", () => {

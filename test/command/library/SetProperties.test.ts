@@ -60,6 +60,15 @@ describe("using properties", () => {
         });
     });
 
+    test("newvalues given in constructor", () => {
+        expect(cmd.newvalues).toStrictEqual({
+            "foo2": "fooo",
+            "foo": 1,
+            "5": 6
+        });
+    });
+
+
     test("execute works", async () => {
         const res = await cmd.execute();
         cmd.done();

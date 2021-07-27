@@ -276,6 +276,54 @@ test("dnd binder with throttling", () => {
     expect(fsm.process).toHaveBeenCalledTimes(4);
 });
 
+test("dnd binder with throttling 2", () => {
+    const fsm = bindings.dndBinder(false)
+        .throttle(200)
+        .on(elt)
+        .toProduce(() => new StubCmd(true))
+        .bind()
+        .interaction
+        .fsm;
+    jest.spyOn(fsm, "process");
+
+    const evt1: MouseEventForTest = createMouseEvent("mousedown", elt, 1, 2) as MouseEventForTest;
+    const evt2: MouseEventForTest = createMouseEvent("mousemove", elt, 3, 4) as MouseEventForTest;
+    const evt3: MouseEventForTest = createMouseEvent("mousemove", elt, 3, 4) as MouseEventForTest;
+    const evt4: MouseEventForTest = createMouseEvent("mousemove", elt, 5, 6) as MouseEventForTest;
+    const evt5: MouseEventForTest = createMouseEvent("mousemove", elt, 7, 8) as MouseEventForTest;
+    const evt6: MouseEventForTest = createMouseEvent("mousemove", elt, 9, 10) as MouseEventForTest;
+    const evt7: MouseEventForTest = createMouseEvent("mouseup", elt) as MouseEventForTest;
+    evt1.id = 1;
+    evt2.id = 2;
+    evt3.id = 3;
+    evt4.id = 4;
+    evt5.id = 5;
+    evt6.id = 6;
+    evt7.id = 7;
+
+    elt.dispatchEvent(evt1);
+    jest.advanceTimersByTime(199);
+    elt.dispatchEvent(evt2);
+    jest.advanceTimersByTime(199);
+    elt.dispatchEvent(evt3);
+    jest.advanceTimersByTime(199);
+    elt.dispatchEvent(evt4);
+    jest.advanceTimersByTime(200);
+    elt.dispatchEvent(evt5);
+    jest.advanceTimersByTime(199);
+    elt.dispatchEvent(evt6);
+    jest.advanceTimersByTime(200);
+    elt.dispatchEvent(evt7);
+    jest.runAllTimers();
+
+    expect(ctx.commands).toHaveLength(1);
+    expect(fsm.process).toHaveBeenNthCalledWith(1, evt1);
+    expect(fsm.process).toHaveBeenNthCalledWith(2, evt4);
+    expect(fsm.process).toHaveBeenNthCalledWith(3, evt6);
+    expect(fsm.process).toHaveBeenNthCalledWith(4, evt7);
+    expect(fsm.process).toHaveBeenCalledTimes(4);
+});
+
 test("key press binder", () => {
     bindings.keyPressBinder(false)
         .on(elt)

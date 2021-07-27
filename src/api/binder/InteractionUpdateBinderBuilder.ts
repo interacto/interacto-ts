@@ -16,9 +16,10 @@ import type {InteractionBinderBuilder} from "./InteractionBinderBuilder";
 import type {LogLevel} from "../logging/LogLevel";
 import type {Interaction} from "../interaction/Interaction";
 import type {Widget} from "./BaseBinderBuilder";
+import type {BaseUpdateBinderBuilder} from "./BaseUpdateBinderBuilder";
 
 export interface InteractionUpdateBinderBuilder<I extends Interaction<D>, D extends InteractionData>
-    extends InteractionBinderBuilder <I, D> {
+    extends InteractionBinderBuilder <I, D>, BaseUpdateBinderBuilder {
     /**
     * Defines what to do when a command is cancelled (because the interaction is cancelled).
     * The undoable command is automatically cancelled so that nothing must be done on the command.
@@ -45,6 +46,10 @@ export interface InteractionUpdateBinderBuilder<I extends Interaction<D>, D exte
     log(...level: ReadonlyArray<LogLevel>): InteractionUpdateBinderBuilder<I, D>;
 
     stopImmediatePropagation(): InteractionUpdateBinderBuilder<I, D>;
+
+    throttle(timeout: number): InteractionUpdateBinderBuilder<I, D>;
+
+    continuousExecution(): InteractionUpdateBinderBuilder<I, D>;
 
     strictStart(): InteractionUpdateBinderBuilder<I, D>;
 

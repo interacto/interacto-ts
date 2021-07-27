@@ -165,6 +165,18 @@ test("fsm throws not an error in thread", () => {
     expect(logger.logInteractionErr).toHaveBeenCalledWith("Exception on timeout of a timeout transition", 42);
 });
 
+test("fsm throws not an error in thread with no logger", () => {
+    evt = new TimeoutTransition(src, tgt, () => 500);
+    jest.spyOn(fsm, "onTimeout");
+    fsm.onTimeout.mockImplementation((): void => {
+        // eslint-disable-next-line @typescript-eslint/no-throw-literal
+        throw 42;
+    });
+    evt.startTimeout();
+    jest.runOnlyPendingTimers();
+    expect(logger.logInteractionErr).not.toHaveBeenCalled();
+});
+
 test("testExecuteCallFSMTimeout", () => {
     evt.startTimeout();
     jest.runOnlyPendingTimers();

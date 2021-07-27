@@ -409,10 +409,6 @@ export class FSMImpl implements FSM {
         return [...this.eventsToProcess];
     }
 
-    public getInitState(): OutputState {
-        return this.initState;
-    }
-
     public uninstall(): void {
         this.fullReinit();
         this.log = false;

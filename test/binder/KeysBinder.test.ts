@@ -30,6 +30,8 @@ import type {Logger} from "../../src/api/logging/Logger";
 import type {EltRef} from "../../src/api/binder/BaseBinderBuilder";
 import {LogLevel} from "../../src/api/logging/LogLevel";
 import clearAllTimers = jest.clearAllTimers;
+import type {UndoHistory} from "../../src/api/undo/UndoHistory";
+import {Press} from "../../src/impl/interaction/library/Press";
 
 let elt: HTMLElement;
 let binding: Binding<Command, Interaction<InteractionData>, InteractionData> | undefined;
@@ -605,4 +607,108 @@ test("stopImmediatePropagation works", () => {
         .bind();
 
     expect(binding.interaction.stopImmediatePropagation).toBeTruthy();
+});
+
+test("keys type with continuous exec", () => {
+    const cmd = new StubCmd(true);
+    binding = bindings.keysTypeBinder()
+        .on(elt)
+        .continuousExecution()
+        .toProduce(() => cmd)
+        .bind();
+
+    robot(elt)
+        .keydown({"code": "z"})
+        .keydown({"code": "b"})
+        .keydown({"code": "a"})
+        .keyup({"code": "z"})
+        .keyup({"code": "b"})
+        .keyup({"code": "a"});
+    jest.runOnlyPendingTimers();
+    // 4 since 3 keys typed = timeout
+    expect(cmd.exec).toBe(4);
+});
+
+test("keys type with throttling", () => {
+    jest.useFakeTimers();
+    const cmd = new StubCmd(true);
+    let chars: Array<string> = [];
+    binding = bindings.keysTypeBinder()
+        .throttle(15)
+        .on(elt)
+        .toProduce(() => cmd)
+        .then((_, i) => {
+            chars = i.keys.map(k => k.code);
+        })
+        .bind();
+
+    robot(elt)
+        .keyup({"code": "z"})
+        .do(() => jest.advanceTimersByTime(1))
+        .keyup({"code": "a"})
+        .do(() => jest.advanceTimersByTime(5))
+        .keyup({"code": "b"})
+        .do(() => jest.advanceTimersByTime(6))
+        .keyup({"code": "c"})
+        .do(() => jest.advanceTimersByTime(15));
+    jest.runOnlyPendingTimers();
+    expect(chars).toStrictEqual(["c"]);
+});
+
+test("keys type with throttling 2", () => {
+    jest.useFakeTimers();
+    const cmd = new StubCmd(true);
+    let chars: Array<string> = [];
+    binding = bindings.keysTypeBinder()
+        .toProduce(() => cmd)
+        .then((_, i) => {
+            chars = i.keys.map(k => k.code);
+        })
+        .throttle(15)
+        .on(elt)
+        .bind();
+
+    robot(elt)
+        .keyup({"code": "z"})
+        .do(() => jest.advanceTimersByTime(1))
+        .keyup({"code": "a"})
+        .do(() => jest.advanceTimersByTime(14))
+        .keyup({"code": "b"})
+        .do(() => jest.advanceTimersByTime(15))
+        .keyup({"code": "c"})
+        .do(() => jest.advanceTimersByTime(10));
+    jest.runOnlyPendingTimers();
+    expect(chars).toStrictEqual(["a", "b", "c"]);
+});
+
+test("keys with cancel", () => {
+    jest.useFakeTimers();
+    const fn = jest.fn();
+    binding = bindings.keysTypeBinder()
+        .toProduce(() => new StubCmd(true))
+        .on(elt)
+        .cancel(fn)
+        .bind();
+
+    robot(elt)
+        .keyup({"code": "z"});
+    binding.interaction.fsm.onCancelling();
+
+    expect(binding.timesCancelled).toStrictEqual(1);
+    expect(fn).toHaveBeenCalledTimes(1);
+});
+
+test("key binding with invalid interaction key data", () => {
+    binding = new KeysBinder(mock<UndoHistory>(), mock<Logger>(), ctx, undefined)
+        .usingInteraction(() => new Press())
+        .toProduce(() => new StubCmd(true))
+        .on(elt)
+        .with("z")
+        .bind();
+
+    robot(elt)
+        .mousedown();
+
+    expect(ctx.commands).toHaveLength(0);
+    expect(binding.timesEnded).toStrictEqual(0);
 });
