@@ -32,7 +32,7 @@ export interface KeyInteractionBinder<I extends Interaction<D>, D extends Intera
 
     end(fn: () => void): KeyInteractionBinder<I, D>;
 
-    with(...codes: ReadonlyArray<string>): KeyInteractionBinder<I, D>;
+    with(isCode: boolean, ...keysOrCodes: ReadonlyArray<string>): KeyInteractionBinder<I, D>;
 
     stopImmediatePropagation(): KeyInteractionBinder<I, D>;
 
