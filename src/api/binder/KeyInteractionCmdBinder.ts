@@ -42,7 +42,7 @@ export interface KeyInteractionCmdBinder<C extends Command, I extends Interactio
 
     end(fn: (c: C, i: D) => void): KeyInteractionCmdBinder<C, I, D>;
 
-    with(...codes: ReadonlyArray<string>): KeyInteractionCmdBinder<C, I, D>;
+    with(isCode: boolean, ...keysOrCodes: ReadonlyArray<string>): KeyInteractionCmdBinder<C, I, D>;
 
     stopImmediatePropagation(): KeyInteractionCmdBinder<C, I, D>;
 

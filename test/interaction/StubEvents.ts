@@ -141,12 +141,13 @@ export function createMouseEvent(type: "auxclick" | "click" | "mousedown" | "mou
     });
 }
 
-export function createKeyEvent(type: "keydown" | "keyup", keyCode: string): KeyboardEvent {
+export function createKeyEvent(type: "keydown" | "keyup", key: string = "", code: string = ""): KeyboardEvent {
     return new KeyboardEvent(type, {
         "cancelable": false,
         "bubbles": true,
         "view": window,
-        "code": keyCode,
+        code,
+        key,
         "repeat": false
     });
 }

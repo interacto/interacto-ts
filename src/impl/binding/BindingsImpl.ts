@@ -289,7 +289,7 @@ export class BindingsImpl extends Bindings {
 
     /**
      * Creates a binding that uses the DnD interaction.
-     * @param cancellable - True: the escape key will cancels the DnD.
+     * @param cancellable - True: the escape key will cancel the DnD.
      */
     public dndBinder(cancellable: boolean): PartialPointSrcTgtBinder {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
@@ -322,7 +322,7 @@ export class BindingsImpl extends Bindings {
     }
 
     /**
-     * Creates a binding that uses the multiple key typings interaction.
+     * Creates a binding that uses the multiple key typing interaction.
      */
     public keysTypeBinder(): PartialKeysBinder {
         return new KeysBinder(this.undoHistory, this.logger, this.observer)

@@ -125,22 +125,32 @@ test("key press modifier OK", () => {
 
 test("key press with routine OK", () => {
     binding = bindings.keyPressBinder(false)
-        .with("b")
+        .with(false, "b")
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
-    robot(elt).keydown({"code": "b"});
+    robot(elt).keydown({"key": "b", "code": "c"});
+    expect(ctx.commands).toHaveLength(1);
+});
+
+test("key press with routine OK isCode true", () => {
+    binding = bindings.keyPressBinder(false)
+        .with(true, "KeyB")
+        .on(elt)
+        .toProduce(() => new StubCmd(true))
+        .bind();
+    robot(elt).keydown({"code": "KeyB", "key": "KeyC"});
     expect(ctx.commands).toHaveLength(1);
 });
 
 test("key press std key with when false", () => {
     binding = bindings.keyPressBinder(false)
-        .with("b")
+        .with(false, "b")
         .on(elt)
         .when(_i => false)
         .toProduce(() => new StubCmd(true))
         .bind();
-    robot(elt).keydown({"code": "b"});
+    robot(elt).keydown({"key": "b"});
     expect(ctx.commands).toHaveLength(0);
 });
 
@@ -148,36 +158,56 @@ test("key press std key with when true", () => {
     binding = bindings.keyPressBinder(false)
         .toProduce(() => new StubCmd(true))
         .on(elt)
-        .with("c")
-        .when(i => i.code === "c")
+        .with(false, "c")
+        .when(i => i.key === "c")
         .bind();
-    robot(elt).keydown({"code": "c"});
+    robot(elt).keydown({"key": "c"});
     expect(ctx.commands).toHaveLength(1);
 });
 
 test("key press with routine KO 1", () => {
     binding = bindings.keyPressBinder(false)
-        .with("c")
+        .with(false, "c")
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
-    robot(elt).keydown({"code": "d"});
+    robot(elt).keydown({"key": "d", "code": "c"});
+    expect(ctx.commands).toHaveLength(0);
+});
+
+test("key press with routine KO 1 isCode true", () => {
+    binding = bindings.keyPressBinder(false)
+        .with(true, "KeyB")
+        .on(elt)
+        .toProduce(() => new StubCmd(true))
+        .bind();
+    robot(elt).keydown({"key": "KeyB", "code": "KeyC"});
     expect(ctx.commands).toHaveLength(0);
 });
 
 test("key press with routine KO several keys", () => {
     binding = bindings.keyPressBinder(false)
-        .with("d", "e")
+        .with(false, "d", "e")
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
-    robot(elt).keydown({"code": "d"});
+    robot(elt).keydown({"key": "d"});
+    expect(ctx.commands).toHaveLength(0);
+});
+
+test("key press with routine KO several keys isCode true", () => {
+    binding = bindings.keyPressBinder(false)
+        .with(true, "KeyD", "KeyE")
+        .on(elt)
+        .toProduce(() => new StubCmd(true))
+        .bind();
+    robot(elt).keydown({"key": "KeyD"});
     expect(ctx.commands).toHaveLength(0);
 });
 
 test("key press with routine OK modifier", () => {
     binding = bindings.keyPressBinder(true)
-        .with("Alt")
+        .with(false, "Alt")
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
@@ -187,17 +217,29 @@ test("key press with routine OK modifier", () => {
     expect(ctx.commands).toHaveLength(1);
 });
 
+test("key press with routine OK modifier isCode true", () => {
+    binding = bindings.keyPressBinder(true)
+        .with(true, "AltLeft")
+        .on(elt)
+        .toProduce(() => new StubCmd(true))
+        .bind();
+    const key = createKeyEvent("keydown", "", "AltLeft");
+    jest.spyOn(key, "altKey", "get").mockReturnValue(true);
+    elt.dispatchEvent(key);
+    expect(ctx.commands).toHaveLength(1);
+});
+
 test("key press first then end", () => {
     const first = jest.fn();
     const end = jest.fn();
     binding = bindings.keyPressBinder(false)
-        .with("f")
+        .with(false, "f")
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .first(first)
         .end(end)
         .bind();
-    robot(elt).keydown({"code": "f"});
+    robot(elt).keydown({"key": "f"});
     expect(first).toHaveBeenCalledTimes(1);
     expect(end).toHaveBeenCalledTimes(1);
 });
@@ -249,14 +291,14 @@ test("keys type first end", () => {
 test("keys type with 1", () => {
     binding = bindings.keysTypeBinder()
         .on(elt)
-        .with("a", "b")
+        .with(false, "a", "b")
         .toProduce(() => new StubCmd(true))
         .bind();
     robot(elt)
-        .keydown({"code": "a"})
-        .keyup({"code": "a"})
-        .keydown({"code": "x"})
-        .keyup({"code": "x"});
+        .keydown({"key": "a"})
+        .keyup({"key": "a"})
+        .keydown({"key": "x"})
+        .keyup({"key": "x"});
     elt.dispatchEvent(createKeyEvent("keydown", "a"));
     elt.dispatchEvent(createKeyEvent("keyup", "a"));
     elt.dispatchEvent(createKeyEvent("keydown", "x"));
@@ -268,14 +310,14 @@ test("keys type with 1", () => {
 test("keys type with 2", () => {
     binding = bindings.keysTypeBinder()
         .on(elt)
-        .with("a")
+        .with(false, "a")
         .toProduce(() => new StubCmd(true))
         .bind();
     robot(elt)
-        .keydown({"code": "a"})
-        .keyup({"code": "a"})
-        .keydown({"code": "b"})
-        .keyup({"code": "b"});
+        .keydown({"key": "a"})
+        .keyup({"key": "a"})
+        .keydown({"key": "b"})
+        .keyup({"key": "b"});
     elt.dispatchEvent(createKeyEvent("keydown", "a"));
     elt.dispatchEvent(createKeyEvent("keyup", "a"));
     elt.dispatchEvent(createKeyEvent("keydown", "b"));
@@ -287,14 +329,14 @@ test("keys type with 2", () => {
 test("keys type with 3", () => {
     binding = bindings.keysTypeBinder()
         .on(elt)
-        .with("z", "b")
+        .with(false, "z", "b")
         .toProduce(() => new StubCmd(true))
         .bind();
     robot(elt)
-        .keydown({"code": "z"})
-        .keyup({"code": "z"})
-        .keydown({"code": "b"})
-        .keyup({"code": "b"});
+        .keydown({"key": "z"})
+        .keyup({"key": "z"})
+        .keydown({"key": "b"})
+        .keyup({"key": "b"});
     jest.runOnlyPendingTimers();
     expect(ctx.commands).toHaveLength(1);
 });
@@ -302,14 +344,14 @@ test("keys type with 3", () => {
 test("keys type with 4", () => {
     binding = bindings.keysTypeBinder()
         .on(elt)
-        .with("z", "b")
+        .with(false, "z", "b")
         .toProduce(() => new StubCmd(true))
         .bind();
     robot(elt)
-        .keydown({"code": "b"})
-        .keyup({"code": "b"})
-        .keydown({"code": "z"})
-        .keyup({"code": "z"});
+        .keydown({"key": "b"})
+        .keyup({"key": "b"})
+        .keydown({"key": "z"})
+        .keyup({"key": "z"});
     jest.runOnlyPendingTimers();
     expect(ctx.commands).toHaveLength(1);
 });
@@ -317,12 +359,12 @@ test("keys type with 4", () => {
 test("keys type with nothing", () => {
     binding = bindings.keysTypeBinder()
         .on(elt)
-        .with()
+        .with(false)
         .toProduce(() => new StubCmd(true))
         .bind();
     robot(elt)
-        .keydown({"code": "b"})
-        .keyup({"code": "b"});
+        .keydown({"key": "b"})
+        .keyup({"key": "b"});
     jest.runOnlyPendingTimers();
     expect(ctx.commands).toHaveLength(1);
 });
@@ -330,12 +372,12 @@ test("keys type with nothing", () => {
 test("keys type with 5", () => {
     binding = bindings.keysTypeBinder()
         .on(elt)
-        .with("b")
+        .with(false, "b")
         .toProduce(() => new StubCmd(true))
         .bind();
     robot(elt)
-        .keydown({"code": "b"})
-        .keyup({"code": "b"});
+        .keydown({"key": "b"})
+        .keyup({"key": "b"});
     jest.runOnlyPendingTimers();
     expect(ctx.commands).toHaveLength(1);
 });
@@ -343,14 +385,14 @@ test("keys type with 5", () => {
 test("keys type with 3 mixed keydown up", () => {
     binding = bindings.keysTypeBinder()
         .on(elt)
-        .with("z", "b")
+        .with(false, "z", "b")
         .toProduce(() => new StubCmd(true))
         .bind();
     robot(elt)
-        .keydown({"code": "z"})
-        .keydown({"code": "b"})
-        .keyup({"code": "z"})
-        .keyup({"code": "b"});
+        .keydown({"key": "z"})
+        .keydown({"key": "b"})
+        .keyup({"key": "z"})
+        .keyup({"key": "b"});
     jest.runOnlyPendingTimers();
     expect(ctx.commands).toHaveLength(1);
 });
@@ -703,7 +745,7 @@ test("key binding with invalid interaction key data", () => {
         .usingInteraction(() => new Press())
         .toProduce(() => new StubCmd(true))
         .on(elt)
-        .with("z")
+        .with(false, "z")
         .bind();
 
     robot(elt)

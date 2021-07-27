@@ -24,7 +24,7 @@ import type {Widget} from "./BaseBinderBuilder";
 export interface KeyInteractionCmdUpdateBinder<C extends Command, I extends Interaction<D>, D extends InteractionData>
     extends KeyInteractionBinderBuilder<I, D>, InteractionUpdateBinder<I, D> {
 
-    with(...codes: ReadonlyArray<string>): KeyInteractionCmdUpdateBinder<C, I, D>;
+    with(isCode: boolean, ...keysOrCodes: ReadonlyArray<string>): KeyInteractionCmdUpdateBinder<C, I, D>;
 
     then(fn: ((c: C, i: D) => void) | ((c: C) => void)): KeyInteractionCmdUpdateBinder<C, I, D>;
 

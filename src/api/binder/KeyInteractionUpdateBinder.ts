@@ -39,7 +39,7 @@ export interface KeyInteractionUpdateBinder<I extends Interaction<D>, D extends 
 
     throttle(timeout: number): KeyInteractionUpdateBinder<I, D>;
 
-    with(...codes: ReadonlyArray<string>): KeyInteractionUpdateBinder<I, D>;
+    with(isCode: boolean, ...keysOrCodes: ReadonlyArray<string>): KeyInteractionUpdateBinder<I, D>;
 
     stopImmediatePropagation(): KeyInteractionUpdateBinder<I, D>;
 
