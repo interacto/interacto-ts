@@ -13,17 +13,16 @@
  */
 
 import {ScrollDataImpl} from "../../src/impl/interaction/ScrollDataImpl";
-import {mock} from "jest-mock-extended";
 
 let data: ScrollDataImpl;
 let evt: UIEvent;
 
 beforeEach(() => {
     data = new ScrollDataImpl();
-
     evt = new UIEvent("mousedown");
-    const view = mock<Window>();
-    Object.defineProperties(view, {
+
+    const newWindow = {...window};
+    Object.defineProperties(newWindow, {
         "scrollX": {
             get(): number {
                 return 14;
@@ -35,22 +34,14 @@ beforeEach(() => {
             }
         }
     });
-    jest.spyOn(evt, "view", "get")
-        .mockReturnValue(view);
+    jest.spyOn(global, "window", "get")
+        .mockReturnValue(newWindow);
 });
 
 test("setScrollData view is not null", () => {
     data.setScrollData(evt);
     expect(data.scrollX).toBe(14);
     expect(data.scrollY).toBe(16);
-});
-
-test("setScrollData view is null", () => {
-    jest.spyOn(evt, "view", "get")
-        .mockReturnValue(null);
-    data.setScrollData(evt);
-    expect(data.scrollX).toBe(0);
-    expect(data.scrollX).toBe(0);
 });
 
 test("flush", () => {
