@@ -21,7 +21,7 @@ import type {EventType} from "../../api/fsm/EventType";
 /**
  * This transition corresponds to the scroll of a window
  */
-export class ScrollTransition extends TransitionBase<UIEvent> {
+export class ScrollTransition extends TransitionBase<Event> {
     /**
      * Creates the transition.
      */
@@ -29,7 +29,7 @@ export class ScrollTransition extends TransitionBase<UIEvent> {
         super(srcState, tgtState);
     }
 
-    public accept(event: Event): event is UIEvent {
+    public accept(event: Event): event is Event {
         return isScrollEvent(event);
     }
 

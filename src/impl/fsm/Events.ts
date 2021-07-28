@@ -107,8 +107,8 @@ export function isMouseDownEvent(event: Event): event is MouseEvent {
     return event instanceof MouseEvent && isEventType(event.type) && event.type === "mousedown";
 }
 
-export function isScrollEvent(event: Event): event is UIEvent {
-    return event instanceof UIEvent && isEventType(event.type) && event.type === "scroll";
+export function isScrollEvent(event: Event): event is Event {
+    return isEventType(event.type) && event.type === "scroll";
 }
 
 export enum KeyCode {
