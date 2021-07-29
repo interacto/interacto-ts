@@ -20,10 +20,10 @@ import {StdState} from "../../fsm/StdState";
 import {SubFSMTransition} from "../../fsm/SubFSMTransition";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
-import {MoveTransition} from "../../fsm/MoveTransition";
 import type {PointData} from "../../../api/interaction/PointData";
 import {InteractionBase} from "../InteractionBase";
 import {PointDataImpl} from "../PointDataImpl";
+import {MouseMoveTransition} from "../../fsm/MouseMoveTransition";
 
 export class DoubleClickFSM extends FSMImpl {
     /** The time gap between the two spinner events. */
@@ -91,7 +91,7 @@ export class DoubleClickFSM extends FSMImpl {
             this.setCheckButton(this.firstClickFSM.getCheckButton());
         };
 
-        const move = new MoveTransition(clicked, cancelled);
+        const move = new MouseMoveTransition(clicked, cancelled);
         move.isGuardOK = (event: Event): boolean => (this.checkButton === undefined || event instanceof MouseEvent &&
                     event.button === this.checkButton);
 

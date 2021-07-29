@@ -13,13 +13,13 @@
  */
 
 import type {FSMHandler} from "../../../src/interacto";
-import {Mouseout, PointDataImpl} from "../../../src/interacto";
+import {MouseLeave, PointDataImpl} from "../../../src/interacto";
 import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
 import {createMouseEvent, createMouseEvent2, robot} from "../StubEvents";
 
-let interaction: Mouseout;
-let interactionWithoutBubbling: Mouseout;
+let interaction: MouseLeave;
+let interactionWithoutBubbling: MouseLeave;
 let canvas: HTMLElement;
 let handler: FSMHandler & MockProxy<FSMHandler>;
 let handler2: FSMHandler & MockProxy<FSMHandler>;
@@ -28,12 +28,12 @@ beforeEach(() => {
     handler = mock<FSMHandler>();
     handler2 = mock<FSMHandler>();
 
-    interaction = new Mouseout(true);
+    interaction = new MouseLeave(true);
     interaction.log(true);
     interaction.fsm.log = true;
     interaction.fsm.addHandler(handler);
 
-    interactionWithoutBubbling = new Mouseout(false);
+    interactionWithoutBubbling = new MouseLeave(false);
     interactionWithoutBubbling.log(true);
     interactionWithoutBubbling.fsm.log = true;
     interactionWithoutBubbling.fsm.addHandler(handler2);
@@ -46,7 +46,7 @@ test("cannot create several times the FSM", () => {
     expect(interaction.fsm.states).toHaveLength(2);
 });
 
-test("mouseout sent to the interaction starts and stops the Mouseout interaction", () => {
+test("mouseout sent to the interaction starts and stops the MouseLeave interaction", () => {
     interaction.registerToNodes([canvas]);
 
     const evt = createMouseEvent("mouseout",
@@ -57,7 +57,7 @@ test("mouseout sent to the interaction starts and stops the Mouseout interaction
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
 });
 
-test("mouseout on an element starts and stops the Mouseout interaction", () => {
+test("mouseout on an element starts and stops the MouseLeave interaction", () => {
     interaction.registerToNodes([canvas]);
 
     const evt = createMouseEvent("mouseout",
@@ -68,7 +68,7 @@ test("mouseout on an element starts and stops the Mouseout interaction", () => {
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
 });
 
-test("mouseleave sent to the interaction starts and stops the Mouseout interaction if bubbling disabled", () => {
+test("mouseleave sent to the interaction starts and stops the MouseLeave interaction if bubbling disabled", () => {
     interactionWithoutBubbling.registerToNodes([canvas]);
 
     const evt = createMouseEvent("mouseleave",
@@ -79,7 +79,7 @@ test("mouseleave sent to the interaction starts and stops the Mouseout interacti
     expect(handler2.fsmStops).toHaveBeenCalledTimes(1);
 });
 
-test("mouseleave on an element starts and stops the Mouseout interaction if bubbling disabled", () => {
+test("mouseleave on an element starts and stops the MouseLeave interaction if bubbling disabled", () => {
     interactionWithoutBubbling.registerToNodes([canvas]);
 
     const evt = createMouseEvent("mouseleave",

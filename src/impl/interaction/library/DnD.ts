@@ -16,15 +16,15 @@ import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {StdState} from "../../fsm/StdState";
 import {TerminalState} from "../../fsm/TerminalState";
 import {CancellingState} from "../../fsm/CancellingState";
-import {MoveTransition} from "../../fsm/MoveTransition";
 import {EscapeKeyPressureTransition} from "../../fsm/EscapeKeyPressureTransition";
 import type {SrcTgtPointsData} from "../../../api/interaction/SrcTgtPointsData";
 import {FSMImpl} from "../../fsm/FSMImpl";
-import {PressureTransition} from "../../fsm/PressureTransition";
+import {MouseDownTransition} from "../../fsm/MouseDownTransition";
 import {ReleaseTransition} from "../../fsm/ReleaseTransition";
 import {InteractionBase} from "../InteractionBase";
 import {SrcTgtPointsDataImpl} from "../SrcTgtPointsDataImpl";
 import type {PointData} from "../../../api/interaction/PointData";
+import {MouseMoveTransition} from "../../fsm/MouseMoveTransition";
 
 /**
  * The FSM for DnD interactions.
@@ -60,7 +60,7 @@ class DnDFSM extends FSMImpl {
         this.addState(cancelled);
         this.startingState = dragged;
 
-        const press = new PressureTransition(this.initState, pressed);
+        const press = new MouseDownTransition(this.initState, pressed);
         press.action = (event: MouseEvent): void => {
             this.buttonToCheck = event.button;
             dataHandler.onPress(event);
@@ -74,11 +74,11 @@ class DnDFSM extends FSMImpl {
             dataHandler.onDrag(event);
         };
 
-        const move = new MoveTransition(pressed, dragged);
+        const move = new MouseMoveTransition(pressed, dragged);
         move.isGuardOK = guardMove;
         move.action = actionMove;
 
-        const moveDrag = new MoveTransition(dragged, dragged);
+        const moveDrag = new MouseMoveTransition(dragged, dragged);
         moveDrag.isGuardOK = guardMove;
         moveDrag.action = actionMove;
 

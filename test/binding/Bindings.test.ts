@@ -79,7 +79,7 @@ test("change binding observer", () => {
 });
 
 test("press binder", () => {
-    bindings.pressBinder()
+    bindings.mouseDownBinder()
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
@@ -89,7 +89,7 @@ test("press binder", () => {
 });
 
 test("log cmd binding", () => {
-    bindings.pressBinder()
+    bindings.mouseDownBinder()
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .log(LogLevel.command, LogLevel.binding)
@@ -100,7 +100,7 @@ test("log cmd binding", () => {
 });
 
 test("undoable command registered", () => {
-    bindings.pressBinder()
+    bindings.mouseDownBinder()
         .on(elt)
         .toProduce(() => new StubUndoableCmd(true))
         .bind();
@@ -111,7 +111,7 @@ test("undoable command registered", () => {
 test("undo redo binders on undo", () => {
     const undo = document.createElement("button");
     const redo = document.createElement("button");
-    bindings.pressBinder()
+    bindings.mouseDownBinder()
         .on(elt)
         .toProduce(() => new StubUndoableCmd(true))
         .bind();
@@ -128,7 +128,7 @@ test("undo redo binders on undo", () => {
 test("undo redo binders on redo", () => {
     const undo = document.createElement("button");
     const redo = document.createElement("button");
-    bindings.pressBinder()
+    bindings.mouseDownBinder()
         .on(elt)
         .toProduce(() => new StubUndoableCmd(true))
         .bind();
@@ -147,7 +147,7 @@ test("press binder with ElementRef", () => {
     const eltRef: EltRef<EventTarget> = {
         "nativeElement": elt
     };
-    bindings.pressBinder()
+    bindings.mouseDownBinder()
         .on(eltRef)
         .toProduce(() => new StubCmd(true))
         .bind();
@@ -176,7 +176,7 @@ test("double click binder", () => {
 });
 
 test("mouseover binder", () => {
-    bindings.mouseoverBinder(true)
+    bindings.mouseEnterBinder(true)
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
@@ -185,7 +185,7 @@ test("mouseover binder", () => {
 });
 
 test("mouseout binder", () => {
-    bindings.mouseoutBinder(true)
+    bindings.mouseLeaveBinder(true)
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
@@ -194,7 +194,7 @@ test("mouseout binder", () => {
 });
 
 test("mousemove binder", () => {
-    bindings.mousemoveBinder()
+    bindings.mouseMoveBinder()
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
@@ -541,7 +541,7 @@ test("that keysPress binder works", () => {
 test("that 'ifCannotExecute' is correctly called", () => {
     const mockFn = jest.fn();
     const cmd = new StubCmd(false);
-    bindings.pressBinder()
+    bindings.mouseDownBinder()
         .on(elt)
         .toProduce((_i: PointData) => cmd)
         .ifCannotExecute(mockFn)

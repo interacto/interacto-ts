@@ -30,7 +30,7 @@ import type {Logger} from "../../src/api/logging/Logger";
 import {TransitionBase} from "../../src/impl/fsm/TransitionBase";
 import type {EventType} from "../../src/api/fsm/EventType";
 import type {InputState} from "../../src/api/fsm/InputState";
-import {PressureTransition} from "../../src/impl/fsm/PressureTransition";
+import {MouseDownTransition} from "../../src/impl/fsm/MouseDownTransition";
 
 let interaction: InteractionStub;
 let fsm: FSMImpl & MockProxy<FSMImpl>;
@@ -210,7 +210,7 @@ test("prevent default on processed event", () => {
     jest.spyOn(evt, "preventDefault");
     jest.spyOn(evt, "stopImmediatePropagation");
     currentState = new InitState(fsm, "s");
-    new PressureTransition(currentState, mock<StdState>());
+    new MouseDownTransition(currentState, mock<StdState>());
     interaction.preventDefault = true;
     interaction.stopImmediatePropagation = false;
     interaction.processEvent(evt);
@@ -226,7 +226,7 @@ test("stop propa on processed event", () => {
     jest.spyOn(evt, "preventDefault");
     jest.spyOn(evt, "stopImmediatePropagation");
     currentState = new InitState(fsm, "s");
-    new PressureTransition(currentState, mock<StdState>());
+    new MouseDownTransition(currentState, mock<StdState>());
     interaction.preventDefault = false;
     interaction.stopImmediatePropagation = true;
     interaction.processEvent(evt);

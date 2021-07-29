@@ -18,63 +18,51 @@ import type {PointData} from "../../../api/interaction/PointData";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {PointDataImpl} from "../PointDataImpl";
-import {MouseoverTransition} from "../../fsm/MouseoverTransition";
-import {MouseenterTransition} from "../../fsm/MouseenterTransition";
-import type {TransitionBase} from "../../fsm/TransitionBase";
+import {MouseMoveTransition} from "../../fsm/MouseMoveTransition";
 
 /**
  * The FSM for mouseover interactions
  */
-export class MouseoverFSM extends FSMImpl {
-    /**
-     * Indicates if event bubbling is enabled for the interaction
-     */
-    private readonly withBubbling: boolean;
+export class MouseMoveFSM extends FSMImpl {
 
     /**
      * Creates the FSM
      */
-    public constructor(withBubbling: boolean) {
+    public constructor() {
         super();
-        this.withBubbling = withBubbling;
     }
 
-    public override buildFSM(dataHandler?: MouseoverFSMHandler): void {
+    public override buildFSM(dataHandler?: MouseMoveFSMHandler): void {
         if (this.states.length > 1) {
             return;
         }
 
         super.buildFSM(dataHandler);
-        const entered = new TerminalState(this, "entered");
-        this.addState(entered);
+        const moved = new TerminalState(this, "moved");
+        this.addState(moved);
 
-        let enter: TransitionBase<MouseEvent>;
-        if (this.withBubbling) {
-            enter = new MouseoverTransition(this.initState, entered);
-        } else {
-            enter = new MouseenterTransition(this.initState, entered);
-        }
-        enter.action = (event: MouseEvent): void => {
-            dataHandler?.onEnter(event);
+        const move = new MouseMoveTransition(this.initState, moved);
+        move.action = (event: MouseEvent): void => {
+            dataHandler?.onMove(event);
         };
     }
 }
 
-interface MouseoverFSMHandler extends FSMDataHandler {
-    onEnter(event: MouseEvent): void;
+interface MouseMoveFSMHandler extends FSMDataHandler {
+    onMove(event: MouseEvent): void;
 }
 
-export class Mouseover extends InteractionBase<PointData, PointDataImpl, MouseoverFSM> {
-    private readonly handler: MouseoverFSMHandler;
+export class MouseMove extends InteractionBase<PointData, PointDataImpl, MouseMoveFSM> {
+    private readonly handler: MouseMoveFSMHandler;
 
     /**
      * Creates the interaction.
      */
-    public constructor(withBubbling: boolean) {
-        super(new MouseoverFSM(withBubbling), new PointDataImpl());
+    public constructor() {
+        super(new MouseMoveFSM(), new PointDataImpl());
 
         this.handler = {
-            "onEnter": (evt: MouseEvent): void => {
+            "onMove": (evt: MouseEvent): void => {
                 this._data.copy(evt);
             },
             "reinitData": (): void => {

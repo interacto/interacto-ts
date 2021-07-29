@@ -14,14 +14,14 @@
 
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {TerminalState} from "../../fsm/TerminalState";
-import {PressureTransition} from "../../fsm/PressureTransition";
+import {MouseDownTransition} from "../../fsm/MouseDownTransition";
 import type {PointData} from "../../../api/interaction/PointData";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {PointDataImpl} from "../PointDataImpl";
 
-export class PressFSM extends FSMImpl {
-    public override buildFSM(dataHandler?: PressFSMHandler): void {
+export class MouseDownFSM extends FSMImpl {
+    public override buildFSM(dataHandler?: MouseDownFSMHandler): void {
         if (this.states.length > 1) {
             return;
         }
@@ -29,28 +29,28 @@ export class PressFSM extends FSMImpl {
         const pressed: TerminalState = new TerminalState(this, "pressed");
         this.addState(pressed);
 
-        const pressure = new PressureTransition(this.initState, pressed);
+        const pressure = new MouseDownTransition(this.initState, pressed);
         pressure.action = (event: MouseEvent): void => {
             dataHandler?.initToPress(event);
         };
     }
 }
 
-interface PressFSMHandler extends FSMDataHandler {
+interface MouseDownFSMHandler extends FSMDataHandler {
     initToPress(event: MouseEvent): void;
 }
 
 /**
- * A user interaction for pressing down the mouse button.
+ * A user interaction for pressing down a mouse button.
  */
-export class Press extends InteractionBase<PointData, PointDataImpl, PressFSM> {
+export class MouseDown extends InteractionBase<PointData, PointDataImpl, MouseDownFSM> {
     /**
      * Creates the interaction.
      */
-    private readonly handler: PressFSMHandler;
+    private readonly handler: MouseDownFSMHandler;
 
     public constructor() {
-        super(new PressFSM(), new PointDataImpl());
+        super(new MouseDownFSM(), new PointDataImpl());
 
         this.handler = {
             "initToPress": (evt: MouseEvent): void => {

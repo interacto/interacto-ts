@@ -13,30 +13,22 @@
  */
 
 import type {FSMHandler} from "../../../src/interacto";
-import {Mouseover, PointDataImpl} from "../../../src/interacto";
+import {PointDataImpl, MouseMove} from "../../../src/interacto";
 import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
 import {createMouseEvent, createMouseEvent2, robot} from "../StubEvents";
 
-let interaction: Mouseover;
-let interactionWithoutBubbling: Mouseover;
+let interaction: MouseMove;
 let canvas: HTMLElement;
 let handler: FSMHandler & MockProxy<FSMHandler>;
-let handler2: FSMHandler & MockProxy<FSMHandler>;
 
 beforeEach(() => {
     handler = mock<FSMHandler>();
-    handler2 = mock<FSMHandler>();
 
-    interaction = new Mouseover(true);
+    interaction = new MouseMove();
     interaction.log(true);
     interaction.fsm.log = true;
     interaction.fsm.addHandler(handler);
-
-    interactionWithoutBubbling = new Mouseover(false);
-    interactionWithoutBubbling.log(true);
-    interactionWithoutBubbling.fsm.log = true;
-    interactionWithoutBubbling.fsm.addHandler(handler2);
 
     canvas = document.createElement("canvas");
 });
@@ -46,10 +38,10 @@ test("cannot create several times the FSM", () => {
     expect(interaction.fsm.states).toHaveLength(2);
 });
 
-test("mouseover sent to the interaction starts and stops the Mouseover interaction", () => {
+test("mousemove sent to the interaction starts and stops the MouseMove interaction", () => {
     interaction.registerToNodes([canvas]);
 
-    const evt = createMouseEvent("mouseover",
+    const evt = createMouseEvent("mousemove",
         canvas, 11, 43, 12, 11, 1);
     interaction.processEvent(evt);
 
@@ -57,49 +49,15 @@ test("mouseover sent to the interaction starts and stops the Mouseover interacti
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
 });
 
-test("mouseover on an element starts and stops the Mouseover interaction", () => {
+test("mousemove on an element starts and stops the MouseMove interaction", () => {
     interaction.registerToNodes([canvas]);
 
-    const evt = createMouseEvent("mouseover",
+    const evt = createMouseEvent("mousemove",
         canvas, 11, 43, 12, 11, 1);
     canvas.dispatchEvent(evt);
 
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
-});
-
-test("mouseenter sent to the interaction starts and stops the Mouseover interaction if bubbling disabled", () => {
-    interactionWithoutBubbling.registerToNodes([canvas]);
-
-    const evt = createMouseEvent("mouseenter",
-        canvas, 11, 43, 12, 11, 1);
-    interactionWithoutBubbling.processEvent(evt);
-
-    expect(handler2.fsmStarts).toHaveBeenCalledTimes(1);
-    expect(handler2.fsmStops).toHaveBeenCalledTimes(1);
-});
-
-test("mouseenter on an element starts and stops the Mouseover interaction if bubbling disabled", () => {
-    interactionWithoutBubbling.registerToNodes([canvas]);
-
-    const evt = createMouseEvent("mouseenter",
-        canvas, 11, 43, 12, 11, 1);
-    canvas.dispatchEvent(evt);
-
-    expect(handler2.fsmStarts).toHaveBeenCalledTimes(1);
-    expect(handler2.fsmStops).toHaveBeenCalledTimes(1);
-});
-
-test("mouseenter doesn't trigger the interaction if bubbling enabled", () => {
-    interaction.registerToNodes([canvas]);
-    robot().mouseenter(canvas);
-    expect(handler.fsmStarts).not.toHaveBeenCalled();
-});
-
-test("mouseover doesn't trigger the interaction if bubbling disabled", () => {
-    interactionWithoutBubbling.registerToNodes([canvas]);
-    robot().mouseover(canvas);
-    expect(handler2.fsmStarts).not.toHaveBeenCalled();
 });
 
 test("other events don't trigger the interaction.", () => {
@@ -137,18 +95,18 @@ test("testMouseEventData", () => {
     handler.fsmStops.mockImplementation(() => {
         data.copy(interaction.data);
     });
-    interaction.processEvent(createMouseEvent2("mouseover", expected));
+    interaction.processEvent(createMouseEvent2("mousemove", expected));
     expect(data).toStrictEqual(expected);
 });
 
-test("testMouseoverOnWidgetData", () => {
+test("testMousemoveOnWidgetData", () => {
     const data = new PointDataImpl();
 
     handler.fsmStops.mockImplementation(() => {
         data.copy(interaction.data);
     });
     interaction.registerToNodes([canvas]);
-    canvas.dispatchEvent(new MouseEvent("mouseover", {"screenX": 111, "screenY": 222, "clientX": 11, "clientY": 22}));
+    canvas.dispatchEvent(new MouseEvent("mousemove", {"screenX": 111, "screenY": 222, "clientX": 11, "clientY": 22}));
     expect(data.clientX).toStrictEqual(11);
     expect(data.clientY).toStrictEqual(22);
     expect(data.screenX).toStrictEqual(111);

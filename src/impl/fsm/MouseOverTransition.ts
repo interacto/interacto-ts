@@ -19,9 +19,9 @@ import {TransitionBase} from "./TransitionBase";
 import type {EventType} from "../../api/fsm/EventType";
 
 /**
- * This transition corresponds to a mouseout of a pointing device.
+ * This transition corresponds to a mouseover of a pointing device.
  */
-export class MouseoutTransition extends TransitionBase<MouseEvent> {
+export class MouseOverTransition extends TransitionBase<MouseEvent> {
     /**
      * Creates the transition.
      */
@@ -34,6 +34,6 @@ export class MouseoutTransition extends TransitionBase<MouseEvent> {
     }
 
     public getAcceptedEvents(): ReadonlyArray<EventType> {
-        return ["mouseout"];
+        return ["mouseover"];
     }
 }

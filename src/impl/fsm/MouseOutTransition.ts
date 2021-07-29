@@ -12,16 +12,16 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {InputState} from "../../api/fsm/InputState";
 import type {OutputState} from "../../api/fsm/OutputState";
+import type {InputState} from "../../api/fsm/InputState";
 import {isEventType} from "./Events";
 import {TransitionBase} from "./TransitionBase";
 import type {EventType} from "../../api/fsm/EventType";
 
 /**
- * This transition corresponds to a move of a button of a pointing device.
+ * This transition corresponds to a mouseout of a pointing device.
  */
-export class MoveTransition extends TransitionBase<MouseEvent> {
+export class MouseOutTransition extends TransitionBase<MouseEvent> {
     /**
      * Creates the transition.
      */
@@ -34,6 +34,6 @@ export class MoveTransition extends TransitionBase<MouseEvent> {
     }
 
     public getAcceptedEvents(): ReadonlyArray<EventType> {
-        return ["mousemove"];
+        return ["mouseout"];
     }
 }

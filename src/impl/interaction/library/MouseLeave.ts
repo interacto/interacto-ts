@@ -18,51 +18,63 @@ import type {PointData} from "../../../api/interaction/PointData";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {PointDataImpl} from "../PointDataImpl";
-import {MousemoveTransition} from "../../fsm/MousemoveTransition";
+import {MouseOutTransition} from "../../fsm/MouseOutTransition";
+import type {TransitionBase} from "../../fsm/TransitionBase";
+import {MouseLeaveTransition} from "../../fsm/MouseLeaveTransition";
 
 /**
- * The FSM for mouseover interactions
+ * The FSM for mouseout interactions
  */
-export class MousemoveFSM extends FSMImpl {
+export class MouseLeaveFSM extends FSMImpl {
+    /**
+     * Indicates if event bubbling is enabled for the interaction
+     */
+    private readonly withBubbling: boolean;
 
     /**
      * Creates the FSM
      */
-    public constructor() {
+    public constructor(withBubbling: boolean) {
         super();
+        this.withBubbling = withBubbling;
     }
 
-    public override buildFSM(dataHandler?: MousemoveFSMHandler): void {
+    public override buildFSM(dataHandler?: MouseLeaveFSMHandler): void {
         if (this.states.length > 1) {
             return;
         }
 
         super.buildFSM(dataHandler);
-        const moved = new TerminalState(this, "moved");
-        this.addState(moved);
+        const exited = new TerminalState(this, "exited");
+        this.addState(exited);
 
-        const move = new MousemoveTransition(this.initState, moved);
-        move.action = (event: MouseEvent): void => {
-            dataHandler?.onMove(event);
+        let exit: TransitionBase<MouseEvent>;
+        if (this.withBubbling) {
+            exit = new MouseOutTransition(this.initState, exited);
+        } else {
+            exit = new MouseLeaveTransition(this.initState, exited);
+        }
+        exit.action = (event: MouseEvent): void => {
+            dataHandler?.onExit(event);
         };
     }
 }
 
-interface MousemoveFSMHandler extends FSMDataHandler {
-    onMove(event: MouseEvent): void;
+interface MouseLeaveFSMHandler extends FSMDataHandler {
+    onExit(event: MouseEvent): void;
 }
 
-export class Mousemove extends InteractionBase<PointData, PointDataImpl, MousemoveFSM> {
-    private readonly handler: MousemoveFSMHandler;
+export class MouseLeave extends InteractionBase<PointData, PointDataImpl, MouseLeaveFSM> {
+    private readonly handler: MouseLeaveFSMHandler;
 
     /**
      * Creates the interaction.
      */
-    public constructor() {
-        super(new MousemoveFSM(), new PointDataImpl());
+    public constructor(withBubbling: boolean) {
+        super(new MouseLeaveFSM(withBubbling), new PointDataImpl());
 
         this.handler = {
-            "onMove": (evt: MouseEvent): void => {
+            "onExit": (evt: MouseEvent): void => {
                 this._data.copy(evt);
             },
             "reinitData": (): void => {

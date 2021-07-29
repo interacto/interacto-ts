@@ -19,9 +19,9 @@ import {TransitionBase} from "./TransitionBase";
 import type {EventType} from "../../api/fsm/EventType";
 
 /**
- * This transition corresponds to a mouseleave of a pointing device.
+ * This transition corresponds to a move of a pointing device.
  */
-export class MouseleaveTransition extends TransitionBase<MouseEvent> {
+export class MouseMoveTransition extends TransitionBase<MouseEvent> {
     /**
      * Creates the transition.
      */
@@ -34,6 +34,6 @@ export class MouseleaveTransition extends TransitionBase<MouseEvent> {
     }
 
     public getAcceptedEvents(): ReadonlyArray<EventType> {
-        return ["mouseleave"];
+        return ["mousemove"];
     }
 }
