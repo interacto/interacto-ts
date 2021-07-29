@@ -36,7 +36,7 @@ import {Swipe} from "../interaction/library/Swipe";
 import {Pan} from "../interaction/library/Pan";
 import {Click} from "../interaction/library/Click";
 import type {PointData} from "../../api/interaction/PointData";
-import {Press} from "../interaction/library/Press";
+import {MouseDown} from "../interaction/library/MouseDown";
 import {DnD} from "../interaction/library/DnD";
 import type {SrcTgtPointsData} from "../../api/interaction/SrcTgtPointsData";
 import {DoubleClick} from "../interaction/library/DoubleClick";
@@ -54,9 +54,9 @@ import {KeysBinder} from "../binder/KeysBinder";
 import {TouchDnD} from "../interaction/library/TouchDnD";
 import {LongPress} from "../interaction/library/LongPress";
 import {Clicks} from "../interaction/library/Clicks";
-import {Mouseout} from "../interaction/library/Mouseout";
-import {Mouseover} from "../interaction/library/Mouseover";
-import {Mousemove} from "../interaction/library/Mousemove";
+import {MouseLeave} from "../interaction/library/MouseLeave";
+import {MouseEnter} from "../interaction/library/MouseEnter";
+import {MouseMove} from "../interaction/library/MouseMove";
 import type {PointsData} from "../../api/interaction/PointsData";
 import type {Widget} from "../../api/binder/BaseBinderBuilder";
 import {Undo} from "../command/library/Undo";
@@ -228,11 +228,11 @@ export class BindingsImpl extends Bindings {
     }
 
     /**
-     * Creates a binding that uses the mouse press interaction.
+     * Creates a binding that uses the mouse button down interaction.
      */
-    public pressBinder(): PartialPointBinder {
+    public mouseDownBinder(): PartialPointBinder {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<Press, PointData>(() => new Press());
+            .usingInteraction<MouseDown, PointData>(() => new MouseDown());
     }
 
     /**
@@ -256,29 +256,29 @@ export class BindingsImpl extends Bindings {
     }
 
     /**
-     * Creates a binding that uses the mouseout interaction.
+     * Creates a binding that uses the MouseLeave interaction.
      * @param withBubbling - True: event bubbling is enabled and events on child elements will be registered
      */
-    public mouseoutBinder(withBubbling: boolean): PartialPointBinder {
+    public mouseLeaveBinder(withBubbling: boolean): PartialPointBinder {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<Mouseout, PointData>(() => new Mouseout(withBubbling));
+            .usingInteraction<MouseLeave, PointData>(() => new MouseLeave(withBubbling));
     }
 
     /**
-     * Creates a binding that uses the mouseover interaction.
+     * Creates a binding that uses the MouseEnter interaction.
      * @param withBubbling - True: event bubbling is enabled and events on child elements will be registered
      */
-    public mouseoverBinder(withBubbling: boolean): PartialPointBinder {
+    public mouseEnterBinder(withBubbling: boolean): PartialPointBinder {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<Mouseover, PointData>(() => new Mouseover(withBubbling));
+            .usingInteraction<MouseEnter, PointData>(() => new MouseEnter(withBubbling));
     }
 
     /**
-     * Creates a binding that uses the mousemove interaction.
+     * Creates a binding that uses the MouseMove interaction.
      */
-    public mousemoveBinder(): PartialPointBinder {
+    public mouseMoveBinder(): PartialPointBinder {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<Mousemove, PointData>(() => new Mousemove());
+            .usingInteraction<MouseMove, PointData>(() => new MouseMove());
     }
 
     /**

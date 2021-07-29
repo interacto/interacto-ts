@@ -20,7 +20,7 @@ import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {InteractionBase} from "../InteractionBase";
 import type {PointData} from "../../../api/interaction/PointData";
-import {PressureTransition} from "../../fsm/PressureTransition";
+import {MouseDownTransition} from "../../fsm/MouseDownTransition";
 import {ReleaseTransition} from "../../fsm/ReleaseTransition";
 import {PointDataImpl} from "../PointDataImpl";
 
@@ -62,7 +62,7 @@ export class LongPressFSM extends FSMImpl {
         this.addState(releasedTooEarly);
         this.addState(timeouted);
 
-        const press = new PressureTransition(this.initState, down);
+        const press = new MouseDownTransition(this.initState, down);
         press.action = (event: MouseEvent): void => {
             this.currentButton = event.button;
             dataHandler?.press(event);

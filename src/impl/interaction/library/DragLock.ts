@@ -19,13 +19,13 @@ import {CancellingState} from "../../fsm/CancellingState";
 import {StdState} from "../../fsm/StdState";
 import {SubFSMTransition} from "../../fsm/SubFSMTransition";
 import {FSMImpl} from "../../fsm/FSMImpl";
-import {MoveTransition} from "../../fsm/MoveTransition";
 import type {SrcTgtPointsData} from "../../../api/interaction/SrcTgtPointsData";
 import {InteractionBase} from "../InteractionBase";
 import type {PointDataImpl} from "../PointDataImpl";
 import {EscapeKeyPressureTransition} from "../../fsm/EscapeKeyPressureTransition";
 import {SrcTgtPointsDataImpl} from "../SrcTgtPointsDataImpl";
 import type {PointData} from "../../../api/interaction/PointData";
+import {MouseMoveTransition} from "../../fsm/MouseMoveTransition";
 
 class DragLockFSM extends FSMImpl {
     public readonly firstDbleClick: DoubleClickFSM;
@@ -97,9 +97,9 @@ class DragLockFSM extends FSMImpl {
         const moveAction = (event: MouseEvent): void => {
             this.getDataHandler()?.onMove(event);
         };
-        const movelock = new MoveTransition(locked, moved);
+        const movelock = new MouseMoveTransition(locked, moved);
         movelock.action = moveAction;
-        const move = new MoveTransition(moved, moved);
+        const move = new MouseMoveTransition(moved, moved);
         move.action = moveAction;
         new EscapeKeyPressureTransition(locked, cancelled);
         new EscapeKeyPressureTransition(moved, cancelled);

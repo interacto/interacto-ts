@@ -164,9 +164,9 @@ export abstract class Bindings {
     abstract dbleClickBinder(): PartialUpdatePointBinder;
 
     /**
-     * Creates a binding that uses the mouse press interaction.
+     * Creates a binding that uses the mouse button down interaction.
      */
-    abstract pressBinder(): PartialPointBinder;
+    abstract mouseDownBinder(): PartialPointBinder;
 
     /**
      * Creates a binding that uses the long press interaction.
@@ -183,21 +183,21 @@ export abstract class Bindings {
     abstract clicksBinder(nbClicks: number): PartialPointsBinder;
 
     /**
-     * Creates a binding that uses the mouseover interaction.
+     * Creates a binding that uses the MouseEnter interaction.
      * @param withBubbling - True: event bubbling is enabled and events on child elements will be registered
      */
-    abstract mouseoverBinder(withBubbling: boolean): PartialPointBinder;
+    abstract mouseEnterBinder(withBubbling: boolean): PartialPointBinder;
 
     /**
-     * Creates a binding that uses the mouseout interaction.
+     * Creates a binding that uses the MouseLeave interaction.
      * @param withBubbling - True: event bubbling is enabled and events on child elements will be registered
      */
-    abstract mouseoutBinder(withBubbling: boolean): PartialPointBinder;
+    abstract mouseLeaveBinder(withBubbling: boolean): PartialPointBinder;
 
     /**
-     * Creates a binding that uses the mousemove interaction.
+     * Creates a binding that uses the MouseMove interaction.
      */
-    abstract mousemoveBinder(): PartialPointBinder;
+    abstract mouseMoveBinder(): PartialPointBinder;
 
     /**
      * Creates a binding that uses the mouse scroll interaction.

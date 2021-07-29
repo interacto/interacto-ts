@@ -31,7 +31,7 @@ import type {EltRef} from "../../src/api/binder/BaseBinderBuilder";
 import {LogLevel} from "../../src/api/logging/LogLevel";
 import clearAllTimers = jest.clearAllTimers;
 import type {UndoHistory} from "../../src/api/undo/UndoHistory";
-import {Press} from "../../src/impl/interaction/library/Press";
+import {MouseDown} from "../../src/impl/interaction/library/MouseDown";
 
 let elt: HTMLElement;
 let binding: Binding<Command, Interaction<InteractionData>, InteractionData> | undefined;
@@ -742,7 +742,7 @@ test("keys with cancel", () => {
 
 test("key binding with invalid interaction key data", () => {
     binding = new KeysBinder(mock<UndoHistory>(), mock<Logger>(), ctx, undefined)
-        .usingInteraction(() => new Press())
+        .usingInteraction(() => new MouseDown())
         .toProduce(() => new StubCmd(true))
         .on(elt)
         .with(false, "z")

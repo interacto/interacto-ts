@@ -13,17 +13,17 @@
  */
 
 import type {FSMHandler} from "../../../src/interacto";
-import {Press} from "../../../src/interacto";
+import {MouseDown} from "../../../src/interacto";
 import {robot} from "../StubEvents";
 import {mock} from "jest-mock-extended";
 
-let interaction: Press;
+let interaction: MouseDown;
 let canvas: HTMLElement;
 let handler: FSMHandler;
 
 beforeEach(() => {
     handler = mock<FSMHandler>();
-    interaction = new Press();
+    interaction = new MouseDown();
     interaction.log(true);
     interaction.fsm.log = true;
     interaction.fsm.addHandler(handler);
@@ -36,7 +36,7 @@ test("build fsm twice does not work", () => {
     expect(interaction.fsm.states).toHaveLength(count);
 });
 
-test("press on the canvas starts and stops interaction Press", () => {
+test("press on the canvas starts and stops MouseDown interaction", () => {
     interaction.registerToNodes([canvas]);
     robot(canvas).mousedown();
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);

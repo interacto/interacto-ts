@@ -20,10 +20,10 @@ import {TerminalState} from "../../src/impl/fsm/TerminalState";
 import {CancellingState} from "../../src/impl/fsm/CancellingState";
 import {mock} from "jest-mock-extended";
 import {createMouseEvent} from "../interaction/StubEvents";
-import {MoveTransition} from "../../src/impl/fsm/MoveTransition";
 import {ReleaseTransition} from "../../src/impl/fsm/ReleaseTransition";
 import {ClickTransition} from "../../src/impl/fsm/ClickTransition";
-import {PressureTransition} from "../../src/impl/fsm/PressureTransition";
+import {MouseDownTransition} from "../../src/impl/fsm/MouseDownTransition";
+import {MouseMoveTransition} from "../../src/impl/fsm/MouseMoveTransition";
 
 class StubTouchFSM extends FSMImpl {
     public cpt: number;
@@ -40,19 +40,19 @@ class StubTouchFSM extends FSMImpl {
         this.addState(released);
         this.addState(cancelled);
 
-        new class extends PressureTransition {
+        new class extends MouseDownTransition {
             public override isGuardOK(event: MouseEvent): boolean {
                 return event.button === cpt;
             }
         }(this.initState, touched);
 
-        new class extends MoveTransition {
+        new class extends MouseMoveTransition {
             public override isGuardOK(event: MouseEvent): boolean {
                 return event.button === cpt;
             }
         }(touched, moved);
 
-        new class extends MoveTransition {
+        new class extends MouseMoveTransition {
             public override isGuardOK(event: MouseEvent): boolean {
                 return event.button === cpt;
             }

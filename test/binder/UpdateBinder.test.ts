@@ -18,7 +18,7 @@ import type {InteractionData} from "../../src/api/interaction/InteractionData";
 import {mock} from "jest-mock-extended";
 import type {Interaction} from "../../src/api/interaction/Interaction";
 import type {BindingsObserver} from "../../src/api/binding/BindingsObserver";
-import {Press} from "../../src/impl/interaction/library/Press";
+import {MouseDown} from "../../src/impl/interaction/library/MouseDown";
 import clearAllMocks = jest.clearAllMocks;
 import type {UndoHistory} from "../../src/api/undo/UndoHistory";
 import {UndoHistoryImpl} from "../../src/impl/undo/UndoHistoryImpl";
@@ -48,7 +48,7 @@ test("that is crashes when calling bind without a command supplier", () => {
 test("that observer is used on bind", () => {
     const obs = mock<BindingsObserver>();
     binder = new UpdateBinder(history, mock<Logger>(), obs)
-        .usingInteraction(() => new Press())
+        .usingInteraction(() => new MouseDown())
         .toProduce(() => mock<Command>());
 
     const binding = binder.bind();

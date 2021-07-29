@@ -16,13 +16,13 @@ import type {FSMImpl} from "../../src/impl/fsm/FSMImpl";
 import {StdState} from "../../src/impl/fsm/StdState";
 import {createMouseEvent, createTouchEvent} from "../interaction/StubEvents";
 import {mock} from "jest-mock-extended";
-import {MousemoveTransition} from "../../src/impl/fsm/MousemoveTransition";
+import {MouseEnterTransition} from "../../src/impl/fsm/MouseEnterTransition";
 
-let tr: MousemoveTransition;
+let tr: MouseEnterTransition;
 let canvas: HTMLCanvasElement;
 
 beforeEach(() => {
-    tr = new MousemoveTransition(new StdState(mock<FSMImpl>(), "a"), new StdState(mock<FSMImpl>(), "b"));
+    tr = new MouseEnterTransition(new StdState(mock<FSMImpl>(), "a"), new StdState(mock<FSMImpl>(), "b"));
     canvas = document.createElement("canvas");
 });
 
@@ -37,15 +37,15 @@ test("invalid event type", () => {
 });
 
 test("valid event", () => {
-    expect(tr.accept(createMouseEvent("mousemove",
+    expect(tr.accept(createMouseEvent("mouseenter",
         canvas, 11, 43, 12, 11, 1))).toBeTruthy();
 });
 
 test("guard OK", () => {
-    expect(tr.isGuardOK(createMouseEvent("mousemove",
+    expect(tr.isGuardOK(createMouseEvent("mouseenter",
         canvas, 11, 23, 12, 25, 1))).toBeTruthy();
 });
 
 test("accepted events", () => {
-    expect(tr.getAcceptedEvents()).toStrictEqual(["mousemove"]);
+    expect(tr.getAcceptedEvents()).toStrictEqual(["mouseenter"]);
 });

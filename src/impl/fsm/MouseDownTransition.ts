@@ -14,14 +14,15 @@
 
 import type {OutputState} from "../../api/fsm/OutputState";
 import type {InputState} from "../../api/fsm/InputState";
-import {isEventType} from "./Events";
+import {isMouseDownEvent} from "./Events";
 import {TransitionBase} from "./TransitionBase";
 import type {EventType} from "../../api/fsm/EventType";
 
 /**
- * This transition corresponds to a mouseenter of a pointing device.
+ * This transition corresponds to a pressure of a button of a pointing device.
  */
-export class MouseenterTransition extends TransitionBase<MouseEvent> {
+export class MouseDownTransition extends TransitionBase<MouseEvent> {
+
     /**
      * Creates the transition.
      */
@@ -30,10 +31,10 @@ export class MouseenterTransition extends TransitionBase<MouseEvent> {
     }
 
     public accept(event: Event): event is MouseEvent {
-        return event instanceof MouseEvent && isEventType(event.type) && this.getAcceptedEvents().includes(event.type);
+        return isMouseDownEvent(event);
     }
 
     public getAcceptedEvents(): ReadonlyArray<EventType> {
-        return ["mouseenter"];
+        return ["mousedown"];
     }
 }
