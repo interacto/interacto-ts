@@ -12,9 +12,11 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {isButton, isCheckBox, isColorChoice, isComboBox, isDatePicker,
+import {
+    isButton, isCheckBox, isColorChoice, isComboBox, isDatePicker,
     isHyperLink, isKeyDownEvent, isKeyUpEvent, isMouseDownEvent, isScrollEvent, isSpinner,
-    isTextInput, KeyCode, getTouch} from "../../src/impl/fsm/Events";
+    isTextInput, KeyCode, getTouch
+} from "../../src/impl/fsm/Events";
 import {createKeyEvent, createMouseEvent, createTouchEvent, createUIEvent} from "../interaction/StubEvents";
 
 

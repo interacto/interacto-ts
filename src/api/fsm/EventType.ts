@@ -33,7 +33,8 @@ export const eventTypes = [
     "change",
     "touchstart",
     "touchend",
-    "touchmove"
+    "touchmove",
+    "wheel"
 ] as const;
 
 /**

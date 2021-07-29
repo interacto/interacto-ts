@@ -17,7 +17,7 @@ import type {PointBaseData} from "./PointBaseData";
 
 /**
  * Interaction data for a single pointing device with buttons at a single position.
- * See: https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent (documentation extracted from here)
+ * See: {@link https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent} (documentation extracted from here)
  */
 export interface PointData extends PointBaseData {
     /**

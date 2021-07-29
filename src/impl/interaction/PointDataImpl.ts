@@ -19,19 +19,19 @@ import {PointingDataBase} from "./PointingDataBase";
  * Single point interaction data implementation with write accesses.
  */
 export class PointDataImpl extends PointingDataBase implements PointData {
-    private buttonData: number = 0;
+    protected buttonData: number = 0;
 
-    private buttonsData: number = 0;
+    protected buttonsData: number = 0;
 
-    private movementXData: number = 0;
+    protected movementXData: number = 0;
 
-    private movementYData: number = 0;
+    protected movementYData: number = 0;
 
-    private offsetXData: number = 0;
+    protected offsetXData: number = 0;
 
-    private offsetYData: number = 0;
+    protected offsetYData: number = 0;
 
-    private relatedTargetData: EventTarget | null = null;
+    protected relatedTargetData: EventTarget | null = null;
 
     public override flush(): void {
         super.flush();
