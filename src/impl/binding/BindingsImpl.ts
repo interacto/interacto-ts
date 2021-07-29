@@ -88,6 +88,8 @@ import type {Logger} from "../../api/logging/Logger";
 import {LoggerImpl} from "../logging/LoggerImpl";
 import type {WheelData} from "../../api/interaction/WheelData";
 import {Wheel} from "../interaction/library/Wheel";
+import {KeyUp} from "../interaction/library/KeyUp";
+import {MouseUp} from "../interaction/library/MouseUp";
 
 export class BindingsImpl extends Bindings {
     private observer: BindingsObserver | undefined;
@@ -228,7 +230,15 @@ export class BindingsImpl extends Bindings {
     }
 
     /**
-     * Creates a binding that uses the mouse button down interaction.
+     * Creates a binding that uses the MouseUp (mouse button released) interaction.
+     */
+    public mouseUpBinder(): PartialPointBinder {
+        return new UpdateBinder(this.undoHistory, this.logger, this.observer)
+            .usingInteraction<MouseUp, PointData>(() => new MouseUp());
+    }
+
+    /**
+     * Creates a binding that uses the MouseDown (mouse button pressed) interaction.
      */
     public mouseDownBinder(): PartialPointBinder {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
@@ -236,7 +246,8 @@ export class BindingsImpl extends Bindings {
     }
 
     /**
-     * Creates a binding that uses the long press interaction.
+     * Creates a binding that uses the LongMouseDown
+     * (mouse button pressed for a certain amount of time) interaction.
      * @param duration - The duration of the pressure to end the user interaction.
      * If this duration is not reached, the interaction is cancelled.
      */
@@ -256,7 +267,7 @@ export class BindingsImpl extends Bindings {
     }
 
     /**
-     * Creates a binding that uses the MouseLeave interaction.
+     * Creates a binding that uses the MouseLeave (mouse cursor leaves the element) interaction.
      * @param withBubbling - True: event bubbling is enabled and events on child elements will be registered
      */
     public mouseLeaveBinder(withBubbling: boolean): PartialPointBinder {
@@ -265,7 +276,7 @@ export class BindingsImpl extends Bindings {
     }
 
     /**
-     * Creates a binding that uses the MouseEnter interaction.
+     * Creates a binding that uses the MouseEnter (mouse cursor enters the element) interaction.
      * @param withBubbling - True: event bubbling is enabled and events on child elements will be registered
      */
     public mouseEnterBinder(withBubbling: boolean): PartialPointBinder {
@@ -274,7 +285,7 @@ export class BindingsImpl extends Bindings {
     }
 
     /**
-     * Creates a binding that uses the MouseMove interaction.
+     * Creates a binding that uses the MouseMove (mouse cursor moves) interaction.
      */
     public mouseMoveBinder(): PartialPointBinder {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
@@ -282,7 +293,7 @@ export class BindingsImpl extends Bindings {
     }
 
     /**
-     * Creates a binding that uses the wheel interaction.
+     * Creates a binding that uses the Wheel (user uses a mouse scrolling wheel) interaction.
      */
     public wheelBinder(): PartialWheelBinder {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
@@ -315,7 +326,16 @@ export class BindingsImpl extends Bindings {
     }
 
     /**
-     * Creates a binding that uses the key pressure interaction.
+     * Creates a binding that uses the KeyUp (key released) interaction.
+     * @param modifierAccepted - True: the interaction will consider key modifiers.
+     */
+    public keyUpBinder(modifierAccepted: boolean): PartialKeyBinder {
+        return new KeysBinder(this.undoHistory, this.logger, this.observer)
+            .usingInteraction<KeyUp, KeyData>(() => new KeyUp(modifierAccepted));
+    }
+
+    /**
+     * Creates a binding that uses the KeyDown (key pressed) interaction.
      * @param modifierAccepted - True: the interaction will consider key modifiers.
      */
     public keyDownBinder(modifierAccepted: boolean): PartialKeyBinder {
@@ -324,7 +344,7 @@ export class BindingsImpl extends Bindings {
     }
 
     /**
-     * Creates a binding that uses the multiple key pressures interaction.
+     * Creates a binding that uses the KeysDown (multiple keys pressed) interaction.
      */
     public keysDownBinder(): PartialKeysBinder {
         return new KeysBinder(this.undoHistory, this.logger, this.observer)
@@ -332,7 +352,7 @@ export class BindingsImpl extends Bindings {
     }
 
     /**
-     * Creates a binding that uses the multiple key typing interaction.
+     * Creates a binding that uses the KeysType (multiple keys pressed then released) interaction.
      */
     public keysTypeBinder(): PartialKeysBinder {
         return new KeysBinder(this.undoHistory, this.logger, this.observer)
@@ -340,7 +360,7 @@ export class BindingsImpl extends Bindings {
     }
 
     /**
-     * Creates a binding that uses the key typing interaction.
+     * Creates a binding that uses the KeyTyped (key pressed then released) interaction.
      */
     public keyTypeBinder(): PartialKeyBinder {
         return new KeysBinder(this.undoHistory, this.logger, this.observer)

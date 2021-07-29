@@ -77,7 +77,7 @@ interface KeyTypedFSMHandler extends FSMDataHandler {
 
 
 /**
- * A user interaction for typing several keyboard touches.
+ * A user interaction for typing several keyboard keys.
  * One can type on multiple keys. The interaction ends after a timeout (a delay after the latest
  * typed key).
  */

@@ -78,12 +78,22 @@ test("change binding observer", () => {
     expect(o3.clearObservedBindings).not.toHaveBeenCalled();
 });
 
-test("press binder", () => {
+test("mouse down binder", () => {
     bindings.mouseDownBinder()
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
     robot(elt).mousedown();
+    expect(ctx.bindings).toHaveLength(1);
+    expect(ctx.commands).toHaveLength(1);
+});
+
+test("mouse up binder", () => {
+    bindings.mouseUpBinder()
+        .on(elt)
+        .toProduce(() => new StubCmd(true))
+        .bind();
+    robot(elt).mouseup();
     expect(ctx.bindings).toHaveLength(1);
     expect(ctx.commands).toHaveLength(1);
 });
@@ -342,6 +352,15 @@ test("key down binder", () => {
     expect(ctx.commands).toHaveLength(1);
 });
 
+test("key up binder", () => {
+    bindings.keyUpBinder(false)
+        .on(elt)
+        .toProduce(() => new StubCmd(true))
+        .bind();
+    robot(elt).keyup({"code": "A"});
+    expect(ctx.commands).toHaveLength(1);
+});
+
 test("key type binder", () => {
     bindings.keyTypeBinder()
         .on(elt)
@@ -536,7 +555,6 @@ test("that keysDown binder works", () => {
 
     expect(ctx.commands).toHaveLength(1);
 });
-
 
 test("that 'ifCannotExecute' is correctly called", () => {
     const mockFn = jest.fn();
