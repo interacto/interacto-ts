@@ -14,7 +14,7 @@
 
 import type {EventType} from "../../src/api/fsm/EventType";
 import type {PointData} from "../../src/api/interaction/PointData";
-
+import type {WheelData} from "../../src/api/interaction/WheelData";
 
 export interface MouseEventForTest extends MouseEvent {
     id: number;
@@ -39,6 +39,7 @@ export interface NonoRobot {
     change(params?: EventTarget | (EventTargetInit & InputEventInit)): this;
     keydown(params?: EventTarget | (EventTargetInit & KeyboardEventInit)): this;
     keyup(params?: EventTarget | (EventTargetInit & KeyboardEventInit)): this;
+    wheel(params?: EventTarget | (EventTargetInit & WheelEventInit)): this;
     scroll(params?: EventTarget | (EventTargetInit & UIEventInit)): this;
     touchstart(params?: EventTarget | (EventTargetInit & TouchEventInit), touches?: Array<TouchInit>, timestamp?: number): this;
     touchmove(params?: EventTarget | (EventTargetInit & TouchEventInit), touches?: Array<TouchInit>, timestamp?: number): this;
@@ -113,6 +114,31 @@ export function createMouseEvent2(type: "auxclick" | "click" | "mousedown" | "mo
     return evt;
 }
 
+export function createWheelEvent2(type: "wheel",
+                                  data: Partial<WheelData>): WheelEvent {
+    const evt = new WheelEvent(type, data);
+
+    Object.defineProperty(evt, "offsetX", {"value": data.offsetX});
+    Object.defineProperty(evt, "offsetY", {"value": data.offsetY});
+    Object.defineProperty(evt, "screenX", {"value": data.screenX});
+    Object.defineProperty(evt, "screenY", {"value": data.screenY});
+    Object.defineProperty(evt, "movementX", {"value": data.movementX});
+    Object.defineProperty(evt, "movementY", {"value": data.movementY});
+    Object.defineProperty(evt, "target", {"value": data.target});
+    Object.defineProperty(evt, "currentTarget", {"value": data.currentTarget});
+    Object.defineProperty(evt, "pageX", {"value": data.pageX});
+    Object.defineProperty(evt, "pageY", {"value": data.pageY});
+    Object.defineProperty(evt, "deltaX", {"value": data.deltaX});
+    Object.defineProperty(evt, "deltaY", {"value": data.deltaY});
+    Object.defineProperty(evt, "deltaZ", {"value": data.deltaZ});
+    Object.defineProperty(evt, "deltaMode", {"value": data.deltaMode});
+
+    if (data.timeStamp !== undefined) {
+        Object.defineProperty(evt, "timeStamp", {"value": data.timeStamp});
+    }
+
+    return evt;
+}
 
 export function createMouseEvent(type: "auxclick" | "click" | "mousedown" | "mouseenter" | "mouseleave" | "mousemove" |
 "mouseout" | "mouseover" | "mouseup",
@@ -138,6 +164,41 @@ export function createMouseEvent(type: "auxclick" | "click" | "mousedown" | "mou
         "metaKey": false,
         "button": buttonValue,
         "relatedTarget": target
+    });
+}
+
+export function createWheelEvent(type: "wheel",
+                                 target: EventTarget, screenX?: number, screenY?: number, clientX?: number,
+                                 clientY?: number, button?: number, deltaX?: number, deltaY?: number,
+                                 deltaZ?: number, deltaMode?: number): WheelEvent {
+    const screenXvalue = screenX ?? 0;
+    const screenYvalue = screenY ?? 0;
+    const clientXvalue = clientX ?? 0;
+    const clientYvalue = clientY ?? 0;
+    const buttonValue = button ?? 0;
+    const deltaXValue = deltaX ?? 0;
+    const deltaYValue = deltaY ?? 0;
+    const deltaZValue = deltaZ ?? 0;
+    const deltaModeValue = deltaMode ?? 0;
+    return new WheelEvent(type, {
+        "view": window,
+        "bubbles": true,
+        "cancelable": false,
+        "detail": 1,
+        "screenX": screenXvalue,
+        "screenY": screenYvalue,
+        "clientX": clientXvalue,
+        "clientY": clientYvalue,
+        "ctrlKey": false,
+        "altKey": false,
+        "shiftKey": false,
+        "metaKey": false,
+        "button": buttonValue,
+        "relatedTarget": target,
+        "deltaX": deltaXValue,
+        "deltaY": deltaYValue,
+        "deltaZ": deltaZValue,
+        "deltaMode": deltaModeValue
     });
 }
 
@@ -234,6 +295,12 @@ class NonoRobotImpl implements NonoRobot {
         return this;
     }
 
+    private processWheelEvent(type: "wheel",
+                              params?: EventTarget | (EventTargetInit & WheelEventInit)): this {
+        this.checkEventTarget(params).dispatchEvent(new WheelEvent(type, this.fixingParameters(params ?? {})));
+        return this;
+    }
+
     private processKeyEvent(type: "keydown" | "keyup", params?: EventTarget | (EventTargetInit & MouseEventInit)): this {
         this.checkEventTarget(params).dispatchEvent(new KeyboardEvent(type, this.fixingParameters(params ?? {})));
         return this;
@@ -317,6 +384,10 @@ class NonoRobotImpl implements NonoRobot {
 
     public mouseleave(params?: EventTarget | (EventTargetInit & MouseEventInit)): this {
         return this.processMouseEvent("mouseleave", params);
+    }
+
+    public wheel(params?: EventTarget | (EventTargetInit & WheelEventInit)): this {
+        return this.processWheelEvent("wheel", params);
     }
 
     public scroll(params?: EventTarget | (EventTargetInit & UIEventInit)): this {

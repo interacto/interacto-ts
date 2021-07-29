@@ -16,7 +16,7 @@ import type {EventModifierData} from "./EventModifierData";
 
 /**
  * Interaction data for a single pointing device at a single position.
- * See: https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent  (documentation extracted from here)
+ * See: {@link https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent}  (documentation extracted from here)
  */
 export interface PointBaseData extends EventModifierData {
     /**

@@ -202,6 +202,15 @@ test("mousemove binder", () => {
     expect(ctx.commands).toHaveLength(1);
 });
 
+test("wheel binder", () => {
+    bindings.wheelBinder()
+        .on(elt)
+        .toProduce(() => new StubCmd(true))
+        .bind();
+    robot().wheel(elt);
+    expect(ctx.commands).toHaveLength(1);
+});
+
 test("drag lock binder", () => {
     bindings.dragLockBinder()
         .on(elt)

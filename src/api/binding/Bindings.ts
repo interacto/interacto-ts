@@ -35,6 +35,7 @@ import type {Undo} from "../../impl/command/library/Undo";
 import type {Redo} from "../../impl/command/library/Redo";
 import type {UndoHistory} from "../undo/UndoHistory";
 import type {Logger} from "../logging/Logger";
+import type {WheelData} from "../interaction/WheelData";
 
 export type PartialButtonBinder = InteractionBinder<Interaction<WidgetData<HTMLButtonElement>>, WidgetData<HTMLButtonElement>>;
 export type PartialInputBinder = InteractionBinder<Interaction<WidgetData<HTMLInputElement>>, WidgetData<HTMLInputElement>>;
@@ -48,6 +49,7 @@ export type PartialMultiTouchBinder = InteractionUpdateBinder<Interaction<MultiT
 export type PartialTapBinder = InteractionUpdateBinder<Interaction<TapData>, TapData>;
 export type PartialTouchBinder = InteractionUpdateBinder<Interaction<TouchData>, TouchData>;
 export type PartialPointBinder = InteractionBinder<Interaction<PointData>, PointData>;
+export type PartialWheelBinder = InteractionBinder<Interaction<WheelData>, WheelData>;
 export type PartialScrollBinder = InteractionBinder<Interaction<ScrollData>, ScrollData>;
 export type PartialUpdatePointBinder = InteractionUpdateBinder<Interaction<PointData>, PointData>;
 export type PartialPointsBinder = InteractionUpdateBinder<Interaction<PointsData>, PointsData>;
@@ -150,6 +152,11 @@ export abstract class Bindings {
      * Creates a binding that uses the click interaction.
      */
     abstract clickBinder(): PartialPointBinder;
+
+    /**
+     * Creates a binding that uses the wheel interaction.
+     */
+    abstract wheelBinder(): PartialWheelBinder;
 
     /**
      * Creates a binding that uses the double click interaction.

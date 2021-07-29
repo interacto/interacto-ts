@@ -51,7 +51,7 @@ export function isTouchEvent(eventType: EventType): boolean {
 export function isMouseEvent(eventType: EventType): boolean {
     return eventType === "mousedown" || eventType === "mouseup" || eventType === "mousemove" ||
     eventType === "mouseover" || eventType === "click" || eventType === "auxclick" || eventType === "mouseout" ||
-    eventType === "mouseenter" || eventType === "mouseleave";
+    eventType === "mouseenter" || eventType === "mouseleave" || eventType === "wheel";
 }
 
 /**

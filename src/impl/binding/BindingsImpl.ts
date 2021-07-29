@@ -79,13 +79,15 @@ import type {
     PartialTextInputBinder,
     PartialTouchBinder,
     PartialTouchSrcTgtBinder,
-    PartialUpdatePointBinder
+    PartialUpdatePointBinder, PartialWheelBinder
 } from "../../api/binding/Bindings";
 import type {UndoHistory} from "../../api/undo/UndoHistory";
 import {UndoHistoryImpl} from "../undo/UndoHistoryImpl";
 import {Bindings} from "../../api/binding/Bindings";
 import type {Logger} from "../../api/logging/Logger";
 import {LoggerImpl} from "../logging/LoggerImpl";
+import type {WheelData} from "../../api/interaction/WheelData";
+import {Wheel} from "../interaction/library/Wheel";
 
 export class BindingsImpl extends Bindings {
     private observer: BindingsObserver | undefined;
@@ -277,6 +279,14 @@ export class BindingsImpl extends Bindings {
     public mousemoveBinder(): PartialPointBinder {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
             .usingInteraction<Mousemove, PointData>(() => new Mousemove());
+    }
+
+    /**
+     * Creates a binding that uses the wheel interaction.
+     */
+    public wheelBinder(): PartialWheelBinder {
+        return new UpdateBinder(this.undoHistory, this.logger, this.observer)
+            .usingInteraction<Wheel, WheelData>(() => new Wheel());
     }
 
     /**
