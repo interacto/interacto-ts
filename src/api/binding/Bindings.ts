@@ -169,11 +169,11 @@ export abstract class Bindings {
     abstract mouseDownBinder(): PartialPointBinder;
 
     /**
-     * Creates a binding that uses the long press interaction.
-     * @param duration - The duration of the pressure to end the user interaction.
+     * Creates a binding that uses the long mouse down interaction.
+     * @param duration - The duration of the pressure on a mouse button necessary to end the user interaction.
      * If this duration is not reached, the interaction is cancelled.
      */
-    abstract longPressBinder(duration: number): PartialUpdatePointBinder;
+    abstract longMouseDownBinder(duration: number): PartialUpdatePointBinder;
 
     /**
      * Creates a binding for clicking n times.
@@ -216,15 +216,15 @@ export abstract class Bindings {
     abstract dragLockBinder(): PartialPointSrcTgtBinder;
 
     /**
-     * Creates a binding that uses the key pressure interaction.
+     * Creates a binding that uses the key down interaction.
      * @param modifierAccepted - True: the interaction will consider key modifiers.
      */
-    abstract keyPressBinder(modifierAccepted: boolean): PartialKeyBinder;
+    abstract keyDownBinder(modifierAccepted: boolean): PartialKeyBinder;
 
     /**
-     * Creates a binding that uses the multiple key pressures interaction.
+     * Creates a binding that uses the multiple keys down interaction.
      */
-    abstract keysPressBinder(): PartialKeysBinder;
+    abstract keysDownBinder(): PartialKeysBinder;
 
     /**
      * Creates a binding that uses the multiple key typings interaction.

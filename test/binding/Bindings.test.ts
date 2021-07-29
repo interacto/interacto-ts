@@ -175,7 +175,7 @@ test("double click binder", () => {
     expect(ctx.commands).toHaveLength(1);
 });
 
-test("mouseover binder", () => {
+test("mouseenter binder", () => {
     bindings.mouseEnterBinder(true)
         .on(elt)
         .toProduce(() => new StubCmd(true))
@@ -184,7 +184,7 @@ test("mouseover binder", () => {
     expect(ctx.commands).toHaveLength(1);
 });
 
-test("mouseout binder", () => {
+test("mouseleave binder", () => {
     bindings.mouseLeaveBinder(true)
         .on(elt)
         .toProduce(() => new StubCmd(true))
@@ -333,8 +333,8 @@ test("dnd binder with throttling 2", () => {
     expect(fsm.process).toHaveBeenCalledTimes(4);
 });
 
-test("key press binder", () => {
-    bindings.keyPressBinder(false)
+test("key down binder", () => {
+    bindings.keyDownBinder(false)
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
@@ -463,8 +463,8 @@ test("clicks binding work", () => {
     expect(ctx.commands).toHaveLength(1);
 });
 
-test("longpress binding work", () => {
-    bindings.longPressBinder(500)
+test("longmousedown binding work", () => {
+    bindings.longMouseDownBinder(500)
         .on(elt)
         .when(_i => true)
         .toProduce((_i: PointData) => new StubCmd(true))
@@ -523,8 +523,8 @@ test("that scroll binder works", () => {
     expect(ctx.commands).toHaveLength(1);
 });
 
-test("that keysPress binder works", () => {
-    bindings.keysPressBinder()
+test("that keysDown binder works", () => {
+    bindings.keysDownBinder()
         .on(elt)
         .toProduce((_i: KeysData) => new StubCmd(true))
         .bind();

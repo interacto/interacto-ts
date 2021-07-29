@@ -22,7 +22,7 @@ import type {Interaction} from "../../src/api/interaction/Interaction";
 import {mock} from "jest-mock-extended";
 import type {BindingsObserver} from "../../src/api/binding/BindingsObserver";
 import {KeysBinder} from "../../src/impl/binder/KeysBinder";
-import {KeyPressed} from "../../src/impl/interaction/library/KeyPressed";
+import {KeyDown} from "../../src/impl/interaction/library/KeyDown";
 import type {KeysData} from "../../src/api/interaction/KeysData";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
 import type {Bindings} from "../../src/api/binding/Bindings";
@@ -64,7 +64,7 @@ test("that is crashes when calling bind without a command supplier", () => {
 test("that observer is used on bind", () => {
     const obs = mock<BindingsObserver>();
     const binder = new KeysBinder(bindings.undoHistory, mock<Logger>(), obs)
-        .usingInteraction(() => new KeyPressed(false))
+        .usingInteraction(() => new KeyDown(false))
         .toProduce(() => mock<Command>());
 
     binding = binder.bind();
@@ -73,7 +73,7 @@ test("that observer is used on bind", () => {
 });
 
 test("key press std key", () => {
-    binding = bindings.keyPressBinder(false)
+    binding = bindings.keyDownBinder(false)
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
@@ -82,7 +82,7 @@ test("key press std key", () => {
 });
 
 test("key press std key when false", () => {
-    binding = bindings.keyPressBinder(false)
+    binding = bindings.keyDownBinder(false)
         .when(_i => false)
         .on(elt)
         .toProduce(() => new StubCmd(true))
@@ -92,7 +92,7 @@ test("key press std key when false", () => {
 });
 
 test("key press std key when true", () => {
-    binding = bindings.keyPressBinder(false)
+    binding = bindings.keyDownBinder(false)
         .when(i => i.code === "A")
         .on(elt)
         .toProduce(() => new StubCmd(true))
@@ -102,7 +102,7 @@ test("key press std key when true", () => {
 });
 
 test("key press modifier KO", () => {
-    binding = bindings.keyPressBinder(false)
+    binding = bindings.keyDownBinder(false)
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
@@ -113,7 +113,7 @@ test("key press modifier KO", () => {
 });
 
 test("key press modifier OK", () => {
-    binding = bindings.keyPressBinder(true)
+    binding = bindings.keyDownBinder(true)
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
@@ -124,7 +124,7 @@ test("key press modifier OK", () => {
 });
 
 test("key press with routine OK", () => {
-    binding = bindings.keyPressBinder(false)
+    binding = bindings.keyDownBinder(false)
         .with(false, "b")
         .on(elt)
         .toProduce(() => new StubCmd(true))
@@ -134,7 +134,7 @@ test("key press with routine OK", () => {
 });
 
 test("key press with routine OK isCode true", () => {
-    binding = bindings.keyPressBinder(false)
+    binding = bindings.keyDownBinder(false)
         .with(true, "KeyB")
         .on(elt)
         .toProduce(() => new StubCmd(true))
@@ -144,7 +144,7 @@ test("key press with routine OK isCode true", () => {
 });
 
 test("key press std key with when false", () => {
-    binding = bindings.keyPressBinder(false)
+    binding = bindings.keyDownBinder(false)
         .with(false, "b")
         .on(elt)
         .when(_i => false)
@@ -155,7 +155,7 @@ test("key press std key with when false", () => {
 });
 
 test("key press std key with when true", () => {
-    binding = bindings.keyPressBinder(false)
+    binding = bindings.keyDownBinder(false)
         .toProduce(() => new StubCmd(true))
         .on(elt)
         .with(false, "c")
@@ -166,7 +166,7 @@ test("key press std key with when true", () => {
 });
 
 test("key press with routine KO 1", () => {
-    binding = bindings.keyPressBinder(false)
+    binding = bindings.keyDownBinder(false)
         .with(false, "c")
         .on(elt)
         .toProduce(() => new StubCmd(true))
@@ -176,7 +176,7 @@ test("key press with routine KO 1", () => {
 });
 
 test("key press with routine KO 1 isCode true", () => {
-    binding = bindings.keyPressBinder(false)
+    binding = bindings.keyDownBinder(false)
         .with(true, "KeyB")
         .on(elt)
         .toProduce(() => new StubCmd(true))
@@ -186,7 +186,7 @@ test("key press with routine KO 1 isCode true", () => {
 });
 
 test("key press with routine KO several keys", () => {
-    binding = bindings.keyPressBinder(false)
+    binding = bindings.keyDownBinder(false)
         .with(false, "d", "e")
         .on(elt)
         .toProduce(() => new StubCmd(true))
@@ -196,7 +196,7 @@ test("key press with routine KO several keys", () => {
 });
 
 test("key press with routine KO several keys isCode true", () => {
-    binding = bindings.keyPressBinder(false)
+    binding = bindings.keyDownBinder(false)
         .with(true, "KeyD", "KeyE")
         .on(elt)
         .toProduce(() => new StubCmd(true))
@@ -206,7 +206,7 @@ test("key press with routine KO several keys isCode true", () => {
 });
 
 test("key press with routine OK modifier", () => {
-    binding = bindings.keyPressBinder(true)
+    binding = bindings.keyDownBinder(true)
         .with(false, "Alt")
         .on(elt)
         .toProduce(() => new StubCmd(true))
@@ -218,7 +218,7 @@ test("key press with routine OK modifier", () => {
 });
 
 test("key press with routine OK modifier isCode true", () => {
-    binding = bindings.keyPressBinder(true)
+    binding = bindings.keyDownBinder(true)
         .with(true, "AltLeft")
         .on(elt)
         .toProduce(() => new StubCmd(true))
@@ -232,7 +232,7 @@ test("key press with routine OK modifier isCode true", () => {
 test("key press first then end", () => {
     const first = jest.fn();
     const end = jest.fn();
-    binding = bindings.keyPressBinder(false)
+    binding = bindings.keyDownBinder(false)
         .with(false, "f")
         .on(elt)
         .toProduce(() => new StubCmd(true))

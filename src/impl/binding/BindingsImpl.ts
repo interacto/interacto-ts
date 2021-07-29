@@ -42,17 +42,17 @@ import type {SrcTgtPointsData} from "../../api/interaction/SrcTgtPointsData";
 import {DoubleClick} from "../interaction/library/DoubleClick";
 import {DragLock} from "../interaction/library/DragLock";
 import {HyperLinkClicked} from "../interaction/library/HyperLinkClicked";
-import {KeyPressed} from "../interaction/library/KeyPressed";
+import {KeyDown} from "../interaction/library/KeyDown";
 import type {KeyData} from "../../api/interaction/KeyData";
 import type {KeysData} from "../../api/interaction/KeysData";
-import {KeysPressed} from "../interaction/library/KeysPressed";
+import {KeysDown} from "../interaction/library/KeysDown";
 import {KeysTyped} from "../interaction/library/KeysTyped";
 import {KeyTyped} from "../interaction/library/KeyTyped";
 import {Scroll} from "../interaction/library/Scroll";
 import type {ScrollData} from "../../api/interaction/ScrollData";
 import {KeysBinder} from "../binder/KeysBinder";
 import {TouchDnD} from "../interaction/library/TouchDnD";
-import {LongPress} from "../interaction/library/LongPress";
+import {LongMouseDown} from "../interaction/library/LongMouseDown";
 import {Clicks} from "../interaction/library/Clicks";
 import {MouseLeave} from "../interaction/library/MouseLeave";
 import {MouseEnter} from "../interaction/library/MouseEnter";
@@ -240,9 +240,9 @@ export class BindingsImpl extends Bindings {
      * @param duration - The duration of the pressure to end the user interaction.
      * If this duration is not reached, the interaction is cancelled.
      */
-    public longPressBinder(duration: number): PartialUpdatePointBinder {
+    public longMouseDownBinder(duration: number): PartialUpdatePointBinder {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<LongPress, PointData>(() => new LongPress(duration));
+            .usingInteraction<LongMouseDown, PointData>(() => new LongMouseDown(duration));
     }
 
     /**
@@ -318,17 +318,17 @@ export class BindingsImpl extends Bindings {
      * Creates a binding that uses the key pressure interaction.
      * @param modifierAccepted - True: the interaction will consider key modifiers.
      */
-    public keyPressBinder(modifierAccepted: boolean): PartialKeyBinder {
+    public keyDownBinder(modifierAccepted: boolean): PartialKeyBinder {
         return new KeysBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<KeyPressed, KeyData>(() => new KeyPressed(modifierAccepted));
+            .usingInteraction<KeyDown, KeyData>(() => new KeyDown(modifierAccepted));
     }
 
     /**
      * Creates a binding that uses the multiple key pressures interaction.
      */
-    public keysPressBinder(): PartialKeysBinder {
+    public keysDownBinder(): PartialKeysBinder {
         return new KeysBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<KeysPressed, KeysData>(() => new KeysPressed());
+            .usingInteraction<KeysDown, KeysData>(() => new KeysDown());
     }
 
     /**

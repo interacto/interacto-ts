@@ -13,17 +13,17 @@
  */
 
 import type {FSMHandler} from "../../../src/interacto";
-import {KeyDataImpl, KeyPressed} from "../../../src/interacto";
+import {KeyDataImpl, KeyDown} from "../../../src/interacto";
 import {robot} from "../StubEvents";
 import {mock} from "jest-mock-extended";
 
-let interaction: KeyPressed;
+let interaction: KeyDown;
 let text: HTMLElement;
 let handler: FSMHandler;
 
 beforeEach(() => {
     handler = mock<FSMHandler>();
-    interaction = new KeyPressed(false);
+    interaction = new KeyDown(false);
     interaction.log(true);
     interaction.fsm.log = true;
     interaction.fsm.addHandler(handler);

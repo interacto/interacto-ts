@@ -14,8 +14,8 @@
 
 import {StdState} from "../../fsm/StdState";
 import {TerminalState} from "../../fsm/TerminalState";
-import {KeyPressureTransition} from "../../fsm/KeyPressureTransition";
-import {KeyReleaseTransition} from "../../fsm/KeyReleaseTransition";
+import {KeyDownTransition} from "../../fsm/KeyDownTransition";
+import {KeyUpTransition} from "../../fsm/KeyUpTransition";
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import type {KeysData} from "../../../api/interaction/KeysData";
 import {FSMImpl} from "../../fsm/FSMImpl";
@@ -25,7 +25,7 @@ import {InteractionBase} from "../InteractionBase";
 /**
  * This interaction permits to define combo a key pressed that can be used to define shortcuts, etc.
  */
-export class KeysPressedFSM extends FSMImpl {
+export class KeysDownFSM extends FSMImpl {
     private readonly currentCodes: Array<string>;
 
     /**
@@ -36,7 +36,7 @@ export class KeysPressedFSM extends FSMImpl {
         this.currentCodes = [];
     }
 
-    public override buildFSM(dataHandler?: KeysPressedFSMHandler): void {
+    public override buildFSM(dataHandler?: KeysDownFSMHandler): void {
         if (this.states.length > 1) {
             return;
         }
@@ -51,13 +51,13 @@ export class KeysPressedFSM extends FSMImpl {
             this.currentCodes.push(event.code);
             dataHandler?.onKeyPressed(event);
         };
-        const kpInit = new KeyPressureTransition(this.initState, pressed);
+        const kpInit = new KeyDownTransition(this.initState, pressed);
         kpInit.action = actionkp;
 
-        const kpPressed = new KeyPressureTransition(pressed, pressed);
+        const kpPressed = new KeyDownTransition(pressed, pressed);
         kpPressed.action = actionkp;
 
-        const kr = new KeyReleaseTransition(pressed, ended);
+        const kr = new KeyUpTransition(pressed, ended);
         kr.isGuardOK = (event: KeyboardEvent): boolean => this.currentCodes.find(value => value === event.code) !== undefined;
     }
 
@@ -67,7 +67,7 @@ export class KeysPressedFSM extends FSMImpl {
     }
 }
 
-interface KeysPressedFSMHandler extends FSMDataHandler {
+interface KeysDownFSMHandler extends FSMDataHandler {
     onKeyPressed(event: KeyboardEvent): void;
 }
 
@@ -75,14 +75,14 @@ interface KeysPressedFSMHandler extends FSMDataHandler {
  * Several keys pressed at the same time.
  * Starts on a key pressure. Ends as soon as one of the pressed keys is released.
  */
-export class KeysPressed extends InteractionBase<KeysData, KeysDataImpl, KeysPressedFSM> {
-    private readonly handler: KeysPressedFSMHandler;
+export class KeysDown extends InteractionBase<KeysData, KeysDataImpl, KeysDownFSM> {
+    private readonly handler: KeysDownFSMHandler;
 
     /**
      * Creates the user interaction.
      */
     public constructor() {
-        super(new KeysPressedFSM(), new KeysDataImpl());
+        super(new KeysDownFSM(), new KeysDataImpl());
 
         this.handler = {
             "onKeyPressed": (event: KeyboardEvent): void => {

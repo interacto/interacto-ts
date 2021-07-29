@@ -20,7 +20,7 @@ import {EscapeKeyPressureTransition} from "../../fsm/EscapeKeyPressureTransition
 import type {SrcTgtPointsData} from "../../../api/interaction/SrcTgtPointsData";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {MouseDownTransition} from "../../fsm/MouseDownTransition";
-import {ReleaseTransition} from "../../fsm/ReleaseTransition";
+import {MouseUpTransition} from "../../fsm/MouseUpTransition";
 import {InteractionBase} from "../InteractionBase";
 import {SrcTgtPointsDataImpl} from "../SrcTgtPointsDataImpl";
 import type {PointData} from "../../../api/interaction/PointData";
@@ -66,7 +66,7 @@ class DnDFSM extends FSMImpl {
             dataHandler.onPress(event);
         };
 
-        const relCancel = new ReleaseTransition(pressed, cancelled);
+        const relCancel = new MouseUpTransition(pressed, cancelled);
         relCancel.isGuardOK = (event: MouseEvent): boolean => event.button === this.buttonToCheck;
 
         const guardMove = (event: MouseEvent): boolean => event.button === this.buttonToCheck;
@@ -82,7 +82,7 @@ class DnDFSM extends FSMImpl {
         moveDrag.isGuardOK = guardMove;
         moveDrag.action = actionMove;
 
-        const release = new ReleaseTransition(dragged, released);
+        const release = new MouseUpTransition(dragged, released);
         release.isGuardOK = (event: MouseEvent): boolean => {
             const tgt = event.currentTarget;
             return event.button === this.buttonToCheck && (!(tgt instanceof Element) || !tgt.classList.contains("ioDwellSpring"));
@@ -97,7 +97,7 @@ class DnDFSM extends FSMImpl {
         if (this.cancellable) {
             new EscapeKeyPressureTransition(pressed, cancelled);
             new EscapeKeyPressureTransition(dragged, cancelled);
-            const releaseCancel = new ReleaseTransition(dragged, cancelled);
+            const releaseCancel = new MouseUpTransition(dragged, cancelled);
             releaseCancel.isGuardOK = (event: MouseEvent): boolean => {
                 const tgt = event.currentTarget;
                 return event.button === this.buttonToCheck && tgt instanceof Element && tgt.classList.contains("ioDwellSpring");

@@ -14,10 +14,10 @@
 
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {TerminalState} from "../../fsm/TerminalState";
-import {KeyPressureTransition} from "../../fsm/KeyPressureTransition";
+import {KeyDownTransition} from "../../fsm/KeyDownTransition";
 import type {KeyData} from "../../../api/interaction/KeyData";
 import {StdState} from "../../fsm/StdState";
-import {KeyReleaseTransition} from "../../fsm/KeyReleaseTransition";
+import {KeyUpTransition} from "../../fsm/KeyUpTransition";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {KeyDataImpl} from "../KeyDataImpl";
 import {InteractionBase} from "../InteractionBase";
@@ -41,12 +41,12 @@ export class KeyTypedFSM extends FSMImpl {
         this.addState(pressed);
         this.addState(typed);
 
-        const kp = new KeyPressureTransition(this.initState, pressed);
+        const kp = new KeyDownTransition(this.initState, pressed);
         kp.action = (event: KeyboardEvent): void => {
             this.checkKey = event.code;
         };
 
-        const kr = new KeyReleaseTransition(pressed, typed);
+        const kr = new KeyUpTransition(pressed, typed);
         kr.isGuardOK = (event: KeyboardEvent): boolean => this.checkKey === undefined || event.code === this.checkKey;
         kr.action = (event: KeyboardEvent): void => {
             dataHandler?.onKeyTyped(event);
@@ -64,7 +64,7 @@ interface KeyTypedFSMHandler extends FSMDataHandler {
 }
 
 /**
- * A user interaction for pressing and releasing a keyboard key
+ * A user interaction for pressing, then releasing a keyboard key
  */
 export class KeyTyped extends InteractionBase<KeyData, KeyDataImpl, KeyTypedFSM> {
     private readonly handler: KeyTypedFSMHandler;

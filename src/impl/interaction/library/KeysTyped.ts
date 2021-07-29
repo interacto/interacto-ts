@@ -20,7 +20,7 @@ import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 import type {KeysData} from "../../../api/interaction/KeysData";
 import {KeysDataImpl} from "../KeysDataImpl";
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import {KeyReleaseTransition} from "../../fsm/KeyReleaseTransition";
+import {KeyUpTransition} from "../../fsm/KeyUpTransition";
 import type {Logger} from "../../../api/logging/Logger";
 
 /**
@@ -62,8 +62,8 @@ export class KeysTypedFSM extends FSMImpl {
         const action = (event: KeyboardEvent): void => {
             dataHandler?.onKeyTyped(event);
         };
-        const keyupInit = new KeyReleaseTransition(this.initState, keyup);
-        const keyupSeq = new KeyReleaseTransition(keyup, keyup);
+        const keyupInit = new KeyUpTransition(this.initState, keyup);
+        const keyupSeq = new KeyUpTransition(keyup, keyup);
         keyupInit.action = action;
         keyupSeq.action = action;
 
