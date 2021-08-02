@@ -13,20 +13,20 @@
  */
 
 import type {FSMDataHandler, FSMHandler} from "../../../src/interacto";
-import {LongPress, PointDataImpl} from "../../../src/interacto";
+import {LongMouseDown, PointDataImpl} from "../../../src/interacto";
 import {createMouseEvent, robot} from "../StubEvents";
 import {mock} from "jest-mock-extended";
 
-let interaction: LongPress;
+let interaction: LongMouseDown;
 let canvas: HTMLElement;
 let handler: FSMHandler;
 
 
 test("cannot create 0 or less duration", () => {
-    expect(() => new LongPress(0)).toThrow("Incorrect duration");
+    expect(() => new LongMouseDown(0)).toThrow("Incorrect duration");
 });
 
-describe("long press test", () => {
+describe("long mouse down test", () => {
     beforeEach(() => {
         jest.useFakeTimers();
         handler = mock<FSMHandler>();
@@ -40,18 +40,18 @@ describe("long press test", () => {
     });
 
     test("cannot build the interaction twice", () => {
-        interaction = new LongPress(200);
+        interaction = new LongMouseDown(200);
         interaction.fsm.buildFSM();
         expect(interaction.fsm.states).toHaveLength(4);
     });
 
     test("that has data handler", () => {
-        interaction = new LongPress(1);
+        interaction = new LongMouseDown(1);
         expect(interaction.fsm.getDataHandler()).toBeDefined();
     });
 
     test("that reinit cleans data", () => {
-        interaction = new LongPress(100);
+        interaction = new LongMouseDown(100);
         jest.spyOn(interaction.fsm.getDataHandler() as FSMDataHandler, "reinitData");
         interaction.processEvent(createMouseEvent("mousedown", canvas, 15, 20, 160, 21, 2));
         interaction.reinit();
@@ -63,7 +63,7 @@ describe("long press test", () => {
     [1000, 2000].forEach(duration => {
         describe(`long press ${String(duration)}`, () => {
             beforeEach(() => {
-                interaction = new LongPress(duration);
+                interaction = new LongMouseDown(duration);
                 interaction.fsm.addHandler(handler);
             });
 

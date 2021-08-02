@@ -20,7 +20,7 @@ import {TerminalState} from "../../src/impl/fsm/TerminalState";
 import {CancellingState} from "../../src/impl/fsm/CancellingState";
 import {mock} from "jest-mock-extended";
 import {createMouseEvent} from "../interaction/StubEvents";
-import {ReleaseTransition} from "../../src/impl/fsm/ReleaseTransition";
+import {MouseUpTransition} from "../../src/impl/fsm/MouseUpTransition";
 import {ClickTransition} from "../../src/impl/fsm/ClickTransition";
 import {MouseDownTransition} from "../../src/impl/fsm/MouseDownTransition";
 import {MouseMoveTransition} from "../../src/impl/fsm/MouseMoveTransition";
@@ -58,7 +58,7 @@ class StubTouchFSM extends FSMImpl {
             }
         }(moved, moved);
 
-        new class extends ReleaseTransition {
+        new class extends MouseUpTransition {
             public override isGuardOK(event: MouseEvent): boolean {
                 return event.button === cpt;
             }

@@ -13,21 +13,21 @@
  */
 
 import type {FSMHandler} from "../../../src/interacto";
-import {KeyDataImpl, KeyPressed} from "../../../src/interacto";
+import {MouseUp} from "../../../src/interacto";
 import {robot} from "../StubEvents";
 import {mock} from "jest-mock-extended";
 
-let interaction: KeyPressed;
-let text: HTMLElement;
+let interaction: MouseUp;
+let canvas: HTMLElement;
 let handler: FSMHandler;
 
 beforeEach(() => {
     handler = mock<FSMHandler>();
-    interaction = new KeyPressed(false);
+    interaction = new MouseUp();
     interaction.log(true);
     interaction.fsm.log = true;
     interaction.fsm.addHandler(handler);
-    text = document.createElement("textarea");
+    canvas = document.createElement("canvas");
 });
 
 test("build fsm twice does not work", () => {
@@ -36,30 +36,9 @@ test("build fsm twice does not work", () => {
     expect(interaction.fsm.states).toHaveLength(count);
 });
 
-test("type 'a' in the textarea starts and stops the interaction.", () => {
-    interaction.registerToNodes([text]);
-    robot(text).keydown({"code": "a"});
+test("press on the canvas starts and stops MouseUp interaction", () => {
+    interaction.registerToNodes([canvas]);
+    robot(canvas).mouseup();
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
-});
-
-test("the key typed in the textarea is the same key in the data of the interaction.", () => {
-    const data = new KeyDataImpl();
-    interaction.registerToNodes([text]);
-    const newHandler = mock<FSMHandler>();
-    newHandler.fsmStops.mockImplementation(() => {
-        data.copy(interaction.data);
-    });
-    interaction.fsm.addHandler(newHandler);
-    robot(text).keydown({"code": "a"});
-    expect(data.code).toStrictEqual("a");
-});
-
-test("testTwoKeyPressEnds", () => {
-    interaction.registerToNodes([text]);
-    robot(text)
-        .keydown({"code": "a"})
-        .keydown({"code": "b"});
-    expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
-    expect(handler.fsmStops).toHaveBeenCalledTimes(2);
 });

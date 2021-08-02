@@ -21,13 +21,13 @@ import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {InteractionBase} from "../InteractionBase";
 import type {PointData} from "../../../api/interaction/PointData";
 import {MouseDownTransition} from "../../fsm/MouseDownTransition";
-import {ReleaseTransition} from "../../fsm/ReleaseTransition";
+import {MouseUpTransition} from "../../fsm/MouseUpTransition";
 import {PointDataImpl} from "../PointDataImpl";
 
 /**
  * The FSM for the LongPress interaction
  */
-export class LongPressFSM extends FSMImpl {
+export class LongMouseDownFSM extends FSMImpl {
     private readonly duration: number;
 
     private currentButton?: number;
@@ -47,7 +47,7 @@ export class LongPressFSM extends FSMImpl {
         this.currentButton = undefined;
     }
 
-    public override buildFSM(dataHandler?: LongPressFSMHandler): void {
+    public override buildFSM(dataHandler?: LongMouseDownFSMHandler): void {
         if (this.states.length > 1) {
             return;
         }
@@ -68,7 +68,7 @@ export class LongPressFSM extends FSMImpl {
             dataHandler?.press(event);
         };
 
-        const release = new ReleaseTransition(down, releasedTooEarly);
+        const release = new MouseUpTransition(down, releasedTooEarly);
         release.isGuardOK = (event: MouseEvent): boolean => event.button === this.currentButton;
 
         new TimeoutTransition(down, timeouted, () => this.duration);
@@ -80,20 +80,20 @@ export class LongPressFSM extends FSMImpl {
     }
 }
 
-interface LongPressFSMHandler extends FSMDataHandler {
+interface LongMouseDownFSMHandler extends FSMDataHandler {
     press(evt: MouseEvent): void;
 }
 
-export class LongPress extends InteractionBase<PointData, PointDataImpl, LongPressFSM> {
-    private readonly handler: LongPressFSMHandler;
+export class LongMouseDown extends InteractionBase<PointData, PointDataImpl, LongMouseDownFSM> {
+    private readonly handler: LongMouseDownFSMHandler;
 
     /**
      * Creates the long press interaction
-     * @param duration - The duration of the pressure required to ends the user interaction (in ms)
+     * @param duration - The duration of the pressure required to end the user interaction (in ms)
      * If this duration is not reached, the interaction is cancelled.
      */
     public constructor(duration: number) {
-        super(new LongPressFSM(duration), new PointDataImpl());
+        super(new LongMouseDownFSM(duration), new PointDataImpl());
 
         this.handler = {
             "press": (evt: MouseEvent): void => {

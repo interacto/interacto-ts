@@ -100,13 +100,13 @@ test("stop propagation prevents bubbling", () => {
 });
 
 test("stop propagation prevents bubbling with key bindings", () => {
-    const b2 = bindings.keyPressBinder(false)
+    const b2 = bindings.keyDownBinder(false)
         .toProduce(() => new StubCmd())
         .on(canvas2)
         .stopImmediatePropagation()
         .bind();
 
-    const b1 = bindings.keyPressBinder(false)
+    const b1 = bindings.keyDownBinder(false)
         .toProduce(() => new StubCmd())
         .on(canvas1)
         .bind();

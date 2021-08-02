@@ -14,7 +14,7 @@
 
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {TerminalState} from "../../fsm/TerminalState";
-import {KeyPressureTransition} from "../../fsm/KeyPressureTransition";
+import {KeyDownTransition} from "../../fsm/KeyDownTransition";
 import type {KeyData} from "../../../api/interaction/KeyData";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
@@ -23,7 +23,7 @@ import {KeyDataImpl} from "../KeyDataImpl";
 /**
  * An FSM for a single key pressure.
  */
-export class KeyPressedFSM extends FSMImpl {
+export class KeyDownFSM extends FSMImpl {
     private readonly modifiersAccepted: boolean;
 
     /**
@@ -35,7 +35,7 @@ export class KeyPressedFSM extends FSMImpl {
         this.modifiersAccepted = modifierAccepted;
     }
 
-    public override buildFSM(dataHandler?: KeyPressedFSMHandler): void {
+    public override buildFSM(dataHandler?: KeyDownFSMHandler): void {
         if (this.states.length > 1) {
             return;
         }
@@ -45,7 +45,7 @@ export class KeyPressedFSM extends FSMImpl {
 
         this.addState(pressed);
 
-        const kp = new KeyPressureTransition(this.initState, pressed);
+        const kp = new KeyDownTransition(this.initState, pressed);
         kp.action = (event: KeyboardEvent): void => {
             dataHandler?.onKeyPressed(event);
         };
@@ -59,19 +59,19 @@ export class KeyPressedFSM extends FSMImpl {
 
 }
 
-interface KeyPressedFSMHandler extends FSMDataHandler {
+interface KeyDownFSMHandler extends FSMDataHandler {
     onKeyPressed(event: KeyboardEvent): void;
 }
 
 /**
  * A user interaction for pressing a key on a keyboard
  */
-export class KeyPressed extends InteractionBase<KeyData, KeyDataImpl, KeyPressedFSM> {
+export class KeyDown extends InteractionBase<KeyData, KeyDataImpl, KeyDownFSM> {
 
-    private readonly handler: KeyPressedFSMHandler;
+    private readonly handler: KeyDownFSMHandler;
 
-    public constructor(modifierAccepted: boolean, fsm?: KeyPressedFSM) {
-        super(fsm ?? new KeyPressedFSM(modifierAccepted), new KeyDataImpl());
+    public constructor(modifierAccepted: boolean, fsm?: KeyDownFSM) {
+        super(fsm ?? new KeyDownFSM(modifierAccepted), new KeyDataImpl());
 
         this.handler = {
             "onKeyPressed": (event: KeyboardEvent): void => {

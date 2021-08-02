@@ -14,14 +14,14 @@
 
 import type {InputState} from "../../api/fsm/InputState";
 import type {OutputState} from "../../api/fsm/OutputState";
-import {isKeyDownEvent} from "./Events";
+import {isKeyUpEvent} from "./Events";
 import {TransitionBase} from "./TransitionBase";
 import type {EventType} from "../../api/fsm/EventType";
 
 /**
- * A transition for a pressure of a key of a keyboard.
+ * A transition for a release of a key of a keyboard.
  */
-export class KeyPressureTransition extends TransitionBase<KeyboardEvent> {
+export class KeyUpTransition extends TransitionBase<KeyboardEvent> {
     /**
      * Creates the transition.
      */
@@ -30,10 +30,10 @@ export class KeyPressureTransition extends TransitionBase<KeyboardEvent> {
     }
 
     public accept(event: Event): event is KeyboardEvent {
-        return isKeyDownEvent(event);
+        return isKeyUpEvent(event);
     }
 
     public getAcceptedEvents(): ReadonlyArray<EventType> {
-        return ["keydown"];
+        return ["keyup"];
     }
 }

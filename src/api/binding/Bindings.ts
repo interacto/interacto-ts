@@ -154,7 +154,7 @@ export abstract class Bindings {
     abstract clickBinder(): PartialPointBinder;
 
     /**
-     * Creates a binding that uses the wheel interaction.
+     * Creates a binding that uses the Wheel (user uses a mouse scrolling wheel) interaction.
      */
     abstract wheelBinder(): PartialWheelBinder;
 
@@ -164,16 +164,22 @@ export abstract class Bindings {
     abstract dbleClickBinder(): PartialUpdatePointBinder;
 
     /**
-     * Creates a binding that uses the mouse button down interaction.
+     * Creates a binding that uses the MouseDown (mouse button pressed) interaction.
      */
     abstract mouseDownBinder(): PartialPointBinder;
 
     /**
-     * Creates a binding that uses the long press interaction.
+     * Creates a binding that uses the MouseUp (mouse button released) interaction.
+     */
+    abstract mouseUpBinder(): PartialPointBinder;
+
+    /**
+     * Creates a binding that uses the LongMouseDown
+     * (mouse button pressed for a certain amount of time) interaction.
      * @param duration - The duration of the pressure to end the user interaction.
      * If this duration is not reached, the interaction is cancelled.
      */
-    abstract longPressBinder(duration: number): PartialUpdatePointBinder;
+    abstract longMouseDownBinder(duration: number): PartialUpdatePointBinder;
 
     /**
      * Creates a binding for clicking n times.
@@ -183,19 +189,19 @@ export abstract class Bindings {
     abstract clicksBinder(nbClicks: number): PartialPointsBinder;
 
     /**
-     * Creates a binding that uses the MouseEnter interaction.
+     * Creates a binding that uses the MouseEnter (mouse cursor enters the element) interaction.
      * @param withBubbling - True: event bubbling is enabled and events on child elements will be registered
      */
     abstract mouseEnterBinder(withBubbling: boolean): PartialPointBinder;
 
     /**
-     * Creates a binding that uses the MouseLeave interaction.
+     * Creates a binding that uses the MouseLeave (mouse cursor leaves the element) interaction.
      * @param withBubbling - True: event bubbling is enabled and events on child elements will be registered
      */
     abstract mouseLeaveBinder(withBubbling: boolean): PartialPointBinder;
 
     /**
-     * Creates a binding that uses the MouseMove interaction.
+     * Creates a binding that uses the MouseMove (mouse cursor moves) interaction.
      */
     abstract mouseMoveBinder(): PartialPointBinder;
 
@@ -216,23 +222,29 @@ export abstract class Bindings {
     abstract dragLockBinder(): PartialPointSrcTgtBinder;
 
     /**
-     * Creates a binding that uses the key pressure interaction.
+     * Creates a binding that uses the KeyDown (key pressed) interaction.
      * @param modifierAccepted - True: the interaction will consider key modifiers.
      */
-    abstract keyPressBinder(modifierAccepted: boolean): PartialKeyBinder;
+    abstract keyDownBinder(modifierAccepted: boolean): PartialKeyBinder;
 
     /**
-     * Creates a binding that uses the multiple key pressures interaction.
+     * Creates a binding that uses the KeysDown (multiple keys pressed) interaction.
      */
-    abstract keysPressBinder(): PartialKeysBinder;
+    abstract keysDownBinder(): PartialKeysBinder;
 
     /**
-     * Creates a binding that uses the multiple key typings interaction.
+     * Creates a binding that uses the KeyUp (key released) interaction.
+     * @param modifierAccepted - True: the interaction will consider key modifiers.
+     */
+    abstract keyUpBinder(modifierAccepted: boolean): PartialKeyBinder;
+
+    /**
+     * Creates a binding that uses the KeysType (multiple keys pressed then released) interaction.
      */
     abstract keysTypeBinder(): PartialKeysBinder;
 
     /**
-     * Creates a binding that uses the key typing interaction.
+     * Creates a binding that uses the KeyTyped (key pressed then released) interaction.
      */
     abstract keyTypeBinder(): PartialKeyBinder;
 

@@ -12,28 +12,30 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {InputState} from "../../api/fsm/InputState";
 import type {OutputState} from "../../api/fsm/OutputState";
-import {isKeyUpEvent} from "./Events";
+import type {InputState} from "../../api/fsm/InputState";
+import {isEventType} from "./Events";
 import {TransitionBase} from "./TransitionBase";
 import type {EventType} from "../../api/fsm/EventType";
 
 /**
- * A transition for a release of a key of a keyboard.
+ * This transition corresponds to a release of a button of a pointing device.
  */
-export class KeyReleaseTransition extends TransitionBase<KeyboardEvent> {
+export class MouseUpTransition extends TransitionBase<MouseEvent> {
     /**
-     * Creates the transition.
+     * Defines a transition.
+     * @param srcState - The source state of the transition.
+     * @param tgtState - The srcObject state of the transition.
      */
     public constructor(srcState: OutputState, tgtState: InputState) {
         super(srcState, tgtState);
     }
 
-    public accept(event: Event): event is KeyboardEvent {
-        return isKeyUpEvent(event);
+    public accept(event: Event): event is MouseEvent {
+        return event instanceof MouseEvent && isEventType(event.type) && this.getAcceptedEvents().includes(event.type);
     }
 
     public getAcceptedEvents(): ReadonlyArray<EventType> {
-        return ["keyup"];
+        return ["mouseup"];
     }
 }

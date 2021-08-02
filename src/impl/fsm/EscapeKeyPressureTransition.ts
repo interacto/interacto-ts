@@ -15,12 +15,12 @@
 import type {InputState} from "../../api/fsm/InputState";
 import type {OutputState} from "../../api/fsm/OutputState";
 import {KeyCode} from "./Events";
-import {KeyPressureTransition} from "./KeyPressureTransition";
+import {KeyDownTransition} from "./KeyDownTransition";
 
 /**
  * This transition should be used to cancel an interaction using key ESCAPE.
  */
-export class EscapeKeyPressureTransition extends KeyPressureTransition {
+export class EscapeKeyPressureTransition extends KeyDownTransition {
     public constructor(srcState: OutputState, tgtState: InputState) {
         super(srcState, tgtState);
     }
