@@ -24,4 +24,16 @@ export interface MultiTouchData extends InteractionData {
      * The list of touch data.
      */
     readonly touches: ReadonlyArray<SrcTgtPointsData<TouchData>>;
+
+    /**
+     * Returns true if the line of each touch is relatively vertical and in the same direction.
+     * @param pxTolerance - The pixel tolerance for considering the lines vertical.
+     */
+    isVertical(pxTolerance: number): boolean;
+
+    /**
+     * Returns true if the line of each touch is relatively horizontal and in the same direction.
+     * @param pxTolerance - The pixel tolerance for considering the line horizontal.
+     */
+    isHorizontal(pxTolerance: number): boolean;
 }

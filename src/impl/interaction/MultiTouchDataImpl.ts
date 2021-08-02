@@ -70,4 +70,36 @@ export class MultiTouchDataImpl implements MultiTouchData, Flushable {
             tdata.copyTgt(tp, evt);
         }
     }
+
+    public isHorizontal(pxTolerance: number): boolean {
+        // Direction of the touches, every touch must go in the same direction
+        let direction = 0;
+
+        for (const touch of this.touchesData) {
+            // Initial touch decides the direction for this interaction, either -1 or 1
+            if (direction === 0) {
+                direction = touch[1].diffScreenX / Math.abs(touch[1].diffScreenX);
+            }
+            if (!touch[1].isHorizontal(pxTolerance) || (touch[1].diffScreenX / Math.abs(touch[1].diffScreenX) !== direction)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public isVertical(pxTolerance: number): boolean {
+        // Direction of the touches, every touch must go in the same direction
+        let direction = 0;
+
+        for (const touch of this.touchesData) {
+            // Initial touch decides the direction for this interaction, either -1 or 1
+            if (direction === 0) {
+                direction = touch[1].diffScreenY / Math.abs(touch[1].diffScreenY);
+            }
+            if (!touch[1].isVertical(pxTolerance) || (touch[1].diffScreenY / Math.abs(touch[1].diffScreenY) !== direction)) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
