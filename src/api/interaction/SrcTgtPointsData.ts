@@ -61,4 +61,26 @@ export interface SrcTgtPointsData<T extends PointBaseData> extends InteractionDa
      * The translation vector between the y screen position of the source and the y screen position of the target.
      */
     readonly diffScreenY: number;
+
+    /**
+     * The duration of the move, in milliseconds.
+     */
+    readonly duration: number;
+
+    /**
+     * The velocity of the move, in pixels per millisecond.
+     */
+    readonly velocity: number;
+
+    /**
+     * Returns true if the line between the two points is relatively vertical.
+     * @param pxTolerance - The pixel tolerance for considering the line vertical.
+     */
+    isVertical(pxTolerance: number): boolean;
+
+    /**
+     * Returns true if the line between the two points is relatively horizontal.
+     * @param pxTolerance - The pixel tolerance for considering the line horizontal.
+     */
+    isHorizontal(pxTolerance: number): boolean;
 }

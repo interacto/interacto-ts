@@ -70,4 +70,20 @@ export class SrcTgtPointsDataImpl implements SrcTgtPointsData<PointData> {
     public get diffScreenY(): number {
         return this.tgt.screenY - this.src.screenY;
     }
+
+    public get duration(): number {
+        return this.tgtData.timeStamp - this.srcData.timeStamp;
+    }
+
+    public get velocity(): number {
+        return Math.sqrt(this.diffScreenX ** 2 + this.diffScreenY ** 2) / this.duration;
+    }
+
+    public isHorizontal(pxTolerance: number): boolean {
+        return Math.abs(this.diffScreenY) < pxTolerance;
+    }
+
+    public isVertical(pxTolerance: number): boolean {
+        return Math.abs(this.diffScreenX) < pxTolerance;
+    }
 }

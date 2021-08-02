@@ -40,7 +40,7 @@ beforeEach(() => {
         "ctrlKey": true,
         "metaKey": true,
         "shiftKey": true,
-        "timeStamp": 17,
+        "timeStamp": 10,
         "target": new EventTarget(),
         "currentTarget": new EventTarget()
     });
@@ -58,13 +58,13 @@ beforeEach(() => {
         "clientY": 14,
         "pageX": 16,
         "pageY": 18,
-        "screenX": 20,
-        "screenY": 22,
+        "screenX": 18,
+        "screenY": 20,
         "altKey": true,
         "ctrlKey": true,
         "metaKey": true,
         "shiftKey": true,
-        "timeStamp": 17,
+        "timeStamp": 20,
         "target": new EventTarget(),
         "currentTarget": new EventTarget()
     });
@@ -96,9 +96,35 @@ test("diffPageY", () => {
 });
 
 test("diffScreenX", () => {
-    expect(data.diffScreenX).toStrictEqual(5);
+    expect(data.diffScreenX).toStrictEqual(3);
 });
 
 test("diffScreenY", () => {
-    expect(data.diffScreenY).toStrictEqual(6);
+    expect(data.diffScreenY).toStrictEqual(4);
 });
+
+test("duration", () => {
+    expect(data.duration).toStrictEqual(10);
+});
+
+test("velocity", () => {
+    // velocity should be sqrt(deltaX^2 + deltaY^2) / velocity = sqrt(16 + 9) / 10 = 0.5
+    expect(data.velocity).toStrictEqual(0.5);
+});
+
+test("isHorizontal OK", () => {
+    expect(data.isHorizontal(5)).toBeTruthy();
+});
+
+test("isHorizontal KO", () => {
+    expect(data.isHorizontal(2)).toBeFalsy();
+});
+
+test("isVertical OK", () => {
+    expect(data.isVertical(5)).toBeTruthy();
+});
+
+test("isVertical KO", () => {
+    expect(data.isVertical(2)).toBeFalsy();
+});
+

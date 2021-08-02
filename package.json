@@ -68,7 +68,7 @@
     "doc": "typedoc --theme minimal --out docs src/interacto.ts",
     "test-publish": "npm pack",
     "gen-changelog": "git log --pretty=\"* %s\" $(git describe --tags --abbrev=0 @^)..@ | sort > commits",
-    "mutation":  "npx stryker run"
+    "mutation": "npx stryker run"
   },
   "dependencies": {
     "rxjs": "^6.6.7"
@@ -81,7 +81,11 @@
       ".(ts|tsx)": "ts-jest"
     },
     "testEnvironment": "jsdom",
-    "coverageReporters": ["lcov", "cobertura", "clover"],
+    "coverageReporters": [
+      "lcov",
+      "cobertura",
+      "clover"
+    ],
     "coverageThreshold": {
       "global": {
         "branches": 80,
