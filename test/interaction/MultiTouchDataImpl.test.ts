@@ -18,13 +18,18 @@ import type {EventModifierData} from "../../src/api/interaction/EventModifierDat
 import type {UnitInteractionData} from "../../src/api/interaction/UnitInteractionData";
 
 let data: MultiTouchDataImpl;
-let touchData: SrcTgtTouchDataImpl;
-let touch: Touch;
+let touchData1: SrcTgtTouchDataImpl;
+let touchData2: SrcTgtTouchDataImpl;
+let touchSrc1: Touch;
+let touchSrc2: Touch;
+let touchTgt1: Touch;
+let touchTgt2: Touch;
 let evt: EventModifierData & UnitInteractionData;
 
 beforeEach(() => {
     data = new MultiTouchDataImpl();
-    touch = {
+
+    touchSrc1 = {
         "altitudeAngle": 5,
         "azimuthAngle": 10,
         "force": 15,
@@ -42,6 +47,61 @@ beforeEach(() => {
         "target": new EventTarget()
     };
 
+    touchTgt1 = {
+        "altitudeAngle": 5,
+        "azimuthAngle": 10,
+        "force": 15,
+        "identifier": 20,
+        "radiusX": 25,
+        "radiusY": 30,
+        "rotationAngle": 35,
+        "touchType": "stylus",
+        "clientX": 12,
+        "clientY": 14,
+        "pageX": 16,
+        "pageY": 18,
+        "screenX": 20,
+        "screenY": 22,
+        "target": new EventTarget()
+    };
+
+    touchSrc2 = {
+        "altitudeAngle": 5,
+        "azimuthAngle": 10,
+        "force": 15,
+        "identifier": 21,
+        "radiusX": 25,
+        "radiusY": 30,
+        "rotationAngle": 35,
+        "touchType": "stylus",
+        "clientX": 11,
+        "clientY": 12,
+        "pageX": 13,
+        "pageY": 14,
+        "screenX": 10,
+        "screenY": 11,
+        "target": new EventTarget()
+    };
+
+
+    touchTgt2 = {
+        "altitudeAngle": 5,
+        "azimuthAngle": 10,
+        "force": 15,
+        "identifier": 20,
+        "radiusX": 25,
+        "radiusY": 30,
+        "rotationAngle": 35,
+        "touchType": "stylus",
+        "clientX": 12,
+        "clientY": 14,
+        "pageX": 16,
+        "pageY": 18,
+        "screenX": 5,
+        "screenY": 6,
+        "target": new EventTarget()
+    };
+
     evt = {
         "altKey": true,
         "ctrlKey": true,
@@ -52,9 +112,13 @@ beforeEach(() => {
         "currentTarget": new EventTarget()
     };
 
-    touchData = new SrcTgtTouchDataImpl();
-    touchData.copySrc(touch, evt);
-    touchData.copyTgt(touch, evt);
+    touchData1 = new SrcTgtTouchDataImpl();
+    touchData1.copySrc(touchSrc1, evt);
+    touchData1.copyTgt(touchTgt1, evt);
+
+    touchData2 = new SrcTgtTouchDataImpl();
+    touchData2.copySrc(touchSrc2, evt);
+    touchData2.copyTgt(touchTgt2, evt);
 });
 
 test("touches collection is empty by default", () => {
@@ -62,34 +126,34 @@ test("touches collection is empty by default", () => {
 });
 
 test("addTouchData", () => {
-    data.addTouchData(touchData);
+    data.addTouchData(touchData1);
     expect(data.touches).toHaveLength(1);
     const element = data.touches[0];
-    expect(element).toStrictEqual(touchData);
+    expect(element).toStrictEqual(touchData1);
 });
 
 test("removeTouchData touch point exists", () => {
-    data.addTouchData(touchData);
+    data.addTouchData(touchData1);
     data.removeTouchData(20);
     expect(data.touches).toHaveLength(0);
-    expect(touchData).toStrictEqual(new SrcTgtTouchDataImpl());
+    expect(touchData1).toStrictEqual(new SrcTgtTouchDataImpl());
 });
 
 test("removeTouchData touch point doesn't exist", () => {
-    data.addTouchData(touchData);
+    data.addTouchData(touchData1);
     data.removeTouchData(6000);
     expect(data.touches).toHaveLength(1);
 });
 
 test("flush", () => {
-    data.addTouchData(touchData);
+    data.addTouchData(touchData1);
     data.flush();
     expect(data.touches).toHaveLength(0);
-    expect(touchData).toStrictEqual(new SrcTgtTouchDataImpl());
+    expect(touchData1).toStrictEqual(new SrcTgtTouchDataImpl());
 });
 
 test("setTouch touch point exists", () => {
-    data.addTouchData(touchData);
+    data.addTouchData(touchData1);
     const newTouch: Touch = {
         "altitudeAngle": 50,
         "azimuthAngle": 10,
@@ -110,7 +174,7 @@ test("setTouch touch point exists", () => {
     const newEvt: TouchEvent = new TouchEvent("touchstart");
 
     const newTouchData = new SrcTgtTouchDataImpl();
-    newTouchData.copySrc(touch, evt);
+    newTouchData.copySrc(touchSrc1, evt);
     newTouchData.copyTgt(newTouch, newEvt);
     data.setTouch(newTouch, newEvt);
 
@@ -118,7 +182,7 @@ test("setTouch touch point exists", () => {
 });
 
 test("setTouch touch point doesn't exist", () => {
-    data.addTouchData(touchData);
+    data.addTouchData(touchData1);
     const newTouch: Touch = {
         "altitudeAngle": 50,
         "azimuthAngle": 10,
@@ -139,5 +203,79 @@ test("setTouch touch point doesn't exist", () => {
     const newEvt: TouchEvent = new TouchEvent("touchstart");
     data.setTouch(newTouch, newEvt);
 
-    expect(data.touches[0]).toStrictEqual(touchData);
+    expect(data.touches[0]).toStrictEqual(touchData1);
+});
+
+test("isHorizontal OK", () => {
+    data.addTouchData(touchData1);
+
+    expect(data.isHorizontal(10)).toBeTruthy();
+});
+
+test("isHorizontal KO", () => {
+    data.addTouchData(touchData1);
+
+    expect(data.isHorizontal(1)).toBeFalsy();
+});
+
+test("isHorizontal wrong direction KO", () => {
+    data.addTouchData(touchData1);
+    data.addTouchData(touchData2);
+
+    expect(data.isHorizontal(10)).toBeFalsy();
+});
+
+test("isVertical OK", () => {
+    data.addTouchData(touchData1);
+
+    expect(data.isVertical(10)).toBeTruthy();
+});
+
+test("isVertical KO", () => {
+    data.addTouchData(touchData1);
+
+    expect(data.isVertical(1)).toBeFalsy();
+});
+
+test("isVertical wrong direction KO", () => {
+    data.addTouchData(touchData1);
+    data.addTouchData(touchData2);
+
+    expect(data.isVertical(1)).toBeFalsy();
+});
+
+test("pinchFactor OK", () => {
+    data.addTouchData(touchData1);
+    data.addTouchData(touchData2);
+
+    expect(data.pinchFactor(0.72)).toBeCloseTo(3.1018);
+});
+
+test("pinchFactor undefined invalid number of touches", () => {
+    data.addTouchData(touchData1);
+
+    expect(data.pinchFactor(1)).toBeUndefined();
+});
+
+test("pinchFactor undefined same direction", () => {
+    data.addTouchData(touchData1);
+    data.addTouchData(touchData1);
+
+    expect(data.pinchFactor(1)).toBeUndefined();
+});
+
+test("pinchFactor undefined low tolerance", () => {
+    data.addTouchData(touchData1);
+    data.addTouchData(touchData1);
+
+    // (actual distance between tgt1 and the projected point: about 0.71px)
+    expect(data.pinchFactor(0.7)).toBeUndefined();
+});
+
+test("project", () => {
+    expect(MultiTouchDataImpl.project([2, 3], [1, -2])).toBeCloseTo(-0.8);
+});
+
+test("distance", () => {
+    expect(MultiTouchDataImpl.distance([20, 22], [5, 6])).toBeCloseTo(21.93);
 });
