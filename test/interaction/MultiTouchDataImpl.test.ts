@@ -241,6 +241,41 @@ test("isVertical wrong direction KO", () => {
     data.addTouchData(touchData1);
     data.addTouchData(touchData2);
 
-    expect(data.isVertical(10)).toBeFalsy();
+    expect(data.isVertical(1)).toBeFalsy();
 });
 
+test("pinchFactor OK", () => {
+    data.addTouchData(touchData1);
+    data.addTouchData(touchData2);
+
+    expect(data.pinchFactor(0.72)).toBeCloseTo(3.1018);
+});
+
+test("pinchFactor undefined invalid number of touches", () => {
+    data.addTouchData(touchData1);
+
+    expect(data.pinchFactor(1)).toBeUndefined();
+});
+
+test("pinchFactor undefined same direction", () => {
+    data.addTouchData(touchData1);
+    data.addTouchData(touchData1);
+
+    expect(data.pinchFactor(1)).toBeUndefined();
+});
+
+test("pinchFactor undefined low tolerance", () => {
+    data.addTouchData(touchData1);
+    data.addTouchData(touchData1);
+
+    // (actual distance between tgt1 and the projected point: about 0.71px)
+    expect(data.pinchFactor(0.7)).toBeUndefined();
+});
+
+test("project", () => {
+    expect(MultiTouchDataImpl.project([2, 3], [1, -2])).toBeCloseTo(-0.8);
+});
+
+test("distance", () => {
+    expect(MultiTouchDataImpl.distance([20, 22], [5, 6])).toBeCloseTo(21.93);
+});
