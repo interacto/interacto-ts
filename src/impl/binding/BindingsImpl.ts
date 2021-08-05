@@ -90,6 +90,7 @@ import type {WheelData} from "../../api/interaction/WheelData";
 import {Wheel} from "../interaction/library/Wheel";
 import {KeyUp} from "../interaction/library/KeyUp";
 import {MouseUp} from "../interaction/library/MouseUp";
+import {Pan} from "../interaction/library/Pan";
 
 export class BindingsImpl extends Bindings {
     private observer: BindingsObserver | undefined;
@@ -170,6 +171,41 @@ export class BindingsImpl extends Bindings {
     }
 
     /**
+     * Creates a binding that uses the pinch user interaction.
+     * A pinch interaction is a subtype of multi-touch interaction created by two touches moving along the same line towards each other.
+     * @param pxTolerance - How far away the touches can go from the line between the two initial contact points before the pinch is considered
+     * invalid.
+     */
+    public pinchBinder(pxTolerance: number): PartialMultiTouchBinder {
+        return new UpdateBinder(this.undoHistory, this.logger, this.observer)
+            .usingInteraction<MultiTouch, MultiTouchData>(() => new MultiTouch(2))
+            .when(i => i.pinchFactor(pxTolerance) !== undefined);
+    }
+
+    /**
+     * Creates a binding that uses the pan interaction.
+     * @param horizontal - Defines whether the pan is horizontal or vertical
+     * @param minLength - The minimal distance from the starting point to the release point for validating the pan
+     * @param nbTouches - The number of required touches.
+     * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
+     */
+    public panBinder(horizontal: boolean, minLength: number, nbTouches: number, pxTolerance: number): PartialMultiTouchBinder {
+        return new UpdateBinder(this.undoHistory, this.logger, this.observer)
+            .usingInteraction<Pan, MultiTouchData>(() => new Pan(horizontal, minLength, nbTouches, pxTolerance));
+    }
+
+    // /**
+    //  * Creates a binding that uses the pan interaction.
+    //  * @param horizontal - Defines whether the pan is horizontal or vertical
+    //  * @param minLength - The minimal distance from the starting point to the release point for validating the pan
+    //  * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
+    //  */
+    // public panBinder(horizontal: boolean, minLength: number, pxTolerance: number): PartialTouchSrcTgtBinder {
+    //     return new UpdateBinder(this.undoHistory, this.logger, this.observer)
+    //         .usingInteraction<Pan, SrcTgtPointsData<TouchData>>(() => new Pan(horizontal, minLength, pxTolerance));
+    // }
+
+    /**
      * Creates a binding that uses the tap user interaction.
      * @param nbTap - The number of required taps.
      * If this number is not reached after a timeout, the interaction is cancelled.
@@ -189,29 +225,18 @@ export class BindingsImpl extends Bindings {
             .usingInteraction<LongTouch, TouchData>(() => new LongTouch(duration));
     }
 
-    /**
-     * Creates a binding that uses the swipe interaction.
-     * If this velocity is not reached, the interaction is cancelled.
-     * @param horizontal - Defines whether the swipe is horizontal or vertical
-     * @param minVelocity - The minimal minVelocity to reach for validating the swipe. In pixels per second.
-     * @param minLength - The minimal distance from the starting point to the release point for validating the swipe
-     * @param pxTolerance - The tolerance rate in pixels accepted while executing the swipe
-     */
-    public swipeBinder(horizontal: boolean, minVelocity: number, minLength: number, pxTolerance: number): PartialTouchSrcTgtBinder {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<Swipe, SrcTgtPointsData<TouchData>>(() => new Swipe(horizontal, minVelocity, minLength, pxTolerance));
-    }
-
-    /**
-     * Creates a binding that uses the pan interaction.
-     * @param horizontal - Defines whether the pan is horizontal or vertical
-     * @param minLength - The minimal distance from the starting point to the release point for validating the pan
-     * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
-     */
-    public panBinder(horizontal: boolean, minLength: number, pxTolerance: number): PartialTouchSrcTgtBinder {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<Pan, SrcTgtPointsData<TouchData>>(() => new Pan(horizontal, minLength, pxTolerance));
-    }
+    // /**
+    //  * Creates a binding that uses the swipe interaction.
+    //  * If this velocity is not reached, the interaction is cancelled.
+    //  * @param horizontal - Defines whether the swipe is horizontal or vertical
+    //  * @param minVelocity - The minimal minVelocity to reach for validating the swipe. In pixels per second.
+    //  * @param minLength - The minimal distance from the starting point to the release point for validating the swipe
+    //  * @param pxTolerance - The tolerance rate in pixels accepted while executing the swipe
+    //  */
+    // public swipeBinder(horizontal: boolean, minVelocity: number, minLength: number, pxTolerance: number): PartialTouchSrcTgtBinder {
+    //     return new UpdateBinder(this.undoHistory, this.logger, this.observer)
+    //         .usingInteraction<Swipe, SrcTgtPointsData<TouchData>>(() => new Swipe(horizontal, minVelocity, minLength, pxTolerance));
+    // }
 
     /**
      * Creates a binding that uses the click interaction.

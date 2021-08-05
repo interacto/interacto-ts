@@ -37,7 +37,7 @@ afterEach(() => {
 });
 
 test("pan horizontal right", () => {
-    binding = bindings.panBinder(true, 50, 5)
+    binding = bindings.panBinder(true, 5, 1, 5)
         .toProduce(() => new StubCmd(true))
         .on(c1)
         .bind();
@@ -55,7 +55,7 @@ test("pan horizontal right", () => {
 });
 
 test("pan horizontal left", () => {
-    binding = bindings.panBinder(true, 50, 5)
+    binding = bindings.panBinder(true, 5, 1, 5)
         .toProduce(() => new StubCmd(true))
         .on(c1)
         .bind();
@@ -74,7 +74,7 @@ test("pan horizontal left", () => {
 
 
 test("pan vertical up", () => {
-    binding = bindings.panBinder(false, 10, 0)
+    binding = bindings.panBinder(false, 10, 1, 0)
         .toProduce(() => new StubCmd(true))
         .on(c1)
         .bind();
@@ -92,7 +92,7 @@ test("pan vertical up", () => {
 });
 
 test("pan vertical down", () => {
-    binding = bindings.panBinder(false, 100, 1)
+    binding = bindings.panBinder(false, 100, 1, 1)
         .toProduce(() => new StubCmd(true))
         .on(c1)
         .bind();

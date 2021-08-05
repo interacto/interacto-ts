@@ -12,186 +12,106 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSMImpl} from "../../fsm/FSMImpl";
-import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import {InteractionBase} from "../InteractionBase";
-import {StdState} from "../../fsm/StdState";
-import {TerminalState} from "../../fsm/TerminalState";
-import {TouchPressureTransition} from "../../fsm/TouchPressureTransition";
-import {TouchReleaseTransition} from "../../fsm/TouchReleaseTransition";
-import {CancellingState} from "../../fsm/CancellingState";
-import {TouchMoveTransition} from "../../fsm/TouchMoveTransition";
+import {ConcurrentFSM} from "../../fsm/ConcurrentFSM";
+import {ConcurrentInteraction} from "../ConcurrentInteraction";
+import type {MultiTouchData} from "../../../api/interaction/MultiTouchData";
+import {MultiTouchDataImpl} from "../MultiTouchDataImpl";
 import {SrcTgtTouchDataImpl} from "../SrcTgtTouchDataImpl";
-import type {SrcTgtPointsData} from "../../../api/interaction/SrcTgtPointsData";
-import type {TouchData} from "../../../api/interaction/TouchData";
+import type {PanTouchFSMHandler} from "./PanTouch";
+import {PanTouchFSM} from "./PanTouch";
 
 /**
- * The FSM for the Pan interaction
+ * The FSM that defines a pan interaction.
+ * A Pan is composed of one or more Pan Touches, depending on how many are required by the binder.
  */
-export class PanFSM extends FSMImpl {
-    protected readonly horizontal: boolean;
-
-    protected readonly minLength: number;
-
-    protected readonly pxTolerance: number;
-
-    protected touchID?: number;
-
-    protected stableAxe?: number;
-
-    protected moveAxe?: number;
-
+class PanFSM extends ConcurrentFSM<PanTouchFSM> {
     /**
      * Creates the FSM.
      */
-    public constructor(horizontal: boolean, minLength: number, pxTolerance: number) {
-        super();
-        this.touchID = undefined;
-        this.stableAxe = undefined;
-        this.moveAxe = undefined;
-        this.horizontal = horizontal;
-        this.minLength = minLength;
-        this.pxTolerance = pxTolerance;
+    public constructor(horizontal: boolean, minLength: number, nbTouches: number) {
+        super([...Array(nbTouches).keys()].map(_ => new PanTouchFSM(horizontal, minLength)));
     }
 
-    public getPanDistance(x: number, y: number): number {
-        const moveAxe2 = this.horizontal ? x : y;
-        return this.moveAxe === undefined ? 0 : Math.abs(this.moveAxe - moveAxe2);
+    public override buildFSM(dataHandler: PanTouchFSMHandler): void {
+        super.buildFSM(dataHandler);
+        this.getConccurFSMs().forEach(fsm => {
+            fsm.buildFSM(dataHandler);
+        });
     }
 
-    public isStable(x: number, y: number): boolean {
-        const stableAxe2 = this.horizontal ? y : x;
-        return this.stableAxe === undefined ? false : Math.abs(this.stableAxe - stableAxe2) <= this.pxTolerance;
-    }
-
-    public override buildFSM(dataHandler?: PanFSMDataHandler): void {
-        if (this.states.length > 1) {
-            return;
+    public override process(event: Event): boolean {
+        if (!(event instanceof TouchEvent)) {
+            return false;
         }
 
-        super.buildFSM(dataHandler);
+        const touches = this.getConccurFSMs()
+            .filter(fsm => fsm.getTouchId() === event.changedTouches[0].identifier);
 
-        const touched = new StdState(this, "touched");
-        const moved = new StdState(this, "moved");
-        const released = new TerminalState(this, "released");
-        const cancelled = new CancellingState(this, "cancelled");
+        if (touches.length > 0) {
+            return touches[0].process(event);
+        }
 
-        this.addState(touched);
-        this.addState(moved);
-        this.addState(released);
-        this.addState(cancelled);
-
-        this.startingState = moved;
-
-        const press = new TouchPressureTransition(this.initState, touched);
-        press.action = (event: TouchEvent): void => {
-            this.setInitialValueOnTouch(event);
-            dataHandler?.touch(event);
-        };
-
-        const releaseTouched = new TouchReleaseTransition(touched, cancelled);
-        releaseTouched.isGuardOK = (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.touchID;
-
-        this.configMove(touched, cancelled, moved, dataHandler);
-        this.configRelease(moved, cancelled, released, dataHandler);
+        return this.getConccurFSMs().some(conccurFSM => conccurFSM.process(event));
     }
-
-
-    private configMove(touched: StdState, cancelled: CancellingState, moved: StdState, dataHandler?: PanFSMDataHandler): void {
-        const isGuardMoveKO = (evt: TouchEvent): boolean => evt.changedTouches[0].identifier === this.touchID &&
-            !this.isStable(evt.changedTouches[0].clientX, evt.changedTouches[0].clientY);
-
-        const moveTouched = new TouchMoveTransition(touched, cancelled);
-        moveTouched.isGuardOK = isGuardMoveKO;
-
-        const moveCancelled = new TouchMoveTransition(moved, cancelled);
-        moveCancelled.isGuardOK = isGuardMoveKO;
-
-        const isGuardMoveOK = (evt: TouchEvent): boolean => evt.changedTouches[0].identifier === this.touchID &&
-            this.isStable(evt.changedTouches[0].clientX, evt.changedTouches[0].clientY);
-        const actionMoveOK = (event: TouchEvent): void => {
-            dataHandler?.panning(event);
-        };
-
-        const moveTouchedOK = new TouchMoveTransition(touched, moved);
-        moveTouchedOK.isGuardOK = isGuardMoveOK;
-        moveTouchedOK.action = actionMoveOK;
-
-        const moveMovedOK = new TouchMoveTransition(moved, moved);
-        moveMovedOK.isGuardOK = isGuardMoveOK;
-        moveMovedOK.action = actionMoveOK;
-    }
-
-
-    private configRelease(moved: StdState, cancelled: CancellingState, released: TerminalState, dataHandler?: PanFSMDataHandler): void {
-        const releaseMoved = new TouchReleaseTransition(moved, cancelled);
-        releaseMoved.isGuardOK = (evt: TouchEvent): boolean => evt.changedTouches[0].identifier === this.touchID &&
-            !this.checkFinalPanConditions(evt);
-
-        const releaseFinal = new TouchReleaseTransition(moved, released);
-        releaseFinal.isGuardOK = (evt: TouchEvent): boolean => evt.changedTouches[0].identifier === this.touchID &&
-            this.checkFinalPanConditions(evt);
-        releaseFinal.action = (event: TouchEvent): void => {
-            dataHandler?.panned(event);
-        };
-    }
-
-    protected setInitialValueOnTouch(evt: TouchEvent): void {
-        const touch: Touch = evt.changedTouches[0];
-        this.touchID = touch.identifier;
-        this.moveAxe = this.horizontal ? touch.clientX : touch.clientY;
-        this.stableAxe = this.horizontal ? touch.clientY : touch.clientX;
-    }
-
-    protected checkFinalPanConditions(evt: TouchEvent): boolean {
-        return this.getPanDistance(evt.changedTouches[0].clientX, evt.changedTouches[0].clientY) >= this.minLength;
-    }
-
-    public override reinit(): void {
-        super.reinit();
-        this.touchID = undefined;
-        this.stableAxe = undefined;
-        this.moveAxe = undefined;
-    }
-}
-
-interface PanFSMDataHandler extends FSMDataHandler {
-    touch(evt: TouchEvent): void;
-    panning(evt: TouchEvent): void;
-    panned(evt: TouchEvent): void;
 }
 
 /**
- * A Pan user interaction.
+ * A pan user interaction.
+ * A pan starts when all its touches have started.
+ * A pan ends when the number of current touches becomes lower than the number of required touches.
+ * It is cancelled if the touches are not horizontal or vertical enough, and if the minimum required distance has not been covered at the end.
  */
-export class Pan extends InteractionBase<SrcTgtPointsData<TouchData>, SrcTgtTouchDataImpl, PanFSM> {
-    private readonly handler: PanFSMDataHandler;
-
+export class Pan extends ConcurrentInteraction<MultiTouchData, MultiTouchDataImpl, PanFSM> {
+    private readonly handler: PanTouchFSMHandler;
 
     /**
-     * Creates the interaction.
-     * @param horizontal - Defines whether the pan is horizontal or vertical
-     * @param minLength - The minimal distance from the starting point to the release point for validating the pan
-     * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
-     * @param fsm - The finiste-state machine to use for this interaction (can be undefined)
+     * Creates the pinch interaction
      */
-    public constructor(horizontal: boolean, minLength: number, pxTolerance: number, fsm?: PanFSM) {
-        super(fsm ?? new PanFSM(horizontal, minLength, pxTolerance), new SrcTgtTouchDataImpl());
+    public constructor(horizontal: boolean, minLength: number, nbTouches: number, pxTolerance: number) {
+        super(new PanFSM(horizontal, minLength, nbTouches), new MultiTouchDataImpl());
 
         this.handler = {
-            "touch": (evt: TouchEvent): void => {
-                const touch: Touch = evt.changedTouches[0];
-                this._data.copySrc(touch, evt);
-                this._data.copyTgt(touch, evt);
+            "onTouch": (event: TouchEvent): void => {
+                if (event.changedTouches.length > 0) {
+                    const data = new SrcTgtTouchDataImpl();
+                    data.copySrc(event.changedTouches[0], event);
+                    data.copyTgt(event.changedTouches[0], event);
+                    this._data.addTouchData(data);
+                }
             },
-            "panning": (evt: TouchEvent): void => {
-                this._data.copyTgt(evt.changedTouches[0], evt);
+            "onMove": (event: TouchEvent): void => {
+                this._data.setTouch(event.changedTouches[0], event);
             },
-            "panned": (evt: TouchEvent): void => {
-                this._data.copyTgt(evt.changedTouches[0], evt);
+            "onRelease": (event: TouchEvent): void => {
+                this._data.setTouch(event.changedTouches[0], event);
             },
             "reinitData": (): void => {
-                this.reinitData();
+                const currentIDs = this.fsm.getConccurFSMs()
+                    .filter(fsm => fsm.started)
+                    .map(fsm => fsm.getTouchId());
+
+                this.data
+                    .touches
+                    .filter(data => !currentIDs.includes(data.src.identifier))
+                    .forEach(data => {
+                        (this.data as MultiTouchDataImpl).removeTouchData(data.src.identifier);
+                    });
+            },
+            "isHorizontal": (): boolean => this._data.isHorizontal(pxTolerance),
+            "isVertical": (): boolean => this._data.isVertical(pxTolerance),
+            "getDiffX": (id: number | undefined): number => {
+                const res = this.data.touches.find(data => data.src.identifier === id);
+                if (res !== undefined) {
+                    return res.diffScreenX;
+                }
+                return 0;
+            },
+            "getDiffY": (id: number | undefined): number => {
+                const res = this.data.touches.find(data => data.src.identifier === id);
+                if (res !== undefined) {
+                    return res.diffScreenY;
+                }
+                return 0;
             }
         };
 

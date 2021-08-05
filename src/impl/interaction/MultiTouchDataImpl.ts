@@ -112,9 +112,9 @@ export class MultiTouchDataImpl implements MultiTouchData, Flushable {
     }
 
     /**
-     * Returns the distance between the end position of the touches divided the distance between the starting position of the touches.
-     * If more or less than two touches are involved, or if the touches do not get closer during the interaction or follow the same line,
-     * the method returns undefined.
+     * Returns the distance between the end position of the touches divided by the distance between the starting position of the touches.
+     * If more or less than two touches are involved, or if the touches don't go in opposite directions during the interaction or
+     * follow the same line, the method returns undefined.
      * @param pxTolerance - The pixel tolerance for considering that the two touches are moving on the same line.
      */
     public pinchFactor(pxTolerance: number): number | undefined {

@@ -92,14 +92,6 @@ beforeEach(() => {
     fsm.addHandler(handler);
 });
 
-test("cons OK error", () => {
-    expect(() => new ConcurrentFSM([fsm1])).toThrow(Error);
-});
-
-test("cons OK error empty", () => {
-    expect(() => new ConcurrentFSM(Array<FSMImpl>())).toThrow(Error);
-});
-
 test("nb FSMs OK", () => {
     expect(fsm.getConccurFSMs()).toHaveLength(2);
 });

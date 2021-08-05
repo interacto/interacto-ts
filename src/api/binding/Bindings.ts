@@ -144,9 +144,10 @@ export abstract class Bindings {
      * Creates a binding that uses the pan interaction.
      * @param horizontal - Defines whether the pan is horizontal or vertical
      * @param minLength - The minimal distance from the starting point to the release point for validating the pan
+     * @param nbTouches - The number of required touches.
      * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
      */
-    abstract panBinder(horizontal: boolean, minLength: number, pxTolerance: number): PartialTouchSrcTgtBinder;
+    abstract panBinder(horizontal: boolean, minLength: number, nbTouches: number, pxTolerance: number): PartialMultiTouchBinder;
 
     /**
      * Creates a binding that uses the click interaction.
