@@ -45,14 +45,14 @@ export class PanTouchFSM extends FSMImpl {
     /**
      * Checks if the Pan this PanTouch is part of is horizontal enough (or vertical enough) for the interaction to continue.
      */
-    private hasCorrectOrientation(dataHandler?: PanTouchFSMHandler): boolean {
+    private hasCorrectOrientation(dataHandler: PanTouchFSMHandler | undefined): boolean {
         return this.isHorizontal ? dataHandler?.isHorizontal() === true : dataHandler?.isVertical() === true;
     }
 
     /**
      * Checks if the Pan this PanTouch is part of is long enough to be ended successfully.
      */
-    private hasCorrectLength(dataHandler?: PanTouchFSMHandler): boolean {
+    private hasCorrectLength(dataHandler: PanTouchFSMHandler | undefined): boolean {
         if (dataHandler !== undefined) {
             return this.isHorizontal
                 ? (Math.abs(dataHandler.getDiffX(this.touchID)) >= this.minLength) : (Math.abs(dataHandler.getDiffY(this.touchID)) >= this.minLength);
@@ -90,9 +90,6 @@ export class PanTouchFSM extends FSMImpl {
      */
     private createTransitions(touched: StdState, moved: StdState, released: TerminalState, cancelled: CancellingState,
                               dataHandler?: PanTouchFSMHandler): void {
-        // The condition that checks if the interaction can continue after any new movement.
-        const moveCondition = (event: TouchEvent): boolean => (event.changedTouches[0].identifier === this.touchID) &&
-            this.hasCorrectOrientation(dataHandler);
 
         const pressure = new TouchPressureTransition(this.initState, touched);
         pressure.action = (event: TouchEvent): void => {
@@ -101,41 +98,46 @@ export class PanTouchFSM extends FSMImpl {
         };
 
         const initialMoveOK = new TouchMoveTransition(touched, moved);
-        initialMoveOK.isGuardOK = (event: TouchEvent): boolean => {
-            // Interaction data has to be updated before testing the transition condition, since the condition relies on the data.
-            dataHandler?.onMove(event);
-            return moveCondition(event);
-        };
+        initialMoveOK.isGuardOK = (event: TouchEvent): boolean => this.updateOnMove(event, dataHandler) && this.hasCorrectOrientation(dataHandler);
 
         const initialMoveKO = new TouchMoveTransition(touched, cancelled);
-        initialMoveKO.isGuardOK = (event: TouchEvent): boolean => {
-            dataHandler?.onMove(event);
-            return !moveCondition(event);
-        };
+        initialMoveKO.isGuardOK = (event: TouchEvent): boolean => this.updateOnMove(event, dataHandler) && !this.hasCorrectOrientation(dataHandler);
 
         const moveOK = new TouchMoveTransition(moved, moved);
-        moveOK.isGuardOK = (event: TouchEvent): boolean => {
-            dataHandler?.onMove(event);
-            return moveCondition(event);
-        };
+        moveOK.isGuardOK = (event: TouchEvent): boolean => this.updateOnMove(event, dataHandler) && this.hasCorrectOrientation(dataHandler);
 
         const moveKO = new TouchMoveTransition(moved, cancelled);
-        moveKO.isGuardOK = (event: TouchEvent): boolean => {
-            dataHandler?.onMove(event);
-            return !moveCondition(event);
-        };
+        moveKO.isGuardOK = (event: TouchEvent): boolean => this.updateOnMove(event, dataHandler) && !this.hasCorrectOrientation(dataHandler);
 
         const releaseOK = new TouchReleaseTransition(moved, released);
-        releaseOK.isGuardOK = (event: TouchEvent): boolean => {
-            dataHandler?.onRelease(event);
-            return moveCondition(event) && this.hasCorrectLength(dataHandler);
-        };
+        releaseOK.isGuardOK = (event: TouchEvent): boolean => this.updateOnRelease(event, dataHandler) &&
+            this.hasCorrectOrientation(dataHandler) && this.hasCorrectLength(dataHandler);
 
         const releaseKO = new TouchReleaseTransition(moved, cancelled);
-        releaseKO.isGuardOK = (event: TouchEvent): boolean => {
+        releaseKO.isGuardOK = (event: TouchEvent): boolean => this.updateOnRelease(event, dataHandler) &&
+            !(this.hasCorrectOrientation(dataHandler) && this.hasCorrectLength(dataHandler));
+    }
+
+    /**
+     * Updates the interaction data if a touch move is registered.
+     */
+    private updateOnMove(event: TouchEvent, dataHandler: PanTouchFSMHandler | undefined): boolean {
+        const isSameID = event.changedTouches[0].identifier === this.touchID;
+        if (isSameID) {
+            dataHandler?.onMove(event);
+        }
+        return isSameID;
+    }
+
+    /**
+     * Updates the interaction data if a touch release is registered.
+     */
+    private updateOnRelease(event: TouchEvent, dataHandler: PanTouchFSMHandler | undefined): boolean {
+        const isSameID = event.changedTouches[0].identifier === this.touchID;
+        if (isSameID) {
             dataHandler?.onRelease(event);
-            return !(moveCondition(event) && this.hasCorrectLength(dataHandler));
-        };
+        }
+        return isSameID;
     }
 
     public getTouchId(): number | undefined {
