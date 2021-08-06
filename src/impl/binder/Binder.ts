@@ -83,6 +83,9 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
         this.stopPropagation ??= false;
         this.prevDefault ??= false;
         this.observer = observer;
+
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        this.whenFnArray = this.whenFnArray === undefined ? [] : [...this.whenFnArray];
         this.whenFn = (i): boolean => this.whenFnArray.every(fn => fn(i));
     }
 
