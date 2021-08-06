@@ -70,6 +70,7 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
 
     protected logger: Logger;
 
+    protected whenFnArray: Array<(i: D) => boolean> = new Array<(i: D) => boolean>();
 
     protected constructor(undoHistory: UndoHistory, logger: Logger, observer?: BindingsObserver, binder?: Partial<Binder<C, I, D>>) {
         Object.assign(this, binder);
@@ -82,6 +83,7 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
         this.stopPropagation ??= false;
         this.prevDefault ??= false;
         this.observer = observer;
+        this.whenFn = (i): boolean => this.whenFnArray.every(fn => fn(i));
     }
 
     protected abstract duplicate(): Binder<C, I, D>;
@@ -115,7 +117,7 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
 
     public when(fn: (i: D) => boolean): Binder<C, I, D> {
         const dup = this.duplicate();
-        dup.whenFn = fn;
+        dup.whenFnArray.push(fn);
         return dup;
     }
 

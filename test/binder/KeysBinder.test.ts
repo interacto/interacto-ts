@@ -754,3 +754,25 @@ test("key binding with invalid interaction key data", () => {
     expect(ctx.commands).toHaveLength(0);
     expect(binding.timesEnded).toStrictEqual(0);
 });
+
+test("when routine accumulation 1", () => {
+    binding = bindings.keyDownBinder(false)
+        .on(elt)
+        .toProduce(() => new StubCmd(true))
+        .when(() => false)
+        .when(() => true)
+        .bind();
+    robot(elt).keydown();
+    expect(ctx.commands).toHaveLength(0);
+});
+
+test("when routine accumulation 2", () => {
+    binding = bindings.keyDownBinder(false)
+        .on(elt)
+        .toProduce(() => new StubCmd(true))
+        .when(() => true)
+        .when(() => false)
+        .bind();
+    robot(elt).keydown();
+    expect(ctx.commands).toHaveLength(0);
+});
