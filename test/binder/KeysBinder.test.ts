@@ -779,6 +779,29 @@ test("when routine accumulation 2", () => {
     expect(ctx.commands).toHaveLength(0);
 });
 
+test("when routine accumulation 3", () => {
+    binding = bindings.keyDownBinder(false)
+        .on(elt)
+        .toProduce(() => new StubCmd(true))
+        .when(() => true)
+        .when(() => true)
+        .bind();
+    robot(elt).keydown();
+    expect(ctx.commands).toHaveLength(1);
+});
+
+test("when routine accumulation 4", () => {
+    binding = bindings.keyDownBinder(false)
+        .on(elt)
+        .toProduce(() => new StubCmd(true))
+        .when(() => false)
+        .when(() => false)
+        .bind();
+    robot(elt).keydown();
+    expect(ctx.commands).toHaveLength(0);
+});
+
+
 test("whenArray is copied when binder is copied", () => {
     const partialBinder1: KeyInteractionCmdBinder<StubCmd, Interaction<KeyData>, KeyData> = bindings.keyDownBinder(true)
         .on(elt)

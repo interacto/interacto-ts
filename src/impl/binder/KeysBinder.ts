@@ -45,7 +45,6 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, D extends I
 
         Object.assign(this, binder);
 
-        // this._whenFnArray = binder?._whenFnArray ? Object.assign([], binder._whenFnArray) : new Array<(i: D) => boolean>();
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         this.whenFnArray = this.whenFnArray === undefined ? [] : [...this.whenFnArray];
         this.whenFn = (i): boolean => this.whenFnArray.every(fn => fn(i));
