@@ -25,13 +25,15 @@ import {KeysBinder} from "../../src/impl/binder/KeysBinder";
 import {KeyDown} from "../../src/impl/interaction/library/KeyDown";
 import type {KeysData} from "../../src/api/interaction/KeysData";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
-import type {Bindings} from "../../src/api/binding/Bindings";
 import type {Logger} from "../../src/api/logging/Logger";
 import type {EltRef} from "../../src/api/binder/BaseBinderBuilder";
 import {LogLevel} from "../../src/api/logging/LogLevel";
 import clearAllTimers = jest.clearAllTimers;
 import type {UndoHistory} from "../../src/api/undo/UndoHistory";
 import {MouseDown} from "../../src/impl/interaction/library/MouseDown";
+import type {KeyInteractionCmdBinder} from "../../src/api/binder/KeyInteractionCmdBinder";
+import type {KeyData} from "../../src/api/interaction/KeyData";
+import type {Bindings} from "../../src/api/binding/Bindings";
 
 let elt: HTMLElement;
 let binding: Binding<Command, Interaction<InteractionData>, InteractionData> | undefined;
@@ -753,4 +755,66 @@ test("key binding with invalid interaction key data", () => {
 
     expect(ctx.commands).toHaveLength(0);
     expect(binding.timesEnded).toStrictEqual(0);
+});
+
+test("when routine accumulation 1", () => {
+    binding = bindings.keyDownBinder(false)
+        .on(elt)
+        .toProduce(() => new StubCmd(true))
+        .when(() => false)
+        .when(() => true)
+        .bind();
+    robot(elt).keydown();
+    expect(ctx.commands).toHaveLength(0);
+});
+
+test("when routine accumulation 2", () => {
+    binding = bindings.keyDownBinder(false)
+        .on(elt)
+        .toProduce(() => new StubCmd(true))
+        .when(() => true)
+        .when(() => false)
+        .bind();
+    robot(elt).keydown();
+    expect(ctx.commands).toHaveLength(0);
+});
+
+test("when routine accumulation 3", () => {
+    binding = bindings.keyDownBinder(false)
+        .on(elt)
+        .toProduce(() => new StubCmd(true))
+        .when(() => true)
+        .when(() => true)
+        .bind();
+    robot(elt).keydown();
+    expect(ctx.commands).toHaveLength(1);
+});
+
+test("when routine accumulation 4", () => {
+    binding = bindings.keyDownBinder(false)
+        .on(elt)
+        .toProduce(() => new StubCmd(true))
+        .when(() => false)
+        .when(() => false)
+        .bind();
+    robot(elt).keydown();
+    expect(ctx.commands).toHaveLength(0);
+});
+
+
+test("whenArray is copied when binder is copied", () => {
+    const partialBinder1: KeyInteractionCmdBinder<StubCmd, Interaction<KeyData>, KeyData> = bindings.keyDownBinder(true)
+        .on(elt)
+        .toProduce(() => new StubCmd(true))
+        .when(() => true);
+
+    const partialBinder2: KeyInteractionCmdBinder<StubCmd, Interaction<KeyData>, KeyData> = partialBinder1
+        .when(() => false);
+
+    partialBinder1.bind();
+    partialBinder2.bind();
+
+    robot(elt).keydown();
+
+    expect(ctx.commands).toHaveLength(1);
 });
