@@ -44,6 +44,11 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, D extends I
         super(undoHistory, logger, observer, binder);
 
         Object.assign(this, binder);
+
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        this.whenFnArray = this.whenFnArray === undefined ? [] : [...this.whenFnArray];
+        this.whenFn = (i): boolean => this.whenFnArray.every(fn => fn(i));
+
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         this.keysOrCodes = this.keysOrCodes === undefined ? [] : [...this.keysOrCodes];
         this.checkCodeFn = (i: D): boolean => {
