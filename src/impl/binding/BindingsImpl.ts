@@ -32,8 +32,6 @@ import {Tap} from "../interaction/library/Tap";
 import type {TapData} from "../../api/interaction/TapData";
 import {LongTouch} from "../interaction/library/LongTouch";
 import type {TouchData} from "../../api/interaction/TouchData";
-import {Swipe} from "../interaction/library/Swipe";
-import {Pan} from "../interaction/library/Pan";
 import {Click} from "../interaction/library/Click";
 import type {PointData} from "../../api/interaction/PointData";
 import {MouseDown} from "../interaction/library/MouseDown";
@@ -195,22 +193,39 @@ export class BindingsImpl extends Bindings {
      * @param horizontal - Defines whether the swipe is horizontal or vertical
      * @param minVelocity - The minimal minVelocity to reach for validating the swipe. In pixels per second.
      * @param minLength - The minimal distance from the starting point to the release point for validating the swipe
+     * @param nbTouches - The number of touches required to start the interaction
      * @param pxTolerance - The tolerance rate in pixels accepted while executing the swipe
      */
-    public swipeBinder(horizontal: boolean, minVelocity: number, minLength: number, pxTolerance: number): PartialTouchSrcTgtBinder {
+    public swipeBinder(horizontal: boolean, minVelocity: number, minLength: number, nbTouches: number, pxTolerance: number): PartialMultiTouchBinder {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<Swipe, SrcTgtPointsData<TouchData>>(() => new Swipe(horizontal, minVelocity, minLength, pxTolerance));
+            .usingInteraction<MultiTouch, MultiTouchData>(() => new MultiTouch(nbTouches))
+            .when(i => (horizontal ? i.isHorizontal(pxTolerance) : i.isVertical(pxTolerance)))
+            .when(i => (horizontal ? Math.abs(i.touches[0].diffScreenX) >= minLength : Math.abs(i.touches[0].diffScreenY) >= minLength))
+            .when(i => i.touches[0].velocity >= minVelocity);
     }
 
     /**
      * Creates a binding that uses the pan interaction.
      * @param horizontal - Defines whether the pan is horizontal or vertical
      * @param minLength - The minimal distance from the starting point to the release point for validating the pan
+     * @param nbTouches - The number of touches required to start the interaction
      * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
      */
-    public panBinder(horizontal: boolean, minLength: number, pxTolerance: number): PartialTouchSrcTgtBinder {
+    public panBinder(horizontal: boolean, minLength: number, nbTouches: number, pxTolerance: number): PartialMultiTouchBinder {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<Pan, SrcTgtPointsData<TouchData>>(() => new Pan(horizontal, minLength, pxTolerance));
+            .usingInteraction<MultiTouch, MultiTouchData>(() => new MultiTouch(nbTouches))
+            .when(i => (horizontal ? i.isHorizontal(pxTolerance) : i.isVertical(pxTolerance)))
+            .when(i => (horizontal ? Math.abs(i.touches[0].diffScreenX) >= minLength : Math.abs(i.touches[0].diffScreenY) >= minLength));
+    }
+
+    /**
+     * Creates a binding that uses the pinch interaction.
+     * @param pxTolerance - The tolerance rate in pixels accepted while executing the pinch
+     */
+    public pinchBinder(pxTolerance: number): PartialMultiTouchBinder {
+        return new UpdateBinder(this.undoHistory, this.logger, this.observer)
+            .usingInteraction<MultiTouch, MultiTouchData>(() => new MultiTouch(2))
+            .when(i => i.pinchFactor(pxTolerance) !== undefined);
     }
 
     /**

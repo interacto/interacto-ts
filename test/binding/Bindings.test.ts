@@ -21,7 +21,7 @@ import type {
     InteractionCmdUpdateBinder,
     InteractionData,
     KeysData,
-    Logger,
+    Logger, MultiTouchData,
     PointData,
     PointsData,
     ScrollData,
@@ -513,8 +513,8 @@ test("that hyperlink binder works", () => {
 });
 
 test("that swipe binder works", () => {
-    bindings.swipeBinder(true, 400, 200, 10)
-        .toProduce((_i: SrcTgtPointsData<TouchData>) => new StubCmd(true))
+    bindings.swipeBinder(true, 400, 200, 1, 10)
+        .toProduce((_i: MultiTouchData) => new StubCmd(true))
         .on(elt)
         .bind();
 
@@ -527,6 +527,29 @@ test("that swipe binder works", () => {
             [{"screenX": 450, "screenY": 30, "clientX": 500, "clientY": 210, "identifier": 2, "target": elt}], 6000)
         .touchend({},
             [{"screenX": 450, "screenY": 30, "clientX": 500, "clientY": 210, "identifier": 2, "target": elt}], 6000);
+
+    expect(ctx.commands).toHaveLength(1);
+});
+
+test("that pinch binder works", () => {
+    bindings.pinchBinder(10)
+        .toProduce((_i: MultiTouchData) => new StubCmd(true))
+        .on(elt)
+        .bind();
+
+    robot(elt)
+        .touchstart({},
+            [{"screenX": 15, "screenY": 16, "clientX": 100, "clientY": 200, "identifier": 2, "target": elt}])
+        .touchstart({},
+            [{"screenX": 10, "screenY": 11, "clientX": 100, "clientY": 200, "identifier": 3, "target": elt}])
+        .touchmove({},
+            [{"screenX": 20, "screenY": 22, "clientX": 100, "clientY": 200, "identifier": 2, "target": elt}])
+        .touchmove({},
+            [{"screenX": 5, "screenY": 6, "clientX": 100, "clientY": 200, "identifier": 3, "target": elt}])
+        .touchend({},
+            [{"screenX": 20, "screenY": 22, "clientX": 500, "clientY": 210, "identifier": 2, "target": elt}])
+        .touchend({},
+            [{"screenX": 5, "screenY": 6, "clientX": 500, "clientY": 210, "identifier": 3, "target": elt}]);
 
     expect(ctx.commands).toHaveLength(1);
 });

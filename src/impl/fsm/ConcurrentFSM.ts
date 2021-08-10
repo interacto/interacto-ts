@@ -24,9 +24,9 @@ export class ConcurrentFSM<F extends FSM> extends FSMImpl {
 
     public constructor(fsms: ReadonlyArray<F>) {
         super();
-        if (fsms.length < 2) {
-            throw new Error(`Requires more that 1 FSM: ${String(fsms)}`);
-        }
+        // if (fsms.length < 2) {
+        //     throw new Error(`Requires more that 1 FSM: ${String(fsms)}`);
+        // }
 
         const handler: FSMHandler = {
             "fsmStarts": (): void => {

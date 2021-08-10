@@ -76,7 +76,7 @@ export class SrcTgtPointsDataImpl implements SrcTgtPointsData<PointData> {
     }
 
     public get velocity(): number {
-        return Math.sqrt(this.diffScreenX ** 2 + this.diffScreenY ** 2) / this.duration;
+        return Math.sqrt(this.diffScreenX ** 2 + this.diffScreenY ** 2) / this.duration * 1000;
     }
 
     public isHorizontal(pxTolerance: number): boolean {

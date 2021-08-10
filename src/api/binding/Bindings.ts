@@ -136,17 +136,26 @@ export abstract class Bindings {
      * @param horizontal - Defines whether the swipe is horizontal or vertical
      * @param minVelocity - The minimal minVelocity to reach for validating the swipe. In pixels per second.
      * @param minLength - The minimal distance from the starting point to the release point for validating the swipe
+     * @param nbTouches - The number of touches required to start the interaction
      * @param pxTolerance - The tolerance rate in pixels accepted while executing the swipe
      */
-    abstract swipeBinder(horizontal: boolean, minVelocity: number, minLength: number, pxTolerance: number): PartialTouchSrcTgtBinder;
+    abstract swipeBinder(horizontal: boolean, minVelocity: number, minLength: number, nbTouches: number,
+        pxTolerance: number): PartialMultiTouchBinder;
 
     /**
      * Creates a binding that uses the pan interaction.
      * @param horizontal - Defines whether the pan is horizontal or vertical
      * @param minLength - The minimal distance from the starting point to the release point for validating the pan
+     * @param nbTouches - The number of touches required to start the interaction
      * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
      */
-    abstract panBinder(horizontal: boolean, minLength: number, pxTolerance: number): PartialTouchSrcTgtBinder;
+    abstract panBinder(horizontal: boolean, minLength: number, nbTouches: number, pxTolerance: number): PartialMultiTouchBinder;
+
+    /**
+     * Creates a binding that uses the pinch interaction.
+     * @param pxTolerance - The tolerance rate in pixels accepted while executing the pinch
+     */
+    abstract pinchBinder(pxTolerance: number): PartialMultiTouchBinder;
 
     /**
      * Creates a binding that uses the click interaction.
