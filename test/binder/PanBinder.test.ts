@@ -37,7 +37,7 @@ afterEach(() => {
 });
 
 test("pan horizontal right", () => {
-    binding = bindings.panBinder(true, 50, 5)
+    binding = bindings.panBinder(true, 50, 1, 5)
         .toProduce(() => new StubCmd(true))
         .on(c1)
         .bind();
@@ -45,7 +45,7 @@ test("pan horizontal right", () => {
     c1.dispatchEvent(createTouchEvent("touchstart", 3, c1, 15, 20, 150, 200));
     c1.dispatchEvent(createTouchEvent("touchmove", 3, c1, 16, 21, 160, 201));
     c1.dispatchEvent(createTouchEvent("touchmove", 3, c1, 20, 25, 200, 205));
-    c1.dispatchEvent(createTouchEvent("touchend", 3, c1, 20, 25, 200, 205));
+    c1.dispatchEvent(createTouchEvent("touchend", 3, c1, 65, 25, 200, 205));
 
     expect(binding).toBeDefined();
     expect(binding.timesCancelled).toStrictEqual(0);
@@ -55,15 +55,15 @@ test("pan horizontal right", () => {
 });
 
 test("pan horizontal left", () => {
-    binding = bindings.panBinder(true, 50, 5)
+    binding = bindings.panBinder(true, 50, 1, 5)
         .toProduce(() => new StubCmd(true))
         .on(c1)
         .bind();
 
-    c1.dispatchEvent(createTouchEvent("touchstart", 3, c1, 15, 20, 150, 200));
-    c1.dispatchEvent(createTouchEvent("touchmove", 3, c1, 14, 19, 140, 199));
-    c1.dispatchEvent(createTouchEvent("touchmove", 3, c1, 10, 15, 100, 195));
-    c1.dispatchEvent(createTouchEvent("touchend", 3, c1, 10, 15, 100, 195));
+    c1.dispatchEvent(createTouchEvent("touchstart", 3, c1, 65, 20, 150, 200));
+    c1.dispatchEvent(createTouchEvent("touchmove", 3, c1, 20, 19, 140, 199));
+    c1.dispatchEvent(createTouchEvent("touchmove", 3, c1, 17, 15, 100, 195));
+    c1.dispatchEvent(createTouchEvent("touchend", 3, c1, 15, 15, 100, 195));
 
     expect(binding).toBeDefined();
     expect(binding.timesCancelled).toStrictEqual(0);
@@ -74,7 +74,7 @@ test("pan horizontal left", () => {
 
 
 test("pan vertical up", () => {
-    binding = bindings.panBinder(false, 10, 0)
+    binding = bindings.panBinder(false, 10, 1, 0)
         .toProduce(() => new StubCmd(true))
         .on(c1)
         .bind();
@@ -92,7 +92,7 @@ test("pan vertical up", () => {
 });
 
 test("pan vertical down", () => {
-    binding = bindings.panBinder(false, 100, 1)
+    binding = bindings.panBinder(false, 100, 1, 1)
         .toProduce(() => new StubCmd(true))
         .on(c1)
         .bind();

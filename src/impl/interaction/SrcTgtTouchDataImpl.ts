@@ -82,10 +82,10 @@ export class SrcTgtTouchDataImpl implements SrcTgtPointsData<TouchData> {
     }
 
     public isHorizontal(pxTolerance: number): boolean {
-        return Math.abs(this.diffScreenY) < pxTolerance;
+        return Math.abs(this.diffScreenY) <= pxTolerance;
     }
 
     public isVertical(pxTolerance: number): boolean {
-        return Math.abs(this.diffScreenX) < pxTolerance;
+        return Math.abs(this.diffScreenX) <= pxTolerance;
     }
 }

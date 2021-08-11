@@ -119,7 +119,7 @@ test("duration", () => {
 });
 
 test("velocity", () => {
-    // velocity should be sqrt(deltaX^2 + deltaY^2) / velocity = sqrt(16 + 9) / 10 = 0.5
+    // velocity should be sqrt(deltaX^2 + deltaY^2) / velocity  = sqrt(16 + 9) / 10 = 0.5
     expect(data.velocity).toStrictEqual(0.5);
 });
 
