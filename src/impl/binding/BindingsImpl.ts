@@ -201,7 +201,8 @@ export class BindingsImpl extends Bindings {
             .usingInteraction<MultiTouch, MultiTouchData>(() => new MultiTouch(nbTouches))
             .when(i => (horizontal ? i.isHorizontal(pxTolerance) : i.isVertical(pxTolerance)))
             .when(i => (horizontal ? Math.abs(i.touches[0].diffScreenX) >= minLength : Math.abs(i.touches[0].diffScreenY) >= minLength))
-            .when(i => i.touches[0].velocity >= minVelocity);
+            // The velocity value is in pixels/ms, so conversion is necessary
+            .when(i => i.touches[0].velocity * 1000 >= minVelocity);
     }
 
     /**
