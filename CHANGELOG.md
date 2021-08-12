@@ -1,3 +1,27 @@
+# 5.8.0
+
+* change(binder): added isCode option to with() for keyboard interactions (#39)
+* change(interaction): Press, Mousemove, Mouseover and Mouseout interactions renamed (#45)
+
+* feat(interaction): added key up, mouse up interactions (#49)
+* feat(interaction): added methods to SrcTgtPointsData and MultiTouchData (#50)
+* feat(interaction): added Pinch binder and updated Pan and Swipe binders (#53)
+* feat(interaction): Wheel interaction added (#44)
+* feat(interaction): when routine now usable several times per binder (#52)
+
+* fix(binder): binders can have the throttle routines in all the cases
+* fix(binder): key binders do not have the throttle, continuousExecution routines
+* fix(binding): catch must be called on crash during the command creation
+* fix(interaction): event must not be prevdef or stoppropa if not processed
+* fix(interaction): scroll interaction not using correct event type (#43)
+
+* test(all): tests added
+
+* build(deps): bump path-parse from 1.0.6 to 1.0.7 (#54)
+* clean(fsm): useless method removed
+* config(script): mutation command added
+
+
 # 5.7.0
 
 * new(binding): binding now have a name and binders can set binding's name
