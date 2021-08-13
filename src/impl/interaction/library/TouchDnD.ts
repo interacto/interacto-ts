@@ -24,6 +24,7 @@ import {getTouch} from "../../fsm/Events";
 import {SrcTgtTouchDataImpl} from "../SrcTgtTouchDataImpl";
 import type {SrcTgtPointsData} from "../../../api/interaction/SrcTgtPointsData";
 import type {TouchData} from "../../../api/interaction/TouchData";
+import {CancellingState} from "../../fsm/CancellingState";
 
 /**
  * The FSM that defines a touch interaction (that works like a DnD)
@@ -31,14 +32,25 @@ import type {TouchData} from "../../../api/interaction/TouchData";
 export class TouchDnDFSM extends FSMImpl {
     private touchID?: number;
 
+    private readonly cancellable;
+
+    private readonly movementRequired;
+
     /**
      * Creates the FSM.
+     * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
+     * @param movementRequired - Whether the DnD starts after the touch point has begun moving (default)
+     * or as soon as the screen is touched.
+     * The latter is used for the MultiTouch interaction.
      */
-    public constructor() {
+    public constructor(cancellable: boolean, movementRequired: boolean = true) {
         super();
         this.touchID = undefined;
+        this.cancellable = cancellable;
+        this.movementRequired = movementRequired;
     }
 
+    // eslint-disable-next-line max-lines-per-function
     public override buildFSM(dataHandler?: TouchDnDFSMHandler): void {
         if (this.states.length > 1) {
             return;
@@ -47,28 +59,70 @@ export class TouchDnDFSM extends FSMImpl {
         super.buildFSM(dataHandler);
 
         const touched = new StdState(this, "touched");
+        const inProgress = new StdState(this, "moved");
         const released = new TerminalState(this, "released");
+        const cancelled = new CancellingState(this, "cancelled");
 
         this.addState(touched);
+        this.addState(inProgress);
         this.addState(released);
+        this.addState(cancelled);
+        this.startingState = inProgress;
 
-        const pressure = new TouchPressureTransition(this.initState, touched);
-        pressure.action = (event: TouchEvent): void => {
-            this.touchID = event.changedTouches[0].identifier;
-            dataHandler?.onTouch(event);
-        };
+        // Transitions used if the DnD only starts after a touch has been moved
+        if (this.movementRequired) {
+            const pressure = new TouchPressureTransition(this.initState, touched);
+            pressure.action = (event: TouchEvent): void => {
+                this.touchID = event.changedTouches[0].identifier;
+                dataHandler?.onTouch(event);
+            };
 
-        const move = new TouchMoveTransition(touched, touched);
+            const firstMove = new TouchMoveTransition(touched, inProgress);
+            firstMove.isGuardOK = (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.touchID;
+            firstMove.action = (event: TouchEvent): void => {
+                dataHandler?.onMove(event);
+            };
+        } else {
+            // Transitions used if the DnD starts directly after a touch
+            const pressure = new TouchPressureTransition(this.initState, inProgress);
+            pressure.action = (event: TouchEvent): void => {
+                this.touchID = event.changedTouches[0].identifier;
+                dataHandler?.onTouch(event);
+            };
+        }
+
+        const move = new TouchMoveTransition(inProgress, inProgress);
         move.isGuardOK = (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.touchID;
         move.action = (event: TouchEvent): void => {
             dataHandler?.onMove(event);
         };
 
-        const release = new TouchReleaseTransition(touched, released);
-        release.isGuardOK = (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.touchID;
-        release.action = (event: TouchEvent): void => {
-            dataHandler?.onRelease(event);
-        };
+        // Transitions used if the DnD can be cancelled by releasing the touch on a dwell spring element
+        if (this.cancellable) {
+            const release = new TouchReleaseTransition(inProgress, released);
+            release.isGuardOK = (event: TouchEvent): boolean => {
+                // Touch event behaviour is not consistent with mouse events: event.tgt.target points to the original element, not to the one
+                // currently targeted. So we have to retrieve the current target manually.
+                const tgt = document.elementFromPoint(event.changedTouches[0].clientX, event.changedTouches[0].clientY);
+                return event.changedTouches[0].identifier === this.touchID &&
+                    (!(tgt instanceof Element) || !tgt.classList.contains("ioDwellSpring"));
+            };
+            release.action = (event: TouchEvent): void => {
+                dataHandler?.onRelease(event);
+            };
+
+            const releaseCancel = new TouchReleaseTransition(inProgress, cancelled);
+            releaseCancel.isGuardOK = (event: TouchEvent): boolean => {
+                const tgt = document.elementFromPoint(event.changedTouches[0].clientX, event.changedTouches[0].clientY);
+                return event.changedTouches[0].identifier === this.touchID && tgt instanceof Element && tgt.classList.contains("ioDwellSpring");
+            };
+        } else {
+            const release = new TouchReleaseTransition(inProgress, released);
+            release.isGuardOK = (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.touchID;
+            release.action = (event: TouchEvent): void => {
+                dataHandler?.onRelease(event);
+            };
+        }
 
         super.buildFSM(dataHandler);
     }
@@ -99,9 +153,14 @@ export class TouchDnD extends InteractionBase<SrcTgtPointsData<TouchData>, SrcTg
 
     /**
      * Creates the interaction.
+     * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
+     * @param movementRequired - Whether the DnD starts after the touch point has begun moving (default)
+     * or as soon as the screen is touched.
+     * The latter is used for the MultiTouch interaction.
+     * @param fsm - The optional FSM provided for the interaction
      */
-    public constructor(fsm?: TouchDnDFSM) {
-        super(fsm ?? new TouchDnDFSM(), new SrcTgtTouchDataImpl());
+    public constructor(cancellable: boolean, movementRequired: boolean = true, fsm?: TouchDnDFSM) {
+        super(fsm ?? new TouchDnDFSM(cancellable, movementRequired), new SrcTgtTouchDataImpl());
 
         this.handler = {
             "onTouch": (evt: TouchEvent): void => {
