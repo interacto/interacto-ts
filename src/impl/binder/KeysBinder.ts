@@ -45,15 +45,8 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, D extends I
 
         Object.assign(this, binder);
 
-        this.whenFnArray = [...this.whenFnArray];
-        this.whenFn = (i): boolean => this.whenFnArray.every(fn => fn(i));
-
-        this.firstFnArray = [...this.firstFnArray];
-        this.firstFn = (c: C, i: D): void => {
-            this.firstFnArray.forEach(fn => {
-                fn(c, i);
-            });
-        };
+        // Arrays have to be cloned again in each subclass of Binder after Object.assign() since it undoes the changes
+        this.copyFnArraysUpdate();
 
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         this.keysOrCodes = this.keysOrCodes === undefined ? [] : [...this.keysOrCodes];
