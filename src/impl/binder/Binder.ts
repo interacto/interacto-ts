@@ -74,6 +74,8 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
 
     protected firstFnArray: Array<(c: C, i: D) => void> = new Array<(c: C, i: D) => void>();
 
+    protected endFnArray: Array<(c: C, i: D) => void> = new Array<(c: C, i: D) => void>();
+
     protected constructor(undoHistory: UndoHistory, logger: Logger, observer?: BindingsObserver, binder?: Partial<Binder<C, I, D>>) {
         Object.assign(this, binder);
 
@@ -86,6 +88,15 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
         this.prevDefault ??= false;
         this.observer = observer;
 
+        this.copyFnArrays();
+    }
+
+    protected abstract duplicate(): Binder<C, I, D>;
+
+    /**
+     * Clones the arrays containing the routine functions after a binder is copied.
+     */
+    protected copyFnArrays(): void {
         // Clones the array (instead of just copying the reference from the previous binder)
         this.whenFnArray = [...this.whenFnArray];
         // Updates the routine to use the new array reference
@@ -97,9 +108,13 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
                 fn(c, i);
             });
         };
+        this.endFnArray = [...this.endFnArray];
+        this.endFn = (c: C, i: D): void => {
+            this.endFnArray.forEach(fn => {
+                fn(c, i);
+            });
+        };
     }
-
-    protected abstract duplicate(): Binder<C, I, D>;
 
     public on(widget: ReadonlyArray<Widget<EventTarget>> | Widget<EventTarget>, ...widgets: ReadonlyArray<Widget<EventTarget>>):
     Binder<C, I, D> {
@@ -154,7 +169,7 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
 
     public end(fn: (c: C, i: D) => void): Binder<C, I, D> {
         const dup = this.duplicate();
-        dup.endFn = fn;
+        dup.endFnArray.push(fn);
         return dup;
     }
 

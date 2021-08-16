@@ -56,15 +56,11 @@ export class UpdateBinder<C extends Command, I extends Interaction<D>, D extends
         this.throttleTimeout ??= 0;
 
         // Arrays have to be cloned again in each subclass of Binder after Object.assign() since it undoes the changes
-        this.whenFnArray = [...this.whenFnArray];
-        this.whenFn = (i): boolean => this.whenFnArray.every(fn => fn(i));
+        this.copyFnArraysUpdate();
+    }
 
-        this.firstFnArray = [...this.firstFnArray];
-        this.firstFn = (c: C, i: D): void => {
-            this.firstFnArray.forEach(fn => {
-                fn(c, i);
-            });
-        };
+    protected copyFnArraysUpdate(): void {
+        super.copyFnArrays();
         this.thenFnArray = [...this.thenFnArray];
         this.thenFn = (c: C, i: D): void => {
             this.thenFnArray.forEach(fn => {

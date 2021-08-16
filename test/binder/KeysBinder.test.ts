@@ -834,14 +834,30 @@ test("first routine accumulation", () => {
 
 test("then routine accumulation", () => {
     let counter = 0;
-    binding = bindings.dbleClickBinder()
+    binding = bindings.keysTypeBinder()
         .on(elt)
+        .with(false, "b")
         .toProduce(() => new StubCmd(true))
         .then(() => counter++)
         .then(() => counter++)
         .bind();
-    robot(elt).click();
-    robot(elt).click();
+    robot(elt)
+        .keydown({"key": "b"})
+        .keyup({"key": "b"});
+    jest.runOnlyPendingTimers();
+    expect(ctx.commands).toHaveLength(1);
+    expect(counter).toStrictEqual(4);
+});
+
+test("end routine accumulation", () => {
+    let counter = 0;
+    binding = bindings.keyDownBinder(true)
+        .on(elt)
+        .toProduce(() => new StubCmd(true))
+        .end(() => counter++)
+        .end(() => counter++)
+        .bind();
+    robot(elt).keydown();
     expect(ctx.commands).toHaveLength(1);
     expect(counter).toStrictEqual(2);
 });
