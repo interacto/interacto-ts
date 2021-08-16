@@ -52,9 +52,16 @@ export class UpdateBinder<C extends Command, I extends Interaction<D>, D extends
         this.continuousCmdExecution ??= false;
         this._strictStart ??= false;
         this.throttleTimeout ??= 0;
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        this.whenFnArray = this.whenFnArray === undefined ? [] : [...this.whenFnArray];
+
+        this.whenFnArray = [...this.whenFnArray];
         this.whenFn = (i): boolean => this.whenFnArray.every(fn => fn(i));
+
+        this.firstFnArray = [...this.firstFnArray];
+        this.firstFn = (c: C, i: D): void => {
+            this.firstFnArray.forEach(fn => {
+                fn(c, i);
+            });
+        };
     }
 
     public then(fn: (c: C, i: D) => void): UpdateBinder<C, I, D> {
