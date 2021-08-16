@@ -59,39 +59,32 @@ export class TouchDnDFSM extends FSMImpl {
         super.buildFSM(dataHandler);
 
         const touched = new StdState(this, "touched");
-        const inProgress = new StdState(this, "moved");
+        const moved = new StdState(this, "moved");
         const released = new TerminalState(this, "released");
         const cancelled = new CancellingState(this, "cancelled");
 
         this.addState(touched);
-        this.addState(inProgress);
+        this.addState(moved);
         this.addState(released);
         this.addState(cancelled);
-        this.startingState = inProgress;
 
-        // Transitions used if the DnD only starts after a touch has been moved
         if (this.movementRequired) {
-            const pressure = new TouchPressureTransition(this.initState, touched);
-            pressure.action = (event: TouchEvent): void => {
-                this.touchID = event.changedTouches[0].identifier;
-                dataHandler?.onTouch(event);
-            };
-
-            const firstMove = new TouchMoveTransition(touched, inProgress);
-            firstMove.isGuardOK = (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.touchID;
-            firstMove.action = (event: TouchEvent): void => {
-                dataHandler?.onMove(event);
-            };
-        } else {
-            // Transitions used if the DnD starts directly after a touch
-            const pressure = new TouchPressureTransition(this.initState, inProgress);
-            pressure.action = (event: TouchEvent): void => {
-                this.touchID = event.changedTouches[0].identifier;
-                dataHandler?.onTouch(event);
-            };
+            this.startingState = moved;
         }
 
-        const move = new TouchMoveTransition(inProgress, inProgress);
+        const pressure = new TouchPressureTransition(this.initState, touched);
+        pressure.action = (event: TouchEvent): void => {
+            this.touchID = event.changedTouches[0].identifier;
+            dataHandler?.onTouch(event);
+        };
+
+        const firstMove = new TouchMoveTransition(touched, moved);
+        firstMove.isGuardOK = (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.touchID;
+        firstMove.action = (event: TouchEvent): void => {
+            dataHandler?.onMove(event);
+        };
+
+        const move = new TouchMoveTransition(moved, moved);
         move.isGuardOK = (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.touchID;
         move.action = (event: TouchEvent): void => {
             dataHandler?.onMove(event);
@@ -99,7 +92,7 @@ export class TouchDnDFSM extends FSMImpl {
 
         // Transitions used if the DnD can be cancelled by releasing the touch on a dwell spring element
         if (this.cancellable) {
-            const release = new TouchReleaseTransition(inProgress, released);
+            const release = new TouchReleaseTransition(moved, released);
             release.isGuardOK = (event: TouchEvent): boolean => {
                 // Touch event behaviour is not consistent with mouse events: event.tgt.target points to the original element, not to the one
                 // currently targeted. So we have to retrieve the current target manually.
@@ -111,15 +104,23 @@ export class TouchDnDFSM extends FSMImpl {
                 dataHandler?.onRelease(event);
             };
 
-            const releaseCancel = new TouchReleaseTransition(inProgress, cancelled);
+            const releaseCancel = new TouchReleaseTransition(moved, cancelled);
             releaseCancel.isGuardOK = (event: TouchEvent): boolean => {
                 const tgt = document.elementFromPoint(event.changedTouches[0].clientX, event.changedTouches[0].clientY);
                 return event.changedTouches[0].identifier === this.touchID && tgt instanceof Element && tgt.classList.contains("ioDwellSpring");
             };
         } else {
-            const release = new TouchReleaseTransition(inProgress, released);
+            const release = new TouchReleaseTransition(moved, released);
             release.isGuardOK = (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.touchID;
             release.action = (event: TouchEvent): void => {
+                dataHandler?.onRelease(event);
+            };
+        }
+        // Additional transition for a DnD that does not require a movement to start and end
+        if (!this.movementRequired) {
+            const releaseTouched = new TouchReleaseTransition(touched, released);
+            releaseTouched.isGuardOK = (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.touchID;
+            releaseTouched.action = (event: TouchEvent): void => {
                 dataHandler?.onRelease(event);
             };
         }
