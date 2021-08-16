@@ -818,3 +818,16 @@ test("whenArray is copied when binder is copied", () => {
 
     expect(ctx.commands).toHaveLength(1);
 });
+
+test("first routine accumulation", () => {
+    let counter = 0;
+    binding = bindings.keyDownBinder(false)
+        .on(elt)
+        .toProduce(() => new StubCmd(true))
+        .first(() => counter++)
+        .first(() => counter++)
+        .bind();
+    robot(elt).keydown();
+    expect(ctx.commands).toHaveLength(1);
+    expect(counter).toStrictEqual(2);
+});

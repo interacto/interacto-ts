@@ -72,6 +72,8 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
 
     protected whenFnArray: Array<(i: D) => boolean> = new Array<(i: D) => boolean>();
 
+    protected firstFnArray: Array<(c: C, i: D) => void> = new Array<(c: C, i: D) => void>();
+
     protected constructor(undoHistory: UndoHistory, logger: Logger, observer?: BindingsObserver, binder?: Partial<Binder<C, I, D>>) {
         Object.assign(this, binder);
 
@@ -87,6 +89,14 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         this.whenFnArray = this.whenFnArray === undefined ? [] : [...this.whenFnArray];
         this.whenFn = (i): boolean => this.whenFnArray.every(fn => fn(i));
+
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        this.firstFnArray = this.firstFnArray === undefined ? [] : [...this.firstFnArray];
+        this.firstFn = (c: C, i: D): void => {
+            this.firstFnArray.forEach(fn => {
+                fn(c, i);
+            });
+        };
     }
 
     protected abstract duplicate(): Binder<C, I, D>;
@@ -114,7 +124,7 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
 
     public first(fn: (c: C, i: D) => void): Binder<C, I, D> {
         const dup = this.duplicate();
-        dup.firstFn = fn;
+        dup.firstFnArray.push(fn);
         return dup;
     }
 
