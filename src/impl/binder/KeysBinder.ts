@@ -45,12 +45,19 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, D extends I
 
         Object.assign(this, binder);
 
+        // Arrays have to be cloned again in each subclass of Binder after Object.assign() since it undoes the changes
         this.whenFnArray = [...this.whenFnArray];
         this.whenFn = (i): boolean => this.whenFnArray.every(fn => fn(i));
 
         this.firstFnArray = [...this.firstFnArray];
         this.firstFn = (c: C, i: D): void => {
             this.firstFnArray.forEach(fn => {
+                fn(c, i);
+            });
+        };
+        this.thenFnArray = [...this.thenFnArray];
+        this.thenFn = (c: C, i: D): void => {
+            this.thenFnArray.forEach(fn => {
                 fn(c, i);
             });
         };

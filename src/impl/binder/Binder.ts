@@ -86,7 +86,9 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
         this.prevDefault ??= false;
         this.observer = observer;
 
+        // Clones the array (instead of just copying the reference from the previous binder)
         this.whenFnArray = [...this.whenFnArray];
+        // Updates the routine to use the new array reference
         this.whenFn = (i): boolean => this.whenFnArray.every(fn => fn(i));
 
         this.firstFnArray = [...this.firstFnArray];

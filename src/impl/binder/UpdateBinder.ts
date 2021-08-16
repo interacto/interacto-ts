@@ -45,6 +45,8 @@ export class UpdateBinder<C extends Command, I extends Interaction<D>, D extends
 
     protected throttleTimeout: number;
 
+    protected thenFnArray: Array<(c: C, i: D) => void> = new Array<(c: C, i: D) => void>();
+
     public constructor(undoHistory: UndoHistory, logger: Logger, observer?: BindingsObserver, binder?: Partial<UpdateBinder<C, I, D>>) {
         super(undoHistory, logger, observer, binder);
 
@@ -53,6 +55,7 @@ export class UpdateBinder<C extends Command, I extends Interaction<D>, D extends
         this._strictStart ??= false;
         this.throttleTimeout ??= 0;
 
+        // Arrays have to be cloned again in each subclass of Binder after Object.assign() since it undoes the changes
         this.whenFnArray = [...this.whenFnArray];
         this.whenFn = (i): boolean => this.whenFnArray.every(fn => fn(i));
 
@@ -62,11 +65,17 @@ export class UpdateBinder<C extends Command, I extends Interaction<D>, D extends
                 fn(c, i);
             });
         };
+        this.thenFnArray = [...this.thenFnArray];
+        this.thenFn = (c: C, i: D): void => {
+            this.thenFnArray.forEach(fn => {
+                fn(c, i);
+            });
+        };
     }
 
     public then(fn: (c: C, i: D) => void): UpdateBinder<C, I, D> {
         const dup = this.duplicate();
-        dup.thenFn = fn;
+        dup.thenFnArray.push(fn);
         return dup;
     }
 

@@ -831,3 +831,17 @@ test("first routine accumulation", () => {
     expect(ctx.commands).toHaveLength(1);
     expect(counter).toStrictEqual(2);
 });
+
+test("then routine accumulation", () => {
+    let counter = 0;
+    binding = bindings.dbleClickBinder()
+        .on(elt)
+        .toProduce(() => new StubCmd(true))
+        .then(() => counter++)
+        .then(() => counter++)
+        .bind();
+    robot(elt).click();
+    robot(elt).click();
+    expect(ctx.commands).toHaveLength(1);
+    expect(counter).toStrictEqual(2);
+});
