@@ -861,3 +861,20 @@ test("end routine accumulation", () => {
     expect(ctx.commands).toHaveLength(1);
     expect(counter).toStrictEqual(2);
 });
+
+test("cancel routine accumulation", () => {
+    let counter = 0;
+    binding = bindings.dndBinder(true)
+        .on(elt)
+        .toProduce(() => new StubCmd(true))
+        .cancel(() => counter++)
+        .cancel(() => counter++)
+        .bind();
+    robot(elt)
+        .mousedown()
+        .mousemove()
+        .keydown({"code": "Escape"});
+    jest.runOnlyPendingTimers();
+    expect(ctx.commands).toHaveLength(0);
+    expect(counter).toStrictEqual(2);
+});
