@@ -28,7 +28,7 @@ class MultiTouchFSM extends ConcurrentFSM<TouchDnDFSM> {
      * Creates the FSM.
      */
     public constructor(nbTouch: number) {
-        super([...Array(nbTouch).keys()].map(_ => new TouchDnDFSM()));
+        super([...Array(nbTouch).keys()].map(_ => new TouchDnDFSM(false, false)));
     }
 
     public override buildFSM(dataHandler: TouchDnDFSMHandler): void {

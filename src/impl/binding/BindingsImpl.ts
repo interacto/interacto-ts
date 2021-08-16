@@ -151,9 +151,9 @@ export class BindingsImpl extends Bindings {
             .usingInteraction<TextInputChanged, WidgetData<HTMLInputElement | HTMLTextAreaElement>>(() => new TextInputChanged(timeout));
     }
 
-    public touchDnDBinder(): PartialTouchSrcTgtBinder {
+    public touchDnDBinder(cancellable: boolean): PartialTouchSrcTgtBinder {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<TouchDnD, SrcTgtPointsData<TouchData>>(() => new TouchDnD());
+            .usingInteraction<TouchDnD, SrcTgtPointsData<TouchData>>(() => new TouchDnD(cancellable));
     }
 
     /**

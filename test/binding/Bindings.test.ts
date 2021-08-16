@@ -452,7 +452,7 @@ test("binding with anon command", () => {
 });
 
 test("touch DnD binding", () => {
-    bindings.touchDnDBinder()
+    bindings.touchDnDBinder(false)
         .on(elt)
         .toProduce((_i: SrcTgtPointsData<TouchData>) => new StubCmd(true))
         .bind();
@@ -680,7 +680,7 @@ describe("check when it crashes in routines", () => {
     beforeEach(() => {
         err = new Error("It crashed");
         cmd = new StubCmd(true);
-        baseBinder = bindings.touchDnDBinder()
+        baseBinder = bindings.touchDnDBinder(false)
             .on(elt)
             .toProduce((_i: SrcTgtPointsData<TouchData>) => cmd);
     });
@@ -808,7 +808,7 @@ describe("check when it crashes in routines", () => {
             .touchend({}, [{"identifier": 1, "target": elt}]);
 
         expect(ctx.commands).toHaveLength(1);
-        expect(fn).toHaveBeenCalledTimes(3);
+        expect(fn).toHaveBeenCalledTimes(2);
         expect(fn).toHaveBeenCalledWith(err);
     });
 
@@ -1131,7 +1131,7 @@ describe("check when it crashes in routines", () => {
             .touchmove({}, [{"identifier": 1, "target": elt}])
             .touchend({}, [{"identifier": 1, "target": elt}]);
 
-        expect(fn).toHaveBeenCalledTimes(4);
+        expect(fn).toHaveBeenCalledTimes(3);
         expect(fn).toHaveBeenCalledWith(err);
     });
 
@@ -1144,6 +1144,8 @@ describe("check when it crashes in routines", () => {
             .bind();
 
         robot(elt).touchstart({}, [{"identifier": 1, "target": elt}]);
+        robot(elt).touchmove({}, [{"identifier": 1, "target": elt}]);
+
 
         expect(ctx.commands).toHaveLength(0);
         expect(logger.logBindingErr).toHaveBeenCalledWith("Crash in 'when'", "msg");
@@ -1155,6 +1157,7 @@ describe("check when it crashes in routines", () => {
             .bind();
 
         robot(elt).touchstart({}, [{"identifier": 1, "target": elt}]);
+        robot(elt).touchmove({}, [{"identifier": 1, "target": elt}]);
 
         expect(logger.logBindingMsg).toHaveBeenNthCalledWith(1, "Checking condition: true");
     });

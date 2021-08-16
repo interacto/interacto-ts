@@ -106,7 +106,7 @@ export abstract class Bindings {
      * Creates a binding that uses the touch DnD interaction (a DnD interaction that uses one touch).
      * This interaction works as a Drag-and-Drop interaction.
      */
-    abstract touchDnDBinder(): PartialTouchSrcTgtBinder;
+    abstract touchDnDBinder(cancellable: boolean): PartialTouchSrcTgtBinder;
 
     /**
      * Creates a binding that uses the multi-touch user interaction.
