@@ -47,6 +47,8 @@ export class UpdateBinder<C extends Command, I extends Interaction<D>, D extends
 
     protected thenFnArray: Array<(c: C, i: D) => void> = new Array<(c: C, i: D) => void>();
 
+    protected cancelFnArray: Array<(i: D) => void> = new Array<(i: D) => void>();
+
     public constructor(undoHistory: UndoHistory, logger: Logger, observer?: BindingsObserver, binder?: Partial<UpdateBinder<C, I, D>>) {
         super(undoHistory, logger, observer, binder);
 
@@ -67,6 +69,12 @@ export class UpdateBinder<C extends Command, I extends Interaction<D>, D extends
                 fn(c, i);
             });
         };
+        this.cancelFnArray = [...this.cancelFnArray];
+        this.cancelFn = (i: D): void => {
+            this.cancelFnArray.forEach(fn => {
+                fn(i);
+            });
+        };
     }
 
     public then(fn: (c: C, i: D) => void): UpdateBinder<C, I, D> {
@@ -83,7 +91,7 @@ export class UpdateBinder<C extends Command, I extends Interaction<D>, D extends
 
     public cancel(fn: (i: D) => void): UpdateBinder<C, I, D> {
         const dup = this.duplicate();
-        dup.cancelFn = fn;
+        dup.cancelFnArray.push(fn);
         return dup;
     }
 
