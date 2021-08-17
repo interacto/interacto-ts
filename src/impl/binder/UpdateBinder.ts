@@ -77,6 +77,7 @@ export class UpdateBinder<C extends Command, I extends Interaction<D>, D extends
                 fn(i);
             });
         };
+        this.endOrCancelFnArray = [...this.endOrCancelFnArray];
         this.endOrCancelFn = (i: D): void => {
             this.endOrCancelFnArray.forEach(fn => {
                 fn(i);
