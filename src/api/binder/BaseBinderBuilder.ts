@@ -60,6 +60,7 @@ export interface BaseBinderBuilder {
 
     /**
      * Specifies the conditions to fulfill to initialise, update, or execute the command while the interaction is running.
+     * Several calls to this method can be made to add new conditions that are checked after the previous ones.
      * @param fn - The predicate that checks whether the command can be initialised, updated, or executed.
      * @returns A clone of the current builder to chain the building configuration.
      */
@@ -67,6 +68,7 @@ export interface BaseBinderBuilder {
 
     /**
      * Defines actions to perform with a binding ends.
+     * Several calls to this method can be made to add new actions that are executed after the previous ones.
      * @param fn - The command to execute on each binding end.
      * @returns A clone of the current builder to chain the building configuration.
      */
@@ -98,6 +100,7 @@ export interface BaseBinderBuilder {
      * Allows the processing of errors during the execution of the binding.
      * Errors reported here are errors thrown in arrow functions provided to the
      * the different routines of the binder.
+     * Several calls to this method can be made to add new actions that are executed after the previous ones.
      * @param fn - The function to process the error caught by the binding during its execution
      */
     catch(fn: (ex: unknown) => void): BaseBinderBuilder;

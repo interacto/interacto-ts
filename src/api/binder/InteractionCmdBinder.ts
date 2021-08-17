@@ -25,21 +25,41 @@ export interface InteractionCmdBinder<C extends Command, I extends Interaction<D
     /**
     * Specifies the initialisation of the command when the interaction starts.
     * Each time the interaction starts, an instance of the command is created and configured by the given callback.
+    * Several calls to this method can be made to add new actions that are executed after the previous ones.
     * @param fn - The callback method that initialises the command.
     * This callback takes as arguments both the command and interaction involved in the binding.
     * @returns The builder to chain the building configuration.
     */
     first(fn: (c: C, i: D) => void): InteractionCmdBinder<C, I, D>;
 
+    /**
+     * Specifies what to do end when an interaction ends (after the end/endOrCancel routines) and the command has produced an effect.
+     * Several calls to this method can be made to add new actions that are executed after the previous ones.
+     * @param fn - The callback method to specify what to do when an interaction ends and the command produced an effect.
+     * @returns The builder to chain the building configuration.
+     */
     ifHadEffects(fn: (c: C, i: D) => void): InteractionCmdBinder<C, I, D>;
 
+    /**
+     * Specifies what to do end when an interaction ends (after the end/endOrCancel routines) and the command did not produce an effect.
+     * Several calls to this method can be made to add new actions that are executed after the previous ones.
+     * @param fn - The callback method to specify what to do when an interaction ends and the command did not produce an effect.
+     * @returns The builder to chain the building configuration.
+     */
     ifHadNoEffect(fn: (c: C, i: D) => void): InteractionCmdBinder<C, I, D>;
 
+    /**
+     * Specifies what to do end when an interaction ends and the command could not be executed.
+     * Several calls to this method can be made to add new actions that are executed after the previous ones.
+     * @param fn - The callback method to specify what to do when an interaction ends and the command could not be executed.
+     * @returns The builder to chain the building configuration.
+     */
     ifCannotExecute(fn: (c: C, i: D) => void): InteractionCmdBinder<C, I, D>;
 
     /**
     * Specifies what to do end when an interaction ends (when the last event of the interaction has occurred, but just after
     * the interaction is reinitialised and the command finally executed and discarded / saved).
+    * Several calls to this method can be made to add new actions that are executed after the previous ones.
     * @param fn - The callback method to specify what to do when an interaction ends.
     * @returns The builder to chain the building configuration.
     */

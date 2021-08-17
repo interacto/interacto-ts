@@ -24,6 +24,7 @@ export interface CmdBinderBuilder<C extends Command> extends BaseBinderBuilder {
     /**
      * Specifies the initialisation of the command when the interaction starts.
      * Each time the interaction starts, an instance of the command is created and configured by the given callback.
+     * Several calls to this method can be made to add new actions that are executed after the previous ones.
      * @param fn - The callback method that initialises the command.
      * This callback takes as arguments the command to configure.
      * @returns A clone of the current builder to chain the building configuration.
