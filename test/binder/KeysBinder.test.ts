@@ -895,3 +895,16 @@ test("endOrCancel routine accumulation", () => {
     expect(ctx.commands).toHaveLength(0);
     expect(counter).toStrictEqual(2);
 });
+
+test("ifHadEffects routine accumulation", () => {
+    let counter = 0;
+    binding = bindings.keyDownBinder(false)
+        .on(elt)
+        .toProduce(() => new StubCmd(true))
+        .ifHadEffects(() => counter++)
+        .ifHadEffects(() => counter++)
+        .bind();
+    robot(elt).keydown();
+    expect(ctx.commands).toHaveLength(1);
+    expect(counter).toStrictEqual(2);
+});
