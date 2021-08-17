@@ -78,6 +78,8 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
 
     protected hadEffectsFnArray: Array<(c: C, i: D) => void> = new Array<(c: C, i: D) => void>();
 
+    protected hadNoEffectFnArray: Array<(c: C, i: D) => void> = new Array<(c: C, i: D) => void>();
+
     protected constructor(undoHistory: UndoHistory, logger: Logger, observer?: BindingsObserver, binder?: Partial<Binder<C, I, D>>) {
         Object.assign(this, binder);
 
@@ -119,6 +121,12 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
         this.hadEffectsFnArray = [...this.hadEffectsFnArray];
         this.hadEffectsFn = (c: C, i: D): void => {
             this.hadEffectsFnArray.forEach(fn => {
+                fn(c, i);
+            });
+        };
+        this.hadNoEffectFnArray = [...this.hadNoEffectFnArray];
+        this.hadNoEffectFn = (c: C, i: D): void => {
+            this.hadNoEffectFnArray.forEach(fn => {
                 fn(c, i);
             });
         };
@@ -165,7 +173,7 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
 
     public ifHadNoEffect(fn: (c: C, i: D) => void): Binder<C, I, D> {
         const dup = this.duplicate();
-        dup.hadNoEffectFn = fn;
+        dup.hadNoEffectFnArray.push(fn);
         return dup;
     }
 
