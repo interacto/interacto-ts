@@ -950,3 +950,4 @@ test("catch routine accumulation", () => {
     expect(ctx.commands).toHaveLength(1);
     expect(counter).toStrictEqual(2);
 });
+
