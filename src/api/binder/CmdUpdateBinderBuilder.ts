@@ -25,6 +25,7 @@ import type {Widget} from "./BaseBinderBuilder";
 export interface CmdUpdateBinderBuilder<C extends Command> extends CmdBinderBuilder<C>, BaseUpdateBinderBuilder {
     /**
      * Specifies the update of the command on interaction updates.
+     * Several calls to this method can be made to add new actions that are executed after the previous ones.
      * @param fn - The callback method that updates the command.
      * This callback takes as arguments the command to update.
      * @returns A clone of the current builder to chain the building configuration.

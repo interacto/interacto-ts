@@ -23,14 +23,16 @@ export interface InteractionUpdateBinderBuilder<I extends Interaction<D>, D exte
     /**
     * Defines what to do when a command is cancelled (because the interaction is cancelled).
     * The undoable command is automatically cancelled so that nothing must be done on the command.
-     * @returns A clone of the current builder to chain the building configuration.
+    * Several calls to this method can be made to add new actions that are executed after the previous ones.
+    * @returns A clone of the current builder to chain the building configuration.
     */
     cancel(fn: (i: D) => void): InteractionUpdateBinderBuilder<I, D>;
 
     /**
     * Defines what to do when a command is cancelled (because the interaction is cancelled).
     * The undoable command is automatically cancelled so that nothing must be done on the command.
-     * @returns A clone of the current builder to chain the building configuration.
+    * Several calls to this method can be made to add new actions that are executed after the previous ones.
+    * @returns A clone of the current builder to chain the building configuration.
     */
     endOrCancel(fn: (i: D) => void): InteractionUpdateBinderBuilder<I, D>;
 
