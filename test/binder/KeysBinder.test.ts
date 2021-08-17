@@ -908,3 +908,16 @@ test("ifHadEffects routine accumulation", () => {
     expect(ctx.commands).toHaveLength(1);
     expect(counter).toStrictEqual(2);
 });
+
+test("ifHadNoEffect routine accumulation", () => {
+    let counter = 0;
+    binding = bindings.keyDownBinder(false)
+        .on(elt)
+        .toProduce(() => new StubCmd(true, false))
+        .ifHadNoEffect(() => counter++)
+        .ifHadNoEffect(() => counter++)
+        .bind();
+    robot(elt).keydown();
+    expect(ctx.commands).toHaveLength(1);
+    expect(counter).toStrictEqual(2);
+});
