@@ -56,7 +56,7 @@ import {MouseLeave} from "../interaction/library/MouseLeave";
 import {MouseEnter} from "../interaction/library/MouseEnter";
 import {MouseMove} from "../interaction/library/MouseMove";
 import type {PointsData} from "../../api/interaction/PointsData";
-import type {Widget} from "../../api/binder/BaseBinderBuilder";
+import type {EltRef, Widget} from "../../api/binder/BaseBinderBuilder";
 import {Undo} from "../command/library/Undo";
 import type {Binding} from "../../api/binding/Binding";
 import {Redo} from "../command/library/Redo";
@@ -88,6 +88,7 @@ import type {WheelData} from "../../api/interaction/WheelData";
 import {Wheel} from "../interaction/library/Wheel";
 import {KeyUp} from "../interaction/library/KeyUp";
 import {MouseUp} from "../interaction/library/MouseUp";
+import Timeout = NodeJS.Timeout;
 
 export class BindingsImpl extends Bindings {
     private observer: BindingsObserver | undefined;
@@ -331,6 +332,56 @@ export class BindingsImpl extends Bindings {
     public dndBinder(cancellable: boolean): PartialPointSrcTgtBinder {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
             .usingInteraction<DnD, SrcTgtPointsData<PointData>>(() => new DnD(cancellable));
+    }
+
+    /**
+     * Creates a binding that uses the Reciprocal DnD interaction.
+     * A spring handle can be pressed on a long click to return the element back to its previous position.
+     * @param handle - The selectable part of the spring widget.
+     * @param spring - The line between the handle and the previous position of the element.
+     */
+    public reciprocalDndBinder(handle: EltRef<SVGCircleElement>, spring: EltRef<SVGLineElement>): PartialPointSrcTgtBinder {
+        let displaySpring: boolean;
+        let interval: Timeout;
+        const radiusAttribute = handle.nativeElement.getAttribute("r");
+        let radius: number;
+        if (radiusAttribute !== null) {
+            radius = parseInt(radiusAttribute, 10);
+        }
+
+        return new UpdateBinder(this.undoHistory, this.logger, this.observer)
+            .usingInteraction<DnD, SrcTgtPointsData<PointData>>(() => new DnD(true))
+            .on(handle)
+            .then((c, i) => {
+                // Management of the dwell and spring
+                // The element to use for this interaction (handle) must have the "ioDwellSpring" class
+                if (!displaySpring) {
+                    clearInterval(interval);
+                    interval = setInterval(() => {
+                        clearInterval(interval);
+                        displaySpring = true;
+                        spring.nativeElement.setAttribute("display", "block");
+                        handle.nativeElement.setAttribute("display", "block");
+                        handle.nativeElement.setAttribute("cx", String(i.tgt.pageX - radius));
+                        handle.nativeElement.setAttribute("cy", String(i.tgt.pageY));
+                        spring.nativeElement.setAttribute("x1", String(i.src.pageX));
+                        spring.nativeElement.setAttribute("y1", String(i.src.pageY));
+                        spring.nativeElement.setAttribute("x2", String(i.tgt.pageX - radius));
+                        spring.nativeElement.setAttribute("y2", String(i.tgt.pageY));
+
+                        if (i.tgt.clientX < radius) {
+                            handle.nativeElement.setAttribute("cx", String(radius));
+                            spring.nativeElement.setAttribute("x2", String(radius));
+                        }
+                    }, 1000);
+                }
+            })
+            .endOrCancel(() => {
+                clearInterval(interval);
+                displaySpring = false;
+                spring.nativeElement.setAttribute("display", "none");
+                handle.nativeElement.setAttribute("display", "none");
+            });
     }
 
     /**

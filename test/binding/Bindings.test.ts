@@ -343,6 +343,36 @@ test("dnd binder with throttling 2", () => {
     expect(fsm.process).toHaveBeenCalledTimes(4);
 });
 
+test("reciprocal DnD binder", () => {
+    const handle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    const spring = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    handle.setAttribute("r", "50");
+    const handleRef: EltRef<SVGCircleElement> = {"nativeElement": handle};
+    const springRef: EltRef<SVGLineElement> = {"nativeElement": spring};
+    const cancel = jest.fn();
+    elt.append(handle);
+    elt.append(spring);
+    handle.classList.add("ioDwellSpring");
+
+    bindings.reciprocalDndBinder(handleRef, springRef)
+        .on(elt)
+        .toProduce(() => new StubCmd(true))
+        .cancel(cancel)
+        .bind();
+    robot(elt)
+        .mousedown()
+        .mousemove()
+        .mouseup()
+        .mousedown()
+        .mousemove();
+    robot(handle)
+        .mouseup();
+
+    expect(ctx.commands).toHaveLength(1);
+    expect(cancel).toHaveBeenCalledTimes(1);
+});
+
+
 test("key down binder", () => {
     bindings.keyDownBinder(false)
         .on(elt)

@@ -29,7 +29,7 @@ import type {KeyData} from "../interaction/KeyData";
 import type {KeyInteractionUpdateBinder} from "../binder/KeyInteractionUpdateBinder";
 import type {KeysData} from "../interaction/KeysData";
 import type {BaseUpdateBinder} from "../binder/BaseUpdateBinder";
-import type {Widget} from "../binder/BaseBinderBuilder";
+import type {Widget, EltRef} from "../binder/BaseBinderBuilder";
 import type {Binding} from "./Binding";
 import type {Undo} from "../../impl/command/library/Undo";
 import type {Redo} from "../../impl/command/library/Redo";
@@ -224,6 +224,14 @@ export abstract class Bindings {
      * @param cancellable - True: the escape key will cancels the DnD.
      */
     abstract dndBinder(cancellable: boolean): PartialPointSrcTgtBinder;
+
+    /**
+     * Creates a binding that uses the Reciprocal DnD interaction.
+     * A spring handle can be pressed on a long click to return the element back to its previous position.
+     * @param handle - The selectable part of the spring widget.
+     * @param spring - The line between the handle and the previous position of the element.
+     */
+    abstract reciprocalDndBinder(handle: EltRef<SVGCircleElement>, spring: EltRef<SVGLineElement>): PartialPointSrcTgtBinder;
 
     /**
      * Creates a binding that uses the drag lock interaction.
