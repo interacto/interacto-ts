@@ -109,6 +109,14 @@ export abstract class Bindings {
     abstract touchDnDBinder(cancellable: boolean): PartialTouchSrcTgtBinder;
 
     /**
+     * Creates a binding that uses the Reciprocal DnD interaction with a touch.
+     * A spring handle can be pressed on a long click to return the element back to its previous position.
+     * @param handle - The selectable part of the spring widget.
+     * @param spring - The line between the handle and the previous position of the element.
+     */
+    abstract reciprocalTouchDnDBinder(handle: EltRef<SVGCircleElement>, spring: EltRef<SVGLineElement>): PartialTouchSrcTgtBinder;
+
+    /**
      * Creates a binding that uses the multi-touch user interaction.
      * @param nbTouches - The number of required touches.
      * A multi-touch starts when all its touches have started.

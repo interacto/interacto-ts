@@ -372,6 +372,38 @@ test("reciprocal DnD binder", () => {
     expect(cancel).toHaveBeenCalledTimes(1);
 });
 
+test("reciprocal touch DnD binder", () => {
+    const handle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    const spring = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    handle.setAttribute("r", "50");
+    const handleRef: EltRef<SVGCircleElement> = {"nativeElement": handle};
+    const springRef: EltRef<SVGLineElement> = {"nativeElement": spring};
+    const cancel = jest.fn();
+    elt.append(handle);
+    elt.append(spring);
+    handle.classList.add("ioDwellSpring");
+
+    // document.elementFromPoint is undefined
+    document.elementFromPoint = jest.fn().mockImplementation(() => null);
+
+    bindings.reciprocalTouchDnDBinder(handleRef, springRef)
+        .on(elt)
+        .toProduce(() => new StubCmd(true))
+        .cancel(cancel)
+        .bind();
+    robot(elt)
+        .touchstart({}, [{"identifier": 1, "target": elt}])
+        .touchmove({}, [{"identifier": 1, "target": elt}])
+        .touchend({}, [{"identifier": 1, "target": elt}])
+        .touchstart({}, [{"identifier": 1, "target": elt}])
+        .touchmove({}, [{"identifier": 1, "target": elt}]);
+    document.elementFromPoint = jest.fn().mockImplementation(() => handle);
+    robot(handle)
+        .touchend({}, [{"identifier": 1, "target": handle}]);
+
+    expect(ctx.commands).toHaveLength(1);
+    expect(cancel).toHaveBeenCalledTimes(1);
+});
 
 test("key down binder", () => {
     bindings.keyDownBinder(false)
