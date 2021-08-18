@@ -158,6 +158,56 @@ export class BindingsImpl extends Bindings {
     }
 
     /**
+     * Creates a binding that uses the Reciprocal DnD interaction with a touch.
+     * A spring handle can be pressed on a long click to return the element back to its previous position.
+     * @param handle - The selectable part of the spring widget.
+     * @param spring - The line between the handle and the previous position of the element.
+     */
+    public reciprocalTouchDnDBinder(handle: EltRef<SVGCircleElement>, spring: EltRef<SVGLineElement>): PartialTouchSrcTgtBinder {
+        let displaySpring: boolean;
+        let interval: Timeout;
+        const radiusAttribute = handle.nativeElement.getAttribute("r");
+        let radius: number;
+        if (radiusAttribute !== null) {
+            radius = parseInt(radiusAttribute, 10);
+        }
+
+        return new UpdateBinder(this.undoHistory, this.logger, this.observer)
+            .usingInteraction<TouchDnD, SrcTgtPointsData<TouchData>>(() => new TouchDnD(true))
+            .on(handle)
+            .then((c, i) => {
+                // Management of the dwell and spring
+                // The element to use for this interaction (handle) must have the "ioDwellSpring" class
+                if (!displaySpring) {
+                    clearInterval(interval);
+                    interval = setInterval(() => {
+                        clearInterval(interval);
+                        displaySpring = true;
+                        spring.nativeElement.setAttribute("display", "block");
+                        handle.nativeElement.setAttribute("display", "block");
+                        handle.nativeElement.setAttribute("cx", String(i.tgt.pageX - radius));
+                        handle.nativeElement.setAttribute("cy", String(i.tgt.pageY));
+                        spring.nativeElement.setAttribute("x1", String(i.src.pageX));
+                        spring.nativeElement.setAttribute("y1", String(i.src.pageY));
+                        spring.nativeElement.setAttribute("x2", String(i.tgt.pageX - radius));
+                        spring.nativeElement.setAttribute("y2", String(i.tgt.pageY));
+
+                        if (i.tgt.clientX < radius) {
+                            handle.nativeElement.setAttribute("cx", String(radius));
+                            spring.nativeElement.setAttribute("x2", String(radius));
+                        }
+                    }, 1000);
+                }
+            })
+            .endOrCancel(() => {
+                clearInterval(interval);
+                displaySpring = false;
+                spring.nativeElement.setAttribute("display", "none");
+                handle.nativeElement.setAttribute("display", "none");
+            });
+    }
+
+    /**
      * Creates a binding that uses the multi-touch user interaction.
      * @param nbTouches - The number of required touches.
      * A multi-touch starts when all its touches have started.
