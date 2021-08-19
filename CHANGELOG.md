@@ -1,3 +1,22 @@
+# 6.0.0
+
+* feat(binder): add reciprocal DnD binder (#67)
+* feat(binder): add reciprocal TouchDnD binder (#68)
+* feat(interaction): TouchDnD is cancellable and may start on first touch or move (#55)
+
+* change(binder): 'cancel' routine now cumulative (#60)
+* change(binder): 'catch' routine now cumulative (#65)
+* change(binder): 'endOrCancel' routine now cumulative (#61)
+* change(binder): 'ifCannotExecute' routine now cumulative (#64)
+* change(binder) 'ifHadEffects' routine now cumulative (#62)
+* change(binder) 'ifHadNoEffect' routine now cumulative (#63)
+* change(binder): 'end' routine now cumulative (#59)
+* change(binder): 'first' routine is cumulative (#57)
+ 
+* doc(binder): documentation on cumulative routines (#66)
+
+
+
 # 5.8.0
 
 * change(binder): added isCode option to with() for keyboard interactions (#39)
