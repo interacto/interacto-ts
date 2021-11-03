@@ -4,7 +4,8 @@
   "version": "6.0.0",
   "author": "Arnaud Blouin",
   "contributors": [
-    "Gwendal Didot"
+    "Gwendal Didot",
+    "Rémi Daniel"
   ],
   "keywords": [
     "event processing",
