@@ -83,7 +83,6 @@ describe("long touch test", () => {
                 expect(handler.fsmCancels).not.toHaveBeenCalled();
             });
 
-
             test("two taps then timeout", () => {
                 interaction.processEvent(createTouchEvent("touchstart", 3, canvas));
                 interaction.processEvent(createTouchEvent("touchend", 3, canvas));
@@ -91,6 +90,23 @@ describe("long touch test", () => {
                 expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
                 expect(handler.fsmStops).not.toHaveBeenCalled();
                 expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
+            });
+
+            test("moving cancels the touch", () => {
+                interaction.processEvent(createTouchEvent("touchstart", 10, canvas));
+                interaction.processEvent(createTouchEvent("touchmove", 10, canvas));
+                expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+                expect(handler.fsmStops).not.toHaveBeenCalled();
+                expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
+            });
+
+            test("moving, not with the same ID does not cancel the touch", () => {
+                interaction.processEvent(createTouchEvent("touchstart", 10, canvas));
+                interaction.processEvent(createTouchEvent("touchmove", 5, canvas));
+                jest.runOnlyPendingTimers();
+                expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+                expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+                expect(handler.fsmCancels).not.toHaveBeenCalled();
             });
         });
     });
