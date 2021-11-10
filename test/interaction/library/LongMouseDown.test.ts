@@ -123,6 +123,16 @@ describe("long mouse down test", () => {
                 expect(handler.fsmStops).toHaveBeenCalledTimes(1);
                 expect(handler.fsmCancels).toHaveBeenCalledTimes(0);
             });
+
+            test("mouse move cancels the long pressure", () => {
+                interaction.processEvent(createMouseEvent("mousedown", canvas, 15, 20, 160, 21, 2));
+                interaction.processEvent(createMouseEvent("mousemove", canvas, 15, 21, 160, 22, 2));
+                jest.runOnlyPendingTimers();
+                expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+                expect(handler.fsmStops).not.toHaveBeenCalled();
+                expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
+            });
+
         });
     });
 });
