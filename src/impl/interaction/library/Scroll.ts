@@ -45,7 +45,7 @@ interface ScrollFSMHandler extends FSMDataHandler {
 }
 
 /**
- * A user interaction for pressing down the mouse button.
+ * A user interaction for scrolling using a mouse wheel. Consists of a single scroll.
  */
 export class Scroll extends InteractionBase<ScrollData, ScrollDataImpl, ScrollFSM> {
     /**
