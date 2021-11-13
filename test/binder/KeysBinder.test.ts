@@ -17,7 +17,7 @@ import type {Binding} from "../../src/api/binding/Binding";
 import type {InteractionData} from "../../src/api/interaction/InteractionData";
 import {BindingsImpl} from "../../src/impl/binding/BindingsImpl";
 import {StubCmd} from "../command/StubCmd";
-import {createKeyEvent, robot} from "../interaction/StubEvents";
+import {createKeyEvent} from "../interaction/StubEvents";
 import type {Interaction} from "../../src/api/interaction/Interaction";
 import {mock} from "jest-mock-extended";
 import type {BindingsObserver} from "../../src/api/binding/BindingsObserver";
@@ -34,6 +34,7 @@ import {MouseDown} from "../../src/impl/interaction/library/MouseDown";
 import type {KeyInteractionCmdBinder} from "../../src/api/binder/KeyInteractionCmdBinder";
 import type {KeyData} from "../../src/api/interaction/KeyData";
 import type {Bindings} from "../../src/api/binding/Bindings";
+import {robot} from "interacto-nono";
 
 let elt: HTMLElement;
 let binding: Binding<Command, Interaction<InteractionData>, InteractionData> | undefined;

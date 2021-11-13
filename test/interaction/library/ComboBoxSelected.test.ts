@@ -15,7 +15,7 @@
 import type {FSMHandler} from "../../../src/interacto";
 import {ComboBoxSelected} from "../../../src/interacto";
 import {mock} from "jest-mock-extended";
-import {robot} from "../StubEvents";
+import {robot} from "interacto-nono";
 
 let interaction: ComboBoxSelected;
 let comboBox: HTMLElement;

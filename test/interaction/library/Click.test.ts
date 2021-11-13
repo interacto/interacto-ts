@@ -14,9 +14,10 @@
 
 import type {FSMHandler} from "../../../src/interacto";
 import {Click, PointDataImpl} from "../../../src/interacto";
-import {createMouseEvent2, robot} from "../StubEvents";
+import {createMouseEvent2} from "../StubEvents";
 import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
+import {robot} from "interacto-nono";
 
 let interaction: Click;
 let canvas: HTMLElement;

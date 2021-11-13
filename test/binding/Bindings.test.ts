@@ -33,10 +33,11 @@ import type {
 import {AnonCmd, BindingsContext, BindingsImpl, LogLevel} from "../../src/interacto";
 import {StubCmd, StubUndoableCmd} from "../command/StubCmd";
 import type {MouseEventForTest} from "../interaction/StubEvents";
-import {createMouseEvent, robot} from "../interaction/StubEvents";
+import {createMouseEvent} from "../interaction/StubEvents";
 import {mock} from "jest-mock-extended";
 import type {UndoHistory} from "../../src/api/undo/UndoHistory";
 import type {BindingsObserver} from "../../src/api/binding/BindingsObserver";
+import {robot} from "interacto-nono";
 
 let elt: HTMLElement;
 let ctx: BindingsContext;

@@ -15,7 +15,7 @@
 import type {FSMHandler} from "../../../src/interacto";
 import {ButtonPressed} from "../../../src/interacto";
 import {mock} from "jest-mock-extended";
-import {robot} from "../StubEvents";
+import {robot} from "interacto-nono";
 
 let interaction: ButtonPressed;
 let button: HTMLButtonElement;

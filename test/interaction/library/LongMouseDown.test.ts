@@ -14,8 +14,9 @@
 
 import type {FSMDataHandler, FSMHandler} from "../../../src/interacto";
 import {LongMouseDown, PointDataImpl} from "../../../src/interacto";
-import {createMouseEvent, robot} from "../StubEvents";
+import {createMouseEvent} from "../StubEvents";
 import {mock} from "jest-mock-extended";
+import {robot} from "interacto-nono";
 
 let interaction: LongMouseDown;
 let canvas: HTMLElement;

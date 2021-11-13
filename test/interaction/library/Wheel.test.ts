@@ -13,11 +13,12 @@
  */
 
 import type {FSMHandler} from "../../../src/interacto";
-import {createWheelEvent2, robot} from "../StubEvents";
+import {createWheelEvent2} from "../StubEvents";
 import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
 import {Wheel} from "../../../src/impl/interaction/library/Wheel";
 import {WheelDataImpl} from "../../../src/impl/interaction/WheelDataImpl";
+import {robot} from "interacto-nono";
 
 let interaction: Wheel;
 let canvas: HTMLElement;

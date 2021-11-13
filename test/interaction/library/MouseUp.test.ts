@@ -14,8 +14,8 @@
 
 import type {FSMHandler} from "../../../src/interacto";
 import {MouseUp} from "../../../src/interacto";
-import {robot} from "../StubEvents";
 import {mock} from "jest-mock-extended";
+import {robot} from "interacto-nono";
 
 let interaction: MouseUp;
 let canvas: HTMLElement;

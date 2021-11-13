@@ -14,9 +14,9 @@
 
 import type {FSMHandler} from "../../../src/interacto";
 import {Scroll} from "../../../src/interacto";
-import {robot} from "../StubEvents";
 import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
+import {robot} from "interacto-nono";
 
 let interaction: Scroll;
 let canvas: HTMLElement;

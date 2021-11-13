@@ -16,7 +16,7 @@ import type {FSMHandler} from "../../../src/interacto";
 import {Click, PointDataImpl} from "../../../src/interacto";
 import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
-import {robot} from "../StubEvents";
+import {robot} from "interacto-nono";
 
 let interaction: Click;
 let groupe: HTMLElement;

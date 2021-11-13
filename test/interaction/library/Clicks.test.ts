@@ -15,7 +15,8 @@
 import {mock} from "jest-mock-extended";
 import type {FSMHandler} from "../../../src/api/fsm/FSMHandler";
 import {Clicks} from "../../../src/impl/interaction/library/Clicks";
-import {createMouseEvent, robot} from "../StubEvents";
+import {createMouseEvent} from "../StubEvents";
+import {robot} from "interacto-nono";
 
 let interaction: Clicks;
 let canvas: HTMLElement;

@@ -14,8 +14,9 @@
 
 import type {FSMHandler} from "../../../src/interacto";
 import {DragLock, SrcTgtPointsDataImpl} from "../../../src/interacto";
-import {createMouseEvent, robot} from "../StubEvents";
+import {createMouseEvent} from "../StubEvents";
 import {mock} from "jest-mock-extended";
+import {robot} from "interacto-nono";
 
 let interaction: DragLock;
 let svg: SVGSVGElement;

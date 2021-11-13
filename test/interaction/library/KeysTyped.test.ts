@@ -14,7 +14,7 @@
 
 import type {FSMHandler, KeyData} from "../../../src/interacto";
 import {KeysDataImpl, KeysTyped, peek} from "../../../src/interacto";
-import {robot} from "../StubEvents";
+import {robot} from "interacto-nono";
 import {mock} from "jest-mock-extended";
 
 let interaction: KeysTyped;

@@ -14,7 +14,7 @@
 
 import type {FSMHandler} from "../../../src/interacto";
 import {DnD} from "../../../src/interacto";
-import {robot} from "../StubEvents";
+import {robot} from "interacto-nono";
 import {mock} from "jest-mock-extended";
 import {StubFSMHandler} from "../../fsm/StubFSMHandler";
 
