@@ -17,6 +17,7 @@ import type {Binding, Interaction, InteractionData} from "../../src/interacto";
 import {BindingsImpl} from "../../src/interacto";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
 import type {Bindings} from "../../src/api/binding/Bindings";
+import {robot} from "interacto-nono";
 
 let binding: Binding<StubCmd, Interaction<InteractionData>, InteractionData> | undefined;
 let c1: HTMLElement;
@@ -42,10 +43,11 @@ test("pan horizontal right", () => {
         .on(c1)
         .bind();
 
-    c1.dispatchEvent(createTouchEvent("touchstart", 3, c1, 15, 20, 150, 200));
-    c1.dispatchEvent(createTouchEvent("touchmove", 3, c1, 16, 21, 160, 201));
-    c1.dispatchEvent(createTouchEvent("touchmove", 3, c1, 20, 25, 200, 205));
-    c1.dispatchEvent(createTouchEvent("touchend", 3, c1, 65, 25, 200, 205));
+    robot(c1)
+        .touchstart({}, [{"screenX": 3, "screenY": 20, "clientX": 150, "clientY": 200, "identifier": 3, "target": c1}])
+        .touchmove({}, [{"screenX": 16, "screenY": 21, "clientX": 160, "clientY": 201, "identifier": 3, "target": c1}])
+        .touchmove({}, [{"screenX": 20, "screenY": 25, "clientX": 200, "clientY": 205, "identifier": 3, "target": c1}])
+        .touchend({}, [{"screenX": 65, "screenY": 25, "clientX": 200, "clientY": 205, "identifier": 3, "target": c1}]);
 
     expect(binding).toBeDefined();
     expect(binding.timesCancelled).toBe(0);
