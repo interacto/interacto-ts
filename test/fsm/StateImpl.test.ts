@@ -29,5 +29,5 @@ test("testFSM", () => {
 });
 
 test("testName", () => {
-    expect(state.name).toStrictEqual("s1");
+    expect(state.name).toBe("s1");
 });

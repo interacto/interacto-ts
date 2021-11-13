@@ -73,5 +73,5 @@ test("data is ok", () => {
     robot(text)
         .keydown({"code": "z"})
         .keyup({"code": "z"});
-    expect(data.code).toStrictEqual("z");
+    expect(data.code).toBe("z");
 });

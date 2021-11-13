@@ -58,7 +58,7 @@ test("type text create command", () => {
     txt1.dispatchEvent(new InputEvent("input"));
     jest.runOnlyPendingTimers();
     expect(binding).not.toBeNull();
-    expect(cmd.exec).toStrictEqual(1);
+    expect(cmd.exec).toBe(1);
     expect(ctx.commands).toHaveLength(1);
     expect(ctx.getCmd(0)).toBe(cmd);
     expect(textonUpdate).toStrictEqual(["f", "fo", "foo", "foo"]);
@@ -106,7 +106,7 @@ test("type text exec several times the command", () => {
     txt1.dispatchEvent(new InputEvent("input"));
     jest.runOnlyPendingTimers();
     expect(binding).toBeDefined();
-    expect(cmd.exec).toStrictEqual(4);
+    expect(cmd.exec).toBe(4);
     expect(ctx.commands).toHaveLength(1);
     expect(ctx.getCmd(0)).toBe(cmd);
     expect(textonUpdate).toStrictEqual(["f", "fo", "foo"]);

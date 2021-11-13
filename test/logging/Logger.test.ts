@@ -160,11 +160,11 @@ test("log interaction err REST", () => {
 test("usage binding start", () => {
     logger.logBindingStart("foo");
     expect(logger.ongoingBindings).toHaveLength(1);
-    expect(logger.ongoingBindings[0].name).toStrictEqual("foo");
+    expect(logger.ongoingBindings[0].name).toBe("foo");
     expect(logger.ongoingBindings[0].sessionID).toStrictEqual(logger.sessionID);
-    expect(logger.ongoingBindings[0].date).toStrictEqual(123);
-    expect(logger.ongoingBindings[0].duration).toStrictEqual(0);
-    expect(logger.ongoingBindings[0].cancelled).toStrictEqual(false);
+    expect(logger.ongoingBindings[0].date).toBe(123);
+    expect(logger.ongoingBindings[0].duration).toBe(0);
+    expect(logger.ongoingBindings[0].cancelled).toBe(false);
     expect(logger.ongoingBindings[0].frontVersion).toBeUndefined();
 });
 
@@ -195,7 +195,7 @@ test("usage binding start and end but not same", () => {
     jest.spyOn(performance, "now").mockReturnValueOnce(200);
     logger.logBindingEnd("yoo", true);
     expect(logger.ongoingBindings).toHaveLength(1);
-    expect(logger.ongoingBindings[0].name).toStrictEqual("foo");
+    expect(logger.ongoingBindings[0].name).toBe("foo");
     // eslint-disable-next-line no-console
     expect(console.log).not.toHaveBeenCalled();
 });
@@ -238,7 +238,7 @@ test("sevseral usage bindings start and one end", () => {
     jest.spyOn(performance, "now").mockReturnValueOnce(1500);
     logger.logBindingEnd("binding3:cmd2", true);
     expect(logger.ongoingBindings).toHaveLength(1);
-    expect(logger.ongoingBindings[0].name).toStrictEqual("binding2");
+    expect(logger.ongoingBindings[0].name).toBe("binding2");
     // eslint-disable-next-line no-console
     expect(console.log).toHaveBeenCalledWith(
         `Usage. id:${logger.sessionID} binding:binding3:cmd2 date:1000 duration:500 cancelled:true`);

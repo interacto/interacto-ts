@@ -39,7 +39,7 @@ describe("checking getTouch", () => {
 
     test("find with correct ID", () => {
         const touch = getTouch(touches, 1);
-        expect(touch).not.toBeUndefined();
+        expect(touch).toBeDefined();
         expect(touch).toStrictEqual(touches[0]);
     });
 });
@@ -175,6 +175,6 @@ describe("checking event functions", () => {
 
 describe("key codes", () => {
     test("key ESCAPE", () => {
-        expect(KeyCode.escape).toStrictEqual(27);
+        expect(KeyCode.escape).toBe(27);
     });
 });

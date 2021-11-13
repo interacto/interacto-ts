@@ -166,13 +166,13 @@ test("changing the history size does not remove undoable instances", () => {
 
 test("testSizeMaxMutatorsSizeOK", () => {
     instance.setSizeMax(21);
-    expect(instance.getSizeMax()).toStrictEqual(21);
+    expect(instance.getSizeMax()).toBe(21);
 });
 
 test("testSizeMaxMutatorsSizeKO", () => {
     instance.setSizeMax(5);
     instance.setSizeMax(-1);
-    expect(instance.getSizeMax()).toStrictEqual(5);
+    expect(instance.getSizeMax()).toBe(5);
 });
 
 test("testGetLastRedoNothingStart", () => {
@@ -204,7 +204,7 @@ test("testGetLastUndoMessageNothingOnStart", () => {
 });
 
 test("getLastOrEmptyUndoMessage NothingOnStart", () => {
-    expect(instance.getLastOrEmptyUndoMessage()).toStrictEqual("");
+    expect(instance.getLastOrEmptyUndoMessage()).toBe("");
 });
 
 test("testGetLastRedoMessageNothingOnStart", () => {
@@ -212,29 +212,29 @@ test("testGetLastRedoMessageNothingOnStart", () => {
 });
 
 test("getLastOrEmptyRedoMessage NothingOnStart", () => {
-    expect(instance.getLastOrEmptyRedoMessage()).toStrictEqual("");
+    expect(instance.getLastOrEmptyRedoMessage()).toBe("");
 });
 
 test("testGetLastUndoMessageOK", () => {
     instance.add(undoable);
-    expect(instance.getLastUndoMessage()).toStrictEqual("undoredomsg");
+    expect(instance.getLastUndoMessage()).toBe("undoredomsg");
 });
 
 test("getLastOrEmptyUndoMessage OK", () => {
     instance.add(undoable);
-    expect(instance.getLastOrEmptyUndoMessage()).toStrictEqual("undoredomsg");
+    expect(instance.getLastOrEmptyUndoMessage()).toBe("undoredomsg");
 });
 
 test("testGetLastRedoMessageOK", () => {
     instance.add(undoable);
     instance.undo();
-    expect(instance.getLastRedoMessage()).toStrictEqual("undoredomsg");
+    expect(instance.getLastRedoMessage()).toBe("undoredomsg");
 });
 
 test("getLastOrEmptyRedoMessage OK", () => {
     instance.add(undoable);
     instance.undo();
-    expect(instance.getLastOrEmptyRedoMessage()).toStrictEqual("undoredomsg");
+    expect(instance.getLastOrEmptyRedoMessage()).toBe("undoredomsg");
 });
 
 test("testClear", () => {

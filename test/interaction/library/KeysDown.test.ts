@@ -57,7 +57,7 @@ test("testKeyPressData", () => {
     robot(text).keydown({"code": "A"});
 
     expect(data.keys).toHaveLength(1);
-    expect(data.keys[0].code).toStrictEqual("A");
+    expect(data.keys[0].code).toBe("A");
 });
 
 test("testTwoKeyPressExecution", () => {
@@ -82,8 +82,8 @@ test("testTwoKeyPressData", () => {
         .keydown({"code": "A"})
         .keydown({"code": "B"});
     expect(data.keys).toHaveLength(2);
-    expect(data.keys[0].code).toStrictEqual("A");
-    expect(data.keys[1].code).toStrictEqual("B");
+    expect(data.keys[0].code).toBe("A");
+    expect(data.keys[1].code).toBe("B");
 });
 
 test("testTwoKeyPressReleaseExecution", () => {
@@ -110,7 +110,7 @@ test("testTwoKeyPressReleaseData", () => {
     interaction.fsm.addHandler(newHandler);
     robot(text).keyup({"code": "B"});
     expect(data.keys).toHaveLength(1);
-    expect(data.keys[0].code).toStrictEqual("A");
+    expect(data.keys[0].code).toBe("A");
 });
 
 test("testTwoKeyPressReleaseRecycle", () => {

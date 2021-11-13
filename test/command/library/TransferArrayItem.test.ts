@@ -50,26 +50,26 @@ test("testCannotDoSrcIndex2TooHigh", () => {
 });
 
 test("testGetUndoName", () => {
-    expect(cmd.getUndoName()).toStrictEqual("Transfer array item");
+    expect(cmd.getUndoName()).toBe("Transfer array item");
 });
 
 test("testRedo", () => {
     cmd.redo();
-    expect(array2[1]).toStrictEqual(0);
-    expect(array1[0]).toStrictEqual(1);
+    expect(array2[1]).toBe(0);
+    expect(array1[0]).toBe(1);
 });
 
 test("testExecution", async () => {
     await cmd.execute();
-    expect(array2[1]).toStrictEqual(0);
-    expect(array1[0]).toStrictEqual(1);
+    expect(array2[1]).toBe(0);
+    expect(array1[0]).toBe(1);
 });
 
 test("testUndo", async () => {
     await cmd.execute();
     cmd.undo();
-    expect(array2[1]).toStrictEqual(4);
-    expect(array1[0]).toStrictEqual(0);
+    expect(array2[1]).toBe(4);
+    expect(array1[0]).toBe(0);
 });
 
 test("testGetSrcArray", () => {
@@ -91,19 +91,19 @@ test("testSetTgtArray", () => {
 });
 
 test("testGetSrcIndex", () => {
-    expect(cmd.srcIndex).toStrictEqual(0);
+    expect(cmd.srcIndex).toBe(0);
 });
 
 test("testGetTgtIndex", () => {
-    expect(cmd.tgtIndex).toStrictEqual(1);
+    expect(cmd.tgtIndex).toBe(1);
 });
 
 test("testSetSrcIndex", () => {
     cmd.srcIndex = 2;
-    expect(cmd.srcIndex).toStrictEqual(2);
+    expect(cmd.srcIndex).toBe(2);
 });
 
 test("testSetTgtIndex", () => {
     cmd.tgtIndex = 2;
-    expect(cmd.tgtIndex).toStrictEqual(2);
+    expect(cmd.tgtIndex).toBe(2);
 });

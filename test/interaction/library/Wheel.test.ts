@@ -97,14 +97,14 @@ test("testWheelOnWidgetData", () => {
     interaction.registerToNodes([canvas]);
     robot().wheel({"target": canvas, "button": 1, "screenX": 111, "screenY": 222, "clientX": 11, "clientY": 22,
         "deltaX": 18, "deltaY": 19, "deltaZ": 20, "deltaMode": 21});
-    expect(data.clientX).toStrictEqual(11);
-    expect(data.clientY).toStrictEqual(22);
-    expect(data.screenX).toStrictEqual(111);
-    expect(data.screenY).toStrictEqual(222);
-    expect(data.button).toStrictEqual(1);
-    expect(data.deltaX).toStrictEqual(18);
-    expect(data.deltaY).toStrictEqual(19);
-    expect(data.deltaZ).toStrictEqual(20);
-    expect(data.deltaMode).toStrictEqual(21);
+    expect(data.clientX).toBe(11);
+    expect(data.clientY).toBe(22);
+    expect(data.screenX).toBe(111);
+    expect(data.screenY).toBe(222);
+    expect(data.button).toBe(1);
+    expect(data.deltaX).toBe(18);
+    expect(data.deltaY).toBe(19);
+    expect(data.deltaZ).toBe(20);
+    expect(data.deltaMode).toBe(21);
 });
 

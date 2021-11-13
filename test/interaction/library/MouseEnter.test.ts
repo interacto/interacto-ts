@@ -149,8 +149,8 @@ test("testMouseoverOnWidgetData", () => {
     });
     interaction.registerToNodes([canvas]);
     canvas.dispatchEvent(new MouseEvent("mouseover", {"screenX": 111, "screenY": 222, "clientX": 11, "clientY": 22}));
-    expect(data.clientX).toStrictEqual(11);
-    expect(data.clientY).toStrictEqual(22);
-    expect(data.screenX).toStrictEqual(111);
-    expect(data.screenY).toStrictEqual(222);
+    expect(data.clientX).toBe(11);
+    expect(data.clientY).toBe(22);
+    expect(data.screenX).toBe(111);
+    expect(data.screenY).toBe(222);
 });

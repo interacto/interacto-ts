@@ -56,8 +56,8 @@ test("event bubbling works", () => {
 
     canvas2.dispatchEvent(createMouseEvent("mousedown", canvas2));
 
-    expect(binding2.timesEnded).toStrictEqual(1);
-    expect(binding1.timesEnded).toStrictEqual(1);
+    expect(binding2.timesEnded).toBe(1);
+    expect(binding1.timesEnded).toBe(1);
 });
 
 test("event bubbling respects physical laws", () => {
@@ -75,8 +75,8 @@ test("event bubbling respects physical laws", () => {
 
     canvas1.dispatchEvent(createMouseEvent("mousedown", canvas1));
 
-    expect(binding1.timesEnded).toStrictEqual(1);
-    expect(binding2.timesEnded).toStrictEqual(0);
+    expect(binding1.timesEnded).toBe(1);
+    expect(binding2.timesEnded).toBe(0);
 });
 
 test("stop propagation prevents bubbling", () => {
@@ -95,8 +95,8 @@ test("stop propagation prevents bubbling", () => {
 
     canvas2.dispatchEvent(createMouseEvent("mousedown", canvas2));
 
-    expect(binding2.timesEnded).toStrictEqual(1);
-    expect(binding1.timesEnded).toStrictEqual(0);
+    expect(binding2.timesEnded).toBe(1);
+    expect(binding1.timesEnded).toBe(0);
 });
 
 test("stop propagation prevents bubbling with key bindings", () => {
@@ -113,8 +113,8 @@ test("stop propagation prevents bubbling with key bindings", () => {
 
     canvas2.dispatchEvent(createKeyEvent("keydown", "A"));
 
-    expect(b2.timesEnded).toStrictEqual(1);
-    expect(b1.timesEnded).toStrictEqual(0);
+    expect(b2.timesEnded).toBe(1);
+    expect(b1.timesEnded).toBe(0);
 });
 
 test("stop propagation prevents bubbling using cloned builders", () => {
@@ -133,6 +133,6 @@ test("stop propagation prevents bubbling using cloned builders", () => {
 
     canvas2.dispatchEvent(createMouseEvent("mousedown", canvas2));
 
-    expect(binding2.timesEnded).toStrictEqual(1);
-    expect(binding1.timesEnded).toStrictEqual(0);
+    expect(binding2.timesEnded).toBe(1);
+    expect(binding1.timesEnded).toBe(0);
 });

@@ -47,7 +47,7 @@ test("testCommandExecutedOnSingleDateFunction", () => {
 
     widget1.dispatchEvent(new Event("input"));
     expect(binding).toBeDefined();
-    expect(cmd.exec).toStrictEqual(1);
+    expect(cmd.exec).toBe(1);
 });
 
 test("testCommandExecutedOnTwoDates", () => {
@@ -75,7 +75,7 @@ test("testInit1Executed", () => {
     widget1.dispatchEvent(new Event("input"));
 
     expect(binding).toBeDefined();
-    expect(cmd.exec).toStrictEqual(11);
+    expect(cmd.exec).toBe(11);
 });
 
 test("testCheckFalse", () => {
@@ -88,5 +88,5 @@ test("testCheckFalse", () => {
     widget1.dispatchEvent(new Event("input"));
 
     expect(binding).toBeDefined();
-    expect(cmd.exec).toStrictEqual(0);
+    expect(cmd.exec).toBe(0);
 });

@@ -34,7 +34,7 @@ beforeEach(() => {
 });
 
 test("testGetUndoName", () => {
-    expect(cmd.getUndoName()).toStrictEqual("ExampleUndoableCmd");
+    expect(cmd.getUndoName()).toBe("ExampleUndoableCmd");
 });
 
 test("testGetVisualSnapshot", () => {

@@ -106,10 +106,10 @@ test("testClickOnWidgetData", () => {
     });
     interaction.registerToNodes([canvas]);
     robot().click({"target": canvas, "button": 1, "screenX": 111, "screenY": 222, "clientX": 11, "clientY": 22});
-    expect(data.clientX).toStrictEqual(11);
-    expect(data.clientY).toStrictEqual(22);
-    expect(data.screenX).toStrictEqual(111);
-    expect(data.screenY).toStrictEqual(222);
-    expect(data.button).toStrictEqual(1);
+    expect(data.clientX).toBe(11);
+    expect(data.clientY).toBe(22);
+    expect(data.screenX).toBe(111);
+    expect(data.screenY).toBe(222);
+    expect(data.button).toBe(1);
 });
 

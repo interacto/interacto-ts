@@ -91,36 +91,36 @@ test("flush", () => {
 });
 
 test("diffClientX", () => {
-    expect(data.diffClientX).toStrictEqual(1);
+    expect(data.diffClientX).toBe(1);
 });
 
 test("diffClientY", () => {
-    expect(data.diffClientY).toStrictEqual(2);
+    expect(data.diffClientY).toBe(2);
 });
 
 test("diffPageX", () => {
-    expect(data.diffPageX).toStrictEqual(3);
+    expect(data.diffPageX).toBe(3);
 });
 
 test("diffPageY", () => {
-    expect(data.diffPageY).toStrictEqual(4);
+    expect(data.diffPageY).toBe(4);
 });
 
 test("diffScreenX", () => {
-    expect(data.diffScreenX).toStrictEqual(3);
+    expect(data.diffScreenX).toBe(3);
 });
 
 test("diffScreenY", () => {
-    expect(data.diffScreenY).toStrictEqual(4);
+    expect(data.diffScreenY).toBe(4);
 });
 
 test("duration", () => {
-    expect(data.duration).toStrictEqual(10);
+    expect(data.duration).toBe(10);
 });
 
 test("velocity", () => {
     // velocity should be sqrt(deltaX^2 + deltaY^2) / velocity  = sqrt(16 + 9) / 10 = 0.5
-    expect(data.velocity).toStrictEqual(0.5);
+    expect(data.velocity).toBe(0.5);
 });
 
 test("isHorizontal OK", () => {

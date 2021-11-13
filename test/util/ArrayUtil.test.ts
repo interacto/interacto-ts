@@ -37,13 +37,13 @@ test("remove when item does not exist", () => {
 
 test("removeat with 0", () => {
     const res = removeAt(arr, 0);
-    expect(res).toStrictEqual("foo");
+    expect(res).toBe("foo");
     expect(arr).toStrictEqual(["bar", "yo"]);
 });
 
 test("removeat with last", () => {
     const res = removeAt(arr, 2);
-    expect(res).toStrictEqual("yo");
+    expect(res).toBe("yo");
     expect(arr).toStrictEqual(["foo", "bar"]);
 });
 
@@ -57,7 +57,7 @@ test("removeat with last", () => {
 
 test("peek of non empty array", () => {
     const res = peek(arr);
-    expect(res).toStrictEqual("yo");
+    expect(res).toBe("yo");
     expect(arr).toStrictEqual(["foo", "bar", "yo"]);
 });
 

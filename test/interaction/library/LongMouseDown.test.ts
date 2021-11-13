@@ -55,7 +55,7 @@ describe("long mouse down test", () => {
         jest.spyOn(interaction.fsm.getDataHandler() as FSMDataHandler, "reinitData");
         interaction.processEvent(createMouseEvent("mousedown", canvas, 15, 20, 160, 21, 2));
         interaction.reinit();
-        expect(interaction.data.button).toStrictEqual(0);
+        expect(interaction.data.button).toBe(0);
         expect(interaction.data.currentTarget).toBeNull();
         expect(interaction.fsm.getDataHandler()?.reinitData).toHaveBeenCalledWith();
     });

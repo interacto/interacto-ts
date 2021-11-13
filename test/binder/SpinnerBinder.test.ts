@@ -50,7 +50,7 @@ test("testCommandExecutedOnSingleSpinnerFunction", () => {
     widget1.dispatchEvent(new Event("input"));
     jest.runAllTimers();
     expect(binding).toBeDefined();
-    expect(cmd.exec).toStrictEqual(1);
+    expect(cmd.exec).toBe(1);
 });
 
 test("testCommandExecutedOnTwoSpinners", () => {
@@ -81,7 +81,7 @@ test("testInit1Executed", () => {
     jest.runAllTimers();
 
     expect(binding).toBeDefined();
-    expect(cmd.exec).toStrictEqual(11);
+    expect(cmd.exec).toBe(11);
 });
 
 test("testCheckFalse", () => {
@@ -94,7 +94,7 @@ test("testCheckFalse", () => {
     widget1.dispatchEvent(new Event("input"));
     jest.runAllTimers();
     expect(binding).toBeDefined();
-    expect(cmd.exec).toStrictEqual(0);
+    expect(cmd.exec).toBe(0);
 });
 
 test("testEndsOnThen", () => {
@@ -115,8 +115,8 @@ test("testEndsOnThen", () => {
     widget1.dispatchEvent(new Event("input"));
     jest.runAllTimers();
 
-    expect(cmd.exec).toStrictEqual(11);
-    expect(cpt).toStrictEqual(2);
+    expect(cmd.exec).toBe(11);
+    expect(cpt).toBe(2);
 });
 
 test("testContinuousThen", () => {
@@ -136,7 +136,7 @@ test("testContinuousThen", () => {
     widget1.dispatchEvent(new Event("input"));
     jest.runAllTimers();
 
-    expect(cpt).toStrictEqual(5);
+    expect(cpt).toBe(5);
 });
 
 test("testContinuousThenTimeOut", () => {
@@ -160,6 +160,6 @@ test("testContinuousThenTimeOut", () => {
     widget1.dispatchEvent(new Event("input"));
     jest.runAllTimers();
 
-    expect(cpt1).toStrictEqual(2);
-    expect(cpt2).toStrictEqual(2);
+    expect(cpt1).toBe(2);
+    expect(cpt2).toBe(2);
 });

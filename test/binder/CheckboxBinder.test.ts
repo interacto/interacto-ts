@@ -48,7 +48,7 @@ test("testCommandExecutedOnSingleButtonFunction", () => {
 
     robot(widget1).input();
     expect(binding).toBeDefined();
-    expect(cmd.exec).toStrictEqual(1);
+    expect(cmd.exec).toBe(1);
 });
 
 test("testCommandExecutedOnSingleButtonSupplier", () => {
@@ -59,7 +59,7 @@ test("testCommandExecutedOnSingleButtonSupplier", () => {
 
     robot(widget1).input();
     expect(binding).toBeDefined();
-    expect(cmd.exec).toStrictEqual(1);
+    expect(cmd.exec).toBe(1);
 });
 
 test("testCommandExecutedOnTwoCheckboxes", () => {
@@ -85,7 +85,7 @@ test("testInit1Executed", () => {
 
     robot(widget1).input();
     expect(binding).toBeDefined();
-    expect(cmd.exec).toStrictEqual(11);
+    expect(cmd.exec).toBe(11);
 });
 
 test("testInit2Executed", () => {
@@ -99,7 +99,7 @@ test("testInit2Executed", () => {
 
     robot(widget1).input();
     expect(binding).toBeDefined();
-    expect(cmd.exec).toStrictEqual(11);
+    expect(cmd.exec).toBe(11);
 });
 
 test("testCheckFalse", () => {
@@ -111,5 +111,5 @@ test("testCheckFalse", () => {
 
     robot(widget1).input();
     expect(binding).toBeDefined();
-    expect(cmd.exec).toStrictEqual(0);
+    expect(cmd.exec).toBe(0);
 });

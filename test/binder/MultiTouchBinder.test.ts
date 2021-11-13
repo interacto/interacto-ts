@@ -51,7 +51,7 @@ test("run multi-touch produces cmd", () => {
     c1.dispatchEvent(createTouchEvent("touchend", 2, c1, 15, 30, 150, 300));
 
     expect(binding).toBeDefined();
-    expect(cmd.exec).toStrictEqual(1);
+    expect(cmd.exec).toBe(1);
     expect(ctx.commands).toHaveLength(1);
     expect(ctx.getCmd(0)).toBe(cmd);
 });
@@ -83,11 +83,11 @@ test("run multi-touch two times recycle events", () => {
     expect(binding).toBeDefined();
     expect(ctx.commands).toHaveLength(2);
     expect(dataFirst).toHaveLength(2);
-    expect(dataFirst[0]).toStrictEqual(2);
-    expect(dataFirst[1]).toStrictEqual(2);
+    expect(dataFirst[0]).toBe(2);
+    expect(dataFirst[1]).toBe(2);
     expect(data).toHaveLength(2);
-    expect(data[0]).toStrictEqual(2);
-    expect(data[1]).toStrictEqual(2);
+    expect(data[0]).toBe(2);
+    expect(data[1]).toBe(2);
 });
 
 test("unsubscribe does not trigger the binding", () => {

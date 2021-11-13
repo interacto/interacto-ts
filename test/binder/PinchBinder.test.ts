@@ -50,8 +50,8 @@ test("pinch OK", () => {
     c1.dispatchEvent(createTouchEvent("touchend", 3, c1, 5, 6, 500, 210));
 
     expect(binding).toBeDefined();
-    expect(binding.timesCancelled).toStrictEqual(0);
-    expect(binding.timesEnded).toStrictEqual(1);
+    expect(binding.timesCancelled).toBe(0);
+    expect(binding.timesEnded).toBe(1);
     expect(ctx.commands).toHaveLength(1);
     expect(ctx.getCmd(0)).toBeInstanceOf(StubCmd);
 });
@@ -70,8 +70,8 @@ test("pinch KO wrong direction", () => {
     c1.dispatchEvent(createTouchEvent("touchend", 3, c1, 5, 6, 500, 210));
 
     expect(binding).toBeDefined();
-    expect(binding.timesCancelled).toStrictEqual(1);
-    expect(binding.timesEnded).toStrictEqual(0);
+    expect(binding.timesCancelled).toBe(1);
+    expect(binding.timesEnded).toBe(0);
     expect(ctx.commands).toHaveLength(0);
 });
 
@@ -86,7 +86,7 @@ test("pinch KO not enough touches", () => {
     c1.dispatchEvent(createTouchEvent("touchend", 2, c1, 20, 22, 500, 210));
 
     expect(binding).toBeDefined();
-    expect(binding.timesCancelled).toStrictEqual(0);
-    expect(binding.timesEnded).toStrictEqual(0);
+    expect(binding.timesCancelled).toBe(0);
+    expect(binding.timesEnded).toBe(0);
     expect(ctx.commands).toHaveLength(0);
 });

@@ -56,7 +56,7 @@ describe("on canvas", () => {
         c1.dispatchEvent(createTouchEvent("touchend", 2, c1, 31, 13, 310, 130));
 
         expect(binding).toBeDefined();
-        expect(cmd.exec).toStrictEqual(1);
+        expect(cmd.exec).toBe(1);
         expect(ctx.commands).toHaveLength(1);
         expect(ctx.getCmd(0)).toBe(cmd);
     });

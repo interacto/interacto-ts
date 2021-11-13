@@ -154,5 +154,5 @@ test("testCancel", () => {
 test("testExecutedTwoTimes", async () => {
     await cmd.execute();
     await cmd.execute();
-    expect(cmd.exec).toStrictEqual(2);
+    expect(cmd.exec).toBe(2);
 });

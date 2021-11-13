@@ -61,7 +61,7 @@ test("type 'b' and wait for timeout stops the interaction: data", () => {
         .keyup({"code": "b"});
     jest.runOnlyPendingTimers();
     expect(data.keys).toHaveLength(1);
-    expect(data.keys[0].code).toStrictEqual("b");
+    expect(data.keys[0].code).toBe("b");
 });
 
 test("type text and wait for timeout stops the interaction", () => {
@@ -98,9 +98,9 @@ test("type text and wait for timeout stops the interaction: data", () => {
         .keyup({"code": "a"});
     jest.runOnlyPendingTimers();
     expect(data.keys).toHaveLength(3);
-    expect(data.keys[0].code).toStrictEqual("b");
-    expect(data.keys[1].code).toStrictEqual("c");
-    expect(data.keys[2].code).toStrictEqual("a");
+    expect(data.keys[0].code).toBe("b");
+    expect(data.keys[1].code).toBe("c");
+    expect(data.keys[2].code).toBe("a");
 });
 
 test("type 'b' does not stop the interaction", () => {
@@ -117,5 +117,5 @@ test("type 'b' does not stop the interaction", () => {
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).not.toHaveBeenCalledWith();
     expect(data.keys).toHaveLength(1);
-    expect(data.keys[0].code).toStrictEqual("z");
+    expect(data.keys[0].code).toBe("z");
 });

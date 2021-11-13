@@ -45,5 +45,5 @@ beforeEach(() => {
 
 test("testSetWidget", () => {
     transition.setWidget("foooo");
-    expect(transition.getWidget()).toStrictEqual("foooo");
+    expect(transition.getWidget()).toBe("foooo");
 });

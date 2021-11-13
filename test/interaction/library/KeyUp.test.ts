@@ -52,7 +52,7 @@ test("the key typed in the textarea is the same key in the data of the interacti
     });
     interaction.fsm.addHandler(newHandler);
     robot(text).keyup({"code": "a"});
-    expect(data.code).toStrictEqual("a");
+    expect(data.code).toBe("a");
 });
 
 test("testTwoKeyPressEnds", () => {

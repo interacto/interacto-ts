@@ -46,7 +46,7 @@ test("testCommandExecutedOnSingleButtonConsumer", () => {
 
     button1.click();
     expect(binding).toBeDefined();
-    expect(cmd.exec).toStrictEqual(1);
+    expect(cmd.exec).toBe(1);
     expect(ctx.commands).toHaveLength(1);
     expect(ctx.commands[0]).toBe(cmd);
 });
@@ -59,7 +59,7 @@ test("testCommandExecutedOnSingleButtonConsumerConsumer", () => {
 
     button1.click();
     expect(binding).toBeDefined();
-    expect(cmd.exec).toStrictEqual(1);
+    expect(cmd.exec).toBe(1);
 });
 
 test("testCommandExecutedOnTwoButtons", () => {
@@ -74,8 +74,8 @@ test("testCommandExecutedOnTwoButtons", () => {
     expect(binding).toBeDefined();
     expect(ctx.commands).toHaveLength(2);
     expect(ctx.getCmd(0)).not.toBe(ctx.getCmd(1));
-    expect(ctx.getCmd<StubCmd>(0).exec).toStrictEqual(1);
-    expect(ctx.getCmd<StubCmd>(1).exec).toStrictEqual(1);
+    expect(ctx.getCmd<StubCmd>(0).exec).toBe(1);
+    expect(ctx.getCmd<StubCmd>(1).exec).toBe(1);
 });
 
 test("command executed on two buttons with one array", () => {
@@ -205,7 +205,7 @@ test("testInit1Executed", () => {
     button1.click();
 
     expect(binding).toBeDefined();
-    expect(cmd.exec).toStrictEqual(11);
+    expect(cmd.exec).toBe(11);
 });
 
 test("testInit2Executed", () => {
@@ -220,7 +220,7 @@ test("testInit2Executed", () => {
     button1.click();
 
     expect(binding).toBeDefined();
-    expect(cmd.exec).toStrictEqual(11);
+    expect(cmd.exec).toBe(11);
 });
 
 test("testCheckFalse", () => {
@@ -233,7 +233,7 @@ test("testCheckFalse", () => {
     button1.click();
 
     expect(binding).toBeDefined();
-    expect(cmd.exec).toStrictEqual(0);
+    expect(cmd.exec).toBe(0);
 });
 
 test("testCommandExecutedOnTwoButtonsSame", () => {
@@ -249,8 +249,8 @@ test("testCommandExecutedOnTwoButtonsSame", () => {
     button1.click();
 
     expect(binding).toBeDefined();
-    expect(cmd.exec).toStrictEqual(1);
-    expect(cpt).toStrictEqual(1);
+    expect(cmd.exec).toBe(1);
+    expect(cpt).toBe(1);
 });
 
 test("testBuilderCloned", () => {
@@ -287,8 +287,8 @@ test("testClonedBuildersSameWidgetCmdOK", () => {
     button1.click();
 
     expect(binding).not.toBe(binding2);
-    expect(cpt1).toStrictEqual(1);
-    expect(cpt2).toStrictEqual(1);
+    expect(cpt1).toBe(1);
+    expect(cpt2).toBe(1);
 });
 
 test("testClonedBuildersDiffWidgetsCmdOK", () => {
@@ -313,8 +313,8 @@ test("testClonedBuildersDiffWidgetsCmdOK", () => {
     button2.click();
 
     expect(binding).not.toBe(binding2);
-    expect(cpt1).toStrictEqual(1);
-    expect(cpt2).toStrictEqual(1);
+    expect(cpt1).toBe(1);
+    expect(cpt2).toBe(1);
 });
 
 test("prevent default set", () => {

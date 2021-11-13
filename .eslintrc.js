@@ -31,6 +31,7 @@ module.exports = {
         "jest/prefer-spy-on": "off",
         "jest/prefer-expect-assertions": "off",
         "jest/no-hooks": "off",
+        "jest/require-hook": "off",
         "jest/require-top-level-describe": "off",
         "jest/consistent-test-it": ["error", {"fn": "test", "withinDescribe": "test"}],
         "@typescript-eslint/unbound-method": "off",

@@ -47,8 +47,8 @@ test("touch move: too slow too short", () => {
     c1.dispatchEvent(createTouchEvent("touchmove", 3, c1, 16, 30, 160, 210, 2000));
 
     expect(binding).toBeDefined();
-    expect(binding.timesCancelled).toStrictEqual(0);
-    expect(binding.timesEnded).toStrictEqual(0);
+    expect(binding.timesCancelled).toBe(0);
+    expect(binding.timesEnded).toBe(0);
     expect(ctx.commands).toHaveLength(0);
 });
 
@@ -65,8 +65,8 @@ test("touch move: too slow too short", () => {
             20 + y, 160, 200 + y, 10));
 
         expect(binding).toBeDefined();
-        expect(binding.timesCancelled).toStrictEqual(0);
-        expect(binding.timesEnded).toStrictEqual(0);
+        expect(binding.timesCancelled).toBe(0);
+        expect(binding.timesEnded).toBe(0);
         expect(ctx.commands).toHaveLength(0);
     });
 });
@@ -88,7 +88,7 @@ test("touch move: too slow too short", () => {
             20 + y, 250, 200 + y, 20));
 
         expect(binding).toBeDefined();
-        expect(binding.timesEnded).toStrictEqual(0);
+        expect(binding.timesEnded).toBe(0);
         expect(ctx.commands).toHaveLength(0);
     });
 });
@@ -108,8 +108,8 @@ test("touch move move too short too slow", () => {
         299, 30, 349, 210, 5399));
 
     expect(binding).toBeDefined();
-    expect(binding.timesCancelled).toStrictEqual(0);
-    expect(binding.timesEnded).toStrictEqual(0);
+    expect(binding.timesCancelled).toBe(0);
+    expect(binding.timesEnded).toBe(0);
     expect(ctx.commands).toHaveLength(0);
 });
 
@@ -127,8 +127,8 @@ test("touch move move too short velocity OK", () => {
         200, 30, 200, 210, 5100));
 
     expect(binding).toBeDefined();
-    expect(binding.timesCancelled).toStrictEqual(0);
-    expect(binding.timesEnded).toStrictEqual(0);
+    expect(binding.timesCancelled).toBe(0);
+    expect(binding.timesEnded).toBe(0);
     expect(ctx.commands).toHaveLength(0);
 });
 
@@ -146,8 +146,8 @@ test("touch move move distance OK short too slow", () => {
         350, 30, 350, 210, 7000));
 
     expect(binding).toBeDefined();
-    expect(binding.timesCancelled).toStrictEqual(0);
-    expect(binding.timesEnded).toStrictEqual(0);
+    expect(binding.timesCancelled).toBe(0);
+    expect(binding.timesEnded).toBe(0);
     expect(ctx.commands).toHaveLength(0);
 });
 
@@ -167,8 +167,8 @@ test("touch move move release distance velocity OK 1s", () => {
         450, 30, 500, 210, 6000));
 
     expect(binding).toBeDefined();
-    expect(binding.timesCancelled).toStrictEqual(0);
-    expect(binding.timesEnded).toStrictEqual(1);
+    expect(binding.timesCancelled).toBe(0);
+    expect(binding.timesEnded).toBe(1);
     expect(ctx.commands).toHaveLength(1);
     expect(ctx.getCmd(0)).toBeInstanceOf(StubCmd);
 });
@@ -189,8 +189,8 @@ test("touch move move release distance velocity OK 200px", () => {
         250, 30, 300, 210, 5500));
 
     expect(binding).toBeDefined();
-    expect(binding.timesCancelled).toStrictEqual(0);
-    expect(binding.timesEnded).toStrictEqual(1);
+    expect(binding.timesCancelled).toBe(0);
+    expect(binding.timesEnded).toBe(1);
     expect(ctx.commands).toHaveLength(1);
     expect(ctx.getCmd(0)).toBeInstanceOf(StubCmd);
 });

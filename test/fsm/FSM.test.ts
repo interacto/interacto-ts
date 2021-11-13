@@ -794,7 +794,7 @@ describe("testWithSubFSM", () => {
         mainfsm.process(createMouseEvent("click", document.createElement("button")));
         mainfsm.process(createKeyEvent("keydown", "a"));
         mainfsm.process(createMouseEvent("click", document.createElement("button")));
-        expect(mainfsm.currentState.name).toStrictEqual("sub2");
+        expect(mainfsm.currentState.name).toBe("sub2");
         expect(fsm.currentState).toBe(fsm.initState);
     });
 

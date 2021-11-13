@@ -738,7 +738,7 @@ test("keys with cancel", () => {
         .keyup({"code": "z"});
     binding.interaction.fsm.onCancelling();
 
-    expect(binding.timesCancelled).toStrictEqual(1);
+    expect(binding.timesCancelled).toBe(1);
     expect(fn).toHaveBeenCalledTimes(1);
 });
 
@@ -754,7 +754,7 @@ test("key binding with invalid interaction key data", () => {
         .mousedown();
 
     expect(ctx.commands).toHaveLength(0);
-    expect(binding.timesEnded).toStrictEqual(0);
+    expect(binding.timesEnded).toBe(0);
 });
 
 test("when routine accumulation 1", () => {
@@ -829,7 +829,7 @@ test("first routine accumulation", () => {
         .bind();
     robot(elt).keydown();
     expect(ctx.commands).toHaveLength(1);
-    expect(counter).toStrictEqual(2);
+    expect(counter).toBe(2);
 });
 
 test("then routine accumulation", () => {
@@ -846,7 +846,7 @@ test("then routine accumulation", () => {
         .keyup({"key": "b"});
     jest.runOnlyPendingTimers();
     expect(ctx.commands).toHaveLength(1);
-    expect(counter).toStrictEqual(4);
+    expect(counter).toBe(4);
 });
 
 test("end routine accumulation", () => {
@@ -859,7 +859,7 @@ test("end routine accumulation", () => {
         .bind();
     robot(elt).keydown();
     expect(ctx.commands).toHaveLength(1);
-    expect(counter).toStrictEqual(2);
+    expect(counter).toBe(2);
 });
 
 test("cancel routine accumulation", () => {
@@ -876,7 +876,7 @@ test("cancel routine accumulation", () => {
         .keydown({"code": "Escape"});
     jest.runOnlyPendingTimers();
     expect(ctx.commands).toHaveLength(0);
-    expect(counter).toStrictEqual(2);
+    expect(counter).toBe(2);
 });
 
 test("endOrCancel routine accumulation", () => {
@@ -893,7 +893,7 @@ test("endOrCancel routine accumulation", () => {
         .keydown({"code": "Escape"});
     jest.runOnlyPendingTimers();
     expect(ctx.commands).toHaveLength(0);
-    expect(counter).toStrictEqual(2);
+    expect(counter).toBe(2);
 });
 
 test("ifHadEffects routine accumulation", () => {
@@ -906,7 +906,7 @@ test("ifHadEffects routine accumulation", () => {
         .bind();
     robot(elt).keydown();
     expect(ctx.commands).toHaveLength(1);
-    expect(counter).toStrictEqual(2);
+    expect(counter).toBe(2);
 });
 
 test("ifHadNoEffect routine accumulation", () => {
@@ -919,7 +919,7 @@ test("ifHadNoEffect routine accumulation", () => {
         .bind();
     robot(elt).keydown();
     expect(ctx.commands).toHaveLength(1);
-    expect(counter).toStrictEqual(2);
+    expect(counter).toBe(2);
 });
 
 test("ifCannotExecute routine accumulation", () => {
@@ -932,7 +932,7 @@ test("ifCannotExecute routine accumulation", () => {
         .bind();
     robot(elt).keydown();
     expect(ctx.commands).toHaveLength(0);
-    expect(counter).toStrictEqual(2);
+    expect(counter).toBe(2);
 });
 
 test("catch routine accumulation", () => {
@@ -948,6 +948,6 @@ test("catch routine accumulation", () => {
         .bind();
     robot(elt).keydown();
     expect(ctx.commands).toHaveLength(1);
-    expect(counter).toStrictEqual(2);
+    expect(counter).toBe(2);
 });
 

@@ -82,7 +82,7 @@ test("testStopTimeout", () => {
 test("stop timeout 0", () => {
     evt = new TimeoutTransition(src, tgt, () => 0);
     evt.startTimeout();
-    expect(jest.getTimerCount()).toStrictEqual(0);
+    expect(jest.getTimerCount()).toBe(0);
     evt.stopTimeout();
     expect(evt.isGuardOK(undefined)).toBeFalsy();
 });
@@ -91,14 +91,14 @@ test("two consecutive starts", () => {
     evt = new TimeoutTransition(src, tgt, () => 300);
     evt.startTimeout();
     evt.startTimeout();
-    expect(jest.getTimerCount()).toStrictEqual(1);
+    expect(jest.getTimerCount()).toBe(1);
     evt.stopTimeout();
     expect(evt.isGuardOK(undefined)).toBeFalsy();
 });
 
 test("stop when not started", () => {
     evt.stopTimeout();
-    expect(jest.getTimerCount()).toStrictEqual(0);
+    expect(jest.getTimerCount()).toBe(0);
     expect(evt.isGuardOK(undefined)).toBeFalsy();
 });
 

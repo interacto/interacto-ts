@@ -108,7 +108,7 @@ describe("nominal cases", () => {
     });
 
     test("name is ok when not executed", () => {
-        expect(binding.name).toStrictEqual("InteractionStub");
+        expect(binding.name).toBe("InteractionStub");
     });
 
     test("testExecuteOK", () => {
@@ -173,16 +173,16 @@ describe("nominal cases", () => {
     });
 
     test("testCounters", () => {
-        expect(binding.timesEnded).toStrictEqual(0);
-        expect(binding.timesCancelled).toStrictEqual(0);
+        expect(binding.timesEnded).toBe(0);
+        expect(binding.timesCancelled).toBe(0);
     });
 
     test("testCounterEndedOnce", () => {
         binding.conditionRespected = true;
         binding.fsmStarts();
         binding.fsmStops();
-        expect(binding.timesEnded).toStrictEqual(1);
-        expect(binding.timesCancelled).toStrictEqual(0);
+        expect(binding.timesEnded).toBe(1);
+        expect(binding.timesCancelled).toBe(0);
     });
 
     test("testCounterEndedTwice", () => {
@@ -191,16 +191,16 @@ describe("nominal cases", () => {
         binding.fsmStops();
         binding.fsmStarts();
         binding.fsmStops();
-        expect(binding.timesEnded).toStrictEqual(2);
-        expect(binding.timesCancelled).toStrictEqual(0);
+        expect(binding.timesEnded).toBe(2);
+        expect(binding.timesCancelled).toBe(0);
     });
 
     test("testCounterCancelledOnce", () => {
         binding.conditionRespected = true;
         binding.fsmStarts();
         binding.fsmCancels();
-        expect(binding.timesCancelled).toStrictEqual(1);
-        expect(binding.timesEnded).toStrictEqual(0);
+        expect(binding.timesCancelled).toBe(1);
+        expect(binding.timesEnded).toBe(0);
     });
 
     test("testCounterCancelledTwice", () => {
@@ -209,8 +209,8 @@ describe("nominal cases", () => {
         binding.fsmCancels();
         binding.fsmStarts();
         binding.fsmCancels();
-        expect(binding.timesCancelled).toStrictEqual(2);
-        expect(binding.timesEnded).toStrictEqual(0);
+        expect(binding.timesCancelled).toBe(2);
+        expect(binding.timesEnded).toBe(0);
     });
 
     test("clear events", () => {
@@ -275,7 +275,7 @@ describe("nominal cases", () => {
         binding = new BindingStub(history, logger, true, false, () => cmd, new InteractionStub(new FSMImpl()));
         binding.conditionRespected = true;
         binding.fsmStarts();
-        expect(binding.name).toStrictEqual("InteractionStub:CmdStubUndoable");
+        expect(binding.name).toBe("InteractionStub:CmdStubUndoable");
     });
 
     test("cancel interaction continuous undoable no log", () => {
@@ -345,7 +345,7 @@ describe("nominal cases", () => {
         (binding.command as StubCmd).candoValue = false;
         binding.fsmUpdates();
         expect(binding.ifCannotExecuteCmd).toHaveBeenCalledWith();
-        expect(binding.command?.exec).toStrictEqual(0);
+        expect(binding.command?.exec).toBe(0);
     });
 
     test("update continuous not log canDo", () => {
@@ -356,7 +356,7 @@ describe("nominal cases", () => {
         (binding.command as StubCmd).candoValue = true;
         binding.fsmUpdates();
         expect(binding.ifCannotExecuteCmd).not.toHaveBeenCalledWith();
-        expect(binding.command?.exec).toStrictEqual(1);
+        expect(binding.command?.exec).toBe(1);
     });
 
     test("stop no log cmd created", () => {
@@ -367,7 +367,7 @@ describe("nominal cases", () => {
         binding.fsmStops();
         expect(cmd?.getStatus()).toStrictEqual(CmdStatus.cancelled);
         expect(binding.command).toBeUndefined();
-        expect(binding.timesCancelled).toStrictEqual(1);
+        expect(binding.timesCancelled).toBe(1);
     });
 
     test("stop no cmd created", () => {
@@ -375,7 +375,7 @@ describe("nominal cases", () => {
         binding.fsmStarts();
         binding.fsmStops();
         expect(binding.command).toBeUndefined();
-        expect(binding.timesCancelled).toStrictEqual(0);
+        expect(binding.timesCancelled).toBe(0);
     });
 
     test("stop with log cmd created and cancelled two times", () => {
@@ -388,7 +388,7 @@ describe("nominal cases", () => {
         binding.fsmStarts();
         binding.conditionRespected = false;
         binding.fsmStops();
-        expect(binding.timesCancelled).toStrictEqual(2);
+        expect(binding.timesCancelled).toBe(2);
         expect(logger.logBindingStart).not.toHaveBeenCalled();
         expect(logger.logBindingEnd).not.toHaveBeenCalled();
     });
