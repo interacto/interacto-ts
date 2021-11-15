@@ -14,7 +14,7 @@
 
 import type {FSMHandler} from "../../../src/interacto";
 import {TouchDnD} from "../../../src/interacto";
-import {createTouchEvent} from "../StubEvents";
+import {createTouchEvent, robot} from "../StubEvents";
 import {mock} from "jest-mock-extended";
 import {TouchDataImpl} from "../../../src/impl/interaction/TouchDataImpl";
 import {StubFSMHandler} from "../../fsm/StubFSMHandler";
@@ -36,6 +36,11 @@ beforeEach(() => {
     canvas = document.createElement("canvas");
     // document.elementFromPoint is undefined
     document.elementFromPoint = jest.fn().mockImplementation(() => null);
+    interaction.registerToNodes([canvas]);
+});
+
+afterEach(() => {
+    interaction.uninstall();
 });
 
 test("build fsm twice does not work", () => {
@@ -286,6 +291,32 @@ test("release on dwell-spring cancels interaction", () => {
     expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
 });
 
+test("several touches before the DnD does not prevent the DnD", () => {
+    robot(canvas)
+        .keepData()
+        .touchstart({}, [{"identifier": 1}])
+        .touchend()
+        .touchstart({}, [{"identifier": 2}])
+        .touchmove({}, [{"identifier": 2}])
+        .touchmove()
+        .touchend();
+
+    expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+    expect(interaction.isRunning()).toBeFalsy();
+});
+
+test("pressure release with no move must stop the DnD", () => {
+    robot(canvas)
+        .keepData()
+        .touchstart({}, [{"identifier": 3}])
+        .touchend();
+
+    expect(handler.fsmStarts).not.toHaveBeenCalled();
+    expect(handler.fsmCancels).not.toHaveBeenCalled();
+    expect(handler.fsmStops).not.toHaveBeenCalled();
+    expect(interaction.isRunning()).toBeFalsy();
+});
+
 describe("movement not required and not cancellable", () => {
     beforeEach(() => {
         srcData = new TouchDataImpl();
@@ -298,6 +329,7 @@ describe("movement not required and not cancellable", () => {
         canvas = document.createElement("canvas");
         // document.elementFromPoint is undefined
         document.elementFromPoint = jest.fn().mockImplementation(() => null);
+        interaction.registerToNodes([canvas]);
     });
 
     test("movement required: pressure starts interaction", () => {
@@ -332,12 +364,16 @@ describe("movement not required and not cancellable", () => {
         expect(tgtData.currentTarget).toBeNull();
     });
 
-    test("pressure release", () => {
-        interaction.processEvent(createTouchEvent("touchstart", 2, canvas, 11, 23, 12, 25));
-        interaction.processEvent(createTouchEvent("touchend", 2, canvas, 11, 23, 12, 25));
+    test("pressure release with no move stops the DnD", () => {
+        robot(canvas)
+            .keepData()
+            .touchstart({}, [{"identifier": 2}])
+            .touchend();
+
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-        expect(handler.fsmStops).toHaveBeenCalledTimes(1);
         expect(handler.fsmCancels).not.toHaveBeenCalled();
+        expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+        expect(interaction.isRunning()).toBeFalsy();
     });
 
     test("pressure move", () => {

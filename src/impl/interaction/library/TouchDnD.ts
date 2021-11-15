@@ -68,15 +68,23 @@ export class TouchDnDFSM extends FSMImpl {
         this.addState(released);
         this.addState(cancelled);
 
-        if (this.movementRequired) {
-            this.startingState = moved;
-        }
-
         const pressure = new TouchPressureTransition(this.initState, touched);
         pressure.action = (event: TouchEvent): void => {
             this.touchID = event.changedTouches[0].identifier;
             dataHandler?.onTouch(event);
         };
+
+        if (this.movementRequired) {
+            this.startingState = moved;
+            const tap = new TouchReleaseTransition(touched, cancelled);
+            tap.isGuardOK = (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.touchID;
+        } else {
+            const releaseTouched = new TouchReleaseTransition(touched, released);
+            releaseTouched.isGuardOK = (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.touchID;
+            releaseTouched.action = (event: TouchEvent): void => {
+                dataHandler?.onRelease(event);
+            };
+        }
 
         const firstMove = new TouchMoveTransition(touched, moved);
         firstMove.isGuardOK = (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.touchID;
@@ -116,15 +124,6 @@ export class TouchDnDFSM extends FSMImpl {
                 dataHandler?.onRelease(event);
             };
         }
-        // Additional transition for a DnD that does not require a movement to start and end
-        if (!this.movementRequired) {
-            const releaseTouched = new TouchReleaseTransition(touched, released);
-            releaseTouched.isGuardOK = (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.touchID;
-            releaseTouched.action = (event: TouchEvent): void => {
-                dataHandler?.onRelease(event);
-            };
-        }
-
         super.buildFSM(dataHandler);
     }
 
