@@ -14,7 +14,7 @@
 
 import type {FSMHandler} from "../../../src/interacto";
 import {MultiTouch} from "../../../src/interacto";
-import {createTouchEvent} from "../StubEvents";
+import {createTouchEvent, robot} from "../StubEvents";
 import {mock} from "jest-mock-extended";
 import {TouchDataImpl} from "../../../src/impl/interaction/TouchDataImpl";
 import {checkTouchPoint} from "../../Utils";
@@ -196,6 +196,56 @@ test("touch end", () => {
     expect(handler.fsmUpdates).not.toHaveBeenCalled();
     expect(handler.fsmStops).not.toHaveBeenCalled();
     expect(handler.fsmCancels).not.toHaveBeenCalled();
+});
+
+test("several touch starts", () => {
+    interaction.registerToNodes([canvas]);
+
+    robot(canvas)
+        .touchstart({}, [{"clientX": 500, "identifier": 1}, {"clientX": 300, "identifier": 3}]);
+
+    expect(interaction.data.touches[0].tgt.clientX).toBe(500);
+    expect(interaction.data.touches[1].tgt.clientX).toBe(300);
+});
+
+test("several touch moves change", () => {
+    interaction.registerToNodes([canvas]);
+
+    robot(canvas)
+        .touchstart({}, [{"clientX": 100, "identifier": 1}])
+        .touchstart({}, [{"clientX": 200, "identifier": 2}])
+        .touchstart({}, [{"clientX": 400, "identifier": 3}])
+        .touchmove({}, [{"clientX": 50, "identifier": 1}, {"clientX": 300, "identifier": 3}]);
+
+    expect(interaction.data.touches[0].tgt.clientX).toBe(50);
+    expect(interaction.data.touches[1].tgt.clientX).toBe(200);
+    expect(interaction.data.touches[2].tgt.clientX).toBe(300);
+});
+
+test("several touch releases change", () => {
+    let data1 = 0;
+    let data2 = 0;
+    let data3 = 0;
+
+    interaction.registerToNodes([canvas]);
+
+    const newHandler = mock<FSMHandler>();
+    newHandler.fsmStops.mockImplementation(() => {
+        data1 = interaction.data.touches[0].tgt.clientX;
+        data2 = interaction.data.touches[1].tgt.clientX;
+        data3 = interaction.data.touches[2].tgt.clientX;
+    });
+    interaction.fsm.addHandler(newHandler);
+
+    robot(canvas)
+        .touchstart({}, [{"clientX": 100, "identifier": 1}])
+        .touchstart({}, [{"clientX": 200, "identifier": 2}])
+        .touchstart({}, [{"clientX": 400, "identifier": 3}])
+        .touchend({}, [{"clientX": 150, "identifier": 3}, {"clientX": 3000, "identifier": 2}]);
+
+    expect(data1).toBe(100);
+    expect(data2).toBe(3000);
+    expect(data3).toBe(150);
 });
 
 // eslint-disable-next-line jest/expect-expect

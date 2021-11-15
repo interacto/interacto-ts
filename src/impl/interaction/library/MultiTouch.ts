@@ -71,19 +71,26 @@ export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouch
 
         this.handler = {
             "onTouch": (event: TouchEvent): void => {
-                if (event.changedTouches.length > 0) {
+                // eslint-disable-next-line @typescript-eslint/prefer-for-of
+                for (let i = 0; i < event.changedTouches.length; i++) {
                     const data = new SrcTgtTouchDataImpl();
-                    data.copySrc(event.changedTouches[0], event);
-                    data.copyTgt(event.changedTouches[0], event);
+                    data.copySrc(event.changedTouches[i], event);
+                    data.copyTgt(event.changedTouches[i], event);
                     this._data.addTouchData(data);
                 }
             },
             "onMove": (event: TouchEvent): void => {
-                this._data.setTouch(event.changedTouches[0], event);
+                // eslint-disable-next-line @typescript-eslint/prefer-for-of
+                for (let i = 0; i < event.changedTouches.length; i++) {
+                    this._data.setTouch(event.changedTouches[i], event);
+                }
             },
 
             "onRelease": (event: TouchEvent): void => {
-                this._data.setTouch(event.changedTouches[0], event);
+                // eslint-disable-next-line @typescript-eslint/prefer-for-of
+                for (let i = 0; i < event.changedTouches.length; i++) {
+                    this._data.setTouch(event.changedTouches[i], event);
+                }
             },
 
             "reinitData": (): void => {
