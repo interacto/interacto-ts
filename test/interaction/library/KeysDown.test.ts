@@ -90,8 +90,9 @@ test("testTwoKeyPressReleaseExecution", () => {
     interaction.registerToNodes([text]);
     robot(text)
         .keydown({"code": "A"})
+        .keepData()
         .keydown({"code": "B"})
-        .keyup({"code": "B"});
+        .keyup();
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(3);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
 });
@@ -117,8 +118,9 @@ test("testTwoKeyPressReleaseRecycle", () => {
     interaction.registerToNodes([text]);
     robot(text)
         .keydown({"code": "A"})
+        .keepData()
         .keydown({"code": "B"})
-        .keyup({"code": "B"});
+        .keyup();
     expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
 });
 

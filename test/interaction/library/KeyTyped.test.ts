@@ -39,8 +39,9 @@ test("cannot create several times the FSM", () => {
 test("type 'a' in the textarea starts and stops the interaction.", () => {
     interaction.registerToNodes([text]);
     robot(text)
+        .keepData()
         .keydown({"code": "a"})
-        .keyup({"code": "a"});
+        .keyup();
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
 });
@@ -71,7 +72,8 @@ test("data is ok", () => {
     });
     interaction.fsm.addHandler(newHandler);
     robot(text)
+        .keepData()
         .keydown({"code": "z"})
-        .keyup({"code": "z"});
+        .keyup();
     expect(data.code).toBe("z");
 });

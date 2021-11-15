@@ -14,9 +14,8 @@
 
 import type {FSMDataHandler, FSMHandler} from "../../../src/interacto";
 import {LongMouseDown, PointDataImpl} from "../../../src/interacto";
-import {createMouseEvent} from "../StubEvents";
+import {createMouseEvent, robot} from "../StubEvents";
 import {mock} from "jest-mock-extended";
-import {robot} from "interacto-nono";
 
 let interaction: LongMouseDown;
 let canvas: HTMLElement;
@@ -119,7 +118,7 @@ describe("long mouse down test", () => {
                 interaction.registerToNodes([canvas]);
                 robot(canvas)
                     .mousedown()
-                    .do(() => jest.runOnlyPendingTimers());
+                    .runOnlyPendingTimers();
                 expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
                 expect(handler.fsmStops).toHaveBeenCalledTimes(1);
                 expect(handler.fsmCancels).toHaveBeenCalledTimes(0);

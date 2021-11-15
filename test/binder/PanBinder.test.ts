@@ -44,10 +44,11 @@ test("pan horizontal right", () => {
         .bind();
 
     robot(c1)
+        .keepData()
         .touchstart({}, [{"screenX": 3, "screenY": 20, "clientX": 150, "clientY": 200, "identifier": 3, "target": c1}])
-        .touchmove({}, [{"screenX": 16, "screenY": 21, "clientX": 160, "clientY": 201, "identifier": 3, "target": c1}])
-        .touchmove({}, [{"screenX": 20, "screenY": 25, "clientX": 200, "clientY": 205, "identifier": 3, "target": c1}])
-        .touchend({}, [{"screenX": 65, "screenY": 25, "clientX": 200, "clientY": 205, "identifier": 3, "target": c1}]);
+        .touchmove({}, [{"screenX": 16, "screenY": 21, "clientX": 160, "clientY": 201}])
+        .touchmove({}, [{"screenX": 20, "screenY": 25, "clientX": 200, "clientY": 205}])
+        .touchend({}, [{"screenX": 65, "screenY": 25, "clientX": 200, "clientY": 205}]);
 
     expect(binding).toBeDefined();
     expect(binding.timesCancelled).toBe(0);

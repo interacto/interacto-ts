@@ -248,9 +248,10 @@ test("check data with one move.", () => {
         }
     }());
     robot(canvas)
+        .keepData()
         .mousedown({"screenX": 1, "screenY": 2, "clientX": 11, "clientY": 23, "button": 0})
-        .mousemove({"screenX": 3, "screenY": 4, "clientX": 15, "clientY": 25, "button": 0})
-        .mouseup({"screenX": 3, "screenY": 4, "clientX": 15, "clientY": 25, "button": 0});
+        .mousemove({"screenX": 3, "screenY": 4, "clientX": 15, "clientY": 25})
+        .mouseup();
     expect(sx).toBe(11);
     expect(sy).toBe(23);
     expect(tx).toBe(15);
@@ -276,9 +277,10 @@ test("displacement data", () => {
     interaction.registerToNodes([canvas]);
 
     robot(canvas)
+        .keepData()
         .mousedown({"screenX": 1, "screenY": 2, "clientX": 11, "clientY": 23, "button": 0})
-        .mousemove({"screenX": 3, "screenY": 4, "clientX": 15, "clientY": 25, "button": 0})
-        .mouseup({"screenX": 3, "screenY": 4, "clientX": 15, "clientY": 25, "button": 0});
+        .mousemove({"screenX": 3, "screenY": 4, "clientX": 15, "clientY": 25})
+        .mouseup();
     expect(diffClientX).toBe(4);
     expect(diffClientY).toBe(2);
     expect(diffScreenX).toBe(2);

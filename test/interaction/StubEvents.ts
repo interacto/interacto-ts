@@ -15,6 +15,35 @@
 import type {EventType} from "../../src/api/fsm/EventType";
 import type {PointData} from "../../src/api/interaction/PointData";
 import type {WheelData} from "../../src/api/interaction/WheelData";
+import type {NonoRobot} from "interacto-nono";
+import {NonoRobotImpl} from "interacto-nono";
+
+export interface JestNonoRobot {
+    runOnlyPendingTimers(): this;
+
+    runAllTimers(): this;
+}
+
+class JestNonoRobotImpl extends NonoRobotImpl implements JestNonoRobot {
+    public constructor(target?: EventTarget) {
+        super(target);
+    }
+
+    public runOnlyPendingTimers(): this {
+        jest.runOnlyPendingTimers();
+        return this;
+    }
+
+    public runAllTimers(): this {
+        jest.runAllTimers();
+        return this;
+    }
+}
+
+export function robot(target?: EventTarget): JestNonoRobot & NonoRobot {
+    return new JestNonoRobotImpl(target);
+}
+
 
 export interface MouseEventForTest extends MouseEvent {
     id: number;

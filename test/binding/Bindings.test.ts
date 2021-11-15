@@ -33,11 +33,10 @@ import type {
 import {AnonCmd, BindingsContext, BindingsImpl, LogLevel} from "../../src/interacto";
 import {StubCmd, StubUndoableCmd} from "../command/StubCmd";
 import type {MouseEventForTest} from "../interaction/StubEvents";
-import {createMouseEvent} from "../interaction/StubEvents";
+import {createMouseEvent, robot} from "../interaction/StubEvents";
 import {mock} from "jest-mock-extended";
 import type {UndoHistory} from "../../src/api/undo/UndoHistory";
 import type {BindingsObserver} from "../../src/api/binding/BindingsObserver";
-import {robot} from "interacto-nono";
 
 let elt: HTMLElement;
 let ctx: BindingsContext;
@@ -180,9 +179,7 @@ test("double click binder", () => {
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .bind();
-    robot(elt)
-        .click()
-        .click();
+    robot(elt).click({}, 2);
     expect(ctx.commands).toHaveLength(1);
 });
 
@@ -228,11 +225,9 @@ test("drag lock binder", () => {
         .toProduce(() => new StubCmd(true))
         .bind();
     robot(elt)
-        .click()
-        .click()
+        .click({}, 2)
         .mousemove()
-        .click()
-        .click();
+        .click({}, 2);
     expect(ctx.commands).toHaveLength(1);
 });
 
@@ -393,11 +388,12 @@ test("reciprocal touch DnD binder", () => {
         .cancel(cancel)
         .bind();
     robot(elt)
+        .keepData()
         .touchstart({}, [{"identifier": 1, "target": elt}])
-        .touchmove({}, [{"identifier": 1, "target": elt}])
-        .touchend({}, [{"identifier": 1, "target": elt}])
-        .touchstart({}, [{"identifier": 1, "target": elt}])
-        .touchmove({}, [{"identifier": 1, "target": elt}]);
+        .touchmove()
+        .touchend()
+        .touchstart()
+        .touchmove();
     document.elementFromPoint = jest.fn().mockImplementation(() => handle);
     robot(handle)
         .touchend({}, [{"identifier": 1, "target": handle}]);
@@ -430,8 +426,9 @@ test("key type binder", () => {
         .toProduce(() => new StubCmd(true))
         .bind();
     robot(elt)
+        .keepData()
         .keydown({"code": "A"})
-        .keyup({"code": "A"});
+        .keyup();
     expect(ctx.commands).toHaveLength(1);
 });
 
@@ -445,13 +442,11 @@ test("click must not block drag lock", () => {
 
     robot(elt)
         .click({"button": 1})
-        .do(() => jest.runOnlyPendingTimers())
-        .auxclick({"button": 2})
-        .auxclick({"button": 2})
+        .runOnlyPendingTimers()
+        .auxclick({"button": 2}, 2)
         .mousemove()
         .mousemove()
-        .auxclick({"button": 2})
-        .auxclick({"button": 2});
+        .auxclick({"button": 2}, 2);
 
     expect(ctx.commands).toHaveLength(1);
 });
@@ -464,8 +459,9 @@ test("drag lock: double click does not cancel", () => {
         .bind();
 
     robot(elt)
+        .keepData()
         .click({"button": 0})
-        .click({"button": 0});
+        .click();
 
     expect(binding.interaction.isRunning()).toBeTruthy();
 });
@@ -486,13 +482,11 @@ test("drag lock: first then end", () => {
 
     robot(elt)
         .click({"button": 1})
-        .do(() => jest.runOnlyPendingTimers())
-        .auxclick({"button": 2})
-        .auxclick({"button": 2})
+        .runOnlyPendingTimers()
+        .auxclick({"button": 2}, 2)
         .mousemove()
         .mousemove()
-        .auxclick({"button": 2})
-        .auxclick({"button": 2});
+        .auxclick({"button": 2}, 2);
 
     expect(first).toHaveBeenCalledTimes(1);
     expect(end).toHaveBeenCalledTimes(1);
@@ -521,9 +515,10 @@ test("touch DnD binding", () => {
         .bind();
 
     robot(elt)
+        .keepData()
         .touchstart({}, [{"identifier": 1, "target": elt}])
-        .touchmove({}, [{"identifier": 1, "target": elt}])
-        .touchend({}, [{"identifier": 1, "target": elt}]);
+        .touchmove()
+        .touchend();
 
     expect(ctx.commands).toHaveLength(1);
 });
@@ -537,10 +532,7 @@ test("clicks binding work", () => {
         })
         .bind();
 
-    robot(elt)
-        .click()
-        .click()
-        .click();
+    robot().click(elt, 3);
 
     expect(ctx.commands).toHaveLength(1);
 });
@@ -582,14 +574,15 @@ test("that swipe binder works", () => {
         .bind();
 
     robot(elt)
+        .keepData()
         .touchstart({},
             [{"screenX": 50, "screenY": 20, "clientX": 100, "clientY": 200, "identifier": 2, "target": elt}], 5000)
         .touchmove({},
-            [{"screenX": 170, "screenY": 30, "clientX": 161, "clientY": 202, "identifier": 2, "target": elt}], 5500)
+            [{"screenX": 170, "screenY": 30, "clientX": 161, "clientY": 202}], 5500)
         .touchmove({},
-            [{"screenX": 450, "screenY": 30, "clientX": 500, "clientY": 210, "identifier": 2, "target": elt}], 6000)
+            [{"screenX": 450, "screenY": 30, "clientX": 500, "clientY": 210}], 6000)
         .touchend({},
-            [{"screenX": 450, "screenY": 30, "clientX": 500, "clientY": 210, "identifier": 2, "target": elt}], 6000);
+            [{"screenX": 450, "screenY": 30, "clientX": 500, "clientY": 210}], 6000);
 
     expect(ctx.commands).toHaveLength(1);
 });
@@ -602,17 +595,17 @@ test("that pinch binder works", () => {
 
     robot(elt)
         .touchstart({},
-            [{"screenX": 15, "screenY": 16, "clientX": 100, "clientY": 200, "identifier": 2, "target": elt}])
+            [{"screenX": 15, "screenY": 16, "clientX": 100, "clientY": 200, "identifier": 2}])
         .touchstart({},
-            [{"screenX": 10, "screenY": 11, "clientX": 100, "clientY": 200, "identifier": 3, "target": elt}])
+            [{"screenX": 10, "screenY": 11, "clientX": 100, "clientY": 200, "identifier": 3}])
         .touchmove({},
-            [{"screenX": 20, "screenY": 22, "clientX": 100, "clientY": 200, "identifier": 2, "target": elt}])
+            [{"screenX": 20, "screenY": 22, "clientX": 100, "clientY": 200, "identifier": 2}])
         .touchmove({},
-            [{"screenX": 5, "screenY": 6, "clientX": 100, "clientY": 200, "identifier": 3, "target": elt}])
+            [{"screenX": 5, "screenY": 6, "clientX": 100, "clientY": 200, "identifier": 3}])
         .touchend({},
-            [{"screenX": 20, "screenY": 22, "clientX": 500, "clientY": 210, "identifier": 2, "target": elt}])
+            [{"screenX": 20, "screenY": 22, "clientX": 500, "clientY": 210, "identifier": 2}])
         .touchend({},
-            [{"screenX": 5, "screenY": 6, "clientX": 500, "clientY": 210, "identifier": 3, "target": elt}]);
+            [{"screenX": 5, "screenY": 6, "clientX": 500, "clientY": 210, "identifier": 3}]);
 
     expect(ctx.commands).toHaveLength(1);
 });
@@ -636,8 +629,9 @@ test("that keysDown binder works", () => {
 
     robot(elt)
         .keydown({"code": "A"})
+        .keepData()
         .keydown({"code": "B"})
-        .keyup({"code": "B"});
+        .keyup();
 
     expect(ctx.commands).toHaveLength(1);
 });
@@ -756,9 +750,10 @@ describe("check when it crashes in routines", () => {
             .bind();
 
         robot(elt)
+            .keepData()
             .touchstart({}, [{"identifier": 3, "target": elt}])
-            .touchmove({}, [{"identifier": 3, "target": elt}])
-            .touchend({}, [{"identifier": 3, "target": elt}]);
+            .touchmove()
+            .touchend();
 
         expect(ctx.commands).toHaveLength(1);
         expect(logger.logBindingErr).toHaveBeenCalledWith("Crash in 'first'", err);
@@ -774,9 +769,10 @@ describe("check when it crashes in routines", () => {
             .bind();
 
         robot(elt)
+            .keepData()
             .touchstart({}, [{"identifier": 1, "target": elt}])
-            .touchmove({}, [{"identifier": 1, "target": elt}])
-            .touchend({}, [{"identifier": 1, "target": elt}]);
+            .touchmove()
+            .touchend();
 
         expect(ctx.commands).toHaveLength(1);
         expect(fn).toHaveBeenCalledTimes(1);
@@ -794,9 +790,10 @@ describe("check when it crashes in routines", () => {
             .bind();
 
         robot(elt)
+            .keepData()
             .touchstart({}, [{"identifier": 1, "target": elt}])
-            .touchmove({}, [{"identifier": 1, "target": elt}])
-            .touchend({}, [{"identifier": 1, "target": elt}]);
+            .touchmove()
+            .touchend();
 
         expect(ctx.commands).toHaveLength(1);
         expect(logger.logBindingErr).toHaveBeenCalledWith("Crash in 'first'", err);
@@ -815,9 +812,10 @@ describe("check when it crashes in routines", () => {
             .bind();
 
         robot(elt)
+            .keepData()
             .touchstart({}, [{"identifier": 1, "target": elt}])
-            .touchmove({}, [{"identifier": 1, "target": elt}])
-            .touchend({}, [{"identifier": 1, "target": elt}]);
+            .touchmove()
+            .touchend();
 
         expect(ctx.commands).toHaveLength(1);
         expect(logger.logBindingErr).toHaveBeenCalledWith("Crash in 'first'", err);
@@ -832,9 +830,10 @@ describe("check when it crashes in routines", () => {
             .bind();
 
         robot(elt)
+            .keepData()
             .touchstart({}, [{"identifier": 1, "target": elt}])
-            .touchmove({}, [{"identifier": 1, "target": elt}])
-            .touchend({}, [{"identifier": 1, "target": elt}]);
+            .touchmove()
+            .touchend();
 
         expect(ctx.commands).toHaveLength(1);
         expect(logger.logBindingErr).toHaveBeenCalledWith("Crash in 'first'", 42);
@@ -848,9 +847,10 @@ describe("check when it crashes in routines", () => {
             .bind();
 
         robot(elt)
+            .keepData()
             .touchstart({}, [{"identifier": 1, "target": elt}])
-            .touchmove({}, [{"identifier": 1, "target": elt}])
-            .touchend({}, [{"identifier": 1, "target": elt}]);
+            .touchmove()
+            .touchend();
 
         expect(ctx.commands).toHaveLength(1);
         expect(logger.logBindingErr).toHaveBeenCalledWith("Crash in 'then'", err);
@@ -866,9 +866,10 @@ describe("check when it crashes in routines", () => {
             .bind();
 
         robot(elt)
+            .keepData()
             .touchstart({}, [{"identifier": 1, "target": elt}])
-            .touchmove({}, [{"identifier": 1, "target": elt}])
-            .touchend({}, [{"identifier": 1, "target": elt}]);
+            .touchmove()
+            .touchend();
 
         expect(ctx.commands).toHaveLength(1);
         expect(fn).toHaveBeenCalledTimes(2);
@@ -884,9 +885,10 @@ describe("check when it crashes in routines", () => {
             .bind();
 
         robot(elt)
+            .keepData()
             .touchstart({}, [{"identifier": 1, "target": elt}])
-            .touchmove({}, [{"identifier": 1, "target": elt}])
-            .touchend({}, [{"identifier": 1, "target": elt}]);
+            .touchmove()
+            .touchend();
 
         expect(ctx.commands).toHaveLength(1);
         expect(logger.logBindingErr).toHaveBeenCalledWith("Crash in 'then'", "foo");
@@ -900,9 +902,10 @@ describe("check when it crashes in routines", () => {
             .bind();
 
         robot(elt)
+            .keepData()
             .touchstart({}, [{"identifier": 1, "target": elt}])
-            .touchmove({}, [{"identifier": 1, "target": elt}])
-            .touchend({}, [{"identifier": 1, "target": elt}]);
+            .touchmove()
+            .touchend();
 
         expect(ctx.commands).toHaveLength(1);
         expect(logger.logBindingErr).toHaveBeenCalledWith("Crash in 'end'", err);
@@ -918,9 +921,10 @@ describe("check when it crashes in routines", () => {
             .bind();
 
         robot(elt)
+            .keepData()
             .touchstart({}, [{"identifier": 1, "target": elt}])
-            .touchmove({}, [{"identifier": 1, "target": elt}])
-            .touchend({}, [{"identifier": 1, "target": elt}]);
+            .touchmove()
+            .touchend();
 
         expect(ctx.commands).toHaveLength(1);
         expect(fn).toHaveBeenCalledTimes(1);
@@ -936,9 +940,10 @@ describe("check when it crashes in routines", () => {
             .bind();
 
         robot(elt)
+            .keepData()
             .touchstart({}, [{"identifier": 1, "target": elt}])
-            .touchmove({}, [{"identifier": 1, "target": elt}])
-            .touchend({}, [{"identifier": 1, "target": elt}]);
+            .touchmove()
+            .touchend();
 
         expect(ctx.commands).toHaveLength(1);
         expect(logger.logBindingErr).toHaveBeenCalledWith("Crash in 'end'", 21);
@@ -952,9 +957,10 @@ describe("check when it crashes in routines", () => {
             .bind();
 
         robot(elt)
+            .keepData()
             .touchstart({}, [{"identifier": 1, "target": elt}])
-            .touchmove({}, [{"identifier": 1, "target": elt}])
-            .touchend({}, [{"identifier": 1, "target": elt}]);
+            .touchmove()
+            .touchend();
 
         expect(ctx.commands).toHaveLength(1);
         expect(logger.logBindingErr).toHaveBeenCalledWith("Crash in 'endOrCancel'", err);
@@ -970,9 +976,10 @@ describe("check when it crashes in routines", () => {
             .bind();
 
         robot(elt)
+            .keepData()
             .touchstart({}, [{"identifier": 1, "target": elt}])
-            .touchmove({}, [{"identifier": 1, "target": elt}])
-            .touchend({}, [{"identifier": 1, "target": elt}]);
+            .touchmove()
+            .touchend();
 
         expect(ctx.commands).toHaveLength(1);
         expect(fn).toHaveBeenCalledTimes(1);
@@ -988,9 +995,10 @@ describe("check when it crashes in routines", () => {
             .bind();
 
         robot(elt)
+            .keepData()
             .touchstart({}, [{"identifier": 1, "target": elt}])
-            .touchmove({}, [{"identifier": 1, "target": elt}])
-            .touchend({}, [{"identifier": 1, "target": elt}]);
+            .touchmove()
+            .touchend();
 
         expect(ctx.commands).toHaveLength(1);
         expect(logger.logBindingErr).toHaveBeenCalledWith("Crash in 'endOrCancel'", true);
@@ -1063,9 +1071,10 @@ describe("check when it crashes in routines", () => {
             .bind();
 
         robot(elt)
+            .keepData()
             .touchstart({}, [{"identifier": 1, "target": elt}])
-            .touchmove({}, [{"identifier": 1, "target": elt}])
-            .touchend({}, [{"identifier": 1, "target": elt}]);
+            .touchmove()
+            .touchend();
 
         expect(ctx.commands).toHaveLength(1);
         expect(logger.logBindingErr).toHaveBeenCalledWith("Crash in 'ifHadNoEffect'", err);
@@ -1082,9 +1091,10 @@ describe("check when it crashes in routines", () => {
             .bind();
 
         robot(elt)
+            .keepData()
             .touchstart({}, [{"identifier": 1, "target": elt}])
-            .touchmove({}, [{"identifier": 1, "target": elt}])
-            .touchend({}, [{"identifier": 1, "target": elt}]);
+            .touchmove()
+            .touchend();
 
         expect(ctx.commands).toHaveLength(1);
         expect(fn).toHaveBeenCalledTimes(1);
@@ -1101,9 +1111,10 @@ describe("check when it crashes in routines", () => {
             .bind();
 
         robot(elt)
+            .keepData()
             .touchstart({}, [{"identifier": 1, "target": elt}])
-            .touchmove({}, [{"identifier": 1, "target": elt}])
-            .touchend({}, [{"identifier": 1, "target": elt}]);
+            .touchmove()
+            .touchend();
 
         expect(ctx.commands).toHaveLength(1);
         expect(logger.logBindingErr).toHaveBeenCalledWith("Crash in 'ifHadNoEffect'", 11);
@@ -1118,9 +1129,10 @@ describe("check when it crashes in routines", () => {
             .bind();
 
         robot(elt)
+            .keepData()
             .touchstart({}, [{"identifier": 1, "target": elt}])
-            .touchmove({}, [{"identifier": 1, "target": elt}])
-            .touchend({}, [{"identifier": 1, "target": elt}]);
+            .touchmove()
+            .touchend();
 
         expect(ctx.commands).toHaveLength(1);
         expect(logger.logBindingErr).toHaveBeenCalledWith("Crash in 'ifHadEffects'", err);
@@ -1137,9 +1149,10 @@ describe("check when it crashes in routines", () => {
             .bind();
 
         robot(elt)
+            .keepData()
             .touchstart({}, [{"identifier": 1, "target": elt}])
-            .touchmove({}, [{"identifier": 1, "target": elt}])
-            .touchend({}, [{"identifier": 1, "target": elt}]);
+            .touchmove()
+            .touchend();
 
         expect(ctx.commands).toHaveLength(1);
         expect(fn).toHaveBeenCalledTimes(1);
@@ -1156,9 +1169,10 @@ describe("check when it crashes in routines", () => {
             .bind();
 
         robot(elt)
+            .keepData()
             .touchstart({}, [{"identifier": 1, "target": elt}])
-            .touchmove({}, [{"identifier": 1, "target": elt}])
-            .touchend({}, [{"identifier": 1, "target": elt}]);
+            .touchmove()
+            .touchend();
 
         expect(ctx.commands).toHaveLength(1);
         expect(logger.logBindingErr).toHaveBeenCalledWith("Crash in 'ifHadEffects'", "YOLO");
@@ -1172,9 +1186,10 @@ describe("check when it crashes in routines", () => {
             .bind();
 
         robot(elt)
+            .keepData()
             .touchstart({}, [{"identifier": 1, "target": elt}])
-            .touchmove({}, [{"identifier": 1, "target": elt}])
-            .touchend({}, [{"identifier": 1, "target": elt}]);
+            .touchmove()
+            .touchend();
 
         expect(ctx.commands).toHaveLength(0);
         expect(logger.logBindingErr).toHaveBeenCalledWith("Crash in 'when'", err);
@@ -1190,9 +1205,10 @@ describe("check when it crashes in routines", () => {
             .bind();
 
         robot(elt)
+            .keepData()
             .touchstart({}, [{"identifier": 1, "target": elt}])
-            .touchmove({}, [{"identifier": 1, "target": elt}])
-            .touchend({}, [{"identifier": 1, "target": elt}]);
+            .touchmove()
+            .touchend();
 
         expect(fn).toHaveBeenCalledTimes(3);
         expect(fn).toHaveBeenCalledWith(err);
@@ -1206,8 +1222,10 @@ describe("check when it crashes in routines", () => {
             })
             .bind();
 
-        robot(elt).touchstart({}, [{"identifier": 1, "target": elt}]);
-        robot(elt).touchmove({}, [{"identifier": 1, "target": elt}]);
+        robot(elt)
+            .keepData()
+            .touchstart({}, [{"identifier": 1, "target": elt}])
+            .touchmove();
 
 
         expect(ctx.commands).toHaveLength(0);
@@ -1219,8 +1237,10 @@ describe("check when it crashes in routines", () => {
             .log(LogLevel.binding)
             .bind();
 
-        robot(elt).touchstart({}, [{"identifier": 1, "target": elt}]);
-        robot(elt).touchmove({}, [{"identifier": 1, "target": elt}]);
+        robot(elt)
+            .keepData()
+            .touchstart({}, [{"identifier": 1, "target": elt}])
+            .touchmove();
 
         expect(logger.logBindingMsg).toHaveBeenNthCalledWith(1, "Checking condition: true");
     });
@@ -1234,9 +1254,10 @@ describe("check when it crashes in routines", () => {
             .bind();
 
         robot(elt)
+            .keepData()
             .touchstart({}, [{"identifier": 1, "target": elt}])
-            .touchmove({}, [{"identifier": 1, "target": elt}])
-            .touchend({}, [{"identifier": 1, "target": elt}]);
+            .touchmove()
+            .touchend();
 
         expect(ctx.commands).toHaveLength(0);
         expect(logger.logBindingErr).toHaveBeenCalledWith("Crash in 'ifCannotExecute'", err);
@@ -1253,9 +1274,10 @@ describe("check when it crashes in routines", () => {
             .bind();
 
         robot(elt)
+            .keepData()
             .touchstart({}, [{"identifier": 1, "target": elt}])
-            .touchmove({}, [{"identifier": 1, "target": elt}])
-            .touchend({}, [{"identifier": 1, "target": elt}]);
+            .touchmove()
+            .touchend();
 
         expect(fn).toHaveBeenCalledTimes(1);
         expect(fn).toHaveBeenCalledWith(err);
@@ -1271,9 +1293,10 @@ describe("check when it crashes in routines", () => {
             .bind();
 
         robot(elt)
+            .keepData()
             .touchstart({}, [{"identifier": 1, "target": elt}])
-            .touchmove({}, [{"identifier": 1, "target": elt}])
-            .touchend({}, [{"identifier": 1, "target": elt}]);
+            .touchmove()
+            .touchend();
 
         expect(ctx.commands).toHaveLength(0);
         expect(logger.logBindingErr).toHaveBeenCalledWith("Crash in 'ifCannotExecute'", 1);
@@ -1297,25 +1320,28 @@ describe("tap and longPress conflict", () => {
     });
 
     test("touchstart and wait", () => {
-        robot(elt).touchstart({}, [{"identifier": 1, "target": elt}]);
-        jest.runOnlyPendingTimers();
+        robot(elt)
+            .touchstart({}, [{"identifier": 1, "target": elt}])
+            .runOnlyPendingTimers();
         expect(ctx.getCmdsProducedBy(binding2)).toHaveLength(1);
         expect(ctx.getCmdsProducedBy(binding)).toHaveLength(0);
     });
 
     test("touchstart and touchend", () => {
         robot(elt)
+            .keepData()
             .touchstart({}, [{"identifier": 1, "target": elt}])
-            .touchend({}, [{"identifier": 1, "target": elt}]);
+            .touchend();
         expect(ctx.getCmdsProducedBy(binding2)).toHaveLength(0);
         expect(ctx.getCmdsProducedBy(binding)).toHaveLength(1);
     });
 
     test("touchstart, wait, touchend", () => {
         robot(elt)
+            .keepData()
             .touchstart({}, [{"identifier": 1, "target": elt}])
-            .do(() => jest.runOnlyPendingTimers())
-            .touchend({}, [{"identifier": 1, "target": elt}]);
+            .runOnlyPendingTimers()
+            .touchend();
         expect(ctx.getCmdsProducedBy(binding2)).toHaveLength(1);
         expect(ctx.getCmdsProducedBy(binding)).toHaveLength(1);
     });
@@ -1337,9 +1363,10 @@ describe("two longTouch", () => {
             .bind();
 
         robot(elt)
+            .keepData()
             .touchstart({}, [{"identifier": 1, "target": elt}])
-            .do(() => jest.runOnlyPendingTimers())
-            .touchend({}, [{"identifier": 1, "target": elt}]);
+            .runOnlyPendingTimers()
+            .touchend();
         expect(ctx.getCmdsProducedBy(binding2)).toHaveLength(1);
         expect(ctx.getCmdsProducedBy(binding)).toHaveLength(0);
     });
@@ -1355,9 +1382,10 @@ describe("two longTouch", () => {
             .bind();
 
         robot(elt)
+            .keepData()
             .touchstart({}, [{"identifier": 1, "target": elt}])
-            .do(() => jest.runOnlyPendingTimers())
-            .touchend({}, [{"identifier": 1, "target": elt}]);
+            .runOnlyPendingTimers()
+            .touchend();
         expect(ctx.getCmdsProducedBy(binding2)).toHaveLength(1);
         expect(ctx.getCmdsProducedBy(binding)).toHaveLength(1);
     });
@@ -1374,9 +1402,10 @@ describe("two longTouch", () => {
             .bind();
 
         robot(elt)
+            .keepData()
             .touchstart({}, [{"identifier": 1, "target": elt}])
-            .do(() => jest.runOnlyPendingTimers())
-            .touchend({}, [{"identifier": 1, "target": elt}]);
+            .runOnlyPendingTimers()
+            .touchend();
         expect(ctx.getCmdsProducedBy(binding2)).toHaveLength(1);
         expect(ctx.getCmdsProducedBy(binding)).toHaveLength(0);
     });
@@ -1393,9 +1422,10 @@ describe("two longTouch", () => {
             .bind();
 
         robot(elt)
+            .keepData()
             .touchstart({}, [{"identifier": 1, "target": elt}])
-            .do(() => jest.runOnlyPendingTimers())
-            .touchend({}, [{"identifier": 1, "target": elt}]);
+            .runOnlyPendingTimers()
+            .touchend();
         expect(ctx.getCmdsProducedBy(binding2)).toHaveLength(1);
         expect(ctx.getCmdsProducedBy(binding)).toHaveLength(1);
     });

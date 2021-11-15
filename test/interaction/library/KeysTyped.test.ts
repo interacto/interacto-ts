@@ -41,8 +41,9 @@ test("cannot create several times the FSM", () => {
 test("type 'b' and wait for timeout stops the interaction", () => {
     interaction.registerToNodes([text]);
     robot(text)
+        .keepData()
         .keydown({"code": "b"})
-        .keyup({"code": "b"});
+        .keyup();
     jest.runOnlyPendingTimers();
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
@@ -57,8 +58,9 @@ test("type 'b' and wait for timeout stops the interaction: data", () => {
 
     interaction.registerToNodes([text]);
     robot(text)
+        .keepData()
         .keydown({"code": "b"})
-        .keyup({"code": "b"});
+        .keyup();
     jest.runOnlyPendingTimers();
     expect(data.keys).toHaveLength(1);
     expect(data.keys[0].code).toBe("b");
@@ -67,12 +69,13 @@ test("type 'b' and wait for timeout stops the interaction: data", () => {
 test("type text and wait for timeout stops the interaction", () => {
     interaction.registerToNodes([text]);
     robot(text)
+        .keepData()
         .keydown({"code": "b"})
-        .keyup({"code": "b"})
+        .keyup()
         .keydown({"code": "c"})
-        .keyup({"code": "c"})
+        .keyup()
         .keydown({"code": "a"})
-        .keyup({"code": "a"});
+        .keyup();
     jest.runOnlyPendingTimers();
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
@@ -90,12 +93,13 @@ test("type text and wait for timeout stops the interaction: data", () => {
 
     interaction.registerToNodes([text]);
     robot(text)
+        .keepData()
         .keydown({"code": "b"})
-        .keyup({"code": "b"})
+        .keyup()
         .keydown({"code": "c"})
-        .keyup({"code": "c"})
+        .keyup()
         .keydown({"code": "a"})
-        .keyup({"code": "a"});
+        .keyup();
     jest.runOnlyPendingTimers();
     expect(data.keys).toHaveLength(3);
     expect(data.keys[0].code).toBe("b");
@@ -112,8 +116,9 @@ test("type 'b' does not stop the interaction", () => {
 
     interaction.registerToNodes([text]);
     robot(text)
+        .keepData()
         .keydown({"code": "z"})
-        .keyup({"code": "z"});
+        .keyup();
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).not.toHaveBeenCalledWith();
     expect(data.keys).toHaveLength(1);

@@ -50,12 +50,10 @@ test("build fsm twice does not work", () => {
 
 test("drag lock is ok", () => {
     interaction.registerToNodes([canvas]);
-    robot(canvas)
-        .click()
-        .click()
+    robot()
+        .click(canvas, 2)
         .mousemove()
-        .click()
-        .click();
+        .click({}, 2);
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     expect(handler.fsmCancels).not.toHaveBeenCalled();
@@ -63,11 +61,7 @@ test("drag lock is ok", () => {
 
 test("drag lock requires a least a move", () => {
     interaction.registerToNodes([canvas]);
-    robot(canvas)
-        .click()
-        .click()
-        .click()
-        .click();
+    robot().click(canvas, 4);
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).not.toHaveBeenCalled();
     expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
@@ -75,9 +69,8 @@ test("drag lock requires a least a move", () => {
 
 test("drag lock canceled on ESC", () => {
     interaction.registerToNodes([canvas]);
-    robot(canvas)
-        .click()
-        .click()
+    robot()
+        .click(canvas, 2)
         .keydown({"code": "27"});
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).not.toHaveBeenCalled();
@@ -110,18 +103,15 @@ test("check data with a normal execution", () => {
 
 test("check update work during move", () => {
     interaction.registerToNodes([canvas]);
-    robot(canvas)
-        .click()
-        .click()
+    robot()
+        .click(canvas, 2)
         .mousemove();
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
 });
 
 test("check data update during a move", () => {
     interaction.registerToNodes([canvas]);
-    robot(canvas)
-        .click({"clientX": 11, "clientY": 23})
-        .click({"clientX": 11, "clientY": 23});
+    robot(canvas).click({"clientX": 11, "clientY": 23}, 2);
     const newHandler = mock<FSMHandler>();
     newHandler.fsmUpdates.mockImplementation(() => {
         tx = interaction.data.tgt.clientX;
@@ -136,12 +126,10 @@ test("check data update during a move", () => {
 
 test("check data reinitialisation", () => {
     interaction.registerToNodes([canvas]);
-    robot(canvas)
-        .click()
-        .click()
+    robot()
+        .click(canvas, 2)
         .mousemove()
-        .click()
-        .click();
+        .click({}, 2);
     expect(interaction.data.src.clientX).toBe(0);
     expect(interaction.data.src.clientY).toBe(0);
     expect(interaction.data.tgt.clientX).toBe(0);
@@ -150,9 +138,8 @@ test("check data reinitialisation", () => {
 
 test("check if canceled with Esc after a move", () => {
     interaction.registerToNodes([canvas]);
-    robot(canvas)
-        .click()
-        .click()
+    robot()
+        .click(canvas, 2)
         .mousemove()
         .keydown({"code": "27"});
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
@@ -163,11 +150,8 @@ test("check if canceled with Esc after a move", () => {
 test("check if the last DoubleClick with a different button don't stop the interaction", () => {
     interaction.registerToNodes([canvas]);
     robot(canvas)
-        .click({"clientX": 11, "clientY": 23, "button": 1})
-        .click({"clientX": 11, "clientY": 23, "button": 1})
-        .mousemove({"clientX": 20, "clientY": 30, "button": 1})
-        .click({"clientX": 20, "clientY": 30, "button": 0})
-        .click({"clientX": 20, "clientY": 30, "button": 0});
+        .click({"button": 1}, 2)
+        .click({"button": 0}, 2);
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).not.toHaveBeenCalled();
 });

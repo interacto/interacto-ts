@@ -41,12 +41,10 @@ beforeEach(() => {
 
 test("dragLock in a SVG environment", () => {
     interaction.registerToNodes([rect1, rect2]);
-    robot(rect2)
-        .click()
-        .click()
+    robot()
+        .click(rect2, 2)
         .mousemove()
-        .click(rect1)
-        .click();
+        .click(rect1, 2);
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
