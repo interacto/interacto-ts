@@ -1321,7 +1321,7 @@ describe("tap and longPress conflict", () => {
 
     test("touchstart and wait", () => {
         robot(elt)
-            .touchstart({}, [{"identifier": 1, "target": elt}])
+            .touchstart({}, [{"identifier": 1}])
             .runOnlyPendingTimers();
         expect(ctx.getCmdsProducedBy(binding2)).toHaveLength(1);
         expect(ctx.getCmdsProducedBy(binding)).toHaveLength(0);
@@ -1330,7 +1330,7 @@ describe("tap and longPress conflict", () => {
     test("touchstart and touchend", () => {
         robot(elt)
             .keepData()
-            .touchstart({}, [{"identifier": 1, "target": elt}])
+            .touchstart({}, [{"identifier": 1}])
             .touchend();
         expect(ctx.getCmdsProducedBy(binding2)).toHaveLength(0);
         expect(ctx.getCmdsProducedBy(binding)).toHaveLength(1);
@@ -1339,11 +1339,11 @@ describe("tap and longPress conflict", () => {
     test("touchstart, wait, touchend", () => {
         robot(elt)
             .keepData()
-            .touchstart({}, [{"identifier": 1, "target": elt}])
+            .touchstart({}, [{"identifier": 1}])
             .runOnlyPendingTimers()
             .touchend();
         expect(ctx.getCmdsProducedBy(binding2)).toHaveLength(1);
-        expect(ctx.getCmdsProducedBy(binding)).toHaveLength(1);
+        expect(ctx.getCmdsProducedBy(binding)).toHaveLength(0);
     });
 });
 
@@ -1364,7 +1364,7 @@ describe("two longTouch", () => {
 
         robot(elt)
             .keepData()
-            .touchstart({}, [{"identifier": 1, "target": elt}])
+            .touchstart({}, [{"identifier": 1}])
             .runOnlyPendingTimers()
             .touchend();
         expect(ctx.getCmdsProducedBy(binding2)).toHaveLength(1);
@@ -1383,7 +1383,7 @@ describe("two longTouch", () => {
 
         robot(elt)
             .keepData()
-            .touchstart({}, [{"identifier": 1, "target": elt}])
+            .touchstart({}, [{"identifier": 1}])
             .runOnlyPendingTimers()
             .touchend();
         expect(ctx.getCmdsProducedBy(binding2)).toHaveLength(1);
@@ -1403,7 +1403,7 @@ describe("two longTouch", () => {
 
         robot(elt)
             .keepData()
-            .touchstart({}, [{"identifier": 1, "target": elt}])
+            .touchstart({}, [{"identifier": 1}])
             .runOnlyPendingTimers()
             .touchend();
         expect(ctx.getCmdsProducedBy(binding2)).toHaveLength(1);
@@ -1423,7 +1423,7 @@ describe("two longTouch", () => {
 
         robot(elt)
             .keepData()
-            .touchstart({}, [{"identifier": 1, "target": elt}])
+            .touchstart({}, [{"identifier": 1}])
             .runOnlyPendingTimers()
             .touchend();
         expect(ctx.getCmdsProducedBy(binding2)).toHaveLength(1);

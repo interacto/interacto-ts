@@ -17,12 +17,14 @@ import {FSMImpl} from "../../fsm/FSMImpl";
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {TerminalState} from "../../fsm/TerminalState";
 import {StdState} from "../../fsm/StdState";
-import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 import {CancellingState} from "../../fsm/CancellingState";
 import type {TapData} from "../../../api/interaction/TapData";
 import {TouchReleaseTransition} from "../../fsm/TouchReleaseTransition";
 import {TapDataImpl} from "../TapDataImpl";
 import {TouchDataImpl} from "../TouchDataImpl";
+import {TouchPressureTransition} from "../../fsm/TouchPressureTransition";
+import {TouchMoveTransition} from "../../fsm/TouchMoveTransition";
+import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 
 /**
  * The FSM for the Tap interaction
@@ -31,6 +33,8 @@ class TapFSM extends FSMImpl {
     private countTaps: number;
 
     private readonly nbTaps: number;
+
+    private touchID?: number;
 
     /**
      * Creates the Tap FSM
@@ -48,39 +52,42 @@ class TapFSM extends FSMImpl {
 
         super.buildFSM(dataHandler);
 
-        const touched = new StdState(this, "touched");
+        const down = new StdState(this, "down");
+        const up = new StdState(this, "up");
         const ended = new TerminalState(this, "ended");
-        const timeouted = new CancellingState(this, "timeouted");
-        this.addState(touched);
+        const cancelled = new CancellingState(this, "cancelled");
+        this.addState(down);
+        this.addState(up);
         this.addState(ended);
-        this.addState(timeouted);
+        this.addState(cancelled);
 
-        const touchInit = new TouchReleaseTransition(this.initState, ended);
-        const touchInitAction = (event: TouchEvent): void => {
-            dataHandler?.tap(event);
-        };
-        touchInit.action = touchInitAction;
-        touchInit.isGuardOK = (_event: TouchEvent): boolean => this.nbTaps === 1;
-
-        const touchTouched = new TouchReleaseTransition(this.initState, touched);
-        touchTouched.action = (event: TouchEvent): void => {
+        const pressureAction = (event: TouchEvent): void => {
+            this.touchID = event.changedTouches[0].identifier;
             this.countTaps++;
             dataHandler?.tap(event);
         };
-        touchTouched.isGuardOK = (_event: Event): boolean => this.nbTaps > 1;
+        const press1 = new TouchPressureTransition(this.initState, down);
+        press1.action = pressureAction;
 
-        const touchTouchedTouched = new TouchReleaseTransition(touched, touched);
-        touchTouchedTouched.action = (event: TouchEvent): void => {
-            this.countTaps++;
-            dataHandler?.tap(event);
-        };
-        touchTouchedTouched.isGuardOK = (_event: TouchEvent): boolean => (this.countTaps + 1) < this.nbTaps;
+        const move = new TouchMoveTransition(down, cancelled);
+        move.isGuardOK = (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.touchID;
 
-        const touchEnded = new TouchReleaseTransition(touched, ended);
-        touchEnded.action = touchInitAction;
-        touchEnded.isGuardOK = (_event: TouchEvent): boolean => (this.countTaps + 1) === this.nbTaps;
+        // No multi-touch
+        new TouchPressureTransition(down, cancelled);
 
-        new TimeoutTransition(touched, timeouted, () => 1000);
+        const release = new TouchReleaseTransition(down, ended);
+        release.isGuardOK = (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.touchID && this.nbTaps === this.countTaps;
+
+        const release2 = new TouchReleaseTransition(down, up);
+        release2.isGuardOK = (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.touchID && this.nbTaps !== this.countTaps;
+
+        const press2 = new TouchPressureTransition(up, down);
+        press2.action = pressureAction;
+
+        new TouchMoveTransition(up, cancelled);
+
+        new TimeoutTransition(down, cancelled, () => 1000);
+        new TimeoutTransition(up, cancelled, () => 1000);
     }
 
     public override reinit(): void {

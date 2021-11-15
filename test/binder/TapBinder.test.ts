@@ -14,7 +14,7 @@
 import type {Binding, FSM, Interaction, InteractionBase, InteractionData} from "../../src/interacto";
 import {BindingsImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
-import {createTouchEvent} from "../interaction/StubEvents";
+import {robot} from "../interaction/StubEvents";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
 import type {Flushable} from "../../src/impl/interaction/Flushable";
 import type {Bindings} from "../../src/api/binding/Bindings";
@@ -50,10 +50,12 @@ describe("on canvas", () => {
             .on(c1)
             .bind();
 
-        c1.dispatchEvent(createTouchEvent("touchend", 1, c1, 11, 23, 110, 230));
-        c1.dispatchEvent(createTouchEvent("touchend", 1, c1, 11, 23, 110, 230));
-        c1.dispatchEvent(createTouchEvent("touchend", 2, c1, 31, 13, 310, 130));
-        c1.dispatchEvent(createTouchEvent("touchend", 2, c1, 31, 13, 310, 130));
+        robot(c1)
+            .keepData()
+            .touchstart({}, [{"identifier": 1}])
+            .touchend()
+            .touchstart({}, [{"identifier": 2}])
+            .touchend();
 
         expect(binding).toBeDefined();
         expect(cmd.exec).toBe(1);
@@ -68,14 +70,16 @@ describe("on canvas", () => {
             .on(c1)
             .bind();
 
-        c1.dispatchEvent(createTouchEvent("touchstart", 1, c1, 11, 23, 110, 230));
-        c1.dispatchEvent(createTouchEvent("touchend", 1, c1, 11, 23, 110, 230));
-        c1.dispatchEvent(createTouchEvent("touchstart", 2, c1, 31, 13, 310, 130));
-        c1.dispatchEvent(createTouchEvent("touchend", 2, c1, 31, 13, 310, 130));
-        c1.dispatchEvent(createTouchEvent("touchstart", 2, c1, 31, 13, 310, 130));
-        c1.dispatchEvent(createTouchEvent("touchend", 2, c1, 31, 13, 310, 130));
-        c1.dispatchEvent(createTouchEvent("touchstart", 2, c1, 31, 13, 310, 130));
-        c1.dispatchEvent(createTouchEvent("touchend", 2, c1, 31, 13, 310, 130));
+        robot(c1)
+            .keepData()
+            .touchstart({}, [{"identifier": 1}])
+            .touchend()
+            .touchstart({}, [{"identifier": 3}])
+            .touchend()
+            .touchstart({}, [{"identifier": 4}])
+            .touchend()
+            .touchstart({}, [{"identifier": 2}])
+            .touchend();
 
         expect(binding).toBeDefined();
         expect(ctx.commands).toHaveLength(2);
@@ -89,7 +93,10 @@ describe("on canvas", () => {
 
         (binding.interaction as InteractionBase<InteractionData, Flushable & InteractionData, FSM>).onNodeUnregistered(c1);
 
-        c1.dispatchEvent(createTouchEvent("touchend", 1, c1, 11, 23, 110, 230));
+        robot(c1)
+            .keepData()
+            .touchstart({}, [{"identifier": 2}])
+            .touchend();
 
         expect(binding.running).toBeFalsy();
     });
@@ -108,7 +115,10 @@ describe("on svg doc for dynamic registration", () => {
             .onDynamic(doc)
             .bind();
 
-        doc.dispatchEvent(createTouchEvent("touchend", 1, doc, 11, 23, 110, 230));
+        robot(doc)
+            .keepData()
+            .touchstart({}, [{"identifier": 1}])
+            .touchend();
 
         expect(binding.running).toBeFalsy();
         expect(binding).toBeDefined();
@@ -127,8 +137,12 @@ describe("on svg doc for dynamic registration", () => {
         // Waiting for the mutation changes to be done.
         await Promise.resolve();
 
-        rect.dispatchEvent(createTouchEvent("touchend", 1, rect, 11, 23, 110, 230));
-        rect.dispatchEvent(createTouchEvent("touchend", 1, rect, 11, 23, 110, 230));
+        robot(rect)
+            .keepData()
+            .touchstart({}, [{"identifier": 1}])
+            .touchend()
+            .touchstart({}, [{"identifier": 2}])
+            .touchend();
 
         expect(binding).toBeDefined();
         expect(ctx.commands).toHaveLength(1);
@@ -146,8 +160,12 @@ describe("on svg doc for dynamic registration", () => {
             .onDynamic(doc)
             .bind();
 
-        rect.dispatchEvent(createTouchEvent("touchend", 1, rect, 11, 23, 110, 230));
-        rect.dispatchEvent(createTouchEvent("touchend", 1, rect, 11, 23, 110, 230));
+        robot(rect)
+            .keepData()
+            .touchstart({}, [{"identifier": 1}])
+            .touchend()
+            .touchstart({}, [{"identifier": 2}])
+            .touchend();
 
         expect(binding).toBeDefined();
         expect(ctx.commands).toHaveLength(1);
@@ -166,7 +184,10 @@ describe("on svg doc for dynamic registration", () => {
         doc.removeChild(rect);
         await Promise.resolve();
 
-        rect.dispatchEvent(createTouchEvent("touchend", 1, rect, 11, 23, 110, 230));
+        robot(rect)
+            .keepData()
+            .touchstart({}, [{"identifier": 2}])
+            .touchend();
 
         expect(binding).toBeDefined();
         expect(ctx.commands).toHaveLength(0);
@@ -185,9 +206,14 @@ describe("on svg doc for dynamic registration", () => {
         doc.removeChild(rect);
         await Promise.resolve();
 
-        rect.dispatchEvent(createTouchEvent("touchend", 1, rect, 11, 23, 110, 230));
-        rect.dispatchEvent(createTouchEvent("touchend", 1, rect, 11, 23, 110, 230));
-        rect.dispatchEvent(createTouchEvent("touchend", 1, rect, 11, 23, 110, 230));
+        robot(rect)
+            .keepData()
+            .touchstart({}, [{"identifier": 1}])
+            .touchend()
+            .touchstart({}, [{"identifier": 3}])
+            .touchend()
+            .touchstart({}, [{"identifier": 2}])
+            .touchend();
 
         expect(binding).toBeDefined();
         expect(ctx.commands).toHaveLength(0);
