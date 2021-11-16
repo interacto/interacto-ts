@@ -13,13 +13,14 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 import {StubCmd} from "../command/StubCmd";
-import {createTouchEvent} from "../interaction/StubEvents";
-import type {Binding, Interaction, InteractionData} from "../../src/interacto";
+import {createTouchEvent, robot} from "../interaction/StubEvents";
+import type {Binding, FSMHandler, Interaction, MultiTouchData} from "../../src/interacto";
 import {BindingsImpl} from "../../src/interacto";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
 import type {Bindings} from "../../src/api/binding/Bindings";
+import {mock} from "jest-mock-extended";
 
-let binding: Binding<StubCmd, Interaction<InteractionData>, InteractionData> | undefined;
+let binding: Binding<StubCmd, Interaction<MultiTouchData>, MultiTouchData> | undefined;
 let c1: HTMLElement;
 let ctx: BindingsContext;
 let bindings: Bindings;
@@ -157,20 +158,78 @@ test("touch move move release distance velocity OK 1s", () => {
         .on(c1)
         .bind();
 
-    c1.dispatchEvent(createTouchEvent("touchstart", 3, c1,
-        50, 20, 100, 200, 5000));
-    c1.dispatchEvent(createTouchEvent("touchmove", 3, c1,
-        160, 30, 160, 201, 5500));
-    c1.dispatchEvent(createTouchEvent("touchmove", 3, c1,
-        250, 30, 500, 210, 6000));
-    c1.dispatchEvent(createTouchEvent("touchend", 3, c1,
-        450, 30, 500, 210, 6000));
+    robot(c1)
+        .touchstart({}, [{"identifier": 3, "screenX": 50, "screenY": 20, "clientX": 100, "clientY": 200}], 5000)
+        .touchmove({}, [{"identifier": 3, "screenX": 160, "screenY": 30, "clientX": 160, "clientY": 201}], 5500)
+        .touchmove({}, [{"identifier": 3, "screenX": 250, "screenY": 30, "clientX": 500, "clientY": 210}], 6000)
+        .touchend({}, [{"identifier": 3, "screenX": 450, "screenY": 30, "clientX": 500, "clientY": 210}], 6000);
 
     expect(binding).toBeDefined();
     expect(binding.timesCancelled).toBe(0);
     expect(binding.timesEnded).toBe(1);
     expect(ctx.commands).toHaveLength(1);
     expect(ctx.getCmd(0)).toBeInstanceOf(StubCmd);
+});
+
+test("swipe starts but another touch occurs (move) cancels the interaction", () => {
+    binding = bindings.swipeBinder(true, 400, 200, 1, 10)
+        .toProduce(() => new StubCmd(true))
+        .on(c1)
+        .bind();
+
+    const newHandler = mock<FSMHandler>();
+    binding.interaction.fsm.addHandler(newHandler);
+
+    robot(c1)
+        .touchstart({}, [{"identifier": 3, "screenX": 50, "screenY": 20, "clientX": 100, "clientY": 200}], 5000)
+        .touchmove({}, [{"identifier": 3, "screenX": 160, "screenY": 30, "clientX": 160, "clientY": 201}], 5500)
+        .touchmove({}, [{"identifier": 2, "screenX": 260, "screenY": 30, "clientX": 160, "clientY": 201}], 5550)
+        .touchmove({}, [{"identifier": 3, "screenX": 250, "screenY": 30, "clientX": 500, "clientY": 210}], 6000)
+        .touchend({}, [{"identifier": 3, "screenX": 450, "screenY": 30, "clientX": 500, "clientY": 210}], 6000);
+
+    expect(ctx.commands).toHaveLength(0);
+    expect(newHandler.fsmCancels).toHaveBeenCalledTimes(1);
+    expect(newHandler.fsmStops).not.toHaveBeenCalled();
+});
+
+// test("swipe starts but another touch occurs cancels the interaction", () => {
+//     binding = bindings.swipeBinder(true, 400, 200, 1, 10)
+//         .toProduce(() => new StubCmd(true))
+//         .on(c1)
+//         .bind();
+//
+//     const newHandler = mock<FSMHandler>();
+//     binding.interaction.fsm.addHandler(newHandler);
+//
+//     robot(c1)
+//         .touchstart({}, [{"identifier": 3, "screenX": 50, "screenY": 20, "clientX": 100, "clientY": 200}], 5000)
+//         .touchmove({}, [{"identifier": 3, "screenX": 160, "screenY": 30, "clientX": 160, "clientY": 201}], 5500)
+//         .touchstart({}, [{"identifier": 2, "screenX": 260, "screenY": 30, "clientX": 160, "clientY": 201}], 5550)
+//         .touchmove({}, [{"identifier": 3, "screenX": 250, "screenY": 30, "clientX": 500, "clientY": 210}], 6000)
+//         .touchend({}, [{"identifier": 3, "screenX": 450, "screenY": 30, "clientX": 500, "clientY": 210}], 6000);
+//
+//     expect(ctx.commands).toHaveLength(0);
+//     expect(newHandler.fsmCancels).toHaveBeenCalledTimes(1);
+//     expect(newHandler.fsmStops).not.toHaveBeenCalled();
+// });
+
+test("one touch and then swipes does not swipe", () => {
+    binding = bindings.swipeBinder(true, 400, 200, 2, 10)
+        .toProduce(() => new StubCmd(true))
+        .on(c1)
+        .bind();
+
+    robot(c1)
+        .keepData()
+        .touchstart({}, [{"identifier": 2}], 4000)
+        .touchstart({}, [{"identifier": 3, "screenX": 50, "screenY": 20, "clientX": 100, "clientY": 200}], 5000)
+        .touchmove({}, [{"screenX": 160, "screenY": 30, "clientX": 160, "clientY": 201}], 5500)
+        .touchmove({}, [{"screenX": 250, "screenY": 30, "clientX": 500, "clientY": 210}], 6000)
+        .touchend({}, [{"screenX": 450, "screenY": 30, "clientX": 500, "clientY": 210}], 6000);
+
+    expect(binding.timesCancelled).toBe(0);
+    expect(binding.timesEnded).toBe(0);
+    expect(ctx.commands).toHaveLength(0);
 });
 
 test("touch move move release distance velocity OK 200px", () => {

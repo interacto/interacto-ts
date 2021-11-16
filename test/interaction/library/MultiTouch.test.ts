@@ -26,9 +26,14 @@ let handler: FSMHandler;
 
 beforeEach(() => {
     handler = mock<FSMHandler>();
-    interaction = new MultiTouch(3);
+    interaction = new MultiTouch(3, false);
     interaction.fsm.addHandler(handler);
     canvas = document.createElement("canvas");
+    interaction.registerToNodes([canvas]);
+});
+
+afterEach(() => {
+    interaction.uninstall();
 });
 
 test("touch1", () => {
@@ -199,13 +204,44 @@ test("touch end", () => {
 });
 
 test("several touch starts", () => {
-    interaction.registerToNodes([canvas]);
-
     robot(canvas)
         .touchstart({}, [{"clientX": 500, "identifier": 1}, {"clientX": 300, "identifier": 3}]);
 
     expect(interaction.data.touches[0].tgt.clientX).toBe(500);
     expect(interaction.data.touches[1].tgt.clientX).toBe(300);
+});
+
+
+test("touch starts", () => {
+    robot(canvas)
+        .touchstart({}, [{"identifier": 3, "screenX": 50, "screenY": 20, "clientX": 100, "clientY": 200}], 5000)
+        .touchstart({}, [{"identifier": 1, "screenX": 50, "screenY": 20, "clientX": 100, "clientY": 200}], 5000)
+        .touchstart({}, [{"identifier": 2, "screenX": 50, "screenY": 20, "clientX": 100, "clientY": 200}], 5000);
+
+    expect(interaction.fsm.getConccurFSMs()[0].started).toBeTruthy();
+    expect(interaction.fsm.getConccurFSMs()[1].started).toBeTruthy();
+    expect(interaction.fsm.getConccurFSMs()[2].started).toBeTruthy();
+    expect(interaction.fsm.started).toBeTruthy();
+});
+
+test("touch starts too many so cancel", () => {
+    robot(canvas)
+        .touchstart({}, [{"identifier": 3, "screenX": 50, "screenY": 20, "clientX": 100, "clientY": 200}], 5000)
+        .touchstart({}, [{"identifier": 1, "screenX": 50, "screenY": 20, "clientX": 100, "clientY": 200}], 5000)
+        .touchstart({}, [{"identifier": 4, "screenX": 50, "screenY": 20, "clientX": 100, "clientY": 200}], 5000)
+        .touchstart({}, [{"identifier": 2, "screenX": 50, "screenY": 20, "clientX": 100, "clientY": 200}], 5000);
+
+    expect(interaction.fsm.started).toBeTruthy();
+});
+
+test("touchs not all started", () => {
+    robot(canvas)
+        .touchstart({}, [{"identifier": 3, "screenX": 50, "screenY": 20, "clientX": 100, "clientY": 200}], 5000);
+
+    expect(interaction.fsm.getConccurFSMs()[0].started).toBeTruthy();
+    expect(interaction.fsm.getConccurFSMs()[1].started).toBeFalsy();
+    expect(interaction.fsm.getConccurFSMs()[2].started).toBeFalsy();
+    expect(interaction.fsm.started).toBeFalsy();
 });
 
 test("several touch moves change", () => {

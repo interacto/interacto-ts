@@ -215,7 +215,7 @@ export class BindingsImpl extends Bindings {
      */
     public multiTouchBinder(nbTouches: number): PartialMultiTouchBinder {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<MultiTouch, MultiTouchData>(() => new MultiTouch(nbTouches));
+            .usingInteraction<MultiTouch, MultiTouchData>(() => new MultiTouch(nbTouches, false));
     }
 
     /**
@@ -249,7 +249,7 @@ export class BindingsImpl extends Bindings {
      */
     public swipeBinder(horizontal: boolean, minVelocity: number, minLength: number, nbTouches: number, pxTolerance: number): PartialMultiTouchBinder {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<MultiTouch, MultiTouchData>(() => new MultiTouch(nbTouches))
+            .usingInteraction<MultiTouch, MultiTouchData>(() => new MultiTouch(nbTouches, true))
             .when(i => (horizontal ? i.isHorizontal(pxTolerance) : i.isVertical(pxTolerance)))
             .when(i => (horizontal ? Math.abs(i.touches[0].diffScreenX) >= minLength : Math.abs(i.touches[0].diffScreenY) >= minLength))
             // The velocity value is in pixels/ms, so conversion is necessary
@@ -265,7 +265,7 @@ export class BindingsImpl extends Bindings {
      */
     public panBinder(horizontal: boolean, minLength: number, nbTouches: number, pxTolerance: number): PartialMultiTouchBinder {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<MultiTouch, MultiTouchData>(() => new MultiTouch(nbTouches))
+            .usingInteraction<MultiTouch, MultiTouchData>(() => new MultiTouch(nbTouches, true))
             .when(i => (horizontal ? i.isHorizontal(pxTolerance) : i.isVertical(pxTolerance)))
             .when(i => (horizontal ? Math.abs(i.touches[0].diffScreenX) >= minLength : Math.abs(i.touches[0].diffScreenY) >= minLength));
     }
@@ -276,7 +276,7 @@ export class BindingsImpl extends Bindings {
      */
     public pinchBinder(pxTolerance: number): PartialMultiTouchBinder {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<MultiTouch, MultiTouchData>(() => new MultiTouch(2))
+            .usingInteraction<MultiTouch, MultiTouchData>(() => new MultiTouch(2, false))
             .when(i => i.pinchFactor(pxTolerance) !== undefined);
     }
 

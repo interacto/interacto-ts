@@ -22,8 +22,12 @@ import {FSMImpl} from "./FSMImpl";
 export class ConcurrentFSM<F extends FSM> extends FSMImpl {
     private readonly conccurFSMs: ReadonlyArray<F>;
 
-    public constructor(fsms: ReadonlyArray<F>) {
+    private readonly totalReinit: boolean;
+
+    public constructor(fsms: ReadonlyArray<F>, totalReinit: boolean = false) {
         super();
+
+        this.totalReinit = totalReinit;
 
         const handler: FSMHandler = {
             "fsmStarts": (): void => {
@@ -75,5 +79,23 @@ export class ConcurrentFSM<F extends FSM> extends FSMImpl {
         this.conccurFSMs.forEach(fsm => {
             fsm.uninstall();
         });
+    }
+
+    public override fullReinit(): void {
+        if (this.totalReinit) {
+            this.conccurFSMs.forEach(f => {
+                f.fullReinit();
+            });
+        }
+        super.fullReinit();
+    }
+
+    public override reinit(): void {
+        if (this.totalReinit) {
+            this.conccurFSMs.forEach(f => {
+                f.reinit();
+            });
+        }
+        super.reinit();
     }
 }

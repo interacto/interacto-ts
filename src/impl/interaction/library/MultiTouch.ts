@@ -27,8 +27,8 @@ class MultiTouchFSM extends ConcurrentFSM<TouchDnDFSM> {
     /**
      * Creates the FSM.
      */
-    public constructor(nbTouch: number) {
-        super([...Array(nbTouch).keys()].map(_ => new TouchDnDFSM(false, false)));
+    public constructor(nbTouch: number, totalReinit: boolean) {
+        super([...Array(nbTouch).keys()].map(_ => new TouchDnDFSM(false, false)), totalReinit);
     }
 
     public override buildFSM(dataHandler: TouchDnDFSMHandler): void {
@@ -43,14 +43,33 @@ class MultiTouchFSM extends ConcurrentFSM<TouchDnDFSM> {
             return false;
         }
 
-        const touches = this.getConccurFSMs()
-            .filter(fsm => fsm.getTouchId() === event.changedTouches[0].identifier);
+        let processed = false;
+        let res = false;
 
-        if (touches.length > 0) {
-            return touches[0].process(event);
+        // eslint-disable-next-line @typescript-eslint/prefer-for-of
+        for (let i = 0; i < event.changedTouches.length; i++) {
+            // Finding an FSM that is currently running with this ID
+            const touches: Array<TouchDnDFSM> = this.getConccurFSMs()
+                .filter(fsm => fsm.getTouchId() === event.changedTouches[i].identifier);
+
+            if (touches.length > 0) {
+                processed = true;
+                res = touches[0].process(event) || res;
+            } else {
+                // If no FSM found, two meanings:
+                // 1/ the touch event is unexpected since all the FSMs are running, so cancelling
+                const remainingFSMs = this.getConccurFSMs().filter(fsm => fsm.getTouchId() === undefined);
+                if (remainingFSMs.length === 0) {
+                    this.onCancelling();
+                    res = false;
+                } else {
+                    // 2/ There exists an FSM that is free to process the new touch
+                    res = remainingFSMs[0].process(event) || res;
+                }
+            }
         }
 
-        return this.getConccurFSMs().some(conccurFSM => conccurFSM.process(event));
+        return processed && res;
     }
 }
 
@@ -65,9 +84,10 @@ export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouch
     /**
      * Creates the multi-touch interaction
      * @param nbTouches - The number of touches.
+     * @param strict - Defines whether too many touches than expected cancelled the ongoing interaction
      */
-    public constructor(nbTouches: number) {
-        super(new MultiTouchFSM(nbTouches), new MultiTouchDataImpl());
+    public constructor(nbTouches: number, strict: boolean) {
+        super(new MultiTouchFSM(nbTouches, strict), new MultiTouchDataImpl());
 
         this.handler = {
             "onTouch": (event: TouchEvent): void => {
