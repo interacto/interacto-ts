@@ -185,11 +185,11 @@ export class BindingsImpl extends Bindings {
                         displaySpring = true;
                         spring.nativeElement.setAttribute("display", "block");
                         handle.nativeElement.setAttribute("display", "block");
-                        handle.nativeElement.setAttribute("cx", String(i.tgt.pageX - radius));
+                        handle.nativeElement.setAttribute("cx", String(i.tgt.pageX - radius * 2));
                         handle.nativeElement.setAttribute("cy", String(i.tgt.pageY));
                         spring.nativeElement.setAttribute("x1", String(i.src.pageX));
                         spring.nativeElement.setAttribute("y1", String(i.src.pageY));
-                        spring.nativeElement.setAttribute("x2", String(i.tgt.pageX - radius));
+                        spring.nativeElement.setAttribute("x2", String(i.tgt.pageX - radius * 2));
                         spring.nativeElement.setAttribute("y2", String(i.tgt.pageY));
 
                         if (i.tgt.clientX < radius) {
