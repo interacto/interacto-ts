@@ -93,7 +93,7 @@ beforeEach(() => {
 });
 
 test("nb FSMs OK", () => {
-    expect(fsm.getConccurFSMs()).toHaveLength(2);
+    expect(fsm.conccurFSMs).toHaveLength(2);
 });
 
 test("log OK", () => {

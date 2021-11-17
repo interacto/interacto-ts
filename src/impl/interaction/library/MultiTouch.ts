@@ -28,12 +28,13 @@ class MultiTouchFSM extends ConcurrentFSM<TouchDnDFSM> {
      * Creates the FSM.
      */
     public constructor(nbTouch: number, totalReinit: boolean) {
-        super([...Array(nbTouch).keys()].map(_ => new TouchDnDFSM(false, false)), totalReinit);
+        super([...Array(nbTouch).keys()].map(_ => new TouchDnDFSM(false, false)),
+            totalReinit ? [new TouchDnDFSM(false, false)] : [], totalReinit);
     }
 
     public override buildFSM(dataHandler: TouchDnDFSMHandler): void {
         super.buildFSM(dataHandler);
-        this.getConccurFSMs().forEach(fsm => {
+        this.getAllConccurFSMs().forEach(fsm => {
             fsm.buildFSM(dataHandler);
         });
     }
@@ -48,17 +49,17 @@ class MultiTouchFSM extends ConcurrentFSM<TouchDnDFSM> {
 
         // eslint-disable-next-line @typescript-eslint/prefer-for-of
         for (let i = 0; i < event.changedTouches.length; i++) {
+            // console.log(event.changedTouches[i].identifier);
             // Finding an FSM that is currently running with this ID
-            const touches: Array<TouchDnDFSM> = this.getConccurFSMs()
+            const touches: Array<TouchDnDFSM> = this.conccurFSMs
                 .filter(fsm => fsm.getTouchId() === event.changedTouches[i].identifier);
-
             if (touches.length > 0) {
                 processed = true;
                 res = touches[0].process(event) || res;
             } else {
                 // If no FSM found, two meanings:
                 // 1/ the touch event is unexpected since all the FSMs are running, so cancelling
-                const remainingFSMs = this.getConccurFSMs().filter(fsm => fsm.getTouchId() === undefined);
+                const remainingFSMs = this.conccurFSMs.filter(fsm => fsm.getTouchId() === undefined);
                 if (remainingFSMs.length === 0) {
                     this.onCancelling();
                     res = false;
@@ -114,7 +115,7 @@ export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouch
             },
 
             "reinitData": (): void => {
-                const currentIDs = this.fsm.getConccurFSMs()
+                const currentIDs = this.fsm.conccurFSMs
                     .filter(fsm => fsm.started)
                     .map(fsm => fsm.getTouchId());
 

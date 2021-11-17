@@ -38,7 +38,7 @@ afterEach(() => {
 
 test("touch1", () => {
     interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 11, 23, 11, 23));
-    expect(interaction.fsm.getConccurFSMs()
+    expect(interaction.fsm.conccurFSMs
         .filter(fsm => fsm.started)).toHaveLength(1);
     expect(interaction.isRunning()).toBeFalsy();
     expect(handler.fsmStarts).not.toHaveBeenCalled();
@@ -57,7 +57,7 @@ test("touch1 data", () => {
 test("touch2", () => {
     interaction.processEvent(createTouchEvent("touchstart", 1, canvas, 11, 23, 11, 23));
     interaction.processEvent(createTouchEvent("touchstart", 2, canvas, 11, 23, 11, 23));
-    expect(interaction.fsm.getConccurFSMs()
+    expect(interaction.fsm.conccurFSMs
         .filter(fsm => fsm.started)).toHaveLength(2);
     expect(interaction.isRunning()).toBeFalsy();
     expect(handler.fsmStarts).not.toHaveBeenCalled();
@@ -80,7 +80,7 @@ test("touch3", () => {
     interaction.processEvent(createTouchEvent("touchstart", 1, canvas, 11, 23, 11, 23));
     interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 21, 13, 21, 13));
     interaction.processEvent(createTouchEvent("touchstart", 2, canvas, 210, 130, 210, 130));
-    expect(interaction.fsm.getConccurFSMs()
+    expect(interaction.fsm.conccurFSMs
         .filter(fsm => fsm.started)).toHaveLength(3);
     expect(interaction.isRunning()).toBeTruthy();
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
@@ -106,8 +106,7 @@ test("touch3 with one error event", () => {
     interaction.processEvent(createTouchEvent("touchstart", 1, canvas, 11, 23, 11, 23));
     interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 21, 13, 21, 13));
     interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 210, 130, 210, 130));
-    expect(interaction.fsm.getConccurFSMs()
-        .filter(fsm => fsm.started)).toHaveLength(2);
+    expect(interaction.fsm.conccurFSMs.filter(fsm => fsm.started)).toHaveLength(2);
     expect(interaction.isRunning()).toBeFalsy();
     expect(handler.fsmStarts).not.toHaveBeenCalled();
     expect(handler.fsmUpdates).not.toHaveBeenCalled();
@@ -218,9 +217,9 @@ test("touch starts", () => {
         .touchstart({}, [{"identifier": 1, "screenX": 50, "screenY": 20, "clientX": 100, "clientY": 200}], 5000)
         .touchstart({}, [{"identifier": 2, "screenX": 50, "screenY": 20, "clientX": 100, "clientY": 200}], 5000);
 
-    expect(interaction.fsm.getConccurFSMs()[0].started).toBeTruthy();
-    expect(interaction.fsm.getConccurFSMs()[1].started).toBeTruthy();
-    expect(interaction.fsm.getConccurFSMs()[2].started).toBeTruthy();
+    expect(interaction.fsm.conccurFSMs[0].started).toBeTruthy();
+    expect(interaction.fsm.conccurFSMs[1].started).toBeTruthy();
+    expect(interaction.fsm.conccurFSMs[2].started).toBeTruthy();
     expect(interaction.fsm.started).toBeTruthy();
 });
 
@@ -238,9 +237,9 @@ test("touchs not all started", () => {
     robot(canvas)
         .touchstart({}, [{"identifier": 3, "screenX": 50, "screenY": 20, "clientX": 100, "clientY": 200}], 5000);
 
-    expect(interaction.fsm.getConccurFSMs()[0].started).toBeTruthy();
-    expect(interaction.fsm.getConccurFSMs()[1].started).toBeFalsy();
-    expect(interaction.fsm.getConccurFSMs()[2].started).toBeFalsy();
+    expect(interaction.fsm.conccurFSMs[0].started).toBeTruthy();
+    expect(interaction.fsm.conccurFSMs[1].started).toBeFalsy();
+    expect(interaction.fsm.conccurFSMs[2].started).toBeFalsy();
     expect(interaction.fsm.started).toBeFalsy();
 });
 

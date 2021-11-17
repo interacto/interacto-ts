@@ -192,26 +192,26 @@ test("swipe starts but another touch occurs (move) cancels the interaction", () 
     expect(newHandler.fsmStops).not.toHaveBeenCalled();
 });
 
-// test("swipe starts but another touch occurs cancels the interaction", () => {
-//     binding = bindings.swipeBinder(true, 400, 200, 1, 10)
-//         .toProduce(() => new StubCmd(true))
-//         .on(c1)
-//         .bind();
-//
-//     const newHandler = mock<FSMHandler>();
-//     binding.interaction.fsm.addHandler(newHandler);
-//
-//     robot(c1)
-//         .touchstart({}, [{"identifier": 3, "screenX": 50, "screenY": 20, "clientX": 100, "clientY": 200}], 5000)
-//         .touchmove({}, [{"identifier": 3, "screenX": 160, "screenY": 30, "clientX": 160, "clientY": 201}], 5500)
-//         .touchstart({}, [{"identifier": 2, "screenX": 260, "screenY": 30, "clientX": 160, "clientY": 201}], 5550)
-//         .touchmove({}, [{"identifier": 3, "screenX": 250, "screenY": 30, "clientX": 500, "clientY": 210}], 6000)
-//         .touchend({}, [{"identifier": 3, "screenX": 450, "screenY": 30, "clientX": 500, "clientY": 210}], 6000);
-//
-//     expect(ctx.commands).toHaveLength(0);
-//     expect(newHandler.fsmCancels).toHaveBeenCalledTimes(1);
-//     expect(newHandler.fsmStops).not.toHaveBeenCalled();
-// });
+test("swipe starts but another touch occurs cancels the interaction", () => {
+    binding = bindings.swipeBinder(true, 400, 200, 1, 10)
+        .toProduce(() => new StubCmd(true))
+        .on(c1)
+        .bind();
+
+    const newHandler = mock<FSMHandler>();
+    binding.interaction.fsm.addHandler(newHandler);
+
+    robot(c1)
+        .touchstart({}, [{"identifier": 3, "screenX": 50, "screenY": 20, "clientX": 100, "clientY": 200}], 5000)
+        .touchmove({}, [{"identifier": 3, "screenX": 160, "screenY": 30, "clientX": 160, "clientY": 201}], 5500)
+        .touchstart({}, [{"identifier": 2, "screenX": 260, "screenY": 30, "clientX": 160, "clientY": 201}], 5550)
+        .touchmove({}, [{"identifier": 3, "screenX": 250, "screenY": 30, "clientX": 500, "clientY": 210}], 6000)
+        .touchend({}, [{"identifier": 3, "screenX": 450, "screenY": 30, "clientX": 500, "clientY": 210}], 6000);
+
+    expect(ctx.commands).toHaveLength(0);
+    expect(newHandler.fsmCancels).toHaveBeenCalledTimes(1);
+    expect(newHandler.fsmStops).not.toHaveBeenCalled();
+});
 
 test("one touch and then swipes does not swipe", () => {
     binding = bindings.swipeBinder(true, 400, 200, 2, 10)

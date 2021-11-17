@@ -20,11 +20,25 @@ import {FSMImpl} from "./FSMImpl";
  * A concurrent FSM: an FSM that contains multiple FSMs that run concurrently.
  */
 export class ConcurrentFSM<F extends FSM> extends FSMImpl {
-    private readonly conccurFSMs: ReadonlyArray<F>;
+    /**
+     * The main fsms
+     */
+    private readonly _conccurFSMs: ReadonlyArray<F>;
+
+    /**
+     * Secondary fsms. These fsms are not considered to determine whether the interaction has started
+     */
+    private readonly _secondaryFSMs: ReadonlyArray<F>;
 
     private readonly totalReinit: boolean;
 
-    public constructor(fsms: ReadonlyArray<F>, totalReinit: boolean = false) {
+    /**
+     * Creates the FSM
+     * @param fsms - The main concurrent FSMs
+     * @param secondaries - The secondary FSMs. Not considered in some steps.
+     * @param totalReinit - Defines whether a cancellation of one of the fsms, reinits all the fsms.
+     */
+    public constructor(fsms: ReadonlyArray<F>, secondaries: ReadonlyArray<F> = [], totalReinit: boolean = false) {
         super();
 
         this.totalReinit = totalReinit;
@@ -45,21 +59,36 @@ export class ConcurrentFSM<F extends FSM> extends FSMImpl {
                 this.onCancelling();
             }
         };
-        this.conccurFSMs = [...fsms];
+        this._conccurFSMs = [...fsms];
+        this._secondaryFSMs = [...secondaries];
         this.conccurFSMs.forEach(fsm => {
             fsm.addHandler(handler);
         });
     }
 
     /**
-     * @returns All the FSMs in an copy of the original array.
+     * @returns All the main and secondary FSMs
      */
-    public getConccurFSMs(): ReadonlyArray<F> {
-        return [...this.conccurFSMs];
+    public getAllConccurFSMs(): ReadonlyArray<F> {
+        return [...this._conccurFSMs, ...this._secondaryFSMs];
+    }
+
+    /**
+     * @returns The main FSMs
+     */
+    public get conccurFSMs(): ReadonlyArray<F> {
+        return [...this._conccurFSMs];
+    }
+
+    /**
+     * @returns The secondary FSMs
+     */
+    public get secondaryFSMs(): ReadonlyArray<FSM> {
+        return [...this._secondaryFSMs];
     }
 
     public override process(event: Event): boolean {
-        return this.conccurFSMs.some(conccurFSM => conccurFSM.process(event));
+        return this.getAllConccurFSMs().some(conccurFSM => conccurFSM.process(event));
     }
 
     public override get started(): boolean {
@@ -72,11 +101,17 @@ export class ConcurrentFSM<F extends FSM> extends FSMImpl {
         this.conccurFSMs.forEach(fsm => {
             fsm.log = log;
         });
+        this.secondaryFSMs.forEach(fsm => {
+            fsm.log = log;
+        });
     }
 
     public override uninstall(): void {
         super.uninstall();
         this.conccurFSMs.forEach(fsm => {
+            fsm.uninstall();
+        });
+        this.secondaryFSMs.forEach(fsm => {
             fsm.uninstall();
         });
     }
@@ -86,6 +121,9 @@ export class ConcurrentFSM<F extends FSM> extends FSMImpl {
             this.conccurFSMs.forEach(f => {
                 f.fullReinit();
             });
+            this.secondaryFSMs.forEach(f => {
+                f.fullReinit();
+            });
         }
         super.fullReinit();
     }
@@ -93,6 +131,9 @@ export class ConcurrentFSM<F extends FSM> extends FSMImpl {
     public override reinit(): void {
         if (this.totalReinit) {
             this.conccurFSMs.forEach(f => {
+                f.reinit();
+            });
+            this.secondaryFSMs.forEach(f => {
                 f.reinit();
             });
         }
