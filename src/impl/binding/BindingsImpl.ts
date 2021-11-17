@@ -77,18 +77,19 @@ import type {
     PartialTextInputBinder,
     PartialTouchBinder,
     PartialTouchSrcTgtBinder,
-    PartialUpdatePointBinder, PartialWheelBinder
+    PartialUpdatePointBinder,
+    PartialWheelBinder
 } from "../../api/binding/Bindings";
+import {Bindings} from "../../api/binding/Bindings";
 import type {UndoHistory} from "../../api/undo/UndoHistory";
 import {UndoHistoryImpl} from "../undo/UndoHistoryImpl";
-import {Bindings} from "../../api/binding/Bindings";
 import type {Logger} from "../../api/logging/Logger";
 import {LoggerImpl} from "../logging/LoggerImpl";
 import type {WheelData} from "../../api/interaction/WheelData";
 import {Wheel} from "../interaction/library/Wheel";
 import {KeyUp} from "../interaction/library/KeyUp";
 import {MouseUp} from "../interaction/library/MouseUp";
-import Timeout = NodeJS.Timeout;
+import {DwellSpringAnimation} from "../animation/DwellSpringAnimation";
 
 export class BindingsImpl extends Bindings {
     private observer: BindingsObserver | undefined;
@@ -164,46 +165,16 @@ export class BindingsImpl extends Bindings {
      * @param spring - The line between the handle and the previous position of the element.
      */
     public reciprocalTouchDnDBinder(handle: EltRef<SVGCircleElement>, spring: EltRef<SVGLineElement>): PartialTouchSrcTgtBinder {
-        let displaySpring: boolean;
-        let interval: Timeout;
-        const radiusAttribute = handle.nativeElement.getAttribute("r");
-        let radius: number;
-        if (radiusAttribute !== null) {
-            radius = parseInt(radiusAttribute, 10);
-        }
+        const anim = new DwellSpringAnimation(handle, spring);
 
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
             .usingInteraction<TouchDnD, SrcTgtPointsData<TouchData>>(() => new TouchDnD(true))
             .on(handle)
-            .then((c, i) => {
-                // Management of the dwell and spring
-                // The element to use for this interaction (handle) must have the "ioDwellSpring" class
-                if (!displaySpring) {
-                    clearInterval(interval);
-                    interval = setInterval(() => {
-                        clearInterval(interval);
-                        displaySpring = true;
-                        spring.nativeElement.setAttribute("display", "block");
-                        handle.nativeElement.setAttribute("display", "block");
-                        handle.nativeElement.setAttribute("cx", String(i.tgt.pageX - radius * 2));
-                        handle.nativeElement.setAttribute("cy", String(i.tgt.pageY));
-                        spring.nativeElement.setAttribute("x1", String(i.src.pageX));
-                        spring.nativeElement.setAttribute("y1", String(i.src.pageY));
-                        spring.nativeElement.setAttribute("x2", String(i.tgt.pageX - radius * 2));
-                        spring.nativeElement.setAttribute("y2", String(i.tgt.pageY));
-
-                        if (i.tgt.clientX < radius) {
-                            handle.nativeElement.setAttribute("cx", String(radius));
-                            spring.nativeElement.setAttribute("x2", String(radius));
-                        }
-                    }, 1000);
-                }
+            .then((_, i) => {
+                anim.process(i);
             })
             .endOrCancel(() => {
-                clearInterval(interval);
-                displaySpring = false;
-                spring.nativeElement.setAttribute("display", "none");
-                handle.nativeElement.setAttribute("display", "none");
+                anim.end();
             });
     }
 
@@ -391,46 +362,16 @@ export class BindingsImpl extends Bindings {
      * @param spring - The line between the handle and the previous position of the element.
      */
     public reciprocalDndBinder(handle: EltRef<SVGCircleElement>, spring: EltRef<SVGLineElement>): PartialPointSrcTgtBinder {
-        let displaySpring: boolean;
-        let interval: Timeout;
-        const radiusAttribute = handle.nativeElement.getAttribute("r");
-        let radius: number;
-        if (radiusAttribute !== null) {
-            radius = parseInt(radiusAttribute, 10);
-        }
+        const anim = new DwellSpringAnimation(handle, spring);
 
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
             .usingInteraction<DnD, SrcTgtPointsData<PointData>>(() => new DnD(true))
             .on(handle)
-            .then((c, i) => {
-                // Management of the dwell and spring
-                // The element to use for this interaction (handle) must have the "ioDwellSpring" class
-                if (!displaySpring) {
-                    clearInterval(interval);
-                    interval = setInterval(() => {
-                        clearInterval(interval);
-                        displaySpring = true;
-                        spring.nativeElement.setAttribute("display", "block");
-                        handle.nativeElement.setAttribute("display", "block");
-                        handle.nativeElement.setAttribute("cx", String(i.tgt.pageX - radius));
-                        handle.nativeElement.setAttribute("cy", String(i.tgt.pageY));
-                        spring.nativeElement.setAttribute("x1", String(i.src.pageX));
-                        spring.nativeElement.setAttribute("y1", String(i.src.pageY));
-                        spring.nativeElement.setAttribute("x2", String(i.tgt.pageX - radius));
-                        spring.nativeElement.setAttribute("y2", String(i.tgt.pageY));
-
-                        if (i.tgt.clientX < radius) {
-                            handle.nativeElement.setAttribute("cx", String(radius));
-                            spring.nativeElement.setAttribute("x2", String(radius));
-                        }
-                    }, 1000);
-                }
+            .then((_, i) => {
+                anim.process(i);
             })
             .endOrCancel(() => {
-                clearInterval(interval);
-                displaySpring = false;
-                spring.nativeElement.setAttribute("display", "none");
-                handle.nativeElement.setAttribute("display", "none");
+                anim.end();
             });
     }
 

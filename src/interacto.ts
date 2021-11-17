@@ -53,6 +53,7 @@ export * from "./api/logging/LogLevel";
 export * from "./api/logging/Logger";
 export * from "./api/undo/UndoHistory";
 export * from "./api/undo/Undoable";
+export * from "./impl/animation/DwellSpringAnimation";
 export * from "./impl/binder/Binder";
 export * from "./impl/binder/KeysBinder";
 export * from "./impl/binder/UpdateBinder";
