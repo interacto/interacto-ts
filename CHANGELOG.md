@@ -1,3 +1,21 @@
+# 6.0.1
+
+* change(binding): increasing the size of the spring (dnd-1)
+* 
+* fix(binding): the dnd-1 animations did not work properly
+* fix(interaction): long pressure not cancelled on mouse move
+* fix(interaction): long touch not cancelled on touch move
+* fix(interaction): multi-touch did not copy data correctly
+* fix(interaction): some multi-touchs must cancel the interaction on excessive touches
+* fix(interaction): tap interaction should not work on move
+* fix(interaction): touch DnD failed on simple tap
+* fix(interaction): unexpected touches now cancel touch interactions
+* fix(doc): incorrect scroll documentation
+* 
+* clean(test): update eslint + various fixes
+* clean(test): use nono API
+
+
 # 6.0.0
 
 * feat(binder): add reciprocal DnD binder (#67)
