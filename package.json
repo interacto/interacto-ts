@@ -1,7 +1,7 @@
 {
   "name": "interacto",
   "description": "Front-end framework for processing user interface events in TypeScript",
-  "version": "6.0.0",
+  "version": "6.0.1",
   "author": "Arnaud Blouin",
   "contributors": [
     "Gwendal Didot",
