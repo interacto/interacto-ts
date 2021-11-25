@@ -26,6 +26,9 @@ export interface EltRef<T> {
  * @param o - The object to check
  */
 export function isEltRef(o: unknown): o is EltRef<EventTarget> {
+    if (o === undefined || o === null) {
+        return false;
+    }
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     return (o as EltRef<EventTarget>).nativeElement instanceof EventTarget;
 }

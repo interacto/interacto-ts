@@ -48,7 +48,7 @@ export class DwellSpringAnimation {
         // Management of the dwell and spring
         // The element to use for this interaction (handle) must have the "ioDwellSpring" class
         if (this.displaySpring) {
-            const distance = Math.sqrt((i.tgt.clientX - this.positionSpring.x) ** 2 + (i.tgt.pageY - this.positionSpring.y) ** 2);
+            const distance = Math.sqrt((i.tgt.clientX - this.positionSpring.x) ** 2 + (i.tgt.clientY - this.positionSpring.y) ** 2);
             if (Math.abs(distance) > (this.radius * 4)) {
                 this.spring.nativeElement.setAttribute("display", "none");
                 this.handle.nativeElement.setAttribute("display", "none");
@@ -60,17 +60,17 @@ export class DwellSpringAnimation {
                 clearInterval(this.interval);
                 this.displaySpring = true;
                 this.positionSpring = {
-                    "x": i.tgt.clientX < this.radius ? this.radius : i.tgt.pageX - this.radius * 2,
-                    "y": i.tgt.pageY
+                    "x": i.tgt.clientX < this.radius ? this.radius : i.tgt.clientX - this.radius * 2,
+                    "y": i.tgt.clientY
                 };
                 this.spring.nativeElement.setAttribute("display", "block");
                 this.handle.nativeElement.setAttribute("display", "block");
                 this.handle.nativeElement.setAttribute("cx", String(this.positionSpring.x));
                 this.handle.nativeElement.setAttribute("cy", String(this.positionSpring.y));
-                this.spring.nativeElement.setAttribute("x1", String(i.src.pageX));
-                this.spring.nativeElement.setAttribute("y1", String(i.src.pageY));
+                this.spring.nativeElement.setAttribute("x1", String(i.src.clientX));
+                this.spring.nativeElement.setAttribute("y1", String(i.src.clientY));
                 this.spring.nativeElement.setAttribute("x2", String(this.positionSpring.x));
-                this.spring.nativeElement.setAttribute("y2", String(i.tgt.pageY));
+                this.spring.nativeElement.setAttribute("y2", String(i.tgt.clientY));
             }, 1000);
         }
     }

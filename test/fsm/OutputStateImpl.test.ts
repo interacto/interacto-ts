@@ -20,6 +20,9 @@ import {StdState} from "../../src/impl/fsm/StdState";
 import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
 import type {Transition} from "../../src/api/fsm/Transition";
+import type {OutputState} from "../../src/api/fsm/OutputState";
+import {isOutputStateType} from "../../src/api/fsm/OutputState";
+import type {FSM} from "../../src/api/fsm/FSM";
 
 let state: OutputStateBase;
 let fsm: FSMImpl & MockProxy<FSMImpl>;
@@ -58,4 +61,79 @@ test("uninstall", () => {
     expect(t1.uninstall).toHaveBeenCalledTimes(1);
     expect(t2.uninstall).toHaveBeenCalledTimes(1);
     expect(state.transitions).toHaveLength(0);
+});
+
+
+test("undefined is not undoable", () => {
+    expect(isOutputStateType(undefined)).toBeFalsy();
+});
+
+test("object missing exit is not outputstate", () => {
+    type T = Omit<OutputState, "exit">;
+    const s: T = {
+        "uninstall": () => {},
+        "name": "foo",
+        "process": () => false,
+        "fsm": fsm as FSM,
+        "transitions": new Array<Transition<Event>>(),
+        "addTransition": () => {},
+        "checkStartingState": () => false
+    };
+    expect(isOutputStateType(s)).toBeFalsy();
+});
+
+test("object missing addTransition is not outputstate", () => {
+    type T = Omit<OutputState, "addTransition">;
+    const s: T = {
+        "uninstall": () => {},
+        "name": "foo",
+        "process": () => false,
+        "fsm": fsm as FSM,
+        "transitions": new Array<Transition<Event>>(),
+        "exit": () => {},
+        "checkStartingState": () => false
+    };
+    expect(isOutputStateType(s)).toBeFalsy();
+});
+
+test("object missing process is not outputstate", () => {
+    type T = Omit<OutputState, "process">;
+    const s: T = {
+        "uninstall": () => {},
+        "name": "foo",
+        "addTransition": () => {},
+        "fsm": fsm as FSM,
+        "transitions": new Array<Transition<Event>>(),
+        "exit": () => {},
+        "checkStartingState": () => false
+    };
+    expect(isOutputStateType(s)).toBeFalsy();
+});
+
+test("object missing transitions is not outputstate", () => {
+    type T = Omit<OutputState, "transitions">;
+    const s: T = {
+        "uninstall": () => {},
+        "name": "foo",
+        "addTransition": () => {},
+        "fsm": fsm as FSM,
+        "process": () => false,
+        "exit": () => {},
+        "checkStartingState": () => false
+    };
+    expect(isOutputStateType(s)).toBeFalsy();
+});
+
+test("object is outputstate", () => {
+    const s: OutputState = {
+        "uninstall": () => {},
+        "name": "foo",
+        "addTransition": () => {},
+        "fsm": fsm as FSM,
+        "transitions": new Array<Transition<Event>>(),
+        "exit": () => {},
+        "checkStartingState": () => false,
+        "process": () => false
+    };
+    expect(isOutputStateType(s)).toBeTruthy();
 });
