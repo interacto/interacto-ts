@@ -68,3 +68,14 @@ test("cannot unregister non color picker", () => {
     interaction.onNodeUnregistered(w);
     expect(w.removeEventListener).not.toHaveBeenCalled();
 });
+
+test("color picker contains an img on which user clicks", () => {
+    const img = document.createElement("img");
+    colorBox.append(img);
+    interaction.registerToNodes([colorBox]);
+
+    robot(img).input();
+
+    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+    expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+});

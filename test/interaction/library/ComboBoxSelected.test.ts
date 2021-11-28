@@ -67,3 +67,14 @@ test("cannot unregister non combo box", () => {
     interaction.onNodeUnregistered(w);
     expect(w.removeEventListener).not.toHaveBeenCalled();
 });
+
+test("combo box contains an img on which user clicks", () => {
+    const img = document.createElement("img");
+    comboBox.append(img);
+    interaction.registerToNodes([comboBox]);
+
+    robot(img).input();
+
+    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+    expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+});

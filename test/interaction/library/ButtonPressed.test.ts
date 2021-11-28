@@ -68,3 +68,14 @@ test("cannot unregister non button", () => {
     interaction.onNodeUnregistered(w);
     expect(w.removeEventListener).not.toHaveBeenCalled();
 });
+
+test("button contains an img on which user clicks", () => {
+    const img = document.createElement("img");
+    button.append(img);
+    interaction.registerToNodes([button]);
+
+    img.click();
+
+    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+    expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+});

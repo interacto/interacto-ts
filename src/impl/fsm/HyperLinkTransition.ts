@@ -31,7 +31,7 @@ export class HyperLinkTransition extends TransitionBase<Event> {
     }
 
     public accept(event: Event): event is Event {
-        return event.target !== null && isHyperLink(event.target);
+        return event.currentTarget !== null && isHyperLink(event.currentTarget);
     }
 
     public getAcceptedEvents(): ReadonlyArray<EventType> {

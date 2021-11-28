@@ -60,3 +60,14 @@ test("cannot unregister non hyperlink", () => {
     interaction.onNodeUnregistered(w);
     expect(w.removeEventListener).not.toHaveBeenCalled();
 });
+
+test("hyperlink contains an img on which user clicks", () => {
+    const img = document.createElement("img");
+    url.append(img);
+    interaction.registerToNodes([url]);
+
+    robot(img).input();
+
+    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+    expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+});

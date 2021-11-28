@@ -31,7 +31,7 @@ export class SpinnerChangedTransition extends TransitionBase<Event> {
     }
 
     public accept(event: Event): event is Event {
-        return event.target !== null && isSpinner(event.target);
+        return event.currentTarget !== null && isSpinner(event.currentTarget);
     }
 
     public getAcceptedEvents(): ReadonlyArray<EventType> {

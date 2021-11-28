@@ -31,7 +31,7 @@ export class TextInputChangedTransition extends TransitionBase<Event> {
     }
 
     public accept(event: Event): event is Event {
-        return event.target !== null && isTextInput(event.target);
+        return event.currentTarget !== null && isTextInput(event.currentTarget);
     }
 
     public getAcceptedEvents(): ReadonlyArray<EventType> {

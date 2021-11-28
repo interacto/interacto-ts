@@ -31,7 +31,7 @@ export class DatePickedTransition extends TransitionBase<Event> {
     }
 
     public accept(event: Event): event is Event {
-        return event.target !== null && isDatePicker(event.target);
+        return event.currentTarget !== null && isDatePicker(event.currentTarget);
     }
 
     public getAcceptedEvents(): ReadonlyArray<EventType> {

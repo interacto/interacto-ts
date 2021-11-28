@@ -225,7 +225,7 @@ export function createUIEvent(type: EventType): UIEvent {
 }
 
 export function createEventWithTarget(target: EventTarget | null, type: string): Event {
-    return {"currentTarget": null,
+    return {"currentTarget": target,
         // eslint-disable-next-line @typescript-eslint/naming-convention
         "AT_TARGET": 0,
         // eslint-disable-next-line @typescript-eslint/naming-convention

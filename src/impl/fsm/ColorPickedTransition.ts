@@ -31,7 +31,7 @@ export class ColorPickedTransition extends TransitionBase<Event> {
     }
 
     public accept(event: Event): event is Event {
-        return event.target !== null && isColorChoice(event.target);
+        return event.currentTarget !== null && isColorChoice(event.currentTarget);
     }
 
     public getAcceptedEvents(): ReadonlyArray<EventType> {

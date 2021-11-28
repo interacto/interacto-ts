@@ -69,3 +69,13 @@ test("cannot unregister non date picker", () => {
     expect(w.removeEventListener).not.toHaveBeenCalled();
 });
 
+test("date picker contains an img on which user clicks", () => {
+    const img = document.createElement("img");
+    date.append(img);
+    interaction.registerToNodes([date]);
+
+    robot(img).input();
+
+    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+    expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+});

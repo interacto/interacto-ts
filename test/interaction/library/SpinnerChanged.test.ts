@@ -118,3 +118,13 @@ test("cannot unregister non spinner", () => {
     interaction.onNodeUnregistered(w);
     expect(w.removeEventListener).not.toHaveBeenCalled();
 });
+
+test("spinner contains an img on which user clicks", () => {
+    const img = document.createElement("img");
+    spinner.append(img);
+    interaction.registerToNodes([spinner]);
+
+    robot(img).input();
+
+    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+});

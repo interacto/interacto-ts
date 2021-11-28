@@ -31,7 +31,7 @@ export class ButtonPressedTransition extends TransitionBase<Event> {
     }
 
     public accept(e: Event): e is Event {
-        return e.target !== null && isButton(e.target);
+        return e.currentTarget !== null && isButton(e.currentTarget);
     }
 
     public getAcceptedEvents(): ReadonlyArray<EventType> {

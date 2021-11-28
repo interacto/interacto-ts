@@ -68,3 +68,14 @@ test("cannot unregister non checkbox", () => {
     interaction.onNodeUnregistered(w);
     expect(w.removeEventListener).not.toHaveBeenCalled();
 });
+
+test("check box contains an img on which user clicks", () => {
+    const img = document.createElement("img");
+    boxCheck.append(img);
+    interaction.registerToNodes([boxCheck]);
+
+    robot(img).input();
+
+    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+    expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+});

@@ -49,3 +49,13 @@ test("type in a text area starts and stops the interaction", () => {
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
 });
+
+test("spinner contains an img on which user clicks", () => {
+    const img = document.createElement("img");
+    textArea.append(img);
+    interaction.registerToNodes([textArea]);
+
+    robot(img).input();
+
+    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+});
