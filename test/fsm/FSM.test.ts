@@ -667,7 +667,7 @@ describe("testWithSubFSM", () => {
         fsm.addState(subC);
     });
 
-    test("fSM", () => {
+    test("check log when processing event with sub FSM", () => {
         fsm = new FSMImpl(logger);
         mainfsm = new FSMImpl(logger);
         s1 = new StdState(mainfsm, "s1");
@@ -693,7 +693,7 @@ describe("testWithSubFSM", () => {
         expect(logger.logInteractionMsg).toHaveBeenCalledTimes(17);
     });
 
-    test("fSM", () => {
+    test("check no log when processing event with sub FSM", () => {
         fsm = new FSMImpl(logger);
         mainfsm = new FSMImpl(logger);
         s1 = new StdState(mainfsm, "s1");
@@ -707,7 +707,7 @@ describe("testWithSubFSM", () => {
         expect(logger.logInteractionMsg).not.toHaveBeenCalled();
     });
 
-    test("fSM", () => {
+    test("check log when processing event with no logger with sub FSM", () => {
         fsm.log = true;
         mainfsm.log = true;
         mainfsm.process(createMouseEvent("click", document.createElement("button")));
