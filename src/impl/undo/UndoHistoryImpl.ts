@@ -87,10 +87,13 @@ export class UndoHistoryImpl extends UndoHistory {
         const undoable = this.undos.pop();
 
         if (undoable !== undefined) {
-            undoable.undo();
-            this.redos.push(undoable);
-            this.undoPublisher.next(this.getLastUndo());
-            this.redoPublisher.next(undoable);
+            try {
+                undoable.undo();
+            } finally {
+                this.redos.push(undoable);
+                this.undoPublisher.next(this.getLastUndo());
+                this.redoPublisher.next(undoable);
+            }
         }
     }
 
@@ -98,10 +101,13 @@ export class UndoHistoryImpl extends UndoHistory {
         const undoable = this.redos.pop();
 
         if (undoable !== undefined) {
-            undoable.redo();
-            this.undos.push(undoable);
-            this.undoPublisher.next(undoable);
-            this.redoPublisher.next(this.getLastRedo());
+            try {
+                undoable.redo();
+            } finally {
+                this.undos.push(undoable);
+                this.undoPublisher.next(undoable);
+                this.redoPublisher.next(this.getLastRedo());
+            }
         }
     }
 

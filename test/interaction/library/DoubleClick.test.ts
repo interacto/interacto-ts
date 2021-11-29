@@ -49,7 +49,7 @@ test("check data of the interaction.", () => {
 
     interaction.registerToNodes([canvas]);
     const newHandler = mock<FSMHandler>();
-    newHandler.fsmStops.mockImplementation(() => {
+    newHandler.fsmStops = jest.fn(() => {
         data.copy(interaction.data);
     });
     interaction.fsm.addHandler(newHandler);

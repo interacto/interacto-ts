@@ -21,7 +21,8 @@ import type {
     InteractionCmdUpdateBinder,
     InteractionData,
     KeysData,
-    Logger, MultiTouchData,
+    Logger,
+    MultiTouchData,
     PointData,
     PointsData,
     ScrollData,
@@ -86,6 +87,22 @@ test("mouse down binder", () => {
     robot(elt).mousedown();
     expect(ctx.bindings).toHaveLength(1);
     expect(ctx.commands).toHaveLength(1);
+});
+
+test("crash in execute", () => {
+    const fn = jest.fn();
+
+    bindings.mouseDownBinder()
+        .on(elt)
+        .toProduce(() => new AnonCmd(() => {
+            throw new Error("errooor");
+        }))
+        .catch(fn)
+        .bind();
+    robot(elt).mousedown();
+
+    expect(fn).toHaveBeenCalledTimes(1);
+    expect(fn).toHaveBeenCalledWith(new Error("errooor"));
 });
 
 test("mouse up binder", () => {
@@ -174,6 +191,24 @@ test("click binder", () => {
     expect(ctx.commands).toHaveLength(1);
 });
 
+test("click binder crashes in command", () => {
+    const fn = jest.fn();
+
+    bindings.clickBinder()
+        .on(elt)
+        .toProduce(() => new AnonCmd(() => {
+            throw new Error("eer");
+        }))
+        .catch(fn)
+        .bind();
+
+    robot(elt).click();
+
+    expect(ctx.commands).toHaveLength(0);
+    expect(fn).toHaveBeenCalledTimes(1);
+    expect(fn).toHaveBeenCalledWith(new Error("eer"));
+});
+
 test("double click binder", () => {
     bindings.dbleClickBinder()
         .on(elt)
@@ -181,6 +216,24 @@ test("double click binder", () => {
         .bind();
     robot(elt).click({}, 2);
     expect(ctx.commands).toHaveLength(1);
+});
+
+test("double click binder crashes in command", () => {
+    const fn = jest.fn();
+
+    bindings.dbleClickBinder()
+        .on(elt)
+        .toProduce(() => new AnonCmd(() => {
+            throw new Error("eer");
+        }))
+        .catch(fn)
+        .bind();
+
+    robot(elt).click({}, 2);
+
+    expect(ctx.commands).toHaveLength(0);
+    expect(fn).toHaveBeenCalledTimes(1);
+    expect(fn).toHaveBeenCalledWith(new Error("eer"));
 });
 
 test("mouseenter binder", () => {
@@ -229,6 +282,27 @@ test("drag lock binder", () => {
         .mousemove()
         .click({}, 2);
     expect(ctx.commands).toHaveLength(1);
+});
+
+test("drag lock binder crash in command", () => {
+    const fn = jest.fn();
+
+    bindings.dragLockBinder()
+        .on(elt)
+        .toProduce(() => new AnonCmd(() => {
+            throw new Error("eer");
+        }))
+        .catch(fn)
+        .bind();
+
+    robot(elt)
+        .click({}, 2)
+        .mousemove()
+        .click({}, 2);
+
+    expect(ctx.commands).toHaveLength(0);
+    expect(fn).toHaveBeenCalledTimes(1);
+    expect(fn).toHaveBeenCalledWith(new Error("eer"));
 });
 
 test("dnd binder", () => {
@@ -432,6 +506,27 @@ test("key type binder", () => {
     expect(ctx.commands).toHaveLength(1);
 });
 
+test("key type crashes in command", () => {
+    const fn = jest.fn();
+
+    bindings.keyTypeBinder()
+        .on(elt)
+        .toProduce(() => new AnonCmd(() => {
+            throw new Error("eer");
+        }))
+        .catch(fn)
+        .bind();
+
+    robot(elt)
+        .keepData()
+        .keydown({"code": "A"})
+        .keyup();
+
+    expect(ctx.commands).toHaveLength(0);
+    expect(fn).toHaveBeenCalledTimes(1);
+    expect(fn).toHaveBeenCalledWith(new Error("eer"));
+});
+
 test("click must not block drag lock", () => {
     bindings.dragLockBinder()
         .on(elt)
@@ -608,6 +703,47 @@ test("that pinch binder works", () => {
             [{"screenX": 5, "screenY": 6, "clientX": 500, "clientY": 210, "identifier": 3}]);
 
     expect(ctx.commands).toHaveLength(1);
+});
+
+test("that multi-touch binder works", () => {
+    bindings.multiTouchBinder(2)
+        .toProduce((_i: MultiTouchData) => new StubCmd(true))
+        .on(elt)
+        .bind();
+
+    robot(elt)
+        .touchstart({},
+            [{"screenX": 15, "screenY": 16, "clientX": 100, "clientY": 200, "identifier": 2}])
+        .touchstart({},
+            [{"screenX": 10, "screenY": 11, "clientX": 100, "clientY": 200, "identifier": 3}])
+        .touchend({},
+            [{"screenX": 5, "screenY": 6, "clientX": 500, "clientY": 210, "identifier": 3}]);
+
+    expect(ctx.commands).toHaveLength(1);
+});
+
+test("multi-touch binder with crash in command", () => {
+    const fn = jest.fn();
+
+    bindings.multiTouchBinder(2)
+        .toProduce(() => new AnonCmd(() => {
+            throw new Error("eer");
+        }))
+        .catch(fn)
+        .on(elt)
+        .bind();
+
+    robot(elt)
+        .touchstart({},
+            [{"screenX": 15, "screenY": 16, "clientX": 100, "clientY": 200, "identifier": 2}])
+        .touchstart({},
+            [{"screenX": 10, "screenY": 11, "clientX": 100, "clientY": 200, "identifier": 3}])
+        .touchend({},
+            [{"screenX": 5, "screenY": 6, "clientX": 500, "clientY": 210, "identifier": 3}]);
+
+    expect(ctx.commands).toHaveLength(0);
+    expect(fn).toHaveBeenCalledTimes(1);
+    expect(fn).toHaveBeenCalledWith(new Error("eer"));
 });
 
 test("that scroll binder works", () => {

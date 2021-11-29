@@ -79,7 +79,7 @@ test("drag lock canceled on ESC", () => {
 
 test("check data with a normal execution", () => {
     const newHandler = mock<FSMHandler>();
-    newHandler.fsmStops.mockImplementation(() => {
+    newHandler.fsmStops = jest.fn(() => {
         sx = interaction.data.src.clientX;
         sy = interaction.data.src.clientY;
         tx = interaction.data.tgt.clientX;
@@ -113,7 +113,7 @@ test("check data update during a move", () => {
     interaction.registerToNodes([canvas]);
     robot(canvas).click({"clientX": 11, "clientY": 23}, 2);
     const newHandler = mock<FSMHandler>();
-    newHandler.fsmUpdates.mockImplementation(() => {
+    newHandler.fsmUpdates = jest.fn(() => {
         tx = interaction.data.tgt.clientX;
         ty = interaction.data.tgt.clientY;
     });

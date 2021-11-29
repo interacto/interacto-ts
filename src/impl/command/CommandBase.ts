@@ -54,18 +54,23 @@ export abstract class CommandBase implements Command {
                 this.createMemento();
             }
             ok = true;
-            const result = this.execution();
 
-            if (result instanceof Promise) {
-                return result
-                    .then(() => {
-                        this.status = CmdStatus.executed;
-                        return true;
-                    })
-                    .catch(() => {
-                        this.status = CmdStatus.executed;
-                        return false;
-                    });
+            try {
+                const result = this.execution();
+                if (result instanceof Promise) {
+                    return result
+                        .then(() => {
+                            this.status = CmdStatus.executed;
+                            return true;
+                        })
+                        .catch(() => {
+                            this.status = CmdStatus.executed;
+                            return false;
+                        });
+                }
+            } catch (err: unknown) {
+                this.status = CmdStatus.executed;
+                throw err;
             }
             this.status = CmdStatus.executed;
         } else {

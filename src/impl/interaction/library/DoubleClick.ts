@@ -77,6 +77,16 @@ export class DoubleClickFSM extends FSMImpl {
         super.buildFSM(dataHandler);
         this.firstClickFSM.buildFSM();
         this.sndClickFSM.buildFSM();
+
+        const errorHandler = {
+            "fsmError": (err: unknown): void => {
+                this.notifyHandlerOnError(err);
+            }
+        };
+
+        this.firstClickFSM.addHandler(errorHandler);
+        this.sndClickFSM.addHandler(errorHandler);
+
         const dbleclicked = new TerminalState(this, "dbleclicked");
         const cancelled = new CancellingState(this, "cancelled");
         const clicked = new StdState(this, "clicked");

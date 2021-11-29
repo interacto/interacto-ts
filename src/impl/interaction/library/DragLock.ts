@@ -71,9 +71,18 @@ class DragLockFSM extends FSMImpl {
 
         super.buildFSM(dataHandler);
         const cancelDbleClick = new DoubleClickFSM();
+        const errorHandler = {
+            "fsmError": (err: unknown): void => {
+                this.notifyHandlerOnError(err);
+            }
+        };
         this.firstDbleClick.buildFSM();
         this.sndDbleClick.buildFSM();
         cancelDbleClick.buildFSM();
+        this.firstDbleClick.addHandler(errorHandler);
+        this.sndDbleClick.addHandler(errorHandler);
+        cancelDbleClick.addHandler(errorHandler);
+
         const dropped = new TerminalState(this, "dropped");
         const cancelled = new CancellingState(this, "cancelled");
         const locked = new StdState(this, "locked");

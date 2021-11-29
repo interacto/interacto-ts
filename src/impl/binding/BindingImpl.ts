@@ -242,6 +242,12 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
         return this._interaction.isRunning();
     }
 
+    public fsmError(err: unknown): void {
+        if (this.logBinding) {
+            this.logger.logBindingErr("", err);
+        }
+        this.catch(err);
+    }
 
     public fsmCancels(): void {
         if (this._cmd !== undefined) {

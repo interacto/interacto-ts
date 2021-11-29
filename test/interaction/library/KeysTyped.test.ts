@@ -51,7 +51,7 @@ test("type 'b' and wait for timeout stops the interaction", () => {
 
 test("type 'b' and wait for timeout stops the interaction: data", () => {
     const newHandler = mock<FSMHandler>();
-    newHandler.fsmStops.mockImplementation(() => {
+    newHandler.fsmStops = jest.fn(() => {
         data.addKey(peek(interaction.data.keys) as KeyData);
     });
     interaction.fsm.addHandler(newHandler);
@@ -84,7 +84,7 @@ test("type text and wait for timeout stops the interaction", () => {
 
 test("type text and wait for timeout stops the interaction: data", () => {
     const newHandler = mock<FSMHandler>();
-    newHandler.fsmStops.mockImplementation(() => {
+    newHandler.fsmStops = jest.fn(() => {
         interaction.data.keys.forEach(k => {
             data.addKey(k);
         });
@@ -109,7 +109,7 @@ test("type text and wait for timeout stops the interaction: data", () => {
 
 test("type 'b' does not stop the interaction", () => {
     const newHandler = mock<FSMHandler>();
-    newHandler.fsmUpdates.mockImplementation(() => {
+    newHandler.fsmUpdates = jest.fn(() => {
         data.addKey(peek(interaction.data.keys) as KeyData);
     });
     interaction.fsm.addHandler(newHandler);

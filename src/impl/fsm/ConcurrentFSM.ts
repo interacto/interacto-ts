@@ -57,6 +57,9 @@ export class ConcurrentFSM<F extends FSM> extends FSMImpl {
             },
             "fsmCancels": (): void => {
                 this.onCancelling();
+            },
+            "fsmError": (err: unknown): void => {
+                this.notifyHandlerOnError(err);
             }
         };
         this._conccurFSMs = [...fsms];

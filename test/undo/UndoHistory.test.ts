@@ -21,12 +21,14 @@ import type {UndoHistory} from "../../src/api/undo/UndoHistory";
 jest.mock("../../src/api/undo/Undoable");
 
 let undoable: MockProxy<Undoable> & Undoable;
+let undoable2: MockProxy<Undoable> & Undoable;
 let instance: UndoHistory;
 
 beforeEach(() => {
     instance = new UndoHistoryImpl();
     instance.setSizeMax(10);
     undoable = mock<Undoable>();
+    undoable2 = mock<Undoable>();
     undoable.getUndoName.mockReturnValue("undoredomsg");
 });
 
@@ -64,7 +66,6 @@ test("testRedoCallredo", () => {
 
 
 test("history limit works as expected on new undoable instances", () => {
-    const undoable2 = mock<Undoable>();
     const undoable3 = mock<Undoable>();
     instance.setSizeMax(2);
     instance.add(undoable);
@@ -117,7 +118,6 @@ test("testSizeMaxRemovedWhen0", () => {
 });
 
 test("changing the history size clears two oldest undoable instances", () => {
-    const undoable2 = mock<Undoable>();
     const undoable3 = mock<Undoable>();
     instance.add(undoable);
     instance.add(undoable2);
@@ -129,7 +129,6 @@ test("changing the history size clears two oldest undoable instances", () => {
 });
 
 test("changing the history size clears one oldest undoable instances", () => {
-    const undoable2 = mock<Undoable>();
     const undoable3 = mock<Undoable>();
     instance.add(undoable);
     instance.add(undoable2);
@@ -142,7 +141,6 @@ test("changing the history size clears one oldest undoable instances", () => {
 });
 
 test("changing the history size clears all oldest undoable instances", () => {
-    const undoable2 = mock<Undoable>();
     const undoable3 = mock<Undoable>();
     instance.add(undoable);
     instance.add(undoable2);
@@ -154,7 +152,6 @@ test("changing the history size clears all oldest undoable instances", () => {
 });
 
 test("changing the history size does not remove undoable instances", () => {
-    const undoable2 = mock<Undoable>();
     const undoable3 = mock<Undoable>();
     instance.add(undoable);
     instance.add(undoable2);
@@ -238,7 +235,6 @@ test("getLastOrEmptyRedoMessage OK", () => {
 });
 
 test("testClear", () => {
-    const undoable2 = mock<Undoable>();
     instance.add(undoable);
     instance.add(undoable2);
     instance.undo();
@@ -273,4 +269,29 @@ test("testUndoRedoAdded", () => {
     expect(undos[1]).toBeUndefined();
     expect(redos).toHaveLength(1);
     expect(redos[0]).toBe(undoable);
+});
+
+test("crash in undo OK", () => {
+    undoable2.undo.mockImplementation(() => {
+        throw new Error("err");
+    });
+    instance.add(undoable);
+    instance.add(undoable2);
+
+    expect(() => instance.undo()).toThrow(new Error("err"));
+    expect(instance.getUndo()).toHaveLength(1);
+    expect(instance.getRedo()).toHaveLength(1);
+});
+
+test("crash in redo OK", () => {
+    undoable2.redo.mockImplementation(() => {
+        throw new Error("err2");
+    });
+    instance.add(undoable);
+    instance.add(undoable2);
+
+    instance.undo();
+    expect(() => instance.redo()).toThrow(new Error("err2"));
+    expect(instance.getUndo()).toHaveLength(2);
+    expect(instance.getRedo()).toHaveLength(0);
 });

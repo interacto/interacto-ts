@@ -277,8 +277,9 @@ export abstract class Bindings {
      * Creates two bindings for undo and redo operations with buttons.
      * @param undo - The undo button
      * @param redo - The redo button
+     * @param catchFn - The function that will treat the errors for both undo and redo bindings
      */
-    abstract undoRedoBinder(undo: Widget<HTMLButtonElement>, redo: Widget<HTMLButtonElement>):
+    abstract undoRedoBinder(undo: Widget<HTMLButtonElement>, redo: Widget<HTMLButtonElement>, catchFn?: ((err: unknown) => void)):
     [Binding<Undo, Interaction<WidgetData<HTMLButtonElement>>, WidgetData<HTMLButtonElement>>,
         Binding<Redo, Interaction<WidgetData<HTMLButtonElement>>, WidgetData<HTMLButtonElement>>];
 

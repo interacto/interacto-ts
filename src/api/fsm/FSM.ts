@@ -102,6 +102,12 @@ export interface FSM {
     onTerminating(): void;
 
     /**
+     * Processes an error produced in the FSM.
+     * @param err - The error to treat.
+     */
+    onError(err: unknown): void;
+
+    /**
      * Jobs to do when a timeout transition is executed.
      * Because the timeout transition is based on a separated thread, the job
      * done by this method must be executed in the UI thread.

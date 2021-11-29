@@ -149,7 +149,13 @@ export class FSMImpl implements FSM {
             this.logger?.logInteractionMsg(`processing event ${String(event.type)} at state 
             ${this.currentState.name}: ${this.constructor.name}`, this.constructor.name);
         }
-        return this.currentState.process(event);
+
+        try {
+            return this.currentState.process(event);
+        } catch (err: unknown) {
+            this.notifyHandlerOnError(err);
+            return false;
+        }
     }
 
     public get log(): boolean {
@@ -213,9 +219,10 @@ export class FSMImpl implements FSM {
         this.eventsToProcess.push(event);
     }
 
-    /**
-     * Terminates the state machine.
-     */
+    public onError(err: unknown): void {
+        this.notifyHandlerOnError(err);
+    }
+
     public onTerminating(): void {
         if (this.log) {
             this.logger?.logInteractionMsg("FSM ended", this.constructor.name);
@@ -340,15 +347,16 @@ export class FSMImpl implements FSM {
     protected notifyHandlerOnStart(): void {
         try {
             this.handlers.forEach(handler => {
-                handler.fsmStarts();
+                handler.fsmStarts?.();
             });
         } catch (ex: unknown) {
             if (ex instanceof CancelFSMException) {
                 this.onCancelling();
-                throw ex;
+            } else {
+                this.logger?.logInteractionErr("An 'fsmStarts' produced an error", ex, this.constructor.name);
+                this.onCancelling();
             }
-            this.logger?.logInteractionErr("An 'fsmStarts' produced an error", ex, this.constructor.name);
-            this.onCancelling();
+            throw ex;
         }
     }
 
@@ -358,15 +366,16 @@ export class FSMImpl implements FSM {
     protected notifyHandlerOnUpdate(): void {
         try {
             this.handlers.forEach(handler => {
-                handler.fsmUpdates();
+                handler.fsmUpdates?.();
             });
         } catch (ex: unknown) {
             if (ex instanceof CancelFSMException) {
                 this.onCancelling();
-                throw ex;
+            } else {
+                this.logger?.logInteractionErr("An 'fsmUpdates' produced an error", ex, this.constructor.name);
+                this.onCancelling();
             }
-            this.logger?.logInteractionErr("An 'fsmUpdates' produced an error", ex, this.constructor.name);
-            this.onCancelling();
+            throw ex;
         }
     }
 
@@ -376,15 +385,14 @@ export class FSMImpl implements FSM {
     public notifyHandlerOnStop(): void {
         try {
             [...this.handlers].forEach(handler => {
-                handler.fsmStops();
+                handler.fsmStops?.();
             });
         } catch (ex: unknown) {
-            if (ex instanceof CancelFSMException) {
-                this.onCancelling();
-                throw ex;
+            if (!(ex instanceof CancelFSMException)) {
+                this.logger?.logInteractionErr("An 'fsmStops' produced an error", ex, this.constructor.name);
             }
-            this.logger?.logInteractionErr("An 'fsmStops' produced an error", ex, this.constructor.name);
             this.onCancelling();
+            throw ex;
         }
     }
 
@@ -394,10 +402,24 @@ export class FSMImpl implements FSM {
     protected notifyHandlerOnCancel(): void {
         try {
             [...this.handlers].forEach(handler => {
-                handler.fsmCancels();
+                handler.fsmCancels?.();
             });
         } catch (ex: unknown) {
             this.logger?.logInteractionErr("An 'fsmCancels' produced an error", ex, this.constructor.name);
+            throw ex;
+        }
+    }
+
+    /**
+     * Notifies handlers that an error occured.
+     */
+    protected notifyHandlerOnError(err: unknown): void {
+        try {
+            [...this.handlers].forEach(handler => {
+                handler.fsmError?.(err);
+            });
+        } catch (ex: unknown) {
+            this.logger?.logInteractionErr("An 'fsmError' produced an error", ex, this.constructor.name);
         }
     }
 

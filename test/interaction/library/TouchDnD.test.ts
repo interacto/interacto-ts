@@ -17,7 +17,6 @@ import {TouchDnD} from "../../../src/interacto";
 import {createTouchEvent, robot} from "../StubEvents";
 import {mock} from "jest-mock-extended";
 import {TouchDataImpl} from "../../../src/impl/interaction/TouchDataImpl";
-import {StubFSMHandler} from "../../fsm/StubFSMHandler";
 
 let interaction: TouchDnD;
 let canvas: HTMLElement;
@@ -68,7 +67,7 @@ test("pressure move", () => {
 test("pressure move data", () => {
     interaction.processEvent(createTouchEvent("touchstart", 2, canvas, 11, 23, 12, 25));
     const newHandler = mock<FSMHandler>();
-    newHandler.fsmUpdates.mockImplementation(() => {
+    newHandler.fsmUpdates = jest.fn(() => {
         srcData.copy(interaction.data.src);
         tgtData.copy(interaction.data.tgt);
     });
@@ -116,7 +115,7 @@ test("pressure move move OK data", () => {
     interaction.processEvent(createTouchEvent("touchmove", 4, canvas, 11, 24, 14, 28));
 
     const newHandler = mock<FSMHandler>();
-    newHandler.fsmUpdates.mockImplementation(() => {
+    newHandler.fsmUpdates = jest.fn(() => {
         srcData.copy(interaction.data.src);
         tgtData.copy(interaction.data.tgt);
     });
@@ -152,11 +151,11 @@ test("pressure move release data", () => {
     const srcData2 = new TouchDataImpl();
     const tgtData2 = new TouchDataImpl();
     const newHandler = mock<FSMHandler>();
-    newHandler.fsmUpdates.mockImplementation(() => {
+    newHandler.fsmUpdates = jest.fn(() => {
         srcData.copy(interaction.data.src);
         tgtData.copy(interaction.data.tgt);
     });
-    newHandler.fsmStops.mockImplementation(() => {
+    newHandler.fsmStops = jest.fn(() => {
         srcData2.copy(interaction.data.src);
         tgtData2.copy(interaction.data.tgt);
     });
@@ -253,15 +252,14 @@ test("displacement data", () => {
     let diffScreenX: number | undefined;
     let diffScreenY: number | undefined;
 
-
-    interaction.fsm.addHandler(new class extends StubFSMHandler {
-        public override fsmStops(): void {
+    interaction.fsm.addHandler({
+        "fsmStops": () => {
             diffClientX = interaction.data.diffClientX;
             diffClientY = interaction.data.diffClientY;
             diffScreenX = interaction.data.diffScreenX;
             diffScreenY = interaction.data.diffScreenY;
         }
-    }());
+    });
 
     interaction.registerToNodes([canvas]);
 
@@ -342,7 +340,7 @@ describe("movement not required and not cancellable", () => {
     test("pressure data", () => {
         const newHandler = mock<FSMHandler>();
 
-        newHandler.fsmUpdates.mockImplementation(() => {
+        newHandler.fsmUpdates = jest.fn(() => {
             srcData.copy(interaction.data.src);
             tgtData.copy(interaction.data.tgt);
         });
@@ -422,15 +420,14 @@ describe("movement not required and not cancellable", () => {
         let diffScreenX: number | undefined;
         let diffScreenY: number | undefined;
 
-
-        interaction.fsm.addHandler(new class extends StubFSMHandler {
-            public override fsmStops(): void {
+        interaction.fsm.addHandler({
+            "fsmStops": () => {
                 diffClientX = interaction.data.diffClientX;
                 diffClientY = interaction.data.diffClientY;
                 diffScreenX = interaction.data.diffScreenX;
                 diffScreenY = interaction.data.diffScreenY;
             }
-        }());
+        });
 
         interaction.registerToNodes([canvas]);
 

@@ -47,7 +47,7 @@ test("scroll event start and stop the interaction", () => {
 test("scroll data", () => {
     let target: EventTarget | null = null;
     interaction.registerToNodes([canvas]);
-    handler.fsmStops.mockImplementation(() => {
+    handler.fsmStops = jest.fn(() => {
         target = interaction.data.target;
     });
     robot(canvas).scroll();

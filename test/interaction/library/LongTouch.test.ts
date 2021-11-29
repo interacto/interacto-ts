@@ -56,7 +56,7 @@ describe("long touch test", () => {
             test("touch does not end", () => {
                 const touchData = new TouchDataImpl();
                 const newHandler = mock<FSMHandler>();
-                newHandler.fsmStarts.mockImplementation(() => {
+                newHandler.fsmStarts = jest.fn(() => {
                     touchData.copy(interaction.data);
                 });
                 interaction.fsm.addHandler(newHandler);

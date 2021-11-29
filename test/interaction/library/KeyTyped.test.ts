@@ -67,7 +67,7 @@ test("data is ok", () => {
     const data = new KeyDataImpl();
     interaction.registerToNodes([text]);
     const newHandler = mock<FSMHandler>();
-    newHandler.fsmStops.mockImplementation(() => {
+    newHandler.fsmStops = jest.fn(() => {
         data.copy(interaction.data);
     });
     interaction.fsm.addHandler(newHandler);

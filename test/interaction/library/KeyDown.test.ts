@@ -47,7 +47,7 @@ test("the key typed in the textarea is the same key in the data of the interacti
     const data = new KeyDataImpl();
     interaction.registerToNodes([text]);
     const newHandler = mock<FSMHandler>();
-    newHandler.fsmStops.mockImplementation(() => {
+    newHandler.fsmStops = jest.fn(() => {
         data.copy(interaction.data);
     });
     interaction.fsm.addHandler(newHandler);

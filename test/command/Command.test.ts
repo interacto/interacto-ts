@@ -156,3 +156,14 @@ test("testExecutedTwoTimes", async () => {
     await cmd.execute();
     expect(cmd.exec).toBe(2);
 });
+
+test("crash in execution, command executed", () => {
+    const command = new class extends CommandBase {
+        protected execution(): void {
+            throw new Error("Cmd err");
+        }
+    }();
+
+    expect(() => command.execute()).toThrow(new Error("Cmd err"));
+    expect(command.getStatus()).toStrictEqual(CmdStatus.executed);
+});

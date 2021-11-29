@@ -401,46 +401,36 @@ export class BindingsImpl extends Bindings {
             .usingInteraction<KeyDown, KeyData>(() => new KeyDown(modifierAccepted));
     }
 
-    /**
-     * Creates a binding that uses the KeysDown (multiple keys pressed) interaction.
-     */
     public keysDownBinder(): PartialKeysBinder {
         return new KeysBinder(this.undoHistory, this.logger, this.observer)
             .usingInteraction<KeysDown, KeysData>(() => new KeysDown());
     }
 
-    /**
-     * Creates a binding that uses the KeysType (multiple keys pressed then released) interaction.
-     */
     public keysTypeBinder(): PartialKeysBinder {
         return new KeysBinder(this.undoHistory, this.logger, this.observer)
             .usingInteraction<KeysTyped, KeysData>(() => new KeysTyped());
     }
 
-    /**
-     * Creates a binding that uses the KeyTyped (key pressed then released) interaction.
-     */
     public keyTypeBinder(): PartialKeyBinder {
         return new KeysBinder(this.undoHistory, this.logger, this.observer)
             .usingInteraction<KeyTyped, KeyData>(() => new KeyTyped());
     }
 
-    /**
-     * Creates two bindings for undo and redo operations with buttons.
-     * @param undo - The undo button
-     * @param redo - The redo button
-     */
-    public undoRedoBinder(undo: Widget<HTMLButtonElement>, redo: Widget<HTMLButtonElement>):
-    [Binding<Undo, Interaction<WidgetData<HTMLButtonElement>>, WidgetData<HTMLButtonElement>>,
-        Binding<Redo, Interaction<WidgetData<HTMLButtonElement>>, WidgetData<HTMLButtonElement>>] {
+
+    public undoRedoBinder(undo: Widget<HTMLButtonElement>, redo: Widget<HTMLButtonElement>,
+                          catchFn: ((err: unknown) => void) = ((): void => {})):
+        [Binding<Undo, Interaction<WidgetData<HTMLButtonElement>>, WidgetData<HTMLButtonElement>>,
+            Binding<Redo, Interaction<WidgetData<HTMLButtonElement>>, WidgetData<HTMLButtonElement>>] {
         return [
             this.buttonBinder()
                 .on(undo)
                 .toProduce(() => new Undo(this.undoHistory))
+                .catch(catchFn)
                 .bind(),
             this.buttonBinder()
                 .on(redo)
                 .toProduce(() => new Redo(this.undoHistory))
+                .catch(catchFn)
                 .bind()
         ];
     }

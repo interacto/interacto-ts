@@ -49,7 +49,7 @@ test("testKeyPressData", () => {
     interaction.registerToNodes([text]);
 
     const newHandler = mock<FSMHandler>();
-    newHandler.fsmUpdates.mockImplementation(() => {
+    newHandler.fsmUpdates = jest.fn(() => {
         data.addKey(peek(interaction.data.keys) as KeyData);
     });
     interaction.fsm.addHandler(newHandler);
@@ -74,7 +74,7 @@ test("testTwoKeyPressData", () => {
     interaction.registerToNodes([text]);
 
     const newHandler = mock<FSMHandler>();
-    newHandler.fsmUpdates.mockImplementation(() => {
+    newHandler.fsmUpdates = jest.fn(() => {
         data.addKey(peek(interaction.data.keys) as KeyData);
     });
     interaction.fsm.addHandler(newHandler);
@@ -105,7 +105,7 @@ test("testTwoKeyPressReleaseData", () => {
         .keydown({"code": "A"})
         .keydown({"code": "B"});
     const newHandler = mock<FSMHandler>();
-    newHandler.fsmUpdates.mockImplementation(() => {
+    newHandler.fsmUpdates = jest.fn(() => {
         data.addKey(peek(interaction.data.keys) as KeyData);
     });
     interaction.fsm.addHandler(newHandler);

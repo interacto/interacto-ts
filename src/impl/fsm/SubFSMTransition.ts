@@ -74,6 +74,9 @@ export class SubFSMTransition extends TransitionBase<Event> {
             },
             "fsmCancels": (): void => {
                 this.cancelsFSM();
+            },
+            "fsmError": (err: unknown): void => {
+                this.src.fsm.onError(err);
             }
         };
     }

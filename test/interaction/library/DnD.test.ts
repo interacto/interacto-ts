@@ -16,7 +16,6 @@ import type {FSMHandler} from "../../../src/interacto";
 import {DnD} from "../../../src/interacto";
 import {robot} from "interacto-nono";
 import {mock} from "jest-mock-extended";
-import {StubFSMHandler} from "../../fsm/StubFSMHandler";
 
 let interaction: DnD;
 let canvas: HTMLElement;
@@ -81,7 +80,7 @@ test("data of the  press and drag part of the interaction", () => {
     interaction.registerToNodes([canvas]);
     robot(canvas).mousedown({"screenX": 1, "screenY": 2, "clientX": 15, "clientY": 20, "button": 0});
     const newHandler = mock<FSMHandler>();
-    newHandler.fsmUpdates.mockImplementation(() => {
+    newHandler.fsmUpdates = jest.fn(() => {
         sx = interaction.data.src.clientX;
         sy = interaction.data.src.clientY;
         tx = interaction.data.tgt.clientX;
@@ -170,8 +169,8 @@ test("check data with multiple drag", () => {
         .mousedown({"screenX": 1, "screenY": 2, "clientX": 11, "clientY": 23, "button": 0})
         .mousemove({"screenX": 3, "screenY": 4, "clientX": 12, "clientY": 22, "button": 0});
 
-    interaction.fsm.addHandler(new class extends StubFSMHandler {
-        public override fsmUpdates(): void {
+    interaction.fsm.addHandler({
+        "fsmUpdates": () => {
             sx = interaction.data.src.clientX;
             sy = interaction.data.src.clientY;
             tx = interaction.data.tgt.clientX;
@@ -179,7 +178,7 @@ test("check data with multiple drag", () => {
             button = interaction.data.src.button;
             obj = interaction.data.tgt.currentTarget as HTMLCanvasElement;
         }
-    }());
+    });
 
     robot(canvas)
         .mousemove({"screenX": 3, "screenY": 4, "clientX": 12, "clientY": 24, "button": 0});
@@ -239,14 +238,14 @@ test("check data with one move.", () => {
     let sy: number | undefined;
 
     interaction.registerToNodes([canvas]);
-    interaction.fsm.addHandler(new class extends StubFSMHandler {
-        public override fsmStops(): void {
+    interaction.fsm.addHandler({
+        "fsmStops": () => {
             sx = interaction.data.src.clientX;
             sy = interaction.data.src.clientY;
             tx = interaction.data.tgt.clientX;
             ty = interaction.data.tgt.clientY;
         }
-    }());
+    });
     robot(canvas)
         .keepData()
         .mousedown({"screenX": 1, "screenY": 2, "clientX": 11, "clientY": 23, "button": 0})
@@ -265,14 +264,14 @@ test("displacement data", () => {
     let diffScreenY: number | undefined;
 
 
-    interaction.fsm.addHandler(new class extends StubFSMHandler {
-        public override fsmStops(): void {
+    interaction.fsm.addHandler({
+        "fsmStops": () => {
             diffClientX = interaction.data.diffClientX;
             diffClientY = interaction.data.diffClientY;
             diffScreenX = interaction.data.diffScreenX;
             diffScreenY = interaction.data.diffScreenY;
         }
-    }());
+    });
 
     interaction.registerToNodes([canvas]);
 

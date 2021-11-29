@@ -92,7 +92,7 @@ test("testClickData", () => {
         "timeStamp": 0
     });
 
-    handler.fsmStops.mockImplementation(() => {
+    handler.fsmStops = jest.fn(() => {
         data.copy(interaction.data);
     });
     interaction.processEvent(createMouseEvent2("click", expected));
@@ -102,7 +102,7 @@ test("testClickData", () => {
 test("testClickOnWidgetData", () => {
     const data = new PointDataImpl();
 
-    handler.fsmStops.mockImplementation(() => {
+    handler.fsmStops = jest.fn(() => {
         data.copy(interaction.data);
     });
     interaction.registerToNodes([canvas]);

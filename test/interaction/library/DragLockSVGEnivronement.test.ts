@@ -54,7 +54,7 @@ test("dragLock in a SVG environment", () => {
 test("dragLock data in a SVG environment", () => {
     const data = new SrcTgtPointsDataImpl();
     const newHandler = mock<FSMHandler>();
-    newHandler.fsmStops.mockImplementation(() => {
+    newHandler.fsmStops = jest.fn(() => {
         data.copySrc(interaction.data.src);
         data.copyTgt(interaction.data.tgt);
     });

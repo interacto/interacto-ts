@@ -265,7 +265,7 @@ test("several touch releases change", () => {
     interaction.registerToNodes([canvas]);
 
     const newHandler = mock<FSMHandler>();
-    newHandler.fsmStops.mockImplementation(() => {
+    newHandler.fsmStops = jest.fn(() => {
         data1 = interaction.data.touches[0].tgt.clientX;
         data2 = interaction.data.touches[1].tgt.clientX;
         data3 = interaction.data.touches[2].tgt.clientX;
@@ -297,7 +297,7 @@ test("touch end data", () => {
     interaction.processEvent(createTouchEvent("touchstart", 2, canvas, 210, 130, 210, 130));
 
     const newHandler = mock<FSMHandler>();
-    newHandler.fsmStops.mockImplementation(() => {
+    newHandler.fsmStops = jest.fn(() => {
         data1s.copy(interaction.data.touches[0].src);
         data1t.copy(interaction.data.touches[0].tgt);
         data2s.copy(interaction.data.touches[1].src);

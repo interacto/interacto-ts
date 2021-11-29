@@ -36,7 +36,7 @@ beforeEach(() => {
 
 test("current target with group tag", () => {
     const data = new PointDataImpl();
-    handler.fsmStops.mockImplementation(() => {
+    handler.fsmStops = jest.fn(() => {
         data.copy(interaction.data);
     });
 

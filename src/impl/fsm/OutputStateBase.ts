@@ -16,6 +16,7 @@ import {StateBase} from "./StateBase";
 import type {OutputState} from "../../api/fsm/OutputState";
 import type {FSM} from "../../api/fsm/FSM";
 import type {Transition} from "../../api/fsm/Transition";
+import {CancelFSMException} from "./CancelFSMException";
 
 /**
  * Base implementation of the OutputState interface.
@@ -37,9 +38,12 @@ export abstract class OutputStateBase extends StateBase implements OutputState {
         return this.transitions.find(tr => {
             try {
                 return tr.execute(event) !== undefined;
-            } catch (ignored: unknown) {
-                // Already processed
-                return false;
+            } catch (err: unknown) {
+                if (err instanceof CancelFSMException) {
+                    // Already processed
+                    return false;
+                }
+                throw err;
             }
         }) !== undefined;
     }

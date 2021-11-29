@@ -71,7 +71,7 @@ describe("long mouse down test", () => {
                 const pressData = new PointDataImpl();
 
                 const newHandler = mock<FSMHandler>();
-                newHandler.fsmStarts.mockImplementation(() => {
+                newHandler.fsmStarts = jest.fn(() => {
                     pressData.copy(interaction.data);
                 });
                 interaction.fsm.addHandler(newHandler);

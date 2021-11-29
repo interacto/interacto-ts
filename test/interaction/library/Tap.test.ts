@@ -95,7 +95,7 @@ describe("tap 1", () => {
     test("one touch data", () => {
         const touch = new TouchDataImpl();
         const newHandler = mock<FSMHandler>();
-        newHandler.fsmStarts.mockImplementation(() => {
+        newHandler.fsmStarts = jest.fn(() => {
             touch.copy(interaction.data.taps[0]);
         });
         interaction.fsm.addHandler(newHandler);
@@ -204,7 +204,7 @@ describe("tap 2", () => {
         const touch = new TapDataImpl();
 
         const newHandler = mock<FSMHandler>();
-        newHandler.fsmStops.mockImplementation(() => {
+        newHandler.fsmStops = jest.fn(() => {
             interaction.data.taps.forEach(t => {
                 touch.addTapData(t);
             });
@@ -294,7 +294,7 @@ describe("tap 3", () => {
         const touch = new TapDataImpl();
 
         const newHandler = mock<FSMHandler>();
-        newHandler.fsmStops.mockImplementation(() => {
+        newHandler.fsmStops = jest.fn(() => {
             interaction.data.taps.forEach(t => {
                 touch.addTapData(t);
             });

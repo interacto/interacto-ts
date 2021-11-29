@@ -82,7 +82,7 @@ test("testWheelData", () => {
         "deltaMode": 21
     });
 
-    handler.fsmStops.mockImplementation(() => {
+    handler.fsmStops = jest.fn(() => {
         data.copy(interaction.data);
     });
     interaction.processEvent(createWheelEvent2("wheel", expected));
@@ -92,7 +92,7 @@ test("testWheelData", () => {
 test("testWheelOnWidgetData", () => {
     const data = new WheelDataImpl();
 
-    handler.fsmStops.mockImplementation(() => {
+    handler.fsmStops = jest.fn(() => {
         data.copy(interaction.data);
     });
     interaction.registerToNodes([canvas]);
