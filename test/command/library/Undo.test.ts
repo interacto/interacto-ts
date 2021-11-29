@@ -28,7 +28,7 @@ describe("base undo testing", () => {
         cmd = new Undo(collector);
     });
 
-    test("testCannotDo", () => {
+    test("cannotDo", () => {
         collector.getLastUndo.mockReturnValue(undefined);
         expect(cmd.canExecute()).toBeFalsy();
     });
@@ -41,17 +41,17 @@ describe("base undo testing", () => {
             collector.getLastUndo.mockReturnValue(undoable);
         });
 
-        test("testCanDo", () => {
+        test("canDo", () => {
             expect(cmd.canExecute()).toBeTruthy();
         });
 
-        test("testDo", () => {
+        test("do", () => {
             // eslint-disable-next-line @typescript-eslint/no-floating-promises
             cmd.execute();
             expect(collector.undo).toHaveBeenCalledTimes(1);
         });
 
-        test("testHadEffects", () => {
+        test("hadEffects", () => {
             // eslint-disable-next-line @typescript-eslint/no-floating-promises
             cmd.execute();
             cmd.done();

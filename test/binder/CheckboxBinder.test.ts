@@ -40,7 +40,7 @@ afterEach(() => {
     bindings.clear();
 });
 
-test("testCommandExecutedOnSingleButtonFunction", () => {
+test("commandExecutedOnSingleButtonFunction", () => {
     binding = bindings.checkboxBinder()
         .toProduce(_i => cmd)
         .on(widget1)
@@ -51,7 +51,7 @@ test("testCommandExecutedOnSingleButtonFunction", () => {
     expect(cmd.exec).toBe(1);
 });
 
-test("testCommandExecutedOnSingleButtonSupplier", () => {
+test("commandExecutedOnSingleButtonSupplier", () => {
     binding = bindings.checkboxBinder()
         .toProduce(() => cmd)
         .on(widget1)
@@ -62,7 +62,7 @@ test("testCommandExecutedOnSingleButtonSupplier", () => {
     expect(cmd.exec).toBe(1);
 });
 
-test("testCommandExecutedOnTwoCheckboxes", () => {
+test("commandExecutedOnTwoCheckboxes", () => {
     binding = bindings.checkboxBinder()
         .toProduce(_i => new StubCmd(true))
         .on(widget1, widget2)
@@ -74,7 +74,7 @@ test("testCommandExecutedOnTwoCheckboxes", () => {
     expect(ctx.commands).toHaveLength(2);
 });
 
-test("testInit1Executed", () => {
+test("init1Executed", () => {
     binding = bindings.checkboxBinder()
         .toProduce(_i => cmd)
         .first(c => {
@@ -88,7 +88,7 @@ test("testInit1Executed", () => {
     expect(cmd.exec).toBe(11);
 });
 
-test("testInit2Executed", () => {
+test("init2Executed", () => {
     binding = bindings.checkboxBinder()
         .toProduce(() => cmd)
         .on(widget1)
@@ -102,7 +102,7 @@ test("testInit2Executed", () => {
     expect(cmd.exec).toBe(11);
 });
 
-test("testCheckFalse", () => {
+test("checkFalse", () => {
     binding = bindings.checkboxBinder()
         .on(widget1)
         .when(_i => false)

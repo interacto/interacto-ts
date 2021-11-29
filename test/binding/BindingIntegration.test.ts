@@ -49,7 +49,7 @@ afterEach(() => {
     history.clear();
 });
 
-test("testNothingDoneIsDeactivated", () => {
+test("nothing Done Is deactivated", () => {
     const dotItSpy = jest.spyOn(cmd, "execute");
     binding.activated = false;
     jest.spyOn(binding, "ifCmdHadNoEffect");
@@ -64,7 +64,7 @@ test("testNothingDoneIsDeactivated", () => {
     expect(cmd.getStatus()).toStrictEqual(CmdStatus.created);
 });
 
-test("testCmdCreatedExecSavedWhenActivated", () => {
+test("cmd Created Exec Saved When activated", () => {
     const dotItSpy = jest.spyOn(cmd, "execute");
     jest.spyOn(binding, "ifCmdHadNoEffect");
     jest.spyOn(binding, "ifCmdHadEffects");
@@ -78,7 +78,7 @@ test("testCmdCreatedExecSavedWhenActivated", () => {
     expect(cmd.getStatus()).toStrictEqual(CmdStatus.done);
 });
 
-test("testCmdKOWhenNotWhenOK", () => {
+test("cmd KO When Not When OK", () => {
     jest.spyOn(binding, "when").mockReturnValue(false);
     const dotItSpy = jest.spyOn(cmd, "execute");
     jest.spyOn(binding, "ifCmdHadNoEffect");
@@ -93,7 +93,7 @@ test("testCmdKOWhenNotWhenOK", () => {
     expect(cmd.getStatus()).toStrictEqual(CmdStatus.created);
 });
 
-test("testCmdKOWhenCannotDoCmd", () => {
+test("cmd KO When Cannot Do Cmd", () => {
     cmd.candoValue = false;
     jest.spyOn(binding, "ifCmdHadNoEffect");
     jest.spyOn(binding, "ifCmdHadEffects");
@@ -106,7 +106,7 @@ test("testCmdKOWhenCannotDoCmd", () => {
     expect(binding.ifCannotExecuteCmd).toHaveBeenCalledTimes(1);
 });
 
-test("testWhenOKCanDoButNoEffect", () => {
+test("when OK Can Do But No Effect", () => {
     const dotItSpy = jest.spyOn(cmd, "execute");
     jest.spyOn(binding, "ifCmdHadNoEffect");
     jest.spyOn(binding, "ifCmdHadEffects");
@@ -120,7 +120,7 @@ test("testWhenOKCanDoButNoEffect", () => {
     expect(binding.ifCannotExecuteCmd).not.toHaveBeenCalledWith();
 });
 
-test("testProducedNone", () => {
+test("produced None", () => {
     cmd.candoValue = false;
     const cmds = new Array<StubCmd>();
     binding.produces.subscribe(elt => cmds.push(elt));
@@ -129,7 +129,7 @@ test("testProducedNone", () => {
     expect(cmds).toHaveLength(0);
 });
 
-test("testProducedOne", () => {
+test("produced One", () => {
     const cmds = new Array<StubCmd>();
     binding.produces.subscribe(elt => cmds.push(elt));
 
@@ -137,7 +137,7 @@ test("testProducedOne", () => {
     expect(cmds).toHaveLength(1);
 });
 
-test("testProducedTwo", () => {
+test("produced Two", () => {
     const cmds = new Array<StubCmd>();
     binding.produces.subscribe(elt => cmds.push(elt));
 

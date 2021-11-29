@@ -32,13 +32,13 @@ beforeEach(() => {
     undoable.getUndoName.mockReturnValue("undoredomsg");
 });
 
-test("testUndoCallundo", () => {
+test("undoCallundo", () => {
     instance.add(undoable);
     instance.undo();
     expect(undoable.undo).toHaveBeenCalledTimes(1);
 });
 
-test("testRedowithUndoDonewithGlobalUndoable", () => {
+test("redowithUndoDonewithGlobalUndoable", () => {
     instance.add(undoable);
     instance.undo();
     instance.redo();
@@ -46,17 +46,17 @@ test("testRedowithUndoDonewithGlobalUndoable", () => {
     expect(undoable.redo).toHaveBeenCalledTimes(1);
 });
 
-test("testRedowhenRedoEmpty", () => {
+test("redowhenRedoEmpty", () => {
     instance.redo();
     expect(undoable.redo).not.toHaveBeenCalled();
 });
 
-test("testUndowhenUndoEmpty", () => {
+test("undowhenUndoEmpty", () => {
     instance.undo();
     expect(undoable.undo).not.toHaveBeenCalled();
 });
 
-test("testRedoCallredo", () => {
+test("redoCallredo", () => {
     instance.add(undoable);
     instance.undo();
     instance.redo();
@@ -77,19 +77,19 @@ test("history limit works as expected on new undoable instances", () => {
 });
 
 
-test("testSetSizeMaxKO", () => {
+test("setSizeMaxKO", () => {
     instance.setSizeMax(-1);
     instance.add(undoable);
     expect(instance.getLastUndo()).toBe(undoable);
 });
 
-test("testSetSizeMax0KO", () => {
+test("setSizeMax0KO", () => {
     instance.setSizeMax(0);
     instance.add(undoable);
     expect(instance.getLastUndo()).toBeUndefined();
 });
 
-test("testAddUndoablewith0SizeUndoable", () => {
+test("addUndoablewith0SizeUndoable", () => {
     instance.setSizeMax(0);
     instance.add(undoable);
     expect(instance.getUndo()).toHaveLength(0);
@@ -97,7 +97,7 @@ test("testAddUndoablewith0SizeUndoable", () => {
 });
 
 
-test("testSizeMaxMutatorsUndoableRemoved", () => {
+test("sizeMaxMutatorsUndoableRemoved", () => {
     instance.setSizeMax(5);
     instance.add(undoable);
     expect(instance.getUndo()).toHaveLength(1);
@@ -105,7 +105,7 @@ test("testSizeMaxMutatorsUndoableRemoved", () => {
     expect(instance.getLastUndo()).toBe(undoable);
 });
 
-test("testSizeMaxRemovedWhen0", () => {
+test("sizeMaxRemovedWhen0", () => {
     const undos = new Array<Undoable | undefined>();
     instance.setSizeMax(5);
     instance.add(undoable);
@@ -161,80 +161,80 @@ test("changing the history size does not remove undoable instances", () => {
     expect(instance.getUndo()).toHaveLength(3);
 });
 
-test("testSizeMaxMutatorsSizeOK", () => {
+test("sizeMaxMutatorsSizeOK", () => {
     instance.setSizeMax(21);
     expect(instance.getSizeMax()).toBe(21);
 });
 
-test("testSizeMaxMutatorsSizeKO", () => {
+test("sizeMaxMutatorsSizeKO", () => {
     instance.setSizeMax(5);
     instance.setSizeMax(-1);
     expect(instance.getSizeMax()).toBe(5);
 });
 
-test("testGetLastRedoNothingStart", () => {
+test("getLastRedoNothingStart", () => {
     expect(instance.getLastRedo()).toBeUndefined();
 });
 
-test("testGetLastRedoNothingOnNewUndoable", () => {
+test("getLastRedoNothingOnNewUndoable", () => {
     instance.add(undoable);
     expect(instance.getLastRedo()).toBeUndefined();
 });
 
-test("testGetLastRedoOKOnRedo", () => {
+test("getLastRedoOKOnRedo", () => {
     instance.add(undoable);
     instance.undo();
     expect(instance.getLastRedo()).toStrictEqual(undoable);
 });
 
-test("testGetLastUndoNothingAtStart", () => {
+test("getLastUndoNothingAtStart", () => {
     expect(instance.getLastUndo()).toBeUndefined();
 });
 
-test("testGetLastUndoOKOnAdd", () => {
+test("getLastUndoOKOnAdd", () => {
     instance.add(undoable);
     expect(instance.getLastUndo()).toStrictEqual(undoable);
 });
 
-test("testGetLastUndoMessageNothingOnStart", () => {
+test("getLastUndoMessageNothingOnStart", () => {
     expect(instance.getLastUndoMessage()).toBeUndefined();
 });
 
-test("getLastOrEmptyUndoMessage NothingOnStart", () => {
+test("lastOrEmptyUndoMessage NothingOnStart", () => {
     expect(instance.getLastOrEmptyUndoMessage()).toBe("");
 });
 
-test("testGetLastRedoMessageNothingOnStart", () => {
+test("getLastRedoMessageNothingOnStart", () => {
     expect(instance.getLastRedoMessage()).toBeUndefined();
 });
 
-test("getLastOrEmptyRedoMessage NothingOnStart", () => {
+test("lastOrEmptyRedoMessage NothingOnStart", () => {
     expect(instance.getLastOrEmptyRedoMessage()).toBe("");
 });
 
-test("testGetLastUndoMessageOK", () => {
+test("getLastUndoMessageOK", () => {
     instance.add(undoable);
     expect(instance.getLastUndoMessage()).toBe("undoredomsg");
 });
 
-test("getLastOrEmptyUndoMessage OK", () => {
+test("lastOrEmptyUndoMessage OK", () => {
     instance.add(undoable);
     expect(instance.getLastOrEmptyUndoMessage()).toBe("undoredomsg");
 });
 
-test("testGetLastRedoMessageOK", () => {
+test("getLastRedoMessageOK", () => {
     instance.add(undoable);
     instance.undo();
     expect(instance.getLastRedoMessage()).toBe("undoredomsg");
 });
 
-test("getLastOrEmptyRedoMessage OK", () => {
+test("lastOrEmptyRedoMessage OK", () => {
     instance.add(undoable);
     instance.undo();
     expect(instance.getLastOrEmptyRedoMessage()).toBe("undoredomsg");
 });
 
-test("testClear", () => {
+test("clear", () => {
     instance.add(undoable);
     instance.add(undoable2);
     instance.undo();
@@ -243,7 +243,7 @@ test("testClear", () => {
     expect(instance.getLastUndo()).toBeUndefined();
 });
 
-test("testUndosAdded", () => {
+test("undos Added", () => {
     const undos = new Array<Undoable | undefined>();
     const undosStream = instance.undosObservable().subscribe((e: Undoable | undefined) => undos.push(e));
 
@@ -254,7 +254,7 @@ test("testUndosAdded", () => {
     expect(undos[0]).toStrictEqual(undoable);
 });
 
-test("testUndoRedoAdded", () => {
+test("undo Redo Added", () => {
     const undos = new Array<Undoable | undefined>();
     const redos = new Array<Undoable | undefined>();
     const undosStream = instance.undosObservable().subscribe((e: Undoable | undefined) => undos.push(e));

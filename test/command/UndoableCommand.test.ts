@@ -33,11 +33,11 @@ beforeEach(() => {
     cmd = new ExampleUndoableCmd();
 });
 
-test("testGetUndoName", () => {
+test("get UndoName", () => {
     expect(cmd.getUndoName()).toBe("ExampleUndoableCmd");
 });
 
-test("testGetVisualSnapshot", () => {
+test("get VisualSnapshot", () => {
     expect(cmd.getVisualSnapshot()).toBeUndefined();
 });
 

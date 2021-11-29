@@ -25,85 +25,85 @@ beforeEach(() => {
     cmd = new TransferArrayItem<number>(array1, array2, 0, 1, "Transfer array item");
 });
 
-test("testCanDo", () => {
+test("canDo", () => {
     expect(cmd.canExecute()).toBeTruthy();
 });
 
-test("testCannotDoSrcIndex1TooLow", () => {
+test("cannot Do Src Index 1 Too Low", () => {
     cmd = new TransferArrayItem<number>(array1, array2, -1, 0, "Transfer array item");
     expect(cmd.canExecute()).toBeFalsy();
 });
 
-test("testCannotDoSrcIndex1TooHigh", () => {
+test("cannot Do Src Index 1 Too High", () => {
     cmd = new TransferArrayItem<number>(array1, array2, 5, 0, "Transfer array item");
     expect(cmd.canExecute()).toBeFalsy();
 });
 
-test("testCannotDoSrcIndex2TooLow", () => {
+test("cannot Do Src Index 2 Too Low", () => {
     cmd = new TransferArrayItem<number>(array1, array2, 0, -1, "Transfer array item");
     expect(cmd.canExecute()).toBeFalsy();
 });
 
-test("testCannotDoSrcIndex2TooHigh", () => {
+test("cannot Do Src Index 2 Too High", () => {
     cmd = new TransferArrayItem<number>(array1, array2, 0, 3, "Transfer array item");
     expect(cmd.canExecute()).toBeFalsy();
 });
 
-test("testGetUndoName", () => {
+test("get UndoName", () => {
     expect(cmd.getUndoName()).toBe("Transfer array item");
 });
 
-test("testRedo", () => {
+test("redo", () => {
     cmd.redo();
     expect(array2[1]).toBe(0);
     expect(array1[0]).toBe(1);
 });
 
-test("testExecution", async () => {
+test("execution", async () => {
     await cmd.execute();
     expect(array2[1]).toBe(0);
     expect(array1[0]).toBe(1);
 });
 
-test("testUndo", async () => {
+test("undo", async () => {
     await cmd.execute();
     cmd.undo();
     expect(array2[1]).toBe(4);
     expect(array1[0]).toBe(0);
 });
 
-test("testGetSrcArray", () => {
+test("get SrcArray", () => {
     expect(cmd.srcArray).toStrictEqual(array1);
 });
 
-test("testGetTgtArray", () => {
+test("get TgtArray", () => {
     expect(cmd.tgtArray).toStrictEqual(array2);
 });
 
-test("testSetSrcArray", () => {
+test("set SrcArray", () => {
     cmd.srcArray = array2;
     expect(cmd.srcArray).toStrictEqual(array2);
 });
 
-test("testSetTgtArray", () => {
+test("set TgtArray", () => {
     cmd.tgtArray = array1;
     expect(cmd.tgtArray).toStrictEqual(array1);
 });
 
-test("testGetSrcIndex", () => {
+test("get SrcIndex", () => {
     expect(cmd.srcIndex).toBe(0);
 });
 
-test("testGetTgtIndex", () => {
+test("get TgtIndex", () => {
     expect(cmd.tgtIndex).toBe(1);
 });
 
-test("testSetSrcIndex", () => {
+test("set SrcIndex", () => {
     cmd.srcIndex = 2;
     expect(cmd.srcIndex).toBe(2);
 });
 
-test("testSetTgtIndex", () => {
+test("set TgtIndex", () => {
     cmd.tgtIndex = 2;
     expect(cmd.tgtIndex).toBe(2);
 });

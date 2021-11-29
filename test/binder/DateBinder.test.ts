@@ -39,7 +39,7 @@ afterEach(() => {
     bindings.clear();
 });
 
-test("testCommandExecutedOnSingleDateFunction", () => {
+test("commandExecutedOnSingleDateFunction", () => {
     binding = bindings.dateBinder()
         .toProduce(_i => cmd)
         .on(widget1)
@@ -50,7 +50,7 @@ test("testCommandExecutedOnSingleDateFunction", () => {
     expect(cmd.exec).toBe(1);
 });
 
-test("testCommandExecutedOnTwoDates", () => {
+test("commandExecutedOnTwoDates", () => {
     binding = bindings.dateBinder()
         .on(widget1, widget2)
         .toProduce(_i => new StubCmd(true))
@@ -63,7 +63,7 @@ test("testCommandExecutedOnTwoDates", () => {
     expect(ctx.commands).toHaveLength(2);
 });
 
-test("testInit1Executed", () => {
+test("init1Executed", () => {
     binding = bindings.dateBinder()
         .on(widget1)
         .toProduce(_i => cmd)
@@ -78,7 +78,7 @@ test("testInit1Executed", () => {
     expect(cmd.exec).toBe(11);
 });
 
-test("testCheckFalse", () => {
+test("checkFalse", () => {
     binding = bindings.dateBinder()
         .toProduce(_i => cmd)
         .on(widget1)

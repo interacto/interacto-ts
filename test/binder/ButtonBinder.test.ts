@@ -38,7 +38,7 @@ afterEach(() => {
     bindings.clear();
 });
 
-test("testCommandExecutedOnSingleButtonConsumer", () => {
+test("commandExecutedOnSingleButtonConsumer", () => {
     binding = bindings.buttonBinder()
         .toProduce(() => cmd)
         .on(button1)
@@ -51,7 +51,7 @@ test("testCommandExecutedOnSingleButtonConsumer", () => {
     expect(ctx.commands[0]).toBe(cmd);
 });
 
-test("testCommandExecutedOnSingleButtonConsumerConsumer", () => {
+test("commandExecutedOnSingleButtonConsumerConsumer", () => {
     binding = bindings.buttonBinder()
         .on(button1)
         .toProduce(_i => cmd)
@@ -62,7 +62,7 @@ test("testCommandExecutedOnSingleButtonConsumerConsumer", () => {
     expect(cmd.exec).toBe(1);
 });
 
-test("testCommandExecutedOnTwoButtons", () => {
+test("commandExecutedOnTwoButtons", () => {
     binding = bindings.buttonBinder()
         .toProduce(() => new StubCmd(true))
         .on(button1, button2)
@@ -193,7 +193,7 @@ test("check ifhadnoeffects", () => {
     expect(ifEffects).not.toHaveBeenCalled();
 });
 
-test("testInit1Executed", () => {
+test("init1Executed", () => {
     binding = bindings.buttonBinder()
         .on(button1)
         .toProduce(() => cmd)
@@ -208,7 +208,7 @@ test("testInit1Executed", () => {
     expect(cmd.exec).toBe(11);
 });
 
-test("testInit2Executed", () => {
+test("init2Executed", () => {
     binding = bindings.buttonBinder()
         .toProduce(_i => cmd)
         .first((c, _i) => {
@@ -223,7 +223,7 @@ test("testInit2Executed", () => {
     expect(cmd.exec).toBe(11);
 });
 
-test("testCheckFalse", () => {
+test("checkFalse", () => {
     binding = bindings.buttonBinder()
         .toProduce(_i => cmd)
         .when(_i => false)
@@ -236,7 +236,7 @@ test("testCheckFalse", () => {
     expect(cmd.exec).toBe(0);
 });
 
-test("testCommandExecutedOnTwoButtonsSame", () => {
+test("commandExecutedOnTwoButtonsSame", () => {
     let cpt = 0;
     binding = bindings.buttonBinder()
         .on(button1, button1)
@@ -253,7 +253,7 @@ test("testCommandExecutedOnTwoButtonsSame", () => {
     expect(cpt).toBe(1);
 });
 
-test("testBuilderCloned", () => {
+test("builderCloned", () => {
     const binder = bindings.buttonBinder();
 
     expect(binder).not.toBe(bindings.buttonBinder());
@@ -267,7 +267,7 @@ test("testBuilderCloned", () => {
     expect(binder).not.toBe(bindings.buttonBinder().log(LogLevel.command));
 });
 
-test("testClonedBuildersSameWidgetCmdOK", () => {
+test("clonedBuildersSameWidgetCmdOK", () => {
     let cpt1 = 0;
     let cpt2 = 0;
     const binder = bindings.buttonBinder()
@@ -291,7 +291,7 @@ test("testClonedBuildersSameWidgetCmdOK", () => {
     expect(cpt2).toBe(1);
 });
 
-test("testClonedBuildersDiffWidgetsCmdOK", () => {
+test("clonedBuildersDiffWidgetsCmdOK", () => {
     let cpt1 = 0;
     let cpt2 = 0;
     const binder = bindings.buttonBinder()

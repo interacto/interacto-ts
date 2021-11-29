@@ -37,7 +37,7 @@ afterEach(() => {
     bindings.clear();
 });
 
-test("testCommandExecutedOnSingleComboFunction", () => {
+test("commandExecutedOnSingleComboFunction", () => {
     binding = bindings.comboBoxBinder()
         .toProduce(_i => cmd)
         .on(widget1)
@@ -48,7 +48,7 @@ test("testCommandExecutedOnSingleComboFunction", () => {
     expect(cmd.exec).toBe(1);
 });
 
-test("testCommandExecutedOnTwoCombos", () => {
+test("commandExecutedOnTwoCombos", () => {
     binding = bindings.comboBoxBinder()
         .on(widget1, widget2)
         .toProduce(_i => new StubCmd(true))
@@ -61,7 +61,7 @@ test("testCommandExecutedOnTwoCombos", () => {
     expect(ctx.commands).toHaveLength(2);
 });
 
-test("testInit1Executed", () => {
+test("init1Executed", () => {
     binding = bindings.comboBoxBinder()
         .on(widget1)
         .toProduce(_i => cmd)
@@ -76,7 +76,7 @@ test("testInit1Executed", () => {
     expect(cmd.exec).toBe(11);
 });
 
-test("testCheckFalse", () => {
+test("checkFalse", () => {
     binding = bindings.comboBoxBinder()
         .toProduce(_i => cmd)
         .on(widget1)

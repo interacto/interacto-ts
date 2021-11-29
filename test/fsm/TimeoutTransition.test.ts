@@ -47,18 +47,18 @@ afterEach(() => {
     jest.clearAllMocks();
 });
 
-test("testIsGuardOKAfterTimeout", () => {
+test("isGuardOKAfterTimeout", () => {
     evt.startTimeout();
     jest.runOnlyPendingTimers();
     expect(evt.isGuardOK(undefined)).toBeTruthy();
 });
 
-test("testIsGuardKOBeforeTimeout", () => {
+test("isGuardKOBeforeTimeout", () => {
     evt.startTimeout();
     expect(evt.isGuardOK(undefined)).toBeFalsy();
 });
 
-test("testacceptOKAfterTimeout", () => {
+test("oKAfterTimeout", () => {
     evt.startTimeout();
     jest.advanceTimersByTime(499);
     expect(fsm.onTimeout).not.toHaveBeenCalled();
@@ -67,12 +67,12 @@ test("testacceptOKAfterTimeout", () => {
     expect(evt.accept(undefined)).toBeTruthy();
 });
 
-test("testacceptKOBeforeTimeout", () => {
+test("kOBeforeTimeout", () => {
     evt.startTimeout();
     expect(evt.accept(undefined)).toBeFalsy();
 });
 
-test("testStopTimeout", () => {
+test("stopTimeout", () => {
     evt.startTimeout();
     evt.stopTimeout();
     jest.runOnlyPendingTimers();
@@ -102,15 +102,15 @@ test("stop when not started", () => {
     expect(evt.isGuardOK(undefined)).toBeFalsy();
 });
 
-test("testGetAcceptEventsEmpty", () => {
+test("getAcceptEventsEmpty", () => {
     expect(evt.getAcceptedEvents()).toHaveLength(0);
 });
 
-test("testExecuteWithoutTimeout", () => {
+test("executeWithoutTimeout", () => {
     expect(evt.execute(undefined)).toBeUndefined();
 });
 
-test("testExecuteWithTimeout", () => {
+test("executeWithTimeout", () => {
     evt.startTimeout();
     setTimeout(() => {
     }, 100);
@@ -118,7 +118,7 @@ test("testExecuteWithTimeout", () => {
     expect(evt.execute(undefined)).toStrictEqual(tgt);
 });
 
-test("execute and guard not OK", () => {
+test("oK", () => {
     evt = new class extends TimeoutTransition {
         public constructor() {
             super(src, tgt, () => 50);
@@ -177,13 +177,13 @@ test("fsm throws not an error in thread with no logger", () => {
     expect(logger.logInteractionErr).not.toHaveBeenCalled();
 });
 
-test("testExecuteCallFSMTimeout", () => {
+test("executeCallFSMTimeout", () => {
     evt.startTimeout();
     jest.runOnlyPendingTimers();
     expect(fsm.onTimeout).toHaveBeenCalledTimes(1);
 });
 
-test("testExecuteCallsStatesMethods", () => {
+test("executeCallsStatesMethods", () => {
     evt.startTimeout();
     jest.runOnlyPendingTimers();
     evt.execute(undefined);

@@ -32,126 +32,126 @@ test("cando default", () => {
     expect(command.canExecute()).toBeTruthy();
 });
 
-test("testCommandStatusAfterCreation", () => {
+test("command Status After Creation", () => {
     expect(cmd.getStatus()).toStrictEqual(CmdStatus.created);
 });
 
-test("testCommandStatusAfterFlush", () => {
+test("command Status After Flush", () => {
     cmd.flush();
     expect(cmd.getStatus()).toStrictEqual(CmdStatus.flushed);
 });
 
-test("testCommandCannotDoItWhenFlushed", () => {
+test("command Cannot Do It When Flushed", () => {
     cmd.flush();
     expect(cmd.execute()).toBeFalsy();
 });
 
-test("testCommandCannotDoItWhenDone", () => {
+test("command Cannot Do It When Done", () => {
     cmd.done();
     expect(cmd.execute()).toBeFalsy();
 });
 
-test("testCommandCannotDoItWhenCancelled", () => {
+test("command Cannot Do It When Cancelled", () => {
     cmd.cancel();
     expect(cmd.execute()).toBeFalsy();
 });
 
-test("testCommandCannotDoItWhenCannotDoAndCreated", () => {
+test("command Cannot Do It When Cannot Do And Created", () => {
     cmd.candoValue = false;
     expect(cmd.execute()).toBeFalsy();
 });
 
-test("testCommandCanDoItWhenCanDo", () => {
+test("command Can Do It When Can Do", () => {
     expect(cmd.execute()).toBeTruthy();
 });
 
-test("testCommandIsExecutedWhenDoIt", async () => {
+test("command Is Executed When Do It", async () => {
     await cmd.execute();
     expect(cmd.getStatus()).toStrictEqual(CmdStatus.executed);
 });
 
-test("testCommandHadEffectWhenDone", () => {
+test("command Had Effect When Done", () => {
     cmd.done();
     expect(cmd.hadEffect()).toBeTruthy();
 });
 
-test("testCommandHadEffectWhenNotDoneAndCreated", () => {
+test("command HadEffect When Not Done And Created", () => {
     expect(cmd.hadEffect()).toBeFalsy();
 });
 
-test("testCommandHadEffectWhenNotDoneAndCancelled", () => {
+test("command HadEffect When Not Done And Cancelled", () => {
     cmd.cancel();
     expect(cmd.hadEffect()).toBeFalsy();
 });
 
-test("testCommandHadEffectWhenNotDoneAndFlushed", () => {
+test("command HadEffect When Not Done And Flushed", () => {
     cmd.flush();
     expect(cmd.hadEffect()).toBeFalsy();
 });
 
-test("testCommandHadEffectWhenNotDoneAndExecuted", async () => {
+test("command HadEffect When Not Done And Executed", async () => {
     cmd.candoValue = true;
     await cmd.execute();
     expect(cmd.hadEffect()).toBeFalsy();
 });
 
-test("testCommandNotDoneWhenFlushed", () => {
+test("command Not Done When Flushed", () => {
     cmd.flush();
     cmd.done();
     expect(cmd.getStatus()).toStrictEqual(CmdStatus.flushed);
 });
 
-test("testCommandNotDoneWhenCancelled", () => {
+test("command Not Done When Cancelled", () => {
     cmd.cancel();
     cmd.done();
     expect(cmd.getStatus()).toStrictEqual(CmdStatus.cancelled);
 });
 
-test("testCommandDoneWhenCreated", () => {
+test("command Done When Created", () => {
     cmd.done();
     expect(cmd.getStatus()).toStrictEqual(CmdStatus.done);
 });
 
-test("testCommandDoneWhenExecuted", async () => {
+test("command Done When Executed", async () => {
     await cmd.execute();
     cmd.done();
     expect(cmd.getStatus()).toStrictEqual(CmdStatus.done);
 });
 
-test("testIsDoneWhenCreated", () => {
+test("isDone When Created", () => {
     expect(cmd.isDone()).toBeFalsy();
 });
 
-test("testIsDoneWhenCancelled", () => {
+test("isDone When Cancelled", () => {
     cmd.cancel();
     expect(cmd.isDone()).toBeFalsy();
 });
 
-test("testIsDoneWhenFlushed", () => {
+test("isDone When Flushed", () => {
     cmd.flush();
     expect(cmd.isDone()).toBeFalsy();
 });
 
-test("testIsDoneWhenDone", () => {
+test("isDone When Done", () => {
     cmd.done();
     expect(cmd.isDone()).toBeTruthy();
 });
 
-test("testIsDoneWhenExecuted", async () => {
+test("is Done When Executed", async () => {
     await cmd.execute();
     expect(cmd.isDone()).toBeFalsy();
 });
 
-test("testNotCancelAtStart", () => {
+test("not Cancel At Start", () => {
     expect(cmd.getStatus()).not.toStrictEqual(CmdStatus.cancelled);
 });
 
-test("testCancel", () => {
+test("cancel", () => {
     cmd.cancel();
     expect(cmd.getStatus()).toStrictEqual(CmdStatus.cancelled);
 });
 
-test("testExecutedTwoTimes", async () => {
+test("executed Two Times", async () => {
     await cmd.execute();
     await cmd.execute();
     expect(cmd.exec).toBe(2);

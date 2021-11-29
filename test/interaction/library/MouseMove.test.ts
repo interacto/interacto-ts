@@ -67,7 +67,7 @@ test("other events don't trigger the interaction.", () => {
     expect(handler.fsmStarts).not.toHaveBeenCalled();
 });
 
-test("testMouseEventData", () => {
+test("mouse Event Data", () => {
     const data = new PointDataImpl();
     const expected = new PointDataImpl();
     expected.copy({
@@ -100,7 +100,7 @@ test("testMouseEventData", () => {
     expect(data).toStrictEqual(expected);
 });
 
-test("testMousemoveOnWidgetData", () => {
+test("mouse move On Widget Data", () => {
     const data = new PointDataImpl();
 
     handler.fsmStops = jest.fn(() => {

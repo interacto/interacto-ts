@@ -43,7 +43,7 @@ beforeEach(() => {
     transition = new WTransition();
 });
 
-test("testSetWidget", () => {
+test("set Widget", () => {
     transition.setWidget("foooo");
     expect(transition.getWidget()).toBe("foooo");
 });

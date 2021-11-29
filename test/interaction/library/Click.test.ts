@@ -66,7 +66,7 @@ test("specific mouse button checking OK", () => {
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
 });
 
-test("testClickData", () => {
+test("click Data", () => {
     const data = new PointDataImpl();
     const expected = new PointDataImpl();
     expected.copy({
@@ -99,7 +99,7 @@ test("testClickData", () => {
     expect(data).toStrictEqual(expected);
 });
 
-test("testClickOnWidgetData", () => {
+test("click On Widget Data", () => {
     const data = new PointDataImpl();
 
     handler.fsmStops = jest.fn(() => {

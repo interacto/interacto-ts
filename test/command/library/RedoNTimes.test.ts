@@ -28,7 +28,7 @@ describe("base redo testing", () => {
         cmd = new RedoNTimes(collector, 2);
     });
 
-    test("testCannotDo", () => {
+    test("cannotDo", () => {
         collector.getRedo.mockReturnValue(new Array<Undoable>());
         expect(cmd.canExecute()).toBeFalsy();
     });
@@ -45,17 +45,17 @@ describe("base redo testing", () => {
         });
 
 
-        test("testCanDo", () => {
+        test("canDo", () => {
             expect(cmd.canExecute()).toBeTruthy();
         });
 
-        test("testDo", () => {
+        test("do", () => {
             // eslint-disable-next-line @typescript-eslint/no-floating-promises
             cmd.execute();
             expect(collector.redo).toHaveBeenCalledTimes(2);
         });
 
-        test("testHadEffects", () => {
+        test("hadEffects", () => {
             // eslint-disable-next-line @typescript-eslint/no-floating-promises
             cmd.execute();
             cmd.done();

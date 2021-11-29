@@ -43,28 +43,28 @@ beforeEach(() => {
     fsm.addState(subS);
 });
 
-test("testInner", () => {
+test("inner", () => {
     expect(fsm.inner).toBeTruthy();
     expect(mainfsm.inner).toBeFalsy();
 });
 
-test("testAcceptFirstEvent", () => {
+test("acceptFirstEvent", () => {
     expect(tr.accept(createMouseEvent("click", document.createElement("button")))).toBeTruthy();
 });
 
-test("testNotAcceptFirstEvent", () => {
+test("notAcceptFirstEvent", () => {
     expect(tr.accept(createMouseEvent("mousemove", document.createElement("button")))).toBeFalsy();
 });
 
-test("testGuardOKFirstEvent", () => {
+test("guardOKFirstEvent", () => {
     expect(tr.isGuardOK(createMouseEvent("click", document.createElement("button")))).toBeTruthy();
 });
 
-test("testGuardKOFirstEvent", () => {
+test("guardKOFirstEvent", () => {
     expect(tr.isGuardOK(createMouseEvent("mousemove", document.createElement("button")))).toBeFalsy();
 });
 
-test("testExecuteFirstEventReturnsSubState", () => {
+test("executeFirstEventReturnsSubState", () => {
     const state: InputState | undefined = tr.execute(createMouseEvent("click", document.createElement("button")));
     expect(state).toBeDefined();
     expect(state).toStrictEqual(subS);
@@ -75,7 +75,7 @@ test("execute no transition", () => {
     expect(state).toBeUndefined();
 });
 
-test("testExecuteFirstEventKO", () => {
+test("executeFirstEventKO", () => {
     const state: InputState | undefined = tr.execute(createMouseEvent("mousemove", document.createElement("button")));
     expect(state).toBeUndefined();
 });
@@ -104,13 +104,13 @@ test("get accepted events when nothing to return", () => {
     expect([...evts]).toHaveLength(0);
 });
 
-test("testExecuteExitSrcState", () => {
+test("executeExitSrcState", () => {
     jest.spyOn(s1, "exit");
     tr.execute(createMouseEvent("click", document.createElement("button")));
     expect(s1.exit).toHaveBeenCalledTimes(1);
 });
 
-test("testExecuteEnterTgtState", () => {
+test("executeEnterTgtState", () => {
     jest.spyOn(s2, "enter");
     tr.execute(createMouseEvent("click", document.createElement("button")));
     expect(s2.enter).toHaveBeenCalledTimes(1);

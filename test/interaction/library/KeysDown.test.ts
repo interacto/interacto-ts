@@ -38,14 +38,14 @@ test("build fsm twice does not work", () => {
     expect(interaction.fsm.states).toHaveLength(count);
 });
 
-test("testKeyPressExecution", () => {
+test("keyPress Execution", () => {
     interaction.registerToNodes([text]);
     robot(text).keydown({"code": "A"});
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).not.toHaveBeenCalled();
 });
 
-test("testKeyPressData", () => {
+test("keyPress Data", () => {
     interaction.registerToNodes([text]);
 
     const newHandler = mock<FSMHandler>();
@@ -60,7 +60,7 @@ test("testKeyPressData", () => {
     expect(data.keys[0].code).toBe("A");
 });
 
-test("testTwoKeyPressExecution", () => {
+test("two KeyPress Execution", () => {
     interaction.registerToNodes([text]);
     robot(text)
         .keydown({"code": "A"})
@@ -70,7 +70,7 @@ test("testTwoKeyPressExecution", () => {
     expect(handler.fsmStops).not.toHaveBeenCalled();
 });
 
-test("testTwoKeyPressData", () => {
+test("two KeyPress Data", () => {
     interaction.registerToNodes([text]);
 
     const newHandler = mock<FSMHandler>();
@@ -86,7 +86,7 @@ test("testTwoKeyPressData", () => {
     expect(data.keys[1].code).toBe("B");
 });
 
-test("testTwoKeyPressReleaseExecution", () => {
+test("two KeyPress Release Execution", () => {
     interaction.registerToNodes([text]);
     robot(text)
         .keydown({"code": "A"})
@@ -98,7 +98,7 @@ test("testTwoKeyPressReleaseExecution", () => {
 });
 
 
-test("testTwoKeyPressReleaseData", () => {
+test("two KeyPress Release Data", () => {
     interaction.registerToNodes([text]);
 
     robot(text)
@@ -114,7 +114,7 @@ test("testTwoKeyPressReleaseData", () => {
     expect(data.keys[0].code).toBe("A");
 });
 
-test("testTwoKeyPressReleaseRecycle", () => {
+test("two KeyPress Release Recycle", () => {
     interaction.registerToNodes([text]);
     robot(text)
         .keydown({"code": "A"})
@@ -124,7 +124,7 @@ test("testTwoKeyPressReleaseRecycle", () => {
     expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
 });
 
-test("testTwoKeyPressTwoReleasesExecution", () => {
+test("two KeyPress Two Releases Execution", () => {
     interaction.registerToNodes([text]);
     robot(text)
         .keydown({"code": "A"})

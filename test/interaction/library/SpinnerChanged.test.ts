@@ -48,7 +48,7 @@ test("build fsm twice does not work", () => {
     expect(interaction.fsm.states).toHaveLength(count);
 });
 
-test("testSpinnerChangedGoodState", () => {
+test("spinnerChangedGoodState", () => {
     interaction.registerToNodes([spinner]);
     robot(spinner).input();
     jest.runAllTimers();
@@ -57,7 +57,7 @@ test("testSpinnerChangedGoodState", () => {
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
 });
 
-test("testSpinnerChange2TimesGoodState", () => {
+test("spinnerChange2TimesGoodState", () => {
     interaction.registerToNodes([spinner]);
     robot(spinner)
         .input()
@@ -68,7 +68,7 @@ test("testSpinnerChange2TimesGoodState", () => {
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
 });
 
-test("testSpinnerChangedGoodStateWithTimeGap", () => {
+test("spinnerChangedGoodStateWithTimeGap", () => {
     SpinnerChangedFSM.setTimeGap(50);
     interaction.registerToNodes([spinner]);
     robot(spinner).input();
@@ -78,7 +78,7 @@ test("testSpinnerChangedGoodStateWithTimeGap", () => {
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
 });
 
-test("testSpinnerChangeTwoTimesWith500GoodState", () => {
+test("spinnerChangeTwoTimesWith500GoodState", () => {
     interaction.registerToNodes([spinner]);
     robot(spinner)
         .input()
@@ -90,7 +90,7 @@ test("testSpinnerChangeTwoTimesWith500GoodState", () => {
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
 });
 
-test("testNoActionWhenNotRegistered", () => {
+test("noActionWhenNotRegistered", () => {
     robot(spinner).input();
     jest.runAllTimers();
     expect(handler.fsmStops).not.toHaveBeenCalled();

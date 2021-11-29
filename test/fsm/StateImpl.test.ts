@@ -24,10 +24,10 @@ beforeEach(() => {
     state = new StdState(fsm, "s1");
 });
 
-test("testFSM", () => {
+test("fSM", () => {
     expect(state.fsm).toStrictEqual(fsm);
 });
 
-test("testName", () => {
+test("name", () => {
     expect(state.name).toBe("s1");
 });

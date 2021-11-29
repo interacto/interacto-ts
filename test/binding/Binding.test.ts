@@ -91,19 +91,19 @@ describe("nominal cases", () => {
         expect(logger.logBindingErr).not.toHaveBeenCalled();
     });
 
-    test("testLinkDeActivation", () => {
+    test("de activation", () => {
         binding.activated = true;
         binding.activated = false;
         expect(binding.activated).toBeFalsy();
     });
 
-    test("testLinkActivation", () => {
+    test("link activation", () => {
         binding.activated = false;
         binding.activated = true;
         expect(binding.activated).toBeTruthy();
     });
 
-    test("testExecuteNope", () => {
+    test("execute nope", () => {
         expect(binding.conditionRespected).toBeFalsy();
     });
 
@@ -111,41 +111,41 @@ describe("nominal cases", () => {
         expect(binding.name).toBe("InteractionStub");
     });
 
-    test("testExecuteOK", () => {
+    test("execute Ok", () => {
         binding = new BindingStub(history, logger, true, false, () => new StubCmd(), new InteractionStub(new FSMImpl()));
         expect(binding.continuousCmdExecution).toBeTruthy();
     });
 
-    test("testIsInteractionMustBeCancelled", () => {
+    test("is interaction must be cancelled", () => {
         expect(binding.strictStart).toBeFalsy();
     });
 
-    test("testNotRunning", () => {
+    test("not running", () => {
         expect(binding.running).toBeFalsy();
     });
 
-    test("testInteractionCancelsWhenNotStarted", () => {
+    test("interaction cancels when not started", () => {
         binding.fsmCancels();
         expect(binding.command).toBeUndefined();
     });
 
-    test("testInteractionUpdatesWhenNotStarted", () => {
+    test("interaction updates when not started", () => {
         binding.fsmUpdates();
         expect(binding.command).toBeUndefined();
     });
 
-    test("testInteractionStopsWhenNotStarted", () => {
+    test("interaction stops when not started", () => {
         binding.fsmStops();
         expect(binding.command).toBeUndefined();
     });
 
-    test("testInteractionStartsWhenNoCorrectInteractionNotActivated", () => {
+    test("interactionStartsWhenNo correct interaction not activated", () => {
         binding.activated = false;
         binding.fsmStarts();
         expect(binding.command).toBeUndefined();
     });
 
-    test("testInteractionStartsWhenNoCorrectInteractionActivated", () => {
+    test("interactionStartsWhen no correct interaction activated", () => {
         binding.conditionRespected = false;
         binding.fsmStarts();
         expect(binding.command).toBeUndefined();
@@ -166,18 +166,18 @@ describe("nominal cases", () => {
         }).toThrow(CancelFSMException);
     });
 
-    test("testInteractionStartsOk", () => {
+    test("interaction starts ok", () => {
         binding.conditionRespected = true;
         binding.fsmStarts();
         expect(binding.command).toBeDefined();
     });
 
-    test("testCounters", () => {
+    test("counters", () => {
         expect(binding.timesEnded).toBe(0);
         expect(binding.timesCancelled).toBe(0);
     });
 
-    test("testCounterEndedOnce", () => {
+    test("counter ended once", () => {
         binding.conditionRespected = true;
         binding.fsmStarts();
         binding.fsmStops();
@@ -185,7 +185,7 @@ describe("nominal cases", () => {
         expect(binding.timesCancelled).toBe(0);
     });
 
-    test("testCounterEndedTwice", () => {
+    test("counter ended twice", () => {
         binding.conditionRespected = true;
         binding.fsmStarts();
         binding.fsmStops();
@@ -195,7 +195,7 @@ describe("nominal cases", () => {
         expect(binding.timesCancelled).toBe(0);
     });
 
-    test("testCounterCancelledOnce", () => {
+    test("counter cancelled once", () => {
         binding.conditionRespected = true;
         binding.fsmStarts();
         binding.fsmCancels();
@@ -203,7 +203,7 @@ describe("nominal cases", () => {
         expect(binding.timesEnded).toBe(0);
     });
 
-    test("testCounterCancelledTwice", () => {
+    test("counter cancelled twice", () => {
         binding.conditionRespected = true;
         binding.fsmStarts();
         binding.fsmCancels();

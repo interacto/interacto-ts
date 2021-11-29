@@ -30,15 +30,15 @@ beforeEach(() => {
     tr = new StubTransitionOK(state1, state2);
 });
 
-test("testGoodSrc", () => {
+test("goodSrc", () => {
     expect(tr.src).toStrictEqual(state1);
 });
 
-test("testGoodTgt", () => {
+test("goodTgt", () => {
     expect(tr.tgt).toStrictEqual(state2);
 });
 
-test("testSrcStateTransitionAdded", () => {
+test("srcStateTransitionAdded", () => {
     expect(state1.transitions).toHaveLength(1);
     expect(state1.transitions[0]).toStrictEqual(tr);
 });

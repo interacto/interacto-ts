@@ -52,7 +52,7 @@ test("other event don't trigger the interaction.", () => {
     expect(handler.fsmStarts).not.toHaveBeenCalled();
 });
 
-test("testWheelData", () => {
+test("wheel Data", () => {
     const data = new WheelDataImpl();
     const expected = new WheelDataImpl();
     expected.copy({
@@ -89,7 +89,7 @@ test("testWheelData", () => {
     expect(data).toStrictEqual(expected);
 });
 
-test("testWheelOnWidgetData", () => {
+test("wheel On Widget Data", () => {
     const data = new WheelDataImpl();
 
     handler.fsmStops = jest.fn(() => {

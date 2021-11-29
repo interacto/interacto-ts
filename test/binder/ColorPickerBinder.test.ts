@@ -39,7 +39,7 @@ afterEach(() => {
     bindings.clear();
 });
 
-test("testCommandExecutedOnSinglePickerFunction", () => {
+test("commandExecutedOnSinglePickerFunction", () => {
     binding = bindings.colorPickerBinder()
         .toProduce((_i: WidgetData<HTMLInputElement>) => cmd)
         .on(widget1)
@@ -50,7 +50,7 @@ test("testCommandExecutedOnSinglePickerFunction", () => {
     expect(cmd.exec).toBe(1);
 });
 
-test("testCommandExecutedOnTwoPickers", () => {
+test("commandExecutedOnTwoPickers", () => {
     binding = bindings.colorPickerBinder()
         .on(widget1, widget2)
         .toProduce((_i: WidgetData<HTMLInputElement>) => new StubCmd(true))
@@ -63,7 +63,7 @@ test("testCommandExecutedOnTwoPickers", () => {
     expect(ctx.commands).toHaveLength(2);
 });
 
-test("testInit1Executed", () => {
+test("init1Executed", () => {
     binding = bindings.colorPickerBinder()
         .on(widget1)
         .toProduce((_i: WidgetData<HTMLInputElement>) => cmd)
@@ -78,7 +78,7 @@ test("testInit1Executed", () => {
     expect(cmd.exec).toBe(11);
 });
 
-test("testCheckFalse", () => {
+test("checkFalse", () => {
     binding = bindings.colorPickerBinder()
         .toProduce((_i: WidgetData<HTMLInputElement>) => cmd)
         .on(widget1)

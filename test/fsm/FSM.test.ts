@@ -40,7 +40,7 @@ beforeEach(() => {
     handler = mock<FSMHandler>();
 });
 
-test("testInitState", () => {
+test("initState", () => {
     expect(fsm.states).toHaveLength(1);
     expect(fsm.states[0]).toBeInstanceOf(InitState);
 });
@@ -50,81 +50,81 @@ test("get init state", () => {
     expect(fsm.initState).toBe(fsm.states[0]);
 });
 
-test("testInner", () => {
+test("inner", () => {
     expect(fsm.inner).toBeFalsy();
 });
 
-test("testStartingState", () => {
+test("startingState", () => {
     expect(fsm.startingState).toStrictEqual(fsm.initState);
 });
 
-test("testCurrentStateAtStart", () => {
+test("currentStateAtStart", () => {
     expect(fsm.currentState).toStrictEqual(fsm.initState);
 });
 
-test("testAddState", () => {
+test("addState", () => {
     const state: StdState = new StdState(fsm, "s1");
     fsm.addState(state);
     expect(fsm.states).toHaveLength(2);
 });
 
 
-test("testAddRemainingNotNull", () => {
+test("addRemainingNotNull", () => {
     const evt = mock<Event>();
     fsm.addRemaningEventsToProcess(evt);
     expect(fsm.getEventsToProcess()).toStrictEqual([evt]);
 });
 
-test("testIsInner", () => {
+test("isInner", () => {
     expect(fsm.inner).toBeFalsy();
 });
 
-test("testSetInnerTrue", () => {
+test("setInnerTrue", () => {
     fsm.inner = true;
     expect(fsm.inner).toBeTruthy();
 });
 
-test("testSetInnerFalse", () => {
+test("setInnerFalse", () => {
     fsm.inner = true;
     fsm.inner = false;
     expect(fsm.inner).toBeFalsy();
 });
 
-test("testProcessRemainingEvents", () => {
+test("processRemainingEvents", () => {
     const evt = mock<Event>();
     fsm.addRemaningEventsToProcess(evt);
     fsm.onTerminating();
     expect(fsm.getEventsToProcess()).toHaveLength(0);
 });
 
-test("testOnTerminatingIfStarted", () => {
+test("onTerminatingIfStarted", () => {
     fsm.onStarting();
     fsm.addHandler(handler);
     fsm.onTerminating();
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
 });
 
-test("testOnTerminatingNotStarted", () => {
+test("onTerminatingNotStarted", () => {
     fsm.addHandler(handler);
     fsm.onTerminating();
     expect(handler.fsmStops).not.toHaveBeenCalled();
 });
 
-test("testOnUpdatingIfStarted", () => {
+test("onUpdatingIfStarted", () => {
     fsm.onStarting();
     fsm.addHandler(handler);
     fsm.onUpdating();
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
 });
 
-test("testOnUpdatingNotStarted", () => {
+test("onUpdatingNotStarted", () => {
     fsm.addHandler(handler);
     fsm.onUpdating();
     expect(handler.fsmUpdates).not.toHaveBeenCalled();
 });
 
 
-test("testOnTimeoutWithoutTimeout", () => {
+test("onTimeoutWithoutTimeout", () => {
     fsm.onTimeout();
     expect(logger.logInteractionMsg).not.toHaveBeenCalled();
 });
@@ -287,7 +287,7 @@ test("that errors caught on cancel with not an error", () => {
 });
 
 
-test("testUninstall", () => {
+test("uninstall", () => {
     const s1 = new StdState(fsm, "su");
     const subj = fsm.currentStateObservable as unknown as Subject<[OutputState, OutputState]>;
     jest.spyOn(s1, "uninstall");
@@ -302,7 +302,7 @@ test("testUninstall", () => {
     expect(s1.uninstall).toHaveBeenCalledTimes(1);
 });
 
-test("testCurrentStateChanged", () => {
+test("currentState Changed", () => {
     const changes: Array<[OutputState, OutputState]> = [];
     const newCurr = new StdState(fsm, "so");
     fsm.currentStateObservable.subscribe(e => changes.push(e));
@@ -328,11 +328,11 @@ describe("testProcessUniqueEvent", () => {
         fsm.addState(terminal);
     });
 
-    test("testGetStates", () => {
+    test("getStates", () => {
         expect(fsm.states).toStrictEqual([fsm.initState, std, terminal]);
     });
 
-    test("testFireEventTriggerFSMStartUpdate", () => {
+    test("fireEventTriggerFSMStartUpdate", () => {
         fsm.process(mock<Event>());
         expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
@@ -340,13 +340,13 @@ describe("testProcessUniqueEvent", () => {
         expect(handler.fsmStops).not.toHaveBeenCalled();
     });
 
-    test("testFire2EventsToEnd", () => {
+    test("fire2EventsToEnd", () => {
         fsm.process(mock<Event>());
         fsm.process(mock<Event>());
         expect(fsm.currentState).toBe(fsm.initState);
     });
 
-    test("testFireEventTriggerFSMUpdate", () => {
+    test("fireEventTriggerFSMUpdate", () => {
         fsm.process(mock<Event>());
         fsm.process(mock<Event>());
         expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
@@ -355,14 +355,14 @@ describe("testProcessUniqueEvent", () => {
         expect(handler.fsmCancels).not.toHaveBeenCalled();
     });
 
-    test("testFireThreeEventRestartOK", () => {
+    test("fireThreeEventRestartOK", () => {
         fsm.process(mock<Event>());
         fsm.process(mock<Event>());
         fsm.process(mock<Event>());
         expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
     });
 
-    test("testRecycleEvent", () => {
+    test("recycleEvent", () => {
         fsm.process(mock<Event>());
         fsm.addRemaningEventsToProcess(mock<Event>());
         fsm.process(mock<Event>());
@@ -372,13 +372,13 @@ describe("testProcessUniqueEvent", () => {
         expect(fsm.getEventsToProcess()).toHaveLength(0);
     });
 
-    test("testReinit", () => {
+    test("reinit", () => {
         fsm.process(mock<Event>());
         fsm.reinit();
         expect(fsm.currentState).toBe(fsm.initState);
     });
 
-    test("testFullReinit", () => {
+    test("fullReinit", () => {
         fsm.process(mock<Event>());
         fsm.addRemaningEventsToProcess(mock<Event>());
         fsm.fullReinit();
@@ -386,7 +386,7 @@ describe("testProcessUniqueEvent", () => {
         expect(fsm.currentState).toBe(fsm.initState);
     });
 
-    test("testCancelOnStart", () => {
+    test("cancelOnStart", () => {
         handler.fsmStarts = jest.fn(() => {
             throw new CancelFSMException();
         });
@@ -398,7 +398,7 @@ describe("testProcessUniqueEvent", () => {
         expect(handler.fsmUpdates).not.toHaveBeenCalled();
     });
 
-    test("testCancelOnUpdate", () => {
+    test("cancelOnUpdate", () => {
         handler.fsmUpdates = jest.fn(() => {
             throw new CancelFSMException();
         });
@@ -410,7 +410,7 @@ describe("testProcessUniqueEvent", () => {
         expect(handler.fsmStops).not.toHaveBeenCalled();
     });
 
-    test("testCancelOnEnd", () => {
+    test("cancelOnEnd", () => {
         handler.fsmStops = jest.fn(() => {
             throw new CancelFSMException();
         });
@@ -423,13 +423,13 @@ describe("testProcessUniqueEvent", () => {
         expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     });
 
-    test("testHasStartedReinit", () => {
+    test("hasStartedReinit", () => {
         fsm.process(mock<Event>());
         fsm.process(mock<Event>());
         expect(fsm.started).toBeFalsy();
     });
 
-    test("testHasStarted", () => {
+    test("hasStarted", () => {
         fsm.process(mock<Event>());
         expect(fsm.started).toBeTruthy();
     });
@@ -451,7 +451,7 @@ describe("testProcessUniqueEvent -- cancel", () => {
         fsm.addState(cancelling);
     });
 
-    test("testCancellation", () => {
+    test("cancellation", () => {
         fsm.process(mock<Event>());
         fsm.process(mock<Event>());
 
@@ -460,7 +460,7 @@ describe("testProcessUniqueEvent -- cancel", () => {
         expect(handler.fsmStops).not.toHaveBeenCalled();
     });
 
-    test("testNoRecycleEventOnCancel", () => {
+    test("noRecycleEventOnCancel", () => {
         fsm.process(mock<Event>());
         fsm.addRemaningEventsToProcess(mock<Event>());
         fsm.process(mock<Event>());
@@ -494,7 +494,7 @@ describe("testMultipleTransitionChoice", () => {
         fsm.addState(cancel);
     });
 
-    test("testNotTriggeredIfGuardKO", () => {
+    test("notTriggeredIfGuardKO", () => {
         iToS.guard = false;
         fsm.process(mock<Event>());
 
@@ -502,7 +502,7 @@ describe("testMultipleTransitionChoice", () => {
         expect(handler.fsmStarts).not.toHaveBeenCalled();
     });
 
-    test("testNotTriggeredIfNotGoodEvent", () => {
+    test("notTriggeredIfNotGoodEvent", () => {
         fsm.process(mock<Event>());
         fsm.process(mock<Event>());
 
@@ -513,7 +513,7 @@ describe("testMultipleTransitionChoice", () => {
         expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
     });
 
-    test("testTriggerGoodChoice", () => {
+    test("triggerGoodChoice", () => {
         fsm.process(mock<Event>());
         fsm.process(createKeyEvent("keydown", "a"));
 
@@ -524,14 +524,14 @@ describe("testMultipleTransitionChoice", () => {
         expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
     });
 
-    test("testHasStartedReinitOnCancel", () => {
+    test("hasStartedReinitOnCancel", () => {
         fsm.process(mock<Event>());
         fsm.process(createKeyEvent("keydown", "a"));
 
         expect(fsm.started).toBeFalsy();
     });
 
-    test("testTriggerGoodChoice2", () => {
+    test("triggerGoodChoice2", () => {
         fsm.process(mock<Event>());
         fsm.process(createMouseEvent("click", document.createElement("button")));
 
@@ -549,14 +549,14 @@ describe("testMultipleTransitionChoice", () => {
         expect(handler.fsmStarts).not.toHaveBeenCalled();
     });
 
-    test("testStartingStateNotTriggeredSoNoUpdate", () => {
+    test("startingStateNotTriggeredSoNoUpdate", () => {
         fsm.startingState = terminal;
         fsm.process(mock<Event>());
 
         expect(handler.fsmUpdates).not.toHaveBeenCalled();
     });
 
-    test("testStartingStateNotTriggeredSoNoCancel", () => {
+    test("startingStateNotTriggeredSoNoCancel", () => {
         fsm.startingState = terminal;
         fsm.process(mock<Event>());
         fsm.process(createKeyEvent("keydown", "a"));
@@ -564,7 +564,7 @@ describe("testMultipleTransitionChoice", () => {
         expect(handler.fsmCancels).not.toHaveBeenCalled();
     });
 
-    test("testStartingStateTriggeredOnTerminal", () => {
+    test("startingStateTriggeredOnTerminal", () => {
         fsm.startingState = terminal;
         fsm.process(mock<Event>());
         fsm.process(createMouseEvent("click", document.createElement("button")));
@@ -573,7 +573,7 @@ describe("testMultipleTransitionChoice", () => {
         expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     });
 
-    test("testStartingStateOnRecursion", () => {
+    test("startingStateOnRecursion", () => {
         fsm.startingState = std;
         fsm.process(mock<Event>());
         fsm.process(createTouchEvent("touchstart", 1, document.createElement("button")));
@@ -604,14 +604,14 @@ describe("testWithTimeoutTransition", () => {
         fsm.addState(terminal);
     });
 
-    test("testTimeoutChangeState", () => {
+    test("timeoutChangeState", () => {
         fsm.log = true;
         fsm.process(mock<Event>());
         jest.runOnlyPendingTimers();
         expect(fsm.currentState).toStrictEqual(std2);
     });
 
-    test("testTimeoutStoppedOnOtherTransitionWithLog", () => {
+    test("timeoutStoppedOnOtherTransitionWithLog", () => {
         fsm.log = true;
         fsm.process(mock<Event>());
         fsm.process(mock<Event>());
@@ -619,13 +619,13 @@ describe("testWithTimeoutTransition", () => {
         expect(fsm.currentState).toStrictEqual(fsm.initState);
     });
 
-    test("testTimeoutStoppedOnOtherTransition", () => {
+    test("timeoutStoppedOnOtherTransition", () => {
         fsm.process(mock<Event>());
         fsm.process(mock<Event>());
         expect(fsm.currentState).toStrictEqual(fsm.initState);
     });
 
-    test("testTimeoutChangeStateThenCancel", () => {
+    test("timeoutChangeStateThenCancel", () => {
         handler.fsmUpdates = jest.fn(() => {
             throw new CancelFSMException();
         });
@@ -667,7 +667,7 @@ describe("testWithSubFSM", () => {
         fsm.addState(subC);
     });
 
-    test("check log when processing event with sub FSM", () => {
+    test("fSM", () => {
         fsm = new FSMImpl(logger);
         mainfsm = new FSMImpl(logger);
         s1 = new StdState(mainfsm, "s1");
@@ -693,7 +693,7 @@ describe("testWithSubFSM", () => {
         expect(logger.logInteractionMsg).toHaveBeenCalledTimes(17);
     });
 
-    test("check no log when processing event with sub FSM", () => {
+    test("fSM", () => {
         fsm = new FSMImpl(logger);
         mainfsm = new FSMImpl(logger);
         s1 = new StdState(mainfsm, "s1");
@@ -707,7 +707,7 @@ describe("testWithSubFSM", () => {
         expect(logger.logInteractionMsg).not.toHaveBeenCalled();
     });
 
-    test("check log when processing event with no logger with sub FSM", () => {
+    test("fSM", () => {
         fsm.log = true;
         mainfsm.log = true;
         mainfsm.process(createMouseEvent("click", document.createElement("button")));
@@ -716,14 +716,14 @@ describe("testWithSubFSM", () => {
         expect(logger.logInteractionMsg).not.toHaveBeenCalled();
     });
 
-    test("testEntersSubGoodCurrState", () => {
+    test("entersSubGoodCurrState", () => {
         mainfsm.process(createMouseEvent("click", document.createElement("button")));
         expect(mainfsm.currentState).toStrictEqual(subS1);
         expect(fsm.currentState).toStrictEqual(subS1);
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     });
 
-    test("testNextSubStarteChangesMainCurrState", () => {
+    test("nextSubStarteChangesMainCurrState", () => {
         mainfsm.process(createMouseEvent("click", document.createElement("button")));
         mainfsm.process(createKeyEvent("keydown", "a"));
         expect(mainfsm.currentState).toStrictEqual(subS2);
@@ -731,7 +731,7 @@ describe("testWithSubFSM", () => {
         expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
     });
 
-    test("testEntersSubTerminalGoNextMain", () => {
+    test("entersSubTerminalGoNextMain", () => {
         mainfsm.process(createMouseEvent("click", document.createElement("button")));
         mainfsm.process(createKeyEvent("keydown", "a"));
         mainfsm.process(createMouseEvent("click", document.createElement("button")));
@@ -741,7 +741,7 @@ describe("testWithSubFSM", () => {
         expect(handler.fsmCancels).not.toHaveBeenCalled();
     });
 
-    test("testEntersSubCancelCancelsMain", () => {
+    test("entersSubCancelCancelsMain", () => {
         mainfsm.process(createMouseEvent("click", document.createElement("button")));
         mainfsm.process(createKeyEvent("keydown", "a"));
         mainfsm.process(createKeyEvent("keydown", "b"));
@@ -751,14 +751,14 @@ describe("testWithSubFSM", () => {
         expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
     });
 
-    test("testReinitAlsoSubFSM", () => {
+    test("reinitAlsoSubFSM", () => {
         mainfsm.process(createMouseEvent("click", document.createElement("button")));
         mainfsm.process(createKeyEvent("keydown", "a"));
         mainfsm.fullReinit();
         expect(fsm.currentState).toStrictEqual(fsm.initState);
     });
 
-    test("testExitSubGoIntoCancelling", () => {
+    test("exitSubGoIntoCancelling", () => {
         const cancel: CancellingState = new CancellingState(mainfsm, "cancel1");
         mainfsm.addState(cancel);
         mainfsm.initState.clearTransitions();
@@ -798,7 +798,7 @@ describe("testWithSubFSM", () => {
         expect(fsm.currentState).toBe(fsm.initState);
     });
 
-    test("testExitSubGoIntoTerminal", () => {
+    test("exitSubGoIntoTerminal", () => {
         const terminal: TerminalState = new TerminalState(mainfsm, "terminal1");
         mainfsm.addState(terminal);
         mainfsm.initState.clearTransitions();

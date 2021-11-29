@@ -55,7 +55,7 @@ test("the key typed in the textarea is the same key in the data of the interacti
     expect(data.code).toBe("a");
 });
 
-test("testTwoKeyPressEnds", () => {
+test("two Key Press Ends", () => {
     interaction.registerToNodes([text]);
     robot(text)
         .keyup({"code": "a"})
