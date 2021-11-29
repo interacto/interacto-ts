@@ -23,7 +23,6 @@ import {MustBeUndoableCmdError} from "./MustBeUndoableCmdError";
 import type {Binding} from "../../api/binding/Binding";
 import type {Interaction} from "../../api/interaction/Interaction";
 import type {UndoHistory} from "../../api/undo/UndoHistory";
-import type {FSMHandler} from "../../api/fsm/FSMHandler";
 import type {Logger} from "../../api/logging/Logger";
 
 /**
@@ -31,7 +30,7 @@ import type {Logger} from "../../api/logging/Logger";
  * @typeParam C - The type of the command that will produce this binding.
  * @typeParam I - The type of the interaction that will use this binding.
  */
-export class BindingImpl<C extends Command, I extends Interaction<D>, D extends InteractionData> implements Binding<C, I, D>, FSMHandler {
+export class BindingImpl<C extends Command, I extends Interaction<D>, D extends InteractionData> implements Binding<C, I, D> {
 
     protected _name: string | undefined;
 
@@ -106,7 +105,23 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
         this._activated = true;
         this.undoHistory = undoHistory;
         this.logger = logger;
-        this._interaction.fsm.addHandler(this);
+        this._interaction.fsm.addHandler({
+            "fsmStarts": () => {
+                this.fsmStarts();
+            },
+            "fsmUpdates": () => {
+                this.fsmUpdates();
+            },
+            "fsmStops": () => {
+                this.fsmStops();
+            },
+            "fsmCancels": () => {
+                this.fsmCancels();
+            },
+            "fsmError": (err: unknown) => {
+                this.fsmError(err);
+            }
+        });
         interaction.registerToNodes(widgets);
     }
 
@@ -242,14 +257,14 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
         return this._interaction.isRunning();
     }
 
-    public fsmError(err: unknown): void {
+    protected fsmError(err: unknown): void {
         if (this.logBinding) {
             this.logger.logBindingErr("", err);
         }
         this.catch(err);
     }
 
-    public fsmCancels(): void {
+    protected fsmCancels(): void {
         if (this._cmd !== undefined) {
             if (this.logBinding) {
                 this.logger.logBindingMsg("Binding cancelled");
@@ -285,7 +300,7 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
         }
     }
 
-    public fsmStarts(): void {
+    protected fsmStarts(): void {
         if (!this._activated) {
             return;
         }
@@ -316,7 +331,7 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
         }
     }
 
-    public fsmUpdates(): void {
+    protected fsmUpdates(): void {
         if (!this._activated) {
             return;
         }
@@ -371,7 +386,7 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
     }
 
 
-    public fsmStops(): void {
+    protected fsmStops(): void {
         if (!this._activated) {
             return;
         }
