@@ -89,6 +89,37 @@ test("mouse down binder", () => {
     expect(ctx.commands).toHaveLength(1);
 });
 
+test("toProduceAnon works", () => {
+    const fn = jest.fn();
+
+    bindings.mouseDownBinder()
+        .on(elt)
+        .toProduceAnon(fn)
+        .bind();
+
+    robot(elt).mousedown();
+
+    expect(ctx.commands).toHaveLength(1);
+    expect(ctx.commands[0]).toBeInstanceOf(AnonCmd);
+    expect(fn).toHaveBeenCalledTimes(1);
+});
+
+test("crash in execute using toProduceAnon", () => {
+    const fn = jest.fn();
+
+    bindings.mouseDownBinder()
+        .on(elt)
+        .toProduceAnon(() => {
+            throw new Error("errooor2");
+        })
+        .catch(fn)
+        .bind();
+    robot(elt).mousedown();
+
+    expect(fn).toHaveBeenCalledTimes(1);
+    expect(fn).toHaveBeenCalledWith(new Error("errooor2"));
+});
+
 test("crash in execute", () => {
     const fn = jest.fn();
 
@@ -223,9 +254,9 @@ test("double click binder crashes in command", () => {
 
     bindings.dbleClickBinder()
         .on(elt)
-        .toProduce(() => new AnonCmd(() => {
+        .toProduceAnon(() => {
             throw new Error("eer");
-        }))
+        })
         .catch(fn)
         .bind();
 

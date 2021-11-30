@@ -25,6 +25,7 @@ import type {Widget} from "../../api/binder/BaseBinderBuilder";
 import type {BindingsObserver} from "../../api/binding/BindingsObserver";
 import type {UndoHistory} from "../../api/undo/UndoHistory";
 import type {Logger} from "../../api/logging/Logger";
+import type {AnonCmd} from "../command/AnonCmd";
 
 /**
  * The base binding builder for bindings where commands can be updated while the user interaction is running.
@@ -180,6 +181,10 @@ export class UpdateBinder<C extends Command, I extends Interaction<D>, D extends
 
     public override toProduce<C2 extends Command>(fn: (i: D) => C2): UpdateBinder<C2, I, D> {
         return super.toProduce(fn) as UpdateBinder<C2, I, D>;
+    }
+
+    public override toProduceAnon(fn: () => void): UpdateBinder<AnonCmd, I, D> {
+        return super.toProduceAnon(fn) as UpdateBinder<AnonCmd, I, D>;
     }
 
     protected duplicate(): UpdateBinder<C, I, D> {

@@ -20,6 +20,7 @@ import type {InteractionUpdateBinder} from "./InteractionUpdateBinder";
 import type {BaseBinder} from "./BaseBinder";
 import type {Interaction} from "../interaction/Interaction";
 import type {Widget} from "./BaseBinderBuilder";
+import type {AnonCmd} from "../../impl/command/AnonCmd";
 
 /**
  * The base interface for building bindings based on non-trivial user interactions (eg DnD) with routines
@@ -43,6 +44,8 @@ export interface BaseUpdateBinder extends BaseUpdateBinderBuilder, BaseBinder {
     throttle(timeout: number): BaseUpdateBinder;
 
     toProduce<C extends Command>(fn: () => C): CmdUpdateBinder<C>;
+
+    toProduceAnon(fn: () => void): CmdUpdateBinder<AnonCmd>;
 
     usingInteraction<I extends Interaction<D>, D extends InteractionData> (fn: () => I): InteractionUpdateBinder<I, D>;
 

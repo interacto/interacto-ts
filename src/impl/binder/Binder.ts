@@ -25,6 +25,7 @@ import type {Widget} from "../../api/binder/BaseBinderBuilder";
 import {isEltRef} from "../../api/binder/BaseBinderBuilder";
 import type {UndoHistory} from "../../api/undo/UndoHistory";
 import type {Logger} from "../../api/logging/Logger";
+import {AnonCmd} from "../command/AnonCmd";
 
 /**
  * The base class that defines the concept of binding builder (called binder).
@@ -245,6 +246,12 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
         const dup = this.duplicate();
         dup.produceFn = fn as unknown as (i: D) => C;
         return dup as unknown as Binder<C2, I, D>;
+    }
+
+    public toProduceAnon(fn: () => void): Binder<AnonCmd, I, D> {
+        const dup = this.duplicate();
+        dup.produceFn = ((): AnonCmd => new AnonCmd(fn)) as unknown as (i: D) => C;
+        return dup as unknown as Binder<AnonCmd, I, D>;
     }
 
     public abstract bind(): Binding<C, I, D>;

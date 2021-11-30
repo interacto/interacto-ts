@@ -18,6 +18,7 @@ import type {BaseBinderBuilder, Widget} from "./BaseBinderBuilder";
 import type {InteractionBinder} from "./InteractionBinder";
 import type {CmdBinder} from "./CmdBinder";
 import type {Interaction} from "../interaction/Interaction";
+import type {AnonCmd} from "../../impl/command/AnonCmd";
 
 /**
  * The base interface for building bindings with routines
@@ -45,6 +46,13 @@ export interface BaseBinder extends BaseBinderBuilder {
      * @returns A clone of the current builder to chain the building configuration.
      */
     toProduce<C extends Command>(fn: () => C): CmdBinder<C>;
+
+    /**
+     * Defines the anonymous command function to run on command execution
+     * @param fn - The anonymous command.
+     * @returns A clone of the current builder to chain the building configuration.
+     */
+    toProduceAnon(fn: () => void): CmdBinder<AnonCmd>;
 
     /**
      * Defines how to create the user interaction that the binding will use to create UI commands.

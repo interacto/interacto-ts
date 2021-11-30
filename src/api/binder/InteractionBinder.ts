@@ -19,6 +19,7 @@ import type {Command} from "../command/Command";
 import type {InteractionCmdBinder} from "./InteractionCmdBinder";
 import type {Interaction} from "../interaction/Interaction";
 import type {Widget} from "./BaseBinderBuilder";
+import type {AnonCmd} from "../../impl/command/AnonCmd";
 
 /**
  * The binder API that already knows the type of user interaction the bindings will use.
@@ -47,4 +48,6 @@ export interface InteractionBinder<I extends Interaction<D>, D extends Interacti
     name(name: string): InteractionBinder<I, D>;
 
     toProduce<C extends Command>(fn: (i: D) => C): InteractionCmdBinder<C, I, D>;
+
+    toProduceAnon(fn: () => void): InteractionCmdBinder<AnonCmd, I, D>;
 }

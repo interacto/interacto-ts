@@ -18,6 +18,7 @@ import type {Command} from "../command/Command";
 import type {KeyInteractionCmdBinder} from "./KeyInteractionCmdBinder";
 import type {Interaction} from "../interaction/Interaction";
 import type {Widget} from "./BaseBinderBuilder";
+import type {AnonCmd} from "../../impl/command/AnonCmd";
 
 export interface KeyInteractionBinder<I extends Interaction<D>, D extends InteractionData>
     extends KeyInteractionBinderBuilder<I, D> {
@@ -43,4 +44,6 @@ export interface KeyInteractionBinder<I extends Interaction<D>, D extends Intera
     name(name: string): KeyInteractionBinder<I, D>;
 
     toProduce<C extends Command>(fn: (i: D) => C): KeyInteractionCmdBinder<C, I, D>;
+
+    toProduceAnon(fn: () => void): KeyInteractionCmdBinder<AnonCmd, I, D>;
 }
