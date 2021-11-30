@@ -20,13 +20,13 @@ import type {LogLevel} from "../logging/LogLevel";
 export interface BaseUpdateBinderBuilder extends BaseBinderBuilder {
     /**
      * Specifies whether the command must be executed on each evolution of the interaction (if 'when' predicate is ok).
-     * @returns A clone of the current builder to chain the building configuration.
+     * @returns A clone of the current binder to chain the building configuration.
      */
     continuousExecution(): BaseUpdateBinderBuilder;
 
     /**
      * The interaction does not start if the condition of the binding ('when') is not fulfilled.
-     * @returns A clone of the current builder to chain the building configuration.
+     * @returns A clone of the current binder to chain the building configuration.
      */
     strictStart(): BaseUpdateBinderBuilder;
 
@@ -40,7 +40,7 @@ export interface BaseUpdateBinderBuilder extends BaseBinderBuilder {
      * At T+10s the third event is finally processed.
      * Based on our own experiments, the given timeout value should be greater than 10ms to throttle some UI events.
      * @param timeout - The timeout used by the throttle operation. In ms.
-     * @returns A clone of the current builder to chain the building configuration.
+     * @returns A clone of the current binder to chain the building configuration.
      */
     throttle(timeout: number): BaseUpdateBinderBuilder;
 

@@ -22,6 +22,12 @@ import type {Interaction} from "../interaction/Interaction";
 import type {Widget} from "./BaseBinderBuilder";
 import type {AnonCmd} from "../../impl/command/AnonCmd";
 
+/**
+ * The binder API for key-based user interactions, that already knows the type of the user interaction to use
+ * (for user interactions that can be updated).
+ * @typeParam I - The type of the user interaction
+ * @typeParam D - The type of the interaction data of the user interaction
+ */
 export interface KeyInteractionUpdateBinder<I extends Interaction<D>, D extends InteractionData>
     extends InteractionUpdateBinderBuilder<I, D>, KeyBinderBuilder {
 

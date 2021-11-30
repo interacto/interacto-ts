@@ -14,8 +14,7 @@
 import type {LogLevel} from "../logging/LogLevel";
 
 /**
- * For supporting Angular ElementReference without
- * any dependency to Angular.
+ * For supporting Angular ElementReference without any dependency to Angular.
  */
 export interface EltRef<T> {
     nativeElement: T;
@@ -34,44 +33,43 @@ export function isEltRef(o: unknown): o is EltRef<EventTarget> {
 }
 
 /**
- * This alias refers to either an EvenTarget object of a reference to an EvenTarget object.
+ * This alias refers to either an EvenTarget object or a reference to an EvenTarget object.
  */
 export type Widget<T extends EventTarget> = EltRef<T> | T;
 
 /**
- * The base interface for building bindings.
+ * The base interface for building bindings (what we call in Interacto a binder).
  */
 export interface BaseBinderBuilder {
     /**
-     * Specifies the widgets on which the binding must operate.
-     * When a widget is added to this list, the added widget is binded to this binding.
+     * Specifies the widgets on which the binding will operate.
+     * When a widget is added to this list, this widget is binded to this binding.
      * When widget is removed from this list, this widget is unbinded from this binding.
      * @param widget - The mandatory first widget
      * @param widgets - The list of the widgets involved in the bindings.
-     * @returns A clone of the current builder to chain the building configuration.
+     * @returns A clone of the current binder to chain the building configuration.
      */
     on(widget: ReadonlyArray<Widget<EventTarget>> | Widget<EventTarget>, ...widgets: ReadonlyArray<Widget<EventTarget>>): BaseBinderBuilder;
 
     /**
-     * Specifies the node which children will be observed by the binding.
-     * The children list is observed by the binding, so that additions and removals
-     * from it are managed by the binding.
-     * @param node - The node which children will be observed by the binding dynamically.
-     * @returns A clone of the current builder to chain the building configuration.
+     * Specifies the node the binding will observe its children.
+     * The binding observes its children list, so that additions and removals from it are managed by the binding.
+     * @param node - The binding will observe the children of this node.
+     * @returns A clone of the current binder to chain the building configuration.
      */
     onDynamic(node: Widget<Node>): BaseBinderBuilder;
 
     /**
      * Specifies the conditions to fulfill to initialise, update, or execute the command while the interaction is running.
-     * Several calls to this method can be made to add new conditions that are checked after the previous ones.
+     * A binder can have several cummulative 'when' routines.
      * @param fn - The predicate that checks whether the command can be initialised, updated, or executed.
-     * @returns A clone of the current builder to chain the building configuration.
+     * @returns A clone of the current binder to chain the building configuration.
      */
     when(fn: () => boolean): BaseBinderBuilder;
 
     /**
-     * Defines actions to perform with a binding ends.
-     * Several calls to this method can be made to add new actions that are executed after the previous ones.
+     * Defines actions to perform when a binding ends.
+     * A binder can have several cummulative 'end' routines.
      * @param fn - The command to execute on each binding end.
      * @returns A clone of the current builder to chain the building configuration.
      */
@@ -79,32 +77,33 @@ export interface BaseBinderBuilder {
 
     /**
      * Specifies the logging level to use.
-     * Several call to 'log' can be done to log different parts:
+     * A binder can have several cummulative 'log' routines, eg:
      * log(LogLevel.INTERACTION).log(LogLevel.COMMAND)
      * @param level - The logging level to use.
-     * @returns A clone of the current builder to chain the building configuration.
+     * @returns A clone of the current binder to chain the building configuration.
      */
     log(...level: ReadonlyArray<LogLevel>): BaseBinderBuilder;
 
     /**
      * If called, all the events the interaction will process will be consumed and
      * not propagated to next listeners.
-     * @returns A clone of the current builder to chain the building configuration.
+     * @returns A clone of the current binder to chain the building configuration.
      */
     stopImmediatePropagation(): BaseBinderBuilder;
 
     /**
      * The default behavior associated to the event will be ignored.
-     * @returns A clone of the current builder to chain the building configuration.
+     * @returns A clone of the current binder to chain the building configuration.
      */
     preventDefault(): BaseBinderBuilder;
 
     /**
      * Allows the processing of errors during the execution of the binding.
      * Errors reported here are errors thrown in arrow functions provided to the
-     * the different routines of the binder.
-     * Several calls to this method can be made to add new actions that are executed after the previous ones.
+     * the different routines of the binder and errors triggered by the command.
+     * A binder can have several cummulative 'catch' routines.
      * @param fn - The function to process the error caught by the binding during its execution
+     * @returns A clone of the current binder to chain the building configuration.
      */
     catch(fn: (ex: unknown) => void): BaseBinderBuilder;
 
@@ -113,6 +112,7 @@ export interface BaseBinderBuilder {
      * This name will be used in the logging system.
      * It should be unique, but no mechanism will check that.
      * @param name - The name of the binding
+     * @returns A clone of the current binder to chain the building configuration.
      */
     name(name: string): BaseBinderBuilder;
 }

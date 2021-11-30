@@ -18,7 +18,7 @@ import type {LogLevel} from "../logging/LogLevel";
 import type {Interaction} from "../interaction/Interaction";
 
 /**
- * The binding builder API that already knows the type of user interaction the bindings will use.
+ * The binding builder API that already knows the type of user interaction the bindings will use
  * @typeParam I - The type of the user interaction
  * @typeParam D - The type of the interaction data of the user interaction
  */
@@ -26,9 +26,10 @@ export interface InteractionBinderBuilder<I extends Interaction<D>, D extends In
     extends BaseBinderBuilder {
     /**
      * Specifies the conditions to fulfill to initialise, update, or execute the command while the interaction is running.
+     * A binder can have several cummulative 'when' routines.
      * @param fn - The predicate that checks whether the command can be initialised, updated, or executed.
-     * This predicate takes as arguments the ongoing user interaction involved in the binding.
-     * @returns A clone of the current builder to chain the building configuration.
+     * This predicate takes as arguments the data of the ongoing user interaction involved in the binding.
+     * @returns A clone of the current binder to chain the building configuration.
      */
     when(fn: (i: D) => boolean): InteractionBinderBuilder<I, D>;
 

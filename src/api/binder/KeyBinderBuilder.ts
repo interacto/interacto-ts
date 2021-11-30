@@ -12,6 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+/**
+ * The binding builder API that support key-based routines
+ */
 export interface KeyBinderBuilder {
     /**
      * Defines the key values the binding will check. On a key interaction, the pressed keys will be checked against

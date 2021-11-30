@@ -21,8 +21,8 @@ import type {Widget} from "./BaseBinderBuilder";
 
 /**
  * The binder API that already knows the type of UI command
- * the bindings will produce. Routines related to interactions that can be updated are provided (then).
- * @typeParam C - The type of the produced UI Commands
+ * the bindings will produce. Routines related to interactions that can be updated are provided ('then').
+ * @typeParam C - The type of the produced UI commands
  */
 export interface CmdUpdateBinder<C extends Command> extends CmdUpdateBinderBuilder<C> {
     then(fn: (c: C) => void): CmdUpdateBinder<C>;
@@ -45,7 +45,7 @@ export interface CmdUpdateBinder<C extends Command> extends CmdUpdateBinderBuild
 
     end(fn: (c: C) => void): CmdUpdateBinder<C>;
 
-    usingInteraction<I extends Interaction<D>, D extends InteractionData> (fn: () => I): InteractionCmdUpdateBinder<C, I, D>;
+    usingInteraction<I extends Interaction<D>, D extends InteractionData>(fn: () => I): InteractionCmdUpdateBinder<C, I, D>;
 
     stopImmediatePropagation(): CmdUpdateBinder<C>;
 

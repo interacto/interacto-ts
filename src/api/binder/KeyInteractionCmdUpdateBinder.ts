@@ -21,6 +21,13 @@ import type {Command} from "../command/Command";
 import type {Interaction} from "../interaction/Interaction";
 import type {Widget} from "./BaseBinderBuilder";
 
+/**
+ * The binder API for key-based user interactions, that already knows the type of the user interaction to use and
+ * the type of command the binding will produce (for user interactions that can be updated).
+ * @typeParam C - The type of the produced UI commands
+ * @typeParam I - The type of the user interaction
+ * @typeParam D - The type of the interaction data of the user interaction
+ */
 export interface KeyInteractionCmdUpdateBinder<C extends Command, I extends Interaction<D>, D extends InteractionData>
     extends KeyInteractionBinderBuilder<I, D>, InteractionUpdateBinder<I, D> {
 

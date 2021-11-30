@@ -20,49 +20,55 @@ import type {Binding} from "../binding/Binding";
 import type {Interaction} from "../interaction/Interaction";
 import type {Widget} from "./BaseBinderBuilder";
 
+/**
+ * The binder API that already knows the type of UI command and the user interaction to use.
+ * @typeParam C - The type of the produced UI commands
+ * @typeParam I - The type of the user interaction
+ * @typeParam D - The type of the interaction data of the user interaction
+ */
 export interface InteractionCmdBinder<C extends Command, I extends Interaction<D>, D extends InteractionData>
     extends CmdBinderBuilder<C>, InteractionBinderBuilder<I, D> {
     /**
-    * Specifies the initialisation of the command when the interaction starts.
-    * Each time the interaction starts, an instance of the command is created and configured by the given callback.
-    * Several calls to this method can be made to add new actions that are executed after the previous ones.
-    * @param fn - The callback method that initialises the command.
-    * This callback takes as arguments both the command and interaction involved in the binding.
-    * @returns The builder to chain the building configuration.
-    */
+     * Specifies the initialisation of the command when the interaction starts.
+     * Each time the interaction starts, an instance of the command is created and configured by the given callback.
+     * A binder can have several cummulative 'first' routines.
+     * @param fn - The callback method that initialises the command.
+     * This callback takes as arguments both the command and interaction data involved in the binding.
+     * @returns The binder to chain the building configuration.
+     */
     first(fn: (c: C, i: D) => void): InteractionCmdBinder<C, I, D>;
 
     /**
      * Specifies what to do end when an interaction ends (after the end/endOrCancel routines) and the command has produced an effect.
-     * Several calls to this method can be made to add new actions that are executed after the previous ones.
+     * A binder can have several cummulative 'ifHadEffects' routines.
      * @param fn - The callback method to specify what to do when an interaction ends and the command produced an effect.
-     * @returns The builder to chain the building configuration.
+     * @returns The binder to chain the building configuration.
      */
     ifHadEffects(fn: (c: C, i: D) => void): InteractionCmdBinder<C, I, D>;
 
     /**
      * Specifies what to do end when an interaction ends (after the end/endOrCancel routines) and the command did not produce an effect.
-     * Several calls to this method can be made to add new actions that are executed after the previous ones.
+     * A binder can have several cummulative 'ifHadNoEffect' routines.
      * @param fn - The callback method to specify what to do when an interaction ends and the command did not produce an effect.
-     * @returns The builder to chain the building configuration.
+     * @returns The binder to chain the building configuration.
      */
     ifHadNoEffect(fn: (c: C, i: D) => void): InteractionCmdBinder<C, I, D>;
 
     /**
      * Specifies what to do end when an interaction ends and the command could not be executed.
-     * Several calls to this method can be made to add new actions that are executed after the previous ones.
+     * A binder can have several cummulative 'ifCannotExecute' routines.
      * @param fn - The callback method to specify what to do when an interaction ends and the command could not be executed.
-     * @returns The builder to chain the building configuration.
+     * @returns The binder to chain the building configuration.
      */
     ifCannotExecute(fn: (c: C, i: D) => void): InteractionCmdBinder<C, I, D>;
 
     /**
-    * Specifies what to do end when an interaction ends (when the last event of the interaction has occurred, but just after
-    * the interaction is reinitialised and the command finally executed and discarded / saved).
-    * Several calls to this method can be made to add new actions that are executed after the previous ones.
-    * @param fn - The callback method to specify what to do when an interaction ends.
-    * @returns The builder to chain the building configuration.
-    */
+     * Specifies what to do end when an interaction ends (when the last event of the interaction has occurred, but just after
+     * the interaction is reinitialised and the command finally executed and discarded / saved).
+     * A binder can have several cummulative 'end' routines.
+     * @param fn - The callback method to specify what to do when an interaction ends.
+     * @returns The binder to chain the building configuration.
+     */
     end(fn: (c: C, i: D) => void): InteractionCmdBinder<C, I, D>;
 
     on(widget: ReadonlyArray<Widget<EventTarget>> | Widget<EventTarget>, ...widgets: ReadonlyArray<Widget<EventTarget>>):
@@ -83,7 +89,7 @@ export interface InteractionCmdBinder<C extends Command, I extends Interaction<D
     name(name: string): InteractionCmdBinder<C, I, D>;
 
     /**
-    * Executes the builder to create and install the binding on the instrument.
-    */
+     * Executes the binder to create and install an Interacto binding.
+     */
     bind(): Binding<C, I, D>;
 }

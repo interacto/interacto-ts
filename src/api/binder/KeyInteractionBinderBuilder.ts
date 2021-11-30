@@ -18,7 +18,12 @@ import type {LogLevel} from "../logging/LogLevel";
 import type {Interaction} from "../interaction/Interaction";
 import type {Widget} from "./BaseBinderBuilder";
 
-
+/**
+ * The binding builder API for key-based user interactions,
+ * that already knows the type of user interaction the bindings will use.
+ * @typeParam I - The type of the user interaction
+ * @typeParam D - The type of the interaction data of the user interaction
+ */
 export interface KeyInteractionBinderBuilder<I extends Interaction<D>, D extends InteractionData>
     extends InteractionBinderBuilder<I, D>, KeyBinderBuilder {
 

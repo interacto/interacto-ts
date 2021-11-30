@@ -18,17 +18,20 @@ import type {LogLevel} from "../logging/LogLevel";
 import type {Widget} from "./BaseBinderBuilder";
 
 /**
- * The binding builder API already knows the type of UI command
+ * The binding builder API that already knows the type of UI command
  * the bindings will produce. Routines related to interactions that can be updated are provided (then).
- * @typeParam C - The type of the produced UI Commands
+ * @typeParam C - The type of the produced UI commands
  */
 export interface CmdUpdateBinderBuilder<C extends Command> extends CmdBinderBuilder<C>, BaseUpdateBinderBuilder {
     /**
-     * Specifies the update of the command on interaction updates.
-     * Several calls to this method can be made to add new actions that are executed after the previous ones.
+     * Permits to update the command on each interaction update.
+     * A binder can have several cummulative 'then' routines.
+     * This routine is called only if 'when' returns true (ie only if
+     * the condition for producing the command is respected).
+     * See 'ifCannotExecute' for a 'then' when this condition is not respected.
      * @param fn - The callback method that updates the command.
      * This callback takes as arguments the command to update.
-     * @returns A clone of the current builder to chain the building configuration.
+     * @returns A clone of the current binder to chain the building configuration.
      */
     then(fn: (c: C) => void): CmdUpdateBinderBuilder<C>;
 

@@ -18,22 +18,28 @@ import type {Interaction} from "../interaction/Interaction";
 import type {Widget} from "./BaseBinderBuilder";
 import type {BaseUpdateBinderBuilder} from "./BaseUpdateBinderBuilder";
 
+/**
+ * The binding builder API that already knows the type of user interaction the bindings will use
+ * (for user interactions that can be updated).
+ * @typeParam I - The type of the user interaction
+ * @typeParam D - The type of the interaction data of the user interaction
+ */
 export interface InteractionUpdateBinderBuilder<I extends Interaction<D>, D extends InteractionData>
     extends InteractionBinderBuilder <I, D>, BaseUpdateBinderBuilder {
     /**
-    * Defines what to do when a command is cancelled (because the interaction is cancelled).
-    * The undoable command is automatically cancelled so that nothing must be done on the command.
-    * Several calls to this method can be made to add new actions that are executed after the previous ones.
-    * @returns A clone of the current builder to chain the building configuration.
-    */
+     * Defines what to do when a command is cancelled (because the interaction is cancelled).
+     * The undoable command is automatically cancelled so that nothing must be done on the command.
+     * A binder can have several cummulative 'cancel' routines.
+     * @returns A clone of the current binder to chain the building configuration.
+     */
     cancel(fn: (i: D) => void): InteractionUpdateBinderBuilder<I, D>;
 
     /**
-    * Defines what to do when a command is cancelled (because the interaction is cancelled).
-    * The undoable command is automatically cancelled so that nothing must be done on the command.
-    * Several calls to this method can be made to add new actions that are executed after the previous ones.
-    * @returns A clone of the current builder to chain the building configuration.
-    */
+     * Defines what to do when a command is cancelled (because the interaction is cancelled).
+     * The undoable command is automatically cancelled so that nothing must be done on the command.
+     * A binder can have several cummulative 'endOrCancel' routines.
+     * @returns A clone of the current binder to chain the building configuration.
+     */
     endOrCancel(fn: (i: D) => void): InteractionUpdateBinderBuilder<I, D>;
 
     when(fn: (i: D) => boolean): InteractionUpdateBinderBuilder<I, D>;

@@ -21,17 +21,25 @@ import type {Binding} from "../binding/Binding";
 import type {Interaction} from "../interaction/Interaction";
 import type {Widget} from "./BaseBinderBuilder";
 
+/**
+ * The binder API that already knows the type of UI command and the user interaction to use
+ * (for user interactions that can be updated).
+ * @typeParam C - The type of the produced UI commands
+ * @typeParam I - The type of the user interaction
+ * @typeParam D - The type of the interaction data of the user interaction
+ */
 export interface InteractionCmdUpdateBinder<C extends Command, I extends Interaction<D>, D extends InteractionData>
     extends InteractionCmdBinder<C, I, D>, CmdUpdateBinderBuilder<C>, InteractionUpdateBinderBuilder<I, D> {
     /**
-    * Specifies the update of the command on interaction command.
-    * This routine is called only if 'when' returns true (ie only if
-    * the condition for producing the command is respected).
-    * See 'ifCannotExecute' for a 'then' when this condition is not respected.
-    * @param fn - The callback method that updates the command.
-    * This callback takes as arguments the command to update and the ongoing interactions (and its parameters).
-    * @returns The builder to chain the building configuration.
-    */
+     * Permits to update the command on each interaction update.
+     * A binder can have several cummulative 'then' routines.
+     * This routine is called only if 'when' returns true (ie only if
+     * the condition for producing the command is respected).
+     * See 'ifCannotExecute' for a 'then' when this condition is not respected.
+     * @param fn - The callback method that updates the command.
+     * This callback takes as arguments the command to update and the ongoing interactions (and its parameters).
+     * @returns The binder to chain the building configuration.
+     */
     then(fn: ((c: C, i: D) => void) | ((c: C) => void)): InteractionCmdUpdateBinder<C, I, D>;
 
     continuousExecution(): InteractionCmdUpdateBinder<C, I, D>;
