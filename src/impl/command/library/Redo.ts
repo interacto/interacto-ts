@@ -13,15 +13,15 @@
  */
 
 import {CommandBase} from "../CommandBase";
-import type {UndoHistory} from "../../../api/undo/UndoHistory";
+import type {UndoHistoryBase} from "../../../api/undo/UndoHistoryBase";
 
 /**
  * A Redo action.
  */
 export class Redo extends CommandBase {
-    protected readonly history: UndoHistory;
+    protected readonly history: UndoHistoryBase;
 
-    public constructor(undoHistory: UndoHistory) {
+    public constructor(undoHistory: UndoHistoryBase) {
         super();
         this.history = undoHistory;
     }

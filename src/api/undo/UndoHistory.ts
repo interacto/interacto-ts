@@ -14,33 +14,20 @@
 
 import type {Undoable} from "./Undoable";
 import type {Observable} from "rxjs";
+import type {UndoHistoryBase} from "./UndoHistoryBase";
 
 /**
  * A history of undone/redone objects.
  * Why a pure abstract class and not an interface?
  * Because interfaces are not retained at runtime in TS and we want DI (that thus cannot inject interface types).
-
  */
-export abstract class UndoHistory {
-    /**
-     * Adds an undoable object to the collector.
-     * @param undoable - The undoable object to add.
-     */
+export abstract class UndoHistory implements UndoHistoryBase {
     abstract add(undoable: Undoable): void;
 
-    /**
-     * Removes all the undoable objects of the collector.
-     */
     abstract clear(): void;
 
-    /**
-     * Undoes the last undoable object.
-     */
     abstract undo(): void;
 
-    /**
-     * Redoes the last undoable object.
-     */
     abstract redo(): void;
 
     /**
@@ -67,34 +54,16 @@ export abstract class UndoHistory {
      */
     abstract redosObservable(): Observable<Undoable | undefined>;
 
-    /**
-     * @returns The last undoable object or undefined if there is no last object.
-     */
     abstract getLastUndo(): Undoable | undefined;
 
-    /**
-     * @returns The last redoable object or undefined if there is no last object.
-     */
     abstract getLastRedo(): Undoable | undefined;
 
-    /**
-     * @returns The last undoable object name or undefined if there is no last object.
-     */
     abstract getLastUndoMessage(): string | undefined;
 
-    /**
-     * @returns The last redoable object name or undefined if there is no last object.
-     */
     abstract getLastRedoMessage(): string | undefined;
 
-    /**
-     * @returns The last undoable object name or an empty string if there is no last object.
-     */
     abstract getLastOrEmptyUndoMessage(): string;
 
-    /**
-     * @returns The last redoable object name or an empty string if there is no last object.
-     */
     abstract getLastOrEmptyRedoMessage(): string;
 
     /**

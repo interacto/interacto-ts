@@ -7,18 +7,20 @@ import {BindingsContext} from "../../src/impl/binding/BindingsContext";
 import type {Bindings} from "../../src/api/binding/Bindings";
 import {Undo} from "../../src/impl/command/library/Undo";
 import {Redo} from "../../src/impl/command/library/Redo";
+import type {UndoHistoryBase} from "../../src/api/undo/UndoHistoryBase";
+import {UndoHistoryImpl} from "../../src/impl/undo/UndoHistoryImpl";
 
 let bundo: HTMLButtonElement;
 let bredo: HTMLButtonElement;
 let ctx: BindingsContext;
-let bindings: Bindings;
+let bindings: Bindings<UndoHistoryBase>;
 let undoable: MockProxy<Undoable> & Undoable;
 let fn: jest.Mock;
 
 describe("test undo redo bindings", () => {
     beforeEach(() => {
         fn = jest.fn();
-        bindings = new BindingsImpl(undefined);
+        bindings = new BindingsImpl(new UndoHistoryImpl());
         ctx = new BindingsContext();
         bindings.setBindingObserver(ctx);
         bundo = document.createElement("button");

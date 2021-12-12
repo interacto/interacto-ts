@@ -22,8 +22,8 @@ import {isUndoableType} from "../../api/undo/Undoable";
 import {MustBeUndoableCmdError} from "./MustBeUndoableCmdError";
 import type {Binding} from "../../api/binding/Binding";
 import type {Interaction} from "../../api/interaction/Interaction";
-import type {UndoHistory} from "../../api/undo/UndoHistory";
 import type {Logger} from "../../api/logging/Logger";
+import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
 
 /**
  * The base class to do bindings, i.e. bindings between user interactions and (undoable) commands.
@@ -61,7 +61,7 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
 
     protected readonly cmdsProduced: Subject<C>;
 
-    protected undoHistory: UndoHistory;
+    protected undoHistory: UndoHistoryBase;
 
     protected logger: Logger;
 
@@ -88,7 +88,7 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
      * @param name - The optional name of the binding. If not provided, computed based on the interaction and command names
      */
     public constructor(continuousExecution: boolean, strict: boolean, interaction: I, cmdProducer: (i?: D) => C,
-                       widgets: ReadonlyArray<EventTarget>, undoHistory: UndoHistory, logger: Logger, name?: string) {
+                       widgets: ReadonlyArray<EventTarget>, undoHistory: UndoHistoryBase, logger: Logger, name?: string) {
         // The name is partial until the binding procudes its first command
         this._name = name;
         this.logBinding = false;

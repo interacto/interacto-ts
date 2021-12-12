@@ -12,8 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 import type {Subscription} from "rxjs";
-import type {Binding, PointData} from "../../src/interacto";
-import {BindingsImpl, MouseDown} from "../../src/interacto";
+import type {Binding, PointData, UndoHistoryBase} from "../../src/interacto";
+import {BindingsImpl, MouseDown, UndoHistoryImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {createKeyEvent, createMouseEvent} from "../interaction/StubEvents";
 import type {Bindings} from "../../src/api/binding/Bindings";
@@ -23,10 +23,10 @@ let canvas2: HTMLElement;
 let binding1: Binding<StubCmd, MouseDown, PointData>;
 let binding2: Binding<StubCmd, MouseDown, PointData>;
 let disposable: Subscription | undefined;
-let bindings: Bindings;
+let bindings: Bindings<UndoHistoryBase>;
 
 beforeEach(() => {
-    bindings = new BindingsImpl();
+    bindings = new BindingsImpl(new UndoHistoryImpl());
     document.documentElement.innerHTML = "<html><div><canvas id='c1'> <canvas id='c2'/> </canvas></html>";
     canvas1 = document.getElementById("c1") as HTMLElement;
     canvas2 = document.getElementById("c2") as HTMLElement;

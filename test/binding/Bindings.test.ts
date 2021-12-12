@@ -29,9 +29,10 @@ import type {
     SrcTgtPointsData,
     TapData,
     TouchData,
+    UndoHistoryBase,
     WidgetData
 } from "../../src/interacto";
-import {AnonCmd, BindingsContext, BindingsImpl, LogLevel} from "../../src/interacto";
+import {AnonCmd, BindingsContext, BindingsImpl, LogLevel, UndoHistoryImpl} from "../../src/interacto";
 import {StubCmd, StubUndoableCmd} from "../command/StubCmd";
 import type {MouseEventForTest} from "../interaction/StubEvents";
 import {createMouseEvent, robot} from "../interaction/StubEvents";
@@ -41,12 +42,12 @@ import type {BindingsObserver} from "../../src/api/binding/BindingsObserver";
 
 let elt: HTMLElement;
 let ctx: BindingsContext;
-let bindings: Bindings;
+let bindings: Bindings<UndoHistoryBase>;
 let logger: Logger;
 
 beforeEach(() => {
     logger = mock<Logger>();
-    bindings = new BindingsImpl(undefined, logger);
+    bindings = new BindingsImpl(new UndoHistoryImpl(), logger);
     ctx = new BindingsContext();
     bindings.setBindingObserver(ctx);
     jest.useFakeTimers();

@@ -14,8 +14,8 @@
  */
 import {StubCmd} from "../command/StubCmd";
 import {createTouchEvent, robot} from "../interaction/StubEvents";
-import type {Binding, FSMHandler, Interaction, MultiTouchData} from "../../src/interacto";
-import {BindingsImpl} from "../../src/interacto";
+import type {Binding, FSMHandler, Interaction, MultiTouchData, UndoHistoryBase} from "../../src/interacto";
+import {BindingsImpl, UndoHistoryImpl} from "../../src/interacto";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
 import type {Bindings} from "../../src/api/binding/Bindings";
 import {mock} from "jest-mock-extended";
@@ -23,10 +23,10 @@ import {mock} from "jest-mock-extended";
 let binding: Binding<StubCmd, Interaction<MultiTouchData>, MultiTouchData> | undefined;
 let c1: HTMLElement;
 let ctx: BindingsContext;
-let bindings: Bindings;
+let bindings: Bindings<UndoHistoryBase>;
 
 beforeEach(() => {
-    bindings = new BindingsImpl();
+    bindings = new BindingsImpl(new UndoHistoryImpl());
     ctx = new BindingsContext();
     bindings.setBindingObserver(ctx);
     jest.useFakeTimers();

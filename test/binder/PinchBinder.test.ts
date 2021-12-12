@@ -13,18 +13,18 @@
  */
 import {StubCmd} from "../command/StubCmd";
 import {createTouchEvent} from "../interaction/StubEvents";
-import type {Binding, Interaction, InteractionData} from "../../src/interacto";
-import {BindingsImpl} from "../../src/interacto";
+import type {Binding, Interaction, InteractionData, UndoHistoryBase} from "../../src/interacto";
+import {BindingsImpl, UndoHistoryImpl} from "../../src/interacto";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
 import type {Bindings} from "../../src/api/binding/Bindings";
 
 let binding: Binding<StubCmd, Interaction<InteractionData>, InteractionData> | undefined;
 let c1: HTMLElement;
 let ctx: BindingsContext;
-let bindings: Bindings;
+let bindings: Bindings<UndoHistoryBase>;
 
 beforeEach(() => {
-    bindings = new BindingsImpl();
+    bindings = new BindingsImpl(new UndoHistoryImpl());
     ctx = new BindingsContext();
     bindings.setBindingObserver(ctx);
     jest.useFakeTimers();

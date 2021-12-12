@@ -23,9 +23,9 @@ import type {BindingsObserver} from "../../api/binding/BindingsObserver";
 import type {Interaction} from "../../api/interaction/Interaction";
 import type {Widget} from "../../api/binder/BaseBinderBuilder";
 import {isEltRef} from "../../api/binder/BaseBinderBuilder";
-import type {UndoHistory} from "../../api/undo/UndoHistory";
 import type {Logger} from "../../api/logging/Logger";
 import {AnonCmd} from "../command/AnonCmd";
+import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
 
 /**
  * The base class that defines the concept of binding builder (called binder).
@@ -67,7 +67,7 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
 
     protected observer?: BindingsObserver;
 
-    protected undoHistory: UndoHistory;
+    protected undoHistory: UndoHistoryBase;
 
     protected logger: Logger;
 
@@ -85,7 +85,7 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
 
     protected onErrFnArray: Array<(ex: unknown) => void> = new Array<(ex: unknown) => void>();
 
-    protected constructor(undoHistory: UndoHistory, logger: Logger, observer?: BindingsObserver, binder?: Partial<Binder<C, I, D>>) {
+    protected constructor(undoHistory: UndoHistoryBase, logger: Logger, observer?: BindingsObserver, binder?: Partial<Binder<C, I, D>>) {
         Object.assign(this, binder);
 
         this.undoHistory = undoHistory;

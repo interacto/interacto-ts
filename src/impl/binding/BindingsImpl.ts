@@ -81,8 +81,6 @@ import type {
     PartialWheelBinder
 } from "../../api/binding/Bindings";
 import {Bindings} from "../../api/binding/Bindings";
-import type {UndoHistory} from "../../api/undo/UndoHistory";
-import {UndoHistoryImpl} from "../undo/UndoHistoryImpl";
 import type {Logger} from "../../api/logging/Logger";
 import {LoggerImpl} from "../logging/LoggerImpl";
 import type {WheelData} from "../../api/interaction/WheelData";
@@ -90,21 +88,22 @@ import {Wheel} from "../interaction/library/Wheel";
 import {KeyUp} from "../interaction/library/KeyUp";
 import {MouseUp} from "../interaction/library/MouseUp";
 import {DwellSpringAnimation} from "../animation/DwellSpringAnimation";
+import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
 
-export class BindingsImpl extends Bindings {
+export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
     private observer: BindingsObserver | undefined;
 
-    private readonly undoHistoryData: UndoHistory;
+    private readonly undoHistoryData: H;
 
     public readonly logger: Logger;
 
-    public constructor(history?: UndoHistory, logger?: Logger) {
+    public constructor(history: H, logger?: Logger) {
         super();
-        this.undoHistoryData = history ?? new UndoHistoryImpl();
+        this.undoHistoryData = history;
         this.logger = logger ?? new LoggerImpl();
     }
 
-    public get undoHistory(): UndoHistory {
+    public get undoHistory(): H {
         return this.undoHistoryData;
     }
 

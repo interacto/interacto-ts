@@ -17,8 +17,8 @@ import {LogLevel} from "../../api/logging/LogLevel";
 import {BindingImpl} from "./BindingImpl";
 import type {Command} from "../../api/command/Command";
 import type {Interaction} from "../../api/interaction/Interaction";
-import type {UndoHistory} from "../../api/undo/UndoHistory";
 import type {Logger} from "../../api/logging/Logger";
+import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
 
 export class AnonBinding<C extends Command, I extends Interaction<D>, D extends InteractionData>
     extends BindingImpl<C, I, D> {
@@ -44,7 +44,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
     private readonly onErrFn?: (ex: unknown) => void;
 
 
-    public constructor(continuousExec: boolean, interaction: I, undoHistory: UndoHistory, logger: Logger, cmdSupplierFn: (d: D) => C,
+    public constructor(continuousExec: boolean, interaction: I, undoHistory: UndoHistoryBase, logger: Logger, cmdSupplierFn: (d: D) => C,
                        widgets: ReadonlyArray<EventTarget>, dynamicNodes: ReadonlyArray<Node>,
                        strict: boolean, loggers: ReadonlyArray<LogLevel>, timeoutThrottle: number,
                        stopPropagation: boolean, prevDefault: boolean, firstFn?: (c: C, i: D) => void,

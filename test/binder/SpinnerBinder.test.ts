@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General export function License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import type {Binding, Interaction, InteractionData, WidgetData} from "../../src/interacto";
-import {BindingsImpl, SpinnerChangedFSM} from "../../src/interacto";
+import type {Binding, Interaction, InteractionData, WidgetData, UndoHistoryBase} from "../../src/interacto";
+import {BindingsImpl, SpinnerChangedFSM, UndoHistoryImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
 import type {Bindings} from "../../src/api/binding/Bindings";
@@ -22,10 +22,10 @@ let widget2: HTMLInputElement;
 let binding: Binding<StubCmd, Interaction<InteractionData>, InteractionData> | undefined;
 let cmd: StubCmd;
 let ctx: BindingsContext;
-let bindings: Bindings;
+let bindings: Bindings<UndoHistoryBase>;
 
 beforeEach(() => {
-    bindings = new BindingsImpl();
+    bindings = new BindingsImpl(new UndoHistoryImpl());
     ctx = new BindingsContext();
     bindings.setBindingObserver(ctx);
     jest.useFakeTimers();

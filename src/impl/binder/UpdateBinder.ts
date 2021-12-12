@@ -23,9 +23,9 @@ import {AnonBinding} from "../binding/AnonBinding";
 import type {Interaction} from "../../api/interaction/Interaction";
 import type {Widget} from "../../api/binder/BaseBinderBuilder";
 import type {BindingsObserver} from "../../api/binding/BindingsObserver";
-import type {UndoHistory} from "../../api/undo/UndoHistory";
 import type {Logger} from "../../api/logging/Logger";
 import type {AnonCmd} from "../command/AnonCmd";
+import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
 
 /**
  * The base binding builder for bindings where commands can be updated while the user interaction is running.
@@ -52,7 +52,7 @@ export class UpdateBinder<C extends Command, I extends Interaction<D>, D extends
 
     protected endOrCancelFnArray: Array<(i: D) => void> = new Array<(i: D) => void>();
 
-    public constructor(undoHistory: UndoHistory, logger: Logger, observer?: BindingsObserver, binder?: Partial<UpdateBinder<C, I, D>>) {
+    public constructor(undoHistory: UndoHistoryBase, logger: Logger, observer?: BindingsObserver, binder?: Partial<UpdateBinder<C, I, D>>) {
         super(undoHistory, logger, observer, binder);
 
         Object.assign(this, binder);

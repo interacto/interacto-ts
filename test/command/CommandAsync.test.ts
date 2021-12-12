@@ -25,6 +25,8 @@ import type {BindingImpl} from "../../src/impl/binding/BindingImpl";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
 import type {Bindings} from "../../src/api/binding/Bindings";
 import {BindingsImpl} from "../../src/impl/binding/BindingsImpl";
+import type {UndoHistoryBase} from "../../src/api/undo/UndoHistoryBase";
+import {UndoHistoryImpl} from "../../src/impl/undo/UndoHistoryImpl";
 import useFakeTimers = jest.useFakeTimers;
 import clearAllTimers = jest.clearAllTimers;
 import useRealTimers = jest.useRealTimers;
@@ -78,11 +80,11 @@ let cmd: StubAsyncCmd;
 let data: Model;
 let binding: Binding<StubAsyncCmd, Interaction<InteractionData>, InteractionData> | undefined;
 let ctx: BindingsContext;
-let bindings: Bindings;
+let bindings: Bindings<UndoHistoryBase>;
 
 describe("testing async commands and bindings", () => {
     beforeEach(() => {
-        bindings = new BindingsImpl();
+        bindings = new BindingsImpl(new UndoHistoryImpl());
         ctx = new BindingsContext();
         bindings.setBindingObserver(ctx);
         data = new Model();

@@ -28,21 +28,23 @@ import {BindingsContext} from "../../src/impl/binding/BindingsContext";
 import type {Logger} from "../../src/api/logging/Logger";
 import type {EltRef} from "../../src/api/binder/BaseBinderBuilder";
 import {LogLevel} from "../../src/api/logging/LogLevel";
-import clearAllTimers = jest.clearAllTimers;
 import type {UndoHistory} from "../../src/api/undo/UndoHistory";
 import {MouseDown} from "../../src/impl/interaction/library/MouseDown";
 import type {KeyInteractionCmdBinder} from "../../src/api/binder/KeyInteractionCmdBinder";
 import type {KeyData} from "../../src/api/interaction/KeyData";
 import type {Bindings} from "../../src/api/binding/Bindings";
 import {robot} from "interacto-nono";
+import {UndoHistoryImpl} from "../../src/impl/undo/UndoHistoryImpl";
+import type {UndoHistoryBase} from "../../src/api/undo/UndoHistoryBase";
+import clearAllTimers = jest.clearAllTimers;
 
 let elt: HTMLElement;
 let binding: Binding<Command, Interaction<InteractionData>, InteractionData> | undefined;
 let ctx: BindingsContext;
-let bindings: Bindings;
+let bindings: Bindings<UndoHistoryBase>;
 
 beforeEach(() => {
-    bindings = new BindingsImpl();
+    bindings = new BindingsImpl(new UndoHistoryImpl());
     ctx = new BindingsContext();
     bindings.setBindingObserver(ctx);
     jest.useFakeTimers();

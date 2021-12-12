@@ -24,9 +24,9 @@ import type {KeyInteractionCmdUpdateBinder} from "../../api/binder/KeyInteractio
 import type {Interaction} from "../../api/interaction/Interaction";
 import type {Widget} from "../../api/binder/BaseBinderBuilder";
 import type {BindingsObserver} from "../../api/binding/BindingsObserver";
-import type {UndoHistory} from "../../api/undo/UndoHistory";
 import type {Logger} from "../../api/logging/Logger";
 import type {AnonCmd} from "../command/AnonCmd";
+import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
 
 /**
  * The base binding builder to create bindings between a keys pressure interaction and a given command.
@@ -41,7 +41,7 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, D extends I
 
     private readonly checkCodeFn: (i: InteractionData) => boolean;
 
-    public constructor(undoHistory: UndoHistory, logger: Logger, observer?: BindingsObserver, binder?: Partial<KeysBinder<C, I, D>>) {
+    public constructor(undoHistory: UndoHistoryBase, logger: Logger, observer?: BindingsObserver, binder?: Partial<KeysBinder<C, I, D>>) {
         super(undoHistory, logger, observer, binder);
 
         Object.assign(this, binder);

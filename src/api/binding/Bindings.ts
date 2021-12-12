@@ -29,13 +29,13 @@ import type {KeyData} from "../interaction/KeyData";
 import type {KeyInteractionUpdateBinder} from "../binder/KeyInteractionUpdateBinder";
 import type {KeysData} from "../interaction/KeysData";
 import type {BaseUpdateBinder} from "../binder/BaseUpdateBinder";
-import type {Widget, EltRef} from "../binder/BaseBinderBuilder";
+import type {EltRef, Widget} from "../binder/BaseBinderBuilder";
 import type {Binding} from "./Binding";
 import type {Undo} from "../../impl/command/library/Undo";
 import type {Redo} from "../../impl/command/library/Redo";
-import type {UndoHistory} from "../undo/UndoHistory";
 import type {Logger} from "../logging/Logger";
 import type {WheelData} from "../interaction/WheelData";
+import type {UndoHistoryBase} from "../undo/UndoHistoryBase";
 
 export type PartialButtonBinder = InteractionBinder<Interaction<WidgetData<HTMLButtonElement>>, WidgetData<HTMLButtonElement>>;
 export type PartialInputBinder = InteractionBinder<Interaction<WidgetData<HTMLInputElement>>, WidgetData<HTMLInputElement>>;
@@ -63,12 +63,13 @@ export type PartialKeysBinder = KeyInteractionUpdateBinder<Interaction<KeysData>
  * Provides an undo/redo history.
  * Why a pure abstract class and not an interface?
  * Because interfaces are not retained at runtime in TS and we want DI (that thus cannot inject interface types).
+ * @typeParam H -- The undo history algorithm
  */
-export abstract class Bindings {
+export abstract class Bindings<H extends UndoHistoryBase> {
     /**
      * The undo/redo history of the current binding context
      */
-    abstract readonly undoHistory: UndoHistory;
+    abstract readonly undoHistory: H;
 
     abstract readonly logger: Logger;
 
