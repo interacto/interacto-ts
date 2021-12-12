@@ -15,6 +15,8 @@
 import type {TreeUndoHistory, UndoableTreeNode} from "../../api/undo/TreeUndoHistory";
 import type {Undoable} from "../../api/undo/Undoable";
 import {remove} from "../util/ArrayUtil";
+import type {Observable} from "rxjs";
+import {Subject} from "rxjs";
 
 class UndoableTreeNodeImpl implements UndoableTreeNode {
     public lastChildUndone: UndoableTreeNode | undefined;
@@ -57,9 +59,15 @@ export class TreeUndoHistoryImpl implements TreeUndoHistory {
 
     public readonly undoableNodes: Array<UndoableTreeNode | undefined>;
 
+    private readonly undoPublisher: Subject<Undoable | undefined>;
+
+    private readonly redoPublisher: Subject<Undoable | undefined>;
+
     public constructor() {
         this.undoableNodes = new Array<UndoableTreeNode>();
         this.idCounter = 0;
+        this.undoPublisher = new Subject();
+        this.redoPublisher = new Subject();
     }
 
     public add(undoable: Undoable): void {
@@ -70,6 +78,7 @@ export class TreeUndoHistoryImpl implements TreeUndoHistory {
         }
         this._currentNode = node;
         this.idCounter++;
+        this.undoPublisher.next(undoable);
     }
 
     public get currentNode(): UndoableTreeNode | undefined {
@@ -80,6 +89,8 @@ export class TreeUndoHistoryImpl implements TreeUndoHistory {
         this._currentNode = undefined;
         this.undoableNodes.length = 0;
         this.idCounter = 0;
+        this.undoPublisher.next(undefined);
+        this.redoPublisher.next(undefined);
     }
 
     public delete(id: number): void {
@@ -167,13 +178,18 @@ export class TreeUndoHistoryImpl implements TreeUndoHistory {
         if (node !== undefined) {
             node.undoable.redo();
             this._currentNode = node;
+            this.undoPublisher.next(node.undoable);
+            this.redoPublisher.next(this.getLastRedo());
         }
     }
 
     public undo(): void {
         if (this.currentNode !== undefined) {
+            const u = this.currentNode.undoable;
             this.currentNode.undo();
             this._currentNode = this.currentNode.parent;
+            this.undoPublisher.next(this.getLastUndo());
+            this.redoPublisher.next(u);
         }
     }
 
@@ -207,5 +223,13 @@ export class TreeUndoHistoryImpl implements TreeUndoHistory {
 
     public getLastUndoMessage(): string | undefined {
         return this.getLastUndo()?.getUndoName();
+    }
+
+    public undosObservable(): Observable<Undoable | undefined> {
+        return this.undoPublisher;
+    }
+
+    public redosObservable(): Observable<Undoable | undefined> {
+        return this.redoPublisher;
     }
 }

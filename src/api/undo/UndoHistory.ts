@@ -40,18 +40,8 @@ export abstract class UndoHistory implements UndoHistoryBase {
      */
     abstract getRedo(): ReadonlyArray<Undoable>;
 
-    /**
-     * A stream for observing changes regarding the last undoable object.
-     * @returns An observable value of optional undoable objects: if empty, this means
-     * that no undoable object are stored anymore.
-     */
     abstract undosObservable(): Observable<Undoable | undefined>;
 
-    /**
-     * A stream for observing changes regarding the last redoable object.
-     * @returns An observable value of optional redoable objects: if empty, this means
-     * that no redoable object are stored anymore.
-     */
     abstract redosObservable(): Observable<Undoable | undefined>;
 
     abstract getLastUndo(): Undoable | undefined;

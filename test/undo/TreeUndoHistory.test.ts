@@ -80,6 +80,14 @@ describe("using a graph undo history", () => {
         expect(history.getLastOrEmptyRedoMessage()).toBe("");
     });
 
+    test("undoable obs not null", () => {
+        expect(history.undosObservable()).toBeDefined();
+    });
+
+    test("redoable obs not null", () => {
+        expect(history.redosObservable()).toBeDefined();
+    });
+
     describe("and using a single undoable", () => {
         beforeEach(() => {
             history.add(undoable0);
@@ -103,6 +111,55 @@ describe("using a graph undo history", () => {
             expect(history.undoableNodes[0]).toBeDefined();
             expect(history.currentNode).toBeUndefined();
             expect(undoable0.undo).toHaveBeenCalledTimes(1);
+        });
+
+        test("redo observation works", () => {
+            const toRedos = new Array<Undoable | undefined>();
+            const redosStream = history.redosObservable().subscribe((e: Undoable | undefined) => toRedos.push(e));
+
+            history.undo();
+            redosStream.unsubscribe();
+
+            expect(toRedos).toHaveLength(1);
+            expect(toRedos[0]).toStrictEqual(undoable0);
+        });
+
+        test("undo observation works", () => {
+            const undos = new Array<Undoable | undefined>();
+            const undosStream = history.undosObservable().subscribe((e: Undoable | undefined) => undos.push(e));
+
+            history.add(undoable1);
+            undosStream.unsubscribe();
+
+            expect(undos).toHaveLength(1);
+            expect(undos[0]).toStrictEqual(undoable1);
+        });
+
+        test("undo and redo observation works on multiple operations", () => {
+            const undos = new Array<Undoable | undefined>();
+            const redos = new Array<Undoable | undefined>();
+            const undosStream = history.undosObservable().subscribe((e: Undoable | undefined) => undos.push(e));
+            const redosStream = history.redosObservable().subscribe((e: Undoable | undefined) => redos.push(e));
+
+            history.add(undoable1);
+            history.undo();
+            history.undo();
+            history.redo();
+            history.redo();
+            undosStream.unsubscribe();
+            redosStream.unsubscribe();
+
+            expect(undos).toHaveLength(5);
+            expect(undos[0]).toStrictEqual(undoable1);
+            expect(undos[1]).toStrictEqual(undoable0);
+            expect(undos[2]).toBeUndefined();
+            expect(undos[3]).toStrictEqual(undoable0);
+            expect(undos[4]).toStrictEqual(undoable1);
+            expect(redos).toHaveLength(4);
+            expect(redos[0]).toStrictEqual(undoable1);
+            expect(redos[1]).toStrictEqual(undoable0);
+            expect(redos[2]).toStrictEqual(undoable1);
+            expect(redos[3]).toBeUndefined();
         });
 
         test("redo does nothing", () => {

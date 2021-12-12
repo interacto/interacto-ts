@@ -13,6 +13,7 @@
  */
 
 import type {Undoable} from "./Undoable";
+import type {Observable} from "rxjs";
 
 /**
  * The base interface for undo histories.
@@ -68,4 +69,18 @@ export interface UndoHistoryBase {
      * @returns The last redoable object name or an empty string if there is no last object.
      */
     getLastOrEmptyRedoMessage(): string;
+
+    /**
+     * A stream for observing changes regarding the last undoable object.
+     * @returns An observable value of optional undoable objects: if empty, this means
+     * that no undoable object are stored anymore.
+     */
+    undosObservable(): Observable<Undoable | undefined>;
+
+    /**
+     * A stream for observing changes regarding the last redoable object.
+     * @returns An observable value of optional redoable objects: if empty, this means
+     * that no redoable object are stored anymore.
+     */
+    redosObservable(): Observable<Undoable | undefined>;
 }
