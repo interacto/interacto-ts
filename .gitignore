@@ -10,3 +10,4 @@ docs/
 out-test/
 reports
 .stryker-tmp
+coverage
