@@ -637,5 +637,28 @@ describe("using a graph undo history", () => {
             expect(positions.get(13)).toBe(3);
             expect(positions.get(14)).toBe(5);
         });
+
+        test("go to root", () => {
+            history.goTo(0);
+            expect(history.currentNode?.id).toBe(0);
+        });
+
+        test("go to root then 4", () => {
+            history.goTo(0);
+            history.goTo(4);
+            expect(history.currentNode?.id).toBe(4);
+        });
+
+        test("go to 1 then 8", () => {
+            history.goTo(1);
+            history.goTo(8);
+            expect(history.currentNode?.id).toBe(8);
+        });
+
+        test("go to 2 then 3", () => {
+            history.goTo(2);
+            history.goTo(3);
+            expect(history.currentNode?.id).toBe(3);
+        });
     });
 });

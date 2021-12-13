@@ -167,7 +167,9 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
         for (let j = pathSrc.length - 1; j > i; j--) {
             pathSrc[j].undo();
         }
-        pathSrc[i].undo();
+        if (i < pathSrc.length) {
+            pathSrc[i].undo();
+        }
         // to then redo the target path to the targeted node
         for (let j = i; j < pathTo.length; j++) {
             pathTo[j].redo();
