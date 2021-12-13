@@ -22,47 +22,47 @@ import type {UndoHistoryBase} from "./UndoHistoryBase";
  * Because interfaces are not retained at runtime in TS and we want DI (that thus cannot inject interface types).
  */
 export abstract class UndoHistory implements UndoHistoryBase {
-    abstract add(undoable: Undoable): void;
+    public abstract add(undoable: Undoable): void;
 
-    abstract clear(): void;
+    public abstract clear(): void;
 
-    abstract undo(): void;
+    public abstract undo(): void;
 
-    abstract redo(): void;
+    public abstract redo(): void;
 
     /**
      * @returns The stack of saved undoable objects.
      */
-    abstract getUndo(): ReadonlyArray<Undoable>;
+    public abstract getUndo(): ReadonlyArray<Undoable>;
 
     /**
      * @returns The stack of saved redoable objects
      */
-    abstract getRedo(): ReadonlyArray<Undoable>;
+    public abstract getRedo(): ReadonlyArray<Undoable>;
 
-    abstract undosObservable(): Observable<Undoable | undefined>;
+    public abstract undosObservable(): Observable<Undoable | undefined>;
 
-    abstract redosObservable(): Observable<Undoable | undefined>;
+    public abstract redosObservable(): Observable<Undoable | undefined>;
 
-    abstract getLastUndo(): Undoable | undefined;
+    public abstract getLastUndo(): Undoable | undefined;
 
-    abstract getLastRedo(): Undoable | undefined;
+    public abstract getLastRedo(): Undoable | undefined;
 
-    abstract getLastUndoMessage(): string | undefined;
+    public abstract getLastUndoMessage(): string | undefined;
 
-    abstract getLastRedoMessage(): string | undefined;
+    public abstract getLastRedoMessage(): string | undefined;
 
-    abstract getLastOrEmptyUndoMessage(): string;
+    public abstract getLastOrEmptyUndoMessage(): string;
 
-    abstract getLastOrEmptyRedoMessage(): string;
+    public abstract getLastOrEmptyRedoMessage(): string;
 
     /**
      * @returns The max number of saved undoable objects.
      */
-    abstract getSizeMax(): number;
+    public abstract getSizeMax(): number;
 
     /**
      * @param max - The max number of saved undoable objects. Must be great than 0.
      */
-    abstract setSizeMax(max: number): void;
+    public abstract setSizeMax(max: number): void;
 }
