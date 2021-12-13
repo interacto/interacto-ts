@@ -49,4 +49,10 @@ export interface TreeUndoHistory extends UndoHistoryBase {
     goTo(id: number): void;
 
     delete(id: number): void;
+
+    /**
+     * Computes the position (in the large) of each node.
+     * Useful for layouting.
+     */
+    getPositions(): Map<number, number>;
 }

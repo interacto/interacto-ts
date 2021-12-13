@@ -193,6 +193,45 @@ export class TreeUndoHistoryImpl implements TreeUndoHistory {
         }
     }
 
+    public getPositions(): Map<number, number> {
+        const positions = new Map<number, number>();
+        if (this.undoableNodes[0] !== undefined) {
+            this.getPositionNode(this.undoableNodes[0], positions, 0);
+        }
+        return positions;
+    }
+
+    private getPositionNode(node: UndoableTreeNode, positions: Map<number, number>, counter: number): number {
+        if (node.children.length === 0) {
+            positions.set(node.id, counter);
+            return counter + 1;
+        }
+        if (node.children.length === 1) {
+            const newCounter = this.getPositionNode(node.children[0], positions, counter);
+            positions.set(node.id, positions.get(node.children[0].id) ?? -1);
+            return newCounter;
+        }
+
+        let newCounter = counter;
+        for (let i = 0; i < Math.floor(node.children.length / 2); i++) {
+            newCounter = this.getPositionNode(node.children[i], positions, newCounter);
+        }
+
+        if (node.children.length % 2 === 0) {
+            positions.set(node.id, newCounter);
+            newCounter++;
+        } else {
+            newCounter = this.getPositionNode(node.children[Math.floor(node.children.length / 2)], positions, newCounter);
+            positions.set(node.id, positions.get(node.children[Math.floor(node.children.length / 2)].id) ?? -1);
+        }
+
+        for (let i = Math.ceil(node.children.length / 2); i < node.children.length; i++) {
+            newCounter = this.getPositionNode(node.children[i], positions, newCounter);
+        }
+
+        return newCounter;
+    }
+
     public getLastOrEmptyRedoMessage(): string {
         return this.getLastRedoMessage() ?? "";
     }

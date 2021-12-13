@@ -88,9 +88,19 @@ describe("using a graph undo history", () => {
         expect(history.redosObservable()).toBeDefined();
     });
 
+    test("get positions when empty", () => {
+        expect([...history.getPositions().keys()]).toHaveLength(0);
+    });
+
     describe("and using a single undoable", () => {
         beforeEach(() => {
             history.add(undoable0);
+        });
+
+        test("width when one element", () => {
+            const positions = history.getPositions();
+            expect([...positions.keys()]).toHaveLength(1);
+            expect(positions.get(0)).toBe(0);
         });
 
         test("get last undoable when one element", () => {
@@ -310,6 +320,16 @@ describe("using a graph undo history", () => {
             history.add(undoable4);
         });
 
+        test("compute positions when multiples elements", () => {
+            const positions = history.getPositions();
+            expect([...positions.keys()]).toHaveLength(5);
+            expect(positions.get(0)).toBe(1);
+            expect(positions.get(1)).toBe(0);
+            expect(positions.get(2)).toBe(3);
+            expect(positions.get(3)).toBe(2);
+            expect(positions.get(4)).toBe(4);
+        });
+
         test("get last undoable when multiple elements", () => {
             expect(history.getLastUndo()).toBe(undoable4);
         });
@@ -498,6 +518,124 @@ describe("using a graph undo history", () => {
             expect(history.undoableNodes[2]?.children).toHaveLength(2);
             expect(history.undoableNodes[3]?.children).toHaveLength(0);
             expect(history.undoableNodes[4]?.children).toHaveLength(0);
+        });
+    });
+
+    describe("and using 15 undoable in different paths", () => {
+        let undoable2: Undoable;
+        let undoable3: Undoable;
+        let undoable4: Undoable;
+        let undoable5: Undoable;
+        let undoable6: Undoable;
+        let undoable7: Undoable;
+        let undoable8: Undoable;
+        let undoable9: Undoable;
+        let undoable10: Undoable;
+        let undoable11: Undoable;
+        let undoable12: Undoable;
+        let undoable13: Undoable;
+        let undoable14: Undoable;
+
+        beforeEach(() => {
+            undoable2 = mock<Undoable>();
+            undoable3 = mock<Undoable>();
+            undoable4 = mock<Undoable>();
+            undoable5 = mock<Undoable>();
+            undoable6 = mock<Undoable>();
+            undoable7 = mock<Undoable>();
+            undoable8 = mock<Undoable>();
+            undoable9 = mock<Undoable>();
+            undoable10 = mock<Undoable>();
+            undoable11 = mock<Undoable>();
+            undoable12 = mock<Undoable>();
+            undoable13 = mock<Undoable>();
+            undoable14 = mock<Undoable>();
+            //                *
+            //                0
+            //        1              8
+            //  2     5    6     9 10 11 12
+            // 3 4  13 14  7
+            history.add(undoable0);
+            history.add(undoable1);
+            history.add(undoable2);
+            history.add(undoable3);
+            history.undo();
+            history.add(undoable4);
+            history.undo();
+            history.undo();
+            history.add(undoable5);
+            history.undo();
+            history.add(undoable6);
+            history.add(undoable7);
+            history.undo();
+            history.undo();
+            history.undo();
+            history.add(undoable8);
+            history.add(undoable9);
+            history.undo();
+            history.add(undoable10);
+            history.undo();
+            history.add(undoable11);
+            history.undo();
+            history.add(undoable12);
+            history.goTo(5);
+            history.add(undoable13);
+            history.undo();
+            history.add(undoable14);
+        });
+
+        test("tree structure is valid", () => {
+            expect(history.currentNode?.undoable).toBe(undoable14);
+            expect(history.undoableNodes[0]?.children).toHaveLength(2);
+            expect(history.undoableNodes[1]?.children).toHaveLength(3);
+            expect(history.undoableNodes[2]?.children).toHaveLength(2);
+            expect(history.undoableNodes[3]?.children).toHaveLength(0);
+            expect(history.undoableNodes[4]?.children).toHaveLength(0);
+            expect(history.undoableNodes[5]?.children).toHaveLength(2);
+            expect(history.undoableNodes[6]?.children).toHaveLength(1);
+            expect(history.undoableNodes[7]?.children).toHaveLength(0);
+            expect(history.undoableNodes[8]?.children).toHaveLength(4);
+            expect(history.undoableNodes[9]?.children).toHaveLength(0);
+            expect(history.undoableNodes[10]?.children).toHaveLength(0);
+            expect(history.undoableNodes[11]?.children).toHaveLength(0);
+            expect(history.undoableNodes[12]?.children).toHaveLength(0);
+            expect(history.undoableNodes[13]?.children).toHaveLength(0);
+            expect(history.undoableNodes[14]?.children).toHaveLength(0);
+            expect(history.undoableNodes[0]?.parent).toBeUndefined();
+            expect(history.undoableNodes[1]?.parent?.undoable).toBe(undoable0);
+            expect(history.undoableNodes[2]?.parent?.undoable).toBe(undoable1);
+            expect(history.undoableNodes[3]?.parent?.undoable).toBe(undoable2);
+            expect(history.undoableNodes[4]?.parent?.undoable).toBe(undoable2);
+            expect(history.undoableNodes[5]?.parent?.undoable).toBe(undoable1);
+            expect(history.undoableNodes[6]?.parent?.undoable).toBe(undoable1);
+            expect(history.undoableNodes[7]?.parent?.undoable).toBe(undoable6);
+            expect(history.undoableNodes[8]?.parent?.undoable).toBe(undoable0);
+            expect(history.undoableNodes[9]?.parent?.undoable).toBe(undoable8);
+            expect(history.undoableNodes[10]?.parent?.undoable).toBe(undoable8);
+            expect(history.undoableNodes[11]?.parent?.undoable).toBe(undoable8);
+            expect(history.undoableNodes[12]?.parent?.undoable).toBe(undoable8);
+            expect(history.undoableNodes[13]?.parent?.undoable).toBe(undoable5);
+            expect(history.undoableNodes[14]?.parent?.undoable).toBe(undoable5);
+        });
+
+        test("compute positions when multiples elements", () => {
+            const positions = history.getPositions();
+            expect([...positions.keys()]).toHaveLength(15);
+            expect(positions.get(0)).toBe(7);
+            expect(positions.get(1)).toBe(4);
+            expect(positions.get(2)).toBe(1);
+            expect(positions.get(3)).toBe(0);
+            expect(positions.get(4)).toBe(2);
+            expect(positions.get(5)).toBe(4);
+            expect(positions.get(6)).toBe(6);
+            expect(positions.get(7)).toBe(6);
+            expect(positions.get(8)).toBe(10);
+            expect(positions.get(9)).toBe(8);
+            expect(positions.get(10)).toBe(9);
+            expect(positions.get(11)).toBe(11);
+            expect(positions.get(12)).toBe(12);
+            expect(positions.get(13)).toBe(3);
+            expect(positions.get(14)).toBe(5);
         });
     });
 });
