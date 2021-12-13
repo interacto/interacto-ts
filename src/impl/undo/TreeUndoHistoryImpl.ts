@@ -12,7 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {TreeUndoHistory, UndoableTreeNode} from "../../api/undo/TreeUndoHistory";
+import type {UndoableTreeNode} from "../../api/undo/TreeUndoHistory";
+import {TreeUndoHistory} from "../../api/undo/TreeUndoHistory";
 import type {Undoable} from "../../api/undo/Undoable";
 import {remove} from "../util/ArrayUtil";
 import type {Observable} from "rxjs";
@@ -52,7 +53,7 @@ class UndoableTreeNodeImpl implements UndoableTreeNode {
     }
 }
 
-export class TreeUndoHistoryImpl implements TreeUndoHistory {
+export class TreeUndoHistoryImpl extends TreeUndoHistory {
     private idCounter: number;
 
     private _currentNode: UndoableTreeNode | undefined;
@@ -64,6 +65,7 @@ export class TreeUndoHistoryImpl implements TreeUndoHistory {
     private readonly redoPublisher: Subject<Undoable | undefined>;
 
     public constructor() {
+        super();
         this.undoableNodes = new Array<UndoableTreeNode>();
         this.idCounter = 0;
         this.undoPublisher = new Subject();

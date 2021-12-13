@@ -14,6 +14,7 @@
 
 import type {UndoHistoryBase} from "./UndoHistoryBase";
 import type {Undoable} from "./Undoable";
+import type {Observable} from "rxjs";
 
 /**
  * Tree undo history.
@@ -41,18 +42,42 @@ export interface UndoableTreeNode {
     redo(): void;
 }
 
-export interface TreeUndoHistory extends UndoHistoryBase {
-    readonly undoableNodes: Array<UndoableTreeNode | undefined>;
+export abstract class TreeUndoHistory implements UndoHistoryBase {
+    public abstract get undoableNodes(): Array<UndoableTreeNode | undefined>;
 
-    readonly currentNode: UndoableTreeNode | undefined;
+    public abstract get currentNode(): UndoableTreeNode | undefined;
 
-    goTo(id: number): void;
+    public abstract goTo(id: number): void;
 
-    delete(id: number): void;
+    public abstract delete(id: number): void;
 
     /**
      * Computes the position (in the large) of each node.
      * Useful for layouting.
      */
-    getPositions(): Map<number, number>;
+    public abstract getPositions(): Map<number, number>;
+
+    public abstract add(undoable: Undoable): void;
+
+    public abstract clear(): void;
+
+    public abstract getLastOrEmptyRedoMessage(): string;
+
+    public abstract getLastOrEmptyUndoMessage(): string;
+
+    public abstract getLastRedo(): Undoable | undefined;
+
+    public abstract getLastRedoMessage(): string | undefined;
+
+    public abstract getLastUndo(): Undoable | undefined;
+
+    public abstract getLastUndoMessage(): string | undefined;
+
+    public abstract redo(): void;
+
+    public abstract redosObservable(): Observable<Undoable | undefined>;
+
+    public abstract undo(): void;
+
+    public abstract undosObservable(): Observable<Undoable | undefined>;
 }
