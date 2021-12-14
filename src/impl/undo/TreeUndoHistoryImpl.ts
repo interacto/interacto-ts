@@ -22,8 +22,6 @@ import {Subject} from "rxjs";
 class UndoableTreeNodeImpl implements UndoableTreeNode {
     public lastChildUndone: UndoableTreeNode | undefined;
 
-    public readonly branchVisualSnapshot: SVGElement | string | undefined;
-
     public readonly children: Array<UndoableTreeNode>;
 
     public readonly id: number;
@@ -32,13 +30,14 @@ class UndoableTreeNodeImpl implements UndoableTreeNode {
 
     public readonly undoable: Undoable;
 
-    public readonly visualSnapshot: SVGElement | string | undefined;
+    private readonly cacheVisualSnap: SVGElement | string | undefined;
 
     public constructor(undoable: Undoable, id: number, parent: UndoableTreeNode | undefined) {
         this.undoable = undoable;
         this.id = id;
         this.children = new Array<UndoableTreeNode>();
         this.parent = parent;
+        this.cacheVisualSnap = undoable.getVisualSnapshot();
     }
 
     public undo(): void {
@@ -51,6 +50,11 @@ class UndoableTreeNodeImpl implements UndoableTreeNode {
     public redo(): void {
         this.undoable.redo();
     }
+
+    public get visualSnapshot(): SVGElement | string | undefined {
+        return this.cacheVisualSnap;
+    }
+
 }
 
 export class TreeUndoHistoryImpl extends TreeUndoHistory {

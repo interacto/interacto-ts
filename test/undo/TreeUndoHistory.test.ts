@@ -94,7 +94,13 @@ describe("using a graph undo history", () => {
 
     describe("and using a single undoable", () => {
         beforeEach(() => {
+            undoable0.getVisualSnapshot = (): string => "foo";
             history.add(undoable0);
+        });
+
+        test("get snapshot", () => {
+            const foo = history.undoableNodes[0]?.visualSnapshot;
+            expect(foo).toBe("foo");
         });
 
         test("width when one element", () => {

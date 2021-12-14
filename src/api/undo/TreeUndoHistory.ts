@@ -35,8 +35,6 @@ export interface UndoableTreeNode {
 
     readonly visualSnapshot: SVGElement | string | undefined;
 
-    readonly branchVisualSnapshot: SVGElement | string | undefined;
-
     undo(): void;
 
     redo(): void;
