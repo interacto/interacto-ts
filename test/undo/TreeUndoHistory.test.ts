@@ -296,10 +296,10 @@ describe("using a graph undo history", () => {
             expect(history.currentNode?.undoable).toBe(undoable0);
         });
 
-        test("delete ok", () => {
+        test("cannot delete the current branch", () => {
             history.delete(0);
-            expect(history.undoableNodes[0]).toBeUndefined();
-            expect(history.currentNode).toBeUndefined();
+            expect(history.undoableNodes).toHaveLength(1);
+            expect(history.currentNode?.undoable).toBe(undoable0);
         });
     });
 
@@ -491,9 +491,10 @@ describe("using a graph undo history", () => {
         });
 
         test("delete 2", () => {
+            history.goTo(0);
             history.delete(2);
 
-            expect(history.currentNode).toBeUndefined();
+            expect(history.currentNode?.undoable).toBe(undoable0);
             expect(history.undoableNodes[0]?.parent).toBeUndefined();
             expect(history.undoableNodes[0]?.children).toHaveLength(1);
             expect(history.undoableNodes[0]?.children[0]?.undoable).toBe(undoable1);
@@ -505,11 +506,12 @@ describe("using a graph undo history", () => {
         });
 
         test("delete 0", () => {
-            history.delete(0);
+            history.goTo(1);
+            history.delete(2);
 
-            expect(history.currentNode).toBeUndefined();
-            expect(history.undoableNodes[0]).toBeUndefined();
-            expect(history.undoableNodes[1]).toBeUndefined();
+            expect(history.currentNode?.undoable).toBe(undoable1);
+            expect(history.undoableNodes[0]).toBeDefined();
+            expect(history.undoableNodes[1]).toBeDefined();
             expect(history.undoableNodes[2]).toBeUndefined();
             expect(history.undoableNodes[3]).toBeUndefined();
             expect(history.undoableNodes[4]).toBeUndefined();

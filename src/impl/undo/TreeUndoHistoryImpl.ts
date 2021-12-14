@@ -105,6 +105,17 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
         if (node === undefined) {
             return;
         }
+
+        let nodeBranch = this.currentNode;
+
+        while (nodeBranch !== undefined) {
+            // cannot remove the current branch (older or current undoables)
+            if (nodeBranch.id === id) {
+                return;
+            }
+            nodeBranch = nodeBranch.parent;
+        }
+
         this.undoableNodes[id] = undefined;
 
         if (node.parent !== undefined) {
