@@ -19,7 +19,7 @@ pipeline {
 
         stage('Node config') {
             steps {
-                nodejs(nodeJSInstallationName: 'node12') {
+                nodejs(nodeJSInstallationName: 'node14') {
                     sh 'npm -v'
                 }
             }
@@ -33,7 +33,7 @@ pipeline {
 
         stage ('NPM install') {
             steps {
-                nodejs(nodeJSInstallationName: 'node12') {
+                nodejs(nodeJSInstallationName: 'node14') {
                     sh '''
                         npm install
                     '''
@@ -43,7 +43,7 @@ pipeline {
 
         stage ('NPM build') {
             steps {
-                nodejs(nodeJSInstallationName: 'node12') {
+                nodejs(nodeJSInstallationName: 'node14') {
                     sh '''
                         npm run package
                     '''
