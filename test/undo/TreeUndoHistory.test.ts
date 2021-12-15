@@ -304,6 +304,38 @@ describe("using a graph undo history", () => {
     });
 
 
+    describe("and using two roots", () => {
+        beforeEach(() => {
+            history.add(undoable0);
+            history.goTo(-1);
+            history.add(undoable1);
+        });
+
+        test("check structure", () => {
+            expect(history.currentNode?.undoable).toBe(undoable1);
+            expect(history.undoableNodes).toHaveLength(2);
+            expect(history.undoableNodes[0]?.parent).toBeUndefined();
+            expect(history.undoableNodes[1]?.parent).toBeUndefined();
+            expect(history.undoableNodes[0]?.children).toHaveLength(0);
+            expect(history.undoableNodes[1]?.children).toHaveLength(0);
+        });
+
+        test("delete one root is OK", () => {
+            history.goTo(-1);
+            history.delete(1);
+            expect(history.undoableNodes[0]?.undoable).toBe(undoable0);
+            expect(history.undoableNodes[1]?.undoable).toBeUndefined();
+        });
+
+        test("positions OK", () => {
+            const pos = history.getPositions();
+            expect(pos.size).toBe(2);
+            expect(pos.get(0)).toBe(0);
+            expect(pos.get(1)).toBe(1);
+        });
+    });
+
+
     describe("and using five undoable in different paths", () => {
         let undoable2: Undoable;
         let undoable3: Undoable;

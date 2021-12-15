@@ -68,9 +68,13 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
 
     private readonly redoPublisher: Subject<Undoable | undefined>;
 
+    // A tree can have several roots (ie several starting branches)
+    private readonly roots: Set<number>;
+
     public constructor() {
         super();
-        this.undoableNodes = new Array<UndoableTreeNode>();
+        this.undoableNodes = [];
+        this.roots = new Set<number>();
         this.idCounter = 0;
         this.undoPublisher = new Subject();
         this.redoPublisher = new Subject();
@@ -79,7 +83,9 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
     public add(undoable: Undoable): void {
         const node = new UndoableTreeNodeImpl(undoable, this.idCounter, this.currentNode);
         this.undoableNodes[this.idCounter] = node;
-        if (this.currentNode !== undefined) {
+        if (this.currentNode === undefined) {
+            this.roots.add(node.id);
+        } else {
             this.currentNode.children.push(node);
         }
         this._currentNode = node;
@@ -92,6 +98,7 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
     }
 
     public clear(): void {
+        this.roots.clear();
         this._currentNode = undefined;
         this.undoableNodes.length = 0;
         this.idCounter = 0;
@@ -117,6 +124,7 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
         }
 
         this.undoableNodes[id] = undefined;
+        this.roots.delete(id);
 
         if (node.parent !== undefined) {
             remove(node.parent.children, node);
@@ -214,9 +222,12 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
 
     public getPositions(): Map<number, number> {
         const positions = new Map<number, number>();
-        if (this.undoableNodes[0] !== undefined) {
-            this.getPositionNode(this.undoableNodes[0], positions, 0);
-        }
+        let counter = 0;
+
+        this.roots.forEach(root => {
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            counter = this.getPositionNode(this.undoableNodes[root]!, positions, counter);
+        });
         return positions;
     }
 
