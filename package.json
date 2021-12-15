@@ -61,7 +61,7 @@
     "compile": "tsc",
     "compile-test": "tsc -p tsconfig4tests.json",
     "pre-build": "npm run clean && npm run generate-barrels && npm run lint && npm run compile && npm run compile-test && npm run coverage",
-    "clean": "(rm -rf dist out-test)",
+    "clean": "(rm -rf dist out-test coverage .stryker-tmp)",
     "clean-all": "npm run clean && (rm -rf reports docs)",
     "test": "jest",
     "lint": "eslint src test --ext .ts",
