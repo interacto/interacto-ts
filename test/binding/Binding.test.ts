@@ -250,8 +250,10 @@ describe("nominal cases", () => {
         expect(binding.cancel).toHaveBeenCalledTimes(2);
     });
 
-    test("cancel interaction continuous", () => {
+    test("cancel interaction continuous not undoable", () => {
         binding = new BindingStub(history, logger, true, false, () => new StubCmd(), new InteractionStub(new FSMImpl()));
+        jest.spyOn(binding, "cancel");
+        jest.spyOn(binding, "endOrCancel");
         binding.conditionRespected = true;
         binding.interaction.fsm.onStarting();
         // eslint-disable-next-line no-unused-expressions
@@ -259,6 +261,11 @@ describe("nominal cases", () => {
         expect(() => {
             binding.interaction.fsm.onCancelling();
         }).toThrow(MustBeUndoableCmdError);
+        expect(binding.timesEnded).toBe(0);
+        expect(binding.timesCancelled).toBe(1);
+        expect(binding.cancel).toHaveBeenCalledTimes(1);
+        expect(binding.endOrCancel).toHaveBeenCalledTimes(1);
+        expect(binding.command).toBeUndefined();
     });
 
     test("cancel interaction continuous undoable", () => {

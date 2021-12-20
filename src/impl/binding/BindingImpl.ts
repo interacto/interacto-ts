@@ -274,14 +274,16 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
                 this.logger.logCmdMsg("Cancelling command", this._cmd.constructor.name);
             }
 
-            if (this.continuousCmdExecution) {
-                this.cancelContinousWithEffectsCmd(this._cmd);
+            try {
+                if (this.continuousCmdExecution) {
+                    this.cancelContinousWithEffectsCmd(this._cmd);
+                }
+            } finally {
+                this._cmd = undefined;
+                this.cancel();
+                this.endOrCancel();
+                this._timeCancelled++;
             }
-
-            this._cmd = undefined;
-            this.cancel();
-            this.endOrCancel();
-            this._timeCancelled++;
         }
 
         if (this.logUsage) {
