@@ -42,7 +42,8 @@ beforeEach(() => {
         "shiftKey": true,
         "timeStamp": 17,
         "target": new EventTarget(),
-        "currentTarget": new EventTarget()
+        "currentTarget": new EventTarget(),
+        "allTouches": []
     });
 });
 

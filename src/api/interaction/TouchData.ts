@@ -68,4 +68,9 @@ export interface TouchData extends PointBaseData, UnitInteractionData {
     readonly rotationAngle: number;
 
     readonly touchType: TouchType;
+
+    /**
+     * All the current touches.
+     */
+    readonly allTouches: ReadonlyArray<TouchData>;
 }

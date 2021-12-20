@@ -113,12 +113,12 @@ beforeEach(() => {
     };
 
     touchData1 = new SrcTgtTouchDataImpl();
-    touchData1.copySrc(touchSrc1, evt);
-    touchData1.copyTgt(touchTgt1, evt);
+    touchData1.copySrc(touchSrc1, evt, []);
+    touchData1.copyTgt(touchTgt1, evt, []);
 
     touchData2 = new SrcTgtTouchDataImpl();
-    touchData2.copySrc(touchSrc2, evt);
-    touchData2.copyTgt(touchTgt2, evt);
+    touchData2.copySrc(touchSrc2, evt, []);
+    touchData2.copyTgt(touchTgt2, evt, []);
 });
 
 test("touches collection is empty by default", () => {
@@ -174,8 +174,8 @@ test("setTouch touch point exists", () => {
     const newEvt: TouchEvent = new TouchEvent("touchstart");
 
     const newTouchData = new SrcTgtTouchDataImpl();
-    newTouchData.copySrc(touchSrc1, evt);
-    newTouchData.copyTgt(newTouch, newEvt);
+    newTouchData.copySrc(touchSrc1, evt, []);
+    newTouchData.copyTgt(newTouch, newEvt, []);
     data.setTouch(newTouch, newEvt);
 
     expect(data.touches[0]).toStrictEqual(newTouchData);

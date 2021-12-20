@@ -95,8 +95,9 @@ export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouch
                 // eslint-disable-next-line @typescript-eslint/prefer-for-of
                 for (let i = 0; i < event.changedTouches.length; i++) {
                     const data = new SrcTgtTouchDataImpl();
-                    data.copySrc(event.changedTouches[i], event);
-                    data.copyTgt(event.changedTouches[i], event);
+                    const all = [...event.touches];
+                    data.copySrc(event.changedTouches[i], event, all);
+                    data.copyTgt(event.changedTouches[i], event, all);
                     this._data.addTouchData(data);
                 }
             },

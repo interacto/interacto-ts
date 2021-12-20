@@ -62,12 +62,13 @@ export class MultiTouchDataImpl implements MultiTouchData, Flushable {
      * Sets new value for the given touch point.
      * The identifier of the given event point is used to find the corresponding
      * touch data.
-     * @param tp - The touch event to use.
+     * @param tp - The touch event data to use.
+     * @param evt - The touch event
      */
     public setTouch(tp: Touch, evt: TouchEvent): void {
         const tdata = this.touchesData.get(tp.identifier);
         if (tdata !== undefined) {
-            tdata.copyTgt(tp, evt);
+            tdata.copyTgt(tp, evt, [...evt.touches]);
         }
     }
 

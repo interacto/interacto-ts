@@ -18,6 +18,8 @@ import type {UnitInteractionData} from "../../api/interaction/UnitInteractionDat
 import type {EventModifierData} from "../../api/interaction/EventModifierData";
 
 export class TouchDataImpl extends PointingDataBase implements TouchData {
+    private _allTouches: Array<TouchData> = [];
+
     private altitudeAngleData: number = 0;
 
     private azimuthAngleData: number = 0;
@@ -34,6 +36,10 @@ export class TouchDataImpl extends PointingDataBase implements TouchData {
 
     private touchTypeData: TouchType = "direct";
 
+
+    public get allTouches(): ReadonlyArray<TouchData> {
+        return this._allTouches;
+    }
 
     public get altitudeAngle(): number {
         return this.altitudeAngleData;
@@ -78,6 +84,11 @@ export class TouchDataImpl extends PointingDataBase implements TouchData {
         this.radiusYData = data.radiusY;
         this.rotationAngleData = data.rotationAngle;
         this.touchTypeData = data.touchType;
+        this._allTouches = data.allTouches.map(t => {
+            const newT = new TouchDataImpl();
+            newT.copy(t);
+            return newT;
+        });
     }
 
     public override flush(): void {
@@ -90,20 +101,37 @@ export class TouchDataImpl extends PointingDataBase implements TouchData {
         this.radiusYData = 0;
         this.rotationAngleData = 0;
         this.touchTypeData = "direct";
+        this._allTouches = [];
     }
 
-    public static mergeTouchEventData(touch: Touch, evt: EventModifierData & UnitInteractionData): TouchData {
+    public static mergeTouchEventData(touch: Touch, evt: EventModifierData & UnitInteractionData, allTouches: Array<Touch>): TouchData {
         const data = new TouchDataImpl();
         // Not beautiful code but other tries did not work
         // 'assign' and spread do not work with events (polyfill concern? Or front interfaces for legacy back API?).
-        //
-        data.copy(touch as TouchData);
-        data.timeStampData = evt.timeStamp;
-        data.altKeyData = evt.altKey;
-        data.shiftKeyData = evt.shiftKey;
-        data.ctrlKeyData = evt.ctrlKey;
-        data.metaKeyData = evt.metaKey;
-        data.currentTargetData = evt.currentTarget;
+        data.copy({
+            "altitudeAngle": touch.altitudeAngle,
+            "azimuthAngle": touch.azimuthAngle,
+            "clientX": touch.clientX,
+            "clientY": touch.clientY,
+            "force": touch.force,
+            "identifier": touch.identifier,
+            "pageX": touch.pageX,
+            "pageY": touch.pageY,
+            "radiusX": touch.radiusX,
+            "radiusY": touch.radiusY,
+            "rotationAngle": touch.rotationAngle,
+            "screenX": touch.screenX,
+            "screenY": touch.screenY,
+            "target": touch.target,
+            "touchType": touch.touchType,
+            "allTouches": allTouches.map(t => TouchDataImpl.mergeTouchEventData(t, evt, [])),
+            "timeStamp": evt.timeStamp,
+            "altKey": evt.altKey,
+            "shiftKey": evt.shiftKey,
+            "ctrlKey": evt.ctrlKey,
+            "metaKey": evt.metaKey,
+            "currentTarget": evt.currentTarget
+        });
         return data;
     }
 }

@@ -14,7 +14,7 @@
 
 import type {FSMHandler} from "../../../src/interacto";
 import {LongTouch, TouchDataImpl} from "../../../src/interacto";
-import {createTouchEvent} from "../StubEvents";
+import {createTouchEvent, robot} from "../StubEvents";
 import {mock} from "jest-mock-extended";
 import {checkTouchPoint} from "../../Utils";
 
@@ -51,6 +51,7 @@ describe("long touch test", () => {
             beforeEach(() => {
                 interaction = new LongTouch(duration);
                 interaction.fsm.addHandler(handler);
+                interaction.registerToNodes([canvas]);
             });
 
             test("touch does not end", () => {
@@ -60,11 +61,16 @@ describe("long touch test", () => {
                     touchData.copy(interaction.data);
                 });
                 interaction.fsm.addHandler(newHandler);
-                interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 15, 20, 160, 21));
+
+                robot()
+                    .touchstart(canvas, [{"identifier": 3, "screenX": 15, "screenY": 20, "clientX": 160, "clientY": 21}]);
+
                 expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
                 expect(handler.fsmStops).not.toHaveBeenCalled();
                 expect(handler.fsmCancels).not.toHaveBeenCalled();
                 checkTouchPoint(touchData, 160, 21, 15, 20, 3, canvas);
+                expect(touchData.allTouches).toHaveLength(1);
+                expect(touchData.allTouches[0].identifier).toBe(3);
             });
 
             test("touch with early release", () => {

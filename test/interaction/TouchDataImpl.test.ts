@@ -20,9 +20,61 @@ import type {UnitInteractionData} from "../../src/api/interaction/UnitInteractio
 let data: TouchDataImpl;
 let defaultData: TouchDataImpl;
 let newData: TouchData;
+let allTouches: Array<TouchData>;
 let evt: EventModifierData & UnitInteractionData;
 
 beforeEach(() => {
+    const t1 = new TouchDataImpl();
+    const t2 = new TouchDataImpl();
+    t1.copy({
+        "altitudeAngle": 15,
+        "azimuthAngle": 110,
+        "force": 115,
+        "identifier": 210,
+        "radiusX": 215,
+        "radiusY": 310,
+        "rotationAngle": 315,
+        "touchType": "stylus",
+        "clientX": 111,
+        "clientY": 121,
+        "pageX": 131,
+        "pageY": 114,
+        "screenX": 151,
+        "screenY": 161,
+        "altKey": false,
+        "ctrlKey": true,
+        "metaKey": true,
+        "shiftKey": false,
+        "timeStamp": 171,
+        "target": new EventTarget(),
+        "currentTarget": new EventTarget(),
+        "allTouches": []
+    });
+    t2.copy({
+        "altitudeAngle": 154,
+        "azimuthAngle": 1140,
+        "force": 1145,
+        "identifier": 2140,
+        "radiusX": 2145,
+        "radiusY": 3140,
+        "rotationAngle": 3415,
+        "touchType": "stylus",
+        "clientX": 1141,
+        "clientY": 1241,
+        "pageX": 1341,
+        "pageY": 1144,
+        "screenX": 1514,
+        "screenY": 1641,
+        "altKey": false,
+        "ctrlKey": true,
+        "metaKey": true,
+        "shiftKey": false,
+        "timeStamp": 1371,
+        "target": new EventTarget(),
+        "currentTarget": new EventTarget(),
+        "allTouches": []
+    });
+    allTouches = [t1, t2];
     data = new TouchDataImpl();
     newData = {
         "altitudeAngle": 5,
@@ -45,8 +97,9 @@ beforeEach(() => {
         "shiftKey": true,
         "timeStamp": 17,
         "target": new EventTarget(),
-        "currentTarget": new EventTarget()
-    } as TouchData;
+        "currentTarget": new EventTarget(),
+        allTouches
+    };
     defaultData = new TouchDataImpl();
     defaultData.copy({
         "altitudeAngle": 0,
@@ -69,7 +122,8 @@ beforeEach(() => {
         "shiftKey": false,
         "timeStamp": 0,
         "target": null,
-        "currentTarget": null
+        "currentTarget": null,
+        "allTouches": []
     });
     evt = {
         "altKey": false,
@@ -108,6 +162,7 @@ test("copy", () => {
     expect(data.timeStamp).toBe(newData.timeStamp);
     expect(data.target).toStrictEqual(newData.target);
     expect(data.currentTarget).toStrictEqual(newData.currentTarget);
+    expect(data.allTouches).toStrictEqual(allTouches);
 });
 
 test("flush", () => {
@@ -118,7 +173,7 @@ test("flush", () => {
 
 test("mergeTouchEventData", () => {
     data.copy(newData);
-    const merged = TouchDataImpl.mergeTouchEventData(data as Touch, evt);
+    const merged = TouchDataImpl.mergeTouchEventData(data as Touch, evt, []);
     expect(merged.altitudeAngle).toBe(data.altitudeAngle);
     expect(merged.azimuthAngle).toBe(data.azimuthAngle);
     expect(merged.force).toBe(data.force);

@@ -41,12 +41,12 @@ export class SrcTgtTouchDataImpl implements SrcTgtPointsData<TouchData> {
         this.tgtData.flush();
     }
 
-    public copySrc(data: Touch, evt: EventModifierData & UnitInteractionData): void {
-        this.srcData.copy(TouchDataImpl.mergeTouchEventData(data, evt));
+    public copySrc(data: Touch, evt: EventModifierData & UnitInteractionData, allTouches: Array<Touch>): void {
+        this.srcData.copy(TouchDataImpl.mergeTouchEventData(data, evt, allTouches));
     }
 
-    public copyTgt(data: Touch, evt: EventModifierData & UnitInteractionData): void {
-        this.tgtData.copy(TouchDataImpl.mergeTouchEventData(data, evt));
+    public copyTgt(data: Touch, evt: EventModifierData & UnitInteractionData, allTouches: Array<Touch>): void {
+        this.tgtData.copy(TouchDataImpl.mergeTouchEventData(data, evt, allTouches));
     }
 
     public get diffClientX(): number {

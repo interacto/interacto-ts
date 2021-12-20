@@ -300,14 +300,19 @@ describe("tap 3", () => {
             });
         });
         interaction.fsm.addHandler(newHandler);
-        interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 15, 20, 16, 21));
-        interaction.processEvent(createTouchEvent("touchend", 3, canvas, 15, 20, 16, 21));
-        interaction.processEvent(createTouchEvent("touchstart", 2, canvas, 12, 27, 14, 28));
-        interaction.processEvent(createTouchEvent("touchend", 2, canvas, 12, 27, 14, 28));
-        interaction.processEvent(createTouchEvent("touchstart", 2, canvas, 112, 217, 114, 128));
-        interaction.processEvent(createTouchEvent("touchend", 2, canvas, 112, 217, 114, 128));
+
+        robot(canvas)
+            .keepData()
+            .touchstart({}, [{"identifier": 3, "screenX": 15, "screenY": 20, "clientX": 16, "clientY": 21}])
+            .touchend()
+            .touchstart({}, [{"identifier": 2, "screenX": 12, "screenY": 27, "clientX": 14, "clientY": 28}])
+            .touchend()
+            .touchstart({}, [{"identifier": 1, "screenX": 112, "screenY": 217, "clientX": 114, "clientY": 128}])
+            .touchend();
 
         expect(touch.taps).toHaveLength(3);
         checkTouchPoint(touch.taps[0], 16, 21, 15, 20, 3, canvas);
+        expect(touch.taps[0].allTouches).toHaveLength(1);
+        expect(touch.taps[0].allTouches[0].identifier).toBe(3);
     });
 });

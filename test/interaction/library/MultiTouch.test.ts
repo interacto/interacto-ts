@@ -223,6 +223,18 @@ test("touch starts", () => {
     expect(interaction.fsm.started).toBeTruthy();
 });
 
+
+test("touch starts data all touches", () => {
+    robot(canvas)
+        .touchstart(canvas, [{"identifier": 3, "screenX": 50, "screenY": 20, "clientX": 100, "clientY": 200}])
+        .touchstart({}, [{"identifier": 1}])
+        .touchstart({}, [{"identifier": 2}]);
+
+    expect(interaction.data.touches[0].src.allTouches).toHaveLength(1);
+    expect(interaction.data.touches[1].src.allTouches).toHaveLength(2);
+    expect(interaction.data.touches[2].src.allTouches).toHaveLength(3);
+});
+
 test("touch starts too many so cancel", () => {
     robot(canvas)
         .touchstart({}, [{"identifier": 3, "screenX": 50, "screenY": 20, "clientX": 100, "clientY": 200}], 5000)

@@ -81,8 +81,8 @@ beforeEach(() => {
         "currentTarget": new EventTarget()
     };
 
-    data.copySrc(touchSrc, evt1);
-    data.copyTgt(touchTgt, evt2);
+    data.copySrc(touchSrc, evt1, []);
+    data.copyTgt(touchTgt, evt2, []);
 });
 
 test("flush", () => {

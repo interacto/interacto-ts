@@ -14,7 +14,7 @@
 
 import type {FSMHandler} from "../../../src/interacto";
 import {TouchDnD} from "../../../src/interacto";
-import {createTouchEvent, robot} from "../StubEvents";
+import {robot} from "../StubEvents";
 import {mock} from "jest-mock-extended";
 import {TouchDataImpl} from "../../../src/impl/interaction/TouchDataImpl";
 
@@ -49,15 +49,18 @@ test("build fsm twice does not work", () => {
 });
 
 test("pressure does not start interaction", () => {
-    interaction.processEvent(createTouchEvent("touchstart", 2, canvas));
+    robot(canvas)
+        .touchstart({}, [{"identifier": 2}]);
     expect(handler.fsmStarts).toHaveBeenCalledTimes(0);
     expect(handler.fsmStops).not.toHaveBeenCalled();
     expect(handler.fsmCancels).not.toHaveBeenCalled();
 });
 
 test("pressure move", () => {
-    interaction.processEvent(createTouchEvent("touchstart", 2, canvas, 11, 23, 12, 25));
-    interaction.processEvent(createTouchEvent("touchmove", 2, canvas, 11, 24, 14, 28));
+    robot(canvas)
+        .keepData()
+        .touchstart({}, [{"identifier": 2}])
+        .touchmove();
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).not.toHaveBeenCalled();
@@ -65,7 +68,9 @@ test("pressure move", () => {
 });
 
 test("pressure move data", () => {
-    interaction.processEvent(createTouchEvent("touchstart", 2, canvas, 11, 23, 12, 25));
+    robot()
+        .touchstart(canvas, [{"identifier": 2, "screenX": 11, "screenY": 23, "clientX": 12, "clientY": 25}]);
+
     const newHandler = mock<FSMHandler>();
     newHandler.fsmUpdates = jest.fn(() => {
         srcData.copy(interaction.data.src);
@@ -73,7 +78,8 @@ test("pressure move data", () => {
     });
     interaction.fsm.addHandler(newHandler);
 
-    interaction.processEvent(createTouchEvent("touchmove", 2, canvas, 141, 24, 14, 28));
+    robot()
+        .touchmove(canvas, [{"identifier": 2, "screenX": 141, "screenY": 24, "clientX": 14, "clientY": 28}]);
     expect(srcData.clientX).toBe(12);
     expect(srcData.clientY).toBe(25);
     expect(srcData.screenX).toBe(11);
@@ -85,15 +91,18 @@ test("pressure move data", () => {
     expect(srcData.identifier).toBe(2);
     expect(tgtData.identifier).toBe(2);
     expect(srcData.target).toBe(canvas);
-    expect(srcData.currentTarget).toBeNull();
+    expect(srcData.currentTarget).toBe(canvas);
     expect(tgtData.target).toBe(canvas);
-    expect(tgtData.currentTarget).toBeNull();
+    expect(tgtData.currentTarget).toBe(canvas);
 });
 
 test("pressure move move KO", () => {
-    interaction.processEvent(createTouchEvent("touchstart", 2, canvas, 11, 23, 12, 25));
-    interaction.processEvent(createTouchEvent("touchmove", 2, canvas, 11, 24, 14, 28));
-    interaction.processEvent(createTouchEvent("touchmove", 1, canvas, 11, 24, 14, 28));
+    robot(canvas)
+        .keepData()
+        .touchstart({}, [{"identifier": 2}])
+        .touchmove()
+        .touchmove({}, [{"identifier": 1}]);
+
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).not.toHaveBeenCalled();
@@ -101,9 +110,12 @@ test("pressure move move KO", () => {
 });
 
 test("pressure move move OK", () => {
-    interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 11, 23, 12, 25));
-    interaction.processEvent(createTouchEvent("touchmove", 3, canvas, 11, 24, 14, 28));
-    interaction.processEvent(createTouchEvent("touchmove", 3, canvas, 11, 24, 14, 28));
+    robot(canvas)
+        .keepData()
+        .touchstart({}, [{"identifier": 3}])
+        .touchmove()
+        .touchmove();
+
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
     expect(handler.fsmStops).not.toHaveBeenCalled();
@@ -111,8 +123,9 @@ test("pressure move move OK", () => {
 });
 
 test("pressure move move OK data", () => {
-    interaction.processEvent(createTouchEvent("touchstart", 4, canvas, 111, 213, 112, 215));
-    interaction.processEvent(createTouchEvent("touchmove", 4, canvas, 11, 24, 14, 28));
+    robot(canvas)
+        .touchstart({}, [{"identifier": 4, "screenX": 111, "screenY": 213, "clientX": 112, "clientY": 215}])
+        .touchmove({}, [{"identifier": 4, "screenX": 11, "screenY": 24, "clientX": 14, "clientY": 28}]);
 
     const newHandler = mock<FSMHandler>();
     newHandler.fsmUpdates = jest.fn(() => {
@@ -121,7 +134,9 @@ test("pressure move move OK data", () => {
     });
     interaction.fsm.addHandler(newHandler);
 
-    interaction.processEvent(createTouchEvent("touchmove", 4, canvas, 110, 240, 140, 280));
+    robot()
+        .touchmove(canvas, [{"identifier": 4, "screenX": 110, "screenY": 240, "clientX": 140, "clientY": 280}]);
+
     expect(srcData.clientX).toBe(112);
     expect(srcData.clientY).toBe(215);
     expect(srcData.screenX).toBe(111);
@@ -132,15 +147,18 @@ test("pressure move move OK data", () => {
     expect(tgtData.screenY).toBe(240);
     expect(srcData.identifier).toBe(4);
     expect(srcData.target).toBe(canvas);
-    expect(srcData.currentTarget).toBeNull();
+    expect(srcData.currentTarget).toBe(canvas);
     expect(tgtData.target).toBe(canvas);
-    expect(tgtData.currentTarget).toBeNull();
+    expect(tgtData.currentTarget).toBe(canvas);
 });
 
 test("pressure move release", () => {
-    interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 11, 23, 12, 25));
-    interaction.processEvent(createTouchEvent("touchmove", 3, canvas, 11, 24, 14, 28));
-    interaction.processEvent(createTouchEvent("touchend", 3, canvas, 11, 24, 14, 28));
+    robot(canvas)
+        .keepData()
+        .touchstart({}, [{"identifier": 3}])
+        .touchmove()
+        .touchend();
+
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
@@ -161,9 +179,10 @@ test("pressure move release data", () => {
     });
     interaction.fsm.addHandler(newHandler);
 
-    interaction.processEvent(createTouchEvent("touchstart", 0, canvas, 111, 231, 121, 251));
-    interaction.processEvent(createTouchEvent("touchmove", 0, canvas, 11, 24, 14, 28));
-    interaction.processEvent(createTouchEvent("touchend", 0, canvas, 110, 240, 140, 280));
+    robot(canvas)
+        .touchstart({}, [{"identifier": 0, "screenX": 111, "screenY": 231, "clientX": 121, "clientY": 251}])
+        .touchmove({}, [{"identifier": 0, "screenX": 11, "screenY": 24, "clientX": 14, "clientY": 28}])
+        .touchend({}, [{"identifier": 0, "screenX": 110, "screenY": 240, "clientX": 140, "clientY": 280}]);
 
     expect(srcData.clientX).toBe(121);
     expect(srcData.clientY).toBe(251);
@@ -176,9 +195,11 @@ test("pressure move release data", () => {
     expect(srcData.identifier).toBe(0);
     expect(tgtData.identifier).toBe(0);
     expect(srcData.target).toBe(canvas);
-    expect(srcData.currentTarget).toBeNull();
+    expect(srcData.currentTarget).toBe(canvas);
     expect(tgtData.target).toBe(canvas);
-    expect(tgtData.currentTarget).toBeNull();
+    expect(tgtData.currentTarget).toBe(canvas);
+    expect(srcData.allTouches).toHaveLength(1);
+    expect(srcData.allTouches[0].identifier).toBe(0);
 
     expect(srcData2.clientX).toBe(121);
     expect(srcData2.clientY).toBe(251);
@@ -195,9 +216,11 @@ test("pressure move release data", () => {
 });
 
 test("pressure move release KO", () => {
-    interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 11, 23, 12, 25));
-    interaction.processEvent(createTouchEvent("touchmove", 3, canvas, 11, 24, 14, 28));
-    interaction.processEvent(createTouchEvent("touchend", 2, canvas, 11, 24, 14, 28));
+    robot(canvas)
+        .keepData()
+        .touchstart({}, [{"identifier": 3}])
+        .touchmove()
+        .touchend({}, [{"identifier": 2}]);
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).not.toHaveBeenCalled();
@@ -205,22 +228,13 @@ test("pressure move release KO", () => {
 });
 
 test("pressure move move release", () => {
-    interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 11, 23, 12, 25));
-    interaction.processEvent(createTouchEvent("touchmove", 3, canvas, 11, 24, 14, 28));
-    interaction.processEvent(createTouchEvent("touchmove", 3, canvas, 11, 24, 14, 28));
-    interaction.processEvent(createTouchEvent("touchend", 3, canvas, 11, 24, 14, 28));
-    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-    expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
-    expect(handler.fsmStops).toHaveBeenCalledTimes(1);
-    expect(handler.fsmCancels).not.toHaveBeenCalled();
-});
+    robot(canvas)
+        .keepData()
+        .touchstart({}, [{"identifier": 3}])
+        .touchmove()
+        .touchmove()
+        .touchend();
 
-test("touch on registered widget", () => {
-    interaction.registerToNodes([canvas]);
-    interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 11, 23, 12, 25));
-    interaction.processEvent(createTouchEvent("touchmove", 3, canvas, 11, 24, 14, 28));
-    interaction.processEvent(createTouchEvent("touchmove", 3, canvas, 11, 24, 14, 28));
-    interaction.processEvent(createTouchEvent("touchend", 3, canvas, 171, 274, 174, 278));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
@@ -228,14 +242,16 @@ test("touch on registered widget", () => {
 });
 
 test("touch restart", () => {
-    interaction.registerToNodes([canvas]);
-    interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 11, 23, 12, 25));
-    interaction.processEvent(createTouchEvent("touchmove", 3, canvas, 11, 24, 14, 28));
-    interaction.processEvent(createTouchEvent("touchmove", 3, canvas, 11, 24, 14, 28));
-    interaction.processEvent(createTouchEvent("touchend", 3, canvas, 171, 274, 174, 278));
-    canvas.dispatchEvent(createTouchEvent("touchstart", 3, canvas, 11, 23, 12, 25));
-    interaction.processEvent(createTouchEvent("touchmove", 3, canvas, 11, 24, 14, 28));
-    canvas.dispatchEvent(createTouchEvent("touchmove", 3, canvas, 11, 24, 14, 28));
+    robot(canvas)
+        .keepData()
+        .touchstart({}, [{"identifier": 3}])
+        .touchmove()
+        .touchmove()
+        .touchend()
+        .touchstart()
+        .touchmove()
+        .touchmove();
+
     expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
 });
 
@@ -246,7 +262,7 @@ test("no modifiers and button", () => {
     expect(interaction.data.src.shiftKey).toBeFalsy();
 });
 
-test("displacement data", () => {
+test("move data", () => {
     let diffClientX: number | undefined;
     let diffClientY: number | undefined;
     let diffScreenX: number | undefined;
@@ -261,11 +277,12 @@ test("displacement data", () => {
         }
     });
 
-    interaction.registerToNodes([canvas]);
+    robot(canvas)
+        .keepData()
+        .touchstart({}, [{"identifier": 3, "screenX": 11, "screenY": 23, "clientX": 12, "clientY": 25}])
+        .touchmove({}, [{"identifier": 3, "screenX": 11, "screenY": 24, "clientX": 14, "clientY": 28}])
+        .touchend({}, [{"identifier": 3, "screenX": 171, "screenY": 274, "clientX": 174, "clientY": 278}]);
 
-    interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 11, 23, 12, 25));
-    interaction.processEvent(createTouchEvent("touchmove", 3, canvas, 11, 24, 14, 28));
-    interaction.processEvent(createTouchEvent("touchend", 3, canvas, 171, 274, 174, 278));
     expect(diffClientX).toBe(162);
     expect(diffClientY).toBe(253);
     expect(diffScreenX).toBe(160);
@@ -279,9 +296,11 @@ test("release on dwell-spring cancels interaction", () => {
     interaction.registerToNodes([canvas, div]);
     document.elementFromPoint = jest.fn().mockImplementation(() => div);
 
-    canvas.dispatchEvent(createTouchEvent("touchstart", 3, canvas, 11, 23, 12, 25));
-    canvas.dispatchEvent(createTouchEvent("touchmove", 3, canvas, 11, 24, 14, 28));
-    div.dispatchEvent(createTouchEvent("touchend", 3, div, 0, 0, 0, 0));
+    robot(canvas)
+        .keepData()
+        .touchstart({}, [{"identifier": 3}])
+        .touchmove()
+        .touchend(div);
 
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
@@ -331,7 +350,8 @@ describe("movement not required and not cancellable", () => {
     });
 
     test("movement required: pressure starts interaction", () => {
-        interaction.processEvent(createTouchEvent("touchstart", 2, canvas));
+        robot(canvas)
+            .touchstart({}, [{"identifier": 2}]);
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmStops).not.toHaveBeenCalled();
         expect(handler.fsmCancels).not.toHaveBeenCalled();
@@ -345,7 +365,10 @@ describe("movement not required and not cancellable", () => {
             tgtData.copy(interaction.data.tgt);
         });
         interaction.fsm.addHandler(newHandler);
-        interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 15, 20, 16, 21));
+
+        robot()
+            .touchstart(canvas, [{"identifier": 3, "screenX": 15, "screenY": 20, "clientX": 16, "clientY": 21}]);
+
         expect(srcData.clientX).toBe(16);
         expect(srcData.clientY).toBe(21);
         expect(srcData.screenX).toBe(15);
@@ -357,9 +380,9 @@ describe("movement not required and not cancellable", () => {
         expect(srcData.identifier).toBe(3);
         expect(tgtData.identifier).toBe(3);
         expect(srcData.target).toBe(canvas);
-        expect(srcData.currentTarget).toBeNull();
+        expect(srcData.currentTarget).toBe(canvas);
         expect(tgtData.target).toBe(canvas);
-        expect(tgtData.currentTarget).toBeNull();
+        expect(tgtData.currentTarget).toBe(canvas);
     });
 
     test("pressure release with no move stops the DnD", () => {
@@ -375,8 +398,10 @@ describe("movement not required and not cancellable", () => {
     });
 
     test("pressure move", () => {
-        interaction.processEvent(createTouchEvent("touchstart", 2, canvas, 11, 23, 12, 25));
-        interaction.processEvent(createTouchEvent("touchmove", 2, canvas, 11, 24, 14, 28));
+        robot(canvas)
+            .keepData()
+            .touchstart({}, [{"identifier": 2}])
+            .touchmove();
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
         expect(handler.fsmStops).not.toHaveBeenCalled();
@@ -384,9 +409,12 @@ describe("movement not required and not cancellable", () => {
     });
 
     test("pressure move move KO", () => {
-        interaction.processEvent(createTouchEvent("touchstart", 2, canvas, 11, 23, 12, 25));
-        interaction.processEvent(createTouchEvent("touchmove", 2, canvas, 11, 24, 14, 28));
-        interaction.processEvent(createTouchEvent("touchmove", 1, canvas, 11, 24, 14, 28));
+        robot(canvas)
+            .keepData()
+            .touchstart({}, [{"identifier": 2}])
+            .touchmove()
+            .touchmove({}, [{"identifier": 1}]);
+
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
         expect(handler.fsmStops).not.toHaveBeenCalled();
@@ -394,9 +422,11 @@ describe("movement not required and not cancellable", () => {
     });
 
     test("pressure move move OK", () => {
-        interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 11, 23, 12, 25));
-        interaction.processEvent(createTouchEvent("touchmove", 3, canvas, 11, 24, 14, 28));
-        interaction.processEvent(createTouchEvent("touchmove", 3, canvas, 11, 24, 14, 28));
+        robot(canvas)
+            .keepData()
+            .touchstart({}, [{"identifier": 3}])
+            .touchmove()
+            .touchmove();
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmUpdates).toHaveBeenCalledTimes(3);
         expect(handler.fsmStops).not.toHaveBeenCalled();
@@ -404,17 +434,20 @@ describe("movement not required and not cancellable", () => {
     });
 
     test("pressure move move release", () => {
-        interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 11, 23, 12, 25));
-        interaction.processEvent(createTouchEvent("touchmove", 3, canvas, 11, 24, 14, 28));
-        interaction.processEvent(createTouchEvent("touchmove", 3, canvas, 11, 24, 14, 28));
-        interaction.processEvent(createTouchEvent("touchend", 3, canvas, 11, 24, 14, 28));
+        robot(canvas)
+            .keepData()
+            .touchstart({}, [{"identifier": 3}])
+            .touchmove()
+            .touchmove()
+            .touchend();
+
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmUpdates).toHaveBeenCalledTimes(3);
         expect(handler.fsmStops).toHaveBeenCalledTimes(1);
         expect(handler.fsmCancels).not.toHaveBeenCalled();
     });
 
-    test("displacement data", () => {
+    test("move data", () => {
         let diffClientX: number | undefined;
         let diffClientY: number | undefined;
         let diffScreenX: number | undefined;
@@ -429,11 +462,11 @@ describe("movement not required and not cancellable", () => {
             }
         });
 
-        interaction.registerToNodes([canvas]);
+        robot(canvas)
+            .touchstart({}, [{"identifier": 3, "screenX": 11, "screenY": 23, "clientX": 12, "clientY": 25}])
+            .touchmove({}, [{"identifier": 3, "screenX": 11, "screenY": 24, "clientX": 14, "clientY": 28}])
+            .touchend({}, [{"identifier": 3, "screenX": 171, "screenY": 274, "clientX": 174, "clientY": 278}]);
 
-        interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 11, 23, 12, 25));
-        interaction.processEvent(createTouchEvent("touchmove", 3, canvas, 11, 24, 14, 28));
-        interaction.processEvent(createTouchEvent("touchend", 3, canvas, 171, 274, 174, 278));
         expect(diffClientX).toBe(162);
         expect(diffClientY).toBe(253);
         expect(diffScreenX).toBe(160);
@@ -447,9 +480,11 @@ describe("movement not required and not cancellable", () => {
         interaction.registerToNodes([canvas, div]);
         document.elementFromPoint = jest.fn().mockImplementation(() => div);
 
-        canvas.dispatchEvent(createTouchEvent("touchstart", 3, canvas, 11, 23, 12, 25));
-        canvas.dispatchEvent(createTouchEvent("touchmove", 3, canvas, 11, 24, 14, 28));
-        div.dispatchEvent(createTouchEvent("touchend", 3, div, 0, 0, 0, 0));
+        robot(canvas)
+            .keepData()
+            .touchstart({}, [{"identifier": 3}])
+            .touchmove()
+            .touchend(div, [{"identifier": 3}]);
 
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
