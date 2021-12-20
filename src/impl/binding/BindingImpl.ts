@@ -404,9 +404,18 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
                     this.logger.logCmdMsg("Cancelling the command");
                 }
                 this._cmd.cancel();
-                this._cmd = undefined;
-                this._timeCancelled++;
-                cancelled = true;
+
+                try {
+                    if (this.continuousCmdExecution) {
+                        this.cancelContinousWithEffectsCmd(this._cmd);
+                    }
+                } finally {
+                    this._cmd = undefined;
+                    this.cancel();
+                    this.endOrCancel();
+                    this._timeCancelled++;
+                    cancelled = true;
+                }
             }
         } else {
             this.executeCommandOnFSMStop(cmd);

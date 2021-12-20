@@ -21,7 +21,7 @@ import {
     MustBeUndoableCmdError,
     UndoHistoryImpl
 } from "../../src/interacto";
-import {StubCmd} from "../command/StubCmd";
+import {StubCmd, StubUndoableCmd} from "../command/StubCmd";
 import {InteractionStub} from "../interaction/InteractionStub";
 import type {Logger} from "../../src/api/logging/Logger";
 import {mock} from "jest-mock-extended";
@@ -264,12 +264,18 @@ describe("nominal cases", () => {
     test("cancel interaction continuous undoable", () => {
         const cmd = new CmdStubUndoable();
         jest.spyOn(cmd, "undo");
+        jest.spyOn(cmd, "cancel");
         binding = new BindingStub(history, logger, true, false, () => cmd, new InteractionStub(new FSMImpl()));
+        jest.spyOn(binding, "cancel");
+        jest.spyOn(binding, "endOrCancel");
         binding.conditionRespected = true;
         binding.logCmd = true;
         binding.interaction.fsm.onStarting();
         binding.interaction.fsm.onCancelling();
         expect(cmd.undo).toHaveBeenCalledTimes(1);
+        expect(cmd.cancel).toHaveBeenCalledTimes(1);
+        expect(binding.cancel).toHaveBeenCalledTimes(1);
+        expect(binding.endOrCancel).toHaveBeenCalledTimes(1);
     });
 
     test("name contains the command name on execution", () => {
@@ -520,6 +526,48 @@ describe("crash in binding", () => {
         binding.interaction.fsm.onUpdating();
         expect(logger.logBindingErr).toHaveBeenCalledWith("Error while creating a command", ex);
         expect(binding.first).not.toHaveBeenCalledWith();
+        expect(binding.command).toBeUndefined();
+    });
+
+    test("command undone when 'when' is false on interaction end", () => {
+        const cmd = new StubUndoableCmd(true);
+        jest.spyOn(cmd, "undo");
+        jest.spyOn(cmd, "cancel");
+        binding = new BindingStub(history, logger, true, false, (): StubCmd => cmd, new InteractionStub(new FSMImpl()));
+        jest.spyOn(binding, "cancel");
+        jest.spyOn(binding, "endOrCancel");
+        binding.conditionRespected = true;
+        binding.interaction.fsm.onStarting();
+        binding.interaction.fsm.onUpdating();
+        binding.conditionRespected = false;
+        binding.interaction.fsm.onTerminating();
+        expect(binding.timesEnded).toBe(0);
+        expect(binding.timesCancelled).toBe(1);
+        expect(cmd.cancel).toHaveBeenCalledTimes(1);
+        expect(cmd.undo).toHaveBeenCalledTimes(1);
+        expect(binding.cancel).toHaveBeenCalledTimes(1);
+        expect(binding.endOrCancel).toHaveBeenCalledTimes(1);
+        expect(binding.command).toBeUndefined();
+    });
+
+    test("command not undoable when 'when' is false on interaction end", () => {
+        const cmd = new StubCmd(true, true);
+        jest.spyOn(cmd, "cancel");
+        binding = new BindingStub(history, logger, true, false, (): StubCmd => cmd, new InteractionStub(new FSMImpl()));
+        jest.spyOn(binding, "cancel");
+        jest.spyOn(binding, "endOrCancel");
+        binding.conditionRespected = true;
+        binding.interaction.fsm.onStarting();
+        binding.interaction.fsm.onUpdating();
+        binding.conditionRespected = false;
+        expect(() => {
+            binding.interaction.fsm.onTerminating();
+        }).toThrow(MustBeUndoableCmdError);
+        expect(binding.timesEnded).toBe(0);
+        expect(binding.timesCancelled).toBe(1);
+        expect(cmd.cancel).toHaveBeenCalledTimes(1);
+        expect(binding.cancel).toHaveBeenCalledTimes(1);
+        expect(binding.endOrCancel).toHaveBeenCalledTimes(1);
         expect(binding.command).toBeUndefined();
     });
 });
