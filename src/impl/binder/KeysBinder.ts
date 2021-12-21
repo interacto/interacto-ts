@@ -27,6 +27,7 @@ import type {BindingsObserver} from "../../api/binding/BindingsObserver";
 import type {Logger} from "../../api/logging/Logger";
 import type {AnonCmd} from "../command/AnonCmd";
 import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
+import {WhenType} from "../../api/binder/When";
 
 /**
  * The base binding builder to create bindings between a keys pressure interaction and a given command.
@@ -39,7 +40,7 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, D extends I
 
     private isCode: boolean;
 
-    private readonly checkCodeFn: (i: InteractionData) => boolean;
+    // private readonly checkCodeFn: (i: InteractionData) => boolean;
 
     public constructor(undoHistory: UndoHistoryBase, logger: Logger, observer?: BindingsObserver, binder?: Partial<KeysBinder<C, I, D>>) {
         super(undoHistory, logger, observer, binder);
@@ -51,7 +52,11 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, D extends I
 
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         this.keysOrCodes = this.keysOrCodes === undefined ? [] : [...this.keysOrCodes];
-        this.checkCodeFn = (i: D): boolean => {
+        this.completeWhenWithKeysPredicates();
+    }
+
+    private completeWhenWithKeysPredicates(): void {
+        const checkCodeFn = (i: D): boolean => {
             let currentKeys: ReadonlyArray<string> = [];
 
             if (this.isCode) {
@@ -73,9 +78,13 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, D extends I
             }
 
             return (this.keysOrCodes.length === 0 || this.keysOrCodes.length === currentKeys.length &&
-                    currentKeys.every((v: string) => this.keysOrCodes.includes(v))) &&
-                (this.whenFn === undefined || this.whenFn(i));
+                    currentKeys.every((v: string) => this.keysOrCodes.includes(v)));
         };
+
+        this.whenFnArray.push({
+            "fn": checkCodeFn,
+            "type": WhenType.nonStrict
+        });
     }
 
     public with(isCode: boolean, ...keysOrCodes: ReadonlyArray<string>): KeysBinder<C, I, D> {
@@ -98,8 +107,8 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, D extends I
         return super.first(fn) as KeysBinder<C, I, D>;
     }
 
-    public override when(fn: (() => boolean) | ((i: D) => boolean)): KeysBinder<C, I, D> {
-        return super.when(fn) as KeysBinder<C, I, D>;
+    public override when(fn: (() => boolean) | ((i: D) => boolean), mode?: WhenType): KeysBinder<C, I, D> {
+        return super.when(fn, mode) as KeysBinder<C, I, D>;
     }
 
     public override ifHadEffects(fn: (c: C, i: D) => void): KeysBinder<C, I, D> {
@@ -136,10 +145,6 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, D extends I
 
     public override continuousExecution(): KeysBinder<C, I, D> {
         return super.continuousExecution() as KeysBinder<C, I, D>;
-    }
-
-    public override strictStart(): KeysBinder<C, I, D> {
-        return super.strictStart() as KeysBinder<C, I, D>;
     }
 
     public override throttle(timeout: number): KeysBinder<C, I, D> {
@@ -189,8 +194,8 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, D extends I
 
         const binding = new AnonBinding(this.continuousCmdExecution, this.usingFn(), this.undoHistory,
             this.logger, this.produceFn, [...this.widgets], [...this.dynamicNodes],
-            this._strictStart, [...this.logLevels], this.throttleTimeout,
-            this.stopPropagation, this.prevDefault, this.firstFn, this.thenFn, this.checkCodeFn,
+            [...this.logLevels], this.throttleTimeout,
+            this.stopPropagation, this.prevDefault, this.firstFn, this.thenFn, [...this.whenFnArray],
             this.endFn, this.cancelFn, this.endOrCancelFn, this.hadEffectsFn,
             this.hadNoEffectFn, this.cannotExecFn, this.onErrFn, this.bindingName);
 

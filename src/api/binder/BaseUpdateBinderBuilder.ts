@@ -13,6 +13,7 @@
  */
 import type {BaseBinderBuilder, Widget} from "./BaseBinderBuilder";
 import type {LogLevel} from "../logging/LogLevel";
+import type {WhenType} from "./When";
 
 /**
  * The base interface for building bindings based on non-trivial user interactions (eg DnD).
@@ -23,12 +24,6 @@ export interface BaseUpdateBinderBuilder extends BaseBinderBuilder {
      * @returns A clone of the current binder to chain the building configuration.
      */
     continuousExecution(): BaseUpdateBinderBuilder;
-
-    /**
-     * The interaction does not start if the condition of the binding ('when') is not fulfilled.
-     * @returns A clone of the current binder to chain the building configuration.
-     */
-    strictStart(): BaseUpdateBinderBuilder;
 
     /**
      * Backpressure operation. Instead of emitting all the events, successive events of the same type are factorized modulo a timeout.
@@ -44,7 +39,7 @@ export interface BaseUpdateBinderBuilder extends BaseBinderBuilder {
      */
     throttle(timeout: number): BaseUpdateBinderBuilder;
 
-    when(fn: () => boolean): BaseUpdateBinderBuilder;
+    when(fn: () => boolean, mode?: WhenType): BaseUpdateBinderBuilder;
 
     end(fn: () => void): BaseUpdateBinderBuilder;
 

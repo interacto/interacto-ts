@@ -22,6 +22,7 @@ export * from "./api/binder/KeyInteractionBinderBuilder";
 export * from "./api/binder/KeyInteractionCmdBinder";
 export * from "./api/binder/KeyInteractionCmdUpdateBinder";
 export * from "./api/binder/KeyInteractionUpdateBinder";
+export * from "./api/binder/When";
 export * from "./api/binding/Binding";
 export * from "./api/binding/Bindings";
 export * from "./api/binding/BindingsObserver";

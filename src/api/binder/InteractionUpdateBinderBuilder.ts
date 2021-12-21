@@ -17,6 +17,7 @@ import type {LogLevel} from "../logging/LogLevel";
 import type {Interaction} from "../interaction/Interaction";
 import type {Widget} from "./BaseBinderBuilder";
 import type {BaseUpdateBinderBuilder} from "./BaseUpdateBinderBuilder";
+import type {WhenType} from "./When";
 
 /**
  * The binding builder API that already knows the type of user interaction the bindings will use
@@ -42,7 +43,7 @@ export interface InteractionUpdateBinderBuilder<I extends Interaction<D>, D exte
      */
     endOrCancel(fn: (i: D) => void): InteractionUpdateBinderBuilder<I, D>;
 
-    when(fn: (i: D) => boolean): InteractionUpdateBinderBuilder<I, D>;
+    when(fn: (i: D) => boolean, mode?: WhenType): InteractionUpdateBinderBuilder<I, D>;
 
     end(fn: () => void): InteractionUpdateBinderBuilder<I, D>;
 
@@ -58,8 +59,6 @@ export interface InteractionUpdateBinderBuilder<I extends Interaction<D>, D exte
     throttle(timeout: number): InteractionUpdateBinderBuilder<I, D>;
 
     continuousExecution(): InteractionUpdateBinderBuilder<I, D>;
-
-    strictStart(): InteractionUpdateBinderBuilder<I, D>;
 
     preventDefault(): InteractionUpdateBinderBuilder<I, D>;
 

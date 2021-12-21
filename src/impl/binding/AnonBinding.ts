@@ -19,6 +19,9 @@ import type {Command} from "../../api/command/Command";
 import type {Interaction} from "../../api/interaction/Interaction";
 import type {Logger} from "../../api/logging/Logger";
 import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
+import type {When} from "../../api/binder/When";
+import {isWhenAtEnd, isWhenAtStart, isWhenAtThen, isWhenStrict} from "../../api/binder/When";
+import {CancelFSMException} from "../fsm/CancelFSMException";
 
 export class AnonBinding<C extends Command, I extends Interaction<D>, D extends InteractionData>
     extends BindingImpl<C, I, D> {
@@ -27,7 +30,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
 
     private readonly thenFn?: (c: C, i: D) => void;
 
-    private readonly whenFn?: (i: D) => boolean;
+    private readonly whenFn?: Array<When<D>>;
 
     private readonly cancelFn?: (i: D) => void;
 
@@ -46,14 +49,14 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
 
     public constructor(continuousExec: boolean, interaction: I, undoHistory: UndoHistoryBase, logger: Logger, cmdSupplierFn: (d: D) => C,
                        widgets: ReadonlyArray<EventTarget>, dynamicNodes: ReadonlyArray<Node>,
-                       strict: boolean, loggers: ReadonlyArray<LogLevel>, timeoutThrottle: number,
+                       loggers: ReadonlyArray<LogLevel>, timeoutThrottle: number,
                        stopPropagation: boolean, prevDefault: boolean, firstFn?: (c: C, i: D) => void,
-                       thenFn?: (c: C, i: D) => void, whenFn?: (i: D) => boolean,
+                       thenFn?: (c: C, i: D) => void, whenFn?: Array<When<D>>,
                        endFn?: (c: C, i: D) => void, cancelFn?: (i: D) => void,
                        endOrCancelFn?: (i: D) => void, hadEffectsFn?: (c: C, i: D) => void,
                        hadNoEffectFn?: (c: C, i: D) => void, cannotExecFn?: (c: C, i: D) => void,
                        onErrFn?: (ex: unknown) => void, name?: string) {
-        super(continuousExec, strict, interaction, cmdSupplierFn, widgets, undoHistory, logger, name);
+        super(continuousExec, interaction, cmdSupplierFn, widgets, undoHistory, logger, name);
         this.configureLoggers(loggers);
         this.firstFn = firstFn;
         this.thenFn = thenFn;
@@ -177,19 +180,46 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
         }
     }
 
-    public override when(): boolean {
-        let ok;
-        try {
-            ok = this.whenFn === undefined || this.whenFn(this.interaction.data);
-        } catch (ex: unknown) {
-            ok = false;
-            this.catch(ex);
-            this.logger.logBindingErr("Crash in 'when'", ex);
-        }
+    protected override whenStart(): boolean {
+        return this.whenChecker(when => isWhenAtStart(when.type));
+    }
+
+    protected override whenUpdate(): boolean {
+        return this.whenChecker(when => isWhenAtThen(when.type));
+    }
+
+    protected override whenStop(): boolean {
+        return this.whenChecker(when => isWhenAtEnd(when.type));
+    }
+
+    private whenChecker(filterPredicate: (when: When<D>) => boolean): boolean {
+        const ok = this.whenFn
+            ?.filter(filterPredicate)
+            .every(when => this.executeWhen(when)) ?? false;
         if (this.logBinding) {
             this.logger.logBindingMsg(`Checking condition: ${String(ok)}`);
         }
         return ok;
+    }
+
+
+    private executeWhen(when: When<D>): boolean {
+        let res: boolean;
+        try {
+            res = when.fn(this.interaction.data);
+        } catch (ex: unknown) {
+            res = false;
+            this.catch(ex);
+            this.logger.logBindingErr("Crash in checking condition", ex);
+        }
+        if (!res && isWhenStrict(when.type)) {
+            if (this.logBinding) {
+                this.logger.logBindingMsg(`Cancelling interaction: ${this._interaction.constructor.name}`);
+            }
+            throw new CancelFSMException();
+        }
+
+        return res;
     }
 
 

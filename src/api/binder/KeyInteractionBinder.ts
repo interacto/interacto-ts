@@ -19,6 +19,7 @@ import type {KeyInteractionCmdBinder} from "./KeyInteractionCmdBinder";
 import type {Interaction} from "../interaction/Interaction";
 import type {Widget} from "./BaseBinderBuilder";
 import type {AnonCmd} from "../../impl/command/AnonCmd";
+import type {WhenType} from "./When";
 
 /**
  * The binder API for key-based user interactions, that already knows the type of the user interaction to use.
@@ -28,7 +29,7 @@ import type {AnonCmd} from "../../impl/command/AnonCmd";
 export interface KeyInteractionBinder<I extends Interaction<D>, D extends InteractionData>
     extends KeyInteractionBinderBuilder<I, D> {
 
-    when(fn: (i: D) => boolean): KeyInteractionBinder<I, D>;
+    when(fn: (i: D) => boolean, mode?: WhenType): KeyInteractionBinder<I, D>;
 
     on(widget: ReadonlyArray<Widget<EventTarget>> | Widget<EventTarget>, ...widgets: ReadonlyArray<Widget<EventTarget>>): KeyInteractionBinder<I, D>;
 

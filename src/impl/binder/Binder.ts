@@ -26,6 +26,8 @@ import {isEltRef} from "../../api/binder/BaseBinderBuilder";
 import type {Logger} from "../../api/logging/Logger";
 import {AnonCmd} from "../command/AnonCmd";
 import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
+import type {When} from "../../api/binder/When";
+import {WhenType} from "../../api/binder/When";
 
 /**
  * The base class that defines the concept of binding builder (called binder).
@@ -36,8 +38,6 @@ export abstract class Binder<C extends Command, I extends Interaction<D>, D exte
 implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> {
 
     protected firstFn?: (c: C, i: D) => void;
-
-    protected whenFn?: (i: D) => boolean;
 
     protected produceFn?: (i: D) => C;
 
@@ -71,19 +71,19 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
 
     protected logger: Logger;
 
-    protected whenFnArray: Array<(i: D) => boolean> = new Array<(i: D) => boolean>();
+    protected whenFnArray: Array<When<D>> = [];
 
-    protected firstFnArray: Array<(c: C, i: D) => void> = new Array<(c: C, i: D) => void>();
+    protected firstFnArray: Array<(c: C, i: D) => void> = [];
 
-    protected endFnArray: Array<(c: C, i: D) => void> = new Array<(c: C, i: D) => void>();
+    protected endFnArray: Array<(c: C, i: D) => void> = [];
 
-    protected hadEffectsFnArray: Array<(c: C, i: D) => void> = new Array<(c: C, i: D) => void>();
+    protected hadEffectsFnArray: Array<(c: C, i: D) => void> = [];
 
-    protected hadNoEffectFnArray: Array<(c: C, i: D) => void> = new Array<(c: C, i: D) => void>();
+    protected hadNoEffectFnArray: Array<(c: C, i: D) => void> = [];
 
-    protected cannotExecFnArray: Array<(c: C, i: D) => void> = new Array<(c: C, i: D) => void>();
+    protected cannotExecFnArray: Array<(c: C, i: D) => void> = [];
 
-    protected onErrFnArray: Array<(ex: unknown) => void> = new Array<(ex: unknown) => void>();
+    protected onErrFnArray: Array<(ex: unknown) => void> = [];
 
     protected constructor(undoHistory: UndoHistoryBase, logger: Logger, observer?: BindingsObserver, binder?: Partial<Binder<C, I, D>>) {
         Object.assign(this, binder);
@@ -106,10 +106,8 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
      * Clones the arrays containing the routine functions after a binder is copied.
      */
     protected copyFnArrays(): void {
-        // Clones the array (instead of just copying the reference from the previous binder)
+        // Clones the arrays (instead of just copying the reference from the previous binder)
         this.whenFnArray = [...this.whenFnArray];
-        // Updates the routine to use the new array reference
-        this.whenFn = (i): boolean => this.whenFnArray.every(fn => fn(i));
 
         this.firstFnArray = [...this.firstFnArray];
         this.firstFn = (c: C, i: D): void => {
@@ -176,9 +174,12 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
         return dup;
     }
 
-    public when(fn: (i: D) => boolean): Binder<C, I, D> {
+    public when(fn: (i: D) => boolean, mode: WhenType = WhenType.nonStrict): Binder<C, I, D> {
         const dup = this.duplicate();
-        dup.whenFnArray.push(fn);
+        dup.whenFnArray.push({
+            fn,
+            "type": mode
+        });
         return dup;
     }
 

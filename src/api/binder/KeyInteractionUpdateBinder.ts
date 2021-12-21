@@ -21,6 +21,7 @@ import type {KeyBinderBuilder} from "./KeyBinderBuilder";
 import type {Interaction} from "../interaction/Interaction";
 import type {Widget} from "./BaseBinderBuilder";
 import type {AnonCmd} from "../../impl/command/AnonCmd";
+import type {WhenType} from "./When";
 
 /**
  * The binder API for key-based user interactions, that already knows the type of the user interaction to use
@@ -38,9 +39,7 @@ export interface KeyInteractionUpdateBinder<I extends Interaction<D>, D extends 
 
     log(...level: ReadonlyArray<LogLevel>): KeyInteractionUpdateBinder<I, D>;
 
-    when(fn: (i: D) => boolean): KeyInteractionUpdateBinder<I, D>;
-
-    strictStart(): KeyInteractionUpdateBinder<I, D>;
+    when(fn: (i: D) => boolean, mode?: WhenType): KeyInteractionUpdateBinder<I, D>;
 
     continuousExecution(): KeyInteractionUpdateBinder<I, D>;
 

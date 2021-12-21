@@ -20,6 +20,7 @@ import type {LogLevel} from "../logging/LogLevel";
 import type {Binding} from "../binding/Binding";
 import type {Interaction} from "../interaction/Interaction";
 import type {Widget} from "./BaseBinderBuilder";
+import type {WhenType} from "./When";
 
 /**
  * The binder API that already knows the type of UI command and the user interaction to use
@@ -44,8 +45,6 @@ export interface InteractionCmdUpdateBinder<C extends Command, I extends Interac
 
     continuousExecution(): InteractionCmdUpdateBinder<C, I, D>;
 
-    strictStart(): InteractionCmdUpdateBinder<C, I, D>;
-
     throttle(timeout: number): InteractionCmdUpdateBinder<C, I, D>;
 
     first(fn: (c: C, i: D) => void): InteractionCmdUpdateBinder<C, I, D>;
@@ -61,7 +60,7 @@ export interface InteractionCmdUpdateBinder<C extends Command, I extends Interac
 
     endOrCancel(fn: (i: D) => void): InteractionCmdUpdateBinder<C, I, D>;
 
-    when(fn: (i: D) => boolean): InteractionCmdUpdateBinder<C, I, D>;
+    when(fn: (i: D) => boolean, mode?: WhenType): InteractionCmdUpdateBinder<C, I, D>;
 
     ifHadEffects(fn: (c: C, i: D) => void): InteractionCmdUpdateBinder<C, I, D>;
 

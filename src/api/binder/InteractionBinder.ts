@@ -20,6 +20,7 @@ import type {InteractionCmdBinder} from "./InteractionCmdBinder";
 import type {Interaction} from "../interaction/Interaction";
 import type {Widget} from "./BaseBinderBuilder";
 import type {AnonCmd} from "../../impl/command/AnonCmd";
+import type {WhenType} from "./When";
 
 /**
  * The binder API that already knows the type of user interaction the bindings will use.
@@ -29,7 +30,7 @@ import type {AnonCmd} from "../../impl/command/AnonCmd";
 export interface InteractionBinder<I extends Interaction<D>, D extends InteractionData>
     extends InteractionBinderBuilder<I, D> {
 
-    when(fn: (i: D) => boolean): InteractionBinder<I, D>;
+    when(fn: (i: D) => boolean, mode?: WhenType): InteractionBinder<I, D>;
 
     on(widget: ReadonlyArray<Widget<EventTarget>> | Widget<EventTarget>, ...widgets: ReadonlyArray<Widget<EventTarget>>): InteractionBinder<I, D>;
 

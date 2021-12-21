@@ -14,6 +14,7 @@
 import type {Command} from "../command/Command";
 import type {BaseBinderBuilder, Widget} from "./BaseBinderBuilder";
 import type {LogLevel} from "../logging/LogLevel";
+import type {WhenType} from "./When";
 
 /**
  * The binding builder API that already knows the type of UI command the bindings will produce
@@ -36,7 +37,7 @@ export interface CmdBinderBuilder<C extends Command> extends BaseBinderBuilder {
 
     onDynamic(node: Widget<Node>): CmdBinderBuilder<C>;
 
-    when(fn: () => boolean): CmdBinderBuilder<C>;
+    when(fn: () => boolean, mode?: WhenType): CmdBinderBuilder<C>;
 
     log(...level: ReadonlyArray<LogLevel>): CmdBinderBuilder<C>;
 

@@ -19,6 +19,7 @@ import type {LogLevel} from "../logging/LogLevel";
 import type {Binding} from "../binding/Binding";
 import type {Interaction} from "../interaction/Interaction";
 import type {Widget} from "./BaseBinderBuilder";
+import type {WhenType} from "./When";
 
 /**
  * The binder API that already knows the type of UI command and the user interaction to use.
@@ -78,7 +79,7 @@ export interface InteractionCmdBinder<C extends Command, I extends Interaction<D
 
     log(...level: ReadonlyArray<LogLevel>): InteractionCmdBinder<C, I, D>;
 
-    when(fn: (i: D) => boolean): InteractionCmdBinder<C, I, D>;
+    when(fn: (i: D) => boolean, mode?: WhenType): InteractionCmdBinder<C, I, D>;
 
     stopImmediatePropagation(): InteractionCmdBinder<C, I, D>;
 

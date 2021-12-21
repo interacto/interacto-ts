@@ -62,11 +62,6 @@ export interface Binding<C extends Command, I extends Interaction<D>, D extends 
     readonly running: boolean;
 
     /**
-     * States whether the interaction must continue to run while the condition of the binding is not fulfilled at the interaction start.
-     */
-    readonly strictStart: boolean;
-
-    /**
      * States whether the command must be executed on each step of the interaction (and not only at the
      * end of the interaction execution).
      */

@@ -18,6 +18,7 @@ import type {InteractionCmdBinder} from "./InteractionCmdBinder";
 import type {LogLevel} from "../logging/LogLevel";
 import type {Interaction} from "../interaction/Interaction";
 import type {Widget} from "./BaseBinderBuilder";
+import type {WhenType} from "./When";
 
 /**
  * The binder API that already knows the type of UI command
@@ -33,7 +34,7 @@ export interface CmdBinder<C extends Command> extends CmdBinderBuilder<C> {
 
     onDynamic(node: Widget<Node>): CmdBinder<C>;
 
-    when(fn: () => boolean): CmdBinder<C>;
+    when(fn: () => boolean, mode?: WhenType): CmdBinder<C>;
 
     log(...level: ReadonlyArray<LogLevel>): CmdBinder<C>;
 

@@ -32,13 +32,14 @@ import type {
     UndoHistoryBase,
     WidgetData
 } from "../../src/interacto";
-import {AnonCmd, BindingsContext, BindingsImpl, LogLevel, UndoHistoryImpl} from "../../src/interacto";
+import {AnonCmd, BindingsContext, BindingsImpl, CmdStatus, LogLevel, UndoHistoryImpl} from "../../src/interacto";
 import {StubCmd, StubUndoableCmd} from "../command/StubCmd";
 import type {MouseEventForTest} from "../interaction/StubEvents";
 import {createMouseEvent, robot} from "../interaction/StubEvents";
 import {mock} from "jest-mock-extended";
 import type {UndoHistory} from "../../src/api/undo/UndoHistory";
 import type {BindingsObserver} from "../../src/api/binding/BindingsObserver";
+import {WhenType} from "../../src/api/binder/When";
 
 let elt: HTMLElement;
 let ctx: BindingsContext;
@@ -820,27 +821,11 @@ test("that 'ifCannotExecute' is correctly called", () => {
 });
 
 
-test("that 'strictStart' works correctly when no 'when' routine", () => {
-    bindings.dndBinder(false)
-        .strictStart()
-        .on(elt)
-        .toProduce((_i: SrcTgtPointsData<PointData>) => new StubCmd(true))
-        .bind();
-
-    robot(elt)
-        .mousedown()
-        .mousemove()
-        .mouseup();
-
-    expect(ctx.commands).toHaveLength(1);
-});
-
 test("that 'strictStart' works correctly when the 'when' routine returns true", () => {
     bindings.dndBinder(false)
-        .when((_i: SrcTgtPointsData<PointData>) => true)
+        .when((_i: SrcTgtPointsData<PointData>) => true, WhenType.strictStart)
         .on(elt)
         .toProduce((_i: SrcTgtPointsData<PointData>) => new StubCmd(true))
-        .strictStart()
         .bind();
 
     robot(elt)
@@ -854,9 +839,8 @@ test("that 'strictStart' works correctly when the 'when' routine returns true", 
 test("that 'strictStart' works correctly when the 'when' routine returns false", () => {
     const binding = bindings.dndBinder(false)
         .on(elt)
-        .strictStart()
         .toProduce((_i: SrcTgtPointsData<PointData>) => new StubCmd(true))
-        .when((_i: SrcTgtPointsData<PointData>) => false)
+        .when((_i: SrcTgtPointsData<PointData>) => false, WhenType.strictStart)
         .bind();
 
     robot(elt)
@@ -872,8 +856,7 @@ test("that 'strictStart' stops the interaction", () => {
     const binding = bindings.dndBinder(false)
         .on(elt)
         .toProduce((_i: SrcTgtPointsData<PointData>) => new StubCmd(true))
-        .when((_i: SrcTgtPointsData<PointData>) => false)
-        .strictStart()
+        .when((_i: SrcTgtPointsData<PointData>) => false, WhenType.strictStart)
         .bind();
 
     robot(elt)
@@ -888,8 +871,7 @@ test("that 'when' is not called on the first event of a DnD", () => {
     bindings.dndBinder(false)
         .on(elt)
         .toProduce((_i: SrcTgtPointsData<PointData>) => new StubCmd(true))
-        .when(() => false)
-        .strictStart()
+        .when(() => false, WhenType.strictStart)
         .bind();
 
     robot(elt).mousedown();
@@ -1360,7 +1342,7 @@ describe("check when it crashes in routines", () => {
             .touchend();
 
         expect(ctx.commands).toHaveLength(0);
-        expect(logger.logBindingErr).toHaveBeenCalledWith("Crash in 'when'", err);
+        expect(logger.logBindingErr).toHaveBeenCalledWith("Crash in checking condition", err);
     });
 
     test("when it crashes in 'when' with an error caught by 'catch'", () => {
@@ -1397,7 +1379,7 @@ describe("check when it crashes in routines", () => {
 
 
         expect(ctx.commands).toHaveLength(0);
-        expect(logger.logBindingErr).toHaveBeenCalledWith("Crash in 'when'", "msg");
+        expect(logger.logBindingErr).toHaveBeenCalledWith("Crash in checking condition", "msg");
     });
 
     test("call to 'when' should log", () => {
@@ -1596,5 +1578,231 @@ describe("two longTouch", () => {
             .touchend();
         expect(ctx.getCmdsProducedBy(binding2)).toHaveLength(1);
         expect(ctx.getCmdsProducedBy(binding)).toHaveLength(1);
+    });
+
+    describe("strict modes", () => {
+        let cmd: StubCmd;
+        let undoCmd: StubUndoableCmd;
+
+        beforeEach(() => {
+            cmd = new StubCmd(true, true);
+            undoCmd = new StubUndoableCmd(true);
+            jest.spyOn(cmd, "cancel");
+            jest.spyOn(undoCmd, "cancel");
+            jest.spyOn(undoCmd, "undo");
+        });
+
+        test("start strict", () => {
+            binding = bindings.longMouseDownBinder(100)
+                .toProduce(() => undoCmd)
+                .when(() => false, WhenType.strictStart)
+                .on(elt)
+                .bind();
+
+            robot(elt)
+                .keepData()
+                .mousedown();
+
+            expect(binding.interaction.isRunning()).toBeFalsy();
+            expect(binding.command).toBeUndefined();
+        });
+
+        test("then lazy", () => {
+            binding = bindings.dndBinder(true)
+                .toProduce(() => undoCmd)
+                .when(() => false, WhenType.then)
+                .on(elt)
+                .bind();
+
+            robot(elt)
+                .keepData()
+                .mousedown()
+                .mousemove();
+            expect(binding.command).toBeUndefined();
+        });
+
+        test("then lazy false, and then lazy true", () => {
+            let ok = false;
+            binding = bindings.dndBinder(true)
+                .toProduce(() => undoCmd)
+                .when(() => ok, WhenType.then)
+                .on(elt)
+                .bind();
+
+            robot(elt)
+                .keepData()
+                .mousedown()
+                .mousemove();
+            ok = true;
+
+            robot(elt)
+                .mousemove();
+
+            expect(binding.command).toBe(undoCmd);
+            expect(undoCmd.getStatus()).toBe(CmdStatus.created);
+        });
+
+        test("then lazy false, and end true", () => {
+            binding = bindings.dndBinder(true)
+                .toProduce(() => undoCmd)
+                .when(() => false, WhenType.then)
+                .on(elt)
+                .bind();
+
+            robot(elt)
+                .keepData()
+                .mousedown()
+                .mousemove()
+                .mouseup();
+            expect(binding.command).toBeUndefined();
+            expect(binding.timesEnded).toBe(1);
+            expect(undoCmd.getStatus()).toBe(CmdStatus.done);
+        });
+
+        test("end false", () => {
+            binding = bindings.dndBinder(true)
+                .toProduce(() => undoCmd)
+                .when(() => false, WhenType.end)
+                .on(elt)
+                .bind();
+
+            robot(elt)
+                .keepData()
+                .mousedown()
+                .mousemove()
+                .mouseup();
+            expect(binding.command).toBeUndefined();
+            expect(binding.timesEnded).toBe(0);
+            expect(binding.timesCancelled).toBe(1);
+            expect(undoCmd.getStatus()).toBe(CmdStatus.cancelled);
+        });
+
+        test("several ends", () => {
+            binding = bindings.dndBinder(true)
+                .toProduce(() => undoCmd)
+                .when(() => false, WhenType.end)
+                .when(() => true, WhenType.end)
+                .on(elt)
+                .bind();
+
+            robot(elt)
+                .keepData()
+                .mousedown()
+                .mousemove()
+                .mouseup();
+
+            expect(binding.command).toBeUndefined();
+            expect(binding.timesEnded).toBe(0);
+            expect(binding.timesCancelled).toBe(1);
+        });
+
+        test("one end true", () => {
+            binding = bindings.dndBinder(true)
+                .toProduce(() => undoCmd)
+                .when(() => true, WhenType.end)
+                .on(elt)
+                .bind();
+
+            robot(elt)
+                .keepData()
+                .mousedown()
+                .mousemove()
+                .mouseup();
+
+            expect(binding.command).toBeUndefined();
+            expect(binding.timesEnded).toBe(1);
+            expect(binding.timesCancelled).toBe(0);
+            expect(undoCmd.getStatus()).toBe(CmdStatus.done);
+        });
+
+        test("strict then false", () => {
+            binding = bindings.dndBinder(true)
+                .toProduce(() => undoCmd)
+                .when(() => false, WhenType.strictThen)
+                .when(() => true, WhenType.end)
+                .on(elt)
+                .bind();
+
+            robot(elt)
+                .keepData()
+                .mousedown()
+                .mousemove()
+                .mouseup();
+
+            expect(binding.command).toBeUndefined();
+            expect(binding.timesEnded).toBe(0);
+            expect(binding.timesCancelled).toBe(1);
+        });
+
+        test("strict false", () => {
+            binding = bindings.dndBinder(true)
+                .toProduce(() => undoCmd)
+                .when(() => false, WhenType.strict)
+                .when(() => true, WhenType.end)
+                .when(() => true, WhenType.then)
+                .when(() => true, WhenType.nonStrict)
+                .on(elt)
+                .bind();
+
+            robot(elt)
+                .keepData()
+                .mousedown()
+                .mousemove()
+                .mouseup();
+
+            expect(binding.command).toBeUndefined();
+            expect(binding.timesEnded).toBe(0);
+            expect(binding.timesCancelled).toBe(0);
+        });
+
+        test("start ok but then false with strict", () => {
+            let ok = true;
+            binding = bindings.dndBinder(true)
+                .toProduce(() => undoCmd)
+                .when(() => ok, WhenType.strict)
+                .when(() => true, WhenType.end)
+                .when(() => true, WhenType.then)
+                .when(() => true, WhenType.nonStrict)
+                .on(elt)
+                .bind();
+
+            robot(elt)
+                .keepData()
+                .mousedown()
+                .mousemove();
+
+            ok = false;
+            robot(elt)
+                .mousemove()
+                .mouseup();
+
+            expect(binding.command).toBeUndefined();
+            expect(binding.timesEnded).toBe(0);
+            expect(binding.timesCancelled).toBe(1);
+        });
+
+        test("start ok but end false with strict", () => {
+            let ok = true;
+            binding = bindings.dndBinder(true)
+                .toProduce(() => undoCmd)
+                .when(() => ok, WhenType.strict)
+                .when(() => true, WhenType.end)
+                .when(() => true, WhenType.then)
+                .on(elt)
+                .bind();
+
+            robot(elt)
+                .keepData()
+                .mousedown()
+                .mousemove();
+
+            ok = false;
+            robot(elt)
+                .mouseup();
+
+            expect(binding.command).toBeUndefined();
+            expect(binding.timesEnded).toBe(0);
+            expect(binding.timesCancelled).toBe(1);
+        });
     });
 });

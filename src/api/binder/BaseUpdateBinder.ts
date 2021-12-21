@@ -21,6 +21,7 @@ import type {BaseBinder} from "./BaseBinder";
 import type {Interaction} from "../interaction/Interaction";
 import type {Widget} from "./BaseBinderBuilder";
 import type {AnonCmd} from "../../impl/command/AnonCmd";
+import type {WhenType} from "./When";
 
 /**
  * The base interface for building bindings based on non-trivial user interactions (eg DnD) with routines
@@ -31,15 +32,13 @@ export interface BaseUpdateBinder extends BaseUpdateBinderBuilder, BaseBinder {
 
     onDynamic(node: Widget<Node>): BaseUpdateBinder;
 
-    when(fn: () => boolean): BaseUpdateBinder;
+    when(fn: () => boolean, mode?: WhenType): BaseUpdateBinder;
 
     end(fn: () => void): BaseUpdateBinder;
 
     log(...level: ReadonlyArray<LogLevel>): BaseUpdateBinder;
 
     continuousExecution(): BaseUpdateBinder;
-
-    strictStart(): BaseUpdateBinder;
 
     throttle(timeout: number): BaseUpdateBinder;
 

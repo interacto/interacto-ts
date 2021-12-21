@@ -16,6 +16,7 @@ import type {CmdBinderBuilder} from "./CmdBinderBuilder";
 import type {BaseUpdateBinderBuilder} from "./BaseUpdateBinderBuilder";
 import type {LogLevel} from "../logging/LogLevel";
 import type {Widget} from "./BaseBinderBuilder";
+import type {WhenType} from "./When";
 
 /**
  * The binding builder API that already knows the type of UI command
@@ -37,8 +38,6 @@ export interface CmdUpdateBinderBuilder<C extends Command> extends CmdBinderBuil
 
     continuousExecution(): CmdUpdateBinderBuilder<C>;
 
-    strictStart(): CmdUpdateBinderBuilder<C>;
-
     throttle(timeout: number): CmdUpdateBinderBuilder<C>;
 
     first(fn: (c: C) => void): CmdUpdateBinderBuilder<C>;
@@ -49,7 +48,7 @@ export interface CmdUpdateBinderBuilder<C extends Command> extends CmdBinderBuil
 
     end(fn: (c: C) => void): CmdUpdateBinderBuilder<C>;
 
-    when(fn: () => boolean): CmdUpdateBinderBuilder<C>;
+    when(fn: () => boolean, mode?: WhenType): CmdUpdateBinderBuilder<C>;
 
     log(...level: ReadonlyArray<LogLevel>): CmdUpdateBinderBuilder<C>;
 

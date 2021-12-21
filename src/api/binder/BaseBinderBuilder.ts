@@ -12,6 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 import type {LogLevel} from "../logging/LogLevel";
+import type {WhenType} from "./When";
 
 /**
  * For supporting Angular ElementReference without any dependency to Angular.
@@ -63,9 +64,10 @@ export interface BaseBinderBuilder {
      * Specifies the conditions to fulfill to initialise, update, or execute the command while the interaction is running.
      * A binder can have several cummulative 'when' routines.
      * @param fn - The predicate that checks whether the command can be initialised, updated, or executed.
+     * @param mode -- The execution mode of the 'when' predicate. If not defined, the non-strict mode will be used.
      * @returns A clone of the current binder to chain the building configuration.
      */
-    when(fn: () => boolean): BaseBinderBuilder;
+    when(fn: () => boolean, mode?: WhenType): BaseBinderBuilder;
 
     /**
      * Defines actions to perform when a binding ends.

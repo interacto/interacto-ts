@@ -18,6 +18,7 @@ import type {InteractionData} from "../interaction/InteractionData";
 import type {InteractionCmdUpdateBinder} from "./InteractionCmdUpdateBinder";
 import type {Interaction} from "../interaction/Interaction";
 import type {Widget} from "./BaseBinderBuilder";
+import type {WhenType} from "./When";
 
 /**
  * The binder API that already knows the type of UI command
@@ -29,8 +30,6 @@ export interface CmdUpdateBinder<C extends Command> extends CmdUpdateBinderBuild
 
     continuousExecution(): CmdUpdateBinder<C>;
 
-    strictStart(): CmdUpdateBinder<C>;
-
     throttle(timeout: number): CmdUpdateBinder<C>;
 
     first(fn: (c: C) => void): CmdUpdateBinder<C>;
@@ -39,7 +38,7 @@ export interface CmdUpdateBinder<C extends Command> extends CmdUpdateBinderBuild
 
     onDynamic(node: Widget<Node>): CmdUpdateBinder<C>;
 
-    when(fn: () => boolean): CmdUpdateBinder<C>;
+    when(fn: () => boolean, mode?: WhenType): CmdUpdateBinder<C>;
 
     log(...level: ReadonlyArray<LogLevel>): CmdUpdateBinder<C>;
 

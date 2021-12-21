@@ -17,6 +17,7 @@ import type {KeyBinderBuilder} from "./KeyBinderBuilder";
 import type {LogLevel} from "../logging/LogLevel";
 import type {Interaction} from "../interaction/Interaction";
 import type {Widget} from "./BaseBinderBuilder";
+import type {WhenType} from "./When";
 
 /**
  * The binding builder API for key-based user interactions,
@@ -27,7 +28,7 @@ import type {Widget} from "./BaseBinderBuilder";
 export interface KeyInteractionBinderBuilder<I extends Interaction<D>, D extends InteractionData>
     extends InteractionBinderBuilder<I, D>, KeyBinderBuilder {
 
-    when(fn: (i: D) => boolean): KeyInteractionBinderBuilder<I, D>;
+    when(fn: (i: D) => boolean, mode?: WhenType): KeyInteractionBinderBuilder<I, D>;
 
     on(widget: ReadonlyArray<Widget<EventTarget>> | Widget<EventTarget>, ...widgets: ReadonlyArray<Widget<EventTarget>>):
     KeyInteractionBinderBuilder<I, D>;

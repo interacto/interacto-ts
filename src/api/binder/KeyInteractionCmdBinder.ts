@@ -19,6 +19,7 @@ import type {LogLevel} from "../logging/LogLevel";
 import type {Binding} from "../binding/Binding";
 import type {Interaction} from "../interaction/Interaction";
 import type {Widget} from "./BaseBinderBuilder";
+import type {WhenType} from "./When";
 
 /**
  * The binder API for key-based user interactions, that already knows the type of the user interaction to use and
@@ -39,7 +40,7 @@ export interface KeyInteractionCmdBinder<C extends Command, I extends Interactio
 
     log(...level: ReadonlyArray<LogLevel>): KeyInteractionCmdBinder<C, I, D>;
 
-    when(fn: (i: D) => boolean): KeyInteractionCmdBinder<C, I, D>;
+    when(fn: (i: D) => boolean, mode?: WhenType): KeyInteractionCmdBinder<C, I, D>;
 
     ifHadEffects(fn: (c: C, i: D) => void): KeyInteractionCmdBinder<C, I, D>;
 

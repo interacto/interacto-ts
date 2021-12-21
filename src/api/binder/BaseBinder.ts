@@ -19,6 +19,7 @@ import type {InteractionBinder} from "./InteractionBinder";
 import type {CmdBinder} from "./CmdBinder";
 import type {Interaction} from "../interaction/Interaction";
 import type {AnonCmd} from "../../impl/command/AnonCmd";
+import type {WhenType} from "./When";
 
 /**
  * The base interface for building bindings with routines
@@ -29,7 +30,7 @@ export interface BaseBinder extends BaseBinderBuilder {
 
     onDynamic(node: Widget<Node>): BaseBinder;
 
-    when(whenPredicate: () => boolean): BaseBinder;
+    when(whenPredicate: () => boolean, mode?: WhenType): BaseBinder;
 
     end(fn: () => void): BaseBinder;
 

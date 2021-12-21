@@ -16,6 +16,7 @@ import type {InteractionData} from "../interaction/InteractionData";
 import type {BaseBinderBuilder, Widget} from "./BaseBinderBuilder";
 import type {LogLevel} from "../logging/LogLevel";
 import type {Interaction} from "../interaction/Interaction";
+import type {WhenType} from "./When";
 
 /**
  * The binding builder API that already knows the type of user interaction the bindings will use
@@ -31,7 +32,7 @@ export interface InteractionBinderBuilder<I extends Interaction<D>, D extends In
      * This predicate takes as arguments the data of the ongoing user interaction involved in the binding.
      * @returns A clone of the current binder to chain the building configuration.
      */
-    when(fn: (i: D) => boolean): InteractionBinderBuilder<I, D>;
+    when(fn: (i: D) => boolean, mode?: WhenType): InteractionBinderBuilder<I, D>;
 
     on(widget: ReadonlyArray<Widget<EventTarget>> | Widget<EventTarget>, ...widgets: ReadonlyArray<Widget<EventTarget>>):
     InteractionBinderBuilder<I, D>;

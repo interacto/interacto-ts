@@ -26,6 +26,7 @@ import type {BindingsObserver} from "../../api/binding/BindingsObserver";
 import type {Logger} from "../../api/logging/Logger";
 import type {AnonCmd} from "../command/AnonCmd";
 import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
+import type {WhenType} from "../../api/binder/When";
 
 /**
  * The base binding builder for bindings where commands can be updated while the user interaction is running.
@@ -42,22 +43,19 @@ export class UpdateBinder<C extends Command, I extends Interaction<D>, D extends
 
     protected continuousCmdExecution: boolean;
 
-    protected _strictStart: boolean;
-
     protected throttleTimeout: number;
 
-    protected thenFnArray: Array<(c: C, i: D) => void> = new Array<(c: C, i: D) => void>();
+    protected thenFnArray: Array<(c: C, i: D) => void> = [];
 
-    protected cancelFnArray: Array<(i: D) => void> = new Array<(i: D) => void>();
+    protected cancelFnArray: Array<(i: D) => void> = [];
 
-    protected endOrCancelFnArray: Array<(i: D) => void> = new Array<(i: D) => void>();
+    protected endOrCancelFnArray: Array<(i: D) => void> = [];
 
     public constructor(undoHistory: UndoHistoryBase, logger: Logger, observer?: BindingsObserver, binder?: Partial<UpdateBinder<C, I, D>>) {
         super(undoHistory, logger, observer, binder);
 
         Object.assign(this, binder);
         this.continuousCmdExecution ??= false;
-        this._strictStart ??= false;
         this.throttleTimeout ??= 0;
 
         // Arrays have to be cloned again in each subclass of Binder after Object.assign() since it undoes the changes
@@ -110,12 +108,6 @@ export class UpdateBinder<C extends Command, I extends Interaction<D>, D extends
         return dup;
     }
 
-    public strictStart(): UpdateBinder<C, I, D> {
-        const dup = this.duplicate();
-        dup._strictStart = true;
-        return dup;
-    }
-
     public throttle(timeout: number): UpdateBinder<C, I, D> {
         const dup = this.duplicate();
         dup.throttleTimeout = timeout;
@@ -135,8 +127,8 @@ export class UpdateBinder<C extends Command, I extends Interaction<D>, D extends
         return super.first(fn) as UpdateBinder<C, I, D>;
     }
 
-    public override when(fn: (i: D) => boolean): UpdateBinder<C, I, D> {
-        return super.when(fn) as UpdateBinder<C, I, D>;
+    public override when(fn: (i: D) => boolean, mode?: WhenType): UpdateBinder<C, I, D> {
+        return super.when(fn, mode) as UpdateBinder<C, I, D>;
     }
 
     public override ifHadEffects(fn: (c: C, i: D) => void): UpdateBinder<C, I, D> {
@@ -201,8 +193,8 @@ export class UpdateBinder<C extends Command, I extends Interaction<D>, D extends
         }
 
         const binding = new AnonBinding(this.continuousCmdExecution, this.usingFn(), this.undoHistory, this.logger, this.produceFn,
-            [...this.widgets], [...this.dynamicNodes], this._strictStart, [...this.logLevels],
-            this.throttleTimeout, this.stopPropagation, this.prevDefault, this.firstFn, this.thenFn, this.whenFn,
+            [...this.widgets], [...this.dynamicNodes], [...this.logLevels],
+            this.throttleTimeout, this.stopPropagation, this.prevDefault, this.firstFn, this.thenFn, [...this.whenFnArray],
             this.endFn, this.cancelFn, this.endOrCancelFn, this.hadEffectsFn,
             this.hadNoEffectFn, this.cannotExecFn, this.onErrFn, this.bindingName);
 

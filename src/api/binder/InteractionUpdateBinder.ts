@@ -19,6 +19,7 @@ import type {InteractionCmdUpdateBinder} from "./InteractionCmdUpdateBinder";
 import type {Interaction} from "../interaction/Interaction";
 import type {Widget} from "./BaseBinderBuilder";
 import type {AnonCmd} from "../../impl/command/AnonCmd";
+import type {WhenType} from "./When";
 
 /**
  * The binder API that already knows the type of the user interaction to use
@@ -36,7 +37,7 @@ export interface InteractionUpdateBinder<I extends Interaction<D>, D extends Int
 
     log(...level: ReadonlyArray<LogLevel>): InteractionUpdateBinder<I, D>;
 
-    when(fn: (i: D) => boolean): InteractionUpdateBinder<I, D>;
+    when(fn: (i: D) => boolean, mode?: WhenType): InteractionUpdateBinder<I, D>;
 
     end(fn: () => void): InteractionUpdateBinder<I, D>;
 
@@ -51,8 +52,6 @@ export interface InteractionUpdateBinder<I extends Interaction<D>, D extends Int
     throttle(timeout: number): InteractionUpdateBinder<I, D>;
 
     continuousExecution(): InteractionUpdateBinder<I, D>;
-
-    strictStart(): InteractionUpdateBinder<I, D>;
 
     catch(fn: (ex: unknown) => void): InteractionUpdateBinder<I, D>;
 

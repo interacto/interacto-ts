@@ -16,7 +16,6 @@ import type {Observable} from "rxjs";
 import {Subject} from "rxjs";
 import type {Command} from "../../api/command/Command";
 import {CmdStatus} from "../../api/command/Command";
-import {CancelFSMException} from "../fsm/CancelFSMException";
 import type {InteractionData} from "../../api/interaction/InteractionData";
 import {isUndoableType} from "../../api/undo/Undoable";
 import {MustBeUndoableCmdError} from "./MustBeUndoableCmdError";
@@ -52,8 +51,6 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
 
     public readonly continuousCmdExecution: boolean;
 
-    public readonly strictStart: boolean;
-
     /**
      * The command class to instantiate.
      */
@@ -77,8 +74,6 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
     /**
      * Creates a binding.
      * @param continuousExecution - Specifies whether the command must be executed on each step of the interaction.
-     * @param strict - Specifies whether the binding execution is strict, ie whether the binding is cancelled if
-     * the its condition is not respected at the starting of the interaction
      * @param cmdProducer - The type of the command that will be created. Used to instantiate the command by reflexivity.
      * The class must be public and must have a constructor with no parameter.
      * @param interaction - The user interaction of the binding.
@@ -87,7 +82,7 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
      * @param logger - The logger to use
      * @param name - The optional name of the binding. If not provided, computed based on the interaction and command names
      */
-    public constructor(continuousExecution: boolean, strict: boolean, interaction: I, cmdProducer: (i?: D) => C,
+    public constructor(continuousExecution: boolean, interaction: I, cmdProducer: (i?: D) => C,
                        widgets: ReadonlyArray<EventTarget>, undoHistory: UndoHistoryBase, logger: Logger, name?: string) {
         // The name is partial until the binding procudes its first command
         this._name = name;
@@ -101,7 +96,6 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
         this._interaction = interaction;
         this._cmd = undefined;
         this.continuousCmdExecution = continuousExecution;
-        this.strictStart = strict;
         this._activated = true;
         this.undoHistory = undoHistory;
         this.logger = logger;
@@ -129,10 +123,15 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
         return this._name ?? this._interaction.constructor.name;
     }
 
-    /**
-     * @returns True if the condition of the binding is respected.
-     */
-    public when(): boolean {
+    protected whenStart(): boolean {
+        return true;
+    }
+
+    protected whenUpdate(): boolean {
+        return true;
+    }
+
+    protected whenStop(): boolean {
         return true;
     }
 
@@ -307,7 +306,7 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
             return;
         }
 
-        const ok: boolean = this.when();
+        const ok: boolean = this.whenStart();
 
         if (this.logBinding) {
             this.logger.logBindingMsg(`Starting binding: ${String(ok)}`);
@@ -320,14 +319,8 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
                     this.logger.logCmdMsg("Command created and init", this._cmd.constructor.name);
                 }
             }
-        } else {
-            if (this.strictStart) {
-                if (this.logBinding) {
-                    this.logger.logBindingMsg(`Cancelling starting interaction: ${this._interaction.constructor.name}`);
-                }
-                throw new CancelFSMException();
-            }
         }
+
         if (this.logUsage) {
             this.logger.logBindingStart(this.name);
         }
@@ -342,7 +335,7 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
             this.logger.logBindingMsg("Binding updates");
         }
 
-        const cmd = this.createAndInitCommand();
+        const cmd = this.createAndInitCommand(this.whenUpdate());
         if (cmd !== undefined) {
             if (this.logCmd) {
                 this.logger.logCmdMsg("Command update");
@@ -398,7 +391,7 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
         }
 
         let cancelled = false;
-        const cmd = this.createAndInitCommand();
+        const cmd = this.createAndInitCommand(this.whenStop());
 
         if (cmd === undefined) {
             if (this._cmd !== undefined) {
@@ -461,14 +454,12 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
         }
     }
 
-    private createAndInitCommand(): C | undefined {
-        const ok = this.when();
-
+    private createAndInitCommand(whenOk: boolean): C | undefined {
         if (this.logBinding) {
-            this.logger.logBindingMsg(`when predicate is ${String(ok)}`);
+            this.logger.logBindingMsg(`when predicate is ${String(whenOk)}`);
         }
 
-        if (ok) {
+        if (whenOk) {
             if (this._cmd === undefined) {
                 if (this.logCmd) {
                     this.logger.logCmdMsg("Command creation");

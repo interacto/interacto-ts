@@ -42,7 +42,7 @@ beforeEach(() => {
     cmd.candoValue = true;
     fsm = new OneTrFSM();
     interaction = new InteractionStub(fsm);
-    binding = new BindingImpl(false, false, interaction, () => cmd, [], history, mock<Logger>());
+    binding = new BindingImpl(false, interaction, () => cmd, [], history, mock<Logger>());
 });
 
 afterEach(() => {
@@ -78,8 +78,13 @@ test("cmd Created Exec Saved When activated", () => {
     expect(cmd.getStatus()).toStrictEqual(CmdStatus.done);
 });
 
-test("cmd KO When Not When OK", () => {
-    jest.spyOn(binding, "when").mockReturnValue(false);
+test("command cannot be executed when the when at stop is KO", () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    jest.spyOn(binding as any, "whenStop").mockReturnValue(false);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    jest.spyOn(binding as any, "whenStart").mockReturnValue(false);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    jest.spyOn(binding as any, "whenUpdate").mockReturnValue(false);
     const dotItSpy = jest.spyOn(cmd, "execute");
     jest.spyOn(binding, "ifCmdHadNoEffect");
     jest.spyOn(binding, "ifCmdHadEffects");
