@@ -14,10 +14,10 @@
 import type {Binding, FSM, Interaction, InteractionBase, InteractionData, UndoHistoryBase} from "../../src/interacto";
 import {BindingsImpl, UndoHistoryImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
-import {createTouchEvent} from "../interaction/StubEvents";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
 import type {Flushable} from "../../src/impl/interaction/Flushable";
 import type {Bindings} from "../../src/api/binding/Bindings";
+import {robot} from "interacto-nono";
 
 let c1: HTMLElement;
 let binding: Binding<StubCmd, Interaction<InteractionData>, InteractionData> | undefined;
@@ -45,10 +45,12 @@ test("run multi-touch produces cmd", () => {
         .on(c1)
         .bind();
 
-    c1.dispatchEvent(createTouchEvent("touchstart", 1, c1, 11, 23, 110, 230));
-    c1.dispatchEvent(createTouchEvent("touchstart", 2, c1, 31, 13, 310, 130));
-    c1.dispatchEvent(createTouchEvent("touchmove", 2, c1, 15, 30, 150, 300));
-    c1.dispatchEvent(createTouchEvent("touchend", 2, c1, 15, 30, 150, 300));
+    robot(c1)
+        .keepData()
+        .touchstart({}, [{"identifier": 1}])
+        .touchstart({}, [{"identifier": 2}])
+        .touchmove()
+        .touchend();
 
     expect(binding).toBeDefined();
     expect(cmd.exec).toBe(1);
@@ -72,13 +74,23 @@ test("run multi-touch two times recycle events", () => {
         })
         .bind();
 
-    c1.dispatchEvent(createTouchEvent("touchstart", 1, c1, 11, 23, 110, 230));
-    c1.dispatchEvent(createTouchEvent("touchstart", 2, c1, 31, 13, 310, 130));
-    c1.dispatchEvent(createTouchEvent("touchmove", 2, c1, 15, 30, 150, 300));
-    c1.dispatchEvent(createTouchEvent("touchend", 2, c1, 15, 30, 150, 300));
-    c1.dispatchEvent(createTouchEvent("touchstart", 3, c1, 31, 13, 310, 130));
-    c1.dispatchEvent(createTouchEvent("touchmove", 3, c1, 15, 30, 150, 300));
-    c1.dispatchEvent(createTouchEvent("touchend", 1, c1, 15, 30, 150, 300));
+    robot(c1)
+        .keepData()
+        .touchstart({}, [{"identifier": 1}])
+        .touchstart({}, [{"identifier": 2}])
+        .touchmove()
+        .touchend()
+        .touchstart({}, [{"identifier": 3}])
+        .touchmove()
+        .touchend({}, [{"identifier": 1}]);
+
+    // c1.dispatchEvent(createTouchEvent("touchstart", 1, c1, 11, 23, 110, 230));
+    // c1.dispatchEvent(createTouchEvent("touchstart", 2, c1, 31, 13, 310, 130));
+    // c1.dispatchEvent(createTouchEvent("touchmove", 2, c1, 15, 30, 150, 300));
+    // c1.dispatchEvent(createTouchEvent("touchend", 2, c1, 15, 30, 150, 300));
+    // c1.dispatchEvent(createTouchEvent("touchstart", 3, c1, 31, 13, 310, 130));
+    // c1.dispatchEvent(createTouchEvent("touchmove", 3, c1, 15, 30, 150, 300));
+    // c1.dispatchEvent(createTouchEvent("touchend", 1, c1, 15, 30, 150, 300));
 
     expect(binding).toBeDefined();
     expect(ctx.commands).toHaveLength(2);
@@ -98,8 +110,10 @@ test("unsubscribe does not trigger the binding", () => {
 
     (binding.interaction as InteractionBase<InteractionData, Flushable & InteractionData, FSM>).onNodeUnregistered(c1);
 
-    c1.dispatchEvent(createTouchEvent("touchstart", 1, c1, 11, 23, 110, 230));
-    c1.dispatchEvent(createTouchEvent("touchstart", 2, c1, 31, 13, 310, 130));
+    robot(c1)
+        .touchstart({}, [{"identifier": 1}])
+        .touchstart({}, [{"identifier": 2}])
+        .touchend();
 
     expect(binding.running).toBeFalsy();
 });

@@ -14,7 +14,7 @@
 
 import type {FSMHandler} from "../../../src/interacto";
 import {Tap, TapDataImpl, TouchDataImpl} from "../../../src/interacto";
-import {createTouchEvent, robot} from "../StubEvents";
+import {robot} from "../StubEvents";
 import {mock} from "jest-mock-extended";
 import {checkTouchPoint} from "../../Utils";
 
@@ -73,8 +73,10 @@ describe("tap 1", () => {
     });
 
     test("two touches cancels", () => {
-        interaction.processEvent(createTouchEvent("touchstart", 4, canvas));
-        interaction.processEvent(createTouchEvent("touchstart", 3, canvas));
+        robot(canvas)
+            .touchstart({}, [{"identifier": 4}])
+            .touchstart({}, [{"identifier": 3}]);
+
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmStops).not.toHaveBeenCalled();
         expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
@@ -100,8 +102,10 @@ describe("tap 1", () => {
         });
         interaction.fsm.addHandler(newHandler);
 
-        interaction.processEvent(createTouchEvent("touchstart", 5, canvas, 14, 20, 15, 21));
-        interaction.processEvent(createTouchEvent("touchend", 5, canvas, 14, 20, 15, 21));
+        robot(canvas)
+            .keepData()
+            .touchstart({}, [{"identifier": 5, "screenX": 14, "screenY": 20, "clientX": 15, "clientY": 21}])
+            .touchend();
 
         checkTouchPoint(touch, 15, 21, 14, 20, 5, canvas);
     });
@@ -210,10 +214,13 @@ describe("tap 2", () => {
             });
         });
         interaction.fsm.addHandler(newHandler);
-        interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 15, 20, 16, 21));
-        interaction.processEvent(createTouchEvent("touchend", 3, canvas, 15, 20, 16, 21));
-        interaction.processEvent(createTouchEvent("touchstart", 2, canvas, 12, 27, 14, 28));
-        interaction.processEvent(createTouchEvent("touchend", 2, canvas, 12, 27, 14, 28));
+
+        robot(canvas)
+            .keepData()
+            .touchstart({}, [{"identifier": 3, "screenX": 15, "screenY": 20, "clientX": 16, "clientY": 21}])
+            .touchend({}, [{"identifier": 3, "screenX": 15, "screenY": 20, "clientX": 16, "clientY": 21}])
+            .touchstart({}, [{"identifier": 2, "screenX": 12, "screenY": 27, "clientX": 14, "clientY": 28}])
+            .touchend({}, [{"identifier": 2, "screenX": 12, "screenY": 27, "clientX": 14, "clientY": 28}]);
 
         expect(touch.taps).toHaveLength(2);
         checkTouchPoint(touch.taps[0], 16, 21, 15, 20, 3, canvas);

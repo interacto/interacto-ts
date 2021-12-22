@@ -68,11 +68,21 @@ export class TouchDnDFSM extends FSMImpl {
         this.addState(released);
         this.addState(cancelled);
 
-        const pressure = new TouchPressureTransition(this.initState, touched);
-        pressure.action = (event: TouchEvent): void => {
+        const touchDownFn = (event: TouchEvent): void => {
             this.touchID = event.changedTouches[0].identifier;
             dataHandler?.onTouch(event);
         };
+
+        const fixTouchDownCheck = (event: TouchEvent): boolean => [...event.touches].filter(t => t.identifier === this.touchID).length === 0;
+
+        const pressure = new TouchPressureTransition(this.initState, touched);
+        pressure.action = touchDownFn;
+
+        // If the touch up event is lost by the browser and another touch down occurs
+        // we must restart the interaction
+        const fixBlockedEvent = new TouchPressureTransition(touched, touched);
+        fixBlockedEvent.isGuardOK = fixTouchDownCheck;
+        fixBlockedEvent.action = touchDownFn;
 
         if (this.movementRequired) {
             this.startingState = moved;
@@ -97,6 +107,12 @@ export class TouchDnDFSM extends FSMImpl {
         move.action = (event: TouchEvent): void => {
             dataHandler?.onMove(event);
         };
+
+        // If the touch up event is lost by the browser and another touch down occurs
+        // we must restart the interaction
+        const fixBlockedEvent2 = new TouchPressureTransition(moved, touched);
+        fixBlockedEvent2.isGuardOK = fixTouchDownCheck;
+        fixBlockedEvent2.action = touchDownFn;
 
         // Transitions used if the DnD can be cancelled by releasing the touch on a dwell spring element
         if (this.cancellable) {

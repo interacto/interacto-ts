@@ -19,7 +19,7 @@ import type {Interaction} from "../../src/api/interaction/Interaction";
 import type {InteractionData} from "../../src/api/interaction/InteractionData";
 import {Subject} from "rxjs";
 import {flushPromises} from "../Utils";
-import {createMouseEvent, createTouchEvent} from "../interaction/StubEvents";
+import {robot} from "../interaction/StubEvents";
 import {LogLevel} from "../../src/api/logging/LogLevel";
 import type {BindingImpl} from "../../src/impl/binding/BindingImpl";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
@@ -400,9 +400,10 @@ describe("testing async commands and bindings", () => {
                 .on(canvas)
                 .bind();
 
-            canvas.dispatchEvent(createMouseEvent("mousedown", canvas));
-            canvas.dispatchEvent(createMouseEvent("mousemove", canvas));
-            canvas.dispatchEvent(createMouseEvent("mouseup", canvas));
+            robot(canvas)
+                .mousedown()
+                .mousemove()
+                .mouseup();
 
             runAllTimers();
             await flushPromises();
@@ -424,11 +425,12 @@ describe("testing async commands and bindings", () => {
                 .ifCannotExecute(cannot)
                 .bind();
 
-            canvas.dispatchEvent(createMouseEvent("mousedown", canvas));
-            canvas.dispatchEvent(createMouseEvent("mousemove", canvas));
-            canvas.dispatchEvent(createMouseEvent("mousemove", canvas));
-            canvas.dispatchEvent(createMouseEvent("mousemove", canvas));
-            canvas.dispatchEvent(createMouseEvent("mouseup", canvas));
+            robot(canvas)
+                .mousedown()
+                .mousemove()
+                .mousemove()
+                .mousemove()
+                .mouseup();
 
             runAllTimers();
             await flushPromises();
@@ -451,10 +453,11 @@ describe("testing async commands and bindings", () => {
                 .ifCannotExecute(cannot)
                 .bind();
 
-            canvas.dispatchEvent(createMouseEvent("mousedown", canvas));
-            canvas.dispatchEvent(createMouseEvent("mousemove", canvas));
-            canvas.dispatchEvent(createMouseEvent("mousemove", canvas));
-            canvas.dispatchEvent(createMouseEvent("mouseup", canvas));
+            robot(canvas)
+                .mousedown()
+                .mousemove()
+                .mousemove()
+                .mouseup();
 
             runAllTimers();
             await flushPromises();
@@ -482,9 +485,10 @@ describe("testing async commands and bindings", () => {
                 throw new Error("Error");
             });
 
-            canvas.dispatchEvent(createMouseEvent("mousedown", canvas));
-            canvas.dispatchEvent(createMouseEvent("mousemove", canvas));
-            canvas.dispatchEvent(createMouseEvent("mouseup", canvas));
+            robot(canvas)
+                .mousedown()
+                .mousemove()
+                .mouseup();
 
             runAllTimers();
             await flushPromises();
@@ -511,14 +515,14 @@ describe("testing async commands and bindings", () => {
                 .on(canvas)
                 .bind();
 
-            canvas.dispatchEvent(createTouchEvent("touchstart", 1, canvas, 11, 23, 110, 230));
-            canvas.dispatchEvent(createTouchEvent("touchstart", 2, canvas, 31, 13, 310, 130));
-            canvas.dispatchEvent(createTouchEvent("touchmove", 2, canvas, 15, 30, 150, 300));
-            canvas.dispatchEvent(createTouchEvent("touchend", 2, canvas, 15, 30, 150, 300));
-            canvas.dispatchEvent(createTouchEvent("touchstart", 3, canvas, 31, 13, 310, 130));
-            canvas.dispatchEvent(createTouchEvent("touchmove", 3, canvas, 15, 30, 150, 300));
-            canvas.dispatchEvent(createTouchEvent("touchend", 1, canvas, 15, 30, 150, 300));
-
+            robot(canvas)
+                .touchstart({}, [{"identifier": 1}])
+                .touchstart({}, [{"identifier": 2}])
+                .touchmove({}, [{"identifier": 2}])
+                .touchend({}, [{"identifier": 2}])
+                .touchstart({}, [{"identifier": 3}])
+                .touchmove({}, [{"identifier": 3}])
+                .touchend({}, [{"identifier": 1}]);
 
             runAllTimers();
             await flushPromises();

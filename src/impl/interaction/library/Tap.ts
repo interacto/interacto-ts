@@ -49,7 +49,6 @@ class TapFSM extends FSMImpl {
         if (this.states.length > 1) {
             return;
         }
-
         super.buildFSM(dataHandler);
 
         const down = new StdState(this, "down");
@@ -60,7 +59,6 @@ class TapFSM extends FSMImpl {
         this.addState(up);
         this.addState(ended);
         this.addState(cancelled);
-
         const pressureAction = (event: TouchEvent): void => {
             this.touchID = event.changedTouches[0].identifier;
             this.countTaps++;
@@ -73,19 +71,27 @@ class TapFSM extends FSMImpl {
         move.isGuardOK = (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.touchID;
 
         // No multi-touch
-        new TouchPressureTransition(down, cancelled);
+        const noMulti = new TouchPressureTransition(down, cancelled);
+        noMulti.isGuardOK = (event: TouchEvent): boolean => [...event.touches].filter(t => t.identifier === this.touchID).length > 0;
+
+        // Required to clean touch events lost by the browser
+        const cleanEvent = new TouchPressureTransition(down, down);
+        // To detect the event is lost, checking it is not part of the touches any more
+        cleanEvent.isGuardOK = (event: TouchEvent): boolean => [...event.touches].filter(t => t.identifier === this.touchID).length === 0;
+        // Then replacing the current tap (but not increment)
+        cleanEvent.action = (event: TouchEvent): void => {
+            this.touchID = event.changedTouches[0].identifier;
+            dataHandler?.tap(event);
+        };
 
         const release = new TouchReleaseTransition(down, ended);
         release.isGuardOK = (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.touchID && this.nbTaps === this.countTaps;
-
         const release2 = new TouchReleaseTransition(down, up);
         release2.isGuardOK = (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.touchID && this.nbTaps !== this.countTaps;
-
         const press2 = new TouchPressureTransition(up, down);
         press2.action = pressureAction;
 
         new TouchMoveTransition(up, cancelled);
-
         new TimeoutTransition(down, cancelled, () => 1000);
         new TimeoutTransition(up, cancelled, () => 1000);
     }

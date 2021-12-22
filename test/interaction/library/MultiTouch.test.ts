@@ -14,7 +14,7 @@
 
 import type {FSMHandler} from "../../../src/interacto";
 import {MultiTouch} from "../../../src/interacto";
-import {createTouchEvent, robot} from "../StubEvents";
+import {robot} from "../StubEvents";
 import {mock} from "jest-mock-extended";
 import {TouchDataImpl} from "../../../src/impl/interaction/TouchDataImpl";
 import {checkTouchPoint} from "../../Utils";
@@ -37,7 +37,9 @@ afterEach(() => {
 });
 
 test("touch1", () => {
-    interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 11, 23, 11, 23));
+    robot(canvas)
+        .touchstart({}, [{"identifier": 3}]);
+
     expect(interaction.fsm.conccurFSMs
         .filter(fsm => fsm.started)).toHaveLength(1);
     expect(interaction.isRunning()).toBeFalsy();
@@ -48,15 +50,19 @@ test("touch1", () => {
 });
 
 test("touch1 data", () => {
-    interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 11, 23, 11, 23));
+    robot(canvas)
+        .touchstart({}, [{"identifier": 3, "screenX": 11, "screenY": 23, "clientX": 11, "clientY": 23}]);
+
     expect(interaction.data.touches).toHaveLength(1);
     checkTouchPoint(interaction.data.touches[0].src, 11, 23, 11, 23, 3, canvas);
     checkTouchPoint(interaction.data.touches[0].tgt, 11, 23, 11, 23, 3, canvas);
 });
 
 test("touch2", () => {
-    interaction.processEvent(createTouchEvent("touchstart", 1, canvas, 11, 23, 11, 23));
-    interaction.processEvent(createTouchEvent("touchstart", 2, canvas, 11, 23, 11, 23));
+    robot(canvas)
+        .touchstart({}, [{"identifier": 1}])
+        .touchstart({}, [{"identifier": 2}]);
+
     expect(interaction.fsm.conccurFSMs
         .filter(fsm => fsm.started)).toHaveLength(2);
     expect(interaction.isRunning()).toBeFalsy();
@@ -67,8 +73,10 @@ test("touch2", () => {
 });
 
 test("touch2 data", () => {
-    interaction.processEvent(createTouchEvent("touchstart", 1, canvas, 11, 23, 11, 23));
-    interaction.processEvent(createTouchEvent("touchstart", 2, canvas, 21, 13, 21, 13));
+    robot(canvas)
+        .touchstart({}, [{"identifier": 1, "screenX": 11, "screenY": 23, "clientX": 11, "clientY": 23}])
+        .touchstart({}, [{"identifier": 2, "screenX": 21, "screenY": 13, "clientX": 21, "clientY": 13}]);
+
     expect(interaction.data.touches).toHaveLength(2);
     checkTouchPoint(interaction.data.touches[0].src, 11, 23, 11, 23, 1, canvas);
     checkTouchPoint(interaction.data.touches[1].src, 21, 13, 21, 13, 2, canvas);
@@ -77,9 +85,11 @@ test("touch2 data", () => {
 });
 
 test("touch3", () => {
-    interaction.processEvent(createTouchEvent("touchstart", 1, canvas, 11, 23, 11, 23));
-    interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 21, 13, 21, 13));
-    interaction.processEvent(createTouchEvent("touchstart", 2, canvas, 210, 130, 210, 130));
+    robot(canvas)
+        .touchstart({}, [{"identifier": 1}])
+        .touchstart({}, [{"identifier": 3}])
+        .touchstart({}, [{"identifier": 2}]);
+
     expect(interaction.fsm.conccurFSMs
         .filter(fsm => fsm.started)).toHaveLength(3);
     expect(interaction.isRunning()).toBeTruthy();
@@ -90,9 +100,11 @@ test("touch3", () => {
 });
 
 test("touch3 data", () => {
-    interaction.processEvent(createTouchEvent("touchstart", 1, canvas, 11, 23, 11, 23));
-    interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 21, 13, 21, 13));
-    interaction.processEvent(createTouchEvent("touchstart", 2, canvas, 210, 130, 210, 130));
+    robot(canvas)
+        .touchstart({}, [{"identifier": 1, "screenX": 11, "screenY": 23, "clientX": 11, "clientY": 23}])
+        .touchstart({}, [{"identifier": 3, "screenX": 21, "screenY": 13, "clientX": 21, "clientY": 13}])
+        .touchstart({}, [{"identifier": 2, "screenX": 210, "screenY": 130, "clientX": 210, "clientY": 130}]);
+
     expect(interaction.data.touches).toHaveLength(3);
     checkTouchPoint(interaction.data.touches[0].src, 11, 23, 11, 23, 1, canvas);
     checkTouchPoint(interaction.data.touches[1].src, 21, 13, 21, 13, 3, canvas);
@@ -103,9 +115,11 @@ test("touch3 data", () => {
 });
 
 test("touch3 with one error event", () => {
-    interaction.processEvent(createTouchEvent("touchstart", 1, canvas, 11, 23, 11, 23));
-    interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 21, 13, 21, 13));
-    interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 210, 130, 210, 130));
+    robot(canvas)
+        .touchstart({}, [{"identifier": 1}])
+        .touchstart({}, [{"identifier": 3}])
+        .touchstart({}, [{"identifier": 3}]);
+
     expect(interaction.fsm.conccurFSMs.filter(fsm => fsm.started)).toHaveLength(2);
     expect(interaction.isRunning()).toBeFalsy();
     expect(handler.fsmStarts).not.toHaveBeenCalled();
@@ -115,10 +129,12 @@ test("touch3 with one error event", () => {
 });
 
 test("touch1 touch2 touch3 move3", () => {
-    interaction.processEvent(createTouchEvent("touchstart", 1, canvas, 11, 23, 11, 23));
-    interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 21, 13, 21, 13));
-    interaction.processEvent(createTouchEvent("touchstart", 2, canvas, 210, 130, 210, 130));
-    interaction.processEvent(createTouchEvent("touchmove", 3, canvas, 210, 130, 210, 130));
+    robot(canvas)
+        .touchstart({}, [{"identifier": 1}])
+        .touchstart({}, [{"identifier": 3}])
+        .touchstart({}, [{"identifier": 2}])
+        .touchmove({}, [{"identifier": 3}]);
+
     expect(interaction.isRunning()).toBeTruthy();
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
@@ -127,10 +143,12 @@ test("touch1 touch2 touch3 move3", () => {
 });
 
 test("touch1 touch2 touch3 release2", () => {
-    interaction.processEvent(createTouchEvent("touchstart", 1, canvas, 11, 23, 11, 23));
-    interaction.processEvent(createTouchEvent("touchstart", 2, canvas, 210, 130, 210, 130));
-    interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 210, 130, 210, 130));
-    interaction.processEvent(createTouchEvent("touchend", 2, canvas, 210, 130, 210, 130));
+    robot(canvas)
+        .touchstart({}, [{"identifier": 1}])
+        .touchstart({}, [{"identifier": 2}])
+        .touchstart({}, [{"identifier": 3}])
+        .touchend({}, [{"identifier": 2}]);
+
     expect(interaction.isRunning()).toBeFalsy();
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
@@ -139,12 +157,14 @@ test("touch1 touch2 touch3 release2", () => {
 });
 
 test("touch1 touch2 move2 touch3 move1 release2", () => {
-    interaction.processEvent(createTouchEvent("touchstart", 1, canvas, 11, 23, 11, 23));
-    interaction.processEvent(createTouchEvent("touchstart", 2, canvas, 210, 130, 210, 130));
-    interaction.processEvent(createTouchEvent("touchmove", 2, canvas, 210, 130, 210, 130));
-    interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 210, 130, 210, 130));
-    interaction.processEvent(createTouchEvent("touchmove", 3, canvas, 210, 130, 210, 130));
-    interaction.processEvent(createTouchEvent("touchend", 2, canvas, 210, 130, 210, 130));
+    robot(canvas)
+        .touchstart({}, [{"identifier": 1}])
+        .touchstart({}, [{"identifier": 2}])
+        .touchmove({}, [{"identifier": 2}])
+        .touchstart({}, [{"identifier": 3}])
+        .touchmove({}, [{"identifier": 3}])
+        .touchend({}, [{"identifier": 2}]);
+
     expect(interaction.isRunning()).toBeFalsy();
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
@@ -153,11 +173,13 @@ test("touch1 touch2 move2 touch3 move1 release2", () => {
 });
 
 test("touch1 touch2 touch3 release1 touch4", () => {
-    interaction.processEvent(createTouchEvent("touchstart", 1, canvas, 11, 23, 11, 23));
-    interaction.processEvent(createTouchEvent("touchstart", 2, canvas, 210, 130, 210, 130));
-    interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 210, 130, 210, 130));
-    interaction.processEvent(createTouchEvent("touchend", 1, canvas, 210, 130, 210, 130));
-    interaction.processEvent(createTouchEvent("touchstart", 4, canvas, 210, 130, 210, 130));
+    robot(canvas)
+        .touchstart({}, [{"identifier": 1}])
+        .touchstart({}, [{"identifier": 2}])
+        .touchstart({}, [{"identifier": 3}])
+        .touchend({}, [{"identifier": 1}])
+        .touchstart({}, [{"identifier": 4}]);
+
     expect(interaction.isRunning()).toBeTruthy();
     expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
@@ -166,11 +188,13 @@ test("touch1 touch2 touch3 release1 touch4", () => {
 });
 
 test("touch2 touch3 touch1 release3 touch3", () => {
-    interaction.processEvent(createTouchEvent("touchstart", 2, canvas, 11, 23, 11, 23));
-    interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 210, 130, 210, 130));
-    interaction.processEvent(createTouchEvent("touchstart", 1, canvas, 210, 130, 210, 130));
-    interaction.processEvent(createTouchEvent("touchend", 3, canvas, 210, 130, 210, 130));
-    interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 210, 130, 210, 130));
+    robot(canvas)
+        .touchstart({}, [{"identifier": 2}])
+        .touchstart({}, [{"identifier": 3}])
+        .touchstart({}, [{"identifier": 1}])
+        .touchend({}, [{"identifier": 3}])
+        .touchstart({}, [{"identifier": 3}]);
+
     expect(interaction.isRunning()).toBeTruthy();
     expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
@@ -179,10 +203,12 @@ test("touch2 touch3 touch1 release3 touch3", () => {
 });
 
 test("touch1 touch2 touch3 move3 data", () => {
-    interaction.processEvent(createTouchEvent("touchstart", 1, canvas, 11, 23, 11, 23));
-    interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 21, 13, 21, 13));
-    interaction.processEvent(createTouchEvent("touchstart", 2, canvas, 210, 130, 210, 130));
-    interaction.processEvent(createTouchEvent("touchmove", 3, canvas, 2100, 1300, 2100, 1300));
+    robot(canvas)
+        .touchstart({}, [{"identifier": 1, "screenX": 11, "screenY": 23, "clientX": 11, "clientY": 23}])
+        .touchstart({}, [{"identifier": 3, "screenX": 21, "screenY": 13, "clientX": 21, "clientY": 13}])
+        .touchstart({}, [{"identifier": 2, "screenX": 210, "screenY": 130, "clientX": 210, "clientY": 130}])
+        .touchmove({}, [{"identifier": 3, "screenX": 2100, "screenY": 1300, "clientX": 2100, "clientY": 1300}]);
+
     expect(interaction.data.touches).toHaveLength(3);
     checkTouchPoint(interaction.data.touches[0].src, 11, 23, 11, 23, 1, canvas);
     checkTouchPoint(interaction.data.touches[1].src, 21, 13, 21, 13, 3, canvas);
@@ -193,8 +219,10 @@ test("touch1 touch2 touch3 move3 data", () => {
 });
 
 test("touch end", () => {
-    interaction.processEvent(createTouchEvent("touchstart", 2, canvas, 11, 23, 11, 23));
-    interaction.processEvent(createTouchEvent("touchend", 2, canvas, 11, 23, 11, 23));
+    robot(canvas)
+        .touchstart({}, [{"identifier": 2}])
+        .touchend({}, [{"identifier": 2}]);
+
     expect(interaction.isRunning()).toBeFalsy();
     expect(handler.fsmStarts).not.toHaveBeenCalled();
     expect(handler.fsmUpdates).not.toHaveBeenCalled();
@@ -213,9 +241,9 @@ test("several touch starts", () => {
 
 test("touch starts", () => {
     robot(canvas)
-        .touchstart({}, [{"identifier": 3, "screenX": 50, "screenY": 20, "clientX": 100, "clientY": 200}], 5000)
-        .touchstart({}, [{"identifier": 1, "screenX": 50, "screenY": 20, "clientX": 100, "clientY": 200}], 5000)
-        .touchstart({}, [{"identifier": 2, "screenX": 50, "screenY": 20, "clientX": 100, "clientY": 200}], 5000);
+        .touchstart({}, [{"identifier": 3}], 5000)
+        .touchstart({}, [{"identifier": 1}], 5000)
+        .touchstart({}, [{"identifier": 2}], 5000);
 
     expect(interaction.fsm.conccurFSMs[0].started).toBeTruthy();
     expect(interaction.fsm.conccurFSMs[1].started).toBeTruthy();
@@ -304,9 +332,10 @@ test("touch end data", () => {
     const data3s = new TouchDataImpl();
     const data3t = new TouchDataImpl();
 
-    interaction.processEvent(createTouchEvent("touchstart", 1, canvas, 11, 23, 11, 23));
-    interaction.processEvent(createTouchEvent("touchstart", 3, canvas, 21, 13, 21, 13));
-    interaction.processEvent(createTouchEvent("touchstart", 2, canvas, 210, 130, 210, 130));
+    robot(canvas)
+        .touchstart({}, [{"identifier": 1, "screenX": 11, "screenY": 23, "clientX": 11, "clientY": 23}])
+        .touchstart({}, [{"identifier": 3, "screenX": 21, "screenY": 13, "clientX": 21, "clientY": 13}])
+        .touchstart({}, [{"identifier": 2, "screenX": 210, "screenY": 130, "clientX": 210, "clientY": 130}]);
 
     const newHandler = mock<FSMHandler>();
     newHandler.fsmStops = jest.fn(() => {
@@ -319,7 +348,8 @@ test("touch end data", () => {
     });
     interaction.fsm.addHandler(newHandler);
 
-    interaction.processEvent(createTouchEvent("touchend", 2, canvas, 11, 23, 11, 23));
+    robot(canvas)
+        .touchend({}, [{"identifier": 2, "screenX": 11, "screenY": 23, "clientX": 11, "clientY": 23}]);
 
     checkTouchPoint(data1s, 11, 23, 11, 23, 1, canvas);
     checkTouchPoint(data1t, 11, 23, 11, 23, 1, canvas);

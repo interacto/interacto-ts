@@ -13,7 +13,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 import {StubCmd} from "../command/StubCmd";
-import {createTouchEvent, robot} from "../interaction/StubEvents";
+import {robot} from "../interaction/StubEvents";
 import type {Binding, FSMHandler, Interaction, MultiTouchData, UndoHistoryBase} from "../../src/interacto";
 import {BindingsImpl, UndoHistoryImpl} from "../../src/interacto";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
@@ -44,8 +44,9 @@ test("touch move: too slow too short", () => {
         .on(c1)
         .bind();
 
-    c1.dispatchEvent(createTouchEvent("touchstart", 3, c1, 15, 20, 150, 200, 100));
-    c1.dispatchEvent(createTouchEvent("touchmove", 3, c1, 16, 30, 160, 210, 2000));
+    robot(c1)
+        .touchstart({}, [{"identifier": 3, "screenX": 15, "screenY": 20, "clientX": 150, "clientY": 200}], 100)
+        .touchmove({}, [{"identifier": 3, "screenX": 16, "screenY": 30, "clientX": 160, "clientY": 201}], 2000);
 
     expect(binding).toBeDefined();
     expect(binding.timesCancelled).toBe(0);
@@ -60,10 +61,9 @@ test("touch move: too slow too short", () => {
             .on(c1)
             .bind();
 
-        c1.dispatchEvent(createTouchEvent("touchstart", 3, c1, 15,
-            20, 150, 200, 10));
-        c1.dispatchEvent(createTouchEvent("touchmove", 3, c1, 16,
-            20 + y, 160, 200 + y, 10));
+        robot(c1)
+            .touchstart({}, [{"identifier": 3, "screenX": 15, "screenY": 20, "clientX": 150, "clientY": 200}], 10)
+            .touchmove({}, [{"identifier": 3, "screenX": 16, "screenY": 20 + y, "clientX": 160, "clientY": 200 + y}], 10);
 
         expect(binding).toBeDefined();
         expect(binding.timesCancelled).toBe(0);
@@ -79,14 +79,11 @@ test("touch move: too slow too short", () => {
             .on(c1)
             .bind();
 
-        c1.dispatchEvent(createTouchEvent("touchstart", 3, c1, 150,
-            20, 150, 200, 0));
-        c1.dispatchEvent(createTouchEvent("touchmove", 3, c1, 160,
-            20, 200, 200, 10));
-        c1.dispatchEvent(createTouchEvent("touchmove", 3, c1, 350,
-            20 + y, 250, 200 + y, 20));
-        c1.dispatchEvent(createTouchEvent("touchend", 3, c1, 350,
-            20 + y, 250, 200 + y, 20));
+        robot(c1)
+            .touchstart({}, [{"identifier": 3, "screenX": 150, "screenY": 20, "clientX": 150, "clientY": 200}], 5000)
+            .touchmove({}, [{"identifier": 3, "screenX": 160, "screenY": 20, "clientX": 200, "clientY": 200}], 5500)
+            .touchmove({}, [{"identifier": 3, "screenX": 350, "screenY": 20 + y, "clientX": 250, "clientY": 200 + y}], 6000)
+            .touchend({}, [{"identifier": 3, "screenX": 350, "screenY": 20 + y, "clientX": 250, "clientY": 200 + y}], 6000);
 
         expect(binding).toBeDefined();
         expect(binding.timesEnded).toBe(0);
@@ -101,12 +98,10 @@ test("touch move move too short too slow", () => {
         .on(c1)
         .bind();
 
-    c1.dispatchEvent(createTouchEvent("touchstart", 3, c1,
-        100, 20, 150, 200, 5000));
-    c1.dispatchEvent(createTouchEvent("touchmove", 3, c1,
-        200, 30, 160, 201, 5200));
-    c1.dispatchEvent(createTouchEvent("touchmove", 3, c1,
-        299, 30, 349, 210, 5399));
+    robot(c1)
+        .touchstart({}, [{"identifier": 3, "screenX": 100, "screenY": 20, "clientX": 150, "clientY": 200}], 5000)
+        .touchmove({}, [{"identifier": 3, "screenX": 200, "screenY": 30, "clientX": 160, "clientY": 201}], 5200)
+        .touchmove({}, [{"identifier": 3, "screenX": 299, "screenY": 30, "clientX": 349, "clientY": 210}], 5399);
 
     expect(binding).toBeDefined();
     expect(binding.timesCancelled).toBe(0);
@@ -120,12 +115,10 @@ test("touch move move too short velocity OK", () => {
         .on(c1)
         .bind();
 
-    c1.dispatchEvent(createTouchEvent("touchstart", 3, c1,
-        150, 20, 150, 200, 5000));
-    c1.dispatchEvent(createTouchEvent("touchmove", 3, c1,
-        160, 30, 160, 201, 5050));
-    c1.dispatchEvent(createTouchEvent("touchmove", 3, c1,
-        200, 30, 200, 210, 5100));
+    robot(c1)
+        .touchstart({}, [{"identifier": 3, "screenX": 150, "screenY": 20, "clientX": 150, "clientY": 200}], 5000)
+        .touchmove({}, [{"identifier": 3, "screenX": 160, "screenY": 20, "clientX": 160, "clientY": 201}], 5050)
+        .touchmove({}, [{"identifier": 3, "screenX": 200, "screenY": 30, "clientX": 200, "clientY": 210}], 5100);
 
     expect(binding).toBeDefined();
     expect(binding.timesCancelled).toBe(0);
@@ -139,12 +132,10 @@ test("touch move move distance OK short too slow", () => {
         .on(c1)
         .bind();
 
-    c1.dispatchEvent(createTouchEvent("touchstart", 3, c1,
-        150, 20, 150, 200, 5000));
-    c1.dispatchEvent(createTouchEvent("touchmove", 3, c1,
-        160, 30, 160, 201, 6000));
-    c1.dispatchEvent(createTouchEvent("touchmove", 3, c1,
-        350, 30, 350, 210, 7000));
+    robot(c1)
+        .touchstart({}, [{"identifier": 3, "screenX": 150, "screenY": 20, "clientX": 150, "clientY": 200}], 5000)
+        .touchmove({}, [{"identifier": 3, "screenX": 160, "screenY": 30, "clientX": 160, "clientY": 201}], 6000)
+        .touchmove({}, [{"identifier": 3, "screenX": 350, "screenY": 30, "clientX": 350, "clientY": 210}], 7000);
 
     expect(binding).toBeDefined();
     expect(binding.timesCancelled).toBe(0);
@@ -238,14 +229,12 @@ test("touch move move release distance velocity OK 200px", () => {
         .on(c1)
         .bind();
 
-    c1.dispatchEvent(createTouchEvent("touchstart", 3, c1,
-        50, 20, 100, 200, 5000));
-    c1.dispatchEvent(createTouchEvent("touchmove", 3, c1,
-        160, 30, 160, 201, 5200));
-    c1.dispatchEvent(createTouchEvent("touchmove", 3, c1,
-        250, 30, 300, 210, 5500));
-    c1.dispatchEvent(createTouchEvent("touchend", 3, c1,
-        250, 30, 300, 210, 5500));
+    robot(c1)
+        .keepData()
+        .touchstart({}, [{"identifier": 3, "screenX": 50, "screenY": 20, "clientX": 100, "clientY": 200}], 5000)
+        .touchmove({}, [{"screenX": 160, "screenY": 30, "clientX": 160, "clientY": 201}], 5200)
+        .touchmove({}, [{"screenX": 250, "screenY": 30, "clientX": 300, "clientY": 210}], 5500)
+        .touchend({}, [{"screenX": 250, "screenY": 30, "clientX": 300, "clientY": 210}], 5500);
 
     expect(binding).toBeDefined();
     expect(binding.timesCancelled).toBe(0);

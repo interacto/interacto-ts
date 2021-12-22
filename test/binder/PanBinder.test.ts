@@ -12,7 +12,6 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 import {StubCmd} from "../command/StubCmd";
-import {createTouchEvent} from "../interaction/StubEvents";
 import type {Binding, Interaction, InteractionData, UndoHistoryBase} from "../../src/interacto";
 import {BindingsImpl, UndoHistoryImpl} from "../../src/interacto";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
@@ -63,10 +62,12 @@ test("pan horizontal left", () => {
         .on(c1)
         .bind();
 
-    c1.dispatchEvent(createTouchEvent("touchstart", 3, c1, 65, 20, 150, 200));
-    c1.dispatchEvent(createTouchEvent("touchmove", 3, c1, 20, 19, 140, 199));
-    c1.dispatchEvent(createTouchEvent("touchmove", 3, c1, 17, 15, 100, 195));
-    c1.dispatchEvent(createTouchEvent("touchend", 3, c1, 15, 15, 100, 195));
+    robot(c1)
+        .keepData()
+        .touchstart({}, [{"screenX": 65, "screenY": 20, "clientX": 150, "clientY": 200, "identifier": 3}])
+        .touchmove({}, [{"screenX": 20, "screenY": 19, "clientX": 140, "clientY": 199}])
+        .touchmove({}, [{"screenX": 17, "screenY": 15, "clientX": 100, "clientY": 195}])
+        .touchend({}, [{"screenX": 15, "screenY": 15, "clientX": 100, "clientY": 195}]);
 
     expect(binding).toBeDefined();
     expect(binding.timesCancelled).toBe(0);
@@ -82,10 +83,12 @@ test("pan vertical up", () => {
         .on(c1)
         .bind();
 
-    c1.dispatchEvent(createTouchEvent("touchstart", 1, c1, 10, 20, 110, 230));
-    c1.dispatchEvent(createTouchEvent("touchmove", 1, c1, 10, 25, 110, 233));
-    c1.dispatchEvent(createTouchEvent("touchmove", 1, c1, 10, 30, 110, 240));
-    c1.dispatchEvent(createTouchEvent("touchend", 1, c1, 10, 30, 110, 240));
+    robot(c1)
+        .keepData()
+        .touchstart({}, [{"screenX": 10, "screenY": 20, "clientX": 110, "clientY": 230, "identifier": 1}])
+        .touchmove({}, [{"screenX": 10, "screenY": 25, "clientX": 110, "clientY": 233}])
+        .touchmove({}, [{"screenX": 10, "screenY": 30, "clientX": 110, "clientY": 240}])
+        .touchend({}, [{"screenX": 10, "screenY": 30, "clientX": 110, "clientY": 240}]);
 
     expect(binding).toBeDefined();
     expect(binding.timesCancelled).toBe(0);
@@ -100,10 +103,12 @@ test("pan vertical down", () => {
         .on(c1)
         .bind();
 
-    c1.dispatchEvent(createTouchEvent("touchstart", 1, c1, 10, 200, 110, 2300));
-    c1.dispatchEvent(createTouchEvent("touchmove", 1, c1, 10, 250, 110, 2330));
-    c1.dispatchEvent(createTouchEvent("touchmove", 1, c1, 11, 300, 111, 2400));
-    c1.dispatchEvent(createTouchEvent("touchend", 1, c1, 11, 300, 111, 2400));
+    robot(c1)
+        .keepData()
+        .touchstart({}, [{"screenX": 10, "screenY": 200, "clientX": 110, "clientY": 2300, "identifier": 1}])
+        .touchmove({}, [{"screenX": 10, "screenY": 250, "clientX": 110, "clientY": 2330}])
+        .touchmove({}, [{"screenX": 11, "screenY": 300, "clientX": 111, "clientY": 2400}])
+        .touchend({}, [{"screenX": 11, "screenY": 300, "clientX": 111, "clientY": 2400}]);
 
     expect(binding).toBeDefined();
     expect(binding.timesCancelled).toBe(0);

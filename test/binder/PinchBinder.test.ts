@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 import {StubCmd} from "../command/StubCmd";
-import {createTouchEvent} from "../interaction/StubEvents";
+import {robot} from "../interaction/StubEvents";
 import type {Binding, Interaction, InteractionData, UndoHistoryBase} from "../../src/interacto";
 import {BindingsImpl, UndoHistoryImpl} from "../../src/interacto";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
@@ -42,12 +42,13 @@ test("pinch OK", () => {
         .on(c1)
         .bind();
 
-    c1.dispatchEvent(createTouchEvent("touchstart", 2, c1, 15, 16, 100, 200));
-    c1.dispatchEvent(createTouchEvent("touchstart", 3, c1, 10, 11, 100, 200));
-    c1.dispatchEvent(createTouchEvent("touchmove", 2, c1, 20, 22, 100, 200));
-    c1.dispatchEvent(createTouchEvent("touchmove", 3, c1, 5, 6, 100, 200));
-    c1.dispatchEvent(createTouchEvent("touchend", 2, c1, 20, 22, 500, 210));
-    c1.dispatchEvent(createTouchEvent("touchend", 3, c1, 5, 6, 500, 210));
+    robot(c1)
+        .touchstart({}, [{"identifier": 2, "screenX": 15, "screenY": 16, "clientX": 100, "clientY": 200}])
+        .touchstart({}, [{"identifier": 3, "screenX": 10, "screenY": 11, "clientX": 100, "clientY": 200}])
+        .touchmove({}, [{"identifier": 2, "screenX": 20, "screenY": 22, "clientX": 100, "clientY": 200}])
+        .touchmove({}, [{"identifier": 3, "screenX": 5, "screenY": 6, "clientX": 100, "clientY": 200}])
+        .touchend({}, [{"identifier": 2, "screenX": 20, "screenY": 22, "clientX": 500, "clientY": 210}])
+        .touchend({}, [{"identifier": 3, "screenX": 5, "screenY": 6, "clientX": 500, "clientY": 210}]);
 
     expect(binding).toBeDefined();
     expect(binding.timesCancelled).toBe(0);
@@ -62,12 +63,13 @@ test("pinch KO wrong direction", () => {
         .on(c1)
         .bind();
 
-    c1.dispatchEvent(createTouchEvent("touchstart", 2, c1, 15, 16, 100, 200));
-    c1.dispatchEvent(createTouchEvent("touchstart", 3, c1, 10, 11, 100, 200));
-    c1.dispatchEvent(createTouchEvent("touchmove", 2, c1, 10, 8, 100, 200));
-    c1.dispatchEvent(createTouchEvent("touchmove", 3, c1, 5, 6, 100, 200));
-    c1.dispatchEvent(createTouchEvent("touchend", 2, c1, 10, 8, 500, 210));
-    c1.dispatchEvent(createTouchEvent("touchend", 3, c1, 5, 6, 500, 210));
+    robot(c1)
+        .touchstart({}, [{"identifier": 2, "screenX": 15, "screenY": 16, "clientX": 100, "clientY": 200}])
+        .touchstart({}, [{"identifier": 3, "screenX": 10, "screenY": 11, "clientX": 100, "clientY": 200}])
+        .touchmove({}, [{"identifier": 2, "screenX": 10, "screenY": 8, "clientX": 100, "clientY": 200}])
+        .touchmove({}, [{"identifier": 3, "screenX": 5, "screenY": 6, "clientX": 100, "clientY": 200}])
+        .touchend({}, [{"identifier": 2, "screenX": 10, "screenY": 8, "clientX": 500, "clientY": 210}])
+        .touchend({}, [{"identifier": 3, "screenX": 5, "screenY": 6, "clientX": 500, "clientY": 210}]);
 
     expect(binding).toBeDefined();
     expect(binding.timesCancelled).toBe(1);
@@ -81,9 +83,10 @@ test("pinch KO not enough touches", () => {
         .on(c1)
         .bind();
 
-    c1.dispatchEvent(createTouchEvent("touchstart", 2, c1, 15, 16, 100, 200));
-    c1.dispatchEvent(createTouchEvent("touchmove", 2, c1, 20, 22, 100, 200));
-    c1.dispatchEvent(createTouchEvent("touchend", 2, c1, 20, 22, 500, 210));
+    robot(c1)
+        .touchstart({}, [{"identifier": 2, "screenX": 15, "screenY": 16, "clientX": 100, "clientY": 200}])
+        .touchmove({}, [{"identifier": 2, "screenX": 20, "screenY": 22, "clientX": 100, "clientY": 200}])
+        .touchend({}, [{"identifier": 2, "screenX": 20, "screenY": 22, "clientX": 500, "clientY": 210}]);
 
     expect(binding).toBeDefined();
     expect(binding.timesCancelled).toBe(0);

@@ -47,9 +47,20 @@ class MultiTouchFSM extends ConcurrentFSM<TouchDnDFSM> {
         let processed = false;
         let res = false;
 
+        // checking lost touch event
+        if (event.type === "touchstart") {
+            const ids = new Set([...event.touches].map(touch => touch.identifier));
+            const losts = this.conccurFSMs.filter(fsm => {
+                const id = fsm.getTouchId();
+                return id !== undefined && !ids.has(id);
+            });
+            losts.forEach(lost => {
+                lost.reinit();
+            });
+        }
+
         // eslint-disable-next-line @typescript-eslint/prefer-for-of
         for (let i = 0; i < event.changedTouches.length; i++) {
-            // console.log(event.changedTouches[i].identifier);
             // Finding an FSM that is currently running with this ID
             const touches: Array<TouchDnDFSM> = this.conccurFSMs
                 .filter(fsm => fsm.getTouchId() === event.changedTouches[i].identifier);
