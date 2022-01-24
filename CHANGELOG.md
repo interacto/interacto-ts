@@ -1,7 +1,34 @@
+# 7.0.0
+
+* feat(api): new routine toProduceAnon
+* feat(binding): 'strictStart' removed. The when routine now has an execution mode
+* feat(interaction): touch interactions now have all the current touches in their data
+* feat(undo): tree undo algorithm. Bindings now generics to undo algo
+
+* fix(binding): crashes in commands not captured by bindings and their catch routine
+* fix(binding): incorrect binding reinit on cancel with not undoable command
+* fix(binding): the binding must undo the command if the 'when' is not respected on interaction end
+* fix(interaction): confusion between target and currentTarget
+* fix(interaction): touch interactions blocked when touch events lost by the browser
+
+* doc(api): ts-doc improved
+
+* clean(code): code simplification and tests added
+* clean(code): hiding internal implementation stuffs
+* clean(test): cleaning test names
+
+* config(ci): updating node version
+* config(git): ignoring some folders
+* config(pkg): eslint updated
+* config(pkg): barrelsby updated
+* fix(config): audit fix
+* fix(config): clean should remove coverage and mutation folders
+
+
 # 6.0.1
 
 * change(binding): increasing the size of the spring (dnd-1)
-* 
+
 * fix(binding): the dnd-1 animations did not work properly
 * fix(interaction): long pressure not cancelled on mouse move
 * fix(interaction): long touch not cancelled on touch move
@@ -11,7 +38,7 @@
 * fix(interaction): touch DnD failed on simple tap
 * fix(interaction): unexpected touches now cancel touch interactions
 * fix(doc): incorrect scroll documentation
-* 
+
 * clean(test): update eslint + various fixes
 * clean(test): use nono API
 
