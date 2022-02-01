@@ -5,19 +5,30 @@
 
 # Interacto
 
-The TypeScript implementation of [Interacto](https://github.com/interacto/).
+The TypeScript implementation of [Interacto](https://github.com/interacto).
 
-**Interacto** is a front-end framework for processing user interface events.<br>
+**Interacto** is a front-end framework for processing user interface events.<br/>
 With **Interacto** developers handle user interactions (DnD, drag-lock, double-click, button click, pan, multi-touch, etc.) instead of low-level UI events.<br>
 Developers configure how to turn a selected user interaction into a (undoable) UI command using a fluent API.<br/>
 Interacto also provides a native support for undo/redo operations.
 
-See https://interacto.github.io for usages and documentation.
+See [https://interacto.github.io](https://interacto.github.io) for usages and documentation.
 
 
 # How to install
 
-Using npm:
+
+For Angular 13 or rxjs 7:
+
 ```
-npm install interacto
+npm install interacto@latest
 ```
+
+For Angular 12 or rxjs 6:
+
+```
+npm install interacto@7.0
+```
+
+For Angular, you may have to install the dedicated [interacto-angular library](https://github.com/interacto-angular) as well.
+

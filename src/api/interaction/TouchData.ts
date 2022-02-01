@@ -22,10 +22,6 @@ import type {PointBaseData} from "./PointBaseData";
  * (documentation extracted from there)
  */
 export interface TouchData extends PointBaseData, UnitInteractionData {
-    readonly altitudeAngle: number;
-
-    readonly azimuthAngle: number;
-
     /**
      * The amount of pressure being applied to the surface by the user,
      * as a float between 0.0 (no pressure) and 1.0 (maximum pressure).
@@ -66,8 +62,6 @@ export interface TouchData extends PointBaseData, UnitInteractionData {
      * to most accurately cover the area of contact between the user and the surface.
      */
     readonly rotationAngle: number;
-
-    readonly touchType: TouchType;
 
     /**
      * All the current touches.

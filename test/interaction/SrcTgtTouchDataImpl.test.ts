@@ -26,14 +26,11 @@ let evt2: EventModifierData & UnitInteractionData;
 beforeEach(() => {
     data = new SrcTgtTouchDataImpl();
     touchSrc = {
-        "altitudeAngle": 5,
-        "azimuthAngle": 10,
         "force": 15,
         "identifier": 20,
         "radiusX": 25,
         "radiusY": 30,
         "rotationAngle": 35,
-        "touchType": "stylus",
         "clientX": 11,
         "clientY": 12,
         "pageX": 13,
@@ -44,14 +41,11 @@ beforeEach(() => {
     };
 
     touchTgt = {
-        "altitudeAngle": 5,
-        "azimuthAngle": 10,
         "force": 15,
         "identifier": 20,
         "radiusX": 25,
         "radiusY": 30,
         "rotationAngle": 35,
-        "touchType": "stylus",
         "clientX": 12,
         "clientY": 14,
         "pageX": 16,

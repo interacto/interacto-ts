@@ -30,14 +30,11 @@ beforeEach(() => {
     data = new MultiTouchDataImpl();
 
     touchSrc1 = {
-        "altitudeAngle": 5,
-        "azimuthAngle": 10,
         "force": 15,
         "identifier": 20,
         "radiusX": 25,
         "radiusY": 30,
         "rotationAngle": 35,
-        "touchType": "stylus",
         "clientX": 11,
         "clientY": 12,
         "pageX": 13,
@@ -48,14 +45,11 @@ beforeEach(() => {
     };
 
     touchTgt1 = {
-        "altitudeAngle": 5,
-        "azimuthAngle": 10,
         "force": 15,
         "identifier": 20,
         "radiusX": 25,
         "radiusY": 30,
         "rotationAngle": 35,
-        "touchType": "stylus",
         "clientX": 12,
         "clientY": 14,
         "pageX": 16,
@@ -66,14 +60,11 @@ beforeEach(() => {
     };
 
     touchSrc2 = {
-        "altitudeAngle": 5,
-        "azimuthAngle": 10,
         "force": 15,
         "identifier": 21,
         "radiusX": 25,
         "radiusY": 30,
         "rotationAngle": 35,
-        "touchType": "stylus",
         "clientX": 11,
         "clientY": 12,
         "pageX": 13,
@@ -85,14 +76,11 @@ beforeEach(() => {
 
 
     touchTgt2 = {
-        "altitudeAngle": 5,
-        "azimuthAngle": 10,
         "force": 15,
         "identifier": 20,
         "radiusX": 25,
         "radiusY": 30,
         "rotationAngle": 35,
-        "touchType": "stylus",
         "clientX": 12,
         "clientY": 14,
         "pageX": 16,
@@ -155,14 +143,11 @@ test("flush", () => {
 test("setTouch touch point exists", () => {
     data.addTouchData(touchData1);
     const newTouch: Touch = {
-        "altitudeAngle": 50,
-        "azimuthAngle": 10,
         "force": 15,
         "identifier": 20,
         "radiusX": 25,
         "radiusY": 30,
         "rotationAngle": 35,
-        "touchType": "stylus",
         "clientX": 11,
         "clientY": 12,
         "pageX": 100,
@@ -184,14 +169,11 @@ test("setTouch touch point exists", () => {
 test("setTouch touch point doesn't exist", () => {
     data.addTouchData(touchData1);
     const newTouch: Touch = {
-        "altitudeAngle": 50,
-        "azimuthAngle": 10,
         "force": 15,
         "identifier": 6000,
         "radiusX": 25,
         "radiusY": 30,
         "rotationAngle": 35,
-        "touchType": "stylus",
         "clientX": 11,
         "clientY": 12,
         "pageX": 100,

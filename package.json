@@ -31,28 +31,28 @@
   "module": "dist/interacto.es5.js",
   "types": "./dist/interacto.d.ts",
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^15.1.0",
+    "@rollup/plugin-commonjs": "^21.0.1",
     "@rollup/plugin-json": "^4.1.0",
-    "@rollup/plugin-node-resolve": "^9.0.0",
+    "@rollup/plugin-node-resolve": "^13.1.3",
     "@stryker-mutator/core": "^5.0.1",
     "@stryker-mutator/jest-runner": "^5.0.1",
-    "@types/jest": "^26.0.23",
-    "@types/node": "^15.6.1",
+    "@types/jest": "^27.4.0",
+    "@types/node": "^16.11.22",
     "@typescript-eslint/eslint-plugin": "^5.6.0",
     "@typescript-eslint/parser": "^5.6.0",
-    "barrelsby": "^2.3.0",
+    "barrelsby": "^2.3.2",
     "eslint": "^8.4.1",
     "eslint-plugin-jest": "^25.3.0",
     "eslint-plugin-tsdoc": "^0.2.14",
     "interacto-nono": "^0.3.0",
-    "jest": "^27.0.2",
-    "jest-mock-extended": "^1.0.15",
-    "rollup": "^2.28.1",
-    "rollup-plugin-sourcemaps": "^0.6.2",
-    "rollup-plugin-typescript2": "^0.27.2",
-    "ts-jest": "^27.0.1",
-    "typedoc": "^0.21.0",
-    "typescript": "^4.3.4"
+    "jest": "^27.4.7",
+    "jest-mock-extended": "^2.0.4",
+    "rollup": "^2.66.1",
+    "rollup-plugin-sourcemaps": "^0.6.3",
+    "rollup-plugin-typescript2": "^0.31.1",
+    "ts-jest": "^27.1.3",
+    "typedoc": "^0.22.11",
+    "typescript": "^4.5.5"
   },
   "scripts": {
     "package": "npm run pre-build && npm run build && npm run doc",
@@ -67,13 +67,13 @@
     "lint": "eslint src test --ext .ts",
     "lint-fix": "eslint src test --ext .ts --fix",
     "coverage": "jest --coverage --collectCoverageFrom=src*/**/*.ts --coverageDirectory reports",
-    "doc": "typedoc --theme minimal --out docs src/interacto.ts",
+    "doc": "typedoc --out docs src/interacto.ts",
     "test-publish": "npm pack",
     "gen-changelog": "git log --pretty=\"* %s\" $(git describe --tags --abbrev=0 @^)..@ | sort > commits",
     "mutation": "npx stryker run"
   },
   "dependencies": {
-    "rxjs": "^6.6.7"
+    "rxjs": "^7.5.0"
   },
   "files": [
     "dist/"
@@ -102,5 +102,8 @@
       "tsx",
       "js"
     ]
+  },
+  "engines": {
+    "node": ">=16.0.0"
   }
 }

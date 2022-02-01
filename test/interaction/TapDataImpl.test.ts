@@ -22,14 +22,11 @@ beforeEach(() => {
     data = new TapDataImpl();
     touchData = new TouchDataImpl();
     touchData.copy({
-        "altitudeAngle": 5,
-        "azimuthAngle": 10,
         "force": 15,
         "identifier": 20,
         "radiusX": 25,
         "radiusY": 30,
         "rotationAngle": 35,
-        "touchType": "stylus",
         "clientX": 11,
         "clientY": 12,
         "pageX": 13,

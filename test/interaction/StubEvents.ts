@@ -67,8 +67,6 @@ export function createTouchEvent(type: "touchend" | "touchmove" | "touchstart", 
         "metaKey": false,
         "changedTouches": [
             {
-                "altitudeAngle": 0,
-                "azimuthAngle": 0,
                 "identifier": id,
                 "screenX": screenXvalue,
                 "screenY": screenYvalue,
@@ -80,8 +78,7 @@ export function createTouchEvent(type: "touchend" | "touchmove" | "touchstart", 
                 "radiusX": 0,
                 "radiusY": 0,
                 "rotationAngle": 0,
-                target,
-                "touchType": "direct"
+                target
             }
         ]
     });

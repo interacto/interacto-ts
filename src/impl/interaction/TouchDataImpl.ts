@@ -20,10 +20,6 @@ import type {EventModifierData} from "../../api/interaction/EventModifierData";
 export class TouchDataImpl extends PointingDataBase implements TouchData {
     private _allTouches: Array<TouchData> = [];
 
-    private altitudeAngleData: number = 0;
-
-    private azimuthAngleData: number = 0;
-
     private forceData: number = 0;
 
     private identifierData: number = 0;
@@ -34,19 +30,8 @@ export class TouchDataImpl extends PointingDataBase implements TouchData {
 
     private rotationAngleData: number = 0;
 
-    private touchTypeData: TouchType = "direct";
-
-
     public get allTouches(): ReadonlyArray<TouchData> {
         return this._allTouches;
-    }
-
-    public get altitudeAngle(): number {
-        return this.altitudeAngleData;
-    }
-
-    public get azimuthAngle(): number {
-        return this.azimuthAngleData;
     }
 
     public get force(): number {
@@ -69,21 +54,13 @@ export class TouchDataImpl extends PointingDataBase implements TouchData {
         return this.rotationAngleData;
     }
 
-    public get touchType(): TouchType {
-        return this.touchTypeData;
-    }
-
-
     public override copy(data: TouchData): void {
         super.copy(data);
-        this.altitudeAngleData = data.altitudeAngle;
-        this.azimuthAngleData = data.azimuthAngle;
         this.forceData = data.force;
         this.identifierData = data.identifier;
         this.radiusXData = data.radiusX;
         this.radiusYData = data.radiusY;
         this.rotationAngleData = data.rotationAngle;
-        this.touchTypeData = data.touchType;
         this._allTouches = data.allTouches.map(t => {
             const newT = new TouchDataImpl();
             newT.copy(t);
@@ -93,14 +70,11 @@ export class TouchDataImpl extends PointingDataBase implements TouchData {
 
     public override flush(): void {
         super.flush();
-        this.altitudeAngleData = 0;
-        this.azimuthAngleData = 0;
         this.forceData = 0;
         this.identifierData = 0;
         this.radiusXData = 0;
         this.radiusYData = 0;
         this.rotationAngleData = 0;
-        this.touchTypeData = "direct";
         this._allTouches = [];
     }
 
@@ -109,8 +83,6 @@ export class TouchDataImpl extends PointingDataBase implements TouchData {
         // Not beautiful code but other tries did not work
         // 'assign' and spread do not work with events (polyfill concern? Or front interfaces for legacy back API?).
         data.copy({
-            "altitudeAngle": touch.altitudeAngle,
-            "azimuthAngle": touch.azimuthAngle,
             "clientX": touch.clientX,
             "clientY": touch.clientY,
             "force": touch.force,
@@ -123,7 +95,6 @@ export class TouchDataImpl extends PointingDataBase implements TouchData {
             "screenX": touch.screenX,
             "screenY": touch.screenY,
             "target": touch.target,
-            "touchType": touch.touchType,
             "allTouches": allTouches.map(t => TouchDataImpl.mergeTouchEventData(t, evt, [])),
             "timeStamp": evt.timeStamp,
             "altKey": evt.altKey,

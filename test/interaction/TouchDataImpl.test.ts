@@ -27,14 +27,11 @@ beforeEach(() => {
     const t1 = new TouchDataImpl();
     const t2 = new TouchDataImpl();
     t1.copy({
-        "altitudeAngle": 15,
-        "azimuthAngle": 110,
         "force": 115,
         "identifier": 210,
         "radiusX": 215,
         "radiusY": 310,
         "rotationAngle": 315,
-        "touchType": "stylus",
         "clientX": 111,
         "clientY": 121,
         "pageX": 131,
@@ -51,14 +48,11 @@ beforeEach(() => {
         "allTouches": []
     });
     t2.copy({
-        "altitudeAngle": 154,
-        "azimuthAngle": 1140,
         "force": 1145,
         "identifier": 2140,
         "radiusX": 2145,
         "radiusY": 3140,
         "rotationAngle": 3415,
-        "touchType": "stylus",
         "clientX": 1141,
         "clientY": 1241,
         "pageX": 1341,
@@ -77,14 +71,11 @@ beforeEach(() => {
     allTouches = [t1, t2];
     data = new TouchDataImpl();
     newData = {
-        "altitudeAngle": 5,
-        "azimuthAngle": 10,
         "force": 15,
         "identifier": 20,
         "radiusX": 25,
         "radiusY": 30,
         "rotationAngle": 35,
-        "touchType": "stylus",
         "clientX": 11,
         "clientY": 12,
         "pageX": 13,
@@ -102,14 +93,11 @@ beforeEach(() => {
     };
     defaultData = new TouchDataImpl();
     defaultData.copy({
-        "altitudeAngle": 0,
-        "azimuthAngle": 0,
         "force": 0,
         "identifier": 0,
         "radiusX": 0,
         "radiusY": 0,
         "rotationAngle": 0,
-        "touchType": "direct",
         "clientX": 0,
         "clientY": 0,
         "pageX": 0,
@@ -141,14 +129,11 @@ test("default values", () => {
 });
 test("copy", () => {
     data.copy(newData);
-    expect(data.altitudeAngle).toBe(newData.altitudeAngle);
-    expect(data.azimuthAngle).toBe(newData.azimuthAngle);
     expect(data.force).toBe(newData.force);
     expect(data.identifier).toBe(newData.identifier);
     expect(data.radiusX).toBe(newData.radiusX);
     expect(data.radiusY).toBe(newData.radiusY);
     expect(data.rotationAngle).toBe(newData.rotationAngle);
-    expect(data.touchType).toStrictEqual(newData.touchType);
     expect(data.rotationAngle).toBe(newData.rotationAngle);
     expect(data.clientX).toBe(newData.clientX);
     expect(data.clientY).toBe(newData.clientY);
@@ -174,14 +159,11 @@ test("flush", () => {
 test("mergeTouchEventData", () => {
     data.copy(newData);
     const merged = TouchDataImpl.mergeTouchEventData(data as Touch, evt, []);
-    expect(merged.altitudeAngle).toBe(data.altitudeAngle);
-    expect(merged.azimuthAngle).toBe(data.azimuthAngle);
     expect(merged.force).toBe(data.force);
     expect(merged.identifier).toBe(data.identifier);
     expect(merged.radiusX).toBe(data.radiusX);
     expect(merged.radiusY).toBe(data.radiusY);
     expect(merged.rotationAngle).toBe(data.rotationAngle);
-    expect(merged.touchType).toStrictEqual(data.touchType);
     expect(merged.rotationAngle).toBe(data.rotationAngle);
     expect(merged.clientX).toBe(data.clientX);
     expect(merged.clientY).toBe(data.clientY);
