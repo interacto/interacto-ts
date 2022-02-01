@@ -1,3 +1,8 @@
+# 7.1.0
+
+* update(deps): update to work with angular 13 and rxjs 7
+
+
 # 7.0.0
 
 * feat(api): new routine toProduceAnon
