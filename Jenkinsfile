@@ -19,7 +19,7 @@ pipeline {
 
         stage('Node config') {
             steps {
-                nodejs(nodeJSInstallationName: 'node14') {
+                nodejs(nodeJSInstallationName: 'node16') {
                     sh 'npm -v'
                 }
             }
