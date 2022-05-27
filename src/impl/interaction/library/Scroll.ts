@@ -23,18 +23,16 @@ import {ScrollDataImpl} from "../ScrollDataImpl";
 /**
  * An FSM for scrolling.
  */
-export class ScrollFSM extends FSMImpl {
-    public override buildFSM(dataHandler?: ScrollFSMHandler): void {
-        if (this.states.length > 1) {
-            return;
-        }
-        super.buildFSM(dataHandler);
+export class ScrollFSM extends FSMImpl<ScrollFSMHandler> {
+    public constructor(dataHandler: ScrollFSMHandler) {
+        super(dataHandler);
+
         const scrolled: TerminalState = new TerminalState(this, "scrolled");
         this.addState(scrolled);
 
         const scroll = new ScrollTransition(this.initState, scrolled);
         scroll.action = (event: Event): void => {
-            dataHandler?.initToScroll(event);
+            this.dataHandler?.initToScroll(event);
         };
     }
 }
@@ -62,8 +60,6 @@ export class Scroll extends InteractionBase<ScrollData, ScrollDataImpl, ScrollFS
             }
         };
 
-        super(new ScrollFSM(), new ScrollDataImpl());
-
-        this.fsm.buildFSM(handler);
+        super(new ScrollFSM(handler), new ScrollDataImpl());
     }
 }

@@ -43,16 +43,6 @@ test("other event don't trigger the interaction", () => {
     expect(handler.fsmStarts).not.toHaveBeenCalled();
 });
 
-test("build fsm twice does not work", () => {
-    const count = interaction.fsm.states.length;
-    interaction.fsm.buildFSM({
-        initToSelectedHandler(): void {
-        },
-        reinitData(): void {
-        }
-    });
-    expect(interaction.fsm.states).toHaveLength(count);
-});
 
 test("cannot register non combo box", () => {
     const w = document.createElement("input");

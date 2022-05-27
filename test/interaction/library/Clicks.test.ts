@@ -48,11 +48,6 @@ test("cannot build the interaction with 1 click", () => {
             jest.clearAllTimers();
         });
 
-        test("cannot build the interaction twice", () => {
-            interaction.fsm.buildFSM();
-            expect(interaction.fsm.states).toHaveLength(4);
-        });
-
         // slice(1) to remove 0
         // Array(nb).keys() to have [0, 1, 2] or [0, 1, 2, 3]
         [...Array(nb).keys()].slice(1).forEach(nbClick => {

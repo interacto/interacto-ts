@@ -44,17 +44,6 @@ test("other event don't trigger the interaction", () => {
     expect(handler.fsmStarts).not.toHaveBeenCalled();
 });
 
-test("build fsm twice does not work", () => {
-    const count = interaction.fsm.states.length;
-    interaction.fsm.buildFSM({
-        initToPickedHandler(): void {
-        },
-        reinitData(): void {
-        }
-    });
-    expect(interaction.fsm.states).toHaveLength(count);
-});
-
 test("cannot register non color picker", () => {
     const w = document.createElement("input");
     jest.spyOn(w, "addEventListener");

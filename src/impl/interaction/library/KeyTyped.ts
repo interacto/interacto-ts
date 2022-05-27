@@ -25,15 +25,12 @@ import {InteractionBase} from "../InteractionBase";
 /**
  * The FSM that describes a keyboard touch typed.
  */
-export class KeyTypedFSM extends FSMImpl {
+export class KeyTypedFSM extends FSMImpl<KeyTypedFSMHandler> {
     private checkKey?: string;
 
-    public override buildFSM(dataHandler?: KeyTypedFSMHandler): void {
-        if (this.states.length > 1) {
-            return;
-        }
+    public constructor(dataHandler: KeyTypedFSMHandler) {
+        super(dataHandler);
 
-        super.buildFSM(dataHandler);
         const pressed: StdState = new StdState(this, "pressed");
         const typed: TerminalState = new TerminalState(this, "typed");
         this.startingState = typed;
@@ -49,7 +46,7 @@ export class KeyTypedFSM extends FSMImpl {
         const kr = new KeyUpTransition(pressed, typed);
         kr.isGuardOK = (event: KeyboardEvent): boolean => this.checkKey === undefined || event.code === this.checkKey;
         kr.action = (event: KeyboardEvent): void => {
-            dataHandler?.onKeyTyped(event);
+            this.dataHandler?.onKeyTyped(event);
         };
     }
 
@@ -80,8 +77,6 @@ export class KeyTyped extends InteractionBase<KeyData, KeyDataImpl, KeyTypedFSM>
             }
         };
 
-        super(new KeyTypedFSM(), new KeyDataImpl());
-
-        this.fsm.buildFSM(handler);
+        super(new KeyTypedFSM(handler), new KeyDataImpl());
     }
 }

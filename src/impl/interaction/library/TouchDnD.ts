@@ -29,7 +29,7 @@ import {CancellingState} from "../../fsm/CancellingState";
 /**
  * The FSM that defines a touch interaction (that works like a DnD)
  */
-export class TouchDnDFSM extends FSMImpl {
+export class TouchDnDFSM extends FSMImpl<TouchDnDFSMHandler> {
     private touchID?: number;
 
     private readonly cancellable;
@@ -43,21 +43,16 @@ export class TouchDnDFSM extends FSMImpl {
      * or as soon as the screen is touched.
      * The latter is used for the MultiTouch interaction.
      */
-    public constructor(cancellable: boolean, movementRequired: boolean = true) {
-        super();
+    public constructor(cancellable: boolean, dataHandler: TouchDnDFSMHandler, movementRequired: boolean = true) {
+        super(dataHandler);
         this.touchID = undefined;
         this.cancellable = cancellable;
         this.movementRequired = movementRequired;
+        this.buildFSM();
     }
 
     // eslint-disable-next-line max-lines-per-function
-    public override buildFSM(dataHandler?: TouchDnDFSMHandler): void {
-        if (this.states.length > 1) {
-            return;
-        }
-
-        super.buildFSM(dataHandler);
-
+    private buildFSM(): void {
         const touched = new StdState(this, "touched");
         const moved = new StdState(this, "moved");
         const released = new TerminalState(this, "released");
@@ -70,7 +65,7 @@ export class TouchDnDFSM extends FSMImpl {
 
         const touchDownFn = (event: TouchEvent): void => {
             this.touchID = event.changedTouches[0].identifier;
-            dataHandler?.onTouch(event);
+            this.dataHandler?.onTouch(event);
         };
 
         const fixTouchDownCheck = (event: TouchEvent): boolean => [...event.touches].filter(t => t.identifier === this.touchID).length === 0;
@@ -92,20 +87,20 @@ export class TouchDnDFSM extends FSMImpl {
             const releaseTouched = new TouchReleaseTransition(touched, released);
             releaseTouched.isGuardOK = (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.touchID;
             releaseTouched.action = (event: TouchEvent): void => {
-                dataHandler?.onRelease(event);
+                this.dataHandler?.onRelease(event);
             };
         }
 
         const firstMove = new TouchMoveTransition(touched, moved);
         firstMove.isGuardOK = (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.touchID;
         firstMove.action = (event: TouchEvent): void => {
-            dataHandler?.onMove(event);
+            this.dataHandler?.onMove(event);
         };
 
         const move = new TouchMoveTransition(moved, moved);
         move.isGuardOK = (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.touchID;
         move.action = (event: TouchEvent): void => {
-            dataHandler?.onMove(event);
+            this.dataHandler?.onMove(event);
         };
 
         // If the touch up event is lost by the browser and another touch down occurs
@@ -125,7 +120,7 @@ export class TouchDnDFSM extends FSMImpl {
                     (!(tgt instanceof Element) || !tgt.classList.contains("ioDwellSpring"));
             };
             release.action = (event: TouchEvent): void => {
-                dataHandler?.onRelease(event);
+                this.dataHandler?.onRelease(event);
             };
 
             const releaseCancel = new TouchReleaseTransition(moved, cancelled);
@@ -137,10 +132,9 @@ export class TouchDnDFSM extends FSMImpl {
             const release = new TouchReleaseTransition(moved, released);
             release.isGuardOK = (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.touchID;
             release.action = (event: TouchEvent): void => {
-                dataHandler?.onRelease(event);
+                this.dataHandler?.onRelease(event);
             };
         }
-        super.buildFSM(dataHandler);
     }
 
     public getTouchId(): number | undefined {
@@ -192,9 +186,7 @@ export class TouchDnD extends InteractionBase<SrcTgtPointsData<TouchData>, SrcTg
             }
         };
 
-        super(fsm ?? new TouchDnDFSM(cancellable, movementRequired), new SrcTgtTouchDataImpl());
-
-        this.fsm.buildFSM(handler);
+        super(fsm ?? new TouchDnDFSM(cancellable, handler, movementRequired), new SrcTgtTouchDataImpl());
     }
 
     private setTgtData(evt: TouchEvent): void {

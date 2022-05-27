@@ -21,23 +21,16 @@ import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {WidgetDataImpl} from "../WidgetDataImpl";
 
-class HyperLinkClickedFSM extends FSMImpl {
-    public constructor() {
-        super();
-    }
+class HyperLinkClickedFSM extends FSMImpl<HyperLinkClickedFSMHandler> {
+    public constructor(dataHandler: HyperLinkClickedFSMHandler) {
+        super(dataHandler);
 
-    public override buildFSM(dataHandler: HyperLinkClickedFSMHandler): void {
-        if (this.states.length > 1) {
-            return;
-        }
-
-        super.buildFSM(dataHandler);
         const clicked: TerminalState = new TerminalState(this, "clicked");
         this.addState(clicked);
 
         const tr = new HyperLinkTransition(this.initState, clicked);
         tr.action = (event: Event): void => {
-            dataHandler.initToClickedHandler(event);
+            this.dataHandler?.initToClickedHandler(event);
         };
     }
 }
@@ -64,9 +57,7 @@ export class HyperLinkClicked extends InteractionBase<WidgetData<HTMLAnchorEleme
             }
         };
 
-        super(new HyperLinkClickedFSM(), new WidgetDataImpl<HTMLAnchorElement>());
-
-        this.fsm.buildFSM(handler);
+        super(new HyperLinkClickedFSM(handler), new WidgetDataImpl<HTMLAnchorElement>());
     }
 
     public override onNewNodeRegistered(node: EventTarget): void {

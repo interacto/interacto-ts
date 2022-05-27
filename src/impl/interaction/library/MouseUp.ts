@@ -20,18 +20,16 @@ import {InteractionBase} from "../InteractionBase";
 import {PointDataImpl} from "../PointDataImpl";
 import {MouseUpTransition} from "../../fsm/MouseUpTransition";
 
-export class MouseUpFSM extends FSMImpl {
-    public override buildFSM(dataHandler?: MouseUpFSMHandler): void {
-        if (this.states.length > 1) {
-            return;
-        }
-        super.buildFSM(dataHandler);
+export class MouseUpFSM extends FSMImpl<MouseUpFSMHandler> {
+    public constructor(dataHandler: MouseUpFSMHandler) {
+        super(dataHandler);
+
         const released: TerminalState = new TerminalState(this, "released");
         this.addState(released);
 
         const release = new MouseUpTransition(this.initState, released);
         release.action = (event: MouseEvent): void => {
-            dataHandler?.initToPress(event);
+            this.dataHandler?.initToPress(event);
         };
     }
 }
@@ -57,8 +55,6 @@ export class MouseUp extends InteractionBase<PointData, PointDataImpl, MouseUpFS
             }
         };
 
-        super(new MouseUpFSM(), new PointDataImpl());
-
-        this.fsm.buildFSM(handler);
+        super(new MouseUpFSM(handler), new PointDataImpl());
     }
 }

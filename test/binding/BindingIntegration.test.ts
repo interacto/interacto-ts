@@ -12,8 +12,16 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSM, InteractionData, UndoHistory, Logger} from "../../src/interacto";
-import {BindingImpl, ClickTransition, CmdStatus, FSMImpl, TerminalState, UndoHistoryImpl} from "../../src/interacto";
+import type {FSM, InteractionData, UndoHistory, Logger,
+    FSMDataHandler} from "../../src/interacto";
+import {
+    BindingImpl,
+    ClickTransition,
+    CmdStatus,
+    FSMImpl,
+    TerminalState,
+    UndoHistoryImpl
+} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {InteractionStub} from "../interaction/InteractionStub";
 import {createMouseEvent} from "../interaction/StubEvents";
@@ -26,7 +34,7 @@ let fsm: FSM;
 let cmd: StubCmd;
 let history: UndoHistory;
 
-class OneTrFSM extends FSMImpl {
+class OneTrFSM extends FSMImpl<FSMDataHandler> {
     public constructor() {
         super();
         const s1 = new TerminalState(this, "s1");

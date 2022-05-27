@@ -21,23 +21,16 @@ import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {WidgetDataImpl} from "../WidgetDataImpl";
 
-class ComboBoxSelectedFSM extends FSMImpl {
-    public constructor() {
-        super();
-    }
+class ComboBoxSelectedFSM extends FSMImpl<ComboBoxSelectedHandler> {
+    public constructor(dataHandler: ComboBoxSelectedHandler) {
+        super(dataHandler);
 
-    public override buildFSM(dataHandler: ComboBoxSelectedHandler): void {
-        if (this.states.length > 1) {
-            return;
-        }
-
-        super.buildFSM(dataHandler);
         const selected: TerminalState = new TerminalState(this, "selected");
         this.addState(selected);
 
         const tr = new ComboBoxTransition(this.initState, selected);
         tr.action = (event: Event): void => {
-            dataHandler.initToSelectedHandler(event);
+            this.dataHandler?.initToSelectedHandler(event);
         };
     }
 }
@@ -65,9 +58,7 @@ export class ComboBoxSelected extends InteractionBase<WidgetData<HTMLSelectEleme
             }
         };
 
-        super(new ComboBoxSelectedFSM(), new WidgetDataImpl<HTMLSelectElement>());
-
-        this.fsm.buildFSM(handler);
+        super(new ComboBoxSelectedFSM(handler), new WidgetDataImpl<HTMLSelectElement>());
     }
 
     public override onNewNodeRegistered(node: EventTarget): void {

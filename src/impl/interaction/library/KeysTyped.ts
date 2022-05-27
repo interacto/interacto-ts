@@ -28,7 +28,7 @@ import type {Logger} from "../../../api/logging/Logger";
  * One can type on multiple keys. The FSM ends after a timeout (a delay after the latest
  * typed key).
  */
-export class KeysTypedFSM extends FSMImpl {
+export class KeysTypedFSM extends FSMImpl<KeyTypedFSMHandler> {
     /** The time gap between the two spinner events. */
     private static readonly timeGap: number = 1000;
 
@@ -42,16 +42,8 @@ export class KeysTypedFSM extends FSMImpl {
     /**
      * Creates the FSM.
      */
-    public constructor() {
-        super();
-    }
-
-    public override buildFSM(dataHandler?: KeyTypedFSMHandler): void {
-        if (this.states.length > 1) {
-            return;
-        }
-
-        super.buildFSM(dataHandler);
+    public constructor(dataHandler: KeyTypedFSMHandler) {
+        super(dataHandler);
 
         const keyup: StdState = new StdState(this, "keyup");
         const timeouted: TerminalState = new TerminalState(this, "timeouted");
@@ -60,7 +52,7 @@ export class KeysTypedFSM extends FSMImpl {
         this.addState(timeouted);
 
         const action = (event: KeyboardEvent): void => {
-            dataHandler?.onKeyTyped(event);
+            this.dataHandler?.onKeyTyped(event);
         };
         const keyupInit = new KeyUpTransition(this.initState, keyup);
         const keyupSeq = new KeyUpTransition(keyup, keyup);
@@ -95,8 +87,6 @@ export class KeysTyped extends InteractionBase<KeysData, KeysDataImpl, KeysTyped
             }
         };
 
-        super(new KeysTypedFSM(), new KeysDataImpl(), logger);
-
-        this.fsm.buildFSM(handler);
+        super(new KeysTypedFSM(handler), new KeysDataImpl(), logger);
     }
 }

@@ -31,8 +31,8 @@ import type {Logger} from "../../api/logging/Logger";
 /**
  * A finite state machine that defines the behavior of a user interaction.
  */
-export class FSMImpl implements FSM {
-    protected dataHandler?: FSMDataHandler;
+export class FSMImpl<T extends FSMDataHandler> implements FSM {
+    protected _dataHandler?: T;
 
     protected readonly logger?: Logger;
 
@@ -83,7 +83,8 @@ export class FSMImpl implements FSM {
     /**
      * Creates the FSM.
      */
-    public constructor(logger?: Logger) {
+    public constructor(dataHandler?: T, logger?: Logger) {
+        this._dataHandler = dataHandler;
         this.logger = logger;
         this.inner = false;
         this._started = false;
@@ -98,13 +99,6 @@ export class FSMImpl implements FSM {
         this._log = false;
     }
 
-    protected buildFSM(dataHandler?: FSMDataHandler): void {
-        if (this.states.length > 1) {
-            return;
-        }
-
-        this.dataHandler = dataHandler;
-    }
 
     public get currentState(): OutputState {
         return this._currentState;
@@ -166,8 +160,12 @@ export class FSMImpl implements FSM {
         this._log = log;
     }
 
-    public getDataHandler(): FSMDataHandler | undefined {
-        return this.dataHandler;
+    public get dataHandler(): T | undefined {
+        return this._dataHandler;
+    }
+
+    public set dataHandler(dataHandler: T | undefined) {
+        this._dataHandler = dataHandler;
     }
 
     /**

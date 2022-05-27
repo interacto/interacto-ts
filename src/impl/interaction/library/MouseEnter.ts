@@ -25,7 +25,7 @@ import type {TransitionBase} from "../../fsm/TransitionBase";
 /**
  * The FSM for mouseover interactions
  */
-export class MouseEnterFSM extends FSMImpl {
+export class MouseEnterFSM extends FSMImpl<MouseEnterFSMHandler> {
     /**
      * Indicates if event bubbling is enabled for the interaction
      */
@@ -34,17 +34,10 @@ export class MouseEnterFSM extends FSMImpl {
     /**
      * Creates the FSM
      */
-    public constructor(withBubbling: boolean) {
-        super();
+    public constructor(withBubbling: boolean, dataHandler: MouseEnterFSMHandler) {
+        super(dataHandler);
         this.withBubbling = withBubbling;
-    }
 
-    public override buildFSM(dataHandler?: MouseEnterFSMHandler): void {
-        if (this.states.length > 1) {
-            return;
-        }
-
-        super.buildFSM(dataHandler);
         const entered = new TerminalState(this, "entered");
         this.addState(entered);
 
@@ -55,7 +48,7 @@ export class MouseEnterFSM extends FSMImpl {
             enter = new MouseEnterTransition(this.initState, entered);
         }
         enter.action = (event: MouseEvent): void => {
-            dataHandler?.onEnter(event);
+            this.dataHandler?.onEnter(event);
         };
     }
 }
@@ -78,8 +71,6 @@ export class MouseEnter extends InteractionBase<PointData, PointDataImpl, MouseE
             }
         };
 
-        super(new MouseEnterFSM(withBubbling), new PointDataImpl());
-
-        this.fsm.buildFSM(handler);
+        super(new MouseEnterFSM(withBubbling, handler), new PointDataImpl());
     }
 }

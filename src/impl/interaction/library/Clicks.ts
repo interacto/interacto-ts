@@ -24,7 +24,7 @@ import {PointDataImpl} from "../PointDataImpl";
 import type {PointsData} from "../../../api/interaction/PointsData";
 import {PointsDataImpl} from "../PointsDataImpl";
 
-export class ClicksFSM extends FSMImpl {
+export class ClicksFSM extends FSMImpl<ClicksFSMHandler> {
     private countClicks: number;
 
     private readonly nbClicks: number;
@@ -32,8 +32,8 @@ export class ClicksFSM extends FSMImpl {
     /**
      * Creates the Clicks FSM
      */
-    public constructor(nbClicks: number) {
-        super();
+    public constructor(nbClicks: number, dataHandler: ClicksFSMHandler) {
+        super(dataHandler);
 
         if (nbClicks <= 0) {
             throw new Error("The number of clicks must be greater than 1");
@@ -45,20 +45,6 @@ export class ClicksFSM extends FSMImpl {
 
         this.countClicks = 0;
         this.nbClicks = nbClicks;
-    }
-
-
-    public override reinit(): void {
-        super.reinit();
-        this.countClicks = 0;
-    }
-
-    public override buildFSM(dataHandler?: ClicksFSMHandler): void {
-        if (this.states.length > 1) {
-            return;
-        }
-
-        super.buildFSM(dataHandler);
 
         const clicked = new StdState(this, "clicked");
         const ended = new TerminalState(this, "ended");
@@ -70,23 +56,29 @@ export class ClicksFSM extends FSMImpl {
         const firstclick = new ClickTransition(this.initState, clicked);
         firstclick.action = (event: MouseEvent): void => {
             this.countClicks++;
-            dataHandler?.click(event);
+            this.dataHandler?.click(event);
         };
 
         const newclick = new ClickTransition(clicked, clicked);
         newclick.action = (event: MouseEvent): void => {
             this.countClicks++;
-            dataHandler?.click(event);
+            this.dataHandler?.click(event);
         };
         newclick.isGuardOK = (_event: MouseEvent): boolean => (this.countClicks + 1) < this.nbClicks;
 
         const finalclick = new ClickTransition(clicked, ended);
         finalclick.action = (event: MouseEvent): void => {
-            dataHandler?.click(event);
+            this.dataHandler?.click(event);
         };
         finalclick.isGuardOK = (_event: MouseEvent): boolean => (this.countClicks + 1) === this.nbClicks;
 
         new TimeoutTransition(clicked, timeouted, () => 1000);
+    }
+
+
+    public override reinit(): void {
+        super.reinit();
+        this.countClicks = 0;
     }
 }
 
@@ -113,8 +105,6 @@ export class Clicks extends InteractionBase<PointsData, PointsDataImpl, ClicksFS
             }
         };
 
-        super(new ClicksFSM(numberClicks), new PointsDataImpl());
-
-        this.fsm.buildFSM(handler);
+        super(new ClicksFSM(numberClicks, handler), new PointsDataImpl());
     }
 }

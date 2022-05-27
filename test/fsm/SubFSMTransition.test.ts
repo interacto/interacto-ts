@@ -20,10 +20,11 @@ import {TerminalState} from "../../src/impl/fsm/TerminalState";
 import {SubStubTransition1} from "./StubTransitionOK";
 import type {Transition} from "../../src/api/fsm/Transition";
 import {createMouseEvent} from "../interaction/StubEvents";
+import type {FSMDataHandler} from "../../src/impl/fsm/FSMDataHandler";
 
 let tr: SubFSMTransition;
-let fsm: FSMImpl;
-let mainfsm: FSMImpl;
+let fsm: FSMImpl<FSMDataHandler>;
+let mainfsm: FSMImpl<FSMDataHandler>;
 let s1: StdState;
 let s2: StdState;
 let subS: TerminalState;

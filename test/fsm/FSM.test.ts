@@ -13,7 +13,7 @@
  */
 
 import type {Subject} from "rxjs";
-import type {FSMHandler, InputState, Logger, OutputState} from "../../src/interacto";
+import type {FSMHandler, InputState, Logger, OutputState, FSMDataHandler} from "../../src/interacto";
 import {
     CancelFSMException,
     CancellingState,
@@ -29,14 +29,14 @@ import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
 import {createKeyEvent, createMouseEvent, createTouchEvent} from "../interaction/StubEvents";
 
-let fsm: FSMImpl;
+let fsm: FSMImpl<FSMDataHandler>;
 let handler: FSMHandler & MockProxy<FSMHandler>;
 let logger: Logger;
 
 beforeEach(() => {
     logger = mock<Logger>();
     jest.clearAllMocks();
-    fsm = new FSMImpl(logger);
+    fsm = new FSMImpl(undefined, logger);
     handler = mock<FSMHandler>();
 });
 
@@ -638,7 +638,7 @@ describe("testWithTimeoutTransition", () => {
 
 
 describe("testWithSubFSM", () => {
-    let mainfsm: FSMImpl;
+    let mainfsm: FSMImpl<FSMDataHandler>;
     let s1: StdState;
     let subS1: StdState;
     let subS2: StdState;
@@ -668,8 +668,8 @@ describe("testWithSubFSM", () => {
     });
 
     test("check log when processing event with sub FSM", () => {
-        fsm = new FSMImpl(logger);
-        mainfsm = new FSMImpl(logger);
+        fsm = new FSMImpl(undefined, logger);
+        mainfsm = new FSMImpl(undefined, logger);
         s1 = new StdState(mainfsm, "s1");
         mainfsm.addState(s1);
         new SubFSMTransition(mainfsm.initState, s1, fsm);
@@ -694,8 +694,8 @@ describe("testWithSubFSM", () => {
     });
 
     test("check no log when processing event with sub FSM", () => {
-        fsm = new FSMImpl(logger);
-        mainfsm = new FSMImpl(logger);
+        fsm = new FSMImpl(undefined, logger);
+        mainfsm = new FSMImpl(undefined, logger);
         s1 = new StdState(mainfsm, "s1");
         mainfsm.addState(s1);
         new SubFSMTransition(mainfsm.initState, s1, fsm);
@@ -778,7 +778,7 @@ describe("testWithSubFSM", () => {
 
             public readonly name = "foo";
 
-            public get fsm(): FSMImpl {
+            public get fsm(): FSMImpl<FSMDataHandler> {
                 return mainfsm;
             }
 

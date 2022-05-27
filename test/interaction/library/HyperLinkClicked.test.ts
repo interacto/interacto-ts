@@ -30,16 +30,6 @@ beforeEach(() => {
     url = document.createElement("a");
 });
 
-test("build fsm twice does not work", () => {
-    const count = interaction.fsm.states.length;
-    interaction.fsm.buildFSM({
-        initToClickedHandler(): void {
-        }, reinitData(): void {
-        }
-    });
-    expect(interaction.fsm.states).toHaveLength(count);
-});
-
 test("click on url starts and stops the interaction", () => {
     interaction.registerToNodes([url]);
     robot(url).input();

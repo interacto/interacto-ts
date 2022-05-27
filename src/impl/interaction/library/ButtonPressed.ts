@@ -24,25 +24,19 @@ import {WidgetDataImpl} from "../WidgetDataImpl";
 /**
  * The FSM for button pressures.
  */
-class ButtonPressedFSM extends FSMImpl {
+class ButtonPressedFSM extends FSMImpl<ButtonPressedFSMHandler> {
     /**
      * Creates the FSM
      */
-    public constructor() {
-        super();
-    }
+    public constructor(dataHandler: ButtonPressedFSMHandler) {
+        super(dataHandler);
 
-    public override buildFSM(dataHandler: ButtonPressedFSMHandler): void {
-        if (this.states.length > 1) {
-            return;
-        }
-        super.buildFSM(dataHandler);
         const pressed: TerminalState = new TerminalState(this, "pressed");
         this.addState(pressed);
 
         const tr = new ButtonPressedTransition(this.initState, pressed);
         tr.action = (event: InputEvent): void => {
-            dataHandler.initToPressedHandler(event);
+            this.dataHandler?.initToPressedHandler(event);
         };
     }
 }
@@ -68,9 +62,7 @@ export class ButtonPressed extends InteractionBase<WidgetData<HTMLButtonElement>
             }
         };
 
-        super(new ButtonPressedFSM(), new WidgetDataImpl<HTMLButtonElement>());
-
-        this.fsm.buildFSM(handler);
+        super(new ButtonPressedFSM(handler), new WidgetDataImpl<HTMLButtonElement>());
     }
 
     public override onNewNodeRegistered(node: EventTarget): void {

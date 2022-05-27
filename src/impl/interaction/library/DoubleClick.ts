@@ -25,7 +25,7 @@ import {InteractionBase} from "../InteractionBase";
 import {PointDataImpl} from "../PointDataImpl";
 import {MouseMoveTransition} from "../../fsm/MouseMoveTransition";
 
-export class DoubleClickFSM extends FSMImpl {
+export class DoubleClickFSM extends FSMImpl<FSMDataHandler> {
     /** The time gap between the two spinner events. */
     private static timeGap = 300;
 
@@ -55,28 +55,10 @@ export class DoubleClickFSM extends FSMImpl {
 
     private checkButton?: number;
 
-    public constructor() {
-        super();
+    public constructor(dataHandler?: FSMDataHandler) {
+        super(dataHandler);
         this.firstClickFSM = new ClickFSM();
         this.sndClickFSM = new ClickFSM();
-    }
-
-
-    // eslint-disable-next-line accessor-pairs
-    public override set log(log: boolean) {
-        super.log = log;
-        this.firstClickFSM.log = log;
-        this.sndClickFSM.log = log;
-    }
-
-    public override buildFSM(dataHandler?: FSMDataHandler): void {
-        if (this.states.length > 1) {
-            return;
-        }
-
-        super.buildFSM(dataHandler);
-        this.firstClickFSM.buildFSM();
-        this.sndClickFSM.buildFSM();
 
         const errorHandler = {
             "fsmError": (err: unknown): void => {
@@ -103,10 +85,18 @@ export class DoubleClickFSM extends FSMImpl {
 
         const move = new MouseMoveTransition(clicked, cancelled);
         move.isGuardOK = (event: Event): boolean => (this.checkButton === undefined || event instanceof MouseEvent &&
-                    event.button === this.checkButton);
+          event.button === this.checkButton);
 
         new TimeoutTransition(clicked, cancelled, DoubleClickFSM.timeGapSupplier);
         new SubFSMTransition(clicked, dbleclicked, this.sndClickFSM);
+    }
+
+
+    // eslint-disable-next-line accessor-pairs
+    public override set log(log: boolean) {
+        super.log = log;
+        this.firstClickFSM.log = log;
+        this.sndClickFSM.log = log;
     }
 
     public setCheckButton(buttonToCheck: number): void {
@@ -139,10 +129,14 @@ export class DoubleClick extends InteractionBase<PointData, PointDataImpl, Doubl
     public constructor(fsm?: DoubleClickFSM, data?: PointDataImpl) {
         super(fsm ?? new DoubleClickFSM(), data ?? new PointDataImpl());
 
+        this.fsm.dataHandler = {
+            "reinitData": (): void => {
+                this.reinitData();
+            }
+        };
         // We give the interaction to the first click as this click interaction
         // will contains the data: so that this interaction will fill the data
         // of the double-click.
         new Click(this.fsm.firstClickFSM, this._data);
-        this.fsm.buildFSM(this);
     }
 }

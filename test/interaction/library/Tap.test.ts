@@ -45,10 +45,6 @@ describe("tap 1", () => {
         interaction.uninstall();
     });
 
-    test("cannot rebuild the interaction", () => {
-        interaction.fsm.buildFSM();
-        expect(interaction.fsm.states).toHaveLength(5);
-    });
 
     test("one touchstart", () => {
         robot(canvas)

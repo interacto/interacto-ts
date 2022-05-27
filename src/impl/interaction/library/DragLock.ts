@@ -27,17 +27,59 @@ import {SrcTgtPointsDataImpl} from "../SrcTgtPointsDataImpl";
 import type {PointData} from "../../../api/interaction/PointData";
 import {MouseMoveTransition} from "../../fsm/MouseMoveTransition";
 
-class DragLockFSM extends FSMImpl {
+class DragLockFSM extends FSMImpl<DragLockFSMHandler> {
     public readonly firstDbleClick: DoubleClickFSM;
 
     public readonly sndDbleClick: DoubleClickFSM;
 
     protected checkButton?: number;
 
-    public constructor() {
-        super();
+    public constructor(dataHandler: DragLockFSMHandler) {
+        super(dataHandler);
         this.firstDbleClick = new DoubleClickFSM();
         this.sndDbleClick = new DoubleClickFSM();
+
+        const cancelDbleClick = new DoubleClickFSM();
+        const errorHandler = {
+            "fsmError": (err: unknown): void => {
+                this.notifyHandlerOnError(err);
+            }
+        };
+
+        this.firstDbleClick.addHandler(errorHandler);
+        this.sndDbleClick.addHandler(errorHandler);
+        cancelDbleClick.addHandler(errorHandler);
+
+        const dropped = new TerminalState(this, "dropped");
+        const cancelled = new CancellingState(this, "cancelled");
+        const locked = new StdState(this, "locked");
+        const moved = new StdState(this, "moved");
+
+        this.addState(dropped);
+        this.addState(cancelled);
+        this.addState(locked);
+        this.addState(moved);
+
+        const subTr = new SubFSMTransition(this.initState, locked, this.firstDbleClick);
+        subTr.action = (): void => {
+            const checkButton = this.firstDbleClick.getCheckButton();
+            this.sndDbleClick.setCheckButton(checkButton);
+            cancelDbleClick.setCheckButton(checkButton);
+            this.dataHandler?.onFirstDbleClick();
+        };
+
+        new SubFSMTransition(locked, cancelled, cancelDbleClick);
+
+        const moveAction = (event: MouseEvent): void => {
+            this.dataHandler?.onMove(event);
+        };
+        const movelock = new MouseMoveTransition(locked, moved);
+        movelock.action = moveAction;
+        const move = new MouseMoveTransition(moved, moved);
+        move.action = moveAction;
+        new EscapeKeyPressureTransition(locked, cancelled);
+        new EscapeKeyPressureTransition(moved, cancelled);
+        new SubFSMTransition(moved, dropped, this.sndDbleClick);
     }
 
     // eslint-disable-next-line accessor-pairs
@@ -58,61 +100,6 @@ class DragLockFSM extends FSMImpl {
         super.fullReinit();
         this.firstDbleClick.fullReinit();
         this.sndDbleClick.fullReinit();
-    }
-
-    public override getDataHandler(): DragLockFSMHandler | undefined {
-        return this.dataHandler as DragLockFSMHandler;
-    }
-
-    public override buildFSM(dataHandler: DragLockFSMHandler): void {
-        if (this.states.length > 1) {
-            return;
-        }
-
-        super.buildFSM(dataHandler);
-        const cancelDbleClick = new DoubleClickFSM();
-        const errorHandler = {
-            "fsmError": (err: unknown): void => {
-                this.notifyHandlerOnError(err);
-            }
-        };
-        this.firstDbleClick.buildFSM();
-        this.sndDbleClick.buildFSM();
-        cancelDbleClick.buildFSM();
-        this.firstDbleClick.addHandler(errorHandler);
-        this.sndDbleClick.addHandler(errorHandler);
-        cancelDbleClick.addHandler(errorHandler);
-
-        const dropped = new TerminalState(this, "dropped");
-        const cancelled = new CancellingState(this, "cancelled");
-        const locked = new StdState(this, "locked");
-        const moved = new StdState(this, "moved");
-
-        this.addState(dropped);
-        this.addState(cancelled);
-        this.addState(locked);
-        this.addState(moved);
-
-        const subTr = new SubFSMTransition(this.initState, locked, this.firstDbleClick);
-        subTr.action = (): void => {
-            const checkButton = this.firstDbleClick.getCheckButton();
-            this.sndDbleClick.setCheckButton(checkButton);
-            cancelDbleClick.setCheckButton(checkButton);
-            dataHandler.onFirstDbleClick();
-        };
-
-        new SubFSMTransition(locked, cancelled, cancelDbleClick);
-
-        const moveAction = (event: MouseEvent): void => {
-            this.getDataHandler()?.onMove(event);
-        };
-        const movelock = new MouseMoveTransition(locked, moved);
-        movelock.action = moveAction;
-        const move = new MouseMoveTransition(moved, moved);
-        move.action = moveAction;
-        new EscapeKeyPressureTransition(locked, cancelled);
-        new EscapeKeyPressureTransition(moved, cancelled);
-        new SubFSMTransition(moved, dropped, this.sndDbleClick);
     }
 }
 
@@ -142,12 +129,11 @@ export class DragLock extends InteractionBase<SrcTgtPointsData<PointData>, SrcTg
             }
         };
 
-        super(new DragLockFSM(), new SrcTgtPointsDataImpl());
+        super(new DragLockFSM(handler), new SrcTgtPointsDataImpl());
 
         // We give the interactions to the initial and final double-clicks as these interactions
         // will contain the data: so that these interactions will fill the data of the draglock.
         new DoubleClick(this.fsm.firstDbleClick, this.data.src as PointDataImpl);
         new DoubleClick(this.fsm.sndDbleClick, this.data.tgt as PointDataImpl);
-        this.fsm.buildFSM(handler);
     }
 }

@@ -31,9 +31,10 @@ import {TransitionBase} from "../../src/impl/fsm/TransitionBase";
 import type {EventType} from "../../src/api/fsm/EventType";
 import type {InputState} from "../../src/api/fsm/InputState";
 import {MouseDownTransition} from "../../src/impl/fsm/MouseDownTransition";
+import type {FSMDataHandler} from "../../src/impl/fsm/FSMDataHandler";
 
 let interaction: InteractionStub;
-let fsm: FSMImpl & MockProxy<FSMImpl>;
+let fsm: FSMImpl<FSMDataHandler> & MockProxy<FSMImpl<FSMDataHandler>>;
 let currentStateObs: Subject<[OutputState, OutputState]>;
 let currentState: OutputState;
 let logger: Logger;
@@ -56,7 +57,7 @@ class StubWrongEventTransition extends TransitionBase<FocusEvent> {
 beforeEach(() => {
     logger = mock<Logger>();
     currentStateObs = new Subject();
-    fsm = mock<FSMImpl>();
+    fsm = mock<FSMImpl<FSMDataHandler>>();
     Object.defineProperty(fsm, "currentStateObservable", {
         "get": jest.fn(() => currentStateObs)
     });

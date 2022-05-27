@@ -23,27 +23,19 @@ import {MouseMoveTransition} from "../../fsm/MouseMoveTransition";
 /**
  * The FSM for mouseover interactions
  */
-export class MouseMoveFSM extends FSMImpl {
-
+export class MouseMoveFSM extends FSMImpl<MouseMoveFSMHandler> {
     /**
      * Creates the FSM
      */
-    public constructor() {
-        super();
-    }
+    public constructor(dataHandler: MouseMoveFSMHandler) {
+        super(dataHandler);
 
-    public override buildFSM(dataHandler?: MouseMoveFSMHandler): void {
-        if (this.states.length > 1) {
-            return;
-        }
-
-        super.buildFSM(dataHandler);
         const moved = new TerminalState(this, "moved");
         this.addState(moved);
 
         const move = new MouseMoveTransition(this.initState, moved);
         move.action = (event: MouseEvent): void => {
-            dataHandler?.onMove(event);
+            this.dataHandler?.onMove(event);
         };
     }
 }
@@ -66,8 +58,6 @@ export class MouseMove extends InteractionBase<PointData, PointDataImpl, MouseMo
             }
         };
 
-        super(new MouseMoveFSM(), new PointDataImpl());
-
-        this.fsm.buildFSM(handler);
+        super(new MouseMoveFSM(handler), new PointDataImpl());
     }
 }

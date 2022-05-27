@@ -21,31 +21,25 @@ import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {WidgetDataImpl} from "../WidgetDataImpl";
 
-class BoxCheckedFSM extends FSMImpl {
+class BoxCheckedFSM extends FSMImpl<BoxCheckedHandler> {
+    public constructor(dataHandler: BoxCheckedHandler) {
+        super(dataHandler);
 
-    public constructor() {
-        super();
-    }
-
-    public override buildFSM(dataHandler: BoxCheckedHandler): void {
-        if (this.states.length > 1) {
-            return;
-        }
-
-        super.buildFSM(dataHandler);
         const checked: TerminalState = new TerminalState(this, "checked");
         this.addState(checked);
 
         const tr = new BoxCheckPressedTransition(this.initState, checked);
         tr.action = (event: InputEvent): void => {
-            dataHandler.initToCheckHandler(event);
+            this.dataHandler?.initToCheckHandler(event);
         };
     }
 }
 
+
 interface BoxCheckedHandler extends FSMDataHandler {
     initToCheckHandler(event: Event): void;
 }
+
 
 /**
  * A user interaction for CheckBox.
@@ -64,9 +58,7 @@ export class BoxChecked extends InteractionBase<WidgetData<HTMLInputElement>, Wi
             }
         };
 
-        super(new BoxCheckedFSM(), new WidgetDataImpl<HTMLInputElement>());
-
-        this.fsm.buildFSM(handler);
+        super(new BoxCheckedFSM(handler), new WidgetDataImpl<HTMLInputElement>());
     }
 
     public override onNewNodeRegistered(node: EventTarget): void {

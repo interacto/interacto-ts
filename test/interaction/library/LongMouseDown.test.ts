@@ -39,25 +39,19 @@ describe("long mouse down test", () => {
         jest.clearAllTimers();
     });
 
-    test("cannot build the interaction twice", () => {
-        interaction = new LongMouseDown(200);
-        interaction.fsm.buildFSM();
-        expect(interaction.fsm.states).toHaveLength(4);
-    });
-
     test("that has data handler", () => {
         interaction = new LongMouseDown(1);
-        expect(interaction.fsm.getDataHandler()).toBeDefined();
+        expect(interaction.fsm.dataHandler).toBeDefined();
     });
 
     test("that reinit cleans data", () => {
         interaction = new LongMouseDown(100);
-        jest.spyOn(interaction.fsm.getDataHandler() as FSMDataHandler, "reinitData");
+        jest.spyOn(interaction.fsm.dataHandler as FSMDataHandler, "reinitData");
         interaction.processEvent(createMouseEvent("mousedown", canvas, 15, 20, 160, 21, 2));
         interaction.reinit();
         expect(interaction.data.button).toBe(0);
         expect(interaction.data.currentTarget).toBeNull();
-        expect(interaction.fsm.getDataHandler()?.reinitData).toHaveBeenCalledWith();
+        expect(interaction.fsm.dataHandler?.reinitData).toHaveBeenCalledWith();
     });
 
     [1000, 2000].forEach(duration => {

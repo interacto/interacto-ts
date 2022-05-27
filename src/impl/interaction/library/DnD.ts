@@ -29,7 +29,7 @@ import {MouseMoveTransition} from "../../fsm/MouseMoveTransition";
 /**
  * The FSM for DnD interactions.
  */
-class DnDFSM extends FSMImpl {
+class DnDFSM extends FSMImpl<DnDFSMHandler> {
     private readonly cancellable: boolean;
 
     private buttonToCheck?: number;
@@ -38,16 +38,9 @@ class DnDFSM extends FSMImpl {
      * Creates the FSM
      * @param cancellable - True: the FSM can be cancelled using the ESC key.
      */
-    public constructor(cancellable: boolean) {
-        super();
+    public constructor(cancellable: boolean, dataHandler: DnDFSMHandler) {
+        super(dataHandler);
         this.cancellable = cancellable;
-    }
-
-    public override buildFSM(dataHandler: DnDFSMHandler): void {
-        if (this.states.length > 1) {
-            return;
-        }
-        super.buildFSM(dataHandler);
 
         const pressed: StdState = new StdState(this, "pressed");
         const dragged: StdState = new StdState(this, "dragged");
@@ -63,7 +56,7 @@ class DnDFSM extends FSMImpl {
         const press = new MouseDownTransition(this.initState, pressed);
         press.action = (event: MouseEvent): void => {
             this.buttonToCheck = event.button;
-            dataHandler.onPress(event);
+            this.dataHandler?.onPress(event);
         };
 
         const relCancel = new MouseUpTransition(pressed, cancelled);
@@ -71,7 +64,7 @@ class DnDFSM extends FSMImpl {
 
         const guardMove = (event: MouseEvent): boolean => event.button === this.buttonToCheck;
         const actionMove = (event: MouseEvent): void => {
-            dataHandler.onDrag(event);
+            this.dataHandler?.onDrag(event);
         };
 
         const move = new MouseMoveTransition(pressed, dragged);
@@ -88,7 +81,7 @@ class DnDFSM extends FSMImpl {
             return event.button === this.buttonToCheck && (!(tgt instanceof Element) || !tgt.classList.contains("ioDwellSpring"));
         };
         release.action = (event: MouseEvent): void => {
-            dataHandler.onRelease(event);
+            this.dataHandler?.onRelease(event);
         };
         this.configureCancellation(pressed, dragged, cancelled);
     }
@@ -141,8 +134,6 @@ export class DnD extends InteractionBase<SrcTgtPointsData<PointData>, SrcTgtPoin
             }
         };
 
-        super(new DnDFSM(cancellable), new SrcTgtPointsDataImpl());
-
-        this.fsm.buildFSM(handler);
+        super(new DnDFSM(cancellable, handler), new SrcTgtPointsDataImpl());
     }
 }

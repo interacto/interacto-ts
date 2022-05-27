@@ -23,31 +23,24 @@ import {KeyDataImpl} from "../KeyDataImpl";
 /**
  * An FSM for a single key pressure.
  */
-export class KeyDownFSM extends FSMImpl {
+export class KeyDownFSM extends FSMImpl<KeyDownFSMHandler> {
     private readonly modifiersAccepted: boolean;
 
     /**
      * Creates the FSM.
      * @param modifierAccepted - True: the FSM will consider key modifiers.
      */
-    public constructor(modifierAccepted: boolean) {
-        super();
+    public constructor(modifierAccepted: boolean, dataHandler: KeyDownFSMHandler) {
+        super(dataHandler);
         this.modifiersAccepted = modifierAccepted;
-    }
 
-    public override buildFSM(dataHandler?: KeyDownFSMHandler): void {
-        if (this.states.length > 1) {
-            return;
-        }
-
-        super.buildFSM(dataHandler);
         const pressed: TerminalState = new TerminalState(this, "pressed");
 
         this.addState(pressed);
 
         const kp = new KeyDownTransition(this.initState, pressed);
         kp.action = (event: KeyboardEvent): void => {
-            dataHandler?.onKeyPressed(event);
+            this.dataHandler?.onKeyPressed(event);
         };
         kp.isGuardOK = (event: KeyboardEvent): boolean => this.modifiersAccepted ||
             (!event.altKey && !event.ctrlKey && !event.shiftKey && !event.metaKey);
@@ -78,8 +71,6 @@ export class KeyDown extends InteractionBase<KeyData, KeyDataImpl, KeyDownFSM> {
             }
         };
 
-        super(fsm ?? new KeyDownFSM(modifierAccepted), new KeyDataImpl());
-
-        this.fsm.buildFSM(handler);
+        super(fsm ?? new KeyDownFSM(modifierAccepted, handler), new KeyDataImpl());
     }
 }

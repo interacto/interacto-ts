@@ -42,12 +42,6 @@ afterEach(() => {
     interaction.uninstall();
 });
 
-test("build fsm twice does not work", () => {
-    const count = interaction.fsm.states.length;
-    interaction.fsm.buildFSM();
-    expect(interaction.fsm.states).toHaveLength(count);
-});
-
 test("pressure does not start interaction", () => {
     robot(canvas)
         .touchstart({}, [{"identifier": 2}]);

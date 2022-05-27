@@ -23,29 +23,22 @@ import {PointDataImpl} from "../PointDataImpl";
 /**
  * The FSM for click interactions
  */
-export class ClickFSM extends FSMImpl {
+export class ClickFSM extends FSMImpl<ClickFSMHandler> {
     private checkButton?: number;
 
     /**
      * Creates the FSM
      */
-    public constructor() {
-        super();
-    }
+    public constructor(dataHandler?: ClickFSMHandler) {
+        super(dataHandler);
 
-    public override buildFSM(dataHandler?: ClickFSMHandler): void {
-        if (this.states.length > 1) {
-            return;
-        }
-
-        super.buildFSM(dataHandler);
         const clicked = new TerminalState(this, "clicked");
         this.addState(clicked);
 
         const clickt = new ClickTransition(this.initState, clicked);
         clickt.action = (event: MouseEvent): void => {
             this.setCheckButton(event.button);
-            dataHandler?.initToClicked(event);
+            this.dataHandler?.initToClicked(event);
         };
         clickt.isGuardOK = (event: MouseEvent): boolean => this.checkButton === undefined || event.button === this.checkButton;
     }
@@ -75,7 +68,8 @@ export class Click extends InteractionBase<PointData, PointDataImpl, ClickFSM> {
      * Creates the interaction.
      */
     public constructor(fsm?: ClickFSM, data?: PointDataImpl) {
-        const handler: ClickFSMHandler = {
+        super(fsm ?? new ClickFSM(), data ?? new PointDataImpl());
+        this.fsm.dataHandler = {
             "initToClicked": (evt: MouseEvent): void => {
                 this._data.copy(evt);
             },
@@ -83,9 +77,5 @@ export class Click extends InteractionBase<PointData, PointDataImpl, ClickFSM> {
                 this.reinitData();
             }
         };
-
-        super(fsm ?? new ClickFSM(), data ?? new PointDataImpl());
-
-        this.fsm.buildFSM(handler);
     }
 }

@@ -25,23 +25,16 @@ import {InteractionBase} from "../InteractionBase";
 /**
  * This interaction permits to define combo a key pressed that can be used to define shortcuts, etc.
  */
-export class KeysDownFSM extends FSMImpl {
+export class KeysDownFSM extends FSMImpl<KeysDownFSMHandler> {
     private readonly currentCodes: Array<string>;
 
     /**
      * Creates the FSM.
      */
-    public constructor() {
-        super();
+    public constructor(dataHandler: KeysDownFSMHandler) {
+        super(dataHandler);
         this.currentCodes = [];
-    }
 
-    public override buildFSM(dataHandler?: KeysDownFSMHandler): void {
-        if (this.states.length > 1) {
-            return;
-        }
-
-        super.buildFSM(dataHandler);
         const pressed: StdState = new StdState(this, "pressed");
         const ended: TerminalState = new TerminalState(this, "ended");
         this.addState(pressed);
@@ -49,7 +42,7 @@ export class KeysDownFSM extends FSMImpl {
 
         const actionkp = (event: KeyboardEvent): void => {
             this.currentCodes.push(event.code);
-            dataHandler?.onKeyPressed(event);
+            this.dataHandler?.onKeyPressed(event);
         };
         const kpInit = new KeyDownTransition(this.initState, pressed);
         kpInit.action = actionkp;
@@ -89,8 +82,6 @@ export class KeysDown extends InteractionBase<KeysData, KeysDataImpl, KeysDownFS
             }
         };
 
-        super(new KeysDownFSM(), new KeysDataImpl());
-
-        this.fsm.buildFSM(handler);
+        super(new KeysDownFSM(handler), new KeysDataImpl());
     }
 }

@@ -32,15 +32,6 @@ beforeEach(() => {
     textArea = document.createElement("textarea");
 });
 
-test("build fsm twice does not work", () => {
-    const count = interaction.fsm.states.length;
-    interaction.fsm.buildFSM({
-        initToChangedHandler(): void {
-        }, reinitData(): void {
-        }
-    });
-    expect(interaction.fsm.states).toHaveLength(count);
-});
 
 test("type in a text area starts and stops the interaction", () => {
     interaction.registerToNodes([textArea]);

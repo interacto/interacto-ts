@@ -33,11 +33,6 @@ beforeEach(() => {
     text = document.createElement("textarea");
 });
 
-test("cannot create several times the FSM", () => {
-    interaction.fsm.buildFSM();
-    expect(interaction.fsm.states).toHaveLength(3);
-});
-
 test("type 'b' and wait for timeout stops the interaction", () => {
     interaction.registerToNodes([text]);
     robot(text)

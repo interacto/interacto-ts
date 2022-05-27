@@ -40,12 +40,6 @@ describe("long touch test", () => {
         jest.clearAllTimers();
     });
 
-    test("cannot build the interaction twice", () => {
-        interaction = new LongTouch(100);
-        interaction.fsm.buildFSM();
-        expect(interaction.fsm.states).toHaveLength(4);
-    });
-
     [1000, 2000].forEach(duration => {
         describe(`long touch ${String(duration)}`, () => {
             beforeEach(() => {

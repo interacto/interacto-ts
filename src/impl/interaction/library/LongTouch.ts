@@ -28,7 +28,7 @@ import {TouchMoveTransition} from "../../fsm/TouchMoveTransition";
 /**
  * The FSM for the LongTouch interaction
  */
-class LongTouchFSM extends FSMImpl {
+class LongTouchFSM extends FSMImpl<LongTouchFSMHandler> {
     private readonly duration: number;
 
     private currentTouchID?: number;
@@ -37,8 +37,8 @@ class LongTouchFSM extends FSMImpl {
      * Creates the long touch FSM
      * @param duration - Defines the duration of the touch interaction.
      */
-    public constructor(duration: number) {
-        super();
+    public constructor(duration: number, dataHandler: LongTouchFSMHandler) {
+        super(dataHandler);
 
         if (duration <= 0) {
             throw new Error("Incorrect duration");
@@ -46,12 +46,6 @@ class LongTouchFSM extends FSMImpl {
 
         this.duration = duration;
         this.currentTouchID = undefined;
-    }
-
-    public override buildFSM(dataHandler?: LongTouchFSMHandler): void {
-        if (this.states.length > 1) {
-            return;
-        }
 
         const touched = new StdState(this, "touched");
         const cancelled = new CancellingState(this, "cancelled");
@@ -64,7 +58,7 @@ class LongTouchFSM extends FSMImpl {
         const press = new TouchPressureTransition(this.initState, touched);
         press.action = (event: TouchEvent): void => {
             this.currentTouchID = event.changedTouches[0].identifier;
-            dataHandler?.tap(event);
+            this.dataHandler?.tap(event);
         };
 
         const moved = new TouchMoveTransition(touched, cancelled);
@@ -75,8 +69,6 @@ class LongTouchFSM extends FSMImpl {
         release.isGuardOK = (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.currentTouchID;
 
         new TimeoutTransition(touched, timeouted, () => this.duration);
-
-        super.buildFSM(dataHandler);
     }
 
     public override reinit(): void {
@@ -107,8 +99,6 @@ export class LongTouch extends InteractionBase<TouchData, TouchDataImpl, LongTou
             }
         };
 
-        super(new LongTouchFSM(duration), new TouchDataImpl());
-
-        this.fsm.buildFSM(handler);
+        super(new LongTouchFSM(duration, handler), new TouchDataImpl());
     }
 }

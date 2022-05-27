@@ -20,23 +20,16 @@ import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {WidgetDataImpl} from "../WidgetDataImpl";
 
-class ColorPickedFSM extends FSMImpl {
-    public constructor() {
-        super();
-    }
+class ColorPickedFSM extends FSMImpl<ColorPickedHandler> {
+    public constructor(dataHandler: ColorPickedHandler) {
+        super(dataHandler);
 
-    public override buildFSM(dataHandler: ColorPickedHandler): void {
-        if (this.states.length > 1) {
-            return;
-        }
-
-        super.buildFSM(dataHandler);
         const picked: TerminalState = new TerminalState(this, "picked");
         this.addState(picked);
 
         const tr = new ColorPickedTransition(this.initState, picked);
         tr.action = (event: Event): void => {
-            dataHandler.initToPickedHandler(event);
+            this.dataHandler?.initToPickedHandler(event);
         };
     }
 }
@@ -49,7 +42,6 @@ interface ColorPickedHandler extends FSMDataHandler {
 /**
  * A user interaction for CheckBox
  */
-
 export class ColorPicked extends InteractionBase<WidgetData<HTMLInputElement>, WidgetDataImpl<HTMLInputElement>, ColorPickedFSM> {
     /**
      * Creates the interaction.
@@ -64,9 +56,7 @@ export class ColorPicked extends InteractionBase<WidgetData<HTMLInputElement>, W
             }
         };
 
-        super(new ColorPickedFSM(), new WidgetDataImpl<HTMLInputElement>());
-
-        this.fsm.buildFSM(handler);
+        super(new ColorPickedFSM(handler), new WidgetDataImpl<HTMLInputElement>());
     }
 
     public override onNewNodeRegistered(node: EventTarget): void {

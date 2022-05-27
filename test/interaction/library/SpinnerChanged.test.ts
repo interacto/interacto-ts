@@ -38,15 +38,6 @@ afterEach(() => {
     SpinnerChangedFSM.setTimeGap(timer);
 });
 
-test("build fsm twice does not work", () => {
-    const count = interaction.fsm.states.length;
-    interaction.fsm.buildFSM({
-        initToChangedHandler(): void {
-        }, reinitData(): void {
-        }
-    });
-    expect(interaction.fsm.states).toHaveLength(count);
-});
 
 test("spinnerChangedGoodState", () => {
     interaction.registerToNodes([spinner]);

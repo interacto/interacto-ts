@@ -20,13 +20,14 @@ import type {InteractionData} from "../../api/interaction/InteractionData";
 import {InteractionBase} from "./InteractionBase";
 import type {EventType} from "../../api/fsm/EventType";
 import type {Flushable} from "./Flushable";
+import type {FSMDataHandler} from "../fsm/FSMDataHandler";
 
 /**
  * The base implementation of a user interaction that uses concurrent FSMs.
  * @typeParam D - The type of the interaction data.
  * @typeParam F - The type of the FSM.
  */
-export abstract class ConcurrentInteraction<D extends InteractionData, DImpl extends D & Flushable, F extends ConcurrentFSM<FSM>>
+export abstract class ConcurrentInteraction<D extends InteractionData, DImpl extends D & Flushable, F extends ConcurrentFSM<FSM, FSMDataHandler>>
     extends InteractionBase<D, DImpl, F> {
     private readonly subscriptions: Array<Subscription>;
 

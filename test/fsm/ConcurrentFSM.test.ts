@@ -24,8 +24,9 @@ import {MouseUpTransition} from "../../src/impl/fsm/MouseUpTransition";
 import {ClickTransition} from "../../src/impl/fsm/ClickTransition";
 import {MouseDownTransition} from "../../src/impl/fsm/MouseDownTransition";
 import {MouseMoveTransition} from "../../src/impl/fsm/MouseMoveTransition";
+import type {FSMDataHandler} from "../../src/impl/fsm/FSMDataHandler";
 
-class StubTouchFSM extends FSMImpl {
+class StubTouchFSM extends FSMImpl<FSMDataHandler> {
     public cpt: number;
 
     public constructor(cpt: number) {
@@ -72,7 +73,7 @@ class StubTouchFSM extends FSMImpl {
     }
 }
 
-let fsm: ConcurrentFSM<StubTouchFSM>;
+let fsm: ConcurrentFSM<StubTouchFSM, FSMDataHandler>;
 let fsm1: StubTouchFSM;
 let fsm2: StubTouchFSM;
 let handler: FSMHandler;

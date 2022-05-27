@@ -28,7 +28,7 @@ import {MouseMoveTransition} from "../../fsm/MouseMoveTransition";
 /**
  * The FSM for the LongPress interaction
  */
-export class LongMouseDownFSM extends FSMImpl {
+export class LongMouseDownFSM extends FSMImpl<LongMouseDownFSMHandler> {
     private readonly duration: number;
 
     private currentButton?: number;
@@ -37,8 +37,8 @@ export class LongMouseDownFSM extends FSMImpl {
      * Creates the long press FSM
      * @param duration - Defines the duration of the long press interaction (in ms).
      */
-    public constructor(duration: number) {
-        super();
+    public constructor(duration: number, dataHandler: LongMouseDownFSMHandler) {
+        super(dataHandler);
 
         if (duration <= 0) {
             throw new Error("Incorrect duration");
@@ -46,14 +46,6 @@ export class LongMouseDownFSM extends FSMImpl {
 
         this.duration = duration;
         this.currentButton = undefined;
-    }
-
-    public override buildFSM(dataHandler?: LongMouseDownFSMHandler): void {
-        if (this.states.length > 1) {
-            return;
-        }
-
-        super.buildFSM(dataHandler);
 
         const down = new StdState(this, "down");
         const cancelled = new CancellingState(this, "cancelled");
@@ -66,7 +58,7 @@ export class LongMouseDownFSM extends FSMImpl {
         const press = new MouseDownTransition(this.initState, down);
         press.action = (event: MouseEvent): void => {
             this.currentButton = event.button;
-            dataHandler?.press(event);
+            this.dataHandler?.press(event);
         };
 
         const guard = (event: MouseEvent): boolean => event.button === this.currentButton;
@@ -105,8 +97,6 @@ export class LongMouseDown extends InteractionBase<PointData, PointDataImpl, Lon
             }
         };
 
-        super(new LongMouseDownFSM(duration), new PointDataImpl());
-
-        this.fsm.buildFSM(handler);
+        super(new LongMouseDownFSM(duration, handler), new PointDataImpl());
     }
 }

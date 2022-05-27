@@ -29,7 +29,7 @@ import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 /**
  * The FSM for the Tap interaction
  */
-class TapFSM extends FSMImpl {
+class TapFSM extends FSMImpl<TapFSMHandler> {
     private countTaps: number;
 
     private readonly nbTaps: number;
@@ -39,17 +39,10 @@ class TapFSM extends FSMImpl {
     /**
      * Creates the Tap FSM
      */
-    public constructor(nbTaps: number) {
-        super();
+    public constructor(nbTaps: number, dataHandler: TapFSMHandler) {
+        super(dataHandler);
         this.nbTaps = nbTaps;
         this.countTaps = 0;
-    }
-
-    public override buildFSM(dataHandler?: TapFSMHandler): void {
-        if (this.states.length > 1) {
-            return;
-        }
-        super.buildFSM(dataHandler);
 
         const down = new StdState(this, "down");
         const up = new StdState(this, "up");
@@ -62,7 +55,7 @@ class TapFSM extends FSMImpl {
         const pressureAction = (event: TouchEvent): void => {
             this.touchID = event.changedTouches[0].identifier;
             this.countTaps++;
-            dataHandler?.tap(event);
+            this.dataHandler?.tap(event);
         };
         const press1 = new TouchPressureTransition(this.initState, down);
         press1.action = pressureAction;
@@ -81,7 +74,7 @@ class TapFSM extends FSMImpl {
         // Then replacing the current tap (but not increment)
         cleanEvent.action = (event: TouchEvent): void => {
             this.touchID = event.changedTouches[0].identifier;
-            dataHandler?.tap(event);
+            this.dataHandler?.tap(event);
         };
 
         const release = new TouchReleaseTransition(down, ended);
@@ -131,8 +124,6 @@ export class Tap extends InteractionBase<TapData, TapDataImpl, TapFSM> {
             }
         };
 
-        super(new TapFSM(numberTaps), new TapDataImpl());
-
-        this.fsm.buildFSM(handler);
+        super(new TapFSM(numberTaps, handler), new TapDataImpl());
     }
 }

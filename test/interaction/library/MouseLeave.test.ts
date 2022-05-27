@@ -42,11 +42,6 @@ beforeEach(() => {
     canvas = document.createElement("canvas");
 });
 
-test("cannot create several times the FSM", () => {
-    interaction.fsm.buildFSM();
-    expect(interaction.fsm.states).toHaveLength(2);
-});
-
 test("mouseout sent to the interaction starts and stops the MouseLeave interaction", () => {
     interaction.registerToNodes([canvas]);
 

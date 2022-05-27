@@ -15,9 +15,10 @@
 import {FSMImpl} from "../../src/impl/fsm/FSMImpl";
 import type {StateBase} from "../../src/impl/fsm/StateBase";
 import {StdState} from "../../src/impl/fsm/StdState";
+import type {FSMDataHandler} from "../../src/impl/fsm/FSMDataHandler";
 
 let state: StateBase;
-let fsm: FSMImpl;
+let fsm: FSMImpl<FSMDataHandler>;
 
 beforeEach(() => {
     fsm = new FSMImpl();

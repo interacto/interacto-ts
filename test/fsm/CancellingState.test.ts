@@ -17,12 +17,13 @@ import type {FSMImpl} from "../../src/impl/fsm/FSMImpl";
 import type {OutputState} from "../../src/api/fsm/OutputState";
 import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
+import type {FSMDataHandler} from "../../src/impl/fsm/FSMDataHandler";
 
 let state: CancellingState;
-let fsm: FSMImpl & MockProxy<FSMImpl>;
+let fsm: FSMImpl<FSMDataHandler> & MockProxy<FSMImpl<FSMDataHandler>>;
 
 beforeEach(() => {
-    fsm = mock<FSMImpl>();
+    fsm = mock<FSMImpl<FSMDataHandler>>();
     state = new CancellingState(fsm, "os");
 });
 

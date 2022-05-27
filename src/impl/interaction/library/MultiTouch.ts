@@ -23,20 +23,13 @@ import {SrcTgtTouchDataImpl} from "../SrcTgtTouchDataImpl";
 /**
  * The FSM that defines a multi-touch interaction (that works like a DnD)
  */
-class MultiTouchFSM extends ConcurrentFSM<TouchDnDFSM> {
+class MultiTouchFSM extends ConcurrentFSM<TouchDnDFSM, TouchDnDFSMHandler> {
     /**
      * Creates the FSM.
      */
-    public constructor(nbTouch: number, totalReinit: boolean) {
-        super([...Array(nbTouch).keys()].map(_ => new TouchDnDFSM(false, false)),
-            totalReinit ? [new TouchDnDFSM(false, false)] : [], totalReinit);
-    }
-
-    public override buildFSM(dataHandler: TouchDnDFSMHandler): void {
-        super.buildFSM(dataHandler);
-        this.getAllConccurFSMs().forEach(fsm => {
-            fsm.buildFSM(dataHandler);
-        });
+    public constructor(nbTouch: number, totalReinit: boolean, dataHandler: TouchDnDFSMHandler) {
+        super([...Array(nbTouch).keys()].map(_ => new TouchDnDFSM(false, dataHandler, false)),
+            totalReinit ? [new TouchDnDFSM(false, dataHandler, false)] : [], totalReinit, dataHandler);
     }
 
     public override process(event: Event): boolean {
@@ -136,8 +129,6 @@ export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouch
             }
         };
 
-        super(new MultiTouchFSM(nbTouches, strict), new MultiTouchDataImpl());
-
-        this.fsm.buildFSM(handler);
+        super(new MultiTouchFSM(nbTouches, strict, handler), new MultiTouchDataImpl());
     }
 }

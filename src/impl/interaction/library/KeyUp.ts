@@ -23,31 +23,24 @@ import {KeyUpTransition} from "../../fsm/KeyUpTransition";
 /**
  * An FSM for a single key release.
  */
-export class KeyUpFSM extends FSMImpl {
+export class KeyUpFSM extends FSMImpl<KeyUpFSMHandler> {
     private readonly modifiersAccepted: boolean;
 
     /**
      * Creates the FSM.
      * @param modifierAccepted - True: the FSM will consider key modifiers.
      */
-    public constructor(modifierAccepted: boolean) {
-        super();
+    public constructor(modifierAccepted: boolean, dataHandler: KeyUpFSMHandler) {
+        super(dataHandler);
         this.modifiersAccepted = modifierAccepted;
-    }
 
-    public override buildFSM(dataHandler?: KeyUpFSMHandler): void {
-        if (this.states.length > 1) {
-            return;
-        }
-
-        super.buildFSM(dataHandler);
         const released: TerminalState = new TerminalState(this, "released");
 
         this.addState(released);
 
         const release = new KeyUpTransition(this.initState, released);
         release.action = (event: KeyboardEvent): void => {
-            dataHandler?.onKeyUp(event);
+            this.dataHandler?.onKeyUp(event);
         };
         release.isGuardOK = (event: KeyboardEvent): boolean => this.modifiersAccepted ||
             (!event.altKey && !event.ctrlKey && !event.shiftKey && !event.metaKey);
@@ -77,8 +70,6 @@ export class KeyUp extends InteractionBase<KeyData, KeyDataImpl, KeyUpFSM> {
             }
         };
 
-        super(fsm ?? new KeyUpFSM(modifierAccepted), new KeyDataImpl());
-
-        this.fsm.buildFSM(handler);
+        super(fsm ?? new KeyUpFSM(modifierAccepted, handler), new KeyDataImpl());
     }
 }

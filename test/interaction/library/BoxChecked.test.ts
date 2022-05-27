@@ -44,17 +44,6 @@ test("other event don't trigger the interaction CheckBox", () => {
     expect(handler.fsmStarts).not.toHaveBeenCalled();
 });
 
-test("build fsm twice does not work", () => {
-    const count = interaction.fsm.states.length;
-    interaction.fsm.buildFSM({
-        initToCheckHandler(): void {
-        },
-        reinitData(): void {
-        }
-    });
-    expect(interaction.fsm.states).toHaveLength(count);
-});
-
 test("cannot register non checkbox", () => {
     const w = document.createElement("div");
     jest.spyOn(w, "addEventListener");

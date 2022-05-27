@@ -17,12 +17,13 @@ import {StdState} from "../../src/impl/fsm/StdState";
 import {createMouseEvent, createTouchEvent} from "../interaction/StubEvents";
 import {mock} from "jest-mock-extended";
 import {MouseOverTransition} from "../../src/impl/fsm/MouseOverTransition";
+import type {FSMDataHandler} from "../../src/impl/fsm/FSMDataHandler";
 
 let tr: MouseOverTransition;
 let canvas: HTMLCanvasElement;
 
 beforeEach(() => {
-    tr = new MouseOverTransition(new StdState(mock<FSMImpl>(), "a"), new StdState(mock<FSMImpl>(), "b"));
+    tr = new MouseOverTransition(new StdState(mock<FSMImpl<FSMDataHandler>>(), "a"), new StdState(mock<FSMImpl<FSMDataHandler>>(), "b"));
     canvas = document.createElement("canvas");
 });
 

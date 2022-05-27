@@ -44,17 +44,6 @@ test("other event don't trigger the interaction ButtonPressed", () => {
     expect(handler.fsmStarts).not.toHaveBeenCalled();
 });
 
-test("build fsm twice does not work", () => {
-    const count = interaction.fsm.states.length;
-    interaction.fsm.buildFSM({
-        initToPressedHandler(): void {
-        },
-        reinitData(): void {
-        }
-    });
-    expect(interaction.fsm.states).toHaveLength(count);
-});
-
 test("cannot register non button", () => {
     const w = document.createElement("a");
     jest.spyOn(w, "addEventListener");

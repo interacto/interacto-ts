@@ -25,7 +25,7 @@ import {MouseLeaveTransition} from "../../fsm/MouseLeaveTransition";
 /**
  * The FSM for mouseout interactions
  */
-export class MouseLeaveFSM extends FSMImpl {
+export class MouseLeaveFSM extends FSMImpl<MouseLeaveFSMHandler> {
     /**
      * Indicates if event bubbling is enabled for the interaction
      */
@@ -34,17 +34,10 @@ export class MouseLeaveFSM extends FSMImpl {
     /**
      * Creates the FSM
      */
-    public constructor(withBubbling: boolean) {
-        super();
+    public constructor(withBubbling: boolean, dataHandler: MouseLeaveFSMHandler) {
+        super(dataHandler);
         this.withBubbling = withBubbling;
-    }
 
-    public override buildFSM(dataHandler?: MouseLeaveFSMHandler): void {
-        if (this.states.length > 1) {
-            return;
-        }
-
-        super.buildFSM(dataHandler);
         const exited = new TerminalState(this, "exited");
         this.addState(exited);
 
@@ -55,7 +48,7 @@ export class MouseLeaveFSM extends FSMImpl {
             exit = new MouseLeaveTransition(this.initState, exited);
         }
         exit.action = (event: MouseEvent): void => {
-            dataHandler?.onExit(event);
+            this.dataHandler?.onExit(event);
         };
     }
 }
@@ -78,8 +71,6 @@ export class MouseLeave extends InteractionBase<PointData, PointDataImpl, MouseL
             }
         };
 
-        super(new MouseLeaveFSM(withBubbling), new PointDataImpl());
-
-        this.fsm.buildFSM(handler);
+        super(new MouseLeaveFSM(withBubbling, handler), new PointDataImpl());
     }
 }

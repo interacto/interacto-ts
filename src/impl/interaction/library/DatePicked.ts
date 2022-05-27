@@ -21,23 +21,16 @@ import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {WidgetDataImpl} from "../WidgetDataImpl";
 
-class DatePickedFSM extends FSMImpl {
-    public constructor() {
-        super();
-    }
+class DatePickedFSM extends FSMImpl<DatePickedHandler> {
+    public constructor(dataHandler: DatePickedHandler) {
+        super(dataHandler);
 
-    public override buildFSM(dataHandler: DatePickedHandler): void {
-        if (this.states.length > 1) {
-            return;
-        }
-
-        super.buildFSM(dataHandler);
         const picked: TerminalState = new TerminalState(this, "picked");
         this.addState(picked);
 
         const tr = new DatePickedTransition(this.initState, picked);
         tr.action = (event: Event): void => {
-            dataHandler.initToPickedHandler(event);
+            this.dataHandler?.initToPickedHandler(event);
         };
     }
 }
@@ -47,10 +40,10 @@ interface DatePickedHandler extends FSMDataHandler {
     initToPickedHandler(event: Event): void;
 }
 
+
 /**
  * A user interaction for Date input.
  */
-
 export class DatePicked extends InteractionBase<WidgetData<HTMLInputElement>, WidgetDataImpl<HTMLInputElement>, DatePickedFSM> {
     /**
      * Creates the interaction.
@@ -65,9 +58,7 @@ export class DatePicked extends InteractionBase<WidgetData<HTMLInputElement>, Wi
             }
         };
 
-        super(new DatePickedFSM(), new WidgetDataImpl<HTMLInputElement>());
-
-        this.fsm.buildFSM(handler);
+        super(new DatePickedFSM(handler), new WidgetDataImpl<HTMLInputElement>());
     }
 
     public override onNewNodeRegistered(node: EventTarget): void {

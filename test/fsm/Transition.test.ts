@@ -17,6 +17,7 @@ import type {TransitionBase} from "../../src/impl/fsm/TransitionBase";
 import type {FSMImpl} from "../../src/impl/fsm/FSMImpl";
 import {StubTransitionOK} from "./StubTransitionOK";
 import {mock} from "jest-mock-extended";
+import type {FSMDataHandler} from "../../src/impl/fsm/FSMDataHandler";
 
 let tr: TransitionBase<Event>;
 let state1: StdState;
@@ -24,7 +25,7 @@ let state2: StdState;
 
 
 beforeEach(() => {
-    const fsm: FSMImpl = mock<FSMImpl>();
+    const fsm: FSMImpl<FSMDataHandler> = mock<FSMImpl<FSMDataHandler>>();
     state1 = new StdState(fsm, "s1");
     state2 = new StdState(fsm, "s2");
     tr = new StubTransitionOK(state1, state2);

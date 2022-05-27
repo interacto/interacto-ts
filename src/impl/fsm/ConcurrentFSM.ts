@@ -15,11 +15,12 @@
 import type {FSM} from "../../api/fsm/FSM";
 import type {FSMHandler} from "../../api/fsm/FSMHandler";
 import {FSMImpl} from "./FSMImpl";
+import type {FSMDataHandler} from "./FSMDataHandler";
 
 /**
  * A concurrent FSM: an FSM that contains multiple FSMs that run concurrently.
  */
-export class ConcurrentFSM<F extends FSM> extends FSMImpl {
+export class ConcurrentFSM<F extends FSM, T extends FSMDataHandler> extends FSMImpl<T> {
     /**
      * The main fsms
      */
@@ -38,8 +39,9 @@ export class ConcurrentFSM<F extends FSM> extends FSMImpl {
      * @param secondaries - The secondary FSMs. Not considered in some steps.
      * @param totalReinit - Defines whether a cancellation of one of the fsms, reinits all the fsms.
      */
-    public constructor(fsms: ReadonlyArray<F>, secondaries: ReadonlyArray<F> = [], totalReinit: boolean = false) {
-        super();
+    public constructor(fsms: ReadonlyArray<F>, secondaries: ReadonlyArray<F> = [], totalReinit: boolean = false,
+                       dataHandler?: T) {
+        super(dataHandler);
 
         this.totalReinit = totalReinit;
 

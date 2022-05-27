@@ -23,26 +23,19 @@ import type {WheelData} from "../../../api/interaction/WheelData";
 /**
  * The FSM for wheel interactions
  */
-export class WheelFSM extends FSMImpl {
+export class WheelFSM extends FSMImpl<WheelFSMHandler> {
     /**
      * Creates the FSM
      */
-    public constructor() {
-        super();
-    }
+    public constructor(dataHandler: WheelFSMHandler) {
+        super(dataHandler);
 
-    public override buildFSM(dataHandler?: WheelFSMHandler): void {
-        if (this.states.length > 1) {
-            return;
-        }
-
-        super.buildFSM(dataHandler);
         const moved = new TerminalState(this, "moved");
         this.addState(moved);
 
         const move = new WheelTransition(this.initState, moved);
         move.action = (event: WheelEvent): void => {
-            dataHandler?.initToMoved(event);
+            this.dataHandler?.initToMoved(event);
         };
     }
 }
@@ -65,8 +58,6 @@ export class Wheel extends InteractionBase<WheelData, WheelDataImpl, WheelFSM> {
             }
         };
 
-        super(fsm ?? new WheelFSM(), data ?? new WheelDataImpl());
-
-        this.fsm.buildFSM(handler);
+        super(fsm ?? new WheelFSM(handler), data ?? new WheelDataImpl());
     }
 }

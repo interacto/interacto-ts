@@ -33,12 +33,6 @@ beforeEach(() => {
     canvas = document.createElement("canvas");
 });
 
-test("build fsm twice does not work", () => {
-    const count = interaction.fsm.states.length;
-    interaction.fsm.buildFSM();
-    expect(interaction.fsm.states).toHaveLength(count);
-});
-
 test("wheel event on a element starts and stops the Wheel interaction", () => {
     interaction.registerToNodes([canvas]);
     robot().wheel(canvas);

@@ -18,10 +18,11 @@ import {StdState} from "../../src/impl/fsm/StdState";
 import {WidgetTransition} from "../../src/impl/fsm/WidgetTransition";
 import {mock} from "jest-mock-extended";
 import type {EventType} from "../../src/api/fsm/EventType";
+import type {FSMDataHandler} from "../../src/impl/fsm/FSMDataHandler";
 
 class WTransition extends WidgetTransition<string> {
     public constructor() {
-        super(new StdState(mock<FSMImpl>(), "a"), new StdState(mock<FSMImpl>(), "b"));
+        super(new StdState(mock<FSMImpl<FSMDataHandler>>(), "a"), new StdState(mock<FSMImpl<FSMDataHandler>>(), "b"));
     }
 
     public accept(event: Event): event is Event {
