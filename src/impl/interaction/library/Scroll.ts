@@ -44,6 +44,7 @@ interface ScrollFSMHandler extends FSMDataHandler {
     initToScroll(event: Event): void;
 }
 
+
 /**
  * A user interaction for scrolling using a mouse wheel. Consists of a single scroll.
  */
@@ -51,12 +52,8 @@ export class Scroll extends InteractionBase<ScrollData, ScrollDataImpl, ScrollFS
     /**
      * Creates the interaction.
      */
-    private readonly handler: ScrollFSMHandler;
-
     public constructor() {
-        super(new ScrollFSM(), new ScrollDataImpl());
-
-        this.handler = {
+        const handler: ScrollFSMHandler = {
             "initToScroll": (event: Event): void => {
                 this._data.setScrollData(event);
             },
@@ -65,6 +62,8 @@ export class Scroll extends InteractionBase<ScrollData, ScrollDataImpl, ScrollFS
             }
         };
 
-        this.fsm.buildFSM(this.handler);
+        super(new ScrollFSM(), new ScrollDataImpl());
+
+        this.fsm.buildFSM(handler);
     }
 }

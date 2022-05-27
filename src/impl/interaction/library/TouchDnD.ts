@@ -165,8 +165,6 @@ export interface TouchDnDFSMHandler extends FSMDataHandler {
  * A touch interaction (that works as a DnD)
  */
 export class TouchDnD extends InteractionBase<SrcTgtPointsData<TouchData>, SrcTgtTouchDataImpl, TouchDnDFSM> {
-    private readonly handler: TouchDnDFSMHandler;
-
     /**
      * Creates the interaction.
      * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
@@ -176,9 +174,7 @@ export class TouchDnD extends InteractionBase<SrcTgtPointsData<TouchData>, SrcTg
      * @param fsm - The optional FSM provided for the interaction
      */
     public constructor(cancellable: boolean, movementRequired: boolean = true, fsm?: TouchDnDFSM) {
-        super(fsm ?? new TouchDnDFSM(cancellable, movementRequired), new SrcTgtTouchDataImpl());
-
-        this.handler = {
+        const handler: TouchDnDFSMHandler = {
             "onTouch": (evt: TouchEvent): void => {
                 const touch: Touch = evt.changedTouches[0];
                 const all = [...evt.touches];
@@ -196,7 +192,9 @@ export class TouchDnD extends InteractionBase<SrcTgtPointsData<TouchData>, SrcTg
             }
         };
 
-        this.fsm.buildFSM(this.handler);
+        super(fsm ?? new TouchDnDFSM(cancellable, movementRequired), new SrcTgtTouchDataImpl());
+
+        this.fsm.buildFSM(handler);
     }
 
     private setTgtData(evt: TouchEvent): void {

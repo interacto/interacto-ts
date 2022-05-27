@@ -65,15 +65,11 @@ interface MouseLeaveFSMHandler extends FSMDataHandler {
 }
 
 export class MouseLeave extends InteractionBase<PointData, PointDataImpl, MouseLeaveFSM> {
-    private readonly handler: MouseLeaveFSMHandler;
-
     /**
      * Creates the interaction.
      */
     public constructor(withBubbling: boolean) {
-        super(new MouseLeaveFSM(withBubbling), new PointDataImpl());
-
-        this.handler = {
+        const handler: MouseLeaveFSMHandler = {
             "onExit": (evt: MouseEvent): void => {
                 this._data.copy(evt);
             },
@@ -82,6 +78,8 @@ export class MouseLeave extends InteractionBase<PointData, PointDataImpl, MouseL
             }
         };
 
-        this.fsm.buildFSM(this.handler);
+        super(new MouseLeaveFSM(withBubbling), new PointDataImpl());
+
+        this.fsm.buildFSM(handler);
     }
 }

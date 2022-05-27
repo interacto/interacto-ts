@@ -65,15 +65,11 @@ interface MouseEnterFSMHandler extends FSMDataHandler {
 }
 
 export class MouseEnter extends InteractionBase<PointData, PointDataImpl, MouseEnterFSM> {
-    private readonly handler: MouseEnterFSMHandler;
-
     /**
      * Creates the interaction.
      */
     public constructor(withBubbling: boolean) {
-        super(new MouseEnterFSM(withBubbling), new PointDataImpl());
-
-        this.handler = {
+        const handler: MouseEnterFSMHandler = {
             "onEnter": (evt: MouseEvent): void => {
                 this._data.copy(evt);
             },
@@ -82,6 +78,8 @@ export class MouseEnter extends InteractionBase<PointData, PointDataImpl, MouseE
             }
         };
 
-        this.fsm.buildFSM(this.handler);
+        super(new MouseEnterFSM(withBubbling), new PointDataImpl());
+
+        this.fsm.buildFSM(handler);
     }
 }

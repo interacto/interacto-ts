@@ -68,12 +68,8 @@ interface KeyDownFSMHandler extends FSMDataHandler {
  */
 export class KeyDown extends InteractionBase<KeyData, KeyDataImpl, KeyDownFSM> {
 
-    private readonly handler: KeyDownFSMHandler;
-
     public constructor(modifierAccepted: boolean, fsm?: KeyDownFSM) {
-        super(fsm ?? new KeyDownFSM(modifierAccepted), new KeyDataImpl());
-
-        this.handler = {
+        const handler: KeyDownFSMHandler = {
             "onKeyPressed": (event: KeyboardEvent): void => {
                 this._data.copy(event);
             },
@@ -82,6 +78,8 @@ export class KeyDown extends InteractionBase<KeyData, KeyDataImpl, KeyDownFSM> {
             }
         };
 
-        this.fsm.buildFSM(this.handler);
+        super(fsm ?? new KeyDownFSM(modifierAccepted), new KeyDataImpl());
+
+        this.fsm.buildFSM(handler);
     }
 }

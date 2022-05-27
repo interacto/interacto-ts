@@ -96,17 +96,13 @@ interface ClicksFSMHandler extends FSMDataHandler {
 
 
 export class Clicks extends InteractionBase<PointsData, PointsDataImpl, ClicksFSM> {
-    private readonly handler: ClicksFSMHandler;
-
     /**
      * Creates the clicks interaction
      * @param numberClicks - The number of clicks expected to end the interaction.
      * If this number is not reached after a timeout, the interaction is cancelled.
      */
     public constructor(numberClicks: number) {
-        super(new ClicksFSM(numberClicks), new PointsDataImpl());
-
-        this.handler = {
+        const handler: ClicksFSMHandler = {
             "click": (evt: MouseEvent): void => {
                 const pt = new PointDataImpl();
                 pt.copy(evt);
@@ -117,6 +113,8 @@ export class Clicks extends InteractionBase<PointsData, PointsDataImpl, ClicksFS
             }
         };
 
-        this.fsm.buildFSM(this.handler);
+        super(new ClicksFSM(numberClicks), new PointsDataImpl());
+
+        this.fsm.buildFSM(handler);
     }
 }

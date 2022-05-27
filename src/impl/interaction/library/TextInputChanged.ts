@@ -79,12 +79,11 @@ interface TextInputChangedHandler extends FSMDataHandler {
  */
 export class TextInputChanged extends InteractionBase<WidgetData<HTMLInputElement | HTMLTextAreaElement>,
 WidgetDataImpl<HTMLInputElement | HTMLTextAreaElement>, TextInputChangedFSM> {
-    private readonly handler: TextInputChangedHandler;
 
     public constructor(timeGap?: number) {
         super(new TextInputChangedFSM(timeGap), new WidgetDataImpl<HTMLInputElement | HTMLTextAreaElement>());
 
-        this.handler = {
+        const handler: TextInputChangedHandler = {
             "initToChangedHandler": (event: Event): void => {
                 this._data.copy(event);
             },
@@ -93,7 +92,7 @@ WidgetDataImpl<HTMLInputElement | HTMLTextAreaElement>, TextInputChangedFSM> {
             }
         };
 
-        this.fsm.buildFSM(this.handler);
+        this.fsm.buildFSM(handler);
     }
 
     public override onNewNodeRegistered(node: EventTarget): void {

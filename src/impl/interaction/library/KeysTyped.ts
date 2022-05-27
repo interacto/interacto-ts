@@ -86,8 +86,6 @@ export class KeysTyped extends InteractionBase<KeysData, KeysDataImpl, KeysTyped
      * Creates the user interaction.
      */
     public constructor(logger?: Logger) {
-        super(new KeysTypedFSM(), new KeysDataImpl(), logger);
-
         const handler: KeyTypedFSMHandler = {
             "onKeyTyped": (event: KeyboardEvent): void => {
                 this._data.addKey(event);
@@ -96,6 +94,8 @@ export class KeysTyped extends InteractionBase<KeysData, KeysDataImpl, KeysTyped
                 this.reinitData();
             }
         };
+
+        super(new KeysTypedFSM(), new KeysDataImpl(), logger);
 
         this.fsm.buildFSM(handler);
     }

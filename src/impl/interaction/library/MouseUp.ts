@@ -47,12 +47,8 @@ export class MouseUp extends InteractionBase<PointData, PointDataImpl, MouseUpFS
     /**
      * Creates the interaction.
      */
-    private readonly handler: MouseUpFSMHandler;
-
     public constructor() {
-        super(new MouseUpFSM(), new PointDataImpl());
-
-        this.handler = {
+        const handler: MouseUpFSMHandler = {
             "initToPress": (evt: MouseEvent): void => {
                 this._data.copy(evt);
             },
@@ -61,6 +57,8 @@ export class MouseUp extends InteractionBase<PointData, PointDataImpl, MouseUpFS
             }
         };
 
-        this.fsm.buildFSM(this.handler);
+        super(new MouseUpFSM(), new PointDataImpl());
+
+        this.fsm.buildFSM(handler);
     }
 }

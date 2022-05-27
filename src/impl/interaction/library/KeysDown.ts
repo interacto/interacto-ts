@@ -76,15 +76,11 @@ interface KeysDownFSMHandler extends FSMDataHandler {
  * Starts on a key pressure. Ends as soon as one of the pressed keys is released.
  */
 export class KeysDown extends InteractionBase<KeysData, KeysDataImpl, KeysDownFSM> {
-    private readonly handler: KeysDownFSMHandler;
-
     /**
      * Creates the user interaction.
      */
     public constructor() {
-        super(new KeysDownFSM(), new KeysDataImpl());
-
-        this.handler = {
+        const handler: KeysDownFSMHandler = {
             "onKeyPressed": (event: KeyboardEvent): void => {
                 this._data.addKey(event);
             },
@@ -93,6 +89,8 @@ export class KeysDown extends InteractionBase<KeysData, KeysDataImpl, KeysDownFS
             }
         };
 
-        this.fsm.buildFSM(this.handler);
+        super(new KeysDownFSM(), new KeysDataImpl());
+
+        this.fsm.buildFSM(handler);
     }
 }

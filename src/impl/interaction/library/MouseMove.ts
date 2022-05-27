@@ -53,15 +53,11 @@ interface MouseMoveFSMHandler extends FSMDataHandler {
 }
 
 export class MouseMove extends InteractionBase<PointData, PointDataImpl, MouseMoveFSM> {
-    private readonly handler: MouseMoveFSMHandler;
-
     /**
      * Creates the interaction.
      */
     public constructor() {
-        super(new MouseMoveFSM(), new PointDataImpl());
-
-        this.handler = {
+        const handler: MouseMoveFSMHandler = {
             "onMove": (evt: MouseEvent): void => {
                 this._data.copy(evt);
             },
@@ -70,6 +66,8 @@ export class MouseMove extends InteractionBase<PointData, PointDataImpl, MouseMo
             }
         };
 
-        this.fsm.buildFSM(this.handler);
+        super(new MouseMoveFSM(), new PointDataImpl());
+
+        this.fsm.buildFSM(handler);
     }
 }

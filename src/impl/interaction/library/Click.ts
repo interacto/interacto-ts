@@ -71,15 +71,11 @@ interface ClickFSMHandler extends FSMDataHandler {
 }
 
 export class Click extends InteractionBase<PointData, PointDataImpl, ClickFSM> {
-    private readonly handler: ClickFSMHandler;
-
     /**
      * Creates the interaction.
      */
     public constructor(fsm?: ClickFSM, data?: PointDataImpl) {
-        super(fsm ?? new ClickFSM(), data ?? new PointDataImpl());
-
-        this.handler = {
+        const handler: ClickFSMHandler = {
             "initToClicked": (evt: MouseEvent): void => {
                 this._data.copy(evt);
             },
@@ -88,6 +84,8 @@ export class Click extends InteractionBase<PointData, PointDataImpl, ClickFSM> {
             }
         };
 
-        this.fsm.buildFSM(this.handler);
+        super(fsm ?? new ClickFSM(), data ?? new PointDataImpl());
+
+        this.fsm.buildFSM(handler);
     }
 }

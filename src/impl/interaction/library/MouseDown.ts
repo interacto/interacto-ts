@@ -47,12 +47,8 @@ export class MouseDown extends InteractionBase<PointData, PointDataImpl, MouseDo
     /**
      * Creates the interaction.
      */
-    private readonly handler: MouseDownFSMHandler;
-
     public constructor() {
-        super(new MouseDownFSM(), new PointDataImpl());
-
-        this.handler = {
+        const handler: MouseDownFSMHandler = {
             "initToPress": (evt: MouseEvent): void => {
                 this._data.copy(evt);
             },
@@ -61,6 +57,8 @@ export class MouseDown extends InteractionBase<PointData, PointDataImpl, MouseDo
             }
         };
 
-        this.fsm.buildFSM(this.handler);
+        super(new MouseDownFSM(), new PointDataImpl());
+
+        this.fsm.buildFSM(handler);
     }
 }

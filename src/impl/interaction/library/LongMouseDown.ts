@@ -90,17 +90,13 @@ interface LongMouseDownFSMHandler extends FSMDataHandler {
 }
 
 export class LongMouseDown extends InteractionBase<PointData, PointDataImpl, LongMouseDownFSM> {
-    private readonly handler: LongMouseDownFSMHandler;
-
     /**
      * Creates the long press interaction
      * @param duration - The duration of the pressure required to end the user interaction (in ms)
      * If this duration is not reached, the interaction is cancelled.
      */
     public constructor(duration: number) {
-        super(new LongMouseDownFSM(duration), new PointDataImpl());
-
-        this.handler = {
+        const handler: LongMouseDownFSMHandler = {
             "press": (evt: MouseEvent): void => {
                 this._data.copy(evt);
             },
@@ -109,6 +105,8 @@ export class LongMouseDown extends InteractionBase<PointData, PointDataImpl, Lon
             }
         };
 
-        this.fsm.buildFSM(this.handler);
+        super(new LongMouseDownFSM(duration), new PointDataImpl());
+
+        this.fsm.buildFSM(handler);
     }
 }

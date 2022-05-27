@@ -121,15 +121,11 @@ interface DnDFSMHandler extends FSMDataHandler {
  * A user interaction for Drag and Drop
  */
 export class DnD extends InteractionBase<SrcTgtPointsData<PointData>, SrcTgtPointsDataImpl, DnDFSM> {
-    private readonly handler: DnDFSMHandler;
-
     /**
      * Creates the interaction.
      */
     public constructor(cancellable: boolean) {
-        super(new DnDFSM(cancellable), new SrcTgtPointsDataImpl());
-
-        this.handler = {
+        const handler: DnDFSMHandler = {
             "onPress": (evt: MouseEvent): void => {
                 this._data.copySrc(evt);
                 this._data.copyTgt(evt);
@@ -145,6 +141,8 @@ export class DnD extends InteractionBase<SrcTgtPointsData<PointData>, SrcTgtPoin
             }
         };
 
-        this.fsm.buildFSM(this.handler);
+        super(new DnDFSM(cancellable), new SrcTgtPointsDataImpl());
+
+        this.fsm.buildFSM(handler);
     }
 }

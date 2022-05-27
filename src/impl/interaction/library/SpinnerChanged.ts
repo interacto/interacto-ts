@@ -81,15 +81,11 @@ interface SpinnerChangedHandler extends FSMDataHandler {
  * A user interaction for Number input.
  */
 export class SpinnerChanged extends InteractionBase<WidgetData<HTMLInputElement>, WidgetDataImpl<HTMLInputElement>, SpinnerChangedFSM> {
-    private readonly handler: SpinnerChangedHandler;
-
     /**
      * Creates the interaction.
      */
     public constructor() {
-        super(new SpinnerChangedFSM(), new WidgetDataImpl<HTMLInputElement>());
-
-        this.handler = {
+        const handler: SpinnerChangedHandler = {
             "initToChangedHandler": (event: Event): void => {
                 this._data.copy(event);
             },
@@ -98,7 +94,9 @@ export class SpinnerChanged extends InteractionBase<WidgetData<HTMLInputElement>
             }
         };
 
-        this.fsm.buildFSM(this.handler);
+        super(new SpinnerChangedFSM(), new WidgetDataImpl<HTMLInputElement>());
+
+        this.fsm.buildFSM(handler);
     }
 
     public override onNewNodeRegistered(node: EventTarget): void {

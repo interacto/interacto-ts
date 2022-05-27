@@ -55,15 +55,11 @@ interface ButtonPressedFSMHandler extends FSMDataHandler {
  * A user interaction for buttons.
  */
 export class ButtonPressed extends InteractionBase<WidgetData<HTMLButtonElement>, WidgetDataImpl<HTMLButtonElement>, ButtonPressedFSM> {
-    private readonly handler: ButtonPressedFSMHandler;
-
     /**
      * Creates the interaction.
      */
     public constructor() {
-        super(new ButtonPressedFSM(), new WidgetDataImpl<HTMLButtonElement>());
-
-        this.handler = {
+        const handler: ButtonPressedFSMHandler = {
             "initToPressedHandler": (event: InputEvent): void => {
                 this._data.copy(event);
             },
@@ -72,7 +68,9 @@ export class ButtonPressed extends InteractionBase<WidgetData<HTMLButtonElement>
             }
         };
 
-        this.fsm.buildFSM(this.handler);
+        super(new ButtonPressedFSM(), new WidgetDataImpl<HTMLButtonElement>());
+
+        this.fsm.buildFSM(handler);
     }
 
     public override onNewNodeRegistered(node: EventTarget): void {

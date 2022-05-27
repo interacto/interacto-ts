@@ -67,13 +67,8 @@ interface KeyUpFSMHandler extends FSMDataHandler {
  * A user interaction for releasing a key on a keyboard
  */
 export class KeyUp extends InteractionBase<KeyData, KeyDataImpl, KeyUpFSM> {
-
-    private readonly handler: KeyUpFSMHandler;
-
     public constructor(modifierAccepted: boolean, fsm?: KeyUpFSM) {
-        super(fsm ?? new KeyUpFSM(modifierAccepted), new KeyDataImpl());
-
-        this.handler = {
+        const handler: KeyUpFSMHandler = {
             "onKeyUp": (event: KeyboardEvent): void => {
                 this._data.copy(event);
             },
@@ -82,6 +77,8 @@ export class KeyUp extends InteractionBase<KeyData, KeyDataImpl, KeyUpFSM> {
             }
         };
 
-        this.fsm.buildFSM(this.handler);
+        super(fsm ?? new KeyUpFSM(modifierAccepted), new KeyDataImpl());
+
+        this.fsm.buildFSM(handler);
     }
 }

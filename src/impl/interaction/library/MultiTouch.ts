@@ -91,17 +91,13 @@ class MultiTouchFSM extends ConcurrentFSM<TouchDnDFSM> {
  * A multi-touch ends when the number of required touches is greater than the number of touches.
  */
 export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouchDataImpl, MultiTouchFSM> {
-    private readonly handler: TouchDnDFSMHandler;
-
     /**
      * Creates the multi-touch interaction
      * @param nbTouches - The number of touches.
      * @param strict - Defines whether too many touches than expected cancelled the ongoing interaction
      */
     public constructor(nbTouches: number, strict: boolean) {
-        super(new MultiTouchFSM(nbTouches, strict), new MultiTouchDataImpl());
-
-        this.handler = {
+        const handler: TouchDnDFSMHandler = {
             "onTouch": (event: TouchEvent): void => {
                 // eslint-disable-next-line @typescript-eslint/prefer-for-of
                 for (let i = 0; i < event.changedTouches.length; i++) {
@@ -140,6 +136,8 @@ export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouch
             }
         };
 
-        this.fsm.buildFSM(this.handler);
+        super(new MultiTouchFSM(nbTouches, strict), new MultiTouchDataImpl());
+
+        this.fsm.buildFSM(handler);
     }
 }

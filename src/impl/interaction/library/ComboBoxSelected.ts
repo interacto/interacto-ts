@@ -52,15 +52,11 @@ interface ComboBoxSelectedHandler extends FSMDataHandler {
  */
 
 export class ComboBoxSelected extends InteractionBase<WidgetData<HTMLSelectElement>, WidgetDataImpl<HTMLSelectElement>, ComboBoxSelectedFSM> {
-    private readonly handler: ComboBoxSelectedHandler;
-
     /**
      * Creates the interaction.
      */
     public constructor() {
-        super(new ComboBoxSelectedFSM(), new WidgetDataImpl<HTMLSelectElement>());
-
-        this.handler = {
+        const handler: ComboBoxSelectedHandler = {
             "initToSelectedHandler": (event: Event): void => {
                 this._data.copy(event);
             },
@@ -69,7 +65,9 @@ export class ComboBoxSelected extends InteractionBase<WidgetData<HTMLSelectEleme
             }
         };
 
-        this.fsm.buildFSM(this.handler);
+        super(new ComboBoxSelectedFSM(), new WidgetDataImpl<HTMLSelectElement>());
+
+        this.fsm.buildFSM(handler);
     }
 
     public override onNewNodeRegistered(node: EventTarget): void {

@@ -67,15 +67,11 @@ interface KeyTypedFSMHandler extends FSMDataHandler {
  * A user interaction for pressing, then releasing a keyboard key
  */
 export class KeyTyped extends InteractionBase<KeyData, KeyDataImpl, KeyTypedFSM> {
-    private readonly handler: KeyTypedFSMHandler;
-
     /**
      * Creates the user interaction.
      */
     public constructor() {
-        super(new KeyTypedFSM(), new KeyDataImpl());
-
-        this.handler = {
+        const handler: KeyTypedFSMHandler = {
             "onKeyTyped": (event: KeyboardEvent): void => {
                 this._data.copy(event);
             },
@@ -84,6 +80,8 @@ export class KeyTyped extends InteractionBase<KeyData, KeyDataImpl, KeyTypedFSM>
             }
         };
 
-        this.fsm.buildFSM(this.handler);
+        super(new KeyTypedFSM(), new KeyDataImpl());
+
+        this.fsm.buildFSM(handler);
     }
 }

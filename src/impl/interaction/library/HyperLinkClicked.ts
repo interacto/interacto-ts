@@ -51,15 +51,11 @@ interface HyperLinkClickedFSMHandler extends FSMDataHandler {
  * A user interaction for CheckBox
  */
 export class HyperLinkClicked extends InteractionBase<WidgetData<HTMLAnchorElement>, WidgetDataImpl<HTMLAnchorElement>, HyperLinkClickedFSM> {
-    private readonly handler: HyperLinkClickedFSMHandler;
-
     /**
      * Creates the interaction.
      */
     public constructor() {
-        super(new HyperLinkClickedFSM(), new WidgetDataImpl<HTMLAnchorElement>());
-
-        this.handler = {
+        const handler: HyperLinkClickedFSMHandler = {
             "initToClickedHandler": (event: Event): void => {
                 this._data.copy(event);
             },
@@ -68,7 +64,9 @@ export class HyperLinkClicked extends InteractionBase<WidgetData<HTMLAnchorEleme
             }
         };
 
-        this.fsm.buildFSM(this.handler);
+        super(new HyperLinkClickedFSM(), new WidgetDataImpl<HTMLAnchorElement>());
+
+        this.fsm.buildFSM(handler);
     }
 
     public override onNewNodeRegistered(node: EventTarget): void {

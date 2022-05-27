@@ -52,15 +52,11 @@ interface WheelFSMHandler extends FSMDataHandler {
 }
 
 export class Wheel extends InteractionBase<WheelData, WheelDataImpl, WheelFSM> {
-    private readonly handler: WheelFSMHandler;
-
     /**
      * Creates the interaction.
      */
     public constructor(fsm?: WheelFSM, data?: WheelDataImpl) {
-        super(fsm ?? new WheelFSM(), data ?? new WheelDataImpl());
-
-        this.handler = {
+        const handler: WheelFSMHandler = {
             "initToMoved": (evt: WheelEvent): void => {
                 this._data.copy(evt);
             },
@@ -69,6 +65,8 @@ export class Wheel extends InteractionBase<WheelData, WheelDataImpl, WheelFSM> {
             }
         };
 
-        this.fsm.buildFSM(this.handler);
+        super(fsm ?? new WheelFSM(), data ?? new WheelDataImpl());
+
+        this.fsm.buildFSM(handler);
     }
 }

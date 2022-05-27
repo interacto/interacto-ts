@@ -90,17 +90,13 @@ interface LongTouchFSMHandler extends FSMDataHandler {
 }
 
 export class LongTouch extends InteractionBase<TouchData, TouchDataImpl, LongTouchFSM> {
-    private readonly handler: LongTouchFSMHandler;
-
     /**
      * Creates the long tap interaction
      * @param duration - The duration of the touch required to ends the user interaction
      * If this duration is not reached, the interaction is cancelled.
      */
     public constructor(duration: number) {
-        super(new LongTouchFSM(duration), new TouchDataImpl());
-
-        this.handler = {
+        const handler: LongTouchFSMHandler = {
             "tap": (evt: TouchEvent): void => {
                 if (evt.changedTouches.length > 0) {
                     this._data.copy(TouchDataImpl.mergeTouchEventData(evt.changedTouches[0], evt, [...evt.touches]));
@@ -111,6 +107,8 @@ export class LongTouch extends InteractionBase<TouchData, TouchDataImpl, LongTou
             }
         };
 
-        this.fsm.buildFSM(this.handler);
+        super(new LongTouchFSM(duration), new TouchDataImpl());
+
+        this.fsm.buildFSM(handler);
     }
 }

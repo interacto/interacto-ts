@@ -52,15 +52,11 @@ interface DatePickedHandler extends FSMDataHandler {
  */
 
 export class DatePicked extends InteractionBase<WidgetData<HTMLInputElement>, WidgetDataImpl<HTMLInputElement>, DatePickedFSM> {
-    private readonly handler: DatePickedHandler;
-
     /**
      * Creates the interaction.
      */
     public constructor() {
-        super(new DatePickedFSM(), new WidgetDataImpl<HTMLInputElement>());
-
-        this.handler = {
+        const handler: DatePickedHandler = {
             "initToPickedHandler": (event: Event): void => {
                 this._data.copy(event);
             },
@@ -69,7 +65,9 @@ export class DatePicked extends InteractionBase<WidgetData<HTMLInputElement>, Wi
             }
         };
 
-        this.fsm.buildFSM(this.handler);
+        super(new DatePickedFSM(), new WidgetDataImpl<HTMLInputElement>());
+
+        this.fsm.buildFSM(handler);
     }
 
     public override onNewNodeRegistered(node: EventTarget): void {

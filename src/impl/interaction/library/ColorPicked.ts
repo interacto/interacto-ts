@@ -51,15 +51,11 @@ interface ColorPickedHandler extends FSMDataHandler {
  */
 
 export class ColorPicked extends InteractionBase<WidgetData<HTMLInputElement>, WidgetDataImpl<HTMLInputElement>, ColorPickedFSM> {
-    private readonly handler: ColorPickedHandler;
-
     /**
      * Creates the interaction.
      */
     public constructor() {
-        super(new ColorPickedFSM(), new WidgetDataImpl<HTMLInputElement>());
-
-        this.handler = {
+        const handler: ColorPickedHandler = {
             "initToPickedHandler": (event: Event): void => {
                 this._data.copy(event);
             },
@@ -68,7 +64,9 @@ export class ColorPicked extends InteractionBase<WidgetData<HTMLInputElement>, W
             }
         };
 
-        this.fsm.buildFSM(this.handler);
+        super(new ColorPickedFSM(), new WidgetDataImpl<HTMLInputElement>());
+
+        this.fsm.buildFSM(handler);
     }
 
     public override onNewNodeRegistered(node: EventTarget): void {
