@@ -15,9 +15,6 @@
 import {InteractionBase} from "../InteractionBase";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import {TerminalState} from "../../fsm/TerminalState";
-import {StdState} from "../../fsm/StdState";
-import {CancellingState} from "../../fsm/CancellingState";
 import type {TapData} from "../../../api/interaction/TapData";
 import {TouchReleaseTransition} from "../../fsm/TouchReleaseTransition";
 import {TapDataImpl} from "../TapDataImpl";
@@ -44,45 +41,40 @@ class TapFSM extends FSMImpl<TapFSMHandler> {
         this.nbTaps = nbTaps;
         this.countTaps = 0;
 
-        const down = new StdState(this, "down");
-        const up = new StdState(this, "up");
-        const ended = new TerminalState(this, "ended");
-        const cancelled = new CancellingState(this, "cancelled");
-        this.addState(down);
-        this.addState(up);
-        this.addState(ended);
-        this.addState(cancelled);
-        const pressureAction = (event: TouchEvent): void => {
+        const down = this.addStdState("down");
+        const up = this.addStdState("up");
+        const cancelled = this.addCancellingState("cancelled");
+        const action = (event: TouchEvent): void => {
             this.touchID = event.changedTouches[0].identifier;
             this.countTaps++;
             this.dataHandler?.tap(event);
         };
-        const press1 = new TouchPressureTransition(this.initState, down);
-        press1.action = pressureAction;
 
-        const move = new TouchMoveTransition(down, cancelled);
-        move.isGuardOK = (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.touchID;
+        new TouchPressureTransition(this.initState, down, action);
+        new TouchPressureTransition(up, down, action);
+
+        new TouchMoveTransition(down, cancelled, undefined,
+            (evt: TouchEvent): boolean => evt.changedTouches[0].identifier === this.touchID);
 
         // No multi-touch
-        const noMulti = new TouchPressureTransition(down, cancelled);
-        noMulti.isGuardOK = (event: TouchEvent): boolean => [...event.touches].filter(t => t.identifier === this.touchID).length > 0;
+        new TouchPressureTransition(down, cancelled, undefined,
+            (evt: TouchEvent): boolean => [...evt.touches].filter(t => t.identifier === this.touchID).length > 0);
 
         // Required to clean touch events lost by the browser
-        const cleanEvent = new TouchPressureTransition(down, down);
-        // To detect the event is lost, checking it is not part of the touches any more
-        cleanEvent.isGuardOK = (event: TouchEvent): boolean => [...event.touches].filter(t => t.identifier === this.touchID).length === 0;
-        // Then replacing the current tap (but not increment)
-        cleanEvent.action = (event: TouchEvent): void => {
-            this.touchID = event.changedTouches[0].identifier;
-            this.dataHandler?.tap(event);
-        };
+        new TouchPressureTransition(down, down,
+            // Replacing the current tap (but not increment)
+            (event: TouchEvent): void => {
+                this.touchID = event.changedTouches[0].identifier;
+                this.dataHandler?.tap(event);
+            },
+            // To detect the event is lost, checking it is not part of the touches any more
+            (evt: TouchEvent): boolean => [...evt.touches].filter(t => t.identifier === this.touchID).length === 0);
 
-        const release = new TouchReleaseTransition(down, ended);
-        release.isGuardOK = (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.touchID && this.nbTaps === this.countTaps;
-        const release2 = new TouchReleaseTransition(down, up);
-        release2.isGuardOK = (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.touchID && this.nbTaps !== this.countTaps;
-        const press2 = new TouchPressureTransition(up, down);
-        press2.action = pressureAction;
+        new TouchReleaseTransition(down, this.addTerminalState("ended"), undefined,
+            (evt: TouchEvent): boolean => evt.changedTouches[0].identifier === this.touchID && this.nbTaps === this.countTaps);
+
+        new TouchReleaseTransition(down, up, undefined,
+            (evt: TouchEvent): boolean => evt.changedTouches[0].identifier === this.touchID && this.nbTaps !== this.countTaps);
 
         new TouchMoveTransition(up, cancelled);
         new TimeoutTransition(down, cancelled, () => 1000);

@@ -19,7 +19,6 @@ import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {PointDataImpl} from "../PointDataImpl";
 import {MouseOutTransition} from "../../fsm/MouseOutTransition";
-import type {TransitionBase} from "../../fsm/TransitionBase";
 import {MouseLeaveTransition} from "../../fsm/MouseLeaveTransition";
 
 /**
@@ -39,17 +38,15 @@ export class MouseLeaveFSM extends FSMImpl<MouseLeaveFSMHandler> {
         this.withBubbling = withBubbling;
 
         const exited = new TerminalState(this, "exited");
-        this.addState(exited);
-
-        let exit: TransitionBase<MouseEvent>;
-        if (this.withBubbling) {
-            exit = new MouseOutTransition(this.initState, exited);
-        } else {
-            exit = new MouseLeaveTransition(this.initState, exited);
-        }
-        exit.action = (event: MouseEvent): void => {
+        const action = (event: MouseEvent): void => {
             this.dataHandler?.onExit(event);
         };
+
+        if (this.withBubbling) {
+            new MouseOutTransition(this.initState, exited, action);
+        } else {
+            new MouseLeaveTransition(this.initState, exited, action);
+        }
     }
 }
 

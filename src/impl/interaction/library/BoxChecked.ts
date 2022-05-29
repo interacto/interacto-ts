@@ -12,7 +12,6 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {TerminalState} from "../../fsm/TerminalState";
 import {BoxCheckPressedTransition} from "../../fsm/BoxCheckPressedTransition";
 import {isCheckBox} from "../../fsm/Events";
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
@@ -25,13 +24,10 @@ class BoxCheckedFSM extends FSMImpl<BoxCheckedHandler> {
     public constructor(dataHandler: BoxCheckedHandler) {
         super(dataHandler);
 
-        const checked: TerminalState = new TerminalState(this, "checked");
-        this.addState(checked);
-
-        const tr = new BoxCheckPressedTransition(this.initState, checked);
-        tr.action = (event: InputEvent): void => {
-            this.dataHandler?.initToCheckHandler(event);
-        };
+        new BoxCheckPressedTransition(this.initState, this.addTerminalState("checked"),
+            (evt: InputEvent): void => {
+                this.dataHandler?.initToCheckHandler(evt);
+            });
     }
 }
 

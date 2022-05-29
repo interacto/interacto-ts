@@ -14,10 +14,6 @@
 
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {DoubleClick, DoubleClickFSM} from "./DoubleClick";
-import {TerminalState} from "../../fsm/TerminalState";
-import {CancellingState} from "../../fsm/CancellingState";
-import {StdState} from "../../fsm/StdState";
-import {SubFSMTransition} from "../../fsm/SubFSMTransition";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import type {SrcTgtPointsData} from "../../../api/interaction/SrcTgtPointsData";
 import {InteractionBase} from "../InteractionBase";
@@ -26,6 +22,7 @@ import {EscapeKeyPressureTransition} from "../../fsm/EscapeKeyPressureTransition
 import {SrcTgtPointsDataImpl} from "../SrcTgtPointsDataImpl";
 import type {PointData} from "../../../api/interaction/PointData";
 import {MouseMoveTransition} from "../../fsm/MouseMoveTransition";
+import {SubFSMTransition} from "../../fsm/SubFSMTransition";
 
 class DragLockFSM extends FSMImpl<DragLockFSMHandler> {
     public readonly firstDbleClick: DoubleClickFSM;
@@ -50,36 +47,30 @@ class DragLockFSM extends FSMImpl<DragLockFSMHandler> {
         this.sndDbleClick.addHandler(errorHandler);
         cancelDbleClick.addHandler(errorHandler);
 
-        const dropped = new TerminalState(this, "dropped");
-        const cancelled = new CancellingState(this, "cancelled");
-        const locked = new StdState(this, "locked");
-        const moved = new StdState(this, "moved");
+        const cancelled = this.addCancellingState("cancelled");
+        const locked = this.addStdState("locked");
+        const moved = this.addStdState("moved");
 
-        this.addState(dropped);
-        this.addState(cancelled);
-        this.addState(locked);
-        this.addState(moved);
-
-        const subTr = new SubFSMTransition(this.initState, locked, this.firstDbleClick);
-        subTr.action = (): void => {
-            const checkButton = this.firstDbleClick.getCheckButton();
-            this.sndDbleClick.setCheckButton(checkButton);
-            cancelDbleClick.setCheckButton(checkButton);
-            this.dataHandler?.onFirstDbleClick();
-        };
+        new SubFSMTransition(this.initState, locked, this.firstDbleClick,
+            (): void => {
+                const checkButton = this.firstDbleClick.getCheckButton();
+                this.sndDbleClick.setCheckButton(checkButton);
+                cancelDbleClick.setCheckButton(checkButton);
+                this.dataHandler?.onFirstDbleClick();
+            });
 
         new SubFSMTransition(locked, cancelled, cancelDbleClick);
 
-        const moveAction = (event: MouseEvent): void => {
-            this.dataHandler?.onMove(event);
-        };
-        const movelock = new MouseMoveTransition(locked, moved);
-        movelock.action = moveAction;
-        const move = new MouseMoveTransition(moved, moved);
-        move.action = moveAction;
+        const move = new MouseMoveTransition(locked, moved,
+            (event: MouseEvent): void => {
+                this.dataHandler?.onMove(event);
+            });
+
+        new MouseMoveTransition(moved, moved, move.action);
+
         new EscapeKeyPressureTransition(locked, cancelled);
         new EscapeKeyPressureTransition(moved, cancelled);
-        new SubFSMTransition(moved, dropped, this.sndDbleClick);
+        new SubFSMTransition(moved, this.addTerminalState("dropped"), this.sndDbleClick);
     }
 
     // eslint-disable-next-line accessor-pairs

@@ -13,10 +13,8 @@
  */
 
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import {TerminalState} from "../../fsm/TerminalState";
 import {KeyDownTransition} from "../../fsm/KeyDownTransition";
 import type {KeyData} from "../../../api/interaction/KeyData";
-import {StdState} from "../../fsm/StdState";
 import {KeyUpTransition} from "../../fsm/KeyUpTransition";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {KeyDataImpl} from "../KeyDataImpl";
@@ -31,23 +29,18 @@ export class KeyTypedFSM extends FSMImpl<KeyTypedFSMHandler> {
     public constructor(dataHandler: KeyTypedFSMHandler) {
         super(dataHandler);
 
-        const pressed: StdState = new StdState(this, "pressed");
-        const typed: TerminalState = new TerminalState(this, "typed");
-        this.startingState = typed;
+        const pressed = this.addStdState("pressed");
 
-        this.addState(pressed);
-        this.addState(typed);
+        new KeyDownTransition(this.initState, pressed,
+            (event: KeyboardEvent): void => {
+                this.checkKey = event.code;
+            });
 
-        const kp = new KeyDownTransition(this.initState, pressed);
-        kp.action = (event: KeyboardEvent): void => {
-            this.checkKey = event.code;
-        };
-
-        const kr = new KeyUpTransition(pressed, typed);
-        kr.isGuardOK = (event: KeyboardEvent): boolean => this.checkKey === undefined || event.code === this.checkKey;
-        kr.action = (event: KeyboardEvent): void => {
-            this.dataHandler?.onKeyTyped(event);
-        };
+        new KeyUpTransition(pressed, this.addTerminalState("typed", true),
+            (evt: KeyboardEvent): void => {
+                this.dataHandler?.onKeyTyped(evt);
+            },
+            (evt: KeyboardEvent): boolean => this.checkKey === undefined || evt.code === this.checkKey);
     }
 
     public override reinit(): void {

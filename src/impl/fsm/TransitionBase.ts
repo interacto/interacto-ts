@@ -25,14 +25,22 @@ export abstract class TransitionBase<E extends Event> implements Transition<E> {
 
     public readonly tgt: InputState;
 
+    public readonly action: (evt?: E) => void;
+
+    public readonly isGuardOK: (evt: E) => boolean;
+
     /**
      * Creates the transition.
      * @param srcState - The source state of the transition.
      * @param tgtState - The output state of the transition.
      */
-    protected constructor(srcState: OutputState, tgtState: InputState) {
+    protected constructor(srcState: OutputState, tgtState: InputState,
+                          action?: (evt?: E) => void, guard?: (evt: E) => boolean) {
         this.src = srcState;
         this.tgt = tgtState;
+        this.action = action ?? ((): void => {
+        });
+        this.isGuardOK = guard ?? ((): boolean => true);
         this.src.addTransition(this);
     }
 
@@ -47,14 +55,7 @@ export abstract class TransitionBase<E extends Event> implements Transition<E> {
         return undefined;
     }
 
-    public action(_event?: E): void {
-    }
-
     public abstract accept(event: Event): event is E;
-
-    public isGuardOK(_event: E): boolean {
-        return true;
-    }
 
     public abstract getAcceptedEvents(): ReadonlyArray<EventType>;
 

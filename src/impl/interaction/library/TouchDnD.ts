@@ -15,7 +15,6 @@
 import {InteractionBase} from "../InteractionBase";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import {StdState} from "../../fsm/StdState";
 import {TerminalState} from "../../fsm/TerminalState";
 import {TouchPressureTransition} from "../../fsm/TouchPressureTransition";
 import {TouchMoveTransition} from "../../fsm/TouchMoveTransition";
@@ -24,7 +23,6 @@ import {getTouch} from "../../fsm/Events";
 import {SrcTgtTouchDataImpl} from "../SrcTgtTouchDataImpl";
 import type {SrcTgtPointsData} from "../../../api/interaction/SrcTgtPointsData";
 import type {TouchData} from "../../../api/interaction/TouchData";
-import {CancellingState} from "../../fsm/CancellingState";
 
 /**
  * The FSM that defines a touch interaction (that works like a DnD)
@@ -53,87 +51,79 @@ export class TouchDnDFSM extends FSMImpl<TouchDnDFSMHandler> {
 
     // eslint-disable-next-line max-lines-per-function
     private buildFSM(): void {
-        const touched = new StdState(this, "touched");
-        const moved = new StdState(this, "moved");
-        const released = new TerminalState(this, "released");
-        const cancelled = new CancellingState(this, "cancelled");
+        new TerminalState(this, "released");
 
-        this.addState(touched);
-        this.addState(moved);
-        this.addState(released);
-        this.addState(cancelled);
+        const touched = this.addStdState("touched");
+        const moved = this.addStdState("moved");
+        const released = this.addTerminalState("released");
+        const cancelled = this.addCancellingState("cancelled");
 
-        const touchDownFn = (event: TouchEvent): void => {
+        const touchDown = (event: TouchEvent): void => {
             this.touchID = event.changedTouches[0].identifier;
             this.dataHandler?.onTouch(event);
         };
 
         const fixTouchDownCheck = (event: TouchEvent): boolean => [...event.touches].filter(t => t.identifier === this.touchID).length === 0;
 
-        const pressure = new TouchPressureTransition(this.initState, touched);
-        pressure.action = touchDownFn;
+        new TouchPressureTransition(this.initState, touched, touchDown);
 
         // If the touch up event is lost by the browser and another touch down occurs
         // we must restart the interaction
-        const fixBlockedEvent = new TouchPressureTransition(touched, touched);
-        fixBlockedEvent.isGuardOK = fixTouchDownCheck;
-        fixBlockedEvent.action = touchDownFn;
+        new TouchPressureTransition(touched, touched, touchDown, fixTouchDownCheck);
 
         if (this.movementRequired) {
             this.startingState = moved;
-            const tap = new TouchReleaseTransition(touched, cancelled);
-            tap.isGuardOK = (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.touchID;
+            new TouchReleaseTransition(touched, cancelled, undefined,
+                (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.touchID);
         } else {
-            const releaseTouched = new TouchReleaseTransition(touched, released);
-            releaseTouched.isGuardOK = (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.touchID;
-            releaseTouched.action = (event: TouchEvent): void => {
-                this.dataHandler?.onRelease(event);
-            };
+            new TouchReleaseTransition(touched, released,
+                (event: TouchEvent): void => {
+                    this.dataHandler?.onRelease(event);
+                },
+                (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.touchID);
         }
 
-        const firstMove = new TouchMoveTransition(touched, moved);
-        firstMove.isGuardOK = (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.touchID;
-        firstMove.action = (event: TouchEvent): void => {
-            this.dataHandler?.onMove(event);
-        };
+        new TouchMoveTransition(touched, moved,
+            (event: TouchEvent): void => {
+                this.dataHandler?.onMove(event);
+            },
+            (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.touchID);
 
-        const move = new TouchMoveTransition(moved, moved);
-        move.isGuardOK = (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.touchID;
-        move.action = (event: TouchEvent): void => {
-            this.dataHandler?.onMove(event);
-        };
+        new TouchMoveTransition(moved, moved,
+            (event: TouchEvent): void => {
+                this.dataHandler?.onMove(event);
+            },
+            (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.touchID);
 
         // If the touch up event is lost by the browser and another touch down occurs
         // we must restart the interaction
-        const fixBlockedEvent2 = new TouchPressureTransition(moved, touched);
-        fixBlockedEvent2.isGuardOK = fixTouchDownCheck;
-        fixBlockedEvent2.action = touchDownFn;
+        new TouchPressureTransition(moved, touched, touchDown, fixTouchDownCheck);
 
         // Transitions used if the DnD can be cancelled by releasing the touch on a dwell spring element
         if (this.cancellable) {
-            const release = new TouchReleaseTransition(moved, released);
-            release.isGuardOK = (event: TouchEvent): boolean => {
+            new TouchReleaseTransition(moved, released,
+                (event: TouchEvent): void => {
+                    this.dataHandler?.onRelease(event);
+                },
+                (event: TouchEvent): boolean => {
                 // Touch event behaviour is not consistent with mouse events: event.tgt.target points to the original element, not to the one
                 // currently targeted. So we have to retrieve the current target manually.
-                const tgt = document.elementFromPoint(event.changedTouches[0].clientX, event.changedTouches[0].clientY);
-                return event.changedTouches[0].identifier === this.touchID &&
+                    const tgt = document.elementFromPoint(event.changedTouches[0].clientX, event.changedTouches[0].clientY);
+                    return event.changedTouches[0].identifier === this.touchID &&
                     (!(tgt instanceof Element) || !tgt.classList.contains("ioDwellSpring"));
-            };
-            release.action = (event: TouchEvent): void => {
-                this.dataHandler?.onRelease(event);
-            };
+                });
 
-            const releaseCancel = new TouchReleaseTransition(moved, cancelled);
-            releaseCancel.isGuardOK = (event: TouchEvent): boolean => {
-                const tgt = document.elementFromPoint(event.changedTouches[0].clientX, event.changedTouches[0].clientY);
-                return event.changedTouches[0].identifier === this.touchID && tgt instanceof Element && tgt.classList.contains("ioDwellSpring");
-            };
+            new TouchReleaseTransition(moved, cancelled, undefined,
+                (ev: TouchEvent): boolean => {
+                    const tgt = document.elementFromPoint(ev.changedTouches[0].clientX, ev.changedTouches[0].clientY);
+                    return ev.changedTouches[0].identifier === this.touchID && tgt instanceof Element && tgt.classList.contains("ioDwellSpring");
+                });
         } else {
-            const release = new TouchReleaseTransition(moved, released);
-            release.isGuardOK = (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.touchID;
-            release.action = (event: TouchEvent): void => {
-                this.dataHandler?.onRelease(event);
-            };
+            new TouchReleaseTransition(moved, released,
+                (event: TouchEvent): void => {
+                    this.dataHandler?.onRelease(event);
+                },
+                (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.touchID);
         }
     }
 

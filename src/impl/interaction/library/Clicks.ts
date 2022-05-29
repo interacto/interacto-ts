@@ -13,16 +13,13 @@
  */
 
 import {FSMImpl} from "../../fsm/FSMImpl";
-import {StdState} from "../../fsm/StdState";
-import {TerminalState} from "../../fsm/TerminalState";
-import {CancellingState} from "../../fsm/CancellingState";
 import {ClickTransition} from "../../fsm/ClickTransition";
-import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {InteractionBase} from "../InteractionBase";
 import {PointDataImpl} from "../PointDataImpl";
 import type {PointsData} from "../../../api/interaction/PointsData";
 import {PointsDataImpl} from "../PointsDataImpl";
+import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 
 export class ClicksFSM extends FSMImpl<ClicksFSMHandler> {
     private countClicks: number;
@@ -46,33 +43,28 @@ export class ClicksFSM extends FSMImpl<ClicksFSMHandler> {
         this.countClicks = 0;
         this.nbClicks = nbClicks;
 
-        const clicked = new StdState(this, "clicked");
-        const ended = new TerminalState(this, "ended");
-        const timeouted = new CancellingState(this, "timeouted");
-        this.addState(clicked);
-        this.addState(ended);
-        this.addState(timeouted);
+        const clicked = this.addStdState("clicked");
 
-        const firstclick = new ClickTransition(this.initState, clicked);
-        firstclick.action = (event: MouseEvent): void => {
-            this.countClicks++;
-            this.dataHandler?.click(event);
-        };
+        new ClickTransition(this.initState, clicked,
+            (evt: MouseEvent): void => {
+                this.countClicks++;
+                this.dataHandler?.click(evt);
+            });
 
-        const newclick = new ClickTransition(clicked, clicked);
-        newclick.action = (event: MouseEvent): void => {
-            this.countClicks++;
-            this.dataHandler?.click(event);
-        };
-        newclick.isGuardOK = (_event: MouseEvent): boolean => (this.countClicks + 1) < this.nbClicks;
+        new ClickTransition(clicked, clicked,
+            (evt: MouseEvent): void => {
+                this.countClicks++;
+                this.dataHandler?.click(evt);
+            },
+            (): boolean => (this.countClicks + 1) < this.nbClicks);
 
-        const finalclick = new ClickTransition(clicked, ended);
-        finalclick.action = (event: MouseEvent): void => {
-            this.dataHandler?.click(event);
-        };
-        finalclick.isGuardOK = (_event: MouseEvent): boolean => (this.countClicks + 1) === this.nbClicks;
+        new ClickTransition(clicked, this.addTerminalState("ended"),
+            (evt: MouseEvent): void => {
+                this.dataHandler?.click(evt);
+            },
+            (): boolean => (this.countClicks + 1) === this.nbClicks);
 
-        new TimeoutTransition(clicked, timeouted, () => 1000);
+        new TimeoutTransition(clicked, this.addCancellingState("timeouted"), () => 1000);
     }
 
 

@@ -15,9 +15,6 @@
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import {StdState} from "../../fsm/StdState";
-import {TerminalState} from "../../fsm/TerminalState";
-import {CancellingState} from "../../fsm/CancellingState";
 import {TouchPressureTransition} from "../../fsm/TouchPressureTransition";
 import {TouchReleaseTransition} from "../../fsm/TouchReleaseTransition";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
@@ -47,28 +44,22 @@ class LongTouchFSM extends FSMImpl<LongTouchFSMHandler> {
         this.duration = duration;
         this.currentTouchID = undefined;
 
-        const touched = new StdState(this, "touched");
-        const cancelled = new CancellingState(this, "cancelled");
-        const timeouted = new TerminalState(this, "timeouted");
+        const touched = this.addStdState("touched");
+        const cancelled = this.addCancellingState("cancelled");
 
-        this.addState(touched);
-        this.addState(cancelled);
-        this.addState(timeouted);
+        new TouchPressureTransition(this.initState, touched,
+            (event: TouchEvent): void => {
+                this.currentTouchID = event.changedTouches[0].identifier;
+                this.dataHandler?.tap(event);
+            });
 
-        const press = new TouchPressureTransition(this.initState, touched);
-        press.action = (event: TouchEvent): void => {
-            this.currentTouchID = event.changedTouches[0].identifier;
-            this.dataHandler?.tap(event);
-        };
+        new TouchMoveTransition(touched, cancelled, undefined,
+            (ev: TouchEvent): boolean => ev.changedTouches[0].identifier === this.currentTouchID);
 
-        const moved = new TouchMoveTransition(touched, cancelled);
-        moved.isGuardOK = (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.currentTouchID;
+        new TouchReleaseTransition(touched, cancelled, undefined,
+            (ev: TouchEvent): boolean => ev.changedTouches[0].identifier === this.currentTouchID);
 
-
-        const release = new TouchReleaseTransition(touched, cancelled);
-        release.isGuardOK = (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.currentTouchID;
-
-        new TimeoutTransition(touched, timeouted, () => this.duration);
+        new TimeoutTransition(touched, this.addTerminalState("timeouted"), () => this.duration);
     }
 
     public override reinit(): void {

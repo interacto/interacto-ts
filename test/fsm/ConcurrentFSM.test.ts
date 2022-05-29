@@ -15,9 +15,6 @@
 import {ConcurrentFSM} from "../../src/impl/fsm/ConcurrentFSM";
 import {FSMImpl} from "../../src/impl/fsm/FSMImpl";
 import type {FSMHandler} from "../../src/api/fsm/FSMHandler";
-import {StdState} from "../../src/impl/fsm/StdState";
-import {TerminalState} from "../../src/impl/fsm/TerminalState";
-import {CancellingState} from "../../src/impl/fsm/CancellingState";
 import {mock} from "jest-mock-extended";
 import {createMouseEvent} from "../interaction/StubEvents";
 import {MouseUpTransition} from "../../src/impl/fsm/MouseUpTransition";
@@ -32,44 +29,15 @@ class StubTouchFSM extends FSMImpl<FSMDataHandler> {
     public constructor(cpt: number) {
         super();
         this.cpt = cpt;
-        const touched = new StdState(this, "touched");
-        const moved = new StdState(this, "mouved");
-        const released = new TerminalState(this, "released");
-        const cancelled = new CancellingState(this, "cancelled");
-        this.addState(touched);
-        this.addState(moved);
-        this.addState(released);
-        this.addState(cancelled);
+        const touched = this.addStdState("touched");
+        const moved = this.addStdState("moved");
+        const guard = (ev: MouseEvent): boolean => ev.button === cpt;
 
-        new class extends MouseDownTransition {
-            public override isGuardOK(event: MouseEvent): boolean {
-                return event.button === cpt;
-            }
-        }(this.initState, touched);
-
-        new class extends MouseMoveTransition {
-            public override isGuardOK(event: MouseEvent): boolean {
-                return event.button === cpt;
-            }
-        }(touched, moved);
-
-        new class extends MouseMoveTransition {
-            public override isGuardOK(event: MouseEvent): boolean {
-                return event.button === cpt;
-            }
-        }(moved, moved);
-
-        new class extends MouseUpTransition {
-            public override isGuardOK(event: MouseEvent): boolean {
-                return event.button === cpt;
-            }
-        }(moved, released);
-
-        new class extends ClickTransition {
-            public override isGuardOK(event: MouseEvent): boolean {
-                return event.button === cpt;
-            }
-        }(moved, cancelled);
+        new MouseDownTransition(this.initState, touched, undefined, guard);
+        new MouseMoveTransition(touched, moved, undefined, guard);
+        new MouseMoveTransition(moved, moved, undefined, guard);
+        new MouseUpTransition(moved, this.addTerminalState("released"), undefined, guard);
+        new ClickTransition(moved, this.addCancellingState("cancelled"), undefined, guard);
     }
 }
 

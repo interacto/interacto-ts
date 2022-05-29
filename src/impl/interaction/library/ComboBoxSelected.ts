@@ -12,7 +12,6 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {TerminalState} from "../../fsm/TerminalState";
 import {isComboBox} from "../../fsm/Events";
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import type {WidgetData} from "../../../api/interaction/WidgetData";
@@ -25,13 +24,10 @@ class ComboBoxSelectedFSM extends FSMImpl<ComboBoxSelectedHandler> {
     public constructor(dataHandler: ComboBoxSelectedHandler) {
         super(dataHandler);
 
-        const selected: TerminalState = new TerminalState(this, "selected");
-        this.addState(selected);
-
-        const tr = new ComboBoxTransition(this.initState, selected);
-        tr.action = (event: Event): void => {
-            this.dataHandler?.initToSelectedHandler(event);
-        };
+        new ComboBoxTransition(this.initState, this.addTerminalState("selected"),
+            (evt: Event): void => {
+                this.dataHandler?.initToSelectedHandler(evt);
+            });
     }
 }
 

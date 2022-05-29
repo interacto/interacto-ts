@@ -22,16 +22,12 @@ export class StubTransitionOK<E extends Event> extends TransitionBase<E> {
     public guard: boolean;
 
     public constructor(srcState: OutputState, tgtState: InputState, guard?: boolean) {
-        super(srcState, tgtState);
+        super(srcState, tgtState, undefined, () => this.guard);
         this.guard = guard ?? true;
     }
 
     public accept(event: Event): event is E {
         return true;
-    }
-
-    public override isGuardOK(_event: E): boolean {
-        return this.guard;
     }
 
     public getAcceptedEvents(): Array<EventType> {

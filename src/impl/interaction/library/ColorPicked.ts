@@ -11,7 +11,6 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import {TerminalState} from "../../fsm/TerminalState";
 import {isColorChoice} from "../../fsm/Events";
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import type {WidgetData} from "../../../api/interaction/WidgetData";
@@ -24,13 +23,10 @@ class ColorPickedFSM extends FSMImpl<ColorPickedHandler> {
     public constructor(dataHandler: ColorPickedHandler) {
         super(dataHandler);
 
-        const picked: TerminalState = new TerminalState(this, "picked");
-        this.addState(picked);
-
-        const tr = new ColorPickedTransition(this.initState, picked);
-        tr.action = (event: Event): void => {
-            this.dataHandler?.initToPickedHandler(event);
-        };
+        new ColorPickedTransition(this.initState, this.addTerminalState("picked"),
+            (evt: Event): void => {
+                this.dataHandler?.initToPickedHandler(evt);
+            });
     }
 }
 

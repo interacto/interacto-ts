@@ -27,6 +27,9 @@ import {remove, removeAt} from "../util/ArrayUtil";
 import {CancelFSMException} from "./CancelFSMException";
 import type {FSM} from "../../api/fsm/FSM";
 import type {Logger} from "../../api/logging/Logger";
+import {StdState} from "./StdState";
+import {TerminalState} from "./TerminalState";
+import {CancellingState} from "./CancellingState";
 
 /**
  * A finite state machine that defines the behavior of a user interaction.
@@ -263,11 +266,45 @@ export class FSMImpl<T extends FSMDataHandler> implements FSM {
     }
 
     /**
-     * Adds a state to the state machine.
-     * @param state - The state to add. Must not be null.
+     * Adds a standard state to the state machine.
+     * @param name - The name of the state to add.
+     * @param startingState - States whether the new state is the one that starts the FSM.
+     * @returns The created state.
      */
-    public addState(state: InputState): void {
+    public addStdState(name: string, startingState = false): StdState {
+        const state = new StdState(this, name);
+        this.addState(state, startingState);
+        return state;
+    }
+
+    /**
+     * Adds a terminal state to the state machine.
+     * @param name - The name of the state to add.
+     * @param startingState - States whether the new state is the one that starts the FSM.
+     * @returns The created state.
+     */
+    public addTerminalState(name: string, startingState = false): TerminalState {
+        const state = new TerminalState(this, name);
+        this.addState(state, startingState);
+        return state;
+    }
+
+    /**
+     * Adds a cancelling state to the state machine.
+     * @param name - The name of the state to add.
+     * @returns The created state.
+     */
+    public addCancellingState(name: string): CancellingState {
+        const state = new CancellingState(this, name);
+        this.addState(state);
+        return state;
+    }
+
+    private addState(state: InputState, startingState = false): void {
         this._states.push(state);
+        if (startingState) {
+            this.startingState = state;
+        }
     }
 
     public reinit(): void {

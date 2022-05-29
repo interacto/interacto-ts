@@ -25,8 +25,9 @@ export class MouseLeaveTransition extends TransitionBase<MouseEvent> {
     /**
      * Creates the transition.
      */
-    public constructor(srcState: OutputState, tgtState: InputState) {
-        super(srcState, tgtState);
+    public constructor(srcState: OutputState, tgtState: InputState,
+                       action?: (evt?: Event) => void, guard?: (evt: Event) => boolean) {
+        super(srcState, tgtState, action, guard);
     }
 
     public accept(event: Event): event is MouseEvent {

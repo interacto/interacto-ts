@@ -12,11 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {TerminalState} from "../../fsm/TerminalState";
 import {isTextInput} from "../../fsm/Events";
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import type {WidgetData} from "../../../api/interaction/WidgetData";
-import {StdState} from "../../fsm/StdState";
 import {TextInputChangedTransition} from "../../fsm/TextInputChangedTransition";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 import {FSMImpl} from "../../fsm/FSMImpl";
@@ -43,22 +41,19 @@ class TextInputChangedFSM extends FSMImpl<TextInputChangedHandler> {
             this._timeGap = timeSet;
         }
 
-        const changed: StdState = new StdState(this, "changed");
-        const ended: TerminalState = new TerminalState(this, "ended");
-        this.addState(changed);
-        this.addState(ended);
+        const changed = this.addStdState("changed");
 
-        const trInit = new TextInputChangedTransition(this.initState, changed);
-        trInit.action = (event: Event): void => {
-            this.dataHandler?.initToChangedHandler(event);
-        };
+        new TextInputChangedTransition(this.initState, changed,
+            (evt: Event): void => {
+                this.dataHandler?.initToChangedHandler(evt);
+            });
 
-        const trChanged = new TextInputChangedTransition(changed, changed);
-        trChanged.action = (event: Event): void => {
-            this.dataHandler?.initToChangedHandler(event);
-        };
+        new TextInputChangedTransition(changed, changed,
+            (evt: Event): void => {
+                this.dataHandler?.initToChangedHandler(evt);
+            });
 
-        new TimeoutTransition(changed, ended, this.timeGapSupplier);
+        new TimeoutTransition(changed, this.addTerminalState("ended"), this.timeGapSupplier);
     }
 }
 

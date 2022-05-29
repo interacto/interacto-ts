@@ -13,7 +13,6 @@
  */
 
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import {TerminalState} from "../../fsm/TerminalState";
 import {ScrollTransition} from "../../fsm/ScrollTransition";
 import type {ScrollData} from "../../../api/interaction/ScrollData";
 import {FSMImpl} from "../../fsm/FSMImpl";
@@ -27,13 +26,10 @@ export class ScrollFSM extends FSMImpl<ScrollFSMHandler> {
     public constructor(dataHandler: ScrollFSMHandler) {
         super(dataHandler);
 
-        const scrolled: TerminalState = new TerminalState(this, "scrolled");
-        this.addState(scrolled);
-
-        const scroll = new ScrollTransition(this.initState, scrolled);
-        scroll.action = (event: Event): void => {
-            this.dataHandler?.initToScroll(event);
-        };
+        new ScrollTransition(this.initState, this.addTerminalState("scrolled"),
+            (evt: Event): void => {
+                this.dataHandler?.initToScroll(evt);
+            });
     }
 }
 

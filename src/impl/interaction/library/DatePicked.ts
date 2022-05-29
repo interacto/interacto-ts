@@ -12,7 +12,6 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {TerminalState} from "../../fsm/TerminalState";
 import {isDatePicker} from "../../fsm/Events";
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import type {WidgetData} from "../../../api/interaction/WidgetData";
@@ -25,13 +24,10 @@ class DatePickedFSM extends FSMImpl<DatePickedHandler> {
     public constructor(dataHandler: DatePickedHandler) {
         super(dataHandler);
 
-        const picked: TerminalState = new TerminalState(this, "picked");
-        this.addState(picked);
-
-        const tr = new DatePickedTransition(this.initState, picked);
-        tr.action = (event: Event): void => {
-            this.dataHandler?.initToPickedHandler(event);
-        };
+        new DatePickedTransition(this.initState, this.addTerminalState("picked"),
+            (evt: Event): void => {
+                this.dataHandler?.initToPickedHandler(evt);
+            });
     }
 }
 

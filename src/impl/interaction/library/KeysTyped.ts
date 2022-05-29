@@ -12,8 +12,6 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {TerminalState} from "../../fsm/TerminalState";
-import {StdState} from "../../fsm/StdState";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
@@ -45,21 +43,17 @@ export class KeysTypedFSM extends FSMImpl<KeyTypedFSMHandler> {
     public constructor(dataHandler: KeyTypedFSMHandler) {
         super(dataHandler);
 
-        const keyup: StdState = new StdState(this, "keyup");
-        const timeouted: TerminalState = new TerminalState(this, "timeouted");
-
-        this.addState(keyup);
-        this.addState(timeouted);
+        const keyup = this.addStdState("keyup");
 
         const action = (event: KeyboardEvent): void => {
             this.dataHandler?.onKeyTyped(event);
         };
-        const keyupInit = new KeyUpTransition(this.initState, keyup);
-        const keyupSeq = new KeyUpTransition(keyup, keyup);
-        keyupInit.action = action;
-        keyupSeq.action = action;
 
-        new TimeoutTransition(keyup, timeouted, KeysTypedFSM.timeGapSupplier);
+        new KeyUpTransition(this.initState, keyup, action);
+
+        new KeyUpTransition(keyup, keyup, action);
+
+        new TimeoutTransition(keyup, this.addTerminalState("timeouted"), KeysTypedFSM.timeGapSupplier);
     }
 }
 

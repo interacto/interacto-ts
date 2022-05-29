@@ -13,7 +13,6 @@
  */
 
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import {TerminalState} from "../../fsm/TerminalState";
 import {MouseDownTransition} from "../../fsm/MouseDownTransition";
 import type {PointData} from "../../../api/interaction/PointData";
 import {FSMImpl} from "../../fsm/FSMImpl";
@@ -24,13 +23,10 @@ export class MouseDownFSM extends FSMImpl<MouseDownFSMHandler> {
     public constructor(dataHandler: MouseDownFSMHandler) {
         super(dataHandler);
 
-        const pressed: TerminalState = new TerminalState(this, "pressed");
-        this.addState(pressed);
-
-        const pressure = new MouseDownTransition(this.initState, pressed);
-        pressure.action = (event: MouseEvent): void => {
-            this.dataHandler?.initToPress(event);
-        };
+        new MouseDownTransition(this.initState, this.addTerminalState("pressed"),
+            (event: MouseEvent): void => {
+                this.dataHandler?.initToPress(event);
+            });
     }
 }
 

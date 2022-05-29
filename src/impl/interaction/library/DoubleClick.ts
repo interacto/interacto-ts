@@ -14,16 +14,13 @@
 
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {Click, ClickFSM} from "./Click";
-import {TerminalState} from "../../fsm/TerminalState";
-import {CancellingState} from "../../fsm/CancellingState";
-import {StdState} from "../../fsm/StdState";
-import {SubFSMTransition} from "../../fsm/SubFSMTransition";
 import {FSMImpl} from "../../fsm/FSMImpl";
-import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 import type {PointData} from "../../../api/interaction/PointData";
 import {InteractionBase} from "../InteractionBase";
 import {PointDataImpl} from "../PointDataImpl";
 import {MouseMoveTransition} from "../../fsm/MouseMoveTransition";
+import {SubFSMTransition} from "../../fsm/SubFSMTransition";
+import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 
 export class DoubleClickFSM extends FSMImpl<FSMDataHandler> {
     /** The time gap between the two spinner events. */
@@ -69,26 +66,19 @@ export class DoubleClickFSM extends FSMImpl<FSMDataHandler> {
         this.firstClickFSM.addHandler(errorHandler);
         this.sndClickFSM.addHandler(errorHandler);
 
-        const dbleclicked = new TerminalState(this, "dbleclicked");
-        const cancelled = new CancellingState(this, "cancelled");
-        const clicked = new StdState(this, "clicked");
+        const cancelled = this.addCancellingState("cancelled");
+        const clicked = this.addStdState("clicked");
 
-        this.addState(clicked);
-        this.addState(dbleclicked);
-        this.addState(cancelled);
-        this.startingState = dbleclicked;
+        new SubFSMTransition(this.initState, clicked, this.firstClickFSM,
+            (): void => {
+                this.setCheckButton(this.firstClickFSM.getCheckButton());
+            });
 
-        const firstClick = new SubFSMTransition(this.initState, clicked, this.firstClickFSM);
-        firstClick.action = (): void => {
-            this.setCheckButton(this.firstClickFSM.getCheckButton());
-        };
-
-        const move = new MouseMoveTransition(clicked, cancelled);
-        move.isGuardOK = (event: Event): boolean => (this.checkButton === undefined || event instanceof MouseEvent &&
-          event.button === this.checkButton);
+        new MouseMoveTransition(clicked, cancelled, undefined,
+            (ev: Event): boolean => (this.checkButton === undefined || ev instanceof MouseEvent && ev.button === this.checkButton));
 
         new TimeoutTransition(clicked, cancelled, DoubleClickFSM.timeGapSupplier);
-        new SubFSMTransition(clicked, dbleclicked, this.sndClickFSM);
+        new SubFSMTransition(clicked, this.addTerminalState("dbleclicked", true), this.sndClickFSM);
     }
 
 

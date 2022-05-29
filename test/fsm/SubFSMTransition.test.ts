@@ -14,9 +14,9 @@
 
 import {FSMImpl} from "../../src/impl/fsm/FSMImpl";
 import type {InputState} from "../../src/api/fsm/InputState";
-import {StdState} from "../../src/impl/fsm/StdState";
+import type {StdState} from "../../src/impl/fsm/StdState";
 import {SubFSMTransition} from "../../src/impl/fsm/SubFSMTransition";
-import {TerminalState} from "../../src/impl/fsm/TerminalState";
+import type {TerminalState} from "../../src/impl/fsm/TerminalState";
 import {SubStubTransition1} from "./StubTransitionOK";
 import type {Transition} from "../../src/api/fsm/Transition";
 import {createMouseEvent} from "../interaction/StubEvents";
@@ -33,15 +33,12 @@ beforeEach(() => {
     jest.clearAllMocks();
     fsm = new FSMImpl();
     mainfsm = new FSMImpl();
-    s1 = new StdState(mainfsm, "s1");
-    s2 = new StdState(mainfsm, "s2");
-    mainfsm.addState(s1);
-    mainfsm.addState(s2);
+    s1 = mainfsm.addStdState("s1");
+    s2 = mainfsm.addStdState("s2");
+    subS = fsm.addTerminalState("sub1");
     tr = new SubFSMTransition(s1, s2, fsm);
 
-    subS = new TerminalState(fsm, "sub1");
     new SubStubTransition1(fsm.initState, subS, true);
-    fsm.addState(subS);
 });
 
 test("inner", () => {

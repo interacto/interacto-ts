@@ -12,8 +12,6 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {StdState} from "../../fsm/StdState";
-import {TerminalState} from "../../fsm/TerminalState";
 import {KeyDownTransition} from "../../fsm/KeyDownTransition";
 import {KeyUpTransition} from "../../fsm/KeyUpTransition";
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
@@ -35,23 +33,18 @@ export class KeysDownFSM extends FSMImpl<KeysDownFSMHandler> {
         super(dataHandler);
         this.currentCodes = [];
 
-        const pressed: StdState = new StdState(this, "pressed");
-        const ended: TerminalState = new TerminalState(this, "ended");
-        this.addState(pressed);
-        this.addState(ended);
+        const pressed = this.addStdState("pressed");
 
-        const actionkp = (event: KeyboardEvent): void => {
-            this.currentCodes.push(event.code);
-            this.dataHandler?.onKeyPressed(event);
+        const actionkp = (evt: KeyboardEvent): void => {
+            this.currentCodes.push(evt.code);
+            this.dataHandler?.onKeyPressed(evt);
         };
-        const kpInit = new KeyDownTransition(this.initState, pressed);
-        kpInit.action = actionkp;
+        new KeyDownTransition(this.initState, pressed, actionkp);
 
-        const kpPressed = new KeyDownTransition(pressed, pressed);
-        kpPressed.action = actionkp;
+        new KeyDownTransition(pressed, pressed, actionkp);
 
-        const kr = new KeyUpTransition(pressed, ended);
-        kr.isGuardOK = (event: KeyboardEvent): boolean => this.currentCodes.find(value => value === event.code) !== undefined;
+        new KeyUpTransition(pressed, this.addTerminalState("ended"), undefined,
+            (evt: KeyboardEvent): boolean => this.currentCodes.find(value => value === evt.code) !== undefined);
     }
 
     public override reinit(): void {

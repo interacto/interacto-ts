@@ -113,7 +113,6 @@ export * from "./impl/fsm/TouchPressureTransition";
 export * from "./impl/fsm/TouchReleaseTransition";
 export * from "./impl/fsm/TransitionBase";
 export * from "./impl/fsm/WheelTransition";
-export * from "./impl/fsm/WidgetTransition";
 export * from "./impl/interaction/ConcurrentInteraction";
 export * from "./impl/interaction/Flushable";
 export * from "./impl/interaction/InteractionBase";

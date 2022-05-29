@@ -13,7 +13,6 @@
  */
 
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import {TerminalState} from "../../fsm/TerminalState";
 import {KeyDownTransition} from "../../fsm/KeyDownTransition";
 import type {KeyData} from "../../../api/interaction/KeyData";
 import {FSMImpl} from "../../fsm/FSMImpl";
@@ -34,16 +33,11 @@ export class KeyDownFSM extends FSMImpl<KeyDownFSMHandler> {
         super(dataHandler);
         this.modifiersAccepted = modifierAccepted;
 
-        const pressed: TerminalState = new TerminalState(this, "pressed");
-
-        this.addState(pressed);
-
-        const kp = new KeyDownTransition(this.initState, pressed);
-        kp.action = (event: KeyboardEvent): void => {
-            this.dataHandler?.onKeyPressed(event);
-        };
-        kp.isGuardOK = (event: KeyboardEvent): boolean => this.modifiersAccepted ||
-            (!event.altKey && !event.ctrlKey && !event.shiftKey && !event.metaKey);
+        new KeyDownTransition(this.initState, this.addTerminalState("pressed"),
+            (evt: KeyboardEvent): void => {
+                this.dataHandler?.onKeyPressed(evt);
+            },
+            (evt: KeyboardEvent): boolean => this.modifiersAccepted || (!evt.altKey && !evt.ctrlKey && !evt.shiftKey && !evt.metaKey));
     }
 
     public override reinit(): void {

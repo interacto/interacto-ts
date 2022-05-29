@@ -19,7 +19,6 @@ import {
     ClickTransition,
     CmdStatus,
     FSMImpl,
-    TerminalState,
     UndoHistoryImpl
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
@@ -37,9 +36,7 @@ let history: UndoHistory;
 class OneTrFSM extends FSMImpl<FSMDataHandler> {
     public constructor() {
         super();
-        const s1 = new TerminalState(this, "s1");
-        this.addState(s1);
-        new ClickTransition(this.initState, s1);
+        new ClickTransition(this.initState, this.addTerminalState("s1"));
     }
 }
 

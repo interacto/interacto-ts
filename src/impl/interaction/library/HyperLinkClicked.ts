@@ -12,7 +12,6 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {TerminalState} from "../../fsm/TerminalState";
 import {isHyperLink} from "../../fsm/Events";
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import type {WidgetData} from "../../../api/interaction/WidgetData";
@@ -25,13 +24,10 @@ class HyperLinkClickedFSM extends FSMImpl<HyperLinkClickedFSMHandler> {
     public constructor(dataHandler: HyperLinkClickedFSMHandler) {
         super(dataHandler);
 
-        const clicked: TerminalState = new TerminalState(this, "clicked");
-        this.addState(clicked);
-
-        const tr = new HyperLinkTransition(this.initState, clicked);
-        tr.action = (event: Event): void => {
-            this.dataHandler?.initToClickedHandler(event);
-        };
+        new HyperLinkTransition(this.initState, this.addTerminalState("clicked"),
+            (evt: Event): void => {
+                this.dataHandler?.initToClickedHandler(evt);
+            });
     }
 }
 

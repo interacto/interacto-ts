@@ -13,14 +13,12 @@
  */
 
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import {TerminalState} from "../../fsm/TerminalState";
 import type {PointData} from "../../../api/interaction/PointData";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {PointDataImpl} from "../PointDataImpl";
 import {MouseOverTransition} from "../../fsm/MouseOverTransition";
 import {MouseEnterTransition} from "../../fsm/MouseEnterTransition";
-import type {TransitionBase} from "../../fsm/TransitionBase";
 
 /**
  * The FSM for mouseover interactions
@@ -38,18 +36,16 @@ export class MouseEnterFSM extends FSMImpl<MouseEnterFSMHandler> {
         super(dataHandler);
         this.withBubbling = withBubbling;
 
-        const entered = new TerminalState(this, "entered");
-        this.addState(entered);
-
-        let enter: TransitionBase<MouseEvent>;
-        if (this.withBubbling) {
-            enter = new MouseOverTransition(this.initState, entered);
-        } else {
-            enter = new MouseEnterTransition(this.initState, entered);
-        }
-        enter.action = (event: MouseEvent): void => {
+        const entered = this.addTerminalState("entered");
+        const action = (event: MouseEvent): void => {
             this.dataHandler?.onEnter(event);
         };
+
+        if (this.withBubbling) {
+            new MouseOverTransition(this.initState, entered, action);
+        } else {
+            new MouseEnterTransition(this.initState, entered, action);
+        }
     }
 }
 

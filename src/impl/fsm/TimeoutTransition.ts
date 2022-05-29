@@ -45,8 +45,9 @@ export class TimeoutTransition extends TransitionBase<Event> {
      * @param timeout - The function that returns the timeout value in ms.
      * @param logger - The logger to use.
      */
-    public constructor(srcState: OutputState, tgtState: InputState, timeout: () => number, logger?: Logger) {
-        super(srcState, tgtState);
+    public constructor(srcState: OutputState, tgtState: InputState, timeout: () => number, logger?: Logger,
+                       action?: (evt?: Event) => void) {
+        super(srcState, tgtState, action, () => this.timeouted);
         this.logger = logger;
         this.timeouted = false;
         this.timeoutDuration = timeout;
@@ -87,10 +88,6 @@ export class TimeoutTransition extends TransitionBase<Event> {
     }
 
     public accept(event?: Event): event is Event {
-        return this.timeouted;
-    }
-
-    public override isGuardOK(_event?: Event): boolean {
         return this.timeouted;
     }
 

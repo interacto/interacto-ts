@@ -13,7 +13,6 @@
  */
 
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import {TerminalState} from "../../fsm/TerminalState";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {WheelTransition} from "../../fsm/WheelTransition";
@@ -30,13 +29,10 @@ export class WheelFSM extends FSMImpl<WheelFSMHandler> {
     public constructor(dataHandler: WheelFSMHandler) {
         super(dataHandler);
 
-        const moved = new TerminalState(this, "moved");
-        this.addState(moved);
-
-        const move = new WheelTransition(this.initState, moved);
-        move.action = (event: WheelEvent): void => {
-            this.dataHandler?.initToMoved(event);
-        };
+        new WheelTransition(this.initState, this.addTerminalState("moved"),
+            (evt: WheelEvent): void => {
+                this.dataHandler?.initToMoved(evt);
+            });
     }
 }
 

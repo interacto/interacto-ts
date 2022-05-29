@@ -13,10 +13,6 @@
  */
 
 import {FSMImpl} from "../../fsm/FSMImpl";
-import {StdState} from "../../fsm/StdState";
-import {CancellingState} from "../../fsm/CancellingState";
-import {TerminalState} from "../../fsm/TerminalState";
-import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {InteractionBase} from "../InteractionBase";
 import type {PointData} from "../../../api/interaction/PointData";
@@ -24,6 +20,7 @@ import {MouseDownTransition} from "../../fsm/MouseDownTransition";
 import {MouseUpTransition} from "../../fsm/MouseUpTransition";
 import {PointDataImpl} from "../PointDataImpl";
 import {MouseMoveTransition} from "../../fsm/MouseMoveTransition";
+import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 
 /**
  * The FSM for the LongPress interaction
@@ -47,26 +44,20 @@ export class LongMouseDownFSM extends FSMImpl<LongMouseDownFSMHandler> {
         this.duration = duration;
         this.currentButton = undefined;
 
-        const down = new StdState(this, "down");
-        const cancelled = new CancellingState(this, "cancelled");
-        const timeouted = new TerminalState(this, "timeouted");
+        const down = this.addStdState("down");
+        const cancelled = this.addCancellingState("cancelled");
+        const timeouted = this.addTerminalState("timeouted");
 
-        this.addState(down);
-        this.addState(cancelled);
-        this.addState(timeouted);
+        new MouseDownTransition(this.initState, down,
+            (evt: MouseEvent): void => {
+                this.currentButton = evt.button;
+                this.dataHandler?.press(evt);
+            });
 
-        const press = new MouseDownTransition(this.initState, down);
-        press.action = (event: MouseEvent): void => {
-            this.currentButton = event.button;
-            this.dataHandler?.press(event);
-        };
+        const move = new MouseMoveTransition(down, cancelled, undefined,
+            (evt: MouseEvent): boolean => evt.button === this.currentButton);
 
-        const guard = (event: MouseEvent): boolean => event.button === this.currentButton;
-        const moved = new MouseMoveTransition(down, cancelled);
-        moved.isGuardOK = guard;
-
-        const release = new MouseUpTransition(down, cancelled);
-        release.isGuardOK = guard;
+        new MouseUpTransition(down, cancelled, undefined, move.isGuardOK);
 
         new TimeoutTransition(down, timeouted, () => this.duration);
     }

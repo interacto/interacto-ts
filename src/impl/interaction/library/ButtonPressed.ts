@@ -13,13 +13,13 @@
  */
 
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import {ButtonPressedTransition} from "../../fsm/ButtonPressedTransition";
-import {TerminalState} from "../../fsm/TerminalState";
 import {isButton} from "../../fsm/Events";
 import type {WidgetData} from "../../../api/interaction/WidgetData";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {WidgetDataImpl} from "../WidgetDataImpl";
+import {ButtonPressedTransition} from "../../fsm/ButtonPressedTransition";
+
 
 /**
  * The FSM for button pressures.
@@ -31,15 +31,13 @@ class ButtonPressedFSM extends FSMImpl<ButtonPressedFSMHandler> {
     public constructor(dataHandler: ButtonPressedFSMHandler) {
         super(dataHandler);
 
-        const pressed: TerminalState = new TerminalState(this, "pressed");
-        this.addState(pressed);
-
-        const tr = new ButtonPressedTransition(this.initState, pressed);
-        tr.action = (event: InputEvent): void => {
-            this.dataHandler?.initToPressedHandler(event);
-        };
+        new ButtonPressedTransition(this.initState, this.addTerminalState("pressed"),
+            (evt: InputEvent): void => {
+                this.dataHandler?.initToPressedHandler(evt);
+            });
     }
 }
+
 
 interface ButtonPressedFSMHandler extends FSMDataHandler {
     initToPressedHandler(event: InputEvent): void;
@@ -48,7 +46,8 @@ interface ButtonPressedFSMHandler extends FSMDataHandler {
 /**
  * A user interaction for buttons.
  */
-export class ButtonPressed extends InteractionBase<WidgetData<HTMLButtonElement>, WidgetDataImpl<HTMLButtonElement>, ButtonPressedFSM> {
+export class ButtonPressed extends InteractionBase<WidgetData<HTMLButtonElement>,
+WidgetDataImpl<HTMLButtonElement>, FSMImpl<ButtonPressedFSMHandler>> {
     /**
      * Creates the interaction.
      */

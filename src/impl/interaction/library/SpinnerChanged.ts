@@ -12,14 +12,12 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {TerminalState} from "../../fsm/TerminalState";
 import {isSpinner} from "../../fsm/Events";
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import type {WidgetData} from "../../../api/interaction/WidgetData";
 import {SpinnerChangedTransition} from "../../fsm/SpinnerChangedTransition";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
-import {StdState} from "../../fsm/StdState";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 import {WidgetDataImpl} from "../WidgetDataImpl";
 
@@ -50,23 +48,14 @@ export class SpinnerChangedFSM extends FSMImpl<SpinnerChangedHandler> {
     public constructor(dataHandler: SpinnerChangedHandler) {
         super(dataHandler);
 
-        const changed = new StdState(this, "valueChanged");
-        const ended = new TerminalState(this, "ended");
-
-        this.addState(changed);
-        this.addState(ended);
-
-        const spinnerAction: (_: Event) => void = (event: Event) => {
-            this.dataHandler?.initToChangedHandler(event);
+        const changed = this.addStdState("changed");
+        const spinnerAction = (evt: Event): void => {
+            this.dataHandler?.initToChangedHandler(evt);
         };
 
-        const changedInit = new SpinnerChangedTransition(this.initState, changed);
-        changedInit.action = spinnerAction;
-
-        const changedChanged = new SpinnerChangedTransition(changed, changed);
-        changedChanged.action = spinnerAction;
-
-        new TimeoutTransition(changed, ended, SpinnerChangedFSM.timeGapSupplier);
+        new SpinnerChangedTransition(this.initState, changed, spinnerAction);
+        new SpinnerChangedTransition(changed, changed, spinnerAction);
+        new TimeoutTransition(changed, this.addTerminalState("ended"), SpinnerChangedFSM.timeGapSupplier);
     }
 }
 

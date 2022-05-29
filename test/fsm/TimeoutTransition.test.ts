@@ -51,12 +51,12 @@ afterEach(() => {
 test("isGuardOKAfterTimeout", () => {
     evt.startTimeout();
     jest.runOnlyPendingTimers();
-    expect(evt.isGuardOK(undefined)).toBeTruthy();
+    expect(evt.isGuardOK(new Event("mousedown"))).toBeTruthy();
 });
 
 test("isGuardKOBeforeTimeout", () => {
     evt.startTimeout();
-    expect(evt.isGuardOK(undefined)).toBeFalsy();
+    expect(evt.isGuardOK(new Event("mousedown"))).toBeFalsy();
 });
 
 test("oKAfterTimeout", () => {
@@ -77,7 +77,7 @@ test("stopTimeout", () => {
     evt.startTimeout();
     evt.stopTimeout();
     jest.runOnlyPendingTimers();
-    expect(evt.isGuardOK(undefined)).toBeFalsy();
+    expect(evt.isGuardOK(new Event("mousedown"))).toBeFalsy();
 });
 
 test("stop timeout 0", () => {
@@ -85,7 +85,7 @@ test("stop timeout 0", () => {
     evt.startTimeout();
     expect(jest.getTimerCount()).toBe(0);
     evt.stopTimeout();
-    expect(evt.isGuardOK(undefined)).toBeFalsy();
+    expect(evt.isGuardOK(new Event("mousedown"))).toBeFalsy();
 });
 
 test("two consecutive starts", () => {
@@ -94,13 +94,13 @@ test("two consecutive starts", () => {
     evt.startTimeout();
     expect(jest.getTimerCount()).toBe(1);
     evt.stopTimeout();
-    expect(evt.isGuardOK(undefined)).toBeFalsy();
+    expect(evt.isGuardOK(new Event("mousedown"))).toBeFalsy();
 });
 
 test("stop when not started", () => {
     evt.stopTimeout();
     expect(jest.getTimerCount()).toBe(0);
-    expect(evt.isGuardOK(undefined)).toBeFalsy();
+    expect(evt.isGuardOK(new Event("mousedown"))).toBeFalsy();
 });
 
 test("getAcceptEventsEmpty", () => {
@@ -117,21 +117,6 @@ test("executeWithTimeout", () => {
     }, 100);
     jest.runOnlyPendingTimers();
     expect(evt.execute(undefined)).toStrictEqual(tgt);
-});
-
-test("oK", () => {
-    evt = new class extends TimeoutTransition {
-        public constructor() {
-            super(src, tgt, () => 50);
-        }
-
-        public override isGuardOK(_event: Event): boolean {
-            return false;
-        }
-    }();
-    evt.startTimeout();
-    jest.runOnlyPendingTimers();
-    expect(evt.execute(undefined)).toBeUndefined();
 });
 
 test("execute cancels", () => {

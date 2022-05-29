@@ -13,7 +13,6 @@
  */
 
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import {TerminalState} from "../../fsm/TerminalState";
 import type {PointData} from "../../../api/interaction/PointData";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
@@ -24,13 +23,10 @@ export class MouseUpFSM extends FSMImpl<MouseUpFSMHandler> {
     public constructor(dataHandler: MouseUpFSMHandler) {
         super(dataHandler);
 
-        const released: TerminalState = new TerminalState(this, "released");
-        this.addState(released);
-
-        const release = new MouseUpTransition(this.initState, released);
-        release.action = (event: MouseEvent): void => {
-            this.dataHandler?.initToPress(event);
-        };
+        new MouseUpTransition(this.initState, this.addTerminalState("released"),
+            (event: MouseEvent): void => {
+                this.dataHandler?.initToPress(event);
+            });
     }
 }
 

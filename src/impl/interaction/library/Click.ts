@@ -13,7 +13,6 @@
  */
 
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import {TerminalState} from "../../fsm/TerminalState";
 import {ClickTransition} from "../../fsm/ClickTransition";
 import type {PointData} from "../../../api/interaction/PointData";
 import {FSMImpl} from "../../fsm/FSMImpl";
@@ -32,15 +31,12 @@ export class ClickFSM extends FSMImpl<ClickFSMHandler> {
     public constructor(dataHandler?: ClickFSMHandler) {
         super(dataHandler);
 
-        const clicked = new TerminalState(this, "clicked");
-        this.addState(clicked);
-
-        const clickt = new ClickTransition(this.initState, clicked);
-        clickt.action = (event: MouseEvent): void => {
-            this.setCheckButton(event.button);
-            this.dataHandler?.initToClicked(event);
-        };
-        clickt.isGuardOK = (event: MouseEvent): boolean => this.checkButton === undefined || event.button === this.checkButton;
+        new ClickTransition(this.initState, this.addTerminalState("clicked"),
+            (evt: MouseEvent): void => {
+                this.setCheckButton(evt.button);
+                this.dataHandler?.initToClicked(evt);
+            },
+            (evt: MouseEvent): boolean => this.checkButton === undefined || evt.button === this.checkButton);
     }
 
     public getCheckButton(): number {

@@ -13,9 +13,6 @@
  */
 
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import {StdState} from "../../fsm/StdState";
-import {TerminalState} from "../../fsm/TerminalState";
-import {CancellingState} from "../../fsm/CancellingState";
 import {EscapeKeyPressureTransition} from "../../fsm/EscapeKeyPressureTransition";
 import type {SrcTgtPointsData} from "../../../api/interaction/SrcTgtPointsData";
 import {FSMImpl} from "../../fsm/FSMImpl";
@@ -37,64 +34,49 @@ class DnDFSM extends FSMImpl<DnDFSMHandler> {
     /**
      * Creates the FSM
      * @param cancellable - True: the FSM can be cancelled using the ESC key.
+     * @param dataHandler - The handler that will receive notifications from the FSM.
      */
     public constructor(cancellable: boolean, dataHandler: DnDFSMHandler) {
         super(dataHandler);
         this.cancellable = cancellable;
 
-        const pressed: StdState = new StdState(this, "pressed");
-        const dragged: StdState = new StdState(this, "dragged");
-        const released: TerminalState = new TerminalState(this, "released");
-        const cancelled: CancellingState = new CancellingState(this, "cancelled");
+        const pressed = this.addStdState("pressed");
+        const dragged = this.addStdState("dragged", true);
+        const cancelled = this.addCancellingState("cancelled");
 
-        this.addState(pressed);
-        this.addState(dragged);
-        this.addState(released);
-        this.addState(cancelled);
-        this.startingState = dragged;
+        new MouseDownTransition(this.initState, pressed,
+            (evt: MouseEvent): void => {
+                this.buttonToCheck = evt.button;
+                this.dataHandler?.onPress(evt);
+            });
 
-        const press = new MouseDownTransition(this.initState, pressed);
-        press.action = (event: MouseEvent): void => {
-            this.buttonToCheck = event.button;
-            this.dataHandler?.onPress(event);
-        };
+        new MouseUpTransition(pressed, cancelled, (evt: MouseEvent): boolean => evt.button === this.buttonToCheck);
 
-        const relCancel = new MouseUpTransition(pressed, cancelled);
-        relCancel.isGuardOK = (event: MouseEvent): boolean => event.button === this.buttonToCheck;
+        const move = new MouseMoveTransition(pressed, dragged,
+            (evt: MouseEvent): void => {
+                this.dataHandler?.onDrag(evt);
+            },
+            (evt: MouseEvent): boolean => evt.button === this.buttonToCheck);
 
-        const guardMove = (event: MouseEvent): boolean => event.button === this.buttonToCheck;
-        const actionMove = (event: MouseEvent): void => {
-            this.dataHandler?.onDrag(event);
-        };
+        new MouseMoveTransition(dragged, dragged, move.action, move.isGuardOK);
 
-        const move = new MouseMoveTransition(pressed, dragged);
-        move.isGuardOK = guardMove;
-        move.action = actionMove;
+        new MouseUpTransition(dragged, this.addTerminalState("released"),
+            (event: MouseEvent): void => {
+                this.dataHandler?.onRelease(event);
+            },
+            (event: MouseEvent): boolean => {
+                const tgt = event.currentTarget;
+                return event.button === this.buttonToCheck && (!(tgt instanceof Element) || !tgt.classList.contains("ioDwellSpring"));
+            });
 
-        const moveDrag = new MouseMoveTransition(dragged, dragged);
-        moveDrag.isGuardOK = guardMove;
-        moveDrag.action = actionMove;
-
-        const release = new MouseUpTransition(dragged, released);
-        release.isGuardOK = (event: MouseEvent): boolean => {
-            const tgt = event.currentTarget;
-            return event.button === this.buttonToCheck && (!(tgt instanceof Element) || !tgt.classList.contains("ioDwellSpring"));
-        };
-        release.action = (event: MouseEvent): void => {
-            this.dataHandler?.onRelease(event);
-        };
-        this.configureCancellation(pressed, dragged, cancelled);
-    }
-
-    private configureCancellation(pressed: StdState, dragged: StdState, cancelled: CancellingState): void {
         if (this.cancellable) {
             new EscapeKeyPressureTransition(pressed, cancelled);
             new EscapeKeyPressureTransition(dragged, cancelled);
-            const releaseCancel = new MouseUpTransition(dragged, cancelled);
-            releaseCancel.isGuardOK = (event: MouseEvent): boolean => {
-                const tgt = event.currentTarget;
-                return event.button === this.buttonToCheck && tgt instanceof Element && tgt.classList.contains("ioDwellSpring");
-            };
+            new MouseUpTransition(dragged, cancelled,
+                (evt: MouseEvent): boolean => {
+                    const tgt = evt.currentTarget;
+                    return evt.button === this.buttonToCheck && tgt instanceof Element && tgt.classList.contains("ioDwellSpring");
+                });
         }
     }
 

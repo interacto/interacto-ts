@@ -13,7 +13,6 @@
  */
 
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import {TerminalState} from "../../fsm/TerminalState";
 import type {KeyData} from "../../../api/interaction/KeyData";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
@@ -34,16 +33,11 @@ export class KeyUpFSM extends FSMImpl<KeyUpFSMHandler> {
         super(dataHandler);
         this.modifiersAccepted = modifierAccepted;
 
-        const released: TerminalState = new TerminalState(this, "released");
-
-        this.addState(released);
-
-        const release = new KeyUpTransition(this.initState, released);
-        release.action = (event: KeyboardEvent): void => {
-            this.dataHandler?.onKeyUp(event);
-        };
-        release.isGuardOK = (event: KeyboardEvent): boolean => this.modifiersAccepted ||
-            (!event.altKey && !event.ctrlKey && !event.shiftKey && !event.metaKey);
+        new KeyUpTransition(this.initState, this.addTerminalState("released"),
+            (evt: KeyboardEvent): void => {
+                this.dataHandler?.onKeyUp(evt);
+            },
+            (ev: KeyboardEvent): boolean => this.modifiersAccepted || (!ev.altKey && !ev.ctrlKey && !ev.shiftKey && !ev.metaKey));
     }
 
     public override reinit(): void {

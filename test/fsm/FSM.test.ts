@@ -13,15 +13,15 @@
  */
 
 import type {Subject} from "rxjs";
-import type {FSMHandler, InputState, Logger, OutputState, FSMDataHandler} from "../../src/interacto";
+import type {FSMHandler, Logger, OutputState, FSMDataHandler,
+    CancellingState,
+    TerminalState} from "../../src/interacto";
 import {
     CancelFSMException,
-    CancellingState,
     FSMImpl,
     InitState,
     StdState,
     SubFSMTransition,
-    TerminalState,
     TimeoutTransition
 } from "../../src/interacto";
 import {StubTransitionOK, SubStubTransition1, SubStubTransition2, SubStubTransition3} from "./StubTransitionOK";
@@ -62,9 +62,8 @@ test("currentStateAtStart", () => {
     expect(fsm.currentState).toStrictEqual(fsm.initState);
 });
 
-test("addState", () => {
-    const state: StdState = new StdState(fsm, "s1");
-    fsm.addState(state);
+test("add standard state", () => {
+    fsm.addStdState("s1");
     expect(fsm.states).toHaveLength(2);
 });
 
@@ -288,11 +287,10 @@ test("that errors caught on cancel with not an error", () => {
 
 
 test("uninstall", () => {
-    const s1 = new StdState(fsm, "su");
+    const s1 = fsm.addStdState("su");
     const subj = fsm.currentStateObservable as unknown as Subject<[OutputState, OutputState]>;
     jest.spyOn(s1, "uninstall");
     jest.spyOn(subj, "complete");
-    fsm.addState(s1);
     fsm.addRemaningEventsToProcess(mock<Event>());
     fsm.uninstall();
 
@@ -320,12 +318,10 @@ describe("testProcessUniqueEvent", () => {
     beforeEach(() => {
         fsm.addHandler(handler);
         fsm.log = true;
-        std = new StdState(fsm, "s1");
-        terminal = new TerminalState(fsm, "t1");
+        std = fsm.addStdState("s1");
+        terminal = fsm.addTerminalState("t1");
         new StubTransitionOK(fsm.initState, std);
         new StubTransitionOK(std, terminal);
-        fsm.addState(std);
-        fsm.addState(terminal);
     });
 
     test("getStates", () => {
@@ -443,12 +439,10 @@ describe("testProcessUniqueEvent -- cancel", () => {
         handler = mock<FSMHandler>();
         fsm.addHandler(handler);
         fsm.log = true;
-        std = new StdState(fsm, "s1");
-        cancelling = new CancellingState(fsm, "c1");
+        std = fsm.addStdState("s1");
+        cancelling = fsm.addCancellingState("c1");
         new StubTransitionOK(fsm.initState, std);
         new StubTransitionOK(std, cancelling);
-        fsm.addState(std);
-        fsm.addState(cancelling);
     });
 
     test("cancellation", () => {
@@ -482,16 +476,13 @@ describe("testMultipleTransitionChoice", () => {
     beforeEach(() => {
         fsm.addHandler(handler);
         fsm.log = true;
-        std = new StdState(fsm, "s1");
-        terminal = new TerminalState(fsm, "t1");
-        cancel = new CancellingState(fsm, "c1");
+        std = fsm.addStdState("s1");
+        terminal = fsm.addTerminalState("t1");
+        cancel = fsm.addCancellingState("c1");
         iToS = new StubTransitionOK(fsm.initState, std);
         new SubStubTransition1(std, terminal, true);
         new SubStubTransition2(std, cancel, true);
         new SubStubTransition3(std, std, true);
-        fsm.addState(std);
-        fsm.addState(terminal);
-        fsm.addState(cancel);
     });
 
     test("notTriggeredIfGuardKO", () => {
@@ -592,16 +583,13 @@ describe("testWithTimeoutTransition", () => {
         jest.useFakeTimers();
         fsm.addHandler(handler);
         fsm.log = true;
-        std = new StdState(fsm, "s1");
-        std2 = new StdState(fsm, "s2");
-        terminal = new TerminalState(fsm, "t1");
+        std = fsm.addStdState("std");
+        std2 = fsm.addStdState("std2");
+        terminal = fsm.addTerminalState("terminal");
         new StubTransitionOK(fsm.initState, std);
         new StubTransitionOK(std, terminal);
         new TimeoutTransition(std, std2, () => 100);
         new StubTransitionOK(std2, std);
-        fsm.addState(std);
-        fsm.addState(std2);
-        fsm.addState(terminal);
     });
 
     test("timeoutChangeState", () => {
@@ -649,42 +637,32 @@ describe("testWithSubFSM", () => {
         jest.clearAllMocks();
         fsm = new FSMImpl();
         mainfsm = new FSMImpl();
-        s1 = new StdState(mainfsm, "s1");
-        mainfsm.addState(s1);
+        s1 = mainfsm.addStdState("s1");
         new SubFSMTransition(mainfsm.initState, s1, fsm);
         mainfsm.addHandler(handler);
-        subS1 = new StdState(fsm, "sub1");
-        subS2 = new StdState(fsm, "sub2");
-        subT = new TerminalState(fsm, "t1");
-        subC = new CancellingState(fsm, "c1");
+        subS1 = fsm.addStdState("subS1");
+        subS2 = fsm.addStdState("subS2");
+        subT = fsm.addTerminalState("subT");
+        subC = fsm.addCancellingState("subC");
         new SubStubTransition1(fsm.initState, subS1, true);
         new SubStubTransition2(subS1, subS2, true);
         new SubStubTransition1(subS2, subT, true);
         new SubStubTransition2(subS2, subC, true);
-        fsm.addState(subS1);
-        fsm.addState(subS2);
-        fsm.addState(subT);
-        fsm.addState(subC);
     });
 
     test("check log when processing event with sub FSM", () => {
         fsm = new FSMImpl(undefined, logger);
         mainfsm = new FSMImpl(undefined, logger);
-        s1 = new StdState(mainfsm, "s1");
-        mainfsm.addState(s1);
+        s1 = mainfsm.addStdState("s1");
         new SubFSMTransition(mainfsm.initState, s1, fsm);
-        subS1 = new StdState(fsm, "sub1");
-        subS2 = new StdState(fsm, "sub2");
-        subT = new TerminalState(fsm, "t1");
-        subC = new CancellingState(fsm, "c1");
+        subS1 = fsm.addStdState("subS1");
+        subS2 = fsm.addStdState("subS2");
+        subT = fsm.addTerminalState("subT");
+        subC = fsm.addCancellingState("subC");
         new SubStubTransition1(fsm.initState, subS1, true);
         new SubStubTransition2(subS1, subS2, true);
         new SubStubTransition1(subS2, subT, true);
         new SubStubTransition2(subS2, subC, true);
-        fsm.addState(subS1);
-        fsm.addState(subS2);
-        fsm.addState(subT);
-        fsm.addState(subC);
         fsm.log = true;
         mainfsm.log = true;
         mainfsm.process(createMouseEvent("click", document.createElement("button")));
@@ -696,8 +674,7 @@ describe("testWithSubFSM", () => {
     test("check no log when processing event with sub FSM", () => {
         fsm = new FSMImpl(undefined, logger);
         mainfsm = new FSMImpl(undefined, logger);
-        s1 = new StdState(mainfsm, "s1");
-        mainfsm.addState(s1);
+        s1 = mainfsm.addStdState("s1");
         new SubFSMTransition(mainfsm.initState, s1, fsm);
         fsm.log = false;
         mainfsm.log = false;
@@ -759,8 +736,7 @@ describe("testWithSubFSM", () => {
     });
 
     test("exitSubGoIntoCancelling", () => {
-        const cancel: CancellingState = new CancellingState(mainfsm, "cancel1");
-        mainfsm.addState(cancel);
+        const cancel = mainfsm.addCancellingState("cancel");
         mainfsm.initState.clearTransitions();
         new SubFSMTransition(mainfsm.initState, cancel, fsm);
         mainfsm.process(createMouseEvent("click", document.createElement("button")));
@@ -771,36 +747,8 @@ describe("testWithSubFSM", () => {
         expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
     });
 
-    test("exit KO state type", () => {
-        const stateKO = new class implements InputState {
-            public enter(): void {
-            }
-
-            public readonly name = "foo";
-
-            public get fsm(): FSMImpl<FSMDataHandler> {
-                return mainfsm;
-            }
-
-            public checkStartingState(): void {
-            }
-
-            public uninstall(): void {
-            }
-        }();
-        mainfsm.addState(stateKO);
-        mainfsm.initState.clearTransitions();
-        new SubFSMTransition(mainfsm.initState, stateKO, fsm);
-        mainfsm.process(createMouseEvent("click", document.createElement("button")));
-        mainfsm.process(createKeyEvent("keydown", "a"));
-        mainfsm.process(createMouseEvent("click", document.createElement("button")));
-        expect(mainfsm.currentState.name).toBe("sub2");
-        expect(fsm.currentState).toBe(fsm.initState);
-    });
-
     test("exitSubGoIntoTerminal", () => {
-        const terminal: TerminalState = new TerminalState(mainfsm, "terminal1");
-        mainfsm.addState(terminal);
+        const terminal = mainfsm.addTerminalState("terminal");
         mainfsm.initState.clearTransitions();
         new SubFSMTransition(mainfsm.initState, terminal, fsm);
         mainfsm.process(createMouseEvent("click", document.createElement("button")));
