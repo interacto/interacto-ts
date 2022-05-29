@@ -57,7 +57,7 @@ export class LongMouseDownFSM extends FSMImpl<LongMouseDownFSMHandler> {
         const move = new MouseMoveTransition(down, cancelled, undefined,
             (evt: MouseEvent): boolean => evt.button === this.currentButton);
 
-        new MouseUpTransition(down, cancelled, undefined, move.isGuardOK);
+        new MouseUpTransition(down, cancelled, undefined, move.guard);
 
         new TimeoutTransition(down, timeouted, () => this.duration);
     }

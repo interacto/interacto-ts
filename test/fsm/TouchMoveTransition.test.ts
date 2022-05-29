@@ -38,7 +38,7 @@ test("valid event", () => {
 });
 
 test("guard OK", () => {
-    expect(tr.isGuardOK(createTouchEvent("touchmove", 3,
+    expect(tr.guard(createTouchEvent("touchmove", 3,
         canvas, 11, 23, 12, 25))).toBeTruthy();
 });
 

@@ -27,7 +27,7 @@ export abstract class TransitionBase<E extends Event> implements Transition<E> {
 
     public readonly action: (evt?: E) => void;
 
-    public readonly isGuardOK: (evt: E) => boolean;
+    public readonly guard: (evt: E) => boolean;
 
     /**
      * Creates the transition.
@@ -40,12 +40,12 @@ export abstract class TransitionBase<E extends Event> implements Transition<E> {
         this.tgt = tgtState;
         this.action = action ?? ((): void => {
         });
-        this.isGuardOK = guard ?? ((): boolean => true);
+        this.guard = guard ?? ((): boolean => true);
         this.src.addTransition(this);
     }
 
     public execute(event: Event): InputState | undefined {
-        if (this.accept(event) && this.isGuardOK(event)) {
+        if (this.accept(event) && this.guard(event)) {
             this.src.fsm.stopCurrentTimeout();
             this.action(event);
             this.src.exit();

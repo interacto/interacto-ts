@@ -29,7 +29,7 @@ export interface Transition<E extends Event> {
      */
     execute(event: Event): InputState | undefined;
 
-    isGuardOK(event: E): boolean;
+    guard(event: E): boolean;
 
     accept(event: Event): event is E;
 

@@ -55,11 +55,11 @@ test("notAcceptFirstEvent", () => {
 });
 
 test("guardOKFirstEvent", () => {
-    expect(tr.isGuardOK(createMouseEvent("click", document.createElement("button")))).toBeTruthy();
+    expect(tr.guard(createMouseEvent("click", document.createElement("button")))).toBeTruthy();
 });
 
 test("guardKOFirstEvent", () => {
-    expect(tr.isGuardOK(createMouseEvent("mousemove", document.createElement("button")))).toBeFalsy();
+    expect(tr.guard(createMouseEvent("mousemove", document.createElement("button")))).toBeFalsy();
 });
 
 test("executeFirstEventReturnsSubState", () => {

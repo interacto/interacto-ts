@@ -43,7 +43,7 @@ test("valid event", () => {
 });
 
 test("guard OK", () => {
-    expect(tr.isGuardOK(createMouseEvent("mouseleave",
+    expect(tr.guard(createMouseEvent("mouseleave",
         canvas, 11, 23, 12, 25, 1))).toBeTruthy();
 });
 

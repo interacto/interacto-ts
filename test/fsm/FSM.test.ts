@@ -486,7 +486,7 @@ describe("testMultipleTransitionChoice", () => {
     });
 
     test("notTriggeredIfGuardKO", () => {
-        iToS.guard = false;
+        iToS._guard = false;
         fsm.process(mock<Event>());
 
         expect(fsm.currentState).toBe(fsm.initState);

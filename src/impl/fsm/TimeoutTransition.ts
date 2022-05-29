@@ -93,7 +93,7 @@ export class TimeoutTransition extends TransitionBase<Event> {
 
     public override execute(event?: Event): InputState | undefined {
         try {
-            if (this.accept(event) && this.isGuardOK(event)) {
+            if (this.accept(event) && this.guard(event)) {
                 this.src.exit();
                 this.action(event);
                 this.tgt.enter();

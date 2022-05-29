@@ -58,7 +58,7 @@ class DnDFSM extends FSMImpl<DnDFSMHandler> {
             },
             (evt: MouseEvent): boolean => evt.button === this.buttonToCheck);
 
-        new MouseMoveTransition(dragged, dragged, move.action, move.isGuardOK);
+        new MouseMoveTransition(dragged, dragged, move.action, move.guard);
 
         new MouseUpTransition(dragged, this.addTerminalState("released"),
             (event: MouseEvent): void => {

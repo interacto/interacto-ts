@@ -44,7 +44,7 @@ test("valid event", () => {
 });
 
 test("guard OK", () => {
-    expect(tr.isGuardOK(createWheelEvent("wheel",
+    expect(tr.guard(createWheelEvent("wheel",
         canvas, 11, 43, 12, 11, 1,
         5, 6, 7, 8))).toBeTruthy();
 });

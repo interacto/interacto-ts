@@ -19,11 +19,11 @@ import type {EventType} from "../../src/api/fsm/EventType";
 import {isEventType} from "../../src/impl/fsm/Events";
 
 export class StubTransitionOK<E extends Event> extends TransitionBase<E> {
-    public guard: boolean;
+    public _guard: boolean;
 
     public constructor(srcState: OutputState, tgtState: InputState, guard?: boolean) {
-        super(srcState, tgtState, undefined, () => this.guard);
-        this.guard = guard ?? true;
+        super(srcState, tgtState, undefined, () => this._guard);
+        this._guard = guard ?? true;
     }
 
     public accept(event: Event): event is E {

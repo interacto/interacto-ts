@@ -48,15 +48,15 @@ afterEach(() => {
     jest.clearAllMocks();
 });
 
-test("isGuardOKAfterTimeout", () => {
+test("guard OK after timeout", () => {
     evt.startTimeout();
     jest.runOnlyPendingTimers();
-    expect(evt.isGuardOK(new Event("mousedown"))).toBeTruthy();
+    expect(evt.guard(new Event("mousedown"))).toBeTruthy();
 });
 
-test("isGuardKOBeforeTimeout", () => {
+test("guard KO before timeout", () => {
     evt.startTimeout();
-    expect(evt.isGuardOK(new Event("mousedown"))).toBeFalsy();
+    expect(evt.guard(new Event("mousedown"))).toBeFalsy();
 });
 
 test("oKAfterTimeout", () => {
@@ -77,7 +77,7 @@ test("stopTimeout", () => {
     evt.startTimeout();
     evt.stopTimeout();
     jest.runOnlyPendingTimers();
-    expect(evt.isGuardOK(new Event("mousedown"))).toBeFalsy();
+    expect(evt.guard(new Event("mousedown"))).toBeFalsy();
 });
 
 test("stop timeout 0", () => {
@@ -85,7 +85,7 @@ test("stop timeout 0", () => {
     evt.startTimeout();
     expect(jest.getTimerCount()).toBe(0);
     evt.stopTimeout();
-    expect(evt.isGuardOK(new Event("mousedown"))).toBeFalsy();
+    expect(evt.guard(new Event("mousedown"))).toBeFalsy();
 });
 
 test("two consecutive starts", () => {
@@ -94,13 +94,13 @@ test("two consecutive starts", () => {
     evt.startTimeout();
     expect(jest.getTimerCount()).toBe(1);
     evt.stopTimeout();
-    expect(evt.isGuardOK(new Event("mousedown"))).toBeFalsy();
+    expect(evt.guard(new Event("mousedown"))).toBeFalsy();
 });
 
 test("stop when not started", () => {
     evt.stopTimeout();
     expect(jest.getTimerCount()).toBe(0);
-    expect(evt.isGuardOK(new Event("mousedown"))).toBeFalsy();
+    expect(evt.guard(new Event("mousedown"))).toBeFalsy();
 });
 
 test("getAcceptEventsEmpty", () => {

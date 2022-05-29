@@ -47,7 +47,7 @@ export class SubFSMTransition extends TransitionBase<Event> {
      */
     public constructor(srcState: OutputState, tgtState: InputState, fsm: FSM,
                        action?: (evt?: Event) => void) {
-        super(srcState, tgtState, action, (evt: Event) => this.findTransition(evt)?.isGuardOK(evt) ?? false);
+        super(srcState, tgtState, action, (evt: Event) => this.findTransition(evt)?.guard(evt) ?? false);
         this.subFSM = fsm;
         this.subFSM.inner = true;
         this.subFSMHandler = {
