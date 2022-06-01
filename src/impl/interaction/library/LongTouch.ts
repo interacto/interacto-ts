@@ -21,6 +21,7 @@ import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 import type {TouchData} from "../../../api/interaction/TouchData";
 import {TouchDataImpl} from "../TouchDataImpl";
 import {TouchMoveTransition} from "../../fsm/TouchMoveTransition";
+import type {Logger} from "../../../api/logging/Logger";
 
 /**
  * The FSM for the LongTouch interaction
@@ -34,8 +35,8 @@ class LongTouchFSM extends FSMImpl<LongTouchFSMHandler> {
      * Creates the long touch FSM
      * @param duration - Defines the duration of the touch interaction.
      */
-    public constructor(duration: number, dataHandler: LongTouchFSMHandler) {
-        super(dataHandler);
+    public constructor(duration: number, logger: Logger, dataHandler: LongTouchFSMHandler) {
+        super(logger, dataHandler);
 
         if (duration <= 0) {
             throw new Error("Incorrect duration");
@@ -78,7 +79,7 @@ export class LongTouch extends InteractionBase<TouchData, TouchDataImpl, LongTou
      * @param duration - The duration of the touch required to ends the user interaction
      * If this duration is not reached, the interaction is cancelled.
      */
-    public constructor(duration: number) {
+    public constructor(duration: number, logger: Logger) {
         const handler: LongTouchFSMHandler = {
             "tap": (evt: TouchEvent): void => {
                 if (evt.changedTouches.length > 0) {
@@ -90,6 +91,6 @@ export class LongTouch extends InteractionBase<TouchData, TouchDataImpl, LongTou
             }
         };
 
-        super(new LongTouchFSM(duration, handler), new TouchDataImpl());
+        super(new LongTouchFSM(duration, logger, handler), new TouchDataImpl(), logger);
     }
 }

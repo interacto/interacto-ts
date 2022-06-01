@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMHandler} from "../../../src/interacto";
+import type {FSMHandler, Logger} from "../../../src/interacto";
 import {Click, PointDataImpl} from "../../../src/interacto";
 import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
@@ -25,7 +25,7 @@ let handler: FSMHandler & MockProxy<FSMHandler>;
 
 beforeEach(() => {
     handler = mock<FSMHandler>();
-    interaction = new Click();
+    interaction = new Click(mock<Logger>());
     interaction.log(true);
     interaction.fsm.log = true;
     interaction.fsm.addHandler(handler);

@@ -12,16 +12,15 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSMImpl} from "../../src/impl/fsm/FSMImpl";
-import type {StateBase} from "../../src/impl/fsm/StateBase";
-import {StdState} from "../../src/impl/fsm/StdState";
-import type {FSMDataHandler} from "../../src/impl/fsm/FSMDataHandler";
+import type {FSMDataHandler, Logger, StateBase} from "../../src/interacto";
+import {FSMImpl, StdState} from "../../src/interacto";
+import {mock} from "jest-mock-extended";
 
 let state: StateBase;
 let fsm: FSMImpl<FSMDataHandler>;
 
 beforeEach(() => {
-    fsm = new FSMImpl();
+    fsm = new FSMImpl(mock<Logger>());
     state = new StdState(fsm, "s1");
 });
 

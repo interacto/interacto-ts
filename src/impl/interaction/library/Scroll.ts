@@ -18,13 +18,14 @@ import type {ScrollData} from "../../../api/interaction/ScrollData";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {ScrollDataImpl} from "../ScrollDataImpl";
+import type {Logger} from "../../../api/logging/Logger";
 
 /**
  * An FSM for scrolling.
  */
 export class ScrollFSM extends FSMImpl<ScrollFSMHandler> {
-    public constructor(dataHandler: ScrollFSMHandler) {
-        super(dataHandler);
+    public constructor(logger: Logger, dataHandler: ScrollFSMHandler) {
+        super(logger, dataHandler);
 
         new ScrollTransition(this.initState, this.addTerminalState("scrolled"),
             (evt: Event): void => {
@@ -46,7 +47,7 @@ export class Scroll extends InteractionBase<ScrollData, ScrollDataImpl, ScrollFS
     /**
      * Creates the interaction.
      */
-    public constructor() {
+    public constructor(logger: Logger) {
         const handler: ScrollFSMHandler = {
             "initToScroll": (event: Event): void => {
                 this._data.setScrollData(event);
@@ -56,6 +57,6 @@ export class Scroll extends InteractionBase<ScrollData, ScrollDataImpl, ScrollFS
             }
         };
 
-        super(new ScrollFSM(handler), new ScrollDataImpl());
+        super(new ScrollFSM(logger, handler), new ScrollDataImpl(), logger);
     }
 }

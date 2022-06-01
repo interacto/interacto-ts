@@ -20,6 +20,7 @@ import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {WidgetDataImpl} from "../WidgetDataImpl";
+import type {Logger} from "../../../api/logging/Logger";
 
 class TextInputChangedFSM extends FSMImpl<TextInputChangedHandler> {
     /** The time gap between the two spinner events. */
@@ -35,8 +36,8 @@ class TextInputChangedFSM extends FSMImpl<TextInputChangedHandler> {
         return this._timeGap;
     }
 
-    public constructor(dataHandler: TextInputChangedHandler, timeSet?: number) {
-        super(dataHandler);
+    public constructor(logger: Logger, dataHandler: TextInputChangedHandler, timeSet?: number) {
+        super(logger, dataHandler);
         if (timeSet !== undefined) {
             this._timeGap = timeSet;
         }
@@ -68,7 +69,7 @@ interface TextInputChangedHandler extends FSMDataHandler {
 export class TextInputChanged extends InteractionBase<WidgetData<HTMLInputElement | HTMLTextAreaElement>,
 WidgetDataImpl<HTMLInputElement | HTMLTextAreaElement>, TextInputChangedFSM> {
 
-    public constructor(timeGap?: number) {
+    public constructor(logger: Logger, timeGap?: number) {
         const handler: TextInputChangedHandler = {
             "initToChangedHandler": (event: Event): void => {
                 this._data.copy(event);
@@ -78,7 +79,7 @@ WidgetDataImpl<HTMLInputElement | HTMLTextAreaElement>, TextInputChangedFSM> {
             }
         };
 
-        super(new TextInputChangedFSM(handler, timeGap), new WidgetDataImpl<HTMLInputElement | HTMLTextAreaElement>());
+        super(new TextInputChangedFSM(logger, handler, timeGap), new WidgetDataImpl<HTMLInputElement | HTMLTextAreaElement>(), logger);
     }
 
     public override onNewNodeRegistered(node: EventTarget): void {

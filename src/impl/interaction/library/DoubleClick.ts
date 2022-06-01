@@ -21,6 +21,7 @@ import {PointDataImpl} from "../PointDataImpl";
 import {MouseMoveTransition} from "../../fsm/MouseMoveTransition";
 import {SubFSMTransition} from "../../fsm/SubFSMTransition";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
+import type {Logger} from "../../../api/logging/Logger";
 
 export class DoubleClickFSM extends FSMImpl<FSMDataHandler> {
     /** The time gap between the two spinner events. */
@@ -52,10 +53,10 @@ export class DoubleClickFSM extends FSMImpl<FSMDataHandler> {
 
     private checkButton?: number;
 
-    public constructor(dataHandler?: FSMDataHandler) {
-        super(dataHandler);
-        this.firstClickFSM = new ClickFSM();
-        this.sndClickFSM = new ClickFSM();
+    public constructor(logger: Logger, dataHandler?: FSMDataHandler) {
+        super(logger, dataHandler);
+        this.firstClickFSM = new ClickFSM(logger);
+        this.sndClickFSM = new ClickFSM(logger);
 
         const errorHandler = {
             "fsmError": (err: unknown): void => {
@@ -116,8 +117,8 @@ export class DoubleClickFSM extends FSMImpl<FSMDataHandler> {
 }
 
 export class DoubleClick extends InteractionBase<PointData, PointDataImpl, DoubleClickFSM> {
-    public constructor(fsm?: DoubleClickFSM, data?: PointDataImpl) {
-        super(fsm ?? new DoubleClickFSM(), data ?? new PointDataImpl());
+    public constructor(logger: Logger, fsm?: DoubleClickFSM, data?: PointDataImpl) {
+        super(fsm ?? new DoubleClickFSM(logger), data ?? new PointDataImpl(), logger);
 
         this.fsm.dataHandler = {
             "reinitData": (): void => {
@@ -127,6 +128,6 @@ export class DoubleClick extends InteractionBase<PointData, PointDataImpl, Doubl
         // We give the interaction to the first click as this click interaction
         // will contains the data: so that this interaction will fill the data
         // of the double-click.
-        new Click(this.fsm.firstClickFSM, this._data);
+        new Click(logger, this.fsm.firstClickFSM, this._data);
     }
 }

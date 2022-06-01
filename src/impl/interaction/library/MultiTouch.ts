@@ -19,6 +19,7 @@ import type {TouchDnDFSMHandler} from "./TouchDnD";
 import {TouchDnDFSM} from "./TouchDnD";
 import {MultiTouchDataImpl} from "../MultiTouchDataImpl";
 import {SrcTgtTouchDataImpl} from "../SrcTgtTouchDataImpl";
+import type {Logger} from "../../../api/logging/Logger";
 
 /**
  * The FSM that defines a multi-touch interaction (that works like a DnD)
@@ -27,9 +28,9 @@ class MultiTouchFSM extends ConcurrentFSM<TouchDnDFSM, TouchDnDFSMHandler> {
     /**
      * Creates the FSM.
      */
-    public constructor(nbTouch: number, totalReinit: boolean, dataHandler: TouchDnDFSMHandler) {
-        super([...Array(nbTouch).keys()].map(_ => new TouchDnDFSM(false, dataHandler, false)),
-            totalReinit ? [new TouchDnDFSM(false, dataHandler, false)] : [], totalReinit, dataHandler);
+    public constructor(nbTouch: number, totalReinit: boolean, logger: Logger, dataHandler: TouchDnDFSMHandler) {
+        super([...Array(nbTouch).keys()].map(_ => new TouchDnDFSM(false, logger, dataHandler, false)),
+            logger, totalReinit ? [new TouchDnDFSM(false, logger, dataHandler, false)] : [], totalReinit, dataHandler);
     }
 
     public override process(event: Event): boolean {
@@ -89,7 +90,7 @@ export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouch
      * @param nbTouches - The number of touches.
      * @param strict - Defines whether too many touches than expected cancelled the ongoing interaction
      */
-    public constructor(nbTouches: number, strict: boolean) {
+    public constructor(nbTouches: number, strict: boolean, logger: Logger) {
         const handler: TouchDnDFSMHandler = {
             "onTouch": (event: TouchEvent): void => {
                 // eslint-disable-next-line @typescript-eslint/prefer-for-of
@@ -129,6 +130,6 @@ export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouch
             }
         };
 
-        super(new MultiTouchFSM(nbTouches, strict, handler), new MultiTouchDataImpl());
+        super(new MultiTouchFSM(nbTouches, strict, logger, handler), new MultiTouchDataImpl(), logger);
     }
 }

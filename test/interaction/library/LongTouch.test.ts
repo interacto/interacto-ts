@@ -12,19 +12,20 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMHandler} from "../../../src/interacto";
+import type {FSMHandler, Logger} from "../../../src/interacto";
 import {LongTouch, TouchDataImpl} from "../../../src/interacto";
 import {createTouchEvent, robot} from "../StubEvents";
+import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
 import {checkTouchPoint} from "../../Utils";
 
 let interaction: LongTouch;
 let canvas: HTMLElement;
 let handler: FSMHandler;
-
+let logger: Logger & MockProxy<Logger>;
 
 test("cannot create 0 or less duration", () => {
-    expect(() => new LongTouch(0)).toThrow("Incorrect duration");
+    expect(() => new LongTouch(0, mock<Logger>())).toThrow("Incorrect duration");
 });
 
 describe("long touch test", () => {
@@ -43,7 +44,8 @@ describe("long touch test", () => {
     [1000, 2000].forEach(duration => {
         describe(`long touch ${String(duration)}`, () => {
             beforeEach(() => {
-                interaction = new LongTouch(duration);
+                logger = mock<Logger>();
+                interaction = new LongTouch(duration, logger);
                 interaction.fsm.addHandler(handler);
                 interaction.registerToNodes([canvas]);
             });
@@ -81,6 +83,21 @@ describe("long touch test", () => {
                 expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
                 expect(handler.fsmStops).toHaveBeenCalledTimes(1);
                 expect(handler.fsmCancels).not.toHaveBeenCalled();
+            });
+
+            test("log interaction is ok", () => {
+                interaction.log(true);
+                interaction.processEvent(createTouchEvent("touchstart", 3, canvas));
+                jest.runOnlyPendingTimers();
+
+                expect(logger.logInteractionMsg).toHaveBeenCalledTimes(7);
+            });
+
+            test("no log interaction is ok", () => {
+                interaction.processEvent(createTouchEvent("touchstart", 3, canvas));
+                jest.runOnlyPendingTimers();
+
+                expect(logger.logInteractionMsg).not.toHaveBeenCalled();
             });
 
             test("two taps then timeout", () => {

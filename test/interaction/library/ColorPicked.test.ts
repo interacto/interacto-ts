@@ -12,20 +12,21 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMHandler} from "../../../src/interacto";
+import type {FSMHandler, Logger} from "../../../src/interacto";
 import {ColorPicked} from "../../../src/interacto";
+import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
 import {robot} from "interacto-nono";
 
 let interaction: ColorPicked;
 let colorBox: HTMLInputElement;
 let handler: FSMHandler;
+let logger: Logger & MockProxy<Logger>;
 
 beforeEach(() => {
     handler = mock<FSMHandler>();
-    interaction = new ColorPicked();
-    interaction.log(true);
-    interaction.fsm.log = true;
+    logger = mock<Logger>();
+    interaction = new ColorPicked(logger);
     interaction.fsm.addHandler(handler);
     colorBox = document.createElement("input");
     colorBox.type = "color";
@@ -36,6 +37,21 @@ test("input event starts and stops the interaction ColorPicked", () => {
     robot().input(colorBox);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+});
+
+test("log interaction is ok", () => {
+    interaction.log(true);
+    interaction.registerToNodes([colorBox]);
+    robot().input(colorBox);
+
+    expect(logger.logInteractionMsg).toHaveBeenCalledTimes(4);
+});
+
+test("no log interaction is ok", () => {
+    interaction.registerToNodes([colorBox]);
+    robot().input(colorBox);
+
+    expect(logger.logInteractionMsg).not.toHaveBeenCalled();
 });
 
 test("other event don't trigger the interaction", () => {

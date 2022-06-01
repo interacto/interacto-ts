@@ -12,11 +12,12 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 import type {Subscription} from "rxjs";
-import type {Binding, PointData, UndoHistoryBase} from "../../src/interacto";
+import type {Binding, PointData, UndoHistoryBase, Logger} from "../../src/interacto";
 import {BindingsImpl, MouseDown, UndoHistoryImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {createKeyEvent, createMouseEvent} from "../interaction/StubEvents";
 import type {Bindings} from "../../src/api/binding/Bindings";
+import {mock} from "jest-mock-extended";
 
 let canvas1: HTMLElement;
 let canvas2: HTMLElement;
@@ -43,13 +44,13 @@ afterEach(() => {
 
 test("event bubbling works", () => {
     binding2 = bindings.nodeBinder()
-        .usingInteraction(() => new MouseDown())
+        .usingInteraction(() => new MouseDown(mock<Logger>()))
         .toProduce(_i => new StubCmd())
         .on(canvas2)
         .bind();
 
     binding1 = bindings.nodeBinder()
-        .usingInteraction(() => new MouseDown())
+        .usingInteraction(() => new MouseDown(mock<Logger>()))
         .toProduce(_i => new StubCmd())
         .on(canvas1)
         .bind();
@@ -62,13 +63,13 @@ test("event bubbling works", () => {
 
 test("event bubbling respects physical laws", () => {
     binding2 = bindings.nodeBinder()
-        .usingInteraction(() => new MouseDown())
+        .usingInteraction(() => new MouseDown(mock<Logger>()))
         .toProduce(() => new StubCmd())
         .on(canvas2)
         .bind();
 
     binding1 = bindings.nodeBinder()
-        .usingInteraction(() => new MouseDown())
+        .usingInteraction(() => new MouseDown(mock<Logger>()))
         .toProduce(() => new StubCmd())
         .on(canvas1)
         .bind();
@@ -81,14 +82,14 @@ test("event bubbling respects physical laws", () => {
 
 test("stop propagation prevents bubbling", () => {
     binding2 = bindings.nodeBinder()
-        .usingInteraction(() => new MouseDown())
+        .usingInteraction(() => new MouseDown(mock<Logger>()))
         .toProduce(() => new StubCmd())
         .on(canvas2)
         .stopImmediatePropagation()
         .bind();
 
     binding1 = bindings.nodeBinder()
-        .usingInteraction(() => new MouseDown())
+        .usingInteraction(() => new MouseDown(mock<Logger>()))
         .toProduce(() => new StubCmd())
         .on(canvas1)
         .bind();
@@ -119,7 +120,7 @@ test("stop propagation prevents bubbling with key bindings", () => {
 
 test("stop propagation prevents bubbling using cloned builders", () => {
     const clone = bindings.nodeBinder()
-        .usingInteraction(() => new MouseDown())
+        .usingInteraction(() => new MouseDown(mock<Logger>()))
         .toProduce(() => new StubCmd())
         .stopImmediatePropagation();
 

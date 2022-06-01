@@ -36,7 +36,7 @@ interface CancellablePromise extends Promise<void> {
 export abstract class InteractionBase<D extends InteractionData, DImpl extends D & Flushable, F extends FSM> implements Interaction<D> {
     protected readonly _fsm: F;
 
-    protected asLog: boolean;
+    protected _log: boolean;
 
     /**
      * The current nodes that the interaction works on
@@ -49,7 +49,7 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
     /** The interaction data */
     protected readonly _data: DImpl;
 
-    protected readonly logger?: Logger;
+    protected readonly logger: Logger;
 
     private mouseHandler?: ((e: MouseEvent) => void);
 
@@ -85,7 +85,7 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
      * @param data - The interaction data.
      * @param logger - The logger to use for this interaction
      */
-    protected constructor(fsm: F, data: DImpl, logger?: Logger) {
+    protected constructor(fsm: F, data: DImpl, logger: Logger) {
         this.logger = logger;
         this.activated = false;
         this.stopImmediatePropag = false;
@@ -96,7 +96,7 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
             this.updateEventsRegistered(current[1], current[0]);
         });
         this.activated = true;
-        this.asLog = false;
+        this._log = false;
         this.registeredNodes = new Set<EventTarget>();
         this.mutationObservers = [];
         this.throttleTimeout = 0;
@@ -142,7 +142,7 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
                 }, currTimeout);
             }
         ).catch((ex: unknown) => {
-            this.logger?.logInteractionErr("Error during the throttling process", ex, this.constructor.name);
+            this.logger.logInteractionErr("Error during the throttling process", ex, this.constructor.name);
         }) as CancellablePromise;
 
         this.currentThrottling.cancel = (): void => {
@@ -412,7 +412,7 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
     }
 
     public log(log: boolean): void {
-        this.asLog = log;
+        this._log = log;
         this._fsm.log = log;
     }
 
@@ -422,8 +422,8 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
     }
 
     public setActivated(activated: boolean): void {
-        if (this.asLog) {
-            this.logger?.logInteractionMsg(`Interaction activation: ${String(activated)}`, this.constructor.name);
+        if (this._log) {
+            this.logger.logInteractionMsg(`Interaction activation: ${String(activated)}`, this.constructor.name);
         }
         this.activated = activated;
         if (!activated) {

@@ -35,7 +35,7 @@ let history: UndoHistory;
 
 class OneTrFSM extends FSMImpl<FSMDataHandler> {
     public constructor() {
-        super();
+        super(mock<Logger>());
         new ClickTransition(this.initState, this.addTerminalState("s1"));
     }
 }

@@ -12,20 +12,21 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMHandler} from "../../../src/interacto";
+import type {FSMHandler, Logger} from "../../../src/interacto";
 import {ComboBoxSelected} from "../../../src/interacto";
+import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
 import {robot} from "interacto-nono";
 
 let interaction: ComboBoxSelected;
 let comboBox: HTMLElement;
 let handler: FSMHandler;
+let logger: Logger & MockProxy<Logger>;
 
 beforeEach(() => {
     handler = mock<FSMHandler>();
-    interaction = new ComboBoxSelected();
-    interaction.log(true);
-    interaction.fsm.log = true;
+    logger = mock<Logger>();
+    interaction = new ComboBoxSelected(logger);
     interaction.fsm.addHandler(handler);
     comboBox = document.createElement("select");
 });
@@ -35,6 +36,21 @@ test("input event starts and stops the interaction ComboBoxSelected", () => {
     robot().input(comboBox);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+});
+
+test("log interaction is ok", () => {
+    interaction.log(true);
+    interaction.registerToNodes([comboBox]);
+    robot().input(comboBox);
+
+    expect(logger.logInteractionMsg).toHaveBeenCalledTimes(4);
+});
+
+test("no log interaction is ok", () => {
+    interaction.registerToNodes([comboBox]);
+    robot().input(comboBox);
+
+    expect(logger.logInteractionMsg).not.toHaveBeenCalled();
 });
 
 test("other event don't trigger the interaction", () => {

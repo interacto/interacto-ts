@@ -70,7 +70,7 @@ test("that is crashes when calling bind without a command supplier", () => {
 test("that observer is used on bind", () => {
     const obs = mock<BindingsObserver>();
     const binder = new KeysBinder(bindings.undoHistory, mock<Logger>(), obs)
-        .usingInteraction(() => new KeyDown(false))
+        .usingInteraction(() => new KeyDown(mock<Logger>(), false))
         .toProduce(() => mock<Command>());
 
     binding = binder.bind();
@@ -729,7 +729,7 @@ test("keys with cancel", () => {
 
 test("key binding with invalid interaction key data", () => {
     binding = new KeysBinder(mock<UndoHistory>(), mock<Logger>(), ctx, undefined)
-        .usingInteraction(() => new MouseDown())
+        .usingInteraction(() => new MouseDown(mock<Logger>()))
         .toProduce(() => new StubCmd(true))
         .on(elt)
         .with(false, "z")

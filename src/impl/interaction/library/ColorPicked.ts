@@ -18,10 +18,11 @@ import {ColorPickedTransition} from "../../fsm/ColorPickedTransition";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {WidgetDataImpl} from "../WidgetDataImpl";
+import type {Logger} from "../../../api/logging/Logger";
 
 class ColorPickedFSM extends FSMImpl<ColorPickedHandler> {
-    public constructor(dataHandler: ColorPickedHandler) {
-        super(dataHandler);
+    public constructor(logger: Logger, dataHandler: ColorPickedHandler) {
+        super(logger, dataHandler);
 
         new ColorPickedTransition(this.initState, this.addTerminalState("picked"),
             (evt: Event): void => {
@@ -42,7 +43,7 @@ export class ColorPicked extends InteractionBase<WidgetData<HTMLInputElement>, W
     /**
      * Creates the interaction.
      */
-    public constructor() {
+    public constructor(logger: Logger) {
         const handler: ColorPickedHandler = {
             "initToPickedHandler": (event: Event): void => {
                 this._data.copy(event);
@@ -52,7 +53,7 @@ export class ColorPicked extends InteractionBase<WidgetData<HTMLInputElement>, W
             }
         };
 
-        super(new ColorPickedFSM(handler), new WidgetDataImpl<HTMLInputElement>());
+        super(new ColorPickedFSM(logger, handler), new WidgetDataImpl<HTMLInputElement>(), logger);
     }
 
     public override onNewNodeRegistered(node: EventTarget): void {

@@ -15,6 +15,7 @@
 import type {
     Binding,
     Bindings,
+    BindingsObserver,
     Command,
     EltRef,
     Interaction,
@@ -29,17 +30,23 @@ import type {
     SrcTgtPointsData,
     TapData,
     TouchData,
+    UndoHistory,
     UndoHistoryBase,
     WidgetData
 } from "../../src/interacto";
-import {AnonCmd, BindingsContext, BindingsImpl, CmdStatus, LogLevel, UndoHistoryImpl} from "../../src/interacto";
+import {
+    AnonCmd,
+    BindingsContext,
+    BindingsImpl,
+    CmdStatus,
+    LogLevel,
+    UndoHistoryImpl,
+    WhenType
+} from "../../src/interacto";
 import {StubCmd, StubUndoableCmd} from "../command/StubCmd";
 import type {MouseEventForTest} from "../interaction/StubEvents";
 import {createMouseEvent, robot} from "../interaction/StubEvents";
 import {mock} from "jest-mock-extended";
-import type {UndoHistory} from "../../src/api/undo/UndoHistory";
-import type {BindingsObserver} from "../../src/api/binding/BindingsObserver";
-import {WhenType} from "../../src/api/binder/When";
 
 let elt: HTMLElement;
 let ctx: BindingsContext;
@@ -158,6 +165,35 @@ describe("test Bindings", () => {
         robot(elt).mousedown();
         expect(logger.logCmdMsg).toHaveBeenCalledTimes(4);
         expect(logger.logBindingMsg).toHaveBeenCalledTimes(5);
+    });
+
+    test("log interaction binding", () => {
+        bindings.mouseDownBinder()
+            .on(elt)
+            .toProduce(() => new StubCmd(true))
+            .log(LogLevel.interaction)
+            .bind();
+        robot(elt).mousedown();
+        expect(logger.logInteractionMsg).toHaveBeenCalledTimes(4);
+    });
+
+    test("continous execution with command not undoable", () => {
+        bindings.dndBinder(true)
+            .on(elt)
+            .toProduce(() => new StubCmd(true))
+            .log(LogLevel.interaction, LogLevel.command, LogLevel.binding)
+            .continuousExecution()
+            .bind();
+
+        robot(elt)
+            .mousedown()
+            .mousemove()
+            .mousemove()
+            .keydown({"code": "Escape"});
+
+        expect(logger.logInteractionErr).toHaveBeenCalledTimes(0);
+        expect(logger.logBindingErr).toHaveBeenCalledTimes(1);
+        expect(logger.logCmdErr).toHaveBeenCalledTimes(0);
     });
 
     test("undoable command registered", () => {

@@ -12,21 +12,22 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMHandler} from "../../../src/interacto";
+import type {FSMHandler, Logger} from "../../../src/interacto";
 import {DoubleClick, PointDataImpl} from "../../../src/interacto";
+import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
 import {robot} from "../StubEvents";
 
 let interaction: DoubleClick;
 let canvas: HTMLElement;
 let handler: FSMHandler;
+let logger: Logger & MockProxy<Logger>;
 
 beforeEach(() => {
     jest.useFakeTimers();
     handler = mock<FSMHandler>();
-    interaction = new DoubleClick();
-    interaction.log(true);
-    interaction.fsm.log = true;
+    logger = mock<Logger>();
+    interaction = new DoubleClick(logger);
     interaction.fsm.addHandler(handler);
     canvas = document.createElement("canvas");
 });
@@ -37,6 +38,21 @@ test("double click on a canvas starts and stops the interaction", () => {
     robot().click(canvas, 2);
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+});
+
+test("log interaction is ok", () => {
+    interaction.log(true);
+    interaction.registerToNodes([canvas]);
+    robot().click(canvas, 2);
+
+    expect(logger.logInteractionMsg).toHaveBeenCalledTimes(10);
+});
+
+test("no log interaction is ok", () => {
+    interaction.registerToNodes([canvas]);
+    robot().click(canvas, 2);
+
+    expect(logger.logInteractionMsg).not.toHaveBeenCalled();
 });
 
 test("check data of the interaction.", () => {

@@ -21,6 +21,7 @@ import {InteractionBase} from "./InteractionBase";
 import type {EventType} from "../../api/fsm/EventType";
 import type {Flushable} from "./Flushable";
 import type {FSMDataHandler} from "../fsm/FSMDataHandler";
+import type {Logger} from "../../api/logging/Logger";
 
 /**
  * The base implementation of a user interaction that uses concurrent FSMs.
@@ -36,8 +37,8 @@ export abstract class ConcurrentInteraction<D extends InteractionData, DImpl ext
      * @param fsm - The concurrent FSM that defines the behavior of the user interaction.
      * @param data - The interaction data.
      */
-    protected constructor(fsm: F, data: DImpl) {
-        super(fsm, data);
+    protected constructor(fsm: F, data: DImpl, logger: Logger) {
+        super(fsm, data, logger);
         this.subscriptions = this.fsm.getAllConccurFSMs()
             .map(conc => conc.currentStateObservable
                 .subscribe(current => {

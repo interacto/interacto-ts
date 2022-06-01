@@ -19,10 +19,11 @@ import {HyperLinkTransition} from "../../fsm/HyperLinkTransition";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {WidgetDataImpl} from "../WidgetDataImpl";
+import type {Logger} from "../../../api/logging/Logger";
 
 class HyperLinkClickedFSM extends FSMImpl<HyperLinkClickedFSMHandler> {
-    public constructor(dataHandler: HyperLinkClickedFSMHandler) {
-        super(dataHandler);
+    public constructor(logger: Logger, dataHandler: HyperLinkClickedFSMHandler) {
+        super(logger, dataHandler);
 
         new HyperLinkTransition(this.initState, this.addTerminalState("clicked"),
             (evt: Event): void => {
@@ -43,7 +44,7 @@ export class HyperLinkClicked extends InteractionBase<WidgetData<HTMLAnchorEleme
     /**
      * Creates the interaction.
      */
-    public constructor() {
+    public constructor(logger: Logger) {
         const handler: HyperLinkClickedFSMHandler = {
             "initToClickedHandler": (event: Event): void => {
                 this._data.copy(event);
@@ -53,7 +54,7 @@ export class HyperLinkClicked extends InteractionBase<WidgetData<HTMLAnchorEleme
             }
         };
 
-        super(new HyperLinkClickedFSM(handler), new WidgetDataImpl<HTMLAnchorElement>());
+        super(new HyperLinkClickedFSM(logger, handler), new WidgetDataImpl<HTMLAnchorElement>(), logger);
     }
 
     public override onNewNodeRegistered(node: EventTarget): void {

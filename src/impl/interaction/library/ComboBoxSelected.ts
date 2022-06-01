@@ -19,10 +19,11 @@ import {ComboBoxTransition} from "../../fsm/ComboBoxTransition";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {WidgetDataImpl} from "../WidgetDataImpl";
+import type {Logger} from "../../../api/logging/Logger";
 
 class ComboBoxSelectedFSM extends FSMImpl<ComboBoxSelectedHandler> {
-    public constructor(dataHandler: ComboBoxSelectedHandler) {
-        super(dataHandler);
+    public constructor(logger: Logger, dataHandler: ComboBoxSelectedHandler) {
+        super(logger, dataHandler);
 
         new ComboBoxTransition(this.initState, this.addTerminalState("selected"),
             (evt: Event): void => {
@@ -44,7 +45,7 @@ export class ComboBoxSelected extends InteractionBase<WidgetData<HTMLSelectEleme
     /**
      * Creates the interaction.
      */
-    public constructor() {
+    public constructor(logger: Logger) {
         const handler: ComboBoxSelectedHandler = {
             "initToSelectedHandler": (event: Event): void => {
                 this._data.copy(event);
@@ -54,7 +55,7 @@ export class ComboBoxSelected extends InteractionBase<WidgetData<HTMLSelectEleme
             }
         };
 
-        super(new ComboBoxSelectedFSM(handler), new WidgetDataImpl<HTMLSelectElement>());
+        super(new ComboBoxSelectedFSM(logger, handler), new WidgetDataImpl<HTMLSelectElement>(), logger);
     }
 
     public override onNewNodeRegistered(node: EventTarget): void {

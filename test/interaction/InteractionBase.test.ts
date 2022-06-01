@@ -155,7 +155,7 @@ test("currentState", () => {
 test("register to node children", async () => {
     expect.assertions(1);
 
-    interaction = new InteractionStub(new FSMImpl());
+    interaction = new InteractionStub(new FSMImpl(logger));
     const doc = document.createElement("svg");
 
     jest.spyOn(interaction, "onNewNodeRegistered");

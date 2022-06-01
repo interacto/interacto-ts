@@ -12,20 +12,21 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMHandler} from "../../../src/interacto";
+import type {FSMHandler, Logger} from "../../../src/interacto";
 import {KeyDataImpl, KeyUp} from "../../../src/interacto";
 import {robot} from "interacto-nono";
+import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
 
 let interaction: KeyUp;
 let text: HTMLElement;
 let handler: FSMHandler;
+let logger: Logger & MockProxy<Logger>;
 
 beforeEach(() => {
     handler = mock<FSMHandler>();
-    interaction = new KeyUp(false);
-    interaction.log(true);
-    interaction.fsm.log = true;
+    logger = mock<Logger>();
+    interaction = new KeyUp(logger, false);
     interaction.fsm.addHandler(handler);
     text = document.createElement("textarea");
 });
@@ -35,6 +36,21 @@ test("type 'a' in the textarea starts and stops the interaction.", () => {
     robot(text).keyup({"code": "a"});
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+});
+
+test("log interaction is ok", () => {
+    interaction.log(true);
+    interaction.registerToNodes([text]);
+    robot(text).keyup({"code": "a"});
+
+    expect(logger.logInteractionMsg).toHaveBeenCalledTimes(4);
+});
+
+test("no log interaction is ok", () => {
+    interaction.registerToNodes([text]);
+    robot(text).keyup({"code": "a"});
+
+    expect(logger.logInteractionMsg).not.toHaveBeenCalled();
 });
 
 test("the key typed in the textarea is the same key in the data of the interaction.", () => {

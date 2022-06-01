@@ -12,18 +12,19 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMDataHandler, FSMHandler} from "../../../src/interacto";
+import type {FSMDataHandler, FSMHandler, Logger} from "../../../src/interacto";
 import {LongMouseDown, PointDataImpl} from "../../../src/interacto";
 import {createMouseEvent, robot} from "../StubEvents";
+import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
 
 let interaction: LongMouseDown;
 let canvas: HTMLElement;
 let handler: FSMHandler;
-
+let logger: Logger & MockProxy<Logger>;
 
 test("cannot create 0 or less duration", () => {
-    expect(() => new LongMouseDown(0)).toThrow("Incorrect duration");
+    expect(() => new LongMouseDown(0, mock<Logger>())).toThrow("Incorrect duration");
 });
 
 describe("long mouse down test", () => {
@@ -40,12 +41,12 @@ describe("long mouse down test", () => {
     });
 
     test("that has data handler", () => {
-        interaction = new LongMouseDown(1);
+        interaction = new LongMouseDown(1, mock<Logger>());
         expect(interaction.fsm.dataHandler).toBeDefined();
     });
 
     test("that reinit cleans data", () => {
-        interaction = new LongMouseDown(100);
+        interaction = new LongMouseDown(100, mock<Logger>());
         jest.spyOn(interaction.fsm.dataHandler as FSMDataHandler, "reinitData");
         interaction.processEvent(createMouseEvent("mousedown", canvas, 15, 20, 160, 21, 2));
         interaction.reinit();
@@ -57,7 +58,8 @@ describe("long mouse down test", () => {
     [1000, 2000].forEach(duration => {
         describe(`long press ${String(duration)}`, () => {
             beforeEach(() => {
-                interaction = new LongMouseDown(duration);
+                logger = mock<Logger>();
+                interaction = new LongMouseDown(duration, logger);
                 interaction.fsm.addHandler(handler);
             });
 
@@ -96,6 +98,23 @@ describe("long mouse down test", () => {
                 expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
                 expect(handler.fsmStops).toHaveBeenCalledTimes(1);
                 expect(handler.fsmCancels).not.toHaveBeenCalled();
+            });
+
+            test("log interaction is ok", () => {
+                interaction.log(true);
+                interaction.processEvent(createMouseEvent("mousedown", canvas, 15, 20, 160, 21, 2));
+                interaction.processEvent(createMouseEvent("mouseup", canvas, 15, 20, 160, 21, 1));
+                jest.runOnlyPendingTimers();
+
+                expect(logger.logInteractionMsg).toHaveBeenCalledTimes(8);
+            });
+
+            test("no log interaction is ok", () => {
+                interaction.processEvent(createMouseEvent("mousedown", canvas, 15, 20, 160, 21, 2));
+                interaction.processEvent(createMouseEvent("mouseup", canvas, 15, 20, 160, 21, 1));
+                jest.runOnlyPendingTimers();
+
+                expect(logger.logInteractionMsg).not.toHaveBeenCalled();
             });
 
             test("two presses with timeout", () => {

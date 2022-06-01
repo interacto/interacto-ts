@@ -19,10 +19,11 @@ import {DatePickedTransition} from "../../fsm/DatePickedTransition";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {WidgetDataImpl} from "../WidgetDataImpl";
+import type {Logger} from "../../../api/logging/Logger";
 
 class DatePickedFSM extends FSMImpl<DatePickedHandler> {
-    public constructor(dataHandler: DatePickedHandler) {
-        super(dataHandler);
+    public constructor(logger: Logger, dataHandler: DatePickedHandler) {
+        super(logger, dataHandler);
 
         new DatePickedTransition(this.initState, this.addTerminalState("picked"),
             (evt: Event): void => {
@@ -44,7 +45,7 @@ export class DatePicked extends InteractionBase<WidgetData<HTMLInputElement>, Wi
     /**
      * Creates the interaction.
      */
-    public constructor() {
+    public constructor(logger: Logger) {
         const handler: DatePickedHandler = {
             "initToPickedHandler": (event: Event): void => {
                 this._data.copy(event);
@@ -54,7 +55,7 @@ export class DatePicked extends InteractionBase<WidgetData<HTMLInputElement>, Wi
             }
         };
 
-        super(new DatePickedFSM(handler), new WidgetDataImpl<HTMLInputElement>());
+        super(new DatePickedFSM(logger, handler), new WidgetDataImpl<HTMLInputElement>(), logger);
     }
 
     public override onNewNodeRegistered(node: EventTarget): void {

@@ -18,6 +18,7 @@ import type {PointData} from "../../../api/interaction/PointData";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {PointDataImpl} from "../PointDataImpl";
+import type {Logger} from "../../../api/logging/Logger";
 
 /**
  * The FSM for click interactions
@@ -28,8 +29,8 @@ export class ClickFSM extends FSMImpl<ClickFSMHandler> {
     /**
      * Creates the FSM
      */
-    public constructor(dataHandler?: ClickFSMHandler) {
-        super(dataHandler);
+    public constructor(logger: Logger, dataHandler?: ClickFSMHandler) {
+        super(logger, dataHandler);
 
         new ClickTransition(this.initState, this.addTerminalState("clicked"),
             (evt: MouseEvent): void => {
@@ -63,8 +64,8 @@ export class Click extends InteractionBase<PointData, PointDataImpl, ClickFSM> {
     /**
      * Creates the interaction.
      */
-    public constructor(fsm?: ClickFSM, data?: PointDataImpl) {
-        super(fsm ?? new ClickFSM(), data ?? new PointDataImpl());
+    public constructor(logger: Logger, fsm?: ClickFSM, data?: PointDataImpl) {
+        super(fsm ?? new ClickFSM(logger), data ?? new PointDataImpl(), logger);
         this.fsm.dataHandler = {
             "initToClicked": (evt: MouseEvent): void => {
                 this._data.copy(evt);

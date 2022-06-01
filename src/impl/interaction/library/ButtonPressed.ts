@@ -19,6 +19,7 @@ import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {WidgetDataImpl} from "../WidgetDataImpl";
 import {ButtonPressedTransition} from "../../fsm/ButtonPressedTransition";
+import type {Logger} from "../../../api/logging/Logger";
 
 
 /**
@@ -28,8 +29,8 @@ class ButtonPressedFSM extends FSMImpl<ButtonPressedFSMHandler> {
     /**
      * Creates the FSM
      */
-    public constructor(dataHandler: ButtonPressedFSMHandler) {
-        super(dataHandler);
+    public constructor(logger: Logger, dataHandler: ButtonPressedFSMHandler) {
+        super(logger, dataHandler);
 
         new ButtonPressedTransition(this.initState, this.addTerminalState("pressed"),
             (evt: InputEvent): void => {
@@ -51,7 +52,7 @@ WidgetDataImpl<HTMLButtonElement>, FSMImpl<ButtonPressedFSMHandler>> {
     /**
      * Creates the interaction.
      */
-    public constructor() {
+    public constructor(logger: Logger) {
         const handler: ButtonPressedFSMHandler = {
             "initToPressedHandler": (event: InputEvent): void => {
                 this._data.copy(event);
@@ -61,7 +62,7 @@ WidgetDataImpl<HTMLButtonElement>, FSMImpl<ButtonPressedFSMHandler>> {
             }
         };
 
-        super(new ButtonPressedFSM(handler), new WidgetDataImpl<HTMLButtonElement>());
+        super(new ButtonPressedFSM(logger, handler), new WidgetDataImpl<HTMLButtonElement>(), logger);
     }
 
     public override onNewNodeRegistered(node: EventTarget): void {

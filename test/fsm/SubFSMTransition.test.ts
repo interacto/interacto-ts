@@ -12,15 +12,11 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSMImpl} from "../../src/impl/fsm/FSMImpl";
-import type {InputState} from "../../src/api/fsm/InputState";
-import type {StdState} from "../../src/impl/fsm/StdState";
-import {SubFSMTransition} from "../../src/impl/fsm/SubFSMTransition";
-import type {TerminalState} from "../../src/impl/fsm/TerminalState";
+import type {FSMDataHandler, InputState, Logger, Transition, StdState, TerminalState} from "../../src/interacto";
+import {FSMImpl, SubFSMTransition} from "../../src/interacto";
 import {SubStubTransition1} from "./StubTransitionOK";
-import type {Transition} from "../../src/api/fsm/Transition";
 import {createMouseEvent} from "../interaction/StubEvents";
-import type {FSMDataHandler} from "../../src/impl/fsm/FSMDataHandler";
+import {mock} from "jest-mock-extended";
 
 let tr: SubFSMTransition;
 let fsm: FSMImpl<FSMDataHandler>;
@@ -31,8 +27,8 @@ let subS: TerminalState;
 
 beforeEach(() => {
     jest.clearAllMocks();
-    fsm = new FSMImpl();
-    mainfsm = new FSMImpl();
+    fsm = new FSMImpl(mock<Logger>());
+    mainfsm = new FSMImpl(mock<Logger>());
     s1 = mainfsm.addStdState("s1");
     s2 = mainfsm.addStdState("s2");
     subS = fsm.addTerminalState("sub1");

@@ -23,6 +23,7 @@ import {SrcTgtPointsDataImpl} from "../SrcTgtPointsDataImpl";
 import type {PointData} from "../../../api/interaction/PointData";
 import {MouseMoveTransition} from "../../fsm/MouseMoveTransition";
 import {SubFSMTransition} from "../../fsm/SubFSMTransition";
+import type {Logger} from "../../../api/logging/Logger";
 
 class DragLockFSM extends FSMImpl<DragLockFSMHandler> {
     public readonly firstDbleClick: DoubleClickFSM;
@@ -31,12 +32,12 @@ class DragLockFSM extends FSMImpl<DragLockFSMHandler> {
 
     protected checkButton?: number;
 
-    public constructor(dataHandler: DragLockFSMHandler) {
-        super(dataHandler);
-        this.firstDbleClick = new DoubleClickFSM();
-        this.sndDbleClick = new DoubleClickFSM();
+    public constructor(logger: Logger, dataHandler: DragLockFSMHandler) {
+        super(logger, dataHandler);
+        this.firstDbleClick = new DoubleClickFSM(logger);
+        this.sndDbleClick = new DoubleClickFSM(logger);
 
-        const cancelDbleClick = new DoubleClickFSM();
+        const cancelDbleClick = new DoubleClickFSM(logger);
         const errorHandler = {
             "fsmError": (err: unknown): void => {
                 this.notifyHandlerOnError(err);
@@ -106,7 +107,7 @@ export class DragLock extends InteractionBase<SrcTgtPointsData<PointData>, SrcTg
     /**
      * Creates a drag lock.
      */
-    public constructor() {
+    public constructor(logger: Logger) {
         const handler: DragLockFSMHandler = {
             "onMove": (evt: MouseEvent): void => {
                 (this.data.tgt as PointDataImpl).copy(evt);
@@ -120,11 +121,11 @@ export class DragLock extends InteractionBase<SrcTgtPointsData<PointData>, SrcTg
             }
         };
 
-        super(new DragLockFSM(handler), new SrcTgtPointsDataImpl());
+        super(new DragLockFSM(logger, handler), new SrcTgtPointsDataImpl(), logger);
 
         // We give the interactions to the initial and final double-clicks as these interactions
         // will contain the data: so that these interactions will fill the data of the draglock.
-        new DoubleClick(this.fsm.firstDbleClick, this.data.src as PointDataImpl);
-        new DoubleClick(this.fsm.sndDbleClick, this.data.tgt as PointDataImpl);
+        new DoubleClick(logger, this.fsm.firstDbleClick, this.data.src as PointDataImpl);
+        new DoubleClick(logger, this.fsm.sndDbleClick, this.data.tgt as PointDataImpl);
     }
 }

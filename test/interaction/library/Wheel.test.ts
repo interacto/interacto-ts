@@ -12,23 +12,22 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMHandler} from "../../../src/interacto";
+import type {FSMHandler, Logger} from "../../../src/interacto";
+import {Wheel, WheelDataImpl} from "../../../src/interacto";
 import {createWheelEvent2} from "../StubEvents";
 import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
-import {Wheel} from "../../../src/impl/interaction/library/Wheel";
-import {WheelDataImpl} from "../../../src/impl/interaction/WheelDataImpl";
 import {robot} from "interacto-nono";
 
 let interaction: Wheel;
 let canvas: HTMLElement;
 let handler: FSMHandler & MockProxy<FSMHandler>;
+let logger: Logger & MockProxy<Logger>;
 
 beforeEach(() => {
     handler = mock<FSMHandler>();
-    interaction = new Wheel();
-    interaction.log(true);
-    interaction.fsm.log = true;
+    logger = mock<Logger>();
+    interaction = new Wheel(logger);
     interaction.fsm.addHandler(handler);
     canvas = document.createElement("canvas");
 });
@@ -38,6 +37,21 @@ test("wheel event on a element starts and stops the Wheel interaction", () => {
     robot().wheel(canvas);
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+});
+
+test("log interaction is ok", () => {
+    interaction.log(true);
+    interaction.registerToNodes([canvas]);
+    robot().wheel(canvas);
+
+    expect(logger.logInteractionMsg).toHaveBeenCalledTimes(4);
+});
+
+test("no log interaction is ok", () => {
+    interaction.registerToNodes([canvas]);
+    robot().wheel(canvas);
+
+    expect(logger.logInteractionMsg).not.toHaveBeenCalled();
 });
 
 test("other event don't trigger the interaction.", () => {

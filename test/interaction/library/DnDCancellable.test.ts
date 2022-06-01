@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMHandler} from "../../../src/interacto";
+import type {FSMHandler, Logger} from "../../../src/interacto";
 import {DnD} from "../../../src/interacto";
 import {robot} from "interacto-nono";
 import {mock} from "jest-mock-extended";
@@ -23,7 +23,7 @@ let handler: FSMHandler;
 
 beforeEach(() => {
     handler = mock<FSMHandler>();
-    interaction = new DnD(true);
+    interaction = new DnD(true, mock<Logger>());
     interaction.log(true);
     interaction.fsm.log = true;
     interaction.fsm.addHandler(handler);

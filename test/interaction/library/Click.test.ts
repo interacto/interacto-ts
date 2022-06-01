@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMHandler} from "../../../src/interacto";
+import type {FSMHandler, Logger} from "../../../src/interacto";
 import {Click, PointDataImpl} from "../../../src/interacto";
 import {createMouseEvent2} from "../StubEvents";
 import type {MockProxy} from "jest-mock-extended";
@@ -22,12 +22,12 @@ import {robot} from "interacto-nono";
 let interaction: Click;
 let canvas: HTMLElement;
 let handler: FSMHandler & MockProxy<FSMHandler>;
+let logger: Logger & MockProxy<Logger>;
 
 beforeEach(() => {
     handler = mock<FSMHandler>();
-    interaction = new Click();
-    interaction.log(true);
-    interaction.fsm.log = true;
+    logger = mock<Logger>();
+    interaction = new Click(logger);
     interaction.fsm.addHandler(handler);
     canvas = document.createElement("canvas");
 });
@@ -37,6 +37,21 @@ test("click on a element starts and stops the interaction Click", () => {
     canvas.click();
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+});
+
+test("log interaction is ok", () => {
+    interaction.log(true);
+    interaction.registerToNodes([canvas]);
+    canvas.click();
+
+    expect(logger.logInteractionMsg).toHaveBeenCalledTimes(4);
+});
+
+test("no log interaction is ok", () => {
+    interaction.registerToNodes([canvas]);
+    canvas.click();
+
+    expect(logger.logInteractionMsg).not.toHaveBeenCalled();
 });
 
 test("other event don't trigger the interaction.", () => {

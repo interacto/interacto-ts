@@ -19,6 +19,7 @@ import {KeyUpTransition} from "../../fsm/KeyUpTransition";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {KeyDataImpl} from "../KeyDataImpl";
 import {InteractionBase} from "../InteractionBase";
+import type {Logger} from "../../../api/logging/Logger";
 
 /**
  * The FSM that describes a keyboard touch typed.
@@ -26,8 +27,8 @@ import {InteractionBase} from "../InteractionBase";
 export class KeyTypedFSM extends FSMImpl<KeyTypedFSMHandler> {
     private checkKey?: string;
 
-    public constructor(dataHandler: KeyTypedFSMHandler) {
-        super(dataHandler);
+    public constructor(logger: Logger, dataHandler: KeyTypedFSMHandler) {
+        super(logger, dataHandler);
 
         const pressed = this.addStdState("pressed");
 
@@ -60,7 +61,7 @@ export class KeyTyped extends InteractionBase<KeyData, KeyDataImpl, KeyTypedFSM>
     /**
      * Creates the user interaction.
      */
-    public constructor() {
+    public constructor(logger: Logger) {
         const handler: KeyTypedFSMHandler = {
             "onKeyTyped": (event: KeyboardEvent): void => {
                 this._data.copy(event);
@@ -70,6 +71,6 @@ export class KeyTyped extends InteractionBase<KeyData, KeyDataImpl, KeyTypedFSM>
             }
         };
 
-        super(new KeyTypedFSM(handler), new KeyDataImpl());
+        super(new KeyTypedFSM(logger, handler), new KeyDataImpl(), logger);
     }
 }

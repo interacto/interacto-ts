@@ -21,6 +21,7 @@ import {MouseUpTransition} from "../../fsm/MouseUpTransition";
 import {PointDataImpl} from "../PointDataImpl";
 import {MouseMoveTransition} from "../../fsm/MouseMoveTransition";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
+import type {Logger} from "../../../api/logging/Logger";
 
 /**
  * The FSM for the LongPress interaction
@@ -34,8 +35,8 @@ export class LongMouseDownFSM extends FSMImpl<LongMouseDownFSMHandler> {
      * Creates the long press FSM
      * @param duration - Defines the duration of the long press interaction (in ms).
      */
-    public constructor(duration: number, dataHandler: LongMouseDownFSMHandler) {
-        super(dataHandler);
+    public constructor(duration: number, logger: Logger, dataHandler: LongMouseDownFSMHandler) {
+        super(logger, dataHandler);
 
         if (duration <= 0) {
             throw new Error("Incorrect duration");
@@ -78,7 +79,7 @@ export class LongMouseDown extends InteractionBase<PointData, PointDataImpl, Lon
      * @param duration - The duration of the pressure required to end the user interaction (in ms)
      * If this duration is not reached, the interaction is cancelled.
      */
-    public constructor(duration: number) {
+    public constructor(duration: number, logger: Logger) {
         const handler: LongMouseDownFSMHandler = {
             "press": (evt: MouseEvent): void => {
                 this._data.copy(evt);
@@ -88,6 +89,6 @@ export class LongMouseDown extends InteractionBase<PointData, PointDataImpl, Lon
             }
         };
 
-        super(new LongMouseDownFSM(duration, handler), new PointDataImpl());
+        super(new LongMouseDownFSM(duration, logger, handler), new PointDataImpl(), logger);
     }
 }

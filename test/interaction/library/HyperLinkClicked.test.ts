@@ -12,20 +12,21 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMHandler} from "../../../src/interacto";
+import type {FSMHandler, Logger} from "../../../src/interacto";
 import {HyperLinkClicked} from "../../../src/interacto";
+import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
 import {robot} from "interacto-nono";
 
 let interaction: HyperLinkClicked;
 let url: HTMLElement;
 let handler: FSMHandler;
+let logger: Logger & MockProxy<Logger>;
 
 beforeEach(() => {
     handler = mock<FSMHandler>();
-    interaction = new HyperLinkClicked();
-    interaction.log(true);
-    interaction.fsm.log = true;
+    logger = mock<Logger>();
+    interaction = new HyperLinkClicked(logger);
     interaction.fsm.addHandler(handler);
     url = document.createElement("a");
 });
@@ -35,6 +36,20 @@ test("click on url starts and stops the interaction", () => {
     robot(url).input();
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+});
+
+test("log interaction is ok", () => {
+    interaction.log(true);
+    interaction.registerToNodes([url]);
+    robot(url).input();
+    expect(logger.logInteractionMsg).toHaveBeenCalledTimes(4);
+});
+
+test("no log interaction is ok", () => {
+    interaction.registerToNodes([url]);
+    robot(url).input();
+
+    expect(logger.logInteractionMsg).not.toHaveBeenCalled();
 });
 
 test("cannot register non hyperlink", () => {

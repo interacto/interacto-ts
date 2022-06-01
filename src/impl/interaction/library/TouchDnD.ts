@@ -23,6 +23,7 @@ import {getTouch} from "../../fsm/Events";
 import {SrcTgtTouchDataImpl} from "../SrcTgtTouchDataImpl";
 import type {SrcTgtPointsData} from "../../../api/interaction/SrcTgtPointsData";
 import type {TouchData} from "../../../api/interaction/TouchData";
+import type {Logger} from "../../../api/logging/Logger";
 
 /**
  * The FSM that defines a touch interaction (that works like a DnD)
@@ -41,8 +42,8 @@ export class TouchDnDFSM extends FSMImpl<TouchDnDFSMHandler> {
      * or as soon as the screen is touched.
      * The latter is used for the MultiTouch interaction.
      */
-    public constructor(cancellable: boolean, dataHandler: TouchDnDFSMHandler, movementRequired: boolean = true) {
-        super(dataHandler);
+    public constructor(cancellable: boolean, logger: Logger, dataHandler: TouchDnDFSMHandler, movementRequired: boolean = true) {
+        super(logger, dataHandler);
         this.touchID = undefined;
         this.cancellable = cancellable;
         this.movementRequired = movementRequired;
@@ -157,7 +158,7 @@ export class TouchDnD extends InteractionBase<SrcTgtPointsData<TouchData>, SrcTg
      * The latter is used for the MultiTouch interaction.
      * @param fsm - The optional FSM provided for the interaction
      */
-    public constructor(cancellable: boolean, movementRequired: boolean = true, fsm?: TouchDnDFSM) {
+    public constructor(logger: Logger, cancellable: boolean, movementRequired: boolean = true, fsm?: TouchDnDFSM) {
         const handler: TouchDnDFSMHandler = {
             "onTouch": (evt: TouchEvent): void => {
                 const touch: Touch = evt.changedTouches[0];
@@ -176,7 +177,7 @@ export class TouchDnD extends InteractionBase<SrcTgtPointsData<TouchData>, SrcTg
             }
         };
 
-        super(fsm ?? new TouchDnDFSM(cancellable, handler, movementRequired), new SrcTgtTouchDataImpl());
+        super(fsm ?? new TouchDnDFSM(cancellable, logger, handler, movementRequired), new SrcTgtTouchDataImpl(), logger);
     }
 
     private setTgtData(evt: TouchEvent): void {

@@ -20,6 +20,7 @@ import {PointDataImpl} from "../PointDataImpl";
 import type {PointsData} from "../../../api/interaction/PointsData";
 import {PointsDataImpl} from "../PointsDataImpl";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
+import type {Logger} from "../../../api/logging/Logger";
 
 export class ClicksFSM extends FSMImpl<ClicksFSMHandler> {
     private countClicks: number;
@@ -29,8 +30,8 @@ export class ClicksFSM extends FSMImpl<ClicksFSMHandler> {
     /**
      * Creates the Clicks FSM
      */
-    public constructor(nbClicks: number, dataHandler: ClicksFSMHandler) {
-        super(dataHandler);
+    public constructor(nbClicks: number, logger: Logger, dataHandler: ClicksFSMHandler) {
+        super(logger, dataHandler);
 
         if (nbClicks <= 0) {
             throw new Error("The number of clicks must be greater than 1");
@@ -85,7 +86,7 @@ export class Clicks extends InteractionBase<PointsData, PointsDataImpl, ClicksFS
      * @param numberClicks - The number of clicks expected to end the interaction.
      * If this number is not reached after a timeout, the interaction is cancelled.
      */
-    public constructor(numberClicks: number) {
+    public constructor(numberClicks: number, logger: Logger) {
         const handler: ClicksFSMHandler = {
             "click": (evt: MouseEvent): void => {
                 const pt = new PointDataImpl();
@@ -97,6 +98,6 @@ export class Clicks extends InteractionBase<PointsData, PointsDataImpl, ClicksFS
             }
         };
 
-        super(new ClicksFSM(numberClicks, handler), new PointsDataImpl());
+        super(new ClicksFSM(numberClicks, logger, handler), new PointsDataImpl(), logger);
     }
 }

@@ -79,7 +79,7 @@ let logger: Logger;
 beforeEach(() => {
     logger = mock<Logger>();
     history = new UndoHistoryImpl();
-    binding = new BindingStub(history, logger, false, () => new StubCmd(), new InteractionStub(new FSMImpl()));
+    binding = new BindingStub(history, logger, false, () => new StubCmd(), new InteractionStub(new FSMImpl(logger)));
     binding.activated = true;
 });
 
@@ -119,7 +119,7 @@ describe("nominal cases", () => {
     });
 
     test("execute Ok", () => {
-        binding = new BindingStub(history, logger, true, () => new StubCmd(), new InteractionStub(new FSMImpl()));
+        binding = new BindingStub(history, logger, true, () => new StubCmd(), new InteractionStub(new FSMImpl(logger)));
         expect(binding.continuousCmdExecution).toBeTruthy();
     });
 
@@ -240,7 +240,7 @@ describe("nominal cases", () => {
     });
 
     test("cancel interaction continuous not undoable", () => {
-        binding = new BindingStub(history, logger, true, () => new StubCmd(), new InteractionStub(new FSMImpl()));
+        binding = new BindingStub(history, logger, true, () => new StubCmd(), new InteractionStub(new FSMImpl(logger)));
         jest.spyOn(binding, "cancel");
         jest.spyOn(binding, "endOrCancel");
         binding.whenStartOK = true;
@@ -261,7 +261,7 @@ describe("nominal cases", () => {
         const cmd = new CmdStubUndoable();
         jest.spyOn(cmd, "undo");
         jest.spyOn(cmd, "cancel");
-        binding = new BindingStub(history, logger, true, () => cmd, new InteractionStub(new FSMImpl()));
+        binding = new BindingStub(history, logger, true, () => cmd, new InteractionStub(new FSMImpl(logger)));
         jest.spyOn(binding, "cancel");
         jest.spyOn(binding, "endOrCancel");
         binding.whenStartOK = true;
@@ -277,7 +277,7 @@ describe("nominal cases", () => {
     test("name contains the command name on execution", () => {
         const cmd = new CmdStubUndoable();
         jest.spyOn(cmd, "undo");
-        binding = new BindingStub(history, logger, true, () => cmd, new InteractionStub(new FSMImpl()));
+        binding = new BindingStub(history, logger, true, () => cmd, new InteractionStub(new FSMImpl(logger)));
         binding.whenStartOK = true;
         binding.interaction.fsm.onStarting();
         expect(binding.name).toBe("InteractionStub:CmdStubUndoable");
@@ -286,7 +286,7 @@ describe("nominal cases", () => {
     test("cancel interaction continuous undoable no log", () => {
         const cmd = new CmdStubUndoable();
         jest.spyOn(cmd, "undo");
-        binding = new BindingStub(history, logger, true, () => cmd, new InteractionStub(new FSMImpl()));
+        binding = new BindingStub(history, logger, true, () => cmd, new InteractionStub(new FSMImpl(logger)));
         binding.whenStartOK = true;
         binding.interaction.fsm.onStarting();
         binding.interaction.fsm.onCancelling();
@@ -344,7 +344,7 @@ describe("nominal cases", () => {
     });
 
     test("update continuous with log cannotDo", () => {
-        binding = new BindingStub(history, logger, true, () => new StubCmd(), new InteractionStub(new FSMImpl()));
+        binding = new BindingStub(history, logger, true, () => new StubCmd(), new InteractionStub(new FSMImpl(logger)));
         jest.spyOn(binding, "ifCannotExecuteCmd");
         binding.whenStartOK = true;
         binding.whenUpdateOK = true;
@@ -357,7 +357,7 @@ describe("nominal cases", () => {
     });
 
     test("update continuous not log canDo", () => {
-        binding = new BindingStub(history, logger, true, () => new StubCmd(), new InteractionStub(new FSMImpl()));
+        binding = new BindingStub(history, logger, true, () => new StubCmd(), new InteractionStub(new FSMImpl(logger)));
         jest.spyOn(binding, "ifCannotExecuteCmd");
         binding.whenStartOK = true;
         binding.whenUpdateOK = true;
@@ -461,7 +461,7 @@ describe("nominal cases", () => {
     });
 
     test("with BindingImpl", () => {
-        const b = new BindingImpl(false, new InteractionStub(new FSMImpl()),
+        const b = new BindingImpl(false, new InteractionStub(new FSMImpl(logger)),
             () => new StubCmd(), [], history, logger);
         b.interaction.fsm.onStarting();
         b.interaction.fsm.onUpdating();
@@ -486,7 +486,7 @@ describe("crash in binding", () => {
             throw ex;
         };
 
-        binding = new BindingStub(history, logger, true, supplier, new InteractionStub(new FSMImpl()));
+        binding = new BindingStub(history, logger, true, supplier, new InteractionStub(new FSMImpl(logger)));
         binding.whenStartOK = true;
         jest.spyOn(binding, "first");
         jest.spyOn(binding, "catch");
@@ -503,7 +503,7 @@ describe("crash in binding", () => {
             throw "yolo";
         };
 
-        binding = new BindingStub(history, logger, true, supplier, new InteractionStub(new FSMImpl()));
+        binding = new BindingStub(history, logger, true, supplier, new InteractionStub(new FSMImpl(logger)));
         binding.whenStartOK = true;
         jest.spyOn(binding, "first");
         binding.interaction.fsm.onStarting();
@@ -518,7 +518,7 @@ describe("crash in binding", () => {
             throw ex;
         };
 
-        binding = new BindingStub(history, logger, true, supplier, new InteractionStub(new FSMImpl()));
+        binding = new BindingStub(history, logger, true, supplier, new InteractionStub(new FSMImpl(logger)));
         binding.whenStartOK = true;
         binding.interaction.fsm.onStarting();
         binding.interaction.fsm.onTerminating();
@@ -531,7 +531,7 @@ describe("crash in binding", () => {
         const supplier = (): StubCmd => {
             throw ex;
         };
-        binding = new BindingStub(history, logger, true, supplier, new InteractionStub(new FSMImpl()));
+        binding = new BindingStub(history, logger, true, supplier, new InteractionStub(new FSMImpl(logger)));
         jest.spyOn(binding, "first");
         binding.whenStartOK = false;
         binding.whenUpdateOK = true;
@@ -546,7 +546,7 @@ describe("crash in binding", () => {
         const cmd = new StubUndoableCmd(true);
         jest.spyOn(cmd, "undo");
         jest.spyOn(cmd, "cancel");
-        binding = new BindingStub(history, logger, true, (): StubCmd => cmd, new InteractionStub(new FSMImpl()));
+        binding = new BindingStub(history, logger, true, (): StubCmd => cmd, new InteractionStub(new FSMImpl(logger)));
         jest.spyOn(binding, "cancel");
         jest.spyOn(binding, "endOrCancel");
         binding.whenStartOK = true;
@@ -566,7 +566,7 @@ describe("crash in binding", () => {
     test("command not undoable when 'when' is false on interaction end", () => {
         const cmd = new StubCmd(true, true);
         jest.spyOn(cmd, "cancel");
-        binding = new BindingStub(history, logger, true, (): StubCmd => cmd, new InteractionStub(new FSMImpl()));
+        binding = new BindingStub(history, logger, true, (): StubCmd => cmd, new InteractionStub(new FSMImpl(logger)));
         jest.spyOn(binding, "cancel");
         jest.spyOn(binding, "endOrCancel");
         binding.whenStartOK = true;

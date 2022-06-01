@@ -12,22 +12,23 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {ConcurrentFSM} from "../../src/impl/fsm/ConcurrentFSM";
-import {FSMImpl} from "../../src/impl/fsm/FSMImpl";
-import type {FSMHandler} from "../../src/api/fsm/FSMHandler";
+import type {FSMDataHandler, FSMHandler, Logger} from "../../src/interacto";
+import {
+    ClickTransition,
+    ConcurrentFSM,
+    FSMImpl,
+    MouseDownTransition,
+    MouseMoveTransition,
+    MouseUpTransition
+} from "../../src/interacto";
 import {mock} from "jest-mock-extended";
 import {createMouseEvent} from "../interaction/StubEvents";
-import {MouseUpTransition} from "../../src/impl/fsm/MouseUpTransition";
-import {ClickTransition} from "../../src/impl/fsm/ClickTransition";
-import {MouseDownTransition} from "../../src/impl/fsm/MouseDownTransition";
-import {MouseMoveTransition} from "../../src/impl/fsm/MouseMoveTransition";
-import type {FSMDataHandler} from "../../src/impl/fsm/FSMDataHandler";
 
 class StubTouchFSM extends FSMImpl<FSMDataHandler> {
     public cpt: number;
 
-    public constructor(cpt: number) {
-        super();
+    public constructor(cpt: number, logger?: Logger) {
+        super(logger ?? mock<Logger>());
         this.cpt = cpt;
         const touched = this.addStdState("touched");
         const moved = this.addStdState("moved");
@@ -57,7 +58,7 @@ beforeEach(() => {
     handler2 = mock<FSMHandler>();
     fsm1.addHandler(handler1);
     fsm2.addHandler(handler2);
-    fsm = new ConcurrentFSM([fsm1, fsm2]);
+    fsm = new ConcurrentFSM([fsm1, fsm2], mock<Logger>());
     fsm.addHandler(handler);
 });
 

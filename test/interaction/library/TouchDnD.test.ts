@@ -12,25 +12,25 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMHandler} from "../../../src/interacto";
-import {TouchDnD} from "../../../src/interacto";
+import type {FSMHandler, Logger} from "../../../src/interacto";
+import {TouchDataImpl, TouchDnD} from "../../../src/interacto";
 import {robot} from "../StubEvents";
+import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
-import {TouchDataImpl} from "../../../src/impl/interaction/TouchDataImpl";
 
 let interaction: TouchDnD;
 let canvas: HTMLElement;
 let handler: FSMHandler;
 let srcData: TouchDataImpl;
 let tgtData: TouchDataImpl;
+let logger: Logger & MockProxy<Logger>;
 
 beforeEach(() => {
     srcData = new TouchDataImpl();
     tgtData = new TouchDataImpl();
     handler = mock<FSMHandler>();
-    interaction = new TouchDnD(true, true);
-    interaction.log(true);
-    interaction.fsm.log = true;
+    logger = mock<Logger>();
+    interaction = new TouchDnD(logger, true, true);
     interaction.fsm.addHandler(handler);
     canvas = document.createElement("canvas");
     // document.elementFromPoint is undefined
@@ -59,6 +59,25 @@ test("pressure move", () => {
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).not.toHaveBeenCalled();
     expect(handler.fsmCancels).not.toHaveBeenCalled();
+});
+
+test("log interaction is ok", () => {
+    interaction.log(true);
+    robot(canvas)
+        .keepData()
+        .touchstart({}, [{"identifier": 2}])
+        .touchmove();
+
+    expect(logger.logInteractionMsg).toHaveBeenCalledTimes(4);
+});
+
+test("no log interaction is ok", () => {
+    robot(canvas)
+        .keepData()
+        .touchstart({}, [{"identifier": 2}])
+        .touchmove();
+
+    expect(logger.logInteractionMsg).not.toHaveBeenCalled();
 });
 
 test("pressure move data", () => {
@@ -333,7 +352,7 @@ describe("movement not required and not cancellable", () => {
         srcData = new TouchDataImpl();
         tgtData = new TouchDataImpl();
         handler = mock<FSMHandler>();
-        interaction = new TouchDnD(false, false);
+        interaction = new TouchDnD(mock<Logger>(), false, false);
         interaction.log(true);
         interaction.fsm.log = true;
         interaction.fsm.addHandler(handler);

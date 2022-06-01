@@ -18,6 +18,7 @@ import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {KeyDataImpl} from "../KeyDataImpl";
 import {KeyUpTransition} from "../../fsm/KeyUpTransition";
+import type {Logger} from "../../../api/logging/Logger";
 
 /**
  * An FSM for a single key release.
@@ -29,8 +30,8 @@ export class KeyUpFSM extends FSMImpl<KeyUpFSMHandler> {
      * Creates the FSM.
      * @param modifierAccepted - True: the FSM will consider key modifiers.
      */
-    public constructor(modifierAccepted: boolean, dataHandler: KeyUpFSMHandler) {
-        super(dataHandler);
+    public constructor(modifierAccepted: boolean, logger: Logger, dataHandler: KeyUpFSMHandler) {
+        super(logger, dataHandler);
         this.modifiersAccepted = modifierAccepted;
 
         new KeyUpTransition(this.initState, this.addTerminalState("released"),
@@ -39,11 +40,6 @@ export class KeyUpFSM extends FSMImpl<KeyUpFSMHandler> {
             },
             (ev: KeyboardEvent): boolean => this.modifiersAccepted || (!ev.altKey && !ev.ctrlKey && !ev.shiftKey && !ev.metaKey));
     }
-
-    public override reinit(): void {
-        super.reinit();
-    }
-
 }
 
 interface KeyUpFSMHandler extends FSMDataHandler {
@@ -54,7 +50,7 @@ interface KeyUpFSMHandler extends FSMDataHandler {
  * A user interaction for releasing a key on a keyboard
  */
 export class KeyUp extends InteractionBase<KeyData, KeyDataImpl, KeyUpFSM> {
-    public constructor(modifierAccepted: boolean, fsm?: KeyUpFSM) {
+    public constructor(logger: Logger, modifierAccepted: boolean, fsm?: KeyUpFSM) {
         const handler: KeyUpFSMHandler = {
             "onKeyUp": (event: KeyboardEvent): void => {
                 this._data.copy(event);
@@ -64,6 +60,6 @@ export class KeyUp extends InteractionBase<KeyData, KeyDataImpl, KeyUpFSM> {
             }
         };
 
-        super(fsm ?? new KeyUpFSM(modifierAccepted, handler), new KeyDataImpl());
+        super(fsm ?? new KeyUpFSM(modifierAccepted, logger, handler), new KeyDataImpl(), logger);
     }
 }

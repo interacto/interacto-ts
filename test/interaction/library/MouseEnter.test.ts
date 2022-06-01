@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMHandler} from "../../../src/interacto";
+import type {FSMHandler, Logger} from "../../../src/interacto";
 import {MouseEnter, PointDataImpl} from "../../../src/interacto";
 import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
@@ -24,17 +24,16 @@ let interactionWithoutBubbling: MouseEnter;
 let canvas: HTMLElement;
 let handler: FSMHandler & MockProxy<FSMHandler>;
 let handler2: FSMHandler & MockProxy<FSMHandler>;
+let logger: Logger & MockProxy<Logger>;
 
 beforeEach(() => {
     handler = mock<FSMHandler>();
     handler2 = mock<FSMHandler>();
-
-    interaction = new MouseEnter(true);
-    interaction.log(true);
-    interaction.fsm.log = true;
+    logger = mock<Logger>();
+    interaction = new MouseEnter(true, logger);
     interaction.fsm.addHandler(handler);
 
-    interactionWithoutBubbling = new MouseEnter(false);
+    interactionWithoutBubbling = new MouseEnter(false, logger);
     interactionWithoutBubbling.log(true);
     interactionWithoutBubbling.fsm.log = true;
     interactionWithoutBubbling.fsm.addHandler(handler2);
@@ -51,6 +50,27 @@ test("mouseover sent to the interaction starts and stops the MouseEnter interact
 
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+});
+
+test("log interaction is ok", () => {
+    interaction.log(true);
+    interaction.registerToNodes([canvas]);
+
+    const evt = createMouseEvent("mouseover",
+        canvas, 11, 43, 12, 11, 1);
+    interaction.processEvent(evt);
+
+    expect(logger.logInteractionMsg).toHaveBeenCalledTimes(4);
+});
+
+test("no log interaction is ok", () => {
+    interaction.registerToNodes([canvas]);
+
+    const evt = createMouseEvent("mouseover",
+        canvas, 11, 43, 12, 11, 1);
+    interaction.processEvent(evt);
+
+    expect(logger.logInteractionMsg).not.toHaveBeenCalled();
 });
 
 test("mouseover on an element starts and stops the MouseEnter interaction", () => {

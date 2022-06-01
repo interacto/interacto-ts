@@ -22,6 +22,7 @@ import {TouchDataImpl} from "../TouchDataImpl";
 import {TouchPressureTransition} from "../../fsm/TouchPressureTransition";
 import {TouchMoveTransition} from "../../fsm/TouchMoveTransition";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
+import type {Logger} from "../../../api/logging/Logger";
 
 /**
  * The FSM for the Tap interaction
@@ -36,8 +37,8 @@ class TapFSM extends FSMImpl<TapFSMHandler> {
     /**
      * Creates the Tap FSM
      */
-    public constructor(nbTaps: number, dataHandler: TapFSMHandler) {
-        super(dataHandler);
+    public constructor(nbTaps: number, logger: Logger, dataHandler: TapFSMHandler) {
+        super(logger, dataHandler);
         this.nbTaps = nbTaps;
         this.countTaps = 0;
 
@@ -102,7 +103,7 @@ export class Tap extends InteractionBase<TapData, TapDataImpl, TapFSM> {
      * @param numberTaps - The number of taps expected to end the interaction.
      * If this number is not reached after a timeout, the interaction is cancelled.
      */
-    public constructor(numberTaps: number) {
+    public constructor(numberTaps: number, logger: Logger) {
         const handler: TapFSMHandler = {
             "tap": (evt: TouchEvent): void => {
                 if (evt.changedTouches.length > 0) {
@@ -116,6 +117,6 @@ export class Tap extends InteractionBase<TapData, TapDataImpl, TapFSM> {
             }
         };
 
-        super(new TapFSM(numberTaps, handler), new TapDataImpl());
+        super(new TapFSM(numberTaps, logger, handler), new TapDataImpl(), logger);
     }
 }

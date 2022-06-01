@@ -19,10 +19,11 @@ import type {WidgetData} from "../../../api/interaction/WidgetData";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {WidgetDataImpl} from "../WidgetDataImpl";
+import type {Logger} from "../../../api/logging/Logger";
 
 class BoxCheckedFSM extends FSMImpl<BoxCheckedHandler> {
-    public constructor(dataHandler: BoxCheckedHandler) {
-        super(dataHandler);
+    public constructor(logger: Logger, dataHandler: BoxCheckedHandler) {
+        super(logger, dataHandler);
 
         new BoxCheckPressedTransition(this.initState, this.addTerminalState("checked"),
             (evt: InputEvent): void => {
@@ -44,7 +45,7 @@ export class BoxChecked extends InteractionBase<WidgetData<HTMLInputElement>, Wi
     /**
      * Creates the interaction.
      */
-    public constructor() {
+    public constructor(logger: Logger) {
         const handler: BoxCheckedHandler = {
             "initToCheckHandler": (event: Event): void => {
                 this._data.copy(event);
@@ -54,7 +55,7 @@ export class BoxChecked extends InteractionBase<WidgetData<HTMLInputElement>, Wi
             }
         };
 
-        super(new BoxCheckedFSM(handler), new WidgetDataImpl<HTMLInputElement>());
+        super(new BoxCheckedFSM(logger, handler), new WidgetDataImpl<HTMLInputElement>(), logger);
     }
 
     public override onNewNodeRegistered(node: EventTarget): void {

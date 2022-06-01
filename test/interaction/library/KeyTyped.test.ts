@@ -12,21 +12,22 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMHandler} from "../../../src/interacto";
+import type {FSMHandler, Logger} from "../../../src/interacto";
 import {KeyDataImpl, KeyTyped} from "../../../src/interacto";
 import {robot} from "interacto-nono";
+import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
 
 let interaction: KeyTyped;
 let text: HTMLElement;
 let handler: FSMHandler;
+let logger: Logger & MockProxy<Logger>;
 
 beforeEach(() => {
     jest.useFakeTimers();
     handler = mock<FSMHandler>();
-    interaction = new KeyTyped();
-    interaction.log(true);
-    interaction.fsm.log = true;
+    logger = mock<Logger>();
+    interaction = new KeyTyped(logger);
     interaction.fsm.addHandler(handler);
     text = document.createElement("textarea");
 });
@@ -39,6 +40,27 @@ test("type 'a' in the textarea starts and stops the interaction.", () => {
         .keyup();
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+});
+
+test("log interaction is ok", () => {
+    interaction.log(true);
+    interaction.registerToNodes([text]);
+    robot(text)
+        .keepData()
+        .keydown({"code": "a"})
+        .keyup();
+
+    expect(logger.logInteractionMsg).toHaveBeenCalledTimes(5);
+});
+
+test("no log interaction is ok", () => {
+    interaction.registerToNodes([text]);
+    robot(text)
+        .keepData()
+        .keydown({"code": "a"})
+        .keyup();
+
+    expect(logger.logInteractionMsg).not.toHaveBeenCalled();
 });
 
 test("only press the key don't stop the interaction.", () => {

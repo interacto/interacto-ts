@@ -12,22 +12,23 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMHandler, KeyData} from "../../../src/interacto";
+import type {FSMHandler, KeyData, Logger} from "../../../src/interacto";
 import {KeysDataImpl, KeysDown, peek} from "../../../src/interacto";
 import {robot} from "interacto-nono";
+import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
 
 let interaction: KeysDown;
 let text: HTMLElement;
 let handler: FSMHandler;
 let data: KeysDataImpl;
+let logger: Logger & MockProxy<Logger>;
 
 beforeEach(() => {
     data = new KeysDataImpl();
     handler = mock<FSMHandler>();
-    interaction = new KeysDown();
-    interaction.log(true);
-    interaction.fsm.log = true;
+    logger = mock<Logger>();
+    interaction = new KeysDown(logger);
     interaction.fsm.addHandler(handler);
     text = document.createElement("textarea");
 });
@@ -89,6 +90,30 @@ test("two KeyPress Release Execution", () => {
         .keyup();
     expect(handler.fsmUpdates).toHaveBeenCalledTimes(3);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+});
+
+test("log interaction is ok", () => {
+    interaction.log(true);
+    interaction.registerToNodes([text]);
+    robot(text)
+        .keydown({"code": "A"})
+        .keepData()
+        .keydown({"code": "B"})
+        .keyup();
+    robot(text).keydown({"code": "A"});
+
+    expect(logger.logInteractionMsg).toHaveBeenCalledTimes(14);
+});
+
+test("no log interaction is ok", () => {
+    interaction.registerToNodes([text]);
+    robot(text)
+        .keydown({"code": "A"})
+        .keepData()
+        .keydown({"code": "B"})
+        .keyup();
+
+    expect(logger.logInteractionMsg).not.toHaveBeenCalled();
 });
 
 

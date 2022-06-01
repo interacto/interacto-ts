@@ -19,6 +19,7 @@ import {InteractionBase} from "../InteractionBase";
 import {PointDataImpl} from "../PointDataImpl";
 import {MouseOverTransition} from "../../fsm/MouseOverTransition";
 import {MouseEnterTransition} from "../../fsm/MouseEnterTransition";
+import type {Logger} from "../../../api/logging/Logger";
 
 /**
  * The FSM for mouseover interactions
@@ -32,8 +33,8 @@ export class MouseEnterFSM extends FSMImpl<MouseEnterFSMHandler> {
     /**
      * Creates the FSM
      */
-    public constructor(withBubbling: boolean, dataHandler: MouseEnterFSMHandler) {
-        super(dataHandler);
+    public constructor(withBubbling: boolean, logger: Logger, dataHandler: MouseEnterFSMHandler) {
+        super(logger, dataHandler);
         this.withBubbling = withBubbling;
 
         const entered = this.addTerminalState("entered");
@@ -57,7 +58,7 @@ export class MouseEnter extends InteractionBase<PointData, PointDataImpl, MouseE
     /**
      * Creates the interaction.
      */
-    public constructor(withBubbling: boolean) {
+    public constructor(withBubbling: boolean, logger: Logger) {
         const handler: MouseEnterFSMHandler = {
             "onEnter": (evt: MouseEvent): void => {
                 this._data.copy(evt);
@@ -67,6 +68,6 @@ export class MouseEnter extends InteractionBase<PointData, PointDataImpl, MouseE
             }
         };
 
-        super(new MouseEnterFSM(withBubbling, handler), new PointDataImpl());
+        super(new MouseEnterFSM(withBubbling, logger, handler), new PointDataImpl(), logger);
     }
 }

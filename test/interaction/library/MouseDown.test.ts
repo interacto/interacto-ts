@@ -12,20 +12,21 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMHandler} from "../../../src/interacto";
+import type {FSMHandler, Logger} from "../../../src/interacto";
 import {MouseDown} from "../../../src/interacto";
 import {robot} from "interacto-nono";
+import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
 
 let interaction: MouseDown;
 let canvas: HTMLElement;
 let handler: FSMHandler;
+let logger: Logger & MockProxy<Logger>;
 
 beforeEach(() => {
     handler = mock<FSMHandler>();
-    interaction = new MouseDown();
-    interaction.log(true);
-    interaction.fsm.log = true;
+    logger = mock<Logger>();
+    interaction = new MouseDown(logger);
     interaction.fsm.addHandler(handler);
     canvas = document.createElement("canvas");
 });
@@ -35,4 +36,19 @@ test("press on the canvas starts and stops MouseDown interaction", () => {
     robot(canvas).mousedown();
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+});
+
+test("log interaction is ok", () => {
+    interaction.log(true);
+    interaction.registerToNodes([canvas]);
+    robot(canvas).mousedown();
+
+    expect(logger.logInteractionMsg).toHaveBeenCalledTimes(4);
+});
+
+test("no log interaction is ok", () => {
+    interaction.registerToNodes([canvas]);
+    robot(canvas).mousedown();
+
+    expect(logger.logInteractionMsg).not.toHaveBeenCalled();
 });

@@ -12,23 +12,39 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMHandler} from "../../../src/interacto";
+import type {FSMHandler, Logger} from "../../../src/interacto";
 import {BoxChecked} from "../../../src/interacto";
+import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
 import {robot} from "interacto-nono";
 
 let interaction: BoxChecked;
 let boxCheck: HTMLInputElement;
 let handler: FSMHandler;
+let logger: Logger & MockProxy<Logger>;
 
 beforeEach(() => {
     handler = mock<FSMHandler>();
-    interaction = new BoxChecked();
-    interaction.log(true);
-    interaction.fsm.log = true;
+    logger = mock<Logger>();
+    interaction = new BoxChecked(logger);
     interaction.fsm.addHandler(handler);
     boxCheck = document.createElement("input");
     boxCheck.type = "checkbox";
+});
+
+test("log interaction is ok", () => {
+    interaction.log(true);
+    interaction.registerToNodes([boxCheck]);
+    robot().input(boxCheck);
+
+    expect(logger.logInteractionMsg).toHaveBeenCalledTimes(4);
+});
+
+test("no log interaction is ok", () => {
+    interaction.registerToNodes([boxCheck]);
+    robot().input(boxCheck);
+
+    expect(logger.logInteractionMsg).not.toHaveBeenCalled();
 });
 
 test("input event trigger the interaction CheckBox", () => {

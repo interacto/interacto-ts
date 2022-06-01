@@ -20,6 +20,7 @@ import {InteractionBase} from "../InteractionBase";
 import {PointDataImpl} from "../PointDataImpl";
 import {MouseOutTransition} from "../../fsm/MouseOutTransition";
 import {MouseLeaveTransition} from "../../fsm/MouseLeaveTransition";
+import type {Logger} from "../../../api/logging/Logger";
 
 /**
  * The FSM for mouseout interactions
@@ -33,8 +34,8 @@ export class MouseLeaveFSM extends FSMImpl<MouseLeaveFSMHandler> {
     /**
      * Creates the FSM
      */
-    public constructor(withBubbling: boolean, dataHandler: MouseLeaveFSMHandler) {
-        super(dataHandler);
+    public constructor(withBubbling: boolean, logger: Logger, dataHandler: MouseLeaveFSMHandler) {
+        super(logger, dataHandler);
         this.withBubbling = withBubbling;
 
         const exited = new TerminalState(this, "exited");
@@ -58,7 +59,7 @@ export class MouseLeave extends InteractionBase<PointData, PointDataImpl, MouseL
     /**
      * Creates the interaction.
      */
-    public constructor(withBubbling: boolean) {
+    public constructor(withBubbling: boolean, logger: Logger) {
         const handler: MouseLeaveFSMHandler = {
             "onExit": (evt: MouseEvent): void => {
                 this._data.copy(evt);
@@ -68,6 +69,6 @@ export class MouseLeave extends InteractionBase<PointData, PointDataImpl, MouseL
             }
         };
 
-        super(new MouseLeaveFSM(withBubbling, handler), new PointDataImpl());
+        super(new MouseLeaveFSM(withBubbling, logger, handler), new PointDataImpl(), logger);
     }
 }

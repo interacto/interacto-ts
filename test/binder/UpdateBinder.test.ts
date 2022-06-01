@@ -48,7 +48,7 @@ test("that is crashes when calling bind without a command supplier", () => {
 test("that observer is used on bind", () => {
     const obs = mock<BindingsObserver>();
     binder = new UpdateBinder(history, mock<Logger>(), obs)
-        .usingInteraction(() => new MouseDown())
+        .usingInteraction(() => new MouseDown(mock<Logger>()))
         .toProduce(() => mock<Command>());
 
     const binding = binder.bind();

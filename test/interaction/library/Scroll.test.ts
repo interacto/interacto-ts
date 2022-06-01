@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMHandler} from "../../../src/interacto";
+import type {FSMHandler, Logger} from "../../../src/interacto";
 import {Scroll} from "../../../src/interacto";
 import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
@@ -21,12 +21,12 @@ import {robot} from "interacto-nono";
 let interaction: Scroll;
 let canvas: HTMLElement;
 let handler: FSMHandler & MockProxy<FSMHandler>;
+let logger: Logger & MockProxy<Logger>;
 
 beforeEach(() => {
     handler = mock<FSMHandler>();
-    interaction = new Scroll();
-    interaction.log(true);
-    interaction.fsm.log = true;
+    logger = mock<Logger>();
+    interaction = new Scroll(logger);
     interaction.fsm.addHandler(handler);
     canvas = document.createElement("canvas");
 });
@@ -63,4 +63,19 @@ test("multiple scroll trigger multiple interaction that start and stop", () => {
         .scroll();
     expect(handler.fsmStops).toHaveBeenCalledTimes(3);
     expect(handler.fsmStarts).toHaveBeenCalledTimes(3);
+});
+
+test("log interaction is ok", () => {
+    interaction.log(true);
+    interaction.registerToNodes([canvas]);
+    robot(canvas).scroll();
+
+    expect(logger.logInteractionMsg).toHaveBeenCalledTimes(4);
+});
+
+test("no log interaction is ok", () => {
+    interaction.registerToNodes([canvas]);
+    robot(canvas).scroll();
+
+    expect(logger.logInteractionMsg).not.toHaveBeenCalled();
 });

@@ -30,6 +30,7 @@ import type {Logger} from "../../api/logging/Logger";
 import {StdState} from "./StdState";
 import {TerminalState} from "./TerminalState";
 import {CancellingState} from "./CancellingState";
+import {MustBeUndoableCmdError} from "../binding/MustBeUndoableCmdError";
 
 /**
  * A finite state machine that defines the behavior of a user interaction.
@@ -37,7 +38,7 @@ import {CancellingState} from "./CancellingState";
 export class FSMImpl<T extends FSMDataHandler> implements FSM {
     protected _dataHandler?: T;
 
-    protected readonly logger?: Logger;
+    protected readonly logger: Logger;
 
     public _log: boolean;
 
@@ -86,7 +87,7 @@ export class FSMImpl<T extends FSMDataHandler> implements FSM {
     /**
      * Creates the FSM.
      */
-    public constructor(dataHandler?: T, logger?: Logger) {
+    public constructor(logger: Logger, dataHandler?: T) {
         this._dataHandler = dataHandler;
         this.logger = logger;
         this.inner = false;
@@ -138,12 +139,12 @@ export class FSMImpl<T extends FSMDataHandler> implements FSM {
     private processEvent(event: Event): boolean {
         if (this.currentSubFSM !== undefined) {
             if (this.log) {
-                this.logger?.logInteractionMsg(`processing event ${String(event.type)} in a sub-FSM`, this.constructor.name);
+                this.logger.logInteractionMsg(`processing event ${String(event.type)} in a sub-FSM`, this.constructor.name);
             }
             return this.currentSubFSM.process(event);
         }
         if (this.log) {
-            this.logger?.logInteractionMsg(`processing event ${String(event.type)} at state 
+            this.logger.logInteractionMsg(`processing event ${String(event.type)} at state 
             ${this.currentState.name}: ${this.constructor.name}`, this.constructor.name);
         }
 
@@ -210,7 +211,7 @@ export class FSMImpl<T extends FSMDataHandler> implements FSM {
         list.forEach(event => {
             removeAt(this.eventsToProcess, 0);
             if (this.log) {
-                this.logger?.logInteractionMsg("Recycling event", this.constructor.name);
+                this.logger.logInteractionMsg("Recycling event", this.constructor.name);
             }
             this.process(event);
         });
@@ -226,7 +227,7 @@ export class FSMImpl<T extends FSMDataHandler> implements FSM {
 
     public onTerminating(): void {
         if (this.log) {
-            this.logger?.logInteractionMsg("FSM ended", this.constructor.name);
+            this.logger.logInteractionMsg("FSM ended", this.constructor.name);
         }
         if (this.started) {
             this.notifyHandlerOnStop();
@@ -237,7 +238,7 @@ export class FSMImpl<T extends FSMDataHandler> implements FSM {
 
     public onCancelling(): void {
         if (this.log) {
-            this.logger?.logInteractionMsg("FSM cancelled", this.constructor.name);
+            this.logger.logInteractionMsg("FSM cancelled", this.constructor.name);
         }
         if (this.started) {
             this.notifyHandlerOnCancel();
@@ -247,7 +248,7 @@ export class FSMImpl<T extends FSMDataHandler> implements FSM {
 
     public onStarting(): void {
         if (this.log) {
-            this.logger?.logInteractionMsg("FSM started", this.constructor.name);
+            this.logger.logInteractionMsg("FSM started", this.constructor.name);
         }
         this._started = true;
         this.notifyHandlerOnStart();
@@ -259,7 +260,7 @@ export class FSMImpl<T extends FSMDataHandler> implements FSM {
     public onUpdating(): void {
         if (this.started) {
             if (this.log) {
-                this.logger?.logInteractionMsg("FSM updated", this.constructor.name);
+                this.logger.logInteractionMsg("FSM updated", this.constructor.name);
             }
             this.notifyHandlerOnUpdate();
         }
@@ -309,7 +310,7 @@ export class FSMImpl<T extends FSMDataHandler> implements FSM {
 
     public reinit(): void {
         if (this.log) {
-            this.logger?.logInteractionMsg("FSM reinitialised", this.constructor.name);
+            this.logger.logInteractionMsg("FSM reinitialised", this.constructor.name);
         }
         this.currentTimeout?.stopTimeout();
         this._started = false;
@@ -331,7 +332,7 @@ export class FSMImpl<T extends FSMDataHandler> implements FSM {
     public onTimeout(): void {
         if (this.currentTimeout !== undefined) {
             if (this.log) {
-                this.logger?.logInteractionMsg("Timeout", this.constructor.name);
+                this.logger.logInteractionMsg("Timeout", this.constructor.name);
             }
             const state = this.currentTimeout.execute();
             if (isOutputStateType(state)) {
@@ -344,7 +345,7 @@ export class FSMImpl<T extends FSMDataHandler> implements FSM {
     public stopCurrentTimeout(): void {
         if (this.currentTimeout !== undefined) {
             if (this.log) {
-                this.logger?.logInteractionMsg("Timeout stopped", this.constructor.name);
+                this.logger.logInteractionMsg("Timeout stopped", this.constructor.name);
             }
             this.currentTimeout.stopTimeout();
             this.currentTimeout = undefined;
@@ -361,7 +362,7 @@ export class FSMImpl<T extends FSMDataHandler> implements FSM {
 
         if (tr !== undefined) {
             if (this.log) {
-                this.logger?.logInteractionMsg("Timeout starting", this.constructor.name);
+                this.logger.logInteractionMsg("Timeout starting", this.constructor.name);
             }
             this.currentTimeout = tr;
             this.currentTimeout.startTimeout();
@@ -385,12 +386,10 @@ export class FSMImpl<T extends FSMDataHandler> implements FSM {
                 handler.fsmStarts?.();
             });
         } catch (ex: unknown) {
-            if (ex instanceof CancelFSMException) {
-                this.onCancelling();
-            } else {
-                this.logger?.logInteractionErr("An 'fsmStarts' produced an error", ex, this.constructor.name);
-                this.onCancelling();
+            if (!(ex instanceof CancelFSMException || ex instanceof MustBeUndoableCmdError)) {
+                this.logger.logInteractionErr("An 'fsmStarts' produced an error", ex, this.constructor.name);
             }
+            this.onCancelling();
             throw ex;
         }
     }
@@ -404,12 +403,10 @@ export class FSMImpl<T extends FSMDataHandler> implements FSM {
                 handler.fsmUpdates?.();
             });
         } catch (ex: unknown) {
-            if (ex instanceof CancelFSMException) {
-                this.onCancelling();
-            } else {
-                this.logger?.logInteractionErr("An 'fsmUpdates' produced an error", ex, this.constructor.name);
-                this.onCancelling();
+            if (!(ex instanceof CancelFSMException || ex instanceof MustBeUndoableCmdError)) {
+                this.logger.logInteractionErr("An 'fsmUpdates' produced an error", ex, this.constructor.name);
             }
+            this.onCancelling();
             throw ex;
         }
     }
@@ -423,8 +420,8 @@ export class FSMImpl<T extends FSMDataHandler> implements FSM {
                 handler.fsmStops?.();
             });
         } catch (ex: unknown) {
-            if (!(ex instanceof CancelFSMException)) {
-                this.logger?.logInteractionErr("An 'fsmStops' produced an error", ex, this.constructor.name);
+            if (!(ex instanceof CancelFSMException || ex instanceof MustBeUndoableCmdError)) {
+                this.logger.logInteractionErr("An 'fsmStops' produced an error", ex, this.constructor.name);
             }
             this.onCancelling();
             throw ex;
@@ -440,7 +437,9 @@ export class FSMImpl<T extends FSMDataHandler> implements FSM {
                 handler.fsmCancels?.();
             });
         } catch (ex: unknown) {
-            this.logger?.logInteractionErr("An 'fsmCancels' produced an error", ex, this.constructor.name);
+            if (!(ex instanceof MustBeUndoableCmdError)) {
+                this.logger.logInteractionErr("An 'fsmCancels' produced an error", ex, this.constructor.name);
+            }
             throw ex;
         }
     }
@@ -454,7 +453,7 @@ export class FSMImpl<T extends FSMDataHandler> implements FSM {
                 handler.fsmError?.(err);
             });
         } catch (ex: unknown) {
-            this.logger?.logInteractionErr("An 'fsmError' produced an error", ex, this.constructor.name);
+            this.logger.logInteractionErr("An 'fsmError' produced an error", ex, this.constructor.name);
         }
     }
 

@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMHandler} from "../../../src/interacto";
+import type {FSMHandler, Logger} from "../../../src/interacto";
 import {DragLock, SrcTgtPointsDataImpl} from "../../../src/interacto";
 import {createMouseEvent} from "../StubEvents";
 import {mock} from "jest-mock-extended";
@@ -26,7 +26,7 @@ let rect2: SVGRectElement;
 
 beforeEach(() => {
     handler = mock<FSMHandler>();
-    interaction = new DragLock();
+    interaction = new DragLock(mock<Logger>());
     interaction.log(true);
     interaction.fsm.log = true;
     interaction.fsm.addHandler(handler);

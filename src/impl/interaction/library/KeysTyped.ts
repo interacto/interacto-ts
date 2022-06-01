@@ -40,8 +40,8 @@ export class KeysTypedFSM extends FSMImpl<KeyTypedFSMHandler> {
     /**
      * Creates the FSM.
      */
-    public constructor(dataHandler: KeyTypedFSMHandler) {
-        super(dataHandler);
+    public constructor(logger: Logger, dataHandler: KeyTypedFSMHandler) {
+        super(logger, dataHandler);
 
         const keyup = this.addStdState("keyup");
 
@@ -71,7 +71,7 @@ export class KeysTyped extends InteractionBase<KeysData, KeysDataImpl, KeysTyped
     /**
      * Creates the user interaction.
      */
-    public constructor(logger?: Logger) {
+    public constructor(logger: Logger) {
         const handler: KeyTypedFSMHandler = {
             "onKeyTyped": (event: KeyboardEvent): void => {
                 this._data.addKey(event);
@@ -81,6 +81,6 @@ export class KeysTyped extends InteractionBase<KeysData, KeysDataImpl, KeysTyped
             }
         };
 
-        super(new KeysTypedFSM(handler), new KeysDataImpl(), logger);
+        super(new KeysTypedFSM(logger, handler), new KeysDataImpl(), logger);
     }
 }

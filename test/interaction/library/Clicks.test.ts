@@ -12,23 +12,26 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
 import type {FSMHandler} from "../../../src/api/fsm/FSMHandler";
 import {Clicks} from "../../../src/impl/interaction/library/Clicks";
 import {createMouseEvent} from "../StubEvents";
 import {robot} from "interacto-nono";
+import type {LoggerImpl} from "../../../src/impl/logging/LoggerImpl";
+import type {Logger} from "../../../src/api/logging/Logger";
 
 let interaction: Clicks;
 let canvas: HTMLElement;
 let handler: FSMHandler;
-
+let logger: Logger & MockProxy<Logger>;
 
 test("cannot build the interaction with 0 click", () => {
-    expect(() => new Clicks(0)).toThrow("The number of clicks must be greater than 1");
+    expect(() => new Clicks(0, mock<LoggerImpl>())).toThrow("The number of clicks must be greater than 1");
 });
 
 test("cannot build the interaction with 1 click", () => {
-    expect(() => new Clicks(1)).toThrow("For a number of clicks that equals 1, use the Click interaction");
+    expect(() => new Clicks(1, mock<LoggerImpl>())).toThrow("For a number of clicks that equals 1, use the Click interaction");
 });
 
 
@@ -37,8 +40,9 @@ test("cannot build the interaction with 1 click", () => {
         beforeEach(() => {
             jest.useFakeTimers();
             handler = mock<FSMHandler>();
+            logger = mock<Logger>();
             canvas = document.createElement("canvas");
-            interaction = new Clicks(nb);
+            interaction = new Clicks(nb, logger);
             interaction.fsm.addHandler(handler);
         });
 
@@ -84,6 +88,23 @@ test("cannot build the interaction with 1 click", () => {
             expect(handler.fsmUpdates).toHaveBeenCalledTimes(nb - 1);
             expect(handler.fsmStops).toHaveBeenCalledTimes(1);
             expect(handler.fsmCancels).not.toHaveBeenCalled();
+        });
+
+        test("log interaction is ok", () => {
+            interaction.log(true);
+            [...Array(nb).keys()].forEach(_ => {
+                interaction.processEvent(createMouseEvent("click", canvas, 15, 21, 160, 21, 3));
+            });
+
+            expect(logger.logInteractionMsg).toHaveBeenCalledTimes(4 * nb);
+        });
+
+        test("no log interaction is ok", () => {
+            [...Array(nb).keys()].forEach(_ => {
+                interaction.processEvent(createMouseEvent("click", canvas, 15, 21, 160, 21, 3));
+            });
+
+            expect(logger.logInteractionMsg).not.toHaveBeenCalled();
         });
 
         test(`that ${nb} clicks is OK two times`, () => {

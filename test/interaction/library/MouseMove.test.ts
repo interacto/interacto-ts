@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMHandler} from "../../../src/interacto";
+import type {FSMHandler, Logger} from "../../../src/interacto";
 import {PointDataImpl, MouseMove} from "../../../src/interacto";
 import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
@@ -22,13 +22,12 @@ import {robot} from "interacto-nono";
 let interaction: MouseMove;
 let canvas: HTMLElement;
 let handler: FSMHandler & MockProxy<FSMHandler>;
+let logger: Logger & MockProxy<Logger>;
 
 beforeEach(() => {
     handler = mock<FSMHandler>();
-
-    interaction = new MouseMove();
-    interaction.log(true);
-    interaction.fsm.log = true;
+    logger = mock<Logger>();
+    interaction = new MouseMove(logger);
     interaction.fsm.addHandler(handler);
 
     canvas = document.createElement("canvas");
@@ -43,6 +42,27 @@ test("mousemove sent to the interaction starts and stops the MouseMove interacti
 
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+});
+
+test("log interaction is ok", () => {
+    interaction.log(true);
+    interaction.registerToNodes([canvas]);
+
+    const evt = createMouseEvent("mousemove",
+        canvas, 11, 43, 12, 11, 1);
+    interaction.processEvent(evt);
+
+    expect(logger.logInteractionMsg).toHaveBeenCalledTimes(4);
+});
+
+test("no log interaction is ok", () => {
+    interaction.registerToNodes([canvas]);
+
+    const evt = createMouseEvent("mousemove",
+        canvas, 11, 43, 12, 11, 1);
+    interaction.processEvent(evt);
+
+    expect(logger.logInteractionMsg).not.toHaveBeenCalled();
 });
 
 test("mousemove on an element starts and stops the MouseMove interaction", () => {

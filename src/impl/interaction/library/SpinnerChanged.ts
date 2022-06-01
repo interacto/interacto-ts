@@ -20,6 +20,7 @@ import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 import {WidgetDataImpl} from "../WidgetDataImpl";
+import type {Logger} from "../../../api/logging/Logger";
 
 export class SpinnerChangedFSM extends FSMImpl<SpinnerChangedHandler> {
     /** The time gap between the two spinner events. */
@@ -45,8 +46,8 @@ export class SpinnerChangedFSM extends FSMImpl<SpinnerChangedHandler> {
         }
     }
 
-    public constructor(dataHandler: SpinnerChangedHandler) {
-        super(dataHandler);
+    public constructor(logger: Logger, dataHandler: SpinnerChangedHandler) {
+        super(logger, dataHandler);
 
         const changed = this.addStdState("changed");
         const spinnerAction = (evt: Event): void => {
@@ -70,7 +71,7 @@ export class SpinnerChanged extends InteractionBase<WidgetData<HTMLInputElement>
     /**
      * Creates the interaction.
      */
-    public constructor() {
+    public constructor(logger: Logger) {
         const handler: SpinnerChangedHandler = {
             "initToChangedHandler": (event: Event): void => {
                 this._data.copy(event);
@@ -80,7 +81,7 @@ export class SpinnerChanged extends InteractionBase<WidgetData<HTMLInputElement>
             }
         };
 
-        super(new SpinnerChangedFSM(handler), new WidgetDataImpl<HTMLInputElement>());
+        super(new SpinnerChangedFSM(logger, handler), new WidgetDataImpl<HTMLInputElement>(), logger);
     }
 
     public override onNewNodeRegistered(node: EventTarget): void {

@@ -114,47 +114,47 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
 
     public buttonBinder(): PartialButtonBinder {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<ButtonPressed, WidgetData<HTMLButtonElement>>(() => new ButtonPressed());
+            .usingInteraction<ButtonPressed, WidgetData<HTMLButtonElement>>(() => new ButtonPressed(this.logger));
     }
 
     public checkboxBinder(): PartialInputBinder {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<BoxChecked, WidgetData<HTMLInputElement>>(() => new BoxChecked());
+            .usingInteraction<BoxChecked, WidgetData<HTMLInputElement>>(() => new BoxChecked(this.logger));
     }
 
     public colorPickerBinder(): PartialInputBinder {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<ColorPicked, WidgetData<HTMLInputElement>>(() => new ColorPicked());
+            .usingInteraction<ColorPicked, WidgetData<HTMLInputElement>>(() => new ColorPicked(this.logger));
     }
 
     public comboBoxBinder(): PartialSelectBinder {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<ComboBoxSelected, WidgetData<HTMLSelectElement>>(() => new ComboBoxSelected());
+            .usingInteraction<ComboBoxSelected, WidgetData<HTMLSelectElement>>(() => new ComboBoxSelected(this.logger));
     }
 
     public spinnerBinder(): PartialSpinnerBinder {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<SpinnerChanged, WidgetData<HTMLInputElement>>(() => new SpinnerChanged());
+            .usingInteraction<SpinnerChanged, WidgetData<HTMLInputElement>>(() => new SpinnerChanged(this.logger));
     }
 
     public dateBinder(): PartialInputBinder {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<DatePicked, WidgetData<HTMLInputElement>>(() => new DatePicked());
+            .usingInteraction<DatePicked, WidgetData<HTMLInputElement>>(() => new DatePicked(this.logger));
     }
 
     public hyperlinkBinder(): PartialAnchorBinder {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<HyperLinkClicked, WidgetData<HTMLAnchorElement>>(() => new HyperLinkClicked());
+            .usingInteraction<HyperLinkClicked, WidgetData<HTMLAnchorElement>>(() => new HyperLinkClicked(this.logger));
     }
 
     public textInputBinder(timeout?: number): PartialTextInputBinder {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<TextInputChanged, WidgetData<HTMLInputElement | HTMLTextAreaElement>>(() => new TextInputChanged(timeout));
+            .usingInteraction<TextInputChanged, WidgetData<HTMLInputElement | HTMLTextAreaElement>>(() => new TextInputChanged(this.logger, timeout));
     }
 
     public touchDnDBinder(cancellable: boolean): PartialTouchSrcTgtBinder {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<TouchDnD, SrcTgtPointsData<TouchData>>(() => new TouchDnD(cancellable));
+            .usingInteraction<TouchDnD, SrcTgtPointsData<TouchData>>(() => new TouchDnD(this.logger, cancellable));
     }
 
     /**
@@ -167,7 +167,7 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
         const anim = new DwellSpringAnimation(handle, spring);
 
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<TouchDnD, SrcTgtPointsData<TouchData>>(() => new TouchDnD(true))
+            .usingInteraction<TouchDnD, SrcTgtPointsData<TouchData>>(() => new TouchDnD(this.logger, true))
             .on(handle)
             .then((_, i) => {
                 anim.process(i);
@@ -185,7 +185,7 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
      */
     public multiTouchBinder(nbTouches: number): PartialMultiTouchBinder {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<MultiTouch, MultiTouchData>(() => new MultiTouch(nbTouches, false));
+            .usingInteraction<MultiTouch, MultiTouchData>(() => new MultiTouch(nbTouches, false, this.logger));
     }
 
     /**
@@ -195,7 +195,7 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
      */
     public tapBinder(nbTap: number): PartialTapBinder {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<Tap, TapData>(() => new Tap(nbTap));
+            .usingInteraction<Tap, TapData>(() => new Tap(nbTap, this.logger));
     }
 
     /**
@@ -205,7 +205,7 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
      */
     public longTouchBinder(duration: number): PartialTouchBinder {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<LongTouch, TouchData>(() => new LongTouch(duration));
+            .usingInteraction<LongTouch, TouchData>(() => new LongTouch(duration, this.logger));
     }
 
     /**
@@ -219,7 +219,7 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
      */
     public swipeBinder(horizontal: boolean, minVelocity: number, minLength: number, nbTouches: number, pxTolerance: number): PartialMultiTouchBinder {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<MultiTouch, MultiTouchData>(() => new MultiTouch(nbTouches, true))
+            .usingInteraction<MultiTouch, MultiTouchData>(() => new MultiTouch(nbTouches, true, this.logger))
             .when(i => (horizontal ? i.isHorizontal(pxTolerance) : i.isVertical(pxTolerance)))
             .when(i => (horizontal ? Math.abs(i.touches[0].diffScreenX) >= minLength : Math.abs(i.touches[0].diffScreenY) >= minLength))
             // The velocity value is in pixels/ms, so conversion is necessary
@@ -235,7 +235,7 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
      */
     public panBinder(horizontal: boolean, minLength: number, nbTouches: number, pxTolerance: number): PartialMultiTouchBinder {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<MultiTouch, MultiTouchData>(() => new MultiTouch(nbTouches, true))
+            .usingInteraction<MultiTouch, MultiTouchData>(() => new MultiTouch(nbTouches, true, this.logger))
             .when(i => (horizontal ? i.isHorizontal(pxTolerance) : i.isVertical(pxTolerance)))
             .when(i => (horizontal ? Math.abs(i.touches[0].diffScreenX) >= minLength : Math.abs(i.touches[0].diffScreenY) >= minLength));
     }
@@ -246,7 +246,7 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
      */
     public pinchBinder(pxTolerance: number): PartialMultiTouchBinder {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<MultiTouch, MultiTouchData>(() => new MultiTouch(2, false))
+            .usingInteraction<MultiTouch, MultiTouchData>(() => new MultiTouch(2, false, this.logger))
             .when(i => i.pinchFactor(pxTolerance) !== undefined);
     }
 
@@ -255,7 +255,7 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
      */
     public clickBinder(): PartialPointBinder {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<Click, PointData>(() => new Click());
+            .usingInteraction<Click, PointData>(() => new Click(this.logger));
     }
 
     /**
@@ -263,7 +263,7 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
      */
     public dbleClickBinder(): PartialUpdatePointBinder {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<DoubleClick, PointData>(() => new DoubleClick());
+            .usingInteraction<DoubleClick, PointData>(() => new DoubleClick(this.logger));
     }
 
     /**
@@ -271,7 +271,7 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
      */
     public mouseUpBinder(): PartialPointBinder {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<MouseUp, PointData>(() => new MouseUp());
+            .usingInteraction<MouseUp, PointData>(() => new MouseUp(this.logger));
     }
 
     /**
@@ -279,7 +279,7 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
      */
     public mouseDownBinder(): PartialPointBinder {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<MouseDown, PointData>(() => new MouseDown());
+            .usingInteraction<MouseDown, PointData>(() => new MouseDown(this.logger));
     }
 
     /**
@@ -290,7 +290,7 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
      */
     public longMouseDownBinder(duration: number): PartialUpdatePointBinder {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<LongMouseDown, PointData>(() => new LongMouseDown(duration));
+            .usingInteraction<LongMouseDown, PointData>(() => new LongMouseDown(duration, this.logger));
     }
 
     /**
@@ -300,7 +300,7 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
      */
     public clicksBinder(nbClicks: number): PartialPointsBinder {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<Clicks, PointsData>(() => new Clicks(nbClicks));
+            .usingInteraction<Clicks, PointsData>(() => new Clicks(nbClicks, this.logger));
     }
 
     /**
@@ -309,7 +309,7 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
      */
     public mouseLeaveBinder(withBubbling: boolean): PartialPointBinder {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<MouseLeave, PointData>(() => new MouseLeave(withBubbling));
+            .usingInteraction<MouseLeave, PointData>(() => new MouseLeave(withBubbling, this.logger));
     }
 
     /**
@@ -318,7 +318,7 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
      */
     public mouseEnterBinder(withBubbling: boolean): PartialPointBinder {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<MouseEnter, PointData>(() => new MouseEnter(withBubbling));
+            .usingInteraction<MouseEnter, PointData>(() => new MouseEnter(withBubbling, this.logger));
     }
 
     /**
@@ -326,7 +326,7 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
      */
     public mouseMoveBinder(): PartialPointBinder {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<MouseMove, PointData>(() => new MouseMove());
+            .usingInteraction<MouseMove, PointData>(() => new MouseMove(this.logger));
     }
 
     /**
@@ -334,7 +334,7 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
      */
     public wheelBinder(): PartialWheelBinder {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<Wheel, WheelData>(() => new Wheel());
+            .usingInteraction<Wheel, WheelData>(() => new Wheel(this.logger));
     }
 
     /**
@@ -342,7 +342,7 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
      */
     public scrollBinder(): PartialScrollBinder {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<Scroll, ScrollData>(() => new Scroll());
+            .usingInteraction<Scroll, ScrollData>(() => new Scroll(this.logger));
     }
 
     /**
@@ -351,7 +351,7 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
      */
     public dndBinder(cancellable: boolean): PartialPointSrcTgtBinder {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<DnD, SrcTgtPointsData<PointData>>(() => new DnD(cancellable));
+            .usingInteraction<DnD, SrcTgtPointsData<PointData>>(() => new DnD(cancellable, this.logger));
     }
 
     /**
@@ -364,7 +364,7 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
         const anim = new DwellSpringAnimation(handle, spring);
 
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<DnD, SrcTgtPointsData<PointData>>(() => new DnD(true))
+            .usingInteraction<DnD, SrcTgtPointsData<PointData>>(() => new DnD(true, this.logger))
             .on(handle)
             .then((_, i) => {
                 anim.process(i);
@@ -379,7 +379,7 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
      */
     public dragLockBinder(): PartialPointSrcTgtBinder {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<DragLock, SrcTgtPointsData<PointData>>(() => new DragLock());
+            .usingInteraction<DragLock, SrcTgtPointsData<PointData>>(() => new DragLock(this.logger));
     }
 
     /**
@@ -388,7 +388,7 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
      */
     public keyUpBinder(modifierAccepted: boolean): PartialKeyBinder {
         return new KeysBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<KeyUp, KeyData>(() => new KeyUp(modifierAccepted));
+            .usingInteraction<KeyUp, KeyData>(() => new KeyUp(this.logger, modifierAccepted));
     }
 
     /**
@@ -397,22 +397,22 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
      */
     public keyDownBinder(modifierAccepted: boolean): PartialKeyBinder {
         return new KeysBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<KeyDown, KeyData>(() => new KeyDown(modifierAccepted));
+            .usingInteraction<KeyDown, KeyData>(() => new KeyDown(this.logger, modifierAccepted));
     }
 
     public keysDownBinder(): PartialKeysBinder {
         return new KeysBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<KeysDown, KeysData>(() => new KeysDown());
+            .usingInteraction<KeysDown, KeysData>(() => new KeysDown(this.logger));
     }
 
     public keysTypeBinder(): PartialKeysBinder {
         return new KeysBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<KeysTyped, KeysData>(() => new KeysTyped());
+            .usingInteraction<KeysTyped, KeysData>(() => new KeysTyped(this.logger));
     }
 
     public keyTypeBinder(): PartialKeyBinder {
         return new KeysBinder(this.undoHistory, this.logger, this.observer)
-            .usingInteraction<KeyTyped, KeyData>(() => new KeyTyped());
+            .usingInteraction<KeyTyped, KeyData>(() => new KeyTyped(this.logger));
     }
 
 

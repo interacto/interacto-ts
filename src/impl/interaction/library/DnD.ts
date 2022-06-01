@@ -22,6 +22,7 @@ import {InteractionBase} from "../InteractionBase";
 import {SrcTgtPointsDataImpl} from "../SrcTgtPointsDataImpl";
 import type {PointData} from "../../../api/interaction/PointData";
 import {MouseMoveTransition} from "../../fsm/MouseMoveTransition";
+import type {Logger} from "../../../api/logging/Logger";
 
 /**
  * The FSM for DnD interactions.
@@ -36,8 +37,8 @@ class DnDFSM extends FSMImpl<DnDFSMHandler> {
      * @param cancellable - True: the FSM can be cancelled using the ESC key.
      * @param dataHandler - The handler that will receive notifications from the FSM.
      */
-    public constructor(cancellable: boolean, dataHandler: DnDFSMHandler) {
-        super(dataHandler);
+    public constructor(cancellable: boolean, logger: Logger, dataHandler: DnDFSMHandler) {
+        super(logger, dataHandler);
         this.cancellable = cancellable;
 
         const pressed = this.addStdState("pressed");
@@ -99,7 +100,7 @@ export class DnD extends InteractionBase<SrcTgtPointsData<PointData>, SrcTgtPoin
     /**
      * Creates the interaction.
      */
-    public constructor(cancellable: boolean) {
+    public constructor(cancellable: boolean, logger: Logger) {
         const handler: DnDFSMHandler = {
             "onPress": (evt: MouseEvent): void => {
                 this._data.copySrc(evt);
@@ -116,6 +117,6 @@ export class DnD extends InteractionBase<SrcTgtPointsData<PointData>, SrcTgtPoin
             }
         };
 
-        super(new DnDFSM(cancellable, handler), new SrcTgtPointsDataImpl());
+        super(new DnDFSM(cancellable, logger, handler), new SrcTgtPointsDataImpl(), logger);
     }
 }

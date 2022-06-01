@@ -12,20 +12,21 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMHandler} from "../../../src/interacto";
+import type {FSMHandler, Logger} from "../../../src/interacto";
 import {DatePicked} from "../../../src/interacto";
+import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
 import {robot} from "interacto-nono";
 
 let interaction: DatePicked;
 let date: HTMLInputElement;
 let handler: FSMHandler;
+let logger: Logger & MockProxy<Logger>;
 
 beforeEach(() => {
     handler = mock<FSMHandler>();
-    interaction = new DatePicked();
-    interaction.log(true);
-    interaction.fsm.log = true;
+    logger = mock<Logger>();
+    interaction = new DatePicked(logger);
     interaction.fsm.addHandler(handler);
     date = document.createElement("input");
     date.type = "date";
@@ -36,6 +37,21 @@ test("input event starts and stops the interaction DatePicked.", () => {
     robot().input(date);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+});
+
+test("log interaction is ok", () => {
+    interaction.log(true);
+    interaction.registerToNodes([date]);
+    robot().input(date);
+
+    expect(logger.logInteractionMsg).toHaveBeenCalledTimes(4);
+});
+
+test("no log interaction is ok", () => {
+    interaction.registerToNodes([date]);
+    robot().input(date);
+
+    expect(logger.logInteractionMsg).not.toHaveBeenCalled();
 });
 
 test("other event don't trigger the interaction.", () => {

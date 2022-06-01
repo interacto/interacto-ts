@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMHandler} from "../../../src/interacto";
+import type {FSMHandler, Logger} from "../../../src/interacto";
 import {MouseLeave, PointDataImpl} from "../../../src/interacto";
 import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
@@ -24,19 +24,17 @@ let interactionWithoutBubbling: MouseLeave;
 let canvas: HTMLElement;
 let handler: FSMHandler & MockProxy<FSMHandler>;
 let handler2: FSMHandler & MockProxy<FSMHandler>;
+let logger: Logger & MockProxy<Logger>;
 
 beforeEach(() => {
     handler = mock<FSMHandler>();
     handler2 = mock<FSMHandler>();
+    logger = mock<Logger>();
 
-    interaction = new MouseLeave(true);
-    interaction.log(true);
-    interaction.fsm.log = true;
+    interaction = new MouseLeave(true, logger);
     interaction.fsm.addHandler(handler);
 
-    interactionWithoutBubbling = new MouseLeave(false);
-    interactionWithoutBubbling.log(true);
-    interactionWithoutBubbling.fsm.log = true;
+    interactionWithoutBubbling = new MouseLeave(false, logger);
     interactionWithoutBubbling.fsm.addHandler(handler2);
 
     canvas = document.createElement("canvas");
@@ -51,6 +49,27 @@ test("mouseout sent to the interaction starts and stops the MouseLeave interacti
 
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+});
+
+test("log interaction is ok", () => {
+    interaction.log(true);
+    interaction.registerToNodes([canvas]);
+
+    const evt = createMouseEvent("mouseout",
+        canvas, 11, 43, 12, 11, 1);
+    interaction.processEvent(evt);
+
+    expect(logger.logInteractionMsg).toHaveBeenCalledTimes(4);
+});
+
+test("no log interaction is ok", () => {
+    interaction.registerToNodes([canvas]);
+
+    const evt = createMouseEvent("mouseout",
+        canvas, 11, 43, 12, 11, 1);
+    interaction.processEvent(evt);
+
+    expect(logger.logInteractionMsg).not.toHaveBeenCalled();
 });
 
 test("mouseout on an element starts and stops the MouseLeave interaction", () => {

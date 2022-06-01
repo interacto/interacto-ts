@@ -12,21 +12,23 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMHandler} from "../../../src/interacto";
-import {MultiTouch} from "../../../src/interacto";
+import type {FSMHandler, Logger} from "../../../src/interacto";
+import {MultiTouch, TouchDataImpl} from "../../../src/interacto";
 import {robot} from "../StubEvents";
+import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
-import {TouchDataImpl} from "../../../src/impl/interaction/TouchDataImpl";
 import {checkTouchPoint} from "../../Utils";
 
 let interaction: MultiTouch;
 let canvas: HTMLElement;
 let handler: FSMHandler;
+let logger: Logger & MockProxy<Logger>;
 
 
 beforeEach(() => {
     handler = mock<FSMHandler>();
-    interaction = new MultiTouch(3, false);
+    logger = mock<Logger>();
+    interaction = new MultiTouch(3, false, logger);
     interaction.fsm.addHandler(handler);
     canvas = document.createElement("canvas");
     interaction.registerToNodes([canvas]);
@@ -70,6 +72,23 @@ test("touch2", () => {
     expect(handler.fsmUpdates).not.toHaveBeenCalled();
     expect(handler.fsmStops).not.toHaveBeenCalled();
     expect(handler.fsmCancels).not.toHaveBeenCalled();
+});
+
+test("log interaction is ok", () => {
+    interaction.log(true);
+    robot(canvas)
+        .touchstart({}, [{"identifier": 1}])
+        .touchstart({}, [{"identifier": 2}]);
+
+    expect(logger.logInteractionMsg).toHaveBeenCalledTimes(6);
+});
+
+test("no log interaction is ok", () => {
+    robot(canvas)
+        .touchstart({}, [{"identifier": 1}])
+        .touchstart({}, [{"identifier": 2}]);
+
+    expect(logger.logInteractionMsg).not.toHaveBeenCalled();
 });
 
 test("touch2 data", () => {

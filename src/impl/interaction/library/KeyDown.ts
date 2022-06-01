@@ -18,6 +18,7 @@ import type {KeyData} from "../../../api/interaction/KeyData";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {KeyDataImpl} from "../KeyDataImpl";
+import type {Logger} from "../../../api/logging/Logger";
 
 /**
  * An FSM for a single key pressure.
@@ -29,8 +30,8 @@ export class KeyDownFSM extends FSMImpl<KeyDownFSMHandler> {
      * Creates the FSM.
      * @param modifierAccepted - True: the FSM will consider key modifiers.
      */
-    public constructor(modifierAccepted: boolean, dataHandler: KeyDownFSMHandler) {
-        super(dataHandler);
+    public constructor(modifierAccepted: boolean, logger: Logger, dataHandler: KeyDownFSMHandler) {
+        super(logger, dataHandler);
         this.modifiersAccepted = modifierAccepted;
 
         new KeyDownTransition(this.initState, this.addTerminalState("pressed"),
@@ -55,7 +56,7 @@ interface KeyDownFSMHandler extends FSMDataHandler {
  */
 export class KeyDown extends InteractionBase<KeyData, KeyDataImpl, KeyDownFSM> {
 
-    public constructor(modifierAccepted: boolean, fsm?: KeyDownFSM) {
+    public constructor(logger: Logger, modifierAccepted: boolean, fsm?: KeyDownFSM) {
         const handler: KeyDownFSMHandler = {
             "onKeyPressed": (event: KeyboardEvent): void => {
                 this._data.copy(event);
@@ -65,6 +66,6 @@ export class KeyDown extends InteractionBase<KeyData, KeyDataImpl, KeyDownFSM> {
             }
         };
 
-        super(fsm ?? new KeyDownFSM(modifierAccepted, handler), new KeyDataImpl());
+        super(fsm ?? new KeyDownFSM(modifierAccepted, logger, handler), new KeyDataImpl(), logger);
     }
 }

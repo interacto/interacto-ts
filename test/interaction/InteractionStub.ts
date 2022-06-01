@@ -12,17 +12,13 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {InteractionBase} from "../../src/impl/interaction/InteractionBase";
-import type {InteractionData} from "../../src/api/interaction/InteractionData";
-import type {FSM} from "../../src/api/fsm/FSM";
-import type {OutputState} from "../../src/api/fsm/OutputState";
-import type {Flushable} from "../../src/impl/interaction/Flushable";
-import {PointDataImpl} from "../../src/impl/interaction/PointDataImpl";
-import type {Logger} from "../../src/api/logging/Logger";
+import type {Logger, FSM, InteractionData, Flushable, OutputState} from "../../src/interacto";
+import {InteractionBase, PointDataImpl} from "../../src/interacto";
+import {mock} from "jest-mock-extended";
 
 export class InteractionStub extends InteractionBase<InteractionData, Flushable & InteractionData, FSM> {
     public constructor(fsm: FSM, logger?: Logger) {
-        super(fsm, new PointDataImpl(), logger);
+        super(fsm, new PointDataImpl(), logger ?? mock<Logger>());
     }
 
     public override updateEventsRegistered(_newState: OutputState, _oldState: OutputState): void {

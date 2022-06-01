@@ -12,15 +12,17 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMHandler} from "../../../src/interacto";
+import type {FSMHandler, Logger} from "../../../src/interacto";
 import {Tap, TapDataImpl, TouchDataImpl} from "../../../src/interacto";
 import {robot} from "../StubEvents";
+import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
 import {checkTouchPoint} from "../../Utils";
 
 let interaction: Tap;
 let canvas: HTMLElement;
 let handler: FSMHandler;
+let logger: Logger & MockProxy<Logger>;
 
 beforeEach(() => {
     jest.useFakeTimers();
@@ -36,7 +38,8 @@ afterEach(() => {
 
 describe("tap 1", () => {
     beforeEach(() => {
-        interaction = new Tap(1);
+        logger = mock<Logger>();
+        interaction = new Tap(1, logger);
         interaction.fsm.addHandler(handler);
         interaction.registerToNodes([canvas]);
     });
@@ -54,6 +57,21 @@ describe("tap 1", () => {
         expect(handler.fsmStops).not.toHaveBeenCalled();
         expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
         expect(handler.fsmCancels).not.toHaveBeenCalled();
+    });
+
+    test("log interaction is ok", () => {
+        interaction.log(true);
+        robot(canvas)
+            .touchstart({}, [{"identifier": 2}]);
+
+        expect(logger.logInteractionMsg).toHaveBeenCalledTimes(4);
+    });
+
+    test("no log interaction is ok", () => {
+        robot(canvas)
+            .touchstart({}, [{"identifier": 2}]);
+
+        expect(logger.logInteractionMsg).not.toHaveBeenCalled();
     });
 
     test("one touchstart touchend", () => {
@@ -109,7 +127,7 @@ describe("tap 1", () => {
 
 describe("tap 2", () => {
     beforeEach(() => {
-        interaction = new Tap(2);
+        interaction = new Tap(2, mock<Logger>());
         interaction.fsm.addHandler(handler);
         interaction.registerToNodes([canvas]);
     });
@@ -225,7 +243,7 @@ describe("tap 2", () => {
 
 describe("tap 3", () => {
     beforeEach(() => {
-        interaction = new Tap(3);
+        interaction = new Tap(3, mock<Logger>());
         interaction.fsm.addHandler(handler);
         interaction.registerToNodes([canvas]);
     });

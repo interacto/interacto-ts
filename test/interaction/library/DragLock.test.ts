@@ -12,9 +12,10 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMHandler} from "../../../src/interacto";
+import type {FSMHandler, Logger} from "../../../src/interacto";
 import {DragLock} from "../../../src/interacto";
 import {createMouseEvent} from "../StubEvents";
+import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
 import {robot} from "interacto-nono";
 
@@ -25,12 +26,13 @@ let tx: number | undefined;
 let ty: number | undefined;
 let sx: number | undefined;
 let sy: number | undefined;
+let logger: Logger & MockProxy<Logger>;
 
 beforeEach(() => {
     jest.useFakeTimers();
     handler = mock<FSMHandler>();
-    interaction = new DragLock();
-    interaction.log(true);
+    logger = mock<Logger>();
+    interaction = new DragLock(logger);
     interaction.fsm.addHandler(handler);
     canvas = document.createElement("canvas");
 });
@@ -44,6 +46,27 @@ test("drag lock is ok", () => {
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     expect(handler.fsmCancels).not.toHaveBeenCalled();
+});
+
+test("log interaction is ok", () => {
+    interaction.log(true);
+    interaction.registerToNodes([canvas]);
+    robot()
+        .click(canvas, 2)
+        .mousemove()
+        .click({}, 2);
+
+    expect(logger.logInteractionMsg).toHaveBeenCalledTimes(24);
+});
+
+test("no log interaction is ok", () => {
+    interaction.registerToNodes([canvas]);
+    robot()
+        .click(canvas, 2)
+        .mousemove()
+        .click({}, 2);
+
+    expect(logger.logInteractionMsg).not.toHaveBeenCalled();
 });
 
 test("drag lock requires a least a move", () => {

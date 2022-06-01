@@ -18,6 +18,7 @@ import {InteractionBase} from "../InteractionBase";
 import {WheelTransition} from "../../fsm/WheelTransition";
 import {WheelDataImpl} from "../WheelDataImpl";
 import type {WheelData} from "../../../api/interaction/WheelData";
+import type {Logger} from "../../../api/logging/Logger";
 
 /**
  * The FSM for wheel interactions
@@ -26,8 +27,8 @@ export class WheelFSM extends FSMImpl<WheelFSMHandler> {
     /**
      * Creates the FSM
      */
-    public constructor(dataHandler: WheelFSMHandler) {
-        super(dataHandler);
+    public constructor(logger: Logger, dataHandler: WheelFSMHandler) {
+        super(logger, dataHandler);
 
         new WheelTransition(this.initState, this.addTerminalState("moved"),
             (evt: WheelEvent): void => {
@@ -44,7 +45,7 @@ export class Wheel extends InteractionBase<WheelData, WheelDataImpl, WheelFSM> {
     /**
      * Creates the interaction.
      */
-    public constructor(fsm?: WheelFSM, data?: WheelDataImpl) {
+    public constructor(logger: Logger, fsm?: WheelFSM, data?: WheelDataImpl) {
         const handler: WheelFSMHandler = {
             "initToMoved": (evt: WheelEvent): void => {
                 this._data.copy(evt);
@@ -54,6 +55,6 @@ export class Wheel extends InteractionBase<WheelData, WheelDataImpl, WheelFSM> {
             }
         };
 
-        super(fsm ?? new WheelFSM(handler), data ?? new WheelDataImpl());
+        super(fsm ?? new WheelFSM(logger, handler), data ?? new WheelDataImpl(), logger);
     }
 }

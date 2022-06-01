@@ -12,20 +12,21 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMHandler} from "../../../src/interacto";
+import type {FSMHandler, Logger} from "../../../src/interacto";
 import {ButtonPressed} from "../../../src/interacto";
+import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
 import {robot} from "interacto-nono";
 
 let interaction: ButtonPressed;
 let button: HTMLButtonElement;
 let handler: FSMHandler;
+let logger: Logger & MockProxy<Logger>;
 
 beforeEach(() => {
     handler = mock<FSMHandler>();
-    interaction = new ButtonPressed();
-    interaction.log(true);
-    interaction.fsm.log = true;
+    logger = mock<Logger>();
+    interaction = new ButtonPressed(logger);
     interaction.fsm.addHandler(handler);
     button = document.createElement("button");
 });
@@ -37,6 +38,20 @@ test("click event start and stop the interaction ButtonPressed", () => {
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
 });
 
+test("log interaction is ok", () => {
+    interaction.log(true);
+    interaction.registerToNodes([button]);
+    button.click();
+
+    expect(logger.logInteractionMsg).toHaveBeenCalledTimes(4);
+});
+
+test("no log interaction is ok", () => {
+    interaction.registerToNodes([button]);
+    button.click();
+
+    expect(logger.logInteractionMsg).not.toHaveBeenCalled();
+});
 
 test("other event don't trigger the interaction ButtonPressed", () => {
     interaction.registerToNodes([button]);

@@ -36,7 +36,7 @@ let logger: Logger;
 beforeEach(() => {
     logger = mock<Logger>();
     jest.clearAllMocks();
-    fsm = new FSMImpl(undefined, logger);
+    fsm = new FSMImpl(logger);
     handler = mock<FSMHandler>();
 });
 
@@ -141,7 +141,7 @@ test("that errors caught on start with an error", () => {
 });
 
 test("that errors caught on start with an error with no logger", () => {
-    fsm = new FSMImpl();
+    fsm = new FSMImpl(logger);
     handler.fsmStarts = jest.fn(() => {
         throw new Error("crash provoked2");
     });
@@ -179,7 +179,7 @@ test("that errors caught on update with an error", () => {
 });
 
 test("that errors caught on update with an error with no logger", () => {
-    fsm = new FSMImpl();
+    fsm = new FSMImpl(logger);
     handler.fsmUpdates = jest.fn(() => {
         throw new Error("crash provoked on update2");
     });
@@ -219,7 +219,7 @@ test("that errors caught on end with an error", () => {
 });
 
 test("that errors caught on end with an error with no logger", () => {
-    fsm = new FSMImpl();
+    fsm = new FSMImpl(logger);
     handler.fsmStops = jest.fn(() => {
         throw new Error("crash provoked on end");
     });
@@ -259,7 +259,7 @@ test("that errors caught on cancel with an error", () => {
 });
 
 test("that errors caught on cancel with an error with no logger", () => {
-    fsm = new FSMImpl();
+    fsm = new FSMImpl(logger);
     handler.fsmCancels = jest.fn(() => {
         throw new Error("crash provoked on cancel");
     });
@@ -635,8 +635,8 @@ describe("testWithSubFSM", () => {
 
     beforeEach(() => {
         jest.clearAllMocks();
-        fsm = new FSMImpl();
-        mainfsm = new FSMImpl();
+        fsm = new FSMImpl(logger);
+        mainfsm = new FSMImpl(logger);
         s1 = mainfsm.addStdState("s1");
         new SubFSMTransition(mainfsm.initState, s1, fsm);
         mainfsm.addHandler(handler);
@@ -651,8 +651,8 @@ describe("testWithSubFSM", () => {
     });
 
     test("check log when processing event with sub FSM", () => {
-        fsm = new FSMImpl(undefined, logger);
-        mainfsm = new FSMImpl(undefined, logger);
+        fsm = new FSMImpl(logger);
+        mainfsm = new FSMImpl(logger);
         s1 = mainfsm.addStdState("s1");
         new SubFSMTransition(mainfsm.initState, s1, fsm);
         subS1 = fsm.addStdState("subS1");
@@ -672,21 +672,12 @@ describe("testWithSubFSM", () => {
     });
 
     test("check no log when processing event with sub FSM", () => {
-        fsm = new FSMImpl(undefined, logger);
-        mainfsm = new FSMImpl(undefined, logger);
+        fsm = new FSMImpl(logger);
+        mainfsm = new FSMImpl(logger);
         s1 = mainfsm.addStdState("s1");
         new SubFSMTransition(mainfsm.initState, s1, fsm);
         fsm.log = false;
         mainfsm.log = false;
-        mainfsm.process(createMouseEvent("click", document.createElement("button")));
-        mainfsm.process(createKeyEvent("keydown", "a"));
-        mainfsm.process(createMouseEvent("click", document.createElement("button")));
-        expect(logger.logInteractionMsg).not.toHaveBeenCalled();
-    });
-
-    test("check log when processing event with no logger with sub FSM", () => {
-        fsm.log = true;
-        mainfsm.log = true;
         mainfsm.process(createMouseEvent("click", document.createElement("button")));
         mainfsm.process(createKeyEvent("keydown", "a"));
         mainfsm.process(createMouseEvent("click", document.createElement("button")));

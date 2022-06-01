@@ -19,6 +19,7 @@ import type {KeysData} from "../../../api/interaction/KeysData";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {KeysDataImpl} from "../KeysDataImpl";
 import {InteractionBase} from "../InteractionBase";
+import type {Logger} from "../../../api/logging/Logger";
 
 /**
  * This interaction permits to define combo a key pressed that can be used to define shortcuts, etc.
@@ -29,8 +30,8 @@ export class KeysDownFSM extends FSMImpl<KeysDownFSMHandler> {
     /**
      * Creates the FSM.
      */
-    public constructor(dataHandler: KeysDownFSMHandler) {
-        super(dataHandler);
+    public constructor(logger: Logger, dataHandler: KeysDownFSMHandler) {
+        super(logger, dataHandler);
         this.currentCodes = [];
 
         const pressed = this.addStdState("pressed");
@@ -65,7 +66,7 @@ export class KeysDown extends InteractionBase<KeysData, KeysDataImpl, KeysDownFS
     /**
      * Creates the user interaction.
      */
-    public constructor() {
+    public constructor(logger: Logger) {
         const handler: KeysDownFSMHandler = {
             "onKeyPressed": (event: KeyboardEvent): void => {
                 this._data.addKey(event);
@@ -75,6 +76,6 @@ export class KeysDown extends InteractionBase<KeysData, KeysDataImpl, KeysDownFS
             }
         };
 
-        super(new KeysDownFSM(handler), new KeysDataImpl());
+        super(new KeysDownFSM(logger, handler), new KeysDataImpl(), logger);
     }
 }
