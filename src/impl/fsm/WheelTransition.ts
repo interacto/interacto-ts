@@ -16,7 +16,6 @@ import type {InputState} from "../../api/fsm/InputState";
 import type {OutputState} from "../../api/fsm/OutputState";
 import {TransitionBase} from "./TransitionBase";
 import type {EventType} from "../../api/fsm/EventType";
-import {isEventType} from "./Events";
 
 /**
  * This transition corresponds to the user moving a mouse wheel or a similar input device.
@@ -31,7 +30,7 @@ export class WheelTransition extends TransitionBase<WheelEvent> {
     }
 
     public accept(event: Event): event is WheelEvent {
-        return event instanceof WheelEvent && isEventType(event.type) && this.getAcceptedEvents().includes(event.type);
+        return event instanceof WheelEvent && this.getAcceptedEvents().includes(event.type as EventType);
     }
 
     public getAcceptedEvents(): ReadonlyArray<EventType> {

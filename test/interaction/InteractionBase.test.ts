@@ -30,8 +30,8 @@ import type {Logger} from "../../src/api/logging/Logger";
 import {TransitionBase} from "../../src/impl/fsm/TransitionBase";
 import type {EventType} from "../../src/api/fsm/EventType";
 import type {InputState} from "../../src/api/fsm/InputState";
-import {MouseDownTransition} from "../../src/impl/fsm/MouseDownTransition";
 import type {FSMDataHandler} from "../../src/impl/fsm/FSMDataHandler";
+import {MouseTransition} from "../../src/impl/fsm/MouseTransition";
 
 let interaction: InteractionStub;
 let fsm: FSMImpl<FSMDataHandler> & MockProxy<FSMImpl<FSMDataHandler>>;
@@ -211,7 +211,7 @@ test("prevent default on processed event", () => {
     jest.spyOn(evt, "preventDefault");
     jest.spyOn(evt, "stopImmediatePropagation");
     currentState = new InitState(fsm, "s");
-    new MouseDownTransition(currentState, mock<StdState>());
+    new MouseTransition(currentState, mock<StdState>(), "mousemove");
     interaction.preventDefault = true;
     interaction.stopImmediatePropagation = false;
     interaction.processEvent(evt);
@@ -227,7 +227,7 @@ test("stop propa on processed event", () => {
     jest.spyOn(evt, "preventDefault");
     jest.spyOn(evt, "stopImmediatePropagation");
     currentState = new InitState(fsm, "s");
-    new MouseDownTransition(currentState, mock<StdState>());
+    new MouseTransition(currentState, mock<StdState>(), "mousemove");
     interaction.preventDefault = false;
     interaction.stopImmediatePropagation = true;
     interaction.processEvent(evt);

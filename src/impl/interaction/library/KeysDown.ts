@@ -12,14 +12,13 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {KeyDownTransition} from "../../fsm/KeyDownTransition";
-import {KeyUpTransition} from "../../fsm/KeyUpTransition";
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import type {KeysData} from "../../../api/interaction/KeysData";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {KeysDataImpl} from "../KeysDataImpl";
 import {InteractionBase} from "../InteractionBase";
 import type {Logger} from "../../../api/logging/Logger";
+import {KeyTransition} from "../../fsm/KeyTransition";
 
 /**
  * This interaction permits to define combo a key pressed that can be used to define shortcuts, etc.
@@ -40,11 +39,11 @@ export class KeysDownFSM extends FSMImpl<KeysDownFSMHandler> {
             this.currentCodes.push(evt.code);
             this.dataHandler?.onKeyPressed(evt);
         };
-        new KeyDownTransition(this.initState, pressed, actionkp);
+        new KeyTransition(this.initState, pressed, "keydown", actionkp);
 
-        new KeyDownTransition(pressed, pressed, actionkp);
+        new KeyTransition(pressed, pressed, "keydown", actionkp);
 
-        new KeyUpTransition(pressed, this.addTerminalState("ended"), undefined,
+        new KeyTransition(pressed, this.addTerminalState("ended"), "keyup", undefined,
             (evt: KeyboardEvent): boolean => this.currentCodes.find(value => value === evt.code) !== undefined);
     }
 

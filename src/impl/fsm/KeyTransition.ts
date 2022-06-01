@@ -12,32 +12,31 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {OutputState} from "../../api/fsm/OutputState";
 import type {InputState} from "../../api/fsm/InputState";
-import {isEventType} from "./Events";
+import type {OutputState} from "../../api/fsm/OutputState";
 import {TransitionBase} from "./TransitionBase";
-import type {EventType} from "../../api/fsm/EventType";
+import type {EventType, KeyEventType} from "../../api/fsm/EventType";
 
 /**
- * This transition defines a touch release.
-
+ * A transition for a keys.
  */
-export class TouchReleaseTransition extends TransitionBase<TouchEvent> {
+export class KeyTransition extends TransitionBase<KeyboardEvent> {
+    private readonly keyType: KeyEventType;
+
     /**
-     * Defines a transition.
-     * @param srcState - The source state of the transition.
-     * @param tgtState - The srcObject state of the transition.
+     * Creates the transition.
      */
-    public constructor(srcState: OutputState, tgtState: InputState,
+    public constructor(srcState: OutputState, tgtState: InputState, keyType: KeyEventType,
                        action?: (evt?: Event) => void, guard?: (evt: Event) => boolean) {
         super(srcState, tgtState, action, guard);
+        this.keyType = keyType;
     }
 
-    public accept(evt: Event): evt is TouchEvent {
-        return evt instanceof TouchEvent && isEventType(evt.type) && this.getAcceptedEvents().includes(evt.type);
+    public accept(event: Event): event is KeyboardEvent {
+        return event instanceof KeyboardEvent && this.getAcceptedEvents().includes(event.type as EventType);
     }
 
     public getAcceptedEvents(): ReadonlyArray<EventType> {
-        return ["touchend"];
+        return [this.keyType];
     }
 }

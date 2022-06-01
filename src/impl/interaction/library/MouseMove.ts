@@ -17,8 +17,8 @@ import type {PointData} from "../../../api/interaction/PointData";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {PointDataImpl} from "../PointDataImpl";
-import {MouseMoveTransition} from "../../fsm/MouseMoveTransition";
 import type {Logger} from "../../../api/logging/Logger";
+import {MouseTransition} from "../../fsm/MouseTransition";
 
 /**
  * The FSM for mouseover interactions
@@ -30,7 +30,7 @@ export class MouseMoveFSM extends FSMImpl<MouseMoveFSMHandler> {
     public constructor(logger: Logger, dataHandler: MouseMoveFSMHandler) {
         super(logger, dataHandler);
 
-        new MouseMoveTransition(this.initState, this.addTerminalState("moved"),
+        new MouseTransition(this.initState, this.addTerminalState("moved"), "mousemove",
             (event: MouseEvent): void => {
                 this.dataHandler?.onMove(event);
             });

@@ -17,9 +17,8 @@ import type {PointData} from "../../../api/interaction/PointData";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {PointDataImpl} from "../PointDataImpl";
-import {MouseOverTransition} from "../../fsm/MouseOverTransition";
-import {MouseEnterTransition} from "../../fsm/MouseEnterTransition";
 import type {Logger} from "../../../api/logging/Logger";
+import {MouseTransition} from "../../fsm/MouseTransition";
 
 /**
  * The FSM for mouseover interactions
@@ -43,9 +42,9 @@ export class MouseEnterFSM extends FSMImpl<MouseEnterFSMHandler> {
         };
 
         if (this.withBubbling) {
-            new MouseOverTransition(this.initState, entered, action);
+            new MouseTransition(this.initState, entered, "mouseover", action);
         } else {
-            new MouseEnterTransition(this.initState, entered, action);
+            new MouseTransition(this.initState, entered, "mouseenter", action);
         }
     }
 }

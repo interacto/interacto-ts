@@ -18,8 +18,8 @@ import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 import type {KeysData} from "../../../api/interaction/KeysData";
 import {KeysDataImpl} from "../KeysDataImpl";
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import {KeyUpTransition} from "../../fsm/KeyUpTransition";
 import type {Logger} from "../../../api/logging/Logger";
+import {KeyTransition} from "../../fsm/KeyTransition";
 
 /**
  * An FSM for typing several keyboard touches.
@@ -49,9 +49,9 @@ export class KeysTypedFSM extends FSMImpl<KeyTypedFSMHandler> {
             this.dataHandler?.onKeyTyped(event);
         };
 
-        new KeyUpTransition(this.initState, keyup, action);
+        new KeyTransition(this.initState, keyup, "keyup", action);
 
-        new KeyUpTransition(keyup, keyup, action);
+        new KeyTransition(keyup, keyup, "keyup", action);
 
         new TimeoutTransition(keyup, this.addTerminalState("timeouted"), KeysTypedFSM.timeGapSupplier);
     }

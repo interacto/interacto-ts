@@ -17,14 +17,14 @@ import type {PointData} from "../../../api/interaction/PointData";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {PointDataImpl} from "../PointDataImpl";
-import {MouseUpTransition} from "../../fsm/MouseUpTransition";
 import type {Logger} from "../../../api/logging/Logger";
+import {MouseTransition} from "../../fsm/MouseTransition";
 
 export class MouseUpFSM extends FSMImpl<MouseUpFSMHandler> {
     public constructor(logger: Logger, dataHandler: MouseUpFSMHandler) {
         super(logger, dataHandler);
 
-        new MouseUpTransition(this.initState, this.addTerminalState("released"),
+        new MouseTransition(this.initState, this.addTerminalState("released"), "mouseup",
             (event: MouseEvent): void => {
                 this.dataHandler?.initToPress(event);
             });

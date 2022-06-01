@@ -14,10 +14,10 @@
 
 import {
     isButton, isCheckBox, isColorChoice, isComboBox, isDatePicker,
-    isHyperLink, isKeyDownEvent, isKeyUpEvent, isMouseDownEvent, isScrollEvent, isSpinner,
+    isHyperLink, isKeyDownEvent, isKeyUpEvent, isSpinner,
     isTextInput, KeyCode, getTouch
-} from "../../src/impl/fsm/Events";
-import {createKeyEvent, createMouseEvent, createTouchEvent, createUIEvent} from "../interaction/StubEvents";
+} from "../../src/interacto";
+import {createKeyEvent, createTouchEvent} from "../interaction/StubEvents";
 
 
 describe("checking getTouch", () => {
@@ -152,24 +152,6 @@ describe("checking event functions", () => {
 
     test("isKeyUpEvent OK", () => {
         expect(isKeyUpEvent(createKeyEvent("keyup", "b"))).toBeTruthy();
-    });
-
-    test("isMouseDownEvent KO", () => {
-        const elt1 = document.createElement("textarea");
-        expect(isMouseDownEvent(createMouseEvent("mouseup", elt1))).toBeFalsy();
-    });
-
-    test("isMouseDownEvent OK", () => {
-        const elt1 = document.createElement("textarea");
-        expect(isMouseDownEvent(createMouseEvent("mousedown", elt1))).toBeTruthy();
-    });
-
-    test("isScrollEvent KO", () => {
-        expect(isScrollEvent(createUIEvent("mouseup"))).toBeFalsy();
-    });
-
-    test("isScrollEvent OK", () => {
-        expect(isScrollEvent(createUIEvent("scroll"))).toBeTruthy();
     });
 });
 

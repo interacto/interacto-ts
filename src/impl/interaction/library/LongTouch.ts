@@ -15,13 +15,11 @@
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import {TouchPressureTransition} from "../../fsm/TouchPressureTransition";
-import {TouchReleaseTransition} from "../../fsm/TouchReleaseTransition";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 import type {TouchData} from "../../../api/interaction/TouchData";
 import {TouchDataImpl} from "../TouchDataImpl";
-import {TouchMoveTransition} from "../../fsm/TouchMoveTransition";
 import type {Logger} from "../../../api/logging/Logger";
+import {TouchTransition} from "../../fsm/TouchTransition";
 
 /**
  * The FSM for the LongTouch interaction
@@ -48,16 +46,16 @@ class LongTouchFSM extends FSMImpl<LongTouchFSMHandler> {
         const touched = this.addStdState("touched");
         const cancelled = this.addCancellingState("cancelled");
 
-        new TouchPressureTransition(this.initState, touched,
+        new TouchTransition(this.initState, touched, "touchstart",
             (event: TouchEvent): void => {
                 this.currentTouchID = event.changedTouches[0].identifier;
                 this.dataHandler?.tap(event);
             });
 
-        new TouchMoveTransition(touched, cancelled, undefined,
+        new TouchTransition(touched, cancelled, "touchmove", undefined,
             (ev: TouchEvent): boolean => ev.changedTouches[0].identifier === this.currentTouchID);
 
-        new TouchReleaseTransition(touched, cancelled, undefined,
+        new TouchTransition(touched, cancelled, "touchend", undefined,
             (ev: TouchEvent): boolean => ev.changedTouches[0].identifier === this.currentTouchID);
 
         new TimeoutTransition(touched, this.addTerminalState("timeouted"), () => this.duration);

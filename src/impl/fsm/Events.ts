@@ -13,14 +13,6 @@
  */
 
 
-import type {EventType} from "../../api/fsm/EventType";
-import {eventTypes} from "../../api/fsm/EventType";
-
-
-export function isEventType(evtType: string): evtType is EventType {
-    return eventTypes.includes(evtType as EventType);
-}
-
 /**
  * Searches for a touch.
  * @param idToFind - The ID of the touch to find.
@@ -34,32 +26,6 @@ export function getTouch(touches: TouchList, idToFind?: number): Touch | undefin
         }
     }
     return undefined;
-}
-
-/**
- * Checks whether the given event type is a touch event.
- * @param eventType - The event type to check.
- */
-export function isTouchEvent(eventType: EventType): boolean {
-    return eventType === "touchstart" || eventType === "touchend" || eventType === "touchmove";
-}
-
-/**
- * Checks whether the given event type is a mouse event.
- * @param eventType - The event type to check.
- */
-export function isMouseEvent(eventType: EventType): boolean {
-    return eventType === "mousedown" || eventType === "mouseup" || eventType === "mousemove" ||
-    eventType === "mouseover" || eventType === "click" || eventType === "auxclick" || eventType === "mouseout" ||
-    eventType === "mouseenter" || eventType === "mouseleave" || eventType === "wheel";
-}
-
-/**
- * Checks whether the given event type is a key event.
- * @param eventType - The event type to check.
- */
-export function isKeyEvent(eventType: EventType): boolean {
-    return eventType === "keydown" || eventType === "keyup";
 }
 
 export function isButton(target: EventTarget): target is HTMLButtonElement {
@@ -96,19 +62,11 @@ export function isTextInput(target: EventTarget): target is HTMLInputElement | H
 }
 
 export function isKeyDownEvent(event: Event): event is KeyboardEvent {
-    return event instanceof KeyboardEvent && isEventType(event.type) && event.type === "keydown";
+    return event instanceof KeyboardEvent && event.type === "keydown";
 }
 
 export function isKeyUpEvent(event: Event): event is KeyboardEvent {
-    return event instanceof KeyboardEvent && isEventType(event.type) && event.type === "keyup";
-}
-
-export function isMouseDownEvent(event: Event): event is MouseEvent {
-    return event instanceof MouseEvent && isEventType(event.type) && event.type === "mousedown";
-}
-
-export function isScrollEvent(event: Event): event is Event {
-    return isEventType(event.type) && event.type === "scroll";
+    return event instanceof KeyboardEvent && event.type === "keyup";
 }
 
 export enum KeyCode {

@@ -13,12 +13,12 @@
  */
 
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import {KeyDownTransition} from "../../fsm/KeyDownTransition";
 import type {KeyData} from "../../../api/interaction/KeyData";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {KeyDataImpl} from "../KeyDataImpl";
 import type {Logger} from "../../../api/logging/Logger";
+import {KeyTransition} from "../../fsm/KeyTransition";
 
 /**
  * An FSM for a single key pressure.
@@ -34,7 +34,7 @@ export class KeyDownFSM extends FSMImpl<KeyDownFSMHandler> {
         super(logger, dataHandler);
         this.modifiersAccepted = modifierAccepted;
 
-        new KeyDownTransition(this.initState, this.addTerminalState("pressed"),
+        new KeyTransition(this.initState, this.addTerminalState("pressed"), "keydown",
             (evt: KeyboardEvent): void => {
                 this.dataHandler?.onKeyPressed(evt);
             },

@@ -16,10 +16,7 @@ import type {FSMDataHandler, FSMHandler, Logger} from "../../src/interacto";
 import {
     ClickTransition,
     ConcurrentFSM,
-    FSMImpl,
-    MouseDownTransition,
-    MouseMoveTransition,
-    MouseUpTransition
+    FSMImpl, MouseTransition
 } from "../../src/interacto";
 import {mock} from "jest-mock-extended";
 import {createMouseEvent} from "../interaction/StubEvents";
@@ -34,10 +31,10 @@ class StubTouchFSM extends FSMImpl<FSMDataHandler> {
         const moved = this.addStdState("moved");
         const guard = (ev: MouseEvent): boolean => ev.button === cpt;
 
-        new MouseDownTransition(this.initState, touched, undefined, guard);
-        new MouseMoveTransition(touched, moved, undefined, guard);
-        new MouseMoveTransition(moved, moved, undefined, guard);
-        new MouseUpTransition(moved, this.addTerminalState("released"), undefined, guard);
+        new MouseTransition(this.initState, touched, "mousedown", undefined, guard);
+        new MouseTransition(touched, moved, "mousemove", undefined, guard);
+        new MouseTransition(moved, moved, "mousemove", undefined, guard);
+        new MouseTransition(moved, this.addTerminalState("released"), "mouseup", undefined, guard);
         new ClickTransition(moved, this.addCancellingState("cancelled"), undefined, guard);
     }
 }

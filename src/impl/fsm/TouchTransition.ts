@@ -14,27 +14,31 @@
 
 import type {OutputState} from "../../api/fsm/OutputState";
 import type {InputState} from "../../api/fsm/InputState";
-import {isEventType} from "./Events";
 import {TransitionBase} from "./TransitionBase";
-import type {EventType} from "../../api/fsm/EventType";
+import type {EventType, TouchEventType} from "../../api/fsm/EventType";
 
 /**
- * This transition corresponds to a mouseenter of a pointing device.
+ * This transition defines a touch move.
  */
-export class MouseEnterTransition extends TransitionBase<MouseEvent> {
+export class TouchTransition extends TransitionBase<TouchEvent> {
+    private readonly eventType: TouchEventType;
+
     /**
-     * Creates the transition.
+     * Defines a transition.
+     * @param srcState - The source state of the transition.
+     * @param tgtState - The srcObject state of the transition.
      */
-    public constructor(srcState: OutputState, tgtState: InputState,
+    public constructor(srcState: OutputState, tgtState: InputState, eventType: TouchEventType,
                        action?: (evt?: Event) => void, guard?: (evt: Event) => boolean) {
         super(srcState, tgtState, action, guard);
+        this.eventType = eventType;
     }
 
-    public accept(event: Event): event is MouseEvent {
-        return event instanceof MouseEvent && isEventType(event.type) && this.getAcceptedEvents().includes(event.type);
+    public accept(evt: Event): evt is TouchEvent {
+        return evt instanceof TouchEvent && this.getAcceptedEvents().includes(evt.type as EventType);
     }
 
     public getAcceptedEvents(): ReadonlyArray<EventType> {
-        return ["mouseenter"];
+        return [this.eventType];
     }
 }

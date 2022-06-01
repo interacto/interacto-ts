@@ -16,12 +16,12 @@ import type {FSM} from "../../api/fsm/FSM";
 import type {OutputState} from "../../api/fsm/OutputState";
 import {InitState} from "../fsm/InitState";
 import type {InteractionData} from "../../api/interaction/InteractionData";
-import {isKeyEvent, isMouseEvent, isTouchEvent} from "../fsm/Events";
 import type {Subscription} from "rxjs";
 import type {Interaction} from "../../api/interaction/Interaction";
-import type {EventType} from "../../api/fsm/EventType";
+import type {EventType, KeyEventType, MouseEventType, TouchEventType} from "../../api/fsm/EventType";
 import type {Flushable} from "./Flushable";
 import type {Logger} from "../../api/logging/Logger";
+import {keyEventTypes, mouseEventTypes, touchEventTypes} from "../../api/fsm/EventType";
 
 
 interface CancellablePromise extends Promise<void> {
@@ -252,15 +252,15 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
     }
 
     protected registerEventToNode(eventType: EventType, node: EventTarget): void {
-        if (isMouseEvent(eventType)) {
+        if (mouseEventTypes.includes(eventType as MouseEventType) || eventType === "wheel") {
             node.addEventListener(eventType, this.getMouseHandler());
             return;
         }
-        if (isTouchEvent(eventType)) {
+        if (touchEventTypes.includes(eventType as TouchEventType)) {
             node.addEventListener(eventType, this.getTouchHandler());
             return;
         }
-        if (isKeyEvent(eventType)) {
+        if (keyEventTypes.includes(eventType as KeyEventType)) {
             node.addEventListener(eventType, this.getKeyHandler());
             return;
         }
@@ -271,15 +271,15 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
     }
 
     protected unregisterEventToNode(eventType: EventType, node: EventTarget): void {
-        if (isMouseEvent(eventType)) {
+        if (mouseEventTypes.includes(eventType as MouseEventType) || eventType === "wheel") {
             node.removeEventListener(eventType, this.getMouseHandler());
             return;
         }
-        if (isTouchEvent(eventType)) {
+        if (touchEventTypes.includes(eventType as TouchEventType)) {
             node.removeEventListener(eventType, this.getTouchHandler());
             return;
         }
-        if (isKeyEvent(eventType)) {
+        if (keyEventTypes.includes(eventType as KeyEventType)) {
             node.removeEventListener(eventType, this.getKeyHandler());
             return;
         }

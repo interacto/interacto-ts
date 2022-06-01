@@ -16,13 +16,11 @@ import {InteractionBase} from "../InteractionBase";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import type {TapData} from "../../../api/interaction/TapData";
-import {TouchReleaseTransition} from "../../fsm/TouchReleaseTransition";
 import {TapDataImpl} from "../TapDataImpl";
 import {TouchDataImpl} from "../TouchDataImpl";
-import {TouchPressureTransition} from "../../fsm/TouchPressureTransition";
-import {TouchMoveTransition} from "../../fsm/TouchMoveTransition";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 import type {Logger} from "../../../api/logging/Logger";
+import {TouchTransition} from "../../fsm/TouchTransition";
 
 /**
  * The FSM for the Tap interaction
@@ -51,18 +49,18 @@ class TapFSM extends FSMImpl<TapFSMHandler> {
             this.dataHandler?.tap(event);
         };
 
-        new TouchPressureTransition(this.initState, down, action);
-        new TouchPressureTransition(up, down, action);
+        new TouchTransition(this.initState, down, "touchstart", action);
+        new TouchTransition(up, down, "touchstart", action);
 
-        new TouchMoveTransition(down, cancelled, undefined,
+        new TouchTransition(down, cancelled, "touchmove", undefined,
             (evt: TouchEvent): boolean => evt.changedTouches[0].identifier === this.touchID);
 
         // No multi-touch
-        new TouchPressureTransition(down, cancelled, undefined,
+        new TouchTransition(down, cancelled, "touchstart", undefined,
             (evt: TouchEvent): boolean => [...evt.touches].filter(t => t.identifier === this.touchID).length > 0);
 
         // Required to clean touch events lost by the browser
-        new TouchPressureTransition(down, down,
+        new TouchTransition(down, down, "touchstart",
             // Replacing the current tap (but not increment)
             (event: TouchEvent): void => {
                 this.touchID = event.changedTouches[0].identifier;
@@ -71,13 +69,13 @@ class TapFSM extends FSMImpl<TapFSMHandler> {
             // To detect the event is lost, checking it is not part of the touches any more
             (evt: TouchEvent): boolean => [...evt.touches].filter(t => t.identifier === this.touchID).length === 0);
 
-        new TouchReleaseTransition(down, this.addTerminalState("ended"), undefined,
+        new TouchTransition(down, this.addTerminalState("ended"), "touchend", undefined,
             (evt: TouchEvent): boolean => evt.changedTouches[0].identifier === this.touchID && this.nbTaps === this.countTaps);
 
-        new TouchReleaseTransition(down, up, undefined,
+        new TouchTransition(down, up, "touchend", undefined,
             (evt: TouchEvent): boolean => evt.changedTouches[0].identifier === this.touchID && this.nbTaps !== this.countTaps);
 
-        new TouchMoveTransition(up, cancelled);
+        new TouchTransition(up, cancelled, "touchmove");
         new TimeoutTransition(down, cancelled, () => 1000);
         new TimeoutTransition(up, cancelled, () => 1000);
     }

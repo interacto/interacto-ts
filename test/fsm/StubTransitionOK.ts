@@ -16,7 +16,6 @@ import {TransitionBase} from "../../src/impl/fsm/TransitionBase";
 import type {InputState} from "../../src/api/fsm/InputState";
 import type {OutputState} from "../../src/api/fsm/OutputState";
 import type {EventType} from "../../src/api/fsm/EventType";
-import {isEventType} from "../../src/impl/fsm/Events";
 
 export class StubTransitionOK<E extends Event> extends TransitionBase<E> {
     public _guard: boolean;
@@ -37,7 +36,7 @@ export class StubTransitionOK<E extends Event> extends TransitionBase<E> {
 
 export class SubStubTransition1 extends StubTransitionOK<MouseEvent> {
     public override accept(event: Event): event is MouseEvent {
-        return event instanceof MouseEvent && isEventType(event.type) && this.getAcceptedEvents().includes(event.type);
+        return event instanceof MouseEvent && this.getAcceptedEvents().includes(event.type as EventType);
     }
 
     public override getAcceptedEvents(): Array<EventType> {
@@ -47,7 +46,7 @@ export class SubStubTransition1 extends StubTransitionOK<MouseEvent> {
 
 export class SubStubTransition2 extends StubTransitionOK<KeyboardEvent> {
     public override accept(event: Event): event is KeyboardEvent {
-        return event instanceof KeyboardEvent && isEventType(event.type) && this.getAcceptedEvents().includes(event.type);
+        return event instanceof KeyboardEvent && this.getAcceptedEvents().includes(event.type as EventType);
     }
 
     public override getAcceptedEvents(): Array<EventType> {
@@ -57,7 +56,7 @@ export class SubStubTransition2 extends StubTransitionOK<KeyboardEvent> {
 
 export class SubStubTransition3 extends StubTransitionOK<TouchEvent> {
     public override accept(event: Event): event is TouchEvent {
-        return event instanceof TouchEvent && isEventType(event.type) && this.getAcceptedEvents().includes(event.type);
+        return event instanceof TouchEvent && this.getAcceptedEvents().includes(event.type as EventType);
     }
 
     public override getAcceptedEvents(): Array<EventType> {

@@ -17,8 +17,8 @@ import type {KeyData} from "../../../api/interaction/KeyData";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {KeyDataImpl} from "../KeyDataImpl";
-import {KeyUpTransition} from "../../fsm/KeyUpTransition";
 import type {Logger} from "../../../api/logging/Logger";
+import {KeyTransition} from "../../fsm/KeyTransition";
 
 /**
  * An FSM for a single key release.
@@ -34,7 +34,7 @@ export class KeyUpFSM extends FSMImpl<KeyUpFSMHandler> {
         super(logger, dataHandler);
         this.modifiersAccepted = modifierAccepted;
 
-        new KeyUpTransition(this.initState, this.addTerminalState("released"),
+        new KeyTransition(this.initState, this.addTerminalState("released"), "keyup",
             (evt: KeyboardEvent): void => {
                 this.dataHandler?.onKeyUp(evt);
             },

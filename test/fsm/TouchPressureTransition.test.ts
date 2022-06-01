@@ -12,18 +12,19 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {TouchPressureTransition} from "../../src/impl/fsm/TouchPressureTransition";
 import {createMouseEvent, createTouchEvent} from "../interaction/StubEvents";
 import type {FSMImpl} from "../../src/impl/fsm/FSMImpl";
 import {StdState} from "../../src/impl/fsm/StdState";
 import {mock} from "jest-mock-extended";
 import type {FSMDataHandler} from "../../src/impl/fsm/FSMDataHandler";
+import {TouchTransition} from "../../src/impl/fsm/TouchTransition";
 
-let tr: TouchPressureTransition;
+let tr: TouchTransition;
 let canvas: HTMLCanvasElement;
 
 beforeEach(() => {
-    tr = new TouchPressureTransition(new StdState(mock<FSMImpl<FSMDataHandler>>(), "a"), new StdState(mock<FSMImpl<FSMDataHandler>>(), "b"));
+    tr = new TouchTransition(new StdState(mock<FSMImpl<FSMDataHandler>>(), "a"),
+        new StdState(mock<FSMImpl<FSMDataHandler>>(), "b"), "touchstart");
     canvas = document.createElement("canvas");
 });
 

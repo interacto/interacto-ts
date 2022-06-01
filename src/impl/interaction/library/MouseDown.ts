@@ -13,18 +13,18 @@
  */
 
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import {MouseDownTransition} from "../../fsm/MouseDownTransition";
 import type {PointData} from "../../../api/interaction/PointData";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {PointDataImpl} from "../PointDataImpl";
 import type {Logger} from "../../../api/logging/Logger";
+import {MouseTransition} from "../../fsm/MouseTransition";
 
 export class MouseDownFSM extends FSMImpl<MouseDownFSMHandler> {
     public constructor(logger: Logger, dataHandler: MouseDownFSMHandler) {
         super(logger, dataHandler);
 
-        new MouseDownTransition(this.initState, this.addTerminalState("pressed"),
+        new MouseTransition(this.initState, this.addTerminalState("pressed"), "mousedown",
             (event: MouseEvent): void => {
                 this.dataHandler?.initToPress(event);
             });

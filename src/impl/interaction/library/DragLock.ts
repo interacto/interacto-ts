@@ -21,9 +21,9 @@ import type {PointDataImpl} from "../PointDataImpl";
 import {EscapeKeyPressureTransition} from "../../fsm/EscapeKeyPressureTransition";
 import {SrcTgtPointsDataImpl} from "../SrcTgtPointsDataImpl";
 import type {PointData} from "../../../api/interaction/PointData";
-import {MouseMoveTransition} from "../../fsm/MouseMoveTransition";
 import {SubFSMTransition} from "../../fsm/SubFSMTransition";
 import type {Logger} from "../../../api/logging/Logger";
+import {MouseTransition} from "../../fsm/MouseTransition";
 
 class DragLockFSM extends FSMImpl<DragLockFSMHandler> {
     public readonly firstDbleClick: DoubleClickFSM;
@@ -62,12 +62,12 @@ class DragLockFSM extends FSMImpl<DragLockFSMHandler> {
 
         new SubFSMTransition(locked, cancelled, cancelDbleClick);
 
-        const move = new MouseMoveTransition(locked, moved,
+        const move = new MouseTransition(locked, moved, "mousemove",
             (event: MouseEvent): void => {
                 this.dataHandler?.onMove(event);
             });
 
-        new MouseMoveTransition(moved, moved, move.action);
+        new MouseTransition(moved, moved, "mousemove", move.action);
 
         new EscapeKeyPressureTransition(locked, cancelled);
         new EscapeKeyPressureTransition(moved, cancelled);

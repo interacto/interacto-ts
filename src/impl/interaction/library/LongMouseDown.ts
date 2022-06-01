@@ -16,12 +16,10 @@ import {FSMImpl} from "../../fsm/FSMImpl";
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {InteractionBase} from "../InteractionBase";
 import type {PointData} from "../../../api/interaction/PointData";
-import {MouseDownTransition} from "../../fsm/MouseDownTransition";
-import {MouseUpTransition} from "../../fsm/MouseUpTransition";
 import {PointDataImpl} from "../PointDataImpl";
-import {MouseMoveTransition} from "../../fsm/MouseMoveTransition";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 import type {Logger} from "../../../api/logging/Logger";
+import {MouseTransition} from "../../fsm/MouseTransition";
 
 /**
  * The FSM for the LongPress interaction
@@ -49,16 +47,16 @@ export class LongMouseDownFSM extends FSMImpl<LongMouseDownFSMHandler> {
         const cancelled = this.addCancellingState("cancelled");
         const timeouted = this.addTerminalState("timeouted");
 
-        new MouseDownTransition(this.initState, down,
+        new MouseTransition(this.initState, down, "mousedown",
             (evt: MouseEvent): void => {
                 this.currentButton = evt.button;
                 this.dataHandler?.press(evt);
             });
 
-        const move = new MouseMoveTransition(down, cancelled, undefined,
+        const move = new MouseTransition(down, cancelled, "mousemove", undefined,
             (evt: MouseEvent): boolean => evt.button === this.currentButton);
 
-        new MouseUpTransition(down, cancelled, undefined, move.guard);
+        new MouseTransition(down, cancelled, "mouseup", undefined, move.guard);
 
         new TimeoutTransition(down, timeouted, () => this.duration);
     }

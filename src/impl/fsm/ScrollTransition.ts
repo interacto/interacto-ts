@@ -14,7 +14,6 @@
 
 import type {InputState} from "../../api/fsm/InputState";
 import type {OutputState} from "../../api/fsm/OutputState";
-import {isScrollEvent} from "./Events";
 import {TransitionBase} from "./TransitionBase";
 import type {EventType} from "../../api/fsm/EventType";
 
@@ -31,7 +30,7 @@ export class ScrollTransition extends TransitionBase<Event> {
     }
 
     public accept(event: Event): event is Event {
-        return isScrollEvent(event);
+        return event.type === "scroll";
     }
 
     public getAcceptedEvents(): ReadonlyArray<EventType> {

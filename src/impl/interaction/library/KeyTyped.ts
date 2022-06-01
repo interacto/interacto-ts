@@ -13,13 +13,12 @@
  */
 
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import {KeyDownTransition} from "../../fsm/KeyDownTransition";
 import type {KeyData} from "../../../api/interaction/KeyData";
-import {KeyUpTransition} from "../../fsm/KeyUpTransition";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {KeyDataImpl} from "../KeyDataImpl";
 import {InteractionBase} from "../InteractionBase";
 import type {Logger} from "../../../api/logging/Logger";
+import {KeyTransition} from "../../fsm/KeyTransition";
 
 /**
  * The FSM that describes a keyboard touch typed.
@@ -32,12 +31,12 @@ export class KeyTypedFSM extends FSMImpl<KeyTypedFSMHandler> {
 
         const pressed = this.addStdState("pressed");
 
-        new KeyDownTransition(this.initState, pressed,
+        new KeyTransition(this.initState, pressed, "keydown",
             (event: KeyboardEvent): void => {
                 this.checkKey = event.code;
             });
 
-        new KeyUpTransition(pressed, this.addTerminalState("typed", true),
+        new KeyTransition(pressed, this.addTerminalState("typed", true), "keyup",
             (evt: KeyboardEvent): void => {
                 this.dataHandler?.onKeyTyped(evt);
             },

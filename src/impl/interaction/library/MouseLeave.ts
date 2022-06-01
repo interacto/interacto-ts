@@ -18,9 +18,8 @@ import type {PointData} from "../../../api/interaction/PointData";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {PointDataImpl} from "../PointDataImpl";
-import {MouseOutTransition} from "../../fsm/MouseOutTransition";
-import {MouseLeaveTransition} from "../../fsm/MouseLeaveTransition";
 import type {Logger} from "../../../api/logging/Logger";
+import {MouseTransition} from "../../fsm/MouseTransition";
 
 /**
  * The FSM for mouseout interactions
@@ -44,9 +43,9 @@ export class MouseLeaveFSM extends FSMImpl<MouseLeaveFSMHandler> {
         };
 
         if (this.withBubbling) {
-            new MouseOutTransition(this.initState, exited, action);
+            new MouseTransition(this.initState, exited, "mouseout", action);
         } else {
-            new MouseLeaveTransition(this.initState, exited, action);
+            new MouseTransition(this.initState, exited, "mouseleave", action);
         }
     }
 }

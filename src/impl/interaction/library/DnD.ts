@@ -16,13 +16,11 @@ import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {EscapeKeyPressureTransition} from "../../fsm/EscapeKeyPressureTransition";
 import type {SrcTgtPointsData} from "../../../api/interaction/SrcTgtPointsData";
 import {FSMImpl} from "../../fsm/FSMImpl";
-import {MouseDownTransition} from "../../fsm/MouseDownTransition";
-import {MouseUpTransition} from "../../fsm/MouseUpTransition";
 import {InteractionBase} from "../InteractionBase";
 import {SrcTgtPointsDataImpl} from "../SrcTgtPointsDataImpl";
 import type {PointData} from "../../../api/interaction/PointData";
-import {MouseMoveTransition} from "../../fsm/MouseMoveTransition";
 import type {Logger} from "../../../api/logging/Logger";
+import {MouseTransition} from "../../fsm/MouseTransition";
 
 /**
  * The FSM for DnD interactions.
@@ -45,23 +43,23 @@ class DnDFSM extends FSMImpl<DnDFSMHandler> {
         const dragged = this.addStdState("dragged", true);
         const cancelled = this.addCancellingState("cancelled");
 
-        new MouseDownTransition(this.initState, pressed,
+        new MouseTransition(this.initState, pressed, "mousedown",
             (evt: MouseEvent): void => {
                 this.buttonToCheck = evt.button;
                 this.dataHandler?.onPress(evt);
             });
 
-        new MouseUpTransition(pressed, cancelled, (evt: MouseEvent): boolean => evt.button === this.buttonToCheck);
+        new MouseTransition(pressed, cancelled, "mouseup", (evt: MouseEvent): boolean => evt.button === this.buttonToCheck);
 
-        const move = new MouseMoveTransition(pressed, dragged,
+        const move = new MouseTransition(pressed, dragged, "mousemove",
             (evt: MouseEvent): void => {
                 this.dataHandler?.onDrag(evt);
             },
             (evt: MouseEvent): boolean => evt.button === this.buttonToCheck);
 
-        new MouseMoveTransition(dragged, dragged, move.action, move.guard);
+        new MouseTransition(dragged, dragged, "mousemove", move.action, move.guard);
 
-        new MouseUpTransition(dragged, this.addTerminalState("released"),
+        new MouseTransition(dragged, this.addTerminalState("released"), "mouseup",
             (event: MouseEvent): void => {
                 this.dataHandler?.onRelease(event);
             },
@@ -73,7 +71,7 @@ class DnDFSM extends FSMImpl<DnDFSMHandler> {
         if (this.cancellable) {
             new EscapeKeyPressureTransition(pressed, cancelled);
             new EscapeKeyPressureTransition(dragged, cancelled);
-            new MouseUpTransition(dragged, cancelled,
+            new MouseTransition(dragged, cancelled, "mouseup",
                 (evt: MouseEvent): boolean => {
                     const tgt = evt.currentTarget;
                     return evt.button === this.buttonToCheck && tgt instanceof Element && tgt.classList.contains("ioDwellSpring");

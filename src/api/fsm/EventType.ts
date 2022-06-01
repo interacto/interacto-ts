@@ -12,10 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- * The supported event types.
- */
-export const eventTypes = [
+export const mouseEventTypes = [
     "mousedown",
     "mouseup",
     "mousemove",
@@ -24,16 +21,31 @@ export const eventTypes = [
     "mouseenter",
     "mouseleave",
     "mousemove",
-    "keydown",
-    "keyup",
     "click",
-    "auxclick",
+    "auxclick"
+] as const;
+
+export const touchEventTypes = [
+    "touchstart",
+    "touchend",
+    "touchmove"
+] as const;
+
+export const keyEventTypes = [
+    "keydown",
+    "keyup"
+] as const;
+
+/**
+ * The supported event types.
+ */
+export const eventTypes = [
+    ...mouseEventTypes,
+    ...touchEventTypes,
+    ...keyEventTypes,
     "input",
     "scroll",
     "change",
-    "touchstart",
-    "touchend",
-    "touchmove",
     "wheel"
 ] as const;
 
@@ -41,3 +53,18 @@ export const eventTypes = [
  * The supported event types as a type
  */
 export type EventType = typeof eventTypes[number];
+
+/**
+ * The mouse event type
+ */
+export type MouseEventType = typeof mouseEventTypes[number];
+
+/**
+ * The touch event type
+ */
+export type TouchEventType = typeof touchEventTypes[number];
+
+/**
+ * The key event type
+ */
+export type KeyEventType = typeof keyEventTypes[number];

@@ -14,27 +14,17 @@
 
 import type {InputState} from "../../api/fsm/InputState";
 import type {OutputState} from "../../api/fsm/OutputState";
-import {TransitionBase} from "./TransitionBase";
-import type {EventType} from "../../api/fsm/EventType";
-import {isEventType} from "./Events";
+import {MouseTransition} from "./MouseTransition";
 
 /**
  * This transition corresponds to a pressure of a button of a pointing device.
  */
-export class ClickTransition extends TransitionBase<MouseEvent> {
+export class ClickTransition extends MouseTransition {
     /**
      * Creates the transition.
      */
     public constructor(srcState: OutputState, tgtState: InputState,
                        action?: (evt?: Event) => void, guard?: (evt: Event) => boolean) {
-        super(srcState, tgtState, action, guard);
-    }
-
-    public accept(event: Event): event is MouseEvent {
-        return event instanceof MouseEvent && isEventType(event.type) && this.getAcceptedEvents().includes(event.type);
-    }
-
-    public getAcceptedEvents(): ReadonlyArray<EventType> {
-        return ["click", "auxclick"];
+        super(srcState, tgtState, ["click", "auxclick"], action, guard);
     }
 }
