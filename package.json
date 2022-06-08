@@ -28,7 +28,7 @@
   "repository": "https://github.com/interacto/interacto-ts.git",
   "license": "GPL-3.0",
   "main": "./dist/interacto.umd.js",
-  "module": "dist/interacto.es5.js",
+  "module": "./dist/interacto.es5.js",
   "types": "./dist/interacto.d.ts",
   "devDependencies": {
     "@rollup/plugin-commonjs": "^22.0.0",
