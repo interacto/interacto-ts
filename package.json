@@ -30,6 +30,14 @@
   "main": "./dist/interacto.umd.js",
   "module": "./dist/interacto.es5.js",
   "types": "./dist/interacto.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/interacto.d.ts",
+        "default": "./dist/interacto.es5.js"
+      }
+    }
+  },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^22.0.0",
     "@rollup/plugin-json": "^4.1.0",
