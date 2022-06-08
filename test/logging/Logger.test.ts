@@ -101,7 +101,7 @@ test("log binding msg in console with name and frontend version", () => {
 test("log binding err in console no name with Error", () => {
     const err = new Error("Foo");
     logger.logBindingErr("c", err);
-    // eslint-disable-next-line no-console
+    // eslint-disable-next-line no-console,jest/no-conditional-in-test
     expect(console.log).toHaveBeenCalledWith(`ERR [${logger.sessionID}] [binding:] at 123: 'c', Foo ${err.stack ?? ""}`);
 });
 
@@ -114,7 +114,7 @@ test("log binding err in console no name", () => {
 test("log cmd err in console no name with Error", () => {
     const err = new Error("AA");
     logger.logCmdErr("c", err);
-    // eslint-disable-next-line no-console
+    // eslint-disable-next-line no-console,jest/no-conditional-in-test
     expect(console.log).toHaveBeenCalledWith(`ERR [${logger.sessionID}] [command:] at 123: 'c', AA ${err.stack ?? ""}`);
 });
 
@@ -127,7 +127,7 @@ test("log cmd err in console", () => {
 test("log interaction err in console no name with Error", () => {
     const err = new Error("AA");
     logger.logInteractionErr("c", err);
-    // eslint-disable-next-line no-console
+    // eslint-disable-next-line no-console,jest/no-conditional-in-test
     expect(console.log).toHaveBeenCalledWith(`ERR [${logger.sessionID}] [interaction:] at 123: 'c', AA ${err.stack ?? ""}`);
 });
 
@@ -154,7 +154,7 @@ test("log interaction err REST", () => {
     expect(console.log).not.toHaveBeenCalledWith();
     expect(xhrMock.open).toHaveBeenCalledWith("POST", "localhost/api/err", true);
     expect(xhrMock.send).toHaveBeenCalledWith(
-        `{"date":123,"msg":"c","level":"interaction","name":"","type":"ERR","sessionID":"${logger.sessionID}","stack":"err"}`);
+        `{"stack":"err","sessionID":"${logger.sessionID}","type":"ERR","name":"","level":"interaction","msg":"c","date":123}`);
 });
 
 test("usage binding start", () => {
@@ -262,5 +262,5 @@ test("usage binding start and end same, rest", () => {
     expect(console.log).not.toHaveBeenCalled();
     expect(xhrMock.open).toHaveBeenCalledWith("POST", "yolo/api/usage", true);
     expect(xhrMock.send).toHaveBeenCalledWith(
-        `{"name":"foo3","sessionID":"${logger.sessionID}","date":123,"duration":77,"cancelled":true}`);
+        `{"date":123,"sessionID":"${logger.sessionID}","name":"foo3","duration":77,"cancelled":true}`);
 });

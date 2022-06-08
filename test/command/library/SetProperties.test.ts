@@ -24,6 +24,7 @@ class StubForSetProp {
 
     public bar: SecondStubSetProp;
 
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     public 5: number;
 
     private _foo2: string;
@@ -56,6 +57,7 @@ describe("using properties", () => {
         cmd = new SetProperties(obj, {
             "foo2": "fooo",
             "foo": 1,
+            // eslint-disable-next-line @typescript-eslint/naming-convention
             "5": 6
         });
     });
@@ -64,6 +66,7 @@ describe("using properties", () => {
         expect(cmd.newvalues).toStrictEqual({
             "foo2": "fooo",
             "foo": 1,
+            // eslint-disable-next-line @typescript-eslint/naming-convention
             "5": 6
         });
     });

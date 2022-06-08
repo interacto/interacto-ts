@@ -22,6 +22,14 @@ import type {Subscription} from "rxjs";
  * Fitt's Law data. Immutable.
  */
 export class FittsLawDataImpl {
+    public readonly t: number;
+
+    public readonly w: number;
+
+    public readonly h: number;
+
+    public readonly d: number;
+
     /**
      * Creates the data.
      * @param t - The time in ms. Be careful about fingerprinting protection:
@@ -31,7 +39,11 @@ export class FittsLawDataImpl {
      * @param d - the distance from the first mouse event to the center of the target object
      */
     // eslint-disable-next-line @typescript-eslint/no-parameter-properties
-    public constructor(public readonly t: number, public readonly w: number, public readonly h: number, public readonly d: number) {
+    public constructor(t: number, w: number, h: number, d: number) {
+        this.d = d;
+        this.h = h;
+        this.w = w;
+        this.t = t;
     }
 
     /**

@@ -601,6 +601,7 @@ describe("test Bindings", () => {
         bindings.dragLockBinder()
             .on(elt)
             .toProduce((_i: SrcTgtPointsData<PointData>) => new StubCmd(true))
+            // eslint-disable-next-line jest/no-conditional-in-test
             .when(i => i.src.button === 2 && i.tgt.button === 2)
             .log(LogLevel.interaction)
             .bind();

@@ -45,6 +45,7 @@ test("type text create command", () => {
     binding = bindings.textInputBinder()
         .toProduce(() => cmd)
         .then((c, i) => {
+            // eslint-disable-next-line jest/no-conditional-in-test
             textonUpdate.push(i.widget?.value ?? "");
         })
         .on(txt1)
@@ -92,6 +93,7 @@ test("type text exec several times the command", () => {
     binding = bindings.textInputBinder()
         .toProduce(() => cmd)
         .then((c, i) => {
+            // eslint-disable-next-line jest/no-conditional-in-test
             textonUpdate.push(i.widget?.value ?? "");
         })
         .on(txt1)

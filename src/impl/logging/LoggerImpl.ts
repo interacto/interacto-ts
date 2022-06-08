@@ -16,14 +16,32 @@ import type {Logger} from "../../api/logging/Logger";
 import type {LogLevel} from "../../api/logging/LogLevel";
 
 export class LoggingData {
-    // eslint-disable-next-line @typescript-eslint/no-parameter-properties
-    public constructor(public readonly date: number, public readonly msg: string, public readonly level: keyof typeof LogLevel,
-                       // eslint-disable-next-line @typescript-eslint/no-parameter-properties
-                       public readonly name: string, public readonly type: "ERR" | "INFO",
-                       // eslint-disable-next-line @typescript-eslint/no-parameter-properties
-                       public readonly sessionID: string, public readonly stack?: string,
-                       // eslint-disable-next-line @typescript-eslint/no-parameter-properties
-                       public readonly frontVersion?: string) {
+    public readonly name: string;
+
+    public readonly sessionID: string;
+
+    public readonly date: number;
+
+    public readonly msg: string;
+
+    public readonly level: keyof typeof LogLevel;
+
+    public readonly type: "ERR" | "INFO";
+
+    public readonly stack?: string;
+
+    public readonly frontVersion?: string;
+
+    public constructor(date: number, msg: string, level: keyof typeof LogLevel, name: string, type: "ERR" | "INFO",
+                       sessionID: string, stack?: string, frontVersion?: string) {
+        this.frontVersion = frontVersion;
+        this.stack = stack;
+        this.sessionID = sessionID;
+        this.type = type;
+        this.name = name;
+        this.level = level;
+        this.msg = msg;
+        this.date = date;
     }
 
     public toString(): string {
@@ -34,14 +52,23 @@ export class LoggingData {
 }
 
 export class UsageLog {
+    public name: string;
+
+    public readonly sessionID: string;
+
+    public readonly date: number;
+
     public duration: number;
 
     public cancelled: boolean;
 
-    // eslint-disable-next-line @typescript-eslint/no-parameter-properties
-    public constructor(public name: string, public readonly sessionID: string, public readonly date: number,
-                       // eslint-disable-next-line @typescript-eslint/no-parameter-properties
-                       public readonly frontVersion?: string) {
+    public readonly frontVersion?: string;
+
+    public constructor(name: string, sessionID: string, date: number, frontVersion?: string) {
+        this.frontVersion = frontVersion;
+        this.date = date;
+        this.sessionID = sessionID;
+        this.name = name;
         this.duration = 0;
         this.cancelled = false;
     }
