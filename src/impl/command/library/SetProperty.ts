@@ -27,13 +27,14 @@ export class SetProperty<T, S extends keyof T> extends UndoableCommand {
 
     public newvalue: T[S];
 
-    protected mementoValue: T[S];
+    protected mementoValue: T[S] | undefined;
 
     public constructor(obj: T, prop: S, newvalue: T[S]) {
         super();
         this.obj = obj;
         this.prop = prop;
         this.newvalue = newvalue;
+        this.mementoValue = undefined;
     }
 
     protected override createMemento(): void {
@@ -49,7 +50,8 @@ export class SetProperty<T, S extends keyof T> extends UndoableCommand {
     }
 
     public undo(): void {
-        this.obj[this.prop] = this.mementoValue;
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        this.obj[this.prop] = this.mementoValue!;
     }
 
     public override getUndoName(): string {

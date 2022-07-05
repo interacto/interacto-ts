@@ -16,15 +16,15 @@
 import {SetProperty} from "../../../src/impl/command/library/SetProperty";
 
 class SecondStubSetProp {
-    public val: Array<number>;
+    public val: Array<number> = [];
 }
 
 class StubForSetProp {
-    public foo: number;
+    public foo: number = 0;
 
-    public bar: SecondStubSetProp;
+    public bar: SecondStubSetProp = new SecondStubSetProp();
 
-    private _foo2: string;
+    private _foo2: string = "";
 
     public get foo2(): string {
         return this._foo2;

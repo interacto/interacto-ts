@@ -14,7 +14,8 @@
     "removeComments": true,
     "noImplicitReturns": true,
     "declaration": true,
-    "noImplicitOverride": true
+    "noImplicitOverride": true,
+    "strictPropertyInitialization": true
   },
   "include": [
     "src/**/*"

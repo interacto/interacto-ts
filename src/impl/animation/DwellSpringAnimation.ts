@@ -24,7 +24,7 @@ import type {PointData} from "../../api/interaction/PointData";
 export class DwellSpringAnimation {
     private displaySpring = false;
 
-    private interval: number;
+    private interval: number | undefined;
 
     private positionSpring: {"x": number; "y": number};
 
@@ -35,6 +35,7 @@ export class DwellSpringAnimation {
     private readonly spring: EltRef<SVGLineElement>;
 
     public constructor(handle: EltRef<SVGCircleElement>, spring: EltRef<SVGLineElement>) {
+        this.interval = undefined;
         this.radius = parseInt(handle.nativeElement.getAttribute("r") ?? "20", 10);
         this.handle = handle;
         this.spring = spring;

@@ -45,6 +45,9 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, D extends I
     public constructor(undoHistory: UndoHistoryBase, logger: Logger, observer?: BindingsObserver, binder?: Partial<KeysBinder<C, I, D>>) {
         super(undoHistory, logger, observer, binder);
 
+        this.isCode = false;
+        this.keysOrCodes = [];
+
         Object.assign(this, binder);
 
         // Arrays have to be cloned again in each subclass of Binder after Object.assign() since it undoes the changes

@@ -16,18 +16,18 @@
 import {SetProperties} from "../../../src/impl/command/library/SetProperties";
 
 class SecondStubSetProp {
-    public val: Array<number>;
+    public val: Array<number> = [];
 }
 
 class StubForSetProp {
-    public foo: number;
+    public foo: number = 0;
 
-    public bar: SecondStubSetProp;
+    public bar: SecondStubSetProp = new SecondStubSetProp();
 
     // eslint-disable-next-line @typescript-eslint/naming-convention
     public 5: number;
 
-    private _foo2: string;
+    private _foo2: string = "";
 
     public get foo2(): string {
         return this._foo2;

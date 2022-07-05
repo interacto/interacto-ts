@@ -32,6 +32,7 @@ export class SetProperties<T> extends UndoableCommand {
         this.obj = obj;
 
         this.compositeCmds = [];
+        this._newvalues = newvalues;
         this.newvalues = newvalues;
     }
 
