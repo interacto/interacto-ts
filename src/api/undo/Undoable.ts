@@ -13,6 +13,16 @@
  */
 
 /**
+ * The basic accepted types for producing snapshots of undoable commands
+ */
+export type PrimitiveUndoableSnapshot = HTMLElement | SVGElement | string;
+
+/**
+ * The type of the visual snpashot that an undoable command can produce
+ */
+export type UndoableSnapshot = PrimitiveUndoableSnapshot | Promise<PrimitiveUndoableSnapshot> | undefined;
+
+/**
  * An interface for undoable objects.
  */
 export interface Undoable {
@@ -35,7 +45,7 @@ export interface Undoable {
      * Gives some information about the impact of a command.
      * @returns Information about the impact of the commmand as an SVG element or text.
      */
-    getVisualSnapshot(): SVGElement | string | undefined;
+    getVisualSnapshot(): UndoableSnapshot;
 }
 
 export function isUndoableType(obj: unknown): obj is Undoable {

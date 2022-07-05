@@ -14,6 +14,7 @@
 
 import type {UndoHistoryBase} from "./UndoHistoryBase";
 import type {Undoable} from "./Undoable";
+import type {UndoableSnapshot} from "./Undoable";
 import type {Observable} from "rxjs";
 
 /**
@@ -33,7 +34,7 @@ export interface UndoableTreeNode {
 
     readonly children: Array<UndoableTreeNode>;
 
-    readonly visualSnapshot: SVGElement | string | undefined;
+    readonly visualSnapshot: UndoableSnapshot;
 
     undo(): void;
 

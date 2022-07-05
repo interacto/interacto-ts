@@ -14,7 +14,7 @@
 
 import type {UndoableTreeNode} from "../../api/undo/TreeUndoHistory";
 import {TreeUndoHistory} from "../../api/undo/TreeUndoHistory";
-import type {Undoable} from "../../api/undo/Undoable";
+import type {Undoable, UndoableSnapshot} from "../../api/undo/Undoable";
 import {remove} from "../util/ArrayUtil";
 import type {Observable} from "rxjs";
 import {Subject} from "rxjs";
@@ -30,7 +30,7 @@ class UndoableTreeNodeImpl implements UndoableTreeNode {
 
     public readonly undoable: Undoable;
 
-    private readonly cacheVisualSnap: SVGElement | string | undefined;
+    private readonly cacheVisualSnap: UndoableSnapshot;
 
     public constructor(undoable: Undoable, id: number, parent: UndoableTreeNode | undefined) {
         this.undoable = undoable;
@@ -51,7 +51,7 @@ class UndoableTreeNodeImpl implements UndoableTreeNode {
         this.undoable.redo();
     }
 
-    public get visualSnapshot(): SVGElement | string | undefined {
+    public get visualSnapshot(): UndoableSnapshot {
         return this.cacheVisualSnap;
     }
 

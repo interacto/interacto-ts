@@ -13,7 +13,7 @@
  */
 
 import {CommandBase} from "./CommandBase";
-import type {Undoable} from "../../api/undo/Undoable";
+import type {Undoable, UndoableSnapshot} from "../../api/undo/Undoable";
 
 /**
  * The base class for undoable UI commands.
@@ -23,7 +23,7 @@ export abstract class UndoableCommand extends CommandBase implements Undoable {
         return this.constructor.name;
     }
 
-    public getVisualSnapshot(): SVGElement | string | undefined {
+    public getVisualSnapshot(): UndoableSnapshot {
         return undefined;
     }
 
