@@ -46,7 +46,7 @@ export class TimeoutTransition extends TransitionBase<Event> {
      * @param logger - The logger to use.
      */
     public constructor(srcState: OutputState, tgtState: InputState, timeout: () => number, logger?: Logger,
-                       action?: (evt?: Event) => void) {
+                       action?: (evt: Event) => void) {
         super(srcState, tgtState, action, () => this.timeouted);
         this.logger = logger;
         this.timeouted = false;

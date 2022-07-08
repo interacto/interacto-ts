@@ -25,7 +25,7 @@ export abstract class TransitionBase<E extends Event> implements Transition<E> {
 
     public readonly tgt: InputState;
 
-    public readonly action: (evt?: E) => void;
+    public readonly action: (evt: E) => void;
 
     public readonly guard: (evt: E) => boolean;
 
@@ -35,7 +35,7 @@ export abstract class TransitionBase<E extends Event> implements Transition<E> {
      * @param tgtState - The output state of the transition.
      */
     protected constructor(srcState: OutputState, tgtState: InputState,
-                          action?: (evt?: E) => void, guard?: (evt: E) => boolean) {
+                          action?: (evt: E) => void, guard?: (evt: E) => boolean) {
         this.src = srcState;
         this.tgt = tgtState;
         this.action = action ?? ((): void => {

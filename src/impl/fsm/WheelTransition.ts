@@ -25,7 +25,7 @@ export class WheelTransition extends TransitionBase<WheelEvent> {
      * Creates the transition.
      */
     public constructor(srcState: OutputState, tgtState: InputState,
-                       action?: (evt?: Event) => void, guard?: (evt: Event) => boolean) {
+                       action?: (evt: Event) => void, guard?: (evt: Event) => boolean) {
         super(srcState, tgtState, action, guard);
     }
 
