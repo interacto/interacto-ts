@@ -91,9 +91,9 @@ import {DwellSpringAnimation} from "../animation/DwellSpringAnimation";
 import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
 
 export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
-    private observer: BindingsObserver | undefined;
+    protected observer: BindingsObserver | undefined;
 
-    private readonly undoHistoryData: H;
+    protected readonly undoHistoryData: H;
 
     public readonly logger: Logger;
 
