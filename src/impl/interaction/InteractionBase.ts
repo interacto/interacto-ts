@@ -41,7 +41,7 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
     /**
      * The current nodes that the interaction works on
      */
-    protected readonly registeredNodes: Set<EventTarget>;
+    protected readonly registeredNodes: Set<unknown>;
 
     /** The current list of mutation observers. Used for listening changes in node lists. */
     protected readonly mutationObservers: Array<MutationObserver>;
@@ -97,7 +97,7 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
         });
         this.activated = true;
         this._log = false;
-        this.registeredNodes = new Set<EventTarget>();
+        this.registeredNodes = new Set<unknown>();
         this.mutationObservers = [];
         this.throttleTimeout = 0;
     }
@@ -213,27 +213,27 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
             .reduce((a, b) => [...a, ...b]);
     }
 
-    public registerToNodes(widgets: ReadonlyArray<EventTarget>): void {
+    public registerToNodes(widgets: ReadonlyArray<unknown>): void {
         widgets.forEach(w => {
             this.registeredNodes.add(w);
             this.onNewNodeRegistered(w);
         });
     }
 
-    protected unregisterFromNodes(widgets: ReadonlyArray<EventTarget>): void {
+    protected unregisterFromNodes(widgets: ReadonlyArray<unknown>): void {
         widgets.forEach(w => {
             this.registeredNodes.delete(w);
             this.onNodeUnregistered(w);
         });
     }
 
-    public onNodeUnregistered(node: EventTarget): void {
+    public onNodeUnregistered(node: unknown): void {
         this.getEventTypesOf(this._fsm.currentState).forEach(type => {
             this.unregisterEventToNode(type, node);
         });
     }
 
-    public onNewNodeRegistered(node: EventTarget): void {
+    public onNewNodeRegistered(node: unknown): void {
         this.getEventTypesOf(this._fsm.currentState).forEach(type => {
             this.registerEventToNode(type, node);
         });
@@ -251,7 +251,11 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
         this.mutationObservers.push(newMutationObserver);
     }
 
-    protected registerEventToNode(eventType: EventType, node: EventTarget): void {
+    protected registerEventToNode(eventType: EventType, node: unknown): void {
+        if (!(node instanceof EventTarget)) {
+            return;
+        }
+
         if (mouseEventTypes.includes(eventType as MouseEventType) || eventType === "wheel") {
             node.addEventListener(eventType, this.getMouseHandler());
             return;
@@ -270,7 +274,10 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
         }
     }
 
-    protected unregisterEventToNode(eventType: EventType, node: EventTarget): void {
+    protected unregisterEventToNode(eventType: EventType, node: unknown): void {
+        if (!(node instanceof EventTarget)) {
+            return;
+        }
         if (mouseEventTypes.includes(eventType as MouseEventType) || eventType === "wheel") {
             node.removeEventListener(eventType, this.getMouseHandler());
             return;

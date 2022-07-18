@@ -49,8 +49,7 @@ export interface InteractionCmdUpdateBinder<C extends Command, I extends Interac
 
     first(fn: (c: C, i: D) => void): InteractionCmdUpdateBinder<C, I, D>;
 
-    on(widget: ReadonlyArray<Widget<EventTarget>> | Widget<EventTarget>, ...widgets: ReadonlyArray<Widget<EventTarget>>):
-    InteractionCmdUpdateBinder<C, I, D>;
+    on<W>(widget: ReadonlyArray<Widget<W>> | Widget<W>, ...widgets: ReadonlyArray<Widget<W>>): InteractionCmdUpdateBinder<C, I, D>;
 
     onDynamic(node: Widget<Node>): InteractionCmdUpdateBinder<C, I, D>;
 

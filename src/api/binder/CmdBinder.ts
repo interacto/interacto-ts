@@ -30,7 +30,7 @@ export interface CmdBinder<C extends Command> extends CmdBinderBuilder<C> {
 
     end(fn: (c: C) => void): CmdBinder<C>;
 
-    on(widget: ReadonlyArray<Widget<EventTarget>> | Widget<EventTarget>, ...widgets: ReadonlyArray<Widget<EventTarget>>): CmdBinder<C>;
+    on<W>(widget: ReadonlyArray<Widget<W>> | Widget<W>, ...widgets: ReadonlyArray<Widget<W>>): CmdBinder<C>;
 
     onDynamic(node: Widget<Node>): CmdBinder<C>;
 

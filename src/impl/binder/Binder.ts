@@ -41,7 +41,7 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
 
     protected produceFn?: (i: D) => C;
 
-    protected widgets: ReadonlyArray<EventTarget>;
+    protected widgets: ReadonlyArray<unknown>;
 
     protected dynamicNodes: ReadonlyArray<Node>;
 
@@ -147,15 +147,14 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
         };
     }
 
-    public on(widget: ReadonlyArray<Widget<EventTarget>> | Widget<EventTarget>, ...widgets: ReadonlyArray<Widget<EventTarget>>):
-    Binder<C, I, D> {
+    public on<W>(widget: ReadonlyArray<Widget<W>> | Widget<W>, ...widgets: ReadonlyArray<Widget<W>>): Binder<C, I, D> {
         const ws = [...widgets].concat(widget).map(w => {
             if (isEltRef(w)) {
                 return w.nativeElement;
             }
             return w;
         });
-        const w: ReadonlyArray<EventTarget> = this.widgets.length === 0 ? ws : [...this.widgets].concat(ws);
+        const w: ReadonlyArray<unknown> = this.widgets.length === 0 ? ws : [...this.widgets].concat(ws);
         const dup = this.duplicate();
         dup.widgets = w;
         return dup;

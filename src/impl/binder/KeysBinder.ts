@@ -97,8 +97,7 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, D extends I
         return dup;
     }
 
-    public override on(widget: ReadonlyArray<Widget<EventTarget>> | Widget<EventTarget>, ...widgets: ReadonlyArray<Widget<EventTarget>>):
-    KeysBinder<C, I, D> {
+    public override on<W>(widget: ReadonlyArray<Widget<W>> | Widget<W>, ...widgets: ReadonlyArray<Widget<W>>): KeysBinder<C, I, D> {
         return super.on(widget, ...widgets) as KeysBinder<C, I, D>;
     }
 

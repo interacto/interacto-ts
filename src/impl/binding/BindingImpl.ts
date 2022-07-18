@@ -83,7 +83,7 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
      * @param name - The optional name of the binding. If not provided, computed based on the interaction and command names
      */
     public constructor(continuousExecution: boolean, interaction: I, cmdProducer: (i?: D) => C,
-                       widgets: ReadonlyArray<EventTarget>, undoHistory: UndoHistoryBase, logger: Logger, name?: string) {
+                       widgets: ReadonlyArray<unknown>, undoHistory: UndoHistoryBase, logger: Logger, name?: string) {
         // The name is partial until the binding procudes its first command
         this._name = name;
         this.logBinding = false;

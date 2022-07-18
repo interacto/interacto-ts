@@ -32,8 +32,7 @@ import type {WhenType} from "./When";
 export interface KeyInteractionUpdateBinder<I extends Interaction<D>, D extends InteractionData>
     extends InteractionUpdateBinderBuilder<I, D>, KeyBinderBuilder {
 
-    on(widget: ReadonlyArray<Widget<EventTarget>> | Widget<EventTarget>, ...widgets: ReadonlyArray<Widget<EventTarget>>):
-    KeyInteractionUpdateBinder<I, D>;
+    on<W>(widget: ReadonlyArray<Widget<W>> | Widget<W>, ...widgets: ReadonlyArray<Widget<W>>): KeyInteractionUpdateBinder<I, D>;
 
     onDynamic(node: Widget<Node>): KeyInteractionUpdateBinder<I, D>;
 

@@ -32,7 +32,7 @@ export interface InteractionBinder<I extends Interaction<D>, D extends Interacti
 
     when(fn: (i: D) => boolean, mode?: WhenType): InteractionBinder<I, D>;
 
-    on(widget: ReadonlyArray<Widget<EventTarget>> | Widget<EventTarget>, ...widgets: ReadonlyArray<Widget<EventTarget>>): InteractionBinder<I, D>;
+    on<W>(widget: ReadonlyArray<Widget<W>> | Widget<W>, ...widgets: ReadonlyArray<Widget<W>>): InteractionBinder<I, D>;
 
     onDynamic(node: Widget<Node>): InteractionBinder<I, D>;
 

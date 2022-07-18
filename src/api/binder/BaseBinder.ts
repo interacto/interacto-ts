@@ -26,7 +26,7 @@ import type {WhenType} from "./When";
  * for defining the UI command and the user interaction to use.
  */
 export interface BaseBinder extends BaseBinderBuilder {
-    on(widget: ReadonlyArray<Widget<EventTarget>> | Widget<EventTarget>, ...widgets: ReadonlyArray<Widget<EventTarget>>): BaseBinder;
+    on<W>(widget: ReadonlyArray<Widget<W>> | Widget<W>, ...widgets: ReadonlyArray<Widget<W>>): BaseBinder;
 
     onDynamic(node: Widget<Node>): BaseBinder;
 

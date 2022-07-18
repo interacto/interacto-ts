@@ -47,8 +47,7 @@ export interface InteractionUpdateBinderBuilder<I extends Interaction<D>, D exte
 
     end(fn: () => void): InteractionUpdateBinderBuilder<I, D>;
 
-    on(widget: ReadonlyArray<Widget<EventTarget>> | Widget<EventTarget>, ...widgets: ReadonlyArray<Widget<EventTarget>>):
-    InteractionUpdateBinderBuilder<I, D>;
+    on<W>(widget: ReadonlyArray<Widget<W>> | Widget<W>, ...widgets: ReadonlyArray<Widget<W>>): InteractionUpdateBinderBuilder<I, D>;
 
     onDynamic(node: Widget<Node>): InteractionUpdateBinderBuilder<I, D>;
 

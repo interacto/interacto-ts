@@ -30,8 +30,7 @@ export interface KeyInteractionBinderBuilder<I extends Interaction<D>, D extends
 
     when(fn: (i: D) => boolean, mode?: WhenType): KeyInteractionBinderBuilder<I, D>;
 
-    on(widget: ReadonlyArray<Widget<EventTarget>> | Widget<EventTarget>, ...widgets: ReadonlyArray<Widget<EventTarget>>):
-    KeyInteractionBinderBuilder<I, D>;
+    on<W>(widget: ReadonlyArray<Widget<W>> | Widget<W>, ...widgets: ReadonlyArray<Widget<W>>): KeyInteractionBinderBuilder<I, D>;
 
     onDynamic(node: Widget<Node>): KeyInteractionBinderBuilder<I, D>;
 

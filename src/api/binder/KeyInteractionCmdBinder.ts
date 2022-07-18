@@ -33,8 +33,7 @@ export interface KeyInteractionCmdBinder<C extends Command, I extends Interactio
 
     first(fn: (c: C, i: D) => void): KeyInteractionCmdBinder<C, I, D>;
 
-    on(widget: ReadonlyArray<Widget<EventTarget>> | Widget<EventTarget>, ...widgets: ReadonlyArray<Widget<EventTarget>>):
-    KeyInteractionCmdBinder<C, I, D>;
+    on<W>(widget: ReadonlyArray<Widget<W>> | Widget<W>, ...widgets: ReadonlyArray<Widget<W>>): KeyInteractionCmdBinder<C, I, D>;
 
     onDynamic(node: Widget<Node>): KeyInteractionCmdBinder<C, I, D>;
 

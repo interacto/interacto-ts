@@ -30,13 +30,13 @@ export function isEltRef(o: unknown): o is EltRef<EventTarget> {
         return false;
     }
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    return (o as EltRef<EventTarget>).nativeElement instanceof EventTarget;
+    return (o as EltRef<unknown>).nativeElement instanceof EventTarget;
 }
 
 /**
  * This alias refers to either an EvenTarget object or a reference to an EvenTarget object.
  */
-export type Widget<T extends EventTarget> = EltRef<T> | T;
+export type Widget<T> = EltRef<T> | T;
 
 /**
  * The base interface for building bindings (what we call in Interacto a binder).
@@ -50,7 +50,7 @@ export interface BaseBinderBuilder {
      * @param widgets - The list of the widgets involved in the bindings.
      * @returns A clone of the current binder to chain the building configuration.
      */
-    on(widget: ReadonlyArray<Widget<EventTarget>> | Widget<EventTarget>, ...widgets: ReadonlyArray<Widget<EventTarget>>): BaseBinderBuilder;
+    on<W>(widget: ReadonlyArray<Widget<W>> | Widget<W>, ...widgets: ReadonlyArray<Widget<W>>): BaseBinderBuilder;
 
     /**
      * Specifies the node the binding will observe its children.

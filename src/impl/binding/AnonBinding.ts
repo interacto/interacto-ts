@@ -48,7 +48,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
 
 
     public constructor(continuousExec: boolean, interaction: I, undoHistory: UndoHistoryBase, logger: Logger, cmdSupplierFn: (d: D) => C,
-                       widgets: ReadonlyArray<EventTarget>, dynamicNodes: ReadonlyArray<Node>,
+                       widgets: ReadonlyArray<unknown>, dynamicNodes: ReadonlyArray<Node>,
                        loggers: ReadonlyArray<LogLevel>, timeoutThrottle: number,
                        stopPropagation: boolean, prevDefault: boolean, firstFn?: (c: C, i: D) => void,
                        thenFn?: (c: C, i: D) => void, whenFn?: Array<When<D>>,

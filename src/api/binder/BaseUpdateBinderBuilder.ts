@@ -45,7 +45,7 @@ export interface BaseUpdateBinderBuilder extends BaseBinderBuilder {
 
     log(...level: ReadonlyArray<LogLevel>): BaseUpdateBinderBuilder;
 
-    on(widget: ReadonlyArray<Widget<EventTarget>> | Widget<EventTarget>, ...widgets: ReadonlyArray<Widget<EventTarget>>): BaseUpdateBinderBuilder;
+    on<W>(widget: ReadonlyArray<Widget<W>> | Widget<W>, ...widgets: ReadonlyArray<Widget<W>>): BaseUpdateBinderBuilder;
 
     onDynamic(node: Widget<Node>): BaseUpdateBinderBuilder;
 
