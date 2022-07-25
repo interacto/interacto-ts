@@ -35,25 +35,25 @@ describe("using a graph undo history", () => {
 
     test("initial history is empty", () => {
         expect(history.undoableNodes).toHaveLength(0);
-        expect(history.currentNode).toBeUndefined();
+        expect(history.currentNode).toBe(history.root);
     });
 
     test("undo does nothing", () => {
         history.undo();
         expect(history.undoableNodes).toHaveLength(0);
-        expect(history.currentNode).toBeUndefined();
+        expect(history.currentNode).toBe(history.root);
     });
 
     test("go to empty ok", () => {
         history.goTo(0);
         expect(history.undoableNodes).toHaveLength(0);
-        expect(history.currentNode).toBeUndefined();
+        expect(history.currentNode).toBe(history.root);
     });
 
     test("delete invalid node ok", () => {
         history.delete(0);
         expect(history.undoableNodes).toHaveLength(0);
-        expect(history.currentNode).toBeUndefined();
+        expect(history.currentNode).toBe(history.root);
     });
 
     test("get last undoable when empty", () => {
@@ -89,7 +89,7 @@ describe("using a graph undo history", () => {
     });
 
     test("get positions when empty", () => {
-        expect([...history.getPositions().keys()]).toHaveLength(0);
+        expect([...history.getPositions().keys()]).toHaveLength(1);
     });
 
     describe("and using a single undoable", () => {
@@ -105,8 +105,9 @@ describe("using a graph undo history", () => {
 
         test("width when one element", () => {
             const positions = history.getPositions();
-            expect([...positions.keys()]).toHaveLength(1);
+            expect([...positions.keys()]).toHaveLength(2);
             expect(positions.get(0)).toBe(0);
+            expect(positions.get(-1)).toBe(0);
         });
 
         test("get last undoable when one element", () => {
@@ -118,14 +119,14 @@ describe("using a graph undo history", () => {
             expect(history.undoableNodes[0]).toBeDefined();
             expect(history.undoableNodes[0]?.undoable).toBe(undoable0);
             expect(history.currentNode).toBeDefined();
-            expect(history.currentNode?.undoable).toBe(undoable0);
+            expect(history.currentNode.undoable).toBe(undoable0);
         });
 
         test("undo works", () => {
             history.undo();
             expect(history.undoableNodes).toHaveLength(1);
             expect(history.undoableNodes[0]).toBeDefined();
-            expect(history.currentNode).toBeUndefined();
+            expect(history.currentNode).toBe(history.root);
             expect(undoable0.undo).toHaveBeenCalledTimes(1);
         });
 
@@ -220,16 +221,16 @@ describe("using a graph undo history", () => {
             expect(history.undoableNodes).toHaveLength(2);
             expect(history.undoableNodes[0]?.undoable).toBe(undoable0);
             expect(history.undoableNodes[1]?.undoable).toBe(undoable1);
-            expect(history.undoableNodes[0]?.parent).toBeUndefined();
-            expect(history.undoableNodes[1]?.parent).toBeUndefined();
+            expect(history.undoableNodes[0]?.parent).toBe(history.root);
+            expect(history.undoableNodes[1]?.parent).toBe(history.root);
             expect(history.undoableNodes[0]?.children).toHaveLength(0);
             expect(history.undoableNodes[1]?.children).toHaveLength(0);
-            expect(history.currentNode?.undoable).toBe(undoable1);
+            expect(history.currentNode.undoable).toBe(undoable1);
         });
 
         test("clear ok", () => {
             history.clear();
-            expect(history.currentNode).toBeUndefined();
+            expect(history.currentNode).toBe(history.root);
             expect(history.undoableNodes).toHaveLength(0);
         });
 
@@ -242,7 +243,7 @@ describe("using a graph undo history", () => {
         test("go to itself", () => {
             history.goTo(0);
 
-            expect(history.currentNode?.undoable).toBe(undoable0);
+            expect(history.currentNode.undoable).toBe(undoable0);
             expect(history.undoableNodes).toHaveLength(1);
             expect(undoable0.undo).not.toHaveBeenCalled();
             expect(undoable0.redo).not.toHaveBeenCalled();
@@ -252,7 +253,7 @@ describe("using a graph undo history", () => {
             history.undo();
             history.goTo(0);
 
-            expect(history.currentNode?.undoable).toBe(undoable0);
+            expect(history.currentNode.undoable).toBe(undoable0);
             expect(undoable0.undo).toHaveBeenCalledTimes(1);
             expect(undoable0.redo).toHaveBeenCalledTimes(1);
         });
@@ -260,7 +261,7 @@ describe("using a graph undo history", () => {
         test("go to undefined ok", () => {
             history.goTo(1000);
 
-            expect(history.currentNode?.undoable).toBe(undoable0);
+            expect(history.currentNode.undoable).toBe(undoable0);
             expect(undoable0.undo).not.toHaveBeenCalled();
             expect(undoable0.redo).not.toHaveBeenCalled();
         });
@@ -268,7 +269,7 @@ describe("using a graph undo history", () => {
         test("go to negative id ok", () => {
             history.goTo(-2);
 
-            expect(history.currentNode?.undoable).toBe(undoable0);
+            expect(history.currentNode.undoable).toBe(undoable0);
             expect(undoable0.undo).not.toHaveBeenCalled();
             expect(undoable0.redo).not.toHaveBeenCalled();
         });
@@ -278,7 +279,7 @@ describe("using a graph undo history", () => {
             history.add(undoable1);
             history.goTo(0);
 
-            expect(history.currentNode?.undoable).toBe(undoable0);
+            expect(history.currentNode.undoable).toBe(undoable0);
             expect(undoable1.undo).toHaveBeenCalledTimes(1);
             expect(undoable0.undo).toHaveBeenCalledTimes(1);
             expect(undoable0.redo).toHaveBeenCalledTimes(1);
@@ -287,19 +288,19 @@ describe("using a graph undo history", () => {
         test("delete negative node ID ok", () => {
             history.delete(-1);
             expect(history.undoableNodes).toHaveLength(1);
-            expect(history.currentNode?.undoable).toBe(undoable0);
+            expect(history.currentNode.undoable).toBe(undoable0);
         });
 
         test("delete invalid ok", () => {
             history.delete(1);
             expect(history.undoableNodes).toHaveLength(1);
-            expect(history.currentNode?.undoable).toBe(undoable0);
+            expect(history.currentNode.undoable).toBe(undoable0);
         });
 
         test("cannot delete the current branch", () => {
             history.delete(0);
             expect(history.undoableNodes).toHaveLength(1);
-            expect(history.currentNode?.undoable).toBe(undoable0);
+            expect(history.currentNode.undoable).toBe(undoable0);
         });
     });
 
@@ -312,10 +313,10 @@ describe("using a graph undo history", () => {
         });
 
         test("check structure", () => {
-            expect(history.currentNode?.undoable).toBe(undoable1);
+            expect(history.currentNode.undoable).toBe(undoable1);
             expect(history.undoableNodes).toHaveLength(2);
-            expect(history.undoableNodes[0]?.parent).toBeUndefined();
-            expect(history.undoableNodes[1]?.parent).toBeUndefined();
+            expect(history.undoableNodes[0]?.parent).toBe(history.root);
+            expect(history.undoableNodes[1]?.parent).toBe(history.root);
             expect(history.undoableNodes[0]?.children).toHaveLength(0);
             expect(history.undoableNodes[1]?.children).toHaveLength(0);
         });
@@ -329,9 +330,10 @@ describe("using a graph undo history", () => {
 
         test("positions OK", () => {
             const pos = history.getPositions();
-            expect(pos.size).toBe(2);
+            expect(pos.size).toBe(3);
             expect(pos.get(0)).toBe(0);
-            expect(pos.get(1)).toBe(1);
+            expect(pos.get(-1)).toBe(1);
+            expect(pos.get(1)).toBe(2);
         });
     });
 
@@ -360,7 +362,8 @@ describe("using a graph undo history", () => {
 
         test("compute positions when multiples elements", () => {
             const positions = history.getPositions();
-            expect([...positions.keys()]).toHaveLength(5);
+            expect([...positions.keys()]).toHaveLength(6);
+            expect(positions.get(-1)).toBe(1);
             expect(positions.get(0)).toBe(1);
             expect(positions.get(1)).toBe(0);
             expect(positions.get(2)).toBe(3);
@@ -373,8 +376,8 @@ describe("using a graph undo history", () => {
         });
 
         test("tree structure is valid", () => {
-            expect(history.currentNode?.undoable).toBe(undoable4);
-            expect(history.undoableNodes[0]?.parent).toBeUndefined();
+            expect(history.currentNode.undoable).toBe(undoable4);
+            expect(history.undoableNodes[0]?.parent).toBe(history.root);
             expect(history.undoableNodes[0]?.children).toHaveLength(2);
             expect(history.undoableNodes[0]?.children[0]?.undoable).toBe(undoable1);
             expect(history.undoableNodes[0]?.children[1]?.undoable).toBe(undoable2);
@@ -392,7 +395,7 @@ describe("using a graph undo history", () => {
 
         test("go to 1", () => {
             history.goTo(1);
-            expect(history.currentNode?.undoable).toBe(undoable1);
+            expect(history.currentNode.undoable).toBe(undoable1);
             expect(undoable0.undo).not.toHaveBeenCalled();
             expect(undoable0.redo).not.toHaveBeenCalled();
             expect(undoable1.redo).toHaveBeenCalledTimes(1);
@@ -405,7 +408,7 @@ describe("using a graph undo history", () => {
         test("go to 1 and then 0", () => {
             history.goTo(1);
             history.goTo(0);
-            expect(history.currentNode?.undoable).toBe(undoable0);
+            expect(history.currentNode.undoable).toBe(undoable0);
             expect(undoable0.undo).not.toHaveBeenCalled();
             expect(undoable0.redo).not.toHaveBeenCalled();
             expect(undoable1.redo).toHaveBeenCalledTimes(1);
@@ -417,7 +420,7 @@ describe("using a graph undo history", () => {
 
         test("go to 3", () => {
             history.goTo(3);
-            expect(history.currentNode?.undoable).toBe(undoable3);
+            expect(history.currentNode.undoable).toBe(undoable3);
             expect(undoable0.undo).not.toHaveBeenCalled();
             expect(undoable0.redo).not.toHaveBeenCalled();
             expect(undoable1.redo).not.toHaveBeenCalled();
@@ -479,7 +482,7 @@ describe("using a graph undo history", () => {
 
         test("go to initial state", () => {
             history.goTo(-1);
-            expect(history.currentNode).toBeUndefined();
+            expect(history.currentNode).toBe(history.root);
             expect(undoable0.undo).toHaveBeenCalledTimes(1);
             expect(undoable0.redo).not.toHaveBeenCalled();
             expect(undoable1.redo).not.toHaveBeenCalled();
@@ -493,7 +496,7 @@ describe("using a graph undo history", () => {
         test("go from initial to 0", () => {
             history.goTo(-1);
             history.goTo(0);
-            expect(history.currentNode?.undoable).toBe(undoable0);
+            expect(history.currentNode.undoable).toBe(undoable0);
             expect(undoable0.undo).toHaveBeenCalledTimes(1);
             expect(undoable0.redo).toHaveBeenCalledTimes(1);
             expect(undoable1.redo).not.toHaveBeenCalled();
@@ -507,8 +510,8 @@ describe("using a graph undo history", () => {
         test("delete 1", () => {
             history.delete(1);
 
-            expect(history.currentNode?.undoable).toBe(undoable4);
-            expect(history.undoableNodes[0]?.parent).toBeUndefined();
+            expect(history.currentNode.undoable).toBe(undoable4);
+            expect(history.undoableNodes[0]?.parent).toBe(history.root);
             expect(history.undoableNodes[0]?.children).toHaveLength(1);
             expect(history.undoableNodes[0]?.children[0]?.undoable).toBe(undoable2);
             expect(history.undoableNodes[1]).toBeUndefined();
@@ -526,8 +529,8 @@ describe("using a graph undo history", () => {
             history.goTo(0);
             history.delete(2);
 
-            expect(history.currentNode?.undoable).toBe(undoable0);
-            expect(history.undoableNodes[0]?.parent).toBeUndefined();
+            expect(history.currentNode.undoable).toBe(undoable0);
+            expect(history.undoableNodes[0]?.parent).toBe(history.root);
             expect(history.undoableNodes[0]?.children).toHaveLength(1);
             expect(history.undoableNodes[0]?.children[0]?.undoable).toBe(undoable1);
             expect(history.undoableNodes[1]?.children).toHaveLength(0);
@@ -541,7 +544,7 @@ describe("using a graph undo history", () => {
             history.goTo(1);
             history.delete(2);
 
-            expect(history.currentNode?.undoable).toBe(undoable1);
+            expect(history.currentNode.undoable).toBe(undoable1);
             expect(history.undoableNodes[0]).toBeDefined();
             expect(history.undoableNodes[1]).toBeDefined();
             expect(history.undoableNodes[2]).toBeUndefined();
@@ -552,7 +555,7 @@ describe("using a graph undo history", () => {
         test("delete invalid 5", () => {
             history.delete(5);
 
-            expect(history.currentNode?.undoable).toBe(undoable4);
+            expect(history.currentNode.undoable).toBe(undoable4);
             expect(history.undoableNodes[0]?.children).toHaveLength(2);
             expect(history.undoableNodes[1]?.children).toHaveLength(0);
             expect(history.undoableNodes[2]?.children).toHaveLength(2);
@@ -625,7 +628,7 @@ describe("using a graph undo history", () => {
         });
 
         test("tree structure is valid", () => {
-            expect(history.currentNode?.undoable).toBe(undoable14);
+            expect(history.currentNode.undoable).toBe(undoable14);
             expect(history.undoableNodes[0]?.children).toHaveLength(2);
             expect(history.undoableNodes[1]?.children).toHaveLength(3);
             expect(history.undoableNodes[2]?.children).toHaveLength(2);
@@ -641,7 +644,7 @@ describe("using a graph undo history", () => {
             expect(history.undoableNodes[12]?.children).toHaveLength(0);
             expect(history.undoableNodes[13]?.children).toHaveLength(0);
             expect(history.undoableNodes[14]?.children).toHaveLength(0);
-            expect(history.undoableNodes[0]?.parent).toBeUndefined();
+            expect(history.undoableNodes[0]?.parent).toBe(history.root);
             expect(history.undoableNodes[1]?.parent?.undoable).toBe(undoable0);
             expect(history.undoableNodes[2]?.parent?.undoable).toBe(undoable1);
             expect(history.undoableNodes[3]?.parent?.undoable).toBe(undoable2);
@@ -660,7 +663,8 @@ describe("using a graph undo history", () => {
 
         test("compute positions when multiples elements", () => {
             const positions = history.getPositions();
-            expect([...positions.keys()]).toHaveLength(15);
+            expect([...positions.keys()]).toHaveLength(16);
+            expect(positions.get(-1)).toBe(7);
             expect(positions.get(0)).toBe(7);
             expect(positions.get(1)).toBe(4);
             expect(positions.get(2)).toBe(1);
@@ -680,25 +684,25 @@ describe("using a graph undo history", () => {
 
         test("go to root", () => {
             history.goTo(0);
-            expect(history.currentNode?.id).toBe(0);
+            expect(history.currentNode.id).toBe(0);
         });
 
         test("go to root then 4", () => {
             history.goTo(0);
             history.goTo(4);
-            expect(history.currentNode?.id).toBe(4);
+            expect(history.currentNode.id).toBe(4);
         });
 
         test("go to 1 then 8", () => {
             history.goTo(1);
             history.goTo(8);
-            expect(history.currentNode?.id).toBe(8);
+            expect(history.currentNode.id).toBe(8);
         });
 
         test("go to 2 then 3", () => {
             history.goTo(2);
             history.goTo(3);
-            expect(history.currentNode?.id).toBe(3);
+            expect(history.currentNode.id).toBe(3);
         });
     });
 });

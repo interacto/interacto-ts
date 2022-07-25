@@ -42,9 +42,11 @@ export interface UndoableTreeNode {
 }
 
 export abstract class TreeUndoHistory implements UndoHistoryBase {
+    public abstract get root(): UndoableTreeNode;
+
     public abstract get undoableNodes(): Array<UndoableTreeNode | undefined>;
 
-    public abstract get currentNode(): UndoableTreeNode | undefined;
+    public abstract get currentNode(): UndoableTreeNode;
 
     public abstract goTo(id: number): void;
 

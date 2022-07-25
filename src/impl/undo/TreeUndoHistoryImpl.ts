@@ -60,7 +60,7 @@ class UndoableTreeNodeImpl implements UndoableTreeNode {
 export class TreeUndoHistoryImpl extends TreeUndoHistory {
     private idCounter: number;
 
-    private _currentNode: UndoableTreeNode | undefined;
+    private _currentNode: UndoableTreeNode;
 
     public readonly undoableNodes: Array<UndoableTreeNode | undefined>;
 
@@ -69,13 +69,27 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
     private readonly redoPublisher: Subject<Undoable | undefined>;
 
     // A tree can have several roots (ie several starting branches)
-    private readonly roots: Set<number>;
+    // private readonly roots: Set<number>;
+    public readonly root: UndoableTreeNode;
 
     public constructor() {
         super();
         this.undoableNodes = [];
-        this.roots = new Set<number>();
+        // this.roots = new Set<number>();
         this.idCounter = 0;
+        this.root = new UndoableTreeNodeImpl({
+            getUndoName(): string {
+                return "";
+            },
+            getVisualSnapshot(): UndoableSnapshot {
+                return "root";
+            },
+            redo(): void {
+            },
+            undo(): void {
+            }
+        }, -1, undefined);
+        this._currentNode = this.root;
         this.undoPublisher = new Subject();
         this.redoPublisher = new Subject();
     }
@@ -83,23 +97,23 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
     public add(undoable: Undoable): void {
         const node = new UndoableTreeNodeImpl(undoable, this.idCounter, this.currentNode);
         this.undoableNodes[this.idCounter] = node;
-        if (this.currentNode === undefined) {
-            this.roots.add(node.id);
-        } else {
-            this.currentNode.children.push(node);
-        }
+        // if (this.currentNode === undefined) {
+        //     this.roots.add(node.id);
+        // } else {
+        this.currentNode.children.push(node);
+        // }
         this._currentNode = node;
         this.idCounter++;
         this.undoPublisher.next(undoable);
     }
 
-    public get currentNode(): UndoableTreeNode | undefined {
+    public get currentNode(): UndoableTreeNode {
         return this._currentNode;
     }
 
     public clear(): void {
-        this.roots.clear();
-        this._currentNode = undefined;
+        // this.roots.clear();
+        this._currentNode = this.root;
         this.undoableNodes.length = 0;
         this.idCounter = 0;
         this.undoPublisher.next(undefined);
@@ -115,16 +129,16 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
 
         let nodeBranch = this.currentNode;
 
-        while (nodeBranch !== undefined) {
+        while (nodeBranch !== this.root) {
             // cannot remove the current branch (older or current undoables)
             if (nodeBranch.id === id) {
                 return;
             }
-            nodeBranch = nodeBranch.parent;
+            nodeBranch = nodeBranch.parent ?? this.root;
         }
 
         this.undoableNodes[id] = undefined;
-        this.roots.delete(id);
+        // this.roots.delete(id);
 
         if (node.parent !== undefined) {
             remove(node.parent.children, node);
@@ -139,22 +153,22 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
         });
 
         if (this.currentNode === node) {
-            this._currentNode = undefined;
+            this._currentNode = this.root;
         }
     }
 
     public goTo(id: number): void {
-        if (this.currentNode?.id === id || this.undoableNodes.length === 0 || id >= this.undoableNodes.length || id < -1) {
+        if (this.currentNode.id === id || this.undoableNodes.length === 0 || id >= this.undoableNodes.length || id < -1) {
             return;
         }
 
-        if (this.currentNode === undefined) {
+        if (this.currentNode === this.root) {
             this.goToFromRoot(id);
         } else {
             this.goFromOneNodeToAnotherOne(id);
         }
 
-        this._currentNode = this.undoableNodes[id];
+        this._currentNode = this.undoableNodes[id] ?? this.root;
     }
 
     private goToFromRoot(id: number): void {
@@ -167,7 +181,7 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
     private gatherToRoot(node: UndoableTreeNode | undefined): Array<UndoableTreeNode> {
         const path = new Array<UndoableTreeNode>();
         let n = node;
-        while (n !== undefined) {
+        while (n !== this.root && n !== undefined) {
             path.push(n);
             n = n.parent;
         }
@@ -200,7 +214,8 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
     }
 
     public redo(): void {
-        const node = this.currentNode === undefined ? this.undoableNodes[0] : this.currentNode.lastChildUndone;
+        // const node = this.currentNode === undefined ? this.undoableNodes[0] : this.currentNode.lastChildUndone;
+        const node = this.currentNode.lastChildUndone;
 
         if (node !== undefined) {
             node.undoable.redo();
@@ -211,10 +226,10 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
     }
 
     public undo(): void {
-        if (this.currentNode !== undefined) {
+        if (this.currentNode !== this.root) {
             const u = this.currentNode.undoable;
             this.currentNode.undo();
-            this._currentNode = this.currentNode.parent;
+            this._currentNode = this.currentNode.parent ?? this.root;
             this.undoPublisher.next(this.getLastUndo());
             this.redoPublisher.next(u);
         }
@@ -222,12 +237,7 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
 
     public getPositions(): Map<number, number> {
         const positions = new Map<number, number>();
-        let counter = 0;
-
-        this.roots.forEach(root => {
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            counter = this.getPositionNode(this.undoableNodes[root]!, positions, counter);
-        });
+        this.getPositionNode(this.root, positions, 0);
         return positions;
     }
 
@@ -271,9 +281,9 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
     }
 
     public getLastRedo(): Undoable | undefined {
-        if (this.currentNode === undefined) {
-            return this.undoableNodes[0]?.undoable;
-        }
+        // if (this.currentNode === undefined) {
+        //     return this.undoableNodes[0]?.undoable;
+        // }
 
         if (this.currentNode.lastChildUndone !== undefined) {
             return this.currentNode.lastChildUndone.undoable;
@@ -287,7 +297,7 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
     }
 
     public getLastUndo(): Undoable | undefined {
-        return this.currentNode?.undoable;
+        return this.currentNode === this.root ? undefined : this.currentNode.undoable;
     }
 
     public getLastUndoMessage(): string | undefined {
