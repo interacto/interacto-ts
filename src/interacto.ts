@@ -68,6 +68,7 @@ export * from "./impl/binding/MustBeUndoableCmdError";
 export * from "./impl/command/AnonCmd";
 export * from "./impl/command/CommandBase";
 export * from "./impl/command/UndoableCommand";
+export * from "./impl/command/library/FocusHTMLElement";
 export * from "./impl/command/library/Redo";
 export * from "./impl/command/library/RedoNTimes";
 export * from "./impl/command/library/SetProperties";
