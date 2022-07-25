@@ -1,10 +1,10 @@
 {
   "compilerOptions": {
-    "target": "ES2019",
+    "target": "es2020",
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "moduleResolution": "node",
-    "module": "esnext",
+    "module": "es2020",
     "outDir": "dist",
     "pretty": true,
     "noImplicitAny": true,
