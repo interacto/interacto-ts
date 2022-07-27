@@ -1,3 +1,27 @@
+# 7.2.0
+
+* feat(command): a new command: FocusHTMLElement
+* feat(undo): undoable snapshots can be of type Promise
+
+
+* api(fsm): renaming 'isGuardOk' as 'guard'
+* change(binding): should have protected attributes instead of private in 'Bindings'
+* change(binding): the 'on' routine now accepts any object
+* change(fsm): no need to have optional parameters for transition
+
+
+* refactor(fsm): code simplification
+
+
+* fix(history): The tree-based history now provides the root element (the initial state)
+* fix(logging): interaction messages not logged in
+
+
+* update(deps): various dependencies updates
+* update(deps): move to TypeScript 4.7
+* update(config): updating the target and module version
+
+
 # 7.1.0
 
 * update(deps): update to work with angular 13 and rxjs 7
