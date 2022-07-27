@@ -18,7 +18,7 @@ See [https://interacto.github.io](https://interacto.github.io) for usages and do
 # How to install
 
 
-For Angular 13 or rxjs 7:
+For Angular 13 and 14 or rxjs 7:
 
 ```
 npm install interacto@latest
