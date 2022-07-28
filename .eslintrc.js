@@ -27,6 +27,7 @@ module.exports = {
       extends: ["plugin:jest/all"],
       plugins: ["jest"],
       rules: {
+        "jest/max-expects": "off",
         "jest/no-disabled-tests": "warn",
         "jest/prefer-spy-on": "off",
         "jest/prefer-expect-assertions": "off",
