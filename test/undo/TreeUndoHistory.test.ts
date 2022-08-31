@@ -16,16 +16,25 @@ import type {Undoable} from "../../src/api/undo/Undoable";
 import {mock} from "jest-mock-extended";
 import type {TreeUndoHistory} from "../../src/api/undo/TreeUndoHistory";
 import {TreeUndoHistoryImpl} from "../../src/impl/undo/TreeUndoHistoryImpl";
+import {TestScheduler} from "rxjs/internal/testing/TestScheduler";
 
-describe("using a graph undo history", () => {
+interface Undoable4Test extends Undoable {
+    foo: number;
+
+    bar: string;
+}
+
+describe("using a tree undo history", () => {
     let history: TreeUndoHistory;
-    let undoable0: Undoable;
-    let undoable1: Undoable;
+    let undoable0: Undoable4Test;
+    let undoable1: Undoable4Test;
+    let undoable2: Undoable4Test;
 
     beforeEach(() => {
         history = new TreeUndoHistoryImpl();
-        undoable0 = mock<Undoable>();
-        undoable1 = mock<Undoable>();
+        undoable0 = mock<Undoable4Test>();
+        undoable1 = mock<Undoable4Test>();
+        undoable2 = mock<Undoable4Test>();
     });
 
     afterEach(() => {
@@ -92,10 +101,129 @@ describe("using a graph undo history", () => {
         expect([...history.getPositions().keys()]).toHaveLength(1);
     });
 
+
+    describe("and testing subscriptions", () => {
+        let testScheduler: TestScheduler;
+
+        beforeEach(() => {
+            testScheduler = new TestScheduler((actual, expected) => {
+                expect(actual).toStrictEqual(expected);
+            });
+        });
+
+        afterEach(() => {
+            testScheduler.flush();
+        });
+
+        // eslint-disable-next-line jest/expect-expect
+        test("one add", () => {
+            testScheduler.run(helpers => {
+                const {cold, expectObservable} = helpers;
+                cold("-a").subscribe(() => history.add(undoable0));
+
+                expectObservable(history.undosObservable())
+                    .toBe("-a", {"a": undoable0});
+                expectObservable(history.redosObservable())
+                    .toBe("-a", {"a": undefined});
+            });
+        });
+
+        // eslint-disable-next-line jest/expect-expect
+        test("two adds", () => {
+            testScheduler.run(helpers => {
+                const {cold, expectObservable} = helpers;
+                cold("-a-b", {"a": undoable0, "b": undoable1}).subscribe(v => history.add(v));
+
+                expectObservable(history.undosObservable()).toBe("-a-b",
+                    {"a": undoable0, "b": undoable1});
+                expectObservable(history.redosObservable()).toBe("-a-b",
+                    {"a": undefined, "b": undefined});
+            });
+        });
+
+        // eslint-disable-next-line jest/expect-expect
+        test("one add one undo", () => {
+            testScheduler.run(helpers => {
+                const {cold, expectObservable} = helpers;
+                cold("-a-b", {"a": () => history.add(undoable0), "b": () => history.undo()}).subscribe(v => {
+                    v();
+                });
+
+                expectObservable(history.undosObservable()).toBe("-a-b",
+                    {"a": undoable0, "b": undefined});
+                expectObservable(history.redosObservable()).toBe("-a-b",
+                    {"a": undefined, "b": undoable0});
+            });
+        });
+
+        // eslint-disable-next-line jest/expect-expect
+        test("one add one undo redo", () => {
+            testScheduler.run(helpers => {
+                const {cold, expectObservable} = helpers;
+                cold("-a-b-c", {
+                    "a": () => history.add(undoable0),
+                    "b": () => history.undo(),
+                    "c": () => history.redo()
+                }).subscribe(v => {
+                    v();
+                });
+
+                expectObservable(history.undosObservable()).toBe("-a-b-c",
+                    {"a": undoable0, "b": undefined, "c": undoable0});
+                expectObservable(history.redosObservable()).toBe("-a-b-c",
+                    {"a": undefined, "b": undoable0, "c": undefined});
+            });
+        });
+
+        // eslint-disable-next-line jest/expect-expect
+        test("three add then go to", () => {
+            testScheduler.run(helpers => {
+                const {cold, expectObservable} = helpers;
+                cold("-a-b-c-d", {
+                    "a": () => history.add(undoable0),
+                    "b": () => history.add(undoable1),
+                    "c": () => history.add(undoable2),
+                    "d": () => history.goTo(0)
+                }).subscribe(v => {
+                    v();
+                });
+
+                expectObservable(history.undosObservable()).toBe("-a-b-c-d",
+                    {"a": undoable0, "b": undoable1, "c": undoable2, "d": undoable0});
+                expectObservable(history.redosObservable()).toBe("-a-b-c-d",
+                    {"a": undefined, "b": undefined, "c": undefined, "d": undoable1});
+            });
+        });
+
+        // eslint-disable-next-line jest/expect-expect
+        test("two add one undo one new add", () => {
+            testScheduler.run(helpers => {
+                const {cold, expectObservable} = helpers;
+                cold("-a-b-c-d", {
+                    "a": () => history.add(undoable0),
+                    "b": () => history.add(undoable1),
+                    "c": () => history.undo(),
+                    "d": () => history.add(undoable2)
+                }).subscribe(v => {
+                    v();
+                });
+
+                expectObservable(history.undosObservable()).toBe("-a-b-c-d",
+                    {"a": undoable0, "b": undoable1, "c": undoable0, "d": undoable2});
+                expectObservable(history.redosObservable()).toBe("-a-b-c-d",
+                    {"a": undefined, "b": undefined, "c": undoable1, "d": undefined});
+            });
+        });
+    });
+
     describe("and using a single undoable", () => {
         beforeEach(() => {
             undoable0.getVisualSnapshot = (): string => "foo";
             history.add(undoable0);
+        });
+
+        test("path when not keeping path", () => {
+            expect(history.path).toHaveLength(0);
         });
 
         test("get snapshot", () => {
@@ -172,11 +300,12 @@ describe("using a graph undo history", () => {
             expect(undos[2]).toBeUndefined();
             expect(undos[3]).toStrictEqual(undoable0);
             expect(undos[4]).toStrictEqual(undoable1);
-            expect(redos).toHaveLength(4);
-            expect(redos[0]).toStrictEqual(undoable1);
-            expect(redos[1]).toStrictEqual(undoable0);
-            expect(redos[2]).toStrictEqual(undoable1);
-            expect(redos[3]).toBeUndefined();
+            expect(redos).toHaveLength(5);
+            expect(redos[0]).toBeUndefined();
+            expect(redos[1]).toStrictEqual(undoable1);
+            expect(redos[2]).toStrictEqual(undoable0);
+            expect(redos[3]).toStrictEqual(undoable1);
+            expect(redos[4]).toBeUndefined();
         });
 
         test("redo does nothing", () => {
@@ -231,6 +360,7 @@ describe("using a graph undo history", () => {
         test("clear ok", () => {
             history.clear();
             expect(history.currentNode).toBe(history.root);
+            expect(history.currentNode.children).toHaveLength(0);
             expect(history.undoableNodes).toHaveLength(0);
         });
 
@@ -302,6 +432,67 @@ describe("using a graph undo history", () => {
             expect(history.undoableNodes).toHaveLength(1);
             expect(history.currentNode.undoable).toBe(undoable0);
         });
+
+        test("export one add", () => {
+            undoable0.foo = 2;
+            const res = history.export(u => ({
+                "a": (u as Undoable4Test).foo
+            }));
+
+            expect(res.path).toHaveLength(0);
+            expect(res.roots).toHaveLength(1);
+            expect(res.roots[0].children).toHaveLength(0);
+            expect(res.roots[0].id).toStrictEqual(history.root.children[0].id);
+            expect(res.roots[0].undoable).toStrictEqual({
+                "a": 2
+            });
+        });
+
+        test("import one add", () => {
+            undoable0.foo = 2;
+            const res = history.export(u => ({
+                "a": (u as Undoable4Test).foo
+            }));
+
+            history.import(res, dto => {
+                const u = mock<Undoable4Test>();
+                // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+                u.foo = (dto as any).a as number;
+                return u;
+            });
+
+            expect(history.path).toHaveLength(0);
+            expect(history.undoableNodes).toHaveLength(1);
+            expect((history.undoableNodes[0]?.undoable as Undoable4Test).foo).toBe(2);
+        });
+
+        test("export two add", () => {
+            history.add(undoable1);
+            undoable0.foo = 4;
+            undoable1.foo = 1;
+            undoable0.bar = "a";
+            undoable1.bar = "b";
+
+            const res = history.export(u => ({
+                "c": (u as Undoable4Test).foo,
+                "d": (u as Undoable4Test).bar
+            }));
+
+            expect(res.path).toHaveLength(0);
+            expect(res.roots).toHaveLength(1);
+            expect(res.roots[0].children).toHaveLength(1);
+            expect(res.roots[0].id).toStrictEqual(history.root.children[0].id);
+            expect(res.roots[0].undoable).toStrictEqual({
+                "c": 4,
+                "d": "a"
+            });
+            expect(res.roots[0].children[0].children).toHaveLength(0);
+            expect(res.roots[0].children[0].id).toStrictEqual(history.root.children[0].children[0].id);
+            expect(res.roots[0].children[0].undoable).toStrictEqual({
+                "c": 1,
+                "d": "b"
+            });
+        });
     });
 
 
@@ -335,18 +526,40 @@ describe("using a graph undo history", () => {
             expect(pos.get(-1)).toBe(1);
             expect(pos.get(1)).toBe(2);
         });
+
+        test("export two roots", () => {
+            undoable0.bar = "1";
+            undoable1.bar = "2";
+
+            const res = history.export(u => ({
+                "bb": (u as Undoable4Test).bar
+            }));
+
+            expect(res.path).toHaveLength(0);
+            expect(res.roots).toHaveLength(2);
+            expect(res.roots[0].children).toHaveLength(0);
+            expect(res.roots[1].children).toHaveLength(0);
+
+            expect(res.roots[0].id).toStrictEqual(history.root.children[0].id);
+            expect(res.roots[0].undoable).toStrictEqual({
+                "bb": "1"
+            });
+
+            expect(res.roots[1].id).toStrictEqual(history.root.children[1].id);
+            expect(res.roots[1].undoable).toStrictEqual({
+                "bb": "2"
+            });
+        });
     });
 
 
     describe("and using five undoable in different paths", () => {
-        let undoable2: Undoable;
-        let undoable3: Undoable;
-        let undoable4: Undoable;
+        let undoable3: Undoable4Test;
+        let undoable4: Undoable4Test;
 
         beforeEach(() => {
-            undoable2 = mock<Undoable>();
-            undoable3 = mock<Undoable>();
-            undoable4 = mock<Undoable>();
+            undoable3 = mock<Undoable4Test>();
+            undoable4 = mock<Undoable4Test>();
             //   *
             //   0
             // 1   2
@@ -358,6 +571,24 @@ describe("using a graph undo history", () => {
             history.add(undoable3);
             history.undo();
             history.add(undoable4);
+        });
+
+        test("export", () => {
+            const res = history.export(() => ({}));
+
+            expect(res.path).toHaveLength(0);
+            expect(res.roots).toHaveLength(1);
+            expect(res.roots[0].children).toHaveLength(2);
+            expect(res.roots[0].children[0].children).toHaveLength(0);
+            expect(res.roots[0].children[1].children).toHaveLength(2);
+            expect(res.roots[0].children[1].children[0].children).toHaveLength(0);
+            expect(res.roots[0].children[1].children[1].children).toHaveLength(0);
+
+            expect(res.roots[0].id).toStrictEqual(history.root.children[0].id);
+            expect(res.roots[0].children[0].id).toStrictEqual(history.root.children[0].children[0].id);
+            expect(res.roots[0].children[1].id).toStrictEqual(history.root.children[0].children[1].id);
+            expect(res.roots[0].children[1].children[0].id).toStrictEqual(history.root.children[0].children[1].children[0].id);
+            expect(res.roots[0].children[1].children[1].id).toStrictEqual(history.root.children[0].children[1].children[1].id);
         });
 
         test("compute positions when multiples elements", () => {
@@ -565,7 +796,6 @@ describe("using a graph undo history", () => {
     });
 
     describe("and using 15 undoable in different paths", () => {
-        let undoable2: Undoable;
         let undoable3: Undoable;
         let undoable4: Undoable;
         let undoable5: Undoable;
@@ -580,7 +810,6 @@ describe("using a graph undo history", () => {
         let undoable14: Undoable;
 
         beforeEach(() => {
-            undoable2 = mock<Undoable>();
             undoable3 = mock<Undoable>();
             undoable4 = mock<Undoable>();
             undoable5 = mock<Undoable>();

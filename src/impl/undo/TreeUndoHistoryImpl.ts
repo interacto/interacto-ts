@@ -12,13 +12,16 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {UndoableTreeNode} from "../../api/undo/TreeUndoHistory";
+import type {UndoableTreeNode, UndoableTreeNodeDTO, TreeUndoHistoryDTO} from "../../api/undo/TreeUndoHistory";
 import {TreeUndoHistory} from "../../api/undo/TreeUndoHistory";
 import type {Undoable, UndoableSnapshot} from "../../api/undo/Undoable";
 import {remove} from "../util/ArrayUtil";
 import type {Observable} from "rxjs";
 import {Subject} from "rxjs";
 
+/**
+ * Implementation of UndoableTreeNode
+ */
 class UndoableTreeNodeImpl implements UndoableTreeNode {
     public lastChildUndone: UndoableTreeNode | undefined;
 
@@ -54,9 +57,43 @@ class UndoableTreeNodeImpl implements UndoableTreeNode {
     public get visualSnapshot(): UndoableSnapshot {
         return this.cacheVisualSnap;
     }
-
 }
 
+class UndoableTreeNodeDTOImpl implements UndoableTreeNodeDTO {
+    public readonly children: ReadonlyArray<UndoableTreeNodeDTO>;
+
+    public readonly id: number;
+
+    public readonly undoable: unknown;
+
+    public constructor(node: UndoableTreeNode, fn: (undoable: Undoable) => unknown) {
+        this.id = node.id;
+        this.undoable = fn(node.undoable);
+        this.children = node.children.map(child => new UndoableTreeNodeDTOImpl(child, fn));
+    }
+
+    /**
+     * Produces a tree node from the DTO node. This operates recurcively on
+     * children, so that it converts all the tree node.
+     * @param fn - The convertion method for the undoable.
+     * @param parent - The parent node of the one to create.
+     * @returns The created tree node (and its children) and the list of created nodes.
+     */
+    public static toNode(dto: UndoableTreeNodeDTO, fn: (dtoUndoable: unknown) => Undoable, parent: UndoableTreeNode):
+    [UndoableTreeNode, Array<UndoableTreeNode>] {
+        const node = new UndoableTreeNodeImpl(fn(dto.undoable), dto.id, parent);
+        const res = dto.children.map(child => UndoableTreeNodeDTOImpl.toNode(child, fn, node));
+
+        node.children.push(...res.map(r => r[0]));
+        const nodes = [node, ...res.flatMap(r => r[1])];
+
+        return [node, nodes];
+    }
+}
+
+/**
+ * An implementation of the TreeUndoHistory interface
+ */
 export class TreeUndoHistoryImpl extends TreeUndoHistory {
     private idCounter: number;
 
@@ -68,14 +105,17 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
 
     private readonly redoPublisher: Subject<Undoable | undefined>;
 
-    // A tree can have several roots (ie several starting branches)
-    // private readonly roots: Set<number>;
     public readonly root: UndoableTreeNode;
 
-    public constructor() {
+    private readonly _path: Array<number>;
+
+    private readonly _keepPath: boolean;
+
+    public constructor(keepPath: boolean = false) {
         super();
+        this._keepPath = keepPath;
+        this._path = [];
         this.undoableNodes = [];
-        // this.roots = new Set<number>();
         this.idCounter = 0;
         this.root = new UndoableTreeNodeImpl({
             getUndoName(): string {
@@ -97,14 +137,12 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
     public add(undoable: Undoable): void {
         const node = new UndoableTreeNodeImpl(undoable, this.idCounter, this.currentNode);
         this.undoableNodes[this.idCounter] = node;
-        // if (this.currentNode === undefined) {
-        //     this.roots.add(node.id);
-        // } else {
         this.currentNode.children.push(node);
-        // }
         this._currentNode = node;
+        this.addToPath();
         this.idCounter++;
         this.undoPublisher.next(undoable);
+        this.redoPublisher.next(undefined);
     }
 
     public get currentNode(): UndoableTreeNode {
@@ -112,8 +150,9 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
     }
 
     public clear(): void {
-        // this.roots.clear();
+        this.root.children.length = 0;
         this._currentNode = this.root;
+        this._path.length = 0;
         this.undoableNodes.length = 0;
         this.idCounter = 0;
         this.undoPublisher.next(undefined);
@@ -121,6 +160,11 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
     }
 
     public delete(id: number): void {
+        // Cannot delete if keeping path
+        if (this.keepPath) {
+            return;
+        }
+
         const node = this.undoableNodes[id];
 
         if (node === undefined) {
@@ -138,7 +182,6 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
         }
 
         this.undoableNodes[id] = undefined;
-        // this.roots.delete(id);
 
         if (node.parent !== undefined) {
             remove(node.parent.children, node);
@@ -169,6 +212,9 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
         }
 
         this._currentNode = this.undoableNodes[id] ?? this.root;
+        this.addToPath();
+        this.undoPublisher.next(this.getLastUndo());
+        this.redoPublisher.next(this.getLastRedo());
     }
 
     private goToFromRoot(id: number): void {
@@ -214,12 +260,12 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
     }
 
     public redo(): void {
-        // const node = this.currentNode === undefined ? this.undoableNodes[0] : this.currentNode.lastChildUndone;
         const node = this.currentNode.lastChildUndone;
 
         if (node !== undefined) {
             node.undoable.redo();
             this._currentNode = node;
+            this.addToPath();
             this.undoPublisher.next(node.undoable);
             this.redoPublisher.next(this.getLastRedo());
         }
@@ -230,6 +276,7 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
             const u = this.currentNode.undoable;
             this.currentNode.undo();
             this._currentNode = this.currentNode.parent ?? this.root;
+            this.addToPath();
             this.undoPublisher.next(this.getLastUndo());
             this.redoPublisher.next(u);
         }
@@ -281,10 +328,6 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
     }
 
     public getLastRedo(): Undoable | undefined {
-        // if (this.currentNode === undefined) {
-        //     return this.undoableNodes[0]?.undoable;
-        // }
-
         if (this.currentNode.lastChildUndone !== undefined) {
             return this.currentNode.lastChildUndone.undoable;
         }
@@ -310,5 +353,53 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
 
     public redosObservable(): Observable<Undoable | undefined> {
         return this.redoPublisher;
+    }
+
+    public get path(): ReadonlyArray<number> {
+        return this._path;
+    }
+
+    public get keepPath(): boolean {
+        return this._keepPath;
+    }
+
+    private addToPath(): void {
+        if (this.keepPath) {
+            this._path.push(this._currentNode.id);
+        }
+    }
+
+    public override export(fn: (undoable: Undoable) => unknown): TreeUndoHistoryDTO {
+        return {
+            "roots": this.root.children.map(child => new UndoableTreeNodeDTOImpl(child, fn)),
+            "path": this.path
+        };
+    }
+
+    public override import<T>(dtoHistory: TreeUndoHistoryDTO, fn: (dtoUndoable: T) => Undoable): void {
+        this.clear();
+
+        if (this.keepPath) {
+            this._path.push(...dtoHistory.path);
+        }
+
+        const res = dtoHistory.roots.map(root => UndoableTreeNodeDTOImpl.toNode(root, fn, this.root));
+        this.root.children.push(...res.map(r => r[0]));
+
+        res.flatMap(r => r[1]).forEach(n => {
+            this.undoableNodes[n.id] = n;
+        });
+
+        this._currentNode = this.root;
+        this.idCounter = Math.max(...this._path) + 1;
+
+        // Executing the nominal path
+        if (this.path.length > 0) {
+            this.goTo(this.path[this.path.length - 1]);
+            this.goTo(-1);
+        }
+
+        this.undoPublisher.next(this.getLastUndo());
+        this.redoPublisher.next(this.getLastRedo());
     }
 }
