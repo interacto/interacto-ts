@@ -1,3 +1,13 @@
+# 7.3.0
+
+* feat(undo): import/export tree history
+
+* update(deps): dependencies updated
+* update(doc): readme updated
+* update(doc): research paper reference added
+
+
+
 # 7.2.0
 
 * feat(command): a new command: FocusHTMLElement
