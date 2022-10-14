@@ -52,7 +52,8 @@ describe("long mouse down test", () => {
         interaction.reinit();
         expect(interaction.data.button).toBe(0);
         expect(interaction.data.currentTarget).toBeNull();
-        expect(interaction.fsm.dataHandler?.reinitData).toHaveBeenCalledWith();
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        expect(interaction.fsm.dataHandler!.reinitData).toHaveBeenCalledWith();
     });
 
     [1000, 2000].forEach(duration => {
