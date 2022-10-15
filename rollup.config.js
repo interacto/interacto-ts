@@ -1,26 +1,35 @@
-import resolve from '@rollup/plugin-node-resolve'
-import commonjs from '@rollup/plugin-commonjs'
-import sourceMaps from 'rollup-plugin-sourcemaps'
-import typescript from 'rollup-plugin-typescript2'
-import json from '@rollup/plugin-json'
+import dts from 'rollup-plugin-dts'
+import esbuild from 'rollup-plugin-esbuild'
 
-const pkg = require('./package.json')
+const name = require('./package.json').main.replace(/\.js$/, '')
 
-export default {
+const bundle = config => ({
+  ...config,
   input: 'src/interacto.ts',
-  output: [
-    { file: pkg.main, name:'Interacto', format: 'umd', sourcemap: true },
-    { file: pkg.module, format: 'es', sourcemap: true },
-  ],
-  external: [],
-  watch: {
-    include: 'src/**',
-  },
-  plugins: [
-    json(),
-    typescript({ useTsconfigDeclarationDir: true }),
-    commonjs(),
-    resolve(),
-    sourceMaps(),
-  ],
-}
+  external: id => !/^[./]/.test(id),
+})
+
+export default [
+  bundle({
+    plugins: [esbuild()],
+    output: [
+      {
+        file: `${name}.js`,
+        format: 'cjs',
+        sourcemap: true,
+      },
+      {
+        file: `${name}.mjs`,
+        format: 'es',
+        sourcemap: true,
+      },
+    ],
+  }),
+  bundle({
+    plugins: [dts()],
+    output: {
+      file: `${name}.d.ts`,
+      format: 'es',
+    },
+  }),
+]
