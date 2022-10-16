@@ -134,13 +134,13 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
                             this.directEventProcess(evt);
                         }
                         resolve();
-                    } catch (ex: unknown) {
-                        rejection(ex);
+                    } catch (error: unknown) {
+                        rejection(error);
                     }
                 }, currTimeout);
             }
-        ).catch((ex: unknown) => {
-            this.logger.logInteractionErr("Error during the throttling process", ex, this.constructor.name);
+        ).catch((error: unknown) => {
+            this.logger.logInteractionErr("Error during the throttling process", error, this.constructor.name);
         }) as CancellablePromise;
 
         this.currentThrottling.cancel = (): void => {
@@ -174,14 +174,14 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
         const events: ReadonlyArray<EventType> = [...this.getEventTypesOf(oldState)];
         const eventsToRemove: ReadonlyArray<EventType> = events.filter(e => !currEvents.includes(e));
         const eventsToAdd: ReadonlyArray<EventType> = currEvents.filter(e => !events.includes(e));
-        this.registeredNodes.forEach(n => {
-            eventsToRemove.forEach(type => {
+        for (const n of this.registeredNodes) {
+            for (const type of eventsToRemove) {
                 this.unregisterEventToNode(type, n);
-            });
-            eventsToAdd.forEach(type => {
+            }
+            for (const type of eventsToAdd) {
                 this.registerEventToNode(type, n);
-            });
-        });
+            }
+        }
     }
 
     protected getCurrentAcceptedEvents(state: OutputState): ReadonlyArray<EventType> {
@@ -189,57 +189,57 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
     }
 
     private callBackMutationObserver(mutationList: ReadonlyArray<MutationRecord>): void {
-        mutationList.forEach(mutation => {
-            mutation.addedNodes.forEach(node => {
+        for (const mutation of mutationList) {
+            for (const node of mutation.addedNodes) {
                 this.registerToNodes([node]);
-            });
-            mutation.removedNodes.forEach(node => {
+            }
+            for (const node of mutation.removedNodes) {
                 this.unregisterFromNodes([node]);
-            });
-        });
+            }
+        }
     }
 
-    protected getEventTypesOf(state: OutputState): ReadonlyArray<EventType> {
-        const tr = state.transitions;
-
-        if (tr.length === 0) {
-            return [];
+    protected getEventTypesOf(state: OutputState): ReadonlySet<EventType> {
+        // Optimisation to avoid map and reduce
+        const result = new Set<EventType>();
+        for (const t of state.transitions) {
+            for (const evt of t.getAcceptedEvents()) {
+                result.add(evt);
+            }
         }
-
-        return tr.map(t => t.getAcceptedEvents())
-            .reduce((a, b) => [...a, ...b]);
+        return result;
     }
 
     public registerToNodes(widgets: ReadonlyArray<unknown>): void {
-        widgets.forEach(w => {
+        for (const w of widgets) {
             this.registeredNodes.add(w);
             this.onNewNodeRegistered(w);
-        });
+        }
     }
 
     protected unregisterFromNodes(widgets: ReadonlyArray<unknown>): void {
-        widgets.forEach(w => {
+        for (const w of widgets) {
             this.registeredNodes.delete(w);
             this.onNodeUnregistered(w);
-        });
+        }
     }
 
     public onNodeUnregistered(node: unknown): void {
-        this.getEventTypesOf(this._fsm.currentState).forEach(type => {
+        for (const type of this.getEventTypesOf(this._fsm.currentState)) {
             this.unregisterEventToNode(type, node);
-        });
+        }
     }
 
     public onNewNodeRegistered(node: unknown): void {
-        this.getEventTypesOf(this._fsm.currentState).forEach(type => {
+        for (const type of this.getEventTypesOf(this._fsm.currentState)) {
             this.registerEventToNode(type, node);
-        });
+        }
     }
 
     public registerToNodeChildren(elementToObserve: Node): void {
-        elementToObserve.childNodes.forEach((node: Node) => {
+        for (const node of elementToObserve.childNodes) {
             this.registerToNodes([node]);
-        });
+        }
 
         const newMutationObserver = new MutationObserver(mutations => {
             this.callBackMutationObserver(mutations);
@@ -445,13 +445,13 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
 
     public uninstall(): void {
         this.disposable.unsubscribe();
-        this.registeredNodes.forEach(n => {
+        for (const n of this.registeredNodes) {
             this.onNodeUnregistered(n);
-        });
+        }
         this.registeredNodes.clear();
-        this.mutationObservers.forEach(m => {
+        for (const m of this.mutationObservers) {
             m.disconnect();
-        });
+        }
         this.mutationObservers.length = 0;
         this.setActivated(false);
     }

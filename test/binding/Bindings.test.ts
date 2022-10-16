@@ -663,8 +663,7 @@ describe("test Bindings", () => {
     test("binding with anon command", () => {
         bindings.clickBinder()
             .on(elt)
-            .toProduce((_i: PointData) => new AnonCmd(() => {
-            }))
+            .toProduce((_i: PointData) => new AnonCmd(() => {}))
             .log(LogLevel.interaction)
             .bind();
 
@@ -693,8 +692,7 @@ describe("test Bindings", () => {
             .on(elt)
             .when(_i => true)
             .toProduce((_i: PointsData) => new StubCmd(true))
-            .then((_c, _i) => {
-            })
+            .then((_c, _i) => {})
             .bind();
 
         robot().click(elt, 3);
@@ -707,10 +705,8 @@ describe("test Bindings", () => {
             .on(elt)
             .when(_i => true)
             .toProduce((_i: PointData) => new StubCmd(true))
-            .then((_c, _i) => {
-            })
-            .first((_c, _i) => {
-            })
+            .then((_c, _i) => {})
+            .first((_c, _i) => {})
             .bind();
 
         robot(elt).mousedown();

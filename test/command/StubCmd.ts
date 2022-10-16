@@ -50,11 +50,9 @@ export class StubUndoableCmd extends StubCmd implements Undoable {
         return "";
     }
 
-    public redo(): void {
-    }
+    public redo(): void {}
 
-    public undo(): void {
-    }
+    public undo(): void {}
 
     public getVisualSnapshot(): SVGElement | string | undefined {
         return undefined;

@@ -56,11 +56,9 @@ class CmdStubUndoable extends StubCmd implements Undoable {
         return true;
     }
 
-    public undo(): void {
-    }
+    public undo(): void {}
 
-    public redo(): void {
-    }
+    public redo(): void {}
 
     public getUndoName(): string {
         return "";
@@ -479,7 +477,7 @@ describe("crash in binding", () => {
     });
 
     test("execute crash with an error", () => {
-        const ex = new Error();
+        const ex = new Error("err");
         const supplier = (): StubCmd => {
             throw ex;
         };
@@ -511,7 +509,7 @@ describe("crash in binding", () => {
     });
 
     test("execute crash and interaction stops", () => {
-        const ex = new Error();
+        const ex = new Error("err");
         const supplier = (): StubCmd => {
             throw ex;
         };
@@ -525,7 +523,7 @@ describe("crash in binding", () => {
     });
 
     test("update with cmd crash", () => {
-        const ex = new Error();
+        const ex = new Error("err");
         const supplier = (): StubCmd => {
             throw ex;
         };

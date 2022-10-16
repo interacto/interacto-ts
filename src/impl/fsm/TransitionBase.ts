@@ -38,8 +38,7 @@ export abstract class TransitionBase<E extends Event> implements Transition<E> {
                           action?: (evt: E) => void, guard?: (evt: E) => boolean) {
         this.src = srcState;
         this.tgt = tgtState;
-        this.action = action ?? ((): void => {
-        });
+        this.action = action ?? ((): void => {});
         this.guard = guard ?? ((): boolean => true);
         this.src.addTransition(this);
     }
@@ -57,12 +56,11 @@ export abstract class TransitionBase<E extends Event> implements Transition<E> {
 
     public abstract accept(event: Event): event is E;
 
-    public abstract getAcceptedEvents(): ReadonlyArray<EventType>;
+    public abstract getAcceptedEvents(): ReadonlySet<EventType>;
 
     public get target(): InputState {
         return this.tgt;
     }
 
-    public uninstall(): void {
-    }
+    public uninstall(): void {}
 }

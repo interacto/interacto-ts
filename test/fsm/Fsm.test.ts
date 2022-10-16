@@ -24,7 +24,7 @@ import {
     SubFSMTransition,
     TimeoutTransition
 } from "../../src/interacto";
-import {StubTransitionOK, SubStubTransition1, SubStubTransition2, SubStubTransition3} from "./StubTransitionOK";
+import {StubTransitionOK, SubStubTransition1, SubStubTransition2, SubStubTransition3} from "./StubTransitionOk";
 import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
 import {createKeyEvent, createMouseEvent, createTouchEvent} from "../interaction/StubEvents";

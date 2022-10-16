@@ -22,6 +22,7 @@ import type {EventType} from "../../api/fsm/EventType";
  * An FSM transition for the CheckBox HTML element.
  */
 export class BoxCheckPressedTransition extends TransitionBase<Event> {
+    private static readonly acceptedEvents: ReadonlySet<EventType> = new Set(["input"]);
 
     /**
      * Creates the transition.
@@ -35,7 +36,7 @@ export class BoxCheckPressedTransition extends TransitionBase<Event> {
         return event.currentTarget !== null && isCheckBox(event.currentTarget);
     }
 
-    public getAcceptedEvents(): ReadonlyArray<EventType> {
-        return ["input"];
+    public getAcceptedEvents(): ReadonlySet<EventType> {
+        return BoxCheckPressedTransition.acceptedEvents;
     }
 }

@@ -18,7 +18,7 @@ import {AnonCmd} from "../../src/impl/command/AnonCmd";
 let cmd: AnonCmd;
 
 test("can Do OK Cmd", () => {
-    cmd = new AnonCmd(() => { });
+    cmd = new AnonCmd(() => {});
     expect(cmd.canExecute()).toBeTruthy();
 });
 
@@ -32,7 +32,7 @@ test("execute", async () => {
 });
 
 test("hadEffect", async () => {
-    cmd = new AnonCmd(() => { });
+    cmd = new AnonCmd(() => {});
     await cmd.execute();
     cmd.done();
     expect(cmd.hadEffect()).toBeTruthy();

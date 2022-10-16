@@ -51,12 +51,12 @@ export class BindingsContext implements BindingsObserver {
     }
 
     public clearObservedBindings(): void {
-        this.disposables.forEach(d => {
+        for (const d of this.disposables) {
             d.unsubscribe();
-        });
-        this.binds.forEach(b => {
+        }
+        for (const b of this.binds) {
             b.uninstallBinding();
-        });
+        }
     }
 
     /**

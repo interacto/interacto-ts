@@ -22,11 +22,9 @@ class ExampleUndoableCmd extends UndoableCommand {
         return undefined;
     }
 
-    public redo(): void {
-    }
+    public redo(): void {}
 
-    public undo(): void {
-    }
+    public undo(): void {}
 }
 
 beforeEach(() => {

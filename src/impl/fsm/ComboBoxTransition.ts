@@ -22,6 +22,7 @@ import type {EventType} from "../../api/fsm/EventType";
  * An FSM transition for the ComboBox HTML element.
  */
 export class ComboBoxTransition extends TransitionBase<Event> {
+    private static readonly acceptedEvents: ReadonlySet<EventType> = new Set(["input"]);
 
     /**
      * Creates the transition.
@@ -35,7 +36,7 @@ export class ComboBoxTransition extends TransitionBase<Event> {
         return event.currentTarget !== null && isComboBox(event.currentTarget);
     }
 
-    public getAcceptedEvents(): ReadonlyArray<EventType> {
-        return ["input"];
+    public getAcceptedEvents(): ReadonlySet<EventType> {
+        return ComboBoxTransition.acceptedEvents;
     }
 }

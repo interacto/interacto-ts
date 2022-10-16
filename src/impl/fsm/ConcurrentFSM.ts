@@ -67,9 +67,9 @@ export class ConcurrentFSM<F extends FSM, T extends FSMDataHandler> extends FSMI
         };
         this._conccurFSMs = [...fsms];
         this._secondaryFSMs = [...secondaries];
-        this.conccurFSMs.forEach(fsm => {
+        for (const fsm of this.conccurFSMs) {
             fsm.addHandler(handler);
-        });
+        }
     }
 
     /**
@@ -104,44 +104,44 @@ export class ConcurrentFSM<F extends FSM, T extends FSMDataHandler> extends FSMI
     // eslint-disable-next-line accessor-pairs
     public override set log(log: boolean) {
         super.log = log;
-        this.conccurFSMs.forEach(fsm => {
+        for (const fsm of this.conccurFSMs) {
             fsm.log = log;
-        });
-        this.secondaryFSMs.forEach(fsm => {
+        }
+        for (const fsm of this.secondaryFSMs) {
             fsm.log = log;
-        });
+        }
     }
 
     public override uninstall(): void {
         super.uninstall();
-        this.conccurFSMs.forEach(fsm => {
+        for (const fsm of this.conccurFSMs) {
             fsm.uninstall();
-        });
-        this.secondaryFSMs.forEach(fsm => {
+        }
+        for (const fsm of this.secondaryFSMs) {
             fsm.uninstall();
-        });
+        }
     }
 
     public override fullReinit(): void {
         if (this.totalReinit) {
-            this.conccurFSMs.forEach(f => {
+            for (const f of this.conccurFSMs) {
                 f.fullReinit();
-            });
-            this.secondaryFSMs.forEach(f => {
+            }
+            for (const f of this.secondaryFSMs) {
                 f.fullReinit();
-            });
+            }
         }
         super.fullReinit();
     }
 
     public override reinit(): void {
         if (this.totalReinit) {
-            this.conccurFSMs.forEach(f => {
+            for (const f of this.conccurFSMs) {
                 f.reinit();
-            });
-            this.secondaryFSMs.forEach(f => {
+            }
+            for (const f of this.secondaryFSMs) {
                 f.reinit();
-            });
+            }
         }
         super.reinit();
     }

@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/empty-brace-spaces */
 /*
  * This file is part of Interacto.
  * Interacto is free software: you can redistribute it and/or modify

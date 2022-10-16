@@ -155,9 +155,9 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
                 this._name = `${this._interaction.constructor.name}:${cmd.constructor.name}`;
             }
             return cmd;
-        } catch (ex: unknown) {
-            this.logger.logBindingErr("Error while creating a command", ex);
-            this.catch(ex);
+        } catch (error: unknown) {
+            this.logger.logBindingErr("Error while creating a command", error);
+            this.catch(error);
             return undefined;
         }
     }
@@ -180,6 +180,7 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
     /**
      * Updates the current command. To override.
      */
+    // eslint-disable-next-line unicorn/no-thenable
     public then(): void {
         // To override.
     }
@@ -363,8 +364,8 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
                 if (this.logCmd) {
                     this.logger.logCmdMsg(`Continuous command execution had this result: ${String(executed)}`);
                 }
-            }).catch((ex: unknown) => {
-                this.logger.logCmdErr("Error while executing the command continuously", ex);
+            }).catch((error: unknown) => {
+                this.logger.logCmdErr("Error while executing the command continuously", error);
             });
         } else {
             if (!ok) {
@@ -438,8 +439,8 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
                 // provoking sync issues (treatments are done as soon as the promise is resolved)
                 this._cmd = undefined;
                 this._timeEnded++;
-            }).catch((ex: unknown) => {
-                this.logger.logCmdErr("Error while executing the command", ex);
+            }).catch((error: unknown) => {
+                this.logger.logCmdErr("Error while executing the command", error);
                 this._cmd = undefined;
                 this._timeEnded++;
             });

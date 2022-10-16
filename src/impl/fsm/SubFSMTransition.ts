@@ -132,15 +132,15 @@ export class SubFSMTransition extends TransitionBase<Event> {
             .find(tr => tr.accept(event));
     }
 
-    public getAcceptedEvents(): ReadonlyArray<EventType> {
-        if (this.subFSM.initState.transitions.length === 0) {
-            return [];
+    public getAcceptedEvents(): ReadonlySet<EventType> {
+        // Optimisation to avoid map and reduce
+        const result = new Set<EventType>();
+        for (const t of this.subFSM.initState.transitions) {
+            for (const evt of t.getAcceptedEvents()) {
+                result.add(evt);
+            }
         }
-
-        return this.subFSM.initState
-            .transitions
-            .map(tr => tr.getAcceptedEvents())
-            .reduce((a, b) => [...a, ...b]);
+        return result;
     }
 
     public override uninstall(): void {

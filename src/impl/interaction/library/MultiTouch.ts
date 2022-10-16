@@ -29,7 +29,7 @@ class MultiTouchFSM extends ConcurrentFSM<TouchDnDFSM, TouchDnDFSMHandler> {
      * Creates the FSM.
      */
     public constructor(nbTouch: number, totalReinit: boolean, logger: Logger, dataHandler: TouchDnDFSMHandler) {
-        super([...Array(nbTouch).keys()].map(_ => new TouchDnDFSM(false, logger, dataHandler, false)),
+        super([...Array.from({"length": nbTouch}).keys()].map(_ => new TouchDnDFSM(false, logger, dataHandler, false)),
             logger, totalReinit ? [new TouchDnDFSM(false, logger, dataHandler, false)] : [], totalReinit, dataHandler);
     }
 
@@ -48,9 +48,9 @@ class MultiTouchFSM extends ConcurrentFSM<TouchDnDFSM, TouchDnDFSMHandler> {
                 const id = fsm.getTouchId();
                 return id !== undefined && !ids.has(id);
             });
-            losts.forEach(lost => {
+            for (const lost of losts) {
                 lost.reinit();
-            });
+            }
         }
 
         // eslint-disable-next-line @typescript-eslint/prefer-for-of
@@ -117,13 +117,14 @@ export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouch
             },
 
             "reinitData": (): void => {
-                const currentIDs = this.fsm.conccurFSMs
+                const currentIDs = new Set(this.fsm.conccurFSMs
                     .filter(fsm => fsm.started)
-                    .map(fsm => fsm.getTouchId());
+                    .map(fsm => fsm.getTouchId()));
 
                 this.data
                     .touches
-                    .filter(data => !currentIDs.includes(data.src.identifier))
+                    .filter(data => !currentIDs.has(data.src.identifier))
+                    // eslint-disable-next-line unicorn/no-array-for-each
                     .forEach(data => {
                         (this.data as MultiTouchDataImpl).removeTouchData(data.src.identifier);
                     });

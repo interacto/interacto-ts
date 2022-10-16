@@ -22,6 +22,7 @@ import type {EventType} from "../../api/fsm/EventType";
  * An FSM transition for the Hyperlink.
  */
 export class HyperLinkTransition extends TransitionBase<Event> {
+    private static readonly acceptedEvents: ReadonlySet<EventType> = new Set(["click", "auxclick"]);
 
     /**
      * Creates the transition.
@@ -35,7 +36,7 @@ export class HyperLinkTransition extends TransitionBase<Event> {
         return event.currentTarget !== null && isHyperLink(event.currentTarget);
     }
 
-    public getAcceptedEvents(): ReadonlyArray<EventType> {
-        return ["click", "auxclick"];
+    public getAcceptedEvents(): ReadonlySet<EventType> {
+        return HyperLinkTransition.acceptedEvents;
     }
 }

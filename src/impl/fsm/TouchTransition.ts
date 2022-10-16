@@ -21,7 +21,7 @@ import type {EventType, TouchEventType} from "../../api/fsm/EventType";
  * This transition defines a touch move.
  */
 export class TouchTransition extends TransitionBase<TouchEvent> {
-    private readonly eventType: TouchEventType;
+    private readonly acceptedEvents: ReadonlySet<EventType>;
 
     /**
      * Defines a transition.
@@ -31,14 +31,14 @@ export class TouchTransition extends TransitionBase<TouchEvent> {
     public constructor(srcState: OutputState, tgtState: InputState, eventType: TouchEventType,
                        action?: (evt: Event) => void, guard?: (evt: Event) => boolean) {
         super(srcState, tgtState, action, guard);
-        this.eventType = eventType;
+        this.acceptedEvents = new Set([eventType]);
     }
 
     public accept(evt: Event): evt is TouchEvent {
-        return evt instanceof TouchEvent && this.getAcceptedEvents().includes(evt.type as EventType);
+        return evt instanceof TouchEvent && this.getAcceptedEvents().has(evt.type as EventType);
     }
 
-    public getAcceptedEvents(): ReadonlyArray<EventType> {
-        return [this.eventType];
+    public getAcceptedEvents(): ReadonlySet<EventType> {
+        return this.acceptedEvents;
     }
 }

@@ -47,12 +47,10 @@ test("removeat with last", () => {
     expect(arr).toStrictEqual(["foo", "bar"]);
 });
 
-[-1, 3].forEach(i => {
-    test("removeat with invalid index", () => {
-        const res = removeAt(arr, i);
-        expect(res).toBeUndefined();
-        expect(arr).toStrictEqual(["foo", "bar", "yo"]);
-    });
+test.each([-1, 3])("removeat with invalid index %s", i => {
+    const res = removeAt(arr, i);
+    expect(res).toBeUndefined();
+    expect(arr).toStrictEqual(["foo", "bar", "yo"]);
 });
 
 test("peek of non empty array", () => {

@@ -39,7 +39,7 @@ afterEach(() => {
 });
 
 test("type text create command", () => {
-    const textonUpdate = Array<string>();
+    const textonUpdate = new Array<string>();
 
     // eslint-disable-next-line jest/valid-expect-in-promise
     binding = bindings.textInputBinder()
@@ -86,7 +86,7 @@ test("type text create command with a delay of 2 seconds", () => {
 });
 
 test("type text exec several times the command", () => {
-    const textonUpdate = Array<string>();
+    const textonUpdate = new Array<string>();
 
     // eslint-disable-next-line jest/valid-expect-in-promise
     binding = bindings.textInputBinder()

@@ -30,7 +30,7 @@ describe("events lost by the browser do not block bindings", () => {
         elt = document.createElement("div");
 
         div2 = document.createElement("div");
-        elt.appendChild(div2);
+        elt.append(div2);
         await Promise.resolve();
     });
 
@@ -45,7 +45,7 @@ describe("events lost by the browser do not block bindings", () => {
             bindings.longTouchBinder(100)
                 .on(div2)
                 .toProduceAnon(() => {
-                    elt.removeChild(div2);
+                    div2.remove();
                 })
                 .bind();
         });
@@ -126,7 +126,7 @@ describe("events lost by the browser do not block bindings", () => {
 
         test("the touch DnD binding not blocked on touch move", async () => {
             div2.addEventListener("touchmove", () => {
-                elt.removeChild(div2);
+                div2.remove();
             });
 
             const b2 = bindings.touchDnDBinder(false)
@@ -225,7 +225,7 @@ describe("events lost by the browser do not block bindings", () => {
         bindings.longMouseDownBinder(100)
             .on(div2)
             .toProduceAnon(() => {
-                elt.removeChild(div2);
+                div2.remove();
             })
             .bind();
 

@@ -69,8 +69,8 @@ export class TimeoutTransition extends TransitionBase<Event> {
                 try {
                     this.timeouted = true;
                     this.src.fsm.onTimeout();
-                } catch (ex: unknown) {
-                    this.logger?.logInteractionErr("Exception on timeout of a timeout transition", ex);
+                } catch (error: unknown) {
+                    this.logger?.logInteractionErr("Exception on timeout of a timeout transition", error);
                 }
             }, time);
         }
@@ -100,13 +100,13 @@ export class TimeoutTransition extends TransitionBase<Event> {
                 return this.tgt;
             }
             return undefined;
-        } catch (ex: unknown) {
+        } catch (error: unknown) {
             this.timeouted = false;
-            throw ex;
+            throw error;
         }
     }
 
-    public getAcceptedEvents(): ReadonlyArray<EventType> {
-        return [];
+    public getAcceptedEvents(): ReadonlySet<EventType> {
+        return new Set();
     }
 }

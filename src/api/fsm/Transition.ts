@@ -36,7 +36,7 @@ export interface Transition<E extends Event> {
     /**
      * @returns The set of events accepted by the transition.
      */
-    getAcceptedEvents(): ReadonlyArray<EventType>;
+    getAcceptedEvents(): ReadonlySet<EventType>;
 
     /**
      * Clean the transition when not used anymore.

@@ -470,7 +470,7 @@ test("on dynamic eltRef", async () => {
         .onDynamic(eltRef)
         .bind();
 
-    div.appendChild(elt);
+    div.append(elt);
     await Promise.resolve();
 
     robot(elt)
@@ -490,7 +490,7 @@ test("on dynamic", async () => {
         .onDynamic(div)
         .bind();
 
-    div.appendChild(elt);
+    div.append(elt);
     await Promise.resolve();
 
     robot(elt)
@@ -924,7 +924,7 @@ test("catch routine accumulation", () => {
         .on(elt)
         .toProduce(() => new StubCmd(true))
         .first(() => {
-            throw new Error();
+            throw new Error("err");
         })
         .catch(() => counter++)
         .catch(() => counter++)

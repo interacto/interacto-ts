@@ -44,8 +44,7 @@ export abstract class CommandBase implements Command {
      * This is the goal of the operation that should be overridden.
      * This operator is called a single time before the first execution of the command.
      */
-    protected createMemento(): void {
-    }
+    protected createMemento(): void {}
 
     public execute(): Promise<boolean> | boolean {
         let ok: boolean;
@@ -68,9 +67,9 @@ export abstract class CommandBase implements Command {
                             return false;
                         });
                 }
-            } catch (err: unknown) {
+            } catch (error: unknown) {
                 this.status = CmdStatus.executed;
-                throw err;
+                throw error;
             }
             this.status = CmdStatus.executed;
         } else {

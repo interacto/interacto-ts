@@ -22,6 +22,7 @@ import type {EventType} from "../../api/fsm/EventType";
  * An FSM transition for the Button HTML element.
  */
 export class ButtonPressedTransition extends TransitionBase<Event> {
+    private static readonly acceptedEvents: ReadonlySet<EventType> = new Set(["click", "auxclick"]);
 
     /**
      * Creates the transition.
@@ -35,7 +36,7 @@ export class ButtonPressedTransition extends TransitionBase<Event> {
         return e.currentTarget !== null && isButton(e.currentTarget);
     }
 
-    public getAcceptedEvents(): ReadonlyArray<EventType> {
-        return ["click", "auxclick"];
+    public getAcceptedEvents(): ReadonlySet<EventType> {
+        return ButtonPressedTransition.acceptedEvents;
     }
 }

@@ -36,38 +36,29 @@ test("wrong object is not undoable", () => {
 
 test("object missing undo is not undoable", () => {
     expect(isUndoableType({
-        "redo": () => {
-        },
-        "getUndoName": () => {
-        }
+        "redo": () => {},
+        "getUndoName": () => {}
     })).toBeFalsy();
 });
 
 test("object missing redo is not undoable", () => {
     expect(isUndoableType({
-        "undo": () => {
-        },
-        "getUndoName": () => {
-        }
+        "undo": () => {},
+        "getUndoName": () => {}
     })).toBeFalsy();
 });
 
 test("object missing getUndoName is not undoable", () => {
     expect(isUndoableType({
-        "undo": () => {
-        },
-        "redo": () => {
-        }
+        "undo": () => {},
+        "redo": () => {}
     })).toBeFalsy();
 });
 
 test("is ok", () => {
     expect(isUndoableType({
-        "undo": () => {
-        },
-        "redo": () => {
-        },
-        "getUndoName": () => {
-        }
+        "undo": () => {},
+        "redo": () => {},
+        "getUndoName": () => {}
     })).toBeTruthy();
 });

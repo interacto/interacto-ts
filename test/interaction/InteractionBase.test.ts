@@ -44,8 +44,8 @@ class StubWrongEventTransition extends TransitionBase<FocusEvent> {
         super(srcState, tgtState);
     }
 
-    public getAcceptedEvents(): ReadonlyArray<EventType> {
-        return ["focus" as EventType];
+    public getAcceptedEvents(): ReadonlySet<EventType> {
+        return new Set(["focus" as EventType]);
     }
 
     public accept(event: Event): event is FocusEvent {
@@ -162,7 +162,7 @@ test("register to node children", async () => {
     interaction.registerToNodeChildren(doc);
     const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
     rect.setAttribute("id", "rect");
-    doc.appendChild(rect);
+    doc.append(rect);
 
     // Waiting for the mutation changes to be done.
     await flushPromises();

@@ -21,7 +21,7 @@ import type {EventType, MouseEventType} from "../../api/fsm/EventType";
  * The base transition for mouse events.
  */
 export class MouseTransition extends TransitionBase<MouseEvent> {
-    private readonly mouseType: ReadonlyArray<MouseEventType>;
+    private readonly acceptedEvents: ReadonlySet<EventType>;
 
     /**
      * Creates the transition.
@@ -29,14 +29,14 @@ export class MouseTransition extends TransitionBase<MouseEvent> {
     public constructor(srcState: OutputState, tgtState: InputState, types: MouseEventType | ReadonlyArray<MouseEventType>,
                        action?: (evt: Event) => void, guard?: (evt: Event) => boolean) {
         super(srcState, tgtState, action, guard);
-        this.mouseType = typeof types === "string" ? [types] : types;
+        this.acceptedEvents = new Set(typeof types === "string" ? [types] : types);
     }
 
     public accept(event: Event): event is MouseEvent {
-        return event instanceof MouseEvent && this.getAcceptedEvents().includes(event.type as EventType);
+        return event instanceof MouseEvent && this.getAcceptedEvents().has(event.type as EventType);
     }
 
-    public getAcceptedEvents(): ReadonlyArray<EventType> {
-        return this.mouseType;
+    public getAcceptedEvents(): ReadonlySet<EventType> {
+        return this.acceptedEvents;
     }
 }

@@ -15,7 +15,7 @@
 import {StdState} from "../../src/impl/fsm/StdState";
 import type {TransitionBase} from "../../src/impl/fsm/TransitionBase";
 import type {FSMImpl} from "../../src/impl/fsm/FSMImpl";
-import {StubTransitionOK} from "./StubTransitionOK";
+import {StubTransitionOK} from "./StubTransitionOk";
 import {mock} from "jest-mock-extended";
 import type {FSMDataHandler} from "../../src/impl/fsm/FSMDataHandler";
 

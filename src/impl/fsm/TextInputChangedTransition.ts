@@ -22,6 +22,8 @@ import type {EventType} from "../../api/fsm/EventType";
  * An FSM transition for the different text input HTML element.
  */
 export class TextInputChangedTransition extends TransitionBase<Event> {
+    private static readonly acceptedEvents: ReadonlySet<EventType> = new Set(["input"]);
+
     /**
      * Creates the transition.
      */
@@ -34,7 +36,7 @@ export class TextInputChangedTransition extends TransitionBase<Event> {
         return event.currentTarget !== null && isTextInput(event.currentTarget);
     }
 
-    public getAcceptedEvents(): ReadonlyArray<EventType> {
-        return ["input"];
+    public getAcceptedEvents(): ReadonlySet<EventType> {
+        return TextInputChangedTransition.acceptedEvents;
     }
 }

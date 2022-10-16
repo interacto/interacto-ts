@@ -21,8 +21,7 @@ import {KeyTransition} from "./KeyTransition";
  * This transition should be used to cancel an interaction using key ESCAPE.
  */
 export class EscapeKeyPressureTransition extends KeyTransition {
-    public constructor(srcState: OutputState, tgtState: InputState,
-                       action?: (evt: Event) => void) {
+    public constructor(srcState: OutputState, tgtState: InputState, action?: (evt: Event) => void) {
         super(srcState, tgtState, "keydown", action,
             (evt: KeyboardEvent) => evt.code === "Escape" || evt.code === String(KeyCode.escape));
     }

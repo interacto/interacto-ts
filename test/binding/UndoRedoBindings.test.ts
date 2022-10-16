@@ -68,8 +68,7 @@ describe("test undo redo bindings", () => {
         });
 
         test("undo/redo bindings: undo works correctly", () => {
-            undoable.undo.mockImplementation(() => {
-            });
+            undoable.undo.mockImplementation(() => {});
 
             bindings.undoRedoBinder(bundo, bredo);
             robot(bundo).click();
@@ -115,8 +114,7 @@ describe("test undo redo bindings", () => {
         });
 
         test("undo/redo bindings: redo works correctly", () => {
-            undoable.redo.mockImplementation(() => {
-            });
+            undoable.redo.mockImplementation(() => {});
 
             bindings.undoRedoBinder(bundo, bredo);
             robot(bredo).click();

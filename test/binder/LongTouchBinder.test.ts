@@ -117,7 +117,7 @@ describe("on svg doc for dynamic registration", () => {
             .bind();
 
         const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-        doc.appendChild(rect);
+        doc.append(rect);
 
         // Waiting for the mutation changes to be done.
         await Promise.resolve();
@@ -132,7 +132,7 @@ describe("on svg doc for dynamic registration", () => {
 
     test("tap does not produce long touch on dynamic array 2", async () => {
         const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-        doc.appendChild(rect);
+        doc.append(rect);
 
         // Waiting for the mutation changes to be done.
         await Promise.resolve();

@@ -124,10 +124,8 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
             getVisualSnapshot(): UndoableSnapshot {
                 return "root";
             },
-            redo(): void {
-            },
-            undo(): void {
-            }
+            redo(): void {},
+            undo(): void {}
         }, -1, undefined);
         this._currentNode = this.root;
         this.undoPublisher = new Subject();
@@ -191,9 +189,10 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
         }
 
         // Cloning the array since 'delete' may alter the children list.
-        [...node.children].forEach(child => {
+        // eslint-disable-next-line unicorn/no-useless-spread
+        for (const child of [...node.children]) {
             this.delete(child.id);
-        });
+        }
 
         if (this.currentNode === node) {
             this._currentNode = this.root;
@@ -386,9 +385,9 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
         const res = dtoHistory.roots.map(root => UndoableTreeNodeDTOImpl.toNode(root, fn, this.root));
         this.root.children.push(...res.map(r => r[0]));
 
-        res.flatMap(r => r[1]).forEach(n => {
+        for (const n of res.flatMap(r => r[1])) {
             this.undoableNodes[n.id] = n;
-        });
+        }
 
         this._currentNode = this.root;
         this.idCounter = Math.max(...this._path) + 1;

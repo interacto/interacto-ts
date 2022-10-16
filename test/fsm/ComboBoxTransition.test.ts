@@ -32,7 +32,7 @@ beforeEach(() => {
 });
 
 test("that getAcceptedEvents works", () => {
-    expect(tr.getAcceptedEvents()).toStrictEqual(["input"]);
+    expect(tr.getAcceptedEvents()).toStrictEqual(new Set(["input"]));
 });
 
 test("that accept KO null target", () => {

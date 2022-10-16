@@ -131,7 +131,7 @@ describe("on svg doc for dynamic registration", () => {
             .bind();
 
         const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-        doc.appendChild(rect);
+        doc.append(rect);
 
         // Waiting for the mutation changes to be done.
         await Promise.resolve();
@@ -149,7 +149,7 @@ describe("on svg doc for dynamic registration", () => {
 
     test("dynamic registration with a node already added", async () => {
         const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-        doc.appendChild(rect);
+        doc.append(rect);
 
         // Waiting for the mutation changes to be done.
         await Promise.resolve();
@@ -177,10 +177,10 @@ describe("on svg doc for dynamic registration", () => {
             .bind();
 
         const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-        doc.appendChild(rect);
+        doc.append(rect);
         await Promise.resolve();
 
-        doc.removeChild(rect);
+        rect.remove();
         await Promise.resolve();
 
         robot(rect)
@@ -194,7 +194,7 @@ describe("on svg doc for dynamic registration", () => {
 
     test("dynamic registration with a node already added then removed", async () => {
         const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-        doc.appendChild(rect);
+        doc.append(rect);
         await Promise.resolve();
 
         binding = bindings.tapBinder(3)
@@ -202,7 +202,7 @@ describe("on svg doc for dynamic registration", () => {
             .onDynamic(doc)
             .bind();
 
-        doc.removeChild(rect);
+        rect.remove();
         await Promise.resolve();
 
         robot(rect)

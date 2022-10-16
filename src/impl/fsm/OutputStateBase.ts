@@ -35,17 +35,17 @@ export abstract class OutputStateBase extends StateBase implements OutputState {
     }
 
     public process(event: Event): boolean {
-        return this.transitions.find(tr => {
+        return this.transitions.some(tr => {
             try {
                 return tr.execute(event) !== undefined;
-            } catch (err: unknown) {
-                if (err instanceof CancelFSMException) {
+            } catch (error: unknown) {
+                if (error instanceof CancelFSMException) {
                     // Already processed
                     return false;
                 }
-                throw err;
+                throw error;
             }
-        }) !== undefined;
+        });
     }
 
     public clearTransitions(): void {
@@ -64,9 +64,9 @@ export abstract class OutputStateBase extends StateBase implements OutputState {
 
     public override uninstall(): void {
         super.uninstall();
-        this.transitions.forEach(tr => {
+        for (const tr of this.transitions) {
             tr.uninstall();
-        });
+        }
         this._transitions.length = 0;
     }
 }

@@ -29,25 +29,21 @@ beforeEach(() => {
 });
 
 test("invalid move event", () => {
-    expect(tr.accept(createMouseEvent("mousemove", canvas,
-        11, 23, 11, 23, 0))).toBeFalsy();
+    expect(tr.accept(createMouseEvent("mousemove", canvas, 11, 23, 11, 23, 0))).toBeFalsy();
 });
 
 test("invalid event type", () => {
-    expect(tr.accept(createTouchEvent("touchstart", 3,
-        canvas, 11, 23, 12, 25))).toBeFalsy();
+    expect(tr.accept(createTouchEvent("touchstart", 3, canvas, 11, 23, 12, 25))).toBeFalsy();
 });
 
 test("valid event", () => {
-    expect(tr.accept(createMouseEvent("mouseup",
-        canvas, 11, 23, 12, 25, 1))).toBeTruthy();
+    expect(tr.accept(createMouseEvent("mouseup", canvas, 11, 23, 12, 25, 1))).toBeTruthy();
 });
 
 test("guard OK", () => {
-    expect(tr.guard(createMouseEvent("mouseup",
-        canvas, 11, 23, 12, 25, 1))).toBeTruthy();
+    expect(tr.guard(createMouseEvent("mouseup", canvas, 11, 23, 12, 25, 1))).toBeTruthy();
 });
 
 test("accepted events", () => {
-    expect(tr.getAcceptedEvents()).toStrictEqual(["mouseup"]);
+    expect(tr.getAcceptedEvents()).toStrictEqual(new Set(["mouseup"]));
 });

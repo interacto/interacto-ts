@@ -37,9 +37,7 @@ describe("base redo testing", () => {
 
         beforeEach(() => {
             undoables = new Array<Undoable>();
-            undoables.push(mock<Undoable>());
-            undoables.push(mock<Undoable>());
-            undoables.push(mock<Undoable>());
+            undoables.push(mock<Undoable>(), mock<Undoable>(), mock<Undoable>());
             collector.getRedo.mockReturnValue(undoables);
         });
 

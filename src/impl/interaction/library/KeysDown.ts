@@ -44,7 +44,7 @@ export class KeysDownFSM extends FSMImpl<KeysDownFSMHandler> {
         new KeyTransition(pressed, pressed, "keydown", actionkp);
 
         new KeyTransition(pressed, this.addTerminalState("ended"), "keyup", undefined,
-            (evt: KeyboardEvent): boolean => this.currentCodes.find(value => value === evt.code) !== undefined);
+            (evt: KeyboardEvent): boolean => this.currentCodes.includes(evt.code));
     }
 
     public override reinit(): void {

@@ -66,24 +66,25 @@ export class UpdateBinder<C extends Command, I extends Interaction<D>, D extends
         super.copyFnArrays();
         this.thenFnArray = [...this.thenFnArray];
         this.thenFn = (c: C, i: D): void => {
-            this.thenFnArray.forEach(fn => {
+            for (const fn of this.thenFnArray) {
                 fn(c, i);
-            });
+            }
         };
         this.cancelFnArray = [...this.cancelFnArray];
         this.cancelFn = (i: D): void => {
-            this.cancelFnArray.forEach(fn => {
+            for (const fn of this.cancelFnArray) {
                 fn(i);
-            });
+            }
         };
         this.endOrCancelFnArray = [...this.endOrCancelFnArray];
         this.endOrCancelFn = (i: D): void => {
-            this.endOrCancelFnArray.forEach(fn => {
+            for (const fn of this.endOrCancelFnArray) {
                 fn(i);
-            });
+            }
         };
     }
 
+    // eslint-disable-next-line unicorn/no-thenable
     public then(fn: (c: C, i: D) => void): UpdateBinder<C, I, D> {
         const dup = this.duplicate();
         dup.thenFnArray.push(fn);

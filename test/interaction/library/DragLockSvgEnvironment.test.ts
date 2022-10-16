@@ -32,11 +32,11 @@ beforeEach(() => {
     interaction.fsm.addHandler(handler);
     document.documentElement.innerHTML = "<html></html>";
     svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    document.body.appendChild(svg);
+    document.body.append(svg);
     rect1 = document.createElementNS("http://www.w3.org/2000/svg", "rect");
     rect2 = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    svg.appendChild(rect1);
-    svg.appendChild(rect2);
+    svg.append(rect1);
+    svg.append(rect2);
 });
 
 test("dragLock in a SVG environment", () => {

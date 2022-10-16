@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-null */
 import type {Flushable} from "./Flushable";
 import type {UnitInteractionData} from "../../api/interaction/UnitInteractionData";
 

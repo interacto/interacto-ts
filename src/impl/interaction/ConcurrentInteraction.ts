@@ -51,15 +51,15 @@ export abstract class ConcurrentInteraction<D extends InteractionData, DImpl ext
     }
 
     public override onNodeUnregistered(node: EventTarget): void {
-        this.getCurrentAcceptedEvents().forEach(type => {
+        for (const type of this.getCurrentAcceptedEvents()) {
             this.unregisterEventToNode(type, node);
-        });
+        }
     }
 
     public override onNewNodeRegistered(node: EventTarget): void {
-        this.getCurrentAcceptedEvents().forEach(type => {
+        for (const type of this.getCurrentAcceptedEvents()) {
             this.registerEventToNode(type, node);
-        });
+        }
     }
 
     public override getCurrentAcceptedEvents(_state?: OutputState): ReadonlyArray<EventType> {
@@ -68,8 +68,8 @@ export abstract class ConcurrentInteraction<D extends InteractionData, DImpl ext
 
     public override uninstall(): void {
         super.uninstall();
-        this.subscriptions.forEach(sub => {
+        for (const sub of this.subscriptions) {
             sub.unsubscribe();
-        });
+        }
     }
 }

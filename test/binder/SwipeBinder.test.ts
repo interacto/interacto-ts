@@ -54,41 +54,37 @@ test("touch move: too slow too short", () => {
     expect(ctx.commands).toHaveLength(0);
 });
 
-[20, -30].forEach((y: number) => {
-    test("touch move KO not horizontal enough", () => {
-        binding = bindings.swipeBinder(true, 400, 200, 1, 10)
-            .toProduce(() => new StubCmd(true))
-            .on(c1)
-            .bind();
+test.each([20, -30])("touch move KO not horizontal enough with %s", y => {
+    binding = bindings.swipeBinder(true, 400, 200, 1, 10)
+        .toProduce(() => new StubCmd(true))
+        .on(c1)
+        .bind();
 
-        robot(c1)
-            .touchstart({}, [{"identifier": 3, "screenX": 15, "screenY": 20, "clientX": 150, "clientY": 200}], 10)
-            .touchmove({}, [{"identifier": 3, "screenX": 16, "screenY": 20 + y, "clientX": 160, "clientY": 200 + y}], 10);
+    robot(c1)
+        .touchstart({}, [{"identifier": 3, "screenX": 15, "screenY": 20, "clientX": 150, "clientY": 200}], 10)
+        .touchmove({}, [{"identifier": 3, "screenX": 16, "screenY": 20 + y, "clientX": 160, "clientY": 200 + y}], 10);
 
-        expect(binding).toBeDefined();
-        expect(binding.timesCancelled).toBe(0);
-        expect(binding.timesEnded).toBe(0);
-        expect(ctx.commands).toHaveLength(0);
-    });
+    expect(binding).toBeDefined();
+    expect(binding.timesCancelled).toBe(0);
+    expect(binding.timesEnded).toBe(0);
+    expect(ctx.commands).toHaveLength(0);
 });
 
-[40, -50].forEach((y: number) => {
-    test("touch move move release not horizontal enough", () => {
-        binding = bindings.swipeBinder(true, 400, 200, 1, 10)
-            .toProduce(() => new StubCmd(true))
-            .on(c1)
-            .bind();
+test.each([40, -50])("touch move move release not horizontal enough with %s", y => {
+    binding = bindings.swipeBinder(true, 400, 200, 1, 10)
+        .toProduce(() => new StubCmd(true))
+        .on(c1)
+        .bind();
 
-        robot(c1)
-            .touchstart({}, [{"identifier": 3, "screenX": 150, "screenY": 20, "clientX": 150, "clientY": 200}], 5000)
-            .touchmove({}, [{"identifier": 3, "screenX": 160, "screenY": 20, "clientX": 200, "clientY": 200}], 5500)
-            .touchmove({}, [{"identifier": 3, "screenX": 350, "screenY": 20 + y, "clientX": 250, "clientY": 200 + y}], 6000)
-            .touchend({}, [{"identifier": 3, "screenX": 350, "screenY": 20 + y, "clientX": 250, "clientY": 200 + y}], 6000);
+    robot(c1)
+        .touchstart({}, [{"identifier": 3, "screenX": 150, "screenY": 20, "clientX": 150, "clientY": 200}], 5000)
+        .touchmove({}, [{"identifier": 3, "screenX": 160, "screenY": 20, "clientX": 200, "clientY": 200}], 5500)
+        .touchmove({}, [{"identifier": 3, "screenX": 350, "screenY": 20 + y, "clientX": 250, "clientY": 200 + y}], 6000)
+        .touchend({}, [{"identifier": 3, "screenX": 350, "screenY": 20 + y, "clientX": 250, "clientY": 200 + y}], 6000);
 
-        expect(binding).toBeDefined();
-        expect(binding.timesEnded).toBe(0);
-        expect(ctx.commands).toHaveLength(0);
-    });
+    expect(binding).toBeDefined();
+    expect(binding.timesEnded).toBe(0);
+    expect(ctx.commands).toHaveLength(0);
 });
 
 test("touch move move too short too slow", () => {

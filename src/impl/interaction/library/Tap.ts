@@ -57,7 +57,7 @@ class TapFSM extends FSMImpl<TapFSMHandler> {
 
         // No multi-touch
         new TouchTransition(down, cancelled, "touchstart", undefined,
-            (evt: TouchEvent): boolean => [...evt.touches].filter(t => t.identifier === this.touchID).length > 0);
+            (evt: TouchEvent): boolean => [...evt.touches].some(t => t.identifier === this.touchID));
 
         // Required to clean touch events lost by the browser
         new TouchTransition(down, down, "touchstart",

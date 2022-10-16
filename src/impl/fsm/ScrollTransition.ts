@@ -21,6 +21,8 @@ import type {EventType} from "../../api/fsm/EventType";
  * This transition corresponds to the scroll of a window
  */
 export class ScrollTransition extends TransitionBase<Event> {
+    private static readonly acceptedEvents: ReadonlySet<EventType> = new Set(["scroll"]);
+
     /**
      * Creates the transition.
      */
@@ -33,7 +35,7 @@ export class ScrollTransition extends TransitionBase<Event> {
         return event.type === "scroll";
     }
 
-    public getAcceptedEvents(): ReadonlyArray<EventType> {
-        return ["scroll"];
+    public getAcceptedEvents(): ReadonlySet<EventType> {
+        return ScrollTransition.acceptedEvents;
     }
 }

@@ -29,8 +29,8 @@ let bindings: Bindings<UndoHistoryBase>;
 beforeEach(() => {
     bindings = new BindingsImpl(new UndoHistoryImpl());
     document.documentElement.innerHTML = "<html><div><canvas id='c1'> <canvas id='c2'/> </canvas></html>";
-    canvas1 = document.getElementById("c1") as HTMLElement;
-    canvas2 = document.getElementById("c2") as HTMLElement;
+    canvas1 = document.querySelector("#c1") as HTMLElement;
+    canvas2 = document.querySelector("#c2") as HTMLElement;
 });
 
 afterEach(() => {

@@ -29,37 +29,37 @@ export class StubTransitionOK<E extends Event> extends TransitionBase<E> {
         return true;
     }
 
-    public getAcceptedEvents(): Array<EventType> {
-        return ["input"];
+    public getAcceptedEvents(): ReadonlySet<EventType> {
+        return new Set(["input"]);
     }
 }
 
 export class SubStubTransition1 extends StubTransitionOK<MouseEvent> {
     public override accept(event: Event): event is MouseEvent {
-        return event instanceof MouseEvent && this.getAcceptedEvents().includes(event.type as EventType);
+        return event instanceof MouseEvent && this.getAcceptedEvents().has(event.type as EventType);
     }
 
-    public override getAcceptedEvents(): Array<EventType> {
-        return ["click"];
+    public override getAcceptedEvents(): ReadonlySet<EventType> {
+        return new Set(["click"]);
     }
 }
 
 export class SubStubTransition2 extends StubTransitionOK<KeyboardEvent> {
     public override accept(event: Event): event is KeyboardEvent {
-        return event instanceof KeyboardEvent && this.getAcceptedEvents().includes(event.type as EventType);
+        return event instanceof KeyboardEvent && this.getAcceptedEvents().has(event.type as EventType);
     }
 
-    public override getAcceptedEvents(): Array<EventType> {
-        return ["keydown"];
+    public override getAcceptedEvents(): ReadonlySet<EventType> {
+        return new Set(["keydown"]);
     }
 }
 
 export class SubStubTransition3 extends StubTransitionOK<TouchEvent> {
     public override accept(event: Event): event is TouchEvent {
-        return event instanceof TouchEvent && this.getAcceptedEvents().includes(event.type as EventType);
+        return event instanceof TouchEvent && this.getAcceptedEvents().has(event.type as EventType);
     }
 
-    public override getAcceptedEvents(): Array<EventType> {
-        return ["touchstart"];
+    public override getAcceptedEvents(): ReadonlySet<EventType> {
+        return new Set(["touchstart"]);
     }
 }

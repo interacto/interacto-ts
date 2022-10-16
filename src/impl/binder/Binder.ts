@@ -111,49 +111,51 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
 
         this.firstFnArray = [...this.firstFnArray];
         this.firstFn = (c: C, i: D): void => {
-            this.firstFnArray.forEach(fn => {
+            for (const fn of this.firstFnArray) {
                 fn(c, i);
-            });
+            }
         };
         this.endFnArray = [...this.endFnArray];
         this.endFn = (c: C, i: D): void => {
-            this.endFnArray.forEach(fn => {
+            for (const fn of this.endFnArray) {
                 fn(c, i);
-            });
+            }
         };
         this.hadEffectsFnArray = [...this.hadEffectsFnArray];
         this.hadEffectsFn = (c: C, i: D): void => {
-            this.hadEffectsFnArray.forEach(fn => {
+            for (const fn of this.hadEffectsFnArray) {
                 fn(c, i);
-            });
+            }
         };
         this.hadNoEffectFnArray = [...this.hadNoEffectFnArray];
         this.hadNoEffectFn = (c: C, i: D): void => {
-            this.hadNoEffectFnArray.forEach(fn => {
+            for (const fn of this.hadNoEffectFnArray) {
                 fn(c, i);
-            });
+            }
         };
         this.cannotExecFnArray = [...this.cannotExecFnArray];
         this.cannotExecFn = (c: C, i: D): void => {
-            this.cannotExecFnArray.forEach(fn => {
+            for (const fn of this.cannotExecFnArray) {
                 fn(c, i);
-            });
+            }
         };
         this.onErrFnArray = [...this.onErrFnArray];
         this.onErrFn = (ex: unknown): void => {
-            this.onErrFnArray.forEach(fn => {
+            for (const fn of this.onErrFnArray) {
                 fn(ex);
-            });
+            }
         };
     }
 
     public on<W>(widget: ReadonlyArray<Widget<W>> | Widget<W>, ...widgets: ReadonlyArray<Widget<W>>): Binder<C, I, D> {
+        // eslint-disable-next-line unicorn/prefer-spread
         const ws = [...widgets].concat(widget).map(w => {
             if (isEltRef(w)) {
                 return w.nativeElement;
             }
             return w;
         });
+        // eslint-disable-next-line unicorn/prefer-spread
         const w: ReadonlyArray<unknown> = this.widgets.length === 0 ? ws : [...this.widgets].concat(ws);
         const dup = this.duplicate();
         dup.widgets = w;
@@ -163,6 +165,7 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
     public onDynamic(node: Widget<Node>): Binder<C, I, D> {
         const dup = this.duplicate();
         const nodeEvt = isEltRef(node) ? node.nativeElement : node;
+        // eslint-disable-next-line unicorn/prefer-spread
         dup.dynamicNodes = [...this.dynamicNodes].concat(nodeEvt);
         return dup;
     }

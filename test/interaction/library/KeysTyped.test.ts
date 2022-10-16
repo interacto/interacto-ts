@@ -104,9 +104,9 @@ test("type text and wait for timeout stops the interaction", () => {
 test("type text and wait for timeout stops the interaction: data", () => {
     const newHandler = mock<FSMHandler>();
     newHandler.fsmStops = jest.fn(() => {
-        interaction.data.keys.forEach(k => {
+        for (const k of interaction.data.keys) {
             data.addKey(k);
-        });
+        }
     });
     interaction.fsm.addHandler(newHandler);
 

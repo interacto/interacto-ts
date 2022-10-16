@@ -108,8 +108,7 @@ test("endsOnThen", () => {
             c.exec = 10;
             cpt++;
         })
-        .end(() => {
-        })
+        .end(() => {})
         .bind();
 
     widget1.dispatchEvent(new Event("input"));
@@ -126,8 +125,7 @@ test("continuousThen", () => {
         .toProduce((_i: WidgetData<HTMLInputElement>) => cmd)
         .on(widget1)
         .then((_c, _i) => cpt++)
-        .end((_c, _i) => {
-        })
+        .end((_c, _i) => {})
         .bind();
 
     widget1.dispatchEvent(new Event("input"));

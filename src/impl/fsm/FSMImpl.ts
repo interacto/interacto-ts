@@ -128,7 +128,7 @@ export class FSMImpl<T extends FSMDataHandler> implements FSM {
 
         // Recycling events
         if (processed && isKeyDownEvent(event) && !(this._currentState instanceof InitState) &&
-            this.eventsToProcess.find(evt => isKeyDownEvent(evt) && evt.code === event.code) === undefined) {
+            !this.eventsToProcess.some(evt => isKeyDownEvent(evt) && evt.code === event.code)) {
             this.addRemaningEventsToProcess(event);
         }
 
@@ -149,8 +149,8 @@ export class FSMImpl<T extends FSMDataHandler> implements FSM {
 
         try {
             return this.currentState.process(event);
-        } catch (err: unknown) {
-            this.notifyHandlerOnError(err);
+        } catch (error: unknown) {
+            this.notifyHandlerOnError(error);
             return false;
         }
     }
@@ -206,13 +206,13 @@ export class FSMImpl<T extends FSMDataHandler> implements FSM {
     protected processRemainingEvents(): void {
         const list: ReadonlyArray<Event> = [...this.eventsToProcess];
 
-        list.forEach(event => {
+        for (const event of list) {
             removeAt(this.eventsToProcess, 0);
             if (this.log) {
                 this.logger.logInteractionMsg("Recycling event", this.constructor.name);
             }
             this.process(event);
-        });
+        }
     }
 
     public addRemaningEventsToProcess(event: Event): void {
@@ -380,15 +380,16 @@ export class FSMImpl<T extends FSMDataHandler> implements FSM {
      */
     protected notifyHandlerOnStart(): void {
         try {
-            this.handlers.forEach(handler => {
+            // eslint-disable-next-line unicorn/no-useless-spread
+            for (const handler of [...this.handlers]) {
                 handler.fsmStarts?.();
-            });
-        } catch (ex: unknown) {
-            if (!(ex instanceof CancelFSMException || ex instanceof MustBeUndoableCmdError)) {
-                this.logger.logInteractionErr("An 'fsmStarts' produced an error", ex, this.constructor.name);
+            }
+        } catch (error: unknown) {
+            if (!(error instanceof CancelFSMException || error instanceof MustBeUndoableCmdError)) {
+                this.logger.logInteractionErr("An 'fsmStarts' produced an error", error, this.constructor.name);
             }
             this.onCancelling();
-            throw ex;
+            throw error;
         }
     }
 
@@ -397,15 +398,16 @@ export class FSMImpl<T extends FSMDataHandler> implements FSM {
      */
     protected notifyHandlerOnUpdate(): void {
         try {
-            this.handlers.forEach(handler => {
+            // eslint-disable-next-line unicorn/no-useless-spread
+            for (const handler of [...this.handlers]) {
                 handler.fsmUpdates?.();
-            });
-        } catch (ex: unknown) {
-            if (!(ex instanceof CancelFSMException || ex instanceof MustBeUndoableCmdError)) {
-                this.logger.logInteractionErr("An 'fsmUpdates' produced an error", ex, this.constructor.name);
+            }
+        } catch (error: unknown) {
+            if (!(error instanceof CancelFSMException || error instanceof MustBeUndoableCmdError)) {
+                this.logger.logInteractionErr("An 'fsmUpdates' produced an error", error, this.constructor.name);
             }
             this.onCancelling();
-            throw ex;
+            throw error;
         }
     }
 
@@ -414,15 +416,16 @@ export class FSMImpl<T extends FSMDataHandler> implements FSM {
      */
     public notifyHandlerOnStop(): void {
         try {
-            [...this.handlers].forEach(handler => {
+            // eslint-disable-next-line unicorn/no-useless-spread
+            for (const handler of [...this.handlers]) {
                 handler.fsmStops?.();
-            });
-        } catch (ex: unknown) {
-            if (!(ex instanceof CancelFSMException || ex instanceof MustBeUndoableCmdError)) {
-                this.logger.logInteractionErr("An 'fsmStops' produced an error", ex, this.constructor.name);
+            }
+        } catch (error: unknown) {
+            if (!(error instanceof CancelFSMException || error instanceof MustBeUndoableCmdError)) {
+                this.logger.logInteractionErr("An 'fsmStops' produced an error", error, this.constructor.name);
             }
             this.onCancelling();
-            throw ex;
+            throw error;
         }
     }
 
@@ -431,14 +434,15 @@ export class FSMImpl<T extends FSMDataHandler> implements FSM {
      */
     protected notifyHandlerOnCancel(): void {
         try {
-            [...this.handlers].forEach(handler => {
+            // eslint-disable-next-line unicorn/no-useless-spread
+            for (const handler of [...this.handlers]) {
                 handler.fsmCancels?.();
-            });
-        } catch (ex: unknown) {
-            if (!(ex instanceof MustBeUndoableCmdError)) {
-                this.logger.logInteractionErr("An 'fsmCancels' produced an error", ex, this.constructor.name);
             }
-            throw ex;
+        } catch (error: unknown) {
+            if (!(error instanceof MustBeUndoableCmdError)) {
+                this.logger.logInteractionErr("An 'fsmCancels' produced an error", error, this.constructor.name);
+            }
+            throw error;
         }
     }
 
@@ -447,11 +451,12 @@ export class FSMImpl<T extends FSMDataHandler> implements FSM {
      */
     protected notifyHandlerOnError(err: unknown): void {
         try {
-            [...this.handlers].forEach(handler => {
+            // eslint-disable-next-line unicorn/no-useless-spread
+            for (const handler of [...this.handlers]) {
                 handler.fsmError?.(err);
-            });
-        } catch (ex: unknown) {
-            this.logger.logInteractionErr("An 'fsmError' produced an error", ex, this.constructor.name);
+            }
+        } catch (error: unknown) {
+            this.logger.logInteractionErr("An 'fsmError' produced an error", error, this.constructor.name);
         }
     }
 
@@ -468,9 +473,9 @@ export class FSMImpl<T extends FSMDataHandler> implements FSM {
         this.log = false;
         this.currentStatePublisher.complete();
         this.currentSubFSM = undefined;
-        this._states.forEach(state => {
+        for (const state of this._states) {
             state.uninstall();
-        });
+        }
         this._states.length = 0;
         this.dataHandler = undefined;
     }

@@ -29,20 +29,17 @@ beforeEach(() => {
 });
 
 test("invalid event", () => {
-    expect(tr.accept(createMouseEvent("mousedown", canvas,
-        11, 23, 11, 23, 0))).toBeFalsy();
+    expect(tr.accept(createMouseEvent("mousedown", canvas, 11, 23, 11, 23, 0))).toBeFalsy();
 });
 
 test("valid event", () => {
-    expect(tr.accept(createTouchEvent("touchstart", 3,
-        canvas, 11, 23, 12, 25))).toBeTruthy();
+    expect(tr.accept(createTouchEvent("touchstart", 3, canvas, 11, 23, 12, 25))).toBeTruthy();
 });
 
 test("guard OK", () => {
-    expect(tr.guard(createTouchEvent("touchstart", 3,
-        canvas, 11, 23, 12, 25))).toBeTruthy();
+    expect(tr.guard(createTouchEvent("touchstart", 3, canvas, 11, 23, 12, 25))).toBeTruthy();
 });
 
 test("accepted events", () => {
-    expect(tr.getAcceptedEvents()).toStrictEqual(["touchstart"]);
+    expect(tr.getAcceptedEvents()).toStrictEqual(new Set(["touchstart"]));
 });

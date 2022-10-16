@@ -140,12 +140,11 @@ export function createWheelEvent2(type: "wheel",
 export function createMouseEvent(type: "auxclick" | "click" | "mousedown" | "mouseenter" | "mouseleave" | "mousemove" |
 "mouseout" | "mouseover" | "mouseup",
                                  target: EventTarget, screenX?: number, screenY?: number, clientX?: number,
-                                 clientY?: number, button?: number): MouseEvent {
+                                 clientY?: number, buttonValue = 0): MouseEvent {
     const screenXvalue = screenX ?? 0;
     const screenYvalue = screenY ?? 0;
     const clientXvalue = clientX ?? 0;
     const clientYvalue = clientY ?? 0;
-    const buttonValue = button ?? 0;
     return new MouseEvent(type, {
         "view": window,
         "bubbles": true,
@@ -167,7 +166,7 @@ export function createMouseEvent(type: "auxclick" | "click" | "mousedown" | "mou
 export function createWheelEvent(type: "wheel",
                                  target: EventTarget, screenX?: number, screenY?: number, clientX?: number,
                                  clientY?: number, button?: number, deltaX?: number, deltaY?: number,
-                                 deltaZ?: number, deltaMode?: number): WheelEvent {
+                                 deltaZ?: number, deltaModeValue = 0): WheelEvent {
     const screenXvalue = screenX ?? 0;
     const screenYvalue = screenY ?? 0;
     const clientXvalue = clientX ?? 0;
@@ -176,7 +175,6 @@ export function createWheelEvent(type: "wheel",
     const deltaXValue = deltaX ?? 0;
     const deltaYValue = deltaY ?? 0;
     const deltaZValue = deltaZ ?? 0;
-    const deltaModeValue = deltaMode ?? 0;
     return new WheelEvent(type, {
         "view": window,
         "bubbles": true,
@@ -242,6 +240,7 @@ export function createEventWithTarget(target: EventTarget | null, type: string):
         "eventPhase": 0,
         "isTrusted": false,
         "returnValue": false,
+        // eslint-disable-next-line unicorn/no-null
         "srcElement": null,
         "timeStamp": 0,
         type,

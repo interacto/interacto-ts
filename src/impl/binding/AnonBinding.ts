@@ -71,13 +71,13 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
         this.interaction.stopImmediatePropagation = stopPropagation;
         this.interaction.preventDefault = prevDefault;
         this.interaction.setThrottleTimeout(timeoutThrottle);
-        dynamicNodes.forEach(node => {
+        for (const node of dynamicNodes) {
             interaction.registerToNodeChildren(node);
-        });
+        }
     }
 
     private configureLoggers(loggers: ReadonlyArray<LogLevel>): void {
-        if (loggers.length !== 0) {
+        if (loggers.length > 0) {
             this.logCmd = loggers.includes(LogLevel.command.valueOf());
             this.logBinding = loggers.includes(LogLevel.binding.valueOf());
             this.logUsage = loggers.includes(LogLevel.usage.valueOf());
@@ -90,21 +90,22 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
         if (this.firstFn !== undefined && cmd !== undefined) {
             try {
                 this.firstFn(cmd, this.interaction.data);
-            } catch (ex: unknown) {
-                this.catch(ex);
-                this.logger.logBindingErr("Crash in 'first'", ex);
+            } catch (error: unknown) {
+                this.catch(error);
+                this.logger.logBindingErr("Crash in 'first'", error);
             }
         }
     }
 
+    // eslint-disable-next-line unicorn/no-thenable
     public override then(): void {
         const cmd = this.command;
         if (this.thenFn !== undefined && cmd !== undefined) {
             try {
                 this.thenFn(cmd, this.interaction.data);
-            } catch (ex: unknown) {
-                this.catch(ex);
-                this.logger.logBindingErr("Crash in 'then'", ex);
+            } catch (error: unknown) {
+                this.catch(error);
+                this.logger.logBindingErr("Crash in 'then'", error);
             }
         }
     }
@@ -114,9 +115,9 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
         if (this.onEndFn !== undefined && cmd !== undefined) {
             try {
                 this.onEndFn(cmd, this.interaction.data);
-            } catch (ex: unknown) {
-                this.catch(ex);
-                this.logger.logBindingErr("Crash in 'end'", ex);
+            } catch (error: unknown) {
+                this.catch(error);
+                this.logger.logBindingErr("Crash in 'end'", error);
             }
         }
     }
@@ -125,9 +126,9 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
         if (this.cancelFn !== undefined) {
             try {
                 this.cancelFn(this.interaction.data);
-            } catch (ex: unknown) {
-                this.catch(ex);
-                this.logger.logBindingErr("Crash in 'cancel'", ex);
+            } catch (error: unknown) {
+                this.catch(error);
+                this.logger.logBindingErr("Crash in 'cancel'", error);
             }
         }
     }
@@ -136,9 +137,9 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
         if (this.endOrCancelFn !== undefined) {
             try {
                 this.endOrCancelFn(this.interaction.data);
-            } catch (ex: unknown) {
-                this.catch(ex);
-                this.logger.logBindingErr("Crash in 'endOrCancel'", ex);
+            } catch (error: unknown) {
+                this.catch(error);
+                this.logger.logBindingErr("Crash in 'endOrCancel'", error);
             }
         }
     }
@@ -148,9 +149,9 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
         if (this.hadNoEffectFn !== undefined && cmd !== undefined) {
             try {
                 this.hadNoEffectFn(cmd, this.interaction.data);
-            } catch (ex: unknown) {
-                this.catch(ex);
-                this.logger.logBindingErr("Crash in 'ifHadNoEffect'", ex);
+            } catch (error: unknown) {
+                this.catch(error);
+                this.logger.logBindingErr("Crash in 'ifHadNoEffect'", error);
             }
         }
     }
@@ -160,9 +161,9 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
         if (this.hadEffectsFn !== undefined && cmd !== undefined) {
             try {
                 this.hadEffectsFn(cmd, this.interaction.data);
-            } catch (ex: unknown) {
-                this.catch(ex);
-                this.logger.logBindingErr("Crash in 'ifHadEffects'", ex);
+            } catch (error: unknown) {
+                this.catch(error);
+                this.logger.logBindingErr("Crash in 'ifHadEffects'", error);
             }
         }
     }
@@ -172,9 +173,9 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
         if (this.cannotExecFn !== undefined && cmd !== undefined) {
             try {
                 this.cannotExecFn(cmd, this.interaction.data);
-            } catch (ex: unknown) {
-                this.catch(ex);
-                this.logger.logBindingErr("Crash in 'ifCannotExecute'", ex);
+            } catch (error: unknown) {
+                this.catch(error);
+                this.logger.logBindingErr("Crash in 'ifCannotExecute'", error);
             }
         }
     }
@@ -205,10 +206,10 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
         let res: boolean;
         try {
             res = when.fn(this.interaction.data);
-        } catch (ex: unknown) {
+        } catch (error: unknown) {
             res = false;
-            this.catch(ex);
-            this.logger.logBindingErr("Crash in checking condition", ex);
+            this.catch(error);
+            this.logger.logBindingErr("Crash in checking condition", error);
         }
         if (!res && isWhenStrict(when.type)) {
             if (this.logBinding) {
@@ -224,8 +225,8 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
         if (this.onErrFn !== undefined) {
             try {
                 this.onErrFn(err);
-            } catch (ex: unknown) {
-                this.logger.logBindingErr("Crash in 'catch'", ex);
+            } catch (error: unknown) {
+                this.logger.logBindingErr("Crash in 'catch'", error);
             }
         }
     }

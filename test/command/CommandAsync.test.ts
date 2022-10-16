@@ -149,10 +149,8 @@ describe("testing async commands and bindings", () => {
         });
 
         test("button binding with async command does not end when the command is not disposed", async () => {
-            const end = jest.fn(() => {
-            });
-            const first = jest.fn(() => {
-            });
+            const end = jest.fn(() => {});
+            const first = jest.fn(() => {});
             binding = bindings.buttonBinder()
                 .toProduce(() => new StubAsyncCmd(data, 50))
                 .on(button1)
@@ -170,10 +168,8 @@ describe("testing async commands and bindings", () => {
         });
 
         test("button binding with async command ends when the command is disposed", async () => {
-            const end = jest.fn(() => {
-            });
-            const first = jest.fn(() => {
-            });
+            const end = jest.fn(() => {});
+            const first = jest.fn(() => {});
             binding = bindings.buttonBinder()
                 .toProduce(() => new StubAsyncCmd(data, 50))
                 .on(button1)
@@ -237,10 +233,8 @@ describe("testing async commands and bindings", () => {
         test("two button clicks with async command, first/end ok when waiting ongoing cmd", async () => {
             cmd = new StubAsyncCmd(data, 50);
             const cmd2 = new StubAsyncCmd(data, 5);
-            const end = jest.fn(() => {
-            });
-            const first = jest.fn(() => {
-            });
+            const end = jest.fn(() => {});
+            const first = jest.fn(() => {});
 
             binding = bindings.buttonBinder()
                 .toProduce(fn()
@@ -268,10 +262,8 @@ describe("testing async commands and bindings", () => {
         test("two button clicks with async command, first/end ok when not waiting ongoing cmd", async () => {
             cmd = new StubAsyncCmd(data, 100);
             const cmd2 = new StubAsyncCmd(data, 50);
-            const end = jest.fn(() => {
-            });
-            const first = jest.fn(() => {
-            });
+            const end = jest.fn(() => {});
+            const first = jest.fn(() => {});
 
             binding = bindings.buttonBinder()
                 .toProduce(fn()

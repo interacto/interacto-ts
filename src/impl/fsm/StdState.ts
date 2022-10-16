@@ -37,6 +37,5 @@ export class StdState extends OutputStateBase implements InputState {
         this.fsm.enterStdState(this);
     }
 
-    public exit(): void {
-    }
+    public exit(): void {}
 }

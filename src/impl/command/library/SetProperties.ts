@@ -49,25 +49,24 @@ export class SetProperties<T> extends UndoableCommand {
     }
 
     public override execute(): Promise<boolean> | boolean {
-        this.compositeCmds.forEach(cmd => {
+        for (const cmd of this.compositeCmds) {
             // eslint-disable-next-line no-void
             void cmd.execute();
-        });
+        }
         return super.execute();
     }
 
-    protected execution(): void {
-    }
+    protected execution(): void {}
 
     public redo(): void {
-        this.compositeCmds.forEach(cmd => {
+        for (const cmd of this.compositeCmds) {
             cmd.redo();
-        });
+        }
     }
 
     public undo(): void {
-        this.compositeCmds.forEach(cmd => {
+        for (const cmd of this.compositeCmds) {
             cmd.undo();
-        });
+        }
     }
 }

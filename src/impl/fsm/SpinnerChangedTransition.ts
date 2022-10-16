@@ -22,6 +22,8 @@ import type {EventType} from "../../api/fsm/EventType";
  * An FSM transition for the Spinner HTML element.
  */
 export class SpinnerChangedTransition extends TransitionBase<Event> {
+    private static readonly acceptedEvents: ReadonlySet<EventType> = new Set(["input"]);
+
     /**
      * Creates the transition.
      */
@@ -34,7 +36,7 @@ export class SpinnerChangedTransition extends TransitionBase<Event> {
         return event.currentTarget !== null && isSpinner(event.currentTarget);
     }
 
-    public getAcceptedEvents(): ReadonlyArray<EventType> {
-        return ["input"];
+    public getAcceptedEvents(): ReadonlySet<EventType> {
+        return SpinnerChangedTransition.acceptedEvents;
     }
 }

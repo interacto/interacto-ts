@@ -8,13 +8,15 @@ module.exports = {
   },
   plugins: [
     '@typescript-eslint',
-    'eslint-plugin-tsdoc'
+    'eslint-plugin-tsdoc',
+    "unicorn"
   ],
   env: {
     browser: true,
     node: true,
     es6: true,
     jest: true,
+    es2022: true
   },
   overrides: [
     {
@@ -44,6 +46,7 @@ module.exports = {
         "max-lines-per-function": "off",
         "object-property-newline": "off",
         "complexity": ["error", { "max": 20 }],
+        "unicorn/no-null": "off"
       }
     }
   ],
@@ -51,7 +54,8 @@ module.exports = {
     "eslint:all",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/all",
-    "plugin:@typescript-eslint/recommended-requiring-type-checking"
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "plugin:unicorn/recommended"
   ],
   "rules": {
     "id-length": "off",
@@ -129,5 +133,28 @@ module.exports = {
     "no-multiple-empty-lines": ["error", { "max": 1 }],
     "no-restricted-syntax": ["error", "ForInStatement"],
     "one-var": ["error", "never"],
+
+    "unicorn/prevent-abbreviations": "off",
+    "unicorn/filename-case": [
+      "error",
+      {
+        "cases": {
+          "camelCase": true,
+          "pascalCase": true
+        },
+        "ignore": [
+          ".*FSM.*",
+          ".*SVG.*",
+          ".*HTML.*",
+        ]
+      }
+    ],
+    "unicorn/no-useless-undefined": "off",
+    "unicorn/consistent-function-scoping": [
+      "error",
+      {
+        "checkArrowFunctions": false
+      }
+    ]
   }
 };

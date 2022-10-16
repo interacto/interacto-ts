@@ -21,7 +21,7 @@ import type {EventType, KeyEventType} from "../../api/fsm/EventType";
  * A transition for a keys.
  */
 export class KeyTransition extends TransitionBase<KeyboardEvent> {
-    private readonly keyType: KeyEventType;
+    private readonly acceptedEvents: ReadonlySet<EventType> = new Set(["wheel"]);
 
     /**
      * Creates the transition.
@@ -29,14 +29,14 @@ export class KeyTransition extends TransitionBase<KeyboardEvent> {
     public constructor(srcState: OutputState, tgtState: InputState, keyType: KeyEventType,
                        action?: (evt: Event) => void, guard?: (evt: Event) => boolean) {
         super(srcState, tgtState, action, guard);
-        this.keyType = keyType;
+        this.acceptedEvents = new Set([keyType]);
     }
 
     public accept(event: Event): event is KeyboardEvent {
-        return event instanceof KeyboardEvent && this.getAcceptedEvents().includes(event.type as EventType);
+        return event instanceof KeyboardEvent && this.getAcceptedEvents().has(event.type as EventType);
     }
 
-    public getAcceptedEvents(): ReadonlyArray<EventType> {
-        return [this.keyType];
+    public getAcceptedEvents(): ReadonlySet<EventType> {
+        return this.acceptedEvents;
     }
 }

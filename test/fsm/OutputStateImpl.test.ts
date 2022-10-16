@@ -15,7 +15,7 @@
 import type {FSMImpl} from "../../src/impl/fsm/FSMImpl";
 import type {InputState} from "../../src/api/fsm/InputState";
 import {OutputStateBase} from "../../src/impl/fsm/OutputStateBase";
-import {StubTransitionOK} from "./StubTransitionOK";
+import {StubTransitionOK} from "./StubTransitionOk";
 import {StdState} from "../../src/impl/fsm/StdState";
 import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
@@ -35,8 +35,7 @@ beforeEach(() => {
             super(fsm, "os");
         }
 
-        public exit(): void {
-        }
+        public exit(): void {}
     }();
 });
 

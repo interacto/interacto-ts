@@ -39,6 +39,5 @@ export abstract class StateBase implements State {
         }
     }
 
-    public uninstall(): void {
-    }
+    public uninstall(): void {}
 }

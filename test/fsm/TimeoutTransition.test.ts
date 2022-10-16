@@ -104,7 +104,7 @@ test("stop when not started", () => {
 });
 
 test("getAcceptEventsEmpty", () => {
-    expect(evt.getAcceptedEvents()).toHaveLength(0);
+    expect(evt.getAcceptedEvents()).toStrictEqual(new Set());
 });
 
 test("executeWithoutTimeout", () => {
@@ -113,8 +113,7 @@ test("executeWithoutTimeout", () => {
 
 test("executeWithTimeout", () => {
     evt.startTimeout();
-    setTimeout(() => {
-    }, 100);
+    setTimeout(() => {}, 100);
     jest.runOnlyPendingTimers();
     expect(evt.execute(undefined)).toStrictEqual(tgt);
 });

@@ -30,8 +30,8 @@ beforeEach(() => {
     interaction.fsm.log = true;
     interaction.fsm.addHandler(handler);
     document.documentElement.innerHTML = "<html><svg><g id='gro'><circle r=\"1\" id='circle'></circle><text></text></g></svg></html>";
-    groupe = document.getElementById("gro") as HTMLElement;
-    circle = document.getElementById("circle") as HTMLElement;
+    groupe = document.querySelector("#gro") as HTMLElement;
+    circle = document.querySelector("#circle") as HTMLElement;
 });
 
 test("current target with group tag", () => {

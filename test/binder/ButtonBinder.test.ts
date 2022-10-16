@@ -259,11 +259,11 @@ test("builderCloned", () => {
     expect(binder).not.toBe(bindings.buttonBinder());
     expect(binder).not.toBe(bindings.buttonBinder().toProduce(() => cmd));
     expect(binder).not.toBe(bindings.buttonBinder().toProduce(() => cmd)
-        .first(() => { }));
+        .first(() => {}));
     expect(binder).not.toBe(bindings.buttonBinder().on(button1));
     expect(binder).not.toBe(bindings.buttonBinder().when(() => false));
     expect(binder).not.toBe(bindings.buttonBinder().toProduce(_i => cmd)
-        .end(_c => { }));
+        .end(_c => {}));
     expect(binder).not.toBe(bindings.buttonBinder().log(LogLevel.command));
 });
 
@@ -373,7 +373,7 @@ test("on dynamic eltRef", async () => {
         .onDynamic(eltRef)
         .bind();
 
-    div.appendChild(button1);
+    div.append(button1);
     await Promise.resolve();
     button1.click();
     button2.click();
@@ -397,7 +397,7 @@ describe("on dynamic", () => {
             .onDynamic(div)
             .bind();
 
-        div.appendChild(button1);
+        div.append(button1);
         await Promise.resolve();
 
         button1.click();
@@ -412,9 +412,9 @@ describe("on dynamic", () => {
             .onDynamic(div)
             .bind();
 
-        div.appendChild(button2);
+        div.append(button2);
         await Promise.resolve();
-        div.appendChild(button3);
+        div.append(button3);
         await Promise.resolve();
 
         button2.click();
@@ -442,11 +442,11 @@ describe("on dynamic", () => {
             .toProduce(() => new StubCmd(true))
             .bind();
 
-        div.appendChild(button2);
+        div.append(button2);
         await Promise.resolve();
-        div.appendChild(button3);
+        div.append(button3);
         await Promise.resolve();
-        div.removeChild(button2);
+        button2.remove();
         await Promise.resolve();
 
         button2.click();

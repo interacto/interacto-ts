@@ -97,7 +97,7 @@ export class LoggerImpl implements Logger {
         this.serverAddress = undefined;
         this.writeConsole = true;
         this.sessionID = Date.now().toString(36) + Math.random().toString(36)
-            .substr(2, 6);
+            .slice(2, 8);
     }
 
     private processLoggingData(data: LoggingData): void {

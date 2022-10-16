@@ -18,10 +18,9 @@
  * @param touches - The list of touches to search in.
  */
 export function getTouch(touches: TouchList, idToFind?: number): Touch | undefined {
-    // eslint-disable-next-line @typescript-eslint/prefer-for-of
-    for (let i = 0; i < touches.length; i++) {
-        if (touches[i].identifier === idToFind) {
-            return touches[i];
+    for (const touch of touches) {
+        if (touch.identifier === idToFind) {
+            return touch;
         }
     }
     return undefined;

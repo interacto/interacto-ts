@@ -141,6 +141,7 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, D extends I
         return super.preventDefault() as KeysBinder<C, I, D>;
     }
 
+    // eslint-disable-next-line unicorn/no-thenable
     public override then(fn: ((c: C, i: D) => void) | ((c: C) => void)): KeysBinder<C, I, D> {
         return super.then(fn) as KeysBinder<C, I, D>;
     }
