@@ -1,35 +1,35 @@
-module.exports = {
-  root: true,
-  parser: '@typescript-eslint/parser',
-  parserOptions: {
-    project: "tsconfig.eslint.json",
-    ecmaVersion: 2020,
-    sourceType: 'module',
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "tsconfig.eslint.json",
+    "ecmaVersion": 2020,
+    "sourceType": "module"
   },
-  plugins: [
-    '@typescript-eslint',
-    'eslint-plugin-tsdoc',
+  "plugins": [
+    "@typescript-eslint",
+    "eslint-plugin-tsdoc",
     "unicorn",
     "eslint-plugin-array-func"
   ],
-  env: {
-    browser: true,
-    node: true,
-    es6: true,
-    jest: true,
-    es2022: true
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true,
+    "jest": true,
+    "es2022": true
   },
-  overrides: [
+  "overrides": [
     {
-      files: [
+      "files": [
         "test/**/*.test.ts"
       ],
-      env: {
-        jest: true
+      "env": {
+        "jest": true
       },
-      extends: ["plugin:jest/all"],
-      plugins: ["jest"],
-      rules: {
+      "extends": ["plugin:jest/all"],
+      "plugins": ["jest"],
+      "rules": {
         "jest/max-expects": "off",
         "jest/no-disabled-tests": "warn",
         "jest/prefer-spy-on": "off",
@@ -51,7 +51,7 @@ module.exports = {
       }
     }
   ],
-  extends: [
+  "extends": [
     "eslint:all",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/all",
@@ -147,7 +147,7 @@ module.exports = {
         "ignore": [
           ".*FSM.*",
           ".*SVG.*",
-          ".*HTML.*",
+          ".*HTML.*"
         ]
       }
     ],
@@ -163,4 +163,4 @@ module.exports = {
     "unicorn/prefer-at": "off",
     "unicorn/prefer-spread": "off"
   }
-};
+}
