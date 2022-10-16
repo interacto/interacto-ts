@@ -55,7 +55,7 @@ module.exports = {
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/all",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
-    "plugin:unicorn/recommended"
+    "plugin:unicorn/all"
   ],
   "rules": {
     "id-length": "off",
@@ -155,6 +155,9 @@ module.exports = {
       {
         "checkArrowFunctions": false
       }
-    ]
+    ],
+    "unicorn/no-keyword-prefix": "off",
+    // requires es2022:
+    "unicorn/prefer-at": "off"
   }
 };

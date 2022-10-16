@@ -78,7 +78,7 @@ export * from "./impl/command/library/Undo";
 export * from "./impl/command/library/UndoNTimes";
 export * from "./impl/fsm/BoxCheckPressedTransition";
 export * from "./impl/fsm/ButtonPressedTransition";
-export * from "./impl/fsm/CancelFSMException";
+export * from "./impl/fsm/CancelFSMError";
 export * from "./impl/fsm/CancellingState";
 export * from "./impl/fsm/ClickTransition";
 export * from "./impl/fsm/ColorPickedTransition";

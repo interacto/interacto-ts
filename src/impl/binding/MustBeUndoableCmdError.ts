@@ -18,6 +18,7 @@
 export class MustBeUndoableCmdError extends Error {
     public constructor(cmdProducer: unknown) {
         super(`The following command must be undoable: ${String(cmdProducer)}`);
+        this.name = "MustBeUndoableCmdError";
     }
 }
 

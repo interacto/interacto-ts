@@ -13,10 +13,11 @@
  */
 
 /**
- * The exception an FSM will throw to cancel the user interaction.
+ * The error an FSM will throw to cancel the user interaction.
  */
-export class CancelFSMException extends Error {
+export class CancelFSMError extends Error {
     public constructor() {
         super();
+        this.name = "CancelFSMError";
     }
 }

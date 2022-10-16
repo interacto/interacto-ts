@@ -24,7 +24,7 @@ import {isKeyDownEvent, isKeyUpEvent} from "./Events";
 import type {Observable} from "rxjs";
 import {Subject} from "rxjs";
 import {remove, removeAt} from "../util/ArrayUtil";
-import {CancelFSMException} from "./CancelFSMException";
+import {CancelFSMError} from "./CancelFSMError";
 import type {FSM} from "../../api/fsm/FSM";
 import type {Logger} from "../../api/logging/Logger";
 import {StdState} from "./StdState";
@@ -385,7 +385,7 @@ export class FSMImpl<T extends FSMDataHandler> implements FSM {
                 handler.fsmStarts?.();
             }
         } catch (error: unknown) {
-            if (!(error instanceof CancelFSMException || error instanceof MustBeUndoableCmdError)) {
+            if (!(error instanceof CancelFSMError || error instanceof MustBeUndoableCmdError)) {
                 this.logger.logInteractionErr("An 'fsmStarts' produced an error", error, this.constructor.name);
             }
             this.onCancelling();
@@ -403,7 +403,7 @@ export class FSMImpl<T extends FSMDataHandler> implements FSM {
                 handler.fsmUpdates?.();
             }
         } catch (error: unknown) {
-            if (!(error instanceof CancelFSMException || error instanceof MustBeUndoableCmdError)) {
+            if (!(error instanceof CancelFSMError || error instanceof MustBeUndoableCmdError)) {
                 this.logger.logInteractionErr("An 'fsmUpdates' produced an error", error, this.constructor.name);
             }
             this.onCancelling();
@@ -421,7 +421,7 @@ export class FSMImpl<T extends FSMDataHandler> implements FSM {
                 handler.fsmStops?.();
             }
         } catch (error: unknown) {
-            if (!(error instanceof CancelFSMException || error instanceof MustBeUndoableCmdError)) {
+            if (!(error instanceof CancelFSMError || error instanceof MustBeUndoableCmdError)) {
                 this.logger.logInteractionErr("An 'fsmStops' produced an error", error, this.constructor.name);
             }
             this.onCancelling();

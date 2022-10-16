@@ -17,7 +17,7 @@ import type {FSMHandler, Logger, OutputState, FSMDataHandler,
     CancellingState,
     TerminalState} from "../../src/interacto";
 import {
-    CancelFSMException,
+    CancelFSMError,
     FSMImpl,
     InitState,
     StdState,
@@ -380,7 +380,7 @@ describe("testProcessUniqueEvent", () => {
 
     test("cancelOnStart", () => {
         handler.fsmStarts = jest.fn(() => {
-            throw new CancelFSMException();
+            throw new CancelFSMError();
         });
         fsm.process(mock<Event>());
         expect(fsm.currentState).toBe(fsm.initState);
@@ -392,7 +392,7 @@ describe("testProcessUniqueEvent", () => {
 
     test("cancelOnUpdate", () => {
         handler.fsmUpdates = jest.fn(() => {
-            throw new CancelFSMException();
+            throw new CancelFSMError();
         });
         fsm.process(mock<Event>());
         expect(fsm.currentState).toBe(fsm.initState);
@@ -404,7 +404,7 @@ describe("testProcessUniqueEvent", () => {
 
     test("cancelOnEnd", () => {
         handler.fsmStops = jest.fn(() => {
-            throw new CancelFSMException();
+            throw new CancelFSMError();
         });
         fsm.process(mock<Event>());
         fsm.process(mock<Event>());
@@ -610,7 +610,7 @@ describe("testWithTimeoutTransition", () => {
 
     test("timeoutChangeStateThenCancel", () => {
         handler.fsmUpdates = jest.fn(() => {
-            throw new CancelFSMException();
+            throw new CancelFSMError();
         });
         fsm.process(mock<Event>());
         jest.runOnlyPendingTimers();

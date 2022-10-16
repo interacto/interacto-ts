@@ -21,7 +21,7 @@ import type {Logger} from "../../api/logging/Logger";
 import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
 import type {When} from "../../api/binder/When";
 import {isWhenAtEnd, isWhenAtStart, isWhenAtThen, isWhenStrict} from "../../api/binder/When";
-import {CancelFSMException} from "../fsm/CancelFSMException";
+import {CancelFSMError} from "../fsm/CancelFSMError";
 
 export class AnonBinding<C extends Command, I extends Interaction<D>, D extends InteractionData>
     extends BindingImpl<C, I, D> {
@@ -215,7 +215,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
             if (this.logBinding) {
                 this.logger.logBindingMsg(`Cancelling interaction: ${this._interaction.constructor.name}`);
             }
-            throw new CancelFSMException();
+            throw new CancelFSMError();
         }
 
         return res;

@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {CancelFSMException} from "../../src/impl/fsm/CancelFSMException";
+import {CancelFSMError} from "../../src/impl/fsm/CancelFSMError";
 import type {FSMImpl} from "../../src/impl/fsm/FSMImpl";
 import type {InputState} from "../../src/api/fsm/InputState";
 import type {OutputState} from "../../src/api/fsm/OutputState";
@@ -121,11 +121,11 @@ test("executeWithTimeout", () => {
 test("execute cancels", () => {
     jest.spyOn(tgt, "enter");
     tgt.enter.mockImplementation((): void => {
-        throw new CancelFSMException();
+        throw new CancelFSMError();
     });
     evt.startTimeout();
     jest.runOnlyPendingTimers();
-    expect(() => evt.execute(undefined)).toThrow(CancelFSMException);
+    expect(() => evt.execute(undefined)).toThrow(CancelFSMError);
 });
 
 test("fsm throws error in thread", () => {
