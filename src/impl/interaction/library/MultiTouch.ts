@@ -29,7 +29,7 @@ class MultiTouchFSM extends ConcurrentFSM<TouchDnDFSM, TouchDnDFSMHandler> {
      * Creates the FSM.
      */
     public constructor(nbTouch: number, totalReinit: boolean, logger: Logger, dataHandler: TouchDnDFSMHandler) {
-        super([...Array.from({"length": nbTouch}).keys()].map(_ => new TouchDnDFSM(false, logger, dataHandler, false)),
+        super(Array.from(Array.from({"length": nbTouch}).keys(), _ => new TouchDnDFSM(false, logger, dataHandler, false)),
             logger, totalReinit ? [new TouchDnDFSM(false, logger, dataHandler, false)] : [], totalReinit, dataHandler);
     }
 
@@ -43,7 +43,7 @@ class MultiTouchFSM extends ConcurrentFSM<TouchDnDFSM, TouchDnDFSMHandler> {
 
         // checking lost touch event
         if (event.type === "touchstart") {
-            const ids = new Set([...event.touches].map(touch => touch.identifier));
+            const ids = new Set(Array.from(event.touches, touch => touch.identifier));
             const losts = this.conccurFSMs.filter(fsm => {
                 const id = fsm.getTouchId();
                 return id !== undefined && !ids.has(id);
@@ -96,7 +96,7 @@ export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouch
                 // eslint-disable-next-line @typescript-eslint/prefer-for-of
                 for (let i = 0; i < event.changedTouches.length; i++) {
                     const data = new SrcTgtTouchDataImpl();
-                    const all = [...event.touches];
+                    const all = Array.from(event.touches);
                     data.copySrc(event.changedTouches[i], event, all);
                     data.copyTgt(event.changedTouches[i], event, all);
                     this._data.addTouchData(data);

@@ -65,8 +65,8 @@ export class ConcurrentFSM<F extends FSM, T extends FSMDataHandler> extends FSMI
                 this.notifyHandlerOnError(err);
             }
         };
-        this._conccurFSMs = [...fsms];
-        this._secondaryFSMs = [...secondaries];
+        this._conccurFSMs = Array.from(fsms);
+        this._secondaryFSMs = Array.from(secondaries);
         for (const fsm of this.conccurFSMs) {
             fsm.addHandler(handler);
         }
@@ -83,14 +83,14 @@ export class ConcurrentFSM<F extends FSM, T extends FSMDataHandler> extends FSMI
      * @returns The main FSMs
      */
     public get conccurFSMs(): ReadonlyArray<F> {
-        return [...this._conccurFSMs];
+        return Array.from(this._conccurFSMs);
     }
 
     /**
      * @returns The secondary FSMs
      */
     public get secondaryFSMs(): ReadonlyArray<FSM> {
-        return [...this._secondaryFSMs];
+        return Array.from(this._secondaryFSMs);
     }
 
     public override process(event: Event): boolean {

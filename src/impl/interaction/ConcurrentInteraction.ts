@@ -63,7 +63,7 @@ export abstract class ConcurrentInteraction<D extends InteractionData, DImpl ext
     }
 
     public override getCurrentAcceptedEvents(_state?: OutputState): ReadonlyArray<EventType> {
-        return this.fsm.getAllConccurFSMs().flatMap(concFSM => [...this.getEventTypesOf(concFSM.currentState)]);
+        return this.fsm.getAllConccurFSMs().flatMap(concFSM => Array.from(this.getEventTypesOf(concFSM.currentState)));
     }
 
     public override uninstall(): void {

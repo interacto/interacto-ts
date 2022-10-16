@@ -204,7 +204,7 @@ export class FSMImpl<T extends FSMDataHandler> implements FSM {
      * The end of the FSM execution, the events still (eg keyPress) in process must be recycled to be reused in the FSM.
      */
     protected processRemainingEvents(): void {
-        const list: ReadonlyArray<Event> = [...this.eventsToProcess];
+        const list: ReadonlyArray<Event> = Array.from(this.eventsToProcess);
 
         for (const event of list) {
             removeAt(this.eventsToProcess, 0);
@@ -380,8 +380,7 @@ export class FSMImpl<T extends FSMDataHandler> implements FSM {
      */
     protected notifyHandlerOnStart(): void {
         try {
-            // eslint-disable-next-line unicorn/no-useless-spread
-            for (const handler of [...this.handlers]) {
+            for (const handler of Array.from(this.handlers)) {
                 handler.fsmStarts?.();
             }
         } catch (error: unknown) {
@@ -398,8 +397,7 @@ export class FSMImpl<T extends FSMDataHandler> implements FSM {
      */
     protected notifyHandlerOnUpdate(): void {
         try {
-            // eslint-disable-next-line unicorn/no-useless-spread
-            for (const handler of [...this.handlers]) {
+            for (const handler of Array.from(this.handlers)) {
                 handler.fsmUpdates?.();
             }
         } catch (error: unknown) {
@@ -416,8 +414,7 @@ export class FSMImpl<T extends FSMDataHandler> implements FSM {
      */
     public notifyHandlerOnStop(): void {
         try {
-            // eslint-disable-next-line unicorn/no-useless-spread
-            for (const handler of [...this.handlers]) {
+            for (const handler of Array.from(this.handlers)) {
                 handler.fsmStops?.();
             }
         } catch (error: unknown) {
@@ -434,8 +431,7 @@ export class FSMImpl<T extends FSMDataHandler> implements FSM {
      */
     protected notifyHandlerOnCancel(): void {
         try {
-            // eslint-disable-next-line unicorn/no-useless-spread
-            for (const handler of [...this.handlers]) {
+            for (const handler of Array.from(this.handlers)) {
                 handler.fsmCancels?.();
             }
         } catch (error: unknown) {
@@ -451,8 +447,7 @@ export class FSMImpl<T extends FSMDataHandler> implements FSM {
      */
     protected notifyHandlerOnError(err: unknown): void {
         try {
-            // eslint-disable-next-line unicorn/no-useless-spread
-            for (const handler of [...this.handlers]) {
+            for (const handler of Array.from(this.handlers)) {
                 handler.fsmError?.(err);
             }
         } catch (error: unknown) {
@@ -461,11 +456,11 @@ export class FSMImpl<T extends FSMDataHandler> implements FSM {
     }
 
     public get states(): ReadonlyArray<State> {
-        return [...this._states];
+        return Array.from(this._states);
     }
 
     public getEventsToProcess(): ReadonlyArray<Event> {
-        return [...this.eventsToProcess];
+        return Array.from(this.eventsToProcess);
     }
 
     public uninstall(): void {

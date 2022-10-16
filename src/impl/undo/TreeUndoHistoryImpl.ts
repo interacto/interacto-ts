@@ -190,7 +190,7 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
 
         // Cloning the array since 'delete' may alter the children list.
         // eslint-disable-next-line unicorn/no-useless-spread
-        for (const child of [...node.children]) {
+        for (const child of Array.from(node.children)) {
             this.delete(child.id);
         }
 

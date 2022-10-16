@@ -64,19 +64,19 @@ export class UpdateBinder<C extends Command, I extends Interaction<D>, D extends
 
     protected copyFnArraysUpdate(): void {
         super.copyFnArrays();
-        this.thenFnArray = [...this.thenFnArray];
+        this.thenFnArray = Array.from(this.thenFnArray);
         this.thenFn = (c: C, i: D): void => {
             for (const fn of this.thenFnArray) {
                 fn(c, i);
             }
         };
-        this.cancelFnArray = [...this.cancelFnArray];
+        this.cancelFnArray = Array.from(this.cancelFnArray);
         this.cancelFn = (i: D): void => {
             for (const fn of this.cancelFnArray) {
                 fn(i);
             }
         };
-        this.endOrCancelFnArray = [...this.endOrCancelFnArray];
+        this.endOrCancelFnArray = Array.from(this.endOrCancelFnArray);
         this.endOrCancelFn = (i: D): void => {
             for (const fn of this.endOrCancelFnArray) {
                 fn(i);
@@ -193,8 +193,8 @@ export class UpdateBinder<C extends Command, I extends Interaction<D>, D extends
         }
 
         const binding = new AnonBinding(this.continuousCmdExecution, this.usingFn(), this.undoHistory, this.logger, this.produceFn,
-            [...this.widgets], [...this.dynamicNodes], [...this.logLevels],
-            this.throttleTimeout, this.stopPropagation, this.prevDefault, this.firstFn, this.thenFn, [...this.whenFnArray],
+            Array.from(this.widgets), Array.from(this.dynamicNodes), Array.from(this.logLevels),
+            this.throttleTimeout, this.stopPropagation, this.prevDefault, this.firstFn, this.thenFn, Array.from(this.whenFnArray),
             this.endFn, this.cancelFn, this.endOrCancelFn, this.hadEffectsFn,
             this.hadNoEffectFn, this.cannotExecFn, this.onErrFn, this.bindingName);
 

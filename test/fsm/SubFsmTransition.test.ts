@@ -86,16 +86,16 @@ test("get accepted events", () => {
     tr2.getAcceptedEvents = jest.fn(() => new Set(["click", "auxclick"]));
     fsm.initState.addTransition(tr2);
     const evts = tr.getAcceptedEvents();
-    expect([...evts]).toHaveLength(2);
+    expect(Array.from(evts)).toHaveLength(2);
     expect(evts.has("click")).toBeTruthy();
     expect(evts.has("auxclick")).toBeTruthy();
-    expect(evts.has([...fsm.initState.transitions[0].getAcceptedEvents()][0])).toBeTruthy();
+    expect(evts.has(Array.from(fsm.initState.transitions[0].getAcceptedEvents())[0])).toBeTruthy();
 });
 
 test("get accepted events when nothing to return", () => {
     fsm.initState.clearTransitions();
     const evts = tr.getAcceptedEvents();
-    expect([...evts]).toHaveLength(0);
+    expect(Array.from(evts)).toHaveLength(0);
 });
 
 test("executeExitSrcState", () => {

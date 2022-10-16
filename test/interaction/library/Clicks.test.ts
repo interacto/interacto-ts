@@ -52,7 +52,7 @@ describe.each([3, 4])("testing clicks with %s clicks", nb => {
 
     // slice(1) to remove 0
     // Array(nb).keys() to have [0, 1, 2] or [0, 1, 2, 3]
-    test.each([...Array.from({"length": nb}).keys()].slice(1))(`that %s on ${nb} is not enough`, nbClick => {
+    test.each(Array.from(Array.from({"length": nb}).keys()).slice(1))(`that %s on ${nb} is not enough`, nbClick => {
         for (let i = 0; i < nbClick; i++) {
             interaction.processEvent(createMouseEvent("click", canvas, 15, 21, 160, 21, 2));
         }
@@ -63,7 +63,7 @@ describe.each([3, 4])("testing clicks with %s clicks", nb => {
         expect(handler.fsmCancels).not.toHaveBeenCalled();
     });
 
-    test.each([...Array.from({"length": nb}).keys()].slice(1))(`that %s on ${nb} is not enough with timeout`, nbClick => {
+    test.each(Array.from(Array.from({"length": nb}).keys()).slice(1))(`that %s on ${nb} is not enough with timeout`, nbClick => {
         for (let i = 0; i < nbClick; i++) {
             interaction.processEvent(createMouseEvent("click", canvas, 15, 21, 160, 21, 3));
         }

@@ -107,39 +107,39 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
      */
     protected copyFnArrays(): void {
         // Clones the arrays (instead of just copying the reference from the previous binder)
-        this.whenFnArray = [...this.whenFnArray];
+        this.whenFnArray = Array.from(this.whenFnArray);
 
-        this.firstFnArray = [...this.firstFnArray];
+        this.firstFnArray = Array.from(this.firstFnArray);
         this.firstFn = (c: C, i: D): void => {
             for (const fn of this.firstFnArray) {
                 fn(c, i);
             }
         };
-        this.endFnArray = [...this.endFnArray];
+        this.endFnArray = Array.from(this.endFnArray);
         this.endFn = (c: C, i: D): void => {
             for (const fn of this.endFnArray) {
                 fn(c, i);
             }
         };
-        this.hadEffectsFnArray = [...this.hadEffectsFnArray];
+        this.hadEffectsFnArray = Array.from(this.hadEffectsFnArray);
         this.hadEffectsFn = (c: C, i: D): void => {
             for (const fn of this.hadEffectsFnArray) {
                 fn(c, i);
             }
         };
-        this.hadNoEffectFnArray = [...this.hadNoEffectFnArray];
+        this.hadNoEffectFnArray = Array.from(this.hadNoEffectFnArray);
         this.hadNoEffectFn = (c: C, i: D): void => {
             for (const fn of this.hadNoEffectFnArray) {
                 fn(c, i);
             }
         };
-        this.cannotExecFnArray = [...this.cannotExecFnArray];
+        this.cannotExecFnArray = Array.from(this.cannotExecFnArray);
         this.cannotExecFn = (c: C, i: D): void => {
             for (const fn of this.cannotExecFnArray) {
                 fn(c, i);
             }
         };
-        this.onErrFnArray = [...this.onErrFnArray];
+        this.onErrFnArray = Array.from(this.onErrFnArray);
         this.onErrFn = (ex: unknown): void => {
             for (const fn of this.onErrFnArray) {
                 fn(ex);
@@ -149,14 +149,17 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
 
     public on<W>(widget: ReadonlyArray<Widget<W>> | Widget<W>, ...widgets: ReadonlyArray<Widget<W>>): Binder<C, I, D> {
         // eslint-disable-next-line unicorn/prefer-spread
-        const ws = [...widgets].concat(widget).map(w => {
-            if (isEltRef(w)) {
-                return w.nativeElement;
-            }
-            return w;
-        });
+        const ws = Array
+            .from(widgets)
+            .concat(widget)
+            .map(w => {
+                if (isEltRef(w)) {
+                    return w.nativeElement;
+                }
+                return w;
+            });
         // eslint-disable-next-line unicorn/prefer-spread
-        const w: ReadonlyArray<unknown> = this.widgets.length === 0 ? ws : [...this.widgets].concat(ws);
+        const w: ReadonlyArray<unknown> = this.widgets.length === 0 ? ws : Array.from(this.widgets).concat(ws);
         const dup = this.duplicate();
         dup.widgets = w;
         return dup;
@@ -166,7 +169,7 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
         const dup = this.duplicate();
         const nodeEvt = isEltRef(node) ? node.nativeElement : node;
         // eslint-disable-next-line unicorn/prefer-spread
-        dup.dynamicNodes = [...this.dynamicNodes].concat(nodeEvt);
+        dup.dynamicNodes = Array.from(this.dynamicNodes).concat(nodeEvt);
         return dup;
     }
 
@@ -211,7 +214,7 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
 
     public log(...level: ReadonlyArray<LogLevel>): Binder<C, I, D> {
         const dup = this.duplicate();
-        dup.logLevels = [...level];
+        dup.logLevels = Array.from(level);
         return dup;
     }
 

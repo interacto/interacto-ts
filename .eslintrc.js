@@ -9,7 +9,8 @@ module.exports = {
   plugins: [
     '@typescript-eslint',
     'eslint-plugin-tsdoc',
-    "unicorn"
+    "unicorn",
+    "eslint-plugin-array-func"
   ],
   env: {
     browser: true,
@@ -55,7 +56,8 @@ module.exports = {
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/all",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
-    "plugin:unicorn/all"
+    "plugin:unicorn/all",
+    "plugin:eslint-plugin-array-func/recommended"
   ],
   "rules": {
     "id-length": "off",
@@ -158,6 +160,7 @@ module.exports = {
     ],
     "unicorn/no-keyword-prefix": "off",
     // requires es2022:
-    "unicorn/prefer-at": "off"
+    "unicorn/prefer-at": "off",
+    "unicorn/prefer-spread": "off"
   }
 };

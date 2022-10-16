@@ -30,7 +30,7 @@ export class TapDataImpl implements TapData, Flushable {
     }
 
     public get taps(): ReadonlyArray<TouchData> {
-        return [...this.tapsData];
+        return Array.from(this.tapsData);
     }
 
     /**

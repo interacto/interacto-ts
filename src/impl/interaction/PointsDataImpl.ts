@@ -26,7 +26,7 @@ export class PointsDataImpl implements PointsData {
     }
 
     public get points(): ReadonlyArray<PointData> {
-        return [...this.pointsData];
+        return Array.from(this.pointsData);
     }
 
     public get currentPosition(): PointData | undefined {

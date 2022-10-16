@@ -32,7 +32,7 @@ export class MultiTouchDataImpl implements MultiTouchData, Flushable {
     }
 
     public get touches(): ReadonlyArray<SrcTgtPointsData<TouchData>> {
-        return [...this.touchesData.values()];
+        return Array.from(this.touchesData.values());
     }
 
     /**
@@ -68,7 +68,7 @@ export class MultiTouchDataImpl implements MultiTouchData, Flushable {
     public setTouch(tp: Touch, evt: TouchEvent): void {
         const tdata = this.touchesData.get(tp.identifier);
         if (tdata !== undefined) {
-            tdata.copyTgt(tp, evt, [...evt.touches]);
+            tdata.copyTgt(tp, evt, Array.from(evt.touches));
         }
     }
 

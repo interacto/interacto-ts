@@ -53,7 +53,7 @@ export abstract class OutputStateBase extends StateBase implements OutputState {
     }
 
     public get transitions(): ReadonlyArray<Transition<Event>> {
-        return [...this._transitions];
+        return Array.from(this._transitions);
     }
 
     public addTransition(tr: Transition<Event>): void {

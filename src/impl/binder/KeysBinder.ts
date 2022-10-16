@@ -54,7 +54,7 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, D extends I
         this.copyFnArraysUpdate();
 
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        this.keysOrCodes = this.keysOrCodes === undefined ? [] : [...this.keysOrCodes];
+        this.keysOrCodes = this.keysOrCodes === undefined ? [] : Array.from(this.keysOrCodes);
         this.completeWhenWithKeysPredicates();
     }
 
@@ -92,7 +92,7 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, D extends I
 
     public with(isCode: boolean, ...keysOrCodes: ReadonlyArray<string>): KeysBinder<C, I, D> {
         const dup = this.duplicate();
-        dup.keysOrCodes = [...keysOrCodes];
+        dup.keysOrCodes = Array.from(keysOrCodes);
         dup.isCode = isCode;
         return dup;
     }
@@ -196,9 +196,9 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, D extends I
         }
 
         const binding = new AnonBinding(this.continuousCmdExecution, this.usingFn(), this.undoHistory,
-            this.logger, this.produceFn, [...this.widgets], [...this.dynamicNodes],
-            [...this.logLevels], this.throttleTimeout,
-            this.stopPropagation, this.prevDefault, this.firstFn, this.thenFn, [...this.whenFnArray],
+            this.logger, this.produceFn, Array.from(this.widgets), Array.from(this.dynamicNodes),
+            Array.from(this.logLevels), this.throttleTimeout,
+            this.stopPropagation, this.prevDefault, this.firstFn, this.thenFn, Array.from(this.whenFnArray),
             this.endFn, this.cancelFn, this.endOrCancelFn, this.hadEffectsFn,
             this.hadNoEffectFn, this.cannotExecFn, this.onErrFn, this.bindingName);
 

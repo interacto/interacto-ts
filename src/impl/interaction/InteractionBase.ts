@@ -171,7 +171,7 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
         }
 
         const currEvents: ReadonlyArray<EventType> = this.getCurrentAcceptedEvents(newState);
-        const events: ReadonlyArray<EventType> = [...this.getEventTypesOf(oldState)];
+        const events: ReadonlyArray<EventType> = Array.from(this.getEventTypesOf(oldState));
         const eventsToRemove: ReadonlyArray<EventType> = events.filter(e => !currEvents.includes(e));
         const eventsToAdd: ReadonlyArray<EventType> = currEvents.filter(e => !events.includes(e));
         for (const n of this.registeredNodes) {
@@ -185,7 +185,7 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
     }
 
     protected getCurrentAcceptedEvents(state: OutputState): ReadonlyArray<EventType> {
-        return [...this.getEventTypesOf(state)];
+        return Array.from(this.getEventTypesOf(state));
     }
 
     private callBackMutationObserver(mutationList: ReadonlyArray<MutationRecord>): void {

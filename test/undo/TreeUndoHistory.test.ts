@@ -98,7 +98,7 @@ describe("using a tree undo history", () => {
     });
 
     test("get positions when empty", () => {
-        expect([...history.getPositions().keys()]).toHaveLength(1);
+        expect(Array.from(history.getPositions().keys())).toHaveLength(1);
     });
 
     describe("and testing subscriptions", () => {
@@ -232,7 +232,7 @@ describe("using a tree undo history", () => {
 
         test("width when one element", () => {
             const positions = history.getPositions();
-            expect([...positions.keys()]).toHaveLength(2);
+            expect(Array.from(positions.keys())).toHaveLength(2);
             expect(positions.get(0)).toBe(0);
             expect(positions.get(-1)).toBe(0);
         });
@@ -590,7 +590,7 @@ describe("using a tree undo history", () => {
 
         test("compute positions when multiples elements", () => {
             const positions = history.getPositions();
-            expect([...positions.keys()]).toHaveLength(6);
+            expect(Array.from(positions.keys())).toHaveLength(6);
             expect(positions.get(-1)).toBe(1);
             expect(positions.get(0)).toBe(1);
             expect(positions.get(1)).toBe(0);
@@ -889,7 +889,7 @@ describe("using a tree undo history", () => {
 
         test("compute positions when multiples elements", () => {
             const positions = history.getPositions();
-            expect([...positions.keys()]).toHaveLength(16);
+            expect(Array.from(positions.keys())).toHaveLength(16);
             expect(positions.get(-1)).toBe(7);
             expect(positions.get(0)).toBe(7);
             expect(positions.get(1)).toBe(4);

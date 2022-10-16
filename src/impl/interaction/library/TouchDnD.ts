@@ -62,7 +62,7 @@ export class TouchDnDFSM extends FSMImpl<TouchDnDFSMHandler> {
             this.dataHandler?.onTouch(event);
         };
 
-        const fixTouchDownCheck = (event: TouchEvent): boolean => [...event.touches].filter(t => t.identifier === this.touchID).length === 0;
+        const fixTouchDownCheck = (event: TouchEvent): boolean => Array.from(event.touches).filter(t => t.identifier === this.touchID).length === 0;
 
         new TouchTransition(this.initState, touched, "touchstart", touchDown);
 
@@ -160,7 +160,7 @@ export class TouchDnD extends InteractionBase<SrcTgtPointsData<TouchData>, SrcTg
         const handler: TouchDnDFSMHandler = {
             "onTouch": (evt: TouchEvent): void => {
                 const touch: Touch = evt.changedTouches[0];
-                const all = [...evt.touches];
+                const all = Array.from(evt.touches);
                 this._data.copySrc(touch, evt, all);
                 this._data.copyTgt(touch, evt, all);
             },
@@ -181,7 +181,7 @@ export class TouchDnD extends InteractionBase<SrcTgtPointsData<TouchData>, SrcTg
     private setTgtData(evt: TouchEvent): void {
         const touch: Touch | undefined = getTouch(evt.changedTouches, this.data.src.identifier);
         if (touch !== undefined) {
-            this._data.copyTgt(touch, evt, [...evt.touches]);
+            this._data.copyTgt(touch, evt, Array.from(evt.touches));
         }
     }
 }
