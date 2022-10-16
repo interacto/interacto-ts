@@ -32,7 +32,6 @@ beforeEach(() => {
     canvas = document.createElement("canvas");
 });
 
-
 test("double click on a canvas starts and stops the interaction", () => {
     interaction.registerToNodes([canvas]);
     robot().click(canvas, 2);

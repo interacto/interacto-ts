@@ -71,7 +71,6 @@ describe("using properties", () => {
         });
     });
 
-
     test("execute works", async () => {
         const res = await cmd.execute();
         cmd.done();

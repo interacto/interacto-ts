@@ -57,7 +57,6 @@ describe("on canvas", () => {
         expect(ctx.getCmd(0)).toBeInstanceOf(StubCmd);
     });
 
-
     test("tap does not produce long touch", () => {
         binding = bindings.longTouchBinder(1000)
             .toProduce(() => new StubCmd(true))
@@ -72,7 +71,6 @@ describe("on canvas", () => {
         expect(binding).toBeDefined();
         expect(ctx.commands).toHaveLength(0);
     });
-
 
     test("run long touch two times recycle events", () => {
         binding = bindings.longTouchBinder(150)
@@ -103,7 +101,6 @@ describe("on canvas", () => {
         expect(binding.running).toBeFalsy();
     });
 });
-
 
 describe("on svg doc for dynamic registration", () => {
     let doc: HTMLElement;

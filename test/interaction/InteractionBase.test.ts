@@ -72,7 +72,6 @@ afterEach(() => {
     currentStateObs.complete();
 });
 
-
 test("full reinit", () => {
     interaction.fullReinit();
     expect(fsm.fullReinit).toHaveBeenCalledTimes(1);
@@ -170,7 +169,6 @@ test("register to node children", async () => {
     expect(interaction.onNewNodeRegistered).toHaveBeenCalledTimes(1);
 });
 
-
 test("register unknown event", () => {
     const b = document.createElement("button");
     jest.spyOn(b, "addEventListener");
@@ -264,7 +262,6 @@ describe("throttling", () => {
         clearAllTimers();
         await flushPromises();
     });
-
 
     test("throttle with a single event > timeout", async() => {
         interaction.processEvent(undefined as never as Event);

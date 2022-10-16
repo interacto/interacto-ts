@@ -14,7 +14,6 @@
 
 import {UndoableCommand} from "../UndoableCommand";
 
-
 /**
  * An undoable command that changes the value of an object property.
  * @typeParam T - The type of the object to change

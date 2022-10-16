@@ -39,7 +39,6 @@ afterEach(() => {
     SpinnerChangedFSM.setTimeGap(timer);
 });
 
-
 test("spinnerChangedGoodState", () => {
     interaction.registerToNodes([spinner]);
     robot(spinner).input();

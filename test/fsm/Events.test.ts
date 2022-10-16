@@ -19,7 +19,6 @@ import {
 } from "../../src/interacto";
 import {createKeyEvent, createTouchEvent} from "../interaction/StubEvents";
 
-
 describe("checking getTouch", () => {
     let touches: TouchList;
     let elt: HTMLButtonElement;
@@ -144,7 +143,6 @@ describe("checking event functions", () => {
     test("isKeyDownEvent OK", () => {
         expect(isKeyDownEvent(createKeyEvent("keydown", "a"))).toBeTruthy();
     });
-
 
     test("isKeyUpEvent KO", () => {
         expect(isKeyUpEvent(createKeyEvent("keydown", "b"))).toBeFalsy();

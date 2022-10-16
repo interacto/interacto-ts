@@ -116,7 +116,6 @@ test("no log interaction is ok", () => {
     expect(logger.logInteractionMsg).not.toHaveBeenCalled();
 });
 
-
 test("two KeyPress Release Data", () => {
     interaction.registerToNodes([text]);
 

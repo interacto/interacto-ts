@@ -101,7 +101,6 @@ describe("using a tree undo history", () => {
         expect([...history.getPositions().keys()]).toHaveLength(1);
     });
 
-
     describe("and testing subscriptions", () => {
         let testScheduler: TestScheduler;
 
@@ -495,7 +494,6 @@ describe("using a tree undo history", () => {
         });
     });
 
-
     describe("and using two roots", () => {
         beforeEach(() => {
             history.add(undoable0);
@@ -551,7 +549,6 @@ describe("using a tree undo history", () => {
             });
         });
     });
-
 
     describe("and using five undoable in different paths", () => {
         let undoable3: Undoable4Test;

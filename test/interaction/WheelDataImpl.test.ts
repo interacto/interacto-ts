@@ -113,4 +113,3 @@ test("flush", () => {
     expect(data).toStrictEqual(defaultData);
 });
 
-

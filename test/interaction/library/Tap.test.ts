@@ -48,7 +48,6 @@ describe("tap 1", () => {
         interaction.uninstall();
     });
 
-
     test("one touchstart", () => {
         robot(canvas)
             .touchstart({}, [{"identifier": 2}]);

@@ -230,11 +230,9 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
         return this._interaction;
     }
 
-
     public get command(): C | undefined {
         return this._cmd;
     }
-
 
     public get activated(): boolean {
         return this._activated;
@@ -349,7 +347,6 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
         }
     }
 
-
     private continuousExecutionOnFSMUpdate(cmd: C): void {
         const ok = cmd.execute();
 
@@ -379,7 +376,6 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
             }
         }
     }
-
 
     protected fsmStops(): void {
         if (!this._activated) {

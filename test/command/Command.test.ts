@@ -17,7 +17,6 @@ import {StubCmd} from "./StubCmd";
 
 let cmd: StubCmd;
 
-
 beforeEach(() => {
     cmd = new StubCmd();
     cmd.candoValue = true;

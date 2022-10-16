@@ -16,7 +16,6 @@ import {OutputStateBase} from "./OutputStateBase";
 import type {InputState} from "../../api/fsm/InputState";
 import type {FSM} from "../../api/fsm/FSM";
 
-
 /**
  * An FSM state.
  * A standard state can compose an FSM.

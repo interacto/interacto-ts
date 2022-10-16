@@ -56,4 +56,3 @@ test("flush", () => {
     expect(data.keys).toHaveLength(0);
 });
 
-

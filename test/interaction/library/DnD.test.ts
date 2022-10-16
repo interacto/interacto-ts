@@ -275,7 +275,6 @@ test("displacement data", () => {
     let diffScreenX: number | undefined;
     let diffScreenY: number | undefined;
 
-
     interaction.fsm.addHandler({
         "fsmStops": () => {
             diffClientX = interaction.data.diffClientX;

@@ -26,7 +26,6 @@ import {InteractionStub} from "../interaction/InteractionStub";
 import {createMouseEvent} from "../interaction/StubEvents";
 import {mock} from "jest-mock-extended";
 
-
 let interaction: InteractionStub;
 let binding: BindingImpl<StubCmd, InteractionStub, InteractionData>;
 let fsm: FSM;

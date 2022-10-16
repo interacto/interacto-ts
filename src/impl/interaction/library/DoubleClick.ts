@@ -82,7 +82,6 @@ export class DoubleClickFSM extends FSMImpl<FSMDataHandler> {
         new SubFSMTransition(clicked, this.addTerminalState("dbleclicked", true), this.sndClickFSM);
     }
 
-
     // eslint-disable-next-line accessor-pairs
     public override set log(log: boolean) {
         super.log = log;
@@ -100,7 +99,6 @@ export class DoubleClickFSM extends FSMImpl<FSMDataHandler> {
     public getCheckButton(): number {
         return this.checkButton ?? -1;
     }
-
 
     public override fullReinit(): void {
         super.fullReinit();

@@ -34,7 +34,6 @@ test("cannot build the interaction with 1 click", () => {
     expect(() => new Clicks(1, mock<LoggerImpl>())).toThrow("For a number of clicks that equals 1, use the Click interaction");
 });
 
-
 [3, 4].forEach(nb => {
     describe(`testing clicks with ${nb} clicks`, () => {
         beforeEach(() => {

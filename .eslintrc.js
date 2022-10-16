@@ -3,7 +3,7 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   parserOptions: {
     project: "tsconfig.eslint.json",
-    ecmaVersion: 2018,
+    ecmaVersion: 2020,
     sourceType: 'module',
   },
   plugins: [
@@ -53,7 +53,6 @@ module.exports = {
     "plugin:@typescript-eslint/all",
     "plugin:@typescript-eslint/recommended-requiring-type-checking"
   ],
-
   "rules": {
     "id-length": "off",
     "no-new": "off",
@@ -127,7 +126,7 @@ module.exports = {
     "complexity": ["error", { "max": 10 }],
     "eqeqeq": ["error", "smart"],
     "max-len": ["error", { "code": 150 }],
-    "no-multiple-empty-lines": ["error", { "max": 2 }],
+    "no-multiple-empty-lines": ["error", { "max": 1 }],
     "no-restricted-syntax": ["error", "ForInStatement"],
     "one-var": ["error", "never"],
   }

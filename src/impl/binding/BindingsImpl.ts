@@ -415,7 +415,6 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
             .usingInteraction<KeyTyped, KeyData>(() => new KeyTyped(this.logger));
     }
 
-
     public undoRedoBinder(undo: Widget<HTMLButtonElement>, redo: Widget<HTMLButtonElement>,
                           catchFn: ((err: unknown) => void) = ((): void => {})):
         [Binding<Undo, Interaction<WidgetData<HTMLButtonElement>>, WidgetData<HTMLButtonElement>>,

@@ -32,7 +32,6 @@ class HyperLinkClickedFSM extends FSMImpl<HyperLinkClickedFSMHandler> {
     }
 }
 
-
 interface HyperLinkClickedFSMHandler extends FSMDataHandler {
     initToClickedHandler(event: Event): void;
 }

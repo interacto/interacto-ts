@@ -64,7 +64,6 @@ test("uninstall", () => {
     expect(state.transitions).toHaveLength(0);
 });
 
-
 test("undefined is not undoable", () => {
     expect(isOutputStateType(undefined)).toBeFalsy();
 });

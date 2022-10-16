@@ -58,7 +58,6 @@ class TextInputChangedFSM extends FSMImpl<TextInputChangedHandler> {
     }
 }
 
-
 interface TextInputChangedHandler extends FSMDataHandler {
     initToChangedHandler(event: Event): void;
 }

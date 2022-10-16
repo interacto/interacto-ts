@@ -67,7 +67,6 @@ test("add standard state", () => {
     expect(fsm.states).toHaveLength(2);
 });
 
-
 test("addRemainingNotNull", () => {
     const evt = mock<Event>();
     fsm.addRemaningEventsToProcess(evt);
@@ -121,7 +120,6 @@ test("onUpdatingNotStarted", () => {
     fsm.onUpdating();
     expect(handler.fsmUpdates).not.toHaveBeenCalled();
 });
-
 
 test("onTimeoutWithoutTimeout", () => {
     fsm.onTimeout();
@@ -285,7 +283,6 @@ test("that errors caught on cancel with not an error", () => {
     expect(logger.logInteractionErr).toHaveBeenCalledTimes(1);
 });
 
-
 test("uninstall", () => {
     const s1 = fsm.addStdState("su");
     const subj = fsm.currentStateObservable as unknown as Subject<[OutputState, OutputState]>;
@@ -309,7 +306,6 @@ test("currentState Changed", () => {
     expect(changes[0][1]).toStrictEqual(newCurr);
     expect(changes[0][0]).toStrictEqual(fsm.initState);
 });
-
 
 describe("testProcessUniqueEvent", () => {
     let std: StdState;
@@ -465,7 +461,6 @@ describe("testProcessUniqueEvent -- cancel", () => {
         expect(fsm.getEventsToProcess()).toHaveLength(0);
     });
 });
-
 
 describe("testMultipleTransitionChoice", () => {
     let std: StdState;
@@ -623,7 +618,6 @@ describe("testWithTimeoutTransition", () => {
         expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
     });
 });
-
 
 describe("testWithSubFSM", () => {
     let mainfsm: FSMImpl<FSMDataHandler>;

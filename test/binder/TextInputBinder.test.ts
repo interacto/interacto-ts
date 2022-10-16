@@ -65,7 +65,6 @@ test("type text create command", () => {
     expect(textonUpdate).toStrictEqual(["f", "fo", "foo", "foo"]);
 });
 
-
 test("type text create command with a delay of 2 seconds", () => {
     // eslint-disable-next-line jest/valid-expect-in-promise
     binding = bindings.textInputBinder(2)

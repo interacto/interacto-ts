@@ -21,7 +21,6 @@ import type {UndoHistory} from "../../../src/api/undo/UndoHistory";
 let cmd: Undo;
 let collector: MockProxy<UndoHistory> & UndoHistory;
 
-
 describe("base undo testing", () => {
     beforeEach(() => {
         collector = mock<UndoHistory>();

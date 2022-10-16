@@ -60,7 +60,6 @@ test("other event don't trigger the interaction.", () => {
     expect(handler.fsmStarts).not.toHaveBeenCalled();
 });
 
-
 test("cannot register non date picker", () => {
     const w = document.createElement("div");
     jest.spyOn(w, "addEventListener");

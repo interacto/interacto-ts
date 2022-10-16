@@ -32,11 +32,9 @@ class DatePickedFSM extends FSMImpl<DatePickedHandler> {
     }
 }
 
-
 interface DatePickedHandler extends FSMDataHandler {
     initToPickedHandler(event: Event): void;
 }
-
 
 /**
  * A user interaction for Date input.

@@ -66,7 +66,6 @@ export interface Command {
     getStatus(): CmdStatus;
 }
 
-
 /**
  * Defines the different states of the command.
  */

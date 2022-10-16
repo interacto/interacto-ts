@@ -12,7 +12,6 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-
 import {isEltRef} from "../../src/api/binder/BaseBinderBuilder";
 
 test("undefined is not eltref", () => {

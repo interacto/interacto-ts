@@ -68,7 +68,6 @@ export class ClicksFSM extends FSMImpl<ClicksFSMHandler> {
         new TimeoutTransition(clicked, this.addCancellingState("timeouted"), () => 1000);
     }
 
-
     public override reinit(): void {
         super.reinit();
         this.countClicks = 0;
@@ -78,7 +77,6 @@ export class ClicksFSM extends FSMImpl<ClicksFSMHandler> {
 interface ClicksFSMHandler extends FSMDataHandler {
     click(evt: MouseEvent): void;
 }
-
 
 export class Clicks extends InteractionBase<PointsData, PointsDataImpl, ClicksFSM> {
     /**

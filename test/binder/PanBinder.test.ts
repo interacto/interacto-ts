@@ -76,7 +76,6 @@ test("pan horizontal left", () => {
     expect(ctx.getCmd(0)).toBeInstanceOf(StubCmd);
 });
 
-
 test("pan vertical up", () => {
     binding = bindings.panBinder(false, 10, 1, 0)
         .toProduce(() => new StubCmd(true))

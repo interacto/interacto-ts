@@ -19,7 +19,6 @@ import type {KeyData} from "../../api/interaction/KeyData";
 export class KeysDataImpl implements KeysData, Flushable {
     private readonly keysData: Array<KeyData> = [];
 
-
     public flush(): void {
         this.keysData.length = 0;
     }

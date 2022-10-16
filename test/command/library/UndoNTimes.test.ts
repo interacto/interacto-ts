@@ -21,7 +21,6 @@ import {UndoNTimes} from "../../../src/impl/command/library/UndoNTimes";
 let cmd: UndoNTimes;
 let collector: MockProxy<UndoHistory> & UndoHistory;
 
-
 describe("base undo testing", () => {
     beforeEach(() => {
         collector = mock<UndoHistory>();

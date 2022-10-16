@@ -21,7 +21,6 @@ import {RedoNTimes} from "../../../src/impl/command/library/RedoNTimes";
 let cmd: RedoNTimes;
 let collector: MockProxy<UndoHistory> & UndoHistory;
 
-
 describe("base redo testing", () => {
     beforeEach(() => {
         collector = mock<UndoHistory>();
@@ -43,7 +42,6 @@ describe("base redo testing", () => {
             undoables.push(mock<Undoable>());
             collector.getRedo.mockReturnValue(undoables);
         });
-
 
         test("canDo", () => {
             expect(cmd.canExecute()).toBeTruthy();

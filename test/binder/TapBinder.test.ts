@@ -63,7 +63,6 @@ describe("on canvas", () => {
         expect(ctx.getCmd(0)).toBe(cmd);
     });
 
-
     test("run tap two times recycle events", () => {
         binding = bindings.tapBinder(2)
             .toProduce(() => new StubCmd(true))

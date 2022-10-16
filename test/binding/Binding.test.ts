@@ -19,7 +19,6 @@ import {InteractionStub} from "../interaction/InteractionStub";
 import type {Logger} from "../../src/api/logging/Logger";
 import {mock} from "jest-mock-extended";
 
-
 class BindingStub extends BindingImpl<StubCmd, InteractionStub, InteractionData> {
     public whenStartOK: boolean;
 
@@ -470,7 +469,6 @@ describe("nominal cases", () => {
         expect(b.timesCancelled).toBe(0);
     });
 });
-
 
 describe("crash in binding", () => {
     afterEach(() => {

@@ -91,7 +91,6 @@ test("touch move: too slow too short", () => {
     });
 });
 
-
 test("touch move move too short too slow", () => {
     binding = bindings.swipeBinder(true, 400, 200, 1, 10)
         .toProduce(() => new StubCmd(true))

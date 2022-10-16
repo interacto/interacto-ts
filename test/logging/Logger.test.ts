@@ -12,7 +12,6 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-
 import {LoggerImpl} from "../../src/interacto";
 
 let logger: LoggerImpl;

@@ -44,7 +44,6 @@ export function robot(target?: EventTarget): JestNonoRobot & NonoRobot {
     return new JestNonoRobotImpl(target);
 }
 
-
 export interface MouseEventForTest extends MouseEvent {
     id: number;
 }
@@ -89,7 +88,6 @@ export function createTouchEvent(type: "touchend" | "touchmove" | "touchstart", 
 
     return evt;
 }
-
 
 export function createMouseEvent2(type: "auxclick" | "click" | "mousedown" | "mousemove" | "mouseout" | "mouseover" | "mouseup",
                                   data: Partial<PointData>): MouseEvent {

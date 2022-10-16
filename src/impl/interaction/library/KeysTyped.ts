@@ -61,7 +61,6 @@ interface KeyTypedFSMHandler extends FSMDataHandler {
     onKeyTyped(event: Event): void;
 }
 
-
 /**
  * A user interaction for typing several keyboard keys.
  * One can type on multiple keys. The interaction ends after a timeout (a delay after the latest

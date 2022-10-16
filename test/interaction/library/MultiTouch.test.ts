@@ -24,7 +24,6 @@ let canvas: HTMLElement;
 let handler: FSMHandler;
 let logger: Logger & MockProxy<Logger>;
 
-
 beforeEach(() => {
     handler = mock<FSMHandler>();
     logger = mock<Logger>();
@@ -257,7 +256,6 @@ test("several touch starts", () => {
     expect(interaction.data.touches[1].tgt.clientX).toBe(300);
 });
 
-
 test("touch starts", () => {
     robot(canvas)
         .touchstart({}, [{"identifier": 3}], 5000)
@@ -269,7 +267,6 @@ test("touch starts", () => {
     expect(interaction.fsm.conccurFSMs[2].started).toBeTruthy();
     expect(interaction.fsm.started).toBeTruthy();
 });
-
 
 test("touch starts data all touches", () => {
     robot(canvas)

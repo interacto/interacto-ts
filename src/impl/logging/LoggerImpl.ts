@@ -80,7 +80,6 @@ export class UsageLog {
     }
 }
 
-
 export class LoggerImpl implements Logger {
     public writeConsole: boolean;
 

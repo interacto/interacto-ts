@@ -34,11 +34,9 @@ export class ScrollFSM extends FSMImpl<ScrollFSMHandler> {
     }
 }
 
-
 interface ScrollFSMHandler extends FSMDataHandler {
     initToScroll(event: Event): void;
 }
-
 
 /**
  * A user interaction for scrolling using a mouse wheel. Consists of a single scroll.

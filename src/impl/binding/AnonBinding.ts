@@ -46,7 +46,6 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
 
     private readonly onErrFn?: (ex: unknown) => void;
 
-
     public constructor(continuousExec: boolean, interaction: I, undoHistory: UndoHistoryBase, logger: Logger, cmdSupplierFn: (d: D) => C,
                        widgets: ReadonlyArray<unknown>, dynamicNodes: ReadonlyArray<Node>,
                        loggers: ReadonlyArray<LogLevel>, timeoutThrottle: number,
@@ -202,7 +201,6 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
         return ok;
     }
 
-
     private executeWhen(when: When<D>): boolean {
         let res: boolean;
         try {
@@ -221,7 +219,6 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
 
         return res;
     }
-
 
     public override catch(err: unknown): void {
         if (this.onErrFn !== undefined) {

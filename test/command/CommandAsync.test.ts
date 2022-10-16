@@ -39,7 +39,6 @@ class Model {
     public data: Array<string> = ["Foo", "Bar", "Yo"];
 }
 
-
 class StubAsyncCmd extends CommandBase {
     public readonly data: Model;
 
@@ -69,12 +68,10 @@ class StubAsyncCmd extends CommandBase {
         );
     }
 
-
     public override hadEffect(): boolean {
         return super.hadEffect() && this.accept;
     }
 }
-
 
 let cmd: StubAsyncCmd;
 let data: Model;
@@ -126,7 +123,6 @@ describe("testing async commands and bindings", () => {
         });
     });
 
-
     describe("async with a standard binding", () => {
         let button1: HTMLButtonElement;
 
@@ -134,7 +130,6 @@ describe("testing async commands and bindings", () => {
             useFakeTimers();
             button1 = document.createElement("button");
         });
-
 
         test("button binding with async command works", async () => {
             binding = bindings.buttonBinder()
@@ -173,7 +168,6 @@ describe("testing async commands and bindings", () => {
             expect(first).toHaveBeenCalledTimes(1);
             expect(data.data).toStrictEqual(["Foo", "Bar", "Yo"]);
         });
-
 
         test("button binding with async command ends when the command is disposed", async () => {
             const end = jest.fn(() => {
@@ -240,7 +234,6 @@ describe("testing async commands and bindings", () => {
             expect(data.data).toStrictEqual(["Foo"]);
         });
 
-
         test("two button clicks with async command, first/end ok when waiting ongoing cmd", async () => {
             cmd = new StubAsyncCmd(data, 50);
             const cmd2 = new StubAsyncCmd(data, 5);
@@ -305,7 +298,6 @@ describe("testing async commands and bindings", () => {
             expect(end).toHaveBeenNthCalledWith(1, cmd2, expect.anything());
             expect(end).toHaveBeenNthCalledWith(2, cmd, expect.anything());
         });
-
 
         test("button binding with async command that rejects works", async () => {
             binding = bindings.buttonBinder()
@@ -500,7 +492,6 @@ describe("testing async commands and bindings", () => {
         });
     });
 
-
     describe("async with a multi-touch binding (recycling events)", () => {
         let canvas: HTMLCanvasElement;
 
@@ -532,5 +523,4 @@ describe("testing async commands and bindings", () => {
         });
     });
 });
-
 

@@ -32,11 +32,9 @@ class BoxCheckedFSM extends FSMImpl<BoxCheckedHandler> {
     }
 }
 
-
 interface BoxCheckedHandler extends FSMDataHandler {
     initToCheckHandler(event: Event): void;
 }
-
 
 /**
  * A user interaction for CheckBox.

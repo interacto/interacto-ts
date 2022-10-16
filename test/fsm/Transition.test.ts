@@ -23,7 +23,6 @@ let tr: TransitionBase<Event>;
 let state1: StdState;
 let state2: StdState;
 
-
 beforeEach(() => {
     const fsm: FSMImpl<FSMDataHandler> = mock<FSMImpl<FSMDataHandler>>();
     state1 = new StdState(fsm, "s1");

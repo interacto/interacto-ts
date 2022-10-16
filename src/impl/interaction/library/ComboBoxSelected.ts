@@ -32,7 +32,6 @@ class ComboBoxSelectedFSM extends FSMImpl<ComboBoxSelectedHandler> {
     }
 }
 
-
 interface ComboBoxSelectedHandler extends FSMDataHandler {
     initToSelectedHandler(event: Event): void;
 }

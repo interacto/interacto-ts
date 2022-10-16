@@ -64,7 +64,6 @@ test("redoCallredo", () => {
     expect(instance.getLastUndo()).toBe(undoable);
 });
 
-
 test("history limit works as expected on new undoable instances", () => {
     const undoable3 = mock<Undoable>();
     instance.setSizeMax(2);
@@ -75,7 +74,6 @@ test("history limit works as expected on new undoable instances", () => {
     expect(instance.getUndo()[0]).toBe(undoable2);
     expect(instance.getUndo()[1]).toBe(undoable3);
 });
-
 
 test("setSizeMaxKO", () => {
     instance.setSizeMax(-1);
@@ -95,7 +93,6 @@ test("addUndoablewith0SizeUndoable", () => {
     expect(instance.getUndo()).toHaveLength(0);
     expect(instance.getRedo()).toHaveLength(0);
 });
-
 
 test("sizeMaxMutatorsUndoableRemoved", () => {
     instance.setSizeMax(5);

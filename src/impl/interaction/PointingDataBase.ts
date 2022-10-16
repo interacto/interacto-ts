@@ -36,7 +36,6 @@ export abstract class PointingDataBase extends InteractionDataBase implements Po
 
     protected shiftKeyData: boolean = false;
 
-
     public override flush(): void {
         super.flush();
         this.clientXData = 0;
@@ -50,7 +49,6 @@ export abstract class PointingDataBase extends InteractionDataBase implements Po
         this.metaKeyData = false;
         this.shiftKeyData = false;
     }
-
 
     public override copy(data: PointBaseData): void {
         super.copy(data);

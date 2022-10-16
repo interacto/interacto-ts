@@ -33,7 +33,6 @@ beforeEach(() => {
     textArea = document.createElement("textarea");
 });
 
-
 test("type in a text area starts and stops the interaction", () => {
     interaction.registerToNodes([textArea]);
     robot(textArea).input();

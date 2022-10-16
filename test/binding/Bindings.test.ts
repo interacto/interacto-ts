@@ -660,7 +660,6 @@ describe("test Bindings", () => {
         expect(endcancel).toHaveBeenCalledTimes(1);
     });
 
-
     test("binding with anon command", () => {
         bindings.clickBinder()
             .on(elt)
@@ -858,7 +857,6 @@ describe("test Bindings", () => {
         expect(ctx.commands).toHaveLength(0);
     });
 
-
     test("that 'strictStart' works correctly when the 'when' routine returns true", () => {
         bindings.dndBinder(false)
             .when((_i: SrcTgtPointsData<PointData>) => true, WhenType.strictStart)
@@ -916,7 +914,6 @@ describe("test Bindings", () => {
 
         expect(when).not.toHaveBeenCalled();
     });
-
 
     describe("check when it crashes in routines", () => {
         let baseBinder: InteractionCmdUpdateBinder<StubCmd, Interaction<SrcTgtPointsData<TouchData>>, SrcTgtPointsData<TouchData>>;
@@ -1416,7 +1413,6 @@ describe("test Bindings", () => {
                 .touchstart({}, [{"identifier": 1, "target": elt}])
                 .touchmove();
 
-
             expect(ctx.commands).toHaveLength(0);
             expect(logger.logBindingErr).toHaveBeenCalledWith("Crash in checking condition", "msg");
         });
@@ -1491,7 +1487,6 @@ describe("test Bindings", () => {
             expect(logger.logBindingErr).toHaveBeenCalledWith("Crash in 'ifCannotExecute'", 1);
         });
     });
-
 
     describe("tap and longPress conflict", () => {
         let binding: Binding<Command, Interaction<InteractionData>, InteractionData>;

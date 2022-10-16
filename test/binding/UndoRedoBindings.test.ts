@@ -79,7 +79,6 @@ describe("test undo redo bindings", () => {
         });
     });
 
-
     describe("test redo bindings", () => {
         beforeEach(() => {
             undoable.redo.mockImplementation(() => {

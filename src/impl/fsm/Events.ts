@@ -12,7 +12,6 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-
 /**
  * Searches for a touch.
  * @param idToFind - The ID of the touch to find.

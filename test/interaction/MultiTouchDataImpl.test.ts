@@ -74,7 +74,6 @@ beforeEach(() => {
         "target": new EventTarget()
     };
 
-
     touchTgt2 = {
         "force": 15,
         "identifier": 20,

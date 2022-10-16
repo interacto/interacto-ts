@@ -29,7 +29,6 @@ import type {WhenType} from "./When";
  */
 export interface InteractionUpdateBinder<I extends Interaction<D>, D extends InteractionData>
     extends InteractionUpdateBinderBuilder<I, D> {
-
     on<W>(widget: ReadonlyArray<Widget<W>> | Widget<W>, ...widgets: ReadonlyArray<Widget<W>>): InteractionUpdateBinder<I, D>;
 
     onDynamic(node: Widget<Node>): InteractionUpdateBinder<I, D>;

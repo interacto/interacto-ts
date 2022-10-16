@@ -15,7 +15,6 @@
 import {UndoableCommand} from "../UndoableCommand";
 import {SetProperty} from "./SetProperty";
 
-
 /**
  * An undoable command that changes the value of a set of object properties.
  * @typeParam T - The type of the object to change
@@ -48,7 +47,6 @@ export class SetProperties<T> extends UndoableCommand {
             this.compositeCmds.push(new SetProperty<T, keyof T>(this.obj, key, v[key] as T[keyof T]));
         }
     }
-
 
     public override execute(): Promise<boolean> | boolean {
         this.compositeCmds.forEach(cmd => {

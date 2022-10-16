@@ -62,7 +62,6 @@ export interface UndoableTreeNode {
     redo(): void;
 }
 
-
 /**
  * The DTO interface used when exporting a tree-based history.
  */
@@ -84,7 +83,6 @@ export interface UndoableTreeNodeDTO {
     readonly children: ReadonlyArray<UndoableTreeNodeDTO>;
 }
 
-
 /**
  * The DTO for tree nodes used while exporting a tree-based history.
  */
@@ -93,7 +91,6 @@ export interface TreeUndoHistoryDTO {
 
     readonly roots: ReadonlyArray<UndoableTreeNodeDTO>;
 }
-
 
 /**
  * Tree-based undo history.

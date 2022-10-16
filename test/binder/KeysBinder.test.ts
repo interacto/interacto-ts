@@ -57,7 +57,6 @@ afterEach(() => {
     clearAllTimers();
 });
 
-
 test("that is crashes when calling bind without an interaction supplier", () => {
     expect(() => new KeysBinder(bindings.undoHistory, mock<Logger>()).bind()).toThrow("The interaction supplier cannot be undefined here");
 });
@@ -785,7 +784,6 @@ test("when routine accumulation 4", () => {
     robot(elt).keydown();
     expect(ctx.commands).toHaveLength(0);
 });
-
 
 test("whenArray is copied when binder is copied", () => {
     const partialBinder1: KeyInteractionCmdBinder<StubCmd, Interaction<KeyData>, KeyData> = bindings.keyDownBinder(true)

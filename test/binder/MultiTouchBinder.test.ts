@@ -58,7 +58,6 @@ test("run multi-touch produces cmd", () => {
     expect(ctx.getCmd(0)).toBe(cmd);
 });
 
-
 test("run multi-touch two times recycle events", () => {
     const data: Array<number> = [];
     const dataFirst: Array<number> = [];

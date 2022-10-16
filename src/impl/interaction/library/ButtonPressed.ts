@@ -21,7 +21,6 @@ import {WidgetDataImpl} from "../WidgetDataImpl";
 import {ButtonPressedTransition} from "../../fsm/ButtonPressedTransition";
 import type {Logger} from "../../../api/logging/Logger";
 
-
 /**
  * The FSM for button pressures.
  */
@@ -38,7 +37,6 @@ class ButtonPressedFSM extends FSMImpl<ButtonPressedFSMHandler> {
             });
     }
 }
-
 
 interface ButtonPressedFSMHandler extends FSMDataHandler {
     initToPressedHandler(event: InputEvent): void;

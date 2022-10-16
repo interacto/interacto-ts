@@ -59,7 +59,6 @@ test("other event don't trigger the interaction", () => {
     expect(handler.fsmStarts).not.toHaveBeenCalled();
 });
 
-
 test("cannot register non combo box", () => {
     const w = document.createElement("input");
     jest.spyOn(w, "addEventListener");

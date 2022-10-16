@@ -23,7 +23,6 @@ import type {Flushable} from "./Flushable";
 import type {Logger} from "../../api/logging/Logger";
 import {keyEventTypes, mouseEventTypes, touchEventTypes} from "../../api/fsm/EventType";
 
-
 interface CancellablePromise extends Promise<void> {
     cancel: () => void;
 }
@@ -114,7 +113,6 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
         this.throttleTimeout = timeout;
     }
 
-
     private createThrottleTimeout(): void {
         this.currentThrottling?.cancel();
         this.currentThrottling = undefined;
@@ -150,7 +148,6 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
             rejection(new Error("cancellation"));
         };
     }
-
 
     private checkThrottlingEvent(event: Event): void {
         const latestEvt = this.latestThrottledEvent;
@@ -422,7 +419,6 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
         this._log = log;
         this._fsm.log = log;
     }
-
 
     public isActivated(): boolean {
         return this.activated;

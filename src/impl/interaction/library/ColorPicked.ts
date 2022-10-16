@@ -31,7 +31,6 @@ class ColorPickedFSM extends FSMImpl<ColorPickedHandler> {
     }
 }
 
-
 interface ColorPickedHandler extends FSMDataHandler {
     initToPickedHandler(event: Event): void;
 }

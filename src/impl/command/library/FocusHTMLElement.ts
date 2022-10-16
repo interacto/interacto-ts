@@ -28,7 +28,6 @@ export class FocusHTMLElement extends CommandBase {
         (this.element as HTMLElement).focus();
     }
 
-
     public override canExecute(): boolean {
         return this.element instanceof HTMLElement;
     }

@@ -103,7 +103,6 @@ export class FSMImpl<T extends FSMDataHandler> implements FSM {
         this._log = false;
     }
 
-
     public get currentState(): OutputState {
         return this._currentState;
     }
@@ -200,7 +199,6 @@ export class FSMImpl<T extends FSMDataHandler> implements FSM {
     public get started(): boolean {
         return this._started;
     }
-
 
     /**
      * The end of the FSM execution, the events still (eg keyPress) in process must be recycled to be reused in the FSM.
