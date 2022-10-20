@@ -38,7 +38,6 @@ import {
     AnonCmd,
     BindingsContext,
     BindingsImpl,
-    CmdStatus,
     UndoHistoryImpl,
     WhenType
 } from "../../src/interacto";
@@ -1668,7 +1667,7 @@ describe("test Bindings", () => {
                     .mousemove();
 
                 expect(binding.command).toBe(undoCmd);
-                expect(undoCmd.getStatus()).toBe(CmdStatus.created);
+                expect(undoCmd.getStatus()).toBe("created");
             });
 
             test("then lazy false, and end true", () => {
@@ -1685,7 +1684,7 @@ describe("test Bindings", () => {
                     .mouseup();
                 expect(binding.command).toBeUndefined();
                 expect(binding.timesEnded).toBe(1);
-                expect(undoCmd.getStatus()).toBe(CmdStatus.done);
+                expect(undoCmd.getStatus()).toBe("done");
             });
 
             test("end false", () => {
@@ -1703,7 +1702,7 @@ describe("test Bindings", () => {
                 expect(binding.command).toBeUndefined();
                 expect(binding.timesEnded).toBe(0);
                 expect(binding.timesCancelled).toBe(1);
-                expect(undoCmd.getStatus()).toBe(CmdStatus.cancelled);
+                expect(undoCmd.getStatus()).toBe("cancelled");
             });
 
             test("several ends", () => {
@@ -1741,7 +1740,7 @@ describe("test Bindings", () => {
                 expect(binding.command).toBeUndefined();
                 expect(binding.timesEnded).toBe(1);
                 expect(binding.timesCancelled).toBe(0);
-                expect(undoCmd.getStatus()).toBe(CmdStatus.done);
+                expect(undoCmd.getStatus()).toBe("done");
             });
 
             test("strict then false", () => {

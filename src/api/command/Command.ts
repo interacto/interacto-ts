@@ -69,25 +69,14 @@ export interface Command {
 /**
  * Defines the different states of the command.
  */
-export enum CmdStatus {
-    /**
-     * When the command is created but not executed yet.
-     */
-    created = 0,
-    /**
-     * When the command has been created and executed one time.
-     */
-    executed = 1,
-    /**
-     * When the command has been cancelled.
-     */
-    cancelled = 2,
-    /**
-     * When the command has been marked as done.
-     */
-    done = 3,
-    /**
-     * The command has been flushed. In this case, the command must not be used anymore.
-     */
-    flushed = 4
-}
+export type CmdStatus =
+/** When the command has been cancelled. */
+"cancelled" |
+/** When the command is created but not executed yet. */
+"created" |
+/** When the command has been marked as done. */
+"done" |
+/** When the command has been created and executed one time. */
+"executed" |
+/** The command has been flushed. In this case, the command must not be used anymore. */
+"flushed";

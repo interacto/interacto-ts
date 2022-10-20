@@ -15,7 +15,6 @@
 import type {Observable} from "rxjs";
 import {Subject} from "rxjs";
 import type {Command} from "../../api/command/Command";
-import {CmdStatus} from "../../api/command/Command";
 import type {InteractionData} from "../../api/interaction/InteractionData";
 import {isUndoableType} from "../../api/undo/Undoable";
 import {MustBeUndoableCmdError} from "./MustBeUndoableCmdError";
@@ -485,7 +484,7 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
         }
 
         // In continuous mode, a command may have been executed in the update routine
-        if (cmd.getStatus() !== CmdStatus.executed) {
+        if (cmd.getStatus() !== "executed") {
             return;
         }
 

@@ -12,7 +12,6 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import {CmdStatus} from "../../src/api/command/Command";
 import {CommandBase} from "../../src/impl/command/CommandBase";
 import {StubCmd} from "./StubCmd";
 
@@ -33,12 +32,12 @@ test("cando default", () => {
 });
 
 test("command Status After Creation", () => {
-    expect(cmd.getStatus()).toStrictEqual(CmdStatus.created);
+    expect(cmd.getStatus()).toBe("created");
 });
 
 test("command Status After Flush", () => {
     cmd.flush();
-    expect(cmd.getStatus()).toStrictEqual(CmdStatus.flushed);
+    expect(cmd.getStatus()).toBe("flushed");
 });
 
 test("command Cannot Do It When Flushed", () => {
@@ -67,7 +66,7 @@ test("command Can Do It When Can Do", () => {
 
 test("command Is Executed When Do It", async () => {
     await cmd.execute();
-    expect(cmd.getStatus()).toStrictEqual(CmdStatus.executed);
+    expect(cmd.getStatus()).toBe("executed");
 });
 
 test("command Had Effect When Done", () => {
@@ -98,24 +97,24 @@ test("command HadEffect When Not Done And Executed", async () => {
 test("command Not Done When Flushed", () => {
     cmd.flush();
     cmd.done();
-    expect(cmd.getStatus()).toStrictEqual(CmdStatus.flushed);
+    expect(cmd.getStatus()).toBe("flushed");
 });
 
 test("command Not Done When Cancelled", () => {
     cmd.cancel();
     cmd.done();
-    expect(cmd.getStatus()).toStrictEqual(CmdStatus.cancelled);
+    expect(cmd.getStatus()).toBe("cancelled");
 });
 
 test("command Done When Created", () => {
     cmd.done();
-    expect(cmd.getStatus()).toStrictEqual(CmdStatus.done);
+    expect(cmd.getStatus()).toBe("done");
 });
 
 test("command Done When Executed", async () => {
     await cmd.execute();
     cmd.done();
-    expect(cmd.getStatus()).toStrictEqual(CmdStatus.done);
+    expect(cmd.getStatus()).toBe("done");
 });
 
 test("isDone When Created", () => {
@@ -143,12 +142,12 @@ test("is Done When Executed", async () => {
 });
 
 test("not Cancel At Start", () => {
-    expect(cmd.getStatus()).not.toStrictEqual(CmdStatus.cancelled);
+    expect(cmd.getStatus()).not.toBe("cancelled");
 });
 
 test("cancel", () => {
     cmd.cancel();
-    expect(cmd.getStatus()).toStrictEqual(CmdStatus.cancelled);
+    expect(cmd.getStatus()).toBe("cancelled");
 });
 
 test("executed Two Times", async () => {
@@ -165,5 +164,5 @@ test("crash in execution, command executed", () => {
     }();
 
     expect(() => command.execute()).toThrow(new Error("Cmd err"));
-    expect(command.getStatus()).toStrictEqual(CmdStatus.executed);
+    expect(command.getStatus()).toBe("executed");
 });

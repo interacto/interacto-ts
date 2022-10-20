@@ -13,7 +13,7 @@
  */
 
 import type {InteractionData, Undoable, UndoHistory} from "../../src/interacto";
-import {BindingImpl, CmdStatus, FSMImpl, MustBeUndoableCmdError, UndoHistoryImpl} from "../../src/interacto";
+import {BindingImpl, FSMImpl, MustBeUndoableCmdError, UndoHistoryImpl} from "../../src/interacto";
 import {StubCmd, StubUndoableCmd} from "../command/StubCmd";
 import {InteractionStub} from "../interaction/InteractionStub";
 import type {Logger} from "../../src/api/logging/Logger";
@@ -220,7 +220,7 @@ describe("nominal cases", () => {
         binding.interaction.fsm.onCancelling();
         binding.interaction.fsm.onCancelling();
         expect(cmd).toBeDefined();
-        expect(cmd?.getStatus()).toStrictEqual(CmdStatus.cancelled);
+        expect(cmd?.getStatus()).toBe("cancelled");
         expect(binding.endOrCancel).toHaveBeenCalledWith();
         expect(binding.cancel).toHaveBeenCalledTimes(1);
         expect(binding.command).toBeUndefined();
@@ -371,7 +371,7 @@ describe("nominal cases", () => {
         const cmd = binding.command;
         binding.whenStartOK = false;
         binding.interaction.fsm.onCancelling();
-        expect(cmd?.getStatus()).toStrictEqual(CmdStatus.cancelled);
+        expect(cmd?.getStatus()).toBe("cancelled");
         expect(binding.command).toBeUndefined();
         expect(binding.timesCancelled).toBe(1);
     });

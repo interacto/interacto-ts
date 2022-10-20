@@ -17,7 +17,6 @@ import type {FSM, InteractionData, UndoHistory, Logger,
 import {
     BindingImpl,
     ClickTransition,
-    CmdStatus,
     FSMImpl,
     UndoHistoryImpl
 } from "../../src/interacto";
@@ -65,7 +64,7 @@ test("nothing Done Is deactivated", () => {
     expect(binding.ifCmdHadEffects).not.toHaveBeenCalledWith();
     expect(binding.ifCmdHadNoEffect).not.toHaveBeenCalledWith();
     expect(binding.ifCannotExecuteCmd).not.toHaveBeenCalledWith();
-    expect(cmd.getStatus()).toStrictEqual(CmdStatus.created);
+    expect(cmd.getStatus()).toBe("created");
 });
 
 test("cmd Created Exec Saved When activated", () => {
@@ -79,7 +78,7 @@ test("cmd Created Exec Saved When activated", () => {
     expect(binding.ifCmdHadEffects).toHaveBeenCalledTimes(1);
     expect(binding.ifCmdHadNoEffect).not.toHaveBeenCalledWith();
     expect(binding.ifCannotExecuteCmd).not.toHaveBeenCalledWith();
-    expect(cmd.getStatus()).toStrictEqual(CmdStatus.done);
+    expect(cmd.getStatus()).toBe("done");
 });
 
 test("command cannot be executed when the when at stop is KO", () => {
@@ -99,7 +98,7 @@ test("command cannot be executed when the when at stop is KO", () => {
     expect(binding.ifCmdHadEffects).not.toHaveBeenCalledWith();
     expect(binding.ifCmdHadNoEffect).not.toHaveBeenCalledWith();
     expect(binding.ifCannotExecuteCmd).not.toHaveBeenCalledWith();
-    expect(cmd.getStatus()).toStrictEqual(CmdStatus.created);
+    expect(cmd.getStatus()).toBe("created");
 });
 
 test("cmd KO When Cannot Do Cmd", () => {
@@ -109,7 +108,7 @@ test("cmd KO When Cannot Do Cmd", () => {
     jest.spyOn(binding, "ifCannotExecuteCmd");
     fsm.process(createMouseEvent("click", document.createElement("button")));
 
-    expect(cmd.getStatus()).toStrictEqual(CmdStatus.created);
+    expect(cmd.getStatus()).toBe("created");
     expect(binding.ifCmdHadEffects).not.toHaveBeenCalledWith();
     expect(binding.ifCmdHadNoEffect).not.toHaveBeenCalledWith();
     expect(binding.ifCannotExecuteCmd).toHaveBeenCalledTimes(1);

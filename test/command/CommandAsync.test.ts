@@ -12,7 +12,6 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {CmdStatus} from "../../src/api/command/Command";
 import {CommandBase} from "../../src/impl/command/CommandBase";
 import type {Binding} from "../../src/api/binding/Binding";
 import type {Interaction} from "../../src/api/interaction/Interaction";
@@ -100,7 +99,7 @@ describe("testing async commands and bindings", () => {
             const res = cmd.execute();
 
             expect(res).toBeDefined();
-            expect(cmd.getStatus()).toStrictEqual(CmdStatus.created);
+            expect(cmd.getStatus()).toBe("created");
             expect(data.data).toStrictEqual(["Foo", "Bar", "Yo"]);
         });
 
@@ -109,7 +108,7 @@ describe("testing async commands and bindings", () => {
             const res = await cmd.execute();
 
             expect(res).toBeDefined();
-            expect(cmd.getStatus()).toStrictEqual(CmdStatus.executed);
+            expect(cmd.getStatus()).toBe("executed");
             expect(data.data).toStrictEqual(["Foo", "Bar"]);
         });
 
@@ -143,7 +142,7 @@ describe("testing async commands and bindings", () => {
             expect(binding).toBeDefined();
             expect(binding.command).toBeUndefined();
             expect(ctx.commands).toHaveLength(1);
-            expect(ctx.commands[0].getStatus()).toStrictEqual(CmdStatus.done);
+            expect(ctx.commands[0].getStatus()).toBe("done");
             expect(data.data).toStrictEqual(["Foo", "Bar"]);
         });
 
@@ -201,8 +200,8 @@ describe("testing async commands and bindings", () => {
             expect(binding).toBeDefined();
             expect(binding.command).toBeUndefined();
             expect(ctx.commands).toHaveLength(2);
-            expect(ctx.commands[0].getStatus()).toStrictEqual(CmdStatus.done);
-            expect(ctx.commands[1].getStatus()).toStrictEqual(CmdStatus.done);
+            expect(ctx.commands[0].getStatus()).toBe("done");
+            expect(ctx.commands[1].getStatus()).toBe("done");
             expect(ctx.getCmd<StubAsyncCmd>(0).timeout).toBe(5);
             expect(ctx.getCmd<StubAsyncCmd>(1).timeout).toBe(100);
             expect(data.data).toStrictEqual(["Foo"]);

@@ -13,7 +13,7 @@
  */
 
 import type {Command} from "../../api/command/Command";
-import {CmdStatus} from "../../api/command/Command";
+import type {CmdStatus} from "../../api/command/Command";
 
 /**
  * The base implementation class for coding UI commands.
@@ -25,10 +25,10 @@ export abstract class CommandBase implements Command {
     protected status: CmdStatus;
 
     /**
-     * Creates the command with the status CREATED.
+     * Creates the command with the status 'created'.
      */
     public constructor() {
-        this.status = CmdStatus.created;
+        this.status = "created";
     }
 
     /**
@@ -36,7 +36,7 @@ export abstract class CommandBase implements Command {
      * The command must not be used after that.
      */
     public flush(): void {
-        this.status = CmdStatus.flushed;
+        this.status = "flushed";
     }
 
     /**
@@ -48,8 +48,8 @@ export abstract class CommandBase implements Command {
 
     public execute(): Promise<boolean> | boolean {
         let ok: boolean;
-        if ((this.status === CmdStatus.created || this.status === CmdStatus.executed) && this.canExecute()) {
-            if (this.status === CmdStatus.created) {
+        if ((this.status === "created" || this.status === "executed") && this.canExecute()) {
+            if (this.status === "created") {
                 this.createMemento();
             }
             ok = true;
@@ -59,19 +59,19 @@ export abstract class CommandBase implements Command {
                 if (result instanceof Promise) {
                     return result
                         .then(() => {
-                            this.status = CmdStatus.executed;
+                            this.status = "executed";
                             return true;
                         })
                         .catch(() => {
-                            this.status = CmdStatus.executed;
+                            this.status = "executed";
                             return false;
                         });
                 }
             } catch (error: unknown) {
-                this.status = CmdStatus.executed;
+                this.status = "executed";
                 throw error;
             }
-            this.status = CmdStatus.executed;
+            this.status = "executed";
         } else {
             ok = false;
         }
@@ -90,17 +90,17 @@ export abstract class CommandBase implements Command {
     }
 
     public done(): void {
-        if (this.status === CmdStatus.created || this.status === CmdStatus.executed) {
-            this.status = CmdStatus.done;
+        if (this.status === "created" || this.status === "executed") {
+            this.status = "done";
         }
     }
 
     public isDone(): boolean {
-        return this.status === CmdStatus.done;
+        return this.status === "done";
     }
 
     public cancel(): void {
-        this.status = CmdStatus.cancelled;
+        this.status = "cancelled";
     }
 
     public getStatus(): CmdStatus {
