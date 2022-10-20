@@ -13,7 +13,7 @@
  */
 
 import type {InteractionData} from "../../api/interaction/InteractionData";
-import {LogLevel} from "../../api/logging/LogLevel";
+import type {LogLevel} from "../../api/logging/LogLevel";
 import {BindingImpl} from "./BindingImpl";
 import type {Command} from "../../api/command/Command";
 import type {Interaction} from "../../api/interaction/Interaction";
@@ -78,10 +78,10 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
 
     private configureLoggers(loggers: ReadonlyArray<LogLevel>): void {
         if (loggers.length > 0) {
-            this.logCmd = loggers.includes(LogLevel.command.valueOf());
-            this.logBinding = loggers.includes(LogLevel.binding.valueOf());
-            this.logUsage = loggers.includes(LogLevel.usage.valueOf());
-            this.interaction.log(loggers.includes(LogLevel.interaction.valueOf()));
+            this.logCmd = loggers.includes("command");
+            this.logBinding = loggers.includes("binding");
+            this.logUsage = loggers.includes("usage");
+            this.interaction.log(loggers.includes("interaction"));
         }
     }
 

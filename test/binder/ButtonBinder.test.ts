@@ -13,7 +13,7 @@
  */
 
 import type {Binding, EltRef, Interaction, InteractionData, UndoHistoryBase} from "../../src/interacto";
-import {BindingsImpl, LogLevel, UndoHistoryImpl} from "../../src/interacto";
+import {BindingsImpl, UndoHistoryImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
 import type {Bindings} from "../../src/api/binding/Bindings";
@@ -264,7 +264,7 @@ test("builderCloned", () => {
     expect(binder).not.toBe(bindings.buttonBinder().when(() => false));
     expect(binder).not.toBe(bindings.buttonBinder().toProduce(_i => cmd)
         .end(_c => {}));
-    expect(binder).not.toBe(bindings.buttonBinder().log(LogLevel.command));
+    expect(binder).not.toBe(bindings.buttonBinder().log("command"));
 });
 
 test("clonedBuildersSameWidgetCmdOK", () => {

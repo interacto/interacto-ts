@@ -24,7 +24,7 @@ export class LoggingData {
 
     public readonly msg: string;
 
-    public readonly level: keyof typeof LogLevel;
+    public readonly level: LogLevel;
 
     public readonly type: "ERR" | "INFO";
 
@@ -32,7 +32,7 @@ export class LoggingData {
 
     public readonly frontVersion?: string;
 
-    public constructor(date: number, msg: string, level: keyof typeof LogLevel, name: string, type: "ERR" | "INFO",
+    public constructor(date: number, msg: string, level: LogLevel, name: string, type: "ERR" | "INFO",
                        sessionID: string, stack?: string, frontVersion?: string) {
         this.frontVersion = frontVersion;
         this.stack = stack;

@@ -39,7 +39,6 @@ import {
     BindingsContext,
     BindingsImpl,
     CmdStatus,
-    LogLevel,
     UndoHistoryImpl,
     WhenType
 } from "../../src/interacto";
@@ -160,7 +159,7 @@ describe("test Bindings", () => {
         bindings.mouseDownBinder()
             .on(elt)
             .toProduce(() => new StubCmd(true))
-            .log(LogLevel.command, LogLevel.binding)
+            .log("command", "binding")
             .bind();
         robot(elt).mousedown();
         expect(logger.logCmdMsg).toHaveBeenCalledTimes(4);
@@ -171,7 +170,7 @@ describe("test Bindings", () => {
         bindings.mouseDownBinder()
             .on(elt)
             .toProduce(() => new StubCmd(true))
-            .log(LogLevel.interaction)
+            .log("interaction")
             .bind();
         robot(elt).mousedown();
         expect(logger.logInteractionMsg).toHaveBeenCalledTimes(4);
@@ -181,7 +180,7 @@ describe("test Bindings", () => {
         bindings.dndBinder(true)
             .on(elt)
             .toProduce(() => new StubCmd(true))
-            .log(LogLevel.interaction, LogLevel.command, LogLevel.binding)
+            .log("interaction", "command", "binding")
             .continuousExecution()
             .bind();
 
@@ -603,7 +602,7 @@ describe("test Bindings", () => {
             .toProduce((_i: SrcTgtPointsData<PointData>) => new StubCmd(true))
             // eslint-disable-next-line jest/no-conditional-in-test
             .when(i => i.src.button === 2 && i.tgt.button === 2)
-            .log(LogLevel.interaction)
+            .log("interaction")
             .bind();
 
         robot(elt)
@@ -621,7 +620,7 @@ describe("test Bindings", () => {
         const binding = bindings.dragLockBinder()
             .on(elt)
             .toProduce((_i: SrcTgtPointsData<PointData>) => new StubCmd(true))
-            .log(LogLevel.interaction)
+            .log("interaction")
             .bind();
 
         robot(elt)
@@ -664,7 +663,7 @@ describe("test Bindings", () => {
         bindings.clickBinder()
             .on(elt)
             .toProduce((_i: PointData) => new AnonCmd(() => {}))
-            .log(LogLevel.interaction)
+            .log("interaction")
             .bind();
 
         robot(elt).click();
@@ -1415,7 +1414,7 @@ describe("test Bindings", () => {
 
         test("call to 'when' should log", () => {
             baseBinder
-                .log(LogLevel.binding)
+                .log("binding")
                 .bind();
 
             robot(elt)

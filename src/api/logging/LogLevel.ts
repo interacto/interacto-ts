@@ -15,7 +15,4 @@
 /**
  * Logging level to log interactions, bindings, and commands.
  */
-export enum LogLevel {
-    interaction = 0, binding = 1, command = 2, usage = 3
-}
-
+export type LogLevel = "binding" | "command" | "interaction" | "usage";

@@ -20,7 +20,6 @@ import type {InteractionData} from "../../src/api/interaction/InteractionData";
 import {Subject} from "rxjs";
 import {flushPromises} from "../Utils";
 import {robot} from "../interaction/StubEvents";
-import {LogLevel} from "../../src/api/logging/LogLevel";
 import type {BindingImpl} from "../../src/impl/binding/BindingImpl";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
 import type {Bindings} from "../../src/api/binding/Bindings";
@@ -405,7 +404,7 @@ describe("testing async commands and bindings", () => {
                 .toProduce(() => new StubAsyncCmd(data))
                 .on(canvas)
                 .continuousExecution()
-                .log(LogLevel.command)
+                .log("command")
                 .ifCannotExecute(cannot)
                 .bind();
 
@@ -461,7 +460,7 @@ describe("testing async commands and bindings", () => {
                 .on(canvas)
                 .continuousExecution()
                 .ifCannotExecute(cannot)
-                .log(LogLevel.command)
+                .log("command")
                 .bind();
 
             jest.spyOn(binding as BindingImpl<StubAsyncCmd, Interaction<InteractionData>, InteractionData>,

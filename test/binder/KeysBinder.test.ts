@@ -27,7 +27,6 @@ import type {KeysData} from "../../src/api/interaction/KeysData";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
 import type {Logger} from "../../src/api/logging/Logger";
 import type {EltRef} from "../../src/api/binder/BaseBinderBuilder";
-import {LogLevel} from "../../src/api/logging/LogLevel";
 import type {UndoHistory} from "../../src/api/undo/UndoHistory";
 import {MouseDown} from "../../src/impl/interaction/library/MouseDown";
 import type {KeyInteractionCmdBinder} from "../../src/api/binder/KeyInteractionCmdBinder";
@@ -609,7 +608,7 @@ test("log works", () => {
     binding = bindings.keysTypeBinder()
         .on(elt)
         .toProduce((_i: KeysData) => new StubCmd(true))
-        .log(LogLevel.interaction, LogLevel.usage)
+        .log("interaction", "usage")
         .bind();
 
     expect(binding.logUsage).toBeTruthy();

@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 import type {Binding, FSM, Interaction, InteractionBase, InteractionData, UndoHistoryBase} from "../../src/interacto";
-import {BindingsImpl, LogLevel, UndoHistoryImpl} from "../../src/interacto";
+import {BindingsImpl, UndoHistoryImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {createTouchEvent} from "../interaction/StubEvents";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
@@ -61,7 +61,7 @@ describe("on canvas", () => {
         binding = bindings.longTouchBinder(1000)
             .toProduce(() => new StubCmd(true))
             .on(c1)
-            .log(LogLevel.interaction)
+            .log("interaction")
             .bind();
 
         c1.dispatchEvent(createTouchEvent("touchstart", 1, c1, 11, 23, 110, 230));
@@ -113,7 +113,7 @@ describe("on svg doc for dynamic registration", () => {
         binding = bindings.longTouchBinder(1000)
             .toProduce(() => new StubCmd(true))
             .onDynamic(doc)
-            .log(LogLevel.interaction)
+            .log("interaction")
             .bind();
 
         const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
@@ -140,7 +140,7 @@ describe("on svg doc for dynamic registration", () => {
         binding = bindings.longTouchBinder(1000)
             .toProduce(() => new StubCmd(true))
             .onDynamic(doc)
-            .log(LogLevel.interaction)
+            .log("interaction")
             .bind();
 
         rect.dispatchEvent(createTouchEvent("touchstart", 1, rect, 11, 23, 110, 230));
