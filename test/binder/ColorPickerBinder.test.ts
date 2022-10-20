@@ -24,69 +24,71 @@ let cmd: StubCmd;
 let ctx: BindingsContext;
 let bindings: Bindings<UndoHistoryBase>;
 
-beforeEach(() => {
-    bindings = new BindingsImpl(new UndoHistoryImpl());
-    ctx = new BindingsContext();
-    bindings.setBindingObserver(ctx);
-    widget1 = document.createElement("input");
-    widget2 = document.createElement("input");
-    widget1.type = "color";
-    widget2.type = "color";
-    cmd = new StubCmd(true);
-});
+describe("using a color picker binder", () => {
+    beforeEach(() => {
+        bindings = new BindingsImpl(new UndoHistoryImpl());
+        ctx = new BindingsContext();
+        bindings.setBindingObserver(ctx);
+        widget1 = document.createElement("input");
+        widget2 = document.createElement("input");
+        widget1.type = "color";
+        widget2.type = "color";
+        cmd = new StubCmd(true);
+    });
 
-afterEach(() => {
-    bindings.clear();
-});
+    afterEach(() => {
+        bindings.clear();
+    });
 
-test("commandExecutedOnSinglePickerFunction", () => {
-    binding = bindings.colorPickerBinder()
-        .toProduce((_i: WidgetData<HTMLInputElement>) => cmd)
-        .on(widget1)
-        .bind();
+    test("commandExecutedOnSinglePickerFunction", () => {
+        binding = bindings.colorPickerBinder()
+            .toProduce((_i: WidgetData<HTMLInputElement>) => cmd)
+            .on(widget1)
+            .bind();
 
-    widget1.dispatchEvent(new Event("input"));
-    expect(binding).toBeDefined();
-    expect(cmd.exec).toBe(1);
-});
+        widget1.dispatchEvent(new Event("input"));
+        expect(binding).toBeDefined();
+        expect(cmd.exec).toBe(1);
+    });
 
-test("commandExecutedOnTwoPickers", () => {
-    binding = bindings.colorPickerBinder()
-        .on(widget1, widget2)
-        .toProduce((_i: WidgetData<HTMLInputElement>) => new StubCmd(true))
-        .bind();
+    test("commandExecutedOnTwoPickers", () => {
+        binding = bindings.colorPickerBinder()
+            .on(widget1, widget2)
+            .toProduce((_i: WidgetData<HTMLInputElement>) => new StubCmd(true))
+            .bind();
 
-    widget1.dispatchEvent(new Event("input"));
-    widget2.dispatchEvent(new Event("input"));
+        widget1.dispatchEvent(new Event("input"));
+        widget2.dispatchEvent(new Event("input"));
 
-    expect(binding).toBeDefined();
-    expect(ctx.commands).toHaveLength(2);
-});
+        expect(binding).toBeDefined();
+        expect(ctx.commands).toHaveLength(2);
+    });
 
-test("init1Executed", () => {
-    binding = bindings.colorPickerBinder()
-        .on(widget1)
-        .toProduce((_i: WidgetData<HTMLInputElement>) => cmd)
-        .first((c: StubCmd) => {
-            c.exec = 10;
-        })
-        .bind();
+    test("init1Executed", () => {
+        binding = bindings.colorPickerBinder()
+            .on(widget1)
+            .toProduce((_i: WidgetData<HTMLInputElement>) => cmd)
+            .first((c: StubCmd) => {
+                c.exec = 10;
+            })
+            .bind();
 
-    widget1.dispatchEvent(new Event("input"));
+        widget1.dispatchEvent(new Event("input"));
 
-    expect(binding).toBeDefined();
-    expect(cmd.exec).toBe(11);
-});
+        expect(binding).toBeDefined();
+        expect(cmd.exec).toBe(11);
+    });
 
-test("checkFalse", () => {
-    binding = bindings.colorPickerBinder()
-        .toProduce((_i: WidgetData<HTMLInputElement>) => cmd)
-        .on(widget1)
-        .when((_i: WidgetData<HTMLInputElement>) => false)
-        .bind();
+    test("checkFalse", () => {
+        binding = bindings.colorPickerBinder()
+            .toProduce((_i: WidgetData<HTMLInputElement>) => cmd)
+            .on(widget1)
+            .when((_i: WidgetData<HTMLInputElement>) => false)
+            .bind();
 
-    widget1.dispatchEvent(new Event("input"));
+        widget1.dispatchEvent(new Event("input"));
 
-    expect(binding).toBeDefined();
-    expect(cmd.exec).toBe(0);
+        expect(binding).toBeDefined();
+        expect(cmd.exec).toBe(0);
+    });
 });

@@ -23,73 +23,75 @@ let c1: HTMLElement;
 let ctx: BindingsContext;
 let bindings: Bindings<UndoHistoryBase>;
 
-beforeEach(() => {
-    bindings = new BindingsImpl(new UndoHistoryImpl());
-    ctx = new BindingsContext();
-    bindings.setBindingObserver(ctx);
-    jest.useFakeTimers();
-    c1 = document.createElement("canvas");
-});
+describe("using a pinch binder", () => {
+    beforeEach(() => {
+        bindings = new BindingsImpl(new UndoHistoryImpl());
+        ctx = new BindingsContext();
+        bindings.setBindingObserver(ctx);
+        jest.useFakeTimers();
+        c1 = document.createElement("canvas");
+    });
 
-afterEach(() => {
-    bindings.clear();
-    jest.clearAllTimers();
-});
+    afterEach(() => {
+        bindings.clear();
+        jest.clearAllTimers();
+    });
 
-test("pinch OK", () => {
-    binding = bindings.pinchBinder(10)
-        .toProduce(() => new StubCmd(true))
-        .on(c1)
-        .bind();
+    test("pinch OK", () => {
+        binding = bindings.pinchBinder(10)
+            .toProduce(() => new StubCmd(true))
+            .on(c1)
+            .bind();
 
-    robot(c1)
-        .touchstart({}, [{"identifier": 2, "screenX": 15, "screenY": 16, "clientX": 100, "clientY": 200}])
-        .touchstart({}, [{"identifier": 3, "screenX": 10, "screenY": 11, "clientX": 100, "clientY": 200}])
-        .touchmove({}, [{"identifier": 2, "screenX": 20, "screenY": 22, "clientX": 100, "clientY": 200}])
-        .touchmove({}, [{"identifier": 3, "screenX": 5, "screenY": 6, "clientX": 100, "clientY": 200}])
-        .touchend({}, [{"identifier": 2, "screenX": 20, "screenY": 22, "clientX": 500, "clientY": 210}])
-        .touchend({}, [{"identifier": 3, "screenX": 5, "screenY": 6, "clientX": 500, "clientY": 210}]);
+        robot(c1)
+            .touchstart({}, [{"identifier": 2, "screenX": 15, "screenY": 16, "clientX": 100, "clientY": 200}])
+            .touchstart({}, [{"identifier": 3, "screenX": 10, "screenY": 11, "clientX": 100, "clientY": 200}])
+            .touchmove({}, [{"identifier": 2, "screenX": 20, "screenY": 22, "clientX": 100, "clientY": 200}])
+            .touchmove({}, [{"identifier": 3, "screenX": 5, "screenY": 6, "clientX": 100, "clientY": 200}])
+            .touchend({}, [{"identifier": 2, "screenX": 20, "screenY": 22, "clientX": 500, "clientY": 210}])
+            .touchend({}, [{"identifier": 3, "screenX": 5, "screenY": 6, "clientX": 500, "clientY": 210}]);
 
-    expect(binding).toBeDefined();
-    expect(binding.timesCancelled).toBe(0);
-    expect(binding.timesEnded).toBe(1);
-    expect(ctx.commands).toHaveLength(1);
-    expect(ctx.getCmd(0)).toBeInstanceOf(StubCmd);
-});
+        expect(binding).toBeDefined();
+        expect(binding.timesCancelled).toBe(0);
+        expect(binding.timesEnded).toBe(1);
+        expect(ctx.commands).toHaveLength(1);
+        expect(ctx.getCmd(0)).toBeInstanceOf(StubCmd);
+    });
 
-test("pinch KO wrong direction", () => {
-    binding = bindings.pinchBinder(10)
-        .toProduce(() => new StubCmd(true))
-        .on(c1)
-        .bind();
+    test("pinch KO wrong direction", () => {
+        binding = bindings.pinchBinder(10)
+            .toProduce(() => new StubCmd(true))
+            .on(c1)
+            .bind();
 
-    robot(c1)
-        .touchstart({}, [{"identifier": 2, "screenX": 15, "screenY": 16, "clientX": 100, "clientY": 200}])
-        .touchstart({}, [{"identifier": 3, "screenX": 10, "screenY": 11, "clientX": 100, "clientY": 200}])
-        .touchmove({}, [{"identifier": 2, "screenX": 10, "screenY": 8, "clientX": 100, "clientY": 200}])
-        .touchmove({}, [{"identifier": 3, "screenX": 5, "screenY": 6, "clientX": 100, "clientY": 200}])
-        .touchend({}, [{"identifier": 2, "screenX": 10, "screenY": 8, "clientX": 500, "clientY": 210}])
-        .touchend({}, [{"identifier": 3, "screenX": 5, "screenY": 6, "clientX": 500, "clientY": 210}]);
+        robot(c1)
+            .touchstart({}, [{"identifier": 2, "screenX": 15, "screenY": 16, "clientX": 100, "clientY": 200}])
+            .touchstart({}, [{"identifier": 3, "screenX": 10, "screenY": 11, "clientX": 100, "clientY": 200}])
+            .touchmove({}, [{"identifier": 2, "screenX": 10, "screenY": 8, "clientX": 100, "clientY": 200}])
+            .touchmove({}, [{"identifier": 3, "screenX": 5, "screenY": 6, "clientX": 100, "clientY": 200}])
+            .touchend({}, [{"identifier": 2, "screenX": 10, "screenY": 8, "clientX": 500, "clientY": 210}])
+            .touchend({}, [{"identifier": 3, "screenX": 5, "screenY": 6, "clientX": 500, "clientY": 210}]);
 
-    expect(binding).toBeDefined();
-    expect(binding.timesCancelled).toBe(1);
-    expect(binding.timesEnded).toBe(0);
-    expect(ctx.commands).toHaveLength(0);
-});
+        expect(binding).toBeDefined();
+        expect(binding.timesCancelled).toBe(1);
+        expect(binding.timesEnded).toBe(0);
+        expect(ctx.commands).toHaveLength(0);
+    });
 
-test("pinch KO not enough touches", () => {
-    binding = bindings.pinchBinder(10)
-        .toProduce(() => new StubCmd(true))
-        .on(c1)
-        .bind();
+    test("pinch KO not enough touches", () => {
+        binding = bindings.pinchBinder(10)
+            .toProduce(() => new StubCmd(true))
+            .on(c1)
+            .bind();
 
-    robot(c1)
-        .touchstart({}, [{"identifier": 2, "screenX": 15, "screenY": 16, "clientX": 100, "clientY": 200}])
-        .touchmove({}, [{"identifier": 2, "screenX": 20, "screenY": 22, "clientX": 100, "clientY": 200}])
-        .touchend({}, [{"identifier": 2, "screenX": 20, "screenY": 22, "clientX": 500, "clientY": 210}]);
+        robot(c1)
+            .touchstart({}, [{"identifier": 2, "screenX": 15, "screenY": 16, "clientX": 100, "clientY": 200}])
+            .touchmove({}, [{"identifier": 2, "screenX": 20, "screenY": 22, "clientX": 100, "clientY": 200}])
+            .touchend({}, [{"identifier": 2, "screenX": 20, "screenY": 22, "clientX": 500, "clientY": 210}]);
 
-    expect(binding).toBeDefined();
-    expect(binding.timesCancelled).toBe(0);
-    expect(binding.timesEnded).toBe(0);
-    expect(ctx.commands).toHaveLength(0);
+        expect(binding).toBeDefined();
+        expect(binding.timesCancelled).toBe(0);
+        expect(binding.timesEnded).toBe(0);
+        expect(ctx.commands).toHaveLength(0);
+    });
 });

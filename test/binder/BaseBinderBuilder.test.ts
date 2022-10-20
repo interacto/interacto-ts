@@ -14,35 +14,37 @@
 
 import {isEltRef} from "../../src/api/binder/BaseBinderBuilder";
 
-test("undefined is not eltref", () => {
-    expect(isEltRef(undefined)).toBeFalsy();
-});
+describe("using a base binder builder", () => {
+    test("undefined is not eltref", () => {
+        expect(isEltRef(undefined)).toBeFalsy();
+    });
 
-test("null is not eltref", () => {
-    expect(isEltRef(null)).toBeFalsy();
-});
+    test("null is not eltref", () => {
+        expect(isEltRef(null)).toBeFalsy();
+    });
 
-test("number is not eltref", () => {
-    expect(isEltRef(1)).toBeFalsy();
-});
+    test("number is not eltref", () => {
+        expect(isEltRef(1)).toBeFalsy();
+    });
 
-test("string is not eltref", () => {
-    expect(isEltRef("foooo")).toBeFalsy();
-});
+    test("string is not eltref", () => {
+        expect(isEltRef("foooo")).toBeFalsy();
+    });
 
-test("{} is not eltref", () => {
-    expect(isEltRef({})).toBeFalsy();
-});
+    test("{} is not eltref", () => {
+        expect(isEltRef({})).toBeFalsy();
+    });
 
-test("o.nativeElement is not EventTarget", () => {
-    expect(isEltRef({
-        "nativeElement": 2
-    })).toBeFalsy();
-});
+    test("o.nativeElement is not EventTarget", () => {
+        expect(isEltRef({
+            "nativeElement": 2
+        })).toBeFalsy();
+    });
 
-test("o.nativeElement is EventTarget", () => {
-    const elt = document.createElement("button");
-    expect(isEltRef({
-        "nativeElement": elt
-    })).toBeTruthy();
+    test("o.nativeElement is EventTarget", () => {
+        const elt = document.createElement("button");
+        expect(isEltRef({
+            "nativeElement": elt
+        })).toBeTruthy();
+    });
 });

@@ -26,114 +26,114 @@ let binding2: Binding<StubCmd, MouseDown, PointData>;
 let disposable: Subscription | undefined;
 let bindings: Bindings<UndoHistoryBase>;
 
-beforeEach(() => {
-    bindings = new BindingsImpl(new UndoHistoryImpl());
-    document.documentElement.innerHTML = "<html><div><canvas id='c1'> <canvas id='c2'/> </canvas></html>";
-    canvas1 = document.querySelector("#c1") as HTMLElement;
-    canvas2 = document.querySelector("#c2") as HTMLElement;
-});
+describe("using a block event binder", () => {
+    beforeEach(() => {
+        bindings = new BindingsImpl(new UndoHistoryImpl());
+        document.documentElement.innerHTML = "<html><div><canvas id='c1'> <canvas id='c2'/> </canvas></html>";
+        canvas1 = document.querySelector("#c1") as HTMLElement;
+        canvas2 = document.querySelector("#c2") as HTMLElement;
+    });
 
-afterEach(() => {
-    if (disposable !== undefined) {
-        disposable.unsubscribe();
-    }
-    binding1.uninstallBinding();
-    binding2.uninstallBinding();
-    bindings.clear();
-});
+    afterEach(() => {
+        disposable?.unsubscribe();
+        binding1.uninstallBinding();
+        binding2.uninstallBinding();
+        bindings.clear();
+    });
 
-test("event bubbling works", () => {
-    binding2 = bindings.nodeBinder()
-        .usingInteraction(() => new MouseDown(mock<Logger>()))
-        .toProduce(_i => new StubCmd())
-        .on(canvas2)
-        .bind();
+    test("event bubbling works", () => {
+        binding2 = bindings.nodeBinder()
+            .usingInteraction(() => new MouseDown(mock<Logger>()))
+            .toProduce(_i => new StubCmd())
+            .on(canvas2)
+            .bind();
 
-    binding1 = bindings.nodeBinder()
-        .usingInteraction(() => new MouseDown(mock<Logger>()))
-        .toProduce(_i => new StubCmd())
-        .on(canvas1)
-        .bind();
+        binding1 = bindings.nodeBinder()
+            .usingInteraction(() => new MouseDown(mock<Logger>()))
+            .toProduce(_i => new StubCmd())
+            .on(canvas1)
+            .bind();
 
-    canvas2.dispatchEvent(createMouseEvent("mousedown", canvas2));
+        canvas2.dispatchEvent(createMouseEvent("mousedown", canvas2));
 
-    expect(binding2.timesEnded).toBe(1);
-    expect(binding1.timesEnded).toBe(1);
-});
+        expect(binding2.timesEnded).toBe(1);
+        expect(binding1.timesEnded).toBe(1);
+    });
 
-test("event bubbling respects physical laws", () => {
-    binding2 = bindings.nodeBinder()
-        .usingInteraction(() => new MouseDown(mock<Logger>()))
-        .toProduce(() => new StubCmd())
-        .on(canvas2)
-        .bind();
+    test("event bubbling respects physical laws", () => {
+        binding2 = bindings.nodeBinder()
+            .usingInteraction(() => new MouseDown(mock<Logger>()))
+            .toProduce(() => new StubCmd())
+            .on(canvas2)
+            .bind();
 
-    binding1 = bindings.nodeBinder()
-        .usingInteraction(() => new MouseDown(mock<Logger>()))
-        .toProduce(() => new StubCmd())
-        .on(canvas1)
-        .bind();
+        binding1 = bindings.nodeBinder()
+            .usingInteraction(() => new MouseDown(mock<Logger>()))
+            .toProduce(() => new StubCmd())
+            .on(canvas1)
+            .bind();
 
-    canvas1.dispatchEvent(createMouseEvent("mousedown", canvas1));
+        canvas1.dispatchEvent(createMouseEvent("mousedown", canvas1));
 
-    expect(binding1.timesEnded).toBe(1);
-    expect(binding2.timesEnded).toBe(0);
-});
+        expect(binding1.timesEnded).toBe(1);
+        expect(binding2.timesEnded).toBe(0);
+    });
 
-test("stop propagation prevents bubbling", () => {
-    binding2 = bindings.nodeBinder()
-        .usingInteraction(() => new MouseDown(mock<Logger>()))
-        .toProduce(() => new StubCmd())
-        .on(canvas2)
-        .stopImmediatePropagation()
-        .bind();
+    test("stop propagation prevents bubbling", () => {
+        binding2 = bindings.nodeBinder()
+            .usingInteraction(() => new MouseDown(mock<Logger>()))
+            .toProduce(() => new StubCmd())
+            .on(canvas2)
+            .stopImmediatePropagation()
+            .bind();
 
-    binding1 = bindings.nodeBinder()
-        .usingInteraction(() => new MouseDown(mock<Logger>()))
-        .toProduce(() => new StubCmd())
-        .on(canvas1)
-        .bind();
+        binding1 = bindings.nodeBinder()
+            .usingInteraction(() => new MouseDown(mock<Logger>()))
+            .toProduce(() => new StubCmd())
+            .on(canvas1)
+            .bind();
 
-    canvas2.dispatchEvent(createMouseEvent("mousedown", canvas2));
+        canvas2.dispatchEvent(createMouseEvent("mousedown", canvas2));
 
-    expect(binding2.timesEnded).toBe(1);
-    expect(binding1.timesEnded).toBe(0);
-});
+        expect(binding2.timesEnded).toBe(1);
+        expect(binding1.timesEnded).toBe(0);
+    });
 
-test("stop propagation prevents bubbling with key bindings", () => {
-    const b2 = bindings.keyDownBinder(false)
-        .toProduce(() => new StubCmd())
-        .on(canvas2)
-        .stopImmediatePropagation()
-        .bind();
+    test("stop propagation prevents bubbling with key bindings", () => {
+        const b2 = bindings.keyDownBinder(false)
+            .toProduce(() => new StubCmd())
+            .on(canvas2)
+            .stopImmediatePropagation()
+            .bind();
 
-    const b1 = bindings.keyDownBinder(false)
-        .toProduce(() => new StubCmd())
-        .on(canvas1)
-        .bind();
+        const b1 = bindings.keyDownBinder(false)
+            .toProduce(() => new StubCmd())
+            .on(canvas1)
+            .bind();
 
-    canvas2.dispatchEvent(createKeyEvent("keydown", "A"));
+        canvas2.dispatchEvent(createKeyEvent("keydown", "A"));
 
-    expect(b2.timesEnded).toBe(1);
-    expect(b1.timesEnded).toBe(0);
-});
+        expect(b2.timesEnded).toBe(1);
+        expect(b1.timesEnded).toBe(0);
+    });
 
-test("stop propagation prevents bubbling using cloned builders", () => {
-    const clone = bindings.nodeBinder()
-        .usingInteraction(() => new MouseDown(mock<Logger>()))
-        .toProduce(() => new StubCmd())
-        .stopImmediatePropagation();
+    test("stop propagation prevents bubbling using cloned builders", () => {
+        const clone = bindings.nodeBinder()
+            .usingInteraction(() => new MouseDown(mock<Logger>()))
+            .toProduce(() => new StubCmd())
+            .stopImmediatePropagation();
 
-    binding1 = clone
-        .on(canvas1)
-        .bind();
+        binding1 = clone
+            .on(canvas1)
+            .bind();
 
-    binding2 = clone
-        .on(canvas2)
-        .bind();
+        binding2 = clone
+            .on(canvas2)
+            .bind();
 
-    canvas2.dispatchEvent(createMouseEvent("mousedown", canvas2));
+        canvas2.dispatchEvent(createMouseEvent("mousedown", canvas2));
 
-    expect(binding2.timesEnded).toBe(1);
-    expect(binding1.timesEnded).toBe(0);
+        expect(binding2.timesEnded).toBe(1);
+        expect(binding1.timesEnded).toBe(0);
+    });
 });

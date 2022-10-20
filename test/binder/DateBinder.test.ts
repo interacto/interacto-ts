@@ -24,69 +24,71 @@ let cmd: StubCmd;
 let ctx: BindingsContext;
 let bindings: Bindings<UndoHistoryBase>;
 
-beforeEach(() => {
-    bindings = new BindingsImpl(new UndoHistoryImpl());
-    ctx = new BindingsContext();
-    bindings.setBindingObserver(ctx);
-    widget1 = document.createElement("input");
-    widget2 = document.createElement("input");
-    widget1.type = "date";
-    widget2.type = "date";
-    cmd = new StubCmd(true);
-});
+describe("using a date binder", () => {
+    beforeEach(() => {
+        bindings = new BindingsImpl(new UndoHistoryImpl());
+        ctx = new BindingsContext();
+        bindings.setBindingObserver(ctx);
+        widget1 = document.createElement("input");
+        widget2 = document.createElement("input");
+        widget1.type = "date";
+        widget2.type = "date";
+        cmd = new StubCmd(true);
+    });
 
-afterEach(() => {
-    bindings.clear();
-});
+    afterEach(() => {
+        bindings.clear();
+    });
 
-test("commandExecutedOnSingleDateFunction", () => {
-    binding = bindings.dateBinder()
-        .toProduce(_i => cmd)
-        .on(widget1)
-        .bind();
+    test("commandExecutedOnSingleDateFunction", () => {
+        binding = bindings.dateBinder()
+            .toProduce(_i => cmd)
+            .on(widget1)
+            .bind();
 
-    widget1.dispatchEvent(new Event("input"));
-    expect(binding).toBeDefined();
-    expect(cmd.exec).toBe(1);
-});
+        widget1.dispatchEvent(new Event("input"));
+        expect(binding).toBeDefined();
+        expect(cmd.exec).toBe(1);
+    });
 
-test("commandExecutedOnTwoDates", () => {
-    binding = bindings.dateBinder()
-        .on(widget1, widget2)
-        .toProduce(_i => new StubCmd(true))
-        .bind();
+    test("commandExecutedOnTwoDates", () => {
+        binding = bindings.dateBinder()
+            .on(widget1, widget2)
+            .toProduce(_i => new StubCmd(true))
+            .bind();
 
-    widget1.dispatchEvent(new Event("input"));
-    widget2.dispatchEvent(new Event("input"));
+        widget1.dispatchEvent(new Event("input"));
+        widget2.dispatchEvent(new Event("input"));
 
-    expect(binding).toBeDefined();
-    expect(ctx.commands).toHaveLength(2);
-});
+        expect(binding).toBeDefined();
+        expect(ctx.commands).toHaveLength(2);
+    });
 
-test("init1Executed", () => {
-    binding = bindings.dateBinder()
-        .on(widget1)
-        .toProduce(_i => cmd)
-        .first((c: StubCmd) => {
-            c.exec = 10;
-        })
-        .bind();
+    test("init1Executed", () => {
+        binding = bindings.dateBinder()
+            .on(widget1)
+            .toProduce(_i => cmd)
+            .first((c: StubCmd) => {
+                c.exec = 10;
+            })
+            .bind();
 
-    widget1.dispatchEvent(new Event("input"));
+        widget1.dispatchEvent(new Event("input"));
 
-    expect(binding).toBeDefined();
-    expect(cmd.exec).toBe(11);
-});
+        expect(binding).toBeDefined();
+        expect(cmd.exec).toBe(11);
+    });
 
-test("checkFalse", () => {
-    binding = bindings.dateBinder()
-        .toProduce(_i => cmd)
-        .on(widget1)
-        .when((_i: WidgetData<HTMLInputElement>) => false)
-        .bind();
+    test("checkFalse", () => {
+        binding = bindings.dateBinder()
+            .toProduce(_i => cmd)
+            .on(widget1)
+            .when((_i: WidgetData<HTMLInputElement>) => false)
+            .bind();
 
-    widget1.dispatchEvent(new Event("input"));
+        widget1.dispatchEvent(new Event("input"));
 
-    expect(binding).toBeDefined();
-    expect(cmd.exec).toBe(0);
+        expect(binding).toBeDefined();
+        expect(cmd.exec).toBe(0);
+    });
 });

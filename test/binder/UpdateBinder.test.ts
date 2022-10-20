@@ -24,35 +24,36 @@ import type {UndoHistory} from "../../src/api/undo/UndoHistory";
 import {UndoHistoryImpl} from "../../src/impl/undo/UndoHistoryImpl";
 import type {Logger} from "../../src/api/logging/Logger";
 
-let binder: UpdateBinder<Command, Interaction<InteractionData>, InteractionData>;
-let history: UndoHistory;
+describe("using an update binder", () => {
+    let binder: UpdateBinder<Command, Interaction<InteractionData>, InteractionData>;
+    let history: UndoHistory;
 
-beforeEach(() => {
-    history = new UndoHistoryImpl();
-    binder = new UpdateBinder(history, mock<Logger>());
+    beforeEach(() => {
+        history = new UndoHistoryImpl();
+        binder = new UpdateBinder(history, mock<Logger>());
+    });
+
+    afterEach(() => {
+        clearAllMocks();
+    });
+
+    test("that is crashes when calling bind without an interaction supplier", () => {
+        expect(() => binder.bind()).toThrow("The interaction supplier cannot be undefined here");
+    });
+
+    test("that is crashes when calling bind without a command supplier", () => {
+        binder = binder.usingInteraction(() => mock<Interaction<InteractionData>>());
+        expect(() => binder.bind()).toThrow("The command supplier cannot be undefined here");
+    });
+
+    test("that observer is used on bind", () => {
+        const obs = mock<BindingsObserver>();
+        binder = new UpdateBinder(history, mock<Logger>(), obs)
+            .usingInteraction(() => new MouseDown(mock<Logger>()))
+            .toProduce(() => mock<Command>());
+
+        const binding = binder.bind();
+        expect(obs.observeBinding).toHaveBeenCalledTimes(1);
+        expect(obs.observeBinding).toHaveBeenCalledWith(binding);
+    });
 });
-
-afterEach(() => {
-    clearAllMocks();
-});
-
-test("that is crashes when calling bind without an interaction supplier", () => {
-    expect(() => binder.bind()).toThrow("The interaction supplier cannot be undefined here");
-});
-
-test("that is crashes when calling bind without a command supplier", () => {
-    binder = binder.usingInteraction(() => mock<Interaction<InteractionData>>());
-    expect(() => binder.bind()).toThrow("The command supplier cannot be undefined here");
-});
-
-test("that observer is used on bind", () => {
-    const obs = mock<BindingsObserver>();
-    binder = new UpdateBinder(history, mock<Logger>(), obs)
-        .usingInteraction(() => new MouseDown(mock<Logger>()))
-        .toProduce(() => mock<Command>());
-
-    const binding = binder.bind();
-    expect(obs.observeBinding).toHaveBeenCalledTimes(1);
-    expect(obs.observeBinding).toHaveBeenCalledWith(binding);
-});
-

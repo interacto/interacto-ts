@@ -24,131 +24,132 @@ let cmd: StubCmd;
 let ctx: BindingsContext;
 let bindings: Bindings<UndoHistoryBase>;
 
-beforeEach(() => {
-    bindings = new BindingsImpl(new UndoHistoryImpl());
-    ctx = new BindingsContext();
-    bindings.setBindingObserver(ctx);
-    jest.useFakeTimers();
-});
-
-afterEach(() => {
-    bindings.clear();
-    jest.clearAllTimers();
-});
-
-describe("on canvas", () => {
-    let c1: HTMLElement;
-
+describe("using a long touch binder", () => {
     beforeEach(() => {
-        c1 = document.createElement("canvas");
+        bindings = new BindingsImpl(new UndoHistoryImpl());
+        ctx = new BindingsContext();
+        bindings.setBindingObserver(ctx);
+        jest.useFakeTimers();
     });
 
-    test("run long touch produces cmd", () => {
-        binding = bindings.longTouchBinder(1000)
-            .toProduce(() => new StubCmd(true))
-            .on(c1)
-            .bind();
-
-        c1.dispatchEvent(createTouchEvent("touchstart", 1, c1, 11, 23, 110, 230));
-        jest.runOnlyPendingTimers();
-
-        expect(binding).toBeDefined();
-        expect(ctx.commands).toHaveLength(1);
-        expect(ctx.getCmd(0)).toBeInstanceOf(StubCmd);
+    afterEach(() => {
+        bindings.clear();
+        jest.clearAllTimers();
     });
 
-    test("tap does not produce long touch", () => {
-        binding = bindings.longTouchBinder(1000)
-            .toProduce(() => new StubCmd(true))
-            .on(c1)
-            .log("interaction")
-            .bind();
+    describe("on canvas", () => {
+        let c1: HTMLElement;
 
-        c1.dispatchEvent(createTouchEvent("touchstart", 1, c1, 11, 23, 110, 230));
-        c1.dispatchEvent(createTouchEvent("touchend", 1, c1, 11, 23, 110, 230));
-        jest.runOnlyPendingTimers();
+        beforeEach(() => {
+            c1 = document.createElement("canvas");
+        });
 
-        expect(binding).toBeDefined();
-        expect(ctx.commands).toHaveLength(0);
+        test("run long touch produces cmd", () => {
+            binding = bindings.longTouchBinder(1000)
+                .toProduce(() => new StubCmd(true))
+                .on(c1)
+                .bind();
+
+            c1.dispatchEvent(createTouchEvent("touchstart", 1, c1, 11, 23, 110, 230));
+            jest.runOnlyPendingTimers();
+
+            expect(binding).toBeDefined();
+            expect(ctx.commands).toHaveLength(1);
+            expect(ctx.getCmd(0)).toBeInstanceOf(StubCmd);
+        });
+
+        test("tap does not produce long touch", () => {
+            binding = bindings.longTouchBinder(1000)
+                .toProduce(() => new StubCmd(true))
+                .on(c1)
+                .log("interaction")
+                .bind();
+
+            c1.dispatchEvent(createTouchEvent("touchstart", 1, c1, 11, 23, 110, 230));
+            c1.dispatchEvent(createTouchEvent("touchend", 1, c1, 11, 23, 110, 230));
+            jest.runOnlyPendingTimers();
+
+            expect(binding).toBeDefined();
+            expect(ctx.commands).toHaveLength(0);
+        });
+
+        test("run long touch two times recycle events", () => {
+            binding = bindings.longTouchBinder(150)
+                .toProduce(() => new StubCmd(true))
+                .on(c1)
+                .bind();
+
+            c1.dispatchEvent(createTouchEvent("touchstart", 1, c1, 11, 23, 110, 230));
+            jest.runOnlyPendingTimers();
+
+            c1.dispatchEvent(createTouchEvent("touchstart", 1, c1, 11, 23, 110, 230));
+            jest.runOnlyPendingTimers();
+
+            expect(binding).toBeDefined();
+            expect(ctx.commands).toHaveLength(2);
+        });
+
+        test("unsubscribe does not trigger the binding", () => {
+            binding = bindings.longTouchBinder(2000)
+                .toProduce(() => cmd)
+                .on(c1)
+                .bind();
+
+            (binding.interaction as InteractionBase<InteractionData, Flushable & InteractionData, FSM>).onNodeUnregistered(c1);
+
+            c1.dispatchEvent(createTouchEvent("touchstart", 1, c1, 11, 23, 110, 230));
+
+            expect(binding.running).toBeFalsy();
+        });
     });
 
-    test("run long touch two times recycle events", () => {
-        binding = bindings.longTouchBinder(150)
-            .toProduce(() => new StubCmd(true))
-            .on(c1)
-            .bind();
+    describe("on svg doc for dynamic registration", () => {
+        let doc: HTMLElement;
 
-        c1.dispatchEvent(createTouchEvent("touchstart", 1, c1, 11, 23, 110, 230));
-        jest.runOnlyPendingTimers();
+        beforeEach(() => {
+            doc = document.createElement("svg");
+        });
 
-        c1.dispatchEvent(createTouchEvent("touchstart", 1, c1, 11, 23, 110, 230));
-        jest.runOnlyPendingTimers();
+        test("tap does not produce long touch on dynamic array", async () => {
+            binding = bindings.longTouchBinder(1000)
+                .toProduce(() => new StubCmd(true))
+                .onDynamic(doc)
+                .log("interaction")
+                .bind();
 
-        expect(binding).toBeDefined();
-        expect(ctx.commands).toHaveLength(2);
-    });
+            const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+            doc.append(rect);
 
-    test("unsubscribe does not trigger the binding", () => {
-        binding = bindings.longTouchBinder(2000)
-            .toProduce(() => cmd)
-            .on(c1)
-            .bind();
+            // Waiting for the mutation changes to be done.
+            await Promise.resolve();
 
-        (binding.interaction as InteractionBase<InteractionData, Flushable & InteractionData, FSM>).onNodeUnregistered(c1);
+            rect.dispatchEvent(createTouchEvent("touchstart", 1, rect, 11, 23, 110, 230));
+            rect.dispatchEvent(createTouchEvent("touchend", 1, rect, 11, 23, 110, 230));
+            jest.runOnlyPendingTimers();
 
-        c1.dispatchEvent(createTouchEvent("touchstart", 1, c1, 11, 23, 110, 230));
+            expect(binding).toBeDefined();
+            expect(ctx.commands).toHaveLength(0);
+        });
 
-        expect(binding.running).toBeFalsy();
+        test("tap does not produce long touch on dynamic array 2", async () => {
+            const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+            doc.append(rect);
+
+            // Waiting for the mutation changes to be done.
+            await Promise.resolve();
+
+            binding = bindings.longTouchBinder(1000)
+                .toProduce(() => new StubCmd(true))
+                .onDynamic(doc)
+                .log("interaction")
+                .bind();
+
+            rect.dispatchEvent(createTouchEvent("touchstart", 1, rect, 11, 23, 110, 230));
+            rect.dispatchEvent(createTouchEvent("touchend", 1, rect, 11, 23, 110, 230));
+            jest.runOnlyPendingTimers();
+
+            expect(binding).toBeDefined();
+            expect(ctx.commands).toHaveLength(0);
+        });
     });
 });
-
-describe("on svg doc for dynamic registration", () => {
-    let doc: HTMLElement;
-
-    beforeEach(() => {
-        doc = document.createElement("svg");
-    });
-
-    test("tap does not produce long touch on dynamic array", async () => {
-        binding = bindings.longTouchBinder(1000)
-            .toProduce(() => new StubCmd(true))
-            .onDynamic(doc)
-            .log("interaction")
-            .bind();
-
-        const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-        doc.append(rect);
-
-        // Waiting for the mutation changes to be done.
-        await Promise.resolve();
-
-        rect.dispatchEvent(createTouchEvent("touchstart", 1, rect, 11, 23, 110, 230));
-        rect.dispatchEvent(createTouchEvent("touchend", 1, rect, 11, 23, 110, 230));
-        jest.runOnlyPendingTimers();
-
-        expect(binding).toBeDefined();
-        expect(ctx.commands).toHaveLength(0);
-    });
-
-    test("tap does not produce long touch on dynamic array 2", async () => {
-        const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-        doc.append(rect);
-
-        // Waiting for the mutation changes to be done.
-        await Promise.resolve();
-
-        binding = bindings.longTouchBinder(1000)
-            .toProduce(() => new StubCmd(true))
-            .onDynamic(doc)
-            .log("interaction")
-            .bind();
-
-        rect.dispatchEvent(createTouchEvent("touchstart", 1, rect, 11, 23, 110, 230));
-        rect.dispatchEvent(createTouchEvent("touchend", 1, rect, 11, 23, 110, 230));
-        jest.runOnlyPendingTimers();
-
-        expect(binding).toBeDefined();
-        expect(ctx.commands).toHaveLength(0);
-    });
-});
-

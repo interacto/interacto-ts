@@ -25,95 +25,96 @@ let cmd: StubCmd;
 let ctx: BindingsContext;
 let bindings: Bindings<UndoHistoryBase>;
 
-beforeEach(() => {
-    bindings = new BindingsImpl(new UndoHistoryImpl());
-    ctx = new BindingsContext();
-    bindings.setBindingObserver(ctx);
-    jest.useFakeTimers();
-    c1 = document.createElement("canvas");
-    cmd = new StubCmd(true);
+describe("using a multi touch binder", () => {
+    beforeEach(() => {
+        bindings = new BindingsImpl(new UndoHistoryImpl());
+        ctx = new BindingsContext();
+        bindings.setBindingObserver(ctx);
+        jest.useFakeTimers();
+        c1 = document.createElement("canvas");
+        cmd = new StubCmd(true);
+    });
+
+    afterEach(() => {
+        bindings.clear();
+        jest.clearAllTimers();
+    });
+
+    test("run multi-touch produces cmd", () => {
+        binding = bindings.multiTouchBinder(2)
+            .toProduce(() => cmd)
+            .on(c1)
+            .bind();
+
+        robot(c1)
+            .keepData()
+            .touchstart({}, [{"identifier": 1}])
+            .touchstart({}, [{"identifier": 2}])
+            .touchmove()
+            .touchend();
+
+        expect(binding).toBeDefined();
+        expect(cmd.exec).toBe(1);
+        expect(ctx.commands).toHaveLength(1);
+        expect(ctx.getCmd(0)).toBe(cmd);
+    });
+
+    test("run multi-touch two times recycle events", () => {
+        const data: Array<number> = [];
+        const dataFirst: Array<number> = [];
+
+        binding = bindings.multiTouchBinder(2)
+            .toProduce(() => new StubCmd(true))
+            .first((_, i) => {
+                dataFirst.push(i.touches.length);
+            })
+            .on(c1)
+            .end((_, i) => {
+                data.push(i.touches.length);
+            })
+            .bind();
+
+        robot(c1)
+            .keepData()
+            .touchstart({}, [{"identifier": 1}])
+            .touchstart({}, [{"identifier": 2}])
+            .touchmove()
+            .touchend()
+            .touchstart({}, [{"identifier": 3}])
+            .touchmove()
+            .touchend({}, [{"identifier": 1}]);
+
+        // c1.dispatchEvent(createTouchEvent("touchstart", 1, c1, 11, 23, 110, 230));
+        // c1.dispatchEvent(createTouchEvent("touchstart", 2, c1, 31, 13, 310, 130));
+        // c1.dispatchEvent(createTouchEvent("touchmove", 2, c1, 15, 30, 150, 300));
+        // c1.dispatchEvent(createTouchEvent("touchend", 2, c1, 15, 30, 150, 300));
+        // c1.dispatchEvent(createTouchEvent("touchstart", 3, c1, 31, 13, 310, 130));
+        // c1.dispatchEvent(createTouchEvent("touchmove", 3, c1, 15, 30, 150, 300));
+        // c1.dispatchEvent(createTouchEvent("touchend", 1, c1, 15, 30, 150, 300));
+
+        expect(binding).toBeDefined();
+        expect(ctx.commands).toHaveLength(2);
+        expect(dataFirst).toHaveLength(2);
+        expect(dataFirst[0]).toBe(2);
+        expect(dataFirst[1]).toBe(2);
+        expect(data).toHaveLength(2);
+        expect(data[0]).toBe(2);
+        expect(data[1]).toBe(2);
+    });
+
+    test("unsubscribe does not trigger the binding", () => {
+        binding = bindings.multiTouchBinder(2)
+            .toProduce(() => cmd)
+            .on(c1)
+            .bind();
+
+        (binding.interaction as InteractionBase<InteractionData, Flushable & InteractionData, FSM>).onNodeUnregistered(c1);
+
+        robot(c1)
+            .touchstart({}, [{"identifier": 1}])
+            .touchstart({}, [{"identifier": 2}])
+            .touchend();
+
+        expect(binding.running).toBeFalsy();
+    });
 });
-
-afterEach(() => {
-    bindings.clear();
-    jest.clearAllTimers();
-});
-
-test("run multi-touch produces cmd", () => {
-    binding = bindings.multiTouchBinder(2)
-        .toProduce(() => cmd)
-        .on(c1)
-        .bind();
-
-    robot(c1)
-        .keepData()
-        .touchstart({}, [{"identifier": 1}])
-        .touchstart({}, [{"identifier": 2}])
-        .touchmove()
-        .touchend();
-
-    expect(binding).toBeDefined();
-    expect(cmd.exec).toBe(1);
-    expect(ctx.commands).toHaveLength(1);
-    expect(ctx.getCmd(0)).toBe(cmd);
-});
-
-test("run multi-touch two times recycle events", () => {
-    const data: Array<number> = [];
-    const dataFirst: Array<number> = [];
-
-    binding = bindings.multiTouchBinder(2)
-        .toProduce(() => new StubCmd(true))
-        .first((_, i) => {
-            dataFirst.push(i.touches.length);
-        })
-        .on(c1)
-        .end((_, i) => {
-            data.push(i.touches.length);
-        })
-        .bind();
-
-    robot(c1)
-        .keepData()
-        .touchstart({}, [{"identifier": 1}])
-        .touchstart({}, [{"identifier": 2}])
-        .touchmove()
-        .touchend()
-        .touchstart({}, [{"identifier": 3}])
-        .touchmove()
-        .touchend({}, [{"identifier": 1}]);
-
-    // c1.dispatchEvent(createTouchEvent("touchstart", 1, c1, 11, 23, 110, 230));
-    // c1.dispatchEvent(createTouchEvent("touchstart", 2, c1, 31, 13, 310, 130));
-    // c1.dispatchEvent(createTouchEvent("touchmove", 2, c1, 15, 30, 150, 300));
-    // c1.dispatchEvent(createTouchEvent("touchend", 2, c1, 15, 30, 150, 300));
-    // c1.dispatchEvent(createTouchEvent("touchstart", 3, c1, 31, 13, 310, 130));
-    // c1.dispatchEvent(createTouchEvent("touchmove", 3, c1, 15, 30, 150, 300));
-    // c1.dispatchEvent(createTouchEvent("touchend", 1, c1, 15, 30, 150, 300));
-
-    expect(binding).toBeDefined();
-    expect(ctx.commands).toHaveLength(2);
-    expect(dataFirst).toHaveLength(2);
-    expect(dataFirst[0]).toBe(2);
-    expect(dataFirst[1]).toBe(2);
-    expect(data).toHaveLength(2);
-    expect(data[0]).toBe(2);
-    expect(data[1]).toBe(2);
-});
-
-test("unsubscribe does not trigger the binding", () => {
-    binding = bindings.multiTouchBinder(2)
-        .toProduce(() => cmd)
-        .on(c1)
-        .bind();
-
-    (binding.interaction as InteractionBase<InteractionData, Flushable & InteractionData, FSM>).onNodeUnregistered(c1);
-
-    robot(c1)
-        .touchstart({}, [{"identifier": 1}])
-        .touchstart({}, [{"identifier": 2}])
-        .touchend();
-
-    expect(binding.running).toBeFalsy();
-});
-

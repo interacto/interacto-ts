@@ -24,67 +24,69 @@ let cmd: StubCmd;
 let ctx: BindingsContext;
 let bindings: Bindings<UndoHistoryBase>;
 
-beforeEach(() => {
-    bindings = new BindingsImpl(new UndoHistoryImpl());
-    ctx = new BindingsContext();
-    bindings.setBindingObserver(ctx);
-    widget1 = document.createElement("select");
-    widget2 = document.createElement("select");
-    cmd = new StubCmd(true);
-});
+describe("using a combobox binder", () => {
+    beforeEach(() => {
+        bindings = new BindingsImpl(new UndoHistoryImpl());
+        ctx = new BindingsContext();
+        bindings.setBindingObserver(ctx);
+        widget1 = document.createElement("select");
+        widget2 = document.createElement("select");
+        cmd = new StubCmd(true);
+    });
 
-afterEach(() => {
-    bindings.clear();
-});
+    afterEach(() => {
+        bindings.clear();
+    });
 
-test("commandExecutedOnSingleComboFunction", () => {
-    binding = bindings.comboBoxBinder()
-        .toProduce(_i => cmd)
-        .on(widget1)
-        .bind();
+    test("commandExecutedOnSingleComboFunction", () => {
+        binding = bindings.comboBoxBinder()
+            .toProduce(_i => cmd)
+            .on(widget1)
+            .bind();
 
-    widget1.dispatchEvent(new Event("input"));
-    expect(binding).toBeDefined();
-    expect(cmd.exec).toBe(1);
-});
+        widget1.dispatchEvent(new Event("input"));
+        expect(binding).toBeDefined();
+        expect(cmd.exec).toBe(1);
+    });
 
-test("commandExecutedOnTwoCombos", () => {
-    binding = bindings.comboBoxBinder()
-        .on(widget1, widget2)
-        .toProduce(_i => new StubCmd(true))
-        .bind();
+    test("commandExecutedOnTwoCombos", () => {
+        binding = bindings.comboBoxBinder()
+            .on(widget1, widget2)
+            .toProduce(_i => new StubCmd(true))
+            .bind();
 
-    widget1.dispatchEvent(new Event("input"));
-    widget2.dispatchEvent(new Event("input"));
+        widget1.dispatchEvent(new Event("input"));
+        widget2.dispatchEvent(new Event("input"));
 
-    expect(binding).toBeDefined();
-    expect(ctx.commands).toHaveLength(2);
-});
+        expect(binding).toBeDefined();
+        expect(ctx.commands).toHaveLength(2);
+    });
 
-test("init1Executed", () => {
-    binding = bindings.comboBoxBinder()
-        .on(widget1)
-        .toProduce(_i => cmd)
-        .first((c: StubCmd, _i: WidgetData<HTMLSelectElement>) => {
-            c.exec = 10;
-        })
-        .bind();
+    test("init1Executed", () => {
+        binding = bindings.comboBoxBinder()
+            .on(widget1)
+            .toProduce(_i => cmd)
+            .first((c: StubCmd, _i: WidgetData<HTMLSelectElement>) => {
+                c.exec = 10;
+            })
+            .bind();
 
-    widget1.dispatchEvent(new Event("input"));
+        widget1.dispatchEvent(new Event("input"));
 
-    expect(binding).toBeDefined();
-    expect(cmd.exec).toBe(11);
-});
+        expect(binding).toBeDefined();
+        expect(cmd.exec).toBe(11);
+    });
 
-test("checkFalse", () => {
-    binding = bindings.comboBoxBinder()
-        .toProduce(_i => cmd)
-        .on(widget1)
-        .when((_i: WidgetData<HTMLSelectElement>) => false)
-        .bind();
+    test("checkFalse", () => {
+        binding = bindings.comboBoxBinder()
+            .toProduce(_i => cmd)
+            .on(widget1)
+            .when((_i: WidgetData<HTMLSelectElement>) => false)
+            .bind();
 
-    widget1.dispatchEvent(new Event("input"));
+        widget1.dispatchEvent(new Event("input"));
 
-    expect(binding).toBeDefined();
-    expect(cmd.exec).toBe(0);
+        expect(binding).toBeDefined();
+        expect(cmd.exec).toBe(0);
+    });
 });

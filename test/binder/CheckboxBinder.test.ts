@@ -25,91 +25,93 @@ let cmd: StubCmd;
 let ctx: BindingsContext;
 let bindings: Bindings<UndoHistoryBase>;
 
-beforeEach(() => {
-    bindings = new BindingsImpl(new UndoHistoryImpl());
-    ctx = new BindingsContext();
-    bindings.setBindingObserver(ctx);
-    widget1 = document.createElement("input");
-    widget2 = document.createElement("input");
-    widget1.type = "checkbox";
-    widget2.type = "checkbox";
-    cmd = new StubCmd(true);
-});
+describe("using a checkbox binder", () => {
+    beforeEach(() => {
+        bindings = new BindingsImpl(new UndoHistoryImpl());
+        ctx = new BindingsContext();
+        bindings.setBindingObserver(ctx);
+        widget1 = document.createElement("input");
+        widget2 = document.createElement("input");
+        widget1.type = "checkbox";
+        widget2.type = "checkbox";
+        cmd = new StubCmd(true);
+    });
 
-afterEach(() => {
-    bindings.clear();
-});
+    afterEach(() => {
+        bindings.clear();
+    });
 
-test("commandExecutedOnSingleButtonFunction", () => {
-    binding = bindings.checkboxBinder()
-        .toProduce(_i => cmd)
-        .on(widget1)
-        .bind();
+    test("commandExecutedOnSingleButtonFunction", () => {
+        binding = bindings.checkboxBinder()
+            .toProduce(_i => cmd)
+            .on(widget1)
+            .bind();
 
-    robot(widget1).input();
-    expect(binding).toBeDefined();
-    expect(cmd.exec).toBe(1);
-});
+        robot(widget1).input();
+        expect(binding).toBeDefined();
+        expect(cmd.exec).toBe(1);
+    });
 
-test("commandExecutedOnSingleButtonSupplier", () => {
-    binding = bindings.checkboxBinder()
-        .toProduce(() => cmd)
-        .on(widget1)
-        .bind();
+    test("commandExecutedOnSingleButtonSupplier", () => {
+        binding = bindings.checkboxBinder()
+            .toProduce(() => cmd)
+            .on(widget1)
+            .bind();
 
-    robot(widget1).input();
-    expect(binding).toBeDefined();
-    expect(cmd.exec).toBe(1);
-});
+        robot(widget1).input();
+        expect(binding).toBeDefined();
+        expect(cmd.exec).toBe(1);
+    });
 
-test("commandExecutedOnTwoCheckboxes", () => {
-    binding = bindings.checkboxBinder()
-        .toProduce(_i => new StubCmd(true))
-        .on(widget1, widget2)
-        .bind();
+    test("commandExecutedOnTwoCheckboxes", () => {
+        binding = bindings.checkboxBinder()
+            .toProduce(_i => new StubCmd(true))
+            .on(widget1, widget2)
+            .bind();
 
-    robot(widget2).input();
-    robot(widget1).input();
-    expect(binding).toBeDefined();
-    expect(ctx.commands).toHaveLength(2);
-});
+        robot(widget2).input();
+        robot(widget1).input();
+        expect(binding).toBeDefined();
+        expect(ctx.commands).toHaveLength(2);
+    });
 
-test("init1Executed", () => {
-    binding = bindings.checkboxBinder()
-        .toProduce(_i => cmd)
-        .first(c => {
-            c.exec = 10;
-        })
-        .on(widget1)
-        .bind();
+    test("init1Executed", () => {
+        binding = bindings.checkboxBinder()
+            .toProduce(_i => cmd)
+            .first(c => {
+                c.exec = 10;
+            })
+            .on(widget1)
+            .bind();
 
-    robot(widget1).input();
-    expect(binding).toBeDefined();
-    expect(cmd.exec).toBe(11);
-});
+        robot(widget1).input();
+        expect(binding).toBeDefined();
+        expect(cmd.exec).toBe(11);
+    });
 
-test("init2Executed", () => {
-    binding = bindings.checkboxBinder()
-        .toProduce(() => cmd)
-        .on(widget1)
-        .first((c, _i) => {
-            c.exec = 10;
-        })
-        .bind();
+    test("init2Executed", () => {
+        binding = bindings.checkboxBinder()
+            .toProduce(() => cmd)
+            .on(widget1)
+            .first((c, _i) => {
+                c.exec = 10;
+            })
+            .bind();
 
-    robot(widget1).input();
-    expect(binding).toBeDefined();
-    expect(cmd.exec).toBe(11);
-});
+        robot(widget1).input();
+        expect(binding).toBeDefined();
+        expect(cmd.exec).toBe(11);
+    });
 
-test("checkFalse", () => {
-    binding = bindings.checkboxBinder()
-        .on(widget1)
-        .when(_i => false)
-        .toProduce(_i => cmd)
-        .bind();
+    test("checkFalse", () => {
+        binding = bindings.checkboxBinder()
+            .on(widget1)
+            .when(_i => false)
+            .toProduce(_i => cmd)
+            .bind();
 
-    robot(widget1).input();
-    expect(binding).toBeDefined();
-    expect(cmd.exec).toBe(0);
+        robot(widget1).input();
+        expect(binding).toBeDefined();
+        expect(cmd.exec).toBe(0);
+    });
 });

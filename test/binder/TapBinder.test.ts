@@ -24,198 +24,199 @@ let cmd: StubCmd;
 let ctx: BindingsContext;
 let bindings: Bindings<UndoHistoryBase>;
 
-beforeEach(() => {
-    bindings = new BindingsImpl(new UndoHistoryImpl());
-    ctx = new BindingsContext();
-    bindings.setBindingObserver(ctx);
-    jest.useFakeTimers();
-    cmd = new StubCmd(true);
-});
-
-afterEach(() => {
-    jest.clearAllTimers();
-    bindings.clear();
-});
-
-describe("on canvas", () => {
-    let c1: HTMLElement;
-
+describe("using a tap binder", () => {
     beforeEach(() => {
-        c1 = document.createElement("canvas");
+        bindings = new BindingsImpl(new UndoHistoryImpl());
+        ctx = new BindingsContext();
+        bindings.setBindingObserver(ctx);
+        jest.useFakeTimers();
+        cmd = new StubCmd(true);
     });
 
-    test("run tap produces cmd", () => {
-        binding = bindings.tapBinder(2)
-            .toProduce(() => cmd)
-            .on(c1)
-            .bind();
-
-        robot(c1)
-            .keepData()
-            .touchstart({}, [{"identifier": 1}])
-            .touchend()
-            .touchstart({}, [{"identifier": 2}])
-            .touchend();
-
-        expect(binding).toBeDefined();
-        expect(cmd.exec).toBe(1);
-        expect(ctx.commands).toHaveLength(1);
-        expect(ctx.getCmd(0)).toBe(cmd);
+    afterEach(() => {
+        jest.clearAllTimers();
+        bindings.clear();
     });
 
-    test("run tap two times recycle events", () => {
-        binding = bindings.tapBinder(2)
-            .toProduce(() => new StubCmd(true))
-            .on(c1)
-            .bind();
+    describe("on canvas", () => {
+        let c1: HTMLElement;
 
-        robot(c1)
-            .keepData()
-            .touchstart({}, [{"identifier": 1}])
-            .touchend()
-            .touchstart({}, [{"identifier": 3}])
-            .touchend()
-            .touchstart({}, [{"identifier": 4}])
-            .touchend()
-            .touchstart({}, [{"identifier": 2}])
-            .touchend();
+        beforeEach(() => {
+            c1 = document.createElement("canvas");
+        });
 
-        expect(binding).toBeDefined();
-        expect(ctx.commands).toHaveLength(2);
+        test("run tap produces cmd", () => {
+            binding = bindings.tapBinder(2)
+                .toProduce(() => cmd)
+                .on(c1)
+                .bind();
+
+            robot(c1)
+                .keepData()
+                .touchstart({}, [{"identifier": 1}])
+                .touchend()
+                .touchstart({}, [{"identifier": 2}])
+                .touchend();
+
+            expect(binding).toBeDefined();
+            expect(cmd.exec).toBe(1);
+            expect(ctx.commands).toHaveLength(1);
+            expect(ctx.getCmd(0)).toBe(cmd);
+        });
+
+        test("run tap two times recycle events", () => {
+            binding = bindings.tapBinder(2)
+                .toProduce(() => new StubCmd(true))
+                .on(c1)
+                .bind();
+
+            robot(c1)
+                .keepData()
+                .touchstart({}, [{"identifier": 1}])
+                .touchend()
+                .touchstart({}, [{"identifier": 3}])
+                .touchend()
+                .touchstart({}, [{"identifier": 4}])
+                .touchend()
+                .touchstart({}, [{"identifier": 2}])
+                .touchend();
+
+            expect(binding).toBeDefined();
+            expect(ctx.commands).toHaveLength(2);
+        });
+
+        test("unsubscribe does not trigger the binding", () => {
+            binding = bindings.tapBinder(2)
+                .toProduce(() => cmd)
+                .on(c1)
+                .bind();
+
+            (binding.interaction as InteractionBase<InteractionData, Flushable & InteractionData, FSM>).onNodeUnregistered(c1);
+
+            robot(c1)
+                .keepData()
+                .touchstart({}, [{"identifier": 2}])
+                .touchend();
+
+            expect(binding.running).toBeFalsy();
+        });
     });
 
-    test("unsubscribe does not trigger the binding", () => {
-        binding = bindings.tapBinder(2)
-            .toProduce(() => cmd)
-            .on(c1)
-            .bind();
+    describe("on svg doc for dynamic registration", () => {
+        let doc: HTMLElement;
 
-        (binding.interaction as InteractionBase<InteractionData, Flushable & InteractionData, FSM>).onNodeUnregistered(c1);
+        beforeEach(() => {
+            doc = document.createElement("svg");
+        });
 
-        robot(c1)
-            .keepData()
-            .touchstart({}, [{"identifier": 2}])
-            .touchend();
+        test("dynamic registration with nothing added", () => {
+            binding = bindings.tapBinder(2)
+                .toProduce(() => cmd)
+                .onDynamic(doc)
+                .bind();
 
-        expect(binding.running).toBeFalsy();
+            robot(doc)
+                .keepData()
+                .touchstart({}, [{"identifier": 1}])
+                .touchend();
+
+            expect(binding.running).toBeFalsy();
+            expect(binding).toBeDefined();
+            expect(ctx.commands).toHaveLength(0);
+        });
+
+        test("dynamic registration with a node added", async () => {
+            binding = bindings.tapBinder(2)
+                .toProduce(() => cmd)
+                .onDynamic(doc)
+                .bind();
+
+            const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+            doc.append(rect);
+
+            // Waiting for the mutation changes to be done.
+            await Promise.resolve();
+
+            robot(rect)
+                .keepData()
+                .touchstart({}, [{"identifier": 1}])
+                .touchend()
+                .touchstart({}, [{"identifier": 2}])
+                .touchend();
+
+            expect(binding).toBeDefined();
+            expect(ctx.commands).toHaveLength(1);
+        });
+
+        test("dynamic registration with a node already added", async () => {
+            const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+            doc.append(rect);
+
+            // Waiting for the mutation changes to be done.
+            await Promise.resolve();
+
+            binding = bindings.tapBinder(2)
+                .toProduce(() => cmd)
+                .onDynamic(doc)
+                .bind();
+
+            robot(rect)
+                .keepData()
+                .touchstart({}, [{"identifier": 1}])
+                .touchend()
+                .touchstart({}, [{"identifier": 2}])
+                .touchend();
+
+            expect(binding).toBeDefined();
+            expect(ctx.commands).toHaveLength(1);
+        });
+
+        test("dynamic registration with a node added and removed", async () => {
+            binding = bindings.tapBinder(1)
+                .toProduce(() => cmd)
+                .onDynamic(doc)
+                .bind();
+
+            const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+            doc.append(rect);
+            await Promise.resolve();
+
+            rect.remove();
+            await Promise.resolve();
+
+            robot(rect)
+                .keepData()
+                .touchstart({}, [{"identifier": 2}])
+                .touchend();
+
+            expect(binding).toBeDefined();
+            expect(ctx.commands).toHaveLength(0);
+        });
+
+        test("dynamic registration with a node already added then removed", async () => {
+            const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+            doc.append(rect);
+            await Promise.resolve();
+
+            binding = bindings.tapBinder(3)
+                .toProduce(() => cmd)
+                .onDynamic(doc)
+                .bind();
+
+            rect.remove();
+            await Promise.resolve();
+
+            robot(rect)
+                .keepData()
+                .touchstart({}, [{"identifier": 1}])
+                .touchend()
+                .touchstart({}, [{"identifier": 3}])
+                .touchend()
+                .touchstart({}, [{"identifier": 2}])
+                .touchend();
+
+            expect(binding).toBeDefined();
+            expect(ctx.commands).toHaveLength(0);
+        });
     });
 });
-
-describe("on svg doc for dynamic registration", () => {
-    let doc: HTMLElement;
-
-    beforeEach(() => {
-        doc = document.createElement("svg");
-    });
-
-    test("dynamic registration with nothing added", () => {
-        binding = bindings.tapBinder(2)
-            .toProduce(() => cmd)
-            .onDynamic(doc)
-            .bind();
-
-        robot(doc)
-            .keepData()
-            .touchstart({}, [{"identifier": 1}])
-            .touchend();
-
-        expect(binding.running).toBeFalsy();
-        expect(binding).toBeDefined();
-        expect(ctx.commands).toHaveLength(0);
-    });
-
-    test("dynamic registration with a node added", async () => {
-        binding = bindings.tapBinder(2)
-            .toProduce(() => cmd)
-            .onDynamic(doc)
-            .bind();
-
-        const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-        doc.append(rect);
-
-        // Waiting for the mutation changes to be done.
-        await Promise.resolve();
-
-        robot(rect)
-            .keepData()
-            .touchstart({}, [{"identifier": 1}])
-            .touchend()
-            .touchstart({}, [{"identifier": 2}])
-            .touchend();
-
-        expect(binding).toBeDefined();
-        expect(ctx.commands).toHaveLength(1);
-    });
-
-    test("dynamic registration with a node already added", async () => {
-        const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-        doc.append(rect);
-
-        // Waiting for the mutation changes to be done.
-        await Promise.resolve();
-
-        binding = bindings.tapBinder(2)
-            .toProduce(() => cmd)
-            .onDynamic(doc)
-            .bind();
-
-        robot(rect)
-            .keepData()
-            .touchstart({}, [{"identifier": 1}])
-            .touchend()
-            .touchstart({}, [{"identifier": 2}])
-            .touchend();
-
-        expect(binding).toBeDefined();
-        expect(ctx.commands).toHaveLength(1);
-    });
-
-    test("dynamic registration with a node added and removed", async () => {
-        binding = bindings.tapBinder(1)
-            .toProduce(() => cmd)
-            .onDynamic(doc)
-            .bind();
-
-        const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-        doc.append(rect);
-        await Promise.resolve();
-
-        rect.remove();
-        await Promise.resolve();
-
-        robot(rect)
-            .keepData()
-            .touchstart({}, [{"identifier": 2}])
-            .touchend();
-
-        expect(binding).toBeDefined();
-        expect(ctx.commands).toHaveLength(0);
-    });
-
-    test("dynamic registration with a node already added then removed", async () => {
-        const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-        doc.append(rect);
-        await Promise.resolve();
-
-        binding = bindings.tapBinder(3)
-            .toProduce(() => cmd)
-            .onDynamic(doc)
-            .bind();
-
-        rect.remove();
-        await Promise.resolve();
-
-        robot(rect)
-            .keepData()
-            .touchstart({}, [{"identifier": 1}])
-            .touchend()
-            .touchstart({}, [{"identifier": 3}])
-            .touchend()
-            .touchstart({}, [{"identifier": 2}])
-            .touchend();
-
-        expect(binding).toBeDefined();
-        expect(ctx.commands).toHaveLength(0);
-    });
-});
-
