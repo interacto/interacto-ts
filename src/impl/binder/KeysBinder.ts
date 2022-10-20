@@ -27,7 +27,7 @@ import type {BindingsObserver} from "../../api/binding/BindingsObserver";
 import type {Logger} from "../../api/logging/Logger";
 import type {AnonCmd} from "../command/AnonCmd";
 import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
-import {WhenType} from "../../api/binder/When";
+import type {WhenType} from "../../api/binder/When";
 
 /**
  * The base binding builder to create bindings between a keys pressure interaction and a given command.
@@ -86,7 +86,7 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, D extends I
 
         this.whenFnArray.push({
             "fn": checkCodeFn,
-            "type": WhenType.nonStrict
+            "type": "nonStrict"
         });
     }
 

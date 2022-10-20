@@ -35,7 +35,6 @@ import type {Bindings} from "../../src/api/binding/Bindings";
 import {robot} from "interacto-nono";
 import {UndoHistoryImpl} from "../../src/impl/undo/UndoHistoryImpl";
 import type {UndoHistoryBase} from "../../src/api/undo/UndoHistoryBase";
-import {WhenType} from "../../src/api/binder/When";
 import clearAllTimers = jest.clearAllTimers;
 
 let elt: HTMLElement;
@@ -405,7 +404,7 @@ test("that 'strictStart' works correctly when the 'when' routine returns false",
     binding = bindings.keysTypeBinder()
         .on(elt)
         .toProduce((_i: KeysData) => new StubCmd(true))
-        .when((_i: KeysData) => false, WhenType.strictStart)
+        .when((_i: KeysData) => false, "strictStart")
         .bind();
 
     robot(elt)
@@ -421,7 +420,7 @@ test("that 'strictStart' works correctly when the 'when' routine returns false",
 
 test("that 'strictStart' works correctly when the 'when' routine returns true", () => {
     binding = bindings.keysTypeBinder()
-        .when((_i: KeysData) => true, WhenType.strictStart)
+        .when((_i: KeysData) => true, "strictStart")
         .on(elt)
         .toProduce((_i: KeysData) => new StubCmd(true))
         .bind();

@@ -12,42 +12,42 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {isWhenAtEnd, isWhenAtStart, isWhenAtThen, isWhenStrict, WhenType} from "../../src/api/binder/When";
+import {isWhenAtEnd, isWhenAtStart, isWhenAtThen, isWhenStrict} from "../../src/api/binder/When";
 
 describe("test WhenType", () => {
     test("isWhenAtStart", () => {
-        expect(isWhenAtStart(WhenType.nonStrict)).toBeTruthy();
-        expect(isWhenAtStart(WhenType.strict)).toBeTruthy();
-        expect(isWhenAtStart(WhenType.strictStart)).toBeTruthy();
-        expect(isWhenAtStart(WhenType.then)).toBeTruthy();
-        expect(isWhenAtStart(WhenType.strictThen)).toBeFalsy();
-        expect(isWhenAtStart(WhenType.end)).toBeFalsy();
+        expect(isWhenAtStart("nonStrict")).toBeTruthy();
+        expect(isWhenAtStart("strict")).toBeTruthy();
+        expect(isWhenAtStart("strictStart")).toBeTruthy();
+        expect(isWhenAtStart("then")).toBeTruthy();
+        expect(isWhenAtStart("strictThen")).toBeFalsy();
+        expect(isWhenAtStart("end")).toBeFalsy();
     });
 
     test("isWhenAtEnd", () => {
-        expect(isWhenAtEnd(WhenType.nonStrict)).toBeTruthy();
-        expect(isWhenAtEnd(WhenType.strict)).toBeTruthy();
-        expect(isWhenAtEnd(WhenType.end)).toBeTruthy();
-        expect(isWhenAtEnd(WhenType.strictStart)).toBeFalsy();
-        expect(isWhenAtEnd(WhenType.then)).toBeFalsy();
-        expect(isWhenAtEnd(WhenType.strictThen)).toBeFalsy();
+        expect(isWhenAtEnd("nonStrict")).toBeTruthy();
+        expect(isWhenAtEnd("strict")).toBeTruthy();
+        expect(isWhenAtEnd("end")).toBeTruthy();
+        expect(isWhenAtEnd("strictStart")).toBeFalsy();
+        expect(isWhenAtEnd("then")).toBeFalsy();
+        expect(isWhenAtEnd("strictThen")).toBeFalsy();
     });
 
     test("isWhenAtThen", () => {
-        expect(isWhenAtThen(WhenType.nonStrict)).toBeTruthy();
-        expect(isWhenAtThen(WhenType.strict)).toBeTruthy();
-        expect(isWhenAtThen(WhenType.then)).toBeTruthy();
-        expect(isWhenAtThen(WhenType.strictThen)).toBeTruthy();
-        expect(isWhenAtThen(WhenType.end)).toBeFalsy();
-        expect(isWhenAtThen(WhenType.strictStart)).toBeFalsy();
+        expect(isWhenAtThen("nonStrict")).toBeTruthy();
+        expect(isWhenAtThen("strict")).toBeTruthy();
+        expect(isWhenAtThen("then")).toBeTruthy();
+        expect(isWhenAtThen("strictThen")).toBeTruthy();
+        expect(isWhenAtThen("end")).toBeFalsy();
+        expect(isWhenAtThen("strictStart")).toBeFalsy();
     });
 
     test("isWhenStrict", () => {
-        expect(isWhenStrict(WhenType.strictStart)).toBeTruthy();
-        expect(isWhenStrict(WhenType.strict)).toBeTruthy();
-        expect(isWhenStrict(WhenType.strictThen)).toBeTruthy();
-        expect(isWhenStrict(WhenType.end)).toBeTruthy();
-        expect(isWhenStrict(WhenType.then)).toBeFalsy();
-        expect(isWhenStrict(WhenType.nonStrict)).toBeFalsy();
+        expect(isWhenStrict("strictStart")).toBeTruthy();
+        expect(isWhenStrict("strict")).toBeTruthy();
+        expect(isWhenStrict("strictThen")).toBeTruthy();
+        expect(isWhenStrict("end")).toBeTruthy();
+        expect(isWhenStrict("then")).toBeFalsy();
+        expect(isWhenStrict("nonStrict")).toBeFalsy();
     });
 });

@@ -27,7 +27,7 @@ import type {Logger} from "../../api/logging/Logger";
 import {AnonCmd} from "../command/AnonCmd";
 import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
 import type {When} from "../../api/binder/When";
-import {WhenType} from "../../api/binder/When";
+import type {WhenType} from "../../api/binder/When";
 
 /**
  * The base class that defines the concept of binding builder (called binder).
@@ -179,7 +179,7 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
         return dup;
     }
 
-    public when(fn: (i: D) => boolean, mode: WhenType = WhenType.nonStrict): Binder<C, I, D> {
+    public when(fn: (i: D) => boolean, mode: WhenType = "nonStrict"): Binder<C, I, D> {
         const dup = this.duplicate();
         dup.whenFnArray.push({
             fn,

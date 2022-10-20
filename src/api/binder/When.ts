@@ -19,41 +19,28 @@
  * Strict modes cancel the binding execution, while non-strict modes just prevent the creation/execution of the
  * command at a given instant.
  */
-export enum WhenType {
-    /**
-     * The predicate will be executed at start/then/end without cancelling the binding execution.
-     */
-    nonStrict = 0,
-    /**
-     * The predicate will be executed at start/then/end and will cancel the binding execution if not fulfilled.
-     */
-    strict = 1,
-    /**
-     * The predicate will be executed at start and will cancel the binding execution if not fulfilled.
-     */
-    strictStart = 2,
-    /**
-     * The predicate will be executed at start and at each update without cancelling the binding execution.
-     */
-    then = 3,
-    /**
-     * The predicate will be executed at start and at each update and will cancel the binding execution if not fulfilled.
-     */
-    strictThen = 4,
-    /**
-     * The predicate will be executed at the end and will cancel the binding execution if not fulfilled.
-     */
-    end = 5
-}
+export type WhenType =
+/** The predicate will be executed at the end and will cancel the binding execution if not fulfilled. */
+"end" |
+/** The predicate will be executed at start/then/end without cancelling the binding execution. */
+"nonStrict" |
+/** The predicate will be executed at start/then/end and will cancel the binding execution if not fulfilled. */
+"strict" |
+/** The predicate will be executed at start and will cancel the binding execution if not fulfilled. */
+"strictStart" |
+/** The predicate will be executed at start and at each update and will cancel the binding execution if not fulfilled. */
+"strictThen" |
+/** The predicate will be executed at start and at each update without cancelling the binding execution. */
+"then";
 
 /**
  * States whether the WhenType concerns the beginning of a binding execution (at start).
- * Not that 'WhenType.then' is included since 'then' is called at start. This includes both strict and non strict mode.
+ * Not that 'then' is included since 'then' is called at start. This includes both strict and non strict mode.
  * @param type -- The WhenType to test
  */
 export function isWhenAtStart(type: WhenType): boolean {
     // 'then' is triggered at 'start' so used here
-    return type === WhenType.strictStart || type === WhenType.then || type === WhenType.nonStrict || type === WhenType.strict;
+    return type === "strictStart" || type === "then" || type === "nonStrict" || type === "strict";
 }
 
 /**
@@ -62,7 +49,7 @@ export function isWhenAtStart(type: WhenType): boolean {
  * @param type -- The WhenType to test
  */
 export function isWhenAtThen(type: WhenType): boolean {
-    return type === WhenType.strictThen || type === WhenType.then || type === WhenType.nonStrict || type === WhenType.strict;
+    return type === "strictThen" || type === "then" || type === "nonStrict" || type === "strict";
 }
 
 /**
@@ -71,7 +58,7 @@ export function isWhenAtThen(type: WhenType): boolean {
  * @param type -- The WhenType to test
  */
 export function isWhenAtEnd(type: WhenType): boolean {
-    return type === WhenType.end || type === WhenType.nonStrict || type === WhenType.strict;
+    return type === "end" || type === "nonStrict" || type === "strict";
 }
 
 /**
@@ -80,7 +67,7 @@ export function isWhenAtEnd(type: WhenType): boolean {
  */
 export function isWhenStrict(type: WhenType): boolean {
     // 'end' is always strict
-    return type === WhenType.end || type === WhenType.strict || type === WhenType.strictThen || type === WhenType.strictStart;
+    return type === "end" || type === "strict" || type === "strictThen" || type === "strictStart";
 }
 
 /**

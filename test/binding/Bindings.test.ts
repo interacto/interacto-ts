@@ -38,8 +38,7 @@ import {
     AnonCmd,
     BindingsContext,
     BindingsImpl,
-    UndoHistoryImpl,
-    WhenType
+    UndoHistoryImpl
 } from "../../src/interacto";
 import {StubCmd, StubUndoableCmd} from "../command/StubCmd";
 import type {MouseEventForTest} from "../interaction/StubEvents";
@@ -853,7 +852,7 @@ describe("test Bindings", () => {
 
     test("that 'strictStart' works correctly when the 'when' routine returns true", () => {
         bindings.dndBinder(false)
-            .when((_i: SrcTgtPointsData<PointData>) => true, WhenType.strictStart)
+            .when((_i: SrcTgtPointsData<PointData>) => true, "strictStart")
             .on(elt)
             .toProduce((_i: SrcTgtPointsData<PointData>) => new StubCmd(true))
             .bind();
@@ -870,7 +869,7 @@ describe("test Bindings", () => {
         const binding = bindings.dndBinder(false)
             .on(elt)
             .toProduce((_i: SrcTgtPointsData<PointData>) => new StubCmd(true))
-            .when((_i: SrcTgtPointsData<PointData>) => false, WhenType.strictStart)
+            .when((_i: SrcTgtPointsData<PointData>) => false, "strictStart")
             .bind();
 
         robot(elt)
@@ -886,7 +885,7 @@ describe("test Bindings", () => {
         const binding = bindings.dndBinder(false)
             .on(elt)
             .toProduce((_i: SrcTgtPointsData<PointData>) => new StubCmd(true))
-            .when((_i: SrcTgtPointsData<PointData>) => false, WhenType.strictStart)
+            .when((_i: SrcTgtPointsData<PointData>) => false, "strictStart")
             .bind();
 
         robot(elt)
@@ -901,7 +900,7 @@ describe("test Bindings", () => {
         bindings.dndBinder(false)
             .on(elt)
             .toProduce((_i: SrcTgtPointsData<PointData>) => new StubCmd(true))
-            .when(() => false, WhenType.strictStart)
+            .when(() => false, "strictStart")
             .bind();
 
         robot(elt).mousedown();
@@ -1623,7 +1622,7 @@ describe("test Bindings", () => {
             test("start strict", () => {
                 binding = bindings.longMouseDownBinder(100)
                     .toProduce(() => undoCmd)
-                    .when(() => false, WhenType.strictStart)
+                    .when(() => false, "strictStart")
                     .on(elt)
                     .bind();
 
@@ -1638,7 +1637,7 @@ describe("test Bindings", () => {
             test("then lazy", () => {
                 binding = bindings.dndBinder(true)
                     .toProduce(() => undoCmd)
-                    .when(() => false, WhenType.then)
+                    .when(() => false, "then")
                     .on(elt)
                     .bind();
 
@@ -1653,7 +1652,7 @@ describe("test Bindings", () => {
                 let ok = false;
                 binding = bindings.dndBinder(true)
                     .toProduce(() => undoCmd)
-                    .when(() => ok, WhenType.then)
+                    .when(() => ok, "then")
                     .on(elt)
                     .bind();
 
@@ -1673,7 +1672,7 @@ describe("test Bindings", () => {
             test("then lazy false, and end true", () => {
                 binding = bindings.dndBinder(true)
                     .toProduce(() => undoCmd)
-                    .when(() => false, WhenType.then)
+                    .when(() => false, "then")
                     .on(elt)
                     .bind();
 
@@ -1690,7 +1689,7 @@ describe("test Bindings", () => {
             test("end false", () => {
                 binding = bindings.dndBinder(true)
                     .toProduce(() => undoCmd)
-                    .when(() => false, WhenType.end)
+                    .when(() => false, "end")
                     .on(elt)
                     .bind();
 
@@ -1708,8 +1707,8 @@ describe("test Bindings", () => {
             test("several ends", () => {
                 binding = bindings.dndBinder(true)
                     .toProduce(() => undoCmd)
-                    .when(() => false, WhenType.end)
-                    .when(() => true, WhenType.end)
+                    .when(() => false, "end")
+                    .when(() => true, "end")
                     .on(elt)
                     .bind();
 
@@ -1727,7 +1726,7 @@ describe("test Bindings", () => {
             test("one end true", () => {
                 binding = bindings.dndBinder(true)
                     .toProduce(() => undoCmd)
-                    .when(() => true, WhenType.end)
+                    .when(() => true, "end")
                     .on(elt)
                     .bind();
 
@@ -1746,8 +1745,8 @@ describe("test Bindings", () => {
             test("strict then false", () => {
                 binding = bindings.dndBinder(true)
                     .toProduce(() => undoCmd)
-                    .when(() => false, WhenType.strictThen)
-                    .when(() => true, WhenType.end)
+                    .when(() => false, "strictThen")
+                    .when(() => true, "end")
                     .on(elt)
                     .bind();
 
@@ -1765,10 +1764,10 @@ describe("test Bindings", () => {
             test("strict false", () => {
                 binding = bindings.dndBinder(true)
                     .toProduce(() => undoCmd)
-                    .when(() => false, WhenType.strict)
-                    .when(() => true, WhenType.end)
-                    .when(() => true, WhenType.then)
-                    .when(() => true, WhenType.nonStrict)
+                    .when(() => false, "strict")
+                    .when(() => true, "end")
+                    .when(() => true, "then")
+                    .when(() => true, "nonStrict")
                     .on(elt)
                     .bind();
 
@@ -1787,10 +1786,10 @@ describe("test Bindings", () => {
                 let ok = true;
                 binding = bindings.dndBinder(true)
                     .toProduce(() => undoCmd)
-                    .when(() => ok, WhenType.strict)
-                    .when(() => true, WhenType.end)
-                    .when(() => true, WhenType.then)
-                    .when(() => true, WhenType.nonStrict)
+                    .when(() => ok, "strict")
+                    .when(() => true, "end")
+                    .when(() => true, "then")
+                    .when(() => true, "nonStrict")
                     .on(elt)
                     .bind();
 
@@ -1813,9 +1812,9 @@ describe("test Bindings", () => {
                 let ok = true;
                 binding = bindings.dndBinder(true)
                     .toProduce(() => undoCmd)
-                    .when(() => ok, WhenType.strict)
-                    .when(() => true, WhenType.end)
-                    .when(() => true, WhenType.then)
+                    .when(() => ok, "strict")
+                    .when(() => true, "end")
+                    .when(() => true, "then")
                     .on(elt)
                     .bind();
 
