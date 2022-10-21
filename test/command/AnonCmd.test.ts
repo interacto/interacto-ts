@@ -15,25 +15,27 @@
 
 import {AnonCmd} from "../../src/impl/command/AnonCmd";
 
-let cmd: AnonCmd;
+describe("using an anon command", () => {
+    let cmd: AnonCmd;
 
-test("can Do OK Cmd", () => {
-    cmd = new AnonCmd(() => {});
-    expect(cmd.canExecute()).toBeTruthy();
-});
-
-test("execute", async () => {
-    let ok = false;
-    cmd = new AnonCmd(() => {
-        ok = true;
+    test("can Do OK Cmd", () => {
+        cmd = new AnonCmd(() => {});
+        expect(cmd.canExecute()).toBeTruthy();
     });
-    await cmd.execute();
-    expect(ok).toBeTruthy();
-});
 
-test("hadEffect", async () => {
-    cmd = new AnonCmd(() => {});
-    await cmd.execute();
-    cmd.done();
-    expect(cmd.hadEffect()).toBeTruthy();
+    test("execute", async () => {
+        let ok = false;
+        cmd = new AnonCmd(() => {
+            ok = true;
+        });
+        await cmd.execute();
+        expect(ok).toBeTruthy();
+    });
+
+    test("hadEffect", async () => {
+        cmd = new AnonCmd(() => {});
+        await cmd.execute();
+        cmd.done();
+        expect(cmd.hadEffect()).toBeTruthy();
+    });
 });

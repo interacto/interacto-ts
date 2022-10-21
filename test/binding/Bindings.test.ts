@@ -50,7 +50,7 @@ let ctx: BindingsContext;
 let bindings: Bindings<UndoHistoryBase>;
 let logger: Logger;
 
-describe("test Bindings", () => {
+describe("using bindings", () => {
     beforeEach(() => {
         logger = mock<Logger>();
         bindings = new BindingsImpl(new UndoHistoryImpl(), logger);

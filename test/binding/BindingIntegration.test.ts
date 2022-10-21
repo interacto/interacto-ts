@@ -12,8 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSM, InteractionData, UndoHistory, Logger,
-    FSMDataHandler} from "../../src/interacto";
+import {mock} from "jest-mock-extended";
+import type {FSM, FSMDataHandler, InteractionData, Logger, UndoHistory} from "../../src/interacto";
 import {
     BindingImpl,
     ClickTransition,
@@ -23,7 +23,6 @@ import {
 import {StubCmd} from "../command/StubCmd";
 import {InteractionStub} from "../interaction/InteractionStub";
 import {createMouseEvent} from "../interaction/StubEvents";
-import {mock} from "jest-mock-extended";
 
 let interaction: InteractionStub;
 let binding: BindingImpl<StubCmd, InteractionStub, InteractionData>;
@@ -38,121 +37,123 @@ class OneTrFSM extends FSMImpl<FSMDataHandler> {
     }
 }
 
-beforeEach(() => {
-    history = new UndoHistoryImpl();
-    jest.clearAllMocks();
-    cmd = new StubCmd();
-    cmd.candoValue = true;
-    fsm = new OneTrFSM();
-    interaction = new InteractionStub(fsm);
-    binding = new BindingImpl(false, interaction, () => cmd, [], history, mock<Logger>());
-});
+describe("executing a binding", () => {
+    beforeEach(() => {
+        history = new UndoHistoryImpl();
+        jest.clearAllMocks();
+        cmd = new StubCmd();
+        cmd.candoValue = true;
+        fsm = new OneTrFSM();
+        interaction = new InteractionStub(fsm);
+        binding = new BindingImpl(false, interaction, () => cmd, [], history, mock<Logger>());
+    });
 
-afterEach(() => {
-    history.clear();
-});
+    afterEach(() => {
+        history.clear();
+    });
 
-test("nothing Done Is deactivated", () => {
-    const dotItSpy = jest.spyOn(cmd, "execute");
-    binding.activated = false;
-    jest.spyOn(binding, "ifCmdHadNoEffect");
-    jest.spyOn(binding, "ifCmdHadEffects");
-    jest.spyOn(binding, "ifCannotExecuteCmd");
-    fsm.process(createMouseEvent("click", document.createElement("button")));
+    test("nothing Done Is deactivated", () => {
+        const dotItSpy = jest.spyOn(cmd, "execute");
+        binding.activated = false;
+        jest.spyOn(binding, "ifCmdHadNoEffect");
+        jest.spyOn(binding, "ifCmdHadEffects");
+        jest.spyOn(binding, "ifCannotExecuteCmd");
+        fsm.process(createMouseEvent("click", document.createElement("button")));
 
-    expect(dotItSpy).not.toHaveBeenCalled();
-    expect(binding.ifCmdHadEffects).not.toHaveBeenCalledWith();
-    expect(binding.ifCmdHadNoEffect).not.toHaveBeenCalledWith();
-    expect(binding.ifCannotExecuteCmd).not.toHaveBeenCalledWith();
-    expect(cmd.getStatus()).toBe("created");
-});
+        expect(dotItSpy).not.toHaveBeenCalled();
+        expect(binding.ifCmdHadEffects).not.toHaveBeenCalledWith();
+        expect(binding.ifCmdHadNoEffect).not.toHaveBeenCalledWith();
+        expect(binding.ifCannotExecuteCmd).not.toHaveBeenCalledWith();
+        expect(cmd.getStatus()).toBe("created");
+    });
 
-test("cmd Created Exec Saved When activated", () => {
-    const dotItSpy = jest.spyOn(cmd, "execute");
-    jest.spyOn(binding, "ifCmdHadNoEffect");
-    jest.spyOn(binding, "ifCmdHadEffects");
-    jest.spyOn(binding, "ifCannotExecuteCmd");
-    fsm.process(createMouseEvent("click", document.createElement("button")));
+    test("cmd Created Exec Saved When activated", () => {
+        const dotItSpy = jest.spyOn(cmd, "execute");
+        jest.spyOn(binding, "ifCmdHadNoEffect");
+        jest.spyOn(binding, "ifCmdHadEffects");
+        jest.spyOn(binding, "ifCannotExecuteCmd");
+        fsm.process(createMouseEvent("click", document.createElement("button")));
 
-    expect(dotItSpy).toHaveBeenCalledTimes(1);
-    expect(binding.ifCmdHadEffects).toHaveBeenCalledTimes(1);
-    expect(binding.ifCmdHadNoEffect).not.toHaveBeenCalledWith();
-    expect(binding.ifCannotExecuteCmd).not.toHaveBeenCalledWith();
-    expect(cmd.getStatus()).toBe("done");
-});
+        expect(dotItSpy).toHaveBeenCalledTimes(1);
+        expect(binding.ifCmdHadEffects).toHaveBeenCalledTimes(1);
+        expect(binding.ifCmdHadNoEffect).not.toHaveBeenCalledWith();
+        expect(binding.ifCannotExecuteCmd).not.toHaveBeenCalledWith();
+        expect(cmd.getStatus()).toBe("done");
+    });
 
-test("command cannot be executed when the when at stop is KO", () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    jest.spyOn(binding as any, "whenStop").mockReturnValue(false);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    jest.spyOn(binding as any, "whenStart").mockReturnValue(false);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    jest.spyOn(binding as any, "whenUpdate").mockReturnValue(false);
-    const dotItSpy = jest.spyOn(cmd, "execute");
-    jest.spyOn(binding, "ifCmdHadNoEffect");
-    jest.spyOn(binding, "ifCmdHadEffects");
-    jest.spyOn(binding, "ifCannotExecuteCmd");
-    fsm.process(createMouseEvent("click", document.createElement("button")));
+    test("command cannot be executed when the when at stop is KO", () => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        jest.spyOn(binding as any, "whenStop").mockReturnValue(false);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        jest.spyOn(binding as any, "whenStart").mockReturnValue(false);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        jest.spyOn(binding as any, "whenUpdate").mockReturnValue(false);
+        const dotItSpy = jest.spyOn(cmd, "execute");
+        jest.spyOn(binding, "ifCmdHadNoEffect");
+        jest.spyOn(binding, "ifCmdHadEffects");
+        jest.spyOn(binding, "ifCannotExecuteCmd");
+        fsm.process(createMouseEvent("click", document.createElement("button")));
 
-    expect(dotItSpy).not.toHaveBeenCalled();
-    expect(binding.ifCmdHadEffects).not.toHaveBeenCalledWith();
-    expect(binding.ifCmdHadNoEffect).not.toHaveBeenCalledWith();
-    expect(binding.ifCannotExecuteCmd).not.toHaveBeenCalledWith();
-    expect(cmd.getStatus()).toBe("created");
-});
+        expect(dotItSpy).not.toHaveBeenCalled();
+        expect(binding.ifCmdHadEffects).not.toHaveBeenCalledWith();
+        expect(binding.ifCmdHadNoEffect).not.toHaveBeenCalledWith();
+        expect(binding.ifCannotExecuteCmd).not.toHaveBeenCalledWith();
+        expect(cmd.getStatus()).toBe("created");
+    });
 
-test("cmd KO When Cannot Do Cmd", () => {
-    cmd.candoValue = false;
-    jest.spyOn(binding, "ifCmdHadNoEffect");
-    jest.spyOn(binding, "ifCmdHadEffects");
-    jest.spyOn(binding, "ifCannotExecuteCmd");
-    fsm.process(createMouseEvent("click", document.createElement("button")));
+    test("cmd KO When Cannot Do Cmd", () => {
+        cmd.candoValue = false;
+        jest.spyOn(binding, "ifCmdHadNoEffect");
+        jest.spyOn(binding, "ifCmdHadEffects");
+        jest.spyOn(binding, "ifCannotExecuteCmd");
+        fsm.process(createMouseEvent("click", document.createElement("button")));
 
-    expect(cmd.getStatus()).toBe("created");
-    expect(binding.ifCmdHadEffects).not.toHaveBeenCalledWith();
-    expect(binding.ifCmdHadNoEffect).not.toHaveBeenCalledWith();
-    expect(binding.ifCannotExecuteCmd).toHaveBeenCalledTimes(1);
-});
+        expect(cmd.getStatus()).toBe("created");
+        expect(binding.ifCmdHadEffects).not.toHaveBeenCalledWith();
+        expect(binding.ifCmdHadNoEffect).not.toHaveBeenCalledWith();
+        expect(binding.ifCannotExecuteCmd).toHaveBeenCalledTimes(1);
+    });
 
-test("when OK Can Do But No Effect", () => {
-    const dotItSpy = jest.spyOn(cmd, "execute");
-    jest.spyOn(binding, "ifCmdHadNoEffect");
-    jest.spyOn(binding, "ifCmdHadEffects");
-    jest.spyOn(binding, "ifCannotExecuteCmd");
-    jest.spyOn(cmd, "hadEffect").mockImplementation(() => false);
-    fsm.process(createMouseEvent("click", document.createElement("button")));
+    test("when OK Can Do But No Effect", () => {
+        const dotItSpy = jest.spyOn(cmd, "execute");
+        jest.spyOn(binding, "ifCmdHadNoEffect");
+        jest.spyOn(binding, "ifCmdHadEffects");
+        jest.spyOn(binding, "ifCannotExecuteCmd");
+        jest.spyOn(cmd, "hadEffect").mockImplementation(() => false);
+        fsm.process(createMouseEvent("click", document.createElement("button")));
 
-    expect(dotItSpy).toHaveBeenCalledTimes(1);
-    expect(binding.ifCmdHadNoEffect).toHaveBeenCalledTimes(1);
-    expect(binding.ifCmdHadEffects).not.toHaveBeenCalledWith();
-    expect(binding.ifCannotExecuteCmd).not.toHaveBeenCalledWith();
-});
+        expect(dotItSpy).toHaveBeenCalledTimes(1);
+        expect(binding.ifCmdHadNoEffect).toHaveBeenCalledTimes(1);
+        expect(binding.ifCmdHadEffects).not.toHaveBeenCalledWith();
+        expect(binding.ifCannotExecuteCmd).not.toHaveBeenCalledWith();
+    });
 
-test("produced None", () => {
-    cmd.candoValue = false;
-    const cmds = new Array<StubCmd>();
-    binding.produces.subscribe(elt => cmds.push(elt));
+    test("produced None", () => {
+        cmd.candoValue = false;
+        const cmds = new Array<StubCmd>();
+        binding.produces.subscribe(elt => cmds.push(elt));
 
-    fsm.process(createMouseEvent("click", document.createElement("button")));
-    expect(cmds).toHaveLength(0);
-});
+        fsm.process(createMouseEvent("click", document.createElement("button")));
+        expect(cmds).toHaveLength(0);
+    });
 
-test("produced One", () => {
-    const cmds = new Array<StubCmd>();
-    binding.produces.subscribe(elt => cmds.push(elt));
+    test("produced One", () => {
+        const cmds = new Array<StubCmd>();
+        binding.produces.subscribe(elt => cmds.push(elt));
 
-    fsm.process(createMouseEvent("click", document.createElement("button")));
-    expect(cmds).toHaveLength(1);
-});
+        fsm.process(createMouseEvent("click", document.createElement("button")));
+        expect(cmds).toHaveLength(1);
+    });
 
-test("produced Two", () => {
-    const cmds = new Array<StubCmd>();
-    binding.produces.subscribe(elt => cmds.push(elt));
+    test("produced Two", () => {
+        const cmds = new Array<StubCmd>();
+        binding.produces.subscribe(elt => cmds.push(elt));
 
-    fsm.process(createMouseEvent("click", document.createElement("button")));
-    cmd = new StubCmd();
-    cmd.candoValue = true;
-    fsm.process(createMouseEvent("click", document.createElement("button")));
-    expect(cmds).toHaveLength(2);
-    expect(cmds[0]).not.toBe(cmds[1]);
+        fsm.process(createMouseEvent("click", document.createElement("button")));
+        cmd = new StubCmd();
+        cmd.candoValue = true;
+        fsm.process(createMouseEvent("click", document.createElement("button")));
+        expect(cmds).toHaveLength(2);
+        expect(cmds[0]).not.toBe(cmds[1]);
+    });
 });

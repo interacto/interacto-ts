@@ -27,15 +27,16 @@ class ExampleUndoableCmd extends UndoableCommand {
     public undo(): void {}
 }
 
-beforeEach(() => {
-    cmd = new ExampleUndoableCmd();
-});
+describe("using an undoable command", () => {
+    beforeEach(() => {
+        cmd = new ExampleUndoableCmd();
+    });
 
-test("get UndoName", () => {
-    expect(cmd.getUndoName()).toBe("ExampleUndoableCmd");
-});
+    test("get UndoName", () => {
+        expect(cmd.getUndoName()).toBe("ExampleUndoableCmd");
+    });
 
-test("get VisualSnapshot", () => {
-    expect(cmd.getVisualSnapshot()).toBeUndefined();
+    test("get VisualSnapshot", () => {
+        expect(cmd.getVisualSnapshot()).toBeUndefined();
+    });
 });
-

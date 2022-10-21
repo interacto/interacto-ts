@@ -38,83 +38,85 @@ class StubForSetProp {
     }
 }
 
-let obj: StubForSetProp;
-let obj2: SecondStubSetProp;
-
-beforeEach(() => {
-    obj2 = new SecondStubSetProp();
-    obj = new StubForSetProp();
-    obj.bar = obj2;
-    obj.foo = -1;
-    obj.foo2 = "yoo";
-    obj["5"] = 3;
-});
-
-describe("using properties", () => {
-    let cmd: SetProperties<StubForSetProp>;
+describe("using a set properties command", () => {
+    let obj: StubForSetProp;
+    let obj2: SecondStubSetProp;
 
     beforeEach(() => {
-        cmd = new SetProperties(obj, {
-            "foo2": "fooo",
-            "foo": 1,
-            // eslint-disable-next-line @typescript-eslint/naming-convention
-            "5": 6
+        obj2 = new SecondStubSetProp();
+        obj = new StubForSetProp();
+        obj.bar = obj2;
+        obj.foo = -1;
+        obj.foo2 = "yoo";
+        obj["5"] = 3;
+    });
+
+    describe("using properties", () => {
+        let cmd: SetProperties<StubForSetProp>;
+
+        beforeEach(() => {
+            cmd = new SetProperties(obj, {
+                "foo2": "fooo",
+                "foo": 1,
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+                "5": 6
+            });
         });
-    });
 
-    test("newvalues given in constructor", () => {
-        expect(cmd.newvalues).toStrictEqual({
-            "foo2": "fooo",
-            "foo": 1,
-            // eslint-disable-next-line @typescript-eslint/naming-convention
-            "5": 6
+        test("newvalues given in constructor", () => {
+            expect(cmd.newvalues).toStrictEqual({
+                "foo2": "fooo",
+                "foo": 1,
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+                "5": 6
+            });
         });
-    });
 
-    test("execute works", async () => {
-        const res = await cmd.execute();
-        cmd.done();
+        test("execute works", async () => {
+            const res = await cmd.execute();
+            cmd.done();
 
-        expect(res).toBeTruthy();
-        expect(cmd.hadEffect()).toBeTruthy();
-        expect(obj.foo).toBe(1);
-        expect(obj.foo2).toBe("fooo");
-        expect(obj["5"]).toBe(6);
-        expect(obj.bar).toBe(obj2);
-    });
+            expect(res).toBeTruthy();
+            expect(cmd.hadEffect()).toBeTruthy();
+            expect(obj.foo).toBe(1);
+            expect(obj.foo2).toBe("fooo");
+            expect(obj["5"]).toBe(6);
+            expect(obj.bar).toBe(obj2);
+        });
 
-    test("execute works when set again", async () => {
-        cmd.newvalues = {
-            "foo2": "ffooo",
-            "foo": 2
-        };
-        const res = await cmd.execute();
-        cmd.done();
+        test("execute works when set again", async () => {
+            cmd.newvalues = {
+                "foo2": "ffooo",
+                "foo": 2
+            };
+            const res = await cmd.execute();
+            cmd.done();
 
-        expect(res).toBeTruthy();
-        expect(cmd.hadEffect()).toBeTruthy();
-        expect(obj.foo).toBe(2);
-        expect(obj.foo2).toBe("ffooo");
-        expect(obj["5"]).toBe(6);
-        expect(obj.bar).toBe(obj2);
-    });
+            expect(res).toBeTruthy();
+            expect(cmd.hadEffect()).toBeTruthy();
+            expect(obj.foo).toBe(2);
+            expect(obj.foo2).toBe("ffooo");
+            expect(obj["5"]).toBe(6);
+            expect(obj.bar).toBe(obj2);
+        });
 
-    test("undo works", async () => {
-        await cmd.execute();
-        cmd.undo();
-        expect(obj.foo).toBe(-1);
-        expect(obj.foo2).toBe("yoo");
-        expect(obj["5"]).toBe(3);
-        expect(obj.bar).toBe(obj2);
-    });
+        test("undo works", async () => {
+            await cmd.execute();
+            cmd.undo();
+            expect(obj.foo).toBe(-1);
+            expect(obj.foo2).toBe("yoo");
+            expect(obj["5"]).toBe(3);
+            expect(obj.bar).toBe(obj2);
+        });
 
-    test("redo works", async () => {
-        await cmd.execute();
-        cmd.undo();
-        cmd.redo();
-        expect(obj.foo).toBe(1);
-        expect(obj.foo2).toBe("fooo");
-        expect(obj["5"]).toBe(6);
-        expect(obj.bar).toBe(obj2);
+        test("redo works", async () => {
+            await cmd.execute();
+            cmd.undo();
+            cmd.redo();
+            expect(obj.foo).toBe(1);
+            expect(obj.foo2).toBe("fooo");
+            expect(obj["5"]).toBe(6);
+            expect(obj.bar).toBe(obj2);
+        });
     });
 });

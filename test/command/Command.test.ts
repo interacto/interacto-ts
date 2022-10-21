@@ -15,154 +15,156 @@
 import {CommandBase} from "../../src/impl/command/CommandBase";
 import {StubCmd} from "./StubCmd";
 
-let cmd: StubCmd;
+describe("using a command", () => {
+    let cmd: StubCmd;
 
-beforeEach(() => {
-    cmd = new StubCmd();
-    cmd.candoValue = true;
-});
+    beforeEach(() => {
+        cmd = new StubCmd();
+        cmd.candoValue = true;
+    });
 
-test("cando default", () => {
-    const command = new class extends CommandBase {
-        protected execution(): void {
-        }
-    }();
+    test("cando default", () => {
+        const command = new class extends CommandBase {
+            protected execution(): void {
+            }
+        }();
 
-    expect(command.canExecute()).toBeTruthy();
-});
+        expect(command.canExecute()).toBeTruthy();
+    });
 
-test("command Status After Creation", () => {
-    expect(cmd.getStatus()).toBe("created");
-});
+    test("command Status After Creation", () => {
+        expect(cmd.getStatus()).toBe("created");
+    });
 
-test("command Status After Flush", () => {
-    cmd.flush();
-    expect(cmd.getStatus()).toBe("flushed");
-});
+    test("command Status After Flush", () => {
+        cmd.flush();
+        expect(cmd.getStatus()).toBe("flushed");
+    });
 
-test("command Cannot Do It When Flushed", () => {
-    cmd.flush();
-    expect(cmd.execute()).toBeFalsy();
-});
+    test("command Cannot Do It When Flushed", () => {
+        cmd.flush();
+        expect(cmd.execute()).toBeFalsy();
+    });
 
-test("command Cannot Do It When Done", () => {
-    cmd.done();
-    expect(cmd.execute()).toBeFalsy();
-});
+    test("command Cannot Do It When Done", () => {
+        cmd.done();
+        expect(cmd.execute()).toBeFalsy();
+    });
 
-test("command Cannot Do It When Cancelled", () => {
-    cmd.cancel();
-    expect(cmd.execute()).toBeFalsy();
-});
+    test("command Cannot Do It When Cancelled", () => {
+        cmd.cancel();
+        expect(cmd.execute()).toBeFalsy();
+    });
 
-test("command Cannot Do It When Cannot Do And Created", () => {
-    cmd.candoValue = false;
-    expect(cmd.execute()).toBeFalsy();
-});
+    test("command Cannot Do It When Cannot Do And Created", () => {
+        cmd.candoValue = false;
+        expect(cmd.execute()).toBeFalsy();
+    });
 
-test("command Can Do It When Can Do", () => {
-    expect(cmd.execute()).toBeTruthy();
-});
+    test("command Can Do It When Can Do", () => {
+        expect(cmd.execute()).toBeTruthy();
+    });
 
-test("command Is Executed When Do It", async () => {
-    await cmd.execute();
-    expect(cmd.getStatus()).toBe("executed");
-});
+    test("command Is Executed When Do It", async () => {
+        await cmd.execute();
+        expect(cmd.getStatus()).toBe("executed");
+    });
 
-test("command Had Effect When Done", () => {
-    cmd.done();
-    expect(cmd.hadEffect()).toBeTruthy();
-});
+    test("command Had Effect When Done", () => {
+        cmd.done();
+        expect(cmd.hadEffect()).toBeTruthy();
+    });
 
-test("command HadEffect When Not Done And Created", () => {
-    expect(cmd.hadEffect()).toBeFalsy();
-});
+    test("command HadEffect When Not Done And Created", () => {
+        expect(cmd.hadEffect()).toBeFalsy();
+    });
 
-test("command HadEffect When Not Done And Cancelled", () => {
-    cmd.cancel();
-    expect(cmd.hadEffect()).toBeFalsy();
-});
+    test("command HadEffect When Not Done And Cancelled", () => {
+        cmd.cancel();
+        expect(cmd.hadEffect()).toBeFalsy();
+    });
 
-test("command HadEffect When Not Done And Flushed", () => {
-    cmd.flush();
-    expect(cmd.hadEffect()).toBeFalsy();
-});
+    test("command HadEffect When Not Done And Flushed", () => {
+        cmd.flush();
+        expect(cmd.hadEffect()).toBeFalsy();
+    });
 
-test("command HadEffect When Not Done And Executed", async () => {
-    cmd.candoValue = true;
-    await cmd.execute();
-    expect(cmd.hadEffect()).toBeFalsy();
-});
+    test("command HadEffect When Not Done And Executed", async () => {
+        cmd.candoValue = true;
+        await cmd.execute();
+        expect(cmd.hadEffect()).toBeFalsy();
+    });
 
-test("command Not Done When Flushed", () => {
-    cmd.flush();
-    cmd.done();
-    expect(cmd.getStatus()).toBe("flushed");
-});
+    test("command Not Done When Flushed", () => {
+        cmd.flush();
+        cmd.done();
+        expect(cmd.getStatus()).toBe("flushed");
+    });
 
-test("command Not Done When Cancelled", () => {
-    cmd.cancel();
-    cmd.done();
-    expect(cmd.getStatus()).toBe("cancelled");
-});
+    test("command Not Done When Cancelled", () => {
+        cmd.cancel();
+        cmd.done();
+        expect(cmd.getStatus()).toBe("cancelled");
+    });
 
-test("command Done When Created", () => {
-    cmd.done();
-    expect(cmd.getStatus()).toBe("done");
-});
+    test("command Done When Created", () => {
+        cmd.done();
+        expect(cmd.getStatus()).toBe("done");
+    });
 
-test("command Done When Executed", async () => {
-    await cmd.execute();
-    cmd.done();
-    expect(cmd.getStatus()).toBe("done");
-});
+    test("command Done When Executed", async () => {
+        await cmd.execute();
+        cmd.done();
+        expect(cmd.getStatus()).toBe("done");
+    });
 
-test("isDone When Created", () => {
-    expect(cmd.isDone()).toBeFalsy();
-});
+    test("isDone When Created", () => {
+        expect(cmd.isDone()).toBeFalsy();
+    });
 
-test("isDone When Cancelled", () => {
-    cmd.cancel();
-    expect(cmd.isDone()).toBeFalsy();
-});
+    test("isDone When Cancelled", () => {
+        cmd.cancel();
+        expect(cmd.isDone()).toBeFalsy();
+    });
 
-test("isDone When Flushed", () => {
-    cmd.flush();
-    expect(cmd.isDone()).toBeFalsy();
-});
+    test("isDone When Flushed", () => {
+        cmd.flush();
+        expect(cmd.isDone()).toBeFalsy();
+    });
 
-test("isDone When Done", () => {
-    cmd.done();
-    expect(cmd.isDone()).toBeTruthy();
-});
+    test("isDone When Done", () => {
+        cmd.done();
+        expect(cmd.isDone()).toBeTruthy();
+    });
 
-test("is Done When Executed", async () => {
-    await cmd.execute();
-    expect(cmd.isDone()).toBeFalsy();
-});
+    test("is Done When Executed", async () => {
+        await cmd.execute();
+        expect(cmd.isDone()).toBeFalsy();
+    });
 
-test("not Cancel At Start", () => {
-    expect(cmd.getStatus()).not.toBe("cancelled");
-});
+    test("not Cancel At Start", () => {
+        expect(cmd.getStatus()).not.toBe("cancelled");
+    });
 
-test("cancel", () => {
-    cmd.cancel();
-    expect(cmd.getStatus()).toBe("cancelled");
-});
+    test("cancel", () => {
+        cmd.cancel();
+        expect(cmd.getStatus()).toBe("cancelled");
+    });
 
-test("executed Two Times", async () => {
-    await cmd.execute();
-    await cmd.execute();
-    expect(cmd.exec).toBe(2);
-});
+    test("executed Two Times", async () => {
+        await cmd.execute();
+        await cmd.execute();
+        expect(cmd.exec).toBe(2);
+    });
 
-test("crash in execution, command executed", () => {
-    const command = new class extends CommandBase {
-        protected execution(): void {
-            throw new Error("Cmd err");
-        }
-    }();
+    test("crash in execution, command executed", () => {
+        const command = new class extends CommandBase {
+            protected execution(): void {
+                throw new Error("Cmd err");
+            }
+        }();
 
-    expect(() => command.execute()).toThrow(new Error("Cmd err"));
-    expect(command.getStatus()).toBe("executed");
+        expect(() => command.execute()).toThrow(new Error("Cmd err"));
+        expect(command.getStatus()).toBe("executed");
+    });
 });

@@ -35,133 +35,135 @@ class StubForSetProp {
     }
 }
 
-let obj: StubForSetProp;
-
-beforeEach(() => {
-    obj = new StubForSetProp();
-});
-
-describe("using a public number property", () => {
-    let cmd: SetProperty<StubForSetProp, "foo">;
+describe("using a set property command", () => {
+    let obj: StubForSetProp;
 
     beforeEach(() => {
-        cmd = new SetProperty(obj, "foo", 3);
+        obj = new StubForSetProp();
     });
 
-    test("execute works", async () => {
-        const res = await cmd.execute();
-        cmd.done();
+    describe("using a public number property", () => {
+        let cmd: SetProperty<StubForSetProp, "foo">;
 
-        expect(res).toBeTruthy();
-        expect(cmd.hadEffect()).toBeTruthy();
-        expect(obj.foo).toBe(3);
+        beforeEach(() => {
+            cmd = new SetProperty(obj, "foo", 3);
+        });
+
+        test("execute works", async () => {
+            const res = await cmd.execute();
+            cmd.done();
+
+            expect(res).toBeTruthy();
+            expect(cmd.hadEffect()).toBeTruthy();
+            expect(obj.foo).toBe(3);
+        });
+
+        test("undo works", async () => {
+            obj.foo = 1;
+            await cmd.execute();
+            cmd.undo();
+            expect(obj.foo).toBe(1);
+        });
+
+        test("redo works", async () => {
+            obj.foo = 2;
+            await cmd.execute();
+            cmd.undo();
+            cmd.redo();
+            expect(obj.foo).toBe(3);
+        });
+
+        test("undo name", () => {
+            expect(cmd.getUndoName()).toBe("Set foo value");
+        });
     });
 
-    test("undo works", async () => {
-        obj.foo = 1;
-        await cmd.execute();
-        cmd.undo();
-        expect(obj.foo).toBe(1);
+    describe("using a public string getter/setter", () => {
+        let cmd: SetProperty<StubForSetProp, "foo2">;
+
+        beforeEach(() => {
+            cmd = new SetProperty(obj, "foo2", "yolo");
+        });
+
+        test("execute works", async () => {
+            const res = await cmd.execute();
+            cmd.done();
+
+            expect(res).toBeTruthy();
+            expect(cmd.hadEffect()).toBeTruthy();
+            expect(obj.foo2).toBe("yolo");
+        });
+
+        test("execute works when set again", async () => {
+            cmd.newvalue = "yoo";
+            const res = await cmd.execute();
+            cmd.done();
+
+            expect(res).toBeTruthy();
+            expect(cmd.hadEffect()).toBeTruthy();
+            expect(obj.foo2).toBe("yoo");
+        });
+
+        test("undo works", async () => {
+            obj.foo2 = "fooo";
+            await cmd.execute();
+            cmd.undo();
+            expect(obj.foo2).toBe("fooo");
+        });
+
+        test("redo works", async () => {
+            obj.foo2 = "fooo22";
+            await cmd.execute();
+            cmd.undo();
+            cmd.redo();
+            expect(obj.foo2).toBe("yolo");
+        });
+
+        test("undo name", () => {
+            expect(cmd.getUndoName()).toBe("Set foo2 value");
+        });
     });
 
-    test("redo works", async () => {
-        obj.foo = 2;
-        await cmd.execute();
-        cmd.undo();
-        cmd.redo();
-        expect(obj.foo).toBe(3);
-    });
+    describe("using a public object property", () => {
+        let cmd: SetProperty<StubForSetProp, "bar">;
+        let obj2: SecondStubSetProp;
 
-    test("undo name", () => {
-        expect(cmd.getUndoName()).toBe("Set foo value");
-    });
-});
+        beforeEach(() => {
+            obj2 = new SecondStubSetProp();
+            obj2.val = [1, 2, 3];
+            cmd = new SetProperty(obj, "bar", obj2);
+        });
 
-describe("using a public string getter/setter", () => {
-    let cmd: SetProperty<StubForSetProp, "foo2">;
+        test("execute works", async () => {
+            const res = await cmd.execute();
+            cmd.done();
 
-    beforeEach(() => {
-        cmd = new SetProperty(obj, "foo2", "yolo");
-    });
+            expect(res).toBeTruthy();
+            expect(cmd.hadEffect()).toBeTruthy();
+            expect(obj.bar).toBe(obj2);
+        });
 
-    test("execute works", async () => {
-        const res = await cmd.execute();
-        cmd.done();
+        test("undo works", async () => {
+            const obj3 = new SecondStubSetProp();
+            obj3.val = [4, 5];
+            obj.bar = obj3;
+            await cmd.execute();
+            cmd.undo();
+            expect(obj.bar).toBe(obj3);
+        });
 
-        expect(res).toBeTruthy();
-        expect(cmd.hadEffect()).toBeTruthy();
-        expect(obj.foo2).toBe("yolo");
-    });
+        test("redo works", async () => {
+            const obj3 = new SecondStubSetProp();
+            obj3.val = [4, 5, 0];
+            obj.bar = obj3;
+            await cmd.execute();
+            cmd.undo();
+            cmd.redo();
+            expect(obj.bar).toBe(obj2);
+        });
 
-    test("execute works when set again", async () => {
-        cmd.newvalue = "yoo";
-        const res = await cmd.execute();
-        cmd.done();
-
-        expect(res).toBeTruthy();
-        expect(cmd.hadEffect()).toBeTruthy();
-        expect(obj.foo2).toBe("yoo");
-    });
-
-    test("undo works", async () => {
-        obj.foo2 = "fooo";
-        await cmd.execute();
-        cmd.undo();
-        expect(obj.foo2).toBe("fooo");
-    });
-
-    test("redo works", async () => {
-        obj.foo2 = "fooo22";
-        await cmd.execute();
-        cmd.undo();
-        cmd.redo();
-        expect(obj.foo2).toBe("yolo");
-    });
-
-    test("undo name", () => {
-        expect(cmd.getUndoName()).toBe("Set foo2 value");
-    });
-});
-
-describe("using a public object property", () => {
-    let cmd: SetProperty<StubForSetProp, "bar">;
-    let obj2: SecondStubSetProp;
-
-    beforeEach(() => {
-        obj2 = new SecondStubSetProp();
-        obj2.val = [1, 2, 3];
-        cmd = new SetProperty(obj, "bar", obj2);
-    });
-
-    test("execute works", async () => {
-        const res = await cmd.execute();
-        cmd.done();
-
-        expect(res).toBeTruthy();
-        expect(cmd.hadEffect()).toBeTruthy();
-        expect(obj.bar).toBe(obj2);
-    });
-
-    test("undo works", async () => {
-        const obj3 = new SecondStubSetProp();
-        obj3.val = [4, 5];
-        obj.bar = obj3;
-        await cmd.execute();
-        cmd.undo();
-        expect(obj.bar).toBe(obj3);
-    });
-
-    test("redo works", async () => {
-        const obj3 = new SecondStubSetProp();
-        obj3.val = [4, 5, 0];
-        obj.bar = obj3;
-        await cmd.execute();
-        cmd.undo();
-        cmd.redo();
-        expect(obj.bar).toBe(obj2);
-    });
-
-    test("undo name", () => {
-        expect(cmd.getUndoName()).toBe("Set bar value");
+        test("undo name", () => {
+            expect(cmd.getUndoName()).toBe("Set bar value");
+        });
     });
 });
