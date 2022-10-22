@@ -19,31 +19,33 @@ import {mock} from "jest-mock-extended";
 import type {FSMDataHandler} from "../../src/impl/fsm/FSMDataHandler";
 import {MouseTransition} from "../../src/impl/fsm/MouseTransition";
 
-let tr: MouseTransition;
-let canvas: HTMLCanvasElement;
+describe("using a mouse up transition", () => {
+    let tr: MouseTransition;
+    let canvas: HTMLCanvasElement;
 
-beforeEach(() => {
-    tr = new MouseTransition(new StdState(mock<FSMImpl<FSMDataHandler>>(), "a"),
-        new StdState(mock<FSMImpl<FSMDataHandler>>(), "b"), "mouseup");
-    canvas = document.createElement("canvas");
-});
+    beforeEach(() => {
+        tr = new MouseTransition(new StdState(mock<FSMImpl<FSMDataHandler>>(), "a"),
+            new StdState(mock<FSMImpl<FSMDataHandler>>(), "b"), "mouseup");
+        canvas = document.createElement("canvas");
+    });
 
-test("invalid move event", () => {
-    expect(tr.accept(createMouseEvent("mousemove", canvas, 11, 23, 11, 23, 0))).toBeFalsy();
-});
+    test("invalid move event", () => {
+        expect(tr.accept(createMouseEvent("mousemove", canvas, 11, 23, 11, 23, 0))).toBeFalsy();
+    });
 
-test("invalid event type", () => {
-    expect(tr.accept(createTouchEvent("touchstart", 3, canvas, 11, 23, 12, 25))).toBeFalsy();
-});
+    test("invalid event type", () => {
+        expect(tr.accept(createTouchEvent("touchstart", 3, canvas, 11, 23, 12, 25))).toBeFalsy();
+    });
 
-test("valid event", () => {
-    expect(tr.accept(createMouseEvent("mouseup", canvas, 11, 23, 12, 25, 1))).toBeTruthy();
-});
+    test("valid event", () => {
+        expect(tr.accept(createMouseEvent("mouseup", canvas, 11, 23, 12, 25, 1))).toBeTruthy();
+    });
 
-test("guard OK", () => {
-    expect(tr.guard(createMouseEvent("mouseup", canvas, 11, 23, 12, 25, 1))).toBeTruthy();
-});
+    test("guard OK", () => {
+        expect(tr.guard(createMouseEvent("mouseup", canvas, 11, 23, 12, 25, 1))).toBeTruthy();
+    });
 
-test("accepted events", () => {
-    expect(tr.getAcceptedEvents()).toStrictEqual(new Set(["mouseup"]));
+    test("accepted events", () => {
+        expect(tr.getAcceptedEvents()).toStrictEqual(new Set(["mouseup"]));
+    });
 });

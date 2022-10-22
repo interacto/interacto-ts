@@ -15,92 +15,94 @@
 import {PointsDataImpl} from "../../src/impl/interaction/PointsDataImpl";
 import {PointDataImpl} from "../../src/impl/interaction/PointDataImpl";
 
-let data: PointsDataImpl;
-let pointData: PointDataImpl;
+describe("using a points data", () => {
+    let data: PointsDataImpl;
+    let pointData: PointDataImpl;
 
-beforeEach(() => {
-    data = new PointsDataImpl();
-    pointData = new PointDataImpl();
-    pointData.copy({
-        "button": 1,
-        "buttons": 2,
-        "movementX": 20,
-        "movementY": 40,
-        "offsetX": 10,
-        "offsetY": 30,
-        "relatedTarget": new EventTarget(),
-        "clientX": 11,
-        "clientY": 12,
-        "pageX": 13,
-        "pageY": 14,
-        "screenX": 15,
-        "screenY": 16,
-        "altKey": true,
-        "ctrlKey": true,
-        "metaKey": true,
-        "shiftKey": true,
-        "timeStamp": 17,
-        "target": new EventTarget(),
-        "currentTarget": new EventTarget()
+    beforeEach(() => {
+        data = new PointsDataImpl();
+        pointData = new PointDataImpl();
+        pointData.copy({
+            "button": 1,
+            "buttons": 2,
+            "movementX": 20,
+            "movementY": 40,
+            "offsetX": 10,
+            "offsetY": 30,
+            "relatedTarget": new EventTarget(),
+            "clientX": 11,
+            "clientY": 12,
+            "pageX": 13,
+            "pageY": 14,
+            "screenX": 15,
+            "screenY": 16,
+            "altKey": true,
+            "ctrlKey": true,
+            "metaKey": true,
+            "shiftKey": true,
+            "timeStamp": 17,
+            "target": new EventTarget(),
+            "currentTarget": new EventTarget()
+        });
     });
-});
 
-test("pointsData is empty by default", () => {
-    expect(data.points).toHaveLength(0);
-});
-
-test("addPoint", () => {
-    data.addPoint(pointData);
-    data.currentPosition = pointData;
-    expect(data.points).toHaveLength(1);
-    const element = data.points[0];
-    expect(element).toStrictEqual(pointData);
-});
-
-test("flush", () => {
-    data.addPoint(pointData);
-    data.flush();
-    expect(data.points).toHaveLength(0);
-    expect(data.currentPosition).toBeUndefined();
-});
-
-test("lastButton is defined when there are points", () => {
-    data.addPoint(pointData);
-    expect(data.lastButton).toBe(1);
-});
-
-test("lastButton is undefined when there are no points", () => {
-    expect(data.lastButton).toBeUndefined();
-});
-
-test("currentPosition", () => {
-    expect(data.currentPosition).toBeUndefined();
-});
-
-test("currentPosition set", () => {
-    const point = new PointDataImpl();
-    point.copy({
-        "altKey": false,
-        "button": 1,
-        "buttons": 2,
-        "clientX": 3,
-        "clientY": 4,
-        "ctrlKey": false,
-        "currentTarget": null,
-        "metaKey": false,
-        "movementX": 5,
-        "movementY": 6,
-        "offsetX": 7,
-        "offsetY": 8,
-        "pageX": 9,
-        "pageY": 10,
-        "relatedTarget": null,
-        "screenX": 11,
-        "screenY": 12,
-        "shiftKey": false,
-        "target": null,
-        "timeStamp": 13
+    test("pointsData is empty by default", () => {
+        expect(data.points).toHaveLength(0);
     });
-    data.currentPosition = point;
-    expect(data.currentPosition).toBe(point);
+
+    test("addPoint", () => {
+        data.addPoint(pointData);
+        data.currentPosition = pointData;
+        expect(data.points).toHaveLength(1);
+        const element = data.points[0];
+        expect(element).toStrictEqual(pointData);
+    });
+
+    test("flush", () => {
+        data.addPoint(pointData);
+        data.flush();
+        expect(data.points).toHaveLength(0);
+        expect(data.currentPosition).toBeUndefined();
+    });
+
+    test("lastButton is defined when there are points", () => {
+        data.addPoint(pointData);
+        expect(data.lastButton).toBe(1);
+    });
+
+    test("lastButton is undefined when there are no points", () => {
+        expect(data.lastButton).toBeUndefined();
+    });
+
+    test("currentPosition", () => {
+        expect(data.currentPosition).toBeUndefined();
+    });
+
+    test("currentPosition set", () => {
+        const point = new PointDataImpl();
+        point.copy({
+            "altKey": false,
+            "button": 1,
+            "buttons": 2,
+            "clientX": 3,
+            "clientY": 4,
+            "ctrlKey": false,
+            "currentTarget": null,
+            "metaKey": false,
+            "movementX": 5,
+            "movementY": 6,
+            "offsetX": 7,
+            "offsetY": 8,
+            "pageX": 9,
+            "pageY": 10,
+            "relatedTarget": null,
+            "screenX": 11,
+            "screenY": 12,
+            "shiftKey": false,
+            "target": null,
+            "timeStamp": 13
+        });
+        data.currentPosition = point;
+        expect(data.currentPosition).toBe(point);
+    });
 });

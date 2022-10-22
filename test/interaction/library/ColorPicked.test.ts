@@ -18,69 +18,71 @@ import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
 import {robot} from "interacto-nono";
 
-let interaction: ColorPicked;
-let colorBox: HTMLInputElement;
-let handler: FSMHandler;
-let logger: Logger & MockProxy<Logger>;
+describe("using a color picked interaction", () => {
+    let interaction: ColorPicked;
+    let colorBox: HTMLInputElement;
+    let handler: FSMHandler;
+    let logger: Logger & MockProxy<Logger>;
 
-beforeEach(() => {
-    handler = mock<FSMHandler>();
-    logger = mock<Logger>();
-    interaction = new ColorPicked(logger);
-    interaction.fsm.addHandler(handler);
-    colorBox = document.createElement("input");
-    colorBox.type = "color";
-});
+    beforeEach(() => {
+        handler = mock<FSMHandler>();
+        logger = mock<Logger>();
+        interaction = new ColorPicked(logger);
+        interaction.fsm.addHandler(handler);
+        colorBox = document.createElement("input");
+        colorBox.type = "color";
+    });
 
-test("input event starts and stops the interaction ColorPicked", () => {
-    interaction.registerToNodes([colorBox]);
-    robot().input(colorBox);
-    expect(handler.fsmStops).toHaveBeenCalledTimes(1);
-    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-});
+    test("input event starts and stops the interaction ColorPicked", () => {
+        interaction.registerToNodes([colorBox]);
+        robot().input(colorBox);
+        expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+        expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+    });
 
-test("log interaction is ok", () => {
-    interaction.log(true);
-    interaction.registerToNodes([colorBox]);
-    robot().input(colorBox);
+    test("log interaction is ok", () => {
+        interaction.log(true);
+        interaction.registerToNodes([colorBox]);
+        robot().input(colorBox);
 
-    expect(logger.logInteractionMsg).toHaveBeenCalledTimes(4);
-});
+        expect(logger.logInteractionMsg).toHaveBeenCalledTimes(4);
+    });
 
-test("no log interaction is ok", () => {
-    interaction.registerToNodes([colorBox]);
-    robot().input(colorBox);
+    test("no log interaction is ok", () => {
+        interaction.registerToNodes([colorBox]);
+        robot().input(colorBox);
 
-    expect(logger.logInteractionMsg).not.toHaveBeenCalled();
-});
+        expect(logger.logInteractionMsg).not.toHaveBeenCalled();
+    });
 
-test("other event don't trigger the interaction", () => {
-    interaction.registerToNodes([colorBox]);
-    robot().click(colorBox);
-    expect(handler.fsmStarts).not.toHaveBeenCalled();
-});
+    test("other event don't trigger the interaction", () => {
+        interaction.registerToNodes([colorBox]);
+        robot().click(colorBox);
+        expect(handler.fsmStarts).not.toHaveBeenCalled();
+    });
 
-test("cannot register non color picker", () => {
-    const w = document.createElement("input");
-    jest.spyOn(w, "addEventListener");
-    interaction.onNewNodeRegistered(w);
-    expect(w.addEventListener).not.toHaveBeenCalled();
-});
+    test("cannot register non color picker", () => {
+        const w = document.createElement("input");
+        jest.spyOn(w, "addEventListener");
+        interaction.onNewNodeRegistered(w);
+        expect(w.addEventListener).not.toHaveBeenCalled();
+    });
 
-test("cannot unregister non color picker", () => {
-    const w = document.createElement("input");
-    jest.spyOn(w, "removeEventListener");
-    interaction.onNodeUnregistered(w);
-    expect(w.removeEventListener).not.toHaveBeenCalled();
-});
+    test("cannot unregister non color picker", () => {
+        const w = document.createElement("input");
+        jest.spyOn(w, "removeEventListener");
+        interaction.onNodeUnregistered(w);
+        expect(w.removeEventListener).not.toHaveBeenCalled();
+    });
 
-test("color picker contains an img on which user clicks", () => {
-    const img = document.createElement("img");
-    colorBox.append(img);
-    interaction.registerToNodes([colorBox]);
+    test("color picker contains an img on which user clicks", () => {
+        const img = document.createElement("img");
+        colorBox.append(img);
+        interaction.registerToNodes([colorBox]);
 
-    robot(img).input();
+        robot(img).input();
 
-    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-    expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+        expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+        expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+    });
 });

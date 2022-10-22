@@ -18,68 +18,70 @@ import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
 import {robot} from "interacto-nono";
 
-let interaction: ButtonPressed;
-let button: HTMLButtonElement;
-let handler: FSMHandler;
-let logger: Logger & MockProxy<Logger>;
+describe("using a button pressed interaction", () => {
+    let interaction: ButtonPressed;
+    let button: HTMLButtonElement;
+    let handler: FSMHandler;
+    let logger: Logger & MockProxy<Logger>;
 
-beforeEach(() => {
-    handler = mock<FSMHandler>();
-    logger = mock<Logger>();
-    interaction = new ButtonPressed(logger);
-    interaction.fsm.addHandler(handler);
-    button = document.createElement("button");
-});
+    beforeEach(() => {
+        handler = mock<FSMHandler>();
+        logger = mock<Logger>();
+        interaction = new ButtonPressed(logger);
+        interaction.fsm.addHandler(handler);
+        button = document.createElement("button");
+    });
 
-test("click event start and stop the interaction ButtonPressed", () => {
-    interaction.registerToNodes([button]);
-    button.click();
-    expect(handler.fsmStops).toHaveBeenCalledTimes(1);
-    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-});
+    test("click event start and stop the interaction ButtonPressed", () => {
+        interaction.registerToNodes([button]);
+        button.click();
+        expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+        expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+    });
 
-test("log interaction is ok", () => {
-    interaction.log(true);
-    interaction.registerToNodes([button]);
-    button.click();
+    test("log interaction is ok", () => {
+        interaction.log(true);
+        interaction.registerToNodes([button]);
+        button.click();
 
-    expect(logger.logInteractionMsg).toHaveBeenCalledTimes(4);
-});
+        expect(logger.logInteractionMsg).toHaveBeenCalledTimes(4);
+    });
 
-test("no log interaction is ok", () => {
-    interaction.registerToNodes([button]);
-    button.click();
+    test("no log interaction is ok", () => {
+        interaction.registerToNodes([button]);
+        button.click();
 
-    expect(logger.logInteractionMsg).not.toHaveBeenCalled();
-});
+        expect(logger.logInteractionMsg).not.toHaveBeenCalled();
+    });
 
-test("other event don't trigger the interaction ButtonPressed", () => {
-    interaction.registerToNodes([button]);
-    robot().change(button);
-    expect(handler.fsmStarts).not.toHaveBeenCalled();
-});
+    test("other event don't trigger the interaction ButtonPressed", () => {
+        interaction.registerToNodes([button]);
+        robot().change(button);
+        expect(handler.fsmStarts).not.toHaveBeenCalled();
+    });
 
-test("cannot register non button", () => {
-    const w = document.createElement("a");
-    jest.spyOn(w, "addEventListener");
-    interaction.onNewNodeRegistered(w);
-    expect(w.addEventListener).not.toHaveBeenCalled();
-});
+    test("cannot register non button", () => {
+        const w = document.createElement("a");
+        jest.spyOn(w, "addEventListener");
+        interaction.onNewNodeRegistered(w);
+        expect(w.addEventListener).not.toHaveBeenCalled();
+    });
 
-test("cannot unregister non button", () => {
-    const w = document.createElement("a");
-    jest.spyOn(w, "removeEventListener");
-    interaction.onNodeUnregistered(w);
-    expect(w.removeEventListener).not.toHaveBeenCalled();
-});
+    test("cannot unregister non button", () => {
+        const w = document.createElement("a");
+        jest.spyOn(w, "removeEventListener");
+        interaction.onNodeUnregistered(w);
+        expect(w.removeEventListener).not.toHaveBeenCalled();
+    });
 
-test("button contains an img on which user clicks", () => {
-    const img = document.createElement("img");
-    button.append(img);
-    interaction.registerToNodes([button]);
+    test("button contains an img on which user clicks", () => {
+        const img = document.createElement("img");
+        button.append(img);
+        interaction.registerToNodes([button]);
 
-    img.click();
+        img.click();
 
-    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-    expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+        expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+        expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+    });
 });

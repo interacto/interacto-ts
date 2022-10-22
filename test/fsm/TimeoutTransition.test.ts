@@ -22,156 +22,158 @@ import {mock} from "jest-mock-extended";
 import type {Logger} from "../../src/api/logging/Logger";
 import type {FSMDataHandler} from "../../src/impl/fsm/FSMDataHandler";
 
-let evt: TimeoutTransition;
-let src: MockProxy<OutputState> & OutputState;
-let tgt: InputState & MockProxy<InputState>;
-let fsm: FSMImpl<FSMDataHandler> & MockProxy<FSMImpl<FSMDataHandler>>;
-let logger: Logger;
+describe("using a timeout transition", () => {
+    let evt: TimeoutTransition;
+    let src: MockProxy<OutputState> & OutputState;
+    let tgt: InputState & MockProxy<InputState>;
+    let fsm: FSMImpl<FSMDataHandler> & MockProxy<FSMImpl<FSMDataHandler>>;
+    let logger: Logger;
 
-beforeEach(() => {
-    logger = mock<Logger>();
-    jest.useFakeTimers();
-    fsm = mock<FSMImpl<FSMDataHandler>>();
-    src = mock<OutputState>();
-    tgt = mock<InputState>();
-    Object.defineProperty(src, "fsm", {
-        "get": jest.fn(() => fsm)
+    beforeEach(() => {
+        logger = mock<Logger>();
+        jest.useFakeTimers();
+        fsm = mock<FSMImpl<FSMDataHandler>>();
+        src = mock<OutputState>();
+        tgt = mock<InputState>();
+        Object.defineProperty(src, "fsm", {
+            "get": jest.fn(() => fsm)
+        });
+        Object.defineProperty(tgt, "fsm", {
+            "get": jest.fn(() => fsm)
+        });
+        evt = new TimeoutTransition(src, tgt, () => 500, logger);
     });
-    Object.defineProperty(tgt, "fsm", {
-        "get": jest.fn(() => fsm)
+
+    afterEach(() => {
+        jest.clearAllTimers();
+        jest.clearAllMocks();
     });
-    evt = new TimeoutTransition(src, tgt, () => 500, logger);
-});
 
-afterEach(() => {
-    jest.clearAllTimers();
-    jest.clearAllMocks();
-});
-
-test("guard OK after timeout", () => {
-    evt.startTimeout();
-    jest.runOnlyPendingTimers();
-    expect(evt.guard(new Event("mousedown"))).toBeTruthy();
-});
-
-test("guard KO before timeout", () => {
-    evt.startTimeout();
-    expect(evt.guard(new Event("mousedown"))).toBeFalsy();
-});
-
-test("oKAfterTimeout", () => {
-    evt.startTimeout();
-    jest.advanceTimersByTime(499);
-    expect(fsm.onTimeout).not.toHaveBeenCalled();
-    jest.advanceTimersByTime(1);
-    expect(fsm.onTimeout).toHaveBeenCalledTimes(1);
-    expect(evt.accept(undefined)).toBeTruthy();
-});
-
-test("kOBeforeTimeout", () => {
-    evt.startTimeout();
-    expect(evt.accept(undefined)).toBeFalsy();
-});
-
-test("stopTimeout", () => {
-    evt.startTimeout();
-    evt.stopTimeout();
-    jest.runOnlyPendingTimers();
-    expect(evt.guard(new Event("mousedown"))).toBeFalsy();
-});
-
-test("stop timeout 0", () => {
-    evt = new TimeoutTransition(src, tgt, () => 0);
-    evt.startTimeout();
-    expect(jest.getTimerCount()).toBe(0);
-    evt.stopTimeout();
-    expect(evt.guard(new Event("mousedown"))).toBeFalsy();
-});
-
-test("two consecutive starts", () => {
-    evt = new TimeoutTransition(src, tgt, () => 300);
-    evt.startTimeout();
-    evt.startTimeout();
-    expect(jest.getTimerCount()).toBe(1);
-    evt.stopTimeout();
-    expect(evt.guard(new Event("mousedown"))).toBeFalsy();
-});
-
-test("stop when not started", () => {
-    evt.stopTimeout();
-    expect(jest.getTimerCount()).toBe(0);
-    expect(evt.guard(new Event("mousedown"))).toBeFalsy();
-});
-
-test("getAcceptEventsEmpty", () => {
-    expect(evt.getAcceptedEvents()).toStrictEqual(new Set());
-});
-
-test("executeWithoutTimeout", () => {
-    expect(evt.execute(undefined)).toBeUndefined();
-});
-
-test("executeWithTimeout", () => {
-    evt.startTimeout();
-    setTimeout(() => {}, 100);
-    jest.runOnlyPendingTimers();
-    expect(evt.execute(undefined)).toStrictEqual(tgt);
-});
-
-test("execute cancels", () => {
-    jest.spyOn(tgt, "enter");
-    tgt.enter.mockImplementation((): void => {
-        throw new CancelFSMError();
+    test("guard OK after timeout", () => {
+        evt.startTimeout();
+        jest.runOnlyPendingTimers();
+        expect(evt.guard(new Event("mousedown"))).toBeTruthy();
     });
-    evt.startTimeout();
-    jest.runOnlyPendingTimers();
-    expect(() => evt.execute(undefined)).toThrow(CancelFSMError);
-});
 
-test("fsm throws error in thread", () => {
-    const ex = new Error("foo");
-    jest.spyOn(fsm, "onTimeout");
-    fsm.onTimeout.mockImplementation((): void => {
-        throw ex;
+    test("guard KO before timeout", () => {
+        evt.startTimeout();
+        expect(evt.guard(new Event("mousedown"))).toBeFalsy();
     });
-    evt.startTimeout();
-    jest.runOnlyPendingTimers();
-    expect(logger.logInteractionErr).toHaveBeenCalledWith("Exception on timeout of a timeout transition", ex);
-});
 
-test("fsm throws not an error in thread", () => {
-    jest.spyOn(fsm, "onTimeout");
-    fsm.onTimeout.mockImplementation((): void => {
-        // eslint-disable-next-line @typescript-eslint/no-throw-literal
-        throw 42;
+    test("oKAfterTimeout", () => {
+        evt.startTimeout();
+        jest.advanceTimersByTime(499);
+        expect(fsm.onTimeout).not.toHaveBeenCalled();
+        jest.advanceTimersByTime(1);
+        expect(fsm.onTimeout).toHaveBeenCalledTimes(1);
+        expect(evt.accept(undefined)).toBeTruthy();
     });
-    evt.startTimeout();
-    jest.runOnlyPendingTimers();
-    expect(logger.logInteractionErr).toHaveBeenCalledWith("Exception on timeout of a timeout transition", 42);
-});
 
-test("fsm throws not an error in thread with no logger", () => {
-    evt = new TimeoutTransition(src, tgt, () => 500);
-    jest.spyOn(fsm, "onTimeout");
-    fsm.onTimeout.mockImplementation((): void => {
-        // eslint-disable-next-line @typescript-eslint/no-throw-literal
-        throw 42;
+    test("kOBeforeTimeout", () => {
+        evt.startTimeout();
+        expect(evt.accept(undefined)).toBeFalsy();
     });
-    evt.startTimeout();
-    jest.runOnlyPendingTimers();
-    expect(logger.logInteractionErr).not.toHaveBeenCalled();
-});
 
-test("executeCallFSMTimeout", () => {
-    evt.startTimeout();
-    jest.runOnlyPendingTimers();
-    expect(fsm.onTimeout).toHaveBeenCalledTimes(1);
-});
+    test("stopTimeout", () => {
+        evt.startTimeout();
+        evt.stopTimeout();
+        jest.runOnlyPendingTimers();
+        expect(evt.guard(new Event("mousedown"))).toBeFalsy();
+    });
 
-test("executeCallsStatesMethods", () => {
-    evt.startTimeout();
-    jest.runOnlyPendingTimers();
-    evt.execute(undefined);
-    expect(src.exit).toHaveBeenCalledTimes(1);
-    expect(tgt.enter).toHaveBeenCalledTimes(1);
+    test("stop timeout 0", () => {
+        evt = new TimeoutTransition(src, tgt, () => 0);
+        evt.startTimeout();
+        expect(jest.getTimerCount()).toBe(0);
+        evt.stopTimeout();
+        expect(evt.guard(new Event("mousedown"))).toBeFalsy();
+    });
+
+    test("two consecutive starts", () => {
+        evt = new TimeoutTransition(src, tgt, () => 300);
+        evt.startTimeout();
+        evt.startTimeout();
+        expect(jest.getTimerCount()).toBe(1);
+        evt.stopTimeout();
+        expect(evt.guard(new Event("mousedown"))).toBeFalsy();
+    });
+
+    test("stop when not started", () => {
+        evt.stopTimeout();
+        expect(jest.getTimerCount()).toBe(0);
+        expect(evt.guard(new Event("mousedown"))).toBeFalsy();
+    });
+
+    test("getAcceptEventsEmpty", () => {
+        expect(evt.getAcceptedEvents()).toStrictEqual(new Set());
+    });
+
+    test("executeWithoutTimeout", () => {
+        expect(evt.execute(undefined)).toBeUndefined();
+    });
+
+    test("executeWithTimeout", () => {
+        evt.startTimeout();
+        setTimeout(() => {}, 100);
+        jest.runOnlyPendingTimers();
+        expect(evt.execute(undefined)).toStrictEqual(tgt);
+    });
+
+    test("execute cancels", () => {
+        jest.spyOn(tgt, "enter");
+        tgt.enter.mockImplementation((): void => {
+            throw new CancelFSMError();
+        });
+        evt.startTimeout();
+        jest.runOnlyPendingTimers();
+        expect(() => evt.execute(undefined)).toThrow(CancelFSMError);
+    });
+
+    test("fsm throws error in thread", () => {
+        const ex = new Error("foo");
+        jest.spyOn(fsm, "onTimeout");
+        fsm.onTimeout.mockImplementation((): void => {
+            throw ex;
+        });
+        evt.startTimeout();
+        jest.runOnlyPendingTimers();
+        expect(logger.logInteractionErr).toHaveBeenCalledWith("Exception on timeout of a timeout transition", ex);
+    });
+
+    test("fsm throws not an error in thread", () => {
+        jest.spyOn(fsm, "onTimeout");
+        fsm.onTimeout.mockImplementation((): void => {
+            // eslint-disable-next-line @typescript-eslint/no-throw-literal
+            throw 42;
+        });
+        evt.startTimeout();
+        jest.runOnlyPendingTimers();
+        expect(logger.logInteractionErr).toHaveBeenCalledWith("Exception on timeout of a timeout transition", 42);
+    });
+
+    test("fsm throws not an error in thread with no logger", () => {
+        evt = new TimeoutTransition(src, tgt, () => 500);
+        jest.spyOn(fsm, "onTimeout");
+        fsm.onTimeout.mockImplementation((): void => {
+            // eslint-disable-next-line @typescript-eslint/no-throw-literal
+            throw 42;
+        });
+        evt.startTimeout();
+        jest.runOnlyPendingTimers();
+        expect(logger.logInteractionErr).not.toHaveBeenCalled();
+    });
+
+    test("executeCallFSMTimeout", () => {
+        evt.startTimeout();
+        jest.runOnlyPendingTimers();
+        expect(fsm.onTimeout).toHaveBeenCalledTimes(1);
+    });
+
+    test("executeCallsStatesMethods", () => {
+        evt.startTimeout();
+        jest.runOnlyPendingTimers();
+        evt.execute(undefined);
+        expect(src.exit).toHaveBeenCalledTimes(1);
+        expect(tgt.enter).toHaveBeenCalledTimes(1);
+    });
 });

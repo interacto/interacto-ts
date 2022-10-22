@@ -15,62 +15,63 @@
 import {KeyDataImpl} from "../../src/impl/interaction/KeyDataImpl";
 import type {KeyData} from "../../src/api/interaction/KeyData";
 
-let data: KeyDataImpl;
-let defaultData: KeyDataImpl;
-let newData: KeyData;
+describe("using a key data", () => {
+    let data: KeyDataImpl;
+    let defaultData: KeyDataImpl;
+    let newData: KeyData;
 
-beforeEach(() => {
-    data = new KeyDataImpl();
+    beforeEach(() => {
+        data = new KeyDataImpl();
 
-    newData = {
-        "code": "KeyQ",
-        "key": "KeyA",
-        "location": 1,
-        "repeat": false,
-        "altKey": true,
-        "ctrlKey": true,
-        "metaKey": true,
-        "shiftKey": true,
-        "timeStamp": 0,
-        "target": null,
-        "currentTarget": null
-    } as KeyData;
+        newData = {
+            "code": "KeyQ",
+            "key": "KeyA",
+            "location": 1,
+            "repeat": false,
+            "altKey": true,
+            "ctrlKey": true,
+            "metaKey": true,
+            "shiftKey": true,
+            "timeStamp": 0,
+            "target": null,
+            "currentTarget": null
+        } as KeyData;
 
-    defaultData = new KeyDataImpl();
-    defaultData.copy({
-        "code": "",
-        "key": "",
-        "location": 0,
-        "repeat": false,
-        "altKey": false,
-        "ctrlKey": false,
-        "metaKey": false,
-        "shiftKey": false,
-        "timeStamp": 0,
-        "target": null,
-        "currentTarget": null
+        defaultData = new KeyDataImpl();
+        defaultData.copy({
+            "code": "",
+            "key": "",
+            "location": 0,
+            "repeat": false,
+            "altKey": false,
+            "ctrlKey": false,
+            "metaKey": false,
+            "shiftKey": false,
+            "timeStamp": 0,
+            "target": null,
+            "currentTarget": null
+        });
+    });
+
+    test("copy", () => {
+        data.copy(newData);
+        expect(data.code).toBe(newData.code);
+        expect(data.key).toBe(newData.key);
+        expect(data.location).toBe(newData.location);
+        expect(data.repeat).toBe(newData.repeat);
+        expect(data.altKey).toBe(newData.altKey);
+        expect(data.ctrlKey).toBe(newData.ctrlKey);
+        expect(data.metaKey).toBe(newData.metaKey);
+        expect(data.shiftKey).toBe(newData.shiftKey);
+    });
+
+    test("default values", () => {
+        expect(data).toStrictEqual(defaultData);
+    });
+
+    test("flush", () => {
+        data.copy(newData);
+        data.flush();
+        expect(data).toStrictEqual(defaultData);
     });
 });
-
-test("copy", () => {
-    data.copy(newData);
-    expect(data.code).toBe(newData.code);
-    expect(data.key).toBe(newData.key);
-    expect(data.location).toBe(newData.location);
-    expect(data.repeat).toBe(newData.repeat);
-    expect(data.altKey).toBe(newData.altKey);
-    expect(data.ctrlKey).toBe(newData.ctrlKey);
-    expect(data.metaKey).toBe(newData.metaKey);
-    expect(data.shiftKey).toBe(newData.shiftKey);
-});
-
-test("default values", () => {
-    expect(data).toStrictEqual(defaultData);
-});
-
-test("flush", () => {
-    data.copy(newData);
-    data.flush();
-    expect(data).toStrictEqual(defaultData);
-});
-

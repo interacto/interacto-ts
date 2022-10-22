@@ -18,64 +18,66 @@ import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
 import {robot} from "interacto-nono";
 
-let interaction: Scroll;
-let canvas: HTMLElement;
-let handler: FSMHandler & MockProxy<FSMHandler>;
-let logger: Logger & MockProxy<Logger>;
+describe("using a scroll interaction", () => {
+    let interaction: Scroll;
+    let canvas: HTMLElement;
+    let handler: FSMHandler & MockProxy<FSMHandler>;
+    let logger: Logger & MockProxy<Logger>;
 
-beforeEach(() => {
-    handler = mock<FSMHandler>();
-    logger = mock<Logger>();
-    interaction = new Scroll(logger);
-    interaction.fsm.addHandler(handler);
-    canvas = document.createElement("canvas");
-});
-
-test("scroll event start and stop the interaction", () => {
-    interaction.registerToNodes([canvas]);
-    robot(canvas).scroll();
-    expect(handler.fsmStops).toHaveBeenCalledTimes(1);
-    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-});
-
-test("scroll data", () => {
-    let target: EventTarget | null = null;
-    interaction.registerToNodes([canvas]);
-    handler.fsmStops = jest.fn(() => {
-        target = interaction.data.target;
+    beforeEach(() => {
+        handler = mock<FSMHandler>();
+        logger = mock<Logger>();
+        interaction = new Scroll(logger);
+        interaction.fsm.addHandler(handler);
+        canvas = document.createElement("canvas");
     });
-    robot(canvas).scroll();
-    expect(target).toBe(canvas);
-});
 
-test("scroll event start and stop the interaction with widget", () => {
-    interaction.registerToNodes([canvas]);
-    robot(canvas).scroll();
-    expect(handler.fsmStops).toHaveBeenCalledTimes(1);
-    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-});
+    test("scroll event start and stop the interaction", () => {
+        interaction.registerToNodes([canvas]);
+        robot(canvas).scroll();
+        expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+        expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+    });
 
-test("multiple scroll trigger multiple interaction that start and stop", () => {
-    interaction.registerToNodes([canvas]);
-    robot(canvas)
-        .scroll()
-        .scroll()
-        .scroll();
-    expect(handler.fsmStops).toHaveBeenCalledTimes(3);
-    expect(handler.fsmStarts).toHaveBeenCalledTimes(3);
-});
+    test("scroll data", () => {
+        let target: EventTarget | null = null;
+        interaction.registerToNodes([canvas]);
+        handler.fsmStops = jest.fn(() => {
+            target = interaction.data.target;
+        });
+        robot(canvas).scroll();
+        expect(target).toBe(canvas);
+    });
 
-test("log interaction is ok", () => {
-    interaction.log(true);
-    interaction.registerToNodes([canvas]);
-    robot(canvas).scroll();
+    test("scroll event start and stop the interaction with widget", () => {
+        interaction.registerToNodes([canvas]);
+        robot(canvas).scroll();
+        expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+        expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+    });
 
-    expect(logger.logInteractionMsg).toHaveBeenCalledTimes(4);
-});
+    test("multiple scroll trigger multiple interaction that start and stop", () => {
+        interaction.registerToNodes([canvas]);
+        robot(canvas)
+            .scroll()
+            .scroll()
+            .scroll();
+        expect(handler.fsmStops).toHaveBeenCalledTimes(3);
+        expect(handler.fsmStarts).toHaveBeenCalledTimes(3);
+    });
 
-test("no log interaction is ok", () => {
-    interaction.registerToNodes([canvas]);
-    robot(canvas).scroll();
+    test("log interaction is ok", () => {
+        interaction.log(true);
+        interaction.registerToNodes([canvas]);
+        robot(canvas).scroll();
 
-    expect(logger.logInteractionMsg).not.toHaveBeenCalled();
+        expect(logger.logInteractionMsg).toHaveBeenCalledTimes(4);
+    });
+
+    test("no log interaction is ok", () => {
+        interaction.registerToNodes([canvas]);
+        robot(canvas).scroll();
+
+        expect(logger.logInteractionMsg).not.toHaveBeenCalled();
+    });
 });

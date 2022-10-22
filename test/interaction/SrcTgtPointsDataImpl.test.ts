@@ -15,116 +15,117 @@
 import {SrcTgtPointsDataImpl} from "../../src/impl/interaction/SrcTgtPointsDataImpl";
 import {PointDataImpl} from "../../src/impl/interaction/PointDataImpl";
 
-let data: SrcTgtPointsDataImpl;
-let pointSrc: PointDataImpl;
-let pointTgt: PointDataImpl;
+describe("using a scrtgtpoints data", () => {
+    let data: SrcTgtPointsDataImpl;
+    let pointSrc: PointDataImpl;
+    let pointTgt: PointDataImpl;
 
-beforeEach(() => {
-    data = new SrcTgtPointsDataImpl();
-    pointSrc = new PointDataImpl();
-    pointSrc.copy({
-        "button": 1,
-        "buttons": 2,
-        "movementX": 20,
-        "movementY": 40,
-        "offsetX": 10,
-        "offsetY": 30,
-        "relatedTarget": new EventTarget(),
-        "clientX": 11,
-        "clientY": 12,
-        "pageX": 13,
-        "pageY": 14,
-        "screenX": 15,
-        "screenY": 16,
-        "altKey": true,
-        "ctrlKey": true,
-        "metaKey": true,
-        "shiftKey": true,
-        "timeStamp": 10,
-        "target": new EventTarget(),
-        "currentTarget": new EventTarget()
+    beforeEach(() => {
+        data = new SrcTgtPointsDataImpl();
+        pointSrc = new PointDataImpl();
+        pointSrc.copy({
+            "button": 1,
+            "buttons": 2,
+            "movementX": 20,
+            "movementY": 40,
+            "offsetX": 10,
+            "offsetY": 30,
+            "relatedTarget": new EventTarget(),
+            "clientX": 11,
+            "clientY": 12,
+            "pageX": 13,
+            "pageY": 14,
+            "screenX": 15,
+            "screenY": 16,
+            "altKey": true,
+            "ctrlKey": true,
+            "metaKey": true,
+            "shiftKey": true,
+            "timeStamp": 10,
+            "target": new EventTarget(),
+            "currentTarget": new EventTarget()
+        });
+
+        pointTgt = new PointDataImpl();
+        pointTgt.copy({
+            "button": 1,
+            "buttons": 2,
+            "movementX": 20,
+            "movementY": 40,
+            "offsetX": 10,
+            "offsetY": 30,
+            "relatedTarget": new EventTarget(),
+            "clientX": 12,
+            "clientY": 14,
+            "pageX": 16,
+            "pageY": 18,
+            "screenX": 18,
+            "screenY": 20,
+            "altKey": true,
+            "ctrlKey": true,
+            "metaKey": true,
+            "shiftKey": true,
+            "timeStamp": 20,
+            "target": new EventTarget(),
+            "currentTarget": new EventTarget()
+        });
+
+        data.copySrc(pointSrc);
+        data.copyTgt(pointTgt);
     });
 
-    pointTgt = new PointDataImpl();
-    pointTgt.copy({
-        "button": 1,
-        "buttons": 2,
-        "movementX": 20,
-        "movementY": 40,
-        "offsetX": 10,
-        "offsetY": 30,
-        "relatedTarget": new EventTarget(),
-        "clientX": 12,
-        "clientY": 14,
-        "pageX": 16,
-        "pageY": 18,
-        "screenX": 18,
-        "screenY": 20,
-        "altKey": true,
-        "ctrlKey": true,
-        "metaKey": true,
-        "shiftKey": true,
-        "timeStamp": 20,
-        "target": new EventTarget(),
-        "currentTarget": new EventTarget()
+    test("flush", () => {
+        data.flush();
+        expect(data.src).toStrictEqual(new PointDataImpl());
+        expect(data.tgt).toStrictEqual(new PointDataImpl());
     });
 
-    data.copySrc(pointSrc);
-    data.copyTgt(pointTgt);
-});
+    test("diffClientX", () => {
+        expect(data.diffClientX).toBe(1);
+    });
 
-test("flush", () => {
-    data.flush();
-    expect(data.src).toStrictEqual(new PointDataImpl());
-    expect(data.tgt).toStrictEqual(new PointDataImpl());
-});
+    test("diffClientY", () => {
+        expect(data.diffClientY).toBe(2);
+    });
 
-test("diffClientX", () => {
-    expect(data.diffClientX).toBe(1);
-});
+    test("diffPageX", () => {
+        expect(data.diffPageX).toBe(3);
+    });
 
-test("diffClientY", () => {
-    expect(data.diffClientY).toBe(2);
-});
+    test("diffPageY", () => {
+        expect(data.diffPageY).toBe(4);
+    });
 
-test("diffPageX", () => {
-    expect(data.diffPageX).toBe(3);
-});
+    test("diffScreenX", () => {
+        expect(data.diffScreenX).toBe(3);
+    });
 
-test("diffPageY", () => {
-    expect(data.diffPageY).toBe(4);
-});
+    test("diffScreenY", () => {
+        expect(data.diffScreenY).toBe(4);
+    });
 
-test("diffScreenX", () => {
-    expect(data.diffScreenX).toBe(3);
-});
+    test("duration", () => {
+        expect(data.duration).toBe(10);
+    });
 
-test("diffScreenY", () => {
-    expect(data.diffScreenY).toBe(4);
-});
+    test("velocity", () => {
+        // velocity should be sqrt(deltaX^2 + deltaY^2) / velocity = sqrt(16 + 9) / 10 = 0.5
+        expect(data.velocity).toBe(0.5);
+    });
 
-test("duration", () => {
-    expect(data.duration).toBe(10);
-});
+    test("isHorizontal OK", () => {
+        expect(data.isHorizontal(5)).toBeTruthy();
+    });
 
-test("velocity", () => {
-    // velocity should be sqrt(deltaX^2 + deltaY^2) / velocity = sqrt(16 + 9) / 10 = 0.5
-    expect(data.velocity).toBe(0.5);
-});
+    test("isHorizontal KO", () => {
+        expect(data.isHorizontal(2)).toBeFalsy();
+    });
 
-test("isHorizontal OK", () => {
-    expect(data.isHorizontal(5)).toBeTruthy();
-});
+    test("isVertical OK", () => {
+        expect(data.isVertical(5)).toBeTruthy();
+    });
 
-test("isHorizontal KO", () => {
-    expect(data.isHorizontal(2)).toBeFalsy();
+    test("isVertical KO", () => {
+        expect(data.isVertical(2)).toBeFalsy();
+    });
 });
-
-test("isVertical OK", () => {
-    expect(data.isVertical(5)).toBeTruthy();
-});
-
-test("isVertical KO", () => {
-    expect(data.isVertical(2)).toBeFalsy();
-});
-

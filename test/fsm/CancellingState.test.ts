@@ -19,47 +19,49 @@ import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
 import type {FSMDataHandler} from "../../src/impl/fsm/FSMDataHandler";
 
-let state: CancellingState;
-let fsm: FSMImpl<FSMDataHandler> & MockProxy<FSMImpl<FSMDataHandler>>;
+describe("using a cancelling state", () => {
+    let state: CancellingState;
+    let fsm: FSMImpl<FSMDataHandler> & MockProxy<FSMImpl<FSMDataHandler>>;
 
-beforeEach(() => {
-    fsm = mock<FSMImpl<FSMDataHandler>>();
-    state = new CancellingState(fsm, "os");
-});
-
-test("enter", () => {
-    state.enter();
-    expect(fsm.onCancelling).toHaveBeenCalledTimes(1);
-});
-
-test("checkStartingState fsm started", () => {
-    Object.defineProperty(fsm, "started", {
-        "get": jest.fn(() => true)
+    beforeEach(() => {
+        fsm = mock<FSMImpl<FSMDataHandler>>();
+        state = new CancellingState(fsm, "os");
     });
 
-    state.checkStartingState();
-    expect(fsm.onStarting).not.toHaveBeenCalledWith();
-});
-
-test("checkStartingState fsm not started but starting state not this state", () => {
-    Object.defineProperty(fsm, "started", {
-        "get": jest.fn(() => false)
-    });
-    Object.defineProperty(fsm, "startingState", {
-        "get": jest.fn(() => mock<OutputState>())
+    test("enter", () => {
+        state.enter();
+        expect(fsm.onCancelling).toHaveBeenCalledTimes(1);
     });
 
-    state.checkStartingState();
-    expect(fsm.onStarting).not.toHaveBeenCalledWith();
-});
+    test("checkStartingState fsm started", () => {
+        Object.defineProperty(fsm, "started", {
+            "get": jest.fn(() => true)
+        });
 
-test("checkStartingState fsm not started and starting state is this state", () => {
-    Object.defineProperty(fsm, "started", {
-        "get": jest.fn(() => false)
+        state.checkStartingState();
+        expect(fsm.onStarting).not.toHaveBeenCalledWith();
     });
-    Object.defineProperty(fsm, "startingState", {
-        "get": jest.fn(() => state)
+
+    test("checkStartingState fsm not started but starting state not this state", () => {
+        Object.defineProperty(fsm, "started", {
+            "get": jest.fn(() => false)
+        });
+        Object.defineProperty(fsm, "startingState", {
+            "get": jest.fn(() => mock<OutputState>())
+        });
+
+        state.checkStartingState();
+        expect(fsm.onStarting).not.toHaveBeenCalledWith();
     });
-    state.checkStartingState();
-    expect(fsm.onStarting).toHaveBeenCalledTimes(1);
+
+    test("checkStartingState fsm not started and starting state is this state", () => {
+        Object.defineProperty(fsm, "started", {
+            "get": jest.fn(() => false)
+        });
+        Object.defineProperty(fsm, "startingState", {
+            "get": jest.fn(() => state)
+        });
+        state.checkStartingState();
+        expect(fsm.onStarting).toHaveBeenCalledTimes(1);
+    });
 });

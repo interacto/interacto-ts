@@ -18,61 +18,63 @@ import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
 import {robot} from "interacto-nono";
 
-let interaction: HyperLinkClicked;
-let url: HTMLElement;
-let handler: FSMHandler;
-let logger: Logger & MockProxy<Logger>;
+describe("using a hyper link interaction", () => {
+    let interaction: HyperLinkClicked;
+    let url: HTMLElement;
+    let handler: FSMHandler;
+    let logger: Logger & MockProxy<Logger>;
 
-beforeEach(() => {
-    handler = mock<FSMHandler>();
-    logger = mock<Logger>();
-    interaction = new HyperLinkClicked(logger);
-    interaction.fsm.addHandler(handler);
-    url = document.createElement("a");
-});
+    beforeEach(() => {
+        handler = mock<FSMHandler>();
+        logger = mock<Logger>();
+        interaction = new HyperLinkClicked(logger);
+        interaction.fsm.addHandler(handler);
+        url = document.createElement("a");
+    });
 
-test("click on url starts and stops the interaction", () => {
-    interaction.registerToNodes([url]);
-    robot(url).input();
-    expect(handler.fsmStops).toHaveBeenCalledTimes(1);
-    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-});
+    test("click on url starts and stops the interaction", () => {
+        interaction.registerToNodes([url]);
+        robot(url).input();
+        expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+        expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+    });
 
-test("log interaction is ok", () => {
-    interaction.log(true);
-    interaction.registerToNodes([url]);
-    robot(url).input();
-    expect(logger.logInteractionMsg).toHaveBeenCalledTimes(4);
-});
+    test("log interaction is ok", () => {
+        interaction.log(true);
+        interaction.registerToNodes([url]);
+        robot(url).input();
+        expect(logger.logInteractionMsg).toHaveBeenCalledTimes(4);
+    });
 
-test("no log interaction is ok", () => {
-    interaction.registerToNodes([url]);
-    robot(url).input();
+    test("no log interaction is ok", () => {
+        interaction.registerToNodes([url]);
+        robot(url).input();
 
-    expect(logger.logInteractionMsg).not.toHaveBeenCalled();
-});
+        expect(logger.logInteractionMsg).not.toHaveBeenCalled();
+    });
 
-test("cannot register non hyperlink", () => {
-    const w = document.createElement("input");
-    jest.spyOn(w, "addEventListener");
-    interaction.onNewNodeRegistered(w);
-    expect(w.addEventListener).not.toHaveBeenCalled();
-});
+    test("cannot register non hyperlink", () => {
+        const w = document.createElement("input");
+        jest.spyOn(w, "addEventListener");
+        interaction.onNewNodeRegistered(w);
+        expect(w.addEventListener).not.toHaveBeenCalled();
+    });
 
-test("cannot unregister non hyperlink", () => {
-    const w = document.createElement("input");
-    jest.spyOn(w, "removeEventListener");
-    interaction.onNodeUnregistered(w);
-    expect(w.removeEventListener).not.toHaveBeenCalled();
-});
+    test("cannot unregister non hyperlink", () => {
+        const w = document.createElement("input");
+        jest.spyOn(w, "removeEventListener");
+        interaction.onNodeUnregistered(w);
+        expect(w.removeEventListener).not.toHaveBeenCalled();
+    });
 
-test("hyperlink contains an img on which user clicks", () => {
-    const img = document.createElement("img");
-    url.append(img);
-    interaction.registerToNodes([url]);
+    test("hyperlink contains an img on which user clicks", () => {
+        const img = document.createElement("img");
+        url.append(img);
+        interaction.registerToNodes([url]);
 
-    robot(img).input();
+        robot(img).input();
 
-    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-    expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+        expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+        expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+    });
 });

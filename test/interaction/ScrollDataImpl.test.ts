@@ -14,39 +14,41 @@
 
 import {ScrollDataImpl} from "../../src/impl/interaction/ScrollDataImpl";
 
-let data: ScrollDataImpl;
-let evt: UIEvent;
+describe("using a scroll data", () => {
+    let data: ScrollDataImpl;
+    let evt: UIEvent;
 
-beforeEach(() => {
-    data = new ScrollDataImpl();
-    evt = new UIEvent("mousedown");
+    beforeEach(() => {
+        data = new ScrollDataImpl();
+        evt = new UIEvent("mousedown");
 
-    const newWindow = {...window};
-    Object.defineProperties(newWindow, {
-        "scrollX": {
-            get(): number {
-                return 14;
+        const newWindow = {...window};
+        Object.defineProperties(newWindow, {
+            "scrollX": {
+                get(): number {
+                    return 14;
+                }
+            },
+            "scrollY": {
+                get(): number {
+                    return 16;
+                }
             }
-        },
-        "scrollY": {
-            get(): number {
-                return 16;
-            }
-        }
+        });
+        jest.spyOn(global, "window", "get")
+            .mockReturnValue(newWindow);
     });
-    jest.spyOn(global, "window", "get")
-        .mockReturnValue(newWindow);
-});
 
-test("setScrollData view is not null", () => {
-    data.setScrollData(evt);
-    expect(data.scrollX).toBe(14);
-    expect(data.scrollY).toBe(16);
-});
+    test("setScrollData view is not null", () => {
+        data.setScrollData(evt);
+        expect(data.scrollX).toBe(14);
+        expect(data.scrollY).toBe(16);
+    });
 
-test("flush", () => {
-    data.setScrollData(evt);
-    data.flush();
-    expect(data.scrollX).toBe(0);
-    expect(data.scrollY).toBe(0);
+    test("flush", () => {
+        data.setScrollData(evt);
+        data.flush();
+        expect(data.scrollX).toBe(0);
+        expect(data.scrollY).toBe(0);
+    });
 });

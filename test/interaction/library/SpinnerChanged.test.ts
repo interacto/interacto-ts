@@ -18,121 +18,123 @@ import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
 import {robot} from "interacto-nono";
 
-let interaction: SpinnerChanged;
-let spinner: HTMLInputElement;
-let handler: FSMHandler;
-let timer: number;
-let logger: Logger & MockProxy<Logger>;
+describe("using a spinner changed interaction", () => {
+    let interaction: SpinnerChanged;
+    let spinner: HTMLInputElement;
+    let handler: FSMHandler;
+    let timer: number;
+    let logger: Logger & MockProxy<Logger>;
 
-beforeEach(() => {
-    jest.useFakeTimers();
-    handler = mock<FSMHandler>();
-    logger = mock<Logger>();
-    interaction = new SpinnerChanged(logger);
-    interaction.fsm.addHandler(handler);
-    timer = SpinnerChangedFSM.getTimeGap();
-    spinner = document.createElement("input");
-    spinner.type = "number";
-});
+    beforeEach(() => {
+        jest.useFakeTimers();
+        handler = mock<FSMHandler>();
+        logger = mock<Logger>();
+        interaction = new SpinnerChanged(logger);
+        interaction.fsm.addHandler(handler);
+        timer = SpinnerChangedFSM.getTimeGap();
+        spinner = document.createElement("input");
+        spinner.type = "number";
+    });
 
-afterEach(() => {
-    SpinnerChangedFSM.setTimeGap(timer);
-});
+    afterEach(() => {
+        SpinnerChangedFSM.setTimeGap(timer);
+    });
 
-test("spinnerChangedGoodState", () => {
-    interaction.registerToNodes([spinner]);
-    robot(spinner).input();
-    jest.runAllTimers();
-    expect(handler.fsmStops).toHaveBeenCalledTimes(1);
-    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-    expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
-});
+    test("spinnerChangedGoodState", () => {
+        interaction.registerToNodes([spinner]);
+        robot(spinner).input();
+        jest.runAllTimers();
+        expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+        expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+        expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
+    });
 
-test("log interaction is ok", () => {
-    interaction.log(true);
-    interaction.registerToNodes([spinner]);
-    robot(spinner).input();
-    jest.runAllTimers();
+    test("log interaction is ok", () => {
+        interaction.log(true);
+        interaction.registerToNodes([spinner]);
+        robot(spinner).input();
+        jest.runAllTimers();
 
-    expect(logger.logInteractionMsg).toHaveBeenCalledTimes(7);
-});
+        expect(logger.logInteractionMsg).toHaveBeenCalledTimes(7);
+    });
 
-test("no log interaction is ok", () => {
-    interaction.registerToNodes([spinner]);
-    robot(spinner).input();
-    jest.runAllTimers();
+    test("no log interaction is ok", () => {
+        interaction.registerToNodes([spinner]);
+        robot(spinner).input();
+        jest.runAllTimers();
 
-    expect(logger.logInteractionMsg).not.toHaveBeenCalled();
-});
+        expect(logger.logInteractionMsg).not.toHaveBeenCalled();
+    });
 
-test("spinnerChange2TimesGoodState", () => {
-    interaction.registerToNodes([spinner]);
-    robot(spinner)
-        .input()
-        .input();
-    jest.runAllTimers();
-    expect(handler.fsmStops).toHaveBeenCalledTimes(1);
-    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-    expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
-});
+    test("spinnerChange2TimesGoodState", () => {
+        interaction.registerToNodes([spinner]);
+        robot(spinner)
+            .input()
+            .input();
+        jest.runAllTimers();
+        expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+        expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+        expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
+    });
 
-test("spinnerChangedGoodStateWithTimeGap", () => {
-    SpinnerChangedFSM.setTimeGap(50);
-    interaction.registerToNodes([spinner]);
-    robot(spinner).input();
-    jest.runAllTimers();
-    expect(handler.fsmStops).toHaveBeenCalledTimes(1);
-    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-    expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
-});
+    test("spinnerChangedGoodStateWithTimeGap", () => {
+        SpinnerChangedFSM.setTimeGap(50);
+        interaction.registerToNodes([spinner]);
+        robot(spinner).input();
+        jest.runAllTimers();
+        expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+        expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+        expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
+    });
 
-test("spinnerChangeTwoTimesWith500GoodState", () => {
-    interaction.registerToNodes([spinner]);
-    robot(spinner)
-        .input()
-        .do(() => jest.runAllTimers())
-        .input();
-    jest.runAllTimers();
-    expect(handler.fsmStops).toHaveBeenCalledTimes(2);
-    expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
-    expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
-});
+    test("spinnerChangeTwoTimesWith500GoodState", () => {
+        interaction.registerToNodes([spinner]);
+        robot(spinner)
+            .input()
+            .do(() => jest.runAllTimers())
+            .input();
+        jest.runAllTimers();
+        expect(handler.fsmStops).toHaveBeenCalledTimes(2);
+        expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
+        expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
+    });
 
-test("noActionWhenNotRegistered", () => {
-    robot(spinner).input();
-    jest.runAllTimers();
-    expect(handler.fsmStops).not.toHaveBeenCalled();
-    expect(handler.fsmStarts).not.toHaveBeenCalled();
-});
+    test("noActionWhenNotRegistered", () => {
+        robot(spinner).input();
+        jest.runAllTimers();
+        expect(handler.fsmStops).not.toHaveBeenCalled();
+        expect(handler.fsmStarts).not.toHaveBeenCalled();
+    });
 
-test("spinner Registered twice", () => {
-    interaction.registerToNodes([spinner, spinner]);
-    robot(spinner).input();
-    jest.runAllTimers();
-    expect(handler.fsmStops).toHaveBeenCalledTimes(1);
-    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-});
+    test("spinner Registered twice", () => {
+        interaction.registerToNodes([spinner, spinner]);
+        robot(spinner).input();
+        jest.runAllTimers();
+        expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+        expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+    });
 
-test("cannot register non spinner", () => {
-    const w = document.createElement("input");
-    jest.spyOn(w, "addEventListener");
-    interaction.onNewNodeRegistered(w);
-    expect(w.addEventListener).not.toHaveBeenCalled();
-});
+    test("cannot register non spinner", () => {
+        const w = document.createElement("input");
+        jest.spyOn(w, "addEventListener");
+        interaction.onNewNodeRegistered(w);
+        expect(w.addEventListener).not.toHaveBeenCalled();
+    });
 
-test("cannot unregister non spinner", () => {
-    const w = document.createElement("input");
-    jest.spyOn(w, "removeEventListener");
-    interaction.onNodeUnregistered(w);
-    expect(w.removeEventListener).not.toHaveBeenCalled();
-});
+    test("cannot unregister non spinner", () => {
+        const w = document.createElement("input");
+        jest.spyOn(w, "removeEventListener");
+        interaction.onNodeUnregistered(w);
+        expect(w.removeEventListener).not.toHaveBeenCalled();
+    });
 
-test("spinner contains an img on which user clicks", () => {
-    const img = document.createElement("img");
-    spinner.append(img);
-    interaction.registerToNodes([spinner]);
+    test("spinner contains an img on which user clicks", () => {
+        const img = document.createElement("img");
+        spinner.append(img);
+        interaction.registerToNodes([spinner]);
 
-    robot(img).input();
+        robot(img).input();
 
-    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+        expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+    });
 });

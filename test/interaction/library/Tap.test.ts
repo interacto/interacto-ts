@@ -19,320 +19,322 @@ import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
 import {checkTouchPoint} from "../../Utils";
 
-let interaction: Tap;
-let canvas: HTMLElement;
-let handler: FSMHandler;
-let logger: Logger & MockProxy<Logger>;
+describe("using a tap interaction", () => {
+    let interaction: Tap;
+    let canvas: HTMLElement;
+    let handler: FSMHandler;
+    let logger: Logger & MockProxy<Logger>;
 
-beforeEach(() => {
-    jest.useFakeTimers();
-    handler = mock<FSMHandler>();
-    canvas = document.createElement("canvas");
-});
-
-afterEach(() => {
-    interaction.uninstall();
-    jest.clearAllMocks();
-    jest.clearAllTimers();
-});
-
-describe("tap 1", () => {
     beforeEach(() => {
-        logger = mock<Logger>();
-        interaction = new Tap(1, logger);
-        interaction.fsm.addHandler(handler);
-        interaction.registerToNodes([canvas]);
+        jest.useFakeTimers();
+        handler = mock<FSMHandler>();
+        canvas = document.createElement("canvas");
     });
 
     afterEach(() => {
         interaction.uninstall();
+        jest.clearAllMocks();
+        jest.clearAllTimers();
     });
 
-    test("one touchstart", () => {
-        robot(canvas)
-            .touchstart({}, [{"identifier": 2}]);
-
-        expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-        expect(handler.fsmStops).not.toHaveBeenCalled();
-        expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
-        expect(handler.fsmCancels).not.toHaveBeenCalled();
-    });
-
-    test("log interaction is ok", () => {
-        interaction.log(true);
-        robot(canvas)
-            .touchstart({}, [{"identifier": 2}]);
-
-        expect(logger.logInteractionMsg).toHaveBeenCalledTimes(4);
-    });
-
-    test("no log interaction is ok", () => {
-        robot(canvas)
-            .touchstart({}, [{"identifier": 2}]);
-
-        expect(logger.logInteractionMsg).not.toHaveBeenCalled();
-    });
-
-    test("one touchstart touchend", () => {
-        robot(canvas)
-            .keepData()
-            .touchstart({}, [{"identifier": 2}])
-            .touchend();
-
-        expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-        expect(handler.fsmStops).toHaveBeenCalledTimes(1);
-        expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
-        expect(handler.fsmCancels).not.toHaveBeenCalled();
-    });
-
-    test("two touches cancels", () => {
-        robot(canvas)
-            .touchstart({}, [{"identifier": 4}])
-            .touchstart({}, [{"identifier": 3}]);
-
-        expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-        expect(handler.fsmStops).not.toHaveBeenCalled();
-        expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
-    });
-
-    test("moving after before the touch cancels the tap", () => {
-        robot(canvas)
-            .keepData()
-            .touchstart({}, [{"identifier": 2}])
-            .touchmove();
-
-        expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-        expect(handler.fsmStops).not.toHaveBeenCalled();
-        expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
-    });
-
-    // eslint-disable-next-line jest/expect-expect
-    test("one touch data", () => {
-        const touch = new TouchDataImpl();
-        const newHandler = mock<FSMHandler>();
-        newHandler.fsmStarts = jest.fn(() => {
-            touch.copy(interaction.data.taps[0]);
+    describe("tap 1", () => {
+        beforeEach(() => {
+            logger = mock<Logger>();
+            interaction = new Tap(1, logger);
+            interaction.fsm.addHandler(handler);
+            interaction.registerToNodes([canvas]);
         });
-        interaction.fsm.addHandler(newHandler);
 
-        robot(canvas)
-            .keepData()
-            .touchstart({}, [{"identifier": 5, "screenX": 14, "screenY": 20, "clientX": 15, "clientY": 21}])
-            .touchend();
-
-        checkTouchPoint(touch, 15, 21, 14, 20, 5, canvas);
-    });
-});
-
-describe("tap 2", () => {
-    beforeEach(() => {
-        interaction = new Tap(2, mock<Logger>());
-        interaction.fsm.addHandler(handler);
-        interaction.registerToNodes([canvas]);
-    });
-
-    afterEach(() => {
-        interaction.uninstall();
-    });
-
-    test("moving after before the touches cancels the tap", () => {
-        robot(canvas)
-            .keepData()
-            .touchstart({}, [{"identifier": 2}])
-            .touchend()
-            .touchstart({}, [{"identifier": 3}])
-            .touchmove()
-            .touchend();
-
-        expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-        expect(handler.fsmStops).not.toHaveBeenCalled();
-        expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
-    });
-
-    test("one touch", () => {
-        robot(canvas)
-            .touchstart({}, [{"identifier": 2}])
-            .touchend();
-        expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-        expect(handler.fsmStops).not.toHaveBeenCalled();
-        expect(handler.fsmCancels).not.toHaveBeenCalled();
-    });
-
-    test("one touch with timeout", () => {
-        robot(canvas)
-            .touchstart({}, [{"identifier": 2}])
-            .runOnlyPendingTimers();
-        expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-        expect(handler.fsmStops).not.toHaveBeenCalled();
-        expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
-    });
-
-    test("one touch-release with timeout", () => {
-        robot(canvas)
-            .keepData()
-            .touchstart({}, [{"identifier": 2}])
-            .touchend()
-            .runOnlyPendingTimers();
-        expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-        expect(handler.fsmStops).not.toHaveBeenCalled();
-        expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
-    });
-
-    test("two touches same time", () => {
-        robot(canvas)
-            .touchstart({}, [{"identifier": 2}])
-            .touchstart({}, [{"identifier": 4}]);
-
-        expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-        expect(handler.fsmStops).not.toHaveBeenCalled();
-        expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
-    });
-
-    test("two touches", () => {
-        robot(canvas)
-            .keepData()
-            .touchstart({}, [{"identifier": 2}])
-            .touchend()
-            .touchstart({}, [{"identifier": 4}])
-            .touchend();
-
-        expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-        expect(handler.fsmStops).toHaveBeenCalledTimes(1);
-        expect(handler.fsmCancels).not.toHaveBeenCalled();
-    });
-
-    test("tap restarts with different id", () => {
-        robot(canvas)
-            .keepData()
-            .touchstart({}, [{"identifier": 1}])
-            .touchend()
-            .touchstart({}, [{"identifier": 2}])
-            .touchend()
-            .touchstart({}, [{"identifier": 3}])
-            .touchend()
-            .touchstart({}, [{"identifier": 4}])
-            .touchend();
-        expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
-        expect(handler.fsmStops).toHaveBeenCalledTimes(2);
-        expect(handler.fsmCancels).not.toHaveBeenCalled();
-    });
-
-    test("two touches data", () => {
-        const touch = new TapDataImpl();
-
-        const newHandler = mock<FSMHandler>();
-        newHandler.fsmStops = jest.fn(() => {
-            for (const tap of interaction.data.taps) {
-                touch.addTapData(tap);
-            }
+        afterEach(() => {
+            interaction.uninstall();
         });
-        interaction.fsm.addHandler(newHandler);
 
-        robot(canvas)
-            .keepData()
-            .touchstart({}, [{"identifier": 3, "screenX": 15, "screenY": 20, "clientX": 16, "clientY": 21}])
-            .touchend({}, [{"identifier": 3, "screenX": 15, "screenY": 20, "clientX": 16, "clientY": 21}])
-            .touchstart({}, [{"identifier": 2, "screenX": 12, "screenY": 27, "clientX": 14, "clientY": 28}])
-            .touchend({}, [{"identifier": 2, "screenX": 12, "screenY": 27, "clientX": 14, "clientY": 28}]);
+        test("one touchstart", () => {
+            robot(canvas)
+                .touchstart({}, [{"identifier": 2}]);
 
-        expect(touch.taps).toHaveLength(2);
-        checkTouchPoint(touch.taps[0], 16, 21, 15, 20, 3, canvas);
-    });
-});
-
-describe("tap 3", () => {
-    beforeEach(() => {
-        interaction = new Tap(3, mock<Logger>());
-        interaction.fsm.addHandler(handler);
-        interaction.registerToNodes([canvas]);
-    });
-
-    afterEach(() => {
-        interaction.uninstall();
-    });
-
-    test("two taps", () => {
-        robot(canvas)
-            .keepData()
-            .touchstart({}, [{"identifier": 2}])
-            .touchend()
-            .touchstart({}, [{"identifier": 4}])
-            .touchend();
-        expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-        expect(handler.fsmStops).not.toHaveBeenCalled();
-        expect(handler.fsmCancels).not.toHaveBeenCalled();
-    });
-
-    test("two touches with timeout", () => {
-        robot(canvas)
-            .keepData()
-            .touchstart({}, [{"identifier": 2}])
-            .touchend()
-            .touchstart({}, [{"identifier": 4}])
-            .touchend()
-            .runOnlyPendingTimers();
-        expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-        expect(handler.fsmStops).not.toHaveBeenCalled();
-        expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
-    });
-
-    test("three touches", () => {
-        robot(canvas)
-            .keepData()
-            .touchstart({}, [{"identifier": 2}])
-            .touchend()
-            .touchstart({}, [{"identifier": 4}])
-            .touchend()
-            .touchstart({}, [{"identifier": 5}])
-            .touchend();
-        expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-        expect(handler.fsmStops).toHaveBeenCalledTimes(1);
-        expect(handler.fsmCancels).not.toHaveBeenCalled();
-    });
-
-    test("tap restarts", () => {
-        robot(canvas)
-            .keepData()
-            .touchstart({}, [{"identifier": 2}])
-            .touchend()
-            .touchstart({}, [{"identifier": 4}])
-            .touchend()
-            .touchstart({}, [{"identifier": 5}])
-            .touchend()
-            .touchstart({}, [{"identifier": 1}])
-            .touchend()
-            .touchstart({}, [{"identifier": 7}])
-            .touchend()
-            .touchstart({}, [{"identifier": 6}])
-            .touchend();
-        expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
-        expect(handler.fsmStops).toHaveBeenCalledTimes(2);
-        expect(handler.fsmCancels).not.toHaveBeenCalled();
-    });
-
-    test("three touches data", () => {
-        const touch = new TapDataImpl();
-
-        const newHandler = mock<FSMHandler>();
-        newHandler.fsmStops = jest.fn(() => {
-            for (const tap of interaction.data.taps) {
-                touch.addTapData(tap);
-            }
+            expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+            expect(handler.fsmStops).not.toHaveBeenCalled();
+            expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
+            expect(handler.fsmCancels).not.toHaveBeenCalled();
         });
-        interaction.fsm.addHandler(newHandler);
 
-        robot(canvas)
-            .keepData()
-            .touchstart({}, [{"identifier": 3, "screenX": 15, "screenY": 20, "clientX": 16, "clientY": 21}])
-            .touchend()
-            .touchstart({}, [{"identifier": 2, "screenX": 12, "screenY": 27, "clientX": 14, "clientY": 28}])
-            .touchend()
-            .touchstart({}, [{"identifier": 1, "screenX": 112, "screenY": 217, "clientX": 114, "clientY": 128}])
-            .touchend();
+        test("log interaction is ok", () => {
+            interaction.log(true);
+            robot(canvas)
+                .touchstart({}, [{"identifier": 2}]);
 
-        expect(touch.taps).toHaveLength(3);
-        checkTouchPoint(touch.taps[0], 16, 21, 15, 20, 3, canvas);
-        expect(touch.taps[0].allTouches).toHaveLength(1);
-        expect(touch.taps[0].allTouches[0].identifier).toBe(3);
+            expect(logger.logInteractionMsg).toHaveBeenCalledTimes(4);
+        });
+
+        test("no log interaction is ok", () => {
+            robot(canvas)
+                .touchstart({}, [{"identifier": 2}]);
+
+            expect(logger.logInteractionMsg).not.toHaveBeenCalled();
+        });
+
+        test("one touchstart touchend", () => {
+            robot(canvas)
+                .keepData()
+                .touchstart({}, [{"identifier": 2}])
+                .touchend();
+
+            expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+            expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+            expect(handler.fsmUpdates).toHaveBeenCalledTimes(1);
+            expect(handler.fsmCancels).not.toHaveBeenCalled();
+        });
+
+        test("two touches cancels", () => {
+            robot(canvas)
+                .touchstart({}, [{"identifier": 4}])
+                .touchstart({}, [{"identifier": 3}]);
+
+            expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+            expect(handler.fsmStops).not.toHaveBeenCalled();
+            expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
+        });
+
+        test("moving after before the touch cancels the tap", () => {
+            robot(canvas)
+                .keepData()
+                .touchstart({}, [{"identifier": 2}])
+                .touchmove();
+
+            expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+            expect(handler.fsmStops).not.toHaveBeenCalled();
+            expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
+        });
+
+        // eslint-disable-next-line jest/expect-expect
+        test("one touch data", () => {
+            const touch = new TouchDataImpl();
+            const newHandler = mock<FSMHandler>();
+            newHandler.fsmStarts = jest.fn(() => {
+                touch.copy(interaction.data.taps[0]);
+            });
+            interaction.fsm.addHandler(newHandler);
+
+            robot(canvas)
+                .keepData()
+                .touchstart({}, [{"identifier": 5, "screenX": 14, "screenY": 20, "clientX": 15, "clientY": 21}])
+                .touchend();
+
+            checkTouchPoint(touch, 15, 21, 14, 20, 5, canvas);
+        });
+    });
+
+    describe("tap 2", () => {
+        beforeEach(() => {
+            interaction = new Tap(2, mock<Logger>());
+            interaction.fsm.addHandler(handler);
+            interaction.registerToNodes([canvas]);
+        });
+
+        afterEach(() => {
+            interaction.uninstall();
+        });
+
+        test("moving after before the touches cancels the tap", () => {
+            robot(canvas)
+                .keepData()
+                .touchstart({}, [{"identifier": 2}])
+                .touchend()
+                .touchstart({}, [{"identifier": 3}])
+                .touchmove()
+                .touchend();
+
+            expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+            expect(handler.fsmStops).not.toHaveBeenCalled();
+            expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
+        });
+
+        test("one touch", () => {
+            robot(canvas)
+                .touchstart({}, [{"identifier": 2}])
+                .touchend();
+            expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+            expect(handler.fsmStops).not.toHaveBeenCalled();
+            expect(handler.fsmCancels).not.toHaveBeenCalled();
+        });
+
+        test("one touch with timeout", () => {
+            robot(canvas)
+                .touchstart({}, [{"identifier": 2}])
+                .runOnlyPendingTimers();
+            expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+            expect(handler.fsmStops).not.toHaveBeenCalled();
+            expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
+        });
+
+        test("one touch-release with timeout", () => {
+            robot(canvas)
+                .keepData()
+                .touchstart({}, [{"identifier": 2}])
+                .touchend()
+                .runOnlyPendingTimers();
+            expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+            expect(handler.fsmStops).not.toHaveBeenCalled();
+            expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
+        });
+
+        test("two touches same time", () => {
+            robot(canvas)
+                .touchstart({}, [{"identifier": 2}])
+                .touchstart({}, [{"identifier": 4}]);
+
+            expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+            expect(handler.fsmStops).not.toHaveBeenCalled();
+            expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
+        });
+
+        test("two touches", () => {
+            robot(canvas)
+                .keepData()
+                .touchstart({}, [{"identifier": 2}])
+                .touchend()
+                .touchstart({}, [{"identifier": 4}])
+                .touchend();
+
+            expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+            expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+            expect(handler.fsmCancels).not.toHaveBeenCalled();
+        });
+
+        test("tap restarts with different id", () => {
+            robot(canvas)
+                .keepData()
+                .touchstart({}, [{"identifier": 1}])
+                .touchend()
+                .touchstart({}, [{"identifier": 2}])
+                .touchend()
+                .touchstart({}, [{"identifier": 3}])
+                .touchend()
+                .touchstart({}, [{"identifier": 4}])
+                .touchend();
+            expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
+            expect(handler.fsmStops).toHaveBeenCalledTimes(2);
+            expect(handler.fsmCancels).not.toHaveBeenCalled();
+        });
+
+        test("two touches data", () => {
+            const touch = new TapDataImpl();
+
+            const newHandler = mock<FSMHandler>();
+            newHandler.fsmStops = jest.fn(() => {
+                for (const tap of interaction.data.taps) {
+                    touch.addTapData(tap);
+                }
+            });
+            interaction.fsm.addHandler(newHandler);
+
+            robot(canvas)
+                .keepData()
+                .touchstart({}, [{"identifier": 3, "screenX": 15, "screenY": 20, "clientX": 16, "clientY": 21}])
+                .touchend({}, [{"identifier": 3, "screenX": 15, "screenY": 20, "clientX": 16, "clientY": 21}])
+                .touchstart({}, [{"identifier": 2, "screenX": 12, "screenY": 27, "clientX": 14, "clientY": 28}])
+                .touchend({}, [{"identifier": 2, "screenX": 12, "screenY": 27, "clientX": 14, "clientY": 28}]);
+
+            expect(touch.taps).toHaveLength(2);
+            checkTouchPoint(touch.taps[0], 16, 21, 15, 20, 3, canvas);
+        });
+    });
+
+    describe("tap 3", () => {
+        beforeEach(() => {
+            interaction = new Tap(3, mock<Logger>());
+            interaction.fsm.addHandler(handler);
+            interaction.registerToNodes([canvas]);
+        });
+
+        afterEach(() => {
+            interaction.uninstall();
+        });
+
+        test("two taps", () => {
+            robot(canvas)
+                .keepData()
+                .touchstart({}, [{"identifier": 2}])
+                .touchend()
+                .touchstart({}, [{"identifier": 4}])
+                .touchend();
+            expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+            expect(handler.fsmStops).not.toHaveBeenCalled();
+            expect(handler.fsmCancels).not.toHaveBeenCalled();
+        });
+
+        test("two touches with timeout", () => {
+            robot(canvas)
+                .keepData()
+                .touchstart({}, [{"identifier": 2}])
+                .touchend()
+                .touchstart({}, [{"identifier": 4}])
+                .touchend()
+                .runOnlyPendingTimers();
+            expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+            expect(handler.fsmStops).not.toHaveBeenCalled();
+            expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
+        });
+
+        test("three touches", () => {
+            robot(canvas)
+                .keepData()
+                .touchstart({}, [{"identifier": 2}])
+                .touchend()
+                .touchstart({}, [{"identifier": 4}])
+                .touchend()
+                .touchstart({}, [{"identifier": 5}])
+                .touchend();
+            expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+            expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+            expect(handler.fsmCancels).not.toHaveBeenCalled();
+        });
+
+        test("tap restarts", () => {
+            robot(canvas)
+                .keepData()
+                .touchstart({}, [{"identifier": 2}])
+                .touchend()
+                .touchstart({}, [{"identifier": 4}])
+                .touchend()
+                .touchstart({}, [{"identifier": 5}])
+                .touchend()
+                .touchstart({}, [{"identifier": 1}])
+                .touchend()
+                .touchstart({}, [{"identifier": 7}])
+                .touchend()
+                .touchstart({}, [{"identifier": 6}])
+                .touchend();
+            expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
+            expect(handler.fsmStops).toHaveBeenCalledTimes(2);
+            expect(handler.fsmCancels).not.toHaveBeenCalled();
+        });
+
+        test("three touches data", () => {
+            const touch = new TapDataImpl();
+
+            const newHandler = mock<FSMHandler>();
+            newHandler.fsmStops = jest.fn(() => {
+                for (const tap of interaction.data.taps) {
+                    touch.addTapData(tap);
+                }
+            });
+            interaction.fsm.addHandler(newHandler);
+
+            robot(canvas)
+                .keepData()
+                .touchstart({}, [{"identifier": 3, "screenX": 15, "screenY": 20, "clientX": 16, "clientY": 21}])
+                .touchend()
+                .touchstart({}, [{"identifier": 2, "screenX": 12, "screenY": 27, "clientX": 14, "clientY": 28}])
+                .touchend()
+                .touchstart({}, [{"identifier": 1, "screenX": 112, "screenY": 217, "clientX": 114, "clientY": 128}])
+                .touchend();
+
+            expect(touch.taps).toHaveLength(3);
+            checkTouchPoint(touch.taps[0], 16, 21, 15, 20, 3, canvas);
+            expect(touch.taps[0].allTouches).toHaveLength(1);
+            expect(touch.taps[0].allTouches[0].identifier).toBe(3);
+        });
     });
 });

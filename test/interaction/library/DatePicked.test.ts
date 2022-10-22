@@ -18,69 +18,71 @@ import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
 import {robot} from "interacto-nono";
 
-let interaction: DatePicked;
-let date: HTMLInputElement;
-let handler: FSMHandler;
-let logger: Logger & MockProxy<Logger>;
+describe("using a date picked interaction", () => {
+    let interaction: DatePicked;
+    let date: HTMLInputElement;
+    let handler: FSMHandler;
+    let logger: Logger & MockProxy<Logger>;
 
-beforeEach(() => {
-    handler = mock<FSMHandler>();
-    logger = mock<Logger>();
-    interaction = new DatePicked(logger);
-    interaction.fsm.addHandler(handler);
-    date = document.createElement("input");
-    date.type = "date";
-});
+    beforeEach(() => {
+        handler = mock<FSMHandler>();
+        logger = mock<Logger>();
+        interaction = new DatePicked(logger);
+        interaction.fsm.addHandler(handler);
+        date = document.createElement("input");
+        date.type = "date";
+    });
 
-test("input event starts and stops the interaction DatePicked.", () => {
-    interaction.registerToNodes([date]);
-    robot().input(date);
-    expect(handler.fsmStops).toHaveBeenCalledTimes(1);
-    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-});
+    test("input event starts and stops the interaction DatePicked.", () => {
+        interaction.registerToNodes([date]);
+        robot().input(date);
+        expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+        expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+    });
 
-test("log interaction is ok", () => {
-    interaction.log(true);
-    interaction.registerToNodes([date]);
-    robot().input(date);
+    test("log interaction is ok", () => {
+        interaction.log(true);
+        interaction.registerToNodes([date]);
+        robot().input(date);
 
-    expect(logger.logInteractionMsg).toHaveBeenCalledTimes(4);
-});
+        expect(logger.logInteractionMsg).toHaveBeenCalledTimes(4);
+    });
 
-test("no log interaction is ok", () => {
-    interaction.registerToNodes([date]);
-    robot().input(date);
+    test("no log interaction is ok", () => {
+        interaction.registerToNodes([date]);
+        robot().input(date);
 
-    expect(logger.logInteractionMsg).not.toHaveBeenCalled();
-});
+        expect(logger.logInteractionMsg).not.toHaveBeenCalled();
+    });
 
-test("other event don't trigger the interaction.", () => {
-    interaction.registerToNodes([date]);
-    robot().change(date);
-    expect(handler.fsmStarts).not.toHaveBeenCalled();
-});
+    test("other event don't trigger the interaction.", () => {
+        interaction.registerToNodes([date]);
+        robot().change(date);
+        expect(handler.fsmStarts).not.toHaveBeenCalled();
+    });
 
-test("cannot register non date picker", () => {
-    const w = document.createElement("div");
-    jest.spyOn(w, "addEventListener");
-    interaction.onNewNodeRegistered(w);
-    expect(w.addEventListener).not.toHaveBeenCalled();
-});
+    test("cannot register non date picker", () => {
+        const w = document.createElement("div");
+        jest.spyOn(w, "addEventListener");
+        interaction.onNewNodeRegistered(w);
+        expect(w.addEventListener).not.toHaveBeenCalled();
+    });
 
-test("cannot unregister non date picker", () => {
-    const w = document.createElement("div");
-    jest.spyOn(w, "removeEventListener");
-    interaction.onNodeUnregistered(w);
-    expect(w.removeEventListener).not.toHaveBeenCalled();
-});
+    test("cannot unregister non date picker", () => {
+        const w = document.createElement("div");
+        jest.spyOn(w, "removeEventListener");
+        interaction.onNodeUnregistered(w);
+        expect(w.removeEventListener).not.toHaveBeenCalled();
+    });
 
-test("date picker contains an img on which user clicks", () => {
-    const img = document.createElement("img");
-    date.append(img);
-    interaction.registerToNodes([date]);
+    test("date picker contains an img on which user clicks", () => {
+        const img = document.createElement("img");
+        date.append(img);
+        interaction.registerToNodes([date]);
 
-    robot(img).input();
+        robot(img).input();
 
-    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-    expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+        expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+        expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+    });
 });

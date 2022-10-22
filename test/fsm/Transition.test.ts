@@ -19,26 +19,28 @@ import {StubTransitionOK} from "./StubTransitionOk";
 import {mock} from "jest-mock-extended";
 import type {FSMDataHandler} from "../../src/impl/fsm/FSMDataHandler";
 
-let tr: TransitionBase<Event>;
-let state1: StdState;
-let state2: StdState;
+describe("using a transition", () => {
+    let tr: TransitionBase<Event>;
+    let state1: StdState;
+    let state2: StdState;
 
-beforeEach(() => {
-    const fsm: FSMImpl<FSMDataHandler> = mock<FSMImpl<FSMDataHandler>>();
-    state1 = new StdState(fsm, "s1");
-    state2 = new StdState(fsm, "s2");
-    tr = new StubTransitionOK(state1, state2);
-});
+    beforeEach(() => {
+        const fsm: FSMImpl<FSMDataHandler> = mock<FSMImpl<FSMDataHandler>>();
+        state1 = new StdState(fsm, "s1");
+        state2 = new StdState(fsm, "s2");
+        tr = new StubTransitionOK(state1, state2);
+    });
 
-test("goodSrc", () => {
-    expect(tr.src).toStrictEqual(state1);
-});
+    test("goodSrc", () => {
+        expect(tr.src).toStrictEqual(state1);
+    });
 
-test("goodTgt", () => {
-    expect(tr.tgt).toStrictEqual(state2);
-});
+    test("goodTgt", () => {
+        expect(tr.tgt).toStrictEqual(state2);
+    });
 
-test("srcStateTransitionAdded", () => {
-    expect(state1.transitions).toHaveLength(1);
-    expect(state1.transitions[0]).toStrictEqual(tr);
+    test("srcStateTransitionAdded", () => {
+        expect(state1.transitions).toHaveLength(1);
+        expect(state1.transitions[0]).toStrictEqual(tr);
+    });
 });

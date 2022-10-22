@@ -19,31 +19,32 @@ import type {InputState} from "../../src/api/fsm/InputState";
 import {createEventWithTarget} from "../interaction/StubEvents";
 import {HyperLinkTransition} from "../../src/impl/fsm/HyperLinkTransition";
 
-let tr: HyperLinkTransition;
-let src: MockProxy<OutputState> & OutputState;
-let tgt: InputState & MockProxy<InputState>;
-let evt: Event;
+describe("using a hyperlink transition", () => {
+    let tr: HyperLinkTransition;
+    let src: MockProxy<OutputState> & OutputState;
+    let tgt: InputState & MockProxy<InputState>;
+    let evt: Event;
 
-beforeEach(() => {
-    src = mock<OutputState>();
-    tgt = mock<InputState>();
-    evt = mock<Event>();
-    tr = new HyperLinkTransition(src, tgt);
+    beforeEach(() => {
+        src = mock<OutputState>();
+        tgt = mock<InputState>();
+        evt = mock<Event>();
+        tr = new HyperLinkTransition(src, tgt);
+    });
+
+    test("that getAcceptedEvents works", () => {
+        expect(tr.getAcceptedEvents()).toStrictEqual(new Set(["click", "auxclick"]));
+    });
+
+    test("that accept KO null target", () => {
+        expect(tr.accept(evt)).toBeFalsy();
+    });
+
+    test("that accept KO target not button", () => {
+        expect(tr.accept(createEventWithTarget(mock<HTMLSelectElement>(), "input"))).toBeFalsy();
+    });
+
+    test("that accept OK", () => {
+        expect(tr.accept(createEventWithTarget(document.createElement("a"), "input"))).toBeTruthy();
+    });
 });
-
-test("that getAcceptedEvents works", () => {
-    expect(tr.getAcceptedEvents()).toStrictEqual(new Set(["click", "auxclick"]));
-});
-
-test("that accept KO null target", () => {
-    expect(tr.accept(evt)).toBeFalsy();
-});
-
-test("that accept KO target not button", () => {
-    expect(tr.accept(createEventWithTarget(mock<HTMLSelectElement>(), "input"))).toBeFalsy();
-});
-
-test("that accept OK", () => {
-    expect(tr.accept(createEventWithTarget(document.createElement("a"), "input"))).toBeTruthy();
-});
-

@@ -15,89 +15,90 @@
 import {PointDataImpl} from "../../src/impl/interaction/PointDataImpl";
 import type {PointData} from "../../src/api/interaction/PointData";
 
-let data: PointDataImpl;
-let newData: PointData;
-let defaultData: PointDataImpl;
+describe("using a point data", () => {
+    let data: PointDataImpl;
+    let newData: PointData;
+    let defaultData: PointDataImpl;
 
-beforeEach(() => {
-    data = new PointDataImpl();
-    newData = {
-        "button": 1,
-        "buttons": 2,
-        "movementX": 20,
-        "movementY": 40,
-        "offsetX": 10,
-        "offsetY": 30,
-        "relatedTarget": new EventTarget(),
-        "clientX": 11,
-        "clientY": 12,
-        "pageX": 13,
-        "pageY": 14,
-        "screenX": 15,
-        "screenY": 16,
-        "altKey": true,
-        "ctrlKey": true,
-        "metaKey": true,
-        "shiftKey": true,
-        "timeStamp": 17,
-        "target": new EventTarget(),
-        "currentTarget": new EventTarget()
-    } as PointData;
-    defaultData = new PointDataImpl();
-    defaultData.copy({
-        "button": 0,
-        "buttons": 0,
-        "movementX": 0,
-        "movementY": 0,
-        "offsetX": 0,
-        "offsetY": 0,
-        "relatedTarget": null,
-        "clientX": 0,
-        "clientY": 0,
-        "pageX": 0,
-        "pageY": 0,
-        "screenX": 0,
-        "screenY": 0,
-        "altKey": false,
-        "ctrlKey": false,
-        "metaKey": false,
-        "shiftKey": false,
-        "timeStamp": 0,
-        "target": null,
-        "currentTarget": null
+    beforeEach(() => {
+        data = new PointDataImpl();
+        newData = {
+            "button": 1,
+            "buttons": 2,
+            "movementX": 20,
+            "movementY": 40,
+            "offsetX": 10,
+            "offsetY": 30,
+            "relatedTarget": new EventTarget(),
+            "clientX": 11,
+            "clientY": 12,
+            "pageX": 13,
+            "pageY": 14,
+            "screenX": 15,
+            "screenY": 16,
+            "altKey": true,
+            "ctrlKey": true,
+            "metaKey": true,
+            "shiftKey": true,
+            "timeStamp": 17,
+            "target": new EventTarget(),
+            "currentTarget": new EventTarget()
+        } as PointData;
+        defaultData = new PointDataImpl();
+        defaultData.copy({
+            "button": 0,
+            "buttons": 0,
+            "movementX": 0,
+            "movementY": 0,
+            "offsetX": 0,
+            "offsetY": 0,
+            "relatedTarget": null,
+            "clientX": 0,
+            "clientY": 0,
+            "pageX": 0,
+            "pageY": 0,
+            "screenX": 0,
+            "screenY": 0,
+            "altKey": false,
+            "ctrlKey": false,
+            "metaKey": false,
+            "shiftKey": false,
+            "timeStamp": 0,
+            "target": null,
+            "currentTarget": null
+        });
+    });
+
+    test("copy", () => {
+        data.copy(newData);
+        expect(data.button).toBe(newData.button);
+        expect(data.buttons).toBe(newData.buttons);
+        expect(data.movementX).toBe(newData.movementX);
+        expect(data.movementY).toBe(newData.movementY);
+        expect(data.offsetX).toBe(newData.offsetX);
+        expect(data.offsetY).toBe(newData.offsetY);
+        expect(data.relatedTarget).toStrictEqual(newData.relatedTarget);
+        expect(data.clientX).toBe(newData.clientX);
+        expect(data.clientY).toBe(newData.clientY);
+        expect(data.pageX).toStrictEqual(newData.pageX);
+        expect(data.pageY).toStrictEqual(newData.pageY);
+        expect(data.screenX).toStrictEqual(newData.screenX);
+        expect(data.screenY).toStrictEqual(newData.screenY);
+        expect(data.ctrlKey).toBe(newData.ctrlKey);
+        expect(data.metaKey).toBe(newData.metaKey);
+        expect(data.shiftKey).toStrictEqual(newData.shiftKey);
+        expect(data.timeStamp).toStrictEqual(newData.timeStamp);
+        expect(data.target).toStrictEqual(newData.target);
+        expect(data.currentTarget).toStrictEqual(newData.currentTarget);
+    });
+
+    test("default values", () => {
+        expect(data).toStrictEqual(defaultData);
+    });
+
+    test("flush", () => {
+        data.copy(newData);
+        data.flush();
+        expect(data).toStrictEqual(defaultData);
     });
 });
-
-test("copy", () => {
-    data.copy(newData);
-    expect(data.button).toBe(newData.button);
-    expect(data.buttons).toBe(newData.buttons);
-    expect(data.movementX).toBe(newData.movementX);
-    expect(data.movementY).toBe(newData.movementY);
-    expect(data.offsetX).toBe(newData.offsetX);
-    expect(data.offsetY).toBe(newData.offsetY);
-    expect(data.relatedTarget).toStrictEqual(newData.relatedTarget);
-    expect(data.clientX).toBe(newData.clientX);
-    expect(data.clientY).toBe(newData.clientY);
-    expect(data.pageX).toStrictEqual(newData.pageX);
-    expect(data.pageY).toStrictEqual(newData.pageY);
-    expect(data.screenX).toStrictEqual(newData.screenX);
-    expect(data.screenY).toStrictEqual(newData.screenY);
-    expect(data.ctrlKey).toBe(newData.ctrlKey);
-    expect(data.metaKey).toBe(newData.metaKey);
-    expect(data.shiftKey).toStrictEqual(newData.shiftKey);
-    expect(data.timeStamp).toStrictEqual(newData.timeStamp);
-    expect(data.target).toStrictEqual(newData.target);
-    expect(data.currentTarget).toStrictEqual(newData.currentTarget);
-});
-
-test("default values", () => {
-    expect(data).toStrictEqual(defaultData);
-});
-
-test("flush", () => {
-    data.copy(newData);
-    data.flush();
-    expect(data).toStrictEqual(defaultData);
-});
-

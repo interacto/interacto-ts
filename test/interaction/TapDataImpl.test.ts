@@ -15,48 +15,50 @@
 import {TapDataImpl} from "../../src/impl/interaction/TapDataImpl";
 import {TouchDataImpl} from "../../src/impl/interaction/TouchDataImpl";
 
-let data: TapDataImpl;
-let touchData: TouchDataImpl;
+describe("using a tap data", () => {
+    let data: TapDataImpl;
+    let touchData: TouchDataImpl;
 
-beforeEach(() => {
-    data = new TapDataImpl();
-    touchData = new TouchDataImpl();
-    touchData.copy({
-        "force": 15,
-        "identifier": 20,
-        "radiusX": 25,
-        "radiusY": 30,
-        "rotationAngle": 35,
-        "clientX": 11,
-        "clientY": 12,
-        "pageX": 13,
-        "pageY": 14,
-        "screenX": 15,
-        "screenY": 16,
-        "altKey": true,
-        "ctrlKey": true,
-        "metaKey": true,
-        "shiftKey": true,
-        "timeStamp": 17,
-        "target": new EventTarget(),
-        "currentTarget": new EventTarget(),
-        "allTouches": []
+    beforeEach(() => {
+        data = new TapDataImpl();
+        touchData = new TouchDataImpl();
+        touchData.copy({
+            "force": 15,
+            "identifier": 20,
+            "radiusX": 25,
+            "radiusY": 30,
+            "rotationAngle": 35,
+            "clientX": 11,
+            "clientY": 12,
+            "pageX": 13,
+            "pageY": 14,
+            "screenX": 15,
+            "screenY": 16,
+            "altKey": true,
+            "ctrlKey": true,
+            "metaKey": true,
+            "shiftKey": true,
+            "timeStamp": 17,
+            "target": new EventTarget(),
+            "currentTarget": new EventTarget(),
+            "allTouches": []
+        });
     });
-});
 
-test("taps collection is empty by default", () => {
-    expect(data.taps).toHaveLength(0);
-});
+    test("taps collection is empty by default", () => {
+        expect(data.taps).toHaveLength(0);
+    });
 
-test("addTapData", () => {
-    data.addTapData(touchData);
-    expect(data.taps).toHaveLength(1);
-    const element = data.taps[0];
-    expect(element).toStrictEqual(touchData);
-});
+    test("addTapData", () => {
+        data.addTapData(touchData);
+        expect(data.taps).toHaveLength(1);
+        const element = data.taps[0];
+        expect(element).toStrictEqual(touchData);
+    });
 
-test("flush", () => {
-    data.addTapData(touchData);
-    data.flush();
-    expect(data.taps).toHaveLength(0);
+    test("flush", () => {
+        data.addTapData(touchData);
+        data.flush();
+        expect(data.taps).toHaveLength(0);
+    });
 });

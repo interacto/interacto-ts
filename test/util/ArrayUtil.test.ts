@@ -14,53 +14,55 @@
 
 import {peek, remove, removeAt} from "../../src/impl/util/ArrayUtil";
 
-let arr: Array<string>;
+describe("using a array util", () => {
+    let arr: Array<string>;
 
-beforeEach(() => {
-    arr = ["foo", "bar", "yo"];
-});
+    beforeEach(() => {
+        arr = ["foo", "bar", "yo"];
+    });
 
-test("remove works", () => {
-    remove(arr, "foo");
-    expect(arr).toStrictEqual(["bar", "yo"]);
-});
+    test("remove works", () => {
+        remove(arr, "foo");
+        expect(arr).toStrictEqual(["bar", "yo"]);
+    });
 
-test("remove works 2", () => {
-    remove(arr, "bar");
-    expect(arr).toStrictEqual(["foo", "yo"]);
-});
+    test("remove works 2", () => {
+        remove(arr, "bar");
+        expect(arr).toStrictEqual(["foo", "yo"]);
+    });
 
-test("remove when item does not exist", () => {
-    remove(arr, "ooo");
-    expect(arr).toStrictEqual(["foo", "bar", "yo"]);
-});
+    test("remove when item does not exist", () => {
+        remove(arr, "ooo");
+        expect(arr).toStrictEqual(["foo", "bar", "yo"]);
+    });
 
-test("removeat with 0", () => {
-    const res = removeAt(arr, 0);
-    expect(res).toBe("foo");
-    expect(arr).toStrictEqual(["bar", "yo"]);
-});
+    test("removeat with 0", () => {
+        const res = removeAt(arr, 0);
+        expect(res).toBe("foo");
+        expect(arr).toStrictEqual(["bar", "yo"]);
+    });
 
-test("removeat with last", () => {
-    const res = removeAt(arr, 2);
-    expect(res).toBe("yo");
-    expect(arr).toStrictEqual(["foo", "bar"]);
-});
+    test("removeat with last", () => {
+        const res = removeAt(arr, 2);
+        expect(res).toBe("yo");
+        expect(arr).toStrictEqual(["foo", "bar"]);
+    });
 
-test.each([-1, 3])("removeat with invalid index %s", i => {
-    const res = removeAt(arr, i);
-    expect(res).toBeUndefined();
-    expect(arr).toStrictEqual(["foo", "bar", "yo"]);
-});
+    test.each([-1, 3])("removeat with invalid index %s", i => {
+        const res = removeAt(arr, i);
+        expect(res).toBeUndefined();
+        expect(arr).toStrictEqual(["foo", "bar", "yo"]);
+    });
 
-test("peek of non empty array", () => {
-    const res = peek(arr);
-    expect(res).toBe("yo");
-    expect(arr).toStrictEqual(["foo", "bar", "yo"]);
-});
+    test("peek of non empty array", () => {
+        const res = peek(arr);
+        expect(res).toBe("yo");
+        expect(arr).toStrictEqual(["foo", "bar", "yo"]);
+    });
 
-test("peek of empty array", () => {
-    const array: Array<string> = [];
-    const res = peek(array);
-    expect(res).toBeUndefined();
+    test("peek of empty array", () => {
+        const array: Array<string> = [];
+        const res = peek(array);
+        expect(res).toBeUndefined();
+    });
 });

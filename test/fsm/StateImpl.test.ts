@@ -16,18 +16,20 @@ import type {FSMDataHandler, Logger, StateBase} from "../../src/interacto";
 import {FSMImpl, StdState} from "../../src/interacto";
 import {mock} from "jest-mock-extended";
 
-let state: StateBase;
-let fsm: FSMImpl<FSMDataHandler>;
+describe("using a state impl", () => {
+    let state: StateBase;
+    let fsm: FSMImpl<FSMDataHandler>;
 
-beforeEach(() => {
-    fsm = new FSMImpl(mock<Logger>());
-    state = new StdState(fsm, "s1");
-});
+    beforeEach(() => {
+        fsm = new FSMImpl(mock<Logger>());
+        state = new StdState(fsm, "s1");
+    });
 
-test("fSM", () => {
-    expect(state.fsm).toStrictEqual(fsm);
-});
+    test("fSM", () => {
+        expect(state.fsm).toStrictEqual(fsm);
+    });
 
-test("name", () => {
-    expect(state.name).toBe("s1");
+    test("name", () => {
+        expect(state.name).toBe("s1");
+    });
 });

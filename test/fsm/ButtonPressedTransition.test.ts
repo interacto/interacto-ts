@@ -24,26 +24,27 @@ let src: MockProxy<OutputState> & OutputState;
 let tgt: InputState & MockProxy<InputState>;
 let evt: Event;
 
-beforeEach(() => {
-    src = mock<OutputState>();
-    tgt = mock<InputState>();
-    evt = mock<Event>();
-    tr = new ButtonPressedTransition(src, tgt);
-});
+describe("using a button pressed transition", () => {
+    beforeEach(() => {
+        src = mock<OutputState>();
+        tgt = mock<InputState>();
+        evt = mock<Event>();
+        tr = new ButtonPressedTransition(src, tgt);
+    });
 
-test("that getAcceptedEvents works", () => {
-    expect(tr.getAcceptedEvents()).toStrictEqual(new Set(["click", "auxclick"]));
-});
+    test("that getAcceptedEvents works", () => {
+        expect(tr.getAcceptedEvents()).toStrictEqual(new Set(["click", "auxclick"]));
+    });
 
-test("that accept KO null target", () => {
-    expect(tr.accept(evt)).toBeFalsy();
-});
+    test("that accept KO null target", () => {
+        expect(tr.accept(evt)).toBeFalsy();
+    });
 
-test("that accept KO target not button", () => {
-    expect(tr.accept(createEventWithTarget(mock<HTMLInputElement>(), "input"))).toBeFalsy();
-});
+    test("that accept KO target not button", () => {
+        expect(tr.accept(createEventWithTarget(mock<HTMLInputElement>(), "input"))).toBeFalsy();
+    });
 
-test("that accept OK", () => {
-    expect(tr.accept(createEventWithTarget(document.createElement("button"), "input"))).toBeTruthy();
+    test("that accept OK", () => {
+        expect(tr.accept(createEventWithTarget(document.createElement("button"), "input"))).toBeTruthy();
+    });
 });
-

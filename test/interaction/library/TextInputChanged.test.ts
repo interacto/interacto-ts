@@ -18,52 +18,54 @@ import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
 import {robot} from "interacto-nono";
 
-jest.useFakeTimers();
+describe("using a text input interaction", () => {
+    jest.useFakeTimers();
 
-let interaction: TextInputChanged;
-let textArea: HTMLElement;
-let handler: FSMHandler;
-let logger: Logger & MockProxy<Logger>;
+    let interaction: TextInputChanged;
+    let textArea: HTMLElement;
+    let handler: FSMHandler;
+    let logger: Logger & MockProxy<Logger>;
 
-beforeEach(() => {
-    handler = mock<FSMHandler>();
-    logger = mock<Logger>();
-    interaction = new TextInputChanged(logger);
-    interaction.fsm.addHandler(handler);
-    textArea = document.createElement("textarea");
-});
+    beforeEach(() => {
+        handler = mock<FSMHandler>();
+        logger = mock<Logger>();
+        interaction = new TextInputChanged(logger);
+        interaction.fsm.addHandler(handler);
+        textArea = document.createElement("textarea");
+    });
 
-test("type in a text area starts and stops the interaction", () => {
-    interaction.registerToNodes([textArea]);
-    robot(textArea).input();
-    jest.runOnlyPendingTimers();
-    expect(handler.fsmStops).toHaveBeenCalledTimes(1);
-    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-});
+    test("type in a text area starts and stops the interaction", () => {
+        interaction.registerToNodes([textArea]);
+        robot(textArea).input();
+        jest.runOnlyPendingTimers();
+        expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+        expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+    });
 
-test("log interaction is ok", () => {
-    interaction.log(true);
-    interaction.registerToNodes([textArea]);
-    robot(textArea).input();
-    jest.runOnlyPendingTimers();
+    test("log interaction is ok", () => {
+        interaction.log(true);
+        interaction.registerToNodes([textArea]);
+        robot(textArea).input();
+        jest.runOnlyPendingTimers();
 
-    expect(logger.logInteractionMsg).toHaveBeenCalledTimes(7);
-});
+        expect(logger.logInteractionMsg).toHaveBeenCalledTimes(7);
+    });
 
-test("no log interaction is ok", () => {
-    interaction.registerToNodes([textArea]);
-    robot(textArea).input();
-    jest.runOnlyPendingTimers();
+    test("no log interaction is ok", () => {
+        interaction.registerToNodes([textArea]);
+        robot(textArea).input();
+        jest.runOnlyPendingTimers();
 
-    expect(logger.logInteractionMsg).not.toHaveBeenCalled();
-});
+        expect(logger.logInteractionMsg).not.toHaveBeenCalled();
+    });
 
-test("spinner contains an img on which user clicks", () => {
-    const img = document.createElement("img");
-    textArea.append(img);
-    interaction.registerToNodes([textArea]);
+    test("spinner contains an img on which user clicks", () => {
+        const img = document.createElement("img");
+        textArea.append(img);
+        interaction.registerToNodes([textArea]);
 
-    robot(img).input();
+        robot(img).input();
 
-    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+        expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+    });
 });

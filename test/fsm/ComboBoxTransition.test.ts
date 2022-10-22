@@ -19,31 +19,32 @@ import type {InputState} from "../../src/api/fsm/InputState";
 import {createEventWithTarget} from "../interaction/StubEvents";
 import {ComboBoxTransition} from "../../src/impl/fsm/ComboBoxTransition";
 
-let tr: ComboBoxTransition;
-let src: MockProxy<OutputState> & OutputState;
-let tgt: InputState & MockProxy<InputState>;
-let evt: Event;
+describe("using a combobox transition", () => {
+    let tr: ComboBoxTransition;
+    let src: MockProxy<OutputState> & OutputState;
+    let tgt: InputState & MockProxy<InputState>;
+    let evt: Event;
 
-beforeEach(() => {
-    src = mock<OutputState>();
-    tgt = mock<InputState>();
-    evt = mock<Event>();
-    tr = new ComboBoxTransition(src, tgt);
+    beforeEach(() => {
+        src = mock<OutputState>();
+        tgt = mock<InputState>();
+        evt = mock<Event>();
+        tr = new ComboBoxTransition(src, tgt);
+    });
+
+    test("that getAcceptedEvents works", () => {
+        expect(tr.getAcceptedEvents()).toStrictEqual(new Set(["input"]));
+    });
+
+    test("that accept KO null target", () => {
+        expect(tr.accept(evt)).toBeFalsy();
+    });
+
+    test("that accept KO target not button", () => {
+        expect(tr.accept(createEventWithTarget(mock<HTMLButtonElement>(), "input"))).toBeFalsy();
+    });
+
+    test("that accept OK", () => {
+        expect(tr.accept(createEventWithTarget(document.createElement("select"), "input"))).toBeTruthy();
+    });
 });
-
-test("that getAcceptedEvents works", () => {
-    expect(tr.getAcceptedEvents()).toStrictEqual(new Set(["input"]));
-});
-
-test("that accept KO null target", () => {
-    expect(tr.accept(evt)).toBeFalsy();
-});
-
-test("that accept KO target not button", () => {
-    expect(tr.accept(createEventWithTarget(mock<HTMLButtonElement>(), "input"))).toBeFalsy();
-});
-
-test("that accept OK", () => {
-    expect(tr.accept(createEventWithTarget(document.createElement("select"), "input"))).toBeTruthy();
-});
-

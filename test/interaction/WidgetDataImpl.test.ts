@@ -15,20 +15,22 @@
 import {WidgetDataImpl} from "../../src/impl/interaction/WidgetDataImpl";
 import type {UnitInteractionData} from "../../src/api/interaction/UnitInteractionData";
 
-let data: WidgetDataImpl<HTMLButtonElement>;
-let touchData: UnitInteractionData;
+describe("using a widget data", () => {
+    let data: WidgetDataImpl<HTMLButtonElement>;
+    let touchData: UnitInteractionData;
 
-beforeEach(() => {
-    data = new WidgetDataImpl();
-    const button: HTMLButtonElement = document.createElement("button");
-    touchData = {
-        "timeStamp": 17,
-        "target": button,
-        "currentTarget": new EventTarget()
-    };
-    data.copy(touchData);
-});
+    beforeEach(() => {
+        data = new WidgetDataImpl();
+        const button: HTMLButtonElement = document.createElement("button");
+        touchData = {
+            "timeStamp": 17,
+            "target": button,
+            "currentTarget": new EventTarget()
+        };
+        data.copy(touchData);
+    });
 
-test("widget", () => {
-    expect(data.widget).toBeInstanceOf(HTMLButtonElement);
+    test("widget", () => {
+        expect(data.widget).toBeInstanceOf(HTMLButtonElement);
+    });
 });

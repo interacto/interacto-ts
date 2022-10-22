@@ -19,33 +19,34 @@ import type {InputState} from "../../src/api/fsm/InputState";
 import {createEventWithTarget} from "../interaction/StubEvents";
 import {ColorPickedTransition} from "../../src/impl/fsm/ColorPickedTransition";
 
-let tr: ColorPickedTransition;
-let src: MockProxy<OutputState> & OutputState;
-let tgt: InputState & MockProxy<InputState>;
-let evt: Event;
+describe("using a color picked transition", () => {
+    let tr: ColorPickedTransition;
+    let src: MockProxy<OutputState> & OutputState;
+    let tgt: InputState & MockProxy<InputState>;
+    let evt: Event;
 
-beforeEach(() => {
-    src = mock<OutputState>();
-    tgt = mock<InputState>();
-    evt = mock<Event>();
-    tr = new ColorPickedTransition(src, tgt);
+    beforeEach(() => {
+        src = mock<OutputState>();
+        tgt = mock<InputState>();
+        evt = mock<Event>();
+        tr = new ColorPickedTransition(src, tgt);
+    });
+
+    test("that getAcceptedEvents works", () => {
+        expect(tr.getAcceptedEvents()).toStrictEqual(new Set(["input"]));
+    });
+
+    test("that accept KO null target", () => {
+        expect(tr.accept(evt)).toBeFalsy();
+    });
+
+    test("that accept KO target not button", () => {
+        expect(tr.accept(createEventWithTarget(mock<HTMLButtonElement>(), "input"))).toBeFalsy();
+    });
+
+    test("that accept OK", () => {
+        const target = document.createElement("input");
+        target.type = "color";
+        expect(tr.accept(createEventWithTarget(target, "input"))).toBeTruthy();
+    });
 });
-
-test("that getAcceptedEvents works", () => {
-    expect(tr.getAcceptedEvents()).toStrictEqual(new Set(["input"]));
-});
-
-test("that accept KO null target", () => {
-    expect(tr.accept(evt)).toBeFalsy();
-});
-
-test("that accept KO target not button", () => {
-    expect(tr.accept(createEventWithTarget(mock<HTMLButtonElement>(), "input"))).toBeFalsy();
-});
-
-test("that accept OK", () => {
-    const target = document.createElement("input");
-    target.type = "color";
-    expect(tr.accept(createEventWithTarget(target, "input"))).toBeTruthy();
-});
-

@@ -19,30 +19,32 @@ import {mock} from "jest-mock-extended";
 import {WheelTransition} from "../../src/impl/fsm/WheelTransition";
 import type {FSMDataHandler} from "../../src/impl/fsm/FSMDataHandler";
 
-let tr: WheelTransition;
-let canvas: HTMLCanvasElement;
+describe("using a wheel transition", () => {
+    let tr: WheelTransition;
+    let canvas: HTMLCanvasElement;
 
-beforeEach(() => {
-    tr = new WheelTransition(new StdState(mock<FSMImpl<FSMDataHandler>>(), "a"), new StdState(mock<FSMImpl<FSMDataHandler>>(), "b"));
-    canvas = document.createElement("canvas");
-});
+    beforeEach(() => {
+        tr = new WheelTransition(new StdState(mock<FSMImpl<FSMDataHandler>>(), "a"), new StdState(mock<FSMImpl<FSMDataHandler>>(), "b"));
+        canvas = document.createElement("canvas");
+    });
 
-test("invalid mouse event", () => {
-    expect(tr.accept(createMouseEvent("mousedown", canvas, 11, 23, 11, 23, 0))).toBeFalsy();
-});
+    test("invalid mouse event", () => {
+        expect(tr.accept(createMouseEvent("mousedown", canvas, 11, 23, 11, 23, 0))).toBeFalsy();
+    });
 
-test("invalid event type", () => {
-    expect(tr.accept(createTouchEvent("touchend", 3, canvas, 11, 23, 12, 25))).toBeFalsy();
-});
+    test("invalid event type", () => {
+        expect(tr.accept(createTouchEvent("touchend", 3, canvas, 11, 23, 12, 25))).toBeFalsy();
+    });
 
-test("valid event", () => {
-    expect(tr.accept(createWheelEvent("wheel", canvas, 11, 43, 12, 11, 1, 5, 6, 7, 8))).toBeTruthy();
-});
+    test("valid event", () => {
+        expect(tr.accept(createWheelEvent("wheel", canvas, 11, 43, 12, 11, 1, 5, 6, 7, 8))).toBeTruthy();
+    });
 
-test("guard OK", () => {
-    expect(tr.guard(createWheelEvent("wheel", canvas, 11, 43, 12, 11, 1, 5, 6, 7, 8))).toBeTruthy();
-});
+    test("guard OK", () => {
+        expect(tr.guard(createWheelEvent("wheel", canvas, 11, 43, 12, 11, 1, 5, 6, 7, 8))).toBeTruthy();
+    });
 
-test("accepted events", () => {
-    expect(tr.getAcceptedEvents()).toStrictEqual(new Set(["wheel"]));
+    test("accepted events", () => {
+        expect(tr.getAcceptedEvents()).toStrictEqual(new Set(["wheel"]));
+    });
 });

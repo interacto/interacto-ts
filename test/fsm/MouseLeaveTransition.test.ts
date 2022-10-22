@@ -19,31 +19,33 @@ import {mock} from "jest-mock-extended";
 import type {FSMDataHandler} from "../../src/impl/fsm/FSMDataHandler";
 import {MouseTransition} from "../../src/impl/fsm/MouseTransition";
 
-let tr: MouseTransition;
-let canvas: HTMLCanvasElement;
+describe("using a mouse leave transition", () => {
+    let tr: MouseTransition;
+    let canvas: HTMLCanvasElement;
 
-beforeEach(() => {
-    tr = new MouseTransition(new StdState(mock<FSMImpl<FSMDataHandler>>(), "a"),
-        new StdState(mock<FSMImpl<FSMDataHandler>>(), "b"), "mouseleave");
-    canvas = document.createElement("canvas");
-});
+    beforeEach(() => {
+        tr = new MouseTransition(new StdState(mock<FSMImpl<FSMDataHandler>>(), "a"),
+            new StdState(mock<FSMImpl<FSMDataHandler>>(), "b"), "mouseleave");
+        canvas = document.createElement("canvas");
+    });
 
-test("invalid move event", () => {
-    expect(tr.accept(createMouseEvent("mousedown", canvas, 11, 23, 11, 23, 0))).toBeFalsy();
-});
+    test("invalid move event", () => {
+        expect(tr.accept(createMouseEvent("mousedown", canvas, 11, 23, 11, 23, 0))).toBeFalsy();
+    });
 
-test("invalid event type", () => {
-    expect(tr.accept(createTouchEvent("touchend", 3, canvas, 11, 23, 12, 25))).toBeFalsy();
-});
+    test("invalid event type", () => {
+        expect(tr.accept(createTouchEvent("touchend", 3, canvas, 11, 23, 12, 25))).toBeFalsy();
+    });
 
-test("valid event", () => {
-    expect(tr.accept(createMouseEvent("mouseleave", canvas, 11, 43, 12, 11, 1))).toBeTruthy();
-});
+    test("valid event", () => {
+        expect(tr.accept(createMouseEvent("mouseleave", canvas, 11, 43, 12, 11, 1))).toBeTruthy();
+    });
 
-test("guard OK", () => {
-    expect(tr.guard(createMouseEvent("mouseleave", canvas, 11, 23, 12, 25, 1))).toBeTruthy();
-});
+    test("guard OK", () => {
+        expect(tr.guard(createMouseEvent("mouseleave", canvas, 11, 23, 12, 25, 1))).toBeTruthy();
+    });
 
-test("accepted events", () => {
-    expect(tr.getAcceptedEvents()).toStrictEqual(new Set(["mouseleave"]));
+    test("accepted events", () => {
+        expect(tr.getAcceptedEvents()).toStrictEqual(new Set(["mouseleave"]));
+    });
 });

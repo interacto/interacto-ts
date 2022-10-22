@@ -17,118 +17,120 @@ import {SrcTgtTouchDataImpl} from "../../src/impl/interaction/SrcTgtTouchDataImp
 import type {EventModifierData} from "../../src/api/interaction/EventModifierData";
 import type {UnitInteractionData} from "../../src/api/interaction/UnitInteractionData";
 
-let data: SrcTgtTouchDataImpl;
-let touchSrc: Touch;
-let touchTgt: Touch;
-let evt1: EventModifierData & UnitInteractionData;
-let evt2: EventModifierData & UnitInteractionData;
+describe("using a srctgttouch data", () => {
+    let data: SrcTgtTouchDataImpl;
+    let touchSrc: Touch;
+    let touchTgt: Touch;
+    let evt1: EventModifierData & UnitInteractionData;
+    let evt2: EventModifierData & UnitInteractionData;
 
-beforeEach(() => {
-    data = new SrcTgtTouchDataImpl();
-    touchSrc = {
-        "force": 15,
-        "identifier": 20,
-        "radiusX": 25,
-        "radiusY": 30,
-        "rotationAngle": 35,
-        "clientX": 11,
-        "clientY": 12,
-        "pageX": 13,
-        "pageY": 14,
-        "screenX": 15,
-        "screenY": 16,
-        "target": new EventTarget()
-    };
+    beforeEach(() => {
+        data = new SrcTgtTouchDataImpl();
+        touchSrc = {
+            "force": 15,
+            "identifier": 20,
+            "radiusX": 25,
+            "radiusY": 30,
+            "rotationAngle": 35,
+            "clientX": 11,
+            "clientY": 12,
+            "pageX": 13,
+            "pageY": 14,
+            "screenX": 15,
+            "screenY": 16,
+            "target": new EventTarget()
+        };
 
-    touchTgt = {
-        "force": 15,
-        "identifier": 20,
-        "radiusX": 25,
-        "radiusY": 30,
-        "rotationAngle": 35,
-        "clientX": 12,
-        "clientY": 14,
-        "pageX": 16,
-        "pageY": 18,
-        "screenX": 18,
-        "screenY": 20,
-        "target": new EventTarget()
-    };
+        touchTgt = {
+            "force": 15,
+            "identifier": 20,
+            "radiusX": 25,
+            "radiusY": 30,
+            "rotationAngle": 35,
+            "clientX": 12,
+            "clientY": 14,
+            "pageX": 16,
+            "pageY": 18,
+            "screenX": 18,
+            "screenY": 20,
+            "target": new EventTarget()
+        };
 
-    evt1 = {
-        "altKey": true,
-        "ctrlKey": true,
-        "metaKey": true,
-        "shiftKey": true,
-        "timeStamp": 10,
-        "target": new EventTarget(),
-        "currentTarget": new EventTarget()
-    };
+        evt1 = {
+            "altKey": true,
+            "ctrlKey": true,
+            "metaKey": true,
+            "shiftKey": true,
+            "timeStamp": 10,
+            "target": new EventTarget(),
+            "currentTarget": new EventTarget()
+        };
 
-    evt2 = {
-        "altKey": true,
-        "ctrlKey": true,
-        "metaKey": true,
-        "shiftKey": true,
-        "timeStamp": 20,
-        "target": new EventTarget(),
-        "currentTarget": new EventTarget()
-    };
+        evt2 = {
+            "altKey": true,
+            "ctrlKey": true,
+            "metaKey": true,
+            "shiftKey": true,
+            "timeStamp": 20,
+            "target": new EventTarget(),
+            "currentTarget": new EventTarget()
+        };
 
-    data.copySrc(touchSrc, evt1, []);
-    data.copyTgt(touchTgt, evt2, []);
-});
+        data.copySrc(touchSrc, evt1, []);
+        data.copyTgt(touchTgt, evt2, []);
+    });
 
-test("flush", () => {
-    data.flush();
-    expect(data.src).toStrictEqual(new TouchDataImpl());
-});
+    test("flush", () => {
+        data.flush();
+        expect(data.src).toStrictEqual(new TouchDataImpl());
+    });
 
-test("diffClientX", () => {
-    expect(data.diffClientX).toBe(1);
-});
+    test("diffClientX", () => {
+        expect(data.diffClientX).toBe(1);
+    });
 
-test("diffClientY", () => {
-    expect(data.diffClientY).toBe(2);
-});
+    test("diffClientY", () => {
+        expect(data.diffClientY).toBe(2);
+    });
 
-test("diffPageX", () => {
-    expect(data.diffPageX).toBe(3);
-});
+    test("diffPageX", () => {
+        expect(data.diffPageX).toBe(3);
+    });
 
-test("diffPageY", () => {
-    expect(data.diffPageY).toBe(4);
-});
+    test("diffPageY", () => {
+        expect(data.diffPageY).toBe(4);
+    });
 
-test("diffScreenX", () => {
-    expect(data.diffScreenX).toBe(3);
-});
+    test("diffScreenX", () => {
+        expect(data.diffScreenX).toBe(3);
+    });
 
-test("diffScreenY", () => {
-    expect(data.diffScreenY).toBe(4);
-});
+    test("diffScreenY", () => {
+        expect(data.diffScreenY).toBe(4);
+    });
 
-test("duration", () => {
-    expect(data.duration).toBe(10);
-});
+    test("duration", () => {
+        expect(data.duration).toBe(10);
+    });
 
-test("velocity", () => {
-    // velocity should be sqrt(deltaX^2 + deltaY^2) / velocity  = sqrt(16 + 9) / 10 = 0.5
-    expect(data.velocity).toBe(0.5);
-});
+    test("velocity", () => {
+        // velocity should be sqrt(deltaX^2 + deltaY^2) / velocity  = sqrt(16 + 9) / 10 = 0.5
+        expect(data.velocity).toBe(0.5);
+    });
 
-test("isHorizontal OK", () => {
-    expect(data.isHorizontal(5)).toBeTruthy();
-});
+    test("isHorizontal OK", () => {
+        expect(data.isHorizontal(5)).toBeTruthy();
+    });
 
-test("isHorizontal KO", () => {
-    expect(data.isHorizontal(2)).toBeFalsy();
-});
+    test("isHorizontal KO", () => {
+        expect(data.isHorizontal(2)).toBeFalsy();
+    });
 
-test("isVertical OK", () => {
-    expect(data.isVertical(5)).toBeTruthy();
-});
+    test("isVertical OK", () => {
+        expect(data.isVertical(5)).toBeTruthy();
+    });
 
-test("isVertical KO", () => {
-    expect(data.isVertical(2)).toBeFalsy();
+    test("isVertical KO", () => {
+        expect(data.isVertical(2)).toBeFalsy();
+    });
 });

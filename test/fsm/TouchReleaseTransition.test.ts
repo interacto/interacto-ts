@@ -19,27 +19,29 @@ import {mock} from "jest-mock-extended";
 import type {FSMDataHandler} from "../../src/impl/fsm/FSMDataHandler";
 import {TouchTransition} from "../../src/impl/fsm/TouchTransition";
 
-let tr: TouchTransition;
-let canvas: HTMLCanvasElement;
+describe("using a touch release transition", () => {
+    let tr: TouchTransition;
+    let canvas: HTMLCanvasElement;
 
-beforeEach(() => {
-    tr = new TouchTransition(new StdState(mock<FSMImpl<FSMDataHandler>>(), "a"),
-        new StdState(mock<FSMImpl<FSMDataHandler>>(), "b"), "touchend");
-    canvas = document.createElement("canvas");
-});
+    beforeEach(() => {
+        tr = new TouchTransition(new StdState(mock<FSMImpl<FSMDataHandler>>(), "a"),
+            new StdState(mock<FSMImpl<FSMDataHandler>>(), "b"), "touchend");
+        canvas = document.createElement("canvas");
+    });
 
-test("invalid event", () => {
-    expect(tr.accept(createMouseEvent("mouseup", canvas, 11, 23, 11, 23, 0))).toBeFalsy();
-});
+    test("invalid event", () => {
+        expect(tr.accept(createMouseEvent("mouseup", canvas, 11, 23, 11, 23, 0))).toBeFalsy();
+    });
 
-test("valid event", () => {
-    expect(tr.accept(createTouchEvent("touchend", 3, canvas, 11, 23, 12, 25))).toBeTruthy();
-});
+    test("valid event", () => {
+        expect(tr.accept(createTouchEvent("touchend", 3, canvas, 11, 23, 12, 25))).toBeTruthy();
+    });
 
-test("guard OK", () => {
-    expect(tr.guard(createTouchEvent("touchend", 3, canvas, 11, 23, 12, 25))).toBeTruthy();
-});
+    test("guard OK", () => {
+        expect(tr.guard(createTouchEvent("touchend", 3, canvas, 11, 23, 12, 25))).toBeTruthy();
+    });
 
-test("accepted events", () => {
-    expect(tr.getAcceptedEvents()).toStrictEqual(new Set(["touchend"]));
+    test("accepted events", () => {
+        expect(tr.getAcceptedEvents()).toStrictEqual(new Set(["touchend"]));
+    });
 });

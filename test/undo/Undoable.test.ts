@@ -14,51 +14,53 @@
 
 import {isUndoableType} from "../../src/interacto";
 
-test("undefined is not undoable", () => {
-    expect(isUndoableType(undefined)).toBeFalsy();
-});
+describe("using an undoable", () => {
+    test("undefined is not undoable", () => {
+        expect(isUndoableType(undefined)).toBeFalsy();
+    });
 
-test("null is not undoable", () => {
-    expect(isUndoableType(null)).toBeFalsy();
-});
+    test("null is not undoable", () => {
+        expect(isUndoableType(null)).toBeFalsy();
+    });
 
-test("number is not undoable", () => {
-    expect(isUndoableType(1)).toBeFalsy();
-});
+    test("number is not undoable", () => {
+        expect(isUndoableType(1)).toBeFalsy();
+    });
 
-test("string is not undoable", () => {
-    expect(isUndoableType("fooo")).toBeFalsy();
-});
+    test("string is not undoable", () => {
+        expect(isUndoableType("fooo")).toBeFalsy();
+    });
 
-test("wrong object is not undoable", () => {
-    expect(isUndoableType({})).toBeFalsy();
-});
+    test("wrong object is not undoable", () => {
+        expect(isUndoableType({})).toBeFalsy();
+    });
 
-test("object missing undo is not undoable", () => {
-    expect(isUndoableType({
-        "redo": () => {},
-        "getUndoName": () => {}
-    })).toBeFalsy();
-});
+    test("object missing undo is not undoable", () => {
+        expect(isUndoableType({
+            "redo": () => {},
+            "getUndoName": () => {}
+        })).toBeFalsy();
+    });
 
-test("object missing redo is not undoable", () => {
-    expect(isUndoableType({
-        "undo": () => {},
-        "getUndoName": () => {}
-    })).toBeFalsy();
-});
+    test("object missing redo is not undoable", () => {
+        expect(isUndoableType({
+            "undo": () => {},
+            "getUndoName": () => {}
+        })).toBeFalsy();
+    });
 
-test("object missing getUndoName is not undoable", () => {
-    expect(isUndoableType({
-        "undo": () => {},
-        "redo": () => {}
-    })).toBeFalsy();
-});
+    test("object missing getUndoName is not undoable", () => {
+        expect(isUndoableType({
+            "undo": () => {},
+            "redo": () => {}
+        })).toBeFalsy();
+    });
 
-test("is ok", () => {
-    expect(isUndoableType({
-        "undo": () => {},
-        "redo": () => {},
-        "getUndoName": () => {}
-    })).toBeTruthy();
+    test("is ok", () => {
+        expect(isUndoableType({
+            "undo": () => {},
+            "redo": () => {},
+            "getUndoName": () => {}
+        })).toBeTruthy();
+    });
 });

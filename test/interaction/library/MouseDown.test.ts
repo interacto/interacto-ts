@@ -18,37 +18,39 @@ import {robot} from "interacto-nono";
 import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
 
-let interaction: MouseDown;
-let canvas: HTMLElement;
-let handler: FSMHandler;
-let logger: Logger & MockProxy<Logger>;
+describe("using a mouse down interaction", () => {
+    let interaction: MouseDown;
+    let canvas: HTMLElement;
+    let handler: FSMHandler;
+    let logger: Logger & MockProxy<Logger>;
 
-beforeEach(() => {
-    handler = mock<FSMHandler>();
-    logger = mock<Logger>();
-    interaction = new MouseDown(logger);
-    interaction.fsm.addHandler(handler);
-    canvas = document.createElement("canvas");
-});
+    beforeEach(() => {
+        handler = mock<FSMHandler>();
+        logger = mock<Logger>();
+        interaction = new MouseDown(logger);
+        interaction.fsm.addHandler(handler);
+        canvas = document.createElement("canvas");
+    });
 
-test("press on the canvas starts and stops MouseDown interaction", () => {
-    interaction.registerToNodes([canvas]);
-    robot(canvas).mousedown();
-    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-    expect(handler.fsmStops).toHaveBeenCalledTimes(1);
-});
+    test("press on the canvas starts and stops MouseDown interaction", () => {
+        interaction.registerToNodes([canvas]);
+        robot(canvas).mousedown();
+        expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+        expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+    });
 
-test("log interaction is ok", () => {
-    interaction.log(true);
-    interaction.registerToNodes([canvas]);
-    robot(canvas).mousedown();
+    test("log interaction is ok", () => {
+        interaction.log(true);
+        interaction.registerToNodes([canvas]);
+        robot(canvas).mousedown();
 
-    expect(logger.logInteractionMsg).toHaveBeenCalledTimes(4);
-});
+        expect(logger.logInteractionMsg).toHaveBeenCalledTimes(4);
+    });
 
-test("no log interaction is ok", () => {
-    interaction.registerToNodes([canvas]);
-    robot(canvas).mousedown();
+    test("no log interaction is ok", () => {
+        interaction.registerToNodes([canvas]);
+        robot(canvas).mousedown();
 
-    expect(logger.logInteractionMsg).not.toHaveBeenCalled();
+        expect(logger.logInteractionMsg).not.toHaveBeenCalled();
+    });
 });

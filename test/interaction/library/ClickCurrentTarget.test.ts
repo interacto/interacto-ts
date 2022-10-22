@@ -18,29 +18,31 @@ import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
 import {robot} from "interacto-nono";
 
-let interaction: Click;
-let groupe: HTMLElement;
-let circle: HTMLElement;
-let handler: FSMHandler & MockProxy<FSMHandler>;
+describe("using a click interaction with a currenttarget", () => {
+    let interaction: Click;
+    let groupe: HTMLElement;
+    let circle: HTMLElement;
+    let handler: FSMHandler & MockProxy<FSMHandler>;
 
-beforeEach(() => {
-    handler = mock<FSMHandler>();
-    interaction = new Click(mock<Logger>());
-    interaction.log(true);
-    interaction.fsm.log = true;
-    interaction.fsm.addHandler(handler);
-    document.documentElement.innerHTML = "<html><svg><g id='gro'><circle r=\"1\" id='circle'></circle><text></text></g></svg></html>";
-    groupe = document.querySelector("#gro") as HTMLElement;
-    circle = document.querySelector("#circle") as HTMLElement;
-});
-
-test("current target with group tag", () => {
-    const data = new PointDataImpl();
-    handler.fsmStops = jest.fn(() => {
-        data.copy(interaction.data);
+    beforeEach(() => {
+        handler = mock<FSMHandler>();
+        interaction = new Click(mock<Logger>());
+        interaction.log(true);
+        interaction.fsm.log = true;
+        interaction.fsm.addHandler(handler);
+        document.documentElement.innerHTML = "<html><svg><g id='gro'><circle r=\"1\" id='circle'></circle><text></text></g></svg></html>";
+        groupe = document.querySelector("#gro") as HTMLElement;
+        circle = document.querySelector("#circle") as HTMLElement;
     });
 
-    interaction.registerToNodes([groupe]);
-    robot().click(circle);
-    expect(data.target).toBe(circle);
+    test("current target with group tag", () => {
+        const data = new PointDataImpl();
+        handler.fsmStops = jest.fn(() => {
+            data.copy(interaction.data);
+        });
+
+        interaction.registerToNodes([groupe]);
+        robot().click(circle);
+        expect(data.target).toBe(circle);
+    });
 });

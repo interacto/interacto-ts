@@ -15,44 +15,45 @@
 import {KeyDataImpl} from "../../src/impl/interaction/KeyDataImpl";
 import {KeysDataImpl} from "../../src/impl/interaction/KeysDataImpl";
 
-let data: KeysDataImpl;
-let keyData: KeyDataImpl;
-let sourceData: KeyDataImpl;
+describe("using a keys data", () => {
+    let data: KeysDataImpl;
+    let keyData: KeyDataImpl;
+    let sourceData: KeyDataImpl;
 
-beforeEach(() => {
-    data = new KeysDataImpl();
-    sourceData = new KeyDataImpl();
-    sourceData.copy({
-        "code": "KeyQ",
-        "key": "KeyA",
-        "location": 1,
-        "repeat": false,
-        "altKey": true,
-        "ctrlKey": true,
-        "metaKey": true,
-        "shiftKey": true,
-        "timeStamp": 0,
-        "target": null,
-        "currentTarget": null
+    beforeEach(() => {
+        data = new KeysDataImpl();
+        sourceData = new KeyDataImpl();
+        sourceData.copy({
+            "code": "KeyQ",
+            "key": "KeyA",
+            "location": 1,
+            "repeat": false,
+            "altKey": true,
+            "ctrlKey": true,
+            "metaKey": true,
+            "shiftKey": true,
+            "timeStamp": 0,
+            "target": null,
+            "currentTarget": null
+        });
+        keyData = new KeyDataImpl();
+        keyData.copy(sourceData);
     });
-    keyData = new KeyDataImpl();
-    keyData.copy(sourceData);
-});
 
-test("key collection is empty by default", () => {
-    expect(data.keys).toHaveLength(0);
-});
+    test("key collection is empty by default", () => {
+        expect(data.keys).toHaveLength(0);
+    });
 
-test("addKey", () => {
-    data.addKey(keyData);
-    expect(data.keys).toHaveLength(1);
-    const element = data.keys[0];
-    expect(element).toStrictEqual(sourceData);
-});
+    test("addKey", () => {
+        data.addKey(keyData);
+        expect(data.keys).toHaveLength(1);
+        const element = data.keys[0];
+        expect(element).toStrictEqual(sourceData);
+    });
 
-test("flush", () => {
-    data.addKey(keyData);
-    data.flush();
-    expect(data.keys).toHaveLength(0);
+    test("flush", () => {
+        data.addKey(keyData);
+        data.flush();
+        expect(data.keys).toHaveLength(0);
+    });
 });
-

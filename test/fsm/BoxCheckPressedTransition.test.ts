@@ -24,28 +24,29 @@ let src: MockProxy<OutputState> & OutputState;
 let tgt: InputState & MockProxy<InputState>;
 let evt: Event;
 
-beforeEach(() => {
-    src = mock<OutputState>();
-    tgt = mock<InputState>();
-    evt = mock<Event>();
-    tr = new BoxCheckPressedTransition(src, tgt);
-});
+describe("using a checkbox transition", () => {
+    beforeEach(() => {
+        src = mock<OutputState>();
+        tgt = mock<InputState>();
+        evt = mock<Event>();
+        tr = new BoxCheckPressedTransition(src, tgt);
+    });
 
-test("that getAcceptedEvents works", () => {
-    expect(tr.getAcceptedEvents()).toStrictEqual(new Set(["input"]));
-});
+    test("that getAcceptedEvents works", () => {
+        expect(tr.getAcceptedEvents()).toStrictEqual(new Set(["input"]));
+    });
 
-test("that accept KO null target", () => {
-    expect(tr.accept(evt)).toBeFalsy();
-});
+    test("that accept KO null target", () => {
+        expect(tr.accept(evt)).toBeFalsy();
+    });
 
-test("that accept KO target not checkbox", () => {
-    expect(tr.accept(createEventWithTarget(mock<HTMLInputElement>(), "foo"))).toBeFalsy();
-});
+    test("that accept KO target not checkbox", () => {
+        expect(tr.accept(createEventWithTarget(mock<HTMLInputElement>(), "foo"))).toBeFalsy();
+    });
 
-test("that accept OK", () => {
-    const target = document.createElement("input");
-    target.type = "checkbox";
-    expect(tr.accept(createEventWithTarget(target, "input"))).toBeTruthy();
+    test("that accept OK", () => {
+        const target = document.createElement("input");
+        target.type = "checkbox";
+        expect(tr.accept(createEventWithTarget(target, "input"))).toBeTruthy();
+    });
 });
-

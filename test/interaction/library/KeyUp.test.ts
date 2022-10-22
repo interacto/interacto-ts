@@ -18,58 +18,60 @@ import {robot} from "interacto-nono";
 import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
 
-let interaction: KeyUp;
-let text: HTMLElement;
-let handler: FSMHandler;
-let logger: Logger & MockProxy<Logger>;
+describe("using a key up interaction", () => {
+    let interaction: KeyUp;
+    let text: HTMLElement;
+    let handler: FSMHandler;
+    let logger: Logger & MockProxy<Logger>;
 
-beforeEach(() => {
-    handler = mock<FSMHandler>();
-    logger = mock<Logger>();
-    interaction = new KeyUp(logger, false);
-    interaction.fsm.addHandler(handler);
-    text = document.createElement("textarea");
-});
-
-test("type 'a' in the textarea starts and stops the interaction.", () => {
-    interaction.registerToNodes([text]);
-    robot(text).keyup({"code": "a"});
-    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-    expect(handler.fsmStops).toHaveBeenCalledTimes(1);
-});
-
-test("log interaction is ok", () => {
-    interaction.log(true);
-    interaction.registerToNodes([text]);
-    robot(text).keyup({"code": "a"});
-
-    expect(logger.logInteractionMsg).toHaveBeenCalledTimes(4);
-});
-
-test("no log interaction is ok", () => {
-    interaction.registerToNodes([text]);
-    robot(text).keyup({"code": "a"});
-
-    expect(logger.logInteractionMsg).not.toHaveBeenCalled();
-});
-
-test("the key typed in the textarea is the same key in the data of the interaction.", () => {
-    const data = new KeyDataImpl();
-    interaction.registerToNodes([text]);
-    const newHandler = mock<FSMHandler>();
-    newHandler.fsmStops = jest.fn(() => {
-        data.copy(interaction.data);
+    beforeEach(() => {
+        handler = mock<FSMHandler>();
+        logger = mock<Logger>();
+        interaction = new KeyUp(logger, false);
+        interaction.fsm.addHandler(handler);
+        text = document.createElement("textarea");
     });
-    interaction.fsm.addHandler(newHandler);
-    robot(text).keyup({"code": "a"});
-    expect(data.code).toBe("a");
-});
 
-test("two Key Press Ends", () => {
-    interaction.registerToNodes([text]);
-    robot(text)
-        .keyup({"code": "a"})
-        .keyup({"code": "b"});
-    expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
-    expect(handler.fsmStops).toHaveBeenCalledTimes(2);
+    test("type 'a' in the textarea starts and stops the interaction.", () => {
+        interaction.registerToNodes([text]);
+        robot(text).keyup({"code": "a"});
+        expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+        expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+    });
+
+    test("log interaction is ok", () => {
+        interaction.log(true);
+        interaction.registerToNodes([text]);
+        robot(text).keyup({"code": "a"});
+
+        expect(logger.logInteractionMsg).toHaveBeenCalledTimes(4);
+    });
+
+    test("no log interaction is ok", () => {
+        interaction.registerToNodes([text]);
+        robot(text).keyup({"code": "a"});
+
+        expect(logger.logInteractionMsg).not.toHaveBeenCalled();
+    });
+
+    test("the key typed in the textarea is the same key in the data of the interaction.", () => {
+        const data = new KeyDataImpl();
+        interaction.registerToNodes([text]);
+        const newHandler = mock<FSMHandler>();
+        newHandler.fsmStops = jest.fn(() => {
+            data.copy(interaction.data);
+        });
+        interaction.fsm.addHandler(newHandler);
+        robot(text).keyup({"code": "a"});
+        expect(data.code).toBe("a");
+    });
+
+    test("two Key Press Ends", () => {
+        interaction.registerToNodes([text]);
+        robot(text)
+            .keyup({"code": "a"})
+            .keyup({"code": "b"});
+        expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
+        expect(handler.fsmStops).toHaveBeenCalledTimes(2);
+    });
 });
