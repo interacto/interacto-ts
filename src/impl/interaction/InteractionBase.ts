@@ -50,13 +50,13 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
 
     protected readonly logger: Logger;
 
-    private mouseHandler?: ((e: MouseEvent) => void);
+    private mouseHandler?: (e: MouseEvent) => void;
 
-    private touchHandler?: ((e: TouchEvent) => void);
+    private touchHandler?: (e: TouchEvent) => void;
 
-    private keyHandler?: ((e: KeyboardEvent) => void);
+    private keyHandler?: (e: KeyboardEvent) => void;
 
-    private uiHandler?: ((e: UIEvent) => void);
+    private uiHandler?: (e: UIEvent) => void;
 
     private actionHandler?: EventListener;
 

@@ -50,7 +50,7 @@ describe("using an update binder", () => {
         const obs = mock<BindingsObserver>();
         binder = new UpdateBinder(history, mock<Logger>(), obs)
             .usingInteraction(() => new MouseDown(mock<Logger>()))
-            .toProduce(() => mock<Command>());
+            .toProduce(() => mock<Command>() as Command);
 
         const binding = binder.bind();
         expect(obs.observeBinding).toHaveBeenCalledTimes(1);

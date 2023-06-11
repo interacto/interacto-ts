@@ -67,6 +67,7 @@
 
     "tsdoc/syntax": "error",
 
+    "no-duplicate-imports": "off",
     "func-style": "off",
     "max-lines": "off",
     "prefer-destructuring": "off",
@@ -99,6 +100,8 @@
     "no-magic-numbers": "off",
     "indent": "off",
 
+    "@typescript-eslint/block-spacing": "off",
+    "@typescript-eslint/lines-around-comment": "off",
     "@typescript-eslint/no-type-alias": "off",
     "@typescript-eslint/no-inferrable-types": "off",
     "@typescript-eslint/no-magic-numbers": "off",

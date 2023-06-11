@@ -54,9 +54,9 @@ export class UpdateBinder<C extends Command, I extends Interaction<D>, D extends
     public constructor(undoHistory: UndoHistoryBase, logger: Logger, observer?: BindingsObserver, binder?: Partial<UpdateBinder<C, I, D>>) {
         super(undoHistory, logger, observer, binder);
 
+        this.continuousCmdExecution = false;
+        this.throttleTimeout = 0;
         Object.assign(this, binder);
-        this.continuousCmdExecution ??= false;
-        this.throttleTimeout ??= 0;
 
         // Arrays have to be cloned again in each subclass of Binder after Object.assign() since it undoes the changes
         this.copyFnArraysUpdate();

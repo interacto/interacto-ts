@@ -86,15 +86,16 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
     protected onErrFnArray: Array<(ex: unknown) => void> = [];
 
     protected constructor(undoHistory: UndoHistoryBase, logger: Logger, observer?: BindingsObserver, binder?: Partial<Binder<C, I, D>>) {
+        this.widgets = [];
+        this.dynamicNodes = [];
+        this.logLevels = [];
+        this.stopPropagation = false;
+        this.prevDefault = false;
+
         Object.assign(this, binder);
 
         this.undoHistory = undoHistory;
         this.logger = logger;
-        this.widgets ??= [];
-        this.dynamicNodes ??= [];
-        this.logLevels ??= [];
-        this.stopPropagation ??= false;
-        this.prevDefault ??= false;
         this.observer = observer;
 
         this.copyFnArrays();

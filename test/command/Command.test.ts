@@ -164,7 +164,7 @@ describe("using a command", () => {
             }
         }();
 
-        expect(() => command.execute()).toThrow(new Error("Cmd err"));
+        expect(() => command.execute() as boolean).toThrow(new Error("Cmd err"));
         expect(command.getStatus()).toBe("executed");
     });
 });

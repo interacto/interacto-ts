@@ -26,7 +26,7 @@ import {CancelFSMError} from "../fsm/CancelFSMError";
 export class AnonBinding<C extends Command, I extends Interaction<D>, D extends InteractionData>
     extends BindingImpl<C, I, D> {
 
-    private readonly firstFn?: ((c: C, i: D) => void);
+    private readonly firstFn?: (c: C, i: D) => void;
 
     private readonly thenFn?: (c: C, i: D) => void;
 
