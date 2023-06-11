@@ -1,3 +1,21 @@
+# 7.4.0
+
+* change(api): union type for log level instead of enum
+* change(api): union type instead of enum for cmd status
+* change(api): union type instead of enum for whentype
+
+* fix(code): various linting issues fixed (unicorn)
+* fix(package): try to improve the rollup packaging
+
+* update(deps): some deps updated
+
+* clean(code): fixing blank lines
+* clean(config): use exact version in deps
+* clean(test): tests cleaned
+
+* config(eslint): changing the format of the eslint config
+
+
 # 7.3.0
 
 * feat(undo): import/export tree history
@@ -96,7 +114,7 @@
 * change(binder) 'ifHadNoEffect' routine now cumulative (#63)
 * change(binder): 'end' routine now cumulative (#59)
 * change(binder): 'first' routine is cumulative (#57)
- 
+
 * doc(binder): documentation on cumulative routines (#66)
 
 
@@ -132,10 +150,10 @@
 * new(logging): new logging system, Fitts law feature preview
 * new(command): added UndoNTimes and RedoNTimes commands
 * new(interaction): X-Y deltas added to SrcTgtPointsData interaction data
-  
+
 * change(api): use property in interfaces instead of Java-like getter/setter
 * change(command): made private command properties protected
-  
+
 * fix(binding): cancelling the interaction should not rely on hadEffect of the command
 * fix(binding): the binding API should not expose FSM handling routines
 * fix(command): setProperty and SetProperties should have mutable new values
@@ -154,7 +172,7 @@
 * feat(command): new command setProperties
 * feat(command): new command setProperty
 * feat(undo): can specify the undo history to the context
-  
+
 * config(pkg): irrelevant script cmd removed
 * config(deps): dependencies updated
 
@@ -205,14 +223,14 @@
 * change(api): interaction data does not expose flush anymore
 * change(api): the on routine should take at least one argument
 * change(undo): undo collector renamed as undo history
-  
+
 * build(deps): dependencies updated
 
 * clean(code): code and test cleaned
-  
+
 * doc(api): documentation updated
 * doc(config): better documentation generation
-  
+
 * fix(undo): error while removing oldest undoable instances
 * fix(doc): incorrect documentation on binders
 
@@ -253,7 +271,7 @@
 
 # 5.1.0
 
-* change(interaction): API change. Transition has now a generic type used by its methods. 
+* change(interaction): API change. Transition has now a generic type used by its methods.
 This allowed code simplification in interactions implementations.
 * feat(interaction): long press interaction
 * feat(interaction): N-clicks interaction
