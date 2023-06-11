@@ -60,7 +60,7 @@
     "rollup-plugin-esbuild": "5.0.0",
     "ts-jest": "29.1.0",
     "typedoc": "0.24.8",
-    "typescript": "4.8.4"
+    "typescript": "4.9.5"
   },
   "scripts": {
     "package": "npm run pre-build && npm run build && npm run doc",
