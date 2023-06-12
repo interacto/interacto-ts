@@ -26,27 +26,27 @@ import {CancelFSMError} from "../fsm/CancelFSMError";
 export class AnonBinding<C extends Command, I extends Interaction<D>, D extends InteractionData>
     extends BindingImpl<C, I, D> {
 
-    private readonly firstFn?: (c: C, i: D) => void;
+    private readonly firstFn: ((c: C, i: D) => void) | undefined;
 
-    private readonly thenFn?: (c: C, i: D) => void;
+    private readonly thenFn: ((c: C, i: D) => void) | undefined;
 
-    private readonly whenFn?: Array<When<D>>;
+    private readonly whenFn: Array<When<D>> | undefined;
 
-    private readonly cancelFn?: (i: D) => void;
+    private readonly cancelFn: ((i: D) => void) | undefined;
 
-    private readonly endOrCancelFn?: (i: D) => void;
+    private readonly endOrCancelFn: ((i: D) => void) | undefined;
 
-    private readonly hadEffectsFn?: (c: C, i: D) => void;
+    private readonly hadEffectsFn: ((c: C, i: D) => void) | undefined;
 
-    private readonly hadNoEffectFn?: (c: C, i: D) => void;
+    private readonly hadNoEffectFn: ((c: C, i: D) => void) | undefined;
 
-    private readonly cannotExecFn?: (c: C, i: D) => void;
+    private readonly cannotExecFn: ((c: C, i: D) => void) | undefined;
 
-    private readonly onEndFn?: (c: C, i: D) => void;
+    private readonly onEndFn: ((c: C, i: D) => void) | undefined;
 
-    private readonly onErrFn?: (ex: unknown) => void;
+    private readonly onErrFn: ((ex: unknown) => void) | undefined;
 
-    public constructor(continuousExec: boolean, interaction: I, undoHistory: UndoHistoryBase, logger: Logger, cmdSupplierFn: (d: D) => C,
+    public constructor(continuousExec: boolean, interaction: I, undoHistory: UndoHistoryBase, logger: Logger, cmdSupplierFn: (d: D | undefined) => C,
                        widgets: ReadonlyArray<unknown>, dynamicNodes: ReadonlyArray<Node>,
                        loggers: ReadonlyArray<LogLevel>, timeoutThrottle: number,
                        stopPropagation: boolean, prevDefault: boolean, firstFn?: (c: C, i: D) => void,

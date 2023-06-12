@@ -44,7 +44,8 @@ class TapFSM extends FSMImpl<TapFSMHandler> {
         const up = this.addStdState("up");
         const cancelled = this.addCancellingState("cancelled");
         const action = (event: TouchEvent): void => {
-            this.touchID = event.changedTouches[0].identifier;
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            this.touchID = event.changedTouches[0]!.identifier;
             this.countTaps++;
             this.dataHandler?.tap(event);
         };
@@ -53,7 +54,8 @@ class TapFSM extends FSMImpl<TapFSMHandler> {
         new TouchTransition(up, down, "touchstart", action);
 
         new TouchTransition(down, cancelled, "touchmove", undefined,
-            (evt: TouchEvent): boolean => evt.changedTouches[0].identifier === this.touchID);
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            (evt: TouchEvent): boolean => evt.changedTouches[0]!.identifier === this.touchID);
 
         // No multi-touch
         new TouchTransition(down, cancelled, "touchstart", undefined,
@@ -63,17 +65,20 @@ class TapFSM extends FSMImpl<TapFSMHandler> {
         new TouchTransition(down, down, "touchstart",
             // Replacing the current tap (but not increment)
             (event: TouchEvent): void => {
-                this.touchID = event.changedTouches[0].identifier;
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                this.touchID = event.changedTouches[0]!.identifier;
                 this.dataHandler?.tap(event);
             },
             // To detect the event is lost, checking it is not part of the touches any more
             (evt: TouchEvent): boolean => Array.from(evt.touches).filter(t => t.identifier === this.touchID).length === 0);
 
         new TouchTransition(down, this.addTerminalState("ended"), "touchend", undefined,
-            (evt: TouchEvent): boolean => evt.changedTouches[0].identifier === this.touchID && this.nbTaps === this.countTaps);
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            (evt: TouchEvent): boolean => evt.changedTouches[0]!.identifier === this.touchID && this.nbTaps === this.countTaps);
 
         new TouchTransition(down, up, "touchend", undefined,
-            (evt: TouchEvent): boolean => evt.changedTouches[0].identifier === this.touchID && this.nbTaps !== this.countTaps);
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            (evt: TouchEvent): boolean => evt.changedTouches[0]!.identifier === this.touchID && this.nbTaps !== this.countTaps);
 
         new TouchTransition(up, cancelled, "touchmove");
         new TimeoutTransition(down, cancelled, () => 1000);
@@ -106,7 +111,8 @@ export class Tap extends InteractionBase<TapData, TapDataImpl, TapFSM> {
             "tap": (evt: TouchEvent): void => {
                 if (evt.changedTouches.length > 0) {
                     const touch = new TouchDataImpl();
-                    touch.copy(TouchDataImpl.mergeTouchEventData(evt.changedTouches[0], evt, Array.from(evt.touches)));
+                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                    touch.copy(TouchDataImpl.mergeTouchEventData(evt.changedTouches[0]!, evt, Array.from(evt.touches)));
                     this._data.addTapData(touch);
                 }
             },

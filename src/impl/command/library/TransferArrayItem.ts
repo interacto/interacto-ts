@@ -79,14 +79,18 @@ export class TransferArrayItem<T> extends UndoableCommand {
 
     public redo(): void {
         const elt = this._srcArray[this._srcIndex];
-        this._srcArray.splice(this._srcIndex, 1);
-        this._tgtArray.splice(this._tgtIndex, 0, elt);
+        if (elt !== undefined) {
+            this._srcArray.splice(this._srcIndex, 1);
+            this._tgtArray.splice(this._tgtIndex, 0, elt);
+        }
     }
 
     public undo(): void {
         const elt = this._tgtArray[this._tgtIndex];
-        this._tgtArray.splice(this._tgtIndex, 1);
-        this._srcArray.splice(this._srcIndex, 0, elt);
+        if (elt !== undefined) {
+            this._tgtArray.splice(this._tgtIndex, 1);
+            this._srcArray.splice(this._srcIndex, 0, elt);
+        }
     }
 
     public get srcArray(): Array<T> {

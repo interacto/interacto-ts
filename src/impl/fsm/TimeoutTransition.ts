@@ -28,12 +28,12 @@ export class TimeoutTransition extends TransitionBase<Event> {
      */
     private readonly timeoutDuration: () => number;
 
-    private readonly logger?: Logger;
+    private readonly logger: Logger | undefined;
 
     /**
      * The current thread in progress.
      */
-    private timeoutThread?: number;
+    private timeoutThread: number | undefined;
 
     private timeouted: boolean;
 
@@ -86,7 +86,7 @@ export class TimeoutTransition extends TransitionBase<Event> {
         }
     }
 
-    public accept(event?: Event): event is Event {
+    public accept(_event?: Event): _event is Event {
         return this.timeouted;
     }
 

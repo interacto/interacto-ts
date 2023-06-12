@@ -27,7 +27,7 @@ import {TouchTransition} from "../../fsm/TouchTransition";
  * The FSM that defines a touch interaction (that works like a DnD)
  */
 export class TouchDnDFSM extends FSMImpl<TouchDnDFSMHandler> {
-    private touchID?: number;
+    private touchID: number | undefined;
 
     private readonly cancellable;
 
@@ -58,7 +58,7 @@ export class TouchDnDFSM extends FSMImpl<TouchDnDFSMHandler> {
         const cancelled = this.addCancellingState("cancelled");
 
         const touchDown = (event: TouchEvent): void => {
-            this.touchID = event.changedTouches[0].identifier;
+            this.touchID = event.changedTouches[0]?.identifier;
             this.dataHandler?.onTouch(event);
         };
 
@@ -73,26 +73,26 @@ export class TouchDnDFSM extends FSMImpl<TouchDnDFSMHandler> {
         if (this.movementRequired) {
             this.startingState = moved;
             new TouchTransition(touched, cancelled, "touchend", undefined,
-                (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.touchID);
+                (event: TouchEvent): boolean => event.changedTouches[0] !== undefined && event.changedTouches[0].identifier === this.touchID);
         } else {
             new TouchTransition(touched, released, "touchend",
                 (event: TouchEvent): void => {
                     this.dataHandler?.onRelease(event);
                 },
-                (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.touchID);
+                (event: TouchEvent): boolean => event.changedTouches[0] !== undefined && event.changedTouches[0].identifier === this.touchID);
         }
 
         new TouchTransition(touched, moved, "touchmove",
             (event: TouchEvent): void => {
                 this.dataHandler?.onMove(event);
             },
-            (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.touchID);
+            (event: TouchEvent): boolean => event.changedTouches[0] !== undefined && event.changedTouches[0].identifier === this.touchID);
 
         new TouchTransition(moved, moved, "touchmove",
             (event: TouchEvent): void => {
                 this.dataHandler?.onMove(event);
             },
-            (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.touchID);
+            (event: TouchEvent): boolean => event.changedTouches[0] !== undefined && event.changedTouches[0].identifier === this.touchID);
 
         // If the touch up event is lost by the browser and another touch down occurs
         // we must restart the interaction
@@ -107,22 +107,26 @@ export class TouchDnDFSM extends FSMImpl<TouchDnDFSMHandler> {
                 (event: TouchEvent): boolean => {
                 // Touch event behaviour is not consistent with mouse events: event.tgt.target points to the original element, not to the one
                 // currently targeted. So we have to retrieve the current target manually.
-                    const tgt = document.elementFromPoint(event.changedTouches[0].clientX, event.changedTouches[0].clientY);
-                    return event.changedTouches[0].identifier === this.touchID &&
+                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                    const touch = event.changedTouches[0]!;
+                    const tgt = document.elementFromPoint(touch.clientX, touch.clientY);
+                    return touch.identifier === this.touchID &&
                     (!(tgt instanceof Element) || !tgt.classList.contains("ioDwellSpring"));
                 });
 
             new TouchTransition(moved, cancelled, "touchend", undefined,
                 (ev: TouchEvent): boolean => {
-                    const tgt = document.elementFromPoint(ev.changedTouches[0].clientX, ev.changedTouches[0].clientY);
-                    return ev.changedTouches[0].identifier === this.touchID && tgt instanceof Element && tgt.classList.contains("ioDwellSpring");
+                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                    const touch = ev.changedTouches[0]!;
+                    const tgt = document.elementFromPoint(touch.clientX, touch.clientY);
+                    return touch.identifier === this.touchID && tgt instanceof Element && tgt.classList.contains("ioDwellSpring");
                 });
         } else {
             new TouchTransition(moved, released, "touchend",
                 (event: TouchEvent): void => {
                     this.dataHandler?.onRelease(event);
                 },
-                (event: TouchEvent): boolean => event.changedTouches[0].identifier === this.touchID);
+                (event: TouchEvent): boolean => event.changedTouches[0] !== undefined && event.changedTouches[0].identifier === this.touchID);
         }
     }
 
@@ -159,10 +163,12 @@ export class TouchDnD extends InteractionBase<SrcTgtPointsData<TouchData>, SrcTg
     public constructor(logger: Logger, cancellable: boolean, movementRequired: boolean = true, fsm?: TouchDnDFSM) {
         const handler: TouchDnDFSMHandler = {
             "onTouch": (evt: TouchEvent): void => {
-                const touch: Touch = evt.changedTouches[0];
-                const all = Array.from(evt.touches);
-                this._data.copySrc(touch, evt, all);
-                this._data.copyTgt(touch, evt, all);
+                if (evt.changedTouches[0] !== undefined) {
+                    const touch: Touch = evt.changedTouches[0];
+                    const all = Array.from(evt.touches);
+                    this._data.copySrc(touch, evt, all);
+                    this._data.copyTgt(touch, evt, all);
+                }
             },
             "onMove": (evt: TouchEvent): void => {
                 this.setTgtData(evt);

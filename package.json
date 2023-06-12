@@ -55,20 +55,20 @@
     "jest": "29.5.0",
     "jest-environment-jsdom": "29.5.0",
     "jest-mock-extended": "3.0.4",
-    "rollup": "3.25.0",
+    "rollup": "3.25.1",
     "rollup-plugin-dts": "5.3.0",
     "rollup-plugin-esbuild": "5.0.0",
     "ts-jest": "29.1.0",
     "typedoc": "0.24.8",
-    "typescript": "4.9.5"
+    "typescript": "5.0.4"
   },
   "scripts": {
     "package": "npm run pre-build && npm run build && npm run doc",
     "build": "rollup -c",
     "generate-barrels": "barrelsby -c ./barrelsby-config.json --delete",
     "compile": "tsc",
-    "compile-test": "tsc -p tsconfig4tests.json",
-    "pre-build": "npm run clean && npm run generate-barrels && npm run lint && npm run compile && npm run compile-test && npm run coverage",
+    "compile-test": "tsc -p tsconfig.test.json",
+    "pre-build": "npm run clean && npm run generate-barrels && npm run compile && npm run lint && npm run compile-test && npm run coverage",
     "clean": "(rm -rf dist out-test coverage .stryker-tmp)",
     "clean-all": "npm run clean && (rm -rf reports docs)",
     "test": "jest",
@@ -88,7 +88,7 @@
   ],
   "jest": {
     "transform": {
-      ".(ts|tsx)": "ts-jest"
+      ".(ts|tsx)": ["ts-jest", {"tsconfig": "tsconfig.test.json"}]
     },
     "testEnvironment": "jsdom",
     "coverageReporters": [

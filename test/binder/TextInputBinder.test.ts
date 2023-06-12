@@ -45,7 +45,7 @@ describe("using a text input binder", () => {
         // eslint-disable-next-line jest/valid-expect-in-promise
         binding = bindings.textInputBinder()
             .toProduce(() => cmd)
-            .then((c, i) => {
+            .then((_, i) => {
                 // eslint-disable-next-line jest/no-conditional-in-test
                 textonUpdate.push(i.widget?.value ?? "");
             })
@@ -92,7 +92,7 @@ describe("using a text input binder", () => {
         // eslint-disable-next-line jest/valid-expect-in-promise
         binding = bindings.textInputBinder()
             .toProduce(() => cmd)
-            .then((c, i) => {
+            .then((_, i) => {
                 // eslint-disable-next-line jest/no-conditional-in-test
                 textonUpdate.push(i.widget?.value ?? "");
             })

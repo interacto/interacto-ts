@@ -154,7 +154,7 @@ describe("using a logger", () => {
         expect(console.log).not.toHaveBeenCalledWith();
         expect(xhrMock.open).toHaveBeenCalledWith("POST", "localhost/api/err", true);
         expect(xhrMock.send).toHaveBeenCalledWith(
-            `{"stack":"err","sessionID":"${logger.sessionID}","type":"ERR","name":"","level":"interaction","msg":"c","date":123}`);
+            `{"name":"","sessionID":"${logger.sessionID}","date":123,"msg":"c","level":"interaction","type":"ERR","stack":"err"}`);
     });
 
     test("usage binding start", () => {
@@ -262,6 +262,6 @@ describe("using a logger", () => {
         expect(console.log).not.toHaveBeenCalled();
         expect(xhrMock.open).toHaveBeenCalledWith("POST", "yolo/api/usage", true);
         expect(xhrMock.send).toHaveBeenCalledWith(
-            `{"date":123,"sessionID":"${logger.sessionID}","name":"foo3","duration":77,"cancelled":true}`);
+            `{"name":"foo3","sessionID":"${logger.sessionID}","date":123,"duration":77,"cancelled":true}`);
     });
 });

@@ -75,8 +75,8 @@ describe("using a button binder", () => {
         expect(binding).toBeDefined();
         expect(ctx.commands).toHaveLength(2);
         expect(ctx.getCmd(0)).not.toBe(ctx.getCmd(1));
-        expect(ctx.getCmd<StubCmd>(0).exec).toBe(1);
-        expect(ctx.getCmd<StubCmd>(1).exec).toBe(1);
+        expect(ctx.getCmd<StubCmd>(0)?.exec).toBe(1);
+        expect(ctx.getCmd<StubCmd>(1)?.exec).toBe(1);
     });
 
     test("command executed on two buttons with one array", () => {

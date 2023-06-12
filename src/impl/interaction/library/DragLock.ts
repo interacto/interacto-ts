@@ -30,7 +30,7 @@ class DragLockFSM extends FSMImpl<DragLockFSMHandler> {
 
     public readonly sndDbleClick: DoubleClickFSM;
 
-    protected checkButton?: number;
+    protected checkButton: number | undefined;
 
     public constructor(logger: Logger, dataHandler: DragLockFSMHandler) {
         super(logger, dataHandler);

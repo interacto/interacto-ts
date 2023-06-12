@@ -24,7 +24,7 @@ export class ClickTransition extends MouseTransition {
      * Creates the transition.
      */
     public constructor(srcState: OutputState, tgtState: InputState,
-                       action?: (evt?: Event) => void, guard?: (evt: Event) => boolean) {
+                       action?: (evt: MouseEvent) => void, guard?: (evt: MouseEvent) => boolean) {
         super(srcState, tgtState, ["click", "auxclick"], action, guard);
     }
 }

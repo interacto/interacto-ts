@@ -17,7 +17,7 @@ import type {PointData} from "../../api/interaction/PointData";
 import {peek} from "../util/ArrayUtil";
 
 export class PointsDataImpl implements PointsData {
-    private currentPositionData?: PointData;
+    private currentPositionData: PointData | undefined;
 
     private readonly pointsData: Array<PointData>;
 

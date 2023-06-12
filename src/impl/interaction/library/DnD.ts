@@ -28,7 +28,7 @@ import {MouseTransition} from "../../fsm/MouseTransition";
 class DnDFSM extends FSMImpl<DnDFSMHandler> {
     private readonly cancellable: boolean;
 
-    private buttonToCheck?: number;
+    private buttonToCheck: number | undefined;
 
     /**
      * Creates the FSM

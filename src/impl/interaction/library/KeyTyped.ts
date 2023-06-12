@@ -24,7 +24,7 @@ import {KeyTransition} from "../../fsm/KeyTransition";
  * The FSM that describes a keyboard touch typed.
  */
 export class KeyTypedFSM extends FSMImpl<KeyTypedFSMHandler> {
-    private checkKey?: string;
+    private checkKey: string | undefined;
 
     public constructor(logger: Logger, dataHandler: KeyTypedFSMHandler) {
         super(logger, dataHandler);

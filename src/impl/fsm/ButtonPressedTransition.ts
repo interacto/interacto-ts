@@ -21,18 +21,18 @@ import type {EventType} from "../../api/fsm/EventType";
 /**
  * An FSM transition for the Button HTML element.
  */
-export class ButtonPressedTransition extends TransitionBase<Event> {
+export class ButtonPressedTransition extends TransitionBase<InputEvent> {
     private static readonly acceptedEvents: ReadonlySet<EventType> = new Set(["click", "auxclick"]);
 
     /**
      * Creates the transition.
      */
     public constructor(srcState: OutputState, tgtState: InputState,
-                       action?: (evt: Event) => void, guard?: (evt: Event) => boolean) {
+                       action?: (evt: InputEvent) => void, guard?: (evt: InputEvent) => boolean) {
         super(srcState, tgtState, action, guard);
     }
 
-    public accept(e: Event): e is Event {
+    public accept(e: Event): e is InputEvent {
         return e.currentTarget !== null && isButton(e.currentTarget);
     }
 

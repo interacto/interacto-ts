@@ -21,18 +21,18 @@ import type {EventType} from "../../api/fsm/EventType";
 /**
  * An FSM transition for the CheckBox HTML element.
  */
-export class BoxCheckPressedTransition extends TransitionBase<Event> {
+export class BoxCheckPressedTransition extends TransitionBase<InputEvent> {
     private static readonly acceptedEvents: ReadonlySet<EventType> = new Set(["input"]);
 
     /**
      * Creates the transition.
      */
     public constructor(srcState: OutputState, tgtState: InputState,
-                       action?: (evt: Event) => void, guard?: (evt: Event) => boolean) {
+                       action?: (evt: InputEvent) => void, guard?: (evt: InputEvent) => boolean) {
         super(srcState, tgtState, action, guard);
     }
 
-    public accept(event: Event): event is Event {
+    public accept(event: Event): event is InputEvent {
         return event.currentTarget !== null && isCheckBox(event.currentTarget);
     }
 

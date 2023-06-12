@@ -20,7 +20,7 @@ export class StubCmd extends CommandBase {
 
     public exec = 0;
 
-    public effects?: boolean;
+    public effects: boolean | undefined;
 
     public constructor(candoValue: boolean = false, effects?: boolean) {
         super();

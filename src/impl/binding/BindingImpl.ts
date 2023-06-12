@@ -46,7 +46,7 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
     /**
      * The current action in progress.
      */
-    protected _cmd?: C;
+    protected _cmd: C | undefined;
 
     public readonly continuousCmdExecution: boolean;
 

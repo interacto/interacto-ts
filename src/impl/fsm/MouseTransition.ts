@@ -27,7 +27,7 @@ export class MouseTransition extends TransitionBase<MouseEvent> {
      * Creates the transition.
      */
     public constructor(srcState: OutputState, tgtState: InputState, types: MouseEventType | ReadonlyArray<MouseEventType>,
-                       action?: (evt: Event) => void, guard?: (evt: Event) => boolean) {
+                       action?: (evt: MouseEvent) => void, guard?: (evt: MouseEvent) => boolean) {
         super(srcState, tgtState, action, guard);
         this.acceptedEvents = new Set(typeof types === "string" ? [types] : types);
     }

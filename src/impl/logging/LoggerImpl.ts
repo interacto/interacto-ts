@@ -28,9 +28,9 @@ export class LoggingData {
 
     public readonly type: "ERR" | "INFO";
 
-    public readonly stack?: string;
+    public readonly stack: string | undefined;
 
-    public readonly frontVersion?: string;
+    public readonly frontVersion: string | undefined;
 
     public constructor(date: number, msg: string, level: LogLevel, name: string, type: "ERR" | "INFO",
                        sessionID: string, stack?: string, frontVersion?: string) {
@@ -62,7 +62,7 @@ export class UsageLog {
 
     public cancelled: boolean;
 
-    public readonly frontVersion?: string;
+    public readonly frontVersion: string | undefined;
 
     public constructor(name: string, sessionID: string, date: number, frontVersion?: string) {
         this.frontVersion = frontVersion;
@@ -162,7 +162,8 @@ export class LoggerImpl implements Logger {
         this.ongoingBindings = this.ongoingBindings.filter(d => !logs.includes(d));
 
         if (logs.length === 1) {
-            const log = logs[0];
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            const log = logs[0]!;
             log.name = bindingName;
             log.duration = performance.now() - log.date;
             log.cancelled = cancelled;

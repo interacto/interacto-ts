@@ -2,8 +2,8 @@
   "root": true,
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "project": "tsconfig.eslint.json",
-    "ecmaVersion": 2020,
+    "project": ["tsconfig.json", "tsconfig.test.json"],
+    "ecmaVersion": 2022,
     "sourceType": "module"
   },
   "plugins": [
@@ -161,8 +161,6 @@
       }
     ],
     "unicorn/no-keyword-prefix": "off",
-    // requires es2022:
-    "unicorn/prefer-at": "off",
     "unicorn/prefer-spread": "off"
   }
 }

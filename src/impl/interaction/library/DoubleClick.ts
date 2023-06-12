@@ -51,7 +51,7 @@ export class DoubleClickFSM extends FSMImpl<FSMDataHandler> {
 
     private readonly sndClickFSM: ClickFSM;
 
-    private checkButton?: number;
+    private checkButton: number | undefined;
 
     public constructor(logger: Logger, dataHandler?: FSMDataHandler) {
         super(logger, dataHandler);

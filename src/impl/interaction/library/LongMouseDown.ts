@@ -27,7 +27,7 @@ import {MouseTransition} from "../../fsm/MouseTransition";
 export class LongMouseDownFSM extends FSMImpl<LongMouseDownFSMHandler> {
     private readonly duration: number;
 
-    private currentButton?: number;
+    private currentButton: number | undefined;
 
     /**
      * Creates the long press FSM

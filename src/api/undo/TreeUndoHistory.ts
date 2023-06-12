@@ -185,5 +185,5 @@ export abstract class TreeUndoHistory implements UndoHistoryBase {
      * @param dtoHistory - The DTO history to import.
      * @param fn - The convertion fonction that transforms undoable DTO (of nodes) into Undoable.
      */
-    public abstract import<T>(dtoHistory: TreeUndoHistoryDTO, fn: (dtoUndoable: T) => Undoable): void;
+    public abstract import(dtoHistory: TreeUndoHistoryDTO, fn: (dtoUndoable: unknown) => Undoable): void;
 }

@@ -221,9 +221,10 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
             .usingInteraction<MultiTouch, MultiTouchData>(() => new MultiTouch(nbTouches, true, this.logger))
             .when(i => (horizontal ? i.isHorizontal(pxTolerance) : i.isVertical(pxTolerance)))
-            .when(i => (horizontal ? Math.abs(i.touches[0].diffScreenX) >= minLength : Math.abs(i.touches[0].diffScreenY) >= minLength))
+            .when(i => i.touches[0] !== undefined &&
+                (horizontal ? Math.abs(i.touches[0].diffScreenX) >= minLength : Math.abs(i.touches[0].diffScreenY) >= minLength))
             // The velocity value is in pixels/ms, so conversion is necessary
-            .when(i => i.touches[0].velocity * 1000 >= minVelocity);
+            .when(i => i.touches[0] !== undefined && i.touches[0].velocity * 1000 >= minVelocity);
     }
 
     /**
@@ -237,7 +238,8 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer)
             .usingInteraction<MultiTouch, MultiTouchData>(() => new MultiTouch(nbTouches, true, this.logger))
             .when(i => (horizontal ? i.isHorizontal(pxTolerance) : i.isVertical(pxTolerance)))
-            .when(i => (horizontal ? Math.abs(i.touches[0].diffScreenX) >= minLength : Math.abs(i.touches[0].diffScreenY) >= minLength));
+            .when(i => i.touches[0] !== undefined &&
+                (horizontal ? Math.abs(i.touches[0].diffScreenX) >= minLength : Math.abs(i.touches[0].diffScreenY) >= minLength));
     }
 
     /**

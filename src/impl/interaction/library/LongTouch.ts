@@ -27,7 +27,7 @@ import {TouchTransition} from "../../fsm/TouchTransition";
 class LongTouchFSM extends FSMImpl<LongTouchFSMHandler> {
     private readonly duration: number;
 
-    private currentTouchID?: number;
+    private currentTouchID: number | undefined;
 
     /**
      * Creates the long touch FSM
@@ -48,15 +48,17 @@ class LongTouchFSM extends FSMImpl<LongTouchFSMHandler> {
 
         new TouchTransition(this.initState, touched, "touchstart",
             (event: TouchEvent): void => {
-                this.currentTouchID = event.changedTouches[0].identifier;
-                this.dataHandler?.tap(event);
+                if (event.changedTouches[0] !== undefined) {
+                    this.currentTouchID = event.changedTouches[0].identifier;
+                    this.dataHandler?.tap(event);
+                }
             });
 
         new TouchTransition(touched, cancelled, "touchmove", undefined,
-            (ev: TouchEvent): boolean => ev.changedTouches[0].identifier === this.currentTouchID);
+            (ev: TouchEvent): boolean => ev.changedTouches[0] !== undefined && ev.changedTouches[0].identifier === this.currentTouchID);
 
         new TouchTransition(touched, cancelled, "touchend", undefined,
-            (ev: TouchEvent): boolean => ev.changedTouches[0].identifier === this.currentTouchID);
+            (ev: TouchEvent): boolean => ev.changedTouches[0] !== undefined && ev.changedTouches[0].identifier === this.currentTouchID);
 
         new TimeoutTransition(touched, this.addTerminalState("timeouted"), () => this.duration);
     }
@@ -80,7 +82,7 @@ export class LongTouch extends InteractionBase<TouchData, TouchDataImpl, LongTou
     public constructor(duration: number, logger: Logger) {
         const handler: LongTouchFSMHandler = {
             "tap": (evt: TouchEvent): void => {
-                if (evt.changedTouches.length > 0) {
+                if (evt.changedTouches[0] !== undefined) {
                     this._data.copy(TouchDataImpl.mergeTouchEventData(evt.changedTouches[0], evt, Array.from(evt.touches)));
                 }
             },

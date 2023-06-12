@@ -27,7 +27,7 @@ export class KeyTransition extends TransitionBase<KeyboardEvent> {
      * Creates the transition.
      */
     public constructor(srcState: OutputState, tgtState: InputState, keyType: KeyEventType,
-                       action?: (evt: Event) => void, guard?: (evt: Event) => boolean) {
+                       action?: (evt: KeyboardEvent) => void, guard?: (evt: KeyboardEvent) => boolean) {
         super(srcState, tgtState, action, guard);
         this.acceptedEvents = new Set([keyType]);
     }

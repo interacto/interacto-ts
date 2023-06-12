@@ -61,17 +61,17 @@ export class FittsLawDataImpl {
 export class FittsLaw {
     private readonly obsSrc: Subscription;
 
-    private readonly providedTarget?: Element;
+    private readonly providedTarget: Element | undefined;
 
     private readonly data: Array<FittsLawDataImpl>;
 
-    private _startX?: number;
+    private _startX: number | undefined;
 
-    private _startY?: number;
+    private _startY: number | undefined;
 
-    private _target?: Element;
+    private _target: Element | undefined;
 
-    private readonly handler: EventListener;
+    private readonly handler: (evt: MouseEvent) => void;
 
     /**
      * @param bSrc - The source binding.
@@ -153,10 +153,10 @@ export class FittsLaw {
         let sumyy = 0;
 
         for (const [i, y] of ys.entries()) {
-            sumx += xs[i];
+            sumx += xs[i] ?? 0;
             sumy += y;
-            sumxy += xs[i] * y;
-            sumxx += xs[i] ** 2;
+            sumxy += (xs[i] ?? 0) * y;
+            sumxx += (xs[i] ?? 0) ** 2;
             sumyy += y * y;
         }
 

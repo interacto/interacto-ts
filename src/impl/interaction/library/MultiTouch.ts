@@ -56,22 +56,23 @@ class MultiTouchFSM extends ConcurrentFSM<TouchDnDFSM, TouchDnDFSMHandler> {
         // eslint-disable-next-line @typescript-eslint/prefer-for-of
         for (let i = 0; i < event.changedTouches.length; i++) {
             // Finding an FSM that is currently running with this ID
-            const touches: Array<TouchDnDFSM> = this.conccurFSMs
-                .filter(fsm => fsm.getTouchId() === event.changedTouches[i].identifier);
-            if (touches.length > 0) {
-                processed = true;
-                res = touches[0].process(event) || res;
-            } else {
+            const first: TouchDnDFSM | undefined = this.conccurFSMs
+                .find(fsm => fsm.getTouchId() !== undefined && fsm.getTouchId() === event.changedTouches[i]?.identifier);
+
+            if (first === undefined) {
                 // If no FSM found, two meanings:
                 // 1/ the touch event is unexpected since all the FSMs are running, so cancelling
-                const remainingFSMs = this.conccurFSMs.filter(fsm => fsm.getTouchId() === undefined);
-                if (remainingFSMs.length === 0) {
+                const remainingFSM = this.conccurFSMs.find(fsm => fsm.getTouchId() === undefined);
+                if (remainingFSM === undefined) {
                     this.onCancelling();
                     res = false;
                 } else {
                     // 2/ There exists an FSM that is free to process the new touch
-                    res = remainingFSMs[0].process(event) || res;
+                    res = remainingFSM.process(event) || res;
                 }
+            } else {
+                processed = true;
+                res = first.process(event) || res;
             }
         }
 
@@ -93,26 +94,23 @@ export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouch
     public constructor(nbTouches: number, strict: boolean, logger: Logger) {
         const handler: TouchDnDFSMHandler = {
             "onTouch": (event: TouchEvent): void => {
-                // eslint-disable-next-line @typescript-eslint/prefer-for-of
-                for (let i = 0; i < event.changedTouches.length; i++) {
+                for (const t of Array.from(event.changedTouches)) {
                     const data = new SrcTgtTouchDataImpl();
                     const all = Array.from(event.touches);
-                    data.copySrc(event.changedTouches[i], event, all);
-                    data.copyTgt(event.changedTouches[i], event, all);
+                    data.copySrc(t, event, all);
+                    data.copyTgt(t, event, all);
                     this._data.addTouchData(data);
                 }
             },
             "onMove": (event: TouchEvent): void => {
-                // eslint-disable-next-line @typescript-eslint/prefer-for-of
-                for (let i = 0; i < event.changedTouches.length; i++) {
-                    this._data.setTouch(event.changedTouches[i], event);
+                for (const t of Array.from(event.changedTouches)) {
+                    this._data.setTouch(t, event);
                 }
             },
 
             "onRelease": (event: TouchEvent): void => {
-                // eslint-disable-next-line @typescript-eslint/prefer-for-of
-                for (let i = 0; i < event.changedTouches.length; i++) {
-                    this._data.setTouch(event.changedTouches[i], event);
+                for (const t of Array.from(event.changedTouches)) {
+                    this._data.setTouch(t, event);
                 }
             },
 

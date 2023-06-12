@@ -220,11 +220,11 @@ export function createUIEvent(type: EventType): UIEvent {
 export function createEventWithTarget(target: EventTarget | null, type: string): Event {
     return {"currentTarget": target,
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        "AT_TARGET": 0,
+        "AT_TARGET": 2,
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        "BUBBLING_PHASE": 0,
+        "BUBBLING_PHASE": 3,
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        "CAPTURING_PHASE": 0,
+        "CAPTURING_PHASE": 1,
         // eslint-disable-next-line @typescript-eslint/naming-convention
         "NONE": 0,
         "composedPath": (): Array<EventTarget> => [],

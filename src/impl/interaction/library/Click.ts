@@ -24,7 +24,7 @@ import type {Logger} from "../../../api/logging/Logger";
  * The FSM for click interactions
  */
 export class ClickFSM extends FSMImpl<ClickFSMHandler> {
-    private checkButton?: number;
+    private checkButton: number | undefined;
 
     /**
      * Creates the FSM

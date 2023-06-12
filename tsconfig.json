@@ -1,23 +1,10 @@
 {
-  "compilerOptions": {
-    "target": "es2020",
-    "allowSyntheticDefaultImports": true,
-    "experimentalDecorators": true,
-    "moduleResolution": "node",
-    "module": "es2020",
-    "outDir": "dist",
-    "pretty": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "noImplicitThis": true,
-    "noUnusedLocals": true,
-    "removeComments": true,
-    "noImplicitReturns": true,
-    "declaration": true,
-    "noImplicitOverride": true,
-    "strictPropertyInitialization": true
-  },
-  "include": [
-    "src/**/*"
-  ]
+    "extends": "./tsconfig.base.json",
+    "compilerOptions": {
+        "outDir": "dist",
+        "noUncheckedIndexedAccess": true
+      },
+      "include": [
+        "src/**/*"
+      ]
 }

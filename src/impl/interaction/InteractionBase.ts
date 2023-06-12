@@ -74,9 +74,9 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
 
     protected throttleTimeout: number;
 
-    protected currentThrottling?: CancellablePromise;
+    protected currentThrottling: CancellablePromise | undefined;
 
-    protected latestThrottledEvent?: Event;
+    protected latestThrottledEvent: Event | undefined;
 
     /**
      * Creates the interaction.
@@ -320,40 +320,40 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
         return this.actionHandler;
     }
 
-    protected getMouseHandler(): (e: MouseEvent) => void {
+    protected getMouseHandler(): EventListener {
         if (this.mouseHandler === undefined) {
             this.mouseHandler = (evt: MouseEvent): void => {
                 this.processEvent(evt);
             };
         }
-        return this.mouseHandler;
+        return this.mouseHandler as EventListener;
     }
 
-    protected getTouchHandler(): (e: TouchEvent) => void {
+    protected getTouchHandler(): EventListener {
         if (this.touchHandler === undefined) {
             this.touchHandler = (evt: TouchEvent): void => {
                 this.processEvent(evt);
             };
         }
-        return this.touchHandler;
+        return this.touchHandler as EventListener;
     }
 
-    protected getKeyHandler(): (e: KeyboardEvent) => void {
+    protected getKeyHandler(): EventListener {
         if (this.keyHandler === undefined) {
             this.keyHandler = (evt: KeyboardEvent): void => {
                 this.processEvent(evt);
             };
         }
-        return this.keyHandler;
+        return this.keyHandler as EventListener;
     }
 
-    protected getUIHandler(): (e: UIEvent) => void {
+    protected getUIHandler(): EventListener {
         if (this.uiHandler === undefined) {
             this.uiHandler = (evt: UIEvent): void => {
                 this.processEvent(evt);
             };
         }
-        return this.uiHandler;
+        return this.uiHandler as EventListener;
     }
 
     public isRunning(): boolean {

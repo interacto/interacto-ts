@@ -202,8 +202,8 @@ describe("testing async commands and bindings", () => {
             expect(ctx.commands).toHaveLength(2);
             expect(ctx.commands[0].getStatus()).toBe("done");
             expect(ctx.commands[1].getStatus()).toBe("done");
-            expect(ctx.getCmd<StubAsyncCmd>(0).timeout).toBe(5);
-            expect(ctx.getCmd<StubAsyncCmd>(1).timeout).toBe(100);
+            expect(ctx.getCmd<StubAsyncCmd>(0)?.timeout).toBe(5);
+            expect(ctx.getCmd<StubAsyncCmd>(1)?.timeout).toBe(100);
             expect(data.data).toStrictEqual(["Foo"]);
         });
 
@@ -223,8 +223,8 @@ describe("testing async commands and bindings", () => {
 
             expect(binding.command).toBeUndefined();
             expect(ctx.commands).toHaveLength(2);
-            expect(ctx.getCmd<StubAsyncCmd>(0).timeout).toBe(5);
-            expect(ctx.getCmd<StubAsyncCmd>(1).timeout).toBe(100);
+            expect(ctx.getCmd<StubAsyncCmd>(0)?.timeout).toBe(5);
+            expect(ctx.getCmd<StubAsyncCmd>(1)?.timeout).toBe(100);
             expect(data.data).toStrictEqual(["Foo"]);
         });
 

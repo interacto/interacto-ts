@@ -219,7 +219,7 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
     private goToFromRoot(id: number): void {
         const undoables = this.gatherToRoot(this.undoableNodes[id]);
         for (let i = undoables.length - 1; i >= 0; i--) {
-            undoables[i].redo();
+            undoables[i]?.redo();
         }
     }
 
@@ -247,14 +247,14 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
         // When taking different paths,
         // we undo from the source path to the common node,
         for (let j = pathSrc.length - 1; j > i; j--) {
-            pathSrc[j].undo();
+            pathSrc[j]?.undo();
         }
         if (i < pathSrc.length) {
-            pathSrc[i].undo();
+            pathSrc[i]?.undo();
         }
         // to then redo the target path to the targeted node
         for (let j = i; j < pathTo.length; j++) {
-            pathTo[j].redo();
+            pathTo[j]?.redo();
         }
     }
 
@@ -288,31 +288,41 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
     }
 
     private getPositionNode(node: UndoableTreeNode, positions: Map<number, number>, counter: number): number {
-        if (node.children.length === 0) {
+        const child0 = node.children[0];
+        const child1 = node.children[1];
+
+        // length === 0
+        if (child0 === undefined) {
             positions.set(node.id, counter);
             return counter + 1;
         }
-        if (node.children.length === 1) {
-            const newCounter = this.getPositionNode(node.children[0], positions, counter);
-            positions.set(node.id, positions.get(node.children[0].id) ?? -1);
+
+        // length === 1
+        if (child1 === undefined) {
+            const newCounter = this.getPositionNode(child0, positions, counter);
+            positions.set(node.id, positions.get(child0.id) ?? -1);
             return newCounter;
         }
 
         let newCounter = counter;
         for (let i = 0; i < Math.floor(node.children.length / 2); i++) {
-            newCounter = this.getPositionNode(node.children[i], positions, newCounter);
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            newCounter = this.getPositionNode(node.children[i]!, positions, newCounter);
         }
 
         if (node.children.length % 2 === 0) {
             positions.set(node.id, newCounter);
             newCounter++;
         } else {
-            newCounter = this.getPositionNode(node.children[Math.floor(node.children.length / 2)], positions, newCounter);
-            positions.set(node.id, positions.get(node.children[Math.floor(node.children.length / 2)].id) ?? -1);
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            const value = node.children[Math.floor(node.children.length / 2)]!;
+            newCounter = this.getPositionNode(value, positions, newCounter);
+            positions.set(node.id, positions.get(value.id) ?? -1);
         }
 
         for (let i = Math.ceil(node.children.length / 2); i < node.children.length; i++) {
-            newCounter = this.getPositionNode(node.children[i], positions, newCounter);
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            newCounter = this.getPositionNode(node.children[i]!, positions, newCounter);
         }
 
         return newCounter;
@@ -375,7 +385,7 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
         };
     }
 
-    public override import<T>(dtoHistory: TreeUndoHistoryDTO, fn: (dtoUndoable: T) => Undoable): void {
+    public override import(dtoHistory: TreeUndoHistoryDTO, fn: (dtoUndoable: unknown) => Undoable): void {
         this.clear();
 
         if (this.keepPath) {
@@ -391,10 +401,11 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
 
         this._currentNode = this.root;
         this.idCounter = Math.max(...this._path) + 1;
+        const gotoId = this.path.at(-1);
 
         // Executing the nominal path
-        if (this.path.length > 0) {
-            this.goTo(this.path[this.path.length - 1]);
+        if (gotoId !== undefined) {
+            this.goTo(gotoId);
             this.goTo(-1);
         }
 

@@ -36,7 +36,7 @@ import {MustBeUndoableCmdError} from "../binding/MustBeUndoableCmdError";
  * A finite state machine that defines the behavior of a user interaction.
  */
 export class FSMImpl<T extends FSMDataHandler> implements FSM {
-    protected _dataHandler?: T;
+    protected _dataHandler: T | undefined;
 
     protected readonly logger: Logger;
 
@@ -80,7 +80,7 @@ export class FSMImpl<T extends FSMDataHandler> implements FSM {
     /**
      * The current timeout in progress.
      */
-    protected currentTimeout?: TimeoutTransition;
+    protected currentTimeout: TimeoutTransition | undefined;
 
     public currentSubFSM: FSM | undefined;
 
@@ -143,7 +143,7 @@ export class FSMImpl<T extends FSMDataHandler> implements FSM {
             return this.currentSubFSM.process(event);
         }
         if (this.log) {
-            this.logger.logInteractionMsg(`processing event ${String(event.type)} at state 
+            this.logger.logInteractionMsg(`processing event ${String(event.type)} at state
             ${this.currentState.name}: ${this.constructor.name}`, this.constructor.name);
         }
 

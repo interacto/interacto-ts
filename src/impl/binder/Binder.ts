@@ -39,7 +39,7 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
 
     protected firstFn?: (c: C, i: D) => void;
 
-    protected produceFn?: (i: D) => C;
+    protected produceFn?: (i: D | undefined) => C;
 
     protected widgets: ReadonlyArray<unknown>;
 
@@ -63,9 +63,9 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
 
     protected prevDefault: boolean;
 
-    protected bindingName?: string;
+    protected bindingName: string | undefined;
 
-    protected observer?: BindingsObserver;
+    protected observer: BindingsObserver | undefined;
 
     protected undoHistory: UndoHistoryBase;
 
@@ -251,13 +251,13 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
 
     public toProduce<C2 extends Command>(fn: (i: D) => C2): Binder<C2, I, D> {
         const dup = this.duplicate();
-        dup.produceFn = fn as unknown as (i: D) => C;
+        dup.produceFn = fn as unknown as (i: D | undefined) => C;
         return dup as unknown as Binder<C2, I, D>;
     }
 
     public toProduceAnon(fn: () => void): Binder<AnonCmd, I, D> {
         const dup = this.duplicate();
-        dup.produceFn = ((): AnonCmd => new AnonCmd(fn)) as unknown as (i: D) => C;
+        dup.produceFn = ((): AnonCmd => new AnonCmd(fn)) as unknown as (i: D | undefined) => C;
         return dup as unknown as Binder<AnonCmd, I, D>;
     }
 
