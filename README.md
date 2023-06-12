@@ -1,4 +1,4 @@
-[![Build Status](https://ci.inria.fr/malai/buildStatus/icon?job=interacto-ts)](https://ci.inria.fr/malai/view/Latexdraw/job/interacto-ts) 
+[![Build Status](https://ci.inria.fr/malai/buildStatus/icon?job=interacto-ts)](https://ci.inria.fr/malai/view/Latexdraw/job/interacto-ts)
 [![npm](https://img.shields.io/npm/v/interacto)](https://www.npmjs.com/package/interacto)
 [![npm](https://img.shields.io/npm/dm/interacto)](https://www.npmjs.com/package/interacto)
 
@@ -17,11 +17,16 @@ See [https://interacto.github.io](https://interacto.github.io) for usages and do
 
 # How to install
 
+For Angular 15 and 16:
+
+```
+npm install interacto@latest
+```
 
 For Angular 13 and 14 or rxjs 7:
 
 ```
-npm install interacto@latest
+npm install interacto@7.3
 ```
 
 For Angular 12 or rxjs 6:
