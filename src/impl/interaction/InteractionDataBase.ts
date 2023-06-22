@@ -7,7 +7,7 @@ export abstract class InteractionDataBase implements UnitInteractionData, Flusha
 
     protected targetData: EventTarget | null = null;
 
-    protected timeStampData: number = 0;
+    protected timeStampData = 0;
 
     public copy(data: UnitInteractionData): void {
         // Cannot use Object.assign because of a strange implementation of Event

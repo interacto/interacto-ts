@@ -111,7 +111,7 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
 
     private readonly _keepPath: boolean;
 
-    public constructor(keepPath: boolean = false) {
+    public constructor(keepPath = false) {
         super();
         this._keepPath = keepPath;
         this._path = [];

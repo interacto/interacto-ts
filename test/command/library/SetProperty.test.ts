@@ -20,11 +20,11 @@ class SecondStubSetProp {
 }
 
 class StubForSetProp {
-    public foo: number = 0;
+    public foo = 0;
 
     public bar: SecondStubSetProp = new SecondStubSetProp();
 
-    private _foo2: string = "";
+    private _foo2 = "";
 
     public get foo2(): string {
         return this._foo2;

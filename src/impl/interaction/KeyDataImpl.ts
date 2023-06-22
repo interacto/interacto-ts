@@ -17,21 +17,21 @@ import type {Flushable} from "./Flushable";
 import {InteractionDataBase} from "./InteractionDataBase";
 
 export class KeyDataImpl extends InteractionDataBase implements KeyData, Flushable {
-    private codeData: string = "";
+    private codeData = "";
 
-    private keyData: string = "";
+    private keyData = "";
 
-    private locationData: number = 0;
+    private locationData = 0;
 
-    private repeatData: boolean = false;
+    private repeatData = false;
 
-    private altKeyData: boolean = false;
+    private altKeyData = false;
 
-    private ctrlKeyData: boolean = false;
+    private ctrlKeyData = false;
 
-    private metaKeyData: boolean = false;
+    private metaKeyData = false;
 
-    private shiftKeyData: boolean = false;
+    private shiftKeyData = false;
 
     public override flush(): void {
         super.flush();

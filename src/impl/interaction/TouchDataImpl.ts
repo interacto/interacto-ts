@@ -20,15 +20,15 @@ import type {EventModifierData} from "../../api/interaction/EventModifierData";
 export class TouchDataImpl extends PointingDataBase implements TouchData {
     private _allTouches: Array<TouchData> = [];
 
-    private forceData: number = 0;
+    private forceData = 0;
 
-    private identifierData: number = 0;
+    private identifierData = 0;
 
-    private radiusXData: number = 0;
+    private radiusXData = 0;
 
-    private radiusYData: number = 0;
+    private radiusYData = 0;
 
-    private rotationAngleData: number = 0;
+    private rotationAngleData = 0;
 
     public get allTouches(): ReadonlyArray<TouchData> {
         return this._allTouches;

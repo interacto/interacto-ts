@@ -19,13 +19,13 @@ import {PointDataImpl} from "./PointDataImpl";
  * Single point interaction data whith mousewheel implementation with write accesses.
  */
 export class WheelDataImpl extends PointDataImpl implements WheelData {
-    private deltaModeData: number = 0;
+    private deltaModeData = 0;
 
-    private deltaXData: number = 0;
+    private deltaXData = 0;
 
-    private deltaYData: number = 0;
+    private deltaYData = 0;
 
-    private deltaZData: number = 0;
+    private deltaZData = 0;
 
     public override flush(): void {
         super.flush();

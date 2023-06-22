@@ -41,7 +41,7 @@ export class ConcurrentFSM<F extends FSM, T extends FSMDataHandler> extends FSMI
      * @param totalReinit - Defines whether a cancellation of one of the fsms, reinits all the fsms.
      */
     public constructor(fsms: ReadonlyArray<F>, logger: Logger, secondaries: ReadonlyArray<F> = [],
-                       totalReinit: boolean = false, dataHandler?: T) {
+                       totalReinit = false, dataHandler?: T) {
         super(logger, dataHandler);
 
         this.totalReinit = totalReinit;

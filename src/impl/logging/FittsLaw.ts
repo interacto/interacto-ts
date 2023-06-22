@@ -137,7 +137,7 @@ export class FittsLaw {
      * @param effectiveTargetW - If true, will consider the effective target width. Otherwise will consider
      * the computed distances.
      */
-    public getAB(effectiveTargetW: boolean = false): [a: number, b: number, r: number] {
+    public getAB(effectiveTargetW = false): [a: number, b: number, r: number] {
         // Linear regression
 
         // do we consider effective target width

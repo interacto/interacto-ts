@@ -34,7 +34,7 @@ export class DwellSpringAnimation {
 
     private readonly spring: EltRef<SVGLineElement>;
 
-    public constructor(handle: EltRef<SVGCircleElement>, spring: EltRef<SVGLineElement>) {
+    public constructor(handle: Readonly<EltRef<SVGCircleElement>>, spring: Readonly<EltRef<SVGLineElement>>) {
         this.interval = undefined;
         this.radius = Number.parseInt(handle.nativeElement.getAttribute("r") ?? "20", 10);
         this.handle = handle;

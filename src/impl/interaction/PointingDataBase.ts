@@ -16,25 +16,25 @@ import {InteractionDataBase} from "./InteractionDataBase";
 import type {PointBaseData} from "../../api/interaction/PointBaseData";
 
 export abstract class PointingDataBase extends InteractionDataBase implements PointBaseData {
-    protected clientXData: number = 0;
+    protected clientXData = 0;
 
-    protected clientYData: number = 0;
+    protected clientYData = 0;
 
-    protected pageXData: number = 0;
+    protected pageXData = 0;
 
-    protected pageYData: number = 0;
+    protected pageYData = 0;
 
-    protected screenXData: number = 0;
+    protected screenXData = 0;
 
-    protected screenYData: number = 0;
+    protected screenYData = 0;
 
-    protected altKeyData: boolean = false;
+    protected altKeyData = false;
 
-    protected ctrlKeyData: boolean = false;
+    protected ctrlKeyData = false;
 
-    protected metaKeyData: boolean = false;
+    protected metaKeyData = false;
 
-    protected shiftKeyData: boolean = false;
+    protected shiftKeyData = false;
 
     public override flush(): void {
         super.flush();

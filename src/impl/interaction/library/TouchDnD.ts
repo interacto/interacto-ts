@@ -40,7 +40,7 @@ export class TouchDnDFSM extends FSMImpl<TouchDnDFSMHandler> {
      * or as soon as the screen is touched.
      * The latter is used for the MultiTouch interaction.
      */
-    public constructor(cancellable: boolean, logger: Logger, dataHandler: TouchDnDFSMHandler, movementRequired: boolean = true) {
+    public constructor(cancellable: boolean, logger: Logger, dataHandler: TouchDnDFSMHandler, movementRequired = true) {
         super(logger, dataHandler);
         this.touchID = undefined;
         this.cancellable = cancellable;
@@ -160,7 +160,7 @@ export class TouchDnD extends InteractionBase<SrcTgtPointsData<TouchData>, SrcTg
      * The latter is used for the MultiTouch interaction.
      * @param fsm - The optional FSM provided for the interaction
      */
-    public constructor(logger: Logger, cancellable: boolean, movementRequired: boolean = true, fsm?: TouchDnDFSM) {
+    public constructor(logger: Logger, cancellable: boolean, movementRequired = true, fsm?: TouchDnDFSM) {
         const handler: TouchDnDFSMHandler = {
             "onTouch": (evt: TouchEvent): void => {
                 if (evt.changedTouches[0] !== undefined) {

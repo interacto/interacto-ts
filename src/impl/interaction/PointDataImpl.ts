@@ -20,17 +20,17 @@ import {PointingDataBase} from "./PointingDataBase";
  * Single point interaction data implementation with write accesses.
  */
 export class PointDataImpl extends PointingDataBase implements PointData {
-    protected buttonData: number = 0;
+    protected buttonData = 0;
 
-    protected buttonsData: number = 0;
+    protected buttonsData = 0;
 
-    protected movementXData: number = 0;
+    protected movementXData = 0;
 
-    protected movementYData: number = 0;
+    protected movementYData = 0;
 
-    protected offsetXData: number = 0;
+    protected offsetXData = 0;
 
-    protected offsetYData: number = 0;
+    protected offsetYData = 0;
 
     protected relatedTargetData: EventTarget | null = null;
 

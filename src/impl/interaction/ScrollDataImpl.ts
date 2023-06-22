@@ -20,9 +20,9 @@ import {InteractionDataBase} from "./InteractionDataBase";
  * Scrolling interaction data implementation with write access.
  */
 export class ScrollDataImpl extends InteractionDataBase implements ScrollData, Flushable {
-    protected scrollXData: number = 0;
+    protected scrollXData = 0;
 
-    protected scrollYData: number = 0;
+    protected scrollYData = 0;
 
     public override flush(): void {
         super.flush();

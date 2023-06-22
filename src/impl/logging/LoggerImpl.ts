@@ -121,32 +121,32 @@ export class LoggerImpl implements Logger {
         return String(ex);
     }
 
-    public logBindingErr(msg: string, ex: unknown, bindingName: string = ""): void {
+    public logBindingErr(msg: string, ex: unknown, bindingName = ""): void {
         this.processLoggingData(new LoggingData(performance.now(), msg,
             "binding", bindingName, "ERR", this.sessionID, this.formatError(ex), this.frontVersion));
     }
 
-    public logBindingMsg(msg: string, bindingName: string = ""): void {
+    public logBindingMsg(msg: string, bindingName = ""): void {
         this.processLoggingData(new LoggingData(performance.now(), msg, "binding", bindingName, "INFO",
             this.sessionID, undefined, this.frontVersion));
     }
 
-    public logCmdErr(msg: string, ex: unknown, cmdName: string = ""): void {
+    public logCmdErr(msg: string, ex: unknown, cmdName = ""): void {
         this.processLoggingData(new LoggingData(performance.now(), msg,
             "command", cmdName, "ERR", this.sessionID, this.formatError(ex), this.frontVersion));
     }
 
-    public logCmdMsg(msg: string, cmdName: string = ""): void {
+    public logCmdMsg(msg: string, cmdName = ""): void {
         this.processLoggingData(new LoggingData(performance.now(), msg, "command", cmdName, "INFO",
             this.sessionID, undefined, this.frontVersion));
     }
 
-    public logInteractionErr(msg: string, ex: unknown, interactionName: string = ""): void {
+    public logInteractionErr(msg: string, ex: unknown, interactionName = ""): void {
         this.processLoggingData(new LoggingData(performance.now(), msg,
             "interaction", interactionName, "ERR", this.sessionID, this.formatError(ex), this.frontVersion));
     }
 
-    public logInteractionMsg(msg: string, interactionName: string = ""): void {
+    public logInteractionMsg(msg: string, interactionName = ""): void {
         this.processLoggingData(new LoggingData(performance.now(), msg, "interaction", interactionName, "INFO",
             this.sessionID, undefined, this.frontVersion));
     }

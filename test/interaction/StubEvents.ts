@@ -197,7 +197,7 @@ export function createWheelEvent(type: "wheel",
     });
 }
 
-export function createKeyEvent(type: "keydown" | "keyup", key: string = "", code: string = ""): KeyboardEvent {
+export function createKeyEvent(type: "keydown" | "keyup", key = "", code = ""): KeyboardEvent {
     return new KeyboardEvent(type, {
         "cancelable": false,
         "bubbles": true,
