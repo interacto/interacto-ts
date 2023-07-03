@@ -27,35 +27,35 @@ import type {WhenType} from "./When";
  * @typeParam I - The type of the user interaction
  * @typeParam D - The type of the interaction data of the user interaction
  */
-export interface InteractionUpdateBinder<I extends Interaction<D>, D extends InteractionData>
-    extends InteractionUpdateBinderBuilder<I, D> {
-    on<W>(widget: ReadonlyArray<Widget<W>> | Widget<W>, ...widgets: ReadonlyArray<Widget<W>>): InteractionUpdateBinder<I, D>;
+export interface InteractionUpdateBinder<I extends Interaction<D>, D extends InteractionData, A>
+    extends InteractionUpdateBinderBuilder<I, D, A> {
+    on<W>(widget: ReadonlyArray<Widget<W>> | Widget<W>, ...widgets: ReadonlyArray<Widget<W>>): InteractionUpdateBinder<I, D, A>;
 
-    onDynamic(node: Widget<Node>): InteractionUpdateBinder<I, D>;
+    onDynamic(node: Widget<Node>): InteractionUpdateBinder<I, D, A>;
 
-    log(...level: ReadonlyArray<LogLevel>): InteractionUpdateBinder<I, D>;
+    log(...level: ReadonlyArray<LogLevel>): InteractionUpdateBinder<I, D, A>;
 
-    when(fn: (i: D) => boolean, mode?: WhenType): InteractionUpdateBinder<I, D>;
+    when(fn: (i: D, acc: Readonly<A>) => boolean, mode?: WhenType): InteractionUpdateBinder<I, D, A>;
 
-    end(fn: () => void): InteractionUpdateBinder<I, D>;
+    end(fn: () => void): InteractionUpdateBinder<I, D, A>;
 
-    cancel(fn: (i: D) => void): InteractionUpdateBinder<I, D>;
+    cancel(fn: (i: D, acc: A) => void): InteractionUpdateBinder<I, D, A>;
 
-    endOrCancel(fn: (i: D) => void): InteractionUpdateBinder<I, D>;
+    endOrCancel(fn: (i: D, acc: A) => void): InteractionUpdateBinder<I, D, A>;
 
-    stopImmediatePropagation(): InteractionUpdateBinder<I, D>;
+    stopImmediatePropagation(): InteractionUpdateBinder<I, D, A>;
 
-    preventDefault(): InteractionUpdateBinder<I, D>;
+    preventDefault(): InteractionUpdateBinder<I, D, A>;
 
-    throttle(timeout: number): InteractionUpdateBinder<I, D>;
+    throttle(timeout: number): InteractionUpdateBinder<I, D, A>;
 
-    continuousExecution(): InteractionUpdateBinder<I, D>;
+    continuousExecution(): InteractionUpdateBinder<I, D, A>;
 
-    catch(fn: (ex: unknown) => void): InteractionUpdateBinder<I, D>;
+    catch(fn: (ex: unknown) => void): InteractionUpdateBinder<I, D, A>;
 
-    name(name: string): InteractionUpdateBinder<I, D>;
+    name(name: string): InteractionUpdateBinder<I, D, A>;
 
-    toProduce<C extends Command>(fn: (i: D) => C): InteractionCmdUpdateBinder<C, I, D>;
+    toProduce<C extends Command>(fn: (i: D) => C): InteractionCmdUpdateBinder<C, I, D, A>;
 
-    toProduceAnon(fn: () => void): InteractionCmdUpdateBinder<AnonCmd, I, D>;
+    toProduceAnon(fn: () => void): InteractionCmdUpdateBinder<AnonCmd, I, D, A>;
 }

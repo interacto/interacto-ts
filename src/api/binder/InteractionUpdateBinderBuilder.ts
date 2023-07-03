@@ -25,15 +25,15 @@ import type {WhenType} from "./When";
  * @typeParam I - The type of the user interaction
  * @typeParam D - The type of the interaction data of the user interaction
  */
-export interface InteractionUpdateBinderBuilder<I extends Interaction<D>, D extends InteractionData>
-    extends InteractionBinderBuilder <I, D>, BaseUpdateBinderBuilder {
+export interface InteractionUpdateBinderBuilder<I extends Interaction<D>, D extends InteractionData, A>
+    extends InteractionBinderBuilder <I, D, A>, BaseUpdateBinderBuilder {
     /**
      * Defines what to do when a command is cancelled (because the interaction is cancelled).
      * The undoable command is automatically cancelled so that nothing must be done on the command.
      * A binder can have several cummulative 'cancel' routines.
      * @returns A clone of the current binder to chain the building configuration.
      */
-    cancel(fn: (i: D) => void): InteractionUpdateBinderBuilder<I, D>;
+    cancel(fn: (i: D, acc: A) => void): InteractionUpdateBinderBuilder<I, D, A>;
 
     /**
      * Defines what to do when a command is cancelled (because the interaction is cancelled).
@@ -41,27 +41,27 @@ export interface InteractionUpdateBinderBuilder<I extends Interaction<D>, D exte
      * A binder can have several cummulative 'endOrCancel' routines.
      * @returns A clone of the current binder to chain the building configuration.
      */
-    endOrCancel(fn: (i: D) => void): InteractionUpdateBinderBuilder<I, D>;
+    endOrCancel(fn: (i: D, acc: A) => void): InteractionUpdateBinderBuilder<I, D, A>;
 
-    when(fn: (i: D) => boolean, mode?: WhenType): InteractionUpdateBinderBuilder<I, D>;
+    when(fn: (i: D, acc: Readonly<A>) => boolean, mode?: WhenType): InteractionUpdateBinderBuilder<I, D, A>;
 
-    end(fn: () => void): InteractionUpdateBinderBuilder<I, D>;
+    end(fn: () => void): InteractionUpdateBinderBuilder<I, D, A>;
 
-    on<W>(widget: ReadonlyArray<Widget<W>> | Widget<W>, ...widgets: ReadonlyArray<Widget<W>>): InteractionUpdateBinderBuilder<I, D>;
+    on<W>(widget: ReadonlyArray<Widget<W>> | Widget<W>, ...widgets: ReadonlyArray<Widget<W>>): InteractionUpdateBinderBuilder<I, D, A>;
 
-    onDynamic(node: Widget<Node>): InteractionUpdateBinderBuilder<I, D>;
+    onDynamic(node: Widget<Node>): InteractionUpdateBinderBuilder<I, D, A>;
 
-    log(...level: ReadonlyArray<LogLevel>): InteractionUpdateBinderBuilder<I, D>;
+    log(...level: ReadonlyArray<LogLevel>): InteractionUpdateBinderBuilder<I, D, A>;
 
-    stopImmediatePropagation(): InteractionUpdateBinderBuilder<I, D>;
+    stopImmediatePropagation(): InteractionUpdateBinderBuilder<I, D, A>;
 
-    throttle(timeout: number): InteractionUpdateBinderBuilder<I, D>;
+    throttle(timeout: number): InteractionUpdateBinderBuilder<I, D, A>;
 
-    continuousExecution(): InteractionUpdateBinderBuilder<I, D>;
+    continuousExecution(): InteractionUpdateBinderBuilder<I, D, A>;
 
-    preventDefault(): InteractionUpdateBinderBuilder<I, D>;
+    preventDefault(): InteractionUpdateBinderBuilder<I, D, A>;
 
-    catch(fn: (ex: unknown) => void): InteractionUpdateBinderBuilder<I, D>;
+    catch(fn: (ex: unknown) => void): InteractionUpdateBinderBuilder<I, D, A>;
 
-    name(name: string): InteractionUpdateBinderBuilder<I, D>;
+    name(name: string): InteractionUpdateBinderBuilder<I, D, A>;
 }

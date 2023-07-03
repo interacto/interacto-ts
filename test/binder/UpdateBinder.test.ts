@@ -25,7 +25,7 @@ import {UndoHistoryImpl} from "../../src/impl/undo/UndoHistoryImpl";
 import type {Logger} from "../../src/api/logging/Logger";
 
 describe("using an update binder", () => {
-    let binder: UpdateBinder<Command, Interaction<InteractionData>, InteractionData>;
+    let binder: UpdateBinder<Command, Interaction<InteractionData>, InteractionData, unknown>;
     let history: UndoHistory;
 
     beforeEach(() => {

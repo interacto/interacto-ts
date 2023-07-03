@@ -73,7 +73,7 @@ class StubAsyncCmd extends CommandBase {
 
 let cmd: StubAsyncCmd;
 let data: Model;
-let binding: Binding<StubAsyncCmd, Interaction<InteractionData>, InteractionData> | undefined;
+let binding: Binding<StubAsyncCmd, Interaction<InteractionData>, InteractionData, unknown> | undefined;
 let ctx: BindingsContext;
 let bindings: Bindings<UndoHistoryBase>;
 
@@ -250,11 +250,11 @@ describe("testing async commands and bindings", () => {
             await flushPromises();
 
             expect(first).toHaveBeenCalledTimes(2);
-            expect(end).toHaveBeenNthCalledWith(1, cmd, expect.anything());
-            expect(end).toHaveBeenNthCalledWith(2, cmd2, expect.anything());
+            expect(end).toHaveBeenNthCalledWith(1, cmd, expect.anything(), {});
+            expect(end).toHaveBeenNthCalledWith(2, cmd2, expect.anything(), {});
             expect(end).toHaveBeenCalledTimes(2);
-            expect(end).toHaveBeenNthCalledWith(1, cmd, expect.anything());
-            expect(end).toHaveBeenNthCalledWith(2, cmd2, expect.anything());
+            expect(end).toHaveBeenNthCalledWith(1, cmd, expect.anything(), {});
+            expect(end).toHaveBeenNthCalledWith(2, cmd2, expect.anything(), {});
         });
 
         test("two button clicks with async command, first/end ok when not waiting ongoing cmd", async () => {
@@ -285,8 +285,8 @@ describe("testing async commands and bindings", () => {
             expect(binding.command).toBeUndefined();
             expect(binding.timesEnded).toBe(2);
             expect(end).toHaveBeenCalledTimes(2);
-            expect(end).toHaveBeenNthCalledWith(1, cmd2, expect.anything());
-            expect(end).toHaveBeenNthCalledWith(2, cmd, expect.anything());
+            expect(end).toHaveBeenNthCalledWith(1, cmd2, expect.anything(), {});
+            expect(end).toHaveBeenNthCalledWith(2, cmd, expect.anything(), {});
         });
 
         test("button binding with async command that rejects works", async () => {
@@ -462,7 +462,7 @@ describe("testing async commands and bindings", () => {
                 .log("command")
                 .bind();
 
-            jest.spyOn(binding as BindingImpl<StubAsyncCmd, Interaction<InteractionData>, InteractionData>,
+            jest.spyOn(binding as BindingImpl<StubAsyncCmd, Interaction<InteractionData>, InteractionData, unknown>,
                 "ifCannotExecuteCmd").mockImplementation(() => {
                 throw new Error("Error");
             });

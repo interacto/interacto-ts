@@ -909,7 +909,7 @@ describe("using bindings", () => {
     });
 
     describe("check when it crashes in routines", () => {
-        let baseBinder: InteractionCmdUpdateBinder<StubCmd, Interaction<SrcTgtPointsData<TouchData>>, SrcTgtPointsData<TouchData>>;
+        let baseBinder: InteractionCmdUpdateBinder<StubCmd, Interaction<SrcTgtPointsData<TouchData>>, SrcTgtPointsData<TouchData>, unknown>;
         let err: Error;
         let cmd: StubCmd;
 
@@ -1482,8 +1482,8 @@ describe("using bindings", () => {
     });
 
     describe("tap and longPress conflict", () => {
-        let binding: Binding<Command, Interaction<InteractionData>, InteractionData>;
-        let binding2: Binding<Command, Interaction<InteractionData>, InteractionData>;
+        let binding: Binding<Command, Interaction<InteractionData>, InteractionData, unknown>;
+        let binding2: Binding<Command, Interaction<InteractionData>, InteractionData, unknown>;
 
         beforeEach(() => {
             binding2 = bindings.longTouchBinder(50)
@@ -1525,8 +1525,8 @@ describe("using bindings", () => {
     });
 
     describe("two longTouch", () => {
-        let binding: Binding<Command, Interaction<InteractionData>, InteractionData>;
-        let binding2: Binding<Command, Interaction<InteractionData>, InteractionData>;
+        let binding: Binding<Command, Interaction<InteractionData>, InteractionData, unknown>;
+        let binding2: Binding<Command, Interaction<InteractionData>, InteractionData, unknown>;
 
         test("two longTouch stopImmediatePropagation", () => {
             binding2 = bindings.longTouchBinder(10)

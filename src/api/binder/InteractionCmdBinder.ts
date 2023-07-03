@@ -27,8 +27,8 @@ import type {WhenType} from "./When";
  * @typeParam I - The type of the user interaction
  * @typeParam D - The type of the interaction data of the user interaction
  */
-export interface InteractionCmdBinder<C extends Command, I extends Interaction<D>, D extends InteractionData>
-    extends CmdBinderBuilder<C>, InteractionBinderBuilder<I, D> {
+export interface InteractionCmdBinder<C extends Command, I extends Interaction<D>, D extends InteractionData, A>
+    extends CmdBinderBuilder<C>, InteractionBinderBuilder<I, D, A> {
     /**
      * Specifies the initialisation of the command when the interaction starts.
      * Each time the interaction starts, an instance of the command is created and configured by the given callback.
@@ -37,7 +37,7 @@ export interface InteractionCmdBinder<C extends Command, I extends Interaction<D
      * This callback takes as arguments both the command and interaction data involved in the binding.
      * @returns The binder to chain the building configuration.
      */
-    first(fn: (c: C, i: D) => void): InteractionCmdBinder<C, I, D>;
+    first(fn: (c: C, i: D, acc: A) => void): InteractionCmdBinder<C, I, D, A>;
 
     /**
      * Specifies what to do end when an interaction ends (after the end/endOrCancel routines) and the command has produced an effect.
@@ -45,7 +45,7 @@ export interface InteractionCmdBinder<C extends Command, I extends Interaction<D
      * @param fn - The callback method to specify what to do when an interaction ends and the command produced an effect.
      * @returns The binder to chain the building configuration.
      */
-    ifHadEffects(fn: (c: C, i: D) => void): InteractionCmdBinder<C, I, D>;
+    ifHadEffects(fn: (c: C, i: D, acc: A) => void): InteractionCmdBinder<C, I, D, A>;
 
     /**
      * Specifies what to do end when an interaction ends (after the end/endOrCancel routines) and the command did not produce an effect.
@@ -53,7 +53,7 @@ export interface InteractionCmdBinder<C extends Command, I extends Interaction<D
      * @param fn - The callback method to specify what to do when an interaction ends and the command did not produce an effect.
      * @returns The binder to chain the building configuration.
      */
-    ifHadNoEffect(fn: (c: C, i: D) => void): InteractionCmdBinder<C, I, D>;
+    ifHadNoEffect(fn: (c: C, i: D, acc: A) => void): InteractionCmdBinder<C, I, D, A>;
 
     /**
      * Specifies what to do end when an interaction ends and the command could not be executed.
@@ -61,7 +61,7 @@ export interface InteractionCmdBinder<C extends Command, I extends Interaction<D
      * @param fn - The callback method to specify what to do when an interaction ends and the command could not be executed.
      * @returns The binder to chain the building configuration.
      */
-    ifCannotExecute(fn: (c: C, i: D) => void): InteractionCmdBinder<C, I, D>;
+    ifCannotExecute(fn: (c: C, i: D, acc: A) => void): InteractionCmdBinder<C, I, D, A>;
 
     /**
      * Specifies what to do end when an interaction ends (when the last event of the interaction has occurred, but just after
@@ -70,26 +70,26 @@ export interface InteractionCmdBinder<C extends Command, I extends Interaction<D
      * @param fn - The callback method to specify what to do when an interaction ends.
      * @returns The binder to chain the building configuration.
      */
-    end(fn: (c: C, i: D) => void): InteractionCmdBinder<C, I, D>;
+    end(fn: (c: C, i: D, acc: A) => void): InteractionCmdBinder<C, I, D, A>;
 
-    on<W>(widget: ReadonlyArray<Widget<W>> | Widget<W>, ...widgets: ReadonlyArray<Widget<W>>): InteractionCmdBinder<C, I, D>;
+    on<W>(widget: ReadonlyArray<Widget<W>> | Widget<W>, ...widgets: ReadonlyArray<Widget<W>>): InteractionCmdBinder<C, I, D, A>;
 
-    onDynamic(node: Widget<Node>): InteractionCmdBinder<C, I, D>;
+    onDynamic(node: Widget<Node>): InteractionCmdBinder<C, I, D, A>;
 
-    log(...level: ReadonlyArray<LogLevel>): InteractionCmdBinder<C, I, D>;
+    log(...level: ReadonlyArray<LogLevel>): InteractionCmdBinder<C, I, D, A>;
 
-    when(fn: (i: D) => boolean, mode?: WhenType): InteractionCmdBinder<C, I, D>;
+    when(fn: (i: D, acc: Readonly<A>) => boolean, mode?: WhenType): InteractionCmdBinder<C, I, D, A>;
 
-    stopImmediatePropagation(): InteractionCmdBinder<C, I, D>;
+    stopImmediatePropagation(): InteractionCmdBinder<C, I, D, A>;
 
-    preventDefault(): InteractionCmdBinder<C, I, D>;
+    preventDefault(): InteractionCmdBinder<C, I, D, A>;
 
-    catch(fn: (ex: unknown) => void): InteractionCmdBinder<C, I, D>;
+    catch(fn: (ex: unknown) => void): InteractionCmdBinder<C, I, D, A>;
 
-    name(name: string): InteractionCmdBinder<C, I, D>;
+    name(name: string): InteractionCmdBinder<C, I, D, A>;
 
     /**
      * Executes the binder to create and install an Interacto binding.
      */
-    bind(): Binding<C, I, D>;
+    bind(): Binding<C, I, D, A>;
 }

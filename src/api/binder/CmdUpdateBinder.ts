@@ -44,7 +44,7 @@ export interface CmdUpdateBinder<C extends Command> extends CmdUpdateBinderBuild
 
     end(fn: (c: C) => void): CmdUpdateBinder<C>;
 
-    usingInteraction<I extends Interaction<D>, D extends InteractionData>(fn: () => I): InteractionCmdUpdateBinder<C, I, D>;
+    usingInteraction<I extends Interaction<D>, D extends InteractionData, A>(fn: () => I): InteractionCmdUpdateBinder<C, I, D, A>;
 
     stopImmediatePropagation(): CmdUpdateBinder<C>;
 

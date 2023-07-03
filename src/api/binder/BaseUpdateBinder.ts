@@ -46,7 +46,7 @@ export interface BaseUpdateBinder extends BaseUpdateBinderBuilder, BaseBinder {
 
     toProduceAnon(fn: () => void): CmdUpdateBinder<AnonCmd>;
 
-    usingInteraction<I extends Interaction<D>, D extends InteractionData>(fn: () => I): InteractionUpdateBinder<I, D>;
+    usingInteraction<I extends Interaction<D>, D extends InteractionData, A>(fn: () => I): InteractionUpdateBinder<I, D, A>;
 
     stopImmediatePropagation(): BaseUpdateBinder;
 

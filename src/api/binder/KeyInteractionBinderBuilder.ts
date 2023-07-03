@@ -25,26 +25,26 @@ import type {WhenType} from "./When";
  * @typeParam I - The type of the user interaction
  * @typeParam D - The type of the interaction data of the user interaction
  */
-export interface KeyInteractionBinderBuilder<I extends Interaction<D>, D extends InteractionData>
-    extends InteractionBinderBuilder<I, D>, KeyBinderBuilder {
+export interface KeyInteractionBinderBuilder<I extends Interaction<D>, D extends InteractionData, A>
+    extends InteractionBinderBuilder<I, D, A>, KeyBinderBuilder {
 
-    when(fn: (i: D) => boolean, mode?: WhenType): KeyInteractionBinderBuilder<I, D>;
+    when(fn: (i: D, acc: Readonly<A>) => boolean, mode?: WhenType): KeyInteractionBinderBuilder<I, D, A>;
 
-    on<W>(widget: ReadonlyArray<Widget<W>> | Widget<W>, ...widgets: ReadonlyArray<Widget<W>>): KeyInteractionBinderBuilder<I, D>;
+    on<W>(widget: ReadonlyArray<Widget<W>> | Widget<W>, ...widgets: ReadonlyArray<Widget<W>>): KeyInteractionBinderBuilder<I, D, A>;
 
-    onDynamic(node: Widget<Node>): KeyInteractionBinderBuilder<I, D>;
+    onDynamic(node: Widget<Node>): KeyInteractionBinderBuilder<I, D, A>;
 
-    log(...level: ReadonlyArray<LogLevel>): KeyInteractionBinderBuilder<I, D>;
+    log(...level: ReadonlyArray<LogLevel>): KeyInteractionBinderBuilder<I, D, A>;
 
-    end(fn: () => void): KeyInteractionBinderBuilder<I, D>;
+    end(fn: () => void): KeyInteractionBinderBuilder<I, D, A>;
 
-    with(isCode: boolean, ...keysOrCodes: ReadonlyArray<string>): KeyInteractionBinderBuilder<I, D>;
+    with(isCode: boolean, ...keysOrCodes: ReadonlyArray<string>): KeyInteractionBinderBuilder<I, D, A>;
 
-    stopImmediatePropagation(): KeyInteractionBinderBuilder<I, D>;
+    stopImmediatePropagation(): KeyInteractionBinderBuilder<I, D, A>;
 
-    preventDefault(): KeyInteractionBinderBuilder<I, D>;
+    preventDefault(): KeyInteractionBinderBuilder<I, D, A>;
 
-    catch(fn: (ex: unknown) => void): KeyInteractionBinderBuilder<I, D>;
+    catch(fn: (ex: unknown) => void): KeyInteractionBinderBuilder<I, D, A>;
 
-    name(name: string): KeyInteractionBinderBuilder<I, D>;
+    name(name: string): KeyInteractionBinderBuilder<I, D, A>;
 }

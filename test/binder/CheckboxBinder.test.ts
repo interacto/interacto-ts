@@ -20,7 +20,7 @@ import {robot} from "interacto-nono";
 
 let widget1: HTMLInputElement;
 let widget2: HTMLInputElement;
-let binding: Binding<StubCmd, Interaction<InteractionData>, InteractionData> | undefined;
+let binding: Binding<StubCmd, Interaction<InteractionData>, InteractionData, unknown> | undefined;
 let cmd: StubCmd;
 let ctx: BindingsContext;
 let bindings: Bindings<UndoHistoryBase>;

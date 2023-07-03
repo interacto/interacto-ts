@@ -25,7 +25,7 @@ import {InteractionStub} from "../interaction/InteractionStub";
 import {createMouseEvent} from "../interaction/StubEvents";
 
 let interaction: InteractionStub;
-let binding: BindingImpl<StubCmd, InteractionStub, InteractionData>;
+let binding: BindingImpl<StubCmd, InteractionStub, InteractionData, unknown>;
 let fsm: FSM;
 let cmd: StubCmd;
 let history: UndoHistory;

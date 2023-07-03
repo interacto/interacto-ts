@@ -20,7 +20,7 @@ import type {InteractionData} from "../interaction/InteractionData";
 /**
  * The concept of binding and its related services.
  */
-export interface Binding<C extends Command, I extends Interaction<D>, D extends InteractionData> {
+export interface Binding<C extends Command, I extends Interaction<D>, D extends InteractionData, A> {
     /**
      * The name of the binding
      */
@@ -40,6 +40,11 @@ export interface Binding<C extends Command, I extends Interaction<D>, D extends 
      * Logs (or not) command production information
      */
     logCmd: boolean;
+
+    /**
+     * The accumulator used during the binding.
+     */
+    readonly accumulator: A;
 
     /**
      * The user interaction.

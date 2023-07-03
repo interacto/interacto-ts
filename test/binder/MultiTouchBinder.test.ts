@@ -20,7 +20,7 @@ import type {Bindings} from "../../src/api/binding/Bindings";
 import {robot} from "interacto-nono";
 
 let c1: HTMLElement;
-let binding: Binding<StubCmd, Interaction<InteractionData>, InteractionData> | undefined;
+let binding: Binding<StubCmd, Interaction<InteractionData>, InteractionData, unknown> | undefined;
 let cmd: StubCmd;
 let ctx: BindingsContext;
 let bindings: Bindings<UndoHistoryBase>;

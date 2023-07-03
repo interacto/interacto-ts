@@ -28,36 +28,36 @@ import type {WhenType} from "./When";
  * @typeParam I - The type of the user interaction
  * @typeParam D - The type of the interaction data of the user interaction
  */
-export interface KeyInteractionCmdBinder<C extends Command, I extends Interaction<D>, D extends InteractionData>
-    extends KeyInteractionBinderBuilder<I, D>, InteractionCmdBinder<C, I, D> {
+export interface KeyInteractionCmdBinder<C extends Command, I extends Interaction<D>, D extends InteractionData, A>
+    extends KeyInteractionBinderBuilder<I, D, A>, InteractionCmdBinder<C, I, D, A> {
 
-    first(fn: (c: C, i: D) => void): KeyInteractionCmdBinder<C, I, D>;
+    first(fn: (c: C, i: D, acc: A) => void): KeyInteractionCmdBinder<C, I, D, A>;
 
-    on<W>(widget: ReadonlyArray<Widget<W>> | Widget<W>, ...widgets: ReadonlyArray<Widget<W>>): KeyInteractionCmdBinder<C, I, D>;
+    on<W>(widget: ReadonlyArray<Widget<W>> | Widget<W>, ...widgets: ReadonlyArray<Widget<W>>): KeyInteractionCmdBinder<C, I, D, A>;
 
-    onDynamic(node: Widget<Node>): KeyInteractionCmdBinder<C, I, D>;
+    onDynamic(node: Widget<Node>): KeyInteractionCmdBinder<C, I, D, A>;
 
-    log(...level: ReadonlyArray<LogLevel>): KeyInteractionCmdBinder<C, I, D>;
+    log(...level: ReadonlyArray<LogLevel>): KeyInteractionCmdBinder<C, I, D, A>;
 
-    when(fn: (i: D) => boolean, mode?: WhenType): KeyInteractionCmdBinder<C, I, D>;
+    when(fn: (i: D, acc: Readonly<A>) => boolean, mode?: WhenType): KeyInteractionCmdBinder<C, I, D, A>;
 
-    ifHadEffects(fn: (c: C, i: D) => void): KeyInteractionCmdBinder<C, I, D>;
+    ifHadEffects(fn: (c: C, i: D, acc: A) => void): KeyInteractionCmdBinder<C, I, D, A>;
 
-    ifHadNoEffect(fn: (c: C, i: D) => void): KeyInteractionCmdBinder<C, I, D>;
+    ifHadNoEffect(fn: (c: C, i: D, acc: A) => void): KeyInteractionCmdBinder<C, I, D, A>;
 
-    ifCannotExecute(fn: (c: C, i: D) => void): KeyInteractionCmdBinder<C, I, D>;
+    ifCannotExecute(fn: (c: C, i: D, acc: A) => void): KeyInteractionCmdBinder<C, I, D, A>;
 
-    end(fn: (c: C, i: D) => void): KeyInteractionCmdBinder<C, I, D>;
+    end(fn: (c: C, i: D, acc: A) => void): KeyInteractionCmdBinder<C, I, D, A>;
 
-    with(isCode: boolean, ...keysOrCodes: ReadonlyArray<string>): KeyInteractionCmdBinder<C, I, D>;
+    with(isCode: boolean, ...keysOrCodes: ReadonlyArray<string>): KeyInteractionCmdBinder<C, I, D, A>;
 
-    stopImmediatePropagation(): KeyInteractionCmdBinder<C, I, D>;
+    stopImmediatePropagation(): KeyInteractionCmdBinder<C, I, D, A>;
 
-    preventDefault(): KeyInteractionCmdBinder<C, I, D>;
+    preventDefault(): KeyInteractionCmdBinder<C, I, D, A>;
 
-    catch(fn: (ex: unknown) => void): KeyInteractionCmdBinder<C, I, D>;
+    catch(fn: (ex: unknown) => void): KeyInteractionCmdBinder<C, I, D, A>;
 
-    name(name: string): KeyInteractionCmdBinder<C, I, D>;
+    name(name: string): KeyInteractionCmdBinder<C, I, D, A>;
 
-    bind(): Binding<C, I, D>;
+    bind(): Binding<C, I, D, A>;
 }

@@ -28,7 +28,7 @@ import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
  * @typeParam C - The type of the command that will produce this binding.
  * @typeParam I - The type of the interaction that will use this binding.
  */
-export class BindingImpl<C extends Command, I extends Interaction<D>, D extends InteractionData> implements Binding<C, I, D> {
+export class BindingImpl<C extends Command, I extends Interaction<D>, D extends InteractionData, A> implements Binding<C, I, D, A> {
 
     protected _name: string | undefined;
 
@@ -43,6 +43,8 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
      */
     protected readonly _interaction: I;
 
+    public accumulator: A;
+
     /**
      * The current action in progress.
      */
@@ -56,6 +58,8 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
     protected readonly cmdProducer: (i?: D) => C;
 
     protected readonly cmdsProduced: Subject<C>;
+
+    protected readonly accumulatorInit: A | undefined;
 
     protected undoHistory: UndoHistoryBase;
 
@@ -82,14 +86,17 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
      * @param name - The optional name of the binding. If not provided, computed based on the interaction and command names
      */
     public constructor(continuousExecution: boolean, interaction: I, cmdProducer: (i?: D) => C,
-                       widgets: ReadonlyArray<unknown>, undoHistory: UndoHistoryBase, logger: Logger, name?: string) {
+                       widgets: ReadonlyArray<unknown>, undoHistory: UndoHistoryBase, logger: Logger,
+                       name?: string, accInit?: A) {
         // The name is partial until the binding procudes its first command
         this._name = name;
+        this.accumulatorInit = accInit;
         this.logBinding = false;
         this.logCmd = false;
         this.logUsage = false;
         this._timeCancelled = 0;
         this._timeEnded = 0;
+        this.accumulator = {...this.accumulatorInit} as A;
         this.cmdsProduced = new Subject();
         this.cmdProducer = cmdProducer;
         this._interaction = interaction;
@@ -116,6 +123,10 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
             }
         });
         interaction.registerToNodes(widgets);
+    }
+
+    private reinitAccumulator(): void {
+        this.accumulator = {...this.accumulatorInit} as A;
     }
 
     public get name(): string {
@@ -248,6 +259,7 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
             this._cmd.flush();
             this._cmd = undefined;
         }
+        this.reinitAccumulator();
     }
 
     public get running(): boolean {
@@ -283,6 +295,8 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
             }
         }
 
+        this.reinitAccumulator();
+
         if (this.logUsage) {
             this.logger.logBindingEnd(this.name, true);
         }
@@ -310,6 +324,7 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
             this.logger.logBindingMsg(`Starting binding: ${String(ok)}`);
         }
         if (ok) {
+            this.reinitAccumulator();
             this._cmd = this.createCommand();
             if (this._cmd !== undefined) {
                 this.first();
@@ -411,6 +426,8 @@ export class BindingImpl<C extends Command, I extends Interaction<D>, D extends 
         } else {
             this.executeCommandOnFSMStop(cmd);
         }
+
+        this.reinitAccumulator();
 
         if (this.logUsage) {
             this.logger.logBindingEnd(this.name, cancelled);

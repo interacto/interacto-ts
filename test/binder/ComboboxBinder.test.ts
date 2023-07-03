@@ -16,10 +16,11 @@ import {BindingsImpl, UndoHistoryImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
 import type {Bindings} from "../../src/api/binding/Bindings";
+import {robot} from "interacto-nono";
 
 let widget1: HTMLSelectElement;
 let widget2: HTMLSelectElement;
-let binding: Binding<StubCmd, Interaction<InteractionData>, InteractionData> | undefined;
+let binding: Binding<StubCmd, Interaction<InteractionData>, InteractionData, unknown> | undefined;
 let cmd: StubCmd;
 let ctx: BindingsContext;
 let bindings: Bindings<UndoHistoryBase>;
@@ -44,7 +45,7 @@ describe("using a combobox binder", () => {
             .on(widget1)
             .bind();
 
-        widget1.dispatchEvent(new Event("input"));
+        robot(widget1).input();
         expect(binding).toBeDefined();
         expect(cmd.exec).toBe(1);
     });
@@ -55,8 +56,8 @@ describe("using a combobox binder", () => {
             .toProduce(_i => new StubCmd(true))
             .bind();
 
-        widget1.dispatchEvent(new Event("input"));
-        widget2.dispatchEvent(new Event("input"));
+        robot(widget1).input();
+        robot(widget2).input();
 
         expect(binding).toBeDefined();
         expect(ctx.commands).toHaveLength(2);
@@ -71,7 +72,7 @@ describe("using a combobox binder", () => {
             })
             .bind();
 
-        widget1.dispatchEvent(new Event("input"));
+        robot(widget1).input();
 
         expect(binding).toBeDefined();
         expect(cmd.exec).toBe(11);
@@ -84,7 +85,7 @@ describe("using a combobox binder", () => {
             .when((_i: WidgetData<HTMLSelectElement>) => false)
             .bind();
 
-        widget1.dispatchEvent(new Event("input"));
+        robot(widget1).input();
 
         expect(binding).toBeDefined();
         expect(cmd.exec).toBe(0);

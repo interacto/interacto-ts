@@ -34,10 +34,10 @@ import type {WhenType} from "../../api/binder/When";
  * @typeParam C - The type of the action to produce.
  * @typeParam I - The type of the user interaction to bind.
  */
-export abstract class Binder<C extends Command, I extends Interaction<D>, D extends InteractionData>
-implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> {
+export abstract class Binder<C extends Command, I extends Interaction<D>, D extends InteractionData, A>
+implements CmdBinder<C>, InteractionBinder<I, D, A>, InteractionCmdBinder<C, I, D, A> {
 
-    protected firstFn?: (c: C, i: D) => void;
+    protected firstFn?: (c: C, i: D, acc: A) => void;
 
     protected produceFn?: (i: D | undefined) => C;
 
@@ -47,13 +47,13 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
 
     protected usingFn?: () => I;
 
-    protected hadEffectsFn?: (c: C, i: D) => void;
+    protected hadEffectsFn?: (c: C, i: D, acc: A) => void;
 
-    protected hadNoEffectFn?: (c: C, i: D) => void;
+    protected hadNoEffectFn?: (c: C, i: D, acc: A) => void;
 
-    protected cannotExecFn?: (c: C, i: D) => void;
+    protected cannotExecFn?: (c: C, i: D, acc: A) => void;
 
-    protected endFn?: (c: C, i: D) => void;
+    protected endFn?: (c: C, i: D, acc: A) => void;
 
     protected onErrFn?: (ex: unknown) => void;
 
@@ -71,21 +71,24 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
 
     protected logger: Logger;
 
-    protected whenFnArray: Array<When<D>> = [];
+    protected whenFnArray: Array<When<D, A>> = [];
 
-    protected firstFnArray: Array<(c: C, i: D) => void> = [];
+    protected firstFnArray: Array<(c: C, i: D, acc: A) => void> = [];
 
-    protected endFnArray: Array<(c: C, i: D) => void> = [];
+    protected endFnArray: Array<(c: C, i: D, acc: A) => void> = [];
 
-    protected hadEffectsFnArray: Array<(c: C, i: D) => void> = [];
+    protected hadEffectsFnArray: Array<(c: C, i: D, acc: A) => void> = [];
 
-    protected hadNoEffectFnArray: Array<(c: C, i: D) => void> = [];
+    protected hadNoEffectFnArray: Array<(c: C, i: D, acc: A) => void> = [];
 
-    protected cannotExecFnArray: Array<(c: C, i: D) => void> = [];
+    protected cannotExecFnArray: Array<(c: C, i: D, acc: A) => void> = [];
 
     protected onErrFnArray: Array<(ex: unknown) => void> = [];
 
-    protected constructor(undoHistory: UndoHistoryBase, logger: Logger, observer?: BindingsObserver, binder?: Partial<Binder<C, I, D>>) {
+    protected accInit: A | undefined;
+
+    protected constructor(undoHistory: UndoHistoryBase, logger: Logger, observer?: BindingsObserver,
+                          binder?: Partial<Binder<C, I, D, A>>, acc?: A) {
         this.widgets = [];
         this.dynamicNodes = [];
         this.logLevels = [];
@@ -94,6 +97,7 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
 
         Object.assign(this, binder);
 
+        this.accInit = acc;
         this.undoHistory = undoHistory;
         this.logger = logger;
         this.observer = observer;
@@ -101,7 +105,7 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
         this.copyFnArrays();
     }
 
-    protected abstract duplicate(): Binder<C, I, D>;
+    protected abstract duplicate(): Binder<C, I, D, A>;
 
     /**
      * Clones the arrays containing the routine functions after a binder is copied.
@@ -111,33 +115,33 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
         this.whenFnArray = Array.from(this.whenFnArray);
 
         this.firstFnArray = Array.from(this.firstFnArray);
-        this.firstFn = (c: C, i: D): void => {
+        this.firstFn = (c: C, i: D, acc: A): void => {
             for (const fn of this.firstFnArray) {
-                fn(c, i);
+                fn(c, i, acc);
             }
         };
         this.endFnArray = Array.from(this.endFnArray);
-        this.endFn = (c: C, i: D): void => {
+        this.endFn = (c: C, i: D, acc: A): void => {
             for (const fn of this.endFnArray) {
-                fn(c, i);
+                fn(c, i, acc);
             }
         };
         this.hadEffectsFnArray = Array.from(this.hadEffectsFnArray);
-        this.hadEffectsFn = (c: C, i: D): void => {
+        this.hadEffectsFn = (c: C, i: D, acc: A): void => {
             for (const fn of this.hadEffectsFnArray) {
-                fn(c, i);
+                fn(c, i, acc);
             }
         };
         this.hadNoEffectFnArray = Array.from(this.hadNoEffectFnArray);
-        this.hadNoEffectFn = (c: C, i: D): void => {
+        this.hadNoEffectFn = (c: C, i: D, acc: A): void => {
             for (const fn of this.hadNoEffectFnArray) {
-                fn(c, i);
+                fn(c, i, acc);
             }
         };
         this.cannotExecFnArray = Array.from(this.cannotExecFnArray);
-        this.cannotExecFn = (c: C, i: D): void => {
+        this.cannotExecFn = (c: C, i: D, acc: A): void => {
             for (const fn of this.cannotExecFnArray) {
-                fn(c, i);
+                fn(c, i, acc);
             }
         };
         this.onErrFnArray = Array.from(this.onErrFnArray);
@@ -148,7 +152,7 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
         };
     }
 
-    public on<W>(widget: ReadonlyArray<Widget<W>> | Widget<W>, ...widgets: ReadonlyArray<Widget<W>>): Binder<C, I, D> {
+    public on<W>(widget: ReadonlyArray<Widget<W>> | Widget<W>, ...widgets: ReadonlyArray<Widget<W>>): Binder<C, I, D, A> {
         // eslint-disable-next-line unicorn/prefer-spread
         const ws = Array
             .from(widgets)
@@ -166,7 +170,7 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
         return dup;
     }
 
-    public onDynamic(node: Widget<Node>): Binder<C, I, D> {
+    public onDynamic(node: Widget<Node>): Binder<C, I, D, A> {
         const dup = this.duplicate();
         const nodeEvt = isEltRef(node) ? node.nativeElement : node;
         // eslint-disable-next-line unicorn/prefer-spread
@@ -174,13 +178,13 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
         return dup;
     }
 
-    public first(fn: (c: C, i: D) => void): Binder<C, I, D> {
+    public first(fn: (c: C, i: D, acc: A) => void): Binder<C, I, D, A> {
         const dup = this.duplicate();
         dup.firstFnArray.push(fn);
         return dup;
     }
 
-    public when(fn: (i: D) => boolean, mode: WhenType = "nonStrict"): Binder<C, I, D> {
+    public when(fn: (i: D, acc: Readonly<A>) => boolean, mode: WhenType = "nonStrict"): Binder<C, I, D, A> {
         const dup = this.duplicate();
         dup.whenFnArray.push({
             fn,
@@ -189,77 +193,77 @@ implements CmdBinder<C>, InteractionBinder<I, D>, InteractionCmdBinder<C, I, D> 
         return dup;
     }
 
-    public ifHadEffects(fn: (c: C, i: D) => void): Binder<C, I, D> {
+    public ifHadEffects(fn: (c: C, i: D, acc: A) => void): Binder<C, I, D, A> {
         const dup = this.duplicate();
         dup.hadEffectsFnArray.push(fn);
         return dup;
     }
 
-    public ifHadNoEffect(fn: (c: C, i: D) => void): Binder<C, I, D> {
+    public ifHadNoEffect(fn: (c: C, i: D, acc: A) => void): Binder<C, I, D, A> {
         const dup = this.duplicate();
         dup.hadNoEffectFnArray.push(fn);
         return dup;
     }
 
-    public ifCannotExecute(fn: (c: C, i: D) => void): Binder<C, I, D> {
+    public ifCannotExecute(fn: (c: C, i: D, acc: A) => void): Binder<C, I, D, A> {
         const dup = this.duplicate();
         dup.cannotExecFnArray.push(fn);
         return dup;
     }
 
-    public end(fn: (c: C, i: D) => void): Binder<C, I, D> {
+    public end(fn: (c: C, i: D, acc: A) => void): Binder<C, I, D, A> {
         const dup = this.duplicate();
         dup.endFnArray.push(fn);
         return dup;
     }
 
-    public log(...level: ReadonlyArray<LogLevel>): Binder<C, I, D> {
+    public log(...level: ReadonlyArray<LogLevel>): Binder<C, I, D, A> {
         const dup = this.duplicate();
         dup.logLevels = Array.from(level);
         return dup;
     }
 
-    public stopImmediatePropagation(): Binder<C, I, D> {
+    public stopImmediatePropagation(): Binder<C, I, D, A> {
         const dup = this.duplicate();
         dup.stopPropagation = true;
         return dup;
     }
 
-    public preventDefault(): Binder<C, I, D> {
+    public preventDefault(): Binder<C, I, D, A> {
         const dup = this.duplicate();
         dup.prevDefault = true;
         return dup;
     }
 
-    public catch(fn: (ex: unknown) => void): Binder<C, I, D> {
+    public catch(fn: (ex: unknown) => void): Binder<C, I, D, A> {
         const dup = this.duplicate();
         dup.onErrFnArray.push(fn);
         return dup;
     }
 
-    public name(name: string): Binder<C, I, D> {
+    public name(name: string): Binder<C, I, D, A> {
         const dup = this.duplicate();
         dup.bindingName = name;
         return dup;
     }
 
-    public usingInteraction<I2 extends Interaction<D2>, D2 extends InteractionData>(fn: () => I2): Binder<C, I2, D2> {
+    public usingInteraction<I2 extends Interaction<D2>, D2 extends InteractionData, A2>(fn: () => I2): Binder<C, I2, D2, A2> {
         const dup = this.duplicate();
         dup.usingFn = fn as unknown as () => I;
-        return dup as unknown as Binder<C, I2, D2>;
+        return dup as unknown as Binder<C, I2, D2, A2>;
     }
 
-    public toProduce<C2 extends Command>(fn: (i: D) => C2): Binder<C2, I, D> {
+    public toProduce<C2 extends Command>(fn: (i: D) => C2): Binder<C2, I, D, A> {
         const dup = this.duplicate();
         dup.produceFn = fn as unknown as (i: D | undefined) => C;
-        return dup as unknown as Binder<C2, I, D>;
+        return dup as unknown as Binder<C2, I, D, A>;
     }
 
-    public toProduceAnon(fn: () => void): Binder<AnonCmd, I, D> {
+    public toProduceAnon(fn: () => void): Binder<AnonCmd, I, D, A> {
         const dup = this.duplicate();
         dup.produceFn = ((): AnonCmd => new AnonCmd(fn)) as unknown as (i: D | undefined) => C;
-        return dup as unknown as Binder<AnonCmd, I, D>;
+        return dup as unknown as Binder<AnonCmd, I, D, A>;
     }
 
-    public abstract bind(): Binding<C, I, D>;
+    public abstract bind(): Binding<C, I, D, A>;
 }

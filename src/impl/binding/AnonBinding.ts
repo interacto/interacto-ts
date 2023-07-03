@@ -23,39 +23,39 @@ import type {When} from "../../api/binder/When";
 import {isWhenAtEnd, isWhenAtStart, isWhenAtThen, isWhenStrict} from "../../api/binder/When";
 import {CancelFSMError} from "../fsm/CancelFSMError";
 
-export class AnonBinding<C extends Command, I extends Interaction<D>, D extends InteractionData>
-    extends BindingImpl<C, I, D> {
+export class AnonBinding<C extends Command, I extends Interaction<D>, D extends InteractionData, A>
+    extends BindingImpl<C, I, D, A> {
 
-    private readonly firstFn: ((c: C, i: D) => void) | undefined;
+    private readonly firstFn: ((c: C, i: D, acc: A) => void) | undefined;
 
-    private readonly thenFn: ((c: C, i: D) => void) | undefined;
+    private readonly thenFn: ((c: C, i: D, acc: A) => void) | undefined;
 
-    private readonly whenFn: Array<When<D>> | undefined;
+    private readonly whenFn: Array<When<D, A>> | undefined;
 
-    private readonly cancelFn: ((i: D) => void) | undefined;
+    private readonly cancelFn: ((i: D, acc: A) => void) | undefined;
 
-    private readonly endOrCancelFn: ((i: D) => void) | undefined;
+    private readonly endOrCancelFn: ((i: D, acc: A) => void) | undefined;
 
-    private readonly hadEffectsFn: ((c: C, i: D) => void) | undefined;
+    private readonly hadEffectsFn: ((c: C, i: D, acc: A) => void) | undefined;
 
-    private readonly hadNoEffectFn: ((c: C, i: D) => void) | undefined;
+    private readonly hadNoEffectFn: ((c: C, i: D, acc: A) => void) | undefined;
 
-    private readonly cannotExecFn: ((c: C, i: D) => void) | undefined;
+    private readonly cannotExecFn: ((c: C, i: D, acc: A) => void) | undefined;
 
-    private readonly onEndFn: ((c: C, i: D) => void) | undefined;
+    private readonly onEndFn: ((c: C, i: D, acc: A) => void) | undefined;
 
     private readonly onErrFn: ((ex: unknown) => void) | undefined;
 
     public constructor(continuousExec: boolean, interaction: I, undoHistory: UndoHistoryBase, logger: Logger, cmdSupplierFn: (d: D | undefined) => C,
                        widgets: ReadonlyArray<unknown>, dynamicNodes: ReadonlyArray<Node>,
                        loggers: ReadonlyArray<LogLevel>, timeoutThrottle: number,
-                       stopPropagation: boolean, prevDefault: boolean, firstFn?: (c: C, i: D) => void,
-                       thenFn?: (c: C, i: D) => void, whenFn?: Array<When<D>>,
-                       endFn?: (c: C, i: D) => void, cancelFn?: (i: D) => void,
-                       endOrCancelFn?: (i: D) => void, hadEffectsFn?: (c: C, i: D) => void,
-                       hadNoEffectFn?: (c: C, i: D) => void, cannotExecFn?: (c: C, i: D) => void,
-                       onErrFn?: (ex: unknown) => void, name?: string) {
-        super(continuousExec, interaction, cmdSupplierFn, widgets, undoHistory, logger, name);
+                       stopPropagation: boolean, prevDefault: boolean, firstFn?: (c: C, i: D, acc: A) => void,
+                       thenFn?: (c: C, i: D, acc: A) => void, whenFn?: Array<When<D, A>>,
+                       endFn?: (c: C, i: D, acc: A) => void, cancelFn?: (i: D, acc: A) => void,
+                       endOrCancelFn?: (i: D, acc: A) => void, hadEffectsFn?: (c: C, i: D, acc: A) => void,
+                       hadNoEffectFn?: (c: C, i: D, acc: A) => void, cannotExecFn?: (c: C, i: D, acc: A) => void,
+                       onErrFn?: (ex: unknown) => void, name?: string, accInit?: A) {
+        super(continuousExec, interaction, cmdSupplierFn, widgets, undoHistory, logger, name, accInit);
         this.configureLoggers(loggers);
         this.firstFn = firstFn;
         this.thenFn = thenFn;
@@ -89,7 +89,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
         const cmd = this.command;
         if (this.firstFn !== undefined && cmd !== undefined) {
             try {
-                this.firstFn(cmd, this.interaction.data);
+                this.firstFn(cmd, this.interaction.data, this.accumulator);
             } catch (error: unknown) {
                 this.catch(error);
                 this.logger.logBindingErr("Crash in 'first'", error);
@@ -102,7 +102,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
         const cmd = this.command;
         if (this.thenFn !== undefined && cmd !== undefined) {
             try {
-                this.thenFn(cmd, this.interaction.data);
+                this.thenFn(cmd, this.interaction.data, this.accumulator);
             } catch (error: unknown) {
                 this.catch(error);
                 this.logger.logBindingErr("Crash in 'then'", error);
@@ -114,7 +114,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
         const cmd = this.command;
         if (this.onEndFn !== undefined && cmd !== undefined) {
             try {
-                this.onEndFn(cmd, this.interaction.data);
+                this.onEndFn(cmd, this.interaction.data, this.accumulator);
             } catch (error: unknown) {
                 this.catch(error);
                 this.logger.logBindingErr("Crash in 'end'", error);
@@ -125,7 +125,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
     public override cancel(): void {
         if (this.cancelFn !== undefined) {
             try {
-                this.cancelFn(this.interaction.data);
+                this.cancelFn(this.interaction.data, this.accumulator);
             } catch (error: unknown) {
                 this.catch(error);
                 this.logger.logBindingErr("Crash in 'cancel'", error);
@@ -136,7 +136,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
     public override endOrCancel(): void {
         if (this.endOrCancelFn !== undefined) {
             try {
-                this.endOrCancelFn(this.interaction.data);
+                this.endOrCancelFn(this.interaction.data, this.accumulator);
             } catch (error: unknown) {
                 this.catch(error);
                 this.logger.logBindingErr("Crash in 'endOrCancel'", error);
@@ -148,7 +148,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
         const cmd = this.command;
         if (this.hadNoEffectFn !== undefined && cmd !== undefined) {
             try {
-                this.hadNoEffectFn(cmd, this.interaction.data);
+                this.hadNoEffectFn(cmd, this.interaction.data, this.accumulator);
             } catch (error: unknown) {
                 this.catch(error);
                 this.logger.logBindingErr("Crash in 'ifHadNoEffect'", error);
@@ -160,7 +160,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
         const cmd = this.command;
         if (this.hadEffectsFn !== undefined && cmd !== undefined) {
             try {
-                this.hadEffectsFn(cmd, this.interaction.data);
+                this.hadEffectsFn(cmd, this.interaction.data, this.accumulator);
             } catch (error: unknown) {
                 this.catch(error);
                 this.logger.logBindingErr("Crash in 'ifHadEffects'", error);
@@ -172,7 +172,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
         const cmd = this.command;
         if (this.cannotExecFn !== undefined && cmd !== undefined) {
             try {
-                this.cannotExecFn(cmd, this.interaction.data);
+                this.cannotExecFn(cmd, this.interaction.data, this.accumulator);
             } catch (error: unknown) {
                 this.catch(error);
                 this.logger.logBindingErr("Crash in 'ifCannotExecute'", error);
@@ -192,7 +192,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
         return this.whenChecker(when => isWhenAtEnd(when.type));
     }
 
-    private whenChecker(filterPredicate: (when: When<D>) => boolean): boolean {
+    private whenChecker(filterPredicate: (when: When<D, A>) => boolean): boolean {
         const ok = this.whenFn
             ?.filter(filterPredicate)
             .every(when => this.executeWhen(when)) ?? false;
@@ -202,10 +202,10 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, D extends 
         return ok;
     }
 
-    private executeWhen(when: When<D>): boolean {
+    private executeWhen(when: When<D, A>): boolean {
         let res: boolean;
         try {
-            res = when.fn(this.interaction.data);
+            res = when.fn(this.interaction.data, this.accumulator);
         } catch (error: unknown) {
             res = false;
             this.catch(error);

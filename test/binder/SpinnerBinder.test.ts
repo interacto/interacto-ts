@@ -16,10 +16,11 @@ import {BindingsImpl, SpinnerChangedFSM, UndoHistoryImpl} from "../../src/intera
 import {StubCmd} from "../command/StubCmd";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
 import type {Bindings} from "../../src/api/binding/Bindings";
+import {robot} from "interacto-nono";
 
 let widget1: HTMLInputElement;
 let widget2: HTMLInputElement;
-let binding: Binding<StubCmd, Interaction<InteractionData>, InteractionData> | undefined;
+let binding: Binding<StubCmd, Interaction<InteractionData>, InteractionData, unknown> | undefined;
 let cmd: StubCmd;
 let ctx: BindingsContext;
 let bindings: Bindings<UndoHistoryBase>;
@@ -48,7 +49,7 @@ describe("using a spinner binder", () => {
             .on(widget1)
             .bind();
 
-        widget1.dispatchEvent(new Event("input"));
+        robot(widget1).input();
         jest.runAllTimers();
         expect(binding).toBeDefined();
         expect(cmd.exec).toBe(1);
@@ -60,9 +61,9 @@ describe("using a spinner binder", () => {
             .toProduce((_i: WidgetData<HTMLInputElement>) => new StubCmd(true))
             .bind();
 
-        widget1.dispatchEvent(new Event("input"));
+        robot(widget1).input();
         jest.runAllTimers();
-        widget2.dispatchEvent(new Event("input"));
+        robot(widget2).input();
         jest.runAllTimers();
 
         expect(binding).toBeDefined();
@@ -78,7 +79,7 @@ describe("using a spinner binder", () => {
             })
             .bind();
 
-        widget1.dispatchEvent(new Event("input"));
+        robot(widget1).input();
         jest.runAllTimers();
 
         expect(binding).toBeDefined();
@@ -92,7 +93,7 @@ describe("using a spinner binder", () => {
             .when(_i => false)
             .bind();
 
-        widget1.dispatchEvent(new Event("input"));
+        robot(widget1).input();
         jest.runAllTimers();
         expect(binding).toBeDefined();
         expect(cmd.exec).toBe(0);
@@ -112,7 +113,7 @@ describe("using a spinner binder", () => {
             .end(() => {})
             .bind();
 
-        widget1.dispatchEvent(new Event("input"));
+        robot(widget1).input();
         jest.runAllTimers();
 
         expect(cmd.exec).toBe(11);
@@ -129,10 +130,10 @@ describe("using a spinner binder", () => {
             .end((_c, _i) => {})
             .bind();
 
-        widget1.dispatchEvent(new Event("input"));
-        widget1.dispatchEvent(new Event("input"));
-        widget1.dispatchEvent(new Event("input"));
-        widget1.dispatchEvent(new Event("input"));
+        robot(widget1).input();
+        robot(widget1).input();
+        robot(widget1).input();
+        robot(widget1).input();
         jest.runAllTimers();
 
         expect(cpt).toBe(5);
@@ -151,12 +152,12 @@ describe("using a spinner binder", () => {
             .end((_c: StubCmd) => cpt2++)
             .bind();
 
-        widget1.dispatchEvent(new Event("input"));
-        widget1.dispatchEvent(new Event("input"));
+        robot(widget1).input();
+        robot(widget1).input();
         jest.runAllTimers();
 
-        widget1.dispatchEvent(new Event("input"));
-        widget1.dispatchEvent(new Event("input"));
+        robot(widget1).input();
+        robot(widget1).input();
         jest.runAllTimers();
 
         expect(cpt1).toBe(2);

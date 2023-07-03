@@ -21,8 +21,8 @@ import {mock} from "jest-mock-extended";
 
 let canvas1: HTMLElement;
 let canvas2: HTMLElement;
-let binding1: Binding<StubCmd, MouseDown, PointData>;
-let binding2: Binding<StubCmd, MouseDown, PointData>;
+let binding1: Binding<StubCmd, MouseDown, PointData, unknown>;
+let binding2: Binding<StubCmd, MouseDown, PointData, unknown>;
 let disposable: Subscription | undefined;
 let bindings: Bindings<UndoHistoryBase>;
 

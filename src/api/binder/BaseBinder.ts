@@ -62,5 +62,5 @@ export interface BaseBinder extends BaseBinderBuilder {
      * @typeParam I - The user interaction type
      * @returns A clone of the current binder to chain the building configuration.
      */
-    usingInteraction<I extends Interaction<D>, D extends InteractionData>(fn: () => I): InteractionBinder<I, D>;
+    usingInteraction<I extends Interaction<D>, D extends InteractionData, A>(fn: () => I): InteractionBinder<I, D, A>;
 }

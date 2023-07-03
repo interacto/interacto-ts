@@ -45,7 +45,7 @@ export interface CmdBinder<C extends Command> extends CmdBinderBuilder<C> {
      * @typeParam I - The user interaction type
      * @returns A clone of the current binder to chain the building configuration.
      */
-    usingInteraction<I extends Interaction<D>, D extends InteractionData>(fn: () => I): InteractionCmdBinder<C, I, D>;
+    usingInteraction<I extends Interaction<D>, D extends InteractionData, A>(fn: () => I): InteractionCmdBinder<C, I, D, A>;
 
     stopImmediatePropagation(): CmdBinder<C>;
 

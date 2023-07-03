@@ -27,27 +27,27 @@ import type {WhenType} from "./When";
  * @typeParam I - The type of the user interaction
  * @typeParam D - The type of the interaction data of the user interaction
  */
-export interface InteractionBinder<I extends Interaction<D>, D extends InteractionData>
-    extends InteractionBinderBuilder<I, D> {
-    when(fn: (i: D) => boolean, mode?: WhenType): InteractionBinder<I, D>;
+export interface InteractionBinder<I extends Interaction<D>, D extends InteractionData, A>
+    extends InteractionBinderBuilder<I, D, A> {
+    when(fn: (i: D, acc: Readonly<A>) => boolean, mode?: WhenType): InteractionBinder<I, D, A>;
 
-    on<W>(widget: ReadonlyArray<Widget<W>> | Widget<W>, ...widgets: ReadonlyArray<Widget<W>>): InteractionBinder<I, D>;
+    on<W>(widget: ReadonlyArray<Widget<W>> | Widget<W>, ...widgets: ReadonlyArray<Widget<W>>): InteractionBinder<I, D, A>;
 
-    onDynamic(node: Widget<Node>): InteractionBinder<I, D>;
+    onDynamic(node: Widget<Node>): InteractionBinder<I, D, A>;
 
-    log(...level: ReadonlyArray<LogLevel>): InteractionBinder<I, D>;
+    log(...level: ReadonlyArray<LogLevel>): InteractionBinder<I, D, A>;
 
-    end(fn: () => void): InteractionBinder<I, D>;
+    end(fn: () => void): InteractionBinder<I, D, A>;
 
-    stopImmediatePropagation(): InteractionBinder<I, D>;
+    stopImmediatePropagation(): InteractionBinder<I, D, A>;
 
-    preventDefault(): InteractionBinder<I, D>;
+    preventDefault(): InteractionBinder<I, D, A>;
 
-    catch(fn: (ex: unknown) => void): InteractionBinder<I, D>;
+    catch(fn: (ex: unknown) => void): InteractionBinder<I, D, A>;
 
-    name(name: string): InteractionBinder<I, D>;
+    name(name: string): InteractionBinder<I, D, A>;
 
-    toProduce<C extends Command>(fn: (i: D) => C): InteractionCmdBinder<C, I, D>;
+    toProduce<C extends Command>(fn: (i: D) => C): InteractionCmdBinder<C, I, D, A>;
 
-    toProduceAnon(fn: () => void): InteractionCmdBinder<AnonCmd, I, D>;
+    toProduceAnon(fn: () => void): InteractionCmdBinder<AnonCmd, I, D, A>;
 }
