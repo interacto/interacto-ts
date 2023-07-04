@@ -37,25 +37,44 @@ import type {Logger} from "../logging/Logger";
 import type {WheelData} from "../interaction/WheelData";
 import type {UndoHistoryBase} from "../undo/UndoHistoryBase";
 
-export type PartialButtonBinder<A> = InteractionBinder<Interaction<WidgetData<HTMLButtonElement>>, WidgetData<HTMLButtonElement>, A>;
-export type PartialInputBinder<A> = InteractionBinder<Interaction<WidgetData<HTMLInputElement>>, WidgetData<HTMLInputElement>, A>;
-export type PartialSelectBinder<A> = InteractionBinder<Interaction<WidgetData<HTMLSelectElement>>, WidgetData<HTMLSelectElement>, A>;
-export type PartialSpinnerBinder<A> = InteractionUpdateBinder<Interaction<WidgetData<HTMLInputElement>>, WidgetData<HTMLInputElement>, A>;
-export type PartialAnchorBinder<A> = InteractionBinder<Interaction<WidgetData<HTMLAnchorElement>>, WidgetData<HTMLAnchorElement>, A>;
-export type PartialTextInputBinder<A> = InteractionUpdateBinder<Interaction<WidgetData<HTMLInputElement | HTMLTextAreaElement>>,
+export type PartialButtonTypedBinder<A> = InteractionBinder<Interaction<WidgetData<HTMLButtonElement>>, WidgetData<HTMLButtonElement>, A>;
+export type PartialInputTypedBinder<A> = InteractionBinder<Interaction<WidgetData<HTMLInputElement>>, WidgetData<HTMLInputElement>, A>;
+export type PartialSelectTypedBinder<A> = InteractionBinder<Interaction<WidgetData<HTMLSelectElement>>, WidgetData<HTMLSelectElement>, A>;
+export type PartialSpinnerTypedBinder<A> = InteractionUpdateBinder<Interaction<WidgetData<HTMLInputElement>>, WidgetData<HTMLInputElement>, A>;
+export type PartialAnchorTypedBinder<A> = InteractionBinder<Interaction<WidgetData<HTMLAnchorElement>>, WidgetData<HTMLAnchorElement>, A>;
+export type PartialTextInputTypedBinder<A> = InteractionUpdateBinder<Interaction<WidgetData<HTMLInputElement | HTMLTextAreaElement>>,
 WidgetData<HTMLInputElement | HTMLTextAreaElement>, A>;
-export type PartialTouchSrcTgtBinder<A> = InteractionUpdateBinder<Interaction<SrcTgtPointsData<TouchData>>, SrcTgtPointsData<TouchData>, A>;
-export type PartialMultiTouchBinder<A> = InteractionUpdateBinder<Interaction<MultiTouchData>, MultiTouchData, A>;
-export type PartialTapBinder<A> = InteractionUpdateBinder<Interaction<TapData>, TapData, A>;
-export type PartialTouchBinder<A> = InteractionUpdateBinder<Interaction<TouchData>, TouchData, A>;
-export type PartialPointBinder<A> = InteractionBinder<Interaction<PointData>, PointData, A>;
-export type PartialWheelBinder<A> = InteractionBinder<Interaction<WheelData>, WheelData, A>;
-export type PartialScrollBinder<A> = InteractionBinder<Interaction<ScrollData>, ScrollData, A>;
-export type PartialUpdatePointBinder<A> = InteractionUpdateBinder<Interaction<PointData>, PointData, A>;
-export type PartialPointsBinder<A> = InteractionUpdateBinder<Interaction<PointsData>, PointsData, A>;
-export type PartialPointSrcTgtBinder<A> = InteractionUpdateBinder<Interaction<SrcTgtPointsData<PointData>>, SrcTgtPointsData<PointData>, A>;
-export type PartialKeyBinder<A> = KeyInteractionBinder<Interaction<KeyData>, KeyData, A>;
-export type PartialKeysBinder<A> = KeyInteractionUpdateBinder<Interaction<KeysData>, KeysData, A>;
+export type PartialTouchSrcTgtTypedBinder<A> = InteractionUpdateBinder<Interaction<SrcTgtPointsData<TouchData>>, SrcTgtPointsData<TouchData>, A>;
+export type PartialMultiTouchTypedBinder<A> = InteractionUpdateBinder<Interaction<MultiTouchData>, MultiTouchData, A>;
+export type PartialTapTypedBinder<A> = InteractionUpdateBinder<Interaction<TapData>, TapData, A>;
+export type PartialTouchTypedBinder<A> = InteractionUpdateBinder<Interaction<TouchData>, TouchData, A>;
+export type PartialPointTypedBinder<A> = InteractionBinder<Interaction<PointData>, PointData, A>;
+export type PartialWheelTypedBinder<A> = InteractionBinder<Interaction<WheelData>, WheelData, A>;
+export type PartialScrollTypedBinder<A> = InteractionBinder<Interaction<ScrollData>, ScrollData, A>;
+export type PartialUpdatePointTypedBinder<A> = InteractionUpdateBinder<Interaction<PointData>, PointData, A>;
+export type PartialPointsTypedBinder<A> = InteractionUpdateBinder<Interaction<PointsData>, PointsData, A>;
+export type PartialPointSrcTgtTypedBinder<A> = InteractionUpdateBinder<Interaction<SrcTgtPointsData<PointData>>, SrcTgtPointsData<PointData>, A>;
+export type PartialKeyTypedBinder<A> = KeyInteractionBinder<Interaction<KeyData>, KeyData, A>;
+export type PartialKeysTypedBinder<A> = KeyInteractionUpdateBinder<Interaction<KeysData>, KeysData, A>;
+
+export type PartialButtonBinder = PartialButtonTypedBinder<unknown>;
+export type PartialInputBinder = PartialInputTypedBinder<unknown>;
+export type PartialSelectBinder = PartialSelectTypedBinder<unknown>;
+export type PartialSpinnerBinder = PartialSpinnerTypedBinder<unknown>;
+export type PartialAnchorBinder = PartialAnchorTypedBinder<unknown>;
+export type PartialTextInputBinder = PartialTextInputTypedBinder<unknown>;
+export type PartialTouchSrcTgtBinder = PartialTouchSrcTgtTypedBinder<unknown>;
+export type PartialMultiTouchBinder = PartialMultiTouchTypedBinder<unknown>;
+export type PartialTapBinder = PartialTapTypedBinder<unknown>;
+export type PartialTouchBinder = PartialTouchTypedBinder<unknown>;
+export type PartialPointBinder = PartialPointTypedBinder<unknown>;
+export type PartialWheelBinder = PartialWheelTypedBinder<unknown>;
+export type PartialScrollBinder = PartialScrollTypedBinder<unknown>;
+export type PartialUpdatePointBinder = PartialUpdatePointTypedBinder<unknown>;
+export type PartialPointsBinder = PartialPointsTypedBinder<unknown>;
+export type PartialPointSrcTgtBinder = PartialPointSrcTgtTypedBinder<unknown>;
+export type PartialKeyBinder = PartialKeyTypedBinder<unknown>;
+export type PartialKeysBinder = PartialKeysTypedBinder<unknown>;
 
 /**
  * A contextual object for creating binders and thus bindings.
@@ -80,19 +99,19 @@ export abstract class Bindings<H extends UndoHistoryBase> {
      * Do not forget to call bind() at the end of the build to execute the builder.
      * @returns The binding builder.
      */
-    public abstract buttonBinder<A>(accInit?: A): PartialButtonBinder<A>;
+    public abstract buttonBinder<A>(accInit?: A): PartialButtonTypedBinder<A>;
 
-    public abstract checkboxBinder<A>(accInit?: A): PartialInputBinder<A>;
+    public abstract checkboxBinder<A>(accInit?: A): PartialInputTypedBinder<A>;
 
-    public abstract colorPickerBinder<A>(accInit?: A): PartialInputBinder<A>;
+    public abstract colorPickerBinder<A>(accInit?: A): PartialInputTypedBinder<A>;
 
-    public abstract comboBoxBinder<A>(accInit?: A): PartialSelectBinder<A>;
+    public abstract comboBoxBinder<A>(accInit?: A): PartialSelectTypedBinder<A>;
 
-    public abstract spinnerBinder<A>(accInit?: A): PartialSpinnerBinder<A>;
+    public abstract spinnerBinder<A>(accInit?: A): PartialSpinnerTypedBinder<A>;
 
-    public abstract dateBinder<A>(accInit?: A): PartialInputBinder<A>;
+    public abstract dateBinder<A>(accInit?: A): PartialInputTypedBinder<A>;
 
-    public abstract hyperlinkBinder<A>(accInit?: A): PartialAnchorBinder<A>;
+    public abstract hyperlinkBinder<A>(accInit?: A): PartialAnchorTypedBinder<A>;
 
     /**
      * Creates a binding that uses a text interaction. This binder takes as argument a timeout value:
@@ -101,13 +120,13 @@ export abstract class Bindings<H extends UndoHistoryBase> {
      * This is a mainstream optimisation that many text processing tools implement to limit the number of editing actions.
      * @param timeout - The timeout in milliseconds after which the interaction stops and the command produced.
      */
-    public abstract textInputBinder<A>(timeout?: number, accInit?: A): PartialTextInputBinder<A>;
+    public abstract textInputBinder<A>(timeout?: number, accInit?: A): PartialTextInputTypedBinder<A>;
 
     /**
      * Creates a binding that uses the touch DnD interaction (a DnD interaction that uses one touch).
      * This interaction works as a Drag-and-Drop interaction.
      */
-    public abstract touchDnDBinder<A>(cancellable: boolean, accInit?: A): PartialTouchSrcTgtBinder<A>;
+    public abstract touchDnDBinder<A>(cancellable: boolean, accInit?: A): PartialTouchSrcTgtTypedBinder<A>;
 
     /**
      * Creates a binding that uses the Reciprocal DnD interaction with a touch.
@@ -116,7 +135,7 @@ export abstract class Bindings<H extends UndoHistoryBase> {
      * @param spring - The line between the handle and the previous position of the element.
      */
     public abstract reciprocalTouchDnDBinder<A>(handle: EltRef<SVGCircleElement>, spring: EltRef<SVGLineElement>, accInit?: A):
-    PartialTouchSrcTgtBinder<A>;
+    PartialTouchSrcTgtTypedBinder<A>;
 
     /**
      * Creates a binding that uses the multi-touch user interaction.
@@ -124,21 +143,21 @@ export abstract class Bindings<H extends UndoHistoryBase> {
      * A multi-touch starts when all its touches have started.
      * A multi-touch ends when the number of required touches is greater than the number of touches.
      */
-    public abstract multiTouchBinder<A>(nbTouches: number, accInit?: A): PartialMultiTouchBinder<A>;
+    public abstract multiTouchBinder<A>(nbTouches: number, accInit?: A): PartialMultiTouchTypedBinder<A>;
 
     /**
      * Creates a binding that uses the tap user interaction.
      * @param nbTap - The number of required taps.
      * If this number is not reached after a timeout, the interaction is cancelled.
      */
-    public abstract tapBinder<A>(nbTap: number, accInit?: A): PartialTapBinder<A>;
+    public abstract tapBinder<A>(nbTap: number, accInit?: A): PartialTapTypedBinder<A>;
 
     /**
      * Creates a binding that uses the long touch interaction.
      * @param duration - The duration of the touch to end the user interaction.
      * If this duration is not reached, the interaction is cancelled.
      */
-    public abstract longTouchBinder<A>(duration: number, accInit?: A): PartialTouchBinder<A>;
+    public abstract longTouchBinder<A>(duration: number, accInit?: A): PartialTouchTypedBinder<A>;
 
     /**
      * Creates a binding that uses the swipe interaction.
@@ -150,7 +169,7 @@ export abstract class Bindings<H extends UndoHistoryBase> {
      * @param pxTolerance - The tolerance rate in pixels accepted while executing the swipe
      */
     public abstract swipeBinder<A>(horizontal: boolean, minVelocity: number, minLength: number, nbTouches: number,
-        pxTolerance: number, accInit?: A): PartialMultiTouchBinder<A>;
+        pxTolerance: number, accInit?: A): PartialMultiTouchTypedBinder<A>;
 
     /**
      * Creates a binding that uses the pan interaction.
@@ -160,38 +179,38 @@ export abstract class Bindings<H extends UndoHistoryBase> {
      * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
      */
     public abstract panBinder<A>(horizontal: boolean, minLength: number, nbTouches: number, pxTolerance: number, accInit?: A):
-    PartialMultiTouchBinder<A>;
+    PartialMultiTouchTypedBinder<A>;
 
     /**
      * Creates a binding that uses the pinch interaction.
      * @param pxTolerance - The tolerance rate in pixels accepted while executing the pinch
      */
-    public abstract pinchBinder<A>(pxTolerance: number, accInit?: A): PartialMultiTouchBinder<A>;
+    public abstract pinchBinder<A>(pxTolerance: number, accInit?: A): PartialMultiTouchTypedBinder<A>;
 
     /**
      * Creates a binding that uses the click interaction.
      */
-    public abstract clickBinder<A>(accInit?: A): PartialPointBinder<A>;
+    public abstract clickBinder<A>(accInit?: A): PartialPointTypedBinder<A>;
 
     /**
      * Creates a binding that uses the Wheel (user uses a mouse scrolling wheel) interaction.
      */
-    public abstract wheelBinder<A>(accInit?: A): PartialWheelBinder<A>;
+    public abstract wheelBinder<A>(accInit?: A): PartialWheelTypedBinder<A>;
 
     /**
      * Creates a binding that uses the double click interaction.
      */
-    public abstract dbleClickBinder<A>(accInit?: A): PartialUpdatePointBinder<A>;
+    public abstract dbleClickBinder<A>(accInit?: A): PartialUpdatePointTypedBinder<A>;
 
     /**
      * Creates a binding that uses the MouseDown (mouse button pressed) interaction.
      */
-    public abstract mouseDownBinder<A>(accInit?: A): PartialPointBinder<A>;
+    public abstract mouseDownBinder<A>(accInit?: A): PartialPointTypedBinder<A>;
 
     /**
      * Creates a binding that uses the MouseUp (mouse button released) interaction.
      */
-    public abstract mouseUpBinder<A>(accInit?: A): PartialPointBinder<A>;
+    public abstract mouseUpBinder<A>(accInit?: A): PartialPointTypedBinder<A>;
 
     /**
      * Creates a binding that uses the LongMouseDown
@@ -199,42 +218,42 @@ export abstract class Bindings<H extends UndoHistoryBase> {
      * @param duration - The duration of the pressure to end the user interaction.
      * If this duration is not reached, the interaction is cancelled.
      */
-    public abstract longMouseDownBinder<A>(duration: number, accInit?: A): PartialUpdatePointBinder<A>;
+    public abstract longMouseDownBinder<A>(duration: number, accInit?: A): PartialUpdatePointTypedBinder<A>;
 
     /**
      * Creates a binding for clicking n times.
      * @param nbClicks - The number of clicks to do.
      * If this number is not reached, the interaction is cancelled after a timeout of 1s.
      */
-    public abstract clicksBinder<A>(nbClicks: number, accInit?: A): PartialPointsBinder<A>;
+    public abstract clicksBinder<A>(nbClicks: number, accInit?: A): PartialPointsTypedBinder<A>;
 
     /**
      * Creates a binding that uses the MouseEnter (mouse cursor enters the element) interaction.
      * @param withBubbling - True: event bubbling is enabled and events on child elements will be registered
      */
-    public abstract mouseEnterBinder<A>(withBubbling: boolean, accInit?: A): PartialPointBinder<A>;
+    public abstract mouseEnterBinder<A>(withBubbling: boolean, accInit?: A): PartialPointTypedBinder<A>;
 
     /**
      * Creates a binding that uses the MouseLeave (mouse cursor leaves the element) interaction.
      * @param withBubbling - True: event bubbling is enabled and events on child elements will be registered
      */
-    public abstract mouseLeaveBinder<A>(withBubbling: boolean, accInit?: A): PartialPointBinder<A>;
+    public abstract mouseLeaveBinder<A>(withBubbling: boolean, accInit?: A): PartialPointTypedBinder<A>;
 
     /**
      * Creates a binding that uses the MouseMove (mouse cursor moves) interaction.
      */
-    public abstract mouseMoveBinder<A>(accInit?: A): PartialPointBinder<A>;
+    public abstract mouseMoveBinder<A>(accInit?: A): PartialPointTypedBinder<A>;
 
     /**
      * Creates a binding that uses the mouse scroll interaction.
      */
-    public abstract scrollBinder<A>(accInit?: A): PartialScrollBinder<A>;
+    public abstract scrollBinder<A>(accInit?: A): PartialScrollTypedBinder<A>;
 
     /**
      * Creates a binding that uses the DnD interaction.
      * @param cancellable - True: the escape key will cancels the DnD.
      */
-    public abstract dndBinder<A>(cancellable: boolean, accInit?: A): PartialPointSrcTgtBinder<A>;
+    public abstract dndBinder<A>(cancellable: boolean, accInit?: A): PartialPointSrcTgtTypedBinder<A>;
 
     /**
      * Creates a binding that uses the Reciprocal DnD interaction.
@@ -243,39 +262,39 @@ export abstract class Bindings<H extends UndoHistoryBase> {
      * @param spring - The line between the handle and the previous position of the element.
      */
     public abstract reciprocalDndBinder<A>(handle: EltRef<SVGCircleElement>, spring: EltRef<SVGLineElement>, accInit?: A):
-    PartialPointSrcTgtBinder<A>;
+    PartialPointSrcTgtTypedBinder<A>;
 
     /**
      * Creates a binding that uses the drag lock interaction.
      */
-    public abstract dragLockBinder<A>(accInit?: A): PartialPointSrcTgtBinder<A>;
+    public abstract dragLockBinder<A>(accInit?: A): PartialPointSrcTgtTypedBinder<A>;
 
     /**
      * Creates a binding that uses the KeyDown (key pressed) interaction.
      * @param modifierAccepted - True: the interaction will consider key modifiers.
      */
-    public abstract keyDownBinder<A>(modifierAccepted: boolean, accInit?: A): PartialKeyBinder<A>;
+    public abstract keyDownBinder<A>(modifierAccepted: boolean, accInit?: A): PartialKeyTypedBinder<A>;
 
     /**
      * Creates a binding that uses the KeysDown (multiple keys pressed) interaction.
      */
-    public abstract keysDownBinder<A>(accInit?: A): PartialKeysBinder<A>;
+    public abstract keysDownBinder<A>(accInit?: A): PartialKeysTypedBinder<A>;
 
     /**
      * Creates a binding that uses the KeyUp (key released) interaction.
      * @param modifierAccepted - True: the interaction will consider key modifiers.
      */
-    public abstract keyUpBinder<A>(modifierAccepted: boolean, accInit?: A): PartialKeyBinder<A>;
+    public abstract keyUpBinder<A>(modifierAccepted: boolean, accInit?: A): PartialKeyTypedBinder<A>;
 
     /**
      * Creates a binding that uses the KeysType (multiple keys pressed then released) interaction.
      */
-    public abstract keysTypeBinder<A>(accInit?: A): PartialKeysBinder<A>;
+    public abstract keysTypeBinder<A>(accInit?: A): PartialKeysTypedBinder<A>;
 
     /**
      * Creates a binding that uses the KeyTyped (key pressed then released) interaction.
      */
-    public abstract keyTypeBinder<A>(accInit?: A): PartialKeyBinder<A>;
+    public abstract keyTypeBinder<A>(accInit?: A): PartialKeyTypedBinder<A>;
 
     /**
      * Creates two bindings for undo and redo operations with buttons.
