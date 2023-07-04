@@ -7,7 +7,7 @@ year: "2021"
 type: article
 journal: "IEEE Transactions on Software Engineering"
 authors:
-  - family-names: Blouin
-    given-names: Arnaud
-  - family-names: Jézéquel
-    given-names: Jean-Marc
+- family-names: Blouin
+  given-names: Arnaud
+- family-names: Jézéquel
+  given-names: Jean-Marc
