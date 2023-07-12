@@ -20,7 +20,6 @@ export const mouseEventTypes = [
     "mouseout",
     "mouseenter",
     "mouseleave",
-    "mousemove",
     "click",
     "auxclick"
 ] as const;
