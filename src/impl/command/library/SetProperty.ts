@@ -54,6 +54,6 @@ export class SetProperty<T, S extends keyof T> extends UndoableCommand {
     }
 
     public override getUndoName(): string {
-        return `Set ${String(this.prop)} value`;
+        return `Set '${String(this.prop)}' value: ${String(this.newvalue)}`;
     }
 }
