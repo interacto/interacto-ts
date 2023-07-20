@@ -74,7 +74,7 @@ describe("using a set property command", () => {
         });
 
         test("undo name", () => {
-            expect(cmd.getUndoName()).toBe("Set foo value");
+            expect(cmd.getUndoName()).toBe("Set 'foo' value: 3");
         });
     });
 
@@ -120,7 +120,7 @@ describe("using a set property command", () => {
         });
 
         test("undo name", () => {
-            expect(cmd.getUndoName()).toBe("Set foo2 value");
+            expect(cmd.getUndoName()).toBe("Set 'foo2' value: yolo");
         });
     });
 
@@ -163,7 +163,7 @@ describe("using a set property command", () => {
         });
 
         test("undo name", () => {
-            expect(cmd.getUndoName()).toBe("Set bar value");
+            expect(cmd.getUndoName()).toBe("Set 'bar' value: [object Object]");
         });
     });
 });
