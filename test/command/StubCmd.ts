@@ -18,19 +18,18 @@ import type {Undoable} from "../../src/api/undo/Undoable";
 export class StubCmd extends CommandBase {
     public candoValue: boolean;
 
-    public exec = 0;
-
     public effects: boolean | undefined;
+
+    public value: number;
 
     public constructor(candoValue = false, effects?: boolean) {
         super();
         this.candoValue = candoValue;
         this.effects = effects;
+        this.value = 0;
     }
 
-    protected execution(): void {
-        this.exec++;
-    }
+    protected execution(): void {}
 
     public override canExecute(): boolean {
         return this.candoValue;

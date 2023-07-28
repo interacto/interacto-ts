@@ -37,9 +37,12 @@ describe("using a button binder", () => {
 
     afterEach(() => {
         bindings.clear();
+        jest.clearAllMocks();
     });
 
     test("commandExecutedOnSingleButtonConsumer", () => {
+        jest.spyOn(cmd, "execute");
+
         binding = bindings.buttonBinder()
             .toProduce(() => cmd)
             .on(button1)
@@ -47,12 +50,14 @@ describe("using a button binder", () => {
 
         button1.click();
         expect(binding).toBeDefined();
-        expect(cmd.exec).toBe(1);
+        expect(cmd.execute).toHaveBeenCalledTimes(1);
         expect(ctx.commands).toHaveLength(1);
         expect(ctx.commands[0]).toBe(cmd);
     });
 
     test("commandExecutedOnSingleButtonConsumerConsumer", () => {
+        jest.spyOn(cmd, "execute");
+
         binding = bindings.buttonBinder()
             .on(button1)
             .toProduce(_i => cmd)
@@ -60,12 +65,16 @@ describe("using a button binder", () => {
 
         button1.click();
         expect(binding).toBeDefined();
-        expect(cmd.exec).toBe(1);
+        expect(cmd.execute).toHaveBeenCalledTimes(1);
     });
 
     test("commandExecutedOnTwoButtons", () => {
         binding = bindings.buttonBinder()
-            .toProduce(() => new StubCmd(true))
+            .toProduce(() => {
+                const c = new StubCmd(true);
+                jest.spyOn(c, "execute");
+                return c;
+            })
             .on(button1, button2)
             .bind();
 
@@ -75,8 +84,10 @@ describe("using a button binder", () => {
         expect(binding).toBeDefined();
         expect(ctx.commands).toHaveLength(2);
         expect(ctx.getCmd(0)).not.toBe(ctx.getCmd(1));
-        expect(ctx.getCmd<StubCmd>(0)?.exec).toBe(1);
-        expect(ctx.getCmd<StubCmd>(1)?.exec).toBe(1);
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        expect(ctx.getCmd<StubCmd>(0)!.execute).toHaveBeenCalledTimes(1);
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        expect(ctx.getCmd<StubCmd>(1)!.execute).toHaveBeenCalledTimes(1);
     });
 
     test("command executed on two buttons with one array", () => {
@@ -195,25 +206,30 @@ describe("using a button binder", () => {
     });
 
     test("init1Executed", () => {
+        jest.spyOn(cmd, "execute");
+
         binding = bindings.buttonBinder()
             .on(button1)
             .toProduce(() => cmd)
             .first(c => {
-                c.exec = 10;
+                c.value = 20;
             })
             .bind();
 
         button1.click();
 
         expect(binding).toBeDefined();
-        expect(cmd.exec).toBe(11);
+        expect(cmd.value).toBe(20);
+        expect(cmd.execute).toHaveBeenCalledTimes(1);
     });
 
     test("init2Executed", () => {
+        jest.spyOn(cmd, "execute");
+
         binding = bindings.buttonBinder()
             .toProduce(_i => cmd)
             .first((c, _i) => {
-                c.exec = 10;
+                c.value = 10;
             })
             .on(button1)
             .bind();
@@ -221,10 +237,13 @@ describe("using a button binder", () => {
         button1.click();
 
         expect(binding).toBeDefined();
-        expect(cmd.exec).toBe(11);
+        expect(cmd.value).toBe(10);
+        expect(cmd.execute).toHaveBeenCalledTimes(1);
     });
 
     test("checkFalse", () => {
+        jest.spyOn(cmd, "execute");
+
         binding = bindings.buttonBinder()
             .toProduce(_i => cmd)
             .when(_i => false)
@@ -234,10 +253,12 @@ describe("using a button binder", () => {
         button1.click();
 
         expect(binding).toBeDefined();
-        expect(cmd.exec).toBe(0);
+        expect(cmd.execute).not.toHaveBeenCalled();
     });
 
     test("commandExecutedOnTwoButtonsSame", () => {
+        jest.spyOn(cmd, "execute");
+
         let cpt = 0;
         binding = bindings.buttonBinder()
             .on(button1, button1)
@@ -250,7 +271,7 @@ describe("using a button binder", () => {
         button1.click();
 
         expect(binding).toBeDefined();
-        expect(cmd.exec).toBe(1);
+        expect(cmd.execute).toHaveBeenCalledTimes(1);
         expect(cpt).toBe(1);
     });
 

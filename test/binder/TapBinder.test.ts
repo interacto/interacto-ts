@@ -46,6 +46,8 @@ describe("using a tap binder", () => {
         });
 
         test("run tap produces cmd", () => {
+            jest.spyOn(cmd, "execute");
+
             binding = bindings.tapBinder(2)
                 .toProduce(() => cmd)
                 .on(c1)
@@ -59,7 +61,7 @@ describe("using a tap binder", () => {
                 .touchend();
 
             expect(binding).toBeDefined();
-            expect(cmd.exec).toBe(1);
+            expect(cmd.execute).toHaveBeenCalledTimes(1);
             expect(ctx.commands).toHaveLength(1);
             expect(ctx.getCmd(0)).toBe(cmd);
         });

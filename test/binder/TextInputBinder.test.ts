@@ -42,6 +42,8 @@ describe("using a text input binder", () => {
     test("type text create command", () => {
         const textonUpdate = new Array<string>();
 
+        jest.spyOn(cmd, "execute");
+
         // eslint-disable-next-line jest/valid-expect-in-promise
         binding = bindings.textInputBinder()
             .toProduce(() => cmd)
@@ -60,7 +62,7 @@ describe("using a text input binder", () => {
         txt1.dispatchEvent(new InputEvent("input"));
         jest.runOnlyPendingTimers();
         expect(binding).not.toBeNull();
-        expect(cmd.exec).toBe(1);
+        expect(cmd.execute).toHaveBeenCalledTimes(1);
         expect(ctx.commands).toHaveLength(1);
         expect(ctx.getCmd(0)).toBe(cmd);
         expect(textonUpdate).toStrictEqual(["f", "fo", "foo", "foo"]);
@@ -89,6 +91,8 @@ describe("using a text input binder", () => {
     test("type text exec several times the command", () => {
         const textonUpdate = new Array<string>();
 
+        jest.spyOn(cmd, "execute");
+
         // eslint-disable-next-line jest/valid-expect-in-promise
         binding = bindings.textInputBinder()
             .toProduce(() => cmd)
@@ -108,7 +112,7 @@ describe("using a text input binder", () => {
         txt1.dispatchEvent(new InputEvent("input"));
         jest.runOnlyPendingTimers();
         expect(binding).toBeDefined();
-        expect(cmd.exec).toBe(4);
+        expect(cmd.execute).toHaveBeenCalledTimes(4);
         expect(ctx.commands).toHaveLength(1);
         expect(ctx.getCmd(0)).toBe(cmd);
         expect(textonUpdate).toStrictEqual(["f", "fo", "foo"]);

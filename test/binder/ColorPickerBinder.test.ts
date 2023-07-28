@@ -39,9 +39,12 @@ describe("using a color picker binder", () => {
 
     afterEach(() => {
         bindings.clear();
+        jest.clearAllMocks();
     });
 
     test("commandExecutedOnSinglePickerFunction", () => {
+        jest.spyOn(cmd, "execute");
+
         binding = bindings.colorPickerBinder()
             .toProduce((_i: WidgetData<HTMLInputElement>) => cmd)
             .on(widget1)
@@ -49,7 +52,7 @@ describe("using a color picker binder", () => {
 
         robot(widget1).input();
         expect(binding).toBeDefined();
-        expect(cmd.exec).toBe(1);
+        expect(cmd.execute).toHaveBeenCalledTimes(1);
     });
 
     test("commandExecutedOnTwoPickers", () => {
@@ -66,21 +69,25 @@ describe("using a color picker binder", () => {
     });
 
     test("init1Executed", () => {
+        jest.spyOn(cmd, "execute");
         binding = bindings.colorPickerBinder()
             .on(widget1)
             .toProduce((_i: WidgetData<HTMLInputElement>) => cmd)
             .first((c: StubCmd) => {
-                c.exec = 10;
+                c.value = 10;
             })
             .bind();
 
         robot(widget1).input();
 
         expect(binding).toBeDefined();
-        expect(cmd.exec).toBe(11);
+        expect(cmd.value).toBe(10);
+        expect(cmd.execute).toHaveBeenCalledTimes(1);
     });
 
     test("checkFalse", () => {
+        jest.spyOn(cmd, "execute");
+
         binding = bindings.colorPickerBinder()
             .toProduce((_i: WidgetData<HTMLInputElement>) => cmd)
             .on(widget1)
@@ -90,6 +97,6 @@ describe("using a color picker binder", () => {
         robot(widget1).input();
 
         expect(binding).toBeDefined();
-        expect(cmd.exec).toBe(0);
+        expect(cmd.execute).not.toHaveBeenCalled();
     });
 });

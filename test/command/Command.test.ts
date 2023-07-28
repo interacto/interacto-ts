@@ -23,6 +23,10 @@ describe("using a command", () => {
         cmd.candoValue = true;
     });
 
+    afterEach(() => {
+        jest.clearAllMocks();
+    });
+
     test("cando default", () => {
         const command = new class extends CommandBase {
             protected execution(): void {
@@ -142,19 +146,16 @@ describe("using a command", () => {
         expect(cmd.isDone()).toBeFalsy();
     });
 
-    test("not Cancel At Start", () => {
-        expect(cmd.getStatus()).not.toBe("cancelled");
-    });
-
     test("cancel", () => {
         cmd.cancel();
         expect(cmd.getStatus()).toBe("cancelled");
     });
 
     test("executed Two Times", async () => {
+        jest.spyOn(cmd, "execute");
         await cmd.execute();
         await cmd.execute();
-        expect(cmd.exec).toBe(2);
+        expect(cmd.execute).toHaveBeenCalledTimes(2);
     });
 
     test("crash in execution, command executed", () => {

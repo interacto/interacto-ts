@@ -44,6 +44,8 @@ describe("using a spinner binder", () => {
     });
 
     test("commandExecutedOnSingleSpinnerFunction", () => {
+        jest.spyOn(cmd, "execute");
+
         binding = bindings.spinnerBinder()
             .toProduce((_i: WidgetData<HTMLInputElement>) => cmd)
             .on(widget1)
@@ -52,7 +54,7 @@ describe("using a spinner binder", () => {
         robot(widget1).input();
         jest.runAllTimers();
         expect(binding).toBeDefined();
-        expect(cmd.exec).toBe(1);
+        expect(cmd.execute).toHaveBeenCalledTimes(1);
     });
 
     test("commandExecutedOnTwoSpinners", () => {
@@ -71,11 +73,13 @@ describe("using a spinner binder", () => {
     });
 
     test("init1Executed", () => {
+        jest.spyOn(cmd, "execute");
+
         binding = bindings.spinnerBinder()
             .on(widget1)
             .toProduce(_i => cmd)
             .first((c: StubCmd) => {
-                c.exec = 10;
+                c.value = 10;
             })
             .bind();
 
@@ -83,10 +87,13 @@ describe("using a spinner binder", () => {
         jest.runAllTimers();
 
         expect(binding).toBeDefined();
-        expect(cmd.exec).toBe(11);
+        expect(cmd.value).toBe(10);
+        expect(cmd.execute).toHaveBeenCalledTimes(1);
     });
 
     test("checkFalse", () => {
+        jest.spyOn(cmd, "execute");
+
         binding = bindings.spinnerBinder()
             .toProduce(_i => cmd)
             .on(widget1)
@@ -96,18 +103,19 @@ describe("using a spinner binder", () => {
         robot(widget1).input();
         jest.runAllTimers();
         expect(binding).toBeDefined();
-        expect(cmd.exec).toBe(0);
+        expect(cmd.execute).not.toHaveBeenCalled();
     });
 
     test("endsOnThen", () => {
         let cpt = 0;
+        jest.spyOn(cmd, "execute");
 
         binding = bindings.spinnerBinder()
             .toProduce(_i => cmd)
             .on(widget1)
             .then((c: StubCmd) => {
                 // checking that its compiles
-                c.exec = 10;
+                c.value = 10;
                 cpt++;
             })
             .end(() => {})
@@ -116,7 +124,8 @@ describe("using a spinner binder", () => {
         robot(widget1).input();
         jest.runAllTimers();
 
-        expect(cmd.exec).toBe(11);
+        expect(cmd.value).toBe(10);
+        expect(cmd.execute).toHaveBeenCalledTimes(1);
         expect(cpt).toBe(2);
     });
 

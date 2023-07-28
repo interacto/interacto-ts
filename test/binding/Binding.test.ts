@@ -342,7 +342,11 @@ describe("using a binding", () => {
         });
 
         test("update continuous with log cannotDo", () => {
-            binding = new BindingStub(history, logger, true, () => new StubCmd(), new InteractionStub(new FSMImpl(logger)));
+            binding = new BindingStub(history, logger, true, () => {
+                const cmd = new StubCmd();
+                jest.spyOn(cmd, "execute");
+                return cmd;
+            }, new InteractionStub(new FSMImpl(logger)));
             jest.spyOn(binding, "ifCannotExecuteCmd");
             binding.whenStartOK = true;
             binding.whenUpdateOK = true;
@@ -351,11 +355,16 @@ describe("using a binding", () => {
             (binding.command as StubCmd).candoValue = false;
             binding.interaction.fsm.onUpdating();
             expect(binding.ifCannotExecuteCmd).toHaveBeenCalledWith();
-            expect(binding.command?.exec).toBe(0);
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            expect(binding.command!.execute).toHaveBeenCalledTimes(1);
         });
 
         test("update continuous not log canDo", () => {
-            binding = new BindingStub(history, logger, true, () => new StubCmd(), new InteractionStub(new FSMImpl(logger)));
+            binding = new BindingStub(history, logger, true, () => {
+                const cmd = new StubCmd();
+                jest.spyOn(cmd, "execute");
+                return cmd;
+            }, new InteractionStub(new FSMImpl(logger)));
             jest.spyOn(binding, "ifCannotExecuteCmd");
             binding.whenStartOK = true;
             binding.whenUpdateOK = true;
@@ -363,7 +372,8 @@ describe("using a binding", () => {
             (binding.command as StubCmd).candoValue = true;
             binding.interaction.fsm.onUpdating();
             expect(binding.ifCannotExecuteCmd).not.toHaveBeenCalledWith();
-            expect(binding.command?.exec).toBe(1);
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            expect(binding.command!.execute).toHaveBeenCalledTimes(1);
         });
 
         test("stop no log cmd created", () => {

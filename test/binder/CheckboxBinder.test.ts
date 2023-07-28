@@ -39,9 +39,12 @@ describe("using a checkbox binder", () => {
 
     afterEach(() => {
         bindings.clear();
+        jest.clearAllMocks();
     });
 
     test("commandExecutedOnSingleButtonFunction", () => {
+        jest.spyOn(cmd, "execute");
+
         binding = bindings.checkboxBinder()
             .toProduce(_i => cmd)
             .on(widget1)
@@ -49,10 +52,12 @@ describe("using a checkbox binder", () => {
 
         robot(widget1).input();
         expect(binding).toBeDefined();
-        expect(cmd.exec).toBe(1);
+        expect(cmd.execute).toHaveBeenCalledTimes(1);
     });
 
     test("commandExecutedOnSingleButtonSupplier", () => {
+        jest.spyOn(cmd, "execute");
+
         binding = bindings.checkboxBinder()
             .toProduce(() => cmd)
             .on(widget1)
@@ -60,7 +65,7 @@ describe("using a checkbox binder", () => {
 
         robot(widget1).input();
         expect(binding).toBeDefined();
-        expect(cmd.exec).toBe(1);
+        expect(cmd.execute).toHaveBeenCalledTimes(1);
     });
 
     test("commandExecutedOnTwoCheckboxes", () => {
@@ -76,34 +81,42 @@ describe("using a checkbox binder", () => {
     });
 
     test("init1Executed", () => {
+        jest.spyOn(cmd, "execute");
+
         binding = bindings.checkboxBinder()
             .toProduce(_i => cmd)
             .first(c => {
-                c.exec = 10;
+                c.value = 10;
             })
             .on(widget1)
             .bind();
 
         robot(widget1).input();
         expect(binding).toBeDefined();
-        expect(cmd.exec).toBe(11);
+        expect(cmd.value).toBe(10);
+        expect(cmd.execute).toHaveBeenCalledTimes(1);
     });
 
     test("init2Executed", () => {
+        jest.spyOn(cmd, "execute");
+
         binding = bindings.checkboxBinder()
             .toProduce(() => cmd)
             .on(widget1)
             .first((c, _i) => {
-                c.exec = 10;
+                c.value = 10;
             })
             .bind();
 
         robot(widget1).input();
         expect(binding).toBeDefined();
-        expect(cmd.exec).toBe(11);
+        expect(cmd.value).toBe(10);
+        expect(cmd.execute).toHaveBeenCalledTimes(1);
     });
 
     test("checkFalse", () => {
+        jest.spyOn(cmd, "execute");
+
         binding = bindings.checkboxBinder()
             .on(widget1)
             .when(_i => false)
@@ -112,6 +125,6 @@ describe("using a checkbox binder", () => {
 
         robot(widget1).input();
         expect(binding).toBeDefined();
-        expect(cmd.exec).toBe(0);
+        expect(cmd.execute).not.toHaveBeenCalled();
     });
 });

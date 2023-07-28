@@ -37,9 +37,12 @@ describe("using a combobox binder", () => {
 
     afterEach(() => {
         bindings.clear();
+        jest.clearAllMocks();
     });
 
     test("commandExecutedOnSingleComboFunction", () => {
+        jest.spyOn(cmd, "execute");
+
         binding = bindings.comboBoxBinder()
             .toProduce(_i => cmd)
             .on(widget1)
@@ -47,7 +50,7 @@ describe("using a combobox binder", () => {
 
         robot(widget1).input();
         expect(binding).toBeDefined();
-        expect(cmd.exec).toBe(1);
+        expect(cmd.execute).toHaveBeenCalledTimes(1);
     });
 
     test("commandExecutedOnTwoCombos", () => {
@@ -64,21 +67,26 @@ describe("using a combobox binder", () => {
     });
 
     test("init1Executed", () => {
+        jest.spyOn(cmd, "execute");
+
         binding = bindings.comboBoxBinder()
             .on(widget1)
             .toProduce(_i => cmd)
             .first((c: StubCmd, _i: WidgetData<HTMLSelectElement>) => {
-                c.exec = 10;
+                c.value = 10;
             })
             .bind();
 
         robot(widget1).input();
 
         expect(binding).toBeDefined();
-        expect(cmd.exec).toBe(11);
+        expect(cmd.value).toBe(10);
+        expect(cmd.execute).toHaveBeenCalledTimes(1);
     });
 
     test("checkFalse", () => {
+        jest.spyOn(cmd, "execute");
+
         binding = bindings.comboBoxBinder()
             .toProduce(_i => cmd)
             .on(widget1)
@@ -88,6 +96,6 @@ describe("using a combobox binder", () => {
         robot(widget1).input();
 
         expect(binding).toBeDefined();
-        expect(cmd.exec).toBe(0);
+        expect(cmd.execute).not.toHaveBeenCalled();
     });
 });

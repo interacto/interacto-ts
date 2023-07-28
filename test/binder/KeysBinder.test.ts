@@ -54,6 +54,7 @@ describe("using a key binder", () => {
     afterEach(() => {
         bindings.clear();
         clearAllTimers();
+        jest.clearAllMocks();
     });
 
     test("that is crashes when calling bind without an interaction supplier", () => {
@@ -638,6 +639,7 @@ describe("using a key binder", () => {
 
     test("keys type with continuous exec", () => {
         const cmd = new StubCmd(true);
+        jest.spyOn(cmd, "execute");
         binding = bindings.keysTypeBinder()
             .on(elt)
             .continuousExecution()
@@ -653,7 +655,7 @@ describe("using a key binder", () => {
             .keyup({"code": "a"});
         jest.runOnlyPendingTimers();
         // 4 since 3 keys typed = timeout
-        expect(cmd.exec).toBe(4);
+        expect(cmd.execute).toHaveBeenCalledTimes(4);
     });
 
     test("keys type with throttling", () => {
