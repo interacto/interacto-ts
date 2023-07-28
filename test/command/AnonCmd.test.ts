@@ -24,12 +24,10 @@ describe("using an anon command", () => {
     });
 
     test("execute", async () => {
-        let ok = false;
-        cmd = new AnonCmd(() => {
-            ok = true;
-        });
+        const fn = jest.fn();
+        cmd = new AnonCmd(fn);
         await cmd.execute();
-        expect(ok).toBeTruthy();
+        expect(fn).toHaveBeenCalledTimes(1);
     });
 
     test("hadEffect", async () => {
