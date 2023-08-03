@@ -12,13 +12,15 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {TouchData} from "../../api/interaction/TouchData";
+import type {PointData} from "../../interacto";
 import {PointsDataImpl} from "./PointsDataImpl";
 
 /**
  * Tapping interaction data implementation
  */
-export class TapDataImpl extends PointsDataImpl<TouchData> {
+export class MousePointsDataImpl extends PointsDataImpl<PointData> {
+    private currentPositionData: PointData | undefined;
+
     /**
      * Creates the interaction data
      */
@@ -26,7 +28,20 @@ export class TapDataImpl extends PointsDataImpl<TouchData> {
         super();
     }
 
-    public get lastId(): number | undefined {
-        return this.pointsData.at(-1)?.identifier;
+    public get currentPosition(): PointData | undefined {
+        return this.currentPositionData;
+    }
+
+    public set currentPosition(position: PointData | undefined) {
+        this.currentPositionData = position;
+    }
+
+    public get lastButton(): number | undefined {
+        return this.pointsData.at(-1)?.button;
+    }
+
+    public override flush(): void {
+        super.flush();
+        this.currentPositionData = undefined;
     }
 }

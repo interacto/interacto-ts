@@ -20,10 +20,8 @@ import type {InteractionUpdateBinder} from "../binder/InteractionUpdateBinder";
 import type {SrcTgtPointsData} from "../interaction/SrcTgtPointsData";
 import type {TouchData} from "../interaction/TouchData";
 import type {MultiTouchData} from "../interaction/MultiTouchData";
-import type {TapData} from "../interaction/TapData";
 import type {PointData} from "../interaction/PointData";
 import type {ScrollData} from "../interaction/ScrollData";
-import type {PointsData} from "../interaction/PointsData";
 import type {KeyInteractionBinder} from "../binder/KeyInteractionBinder";
 import type {KeyData} from "../interaction/KeyData";
 import type {KeyInteractionUpdateBinder} from "../binder/KeyInteractionUpdateBinder";
@@ -36,6 +34,8 @@ import type {Redo} from "../../impl/command/library/Redo";
 import type {Logger} from "../logging/Logger";
 import type {WheelData} from "../interaction/WheelData";
 import type {UndoHistoryBase} from "../undo/UndoHistoryBase";
+import type {MousePointsData} from "../interaction/MousePointsData";
+import type {TapsData} from "../interaction/TapsData";
 
 export type PartialButtonTypedBinder<A> = InteractionBinder<Interaction<WidgetData<HTMLButtonElement>>, WidgetData<HTMLButtonElement>, A>;
 export type PartialInputTypedBinder<A> = InteractionBinder<Interaction<WidgetData<HTMLInputElement>>, WidgetData<HTMLInputElement>, A>;
@@ -46,13 +46,13 @@ export type PartialTextInputTypedBinder<A> = InteractionUpdateBinder<Interaction
 WidgetData<HTMLInputElement | HTMLTextAreaElement>, A>;
 export type PartialTouchSrcTgtTypedBinder<A> = InteractionUpdateBinder<Interaction<SrcTgtPointsData<TouchData>>, SrcTgtPointsData<TouchData>, A>;
 export type PartialMultiTouchTypedBinder<A> = InteractionUpdateBinder<Interaction<MultiTouchData>, MultiTouchData, A>;
-export type PartialTapTypedBinder<A> = InteractionUpdateBinder<Interaction<TapData>, TapData, A>;
+export type PartialTapsTypedBinder<A> = InteractionUpdateBinder<Interaction<TapsData>, TapsData, A>;
 export type PartialTouchTypedBinder<A> = InteractionUpdateBinder<Interaction<TouchData>, TouchData, A>;
 export type PartialPointTypedBinder<A> = InteractionBinder<Interaction<PointData>, PointData, A>;
 export type PartialWheelTypedBinder<A> = InteractionBinder<Interaction<WheelData>, WheelData, A>;
 export type PartialScrollTypedBinder<A> = InteractionBinder<Interaction<ScrollData>, ScrollData, A>;
 export type PartialUpdatePointTypedBinder<A> = InteractionUpdateBinder<Interaction<PointData>, PointData, A>;
-export type PartialPointsTypedBinder<A> = InteractionUpdateBinder<Interaction<PointsData>, PointsData, A>;
+export type PartialPointsTypedBinder<A> = InteractionUpdateBinder<Interaction<MousePointsData>, MousePointsData, A>;
 export type PartialPointSrcTgtTypedBinder<A> = InteractionUpdateBinder<Interaction<SrcTgtPointsData<PointData>>, SrcTgtPointsData<PointData>, A>;
 export type PartialKeyTypedBinder<A> = KeyInteractionBinder<Interaction<KeyData>, KeyData, A>;
 export type PartialKeysTypedBinder<A> = KeyInteractionUpdateBinder<Interaction<KeysData>, KeysData, A>;
@@ -65,7 +65,7 @@ export type PartialAnchorBinder = PartialAnchorTypedBinder<unknown>;
 export type PartialTextInputBinder = PartialTextInputTypedBinder<unknown>;
 export type PartialTouchSrcTgtBinder = PartialTouchSrcTgtTypedBinder<unknown>;
 export type PartialMultiTouchBinder = PartialMultiTouchTypedBinder<unknown>;
-export type PartialTapBinder = PartialTapTypedBinder<unknown>;
+export type PartialTapsBinder = PartialTapsTypedBinder<unknown>;
 export type PartialTouchBinder = PartialTouchTypedBinder<unknown>;
 export type PartialPointBinder = PartialPointTypedBinder<unknown>;
 export type PartialWheelBinder = PartialWheelTypedBinder<unknown>;
@@ -150,7 +150,7 @@ export abstract class Bindings<H extends UndoHistoryBase> {
      * @param nbTap - The number of required taps.
      * If this number is not reached after a timeout, the interaction is cancelled.
      */
-    public abstract tapBinder<A>(nbTap: number, accInit?: A): PartialTapTypedBinder<A>;
+    public abstract tapBinder<A>(nbTap: number, accInit?: A): PartialTapsTypedBinder<A>;
 
     /**
      * Creates a binding that uses the long touch interaction.

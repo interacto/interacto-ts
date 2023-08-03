@@ -112,7 +112,7 @@ describe("using a tap interaction", () => {
             const touch = new TouchDataImpl();
             const newHandler = mock<FSMHandler>();
             newHandler.fsmStarts = jest.fn(() => {
-                touch.copy(interaction.data.taps[0]);
+                touch.copy(interaction.data.points[0]);
             });
             interaction.fsm.addHandler(newHandler);
 
@@ -223,8 +223,8 @@ describe("using a tap interaction", () => {
 
             const newHandler = mock<FSMHandler>();
             newHandler.fsmStops = jest.fn(() => {
-                for (const tap of interaction.data.taps) {
-                    touch.addTapData(tap);
+                for (const tap of interaction.data.points) {
+                    touch.addPoint(tap);
                 }
             });
             interaction.fsm.addHandler(newHandler);
@@ -236,8 +236,8 @@ describe("using a tap interaction", () => {
                 .touchstart({}, [{"identifier": 2, "screenX": 12, "screenY": 27, "clientX": 14, "clientY": 28}])
                 .touchend({}, [{"identifier": 2, "screenX": 12, "screenY": 27, "clientX": 14, "clientY": 28}]);
 
-            expect(touch.taps).toHaveLength(2);
-            checkTouchPoint(touch.taps[0], 16, 21, 15, 20, 3, canvas);
+            expect(touch.points).toHaveLength(2);
+            checkTouchPoint(touch.points[0], 16, 21, 15, 20, 3, canvas);
         });
     });
 
@@ -316,8 +316,8 @@ describe("using a tap interaction", () => {
 
             const newHandler = mock<FSMHandler>();
             newHandler.fsmStops = jest.fn(() => {
-                for (const tap of interaction.data.taps) {
-                    touch.addTapData(tap);
+                for (const tap of interaction.data.points) {
+                    touch.addPoint(tap);
                 }
             });
             interaction.fsm.addHandler(newHandler);
@@ -331,10 +331,10 @@ describe("using a tap interaction", () => {
                 .touchstart({}, [{"identifier": 1, "screenX": 112, "screenY": 217, "clientX": 114, "clientY": 128}])
                 .touchend();
 
-            expect(touch.taps).toHaveLength(3);
-            checkTouchPoint(touch.taps[0], 16, 21, 15, 20, 3, canvas);
-            expect(touch.taps[0].allTouches).toHaveLength(1);
-            expect(touch.taps[0].allTouches[0].identifier).toBe(3);
+            expect(touch.points).toHaveLength(3);
+            checkTouchPoint(touch.points[0], 16, 21, 15, 20, 3, canvas);
+            expect(touch.points[0].allTouches).toHaveLength(1);
+            expect(touch.points[0].allTouches[0].identifier).toBe(3);
         });
     });
 });

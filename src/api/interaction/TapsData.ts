@@ -12,17 +12,10 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {InteractionData} from "./InteractionData";
+import type {PointsData} from "./PointsData";
 import type {TouchData} from "./TouchData";
 
 /**
- * Tapping data interface.
- * Compared to Multi-touch data, the ID of a touch is not considered
- * as tapping several times may use the same touch ID.
+ * Interaction data that contains a set of points.
  */
-export interface TapData extends InteractionData {
-    /**
-     * The list of touches data.
-     */
-    readonly taps: ReadonlyArray<TouchData>;
-}
+export type TapsData = PointsData<TouchData>;

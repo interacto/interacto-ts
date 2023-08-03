@@ -17,10 +17,9 @@ import {ClickTransition} from "../../fsm/ClickTransition";
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {InteractionBase} from "../InteractionBase";
 import {PointDataImpl} from "../PointDataImpl";
-import type {PointsData} from "../../../api/interaction/PointsData";
-import {PointsDataImpl} from "../PointsDataImpl";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 import type {Logger} from "../../../api/logging/Logger";
+import {MousePointsDataImpl} from "../MousePointsDataImpl";
 
 export class ClicksFSM extends FSMImpl<ClicksFSMHandler> {
     private countClicks: number;
@@ -78,7 +77,7 @@ interface ClicksFSMHandler extends FSMDataHandler {
     click(evt: MouseEvent): void;
 }
 
-export class Clicks extends InteractionBase<PointsData, PointsDataImpl, ClicksFSM> {
+export class Clicks extends InteractionBase<MousePointsDataImpl, MousePointsDataImpl, ClicksFSM> {
     /**
      * Creates the clicks interaction
      * @param numberClicks - The number of clicks expected to end the interaction.
@@ -96,6 +95,6 @@ export class Clicks extends InteractionBase<PointsData, PointsDataImpl, ClicksFS
             }
         };
 
-        super(new ClicksFSM(numberClicks, logger, handler), new PointsDataImpl(), logger);
+        super(new ClicksFSM(numberClicks, logger, handler), new MousePointsDataImpl(), logger);
     }
 }

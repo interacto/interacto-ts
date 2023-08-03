@@ -12,41 +12,25 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import type {PointBaseData} from "../../api/interaction/PointBaseData";
 import type {PointsData} from "../../api/interaction/PointsData";
-import type {PointData} from "../../api/interaction/PointData";
-import {peek} from "../util/ArrayUtil";
 
-export class PointsDataImpl implements PointsData {
-    private currentPositionData: PointData | undefined;
-
-    private readonly pointsData: Array<PointData>;
+export abstract class PointsDataImpl<D extends PointBaseData> implements PointsData<D> {
+    protected readonly pointsData: Array<D>;
 
     public constructor() {
         this.pointsData = [];
     }
 
-    public get points(): ReadonlyArray<PointData> {
+    public get points(): ReadonlyArray<D> {
         return Array.from(this.pointsData);
     }
 
-    public get currentPosition(): PointData | undefined {
-        return this.currentPositionData;
-    }
-
-    public set currentPosition(position: PointData | undefined) {
-        this.currentPositionData = position;
-    }
-
-    public get lastButton(): number | undefined {
-        return peek(this.pointsData)?.button;
-    }
-
-    public addPoint(ptData: PointData): void {
+    public addPoint(ptData: D): void {
         this.pointsData.push(ptData);
     }
 
     public flush(): void {
         this.pointsData.length = 0;
-        this.currentPositionData = undefined;
     }
 }

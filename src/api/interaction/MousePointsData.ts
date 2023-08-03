@@ -12,15 +12,15 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {InteractionData} from "./InteractionData";
-import type {PointBaseData} from "./PointBaseData";
+import type {PointData} from "./PointData";
+import type {PointsData} from "./PointsData";
 
 /**
- * Interaction data that contains a set of points.
+ * Mouse interaction data that contains a set of points and the current position of the mouse.
  */
-export interface PointsData<D extends PointBaseData> extends InteractionData {
+export interface MousePointsData extends PointsData<PointData> {
     /**
-     * @returns The series of points.
+     * @returns The current position of the pointing device.
      */
-    readonly points: ReadonlyArray<D>;
+    readonly currentPosition: PointData | undefined;
 }

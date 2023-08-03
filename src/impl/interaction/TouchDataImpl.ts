@@ -16,6 +16,8 @@ import type {TouchData} from "../../api/interaction/TouchData";
 import {PointingDataBase} from "./PointingDataBase";
 import type {UnitInteractionData} from "../../api/interaction/UnitInteractionData";
 import type {EventModifierData} from "../../api/interaction/EventModifierData";
+import type {PointData} from "../../interacto";
+import {PointDataImpl} from "../../interacto";
 
 export class TouchDataImpl extends PointingDataBase implements TouchData {
     private _allTouches: Array<TouchData> = [];
@@ -104,5 +106,32 @@ export class TouchDataImpl extends PointingDataBase implements TouchData {
             "currentTarget": evt.currentTarget
         });
         return data;
+    }
+
+    public toPointData(): PointData {
+        const point = new PointDataImpl();
+        point.copy({
+            "button": this.identifier,
+            "buttons": 0,
+            "movementX": 0,
+            "movementY": 0,
+            "offsetX": 0,
+            "offsetY": 0,
+            "relatedTarget": this.target,
+            "clientX": this.clientX,
+            "clientY": this.clientY,
+            "pageX": this.pageX,
+            "pageY": this.pageY,
+            "screenX": this.screenX,
+            "screenY": this.screenY,
+            "altKey": this.altKey,
+            "ctrlKey": this.ctrlKey,
+            "metaKey": this.metaKey,
+            "shiftKey": this.shiftKey,
+            "timeStamp": this.timeStamp,
+            "target": this.target,
+            "currentTarget": this.currentTarget
+        });
+        return point;
     }
 }

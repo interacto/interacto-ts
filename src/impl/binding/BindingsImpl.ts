@@ -29,11 +29,12 @@ import {TextInputChanged} from "../interaction/library/TextInputChanged";
 import {MultiTouch} from "../interaction/library/MultiTouch";
 import type {MultiTouchData} from "../../api/interaction/MultiTouchData";
 import {Tap} from "../interaction/library/Tap";
-import type {TapData} from "../../api/interaction/TapData";
 import {LongTouch} from "../interaction/library/LongTouch";
 import type {TouchData} from "../../api/interaction/TouchData";
 import {Click} from "../interaction/library/Click";
 import type {PointData} from "../../api/interaction/PointData";
+import type {PointsData} from "../../api/interaction/PointsData";
+import type {MousePointsData} from "../../api/interaction/MousePointsData";
 import {MouseDown} from "../interaction/library/MouseDown";
 import {DnD} from "../interaction/library/DnD";
 import type {SrcTgtPointsData} from "../../api/interaction/SrcTgtPointsData";
@@ -55,7 +56,6 @@ import {Clicks} from "../interaction/library/Clicks";
 import {MouseLeave} from "../interaction/library/MouseLeave";
 import {MouseEnter} from "../interaction/library/MouseEnter";
 import {MouseMove} from "../interaction/library/MouseMove";
-import type {PointsData} from "../../api/interaction/PointsData";
 import type {EltRef, Widget} from "../../api/binder/BaseBinderBuilder";
 import {Undo} from "../command/library/Undo";
 import type {Binding} from "../../api/binding/Binding";
@@ -73,7 +73,7 @@ import type {
     PartialScrollTypedBinder,
     PartialSelectTypedBinder,
     PartialSpinnerTypedBinder,
-    PartialTapTypedBinder,
+    PartialTapsTypedBinder,
     PartialTextInputTypedBinder,
     PartialTouchTypedBinder,
     PartialTouchSrcTgtTypedBinder,
@@ -195,9 +195,9 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
      * @param nbTap - The number of required taps.
      * If this number is not reached after a timeout, the interaction is cancelled.
      */
-    public tapBinder<A>(nbTap: number, accInit?: A): PartialTapTypedBinder<A> {
+    public tapBinder<A>(nbTap: number, accInit?: A): PartialTapsTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
-            .usingInteraction<Tap, TapData, A>(() => new Tap(nbTap, this.logger));
+            .usingInteraction<Tap, PointsData<TouchData>, A>(() => new Tap(nbTap, this.logger));
     }
 
     /**
@@ -306,7 +306,7 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
      */
     public clicksBinder<A>(nbClicks: number, accInit?: A): PartialPointsTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
-            .usingInteraction<Clicks, PointsData, A>(() => new Clicks(nbClicks, this.logger));
+            .usingInteraction<Clicks, MousePointsData, A>(() => new Clicks(nbClicks, this.logger));
     }
 
     /**

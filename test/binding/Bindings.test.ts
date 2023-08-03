@@ -23,12 +23,12 @@ import type {
     InteractionData,
     KeysData,
     Logger,
+    MousePointsData,
     MultiTouchData,
     PointData,
-    PointsData,
     ScrollData,
     SrcTgtPointsData,
-    TapData,
+    TapsData,
     TouchData,
     UndoHistory,
     UndoHistoryBase,
@@ -688,7 +688,7 @@ describe("using bindings", () => {
         bindings.clicksBinder(3)
             .on(elt)
             .when(_i => true)
-            .toProduce((_i: PointsData) => new StubCmd(true))
+            .toProduce((_i: MousePointsData) => new StubCmd(true))
             .then((_c, _i) => {})
             .bind();
 
@@ -1491,7 +1491,7 @@ describe("using bindings", () => {
                 .toProduce((_i: TouchData) => new StubCmd(true))
                 .bind();
             binding = bindings.tapBinder(1)
-                .toProduce((_i: TapData) => new StubCmd(true))
+                .toProduce((_i: TapsData) => new StubCmd(true))
                 .on(elt)
                 .bind();
         });

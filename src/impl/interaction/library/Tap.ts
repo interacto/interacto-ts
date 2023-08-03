@@ -15,12 +15,13 @@
 import {InteractionBase} from "../InteractionBase";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import type {TapData} from "../../../api/interaction/TapData";
-import {TapDataImpl} from "../TapDataImpl";
 import {TouchDataImpl} from "../TouchDataImpl";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 import type {Logger} from "../../../api/logging/Logger";
 import {TouchTransition} from "../../fsm/TouchTransition";
+import type {PointsDataImpl} from "../PointsDataImpl";
+import type {PointsData, TouchData} from "../../../interacto";
+import {TapDataImpl} from "../TapDataImpl";
 
 /**
  * The FSM for the Tap interaction
@@ -100,7 +101,7 @@ interface TapFSMHandler extends FSMDataHandler {
  * This touch interaction takes as input the number of taps expected to end the interaction.
  * If this number is not reached after a timeout, the interaction is cancelled.
  */
-export class Tap extends InteractionBase<TapData, TapDataImpl, TapFSM> {
+export class Tap extends InteractionBase<PointsData<TouchData>, PointsDataImpl<TouchData>, TapFSM> {
     /**
      * Creates the tap interaction
      * @param numberTaps - The number of taps expected to end the interaction.
@@ -113,7 +114,7 @@ export class Tap extends InteractionBase<TapData, TapDataImpl, TapFSM> {
                     const touch = new TouchDataImpl();
                     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                     touch.copy(TouchDataImpl.mergeTouchEventData(evt.changedTouches[0]!, evt, Array.from(evt.touches)));
-                    this._data.addTapData(touch);
+                    this._data.addPoint(touch);
                 }
             },
             "reinitData": (): void => {

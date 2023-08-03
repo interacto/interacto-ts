@@ -46,19 +46,19 @@ describe("using a tap data", () => {
     });
 
     test("taps collection is empty by default", () => {
-        expect(data.taps).toHaveLength(0);
+        expect(data.points).toHaveLength(0);
     });
 
     test("addTapData", () => {
-        data.addTapData(touchData);
-        expect(data.taps).toHaveLength(1);
-        const element = data.taps[0];
+        data.addPoint(touchData);
+        expect(data.points).toHaveLength(1);
+        const element = data.points[0];
         expect(element).toStrictEqual(touchData);
     });
 
     test("flush", () => {
-        data.addTapData(touchData);
+        data.addPoint(touchData);
         data.flush();
-        expect(data.taps).toHaveLength(0);
+        expect(data.points).toHaveLength(0);
     });
 });

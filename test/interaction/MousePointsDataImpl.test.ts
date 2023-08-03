@@ -12,15 +12,15 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {PointsDataImpl} from "../../src/impl/interaction/PointsDataImpl";
+import {MousePointsDataImpl} from "../../src/impl/interaction/MousePointsDataImpl";
 import {PointDataImpl} from "../../src/impl/interaction/PointDataImpl";
 
 describe("using a points data", () => {
-    let data: PointsDataImpl;
+    let data: MousePointsDataImpl;
     let pointData: PointDataImpl;
 
     beforeEach(() => {
-        data = new PointsDataImpl();
+        data = new MousePointsDataImpl();
         pointData = new PointDataImpl();
         pointData.copy({
             "button": 1,
