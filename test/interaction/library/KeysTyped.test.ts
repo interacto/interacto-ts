@@ -13,7 +13,7 @@
  */
 
 import type {FSMHandler, KeyData, Logger} from "../../../src/interacto";
-import {KeysDataImpl, KeysTyped, peek} from "../../../src/interacto";
+import {KeysDataImpl, KeysTyped} from "../../../src/interacto";
 import {robot} from "interacto-nono";
 import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
@@ -72,7 +72,7 @@ describe("using a keys typed interaction", () => {
     test("type 'b' and wait for timeout stops the interaction: data", () => {
         const newHandler = mock<FSMHandler>();
         newHandler.fsmStops = jest.fn(() => {
-            data.addKey(peek(interaction.data.keys) as KeyData);
+            data.addKey(interaction.data.keys.at(-1) as KeyData);
         });
         interaction.fsm.addHandler(newHandler);
 
@@ -130,7 +130,7 @@ describe("using a keys typed interaction", () => {
     test("type 'b' does not stop the interaction", () => {
         const newHandler = mock<FSMHandler>();
         newHandler.fsmUpdates = jest.fn(() => {
-            data.addKey(peek(interaction.data.keys) as KeyData);
+            data.addKey(interaction.data.keys.at(-1) as KeyData);
         });
         interaction.fsm.addHandler(newHandler);
 

@@ -13,7 +13,7 @@
  */
 
 import type {FSMHandler, KeyData, Logger} from "../../../src/interacto";
-import {KeysDataImpl, KeysDown, peek} from "../../../src/interacto";
+import {KeysDataImpl, KeysDown} from "../../../src/interacto";
 import {robot} from "interacto-nono";
 import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
@@ -46,7 +46,7 @@ describe("using a keys down interaction", () => {
 
         const newHandler = mock<FSMHandler>();
         newHandler.fsmUpdates = jest.fn(() => {
-            data.addKey(peek(interaction.data.keys) as KeyData);
+            data.addKey(interaction.data.keys.at(-1) as KeyData);
         });
         interaction.fsm.addHandler(newHandler);
 
@@ -71,7 +71,7 @@ describe("using a keys down interaction", () => {
 
         const newHandler = mock<FSMHandler>();
         newHandler.fsmUpdates = jest.fn(() => {
-            data.addKey(peek(interaction.data.keys) as KeyData);
+            data.addKey(interaction.data.keys.at(-1) as KeyData);
         });
         interaction.fsm.addHandler(newHandler);
         robot(text)
@@ -125,7 +125,7 @@ describe("using a keys down interaction", () => {
             .keydown({"code": "B"});
         const newHandler = mock<FSMHandler>();
         newHandler.fsmUpdates = jest.fn(() => {
-            data.addKey(peek(interaction.data.keys) as KeyData);
+            data.addKey(interaction.data.keys.at(-1) as KeyData);
         });
         interaction.fsm.addHandler(newHandler);
         robot(text).keyup({"code": "B"});

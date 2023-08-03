@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {peek, remove, removeAt} from "../../src/impl/util/ArrayUtil";
+import {remove, removeAt} from "../../src/impl/util/ArrayUtil";
 
 describe("using a array util", () => {
     let arr: Array<string>;
@@ -52,17 +52,5 @@ describe("using a array util", () => {
         const res = removeAt(arr, i);
         expect(res).toBeUndefined();
         expect(arr).toStrictEqual(["foo", "bar", "yo"]);
-    });
-
-    test("peek of non empty array", () => {
-        const res = peek(arr);
-        expect(res).toBe("yo");
-        expect(arr).toStrictEqual(["foo", "bar", "yo"]);
-    });
-
-    test("peek of empty array", () => {
-        const array: Array<string> = [];
-        const res = peek(array);
-        expect(res).toBeUndefined();
     });
 });

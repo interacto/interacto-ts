@@ -15,7 +15,6 @@
 import type {Undoable} from "../../api/undo/Undoable";
 import type {Observable} from "rxjs";
 import {Subject} from "rxjs";
-import {peek} from "../util/ArrayUtil";
 import {UndoHistory} from "../../api/undo/UndoHistory";
 
 export class UndoHistoryImpl extends UndoHistory {
@@ -112,11 +111,11 @@ export class UndoHistoryImpl extends UndoHistory {
     }
 
     public getLastUndoMessage(): string | undefined {
-        return peek(this.undos)?.getUndoName();
+        return this.undos.at(-1)?.getUndoName();
     }
 
     public getLastRedoMessage(): string | undefined {
-        return peek(this.redos)?.getUndoName();
+        return this.redos.at(-1)?.getUndoName();
     }
 
     public getLastOrEmptyUndoMessage(): string {
@@ -128,11 +127,11 @@ export class UndoHistoryImpl extends UndoHistory {
     }
 
     public getLastUndo(): Undoable | undefined {
-        return peek(this.undos);
+        return this.undos.at(-1);
     }
 
     public getLastRedo(): Undoable | undefined {
-        return peek(this.redos);
+        return this.redos.at(-1);
     }
 
     public getSizeMax(): number {
