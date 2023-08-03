@@ -3,7 +3,7 @@ name: Interacto CI
 on:
     push:
       branches:
-        - master
+        - main
       paths-ignore:
         - '**/*.md'
         - '**/*.cff'
