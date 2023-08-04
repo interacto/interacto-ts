@@ -785,6 +785,17 @@ describe("using bindings", () => {
         expect(ctx.commands).toHaveLength(1);
     });
 
+    test("that touch start binder works", () => {
+        bindings.touchStartBinder()
+            .toProduce((_i: TouchData) => new StubCmd(true))
+            .on(elt)
+            .bind();
+
+        robot().touchstart(elt, [{"identifier": 2}]);
+
+        expect(ctx.commands).toHaveLength(1);
+    });
+
     test("multi-touch binder with crash in command", () => {
         const fn = jest.fn();
 

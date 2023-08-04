@@ -153,6 +153,11 @@ export abstract class Bindings<H extends UndoHistoryBase> {
     public abstract tapBinder<A>(nbTap: number, accInit?: A): PartialTapsTypedBinder<A>;
 
     /**
+     * Creates a binding that uses the MouseDown (mouse button pressed) interaction.
+     */
+    public abstract touchStartBinder<A>(accInit?: A): PartialTouchTypedBinder<A>;
+
+    /**
      * Creates a binding that uses the long touch interaction.
      * @param duration - The duration of the touch to end the user interaction.
      * If this duration is not reached, the interaction is cancelled.

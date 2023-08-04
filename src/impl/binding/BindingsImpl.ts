@@ -89,6 +89,7 @@ import {KeyUp} from "../interaction/library/KeyUp";
 import {MouseUp} from "../interaction/library/MouseUp";
 import {DwellSpringAnimation} from "../animation/DwellSpringAnimation";
 import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
+import {TouchStart} from "../interaction/library/TouchStart";
 
 export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
     protected observer: BindingsObserver | undefined;
@@ -156,6 +157,11 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
     public touchDnDBinder<A>(cancellable: boolean, accInit?: A): PartialTouchSrcTgtTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<TouchDnD, SrcTgtPointsData<TouchData>, A>(() => new TouchDnD(this.logger, cancellable));
+    }
+
+    public override touchStartBinder<A>(accInit?: A): PartialTouchTypedBinder<A> {
+        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+            .usingInteraction<TouchStart, TouchData, A>(() => new TouchStart(this.logger));
     }
 
     /**
