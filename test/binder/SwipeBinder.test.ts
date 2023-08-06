@@ -20,7 +20,7 @@ import {BindingsContext} from "../../src/impl/binding/BindingsContext";
 import type {Bindings} from "../../src/api/binding/Bindings";
 import {mock} from "jest-mock-extended";
 
-let binding: Binding<StubCmd, Interaction<MultiTouchData>, MultiTouchData, unknown> | undefined;
+let binding: Binding<StubCmd, Interaction<MultiTouchData>, unknown> | undefined;
 let c1: HTMLElement;
 let ctx: BindingsContext;
 let bindings: Bindings<UndoHistoryBase>;

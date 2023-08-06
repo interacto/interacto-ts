@@ -18,7 +18,7 @@ import type {InteractionData} from "../interaction/InteractionData";
 import type {CmdUpdateBinder} from "./CmdUpdateBinder";
 import type {InteractionUpdateBinder} from "./InteractionUpdateBinder";
 import type {BaseBinder} from "./BaseBinder";
-import type {Interaction} from "../interaction/Interaction";
+import type {Interaction, InteractionDataType} from "../interaction/Interaction";
 import type {Widget} from "./BaseBinderBuilder";
 import type {AnonCmd} from "../../impl/command/AnonCmd";
 import type {WhenType} from "./When";
@@ -46,7 +46,8 @@ export interface BaseUpdateBinder extends BaseUpdateBinderBuilder, BaseBinder {
 
     toProduceAnon(fn: () => void): CmdUpdateBinder<AnonCmd>;
 
-    usingInteraction<I extends Interaction<D>, D extends InteractionData, A>(fn: () => I): InteractionUpdateBinder<I, D, A>;
+    usingInteraction<I extends Interaction<D>, A, D extends InteractionData = InteractionDataType<I>>
+    (fn: () => I): InteractionUpdateBinder<I, A, D>;
 
     stopImmediatePropagation(): BaseUpdateBinder;
 

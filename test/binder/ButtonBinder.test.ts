@@ -20,7 +20,7 @@ import type {Bindings} from "../../src/api/binding/Bindings";
 
 let button1: HTMLButtonElement;
 let button2: HTMLButtonElement;
-let binding: Binding<StubCmd, Interaction<InteractionData>, InteractionData, unknown> | undefined;
+let binding: Binding<StubCmd, Interaction<InteractionData>, unknown> | undefined;
 let cmd: StubCmd;
 let ctx: BindingsContext;
 let bindings: Bindings<UndoHistoryBase>;

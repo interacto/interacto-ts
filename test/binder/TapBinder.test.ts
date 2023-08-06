@@ -19,7 +19,7 @@ import {BindingsContext} from "../../src/impl/binding/BindingsContext";
 import type {Flushable} from "../../src/impl/interaction/Flushable";
 import type {Bindings} from "../../src/api/binding/Bindings";
 
-let binding: Binding<StubCmd, Interaction<InteractionData>, InteractionData, unknown> | undefined;
+let binding: Binding<StubCmd, Interaction<InteractionData>, unknown> | undefined;
 let cmd: StubCmd;
 let ctx: BindingsContext;
 let bindings: Bindings<UndoHistoryBase>;

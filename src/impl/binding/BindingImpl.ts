@@ -19,7 +19,7 @@ import type {InteractionData} from "../../api/interaction/InteractionData";
 import {isUndoableType} from "../../api/undo/Undoable";
 import {MustBeUndoableCmdError} from "./MustBeUndoableCmdError";
 import type {Binding} from "../../api/binding/Binding";
-import type {Interaction} from "../../api/interaction/Interaction";
+import type {Interaction, InteractionDataType} from "../../api/interaction/Interaction";
 import type {Logger} from "../../api/logging/Logger";
 import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
 
@@ -28,7 +28,8 @@ import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
  * @typeParam C - The type of the command that will produce this binding.
  * @typeParam I - The type of the interaction that will use this binding.
  */
-export class BindingImpl<C extends Command, I extends Interaction<D>, D extends InteractionData, A> implements Binding<C, I, D, A> {
+export class BindingImpl<C extends Command, I extends Interaction<D>, A, D extends InteractionData = InteractionDataType<I>>
+implements Binding<C, I, A, D> {
 
     protected _name: string | undefined;
 

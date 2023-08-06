@@ -15,7 +15,7 @@ import type {InteractionData} from "../interaction/InteractionData";
 import type {InteractionBinderBuilder} from "./InteractionBinderBuilder";
 import type {KeyBinderBuilder} from "./KeyBinderBuilder";
 import type {LogLevel} from "../logging/LogLevel";
-import type {Interaction} from "../interaction/Interaction";
+import type {Interaction, InteractionDataType} from "../interaction/Interaction";
 import type {Widget} from "./BaseBinderBuilder";
 import type {WhenType} from "./When";
 
@@ -25,26 +25,26 @@ import type {WhenType} from "./When";
  * @typeParam I - The type of the user interaction
  * @typeParam D - The type of the interaction data of the user interaction
  */
-export interface KeyInteractionBinderBuilder<I extends Interaction<D>, D extends InteractionData, A>
-    extends InteractionBinderBuilder<I, D, A>, KeyBinderBuilder {
+export interface KeyInteractionBinderBuilder<I extends Interaction<D>, A, D extends InteractionData = InteractionDataType<I>>
+    extends InteractionBinderBuilder<I, A, D>, KeyBinderBuilder {
 
-    when(fn: (i: D, acc: Readonly<A>) => boolean, mode?: WhenType): KeyInteractionBinderBuilder<I, D, A>;
+    when(fn: (i: D, acc: Readonly<A>) => boolean, mode?: WhenType): KeyInteractionBinderBuilder<I, A, D>;
 
-    on<W>(widget: ReadonlyArray<Widget<W>> | Widget<W>, ...widgets: ReadonlyArray<Widget<W>>): KeyInteractionBinderBuilder<I, D, A>;
+    on<W>(widget: ReadonlyArray<Widget<W>> | Widget<W>, ...widgets: ReadonlyArray<Widget<W>>): KeyInteractionBinderBuilder<I, A, D>;
 
-    onDynamic(node: Widget<Node>): KeyInteractionBinderBuilder<I, D, A>;
+    onDynamic(node: Widget<Node>): KeyInteractionBinderBuilder<I, A, D>;
 
-    log(...level: ReadonlyArray<LogLevel>): KeyInteractionBinderBuilder<I, D, A>;
+    log(...level: ReadonlyArray<LogLevel>): KeyInteractionBinderBuilder<I, A, D>;
 
-    end(fn: () => void): KeyInteractionBinderBuilder<I, D, A>;
+    end(fn: () => void): KeyInteractionBinderBuilder<I, A, D>;
 
-    with(isCode: boolean, ...keysOrCodes: ReadonlyArray<string>): KeyInteractionBinderBuilder<I, D, A>;
+    with(isCode: boolean, ...keysOrCodes: ReadonlyArray<string>): KeyInteractionBinderBuilder<I, A, D>;
 
-    stopImmediatePropagation(): KeyInteractionBinderBuilder<I, D, A>;
+    stopImmediatePropagation(): KeyInteractionBinderBuilder<I, A, D>;
 
-    preventDefault(): KeyInteractionBinderBuilder<I, D, A>;
+    preventDefault(): KeyInteractionBinderBuilder<I, A, D>;
 
-    catch(fn: (ex: unknown) => void): KeyInteractionBinderBuilder<I, D, A>;
+    catch(fn: (ex: unknown) => void): KeyInteractionBinderBuilder<I, A, D>;
 
-    name(name: string): KeyInteractionBinderBuilder<I, D, A>;
+    name(name: string): KeyInteractionBinderBuilder<I, A, D>;
 }

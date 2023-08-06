@@ -20,7 +20,7 @@ import type {InteractionCmdUpdateBinder} from "../../api/binder/InteractionCmdUp
 import type {LogLevel} from "../../api/logging/LogLevel";
 import type {Binding} from "../../api/binding/Binding";
 import {AnonBinding} from "../binding/AnonBinding";
-import type {Interaction} from "../../api/interaction/Interaction";
+import type {Interaction, InteractionDataType} from "../../api/interaction/Interaction";
 import type {Widget} from "../../api/binder/BaseBinderBuilder";
 import type {BindingsObserver} from "../../api/binding/BindingsObserver";
 import type {Logger} from "../../api/logging/Logger";
@@ -32,8 +32,8 @@ import type {WhenType} from "../../api/binder/When";
  * The base binding builder for bindings where commands can be updated while the user interaction is running.
  * @typeParam C - The type of the command to produce.
  */
-export class UpdateBinder<C extends Command, I extends Interaction<D>, D extends InteractionData, A>
-    extends Binder<C, I, D, A> implements CmdUpdateBinder<C>, InteractionCmdUpdateBinder<C, I, D, A> {
+export class UpdateBinder<C extends Command, I extends Interaction<D>, A, D extends InteractionData = InteractionDataType<I>>
+    extends Binder<C, I, A, D> implements CmdUpdateBinder<C>, InteractionCmdUpdateBinder<C, I, A, D> {
 
     protected thenFn?: (c: C, i: D, acc: A) => void;
 
@@ -52,7 +52,7 @@ export class UpdateBinder<C extends Command, I extends Interaction<D>, D extends
     protected endOrCancelFnArray: Array<(i: D, acc: A) => void> = [];
 
     public constructor(undoHistory: UndoHistoryBase, logger: Logger, observer?: BindingsObserver,
-                       binder?: Partial<UpdateBinder<C, I, D, A>>, acc?: A) {
+                       binder?: Partial<UpdateBinder<C, I, A, D>>, acc?: A) {
         super(undoHistory, logger, observer, binder, acc);
 
         this.continuousCmdExecution = false;
@@ -86,105 +86,106 @@ export class UpdateBinder<C extends Command, I extends Interaction<D>, D extends
     }
 
     // eslint-disable-next-line unicorn/no-thenable
-    public then(fn: (c: C, i: D, acc: A) => void): UpdateBinder<C, I, D, A> {
+    public then(fn: (c: C, i: D, acc: A) => void): UpdateBinder<C, I, A, D> {
         const dup = this.duplicate();
         dup.thenFnArray.push(fn);
         return dup;
     }
 
-    public continuousExecution(): UpdateBinder<C, I, D, A> {
+    public continuousExecution(): UpdateBinder<C, I, A, D> {
         const dup = this.duplicate();
         dup.continuousCmdExecution = true;
         return dup;
     }
 
-    public cancel(fn: (i: D, acc: A) => void): UpdateBinder<C, I, D, A> {
+    public cancel(fn: (i: D, acc: A) => void): UpdateBinder<C, I, A, D> {
         const dup = this.duplicate();
         dup.cancelFnArray.push(fn);
         return dup;
     }
 
-    public endOrCancel(fn: (i: D, acc: A) => void): UpdateBinder<C, I, D, A> {
+    public endOrCancel(fn: (i: D, acc: A) => void): UpdateBinder<C, I, A, D> {
         const dup = this.duplicate();
         dup.endOrCancelFnArray.push(fn);
         return dup;
     }
 
-    public throttle(timeout: number): UpdateBinder<C, I, D, A> {
+    public throttle(timeout: number): UpdateBinder<C, I, A, D> {
         const dup = this.duplicate();
         dup.throttleTimeout = timeout;
         return dup;
     }
 
-    public override on<W>(widget: ReadonlyArray<Widget<W>> | Widget<W>, ...widgets: ReadonlyArray<Widget<W>>): UpdateBinder<C, I, D, A> {
-        return super.on(widget, ...widgets) as UpdateBinder<C, I, D, A>;
+    public override on<W>(widget: ReadonlyArray<Widget<W>> | Widget<W>, ...widgets: ReadonlyArray<Widget<W>>): UpdateBinder<C, I, A, D> {
+        return super.on(widget, ...widgets) as UpdateBinder<C, I, A, D>;
     }
 
-    public override onDynamic(node: Widget<Node>): UpdateBinder<C, I, D, A> {
-        return super.onDynamic(node) as UpdateBinder<C, I, D, A>;
+    public override onDynamic(node: Widget<Node>): UpdateBinder<C, I, A, D> {
+        return super.onDynamic(node) as UpdateBinder<C, I, A, D>;
     }
 
-    public override first(fn: (c: C, i: D, acc: A) => void): UpdateBinder<C, I, D, A> {
-        return super.first(fn) as UpdateBinder<C, I, D, A>;
+    public override first(fn: (c: C, i: D, acc: A) => void): UpdateBinder<C, I, A, D> {
+        return super.first(fn) as UpdateBinder<C, I, A, D>;
     }
 
-    public override when(fn: (i: D, acc: Readonly<A>) => boolean, mode?: WhenType): UpdateBinder<C, I, D, A> {
-        return super.when(fn, mode) as UpdateBinder<C, I, D, A>;
+    public override when(fn: (i: D, acc: Readonly<A>) => boolean, mode?: WhenType): UpdateBinder<C, I, A, D> {
+        return super.when(fn, mode) as UpdateBinder<C, I, A, D>;
     }
 
-    public override ifHadEffects(fn: (c: C, i: D, acc: A) => void): UpdateBinder<C, I, D, A> {
-        return super.ifHadEffects(fn) as UpdateBinder<C, I, D, A>;
+    public override ifHadEffects(fn: (c: C, i: D, acc: A) => void): UpdateBinder<C, I, A, D> {
+        return super.ifHadEffects(fn) as UpdateBinder<C, I, A, D>;
     }
 
-    public override ifHadNoEffect(fn: (c: C, i: D, acc: A) => void): UpdateBinder<C, I, D, A> {
-        return super.ifHadNoEffect(fn) as UpdateBinder<C, I, D, A>;
+    public override ifHadNoEffect(fn: (c: C, i: D, acc: A) => void): UpdateBinder<C, I, A, D> {
+        return super.ifHadNoEffect(fn) as UpdateBinder<C, I, A, D>;
     }
 
-    public override ifCannotExecute(fn: (c: C, i: D, acc: A) => void): UpdateBinder<C, I, D, A> {
-        return super.ifCannotExecute(fn) as UpdateBinder<C, I, D, A>;
+    public override ifCannotExecute(fn: (c: C, i: D, acc: A) => void): UpdateBinder<C, I, A, D> {
+        return super.ifCannotExecute(fn) as UpdateBinder<C, I, A, D>;
     }
 
-    public override end(fn: (c: C, i: D, acc: A) => void): UpdateBinder<C, I, D, A> {
-        return super.end(fn) as UpdateBinder<C, I, D, A>;
+    public override end(fn: (c: C, i: D, acc: A) => void): UpdateBinder<C, I, A, D> {
+        return super.end(fn) as UpdateBinder<C, I, A, D>;
     }
 
-    public override log(...level: ReadonlyArray<LogLevel>): UpdateBinder<C, I, D, A> {
-        return super.log(...level) as UpdateBinder<C, I, D, A>;
+    public override log(...level: ReadonlyArray<LogLevel>): UpdateBinder<C, I, A, D> {
+        return super.log(...level) as UpdateBinder<C, I, A, D>;
     }
 
-    public override stopImmediatePropagation(): UpdateBinder<C, I, D, A> {
-        return super.stopImmediatePropagation() as UpdateBinder<C, I, D, A>;
+    public override stopImmediatePropagation(): UpdateBinder<C, I, A, D> {
+        return super.stopImmediatePropagation() as UpdateBinder<C, I, A, D>;
     }
 
-    public override preventDefault(): UpdateBinder<C, I, D, A> {
-        return super.preventDefault() as UpdateBinder<C, I, D, A>;
+    public override preventDefault(): UpdateBinder<C, I, A, D> {
+        return super.preventDefault() as UpdateBinder<C, I, A, D>;
     }
 
-    public override catch(fn: (ex: unknown) => void): UpdateBinder<C, I, D, A> {
-        return super.catch(fn) as UpdateBinder<C, I, D, A>;
+    public override catch(fn: (ex: unknown) => void): UpdateBinder<C, I, A, D> {
+        return super.catch(fn) as UpdateBinder<C, I, A, D>;
     }
 
-    public override name(name: string): UpdateBinder<C, I, D, A> {
-        return super.name(name) as UpdateBinder<C, I, D, A>;
+    public override name(name: string): UpdateBinder<C, I, A, D> {
+        return super.name(name) as UpdateBinder<C, I, A, D>;
     }
 
-    public override usingInteraction<I2 extends Interaction<D2>, D2 extends InteractionData, A2>(fn: () => I2): UpdateBinder<C, I2, D2, A2> {
-        return super.usingInteraction(fn) as UpdateBinder<C, I2, D2, A2>;
+    public override usingInteraction<I2 extends Interaction<D2>, A2, D2 extends InteractionData = InteractionDataType<I2>>
+    (fn: () => I2): UpdateBinder<C, I2, A2, D2> {
+        return super.usingInteraction(fn) as UpdateBinder<C, I2, A2, D2>;
     }
 
-    public override toProduce<C2 extends Command>(fn: (i: D) => C2): UpdateBinder<C2, I, D, A> {
-        return super.toProduce(fn) as UpdateBinder<C2, I, D, A>;
+    public override toProduce<C2 extends Command>(fn: (i: D) => C2): UpdateBinder<C2, I, A, D> {
+        return super.toProduce(fn) as UpdateBinder<C2, I, A, D>;
     }
 
-    public override toProduceAnon(fn: () => void): UpdateBinder<AnonCmd, I, D, A> {
-        return super.toProduceAnon(fn) as UpdateBinder<AnonCmd, I, D, A>;
+    public override toProduceAnon(fn: () => void): UpdateBinder<AnonCmd, I, A, D> {
+        return super.toProduceAnon(fn) as UpdateBinder<AnonCmd, I, A, D>;
     }
 
-    protected duplicate(): UpdateBinder<C, I, D, A> {
-        return new UpdateBinder<C, I, D, A>(this.undoHistory, this.logger, this.observer, this);
+    protected duplicate(): UpdateBinder<C, I, A, D> {
+        return new UpdateBinder<C, I, A, D>(this.undoHistory, this.logger, this.observer, this);
     }
 
-    public bind(): Binding<C, I, D, A> {
+    public bind(): Binding<C, I, A, D> {
         if (this.usingFn === undefined) {
             throw new Error("The interaction supplier cannot be undefined here");
         }

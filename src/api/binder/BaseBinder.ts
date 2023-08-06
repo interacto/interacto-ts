@@ -17,7 +17,7 @@ import type {InteractionData} from "../interaction/InteractionData";
 import type {BaseBinderBuilder, Widget} from "./BaseBinderBuilder";
 import type {InteractionBinder} from "./InteractionBinder";
 import type {CmdBinder} from "./CmdBinder";
-import type {Interaction} from "../interaction/Interaction";
+import type {Interaction, InteractionDataType} from "../interaction/Interaction";
 import type {AnonCmd} from "../../impl/command/AnonCmd";
 import type {WhenType} from "./When";
 
@@ -62,5 +62,5 @@ export interface BaseBinder extends BaseBinderBuilder {
      * @typeParam I - The user interaction type
      * @returns A clone of the current binder to chain the building configuration.
      */
-    usingInteraction<I extends Interaction<D>, D extends InteractionData, A>(fn: () => I): InteractionBinder<I, D, A>;
+    usingInteraction<I extends Interaction<D>, A, D extends InteractionData = InteractionDataType<I>>(fn: () => I): InteractionBinder<I, A, D>;
 }

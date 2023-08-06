@@ -37,25 +37,24 @@ import type {UndoHistoryBase} from "../undo/UndoHistoryBase";
 import type {MousePointsData} from "../interaction/MousePointsData";
 import type {TapsData} from "../interaction/TapsData";
 
-export type PartialButtonTypedBinder<A> = InteractionBinder<Interaction<WidgetData<HTMLButtonElement>>, WidgetData<HTMLButtonElement>, A>;
-export type PartialInputTypedBinder<A> = InteractionBinder<Interaction<WidgetData<HTMLInputElement>>, WidgetData<HTMLInputElement>, A>;
-export type PartialSelectTypedBinder<A> = InteractionBinder<Interaction<WidgetData<HTMLSelectElement>>, WidgetData<HTMLSelectElement>, A>;
-export type PartialSpinnerTypedBinder<A> = InteractionUpdateBinder<Interaction<WidgetData<HTMLInputElement>>, WidgetData<HTMLInputElement>, A>;
-export type PartialAnchorTypedBinder<A> = InteractionBinder<Interaction<WidgetData<HTMLAnchorElement>>, WidgetData<HTMLAnchorElement>, A>;
-export type PartialTextInputTypedBinder<A> = InteractionUpdateBinder<Interaction<WidgetData<HTMLInputElement | HTMLTextAreaElement>>,
-WidgetData<HTMLInputElement | HTMLTextAreaElement>, A>;
-export type PartialTouchSrcTgtTypedBinder<A> = InteractionUpdateBinder<Interaction<SrcTgtPointsData<TouchData>>, SrcTgtPointsData<TouchData>, A>;
-export type PartialMultiTouchTypedBinder<A> = InteractionUpdateBinder<Interaction<MultiTouchData>, MultiTouchData, A>;
-export type PartialTapsTypedBinder<A> = InteractionUpdateBinder<Interaction<TapsData>, TapsData, A>;
-export type PartialTouchTypedBinder<A> = InteractionUpdateBinder<Interaction<TouchData>, TouchData, A>;
-export type PartialPointTypedBinder<A> = InteractionBinder<Interaction<PointData>, PointData, A>;
-export type PartialWheelTypedBinder<A> = InteractionBinder<Interaction<WheelData>, WheelData, A>;
-export type PartialScrollTypedBinder<A> = InteractionBinder<Interaction<ScrollData>, ScrollData, A>;
-export type PartialUpdatePointTypedBinder<A> = InteractionUpdateBinder<Interaction<PointData>, PointData, A>;
-export type PartialPointsTypedBinder<A> = InteractionUpdateBinder<Interaction<MousePointsData>, MousePointsData, A>;
-export type PartialPointSrcTgtTypedBinder<A> = InteractionUpdateBinder<Interaction<SrcTgtPointsData<PointData>>, SrcTgtPointsData<PointData>, A>;
-export type PartialKeyTypedBinder<A> = KeyInteractionBinder<Interaction<KeyData>, KeyData, A>;
-export type PartialKeysTypedBinder<A> = KeyInteractionUpdateBinder<Interaction<KeysData>, KeysData, A>;
+export type PartialButtonTypedBinder<A> = InteractionBinder<Interaction<WidgetData<HTMLButtonElement>>, A>;
+export type PartialInputTypedBinder<A> = InteractionBinder<Interaction<WidgetData<HTMLInputElement>>, A>;
+export type PartialSelectTypedBinder<A> = InteractionBinder<Interaction<WidgetData<HTMLSelectElement>>, A>;
+export type PartialSpinnerTypedBinder<A> = InteractionUpdateBinder<Interaction<WidgetData<HTMLInputElement>>, A>;
+export type PartialAnchorTypedBinder<A> = InteractionBinder<Interaction<WidgetData<HTMLAnchorElement>>, A>;
+export type PartialTextInputTypedBinder<A> = InteractionUpdateBinder<Interaction<WidgetData<HTMLInputElement | HTMLTextAreaElement>>, A>;
+export type PartialTouchSrcTgtTypedBinder<A> = InteractionUpdateBinder<Interaction<SrcTgtPointsData<TouchData>>, A>;
+export type PartialMultiTouchTypedBinder<A> = InteractionUpdateBinder<Interaction<MultiTouchData>, A>;
+export type PartialTapsTypedBinder<A> = InteractionUpdateBinder<Interaction<TapsData>, A>;
+export type PartialTouchTypedBinder<A> = InteractionUpdateBinder<Interaction<TouchData>, A>;
+export type PartialPointTypedBinder<A> = InteractionBinder<Interaction<PointData>, A>;
+export type PartialWheelTypedBinder<A> = InteractionBinder<Interaction<WheelData>, A>;
+export type PartialScrollTypedBinder<A> = InteractionBinder<Interaction<ScrollData>, A>;
+export type PartialUpdatePointTypedBinder<A> = InteractionUpdateBinder<Interaction<PointData>, A>;
+export type PartialPointsTypedBinder<A> = InteractionUpdateBinder<Interaction<MousePointsData>, A>;
+export type PartialPointSrcTgtTypedBinder<A> = InteractionUpdateBinder<Interaction<SrcTgtPointsData<PointData>>, A>;
+export type PartialKeyTypedBinder<A> = KeyInteractionBinder<Interaction<KeyData>, A>;
+export type PartialKeysTypedBinder<A> = KeyInteractionUpdateBinder<Interaction<KeysData>, A>;
 
 export type PartialButtonBinder = PartialButtonTypedBinder<unknown>;
 export type PartialInputBinder = PartialInputTypedBinder<unknown>;
@@ -308,8 +307,7 @@ export abstract class Bindings<H extends UndoHistoryBase> {
      * @param catchFn - The function that will treat the errors for both undo and redo bindings
      */
     public abstract undoRedoBinder(undo: Widget<HTMLButtonElement>, redo: Widget<HTMLButtonElement>, catchFn?: ((err: unknown) => void)):
-    [Binding<Undo, Interaction<WidgetData<HTMLButtonElement>>, WidgetData<HTMLButtonElement>, unknown>,
-        Binding<Redo, Interaction<WidgetData<HTMLButtonElement>>, WidgetData<HTMLButtonElement>, unknown>];
+    [Binding<Undo, Interaction<WidgetData<HTMLButtonElement>>, unknown>, Binding<Redo, Interaction<WidgetData<HTMLButtonElement>>, unknown>];
 
     /**
      * Clears all the data of this binding context:

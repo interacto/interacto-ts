@@ -73,7 +73,7 @@ class StubAsyncCmd extends CommandBase {
 
 let cmd: StubAsyncCmd;
 let data: Model;
-let binding: Binding<StubAsyncCmd, Interaction<InteractionData>, InteractionData, unknown> | undefined;
+let binding: Binding<StubAsyncCmd, Interaction<InteractionData>, unknown> | undefined;
 let ctx: BindingsContext;
 let bindings: Bindings<UndoHistoryBase>;
 
@@ -462,7 +462,7 @@ describe("testing async commands and bindings", () => {
                 .log("command")
                 .bind();
 
-            jest.spyOn(binding as BindingImpl<StubAsyncCmd, Interaction<InteractionData>, InteractionData, unknown>,
+            jest.spyOn(binding as BindingImpl<StubAsyncCmd, Interaction<InteractionData>, unknown>,
                 "ifCannotExecuteCmd").mockImplementation(() => {
                 throw new Error("Error");
             });

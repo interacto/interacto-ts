@@ -13,7 +13,7 @@
  */
 
 import {mock} from "jest-mock-extended";
-import type {FSM, FSMDataHandler, InteractionData, Logger, UndoHistory} from "../../src/interacto";
+import type {FSM, FSMDataHandler, Logger, UndoHistory} from "../../src/interacto";
 import {
     BindingImpl,
     ClickTransition,
@@ -25,7 +25,7 @@ import {InteractionStub} from "../interaction/InteractionStub";
 import {createMouseEvent} from "../interaction/StubEvents";
 
 let interaction: InteractionStub;
-let binding: BindingImpl<StubCmd, InteractionStub, InteractionData, unknown>;
+let binding: BindingImpl<StubCmd, InteractionStub, unknown>;
 let fsm: FSM;
 let cmd: StubCmd;
 let history: UndoHistory;

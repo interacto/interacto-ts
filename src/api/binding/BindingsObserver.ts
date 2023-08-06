@@ -25,7 +25,7 @@ export interface BindingsObserver {
      * Adds a binding to observe.
      * @param binding - The binding to observe.
      */
-    observeBinding(binding: Binding<Command, Interaction<InteractionData>, InteractionData, unknown>): void;
+    observeBinding(binding: Binding<Command, Interaction<InteractionData>, unknown>): void;
 
     /**
      * Clear all the observed bindings and uninstall them.

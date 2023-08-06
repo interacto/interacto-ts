@@ -38,7 +38,7 @@ import type {UndoHistoryBase} from "../../src/api/undo/UndoHistoryBase";
 import clearAllTimers = jest.clearAllTimers;
 
 let elt: HTMLElement;
-let binding: Binding<Command, Interaction<InteractionData>, InteractionData, unknown> | undefined;
+let binding: Binding<Command, Interaction<InteractionData>, unknown> | undefined;
 let ctx: BindingsContext;
 let bindings: Bindings<UndoHistoryBase>;
 
@@ -787,12 +787,12 @@ describe("using a key binder", () => {
     });
 
     test("whenArray is copied when binder is copied", () => {
-        const partialBinder1: KeyInteractionCmdBinder<StubCmd, Interaction<KeyData>, KeyData, unknown> = bindings.keyDownBinder(true)
+        const partialBinder1: KeyInteractionCmdBinder<StubCmd, Interaction<KeyData>, unknown> = bindings.keyDownBinder(true)
             .on(elt)
             .toProduce(() => new StubCmd(true))
             .when(() => true);
 
-        const partialBinder2: KeyInteractionCmdBinder<StubCmd, Interaction<KeyData>, KeyData, unknown> = partialBinder1
+        const partialBinder2: KeyInteractionCmdBinder<StubCmd, Interaction<KeyData>, unknown> = partialBinder1
             .when(() => false);
 
         partialBinder1.bind();

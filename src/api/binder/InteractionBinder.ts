@@ -17,7 +17,7 @@ import type {InteractionBinderBuilder} from "./InteractionBinderBuilder";
 import type {LogLevel} from "../logging/LogLevel";
 import type {Command} from "../command/Command";
 import type {InteractionCmdBinder} from "./InteractionCmdBinder";
-import type {Interaction} from "../interaction/Interaction";
+import type {Interaction, InteractionDataType} from "../interaction/Interaction";
 import type {Widget} from "./BaseBinderBuilder";
 import type {AnonCmd} from "../../impl/command/AnonCmd";
 import type {WhenType} from "./When";
@@ -27,27 +27,27 @@ import type {WhenType} from "./When";
  * @typeParam I - The type of the user interaction
  * @typeParam D - The type of the interaction data of the user interaction
  */
-export interface InteractionBinder<I extends Interaction<D>, D extends InteractionData, A>
-    extends InteractionBinderBuilder<I, D, A> {
-    when(fn: (i: D, acc: Readonly<A>) => boolean, mode?: WhenType): InteractionBinder<I, D, A>;
+export interface InteractionBinder<I extends Interaction<D>, A, D extends InteractionData = InteractionDataType<I>>
+    extends InteractionBinderBuilder<I, A, D> {
+    when(fn: (i: D, acc: Readonly<A>) => boolean, mode?: WhenType): InteractionBinder<I, A, D>;
 
-    on<W>(widget: ReadonlyArray<Widget<W>> | Widget<W>, ...widgets: ReadonlyArray<Widget<W>>): InteractionBinder<I, D, A>;
+    on<W>(widget: ReadonlyArray<Widget<W>> | Widget<W>, ...widgets: ReadonlyArray<Widget<W>>): InteractionBinder<I, A, D>;
 
-    onDynamic(node: Widget<Node>): InteractionBinder<I, D, A>;
+    onDynamic(node: Widget<Node>): InteractionBinder<I, A, D>;
 
-    log(...level: ReadonlyArray<LogLevel>): InteractionBinder<I, D, A>;
+    log(...level: ReadonlyArray<LogLevel>): InteractionBinder<I, A, D>;
 
-    end(fn: () => void): InteractionBinder<I, D, A>;
+    end(fn: () => void): InteractionBinder<I, A, D>;
 
-    stopImmediatePropagation(): InteractionBinder<I, D, A>;
+    stopImmediatePropagation(): InteractionBinder<I, A, D>;
 
-    preventDefault(): InteractionBinder<I, D, A>;
+    preventDefault(): InteractionBinder<I, A, D>;
 
-    catch(fn: (ex: unknown) => void): InteractionBinder<I, D, A>;
+    catch(fn: (ex: unknown) => void): InteractionBinder<I, A, D>;
 
-    name(name: string): InteractionBinder<I, D, A>;
+    name(name: string): InteractionBinder<I, A, D>;
 
-    toProduce<C extends Command>(fn: (i: D) => C): InteractionCmdBinder<C, I, D, A>;
+    toProduce<C extends Command>(fn: (i: D) => C): InteractionCmdBinder<C, I, A, D>;
 
-    toProduceAnon(fn: () => void): InteractionCmdBinder<AnonCmd, I, D, A>;
+    toProduceAnon(fn: () => void): InteractionCmdBinder<AnonCmd, I, A, D>;
 }

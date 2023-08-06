@@ -15,7 +15,7 @@
 import type {InteractionData} from "../interaction/InteractionData";
 import type {BaseBinderBuilder, Widget} from "./BaseBinderBuilder";
 import type {LogLevel} from "../logging/LogLevel";
-import type {Interaction} from "../interaction/Interaction";
+import type {Interaction, InteractionDataType} from "../interaction/Interaction";
 import type {WhenType} from "./When";
 
 /**
@@ -23,7 +23,7 @@ import type {WhenType} from "./When";
  * @typeParam I - The type of the user interaction
  * @typeParam D - The type of the interaction data of the user interaction
  */
-export interface InteractionBinderBuilder<I extends Interaction<D>, D extends InteractionData, A>
+export interface InteractionBinderBuilder<I extends Interaction<D>, A, D extends InteractionData = InteractionDataType<I>>
     extends BaseBinderBuilder {
     /**
      * Specifies the conditions to fulfill to initialise, update, or execute the command while the interaction is running.
@@ -32,21 +32,21 @@ export interface InteractionBinderBuilder<I extends Interaction<D>, D extends In
      * This predicate takes as arguments the data of the ongoing user interaction involved in the binding.
      * @returns A clone of the current binder to chain the building configuration.
      */
-    when(fn: (i: D, acc: Readonly<A>) => boolean, mode?: WhenType): InteractionBinderBuilder<I, D, A>;
+    when(fn: (i: D, acc: Readonly<A>) => boolean, mode?: WhenType): InteractionBinderBuilder<I, A, D>;
 
-    on<W>(widget: ReadonlyArray<Widget<W>> | Widget<W>, ...widgets: ReadonlyArray<Widget<W>>): InteractionBinderBuilder<I, D, A>;
+    on<W>(widget: ReadonlyArray<Widget<W>> | Widget<W>, ...widgets: ReadonlyArray<Widget<W>>): InteractionBinderBuilder<I, A, D>;
 
-    onDynamic(node: Widget<Node>): InteractionBinderBuilder<I, D, A>;
+    onDynamic(node: Widget<Node>): InteractionBinderBuilder<I, A, D>;
 
-    end(fn: () => void): InteractionBinderBuilder<I, D, A>;
+    end(fn: () => void): InteractionBinderBuilder<I, A, D>;
 
-    log(...level: ReadonlyArray<LogLevel>): InteractionBinderBuilder<I, D, A>;
+    log(...level: ReadonlyArray<LogLevel>): InteractionBinderBuilder<I, A, D>;
 
-    stopImmediatePropagation(): InteractionBinderBuilder<I, D, A>;
+    stopImmediatePropagation(): InteractionBinderBuilder<I, A, D>;
 
-    preventDefault(): InteractionBinderBuilder<I, D, A>;
+    preventDefault(): InteractionBinderBuilder<I, A, D>;
 
-    catch(fn: (ex: unknown) => void): InteractionBinderBuilder<I, D, A>;
+    catch(fn: (ex: unknown) => void): InteractionBinderBuilder<I, A, D>;
 
-    name(name: string): InteractionBinderBuilder<I, D, A>;
+    name(name: string): InteractionBinderBuilder<I, A, D>;
 }

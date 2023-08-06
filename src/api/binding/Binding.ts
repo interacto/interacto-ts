@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {Interaction} from "../interaction/Interaction";
+import type {Interaction, InteractionDataType} from "../interaction/Interaction";
 import type {Command} from "../command/Command";
 import type {Observable} from "rxjs";
 import type {InteractionData} from "../interaction/InteractionData";
@@ -20,7 +20,7 @@ import type {InteractionData} from "../interaction/InteractionData";
 /**
  * The concept of binding and its related services.
  */
-export interface Binding<C extends Command, I extends Interaction<D>, D extends InteractionData, A> {
+export interface Binding<C extends Command, I extends Interaction<D>, A, D extends InteractionData = InteractionDataType<I>> {
     /**
      * The name of the binding
      */

@@ -18,7 +18,7 @@ import type {LogLevel} from "../logging/LogLevel";
 import type {Binding} from "../binding/Binding";
 import type {InteractionUpdateBinder} from "./InteractionUpdateBinder";
 import type {Command} from "../command/Command";
-import type {Interaction} from "../interaction/Interaction";
+import type {Interaction, InteractionDataType} from "../interaction/Interaction";
 import type {Widget} from "./BaseBinderBuilder";
 import type {WhenType} from "./When";
 
@@ -29,46 +29,46 @@ import type {WhenType} from "./When";
  * @typeParam I - The type of the user interaction
  * @typeParam D - The type of the interaction data of the user interaction
  */
-export interface KeyInteractionCmdUpdateBinder<C extends Command, I extends Interaction<D>, D extends InteractionData, A>
-    extends KeyInteractionBinderBuilder<I, D, A>, InteractionUpdateBinder<I, D, A> {
+export interface KeyInteractionCmdUpdateBinder<C extends Command, I extends Interaction<D>, A, D extends InteractionData = InteractionDataType<I>>
+    extends KeyInteractionBinderBuilder<I, A, D>, InteractionUpdateBinder<I, A, D> {
 
-    with(isCode: boolean, ...keysOrCodes: ReadonlyArray<string>): KeyInteractionCmdUpdateBinder<C, I, D, A>;
+    with(isCode: boolean, ...keysOrCodes: ReadonlyArray<string>): KeyInteractionCmdUpdateBinder<C, I, A, D>;
 
-    then(fn: ((c: C, i: D, acc: A) => void) | ((c: C) => void)): KeyInteractionCmdUpdateBinder<C, I, D, A>;
+    then(fn: ((c: C, i: D, acc: A) => void) | ((c: C) => void)): KeyInteractionCmdUpdateBinder<C, I, A, D>;
 
-    continuousExecution(): KeyInteractionCmdUpdateBinder<C, I, D, A>;
+    continuousExecution(): KeyInteractionCmdUpdateBinder<C, I, A, D>;
 
-    throttle(timeout: number): KeyInteractionCmdUpdateBinder<C, I, D, A>;
+    throttle(timeout: number): KeyInteractionCmdUpdateBinder<C, I, A, D>;
 
-    first(fn: (c: C, i: D, acc: A) => void): KeyInteractionCmdUpdateBinder<C, I, D, A>;
+    first(fn: (c: C, i: D, acc: A) => void): KeyInteractionCmdUpdateBinder<C, I, A, D>;
 
-    on<W>(widget: ReadonlyArray<Widget<W>> | Widget<W>, ...widgets: ReadonlyArray<Widget<W>>): KeyInteractionCmdUpdateBinder<C, I, D, A>;
+    on<W>(widget: ReadonlyArray<Widget<W>> | Widget<W>, ...widgets: ReadonlyArray<Widget<W>>): KeyInteractionCmdUpdateBinder<C, I, A, D>;
 
-    onDynamic(node: Widget<Node>): KeyInteractionCmdUpdateBinder<C, I, D, A>;
+    onDynamic(node: Widget<Node>): KeyInteractionCmdUpdateBinder<C, I, A, D>;
 
-    log(...level: ReadonlyArray<LogLevel>): KeyInteractionCmdUpdateBinder<C, I, D, A>;
+    log(...level: ReadonlyArray<LogLevel>): KeyInteractionCmdUpdateBinder<C, I, A, D>;
 
-    cancel(fn: (i: D, acc: A) => void): KeyInteractionCmdUpdateBinder<C, I, D, A>;
+    cancel(fn: (i: D, acc: A) => void): KeyInteractionCmdUpdateBinder<C, I, A, D>;
 
-    endOrCancel(fn: (i: D, acc: A) => void): KeyInteractionCmdUpdateBinder<C, I, D, A>;
+    endOrCancel(fn: (i: D, acc: A) => void): KeyInteractionCmdUpdateBinder<C, I, A, D>;
 
-    when(fn: (i: D, acc: Readonly<A>) => boolean, mode?: WhenType): KeyInteractionCmdUpdateBinder<C, I, D, A>;
+    when(fn: (i: D, acc: Readonly<A>) => boolean, mode?: WhenType): KeyInteractionCmdUpdateBinder<C, I, A, D>;
 
-    ifHadEffects(fn: (c: C, i: D, acc: A) => void): KeyInteractionCmdUpdateBinder<C, I, D, A>;
+    ifHadEffects(fn: (c: C, i: D, acc: A) => void): KeyInteractionCmdUpdateBinder<C, I, A, D>;
 
-    ifHadNoEffect(fn: (c: C, i: D, acc: A) => void): KeyInteractionCmdUpdateBinder<C, I, D, A>;
+    ifHadNoEffect(fn: (c: C, i: D, acc: A) => void): KeyInteractionCmdUpdateBinder<C, I, A, D>;
 
-    ifCannotExecute(fn: (c: C, i: D, acc: A) => void): KeyInteractionCmdUpdateBinder<C, I, D, A>;
+    ifCannotExecute(fn: (c: C, i: D, acc: A) => void): KeyInteractionCmdUpdateBinder<C, I, A, D>;
 
-    end(fn: (c: C, i: D, acc: A) => void): KeyInteractionCmdUpdateBinder<C, I, D, A>;
+    end(fn: (c: C, i: D, acc: A) => void): KeyInteractionCmdUpdateBinder<C, I, A, D>;
 
-    stopImmediatePropagation(): KeyInteractionCmdUpdateBinder<C, I, D, A>;
+    stopImmediatePropagation(): KeyInteractionCmdUpdateBinder<C, I, A, D>;
 
-    preventDefault(): KeyInteractionCmdUpdateBinder<C, I, D, A>;
+    preventDefault(): KeyInteractionCmdUpdateBinder<C, I, A, D>;
 
-    catch(fn: (ex: unknown) => void): KeyInteractionCmdUpdateBinder<C, I, D, A>;
+    catch(fn: (ex: unknown) => void): KeyInteractionCmdUpdateBinder<C, I, A, D>;
 
-    name(name: string): KeyInteractionCmdUpdateBinder<C, I, D, A>;
+    name(name: string): KeyInteractionCmdUpdateBinder<C, I, A, D>;
 
-    bind(): Binding<C, I, D, A>;
+    bind(): Binding<C, I, A, D>;
 }

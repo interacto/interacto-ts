@@ -79,8 +79,8 @@ export class FittsLaw {
      * @param target - The optional target object. If not provided, the target object will be inferred
      * from event data.
      */
-    public constructor(bSrc: Binding<Command, Interaction<InteractionData>, InteractionData, unknown>,
-                       bTgt: Binding<Command, Interaction<InteractionData>, InteractionData, unknown>,
+    public constructor(bSrc: Binding<Command, Interaction<InteractionData>, unknown>,
+                       bTgt: Binding<Command, Interaction<InteractionData>, unknown>,
                        target?: Element) {
         this.data = [];
         this.providedTarget = target;

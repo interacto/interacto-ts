@@ -27,7 +27,7 @@ export class BindingsContext implements BindingsObserver {
     /**
      * The bindings gathered when created using `Bindings` routines
      */
-    private readonly binds: Array<Binding<Command, Interaction<InteractionData>, InteractionData, unknown>>;
+    private readonly binds: Array<Binding<Command, Interaction<InteractionData>, unknown>>;
 
     /**
      * For each gathered binding, listening the produced commands
@@ -37,7 +37,7 @@ export class BindingsContext implements BindingsObserver {
     /**
      * The commands produced by the gathered bindings
      */
-    private readonly cmds: Array<[Command, Binding<Command, Interaction<InteractionData>, InteractionData, unknown>]>;
+    private readonly cmds: Array<[Command, Binding<Command, Interaction<InteractionData>, unknown>]>;
 
     public constructor() {
         this.binds = [];
@@ -45,7 +45,7 @@ export class BindingsContext implements BindingsObserver {
         this.cmds = [];
     }
 
-    public observeBinding(binding: Binding<Command, Interaction<InteractionData>, InteractionData, unknown>): void {
+    public observeBinding(binding: Binding<Command, Interaction<InteractionData>, unknown>): void {
         this.binds.push(binding);
         this.disposables.push(binding.produces.subscribe(cmd => this.cmds.push([cmd, binding])));
     }
@@ -62,7 +62,7 @@ export class BindingsContext implements BindingsObserver {
     /**
      * Returns a read-only array of the gathered bindings.
      */
-    public get bindings(): ReadonlyArray<Binding<Command, Interaction<InteractionData>, InteractionData, unknown>> {
+    public get bindings(): ReadonlyArray<Binding<Command, Interaction<InteractionData>, unknown>> {
         return this.binds;
     }
 
@@ -86,7 +86,7 @@ export class BindingsContext implements BindingsObserver {
      * Returns the commands produced by the given binding.
      * @param binding - binding The binding to consider
      */
-    public getCmdsProducedBy(binding: Binding<Command, Interaction<InteractionData>, InteractionData, unknown>): ReadonlyArray<Command> {
+    public getCmdsProducedBy(binding: Binding<Command, Interaction<InteractionData>, unknown>): ReadonlyArray<Command> {
         return this.cmds
             .filter(c => c[1] === binding)
             .map(c => c[0]);

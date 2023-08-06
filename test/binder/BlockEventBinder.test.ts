@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 import type {Subscription} from "rxjs";
-import type {Binding, PointData, UndoHistoryBase, Logger} from "../../src/interacto";
+import type {Binding, UndoHistoryBase, Logger} from "../../src/interacto";
 import {BindingsImpl, MouseDown, UndoHistoryImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {createKeyEvent, createMouseEvent} from "../interaction/StubEvents";
@@ -21,8 +21,8 @@ import {mock} from "jest-mock-extended";
 
 let canvas1: HTMLElement;
 let canvas2: HTMLElement;
-let binding1: Binding<StubCmd, MouseDown, PointData, unknown>;
-let binding2: Binding<StubCmd, MouseDown, PointData, unknown>;
+let binding1: Binding<StubCmd, MouseDown, unknown>;
+let binding2: Binding<StubCmd, MouseDown, unknown>;
 let disposable: Subscription | undefined;
 let bindings: Bindings<UndoHistoryBase>;
 

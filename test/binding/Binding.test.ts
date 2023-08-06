@@ -19,7 +19,7 @@ import {InteractionStub} from "../interaction/InteractionStub";
 import type {Logger} from "../../src/api/logging/Logger";
 import {mock} from "jest-mock-extended";
 
-class BindingStub extends BindingImpl<StubCmd, InteractionStub, InteractionData, unknown> {
+class BindingStub extends BindingImpl<StubCmd, InteractionStub, unknown> {
     public whenStartOK: boolean;
 
     public whenEndOK: boolean;

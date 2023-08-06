@@ -16,7 +16,7 @@ import type {CmdUpdateBinderBuilder} from "./CmdUpdateBinderBuilder";
 import type {LogLevel} from "../logging/LogLevel";
 import type {InteractionData} from "../interaction/InteractionData";
 import type {InteractionCmdUpdateBinder} from "./InteractionCmdUpdateBinder";
-import type {Interaction} from "../interaction/Interaction";
+import type {Interaction, InteractionDataType} from "../interaction/Interaction";
 import type {Widget} from "./BaseBinderBuilder";
 import type {WhenType} from "./When";
 
@@ -44,7 +44,8 @@ export interface CmdUpdateBinder<C extends Command> extends CmdUpdateBinderBuild
 
     end(fn: (c: C) => void): CmdUpdateBinder<C>;
 
-    usingInteraction<I extends Interaction<D>, D extends InteractionData, A>(fn: () => I): InteractionCmdUpdateBinder<C, I, D, A>;
+    usingInteraction<I extends Interaction<D>, A, D extends InteractionData = InteractionDataType<I>>
+    (fn: () => I): InteractionCmdUpdateBinder<C, I, A, D>;
 
     stopImmediatePropagation(): CmdUpdateBinder<C>;
 

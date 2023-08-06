@@ -16,7 +16,7 @@ import type {KeyInteractionBinderBuilder} from "./KeyInteractionBinderBuilder";
 import type {LogLevel} from "../logging/LogLevel";
 import type {Command} from "../command/Command";
 import type {KeyInteractionCmdBinder} from "./KeyInteractionCmdBinder";
-import type {Interaction} from "../interaction/Interaction";
+import type {Interaction, InteractionDataType} from "../interaction/Interaction";
 import type {Widget} from "./BaseBinderBuilder";
 import type {AnonCmd} from "../../impl/command/AnonCmd";
 import type {WhenType} from "./When";
@@ -26,30 +26,30 @@ import type {WhenType} from "./When";
  * @typeParam I - The type of the user interaction
  * @typeParam D - The type of the interaction data of the user interaction
  */
-export interface KeyInteractionBinder<I extends Interaction<D>, D extends InteractionData, A>
-    extends KeyInteractionBinderBuilder<I, D, A> {
+export interface KeyInteractionBinder<I extends Interaction<D>, A, D extends InteractionData = InteractionDataType<I>>
+    extends KeyInteractionBinderBuilder<I, A, D> {
 
-    when(fn: (i: D, acc: Readonly<A>) => boolean, mode?: WhenType): KeyInteractionBinder<I, D, A>;
+    when(fn: (i: D, acc: Readonly<A>) => boolean, mode?: WhenType): KeyInteractionBinder<I, A, D>;
 
-    on<W>(widget: ReadonlyArray<Widget<W>> | Widget<W>, ...widgets: ReadonlyArray<Widget<W>>): KeyInteractionBinder<I, D, A>;
+    on<W>(widget: ReadonlyArray<Widget<W>> | Widget<W>, ...widgets: ReadonlyArray<Widget<W>>): KeyInteractionBinder<I, A, D>;
 
-    onDynamic(node: Widget<Node>): KeyInteractionBinder<I, D, A>;
+    onDynamic(node: Widget<Node>): KeyInteractionBinder<I, A, D>;
 
-    log(...level: ReadonlyArray<LogLevel>): KeyInteractionBinder<I, D, A>;
+    log(...level: ReadonlyArray<LogLevel>): KeyInteractionBinder<I, A, D>;
 
-    end(fn: () => void): KeyInteractionBinder<I, D, A>;
+    end(fn: () => void): KeyInteractionBinder<I, A, D>;
 
-    with(isCode: boolean, ...keysOrCodes: ReadonlyArray<string>): KeyInteractionBinder<I, D, A>;
+    with(isCode: boolean, ...keysOrCodes: ReadonlyArray<string>): KeyInteractionBinder<I, A, D>;
 
-    stopImmediatePropagation(): KeyInteractionBinder<I, D, A>;
+    stopImmediatePropagation(): KeyInteractionBinder<I, A, D>;
 
-    preventDefault(): KeyInteractionBinder<I, D, A>;
+    preventDefault(): KeyInteractionBinder<I, A, D>;
 
-    catch(fn: (ex: unknown) => void): KeyInteractionBinder<I, D, A>;
+    catch(fn: (ex: unknown) => void): KeyInteractionBinder<I, A, D>;
 
-    name(name: string): KeyInteractionBinder<I, D, A>;
+    name(name: string): KeyInteractionBinder<I, A, D>;
 
-    toProduce<C extends Command>(fn: (i: D) => C): KeyInteractionCmdBinder<C, I, D, A>;
+    toProduce<C extends Command>(fn: (i: D) => C): KeyInteractionCmdBinder<C, I, A, D>;
 
-    toProduceAnon(fn: () => void): KeyInteractionCmdBinder<AnonCmd, I, D, A>;
+    toProduceAnon(fn: () => void): KeyInteractionCmdBinder<AnonCmd, I, A, D>;
 }

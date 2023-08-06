@@ -25,7 +25,8 @@ import {UndoHistoryImpl} from "../../src/impl/undo/UndoHistoryImpl";
 import type {Logger} from "../../src/api/logging/Logger";
 
 describe("using an update binder", () => {
-    let binder: UpdateBinder<Command, Interaction<InteractionData>, InteractionData, unknown>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let binder: UpdateBinder<Command, Interaction<any>, unknown>;
     let history: UndoHistory;
 
     beforeEach(() => {
