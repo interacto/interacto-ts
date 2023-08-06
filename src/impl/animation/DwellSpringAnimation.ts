@@ -49,7 +49,7 @@ export class DwellSpringAnimation {
         // Management of the dwell and spring
         // The element to use for this interaction (handle) must have the "ioDwellSpring" class
         if (this.displaySpring) {
-            const distance = Math.sqrt((i.tgt.clientX - this.positionSpring.x) ** 2 + (i.tgt.clientY - this.positionSpring.y) ** 2);
+            const distance = Math.hypot((i.tgt.clientX - this.positionSpring.x), (i.tgt.clientY - this.positionSpring.y));
             if (Math.abs(distance) > (this.radius * 4)) {
                 this.spring.nativeElement.setAttribute("display", "none");
                 this.handle.nativeElement.setAttribute("display", "none");

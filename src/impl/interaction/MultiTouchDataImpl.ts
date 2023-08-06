@@ -174,6 +174,6 @@ export class MultiTouchDataImpl implements MultiTouchData, Flushable {
      * Returns the distance between point1 and point2
      */
     public static distance(point1: [number, number], point2: [number, number]): number {
-        return Math.sqrt((point2[0] - point1[0]) ** 2 + (point2[1] - point1[1]) ** 2);
+        return Math.hypot((point2[0] - point1[0]), (point2[1] - point1[1]));
     }
 }

@@ -119,7 +119,7 @@ export class FittsLaw {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const b = this.providedTarget.clientTop + this.providedTarget.clientHeight / 2 + this._startY!;
 
-        return Math.sqrt(a ** 2 + b ** 2);
+        return Math.hypot(a, b);
     }
 
     /**
