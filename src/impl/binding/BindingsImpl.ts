@@ -69,7 +69,8 @@ import type {
     PartialTouchTypedBinder,
     PartialTouchSrcTgtTypedBinder,
     PartialUpdatePointTypedBinder,
-    PartialWheelTypedBinder
+    PartialWheelTypedBinder,
+    PartialPointOrTouchTypedBinder
 } from "../../api/binding/Bindings";
 import {Bindings} from "../../api/binding/Bindings";
 import type {Logger} from "../../api/logging/Logger";
@@ -80,6 +81,7 @@ import {MouseUp} from "../interaction/library/MouseUp";
 import {DwellSpringAnimation} from "../animation/DwellSpringAnimation";
 import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
 import {TouchStart} from "../interaction/library/TouchStart";
+import {Or} from "../interaction/Or";
 
 export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
     protected observer: BindingsObserver | undefined;
@@ -414,6 +416,11 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
     public keyTypeBinder<A>(accInit?: A): PartialKeyTypedBinder<A> {
         return new KeysBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<KeyTyped, A>(() => new KeyTyped(this.logger));
+    }
+
+    public mouseDownOrTouchStartBinder<A>(accInit?: A): PartialPointOrTouchTypedBinder<A> {
+        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+            .usingInteraction<Or<MouseDown, TouchStart>, A>(() => new Or(new MouseDown(this.logger), new TouchStart(this.logger), this.logger));
     }
 
     public undoRedoBinder(undo: Widget<HTMLButtonElement>, redo: Widget<HTMLButtonElement>,

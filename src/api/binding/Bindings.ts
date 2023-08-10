@@ -55,6 +55,7 @@ export type PartialPointsTypedBinder<A> = InteractionUpdateBinder<Interaction<Mo
 export type PartialPointSrcTgtTypedBinder<A> = InteractionUpdateBinder<Interaction<SrcTgtPointsData<PointData>>, A>;
 export type PartialKeyTypedBinder<A> = KeyInteractionBinder<Interaction<KeyData>, A>;
 export type PartialKeysTypedBinder<A> = KeyInteractionUpdateBinder<Interaction<KeysData>, A>;
+export type PartialPointOrTouchTypedBinder<A> = InteractionBinder<Interaction<PointData | TouchData>, A>;
 
 export type PartialButtonBinder = PartialButtonTypedBinder<unknown>;
 export type PartialInputBinder = PartialInputTypedBinder<unknown>;
@@ -299,6 +300,11 @@ export abstract class Bindings<H extends UndoHistoryBase> {
      * Creates a binding that uses the KeyTyped (key pressed then released) interaction.
      */
     public abstract keyTypeBinder<A>(accInit?: A): PartialKeyTypedBinder<A>;
+
+    /**
+     * Creates a binding that uses either a mouse down or a touch start interaction.
+     */
+    public abstract mouseDownOrTouchStartBinder<A>(accInit?: A): PartialPointOrTouchTypedBinder<A>;
 
     /**
      * Creates two bindings for undo and redo operations with buttons.

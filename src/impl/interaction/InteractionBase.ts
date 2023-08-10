@@ -28,6 +28,12 @@ interface CancellablePromise extends Promise<void> {
 }
 
 /**
+ * Infers the type of the involved interaction data implementation
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type InteractionDataImplType<T> = T extends InteractionBase<any, infer DImpl, any> ? DImpl : never;
+
+/**
  * The base implementation of a user interaction.
  * @typeParam D - The type of the interaction data.
  * @typeParam F - The type of the FSM.

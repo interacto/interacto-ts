@@ -17,11 +17,16 @@ import type {FSMHandler} from "../../api/fsm/FSMHandler";
 import {FSMImpl} from "./FSMImpl";
 import type {FSMDataHandler} from "./FSMDataHandler";
 import type {Logger} from "../../api/logging/Logger";
+import type {ConcurrentFSM} from "../../api/fsm/ConcurrentFSM";
 
 /**
  * A concurrent FSM: an FSM that contains multiple FSMs that run concurrently.
+ * Using this FSM all the sub FSMs must have started to start the main FSM:
+ * this is a AND concurrent FSM as all the sub FSMs must run.
+ * This FSM can have secondary FSMs that are optionals, i.e. not mandatory for the main
+ * FSM to start.
  */
-export class ConcurrentFSM<F extends FSM, T extends FSMDataHandler> extends FSMImpl<T> {
+export class ConcurrentAndFSM<F extends FSM, T extends FSMDataHandler> extends FSMImpl<T> implements ConcurrentFSM<F> {
     /**
      * The main fsms
      */
@@ -72,9 +77,6 @@ export class ConcurrentFSM<F extends FSM, T extends FSMDataHandler> extends FSMI
         }
     }
 
-    /**
-     * @returns All the main and secondary FSMs
-     */
     public getAllConccurFSMs(): ReadonlyArray<F> {
         return [...this._conccurFSMs, ...this._secondaryFSMs];
     }

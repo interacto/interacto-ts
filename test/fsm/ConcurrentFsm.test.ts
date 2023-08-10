@@ -15,7 +15,7 @@
 import type {FSMDataHandler, FSMHandler, Logger} from "../../src/interacto";
 import {
     ClickTransition,
-    ConcurrentFSM,
+    ConcurrentAndFSM,
     FSMImpl, MouseTransition
 } from "../../src/interacto";
 import {mock} from "jest-mock-extended";
@@ -40,7 +40,7 @@ class StubTouchFSM extends FSMImpl<FSMDataHandler> {
 }
 
 describe("using a concurrent FSM", () => {
-    let fsm: ConcurrentFSM<StubTouchFSM, FSMDataHandler>;
+    let fsm: ConcurrentAndFSM<StubTouchFSM, FSMDataHandler>;
     let fsm1: StubTouchFSM;
     let fsm2: StubTouchFSM;
     let handler: FSMHandler;
@@ -56,7 +56,7 @@ describe("using a concurrent FSM", () => {
         handler2 = mock<FSMHandler>();
         fsm1.addHandler(handler1);
         fsm2.addHandler(handler2);
-        fsm = new ConcurrentFSM([fsm1, fsm2], mock<Logger>());
+        fsm = new ConcurrentAndFSM([fsm1, fsm2], mock<Logger>());
         fsm.addHandler(handler);
     });
 

@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {ConcurrentFSM} from "../../fsm/ConcurrentFSM";
+import {ConcurrentAndFSM} from "../../fsm/ConcurrentAndFSM";
 import {ConcurrentInteraction} from "../ConcurrentInteraction";
 import type {MultiTouchData} from "../../../api/interaction/MultiTouchData";
 import type {TouchDnDFSMHandler} from "./TouchDnD";
@@ -24,7 +24,7 @@ import type {Logger} from "../../../api/logging/Logger";
 /**
  * The FSM that defines a multi-touch interaction (that works like a DnD)
  */
-class MultiTouchFSM extends ConcurrentFSM<TouchDnDFSM, TouchDnDFSMHandler> {
+class MultiTouchFSM extends ConcurrentAndFSM<TouchDnDFSM, TouchDnDFSMHandler> {
     /**
      * Creates the FSM.
      */
