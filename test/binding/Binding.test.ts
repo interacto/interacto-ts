@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {InteractionData, Undoable, UndoHistory} from "../../src/interacto";
+import type {InteractionData, Undoable, UndoHistory, VisitorBinding} from "../../src/interacto";
 import {BindingImpl, FSMImpl, MustBeUndoableCmdError, UndoHistoryImpl} from "../../src/interacto";
 import {StubCmd, StubUndoableCmd} from "../command/StubCmd";
 import {InteractionStub} from "../interaction/InteractionStub";
@@ -114,6 +114,13 @@ describe("using a binding", () => {
 
         test("name is ok when not executed", () => {
             expect(binding.name).toBe("InteractionStub");
+        });
+
+        test("accept visitor works", () => {
+            const visitor: VisitorBinding = mock<VisitorBinding>();
+            binding.acceptVisitor(visitor);
+            expect(visitor.visitBinding).toHaveBeenCalledTimes(1);
+            expect(visitor.visitBinding).toHaveBeenCalledWith(binding);
         });
 
         test("execute Ok", () => {

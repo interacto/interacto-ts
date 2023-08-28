@@ -32,6 +32,7 @@ import type {
     TouchData,
     UndoHistory,
     UndoHistoryBase,
+    VisitorBinding,
     WidgetData
 } from "../../src/interacto";
 import {
@@ -71,6 +72,13 @@ describe("using bindings", () => {
         bindings = new BindingsImpl(h);
 
         expect(h).toBe(bindings.undoHistory);
+    });
+
+    test("accept visitor works", () => {
+        const visitor: VisitorBinding = mock<VisitorBinding>();
+        bindings.acceptVisitor(visitor);
+        expect(visitor.visitBindings).toHaveBeenCalledTimes(1);
+        expect(visitor.visitBindings).toHaveBeenCalledWith(bindings);
     });
 
     test("change binding observer", () => {

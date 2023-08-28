@@ -16,6 +16,7 @@ import type {Interaction, InteractionDataType} from "../interaction/Interaction"
 import type {Command} from "../command/Command";
 import type {Observable} from "rxjs";
 import type {InteractionData} from "../interaction/InteractionData";
+import type {VisitorBinding} from "./VisitorBinding";
 
 /**
  * The concept of binding and its related services.
@@ -88,4 +89,10 @@ export interface Binding<C extends Command, I extends Interaction<D>, A, D exten
     readonly produces: Observable<C>;
 
     uninstallBinding(): void;
+
+    /**
+     * Visiting the binding.
+     * @param visitor - The visitor.
+     */
+    acceptVisitor(visitor: VisitorBinding): void;
 }

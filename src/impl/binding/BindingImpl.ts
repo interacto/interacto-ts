@@ -22,6 +22,7 @@ import type {Binding} from "../../api/binding/Binding";
 import type {Interaction, InteractionDataType} from "../../api/interaction/Interaction";
 import type {Logger} from "../../api/logging/Logger";
 import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
+import type {VisitorBinding} from "../../api/binding/VisitorBinding";
 
 /**
  * The base class to do bindings, i.e. bindings between user interactions and (undoable) commands.
@@ -545,5 +546,9 @@ implements Binding<C, I, A, D> {
 
     public get timesCancelled(): number {
         return this._timeCancelled;
+    }
+
+    public acceptVisitor(visitor: VisitorBinding): void {
+        visitor.visitBinding(this);
     }
 }

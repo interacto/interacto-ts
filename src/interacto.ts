@@ -26,6 +26,7 @@ export * from "./api/binder/When";
 export * from "./api/binding/Binding";
 export * from "./api/binding/Bindings";
 export * from "./api/binding/BindingsObserver";
+export * from "./api/binding/VisitorBinding";
 export * from "./api/command/Command";
 export * from "./api/fsm/ConcurrentFSM";
 export * from "./api/fsm/EventType";

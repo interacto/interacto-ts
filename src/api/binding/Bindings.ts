@@ -36,6 +36,7 @@ import type {WheelData} from "../interaction/WheelData";
 import type {UndoHistoryBase} from "../undo/UndoHistoryBase";
 import type {MousePointsData} from "../interaction/MousePointsData";
 import type {TapsData} from "../interaction/TapsData";
+import type {VisitorBinding} from "./VisitorBinding";
 
 export type PartialButtonTypedBinder<A = unknown> = InteractionBinder<Interaction<WidgetData<HTMLButtonElement>>, A>;
 export type PartialInputTypedBinder<A = unknown> = InteractionBinder<Interaction<WidgetData<HTMLInputElement>>, A>;
@@ -308,4 +309,10 @@ export abstract class Bindings<H extends UndoHistoryBase> {
      * @param obs - The new `BindingsObserver` object to consider. Can be undefined.
      */
     public abstract setBindingObserver(obs?: BindingsObserver): void;
+
+    /**
+     * Visiting the binding.
+     * @param visitor - The visitor.
+     */
+    public abstract acceptVisitor(visitor: VisitorBinding): void;
 }

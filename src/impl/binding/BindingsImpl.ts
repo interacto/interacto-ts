@@ -82,6 +82,7 @@ import {DwellSpringAnimation} from "../animation/DwellSpringAnimation";
 import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
 import {TouchStart} from "../interaction/library/TouchStart";
 import {Or} from "../interaction/Or";
+import type {VisitorBinding} from "../../api/binding/VisitorBinding";
 
 export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
     protected observer: BindingsObserver | undefined;
@@ -449,5 +450,9 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
     public setBindingObserver(obs?: BindingsObserver): void {
         this.observer?.clearObservedBindings();
         this.observer = obs;
+    }
+
+    public override acceptVisitor(visitor: VisitorBinding): void {
+        visitor.visitBindings(this);
     }
 }
