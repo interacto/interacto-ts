@@ -15,6 +15,7 @@
 import {StateBase} from "./StateBase";
 import type {InputState} from "../../api/fsm/InputState";
 import type {FSM} from "../../api/fsm/FSM";
+import type {VisitorFSM} from "../../api/fsm/VisitorFSM";
 
 /**
  * An FSM state.
@@ -34,5 +35,9 @@ export class TerminalState extends StateBase implements InputState {
     public enter(): void {
         this.checkStartingState();
         this.fsm.onTerminating();
+    }
+
+    public override acceptVisitor(visitor: VisitorFSM): void {
+        visitor.visitTerminalState(this);
     }
 }

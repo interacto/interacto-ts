@@ -17,6 +17,7 @@ import type {OutputState} from "./OutputState";
 import type {State} from "./State";
 import type {FSMHandler} from "./FSMHandler";
 import type {InputState} from "./InputState";
+import type {VisitorFSM} from "./VisitorFSM";
 
 /**
  * A finite state machine that defines the behavior of a user interaction.
@@ -154,4 +155,10 @@ export interface FSM {
      * The FSM must not be used after that.
      */
     uninstall(): void;
+
+    /**
+     * Visiting the FSM.
+     * @param visitor - The visitor.
+     */
+    acceptVisitor(visitor: VisitorFSM): void;
 }

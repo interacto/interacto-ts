@@ -18,6 +18,7 @@ import {FSMImpl} from "./FSMImpl";
 import type {FSMDataHandler} from "./FSMDataHandler";
 import type {Logger} from "../../api/logging/Logger";
 import type {ConcurrentFSM} from "../../api/fsm/ConcurrentFSM";
+import type {VisitorFSM} from "../../api/fsm/VisitorFSM";
 
 /**
  * A concurrent FSM: an FSM that contains multiple FSMs that run concurrently.
@@ -97,6 +98,10 @@ export class ConcurrentAndFSM<F extends FSM, T extends FSMDataHandler> extends F
 
     public override process(event: Event): boolean {
         return this.getAllConccurFSMs().some(conccurFSM => conccurFSM.process(event));
+    }
+
+    public override acceptVisitor(visitor: VisitorFSM): void {
+        visitor.visitAndConcurrentFSM(this);
     }
 
     public override get started(): boolean {

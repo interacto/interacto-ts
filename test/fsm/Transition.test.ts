@@ -18,6 +18,7 @@ import type {FSMImpl} from "../../src/impl/fsm/FSMImpl";
 import {StubTransitionOK} from "./StubTransitionOk";
 import {mock} from "jest-mock-extended";
 import type {FSMDataHandler} from "../../src/impl/fsm/FSMDataHandler";
+import type {VisitorFSM} from "../../src/api/fsm/VisitorFSM";
 
 describe("using a transition", () => {
     let tr: TransitionBase<Event>;
@@ -31,16 +32,22 @@ describe("using a transition", () => {
         tr = new StubTransitionOK(state1, state2);
     });
 
-    test("goodSrc", () => {
+    test("good src", () => {
         expect(tr.src).toStrictEqual(state1);
     });
 
-    test("goodTgt", () => {
+    test("good tgt", () => {
         expect(tr.tgt).toStrictEqual(state2);
     });
 
-    test("srcStateTransitionAdded", () => {
+    test("src state transition added", () => {
         expect(state1.transitions).toHaveLength(1);
         expect(state1.transitions[0]).toStrictEqual(tr);
+    });
+
+    test("visitor works", () => {
+        const visitor = mock<VisitorFSM>();
+        tr.acceptVisitor(visitor);
+        expect(visitor.visitTransition).toHaveBeenCalledWith(tr);
     });
 });

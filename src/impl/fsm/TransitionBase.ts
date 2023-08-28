@@ -16,6 +16,7 @@ import type {OutputState} from "../../api/fsm/OutputState";
 import type {InputState} from "../../api/fsm/InputState";
 import type {Transition} from "../../api/fsm/Transition";
 import type {EventType} from "../../api/fsm/EventType";
+import type {VisitorFSM} from "../../api/fsm/VisitorFSM";
 
 /**
  * The base implementation of a FSM transition.
@@ -55,6 +56,10 @@ export abstract class TransitionBase<E extends Event> implements Transition<E> {
     }
 
     public abstract accept(event: Event): event is E;
+
+    public acceptVisitor(visitor: VisitorFSM): void {
+        visitor.visitTransition(this);
+    }
 
     public abstract getAcceptedEvents(): ReadonlySet<EventType>;
 

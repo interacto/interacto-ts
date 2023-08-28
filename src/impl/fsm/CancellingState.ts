@@ -15,6 +15,7 @@
 import {StateBase} from "./StateBase";
 import type {InputState} from "../../api/fsm/InputState";
 import type {FSM} from "../../api/fsm/FSM";
+import type {VisitorFSM} from "../../api/fsm/VisitorFSM";
 
 /**
  * A state of an FSM.
@@ -35,4 +36,8 @@ export class CancellingState extends StateBase implements InputState {
     }
 
     public override uninstall(): void {}
+
+    public override acceptVisitor(visitor: VisitorFSM): void {
+        visitor.visitCancellingState(this);
+    }
 }

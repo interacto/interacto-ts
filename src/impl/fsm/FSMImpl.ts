@@ -31,6 +31,7 @@ import {StdState} from "./StdState";
 import {TerminalState} from "./TerminalState";
 import {CancellingState} from "./CancellingState";
 import {MustBeUndoableCmdError} from "../binding/MustBeUndoableCmdError";
+import type {VisitorFSM} from "../../api/fsm/VisitorFSM";
 
 /**
  * A finite state machine that defines the behavior of a user interaction.
@@ -153,6 +154,10 @@ export class FSMImpl<T extends FSMDataHandler> implements FSM {
             this.notifyHandlerOnError(error);
             return false;
         }
+    }
+
+    public acceptVisitor(visitor: VisitorFSM): void {
+        visitor.visitFSM(this);
     }
 
     public get log(): boolean {

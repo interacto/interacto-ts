@@ -18,6 +18,7 @@ import {FSMImpl} from "./FSMImpl";
 import type {FSMDataHandler} from "./FSMDataHandler";
 import type {Logger} from "../../api/logging/Logger";
 import type {ConcurrentFSM} from "../../api/fsm/ConcurrentFSM";
+import type {VisitorFSM} from "../../api/fsm/VisitorFSM";
 
 /**
  * A concurrent FSM: an FSM that contains multiple FSMs where only one of them can run at
@@ -109,5 +110,9 @@ export class ConcurrentXOrFSM<F extends FSM, T extends FSMDataHandler> extends F
             f.reinit();
         }
         super.reinit();
+    }
+
+    public override acceptVisitor(visitor: VisitorFSM): void {
+        visitor.visitXOrConcurrentFSM(this);
     }
 }

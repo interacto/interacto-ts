@@ -20,7 +20,7 @@ import {PointDataImpl} from "../PointDataImpl";
 import type {Logger} from "../../../api/logging/Logger";
 import {MouseTransition} from "../../fsm/MouseTransition";
 
-export class MouseDownFSM extends FSMImpl<MouseDownFSMHandler> {
+class MouseDownFSM extends FSMImpl<MouseDownFSMHandler> {
     public constructor(logger: Logger, dataHandler: MouseDownFSMHandler) {
         super(logger, dataHandler);
 

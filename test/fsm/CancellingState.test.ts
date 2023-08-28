@@ -18,6 +18,7 @@ import type {OutputState} from "../../src/api/fsm/OutputState";
 import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
 import type {FSMDataHandler} from "../../src/impl/fsm/FSMDataHandler";
+import type {VisitorFSM} from "../../src/api/fsm/VisitorFSM";
 
 describe("using a cancelling state", () => {
     let state: CancellingState;
@@ -63,5 +64,11 @@ describe("using a cancelling state", () => {
         });
         state.checkStartingState();
         expect(fsm.onStarting).toHaveBeenCalledTimes(1);
+    });
+
+    test("visitor works", () => {
+        const visitor = mock<VisitorFSM>();
+        state.acceptVisitor(visitor);
+        expect(visitor.visitCancellingState).toHaveBeenCalledWith(state);
     });
 });

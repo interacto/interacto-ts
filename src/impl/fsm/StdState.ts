@@ -15,6 +15,7 @@
 import {OutputStateBase} from "./OutputStateBase";
 import type {InputState} from "../../api/fsm/InputState";
 import type {FSM} from "../../api/fsm/FSM";
+import type {VisitorFSM} from "../../api/fsm/VisitorFSM";
 
 /**
  * An FSM state.
@@ -38,4 +39,8 @@ export class StdState extends OutputStateBase implements InputState {
     }
 
     public exit(): void {}
+
+    public acceptVisitor(visitor: VisitorFSM): void {
+        visitor.visitState(this);
+    }
 }

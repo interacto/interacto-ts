@@ -12,31 +12,30 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {VisitorFSM} from "../../src/api/fsm/VisitorFSM";
-import type {FSMDataHandler, Logger, StateBase} from "../../src/interacto";
-import {FSMImpl, StdState} from "../../src/interacto";
+import type {FSMImpl} from "../../src/impl/fsm/FSMImpl";
+import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
+import type {FSMDataHandler} from "../../src/impl/fsm/FSMDataHandler";
+import type {VisitorFSM} from "../../src/api/fsm/VisitorFSM";
+import {TerminalState} from "../../src/impl/fsm/TerminalState";
 
-describe("using a state impl", () => {
-    let state: StateBase;
-    let fsm: FSMImpl<FSMDataHandler>;
+describe("using a terminal state", () => {
+    let state: TerminalState;
+    let fsm: FSMImpl<FSMDataHandler> & MockProxy<FSMImpl<FSMDataHandler>>;
 
     beforeEach(() => {
-        fsm = new FSMImpl(mock<Logger>());
-        state = new StdState(fsm, "s1");
+        fsm = mock<FSMImpl<FSMDataHandler>>();
+        state = new TerminalState(fsm, "os");
     });
 
-    test("fSM", () => {
-        expect(state.fsm).toStrictEqual(fsm);
-    });
-
-    test("name", () => {
-        expect(state.name).toBe("s1");
+    test("enter", () => {
+        state.enter();
+        expect(fsm.onTerminating).toHaveBeenCalledTimes(1);
     });
 
     test("visitor works", () => {
         const visitor = mock<VisitorFSM>();
         state.acceptVisitor(visitor);
-        expect(visitor.visitState).toHaveBeenCalledWith(state);
+        expect(visitor.visitTerminalState).toHaveBeenCalledWith(state);
     });
 });

@@ -17,6 +17,7 @@ import type {OutputState} from "../../api/fsm/OutputState";
 import type {InputState} from "../../api/fsm/InputState";
 import type {EventType} from "../../api/fsm/EventType";
 import type {Logger} from "../../api/logging/Logger";
+import type {VisitorFSM} from "../../api/fsm/VisitorFSM";
 
 /**
  * A timeout transition is an FSM transition that is not executed by an event:
@@ -108,5 +109,9 @@ export class TimeoutTransition extends TransitionBase<Event> {
 
     public getAcceptedEvents(): ReadonlySet<EventType> {
         return new Set();
+    }
+
+    public override acceptVisitor(visitor: VisitorFSM): void {
+        visitor.visitTimeoutTransition(this);
     }
 }

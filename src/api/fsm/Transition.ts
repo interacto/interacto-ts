@@ -14,6 +14,7 @@
 
 import type {InputState} from "./InputState";
 import type {EventType} from "./EventType";
+import type {VisitorFSM} from "./VisitorFSM";
 
 /**
  * The concept of FSM transition.
@@ -32,6 +33,12 @@ export interface Transition<E extends Event> {
     guard(event: E): boolean;
 
     accept(event: Event): event is E;
+
+    /**
+     * Visiting the transition.
+     * @param visitor - The visitor.
+     */
+    acceptVisitor(visitor: VisitorFSM): void;
 
     /**
      * @returns The set of events accepted by the transition.

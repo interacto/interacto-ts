@@ -37,6 +37,8 @@ describe("using an output state", () => {
             }
 
             public exit(): void {}
+
+            public acceptVisitor(): void {}
         }();
     });
 
@@ -77,7 +79,8 @@ describe("using an output state", () => {
             "fsm": fsm as FSM,
             "transitions": new Array<Transition<Event>>(),
             "addTransition": () => {},
-            "checkStartingState": () => false
+            "checkStartingState": () => false,
+            "acceptVisitor": () => {}
         };
         expect(isOutputStateType(s)).toBeFalsy();
     });
@@ -91,7 +94,8 @@ describe("using an output state", () => {
             "fsm": fsm as FSM,
             "transitions": new Array<Transition<Event>>(),
             "exit": () => {},
-            "checkStartingState": () => false
+            "checkStartingState": () => false,
+            "acceptVisitor": () => {}
         };
         expect(isOutputStateType(s)).toBeFalsy();
     });
@@ -105,7 +109,8 @@ describe("using an output state", () => {
             "fsm": fsm as FSM,
             "transitions": new Array<Transition<Event>>(),
             "exit": () => {},
-            "checkStartingState": () => false
+            "checkStartingState": () => false,
+            "acceptVisitor": () => {}
         };
         expect(isOutputStateType(s)).toBeFalsy();
     });
@@ -119,7 +124,8 @@ describe("using an output state", () => {
             "fsm": fsm as FSM,
             "process": () => false,
             "exit": () => {},
-            "checkStartingState": () => false
+            "checkStartingState": () => false,
+            "acceptVisitor": () => {}
         };
         expect(isOutputStateType(s)).toBeFalsy();
     });
@@ -133,7 +139,8 @@ describe("using an output state", () => {
             "transitions": new Array<Transition<Event>>(),
             "exit": () => {},
             "checkStartingState": () => false,
-            "process": () => false
+            "process": () => false,
+            "acceptVisitor": () => {}
         };
         expect(isOutputStateType(s)).toBeTruthy();
     });

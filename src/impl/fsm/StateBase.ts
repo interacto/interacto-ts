@@ -14,6 +14,7 @@
 
 import type {State} from "../../api/fsm/State";
 import type {FSM} from "../../api/fsm/FSM";
+import type {VisitorFSM} from "../../api/fsm/VisitorFSM";
 
 /**
  * The base implementation of the State interface.
@@ -40,4 +41,6 @@ export abstract class StateBase implements State {
     }
 
     public uninstall(): void {}
+
+    public abstract acceptVisitor(visitor: VisitorFSM): void;
 }

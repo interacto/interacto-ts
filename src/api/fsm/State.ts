@@ -13,6 +13,7 @@
  */
 
 import type {FSM} from "./FSM";
+import type {VisitorFSM} from "./VisitorFSM";
 
 /**
  * The base type of an FSM state.
@@ -41,5 +42,11 @@ export interface State {
      * The state must not be used after that.
      */
     uninstall(): void;
+
+    /**
+     * Visiting the state.
+     * @param visitor - The visitor.
+     */
+    acceptVisitor(visitor: VisitorFSM): void;
 }
 

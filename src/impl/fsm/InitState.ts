@@ -14,6 +14,7 @@
 
 import {OutputStateBase} from "./OutputStateBase";
 import type {FSM} from "../../api/fsm/FSM";
+import type {VisitorFSM} from "../../api/fsm/VisitorFSM";
 
 /**
  * An FSM state.
@@ -26,5 +27,9 @@ export class InitState extends OutputStateBase {
 
     public exit(): void {
         this.checkStartingState();
+    }
+
+    public acceptVisitor(visitor: VisitorFSM): void {
+        visitor.visitInitState(this);
     }
 }

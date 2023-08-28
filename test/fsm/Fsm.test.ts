@@ -28,6 +28,7 @@ import {StubTransitionOK, SubStubTransition1, SubStubTransition2, SubStubTransit
 import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
 import {createKeyEvent, createMouseEvent, createTouchEvent} from "../interaction/StubEvents";
+import type {VisitorFSM} from "../../src/api/fsm/VisitorFSM";
 
 let fsm: FSMImpl<FSMDataHandler>;
 let handler: FSMHandler & MockProxy<FSMHandler>;
@@ -49,6 +50,12 @@ describe("using an FSM", () => {
     test("get init state", () => {
         expect(fsm.initState).toBeInstanceOf(InitState);
         expect(fsm.initState).toBe(fsm.states[0]);
+    });
+
+    test("visitor works", () => {
+        const visitor = mock<VisitorFSM>();
+        fsm.acceptVisitor(visitor);
+        expect(visitor.visitFSM).toHaveBeenCalledWith(fsm);
     });
 
     test("inner", () => {
