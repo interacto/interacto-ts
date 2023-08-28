@@ -51,6 +51,7 @@ export * from "./api/interaction/SrcTgtPointsData";
 export * from "./api/interaction/TapsData";
 export * from "./api/interaction/TouchData";
 export * from "./api/interaction/UnitInteractionData";
+export * from "./api/interaction/VisitorInteraction";
 export * from "./api/interaction/WheelData";
 export * from "./api/interaction/WidgetData";
 export * from "./api/logging/LogLevel";

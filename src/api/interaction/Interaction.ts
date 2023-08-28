@@ -14,6 +14,7 @@
 
 import type {InteractionData} from "./InteractionData";
 import type {FSM} from "../fsm/FSM";
+import type {VisitorInteraction} from "./VisitorInteraction";
 
 /**
  * Infers the interaction data type from an interaction
@@ -97,4 +98,10 @@ export interface Interaction<D extends InteractionData> {
      * Then, user interaction can be used any more.
      */
     uninstall(): void;
+
+    /**
+     * Visiting the interaction and its FSM.
+     * @param visitor - The visitor.
+     */
+    acceptVisitor(visitor: VisitorInteraction): void;
 }

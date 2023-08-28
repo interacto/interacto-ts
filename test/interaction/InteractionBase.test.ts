@@ -32,6 +32,7 @@ import type {EventType} from "../../src/api/fsm/EventType";
 import type {InputState} from "../../src/api/fsm/InputState";
 import type {FSMDataHandler} from "../../src/impl/fsm/FSMDataHandler";
 import {MouseTransition} from "../../src/impl/fsm/MouseTransition";
+import type {VisitorInteraction} from "../../src/interacto";
 
 describe("using a base interaction", () => {
     let interaction: InteractionStub;
@@ -76,6 +77,13 @@ describe("using a base interaction", () => {
     test("full reinit", () => {
         interaction.fullReinit();
         expect(fsm.fullReinit).toHaveBeenCalledTimes(1);
+    });
+
+    test("accept visitor works", () => {
+        const visitor: VisitorInteraction = mock<VisitorInteraction>();
+        interaction.acceptVisitor(visitor);
+        expect(visitor.visitInteraction).toHaveBeenCalledTimes(1);
+        expect(visitor.visitInteraction).toHaveBeenCalledWith(interaction);
     });
 
     test("is running not activated", () => {

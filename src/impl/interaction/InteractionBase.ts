@@ -22,6 +22,7 @@ import type {EventType, KeyEventType, MouseEventType, TouchEventType} from "../.
 import type {Flushable} from "./Flushable";
 import type {Logger} from "../../api/logging/Logger";
 import {keyEventTypes, mouseEventTypes, touchEventTypes} from "../../api/fsm/EventType";
+import type {VisitorInteraction} from "../../api/interaction/VisitorInteraction";
 
 interface CancellablePromise extends Promise<void> {
     cancel: () => void;
@@ -460,5 +461,9 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
         }
         this.mutationObservers.length = 0;
         this.setActivated(false);
+    }
+
+    public acceptVisitor(visitor: VisitorInteraction): void {
+        visitor.visitInteraction(this);
     }
 }
