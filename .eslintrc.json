@@ -64,6 +64,7 @@
     "no-underscore-dangle": "off",
     "no-useless-constructor": "off",
     "@typescript-eslint/prefer-readonly-parameter-types": "off",
+    "@typescript-eslint/class-methods-use-this": "off",
 
     "tsdoc/syntax": "error",
 
@@ -90,7 +91,6 @@
     "space-before-function-paren": "off",
     "function-call-argument-newline": "off",
     "no-mixed-operators": "off",
-    "class-methods-use-this": "off",
     "lines-between-class-members": "off",
     "no-unused-expressions": "off",
     "no-undefined": "off",

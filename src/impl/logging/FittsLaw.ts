@@ -38,7 +38,6 @@ export class FittsLawDataImpl {
      * @param h - The height of the target object
      * @param d - the distance from the first mouse event to the center of the target object
      */
-    // eslint-disable-next-line @typescript-eslint/no-parameter-properties
     public constructor(t: number, w: number, h: number, d: number) {
         this.d = d;
         this.h = h;
