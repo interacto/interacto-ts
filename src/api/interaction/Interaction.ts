@@ -48,6 +48,16 @@ export interface Interaction<D extends InteractionData> {
     data: D;
 
     /**
+     * The registered nodes.
+     */
+    readonly registeredNodes: ReadonlySet<unknown>;
+
+    /**
+     * The nodes for which the user interaction will register their child nodes dynamically.
+     */
+    readonly dynamicRegisteredNodes: ReadonlySet<unknown>;
+
+    /**
      * @returns Whether the user interaction is running.
      */
     isRunning(): boolean;

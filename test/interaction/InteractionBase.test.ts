@@ -196,6 +196,21 @@ describe("using a base interaction", () => {
         expect(b.removeEventListener).not.toHaveBeenCalled();
     });
 
+    test("registeredNodes is OK", () => {
+        const b1 = document.createElement("button");
+        const b2 = document.createElement("div");
+        interaction.registerToNodes([b1, b2]);
+        expect(interaction.registeredNodes).toStrictEqual(new Set([b1, b2]));
+    });
+
+    test("dynamicRegisteredNodes is OK", () => {
+        const b1 = document.createElement("button");
+        const b2 = document.createElement("input");
+        interaction.registerToNodeChildren(b1);
+        interaction.registerToNodeChildren(b2);
+        expect(interaction.dynamicRegisteredNodes).toStrictEqual(new Set([b1, b2]));
+    });
+
     test("no prevent default or propagation on unprocessed event", () => {
         fsm.process.mockImplementationOnce(() => false);
         const div = document.createElement("div");

@@ -40,14 +40,16 @@ export type InteractionDataImplType<T> = T extends InteractionBase<any, infer DI
  * @typeParam F - The type of the FSM.
  */
 export abstract class InteractionBase<D extends InteractionData, DImpl extends D & Flushable, F extends FSM> implements Interaction<D> {
-    protected readonly _fsm: F;
-
-    protected _log: boolean;
-
     /**
      * The current nodes that the interaction works on
      */
-    protected readonly registeredNodes: Set<unknown>;
+    protected readonly _registeredNodes: Set<unknown>;
+
+    protected readonly _dynamicRegisteredNodes: Set<unknown>;
+
+    protected readonly _fsm: F;
+
+    protected _log: boolean;
 
     /** The current list of mutation observers. Used for listening changes in node lists. */
     protected readonly mutationObservers: Array<MutationObserver>;
@@ -103,7 +105,8 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
         });
         this.activated = true;
         this._log = false;
-        this.registeredNodes = new Set<unknown>();
+        this._registeredNodes = new Set<unknown>();
+        this._dynamicRegisteredNodes = new Set<unknown>();
         this.mutationObservers = [];
         this.throttleTimeout = 0;
     }
@@ -181,7 +184,7 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
         const events: ReadonlyArray<EventType> = Array.from(this.getEventTypesOf(oldState));
         const eventsToRemove: ReadonlyArray<EventType> = events.filter(e => !currEvents.includes(e));
         const eventsToAdd: ReadonlyArray<EventType> = currEvents.filter(e => !events.includes(e));
-        for (const n of this.registeredNodes) {
+        for (const n of this._registeredNodes) {
             for (const type of eventsToRemove) {
                 this.unregisterEventToNode(type, n);
             }
@@ -219,14 +222,14 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
 
     public registerToNodes(widgets: ReadonlyArray<unknown>): void {
         for (const w of widgets) {
-            this.registeredNodes.add(w);
+            this._registeredNodes.add(w);
             this.onNewNodeRegistered(w);
         }
     }
 
     protected unregisterFromNodes(widgets: ReadonlyArray<unknown>): void {
         for (const w of widgets) {
-            this.registeredNodes.delete(w);
+            this._registeredNodes.delete(w);
             this.onNodeUnregistered(w);
         }
     }
@@ -244,6 +247,8 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
     }
 
     public registerToNodeChildren(elementToObserve: Node): void {
+        this._dynamicRegisteredNodes.add(elementToObserve);
+
         for (const node of elementToObserve.childNodes) {
             this.registerToNodes([node]);
         }
@@ -452,10 +457,10 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
 
     public uninstall(): void {
         this.disposable.unsubscribe();
-        for (const n of this.registeredNodes) {
+        for (const n of this._registeredNodes) {
             this.onNodeUnregistered(n);
         }
-        this.registeredNodes.clear();
+        this._registeredNodes.clear();
         for (const m of this.mutationObservers) {
             m.disconnect();
         }
@@ -465,5 +470,13 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
 
     public acceptVisitor(visitor: VisitorInteraction): void {
         visitor.visitInteraction(this);
+    }
+
+    public get registeredNodes(): ReadonlySet<unknown> {
+        return this._registeredNodes;
+    }
+
+    public get dynamicRegisteredNodes(): ReadonlySet<unknown> {
+        return this._dynamicRegisteredNodes;
     }
 }
