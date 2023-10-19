@@ -16,6 +16,7 @@ import type {Command} from "../command/Command";
 import type {InteractionData} from "../interaction/InteractionData";
 import type {Interaction} from "../interaction/Interaction";
 import type {Binding} from "./Binding";
+import type {Checker} from "../../impl/binding/Checker";
 
 /**
  * Permits to observe the bindings produced using `Bindings` routines.
@@ -31,4 +32,6 @@ export interface BindingsObserver {
      * Clear all the observed bindings and uninstall them.
      */
     clearObservedBindings(): void;
+
+    readonly checker: Checker;
 }

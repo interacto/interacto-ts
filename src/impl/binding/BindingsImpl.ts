@@ -83,6 +83,7 @@ import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
 import {TouchStart} from "../interaction/library/TouchStart";
 import {Or} from "../interaction/Or";
 import type {VisitorBinding} from "../../api/binding/VisitorBinding";
+import type {LinterRule} from "../../api/binding/Linting";
 
 export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
     protected observer: BindingsObserver | undefined;
@@ -95,6 +96,10 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
         super();
         this.undoHistoryData = history;
         this.logger = logger ?? new LoggerImpl();
+    }
+
+    public setLinterRules(...rules: ReadonlyArray<LinterRule>): void {
+        this.observer?.checker.setLinterRules(...rules);
     }
 
     public get undoHistory(): H {
