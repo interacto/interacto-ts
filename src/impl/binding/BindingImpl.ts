@@ -23,6 +23,7 @@ import type {Interaction, InteractionDataType} from "../../api/interaction/Inter
 import type {Logger} from "../../api/logging/Logger";
 import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
 import type {VisitorBinding} from "../../api/binding/VisitorBinding";
+import type {RuleName, Severity} from "../../api/binding/Linting";
 
 /**
  * The base class to do bindings, i.e. bindings between user interactions and (undoable) commands.
@@ -46,6 +47,8 @@ implements Binding<C, I, A, D> {
     protected readonly _interaction: I;
 
     public accumulator: A;
+
+    public readonly linterRules: ReadonlyMap<RuleName, Severity>;
 
     /**
      * The current action in progress.
@@ -89,9 +92,10 @@ implements Binding<C, I, A, D> {
      */
     public constructor(continuousExecution: boolean, interaction: I, cmdProducer: (i?: D) => C,
                        widgets: ReadonlyArray<unknown>, undoHistory: UndoHistoryBase, logger: Logger,
-                       name?: string, accInit?: A) {
+                       linterRules: ReadonlyMap<RuleName, Severity>, name?: string, accInit?: A) {
         // The name is partial until the binding procudes its first command
         this._name = name;
+        this.linterRules = linterRules;
         this.accumulatorInit = accInit;
         this.logBinding = false;
         this.logCmd = false;

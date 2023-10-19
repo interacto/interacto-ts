@@ -27,6 +27,7 @@ import type {Logger} from "../../api/logging/Logger";
 import type {AnonCmd} from "../command/AnonCmd";
 import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
 import type {WhenType} from "../../api/binder/When";
+import type {RuleName, Severity} from "../../api/binding/Linting";
 
 /**
  * The base binding builder for bindings where commands can be updated while the user interaction is running.
@@ -168,6 +169,10 @@ export class UpdateBinder<C extends Command, I extends Interaction<D>, A, D exte
         return super.name(name) as UpdateBinder<C, I, A, D>;
     }
 
+    public override configureRules(ruleName: RuleName, severity: Severity): UpdateBinder<C, I, A, D> {
+        return super.configureRules(ruleName, severity) as UpdateBinder<C, I, A, D>;
+    }
+
     public override usingInteraction<I2 extends Interaction<D2>, A2, D2 extends InteractionData = InteractionDataType<I2>>
     (fn: () => I2): UpdateBinder<C, I2, A2, D2> {
         return super.usingInteraction(fn) as UpdateBinder<C, I2, A2, D2>;
@@ -196,8 +201,8 @@ export class UpdateBinder<C extends Command, I extends Interaction<D>, A, D exte
 
         const binding = new AnonBinding(this.continuousCmdExecution, this.usingFn(), this.undoHistory, this.logger, this.produceFn,
             Array.from(this.widgets), Array.from(this.dynamicNodes), Array.from(this.logLevels),
-            this.throttleTimeout, this.stopPropagation, this.prevDefault, this.firstFn, this.thenFn, Array.from(this.whenFnArray),
-            this.endFn, this.cancelFn, this.endOrCancelFn, this.hadEffectsFn,
+            this.throttleTimeout, this.stopPropagation, this.prevDefault, new Map(this.linterRules), this.firstFn, this.thenFn,
+            Array.from(this.whenFnArray), this.endFn, this.cancelFn, this.endOrCancelFn, this.hadEffectsFn,
             this.hadNoEffectFn, this.cannotExecFn, this.onErrFn, this.bindingName, this.accInit);
 
         this.observer?.observeBinding(binding);

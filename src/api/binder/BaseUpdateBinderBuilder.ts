@@ -14,6 +14,7 @@
 import type {BaseBinderBuilder, Widget} from "./BaseBinderBuilder";
 import type {LogLevel} from "../logging/LogLevel";
 import type {WhenType} from "./When";
+import type {RuleName, Severity} from "../binding/Linting";
 
 /**
  * The base interface for building bindings based on non-trivial user interactions (eg DnD).
@@ -56,4 +57,6 @@ export interface BaseUpdateBinderBuilder extends BaseBinderBuilder {
     catch(fn: (ex: unknown) => void): BaseUpdateBinderBuilder;
 
     name(name: string): BaseUpdateBinderBuilder;
+
+    configureRules(ruleName: RuleName, severity: Severity): BaseUpdateBinderBuilder;
 }

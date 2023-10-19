@@ -28,6 +28,7 @@ import type {Logger} from "../../api/logging/Logger";
 import type {AnonCmd} from "../command/AnonCmd";
 import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
 import type {WhenType} from "../../api/binder/When";
+import type {RuleName, Severity} from "../../api/binding/Linting";
 
 /**
  * The base binding builder to create bindings between a keys pressure interaction and a given command.
@@ -171,6 +172,10 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, A, D extend
         return super.name(name) as KeysBinder<C, I, A, D>;
     }
 
+    public override configureRules(ruleName: RuleName, severity: Severity): KeysBinder<C, I, A, D> {
+        return super.configureRules(ruleName, severity) as KeysBinder<C, I, A, D>;
+    }
+
     public override toProduce<C2 extends Command>(fn: (i: D) => C2): KeysBinder<C2, I, A, D> {
         return super.toProduce(fn) as KeysBinder<C2, I, A, D>;
     }
@@ -199,8 +204,8 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, A, D extend
 
         const binding = new AnonBinding(this.continuousCmdExecution, this.usingFn(), this.undoHistory,
             this.logger, this.produceFn, Array.from(this.widgets), Array.from(this.dynamicNodes),
-            Array.from(this.logLevels), this.throttleTimeout,
-            this.stopPropagation, this.prevDefault, this.firstFn, this.thenFn, Array.from(this.whenFnArray),
+            Array.from(this.logLevels), this.throttleTimeout, this.stopPropagation, this.prevDefault,
+            new Map(this.linterRules), this.firstFn, this.thenFn, Array.from(this.whenFnArray),
             this.endFn, this.cancelFn, this.endOrCancelFn, this.hadEffectsFn,
             this.hadNoEffectFn, this.cannotExecFn, this.onErrFn, this.bindingName, this.accInit);
 

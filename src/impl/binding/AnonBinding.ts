@@ -22,6 +22,7 @@ import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
 import type {When} from "../../api/binder/When";
 import {isWhenAtEnd, isWhenAtStart, isWhenAtThen, isWhenStrict} from "../../api/binder/When";
 import {CancelFSMError} from "../fsm/CancelFSMError";
+import type {RuleName, Severity} from "../../api/binding/Linting";
 
 export class AnonBinding<C extends Command, I extends Interaction<D>, A, D extends InteractionData = InteractionDataType<I>>
     extends BindingImpl<C, I, A, D> {
@@ -46,16 +47,18 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, A, D exten
 
     private readonly onErrFn: ((ex: unknown) => void) | undefined;
 
-    public constructor(continuousExec: boolean, interaction: I, undoHistory: UndoHistoryBase, logger: Logger, cmdSupplierFn: (d: D | undefined) => C,
+    public constructor(continuousExec: boolean, interaction: I, undoHistory: UndoHistoryBase,
+                       logger: Logger, cmdSupplierFn: (d: D | undefined) => C,
                        widgets: ReadonlyArray<unknown>, dynamicNodes: ReadonlyArray<Node>,
                        loggers: ReadonlyArray<LogLevel>, timeoutThrottle: number,
-                       stopPropagation: boolean, prevDefault: boolean, firstFn?: (c: C, i: D, acc: A) => void,
+                       stopPropagation: boolean, prevDefault: boolean, linterRules: ReadonlyMap<RuleName, Severity>,
+                       firstFn?: (c: C, i: D, acc: A) => void,
                        thenFn?: (c: C, i: D, acc: A) => void, whenFn?: Array<When<D, A>>,
                        endFn?: (c: C, i: D, acc: A) => void, cancelFn?: (i: D, acc: A) => void,
                        endOrCancelFn?: (i: D, acc: A) => void, hadEffectsFn?: (c: C, i: D, acc: A) => void,
                        hadNoEffectFn?: (c: C, i: D, acc: A) => void, cannotExecFn?: (c: C, i: D, acc: A) => void,
                        onErrFn?: (ex: unknown) => void, name?: string, accInit?: A) {
-        super(continuousExec, interaction, cmdSupplierFn, widgets, undoHistory, logger, name, accInit);
+        super(continuousExec, interaction, cmdSupplierFn, widgets, undoHistory, logger, linterRules, name, accInit);
         this.configureLoggers(loggers);
         this.firstFn = firstFn;
         this.thenFn = thenFn;

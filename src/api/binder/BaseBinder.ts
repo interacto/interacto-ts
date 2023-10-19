@@ -20,6 +20,7 @@ import type {CmdBinder} from "./CmdBinder";
 import type {Interaction, InteractionDataType} from "../interaction/Interaction";
 import type {AnonCmd} from "../../impl/command/AnonCmd";
 import type {WhenType} from "./When";
+import type {RuleName, Severity} from "../binding/Linting";
 
 /**
  * The base interface for building bindings with routines
@@ -39,6 +40,8 @@ export interface BaseBinder extends BaseBinderBuilder {
     catch(fn: (ex: unknown) => void): BaseBinder;
 
     name(name: string): BaseBinder;
+
+    configureRules(ruleName: RuleName, severity: Severity): BaseBinder;
 
     /**
      * Defines how to create the UI command that the binding will produce.

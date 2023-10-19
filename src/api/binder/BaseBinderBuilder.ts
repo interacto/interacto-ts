@@ -11,6 +11,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
+import type {RuleName, Severity} from "../binding/Linting";
 import type {LogLevel} from "../logging/LogLevel";
 import type {WhenType} from "./When";
 
@@ -117,4 +118,12 @@ export interface BaseBinderBuilder {
      * @returns A clone of the current binder to chain the building configuration.
      */
     name(name: string): BaseBinderBuilder;
+
+    /**
+     * Configures a linter rule specifically for the binding.
+     * @param ruleName - The name of the rule.
+     * @param severity - The severity level of the rule.
+     * @returns A clone of the current binder to chain the building configuration.
+     */
+    configureRules(ruleName: RuleName, severity: Severity): BaseBinderBuilder;
 }

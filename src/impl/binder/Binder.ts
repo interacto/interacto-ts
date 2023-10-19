@@ -28,6 +28,7 @@ import {AnonCmd} from "../command/AnonCmd";
 import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
 import type {When} from "../../api/binder/When";
 import type {WhenType} from "../../api/binder/When";
+import type {RuleName, Severity} from "../../api/binding/Linting";
 
 /**
  * The base class that defines the concept of binding builder (called binder).
@@ -87,11 +88,14 @@ implements CmdBinder<C>, InteractionBinder<I, A, D>, InteractionCmdBinder<C, I, 
 
     protected accInit: A | undefined;
 
+    protected linterRules: Map<RuleName, Severity>;
+
     protected constructor(undoHistory: UndoHistoryBase, logger: Logger, observer?: BindingsObserver,
                           binder?: Partial<Binder<C, I, A, D>>, acc?: A) {
         this.widgets = [];
         this.dynamicNodes = [];
         this.logLevels = [];
+        this.linterRules = new Map();
         this.stopPropagation = false;
         this.prevDefault = false;
 
@@ -244,6 +248,12 @@ implements CmdBinder<C>, InteractionBinder<I, A, D>, InteractionCmdBinder<C, I, 
     public name(name: string): Binder<C, I, A, D> {
         const dup = this.duplicate();
         dup.bindingName = name;
+        return dup;
+    }
+
+    public configureRules(ruleName: RuleName, severity: Severity): Binder<C, I, A, D> {
+        const dup = this.duplicate();
+        dup.linterRules.set(ruleName, severity);
         return dup;
     }
 

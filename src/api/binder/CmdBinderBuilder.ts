@@ -15,6 +15,7 @@ import type {Command} from "../command/Command";
 import type {BaseBinderBuilder, Widget} from "./BaseBinderBuilder";
 import type {LogLevel} from "../logging/LogLevel";
 import type {WhenType} from "./When";
+import type {RuleName, Severity} from "../binding/Linting";
 
 /**
  * The binding builder API that already knows the type of UI command the bindings will produce
@@ -48,4 +49,6 @@ export interface CmdBinderBuilder<C extends Command> extends BaseBinderBuilder {
     catch(fn: (ex: unknown) => void): CmdBinderBuilder<C>;
 
     name(name: string): CmdBinderBuilder<C>;
+
+    configureRules(ruleName: RuleName, severity: Severity): CmdBinderBuilder<C>;
 }

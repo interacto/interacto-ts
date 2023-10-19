@@ -21,6 +21,7 @@ import type {Interaction, InteractionDataType} from "../interaction/Interaction"
 import type {Widget} from "./BaseBinderBuilder";
 import type {AnonCmd} from "../../impl/command/AnonCmd";
 import type {WhenType} from "./When";
+import type {RuleName, Severity} from "../binding/Linting";
 
 /**
  * The binder API that already knows the type of user interaction the bindings will use.
@@ -46,6 +47,8 @@ export interface InteractionBinder<I extends Interaction<D>, A, D extends Intera
     catch(fn: (ex: unknown) => void): InteractionBinder<I, A, D>;
 
     name(name: string): InteractionBinder<I, A, D>;
+
+    configureRules(ruleName: RuleName, severity: Severity): InteractionBinder<I, A, D>;
 
     toProduce<C extends Command>(fn: (i: D) => C): InteractionCmdBinder<C, I, A, D>;
 

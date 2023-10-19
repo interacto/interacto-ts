@@ -45,7 +45,7 @@ describe("executing a binding", () => {
         cmd.candoValue = true;
         fsm = new OneTrFSM();
         interaction = new InteractionStub(fsm);
-        binding = new BindingImpl(false, interaction, () => cmd, [], history, mock<Logger>());
+        binding = new BindingImpl(false, interaction, () => cmd, [], history, mock<Logger>(), new Map());
     });
 
     afterEach(() => {

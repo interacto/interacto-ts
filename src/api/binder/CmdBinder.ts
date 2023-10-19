@@ -19,6 +19,7 @@ import type {LogLevel} from "../logging/LogLevel";
 import type {Interaction, InteractionDataType} from "../interaction/Interaction";
 import type {Widget} from "./BaseBinderBuilder";
 import type {WhenType} from "./When";
+import type {RuleName, Severity} from "../binding/Linting";
 
 /**
  * The binder API that already knows the type of UI command
@@ -55,4 +56,6 @@ export interface CmdBinder<C extends Command> extends CmdBinderBuilder<C> {
     catch(fn: (ex: unknown) => void): CmdBinder<C>;
 
     name(name: string): CmdBinder<C>;
+
+    configureRules(ruleName: RuleName, severity: Severity): CmdBinder<C>;
 }

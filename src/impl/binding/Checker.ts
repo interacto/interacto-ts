@@ -53,10 +53,12 @@ export class Checker {
 
     public checkSameInteractions(binding: Binding<Command, Interaction<InteractionData>, unknown>,
                                  binds: ReadonlyArray<Binding<Command, Interaction<InteractionData>, unknown>>): void {
-        const severity = this.getSameInteractionSeverity();
+        const severity = this.getSameInteractionSeverity(binding);
 
         if (severity !== "ignore" &&
-            binds.some(b => binding.interaction.constructor === b.interaction.constructor &&
+            binds
+                .filter(b => b.linterRules.get("same-interactions") !== "ignore")
+                .some(b => binding.interaction.constructor === b.interaction.constructor &&
             this.isWidgetSetsIntersecting(binding.interaction.registeredNodes, b.interaction.registeredNodes))
         ) {
             this.printLinterMsg(severity, "[same-interactions] Two bindings use the same user interaction on same widget.");
@@ -65,10 +67,12 @@ export class Checker {
 
     public checkSameData(binding: Binding<Command, Interaction<InteractionData>, unknown>,
                          binds: ReadonlyArray<Binding<Command, Interaction<InteractionData>, unknown>>): void {
-        const severity = this.getSameDataSeverity();
+        const severity = this.getSameDataSeverity(binding);
 
         if (severity !== "ignore" &&
-            binds.some(b => binding.interaction.data.constructor === b.interaction.data.constructor &&
+            binds
+                .filter(b => b.linterRules.get("same-data") !== "ignore")
+                .some(b => binding.interaction.data.constructor === b.interaction.data.constructor &&
             this.isWidgetSetsIntersecting(binding.interaction.registeredNodes, b.interaction.registeredNodes))
         ) {
             this.printLinterMsg(severity, "[same-data] Two bindings use the same user interaction data type on same widget.");
@@ -77,10 +81,12 @@ export class Checker {
 
     public checkIncluded(binding: Binding<Command, Interaction<InteractionData>, unknown>,
                          binds: ReadonlyArray<Binding<Command, Interaction<InteractionData>, unknown>>): void {
-        const severity = this.getIncludedSeverity();
+        const severity = this.getIncludedSeverity(binding);
 
         if (severity !== "ignore" &&
-            binds.some(b => this.isIncluded(binding.interaction.constructor.name, b.interaction.constructor.name) &&
+            binds
+                .filter(b => b.linterRules.get("included") !== "ignore")
+                .some(b => this.isIncluded(binding.interaction.constructor.name, b.interaction.constructor.name) &&
             this.isWidgetSetsIntersecting(binding.interaction.registeredNodes, b.interaction.registeredNodes))
         ) {
             this.printLinterMsg(severity, "[same-data] Two bindings use the same user interaction data type on same widget.");
@@ -91,16 +97,16 @@ export class Checker {
         return (this.cacheIncluded.get(i1)?.has(i2) ?? false) || (this.cacheIncluded.get(i2)?.has(i1) ?? false);
     }
 
-    private getSameDataSeverity(): Severity {
-        return this.linterRules.get("same-data") ?? "err";
+    private getSameDataSeverity(binding?: Binding<Command, Interaction<InteractionData>, unknown>): Severity {
+        return binding?.linterRules.get("same-data") ?? this.linterRules.get("same-data") ?? "err";
     }
 
-    private getSameInteractionSeverity(): Severity {
-        return this.linterRules.get("same-interactions") ?? "err";
+    private getSameInteractionSeverity(binding?: Binding<Command, Interaction<InteractionData>, unknown>): Severity {
+        return binding?.linterRules.get("same-interactions") ?? this.linterRules.get("same-interactions") ?? "err";
     }
 
-    private getIncludedSeverity(): Severity {
-        return this.linterRules.get("included") ?? "err";
+    private getIncludedSeverity(binding?: Binding<Command, Interaction<InteractionData>, unknown>): Severity {
+        return binding?.linterRules.get("included") ?? this.linterRules.get("included") ?? "err";
     }
 
     private isWidgetSetsIntersecting(w1: ReadonlySet<unknown>, w2: ReadonlySet<unknown>): boolean {

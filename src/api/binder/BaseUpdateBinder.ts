@@ -22,6 +22,7 @@ import type {Interaction, InteractionDataType} from "../interaction/Interaction"
 import type {Widget} from "./BaseBinderBuilder";
 import type {AnonCmd} from "../../impl/command/AnonCmd";
 import type {WhenType} from "./When";
+import type {RuleName, Severity} from "../binding/Linting";
 
 /**
  * The base interface for building bindings based on non-trivial user interactions (eg DnD) with routines
@@ -56,4 +57,6 @@ export interface BaseUpdateBinder extends BaseUpdateBinderBuilder, BaseBinder {
     catch(fn: (ex: unknown) => void): BaseUpdateBinder;
 
     name(name: string): BaseUpdateBinder;
+
+    configureRules(ruleName: RuleName, severity: Severity): BaseUpdateBinder;
 }

@@ -28,7 +28,7 @@ class BindingStub extends BindingImpl<StubCmd, InteractionStub, unknown> {
 
     public constructor(history: UndoHistory, logger: Logger, continuous: boolean,
                        cmdCreation: (i?: InteractionData) => StubCmd, interaction: InteractionStub) {
-        super(continuous, interaction, cmdCreation, [], history, logger);
+        super(continuous, interaction, cmdCreation, [], history, logger, new Map());
         this.whenStartOK = false;
         this.whenEndOK = false;
         this.whenUpdateOK = false;
@@ -477,7 +477,7 @@ describe("using a binding", () => {
 
         test("with BindingImpl", () => {
             const b = new BindingImpl(false, new InteractionStub(new FSMImpl(logger)),
-                () => new StubCmd(), [], history, logger);
+                () => new StubCmd(), [], history, logger, new Map());
             b.interaction.fsm.onStarting();
             b.interaction.fsm.onUpdating();
             b.interaction.fsm.onTerminating();

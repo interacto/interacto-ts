@@ -21,6 +21,7 @@ import type {Command} from "../command/Command";
 import type {Interaction, InteractionDataType} from "../interaction/Interaction";
 import type {Widget} from "./BaseBinderBuilder";
 import type {WhenType} from "./When";
+import type {RuleName, Severity} from "../binding/Linting";
 
 /**
  * The binder API for key-based user interactions, that already knows the type of the user interaction to use and
@@ -69,6 +70,8 @@ export interface KeyInteractionCmdUpdateBinder<C extends Command, I extends Inte
     catch(fn: (ex: unknown) => void): KeyInteractionCmdUpdateBinder<C, I, A, D>;
 
     name(name: string): KeyInteractionCmdUpdateBinder<C, I, A, D>;
+
+    configureRules(ruleName: RuleName, severity: Severity): KeyInteractionCmdUpdateBinder<C, I, A, D>;
 
     bind(): Binding<C, I, A, D>;
 }

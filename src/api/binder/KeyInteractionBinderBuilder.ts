@@ -18,6 +18,7 @@ import type {LogLevel} from "../logging/LogLevel";
 import type {Interaction, InteractionDataType} from "../interaction/Interaction";
 import type {Widget} from "./BaseBinderBuilder";
 import type {WhenType} from "./When";
+import type {RuleName, Severity} from "../binding/Linting";
 
 /**
  * The binding builder API for key-based user interactions,
@@ -47,4 +48,6 @@ export interface KeyInteractionBinderBuilder<I extends Interaction<D>, A, D exte
     catch(fn: (ex: unknown) => void): KeyInteractionBinderBuilder<I, A, D>;
 
     name(name: string): KeyInteractionBinderBuilder<I, A, D>;
+
+    configureRules(ruleName: RuleName, severity: Severity): KeyInteractionBinderBuilder<I, A, D>;
 }

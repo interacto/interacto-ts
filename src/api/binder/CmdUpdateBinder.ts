@@ -19,6 +19,7 @@ import type {InteractionCmdUpdateBinder} from "./InteractionCmdUpdateBinder";
 import type {Interaction, InteractionDataType} from "../interaction/Interaction";
 import type {Widget} from "./BaseBinderBuilder";
 import type {WhenType} from "./When";
+import type {RuleName, Severity} from "../binding/Linting";
 
 /**
  * The binder API that already knows the type of UI command
@@ -54,4 +55,6 @@ export interface CmdUpdateBinder<C extends Command> extends CmdUpdateBinderBuild
     catch(fn: (ex: unknown) => void): CmdUpdateBinder<C>;
 
     name(name: string): CmdUpdateBinder<C>;
+
+    configureRules(ruleName: RuleName, severity: Severity): CmdUpdateBinder<C>;
 }

@@ -17,6 +17,7 @@ import type {Command} from "../command/Command";
 import type {Observable} from "rxjs";
 import type {InteractionData} from "../interaction/InteractionData";
 import type {VisitorBinding} from "./VisitorBinding";
+import type {RuleName, Severity} from "./Linting";
 
 /**
  * The concept of binding and its related services.
@@ -56,6 +57,11 @@ export interface Binding<C extends Command, I extends Interaction<D>, A, D exten
      * The command in progress or null.
      */
     readonly command: C | undefined;
+
+    /**
+     * The linter rules specific to this binding.
+     */
+    readonly linterRules: ReadonlyMap<RuleName, Severity>;
 
     /**
      * States whether the binding is activated.

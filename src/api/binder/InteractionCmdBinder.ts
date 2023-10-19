@@ -20,6 +20,7 @@ import type {Binding} from "../binding/Binding";
 import type {Interaction, InteractionDataType} from "../interaction/Interaction";
 import type {Widget} from "./BaseBinderBuilder";
 import type {WhenType} from "./When";
+import type {RuleName, Severity} from "../binding/Linting";
 
 /**
  * The binder API that already knows the type of UI command and the user interaction to use.
@@ -87,6 +88,8 @@ export interface InteractionCmdBinder<C extends Command, I extends Interaction<D
     catch(fn: (ex: unknown) => void): InteractionCmdBinder<C, I, A, D>;
 
     name(name: string): InteractionCmdBinder<C, I, A, D>;
+
+    configureRules(ruleName: RuleName, severity: Severity): InteractionCmdBinder<C, I, A, D>;
 
     /**
      * Executes the binder to create and install an Interacto binding.

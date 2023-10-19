@@ -18,6 +18,7 @@ import type {Interaction, InteractionDataType} from "../interaction/Interaction"
 import type {Widget} from "./BaseBinderBuilder";
 import type {BaseUpdateBinderBuilder} from "./BaseUpdateBinderBuilder";
 import type {WhenType} from "./When";
+import type {RuleName, Severity} from "../binding/Linting";
 
 /**
  * The binding builder API that already knows the type of user interaction the bindings will use
@@ -64,4 +65,6 @@ export interface InteractionUpdateBinderBuilder<I extends Interaction<D>, A, D e
     catch(fn: (ex: unknown) => void): InteractionUpdateBinderBuilder<I, A, D>;
 
     name(name: string): InteractionUpdateBinderBuilder<I, A, D>;
+
+    configureRules(ruleName: RuleName, severity: Severity): InteractionUpdateBinderBuilder<I, A, D>;
 }

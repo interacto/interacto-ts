@@ -91,4 +91,46 @@ describe("binding checker", () => {
         }
         ).not.toThrow("[same-interactions] Two bindings use the same user interaction on same widget.");
     });
+
+    test("check same-interaction with new binder linting configuration", () => {
+        const b1 = bindings
+            .clickBinder()
+            .on(w1)
+            .toProduceAnon(() => undefined)
+            .configureRules("same-interactions", "ignore")
+            .bind();
+        const b2 = bindings
+            .clickBinder()
+            .toProduceAnon(() => undefined)
+            .on(w1)
+            .bind();
+
+        checker.setLinterRules(["same-interactions", "err"]);
+
+        expect(() => {
+            checker.checkSameInteractions(b1, [b2]);
+        }
+        ).not.toThrow("[same-interactions] Two bindings use the same user interaction on same widget.");
+    });
+
+    test("check same-interaction with existing binder linting configuration", () => {
+        const b1 = bindings
+            .clickBinder()
+            .on(w1)
+            .toProduceAnon(() => undefined)
+            .bind();
+        const b2 = bindings
+            .clickBinder()
+            .configureRules("same-interactions", "ignore")
+            .toProduceAnon(() => undefined)
+            .on(w1)
+            .bind();
+
+        checker.setLinterRules(["same-interactions", "err"]);
+
+        expect(() => {
+            checker.checkSameInteractions(b1, [b2]);
+        }
+        ).not.toThrow("[same-interactions] Two bindings use the same user interaction on same widget.");
+    });
 });
