@@ -53,43 +53,35 @@ export class Checker {
 
     public checkSameInteractions(binding: Binding<Command, Interaction<InteractionData>, unknown>,
                                  binds: ReadonlyArray<Binding<Command, Interaction<InteractionData>, unknown>>): void {
-        const severity = this.getSameInteractionSeverity(binding);
-
-        if (severity !== "ignore" &&
-            binds
-                .filter(b => b.linterRules.get("same-interactions") !== "ignore")
-                .some(b => binding.interaction.constructor === b.interaction.constructor &&
-            this.isWidgetSetsIntersecting(binding.interaction.registeredNodes, b.interaction.registeredNodes))
-        ) {
-            this.printLinterMsg(severity, "[same-interactions] Two bindings use the same user interaction on same widget.");
-        }
+        this.checkRule("same-interactions", this.getSameInteractionSeverity(binding), binding, binds,
+            b => binding.interaction.constructor === b.interaction.constructor,
+            "[same-interactions] Two bindings use the same user interaction on same widget.");
     }
 
     public checkSameData(binding: Binding<Command, Interaction<InteractionData>, unknown>,
                          binds: ReadonlyArray<Binding<Command, Interaction<InteractionData>, unknown>>): void {
-        const severity = this.getSameDataSeverity(binding);
-
-        if (severity !== "ignore" &&
-            binds
-                .filter(b => b.linterRules.get("same-data") !== "ignore")
-                .some(b => binding.interaction.data.constructor === b.interaction.data.constructor &&
-            this.isWidgetSetsIntersecting(binding.interaction.registeredNodes, b.interaction.registeredNodes))
-        ) {
-            this.printLinterMsg(severity, "[same-data] Two bindings use the same user interaction data type on same widget.");
-        }
+        this.checkRule("same-data", this.getSameDataSeverity(binding), binding, binds,
+            b => binding.interaction.data.constructor === b.interaction.data.constructor,
+            "[same-data] Two bindings use the same user interaction data type on same widget.");
     }
 
     public checkIncluded(binding: Binding<Command, Interaction<InteractionData>, unknown>,
                          binds: ReadonlyArray<Binding<Command, Interaction<InteractionData>, unknown>>): void {
-        const severity = this.getIncludedSeverity(binding);
+        this.checkRule("included", this.getIncludedSeverity(binding), binding, binds,
+            b => this.isIncluded(binding.interaction.constructor.name, b.interaction.constructor.name),
+            "[included] The interaction of the first binding is included into the interaction of a second one.");
+    }
 
-        if (severity !== "ignore" &&
+    private checkRule(ruleName: RuleName, severity: Severity,
+                      binding: Binding<Command, Interaction<InteractionData>, unknown>,
+                      binds: ReadonlyArray<Binding<Command, Interaction<InteractionData>, unknown>>,
+                      predicate: (b: Binding<Command, Interaction<InteractionData>, unknown>) => boolean, msg: string): void {
+        if (severity !== "ignore" && !binding.isWhenDefined() &&
             binds
-                .filter(b => b.linterRules.get("included") !== "ignore")
-                .some(b => this.isIncluded(binding.interaction.constructor.name, b.interaction.constructor.name) &&
-            this.isWidgetSetsIntersecting(binding.interaction.registeredNodes, b.interaction.registeredNodes))
+                .filter(b => b.linterRules.get(ruleName) !== "ignore" && !b.isWhenDefined())
+                .some(b => predicate(b) && this.isWidgetSetsIntersecting(binding.interaction.registeredNodes, b.interaction.registeredNodes))
         ) {
-            this.printLinterMsg(severity, "[same-data] Two bindings use the same user interaction data type on same widget.");
+            this.printLinterMsg(severity, msg);
         }
     }
 

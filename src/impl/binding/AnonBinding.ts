@@ -233,4 +233,8 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, A, D exten
             }
         }
     }
+
+    public override isWhenDefined(): boolean {
+        return this.whenFn !== undefined && this.whenFn.length > 0;
+    }
 }

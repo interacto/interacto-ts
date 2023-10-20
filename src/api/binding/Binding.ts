@@ -94,6 +94,11 @@ export interface Binding<C extends Command, I extends Interaction<D>, A, D exten
     /** An RX observable objects that will provide the commands produced by the binding. */
     readonly produces: Observable<C>;
 
+    /**
+     * Does this binding has a 'when' predicate defined?
+     */
+    isWhenDefined(): boolean;
+
     uninstallBinding(): void;
 
     /**

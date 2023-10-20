@@ -178,6 +178,10 @@ implements Binding<C, I, A, D> {
         }
     }
 
+    public isWhenDefined(): boolean {
+        return false;
+    }
+
     /**
      * Called when an error appeared during the execution of the binding. To override.
      * @param _err - The error.

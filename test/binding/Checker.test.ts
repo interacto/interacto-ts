@@ -133,4 +133,46 @@ describe("binding checker", () => {
         }
         ).not.toThrow("[same-interactions] Two bindings use the same user interaction on same widget.");
     });
+
+    test("check nothing done if 'when' defined on b1", () => {
+        const b1 = bindings
+            .clickBinder()
+            .on(w1)
+            .toProduceAnon(() => undefined)
+            .when(() => true)
+            .bind();
+        const b2 = bindings
+            .clickBinder()
+            .toProduceAnon(() => undefined)
+            .on(w1)
+            .bind();
+
+        checker.setLinterRules(["same-interactions", "err"]);
+
+        expect(() => {
+            checker.checkSameInteractions(b1, [b2]);
+        }
+        ).not.toThrow("[same-interactions] Two bindings use the same user interaction on same widget.");
+    });
+
+    test("check nothing done if 'when' defined on b2", () => {
+        const b1 = bindings
+            .clickBinder()
+            .on(w1)
+            .toProduceAnon(() => undefined)
+            .bind();
+        const b2 = bindings
+            .clickBinder()
+            .when(() => true)
+            .toProduceAnon(() => undefined)
+            .on(w1)
+            .bind();
+
+        checker.setLinterRules(["same-interactions", "err"]);
+
+        expect(() => {
+            checker.checkSameInteractions(b1, [b2]);
+        }
+        ).not.toThrow("[same-interactions] Two bindings use the same user interaction on same widget.");
+    });
 });
