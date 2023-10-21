@@ -16,8 +16,8 @@ import type {TouchData} from "../../api/interaction/TouchData";
 import {PointingDataBase} from "./PointingDataBase";
 import type {UnitInteractionData} from "../../api/interaction/UnitInteractionData";
 import type {EventModifierData} from "../../api/interaction/EventModifierData";
-import type {PointData} from "../../interacto";
-import {PointDataImpl} from "../../interacto";
+import type {PointData} from "../../api/interaction/PointData";
+import {PointDataImpl} from "./PointDataImpl";
 
 export class TouchDataImpl extends PointingDataBase implements TouchData {
     private _allTouches: Array<TouchData> = [];

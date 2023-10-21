@@ -17,7 +17,17 @@ import type {LinterRule, RuleName, Severity} from "../../api/binding/Linting";
 import type {Command} from "../../api/command/Command";
 import type {Interaction} from "../../api/interaction/Interaction";
 import type {InteractionData} from "../../api/interaction/InteractionData";
-import {Click, Clicks, DoubleClick, DragLock, KeyDown, KeyTyped, KeyUp, KeysTyped, LongMouseDown, MouseDown, MouseUp} from "../../interacto";
+import {Click} from "../interaction/library/Click";
+import {Clicks} from "../interaction/library/Clicks";
+import {DoubleClick} from "../interaction/library/DoubleClick";
+import {DragLock} from "../interaction/library/DragLock";
+import {KeyDown} from "../interaction/library/KeyDown";
+import {KeyTyped} from "../interaction/library/KeyTyped";
+import {KeyUp} from "../interaction/library/KeyUp";
+import {KeysTyped} from "../interaction/library/KeysTyped";
+import {LongMouseDown} from "../interaction/library/LongMouseDown";
+import {MouseDown} from "../interaction/library/MouseDown";
+import {MouseUp} from "../interaction/library/MouseUp";
 
 export class Checker {
     private readonly linterRules: Map<RuleName, Severity>;

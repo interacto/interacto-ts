@@ -161,6 +161,7 @@ export * from "./impl/interaction/library/Scroll";
 export * from "./impl/interaction/library/SpinnerChanged";
 export * from "./impl/interaction/library/Tap";
 export * from "./impl/interaction/library/TextInputChanged";
+export * from "./impl/interaction/library/TimedClick";
 export * from "./impl/interaction/library/TouchDnD";
 export * from "./impl/interaction/library/TouchStart";
 export * from "./impl/interaction/library/Wheel";
