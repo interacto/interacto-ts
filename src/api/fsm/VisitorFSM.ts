@@ -13,9 +13,9 @@
  */
 
 import type {ConcurrentAndFSM} from "../../impl/fsm/ConcurrentAndFSM";
+import type {ConcurrentXOrFSM} from "../../impl/fsm/ConcurrentXOrFSM";
 import type {FSMDataHandler} from "../../impl/fsm/FSMDataHandler";
 import type {TimeoutTransition} from "../../impl/fsm/TimeoutTransition";
-import type {ConcurrentXOrFSM} from "../../interacto";
 import type {FSM} from "./FSM";
 import type {InputState} from "./InputState";
 import type {OutputState} from "./OutputState";

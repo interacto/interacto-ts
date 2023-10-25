@@ -18,7 +18,7 @@ import {InteractionBase} from "../InteractionBase";
 import type {Logger} from "../../../api/logging/Logger";
 import {TouchTransition} from "../../fsm/TouchTransition";
 import {TouchDataImpl} from "../TouchDataImpl";
-import type {TouchData} from "../../../interacto";
+import type {TouchData} from "../../../api/interaction/TouchData";
 
 class TouchStartFSM extends FSMImpl<TouchStartFSMHandler> {
     public constructor(logger: Logger, dataHandler: TouchStartFSMHandler) {
