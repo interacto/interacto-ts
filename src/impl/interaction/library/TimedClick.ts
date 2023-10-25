@@ -26,8 +26,6 @@ export class TimedClickFSM extends FSMImpl<ClickFSMHandler> {
 
     private readonly buttonToConsider: number | undefined;
 
-    private readonly duration: number;
-
     /**
      * Creates the FSM
      */
@@ -39,7 +37,6 @@ export class TimedClickFSM extends FSMImpl<ClickFSMHandler> {
         }
 
         this.buttonToConsider = button;
-        this.duration = duration;
 
         const pressed = this.addStdState("pressed");
         const cancelled = this.addCancellingState("cancelled");
@@ -58,7 +55,7 @@ export class TimedClickFSM extends FSMImpl<ClickFSMHandler> {
             (evt: MouseEvent): boolean => this.currentButton === undefined || evt.button === this.currentButton);
 
         new MouseTransition(pressed, cancelled, "mousemove");
-        new TimeoutTransition(pressed, cancelled, () => this.duration);
+        new TimeoutTransition(pressed, cancelled, () => duration);
     }
 
     private setButtonToCheck(evtButton: number): void {

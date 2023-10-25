@@ -13,14 +13,15 @@
  */
 
 import type {FSMHandler, Logger} from "../../../src/interacto";
-import {Tap, TapDataImpl, TouchDataImpl} from "../../../src/interacto";
+import {TimedTap} from "../../../src/interacto";
+import {TapDataImpl, TouchDataImpl} from "../../../src/interacto";
 import {robot} from "../StubEvents";
 import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
 import {checkTouchPoint} from "../../Utils";
 
-describe("using a tap interaction", () => {
-    let interaction: Tap;
+describe("using a timed tap interaction", () => {
+    let interaction: TimedTap;
     let canvas: HTMLElement;
     let handler: FSMHandler;
     let logger: Logger & MockProxy<Logger>;
@@ -40,7 +41,7 @@ describe("using a tap interaction", () => {
     describe("tap 1", () => {
         beforeEach(() => {
             logger = mock<Logger>();
-            interaction = new Tap(1, logger);
+            interaction = new TimedTap(300, 1, logger);
             interaction.fsm.addHandler(handler);
             interaction.registerToNodes([canvas]);
         });
@@ -64,7 +65,7 @@ describe("using a tap interaction", () => {
             robot(canvas)
                 .touchstart({}, [{"identifier": 2}]);
 
-            expect(logger.logInteractionMsg).toHaveBeenCalledTimes(3);
+            expect(logger.logInteractionMsg).toHaveBeenCalledTimes(4);
         });
 
         test("no log interaction is ok", () => {
@@ -127,7 +128,7 @@ describe("using a tap interaction", () => {
 
     describe("tap 2", () => {
         beforeEach(() => {
-            interaction = new Tap(2, mock<Logger>());
+            interaction = new TimedTap(400, 2, mock<Logger>());
             interaction.fsm.addHandler(handler);
             interaction.registerToNodes([canvas]);
         });
@@ -156,6 +157,23 @@ describe("using a tap interaction", () => {
                 .touchend();
             expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
             expect(handler.fsmStops).not.toHaveBeenCalled();
+            expect(handler.fsmCancels).not.toHaveBeenCalled();
+        });
+
+        test("one touch with timeout", () => {
+            robot(canvas)
+                .touchstart({}, [{"identifier": 2}])
+                .do(() => jest.advanceTimersByTime(400));
+            expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+            expect(handler.fsmStops).not.toHaveBeenCalled();
+            expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
+        });
+
+        test("one touch with delay but not timeout", () => {
+            robot(canvas)
+                .touchstart({}, [{"identifier": 2}])
+                .do(() => jest.advanceTimersByTime(399));
+            expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
             expect(handler.fsmCancels).not.toHaveBeenCalled();
         });
 
@@ -234,7 +252,7 @@ describe("using a tap interaction", () => {
 
     describe("tap 3", () => {
         beforeEach(() => {
-            interaction = new Tap(3, mock<Logger>());
+            interaction = new TimedTap(100, 3, mock<Logger>());
             interaction.fsm.addHandler(handler);
             interaction.registerToNodes([canvas]);
         });

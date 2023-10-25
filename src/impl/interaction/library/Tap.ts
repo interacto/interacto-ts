@@ -20,18 +20,25 @@ import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 import type {Logger} from "../../../api/logging/Logger";
 import {TouchTransition} from "../../fsm/TouchTransition";
 import type {PointsDataImpl} from "../PointsDataImpl";
-import type {PointsData, TouchData} from "../../../interacto";
 import {TapDataImpl} from "../TapDataImpl";
+import type {CancellingState} from "../../fsm/CancellingState";
+import type {StdState} from "../../fsm/StdState";
+import type {PointsData} from "../../../api/interaction/PointsData";
+import type {TouchData} from "../../../api/interaction/TouchData";
 
 /**
  * The FSM for the Tap interaction
  */
-class TapFSM extends FSMImpl<TapFSMHandler> {
+export class TapFSM extends FSMImpl<TapFSMHandler> {
     private countTaps: number;
 
     private readonly nbTaps: number;
 
     private touchID?: number;
+
+    protected readonly downState: StdState;
+
+    protected readonly cancelState: CancellingState;
 
     /**
      * Creates the Tap FSM
@@ -41,9 +48,9 @@ class TapFSM extends FSMImpl<TapFSMHandler> {
         this.nbTaps = nbTaps;
         this.countTaps = 0;
 
-        const down = this.addStdState("down");
+        this.downState = this.addStdState("down");
         const up = this.addStdState("up");
-        const cancelled = this.addCancellingState("cancelled");
+        this.cancelState = this.addCancellingState("cancelled");
         const action = (event: TouchEvent): void => {
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             this.touchID = event.changedTouches[0]!.identifier;
@@ -51,19 +58,19 @@ class TapFSM extends FSMImpl<TapFSMHandler> {
             this.dataHandler?.tap(event);
         };
 
-        new TouchTransition(this.initState, down, "touchstart", action);
-        new TouchTransition(up, down, "touchstart", action);
+        new TouchTransition(this.initState, this.downState, "touchstart", action);
+        new TouchTransition(up, this.downState, "touchstart", action);
 
-        new TouchTransition(down, cancelled, "touchmove", undefined,
+        new TouchTransition(this.downState, this.cancelState, "touchmove", undefined,
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             (evt: TouchEvent): boolean => evt.changedTouches[0]!.identifier === this.touchID);
 
         // No multi-touch
-        new TouchTransition(down, cancelled, "touchstart", undefined,
+        new TouchTransition(this.downState, this.cancelState, "touchstart", undefined,
             (evt: TouchEvent): boolean => Array.from(evt.touches).some(t => t.identifier === this.touchID));
 
         // Required to clean touch events lost by the browser
-        new TouchTransition(down, down, "touchstart",
+        new TouchTransition(this.downState, this.downState, "touchstart",
             // Replacing the current tap (but not increment)
             (event: TouchEvent): void => {
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -73,17 +80,16 @@ class TapFSM extends FSMImpl<TapFSMHandler> {
             // To detect the event is lost, checking it is not part of the touches any more
             (evt: TouchEvent): boolean => Array.from(evt.touches).filter(t => t.identifier === this.touchID).length === 0);
 
-        new TouchTransition(down, this.addTerminalState("ended"), "touchend", undefined,
+        new TouchTransition(this.downState, this.addTerminalState("ended"), "touchend", undefined,
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             (evt: TouchEvent): boolean => evt.changedTouches[0]!.identifier === this.touchID && this.nbTaps === this.countTaps);
 
-        new TouchTransition(down, up, "touchend", undefined,
+        new TouchTransition(this.downState, up, "touchend", undefined,
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             (evt: TouchEvent): boolean => evt.changedTouches[0]!.identifier === this.touchID && this.nbTaps !== this.countTaps);
 
-        new TouchTransition(up, cancelled, "touchmove");
-        new TimeoutTransition(down, cancelled, () => 1000);
-        new TimeoutTransition(up, cancelled, () => 1000);
+        new TouchTransition(up, this.cancelState, "touchmove");
+        new TimeoutTransition(up, this.cancelState, () => 1000);
     }
 
     public override reinit(): void {
