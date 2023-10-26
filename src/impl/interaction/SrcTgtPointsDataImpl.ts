@@ -12,31 +12,13 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {SrcTgtPointsData} from "../../api/interaction/SrcTgtPointsData";
 import {PointDataImpl} from "./PointDataImpl";
 import type {PointData} from "../../api/interaction/PointData";
+import {SrcTgtDataBase} from "./SrcTgtDataBase";
 
-export class SrcTgtPointsDataImpl implements SrcTgtPointsData<PointData> {
-    private readonly srcData: PointDataImpl;
-
-    private readonly tgtData: PointDataImpl;
-
+export class SrcTgtPointsDataImpl extends SrcTgtDataBase<PointData, PointDataImpl> {
     public constructor() {
-        this.srcData = new PointDataImpl();
-        this.tgtData = new PointDataImpl();
-    }
-
-    public get src(): PointData {
-        return this.srcData;
-    }
-
-    public get tgt(): PointData {
-        return this.tgtData;
-    }
-
-    public flush(): void {
-        this.srcData.flush();
-        this.tgtData.flush();
+        super(new PointDataImpl(), new PointDataImpl());
     }
 
     public copySrc(data: PointData): void {
@@ -45,45 +27,5 @@ export class SrcTgtPointsDataImpl implements SrcTgtPointsData<PointData> {
 
     public copyTgt(data: PointData): void {
         this.tgtData.copy(data);
-    }
-
-    public get diffClientX(): number {
-        return this.tgt.clientX - this.src.clientX;
-    }
-
-    public get diffClientY(): number {
-        return this.tgt.clientY - this.src.clientY;
-    }
-
-    public get diffPageX(): number {
-        return this.tgt.pageX - this.src.pageX;
-    }
-
-    public get diffPageY(): number {
-        return this.tgt.pageY - this.src.pageY;
-    }
-
-    public get diffScreenX(): number {
-        return this.tgt.screenX - this.src.screenX;
-    }
-
-    public get diffScreenY(): number {
-        return this.tgt.screenY - this.src.screenY;
-    }
-
-    public get duration(): number {
-        return this.tgtData.timeStamp - this.srcData.timeStamp;
-    }
-
-    public get velocity(): number {
-        return Math.hypot(this.diffScreenX, this.diffScreenY) / this.duration;
-    }
-
-    public isHorizontal(pxTolerance: number): boolean {
-        return Math.abs(this.diffScreenY) < pxTolerance;
-    }
-
-    public isVertical(pxTolerance: number): boolean {
-        return Math.abs(this.diffScreenX) < pxTolerance;
     }
 }

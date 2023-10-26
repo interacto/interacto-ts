@@ -127,6 +127,7 @@ export * from "./impl/interaction/PointDataImpl";
 export * from "./impl/interaction/PointingDataBase";
 export * from "./impl/interaction/PointsDataImpl";
 export * from "./impl/interaction/ScrollDataImpl";
+export * from "./impl/interaction/SrcTgtDataBase";
 export * from "./impl/interaction/SrcTgtPointsDataImpl";
 export * from "./impl/interaction/SrcTgtTouchDataImpl";
 export * from "./impl/interaction/TapDataImpl";

@@ -83,4 +83,28 @@ export interface SrcTgtPointsData<T extends PointBaseData> extends InteractionDa
      * @param pxTolerance - The pixel tolerance for considering the line horizontal.
      */
     isHorizontal(pxTolerance: number): boolean;
+
+    /**
+     * Returns true if the gesture is going to the left.
+     * @param pxTolerance - The pixel tolerance for considering the line horizontal.
+     */
+    isLeft(pxTolerance: number): boolean;
+
+    /**
+     * Returns true if the gesture is going to the right.
+     * @param pxTolerance - The pixel tolerance for considering the line horizontal.
+     */
+    isRight(pxTolerance: number): boolean;
+
+    /**
+     * Returns true if the gesture is going to the top.
+     * @param pxTolerance - The pixel tolerance for considering the line vertical.
+     */
+    isTop(pxTolerance: number): boolean;
+
+    /**
+     * Returns true if the gesture is going to the bottom.
+     * @param pxTolerance - The pixel tolerance for considering the line vertical.
+     */
+    isBottom(pxTolerance: number): boolean;
 }
