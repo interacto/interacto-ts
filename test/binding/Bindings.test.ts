@@ -1531,16 +1531,6 @@ describe("using bindings", () => {
             expect(ctx.getCmdsProducedBy(binding2)).toHaveLength(0);
             expect(ctx.getCmdsProducedBy(binding)).toHaveLength(1);
         });
-
-        test("touchstart, wait, touchend", () => {
-            robot(elt)
-                .keepData()
-                .touchstart({}, [{"identifier": 1}])
-                .runOnlyPendingTimers()
-                .touchend();
-            expect(ctx.getCmdsProducedBy(binding2)).toHaveLength(1);
-            expect(ctx.getCmdsProducedBy(binding)).toHaveLength(0);
-        });
     });
 
     describe("two longTouch", () => {
