@@ -114,7 +114,7 @@ describe("using the std FSM visitor implementation", () => {
         visitedFSM = new TouchDnD(mock<Logger>(), false).fsm;
         visitedFSM.acceptVisitor(visitor);
         // eslint-disable-next-line max-len
-        expect(visitor.res).toBe(">i[init]-touchstart-s[touched]-touchstart-s[touched]-touchend-c[cancelled]-touchmove-s[moved]-touchmove-s[moved]-touchstart-s[touched]-touchend-t[released]");
+        expect(visitor.res).toBe(">i[init]-touchstart-s[touched]-touchstart-s[touched]-touchend-c[cancelled]-touchmove-s[moved]-touchmove-s[moved]-touchstart-s[touched]-touchend-t[released]-touchstart-c[cancelled]-touchstart-c[cancelled]");
     });
 
     test("visiting the multi-touch FSM works", () => {

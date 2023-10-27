@@ -22,16 +22,24 @@ import type {SrcTgtPointsData} from "../../../api/interaction/SrcTgtPointsData";
 import type {TouchData} from "../../../api/interaction/TouchData";
 import type {Logger} from "../../../api/logging/Logger";
 import {TouchTransition} from "../../fsm/TouchTransition";
+import type {CancellingState} from "../../fsm/CancellingState";
+import type {StdState} from "../../fsm/StdState";
 
 /**
  * The FSM that defines a touch interaction (that works like a DnD)
  */
 export class TouchDnDFSM extends FSMImpl<TouchDnDFSMHandler> {
-    private touchID: number | undefined;
+    protected touchID: number | undefined;
 
-    private readonly cancellable;
+    protected readonly cancellable;
 
-    private readonly movementRequired;
+    protected readonly movementRequired;
+
+    protected readonly cancelled: CancellingState;
+
+    protected readonly moved: StdState;
+
+    protected readonly touched: StdState;
 
     /**
      * Creates the FSM.
@@ -45,17 +53,17 @@ export class TouchDnDFSM extends FSMImpl<TouchDnDFSMHandler> {
         this.touchID = undefined;
         this.cancellable = cancellable;
         this.movementRequired = movementRequired;
+        this.cancelled = this.addCancellingState("cancelled");
+        this.moved = this.addStdState("moved");
+        this.touched = this.addStdState("touched");
         this.buildFSM();
     }
 
     // eslint-disable-next-line max-lines-per-function
-    private buildFSM(): void {
+    protected buildFSM(): void {
         new TerminalState(this, "released");
 
-        const touched = this.addStdState("touched");
-        const moved = this.addStdState("moved");
         const released = this.addTerminalState("released");
-        const cancelled = this.addCancellingState("cancelled");
 
         const touchDown = (event: TouchEvent): void => {
             this.touchID = event.changedTouches[0]?.identifier;
@@ -64,31 +72,31 @@ export class TouchDnDFSM extends FSMImpl<TouchDnDFSMHandler> {
 
         const fixTouchDownCheck = (event: TouchEvent): boolean => Array.from(event.touches).filter(t => t.identifier === this.touchID).length === 0;
 
-        new TouchTransition(this.initState, touched, "touchstart", touchDown);
+        new TouchTransition(this.initState, this.touched, "touchstart", touchDown);
 
         // If the touch up event is lost by the browser and another touch down occurs
         // we must restart the interaction
-        new TouchTransition(touched, touched, "touchstart", touchDown, fixTouchDownCheck);
+        new TouchTransition(this.touched, this.touched, "touchstart", touchDown, fixTouchDownCheck);
 
         if (this.movementRequired) {
-            this.startingState = moved;
-            new TouchTransition(touched, cancelled, "touchend", undefined,
+            this.startingState = this.moved;
+            new TouchTransition(this.touched, this.cancelled, "touchend", undefined,
                 (event: TouchEvent): boolean => event.changedTouches[0] !== undefined && event.changedTouches[0].identifier === this.touchID);
         } else {
-            new TouchTransition(touched, released, "touchend",
+            new TouchTransition(this.touched, released, "touchend",
                 (event: TouchEvent): void => {
                     this.dataHandler?.onRelease(event);
                 },
                 (event: TouchEvent): boolean => event.changedTouches[0] !== undefined && event.changedTouches[0].identifier === this.touchID);
         }
 
-        new TouchTransition(touched, moved, "touchmove",
+        new TouchTransition(this.touched, this.moved, "touchmove",
             (event: TouchEvent): void => {
                 this.dataHandler?.onMove(event);
             },
             (event: TouchEvent): boolean => event.changedTouches[0] !== undefined && event.changedTouches[0].identifier === this.touchID);
 
-        new TouchTransition(moved, moved, "touchmove",
+        new TouchTransition(this.moved, this.moved, "touchmove",
             (event: TouchEvent): void => {
                 this.dataHandler?.onMove(event);
             },
@@ -96,11 +104,11 @@ export class TouchDnDFSM extends FSMImpl<TouchDnDFSMHandler> {
 
         // If the touch up event is lost by the browser and another touch down occurs
         // we must restart the interaction
-        new TouchTransition(moved, touched, "touchstart", touchDown, fixTouchDownCheck);
+        new TouchTransition(this.moved, this.touched, "touchstart", touchDown, fixTouchDownCheck);
 
         // Transitions used if the DnD can be cancelled by releasing the touch on a dwell spring element
         if (this.cancellable) {
-            new TouchTransition(moved, released, "touchend",
+            new TouchTransition(this.moved, released, "touchend",
                 (event: TouchEvent): void => {
                     this.dataHandler?.onRelease(event);
                 },
@@ -114,7 +122,7 @@ export class TouchDnDFSM extends FSMImpl<TouchDnDFSMHandler> {
                     (!(tgt instanceof Element) || !tgt.classList.contains("ioDwellSpring"));
                 });
 
-            new TouchTransition(moved, cancelled, "touchend", undefined,
+            new TouchTransition(this.moved, this.cancelled, "touchend", undefined,
                 (ev: TouchEvent): boolean => {
                     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                     const touch = ev.changedTouches[0]!;
@@ -122,7 +130,7 @@ export class TouchDnDFSM extends FSMImpl<TouchDnDFSMHandler> {
                     return touch.identifier === this.touchID && tgt instanceof Element && tgt.classList.contains("ioDwellSpring");
                 });
         } else {
-            new TouchTransition(moved, released, "touchend",
+            new TouchTransition(this.moved, released, "touchend",
                 (event: TouchEvent): void => {
                     this.dataHandler?.onRelease(event);
                 },
@@ -140,6 +148,25 @@ export class TouchDnDFSM extends FSMImpl<TouchDnDFSMHandler> {
     }
 }
 
+class OneTouchDnDFSM extends TouchDnDFSM {
+    /**
+     * Creates a DnD touch FSM that only works with one touch.
+     * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
+     */
+    public constructor(cancellable: boolean, logger: Logger, dataHandler: TouchDnDFSMHandler) {
+        super(cancellable, logger, dataHandler);
+    }
+
+    protected override buildFSM(): void {
+        super.buildFSM();
+
+        const check = (event: TouchEvent): boolean => event.changedTouches[0] !== undefined && event.changedTouches[0].identifier !== this.touchID;
+
+        new TouchTransition(this.moved, this.cancelled, "touchstart", undefined, check);
+        new TouchTransition(this.touched, this.cancelled, "touchstart", undefined, check);
+    }
+}
+
 export interface TouchDnDFSMHandler extends FSMDataHandler {
     onTouch(event: TouchEvent): void;
 
@@ -151,13 +178,13 @@ export interface TouchDnDFSMHandler extends FSMDataHandler {
 /**
  * A touch interaction (that works as a DnD)
  */
-export class TouchDnD extends InteractionBase<SrcTgtPointsData<TouchData>, SrcTgtTouchDataImpl, TouchDnDFSM> {
+export class TouchDnD extends InteractionBase<SrcTgtPointsData<TouchData>, SrcTgtTouchDataImpl, OneTouchDnDFSM> {
     /**
      * Creates the interaction.
      * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
      * @param fsm - The optional FSM provided for the interaction
      */
-    public constructor(logger: Logger, cancellable: boolean, fsm?: TouchDnDFSM) {
+    public constructor(logger: Logger, cancellable: boolean, fsm?: OneTouchDnDFSM) {
         const handler: TouchDnDFSMHandler = {
             "onTouch": (evt: TouchEvent): void => {
                 if (evt.changedTouches[0] !== undefined) {
@@ -178,7 +205,7 @@ export class TouchDnD extends InteractionBase<SrcTgtPointsData<TouchData>, SrcTg
             }
         };
 
-        super(fsm ?? new TouchDnDFSM(cancellable, logger, handler), new SrcTgtTouchDataImpl(), logger);
+        super(fsm ?? new OneTouchDnDFSM(cancellable, logger, handler), new SrcTgtTouchDataImpl(), logger);
     }
 
     private setTgtData(evt: TouchEvent): void {
