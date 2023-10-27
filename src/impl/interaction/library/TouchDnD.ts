@@ -155,12 +155,9 @@ export class TouchDnD extends InteractionBase<SrcTgtPointsData<TouchData>, SrcTg
     /**
      * Creates the interaction.
      * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
-     * @param movementRequired - Whether the DnD starts after the touch point has begun moving (default)
-     * or as soon as the screen is touched.
-     * The latter is used for the MultiTouch interaction.
      * @param fsm - The optional FSM provided for the interaction
      */
-    public constructor(logger: Logger, cancellable: boolean, movementRequired = true, fsm?: TouchDnDFSM) {
+    public constructor(logger: Logger, cancellable: boolean, fsm?: TouchDnDFSM) {
         const handler: TouchDnDFSMHandler = {
             "onTouch": (evt: TouchEvent): void => {
                 if (evt.changedTouches[0] !== undefined) {
@@ -181,7 +178,7 @@ export class TouchDnD extends InteractionBase<SrcTgtPointsData<TouchData>, SrcTg
             }
         };
 
-        super(fsm ?? new TouchDnDFSM(cancellable, logger, handler, movementRequired), new SrcTgtTouchDataImpl(), logger);
+        super(fsm ?? new TouchDnDFSM(cancellable, logger, handler), new SrcTgtTouchDataImpl(), logger);
     }
 
     private setTgtData(evt: TouchEvent): void {
