@@ -74,6 +74,9 @@ export class TouchDnDFSM extends FSMImpl<TouchDnDFSMHandler> {
 
         new TouchTransition(this.initState, this.touched, "touchstart", touchDown);
 
+        new TouchTransition(this.initState, this.moved, "touchmove", touchDown,
+            (event: TouchEvent): boolean => event.touches.length === 1 && event.touches[0] !== undefined);
+
         // If the touch up event is lost by the browser and another touch down occurs
         // we must restart the interaction
         new TouchTransition(this.touched, this.touched, "touchstart", touchDown, fixTouchDownCheck);

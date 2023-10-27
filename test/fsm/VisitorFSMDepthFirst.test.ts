@@ -114,14 +114,14 @@ describe("using the std FSM visitor implementation", () => {
         visitedFSM = new TouchDnD(mock<Logger>(), false).fsm;
         visitedFSM.acceptVisitor(visitor);
         // eslint-disable-next-line max-len
-        expect(visitor.res).toBe(">i[init]-touchstart-s[touched]-touchstart-s[touched]-touchend-c[cancelled]-touchmove-s[moved]-touchmove-s[moved]-touchstart-s[touched]-touchend-t[released]-touchstart-c[cancelled]-touchstart-c[cancelled]");
+        expect(visitor.res).toBe(">i[init]-touchstart-s[touched]-touchstart-s[touched]-touchend-c[cancelled]-touchmove-s[moved]-touchmove-s[moved]-touchstart-s[touched]-touchend-t[released]-touchstart-c[cancelled]-touchstart-c[cancelled]-touchmove-s[moved]");
     });
 
     test("visiting the multi-touch FSM works", () => {
         visitedFSM = new MultiTouch(2, false, mock<Logger>()).fsm;
         visitedFSM.acceptVisitor(visitor);
         // eslint-disable-next-line max-len
-        const subFSM = ">i[init]-touchstart-s[touched]-touchstart-s[touched]-touchend-t[released]-touchmove-s[moved]-touchmove-s[moved]-touchstart-s[touched]-touchend-t[released]";
+        const subFSM = ">i[init]-touchstart-s[touched]-touchstart-s[touched]-touchend-t[released]-touchmove-s[moved]-touchmove-s[moved]-touchstart-s[touched]-touchend-t[released]-touchmove-s[moved]";
         expect(visitor.res).toBe(`&${subFSM}${subFSM}`);
     });
 });
