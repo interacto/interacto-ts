@@ -41,6 +41,7 @@ describe("using a touch dnd interaction", () => {
 
     afterEach(() => {
         interaction.uninstall();
+        jest.clearAllMocks();
     });
 
     test("pressure does not start interaction", () => {

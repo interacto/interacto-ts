@@ -67,11 +67,11 @@ export abstract class SrcTgtDataBase<T extends PointBaseData, S extends Flushabl
     }
 
     public isHorizontal(pxTolerance: number): boolean {
-        return Math.abs(this.diffScreenY) <= pxTolerance;
+        return Math.abs(this.diffScreenY) <= pxTolerance && this.diffScreenX !== 0;
     }
 
     public isVertical(pxTolerance: number): boolean {
-        return Math.abs(this.diffScreenX) <= pxTolerance;
+        return Math.abs(this.diffScreenX) <= pxTolerance && this.diffScreenY !== 0;
     }
 
     public isLeft(pxTolerance: number): boolean {

@@ -164,6 +164,7 @@ export * from "./impl/interaction/library/MouseLeave";
 export * from "./impl/interaction/library/MouseMove";
 export * from "./impl/interaction/library/MouseUp";
 export * from "./impl/interaction/library/MultiTouch";
+export * from "./impl/interaction/library/Pans";
 export * from "./impl/interaction/library/Scroll";
 export * from "./impl/interaction/library/SpinnerChanged";
 export * from "./impl/interaction/library/Tap";
