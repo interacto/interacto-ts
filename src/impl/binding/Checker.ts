@@ -29,6 +29,8 @@ import {KeysTyped} from "../interaction/library/KeysTyped";
 import {LongMouseDown} from "../interaction/library/LongMouseDown";
 import {MouseDown} from "../interaction/library/MouseDown";
 import {MouseUp} from "../interaction/library/MouseUp";
+import {HPan, LeftPan, RightPan, VPan} from "../interaction/library/Pans";
+import {TouchDnD} from "../interaction/library/TouchDnD";
 
 export class Checker {
     private readonly linterRules: Map<RuleName, Severity>;
