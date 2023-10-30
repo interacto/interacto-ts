@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMHandler, Logger} from "../../../src/interacto";
+import type {FSMHandler, Logger, TouchDnD} from "../../../src/interacto";
 import {BottomPan} from "../../../src/interacto";
 import {TopPan} from "../../../src/interacto";
 import {LeftPan, RightPan} from "../../../src/interacto";
@@ -25,6 +25,7 @@ describe("using pan interactions", () => {
     let canvas: HTMLElement;
     let handler: FSMHandler;
     let logger: Logger & MockProxy<Logger>;
+    let interaction: TouchDnD;
 
     beforeEach(() => {
         handler = mock<FSMHandler>();
@@ -35,19 +36,14 @@ describe("using pan interactions", () => {
 
     afterEach(() => {
         jest.clearAllMocks();
+        interaction.uninstall();
     });
 
     describe("using a horizontal pan interaction", () => {
-        let interaction: HPan;
-
         beforeEach(() => {
             interaction = new HPan(logger, true, 10);
             interaction.fsm.addHandler(handler);
             interaction.registerToNodes([canvas]);
-        });
-
-        afterEach(() => {
-            interaction.uninstall();
         });
 
         test("touch move horiz ok", () => {
@@ -114,8 +110,6 @@ describe("using pan interactions", () => {
     });
 
     describe("using a vertical pan interaction", () => {
-        let interaction: VPan;
-
         beforeEach(() => {
             interaction = new VPan(logger, true, 10);
             interaction.fsm.addHandler(handler);
@@ -162,8 +156,6 @@ describe("using pan interactions", () => {
     });
 
     describe("using a left pan interaction", () => {
-        let interaction: LeftPan;
-
         beforeEach(() => {
             interaction = new LeftPan(logger, true, 10);
             interaction.fsm.addHandler(handler);
@@ -210,8 +202,6 @@ describe("using pan interactions", () => {
     });
 
     describe("using a right pan interaction", () => {
-        let interaction: RightPan;
-
         beforeEach(() => {
             interaction = new RightPan(logger, true, 10);
             interaction.fsm.addHandler(handler);
@@ -255,11 +245,18 @@ describe("using pan interactions", () => {
 
             expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         });
+
+        test("it stops", () => {
+            robot(canvas)
+                .touchstart({}, [{"identifier": 1, "screenX": 10, "screenY": 9}])
+                .touchmove({}, [{"identifier": 1, "screenX": 20, "screenY": 5}])
+                .touchend({}, [{"identifier": 1, "screenX": 20, "screenY": 5}]);
+
+            expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+        });
     });
 
     describe("using a top pan interaction", () => {
-        let interaction: TopPan;
-
         beforeEach(() => {
             interaction = new TopPan(logger, true, 10);
             interaction.fsm.addHandler(handler);
@@ -306,8 +303,6 @@ describe("using pan interactions", () => {
     });
 
     describe("using a bottom pan interaction", () => {
-        let interaction: BottomPan;
-
         beforeEach(() => {
             interaction = new BottomPan(logger, true, 10);
             interaction.fsm.addHandler(handler);
@@ -350,6 +345,170 @@ describe("using pan interactions", () => {
                 .touchmove({}, [{"identifier": 1, "screenX": 20, "screenY": 15}]);
 
             expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    describe("using a pan interaction and a minimal distance", () => {
+        test("with a HPan and minimal distance OK", () => {
+            interaction = new HPan(logger, false, 1, 100);
+            interaction.fsm.addHandler(handler);
+            interaction.registerToNodes([canvas]);
+
+            robot(canvas)
+                .touchstart({}, [{"identifier": 1, "screenX": 10, "screenY": 19}])
+                .touchmove({}, [{"identifier": 1, "screenX": 110, "screenY": 20}])
+                .touchend({}, [{"identifier": 1, "screenX": 110, "screenY": 20}]);
+
+            expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+        });
+
+        test("with a HPan and minimal distance KO", () => {
+            interaction = new HPan(logger, false, 1, 100);
+            interaction.fsm.addHandler(handler);
+            interaction.registerToNodes([canvas]);
+
+            robot(canvas)
+                .touchstart({}, [{"identifier": 1, "screenX": 10, "screenY": 19}])
+                .touchmove({}, [{"identifier": 1, "screenX": 110, "screenY": 20}])
+                .touchend({}, [{"identifier": 1, "screenX": 109, "screenY": 20}]);
+
+            expect(handler.fsmStops).not.toHaveBeenCalled();
+            expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
+        });
+
+        test("with a VPan and minimal distance OK", () => {
+            interaction = new VPan(logger, false, 1, 100);
+            interaction.fsm.addHandler(handler);
+            interaction.registerToNodes([canvas]);
+
+            robot(canvas)
+                .touchstart({}, [{"identifier": 1, "screenX": 10, "screenY": 100}])
+                .touchmove({}, [{"identifier": 1, "screenX": 10, "screenY": 200}])
+                .touchend({}, [{"identifier": 1, "screenX": 10, "screenY": 200}]);
+
+            expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+        });
+
+        test("with a VPan and minimal distance KO", () => {
+            interaction = new VPan(logger, false, 1, 100);
+            interaction.fsm.addHandler(handler);
+            interaction.registerToNodes([canvas]);
+
+            robot(canvas)
+                .touchstart({}, [{"identifier": 1, "screenX": 10, "screenY": 100}])
+                .touchmove({}, [{"identifier": 1, "screenX": 10, "screenY": 199}])
+                .touchend({}, [{"identifier": 1, "screenX": 10, "screenY": 199}]);
+
+            expect(handler.fsmStops).not.toHaveBeenCalled();
+            expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
+        });
+
+        test("with a LeftPan and minimal distance OK", () => {
+            interaction = new LeftPan(logger, false, 1, 50);
+            interaction.fsm.addHandler(handler);
+            interaction.registerToNodes([canvas]);
+
+            robot(canvas)
+                .touchstart({}, [{"identifier": 1, "screenX": 10, "screenY": 19}])
+                .touchmove({}, [{"identifier": 1, "screenX": -40, "screenY": 20}])
+                .touchend({}, [{"identifier": 1, "screenX": -40, "screenY": 20}]);
+
+            expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+        });
+
+        test("with a LeftPan and minimal distance KO", () => {
+            interaction = new LeftPan(logger, false, 1, 20);
+            interaction.fsm.addHandler(handler);
+            interaction.registerToNodes([canvas]);
+
+            robot(canvas)
+                .touchstart({}, [{"identifier": 1, "screenX": 100, "screenY": 19}])
+                .touchmove({}, [{"identifier": 1, "screenX": 81, "screenY": 20}])
+                .touchend({}, [{"identifier": 1, "screenX": 81, "screenY": 20}]);
+
+            expect(handler.fsmStops).not.toHaveBeenCalled();
+            expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
+        });
+
+        test("with a RightPan and minimal distance OK", () => {
+            interaction = new RightPan(logger, false, 1, 1);
+            interaction.fsm.addHandler(handler);
+            interaction.registerToNodes([canvas]);
+
+            robot(canvas)
+                .touchstart({}, [{"identifier": 1, "screenX": 0, "screenY": 19}])
+                .touchmove({}, [{"identifier": 1, "screenX": 2, "screenY": 20}])
+                .touchend({}, [{"identifier": 1, "screenX": 2, "screenY": 20}]);
+
+            expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+        });
+
+        test("with a RightPan and minimal distance KO", () => {
+            interaction = new RightPan(logger, false, 1, 10);
+            interaction.fsm.addHandler(handler);
+            interaction.registerToNodes([canvas]);
+
+            robot(canvas)
+                .touchstart({}, [{"identifier": 1, "screenX": 50, "screenY": 19}])
+                .touchmove({}, [{"identifier": 1, "screenX": 59, "screenY": 20}])
+                .touchend({}, [{"identifier": 1, "screenX": 59, "screenY": 20}]);
+
+            expect(handler.fsmStops).not.toHaveBeenCalled();
+            expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
+        });
+
+        test("with a TopPan and minimal distance OK", () => {
+            interaction = new TopPan(logger, false, 1, 10);
+            interaction.fsm.addHandler(handler);
+            interaction.registerToNodes([canvas]);
+
+            robot(canvas)
+                .touchstart({}, [{"identifier": 1, "screenX": 10, "screenY": 100}])
+                .touchmove({}, [{"identifier": 1, "screenX": 10, "screenY": 90}])
+                .touchend({}, [{"identifier": 1, "screenX": 10, "screenY": 90}]);
+
+            expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+        });
+
+        test("with a TopPan and minimal distance KO", () => {
+            interaction = new TopPan(logger, false, 1, 10);
+            interaction.fsm.addHandler(handler);
+            interaction.registerToNodes([canvas]);
+
+            robot(canvas)
+                .touchstart({}, [{"identifier": 1, "screenX": 10, "screenY": 100}])
+                .touchmove({}, [{"identifier": 1, "screenX": 10, "screenY": 91}])
+                .touchend({}, [{"identifier": 1, "screenX": 10, "screenY": 91}]);
+
+            expect(handler.fsmStops).not.toHaveBeenCalled();
+            expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
+        });
+
+        test("with a BottomPan and minimal distance OK", () => {
+            interaction = new BottomPan(logger, false, 1, 100);
+            interaction.fsm.addHandler(handler);
+            interaction.registerToNodes([canvas]);
+
+            robot(canvas)
+                .touchstart({}, [{"identifier": 1, "screenX": 10, "screenY": 110}])
+                .touchmove({}, [{"identifier": 1, "screenX": 10, "screenY": 210}])
+                .touchend({}, [{"identifier": 1, "screenX": 10, "screenY": 210}]);
+
+            expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+        });
+
+        test("with a BottomPan and minimal distance KO", () => {
+            interaction = new BottomPan(logger, false, 1, 100);
+            interaction.fsm.addHandler(handler);
+            interaction.registerToNodes([canvas]);
+
+            robot(canvas)
+                .touchstart({}, [{"identifier": 1, "screenX": 10, "screenY": 100}])
+                .touchmove({}, [{"identifier": 1, "screenX": 10, "screenY": 199}])
+                .touchend({}, [{"identifier": 1, "screenX": 10, "screenY": 199}]);
+
+            expect(handler.fsmStops).not.toHaveBeenCalled();
+            expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
         });
     });
 });

@@ -23,22 +23,41 @@ let c1: HTMLElement;
 let ctx: BindingsContext;
 let bindings: Bindings<UndoHistoryBase>;
 
-describe("using a pan binder", () => {
+describe("using pan binders", () => {
     beforeEach(() => {
         bindings = new BindingsImpl(new UndoHistoryImpl());
         ctx = new BindingsContext();
         bindings.setBindingObserver(ctx);
-        jest.useFakeTimers();
         c1 = document.createElement("canvas");
     });
 
     afterEach(() => {
         bindings.clear();
-        jest.clearAllTimers();
     });
 
-    test("pan horizontal right", () => {
-        binding = bindings.panBinder(true, 50, 1, 5)
+    test("horizontal pan", () => {
+        binding = bindings.panHorizontalBinder(5, false, 50)
+            .toProduce(() => new StubCmd(true))
+            .on(c1)
+            .bind();
+
+        robot(c1)
+            .keepData()
+            .touchstart({}, [{"screenX": 3, "screenY": 20, "clientX": 150, "clientY": 200, "identifier": 3, "target": c1}])
+            .touchmove({}, [{"screenX": -100, "screenY": 21, "clientX": -1000, "clientY": 201}])
+            .touchmove({}, [{"screenX": 16, "screenY": 21, "clientX": 160, "clientY": 201}])
+            .touchmove({}, [{"screenX": 20, "screenY": 25, "clientX": 200, "clientY": 205}])
+            .touchend({}, [{"screenX": 65, "screenY": 25, "clientX": 200, "clientY": 205}]);
+
+        expect(binding).toBeDefined();
+        expect(binding.timesCancelled).toBe(0);
+        expect(binding.timesEnded).toBe(1);
+        expect(ctx.commands).toHaveLength(1);
+        expect(ctx.getCmd(0)).toBeInstanceOf(StubCmd);
+    });
+
+    test("right pan", () => {
+        binding = bindings.panRightBinder(5, false, 50)
             .toProduce(() => new StubCmd(true))
             .on(c1)
             .bind();
@@ -57,8 +76,8 @@ describe("using a pan binder", () => {
         expect(ctx.getCmd(0)).toBeInstanceOf(StubCmd);
     });
 
-    test("pan horizontal left", () => {
-        binding = bindings.panBinder(true, 50, 1, 5)
+    test("left pan", () => {
+        binding = bindings.panLeftBinder(5, false, 50)
             .toProduce(() => new StubCmd(true))
             .on(c1)
             .bind();
@@ -77,8 +96,8 @@ describe("using a pan binder", () => {
         expect(ctx.getCmd(0)).toBeInstanceOf(StubCmd);
     });
 
-    test("pan vertical up", () => {
-        binding = bindings.panBinder(false, 10, 1, 0)
+    test("vertical pan", () => {
+        binding = bindings.panVerticalBinder(5, false, 10)
             .toProduce(() => new StubCmd(true))
             .on(c1)
             .bind();
@@ -97,8 +116,8 @@ describe("using a pan binder", () => {
         expect(ctx.getCmd(0)).toBeInstanceOf(StubCmd);
     });
 
-    test("pan vertical down", () => {
-        binding = bindings.panBinder(false, 100, 1, 1)
+    test("bottom pan", () => {
+        binding = bindings.panBottomBinder(5, false, 100)
             .toProduce(() => new StubCmd(true))
             .on(c1)
             .bind();
@@ -109,6 +128,47 @@ describe("using a pan binder", () => {
             .touchmove({}, [{"screenX": 10, "screenY": 250, "clientX": 110, "clientY": 2330}])
             .touchmove({}, [{"screenX": 11, "screenY": 300, "clientX": 111, "clientY": 2400}])
             .touchend({}, [{"screenX": 11, "screenY": 300, "clientX": 111, "clientY": 2400}]);
+
+        expect(binding).toBeDefined();
+        expect(binding.timesCancelled).toBe(0);
+        expect(binding.timesEnded).toBe(1);
+        expect(ctx.commands).toHaveLength(1);
+        expect(ctx.getCmd(0)).toBeInstanceOf(StubCmd);
+    });
+
+    test("top pan", () => {
+        binding = bindings.panTopBinder(5, false, 100)
+            .toProduce(() => new StubCmd(true))
+            .on(c1)
+            .bind();
+
+        robot(c1)
+            .keepData()
+            .touchstart({}, [{"screenX": 10, "screenY": 200, "clientX": 110, "clientY": 200, "identifier": 1}])
+            .touchmove({}, [{"screenX": 10, "screenY": 150, "clientX": 110, "clientY": 150}])
+            .touchmove({}, [{"screenX": 11, "screenY": 100, "clientX": 111, "clientY": 100}])
+            .touchend({}, [{"screenX": 11, "screenY": 100, "clientX": 111, "clientY": 100}]);
+
+        expect(binding).toBeDefined();
+        expect(binding.timesCancelled).toBe(0);
+        expect(binding.timesEnded).toBe(1);
+        expect(ctx.commands).toHaveLength(1);
+        expect(ctx.getCmd(0)).toBeInstanceOf(StubCmd);
+    });
+
+    test("pan", () => {
+        binding = bindings.panBinder(false)
+            .toProduce(() => new StubCmd(true))
+            .on(c1)
+            .bind();
+
+        robot(c1)
+            .keepData()
+            .touchstart({}, [{"screenX": 3, "screenY": 20, "clientX": 150, "clientY": 200, "identifier": 3, "target": c1}])
+            .touchmove({}, [{"screenX": 10, "screenY": 150, "clientX": 110, "clientY": 150}])
+            .touchmove({}, [{"screenX": 10, "screenY": 250, "clientX": 110, "clientY": 2330}])
+            .touchmove({}, [{"screenX": 16, "screenY": 21, "clientX": 160, "clientY": 201}])
+            .touchend({}, [{"screenX": 16, "screenY": 21, "clientX": 160, "clientY": 201}]);
 
         expect(binding).toBeDefined();
         expect(binding.timesCancelled).toBe(0);

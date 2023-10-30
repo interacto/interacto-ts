@@ -159,14 +159,65 @@ export abstract class Bindings<H extends UndoHistoryBase> {
         pxTolerance: number, accInit?: A): PartialMultiTouchTypedBinder<A>;
 
     /**
-     * Creates a binding that uses the pan interaction.
-     * @param horizontal - Defines whether the pan is horizontal or vertical
-     * @param minLength - The minimal distance from the starting point to the release point for validating the pan
-     * @param nbTouches - The number of touches required to start the interaction
-     * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
+     * Creates a binding that uses the pan interaction (in all direction, one touch).
+     * The involved user interaction is TouchDnD.
+     * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
      */
-    public abstract panBinder<A>(horizontal: boolean, minLength: number, nbTouches: number, pxTolerance: number, accInit?: A):
-    PartialMultiTouchTypedBinder<A>;
+    public abstract panBinder<A>(cancellable: boolean, accInit?: A): PartialTouchSrcTgtTypedBinder<A>;
+
+    /**
+     * Creates a binding that uses a vertical pan interaction (one-touch).
+     * @param minLength - The minimal distance from the starting point to the release point for validating the pan
+     * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
+     * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
+     */
+    public abstract panVerticalBinder<A>(pxTolerance: number, cancellable: boolean, minLength?: number, accInit?: A):
+    PartialTouchSrcTgtTypedBinder<A>;
+
+    /**
+     * Creates a binding that uses a vertical pan interaction (one-touch).
+     * @param minLength - The minimal distance from the starting point to the release point for validating the pan
+     * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
+     * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
+     */
+    public abstract panHorizontalBinder<A>(pxTolerance: number, cancellable: boolean, minLength?: number, accInit?: A):
+    PartialTouchSrcTgtTypedBinder<A>;
+
+    /**
+     * Creates a binding that uses a left pan interaction (one-touch).
+     * @param minLength - The minimal distance from the starting point to the release point for validating the pan
+     * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
+     * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
+     */
+    public abstract panLeftBinder<A>(pxTolerance: number, cancellable: boolean, minLength?: number, accInit?: A):
+    PartialTouchSrcTgtTypedBinder<A>;
+
+    /**
+     * Creates a binding that uses a right pan interaction (one-touch).
+     * @param minLength - The minimal distance from the starting point to the release point for validating the pan
+     * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
+     * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
+     */
+    public abstract panRightBinder<A>(pxTolerance: number, cancellable: boolean, minLength?: number, accInit?: A):
+    PartialTouchSrcTgtTypedBinder<A>;
+
+    /**
+     * Creates a binding that uses a top pan interaction (one-touch).
+     * @param minLength - The minimal distance from the starting point to the release point for validating the pan
+     * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
+     * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
+     */
+    public abstract panTopBinder<A>(pxTolerance: number, cancellable: boolean, minLength?: number, accInit?: A):
+    PartialTouchSrcTgtTypedBinder<A>;
+
+    /**
+     * Creates a binding that uses a bottom pan interaction (one-touch).
+     * @param minLength - The minimal distance from the starting point to the release point for validating the pan
+     * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
+     * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
+     */
+    public abstract panBottomBinder<A>(pxTolerance: number, cancellable: boolean, minLength?: number, accInit?: A):
+    PartialTouchSrcTgtTypedBinder<A>;
 
     /**
      * Creates a binding that uses the pinch interaction.

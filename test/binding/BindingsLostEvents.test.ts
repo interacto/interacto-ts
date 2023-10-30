@@ -172,7 +172,7 @@ describe("events lost by the browser do not block bindings", () => {
         });
 
         test("the pan binding not blocked", async () => {
-            const b2 = bindings.panBinder(false, 10, 1, 0)
+            const b2 = bindings.panBinder(false)
                 .toProduce(() => new StubCmd(true))
                 .on(elt)
                 .bind();
