@@ -15,7 +15,6 @@
 import {InteractionBase} from "../InteractionBase";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import {TerminalState} from "../../fsm/TerminalState";
 import {getTouch} from "../../fsm/Events";
 import {SrcTgtTouchDataImpl} from "../SrcTgtTouchDataImpl";
 import type {SrcTgtPointsData} from "../../../api/interaction/SrcTgtPointsData";
@@ -71,8 +70,6 @@ export class TouchDnDFSM extends FSMImpl<TouchDnDFSMHandler> {
 
     // eslint-disable-next-line max-lines-per-function
     protected buildFSM(): void {
-        new TerminalState(this, "released");
-
         const released = this.addTerminalState("released");
 
         const touchDown = (event: TouchEvent): void => {
