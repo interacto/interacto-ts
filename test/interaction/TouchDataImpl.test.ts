@@ -95,7 +95,7 @@ describe("using a touch data", () => {
         defaultData = new TouchDataImpl();
         defaultData.copy({
             "force": 0,
-            "identifier": 0,
+            "identifier": -1,
             "radiusX": 0,
             "radiusY": 0,
             "rotationAngle": 0,

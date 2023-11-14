@@ -24,7 +24,7 @@ export class TouchDataImpl extends PointingDataBase implements TouchData {
 
     private forceData = 0;
 
-    private identifierData = 0;
+    private identifierData = -1;
 
     private radiusXData = 0;
 
@@ -73,7 +73,7 @@ export class TouchDataImpl extends PointingDataBase implements TouchData {
     public override flush(): void {
         super.flush();
         this.forceData = 0;
-        this.identifierData = 0;
+        this.identifierData = -1;
         this.radiusXData = 0;
         this.radiusYData = 0;
         this.rotationAngleData = 0;
