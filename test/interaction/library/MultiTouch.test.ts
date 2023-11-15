@@ -35,6 +35,7 @@ describe("using a multi touch interaction", () => {
     });
 
     afterEach(() => {
+        jest.clearAllMocks();
         interaction.uninstall();
     });
 

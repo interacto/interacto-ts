@@ -12,10 +12,11 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import type {MultiTouchData} from "./MultiTouchData";
 import type {SrcTgtPointsData} from "./SrcTgtPointsData";
 import type {TouchData} from "./TouchData";
 
-export interface TwoTouchData {
+export interface TwoTouchData extends MultiTouchData {
     /**
      * The first touch
      */
@@ -61,4 +62,12 @@ export interface TwoTouchData {
      * @param pxTolerance - The pixel tolerance for considering the line vertical.
      */
     isBottom(pxTolerance: number): boolean;
+
+    /**
+     * Returns the distance between the end position of the touches divided the distance between the starting position of the touches.
+     * If more or less than two touches are involved, or if the touches do not get closer during the interaction or follow the same line,
+     * the method returns undefined.
+     * @param pxTolerance - The pixel tolerance for considering that the two touches are moving on the same line.
+     */
+    pinchFactor(pxTolerance: number): number | undefined;
 }

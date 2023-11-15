@@ -24,7 +24,7 @@ import type {Logger} from "../../../api/logging/Logger";
 /**
  * The FSM that defines a multi-touch interaction (that works like a DnD)
  */
-class MultiTouchFSM extends ConcurrentAndFSM<TouchDnDFSM, TouchDnDFSMHandler> {
+export class MultiTouchFSM extends ConcurrentAndFSM<TouchDnDFSM, TouchDnDFSMHandler> {
     /**
      * Creates the FSM.
      */
@@ -94,9 +94,9 @@ export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouch
     public constructor(nbTouches: number, strict: boolean, logger: Logger) {
         const handler: TouchDnDFSMHandler = {
             "onTouch": (event: TouchEvent): void => {
+                const all = Array.from(event.touches);
                 for (const t of Array.from(event.changedTouches)) {
                     const data = new SrcTgtTouchDataImpl();
-                    const all = Array.from(event.touches);
                     data.copySrc(t, event, all);
                     data.copyTgt(t, event, all);
                     this._data.addTouchData(data);

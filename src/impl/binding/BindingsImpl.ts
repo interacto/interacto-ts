@@ -70,7 +70,10 @@ import type {
     PartialTouchSrcTgtTypedBinder,
     PartialUpdatePointTypedBinder,
     PartialWheelTypedBinder,
-    PartialPointOrTouchTypedBinder
+    PartialPointOrTouchTypedBinder,
+    PartialTwoTouchTypedBinder,
+    PartialThreeTouchTypedBinder,
+    PartialFourTouchTypedBinder
 } from "../../api/binding/Bindings";
 import {Bindings} from "../../api/binding/Bindings";
 import type {Logger} from "../../api/logging/Logger";
@@ -84,7 +87,8 @@ import {TouchStart} from "../interaction/library/TouchStart";
 import {Or} from "../interaction/Or";
 import type {VisitorBinding} from "../../api/binding/VisitorBinding";
 import type {LinterRule} from "../../api/binding/Linting";
-import {BottomPan, HPan, LeftPan, RightPan, TopPan, VPan} from "../../interacto";
+import {TwoTouchDnD, ThreeTouchDnD, FourTouchDnD} from "../interaction/library/XTouch";
+import {BottomPan, HPan, LeftPan, RightPan, TopPan, VPan} from "../interaction/library/Pans";
 
 export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
     protected observer: BindingsObserver | undefined;
@@ -192,6 +196,21 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
     public multiTouchBinder<A>(nbTouches: number, accInit?: A): PartialMultiTouchTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<MultiTouch, A>(() => new MultiTouch(nbTouches, false, this.logger));
+    }
+
+    public twoTouchBinder<A>(accInit?: A): PartialTwoTouchTypedBinder<A> {
+        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+            .usingInteraction<TwoTouchDnD, A>(() => new TwoTouchDnD(this.logger));
+    }
+
+    public threeTouchBinder<A>(accInit?: A): PartialThreeTouchTypedBinder<A> {
+        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+            .usingInteraction<ThreeTouchDnD, A>(() => new ThreeTouchDnD(this.logger));
+    }
+
+    public fourTouchBinder<A>(accInit?: A): PartialFourTouchTypedBinder<A> {
+        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+            .usingInteraction<FourTouchDnD, A>(() => new FourTouchDnD(this.logger));
     }
 
     /**
@@ -321,9 +340,9 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
      * @param pxTolerance - The tolerance rate in pixels accepted while executing the pinch
      * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
      */
-    public pinchBinder<A>(pxTolerance: number, accInit?: A): PartialMultiTouchTypedBinder<A> {
+    public pinchBinder<A>(pxTolerance: number, accInit?: A): PartialTwoTouchTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
-            .usingInteraction<MultiTouch, A>(() => new MultiTouch(2, false, this.logger))
+            .usingInteraction<TwoTouchDnD, A>(() => new TwoTouchDnD(this.logger))
             .when(i => i.pinchFactor(pxTolerance) !== undefined);
     }
 

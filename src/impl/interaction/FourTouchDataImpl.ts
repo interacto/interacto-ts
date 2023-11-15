@@ -12,11 +12,10 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {EventModifierData} from "../../api/interaction/EventModifierData";
 import type {FourTouchData} from "../../api/interaction/FourTouchData";
 import type {SrcTgtPointsData} from "../../api/interaction/SrcTgtPointsData";
 import type {TouchData} from "../../api/interaction/TouchData";
-import type {UnitInteractionData} from "../../api/interaction/UnitInteractionData";
+import type {EventModifierData, UnitInteractionData} from "../../interacto";
 import {SrcTgtTouchDataImpl} from "./SrcTgtTouchDataImpl";
 import {ThreeTouchDataImpl} from "./ThreeTouchDataImpl";
 
@@ -32,17 +31,27 @@ export class FourTouchDataImpl extends ThreeTouchDataImpl implements FourTouchDa
         return this.t4;
     }
 
+    public override initTouch(data: Touch, evt: EventModifierData & UnitInteractionData, allTouches: Array<Touch>): void {
+        // If only t4 is not initialised
+        if (this.t4.src.identifier === -1 && this.t3.src.identifier !== -1) {
+            this.t4.copySrc(data, evt, allTouches);
+            this.t4.copyTgt(data, evt, allTouches);
+        } else {
+            super.initTouch(data, evt, allTouches);
+        }
+    }
+
+    public override copyTouch(data: Touch, evt: EventModifierData & UnitInteractionData, allTouches: Array<Touch>): void {
+        if (this.t4.src.identifier === data.identifier) {
+            this.t4.copyTgt(data, evt, allTouches);
+        } else {
+            super.copyTouch(data, evt, allTouches);
+        }
+    }
+
     public override flush(): void {
         super.flush();
         this.t4.flush();
-    }
-
-    public copySrcTouch4(data: Touch, evt: EventModifierData & UnitInteractionData, allTouches: Array<Touch>): void {
-        this.t4.copySrc(data, evt, allTouches);
-    }
-
-    public copyTgtTouch4(data: Touch, evt: EventModifierData & UnitInteractionData, allTouches: Array<Touch>): void {
-        this.t4.copyTgt(data, evt, allTouches);
     }
 
     public override isLeft(pxTolerance: number): boolean {

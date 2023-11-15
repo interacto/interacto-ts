@@ -21,7 +21,7 @@ import {SrcTgtTouchDataImpl} from "./SrcTgtTouchDataImpl";
 import {TwoTouchDataImpl} from "./TwoTouchDataImpl";
 
 export class ThreeTouchDataImpl extends TwoTouchDataImpl implements ThreeTouchData {
-    private readonly t3: SrcTgtTouchDataImpl;
+    protected readonly t3: SrcTgtTouchDataImpl;
 
     public constructor() {
         super();
@@ -37,12 +37,22 @@ export class ThreeTouchDataImpl extends TwoTouchDataImpl implements ThreeTouchDa
         this.t3.flush();
     }
 
-    public copySrcTouch3(data: Touch, evt: EventModifierData & UnitInteractionData, allTouches: Array<Touch>): void {
-        this.t3.copySrc(data, evt, allTouches);
+    public override initTouch(data: Touch, evt: EventModifierData & UnitInteractionData, allTouches: Array<Touch>): void {
+        // If only t3 is not initialised
+        if (this.t3.src.identifier === -1 && this.t2.src.identifier !== -1) {
+            this.t3.copySrc(data, evt, allTouches);
+            this.t3.copyTgt(data, evt, allTouches);
+        } else {
+            super.initTouch(data, evt, allTouches);
+        }
     }
 
-    public copyTgtTouch3(data: Touch, evt: EventModifierData & UnitInteractionData, allTouches: Array<Touch>): void {
-        this.t3.copyTgt(data, evt, allTouches);
+    public override copyTouch(data: Touch, evt: EventModifierData & UnitInteractionData, allTouches: Array<Touch>): void {
+        if (this.t3.src.identifier === data.identifier) {
+            this.t3.copyTgt(data, evt, allTouches);
+        } else {
+            super.copyTouch(data, evt, allTouches);
+        }
     }
 
     public override isLeft(pxTolerance: number): boolean {

@@ -37,6 +37,9 @@ import type {UndoHistoryBase} from "../undo/UndoHistoryBase";
 import type {MousePointsData} from "../interaction/MousePointsData";
 import type {TapsData} from "../interaction/TapsData";
 import type {VisitorBinding} from "./VisitorBinding";
+import type {TwoTouchData} from "../interaction/TwoTouchData";
+import type {ThreeTouchData} from "../interaction/ThreeTouchData";
+import type {FourTouchData} from "../interaction/FourTouchData";
 
 export type PartialButtonTypedBinder<A = unknown> = InteractionBinder<Interaction<WidgetData<HTMLButtonElement>>, A>;
 export type PartialInputTypedBinder<A = unknown> = InteractionBinder<Interaction<WidgetData<HTMLInputElement>>, A>;
@@ -44,6 +47,9 @@ export type PartialSelectTypedBinder<A = unknown> = InteractionBinder<Interactio
 export type PartialSpinnerTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<WidgetData<HTMLInputElement>>, A>;
 export type PartialAnchorTypedBinder<A = unknown> = InteractionBinder<Interaction<WidgetData<HTMLAnchorElement>>, A>;
 export type PartialTextInputTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<WidgetData<HTMLInputElement | HTMLTextAreaElement>>, A>;
+export type PartialTwoTouchTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<TwoTouchData>, A>;
+export type PartialThreeTouchTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<ThreeTouchData>, A>;
+export type PartialFourTouchTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<FourTouchData>, A>;
 export type PartialTouchSrcTgtTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<SrcTgtPointsData<TouchData>>, A>;
 export type PartialMultiTouchTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<MultiTouchData>, A>;
 export type PartialTapsTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<TapsData>, A>;
@@ -126,6 +132,21 @@ export abstract class Bindings<H extends UndoHistoryBase> {
      * A multi-touch ends when the number of required touches is greater than the number of touches.
      */
     public abstract multiTouchBinder<A>(nbTouches: number, accInit?: A): PartialMultiTouchTypedBinder<A>;
+
+    /**
+     * Creates a binding that uses two (DnD) touches.
+     */
+    public abstract twoTouchBinder<A>(accInit?: A): PartialTwoTouchTypedBinder<A>;
+
+    /**
+     * Creates a binding that uses three (DnD) touches.
+     */
+    public abstract threeTouchBinder<A>(accInit?: A): PartialThreeTouchTypedBinder<A>;
+
+    /**
+     * Creates a binding that uses four (DnD) touches.
+     */
+    public abstract fourTouchBinder<A>(accInit?: A): PartialFourTouchTypedBinder<A>;
 
     /**
      * Creates a binding that uses the tap user interaction.

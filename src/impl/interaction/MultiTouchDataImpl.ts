@@ -22,7 +22,7 @@ import type {TouchData} from "../../api/interaction/TouchData";
  * Multi-touch interaction data implementation
  */
 export class MultiTouchDataImpl implements MultiTouchData, Flushable {
-    private readonly touchesData: Map<number, SrcTgtTouchDataImpl>;
+    protected readonly touchesData: Map<number, SrcTgtTouchDataImpl>;
 
     /**
      * Creates the interaction data
@@ -110,70 +110,5 @@ export class MultiTouchDataImpl implements MultiTouchData, Flushable {
             }
         }
         return true;
-    }
-
-    /**
-     * Returns the distance between the end position of the touches divided the distance between the starting position of the touches.
-     * If more or less than two touches are involved, or if the touches do not get closer during the interaction or follow the same line,
-     * the method returns undefined.
-     * @param pxTolerance - The pixel tolerance for considering that the two touches are moving on the same line.
-     */
-    public pinchFactor(pxTolerance: number): number | undefined {
-        // 1. Check that there are 2 touches
-        const t0 = this.touches[0];
-        const t1 = this.touches[1];
-        if (t0 === undefined || t1 === undefined) {
-            return undefined;
-        }
-
-        const tgt1: [number, number] = [t0.tgt.screenX, t0.tgt.screenY];
-        const tgt2: [number, number] = [t1.tgt.screenX, t1.tgt.screenY];
-
-        const src1: [number, number] = [t0.src.screenX, t0.src.screenY];
-        const src2: [number, number] = [t1.src.screenX, t1.src.screenY];
-
-        const vector1: [number, number] = [t0.diffScreenX, t0.diffScreenY];
-        const vector2: [number, number] = [t1.diffScreenX, t1.diffScreenY];
-
-        // 2. Define the line between the 2 sources
-        const lineVector: [number, number] = [tgt2[0] - tgt1[0], tgt2[1] - tgt1[1]];
-
-        // 3. For each touch, define the projection of the target on the line
-        const projection1 = MultiTouchDataImpl.project(vector1, lineVector);
-        const projectionVector1: [number, number] = [projection1 * lineVector[0], projection1 * lineVector[1]];
-
-        const projection2 = MultiTouchDataImpl.project(vector2, lineVector);
-        const projectionVector2: [number, number] = [projection2 * lineVector[0], projection2 * lineVector[1]];
-
-        // 4. Check that  the projections have opposite signs
-        if (projection1 / Math.abs(projection1) === projection2 / Math.abs(projection2)) {
-            return undefined;
-        }
-
-        // 5. Calculate the distances between the targets and the projected points and check they are < pxTolerance
-        const distance1 = MultiTouchDataImpl.distance(projectionVector1, vector1);
-        const distance2 = MultiTouchDataImpl.distance(projectionVector2, vector2);
-
-        if (distance1 > pxTolerance || distance2 > pxTolerance) {
-            return undefined;
-        }
-
-        // 6. Calculate the ratio between the distance between the end position of the touches
-        // and the distance between the starting position of the touches
-        return MultiTouchDataImpl.distance(tgt1, tgt2) / MultiTouchDataImpl.distance(src1, src2);
-    }
-
-    /**
-     * Returns the value of the projection of vector1 on vector2
-     */
-    public static project(vector1: [number, number], vector2: [number, number]): number {
-        return (vector1[0] * vector2[0] + vector1[1] * vector2[1]) / (vector2[0] ** 2 + vector2[1] ** 2);
-    }
-
-    /**
-     * Returns the distance between point1 and point2
-     */
-    public static distance(point1: [number, number], point2: [number, number]): number {
-        return Math.hypot((point2[0] - point1[0]), (point2[1] - point1[1]));
     }
 }
