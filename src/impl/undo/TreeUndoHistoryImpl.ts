@@ -288,8 +288,7 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
     }
 
     private getPositionNode(node: UndoableTreeNode, positions: Map<number, number>, counter: number): number {
-        const child0 = node.children[0];
-        const child1 = node.children[1];
+        const [child0, child1] = node.children;
 
         // length === 0
         if (child0 === undefined) {

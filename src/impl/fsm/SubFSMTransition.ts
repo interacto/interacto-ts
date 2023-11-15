@@ -90,6 +90,7 @@ export class SubFSMTransition extends TransitionBase<Event> {
         this.src.fsm.currentSubFSM = this.subFSM;
         this.subStateSubscription = this.subFSM.currentStateObservable
             .subscribe(value => {
+                // eslint-disable-next-line @typescript-eslint/prefer-destructuring
                 this.src.fsm.currentState = value[1];
             });
     }
