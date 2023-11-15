@@ -140,16 +140,4 @@ export class ConcurrentAndFSM<F extends FSM, T extends FSMDataHandler> extends F
         }
         super.fullReinit();
     }
-
-    public override reinit(): void {
-        if (this.totalReinit) {
-            for (const f of this.conccurFSMs) {
-                f.reinit();
-            }
-            for (const f of this.secondaryFSMs) {
-                f.reinit();
-            }
-        }
-        super.reinit();
-    }
 }
