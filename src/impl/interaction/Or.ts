@@ -40,7 +40,7 @@ export class Or<
         };
         super(new ConcurrentXOrFSM([i1.fsm, i2.fsm], logger, handler), {
             "flush": () => {}
-        } as D1Impl | D2Impl, logger);
+        } as D1Impl | D2Impl, logger, `${i1.name}-${i2.name}`);
         this.i1 = i1;
         this.i2 = i2;
     }

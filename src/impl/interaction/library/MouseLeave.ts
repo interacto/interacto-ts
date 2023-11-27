@@ -58,7 +58,7 @@ export class MouseLeave extends InteractionBase<PointData, PointDataImpl, MouseL
     /**
      * Creates the interaction.
      */
-    public constructor(withBubbling: boolean, logger: Logger) {
+    public constructor(withBubbling: boolean, logger: Logger, name?: string) {
         const handler: MouseLeaveFSMHandler = {
             "onExit": (evt: MouseEvent): void => {
                 this._data.copy(evt);
@@ -68,6 +68,6 @@ export class MouseLeave extends InteractionBase<PointData, PointDataImpl, MouseL
             }
         };
 
-        super(new MouseLeaveFSM(withBubbling, logger, handler), new PointDataImpl(), logger);
+        super(new MouseLeaveFSM(withBubbling, logger, handler), new PointDataImpl(), logger, name ?? MouseLeave.name);
     }
 }

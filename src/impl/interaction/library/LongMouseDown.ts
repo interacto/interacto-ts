@@ -77,7 +77,7 @@ export class LongMouseDown extends InteractionBase<PointData, PointDataImpl, Lon
      * @param duration - The duration of the pressure required to end the user interaction (in ms)
      * If this duration is not reached, the interaction is cancelled.
      */
-    public constructor(duration: number, logger: Logger) {
+    public constructor(duration: number, logger: Logger, name?: string) {
         const handler: LongMouseDownFSMHandler = {
             "press": (evt: MouseEvent): void => {
                 this._data.copy(evt);
@@ -87,6 +87,6 @@ export class LongMouseDown extends InteractionBase<PointData, PointDataImpl, Lon
             }
         };
 
-        super(new LongMouseDownFSM(duration, logger, handler), new PointDataImpl(), logger);
+        super(new LongMouseDownFSM(duration, logger, handler), new PointDataImpl(), logger, name ?? LongMouseDown.name);
     }
 }

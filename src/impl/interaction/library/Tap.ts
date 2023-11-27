@@ -113,7 +113,7 @@ export class Tap extends InteractionBase<PointsData<TouchData>, PointsDataImpl<T
      * @param numberTaps - The number of taps expected to end the interaction.
      * If this number is not reached after a timeout, the interaction is cancelled.
      */
-    public constructor(numberTaps: number, logger: Logger) {
+    public constructor(numberTaps: number, logger: Logger, name?: string) {
         const handler: TapFSMHandler = {
             "tap": (evt: TouchEvent): void => {
                 if (evt.changedTouches.length > 0) {
@@ -128,6 +128,6 @@ export class Tap extends InteractionBase<PointsData<TouchData>, PointsDataImpl<T
             }
         };
 
-        super(new TapFSM(numberTaps, logger, handler), new TapDataImpl(), logger);
+        super(new TapFSM(numberTaps, logger, handler), new TapDataImpl(), logger, name ?? Tap.name);
     }
 }

@@ -115,8 +115,8 @@ export class DoubleClickFSM extends FSMImpl<FSMDataHandler> {
 }
 
 export class DoubleClick extends InteractionBase<PointData, PointDataImpl, DoubleClickFSM> {
-    public constructor(logger: Logger, fsm?: DoubleClickFSM, data?: PointDataImpl) {
-        super(fsm ?? new DoubleClickFSM(logger), data ?? new PointDataImpl(), logger);
+    public constructor(logger: Logger, fsm?: DoubleClickFSM, data?: PointDataImpl, name?: string) {
+        super(fsm ?? new DoubleClickFSM(logger), data ?? new PointDataImpl(), logger, name ?? DoubleClick.name);
 
         this.fsm.dataHandler = {
             "reinitData": (): void => {

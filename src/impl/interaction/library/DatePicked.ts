@@ -43,7 +43,7 @@ export class DatePicked extends InteractionBase<WidgetData<HTMLInputElement>, Wi
     /**
      * Creates the interaction.
      */
-    public constructor(logger: Logger) {
+    public constructor(logger: Logger, name?: string) {
         const handler: DatePickedHandler = {
             "initToPickedHandler": (event: Event): void => {
                 this._data.copy(event);
@@ -53,7 +53,7 @@ export class DatePicked extends InteractionBase<WidgetData<HTMLInputElement>, Wi
             }
         };
 
-        super(new DatePickedFSM(logger, handler), new WidgetDataImpl<HTMLInputElement>(), logger);
+        super(new DatePickedFSM(logger, handler), new WidgetDataImpl<HTMLInputElement>(), logger, name ?? DatePicked.name);
     }
 
     public override onNewNodeRegistered(node: EventTarget): void {

@@ -83,7 +83,7 @@ export class Clicks extends InteractionBase<MousePointsDataImpl, MousePointsData
      * @param numberClicks - The number of clicks expected to end the interaction.
      * If this number is not reached after a timeout, the interaction is cancelled.
      */
-    public constructor(numberClicks: number, logger: Logger) {
+    public constructor(numberClicks: number, logger: Logger, name?: string) {
         const handler: ClicksFSMHandler = {
             "click": (evt: MouseEvent): void => {
                 const pt = new PointDataImpl();
@@ -95,6 +95,6 @@ export class Clicks extends InteractionBase<MousePointsDataImpl, MousePointsData
             }
         };
 
-        super(new ClicksFSM(numberClicks, logger, handler), new MousePointsDataImpl(), logger);
+        super(new ClicksFSM(numberClicks, logger, handler), new MousePointsDataImpl(), logger, name ?? Clicks.name);
     }
 }

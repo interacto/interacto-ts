@@ -48,6 +48,11 @@ export interface Interaction<D extends InteractionData> {
     data: D;
 
     /**
+     * The real name of the interaction.
+     */
+    readonly name: string;
+
+    /**
      * The registered nodes.
      */
     readonly registeredNodes: ReadonlySet<unknown>;

@@ -49,6 +49,8 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
 
     protected readonly _fsm: F;
 
+    protected readonly _name: string;
+
     protected _log: boolean;
 
     /** The current list of mutation observers. Used for listening changes in node lists. */
@@ -92,8 +94,10 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
      * @param fsm - The FSM that defines the behavior of the user interaction.
      * @param data - The interaction data.
      * @param logger - The logger to use for this interaction
+     * @param name - The real name of the interaction
      */
-    protected constructor(fsm: F, data: DImpl, logger: Logger) {
+    protected constructor(fsm: F, data: DImpl, logger: Logger, name: string) {
+        this._name = name;
         this.logger = logger;
         this.activated = false;
         this.stopImmediatePropag = false;
@@ -117,6 +121,10 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
 
     public get data(): D {
         return this._data;
+    }
+
+    public get name(): string {
+        return this._name;
     }
 
     public setThrottleTimeout(timeout: number): void {

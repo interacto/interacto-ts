@@ -56,7 +56,7 @@ interface KeyDownFSMHandler extends FSMDataHandler {
  */
 export class KeyDown extends InteractionBase<KeyData, KeyDataImpl, KeyDownFSM> {
 
-    public constructor(logger: Logger, modifierAccepted: boolean, fsm?: KeyDownFSM) {
+    public constructor(logger: Logger, modifierAccepted: boolean, fsm?: KeyDownFSM, name?: string) {
         const handler: KeyDownFSMHandler = {
             "onKeyPressed": (event: KeyboardEvent): void => {
                 this._data.copy(event);
@@ -66,6 +66,6 @@ export class KeyDown extends InteractionBase<KeyData, KeyDataImpl, KeyDownFSM> {
             }
         };
 
-        super(fsm ?? new KeyDownFSM(modifierAccepted, logger, handler), new KeyDataImpl(), logger);
+        super(fsm ?? new KeyDownFSM(modifierAccepted, logger, handler), new KeyDataImpl(), logger, name ?? KeyDown.name);
     }
 }

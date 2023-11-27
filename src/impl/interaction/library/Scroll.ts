@@ -45,7 +45,7 @@ export class Scroll extends InteractionBase<ScrollData, ScrollDataImpl, ScrollFS
     /**
      * Creates the interaction.
      */
-    public constructor(logger: Logger) {
+    public constructor(logger: Logger, name?: string) {
         const handler: ScrollFSMHandler = {
             "initToScroll": (event: Event): void => {
                 this._data.setScrollData(event);
@@ -55,6 +55,6 @@ export class Scroll extends InteractionBase<ScrollData, ScrollDataImpl, ScrollFS
             }
         };
 
-        super(new ScrollFSM(logger, handler), new ScrollDataImpl(), logger);
+        super(new ScrollFSM(logger, handler), new ScrollDataImpl(), logger, name ?? Scroll.name);
     }
 }

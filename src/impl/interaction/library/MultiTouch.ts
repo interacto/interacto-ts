@@ -91,7 +91,7 @@ export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouch
      * @param nbTouches - The number of touches.
      * @param strict - Defines whether too many touches than expected cancelled the ongoing interaction
      */
-    public constructor(nbTouches: number, strict: boolean, logger: Logger) {
+    public constructor(nbTouches: number, strict: boolean, logger: Logger, name?: string) {
         const handler: TouchDnDFSMHandler = {
             "onTouch": (event: TouchEvent): void => {
                 const all = Array.from(event.touches);
@@ -129,6 +129,6 @@ export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouch
             }
         };
 
-        super(new MultiTouchFSM(nbTouches, strict, logger, handler), new MultiTouchDataImpl(), logger);
+        super(new MultiTouchFSM(nbTouches, strict, logger, handler), new MultiTouchDataImpl(), logger, name ?? MultiTouch.name);
     }
 }

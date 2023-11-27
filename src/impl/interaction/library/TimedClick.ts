@@ -78,8 +78,8 @@ export class TimedClick extends InteractionBase<PointData, PointDataImpl, TimedC
      * @param duration - The duration of the touch required to ends the user interaction
      * If this duration is not reached, the interaction is cancelled.
      */
-    public constructor(duration: number, logger: Logger, button?: number, fsm?: TimedClickFSM, data?: PointDataImpl) {
-        super(fsm ?? new TimedClickFSM(duration, logger, button), data ?? new PointDataImpl(), logger);
+    public constructor(duration: number, logger: Logger, button?: number, fsm?: TimedClickFSM, data?: PointDataImpl, name?: string) {
+        super(fsm ?? new TimedClickFSM(duration, logger, button), data ?? new PointDataImpl(), logger, name ?? TimedClick.name);
         this.fsm.dataHandler = {
             "initToClicked": (evt: MouseEvent): void => {
                 this._data.copy(evt);

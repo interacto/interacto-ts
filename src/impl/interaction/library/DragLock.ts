@@ -107,7 +107,7 @@ export class DragLock extends InteractionBase<SrcTgtPointsData<PointData>, SrcTg
     /**
      * Creates a drag lock.
      */
-    public constructor(logger: Logger) {
+    public constructor(logger: Logger, name?: string) {
         const handler: DragLockFSMHandler = {
             "onMove": (evt: MouseEvent): void => {
                 (this.data.tgt as PointDataImpl).copy(evt);
@@ -121,7 +121,7 @@ export class DragLock extends InteractionBase<SrcTgtPointsData<PointData>, SrcTg
             }
         };
 
-        super(new DragLockFSM(logger, handler), new SrcTgtPointsDataImpl(), logger);
+        super(new DragLockFSM(logger, handler), new SrcTgtPointsDataImpl(), logger, name ?? DragLock.name);
 
         // We give the interactions to the initial and final double-clicks as these interactions
         // will contain the data: so that these interactions will fill the data of the draglock.

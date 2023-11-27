@@ -50,7 +50,7 @@ interface KeyUpFSMHandler extends FSMDataHandler {
  * A user interaction for releasing a key on a keyboard
  */
 export class KeyUp extends InteractionBase<KeyData, KeyDataImpl, KeyUpFSM> {
-    public constructor(logger: Logger, modifierAccepted: boolean, fsm?: KeyUpFSM) {
+    public constructor(logger: Logger, modifierAccepted: boolean, fsm?: KeyUpFSM, name?: string) {
         const handler: KeyUpFSMHandler = {
             "onKeyUp": (event: KeyboardEvent): void => {
                 this._data.copy(event);
@@ -60,6 +60,6 @@ export class KeyUp extends InteractionBase<KeyData, KeyDataImpl, KeyUpFSM> {
             }
         };
 
-        super(fsm ?? new KeyUpFSM(modifierAccepted, logger, handler), new KeyDataImpl(), logger);
+        super(fsm ?? new KeyUpFSM(modifierAccepted, logger, handler), new KeyDataImpl(), logger, name ?? KeyUp.name);
     }
 }

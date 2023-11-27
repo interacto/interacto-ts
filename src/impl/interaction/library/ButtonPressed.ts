@@ -50,7 +50,7 @@ WidgetDataImpl<HTMLButtonElement>, FSMImpl<ButtonPressedFSMHandler>> {
     /**
      * Creates the interaction.
      */
-    public constructor(logger: Logger) {
+    public constructor(logger: Logger, name?: string) {
         const handler: ButtonPressedFSMHandler = {
             "initToPressedHandler": (event: InputEvent): void => {
                 this._data.copy(event);
@@ -60,7 +60,7 @@ WidgetDataImpl<HTMLButtonElement>, FSMImpl<ButtonPressedFSMHandler>> {
             }
         };
 
-        super(new ButtonPressedFSM(logger, handler), new WidgetDataImpl<HTMLButtonElement>(), logger);
+        super(new ButtonPressedFSM(logger, handler), new WidgetDataImpl<HTMLButtonElement>(), logger, name ?? ButtonPressed.name);
     }
 
     public override onNewNodeRegistered(node: EventTarget): void {

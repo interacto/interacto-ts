@@ -65,7 +65,7 @@ export class KeysDown extends InteractionBase<KeysData, KeysDataImpl, KeysDownFS
     /**
      * Creates the user interaction.
      */
-    public constructor(logger: Logger) {
+    public constructor(logger: Logger, name?: string) {
         const handler: KeysDownFSMHandler = {
             "onKeyPressed": (event: KeyboardEvent): void => {
                 this._data.addKey(event);
@@ -75,6 +75,6 @@ export class KeysDown extends InteractionBase<KeysData, KeysDataImpl, KeysDownFS
             }
         };
 
-        super(new KeysDownFSM(logger, handler), new KeysDataImpl(), logger);
+        super(new KeysDownFSM(logger, handler), new KeysDataImpl(), logger, name ?? KeysDown.name);
     }
 }

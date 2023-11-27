@@ -44,5 +44,11 @@ export interface FSMHandler {
      * When an error occurs.
      */
     fsmError?(err: unknown): void;
+
+    preFsmStart?(): void;
+
+    preFsmUpdate?(): void;
+
+    preFsmStop?(): void;
 }
 

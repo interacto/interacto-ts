@@ -13,10 +13,7 @@
  */
 
 import type {FSMHandler, Logger, TouchDnD} from "../../../src/interacto";
-import {BottomPan} from "../../../src/interacto";
-import {TopPan} from "../../../src/interacto";
-import {LeftPan, RightPan} from "../../../src/interacto";
-import {HPan, VPan} from "../../../src/interacto";
+import {bottomPan, hPan, vPan, leftPan, rightPan, topPan} from "../../../src/interacto";
 import {robot} from "../StubEvents";
 import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
@@ -41,7 +38,7 @@ describe("using pan interactions", () => {
 
     describe("using a horizontal pan interaction", () => {
         beforeEach(() => {
-            interaction = new HPan(logger, true, 10);
+            interaction = hPan(logger, true, 10)();
             interaction.fsm.addHandler(handler);
             interaction.registerToNodes([canvas]);
         });
@@ -86,6 +83,8 @@ describe("using pan interactions", () => {
                 .touchmove({}, [{"identifier": 1, "screenX": 20, "screenY": 10}])
                 .touchmove({}, [{"identifier": 1, "screenX": 30, "screenY": 10}])
                 .touchmove({}, [{"identifier": 1, "screenX": 30, "screenY": 30}])
+                .touchend({}, [{"identifier": 1, "screenX": 30, "screenY": 30}])
+                .touchstart({}, [{"identifier": 1, "screenX": 10, "screenY": 10}])
                 .touchmove({}, [{"identifier": 1, "screenX": 40, "screenY": 10}])
                 .touchmove({}, [{"identifier": 1, "screenX": 50, "screenY": 10}])
                 .touchend({}, [{"identifier": 1, "screenX": 50, "screenY": 10}]);
@@ -101,6 +100,8 @@ describe("using pan interactions", () => {
                 .touchmove(canvas, [{"identifier": 1, "screenX": 30, "screenY": 10}])
                 .touchstart(canvas, [{"identifier": 2, "screenX": 31, "screenY": 20}])
                 .touchend(canvas, [{"identifier": 1}])
+                .touchend(canvas, [{"identifier": 2}])
+                .touchstart({}, [{"identifier": 2, "screenX": 10, "screenY": 20}])
                 .touchmove(canvas, [{"identifier": 2, "screenX": 41, "screenY": 20}])
                 .touchend(canvas, [{"identifier": 2, "screenX": 41, "screenY": 20}]);
 
@@ -111,7 +112,7 @@ describe("using pan interactions", () => {
 
     describe("using a vertical pan interaction", () => {
         beforeEach(() => {
-            interaction = new VPan(logger, true, 10);
+            interaction = vPan(logger, true, 10)();
             interaction.fsm.addHandler(handler);
             interaction.registerToNodes([canvas]);
         });
@@ -157,7 +158,7 @@ describe("using pan interactions", () => {
 
     describe("using a left pan interaction", () => {
         beforeEach(() => {
-            interaction = new LeftPan(logger, true, 10);
+            interaction = leftPan(logger, true, 10)();
             interaction.fsm.addHandler(handler);
             interaction.registerToNodes([canvas]);
         });
@@ -203,7 +204,7 @@ describe("using pan interactions", () => {
 
     describe("using a right pan interaction", () => {
         beforeEach(() => {
-            interaction = new RightPan(logger, true, 10);
+            interaction = rightPan(logger, true, 10)();
             interaction.fsm.addHandler(handler);
             interaction.registerToNodes([canvas]);
         });
@@ -258,7 +259,7 @@ describe("using pan interactions", () => {
 
     describe("using a top pan interaction", () => {
         beforeEach(() => {
-            interaction = new TopPan(logger, true, 10);
+            interaction = topPan(logger, true, 10)();
             interaction.fsm.addHandler(handler);
             interaction.registerToNodes([canvas]);
         });
@@ -304,7 +305,7 @@ describe("using pan interactions", () => {
 
     describe("using a bottom pan interaction", () => {
         beforeEach(() => {
-            interaction = new BottomPan(logger, true, 10);
+            interaction = bottomPan(logger, true, 10)();
             interaction.fsm.addHandler(handler);
             interaction.registerToNodes([canvas]);
         });
@@ -350,7 +351,7 @@ describe("using pan interactions", () => {
 
     describe("using a pan interaction and a minimal distance", () => {
         test("with a HPan and minimal distance OK", () => {
-            interaction = new HPan(logger, false, 1, 100);
+            interaction = hPan(logger, false, 1, 100)();
             interaction.fsm.addHandler(handler);
             interaction.registerToNodes([canvas]);
 
@@ -363,7 +364,7 @@ describe("using pan interactions", () => {
         });
 
         test("with a HPan and minimal distance KO", () => {
-            interaction = new HPan(logger, false, 1, 100);
+            interaction = hPan(logger, false, 1, 100)();
             interaction.fsm.addHandler(handler);
             interaction.registerToNodes([canvas]);
 
@@ -377,7 +378,7 @@ describe("using pan interactions", () => {
         });
 
         test("with a VPan and minimal distance OK", () => {
-            interaction = new VPan(logger, false, 1, 100);
+            interaction = vPan(logger, false, 1, 100)();
             interaction.fsm.addHandler(handler);
             interaction.registerToNodes([canvas]);
 
@@ -390,7 +391,7 @@ describe("using pan interactions", () => {
         });
 
         test("with a VPan and minimal distance KO", () => {
-            interaction = new VPan(logger, false, 1, 100);
+            interaction = vPan(logger, false, 1, 100)();
             interaction.fsm.addHandler(handler);
             interaction.registerToNodes([canvas]);
 
@@ -404,7 +405,7 @@ describe("using pan interactions", () => {
         });
 
         test("with a LeftPan and minimal distance OK", () => {
-            interaction = new LeftPan(logger, false, 1, 50);
+            interaction = leftPan(logger, false, 1, 50)();
             interaction.fsm.addHandler(handler);
             interaction.registerToNodes([canvas]);
 
@@ -417,7 +418,7 @@ describe("using pan interactions", () => {
         });
 
         test("with a LeftPan and minimal distance KO", () => {
-            interaction = new LeftPan(logger, false, 1, 20);
+            interaction = leftPan(logger, false, 1, 20)();
             interaction.fsm.addHandler(handler);
             interaction.registerToNodes([canvas]);
 
@@ -431,7 +432,7 @@ describe("using pan interactions", () => {
         });
 
         test("with a RightPan and minimal distance OK", () => {
-            interaction = new RightPan(logger, false, 1, 1);
+            interaction = rightPan(logger, false, 1, 1)();
             interaction.fsm.addHandler(handler);
             interaction.registerToNodes([canvas]);
 
@@ -444,7 +445,7 @@ describe("using pan interactions", () => {
         });
 
         test("with a RightPan and minimal distance KO", () => {
-            interaction = new RightPan(logger, false, 1, 10);
+            interaction = rightPan(logger, false, 1, 10)();
             interaction.fsm.addHandler(handler);
             interaction.registerToNodes([canvas]);
 
@@ -458,7 +459,7 @@ describe("using pan interactions", () => {
         });
 
         test("with a TopPan and minimal distance OK", () => {
-            interaction = new TopPan(logger, false, 1, 10);
+            interaction = topPan(logger, false, 1, 10)();
             interaction.fsm.addHandler(handler);
             interaction.registerToNodes([canvas]);
 
@@ -471,7 +472,7 @@ describe("using pan interactions", () => {
         });
 
         test("with a TopPan and minimal distance KO", () => {
-            interaction = new TopPan(logger, false, 1, 10);
+            interaction = topPan(logger, false, 1, 10)();
             interaction.fsm.addHandler(handler);
             interaction.registerToNodes([canvas]);
 
@@ -485,7 +486,7 @@ describe("using pan interactions", () => {
         });
 
         test("with a BottomPan and minimal distance OK", () => {
-            interaction = new BottomPan(logger, false, 1, 100);
+            interaction = bottomPan(logger, false, 1, 100)();
             interaction.fsm.addHandler(handler);
             interaction.registerToNodes([canvas]);
 
@@ -498,7 +499,7 @@ describe("using pan interactions", () => {
         });
 
         test("with a BottomPan and minimal distance KO", () => {
-            interaction = new BottomPan(logger, false, 1, 100);
+            interaction = bottomPan(logger, false, 1, 100)();
             interaction.fsm.addHandler(handler);
             interaction.registerToNodes([canvas]);
 

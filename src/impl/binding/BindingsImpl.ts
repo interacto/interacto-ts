@@ -88,7 +88,7 @@ import {Or} from "../interaction/Or";
 import type {VisitorBinding} from "../../api/binding/VisitorBinding";
 import type {LinterRule} from "../../api/binding/Linting";
 import {TwoTouchDnD, ThreeTouchDnD, FourTouchDnD} from "../interaction/library/XTouch";
-import {BottomPan, HPan, LeftPan, RightPan, TopPan, VPan} from "../interaction/library/Pans";
+import {bottomPan, hPan, leftPan, rightPan, topPan, vPan} from "../interaction/library/Pans";
 
 export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
     protected observer: BindingsObserver | undefined;
@@ -272,7 +272,7 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
     public panVerticalBinder<A>(pxTolerance: number, cancellable: boolean, minLength?: number, accInit?: A):
     PartialTouchSrcTgtTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
-            .usingInteraction<VPan, A>(() => new VPan(this.logger, cancellable, pxTolerance, minLength));
+            .usingInteraction<TouchDnD, A>(vPan(this.logger, cancellable, pxTolerance, minLength));
     }
 
     /**
@@ -284,7 +284,7 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
     public panHorizontalBinder<A>(pxTolerance: number, cancellable: boolean, minLength?: number, accInit?: A):
     PartialTouchSrcTgtTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
-            .usingInteraction<HPan, A>(() => new HPan(this.logger, cancellable, pxTolerance, minLength));
+            .usingInteraction<TouchDnD, A>(hPan(this.logger, cancellable, pxTolerance, minLength));
     }
 
     /**
@@ -296,7 +296,7 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
     public panLeftBinder<A>(pxTolerance: number, cancellable: boolean, minLength?: number, accInit?: A):
     PartialTouchSrcTgtTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
-            .usingInteraction<LeftPan, A>(() => new LeftPan(this.logger, cancellable, pxTolerance, minLength));
+            .usingInteraction<TouchDnD, A>(leftPan(this.logger, cancellable, pxTolerance, minLength));
     }
 
     /**
@@ -308,7 +308,7 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
     public panRightBinder<A>(pxTolerance: number, cancellable: boolean, minLength?: number, accInit?: A):
     PartialTouchSrcTgtTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
-            .usingInteraction<RightPan, A>(() => new RightPan(this.logger, cancellable, pxTolerance, minLength));
+            .usingInteraction<TouchDnD, A>(rightPan(this.logger, cancellable, pxTolerance, minLength));
     }
 
     /**
@@ -320,7 +320,7 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
     public panTopBinder<A>(pxTolerance: number, cancellable: boolean, minLength?: number, accInit?: A):
     PartialTouchSrcTgtTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
-            .usingInteraction<TopPan, A>(() => new TopPan(this.logger, cancellable, pxTolerance, minLength));
+            .usingInteraction<TouchDnD, A>(topPan(this.logger, cancellable, pxTolerance, minLength));
     }
 
     /**
@@ -332,7 +332,7 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
     public panBottomBinder<A>(pxTolerance: number, cancellable: boolean, minLength?: number, accInit?: A):
     PartialTouchSrcTgtTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
-            .usingInteraction<BottomPan, A>(() => new BottomPan(this.logger, cancellable, pxTolerance, minLength));
+            .usingInteraction<TouchDnD, A>(bottomPan(this.logger, cancellable, pxTolerance, minLength));
     }
 
     /**

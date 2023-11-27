@@ -28,7 +28,7 @@ export abstract class XTouchDnD<T extends TwoTouchData, S extends T & TwoTouchDa
      * Creates the interaction.
      * @param fsm - The optional FSM provided for the interaction
      */
-    public constructor(nbTouches: number, logger: Logger, dataImpl: S, fsm?: MultiTouchFSM) {
+    public constructor(nbTouches: number, logger: Logger, dataImpl: S, name: string, fsm?: MultiTouchFSM) {
         //    predicate?: (data: SrcTgtPointsData<TouchData>) => boolean,
         //    predicateEnd?: (data: SrcTgtPointsData<TouchData>) => boolean) {
         const handler: TouchDnDFSMHandler = {
@@ -49,7 +49,7 @@ export abstract class XTouchDnD<T extends TwoTouchData, S extends T & TwoTouchDa
             }
         };
 
-        super(fsm ?? new MultiTouchFSM(nbTouches, true, logger, handler), dataImpl, logger);
+        super(fsm ?? new MultiTouchFSM(nbTouches, true, logger, handler), dataImpl, logger, name);
     }
 
     protected setTgtData(evt: TouchEvent): void {
@@ -65,7 +65,7 @@ export abstract class XTouchDnD<T extends TwoTouchData, S extends T & TwoTouchDa
  */
 export class TwoTouchDnD extends XTouchDnD<TwoTouchData, TwoTouchDataImpl> {
     public constructor(logger: Logger) {
-        super(2, logger, new TwoTouchDataImpl());
+        super(2, logger, new TwoTouchDataImpl(), TwoTouchDnD.name);
     }
 }
 
@@ -74,7 +74,7 @@ export class TwoTouchDnD extends XTouchDnD<TwoTouchData, TwoTouchDataImpl> {
  */
 export class ThreeTouchDnD extends XTouchDnD<ThreeTouchData, ThreeTouchDataImpl> {
     public constructor(logger: Logger) {
-        super(3, logger, new ThreeTouchDataImpl());
+        super(3, logger, new ThreeTouchDataImpl(), ThreeTouchDnD.name);
     }
 }
 
@@ -83,6 +83,6 @@ export class ThreeTouchDnD extends XTouchDnD<ThreeTouchData, ThreeTouchDataImpl>
  */
 export class FourTouchDnD extends XTouchDnD<FourTouchData, FourTouchDataImpl> {
     public constructor(logger: Logger) {
-        super(4, logger, new FourTouchDataImpl());
+        super(4, logger, new FourTouchDataImpl(), FourTouchDnD.name);
     }
 }

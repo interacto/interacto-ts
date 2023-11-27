@@ -71,7 +71,7 @@ export class SpinnerChanged extends InteractionBase<WidgetData<HTMLInputElement>
     /**
      * Creates the interaction.
      */
-    public constructor(logger: Logger) {
+    public constructor(logger: Logger, name?: string) {
         const handler: SpinnerChangedHandler = {
             "initToChangedHandler": (event: Event): void => {
                 this._data.copy(event);
@@ -81,7 +81,7 @@ export class SpinnerChanged extends InteractionBase<WidgetData<HTMLInputElement>
             }
         };
 
-        super(new SpinnerChangedFSM(logger, handler), new WidgetDataImpl<HTMLInputElement>(), logger);
+        super(new SpinnerChangedFSM(logger, handler), new WidgetDataImpl<HTMLInputElement>(), logger, name ?? SpinnerChanged.name);
     }
 
     public override onNewNodeRegistered(node: EventTarget): void {

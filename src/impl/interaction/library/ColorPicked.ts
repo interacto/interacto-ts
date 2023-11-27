@@ -42,7 +42,7 @@ export class ColorPicked extends InteractionBase<WidgetData<HTMLInputElement>, W
     /**
      * Creates the interaction.
      */
-    public constructor(logger: Logger) {
+    public constructor(logger: Logger, name?: string) {
         const handler: ColorPickedHandler = {
             "initToPickedHandler": (event: Event): void => {
                 this._data.copy(event);
@@ -52,7 +52,7 @@ export class ColorPicked extends InteractionBase<WidgetData<HTMLInputElement>, W
             }
         };
 
-        super(new ColorPickedFSM(logger, handler), new WidgetDataImpl<HTMLInputElement>(), logger);
+        super(new ColorPickedFSM(logger, handler), new WidgetDataImpl<HTMLInputElement>(), logger, name ?? ColorPicked.name);
     }
 
     public override onNewNodeRegistered(node: EventTarget): void {

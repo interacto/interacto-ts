@@ -52,7 +52,7 @@ export class TimedTap extends InteractionBase<PointsData<TouchData>, PointsDataI
      * @param numberTaps - The number of taps expected to end the interaction.
      * If this number is not reached after a timeout, the interaction is cancelled.
      */
-    public constructor(duration: number, numberTaps: number, logger: Logger) {
+    public constructor(duration: number, numberTaps: number, logger: Logger, name?: string) {
         const handler: TapFSMHandler = {
             "tap": (evt: TouchEvent): void => {
                 if (evt.changedTouches.length > 0) {
@@ -67,6 +67,6 @@ export class TimedTap extends InteractionBase<PointsData<TouchData>, PointsDataI
             }
         };
 
-        super(new TimedTapFSM(duration, numberTaps, logger, handler), new TapDataImpl(), logger);
+        super(new TimedTapFSM(duration, numberTaps, logger, handler), new TapDataImpl(), logger, name ?? TimedTap.name);
     }
 }

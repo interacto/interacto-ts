@@ -69,6 +69,7 @@
 
     "tsdoc/syntax": "error",
 
+    "unicorn/no-thenable": "off",
     "no-duplicate-imports": "off",
     "func-style": "off",
     "max-lines": "off",

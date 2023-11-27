@@ -145,7 +145,7 @@ describe("using a touch dnd interaction", () => {
         expect(handler.fsmStarts).not.toHaveBeenCalled();
     });
 
-    test("after a cancellation, touch move still works", () => {
+    test("after a cancellation, touch move do not work anymore", () => {
         robot(canvas)
             .keepData()
             .touchstart({}, [{"identifier": 2}])
@@ -155,7 +155,7 @@ describe("using a touch dnd interaction", () => {
             .touchmove({}, [{"identifier": 2}])
             .touchend();
 
-        expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+        expect(handler.fsmStops).not.toHaveBeenCalled();
     });
 
     test("pressure move move OK", () => {

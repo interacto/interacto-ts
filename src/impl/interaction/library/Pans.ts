@@ -13,95 +13,99 @@
  */
 
 import type {Logger} from "../../../api/logging/Logger";
-import type {OneTouchDnDFSM} from "./TouchDnD";
+import {InteractionBuilderImpl} from "../InteractionBuilderImpl";
 import {TouchDnD} from "./TouchDnD";
 
-export class HPan extends TouchDnD {
-    /**
-     * Creates the horizontal pan.
-     * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
-     * @param pxTolerance - The pixel tolerance for considering the line horizontal.
-     * @param minLength - The minimal distance from the starting point to the release point for validating the pan
-     * @param fsm - The optional FSM provided for the interaction
-     */
-    public constructor(logger: Logger, cancellable: boolean, pxTolerance: number, minLength?: number, fsm?: OneTouchDnDFSM) {
-        super(logger, cancellable, fsm,
-            data => data.isHorizontal(pxTolerance),
-            data => minLength === undefined || Math.abs(data.diffScreenX) >= minLength);
-    }
+/**
+ * Creates the horizontal pan.
+ * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
+ * @param pxTolerance - The pixel tolerance for considering the line horizontal.
+ * @param minLength - The minimal distance from the starting point to the release point for validating the pan
+ */
+export function hPan(logger: Logger, cancellable: boolean,
+                     pxTolerance: number, minLength?: number): () => TouchDnD {
+    return new InteractionBuilderImpl(name => new TouchDnD(logger, cancellable, undefined, name))
+        .firstAndThen(data => data.isHorizontal(pxTolerance))
+        .end(data => minLength === undefined || Math.abs(data.diffScreenX) >= minLength)
+        .name(hPan.name)
+        .build();
 }
 
-export class VPan extends TouchDnD {
-    /**
-     * Creates the vertical pan.
-     * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
-     * @param pxTolerance - The pixel tolerance for considering the line vertical.
-     * @param minLength - The minimal distance from the starting point to the release point for validating the pan
-     * @param fsm - The optional FSM provided for the interaction
-     */
-    public constructor(logger: Logger, cancellable: boolean, pxTolerance: number, minLength?: number, fsm?: OneTouchDnDFSM) {
-        super(logger, cancellable, fsm,
-            data => data.isVertical(pxTolerance),
-            data => minLength === undefined || Math.abs(data.diffScreenY) >= minLength);
-    }
+/**
+ * Creates the vertical pan.
+ * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
+ * @param pxTolerance - The pixel tolerance for considering the line vertical.
+ * @param minLength - The minimal distance from the starting point to the release point for validating the pan
+ */
+export function vPan(logger: Logger, cancellable: boolean,
+                     pxTolerance: number, minLength?: number): () => TouchDnD {
+    return new InteractionBuilderImpl(name => new TouchDnD(logger, cancellable, undefined, name))
+        .firstAndThen(data => data.isVertical(pxTolerance))
+        .end(data => minLength === undefined || Math.abs(data.diffScreenY) >= minLength)
+        .name(hPan.name)
+        .build();
 }
 
-export class LeftPan extends TouchDnD {
-    /**
-     * Creates a left pan.
-     * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
-     * @param pxTolerance - The pixel tolerance for considering the line to the left.
-     * @param minLength - The minimal distance from the starting point to the release point for validating the pan
-     * @param fsm - The optional FSM provided for the interaction
-     */
-    public constructor(logger: Logger, cancellable: boolean, pxTolerance: number, minLength?: number, fsm?: OneTouchDnDFSM) {
-        super(logger, cancellable, fsm,
-            data => data.isLeft(pxTolerance),
-            data => minLength === undefined || Math.abs(data.diffScreenX) >= minLength);
-    }
+/**
+ * Creates a left pan.
+ * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
+ * @param pxTolerance - The pixel tolerance for considering the line to the left.
+ * @param minLength - The minimal distance from the starting point to the release point for validating the pan
+ * @param fsm - The optional FSM provided for the interaction
+ */
+export function leftPan(logger: Logger, cancellable: boolean,
+                        pxTolerance: number, minLength?: number): () => TouchDnD {
+    return new InteractionBuilderImpl(name => new TouchDnD(logger, cancellable, undefined, name))
+        .firstAndThen(data => data.isLeft(pxTolerance))
+        .end(data => minLength === undefined || Math.abs(data.diffScreenX) >= minLength)
+        .name(hPan.name)
+        .build();
 }
 
-export class RightPan extends TouchDnD {
-    /**
-     * Creates a right pan.
-     * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
-     * @param pxTolerance - The pixel tolerance for considering the line to the right.
-     * @param minLength - The minimal distance from the starting point to the release point for validating the pan
-     * @param fsm - The optional FSM provided for the interaction
-     */
-    public constructor(logger: Logger, cancellable: boolean, pxTolerance: number, minLength?: number, fsm?: OneTouchDnDFSM) {
-        super(logger, cancellable, fsm,
-            data => data.isRight(pxTolerance),
-            data => minLength === undefined || Math.abs(data.diffScreenX) >= minLength);
-    }
+/**
+ * Creates a right pan.
+ * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
+ * @param pxTolerance - The pixel tolerance for considering the line to the right.
+ * @param minLength - The minimal distance from the starting point to the release point for validating the pan
+ * @param fsm - The optional FSM provided for the interaction
+ */
+export function rightPan(logger: Logger, cancellable: boolean,
+                         pxTolerance: number, minLength?: number): () => TouchDnD {
+    return new InteractionBuilderImpl(name => new TouchDnD(logger, cancellable, undefined, name))
+        .firstAndThen(data => data.isRight(pxTolerance))
+        .end(data => minLength === undefined || Math.abs(data.diffScreenX) >= minLength)
+        .name(hPan.name)
+        .build();
 }
 
-export class TopPan extends TouchDnD {
-    /**
-     * Creates a top pan.
-     * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
-     * @param pxTolerance - The pixel tolerance for considering the line to the top.
-     * @param minLength - The minimal distance from the starting point to the release point for validating the pan
-     * @param fsm - The optional FSM provided for the interaction
-     */
-    public constructor(logger: Logger, cancellable: boolean, pxTolerance: number, minLength?: number, fsm?: OneTouchDnDFSM) {
-        super(logger, cancellable, fsm,
-            data => data.isTop(pxTolerance),
-            data => minLength === undefined || Math.abs(data.diffScreenY) >= minLength);
-    }
+/**
+ * Creates a top pan.
+ * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
+ * @param pxTolerance - The pixel tolerance for considering the line to the top.
+ * @param minLength - The minimal distance from the starting point to the release point for validating the pan
+ * @param fsm - The optional FSM provided for the interaction
+ */
+export function topPan(logger: Logger, cancellable: boolean,
+                       pxTolerance: number, minLength?: number): () => TouchDnD {
+    return new InteractionBuilderImpl(name => new TouchDnD(logger, cancellable, undefined, name))
+        .firstAndThen(data => data.isTop(pxTolerance))
+        .end(data => minLength === undefined || Math.abs(data.diffScreenY) >= minLength)
+        .name(hPan.name)
+        .build();
 }
 
-export class BottomPan extends TouchDnD {
-    /**
-     * Creates a bottom pan.
-     * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
-     * @param pxTolerance - The pixel tolerance for considering the line to the bottom.
-     * @param minLength - The minimal distance from the starting point to the release point for validating the pan
-     * @param fsm - The optional FSM provided for the interaction
-     */
-    public constructor(logger: Logger, cancellable: boolean, pxTolerance: number, minLength?: number, fsm?: OneTouchDnDFSM) {
-        super(logger, cancellable, fsm,
-            data => data.isBottom(pxTolerance),
-            data => minLength === undefined || Math.abs(data.diffScreenY) >= minLength);
-    }
+/**
+ * Creates a bottom pan.
+ * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
+ * @param pxTolerance - The pixel tolerance for considering the line to the bottom.
+ * @param minLength - The minimal distance from the starting point to the release point for validating the pan
+ * @param fsm - The optional FSM provided for the interaction
+ */
+export function bottomPan(logger: Logger, cancellable: boolean,
+                          pxTolerance: number, minLength?: number): () => TouchDnD {
+    return new InteractionBuilderImpl(name => new TouchDnD(logger, cancellable, undefined, name))
+        .firstAndThen(data => data.isBottom(pxTolerance))
+        .end(data => minLength === undefined || Math.abs(data.diffScreenY) >= minLength)
+        .name(hPan.name)
+        .build();
 }

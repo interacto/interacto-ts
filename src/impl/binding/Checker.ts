@@ -28,7 +28,7 @@ import {KeysTyped} from "../interaction/library/KeysTyped";
 import {LongMouseDown} from "../interaction/library/LongMouseDown";
 import {MouseDown} from "../interaction/library/MouseDown";
 import {MouseUp} from "../interaction/library/MouseUp";
-import {HPan, LeftPan, RightPan, VPan} from "../interaction/library/Pans";
+import {leftPan, rightPan, vPan, hPan, topPan} from "../interaction/library/Pans";
 import {TouchDnD} from "../interaction/library/TouchDnD";
 
 export class Checker {
@@ -65,8 +65,9 @@ export class Checker {
 
     public checkSameInteractions(binding: Binding<Command, Interaction<InteractionData>, unknown>,
                                  binds: ReadonlyArray<Binding<Command, Interaction<InteractionData>, unknown>>): void {
+        // support OR by splitting name with -
         this.checkRule("same-interactions", this.getSameInteractionSeverity(binding), binding, binds,
-            b => binding.interaction.constructor === b.interaction.constructor,
+            b => binding.interaction.name === b.interaction.name,
             "[same-interactions] Two bindings use the same user interaction on same widget.");
     }
 
@@ -79,8 +80,9 @@ export class Checker {
 
     public checkIncluded(binding: Binding<Command, Interaction<InteractionData>, unknown>,
                          binds: ReadonlyArray<Binding<Command, Interaction<InteractionData>, unknown>>): void {
+        // support OR
         this.checkRule("included", this.getIncludedSeverity(binding), binding, binds,
-            b => this.isIncluded(binding.interaction.constructor.name, b.interaction.constructor.name),
+            b => this.isIncluded(binding.interaction.name, b.interaction.name),
             "[included] The interaction of the first binding is included into the interaction of a second one.");
     }
 
@@ -136,10 +138,11 @@ export class Checker {
             this.cacheIncluded.set(LongMouseDown.name, new Set([Click.name, DoubleClick.name, Clicks.name]));
             this.cacheIncluded.set(MouseDown.name, new Set([LongMouseDown.name, Click.name, DoubleClick.name, Clicks.name]));
             this.cacheIncluded.set(MouseUp.name, new Set([Click.name, DoubleClick.name, Clicks.name]));
-            this.cacheIncluded.set(LeftPan.name, new Set([HPan.name, TouchDnD.name]));
-            this.cacheIncluded.set(RightPan.name, new Set([HPan.name, TouchDnD.name]));
-            this.cacheIncluded.set(HPan.name, new Set([TouchDnD.name]));
-            this.cacheIncluded.set(VPan.name, new Set([TouchDnD.name]));
+            this.cacheIncluded.set(leftPan.name, new Set([hPan.name, TouchDnD.name]));
+            this.cacheIncluded.set(rightPan.name, new Set([hPan.name, TouchDnD.name]));
+            this.cacheIncluded.set(topPan.name, new Set([vPan.name, TouchDnD.name]));
+            this.cacheIncluded.set(hPan.name, new Set([TouchDnD.name]));
+            this.cacheIncluded.set(vPan.name, new Set([TouchDnD.name]));
         }
     }
 }

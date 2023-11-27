@@ -57,7 +57,7 @@ export class MouseEnter extends InteractionBase<PointData, PointDataImpl, MouseE
     /**
      * Creates the interaction.
      */
-    public constructor(withBubbling: boolean, logger: Logger) {
+    public constructor(withBubbling: boolean, logger: Logger, name?: string) {
         const handler: MouseEnterFSMHandler = {
             "onEnter": (evt: MouseEvent): void => {
                 this._data.copy(evt);
@@ -67,6 +67,6 @@ export class MouseEnter extends InteractionBase<PointData, PointDataImpl, MouseE
             }
         };
 
-        super(new MouseEnterFSM(withBubbling, logger, handler), new PointDataImpl(), logger);
+        super(new MouseEnterFSM(withBubbling, logger, handler), new PointDataImpl(), logger, name ?? MouseEnter.name);
     }
 }

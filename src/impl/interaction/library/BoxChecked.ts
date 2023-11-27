@@ -43,7 +43,7 @@ export class BoxChecked extends InteractionBase<WidgetData<HTMLInputElement>, Wi
     /**
      * Creates the interaction.
      */
-    public constructor(logger: Logger) {
+    public constructor(logger: Logger, name?: string) {
         const handler: BoxCheckedHandler = {
             "initToCheckHandler": (event: Event): void => {
                 this._data.copy(event);
@@ -53,7 +53,7 @@ export class BoxChecked extends InteractionBase<WidgetData<HTMLInputElement>, Wi
             }
         };
 
-        super(new BoxCheckedFSM(logger, handler), new WidgetDataImpl<HTMLInputElement>(), logger);
+        super(new BoxCheckedFSM(logger, handler), new WidgetDataImpl<HTMLInputElement>(), logger, name ?? BoxChecked.name);
     }
 
     public override onNewNodeRegistered(node: EventTarget): void {

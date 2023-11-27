@@ -45,7 +45,7 @@ export class MouseMove extends InteractionBase<PointData, PointDataImpl, MouseMo
     /**
      * Creates the interaction.
      */
-    public constructor(logger: Logger) {
+    public constructor(logger: Logger, name?: string) {
         const handler: MouseMoveFSMHandler = {
             "onMove": (evt: MouseEvent): void => {
                 this._data.copy(evt);
@@ -55,6 +55,6 @@ export class MouseMove extends InteractionBase<PointData, PointDataImpl, MouseMo
             }
         };
 
-        super(new MouseMoveFSM(logger, handler), new PointDataImpl(), logger);
+        super(new MouseMoveFSM(logger, handler), new PointDataImpl(), logger, name ?? MouseMove.name);
     }
 }

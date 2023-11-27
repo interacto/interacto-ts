@@ -18,7 +18,7 @@ import {mock} from "jest-mock-extended";
 
 export class InteractionStub extends InteractionBase<InteractionData, Flushable & InteractionData, FSM> {
     public constructor(fsm: FSM, logger?: Logger) {
-        super(fsm, new PointDataImpl(), logger ?? mock<Logger>());
+        super(fsm, new PointDataImpl(), logger ?? mock<Logger>(), InteractionStub.name);
     }
 
     public override updateEventsRegistered(_newState: OutputState, _oldState: OutputState): void {}

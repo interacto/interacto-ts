@@ -40,31 +40,20 @@ export class TouchDnDFSM extends FSMImpl<TouchDnDFSMHandler> {
 
     protected readonly touched: StdState;
 
-    protected readonly currentData: SrcTgtTouchDataImpl;
-
-    protected readonly predicate: ((data: SrcTgtPointsData<TouchData>) => boolean) | undefined;
-
-    protected readonly predicateEnd: ((data: SrcTgtPointsData<TouchData>) => boolean) | undefined;
-
     /**
      * Creates the FSM.
      * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
      * @param movementRequired - Whether the DnD starts after the touch point has begun moving (default)
      * or as soon as the screen is touched. The latter is used for the MultiTouch interaction.
      */
-    public constructor(cancellable: boolean, logger: Logger, dataHandler: TouchDnDFSMHandler, movementRequired = true,
-                       predicate?: (data: SrcTgtPointsData<TouchData>) => boolean,
-                       predicateEnd?: (data: SrcTgtPointsData<TouchData>) => boolean) {
+    public constructor(cancellable: boolean, logger: Logger, dataHandler: TouchDnDFSMHandler, movementRequired = true) {
         super(logger, dataHandler);
         this.touchID = undefined;
         this.cancellable = cancellable;
         this.movementRequired = movementRequired;
-        this.predicate = predicate;
-        this.predicateEnd = predicateEnd;
         this.cancelled = this.addCancellingState("cancelled");
         this.moved = this.addStdState("moved");
         this.touched = this.addStdState("touched");
-        this.currentData = new SrcTgtTouchDataImpl();
         this.buildFSM();
     }
 
@@ -74,18 +63,12 @@ export class TouchDnDFSM extends FSMImpl<TouchDnDFSMHandler> {
 
         const touchDown = (event: TouchEvent): void => {
             this.touchID = event.changedTouches[0]?.identifier;
-            if (event.changedTouches[0] !== undefined) {
-                const touch: Touch = event.changedTouches[0];
-                this.currentData.copySrc(touch, event, Array.from(event.touches));
-            }
             this.dataHandler?.onTouch(event);
         };
 
         const fixTouchDownCheck = (event: TouchEvent): boolean => !Array.from(event.touches).some(t => t.identifier === this.touchID);
 
         new TouchTransition(this.initState, this.touched, "touchstart", touchDown);
-
-        new TouchTransition(this.initState, this.moved, "touchmove", touchDown, (event: TouchEvent): boolean => event.targetTouches.length === 1);
 
         // If the touch up event is lost by the browser and another touch down occurs
         // we must restart the interaction
@@ -106,33 +89,14 @@ export class TouchDnDFSM extends FSMImpl<TouchDnDFSMHandler> {
         const moved = (event: TouchEvent): void => {
             this.dataHandler?.onMove(event);
         };
-
-        const movedPredicate = (event: TouchEvent): boolean => {
-            this.setTgt(event);
-            return event.changedTouches[0]?.identifier === this.touchID && (this.predicate === undefined || this.predicate(this.currentData));
-        };
+        const movedPredicate = (event: TouchEvent): boolean => event.changedTouches[0]?.identifier === this.touchID;
 
         new TouchTransition(this.touched, this.moved, "touchmove", moved, movedPredicate);
         new TouchTransition(this.moved, this.moved, "touchmove", moved, movedPredicate);
 
-        const movedPredicateCancel = (event: TouchEvent): boolean => {
-            this.setTgt(event);
-            return event.changedTouches[0]?.identifier === this.touchID && this.predicate !== undefined && !this.predicate(this.currentData);
-        };
-
-        new TouchTransition(this.touched, this.cancelled, "touchmove", moved, movedPredicateCancel);
-        new TouchTransition(this.moved, this.cancelled, "touchmove", moved, movedPredicateCancel);
-
         // If the touch up event is lost by the browser and another touch down occurs
         // we must restart the interaction
         new TouchTransition(this.moved, this.touched, "touchstart", touchDown, fixTouchDownCheck);
-
-        new TouchTransition(this.moved, this.cancelled, "touchend", undefined,
-            (event: TouchEvent): boolean => {
-                this.setTgt(event);
-                return event.changedTouches[0]?.identifier === this.touchID && this.predicateEnd !== undefined &&
-                !this.predicateEnd(this.currentData);
-            });
 
         // Transitions used if the DnD can be cancelled by releasing the touch on a dwell spring element
         if (this.cancellable) {
@@ -162,18 +126,7 @@ export class TouchDnDFSM extends FSMImpl<TouchDnDFSMHandler> {
                 (event: TouchEvent): void => {
                     this.dataHandler?.onRelease(event);
                 },
-                (event: TouchEvent): boolean => {
-                    this.setTgt(event);
-                    return event.changedTouches[0]?.identifier === this.touchID &&
-                    (this.predicateEnd === undefined || this.predicateEnd(this.currentData));
-                });
-        }
-    }
-
-    private setTgt(event: TouchEvent): void {
-        if (event.changedTouches[0] !== undefined) {
-            const touch: Touch = event.changedTouches[0];
-            this.currentData.copyTgt(touch, event, Array.from(event.touches));
+                (event: TouchEvent): boolean => event.changedTouches[0]?.identifier === this.touchID);
         }
     }
 
@@ -184,7 +137,6 @@ export class TouchDnDFSM extends FSMImpl<TouchDnDFSMHandler> {
     public override reinit(): void {
         super.reinit();
         this.touchID = undefined;
-        this.currentData.flush();
     }
 }
 
@@ -193,10 +145,8 @@ export class OneTouchDnDFSM extends TouchDnDFSM {
      * Creates a DnD touch FSM that only works with one touch.
      * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
      */
-    public constructor(cancellable: boolean, logger: Logger, dataHandler: TouchDnDFSMHandler,
-                       predicate?: (data: SrcTgtPointsData<TouchData>) => boolean,
-                       predicateEnd?: (data: SrcTgtPointsData<TouchData>) => boolean) {
-        super(cancellable, logger, dataHandler, true, predicate, predicateEnd);
+    public constructor(cancellable: boolean, logger: Logger, dataHandler: TouchDnDFSMHandler) {
+        super(cancellable, logger, dataHandler, true);
     }
 
     protected override buildFSM(): void {
@@ -226,9 +176,7 @@ export class TouchDnD extends InteractionBase<SrcTgtPointsData<TouchData>, SrcTg
      * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
      * @param fsm - The optional FSM provided for the interaction
      */
-    public constructor(logger: Logger, cancellable: boolean, fsm?: OneTouchDnDFSM,
-                       predicate?: (data: SrcTgtPointsData<TouchData>) => boolean,
-                       predicateEnd?: (data: SrcTgtPointsData<TouchData>) => boolean) {
+    public constructor(logger: Logger, cancellable: boolean, fsm?: OneTouchDnDFSM, name?: string) {
         const handler: TouchDnDFSMHandler = {
             "onTouch": (evt: TouchEvent): void => {
                 if (evt.changedTouches[0] !== undefined) {
@@ -249,7 +197,7 @@ export class TouchDnD extends InteractionBase<SrcTgtPointsData<TouchData>, SrcTg
             }
         };
 
-        super(fsm ?? new OneTouchDnDFSM(cancellable, logger, handler, predicate, predicateEnd), new SrcTgtTouchDataImpl(), logger);
+        super(fsm ?? new OneTouchDnDFSM(cancellable, logger, handler), new SrcTgtTouchDataImpl(), logger, name ?? TouchDnD.name);
     }
 
     private setTgtData(evt: TouchEvent): void {

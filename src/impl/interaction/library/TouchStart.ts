@@ -42,7 +42,7 @@ export class TouchStart extends InteractionBase<TouchData, TouchDataImpl, TouchS
     /**
      * Creates the interaction.
      */
-    public constructor(logger: Logger) {
+    public constructor(logger: Logger, name?: string) {
         const handler: TouchStartFSMHandler = {
             "initToTouch": (evt: TouchEvent): void => {
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -53,6 +53,6 @@ export class TouchStart extends InteractionBase<TouchData, TouchDataImpl, TouchS
             }
         };
 
-        super(new TouchStartFSM(logger, handler), new TouchDataImpl(), logger);
+        super(new TouchStartFSM(logger, handler), new TouchDataImpl(), logger, name ?? TouchStart.name);
     }
 }

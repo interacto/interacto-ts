@@ -98,7 +98,7 @@ export class DnD extends InteractionBase<SrcTgtPointsData<PointData>, SrcTgtPoin
     /**
      * Creates the interaction.
      */
-    public constructor(cancellable: boolean, logger: Logger) {
+    public constructor(cancellable: boolean, logger: Logger, name?: string) {
         const handler: DnDFSMHandler = {
             "onPress": (evt: MouseEvent): void => {
                 this._data.copySrc(evt);
@@ -115,6 +115,6 @@ export class DnD extends InteractionBase<SrcTgtPointsData<PointData>, SrcTgtPoin
             }
         };
 
-        super(new DnDFSM(cancellable, logger, handler), new SrcTgtPointsDataImpl(), logger);
+        super(new DnDFSM(cancellable, logger, handler), new SrcTgtPointsDataImpl(), logger, name ?? DnD.name);
     }
 }

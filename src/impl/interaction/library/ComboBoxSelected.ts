@@ -44,7 +44,7 @@ export class ComboBoxSelected extends InteractionBase<WidgetData<HTMLSelectEleme
     /**
      * Creates the interaction.
      */
-    public constructor(logger: Logger) {
+    public constructor(logger: Logger, name?: string) {
         const handler: ComboBoxSelectedHandler = {
             "initToSelectedHandler": (event: Event): void => {
                 this._data.copy(event);
@@ -54,7 +54,7 @@ export class ComboBoxSelected extends InteractionBase<WidgetData<HTMLSelectEleme
             }
         };
 
-        super(new ComboBoxSelectedFSM(logger, handler), new WidgetDataImpl<HTMLSelectElement>(), logger);
+        super(new ComboBoxSelectedFSM(logger, handler), new WidgetDataImpl<HTMLSelectElement>(), logger, name ?? ComboBoxSelected.name);
     }
 
     public override onNewNodeRegistered(node: EventTarget): void {

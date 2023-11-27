@@ -79,7 +79,7 @@ export class LongTouch extends InteractionBase<TouchData, TouchDataImpl, LongTou
      * @param duration - The duration of the touch required to ends the user interaction
      * If this duration is not reached, the interaction is cancelled.
      */
-    public constructor(duration: number, logger: Logger) {
+    public constructor(duration: number, logger: Logger, name?: string) {
         const handler: LongTouchFSMHandler = {
             "tap": (evt: TouchEvent): void => {
                 if (evt.changedTouches[0] !== undefined) {
@@ -91,6 +91,6 @@ export class LongTouch extends InteractionBase<TouchData, TouchDataImpl, LongTou
             }
         };
 
-        super(new LongTouchFSM(duration, logger, handler), new TouchDataImpl(), logger);
+        super(new LongTouchFSM(duration, logger, handler), new TouchDataImpl(), logger, name ?? LongTouch.name);
     }
 }

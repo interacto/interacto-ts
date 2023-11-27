@@ -385,7 +385,13 @@ export class FSMImpl<T extends FSMDataHandler> implements FSM {
      */
     protected notifyHandlerOnStart(): void {
         try {
-            for (const handler of Array.from(this.handlers)) {
+            const hs = Array.from(this.handlers);
+
+            for (const handler of hs) {
+                handler.preFsmStart?.();
+            }
+
+            for (const handler of hs) {
                 handler.fsmStarts?.();
             }
         } catch (error: unknown) {
@@ -402,7 +408,13 @@ export class FSMImpl<T extends FSMDataHandler> implements FSM {
      */
     protected notifyHandlerOnUpdate(): void {
         try {
-            for (const handler of Array.from(this.handlers)) {
+            const hs = Array.from(this.handlers);
+
+            for (const handler of hs) {
+                handler.preFsmUpdate?.();
+            }
+
+            for (const handler of hs) {
                 handler.fsmUpdates?.();
             }
         } catch (error: unknown) {
@@ -419,7 +431,13 @@ export class FSMImpl<T extends FSMDataHandler> implements FSM {
      */
     public notifyHandlerOnStop(): void {
         try {
-            for (const handler of Array.from(this.handlers)) {
+            const hs = Array.from(this.handlers);
+
+            for (const handler of hs) {
+                handler.preFsmStop?.();
+            }
+
+            for (const handler of hs) {
                 handler.fsmStops?.();
             }
         } catch (error: unknown) {

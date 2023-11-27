@@ -68,7 +68,7 @@ interface TextInputChangedHandler extends FSMDataHandler {
 export class TextInputChanged extends InteractionBase<WidgetData<HTMLInputElement | HTMLTextAreaElement>,
 WidgetDataImpl<HTMLInputElement | HTMLTextAreaElement>, TextInputChangedFSM> {
 
-    public constructor(logger: Logger, timeGap?: number) {
+    public constructor(logger: Logger, timeGap?: number, name?: string) {
         const handler: TextInputChangedHandler = {
             "initToChangedHandler": (event: Event): void => {
                 this._data.copy(event);
@@ -78,7 +78,8 @@ WidgetDataImpl<HTMLInputElement | HTMLTextAreaElement>, TextInputChangedFSM> {
             }
         };
 
-        super(new TextInputChangedFSM(logger, handler, timeGap), new WidgetDataImpl<HTMLInputElement | HTMLTextAreaElement>(), logger);
+        super(new TextInputChangedFSM(logger, handler, timeGap),
+            new WidgetDataImpl<HTMLInputElement | HTMLTextAreaElement>(), logger, name ?? TextInputChanged.name);
     }
 
     public override onNewNodeRegistered(node: EventTarget): void {

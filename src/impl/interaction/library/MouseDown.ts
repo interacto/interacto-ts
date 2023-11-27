@@ -42,7 +42,7 @@ export class MouseDown extends InteractionBase<PointData, PointDataImpl, MouseDo
     /**
      * Creates the interaction.
      */
-    public constructor(logger: Logger) {
+    public constructor(logger: Logger, name?: string) {
         const handler: MouseDownFSMHandler = {
             "initToPress": (evt: MouseEvent): void => {
                 this._data.copy(evt);
@@ -52,6 +52,6 @@ export class MouseDown extends InteractionBase<PointData, PointDataImpl, MouseDo
             }
         };
 
-        super(new MouseDownFSM(logger, handler), new PointDataImpl(), logger);
+        super(new MouseDownFSM(logger, handler), new PointDataImpl(), logger, name ?? MouseDown.name);
     }
 }

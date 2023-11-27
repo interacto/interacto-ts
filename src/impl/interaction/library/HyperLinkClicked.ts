@@ -43,7 +43,7 @@ export class HyperLinkClicked extends InteractionBase<WidgetData<HTMLAnchorEleme
     /**
      * Creates the interaction.
      */
-    public constructor(logger: Logger) {
+    public constructor(logger: Logger, name?: string) {
         const handler: HyperLinkClickedFSMHandler = {
             "initToClickedHandler": (event: Event): void => {
                 this._data.copy(event);
@@ -53,7 +53,7 @@ export class HyperLinkClicked extends InteractionBase<WidgetData<HTMLAnchorEleme
             }
         };
 
-        super(new HyperLinkClickedFSM(logger, handler), new WidgetDataImpl<HTMLAnchorElement>(), logger);
+        super(new HyperLinkClickedFSM(logger, handler), new WidgetDataImpl<HTMLAnchorElement>(), logger, name ?? HyperLinkClicked.name);
     }
 
     public override onNewNodeRegistered(node: EventTarget): void {

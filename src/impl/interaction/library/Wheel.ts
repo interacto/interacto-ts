@@ -45,7 +45,7 @@ export class Wheel extends InteractionBase<WheelData, WheelDataImpl, WheelFSM> {
     /**
      * Creates the interaction.
      */
-    public constructor(logger: Logger, fsm?: WheelFSM, data?: WheelDataImpl) {
+    public constructor(logger: Logger, fsm?: WheelFSM, data?: WheelDataImpl, name?: string) {
         const handler: WheelFSMHandler = {
             "initToMoved": (evt: WheelEvent): void => {
                 this._data.copy(evt);
@@ -55,6 +55,6 @@ export class Wheel extends InteractionBase<WheelData, WheelDataImpl, WheelFSM> {
             }
         };
 
-        super(fsm ?? new WheelFSM(logger, handler), data ?? new WheelDataImpl(), logger);
+        super(fsm ?? new WheelFSM(logger, handler), data ?? new WheelDataImpl(), logger, name ?? Wheel.name);
     }
 }
