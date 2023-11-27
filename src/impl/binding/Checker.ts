@@ -28,7 +28,7 @@ import {KeysTyped} from "../interaction/library/KeysTyped";
 import {LongMouseDown} from "../interaction/library/LongMouseDown";
 import {MouseDown} from "../interaction/library/MouseDown";
 import {MouseUp} from "../interaction/library/MouseUp";
-import {leftPan, rightPan, vPan, hPan, topPan} from "../interaction/library/Pans";
+import {leftPan, rightPan, vPan, hPan, topPan, bottomPan} from "../interaction/library/Pans";
 import {TouchDnD} from "../interaction/library/TouchDnD";
 
 export class Checker {
@@ -141,6 +141,7 @@ export class Checker {
             this.cacheIncluded.set(leftPan.name, new Set([hPan.name, TouchDnD.name]));
             this.cacheIncluded.set(rightPan.name, new Set([hPan.name, TouchDnD.name]));
             this.cacheIncluded.set(topPan.name, new Set([vPan.name, TouchDnD.name]));
+            this.cacheIncluded.set(bottomPan.name, new Set([vPan.name, TouchDnD.name]));
             this.cacheIncluded.set(hPan.name, new Set([TouchDnD.name]));
             this.cacheIncluded.set(vPan.name, new Set([TouchDnD.name]));
         }
