@@ -42,7 +42,7 @@ export function vPan(logger: Logger, cancellable: boolean,
     return new InteractionBuilderImpl(name => new TouchDnD(logger, cancellable, undefined, name))
         .firstAndThen(data => data.isVertical(pxTolerance))
         .end(data => minLength === undefined || Math.abs(data.diffScreenY) >= minLength)
-        .name(hPan.name)
+        .name(vPan.name)
         .build();
 }
 
@@ -58,7 +58,7 @@ export function leftPan(logger: Logger, cancellable: boolean,
     return new InteractionBuilderImpl(name => new TouchDnD(logger, cancellable, undefined, name))
         .firstAndThen(data => data.isLeft(pxTolerance))
         .end(data => minLength === undefined || Math.abs(data.diffScreenX) >= minLength)
-        .name(hPan.name)
+        .name(leftPan.name)
         .build();
 }
 
@@ -74,7 +74,7 @@ export function rightPan(logger: Logger, cancellable: boolean,
     return new InteractionBuilderImpl(name => new TouchDnD(logger, cancellable, undefined, name))
         .firstAndThen(data => data.isRight(pxTolerance))
         .end(data => minLength === undefined || Math.abs(data.diffScreenX) >= minLength)
-        .name(hPan.name)
+        .name(rightPan.name)
         .build();
 }
 
@@ -106,6 +106,6 @@ export function bottomPan(logger: Logger, cancellable: boolean,
     return new InteractionBuilderImpl(name => new TouchDnD(logger, cancellable, undefined, name))
         .firstAndThen(data => data.isBottom(pxTolerance))
         .end(data => minLength === undefined || Math.abs(data.diffScreenY) >= minLength)
-        .name(hPan.name)
+        .name(bottomPan.name)
         .build();
 }
