@@ -90,7 +90,7 @@ export function topPan(logger: Logger, cancellable: boolean,
     return new InteractionBuilderImpl(name => new TouchDnD(logger, cancellable, undefined, name))
         .firstAndThen(data => data.isTop(pxTolerance))
         .end(data => minLength === undefined || Math.abs(data.diffScreenY) >= minLength)
-        .name(hPan.name)
+        .name(topPan.name)
         .build();
 }
 

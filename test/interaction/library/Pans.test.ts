@@ -43,6 +43,10 @@ describe("using pan interactions", () => {
             interaction.registerToNodes([canvas]);
         });
 
+        test("has a good name", () => {
+            expect(interaction.name).toBe(hPan.name);
+        });
+
         test("touch move horiz ok", () => {
             robot(canvas)
                 .touchstart({}, [{"identifier": 2, "screenX": 10, "screenY": 20}])
@@ -121,6 +125,10 @@ describe("using pan interactions", () => {
             interaction.uninstall();
         });
 
+        test("has a good name", () => {
+            expect(interaction.name).toBe(vPan.name);
+        });
+
         test("touch move vert ok", () => {
             robot(canvas)
                 .touchstart({}, [{"identifier": 2, "screenX": 10, "screenY": 20}])
@@ -167,6 +175,10 @@ describe("using pan interactions", () => {
             interaction.uninstall();
         });
 
+        test("has a good name", () => {
+            expect(interaction.name).toBe(leftPan.name);
+        });
+
         test("touch move left ok", () => {
             robot(canvas)
                 .touchstart({}, [{"identifier": 2, "screenX": 10, "screenY": 10}])
@@ -211,6 +223,10 @@ describe("using pan interactions", () => {
 
         afterEach(() => {
             interaction.uninstall();
+        });
+
+        test("has a good name", () => {
+            expect(interaction.name).toBe(rightPan.name);
         });
 
         test("touch move right ok", () => {
@@ -268,6 +284,10 @@ describe("using pan interactions", () => {
             interaction.uninstall();
         });
 
+        test("has a good name", () => {
+            expect(interaction.name).toBe(topPan.name);
+        });
+
         test("touch move top ok", () => {
             robot(canvas)
                 .touchstart({}, [{"identifier": 2, "screenX": 10, "screenY": 10}])
@@ -312,6 +332,10 @@ describe("using pan interactions", () => {
 
         afterEach(() => {
             interaction.uninstall();
+        });
+
+        test("has a good name", () => {
+            expect(interaction.name).toBe(bottomPan.name);
         });
 
         test("touch move bottom ok", () => {
