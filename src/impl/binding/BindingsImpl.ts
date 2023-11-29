@@ -89,6 +89,7 @@ import type {VisitorBinding} from "../../api/binding/VisitorBinding";
 import type {LinterRule} from "../../api/binding/Linting";
 import {TwoTouchDnD, ThreeTouchDnD, FourTouchDnD} from "../interaction/library/XTouch";
 import {bottomPan, hPan, leftPan, rightPan, topPan, vPan} from "../interaction/library/Pans";
+import {twoBottomPan, twoHPan, twoLeftPan, twoRightPan, twoTopPan, twoVPan} from "../../interacto";
 
 export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
     protected observer: BindingsObserver | undefined;
@@ -333,6 +334,72 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
     PartialTouchSrcTgtTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<TouchDnD, A>(bottomPan(this.logger, cancellable, pxTolerance, minLength));
+    }
+
+    /**
+     * Creates a binding that uses a vertical pan interaction (two-touch).
+     * @param minLength - The minimal distance from the starting point to the release point for validating the pan
+     * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
+     */
+    public twoPanVerticalBinder<A>(pxTolerance: number, minLength?: number, accInit?: A):
+    PartialTwoTouchTypedBinder<A> {
+        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+            .usingInteraction<TwoTouchDnD, A>(twoVPan(this.logger, pxTolerance, minLength));
+    }
+
+    /**
+     * Creates a binding that uses a horizontal pan interaction (two-touch).
+     * @param minLength - The minimal distance from the starting point to the release point for validating the pan
+     * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
+     */
+    public twoPanHorizontalBinder<A>(pxTolerance: number, minLength?: number, accInit?: A):
+    PartialTwoTouchTypedBinder<A> {
+        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+            .usingInteraction<TwoTouchDnD, A>(twoHPan(this.logger, pxTolerance, minLength));
+    }
+
+    /**
+     * Creates a binding that uses a left pan interaction (two-touch).
+     * @param minLength - The minimal distance from the starting point to the release point for validating the pan
+     * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
+     */
+    public twoPanLeftBinder<A>(pxTolerance: number, minLength?: number, accInit?: A):
+    PartialTwoTouchTypedBinder<A> {
+        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+            .usingInteraction<TwoTouchDnD, A>(twoLeftPan(this.logger, pxTolerance, minLength));
+    }
+
+    /**
+     * Creates a binding that uses a right pan interaction (two-touch).
+     * @param minLength - The minimal distance from the starting point to the release point for validating the pan
+     * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
+     */
+    public twoPanRightBinder<A>(pxTolerance: number, minLength?: number, accInit?: A):
+    PartialTwoTouchTypedBinder<A> {
+        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+            .usingInteraction<TwoTouchDnD, A>(twoRightPan(this.logger, pxTolerance, minLength));
+    }
+
+    /**
+     * Creates a binding that uses a top pan interaction (two-touch).
+     * @param minLength - The minimal distance from the starting point to the release point for validating the pan
+     * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
+     */
+    public twoPanTopBinder<A>(pxTolerance: number, minLength?: number, accInit?: A):
+    PartialTwoTouchTypedBinder<A> {
+        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+            .usingInteraction<TwoTouchDnD, A>(twoTopPan(this.logger, pxTolerance, minLength));
+    }
+
+    /**
+     * Creates a binding that uses a bottom pan interaction (two-touch).
+     * @param minLength - The minimal distance from the starting point to the release point for validating the pan
+     * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
+     */
+    public twoPanBottomBinder<A>(pxTolerance: number, minLength?: number, accInit?: A):
+    PartialTwoTouchTypedBinder<A> {
+        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+            .usingInteraction<TwoTouchDnD, A>(twoBottomPan(this.logger, pxTolerance, minLength));
     }
 
     /**

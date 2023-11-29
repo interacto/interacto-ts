@@ -16,6 +16,7 @@ import type {Interaction, InteractionDataType} from "../../api/interaction/Inter
 import type {InteractionBuilder} from "../../api/interaction/InteractionBuilder";
 import type {InteractionData} from "../../api/interaction/InteractionData";
 import {CancelFSMError} from "../fsm/CancelFSMError";
+
 /**
  * An implementation of `InteractionBuilder`.
  */

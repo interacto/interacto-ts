@@ -27,10 +27,12 @@ import type {Logger} from "../../../api/logging/Logger";
 export class MultiTouchFSM extends ConcurrentAndFSM<TouchDnDFSM, TouchDnDFSMHandler> {
     /**
      * Creates the FSM.
+     * @param movementRequired - Whether the DnD starts after the touch point has begun moving (default)
+     * or as soon as the screen is touched. The latter is used for the MultiTouch interaction.
      */
-    public constructor(nbTouch: number, totalReinit: boolean, logger: Logger, dataHandler: TouchDnDFSMHandler) {
-        super(Array.from(Array.from({"length": nbTouch}).keys(), _ => new TouchDnDFSM(false, logger, dataHandler, false)),
-            logger, totalReinit ? [new TouchDnDFSM(false, logger, dataHandler, false)] : [], totalReinit, dataHandler);
+    public constructor(nbTouch: number, totalReinit: boolean, logger: Logger, dataHandler: TouchDnDFSMHandler, movementRequired = false) {
+        super(Array.from(Array.from({"length": nbTouch}).keys(), _ => new TouchDnDFSM(false, logger, dataHandler, movementRequired)),
+            logger, totalReinit ? [new TouchDnDFSM(false, logger, dataHandler, movementRequired)] : [], totalReinit, dataHandler);
     }
 
     public override process(event: Event): boolean {

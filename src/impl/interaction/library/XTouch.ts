@@ -27,10 +27,10 @@ export abstract class XTouchDnD<T extends TwoTouchData, S extends T & TwoTouchDa
     /**
      * Creates the interaction.
      * @param fsm - The optional FSM provided for the interaction
+     * @param movementRequired - Whether the DnD starts after the touch point has begun moving (default)
+     * or as soon as the screen is touched. The latter is used for the MultiTouch interaction.
      */
-    public constructor(nbTouches: number, logger: Logger, dataImpl: S, name: string, fsm?: MultiTouchFSM) {
-        //    predicate?: (data: SrcTgtPointsData<TouchData>) => boolean,
-        //    predicateEnd?: (data: SrcTgtPointsData<TouchData>) => boolean) {
+    public constructor(nbTouches: number, logger: Logger, dataImpl: S, name: string, fsm?: MultiTouchFSM, movementRequired?: boolean) {
         const handler: TouchDnDFSMHandler = {
             "onTouch": (evt: TouchEvent): void => {
                 const all = Array.from(evt.touches);
@@ -49,7 +49,7 @@ export abstract class XTouchDnD<T extends TwoTouchData, S extends T & TwoTouchDa
             }
         };
 
-        super(fsm ?? new MultiTouchFSM(nbTouches, true, logger, handler), dataImpl, logger, name);
+        super(fsm ?? new MultiTouchFSM(nbTouches, true, logger, handler, movementRequired), dataImpl, logger, name);
     }
 
     protected setTgtData(evt: TouchEvent): void {
@@ -64,8 +64,8 @@ export abstract class XTouchDnD<T extends TwoTouchData, S extends T & TwoTouchDa
  * A touch interaction that involves two touches exactly.
  */
 export class TwoTouchDnD extends XTouchDnD<TwoTouchData, TwoTouchDataImpl> {
-    public constructor(logger: Logger) {
-        super(2, logger, new TwoTouchDataImpl(), TwoTouchDnD.name);
+    public constructor(logger: Logger, name?: string, movementRequired?: boolean) {
+        super(2, logger, new TwoTouchDataImpl(), name ?? TwoTouchDnD.name, undefined, movementRequired);
     }
 }
 
@@ -73,8 +73,8 @@ export class TwoTouchDnD extends XTouchDnD<TwoTouchData, TwoTouchDataImpl> {
  * A touch interaction that involves three touches exactly.
  */
 export class ThreeTouchDnD extends XTouchDnD<ThreeTouchData, ThreeTouchDataImpl> {
-    public constructor(logger: Logger) {
-        super(3, logger, new ThreeTouchDataImpl(), ThreeTouchDnD.name);
+    public constructor(logger: Logger, name?: string, movementRequired?: boolean) {
+        super(3, logger, new ThreeTouchDataImpl(), name ?? ThreeTouchDnD.name, undefined, movementRequired);
     }
 }
 
@@ -82,7 +82,7 @@ export class ThreeTouchDnD extends XTouchDnD<ThreeTouchData, ThreeTouchDataImpl>
  * A touch interaction that involves four touches exactly.
  */
 export class FourTouchDnD extends XTouchDnD<FourTouchData, FourTouchDataImpl> {
-    public constructor(logger: Logger) {
-        super(4, logger, new FourTouchDataImpl(), FourTouchDnD.name);
+    public constructor(logger: Logger, name?: string, movementRequired?: boolean) {
+        super(4, logger, new FourTouchDataImpl(), name ?? FourTouchDnD.name, undefined, movementRequired);
     }
 }

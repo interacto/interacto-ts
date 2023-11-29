@@ -92,6 +92,30 @@ export class TwoTouchDataImpl implements TwoTouchData {
         return this.t1.isBottom(pxTolerance) && this.t2.isBottom(pxTolerance);
     }
 
+    public get diffClientX(): number {
+        return (this.t1.diffClientX + this.t2.diffClientX) / 2;
+    }
+
+    public get diffClientY(): number {
+        return (this.t1.diffClientY + this.t2.diffClientY) / 2;
+    }
+
+    public get diffPageX(): number {
+        return (this.t1.diffPageX + this.t2.diffPageX) / 2;
+    }
+
+    public get diffPageY(): number {
+        return (this.t1.diffPageY + this.t2.diffPageY) / 2;
+    }
+
+    public get diffScreenX(): number {
+        return (this.t1.diffScreenX + this.t2.diffScreenX) / 2;
+    }
+
+    public get diffScreenY(): number {
+        return (this.t1.diffScreenY + this.t2.diffScreenY) / 2;
+    }
+
     /**
      * Returns the distance between the end position of the touches divided the distance between the starting position of the touches.
      * If more or less than two touches are involved, or if the touches do not get closer during the interaction or follow the same line,

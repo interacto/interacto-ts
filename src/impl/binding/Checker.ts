@@ -28,8 +28,10 @@ import {KeysTyped} from "../interaction/library/KeysTyped";
 import {LongMouseDown} from "../interaction/library/LongMouseDown";
 import {MouseDown} from "../interaction/library/MouseDown";
 import {MouseUp} from "../interaction/library/MouseUp";
+import {MultiTouch} from "../interaction/library/MultiTouch";
 import {leftPan, rightPan, vPan, hPan, topPan, bottomPan} from "../interaction/library/Pans";
 import {TouchDnD} from "../interaction/library/TouchDnD";
+import {twoBottomPan, twoHPan, twoLeftPan, twoRightPan, twoTopPan, twoVPan} from "../interaction/library/TwoPans";
 
 export class Checker {
     private readonly linterRules: Map<RuleName, Severity>;
@@ -144,6 +146,12 @@ export class Checker {
             this.cacheIncluded.set(bottomPan.name, new Set([vPan.name, TouchDnD.name]));
             this.cacheIncluded.set(hPan.name, new Set([TouchDnD.name]));
             this.cacheIncluded.set(vPan.name, new Set([TouchDnD.name]));
+            this.cacheIncluded.set(twoHPan.name, new Set([MultiTouch.name]));
+            this.cacheIncluded.set(twoVPan.name, new Set([MultiTouch.name]));
+            this.cacheIncluded.set(twoLeftPan.name, new Set([twoHPan.name, MultiTouch.name]));
+            this.cacheIncluded.set(twoRightPan.name, new Set([twoHPan.name, MultiTouch.name]));
+            this.cacheIncluded.set(twoTopPan.name, new Set([twoVPan.name, MultiTouch.name]));
+            this.cacheIncluded.set(twoBottomPan.name, new Set([twoVPan.name, MultiTouch.name]));
         }
     }
 }

@@ -28,6 +28,36 @@ export interface TwoTouchData extends MultiTouchData {
     readonly touch2: SrcTgtPointsData<TouchData>;
 
     /**
+     * The translation vector between the x client position of the source and the y client position of the target.
+     */
+    readonly diffClientX: number;
+
+    /**
+    * The translation vector between the y client position of the source and the y client position of the target.
+    */
+    readonly diffClientY: number;
+
+    /**
+    * The translation vector between the x page position of the source and the x page position of the target.
+    */
+    readonly diffPageX: number;
+
+    /**
+    * The translation vector between the y page position of the source and the y page position of the target.
+    */
+    readonly diffPageY: number;
+
+    /**
+    * The translation vector between the x screen position of the source and the x screen position of the target.
+    */
+    readonly diffScreenX: number;
+
+    /**
+    * The translation vector between the y screen position of the source and the y screen position of the target.
+    */
+    readonly diffScreenY: number;
+
+    /**
      * Returns true if all the touch lines are vertical in the same direction.
      * @param pxTolerance - The pixel tolerance for considering the line vertical.
      */

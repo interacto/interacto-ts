@@ -175,6 +175,7 @@ export * from "./impl/interaction/library/TimedClick";
 export * from "./impl/interaction/library/TimedTap";
 export * from "./impl/interaction/library/TouchDnD";
 export * from "./impl/interaction/library/TouchStart";
+export * from "./impl/interaction/library/TwoPans";
 export * from "./impl/interaction/library/Wheel";
 export * from "./impl/interaction/library/XTouch";
 export * from "./impl/logging/FittsLaw";
