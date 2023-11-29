@@ -59,39 +59,30 @@ describe("using pan interactions", () => {
 
         test("touch move vert ko", () => {
             robot(canvas)
-                .touchstart({}, [{"identifier": 1, "screenX": 10, "screenY": 20}])
-                .touchmove({}, [{"identifier": 1, "screenX": 10, "screenY": 10}]);
+                .pan(2, 10, "top", {});
 
             expect(handler.fsmStarts).not.toHaveBeenCalled();
         });
 
         test("touch move horiz ko because beyond tolerance rate", () => {
             robot(canvas)
-                .touchstart({}, [{"identifier": 1, "screenX": 10, "screenY": 21}])
-                .touchmove({}, [{"identifier": 1, "screenX": 11, "screenY": 10}]);
+                .pan(2, 10, "right", {}, 11);
 
             expect(handler.fsmStarts).not.toHaveBeenCalled();
         });
 
         test("touch move horiz ok because in tolerance rate", () => {
             robot(canvas)
-                .touchstart({}, [{"identifier": 1, "screenX": 10, "screenY": 19}])
-                .touchmove({}, [{"identifier": 1, "screenX": 9, "screenY": 10}]);
+                .pan(1, 1, "left", {}, 9);
 
+            expect(handler.fsmCancels).not.toHaveBeenCalled();
             expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         });
 
         test("restart after a cancellation", () => {
             robot(canvas)
-                .touchstart({}, [{"identifier": 1, "screenX": 10, "screenY": 10}])
-                .touchmove({}, [{"identifier": 1, "screenX": 20, "screenY": 10}])
-                .touchmove({}, [{"identifier": 1, "screenX": 30, "screenY": 10}])
-                .touchmove({}, [{"identifier": 1, "screenX": 30, "screenY": 30}])
-                .touchend({}, [{"identifier": 1, "screenX": 30, "screenY": 30}])
-                .touchstart({}, [{"identifier": 1, "screenX": 10, "screenY": 10}])
-                .touchmove({}, [{"identifier": 1, "screenX": 40, "screenY": 10}])
-                .touchmove({}, [{"identifier": 1, "screenX": 50, "screenY": 10}])
-                .touchend({}, [{"identifier": 1, "screenX": 50, "screenY": 10}]);
+                .pan(1, 50, "left", {}, 20, 3)
+                .pan(1, 50, "left", {}, 0, 2);
 
             expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
             expect(handler.fsmStops).toHaveBeenCalledTimes(1);
@@ -141,24 +132,21 @@ describe("using pan interactions", () => {
 
         test("touch move horiz ko", () => {
             robot(canvas)
-                .touchstart({}, [{"identifier": 1, "screenX": 10, "screenY": 10}])
-                .touchmove({}, [{"identifier": 1, "screenX": 20, "screenY": 10}]);
+                .pan(2, 10, "left", {});
 
             expect(handler.fsmStarts).not.toHaveBeenCalled();
         });
 
         test("touch move vert ko because beyond tolerance rate", () => {
             robot(canvas)
-                .touchstart({}, [{"identifier": 1, "screenX": 10, "screenY": 10}])
-                .touchmove({}, [{"identifier": 1, "screenX": 21, "screenY": 11}]);
+                .pan(3, 20, "top", {}, 11);
 
             expect(handler.fsmStarts).not.toHaveBeenCalled();
         });
 
         test("touch move vert ok because in tolerance rate", () => {
             robot(canvas)
-                .touchstart({}, [{"identifier": 1, "screenX": 10, "screenY": 9}])
-                .touchmove({}, [{"identifier": 1, "screenX": 19, "screenY": 5}]);
+                .pan(3, 20, "top", {}, 10);
 
             expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         });
@@ -191,24 +179,21 @@ describe("using pan interactions", () => {
 
         test("touch move left ko when to right", () => {
             robot(canvas)
-                .touchstart({}, [{"identifier": 1, "screenX": 10, "screenY": 10}])
-                .touchmove({}, [{"identifier": 1, "screenX": 11, "screenY": 10}]);
+                .pan(3, 20, "right", {});
 
             expect(handler.fsmStarts).not.toHaveBeenCalled();
         });
 
         test("touch move left ko when to top beyond threshold", () => {
             robot(canvas)
-                .touchstart({}, [{"identifier": 1, "screenX": 10, "screenY": 10}])
-                .touchmove({}, [{"identifier": 1, "screenX": 9, "screenY": 21}]);
+                .pan(3, 20, "left", {}, 11);
 
             expect(handler.fsmStarts).not.toHaveBeenCalled();
         });
 
         test("touch move left ok when to top too because in tolerance rate", () => {
             robot(canvas)
-                .touchstart({}, [{"identifier": 1, "screenX": 10, "screenY": 9}])
-                .touchmove({}, [{"identifier": 1, "screenX": -1, "screenY": 5}]);
+                .pan(3, 20, "left", {}, 10);
 
             expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         });
@@ -241,33 +226,28 @@ describe("using pan interactions", () => {
 
         test("touch move right ko when to left", () => {
             robot(canvas)
-                .touchstart({}, [{"identifier": 1, "screenX": 10, "screenY": 10}])
-                .touchmove({}, [{"identifier": 1, "screenX": 9, "screenY": 10}]);
+                .pan(3, 20, "left", {});
 
             expect(handler.fsmStarts).not.toHaveBeenCalled();
         });
 
         test("touch move right ko when to bottom beyond threshold", () => {
             robot(canvas)
-                .touchstart({}, [{"identifier": 1, "screenX": 10, "screenY": 10}])
-                .touchmove({}, [{"identifier": 1, "screenX": 11, "screenY": -1}]);
+                .pan(3, 20, "right", {}, 11);
 
             expect(handler.fsmStarts).not.toHaveBeenCalled();
         });
 
         test("touch move right ok when to top too because in tolerance rate", () => {
             robot(canvas)
-                .touchstart({}, [{"identifier": 1, "screenX": 10, "screenY": 9}])
-                .touchmove({}, [{"identifier": 1, "screenX": 20, "screenY": 5}]);
+                .pan(3, 20, "right", {}, 10);
 
             expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         });
 
         test("it stops", () => {
             robot(canvas)
-                .touchstart({}, [{"identifier": 1, "screenX": 10, "screenY": 9}])
-                .touchmove({}, [{"identifier": 1, "screenX": 20, "screenY": 5}])
-                .touchend({}, [{"identifier": 1, "screenX": 20, "screenY": 5}]);
+                .pan(1, 100, "right", {}, 8, 2);
 
             expect(handler.fsmStops).toHaveBeenCalledTimes(1);
         });
@@ -300,24 +280,21 @@ describe("using pan interactions", () => {
 
         test("touch move top ko when to bottom", () => {
             robot(canvas)
-                .touchstart({}, [{"identifier": 1, "screenX": 10, "screenY": 10}])
-                .touchmove({}, [{"identifier": 1, "screenX": 10, "screenY": 11}]);
+                .pan(1, 20, "bottom", {});
 
             expect(handler.fsmStarts).not.toHaveBeenCalled();
         });
 
         test("touch move top ko when to right beyond threshold", () => {
             robot(canvas)
-                .touchstart({}, [{"identifier": 1, "screenX": 10, "screenY": 10}])
-                .touchmove({}, [{"identifier": 1, "screenX": 21, "screenY": 0}]);
+                .pan(2, 20, "top", {}, 11);
 
             expect(handler.fsmStarts).not.toHaveBeenCalled();
         });
 
         test("touch move top ok when to right too because in tolerance rate", () => {
             robot(canvas)
-                .touchstart({}, [{"identifier": 1, "screenX": 10, "screenY": 9}])
-                .touchmove({}, [{"identifier": 1, "screenX": 20, "screenY": 5}]);
+                .pan(2, 20, "top", {}, 10);
 
             expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         });
@@ -350,24 +327,21 @@ describe("using pan interactions", () => {
 
         test("touch move bottom ko when to top", () => {
             robot(canvas)
-                .touchstart({}, [{"identifier": 1, "screenX": 10, "screenY": 10}])
-                .touchmove({}, [{"identifier": 1, "screenX": 10, "screenY": 9}]);
+                .pan(2, 20, "top", {});
 
             expect(handler.fsmStarts).not.toHaveBeenCalled();
         });
 
         test("touch move bottom ko when to right beyond threshold", () => {
             robot(canvas)
-                .touchstart({}, [{"identifier": 1, "screenX": 10, "screenY": 10}])
-                .touchmove({}, [{"identifier": 1, "screenX": 21, "screenY": 20}]);
+                .pan(2, 20, "bottom", {}, 11);
 
             expect(handler.fsmStarts).not.toHaveBeenCalled();
         });
 
         test("touch move bottom ok when to right too because in tolerance rate", () => {
             robot(canvas)
-                .touchstart({}, [{"identifier": 1, "screenX": 10, "screenY": 9}])
-                .touchmove({}, [{"identifier": 1, "screenX": 20, "screenY": 15}]);
+                .pan(2, 20, "bottom", {}, 10);
 
             expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         });
@@ -380,9 +354,7 @@ describe("using pan interactions", () => {
             interaction.registerToNodes([canvas]);
 
             robot(canvas)
-                .touchstart({}, [{"identifier": 1, "screenX": 10, "screenY": 19}])
-                .touchmove({}, [{"identifier": 1, "screenX": 110, "screenY": 20}])
-                .touchend({}, [{"identifier": 1, "screenX": 110, "screenY": 20}]);
+                .pan(2, 100, "left", {}, 1);
 
             expect(handler.fsmStops).toHaveBeenCalledTimes(1);
         });
@@ -393,12 +365,10 @@ describe("using pan interactions", () => {
             interaction.registerToNodes([canvas]);
 
             robot(canvas)
-                .touchstart({}, [{"identifier": 1, "screenX": 10, "screenY": 19}])
-                .touchmove({}, [{"identifier": 1, "screenX": 110, "screenY": 20}])
-                .touchend({}, [{"identifier": 1, "screenX": 109, "screenY": 20}]);
+                .pan(2, 50, "left", {});
 
-            expect(handler.fsmStops).not.toHaveBeenCalled();
             expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
+            expect(handler.fsmStops).not.toHaveBeenCalled();
         });
 
         test("with a VPan and minimal distance OK", () => {
@@ -407,9 +377,7 @@ describe("using pan interactions", () => {
             interaction.registerToNodes([canvas]);
 
             robot(canvas)
-                .touchstart({}, [{"identifier": 1, "screenX": 10, "screenY": 100}])
-                .touchmove({}, [{"identifier": 1, "screenX": 10, "screenY": 200}])
-                .touchend({}, [{"identifier": 1, "screenX": 10, "screenY": 200}]);
+                .pan(2, 100, "top", {}, 1);
 
             expect(handler.fsmStops).toHaveBeenCalledTimes(1);
         });
@@ -420,9 +388,7 @@ describe("using pan interactions", () => {
             interaction.registerToNodes([canvas]);
 
             robot(canvas)
-                .touchstart({}, [{"identifier": 1, "screenX": 10, "screenY": 100}])
-                .touchmove({}, [{"identifier": 1, "screenX": 10, "screenY": 199}])
-                .touchend({}, [{"identifier": 1, "screenX": 10, "screenY": 199}]);
+                .pan(2, 99, "bottom", {}, 1);
 
             expect(handler.fsmStops).not.toHaveBeenCalled();
             expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
@@ -434,9 +400,7 @@ describe("using pan interactions", () => {
             interaction.registerToNodes([canvas]);
 
             robot(canvas)
-                .touchstart({}, [{"identifier": 1, "screenX": 10, "screenY": 19}])
-                .touchmove({}, [{"identifier": 1, "screenX": -40, "screenY": 20}])
-                .touchend({}, [{"identifier": 1, "screenX": -40, "screenY": 20}]);
+                .pan(2, 100, "left", {}, 1);
 
             expect(handler.fsmStops).toHaveBeenCalledTimes(1);
         });
@@ -447,9 +411,7 @@ describe("using pan interactions", () => {
             interaction.registerToNodes([canvas]);
 
             robot(canvas)
-                .touchstart({}, [{"identifier": 1, "screenX": 100, "screenY": 19}])
-                .touchmove({}, [{"identifier": 1, "screenX": 81, "screenY": 20}])
-                .touchend({}, [{"identifier": 1, "screenX": 81, "screenY": 20}]);
+                .pan(2, 19, "left", {}, 1);
 
             expect(handler.fsmStops).not.toHaveBeenCalled();
             expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
@@ -461,9 +423,7 @@ describe("using pan interactions", () => {
             interaction.registerToNodes([canvas]);
 
             robot(canvas)
-                .touchstart({}, [{"identifier": 1, "screenX": 0, "screenY": 19}])
-                .touchmove({}, [{"identifier": 1, "screenX": 2, "screenY": 20}])
-                .touchend({}, [{"identifier": 1, "screenX": 2, "screenY": 20}]);
+                .pan(2, 100, "right", {}, 1);
 
             expect(handler.fsmStops).toHaveBeenCalledTimes(1);
         });
@@ -474,9 +434,7 @@ describe("using pan interactions", () => {
             interaction.registerToNodes([canvas]);
 
             robot(canvas)
-                .touchstart({}, [{"identifier": 1, "screenX": 50, "screenY": 19}])
-                .touchmove({}, [{"identifier": 1, "screenX": 59, "screenY": 20}])
-                .touchend({}, [{"identifier": 1, "screenX": 59, "screenY": 20}]);
+                .pan(2, 9, "right", {}, 1);
 
             expect(handler.fsmStops).not.toHaveBeenCalled();
             expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
@@ -488,9 +446,7 @@ describe("using pan interactions", () => {
             interaction.registerToNodes([canvas]);
 
             robot(canvas)
-                .touchstart({}, [{"identifier": 1, "screenX": 10, "screenY": 100}])
-                .touchmove({}, [{"identifier": 1, "screenX": 10, "screenY": 90}])
-                .touchend({}, [{"identifier": 1, "screenX": 10, "screenY": 90}]);
+                .pan(2, 100, "top", {});
 
             expect(handler.fsmStops).toHaveBeenCalledTimes(1);
         });
@@ -501,9 +457,7 @@ describe("using pan interactions", () => {
             interaction.registerToNodes([canvas]);
 
             robot(canvas)
-                .touchstart({}, [{"identifier": 1, "screenX": 10, "screenY": 100}])
-                .touchmove({}, [{"identifier": 1, "screenX": 10, "screenY": 91}])
-                .touchend({}, [{"identifier": 1, "screenX": 10, "screenY": 91}]);
+                .pan(2, 9, "top", {});
 
             expect(handler.fsmStops).not.toHaveBeenCalled();
             expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
@@ -515,9 +469,7 @@ describe("using pan interactions", () => {
             interaction.registerToNodes([canvas]);
 
             robot(canvas)
-                .touchstart({}, [{"identifier": 1, "screenX": 10, "screenY": 110}])
-                .touchmove({}, [{"identifier": 1, "screenX": 10, "screenY": 210}])
-                .touchend({}, [{"identifier": 1, "screenX": 10, "screenY": 210}]);
+                .pan(2, 100, "bottom", {});
 
             expect(handler.fsmStops).toHaveBeenCalledTimes(1);
         });
@@ -528,9 +480,7 @@ describe("using pan interactions", () => {
             interaction.registerToNodes([canvas]);
 
             robot(canvas)
-                .touchstart({}, [{"identifier": 1, "screenX": 10, "screenY": 100}])
-                .touchmove({}, [{"identifier": 1, "screenX": 10, "screenY": 199}])
-                .touchend({}, [{"identifier": 1, "screenX": 10, "screenY": 199}]);
+                .pan(2, 99, "bottom", {});
 
             expect(handler.fsmStops).not.toHaveBeenCalled();
             expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
