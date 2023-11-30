@@ -12,17 +12,23 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import type {LineTouchData} from "../../../api/interaction/LineTouchData";
+import type {TwoTouchData} from "../../../api/interaction/TwoTouchData";
 import type {Logger} from "../../../api/logging/Logger";
 import {InteractionBuilderImpl} from "../InteractionBuilderImpl";
-import {TwoTouchDnD} from "./XTouch";
+import {TwoPanDataImpl} from "../TwoPanDataImpl";
+import {XTouchDnD} from "./XTouch";
+
+export type TwoPan = XTouchDnD<LineTouchData & TwoTouchData, TwoPanDataImpl>;
 
 /**
  * Creates the horizontal pan that uses two touches.
  * @param pxTolerance - The pixel tolerance for considering the line horizontal.
  * @param minLength - The minimal distance from the starting point to the release point for validating the pan
  */
-export function twoHPan(logger: Logger, pxTolerance: number, minLength?: number): () => TwoTouchDnD {
-    return new InteractionBuilderImpl(name => new TwoTouchDnD(logger, name, true))
+export function twoHPan(logger: Logger, pxTolerance: number, minLength?: number): () => TwoPan {
+    return new InteractionBuilderImpl(name => new XTouchDnD<LineTouchData & TwoTouchData, TwoPanDataImpl>(2, logger,
+        new TwoPanDataImpl(), name, undefined, true))
         .firstAndThen(data => data.isHorizontal(pxTolerance))
         .end(data => minLength === undefined || Math.abs(data.diffScreenX) >= minLength)
         .name(twoHPan.name)
@@ -34,8 +40,9 @@ export function twoHPan(logger: Logger, pxTolerance: number, minLength?: number)
  * @param pxTolerance - The pixel tolerance for considering the line vertical.
  * @param minLength - The minimal distance from the starting point to the release point for validating the pan
  */
-export function twoVPan(logger: Logger, pxTolerance: number, minLength?: number): () => TwoTouchDnD {
-    return new InteractionBuilderImpl(name => new TwoTouchDnD(logger, name, true))
+export function twoVPan(logger: Logger, pxTolerance: number, minLength?: number): () => TwoPan {
+    return new InteractionBuilderImpl(name => new XTouchDnD<LineTouchData & TwoTouchData, TwoPanDataImpl>(2, logger,
+        new TwoPanDataImpl(), name, undefined, true))
         .firstAndThen(data => data.isVertical(pxTolerance))
         .end(data => minLength === undefined || Math.abs(data.diffScreenY) >= minLength)
         .name(twoVPan.name)
@@ -48,8 +55,9 @@ export function twoVPan(logger: Logger, pxTolerance: number, minLength?: number)
  * @param minLength - The minimal distance from the starting point to the release point for validating the pan
  * @param fsm - The optional FSM provided for the interaction
  */
-export function twoLeftPan(logger: Logger, pxTolerance: number, minLength?: number): () => TwoTouchDnD {
-    return new InteractionBuilderImpl(name => new TwoTouchDnD(logger, name, true))
+export function twoLeftPan(logger: Logger, pxTolerance: number, minLength?: number): () => TwoPan {
+    return new InteractionBuilderImpl(name => new XTouchDnD<LineTouchData & TwoTouchData, TwoPanDataImpl>(2, logger,
+        new TwoPanDataImpl(), name, undefined, true))
         .firstAndThen(data => data.isLeft(pxTolerance))
         .end(data => minLength === undefined || Math.abs(data.diffScreenX) >= minLength)
         .name(twoLeftPan.name)
@@ -62,8 +70,9 @@ export function twoLeftPan(logger: Logger, pxTolerance: number, minLength?: numb
  * @param minLength - The minimal distance from the starting point to the release point for validating the pan
  * @param fsm - The optional FSM provided for the interaction
  */
-export function twoRightPan(logger: Logger, pxTolerance: number, minLength?: number): () => TwoTouchDnD {
-    return new InteractionBuilderImpl(name => new TwoTouchDnD(logger, name, true))
+export function twoRightPan(logger: Logger, pxTolerance: number, minLength?: number): () => TwoPan {
+    return new InteractionBuilderImpl(name => new XTouchDnD<LineTouchData & TwoTouchData, TwoPanDataImpl>(2, logger,
+        new TwoPanDataImpl(), name, undefined, true))
         .firstAndThen(data => data.isRight(pxTolerance))
         .end(data => minLength === undefined || Math.abs(data.diffScreenX) >= minLength)
         .name(twoRightPan.name)
@@ -76,8 +85,9 @@ export function twoRightPan(logger: Logger, pxTolerance: number, minLength?: num
  * @param minLength - The minimal distance from the starting point to the release point for validating the pan
  * @param fsm - The optional FSM provided for the interaction
  */
-export function twoTopPan(logger: Logger, pxTolerance: number, minLength?: number): () => TwoTouchDnD {
-    return new InteractionBuilderImpl(name => new TwoTouchDnD(logger, name, true))
+export function twoTopPan(logger: Logger, pxTolerance: number, minLength?: number): () => TwoPan {
+    return new InteractionBuilderImpl(name => new XTouchDnD<LineTouchData & TwoTouchData, TwoPanDataImpl>(2, logger,
+        new TwoPanDataImpl(), name, undefined, true))
         .firstAndThen(data => data.isTop(pxTolerance))
         .end(data => minLength === undefined || Math.abs(data.diffScreenY) >= minLength)
         .name(twoTopPan.name)
@@ -90,8 +100,9 @@ export function twoTopPan(logger: Logger, pxTolerance: number, minLength?: numbe
  * @param minLength - The minimal distance from the starting point to the release point for validating the pan
  * @param fsm - The optional FSM provided for the interaction
  */
-export function twoBottomPan(logger: Logger, pxTolerance: number, minLength?: number): () => TwoTouchDnD {
-    return new InteractionBuilderImpl(name => new TwoTouchDnD(logger, name, true))
+export function twoBottomPan(logger: Logger, pxTolerance: number, minLength?: number): () => TwoPan {
+    return new InteractionBuilderImpl(name => new XTouchDnD<LineTouchData & TwoTouchData, TwoPanDataImpl>(2, logger,
+        new TwoPanDataImpl(), name, undefined, true))
         .firstAndThen(data => data.isBottom(pxTolerance))
         .end(data => minLength === undefined || Math.abs(data.diffScreenY) >= minLength)
         .name(twoBottomPan.name)

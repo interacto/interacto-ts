@@ -73,7 +73,9 @@ import type {
     PartialPointOrTouchTypedBinder,
     PartialTwoTouchTypedBinder,
     PartialThreeTouchTypedBinder,
-    PartialFourTouchTypedBinder
+    PartialFourTouchTypedBinder,
+    PartialRotateTypedBinder,
+    PartialTwoPanTypedBinder
 } from "../../api/binding/Bindings";
 import {Bindings} from "../../api/binding/Bindings";
 import type {Logger} from "../../api/logging/Logger";
@@ -87,9 +89,15 @@ import {TouchStart} from "../interaction/library/TouchStart";
 import {Or} from "../interaction/Or";
 import type {VisitorBinding} from "../../api/binding/VisitorBinding";
 import type {LinterRule} from "../../api/binding/Linting";
-import {TwoTouchDnD, ThreeTouchDnD, FourTouchDnD} from "../interaction/library/XTouch";
+import type {XTouchDnD} from "../interaction/library/XTouch";
+import {ThreeTouchDnD, FourTouchDnD, twoTouch} from "../interaction/library/XTouch";
 import {bottomPan, hPan, leftPan, rightPan, topPan, vPan} from "../interaction/library/Pans";
-import {twoBottomPan, twoHPan, twoLeftPan, twoRightPan, twoTopPan, twoVPan} from "../../interacto";
+import type {Rotate} from "../interaction/library/TwoTouch";
+import {rotate} from "../interaction/library/TwoTouch";
+import type {TwoPan} from "../interaction/library/TwoPans";
+import {twoBottomPan, twoHPan, twoLeftPan, twoRightPan, twoTopPan, twoVPan} from "../interaction/library/TwoPans";
+import type {GeneralTwoTouchDataImpl} from "../interaction/GeneralTwoTouchDataImpl";
+import type {GeneralTwoTouchData} from "../../api/interaction/TwoTouchData";
 
 export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
     protected observer: BindingsObserver | undefined;
@@ -201,7 +209,7 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
 
     public twoTouchBinder<A>(accInit?: A): PartialTwoTouchTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
-            .usingInteraction<TwoTouchDnD, A>(() => new TwoTouchDnD(this.logger));
+            .usingInteraction<XTouchDnD<GeneralTwoTouchData, GeneralTwoTouchDataImpl>, A>(twoTouch(this.logger));
     }
 
     public threeTouchBinder<A>(accInit?: A): PartialThreeTouchTypedBinder<A> {
@@ -244,10 +252,10 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
      * @param pxTolerance - The tolerance rate in pixels accepted while executing the swipe
      */
     public swipeBinder<A>(horizontal: boolean, minVelocity: number, minLength: number, nbTouches: number,
-                          pxTolerance: number, accInit?: A): PartialMultiTouchTypedBinder<A> {
+                          _pxTolerance: number, accInit?: A): PartialMultiTouchTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<MultiTouch, A>(() => new MultiTouch(nbTouches, true, this.logger))
-            .when(i => (horizontal ? i.isHorizontal(pxTolerance) : i.isVertical(pxTolerance)))
+            // .when(i => (horizontal ? i.isHorizontal(pxTolerance) : i.isVertical(pxTolerance)))
             .when(i => i.touches[0] !== undefined &&
                 (horizontal ? Math.abs(i.touches[0].diffScreenX) >= minLength : Math.abs(i.touches[0].diffScreenY) >= minLength))
             // The velocity value is in pixels/ms, so conversion is necessary
@@ -342,9 +350,9 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
      * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
      */
     public twoPanVerticalBinder<A>(pxTolerance: number, minLength?: number, accInit?: A):
-    PartialTwoTouchTypedBinder<A> {
+    PartialTwoPanTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
-            .usingInteraction<TwoTouchDnD, A>(twoVPan(this.logger, pxTolerance, minLength));
+            .usingInteraction<TwoPan, A>(twoVPan(this.logger, pxTolerance, minLength));
     }
 
     /**
@@ -353,9 +361,9 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
      * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
      */
     public twoPanHorizontalBinder<A>(pxTolerance: number, minLength?: number, accInit?: A):
-    PartialTwoTouchTypedBinder<A> {
+    PartialTwoPanTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
-            .usingInteraction<TwoTouchDnD, A>(twoHPan(this.logger, pxTolerance, minLength));
+            .usingInteraction<TwoPan, A>(twoHPan(this.logger, pxTolerance, minLength));
     }
 
     /**
@@ -364,9 +372,9 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
      * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
      */
     public twoPanLeftBinder<A>(pxTolerance: number, minLength?: number, accInit?: A):
-    PartialTwoTouchTypedBinder<A> {
+    PartialTwoPanTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
-            .usingInteraction<TwoTouchDnD, A>(twoLeftPan(this.logger, pxTolerance, minLength));
+            .usingInteraction<TwoPan, A>(twoLeftPan(this.logger, pxTolerance, minLength));
     }
 
     /**
@@ -375,9 +383,9 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
      * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
      */
     public twoPanRightBinder<A>(pxTolerance: number, minLength?: number, accInit?: A):
-    PartialTwoTouchTypedBinder<A> {
+    PartialTwoPanTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
-            .usingInteraction<TwoTouchDnD, A>(twoRightPan(this.logger, pxTolerance, minLength));
+            .usingInteraction<TwoPan, A>(twoRightPan(this.logger, pxTolerance, minLength));
     }
 
     /**
@@ -386,9 +394,9 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
      * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
      */
     public twoPanTopBinder<A>(pxTolerance: number, minLength?: number, accInit?: A):
-    PartialTwoTouchTypedBinder<A> {
+    PartialTwoPanTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
-            .usingInteraction<TwoTouchDnD, A>(twoTopPan(this.logger, pxTolerance, minLength));
+            .usingInteraction<TwoPan, A>(twoTopPan(this.logger, pxTolerance, minLength));
     }
 
     /**
@@ -397,19 +405,23 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
      * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
      */
     public twoPanBottomBinder<A>(pxTolerance: number, minLength?: number, accInit?: A):
-    PartialTwoTouchTypedBinder<A> {
+    PartialTwoPanTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
-            .usingInteraction<TwoTouchDnD, A>(twoBottomPan(this.logger, pxTolerance, minLength));
+            .usingInteraction<TwoPan, A>(twoBottomPan(this.logger, pxTolerance, minLength));
+    }
+
+    public rotateBinder<A>(pxTolerance: number, accInit?: A): PartialRotateTypedBinder<A> {
+        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+            .usingInteraction<Rotate, A>(rotate(this.logger, pxTolerance));
     }
 
     /**
      * Creates a binding that uses the pinch interaction.
      * @param pxTolerance - The tolerance rate in pixels accepted while executing the pinch
-     * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
      */
     public pinchBinder<A>(pxTolerance: number, accInit?: A): PartialTwoTouchTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
-            .usingInteraction<TwoTouchDnD, A>(() => new TwoTouchDnD(this.logger))
+            .usingInteraction<XTouchDnD<GeneralTwoTouchData, GeneralTwoTouchDataImpl>, A>(twoTouch(this.logger))
             .when(i => i.pinchFactor(pxTolerance) !== undefined);
     }
 

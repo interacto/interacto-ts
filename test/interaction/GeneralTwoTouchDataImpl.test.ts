@@ -12,12 +12,11 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {EventModifierData} from "../../src/api/interaction/EventModifierData";
-import type {UnitInteractionData} from "../../src/api/interaction/UnitInteractionData";
-import {TwoTouchDataImpl} from "../../src/impl/interaction/TwoTouchDataImpl";
+import type {EventModifierData, UnitInteractionData} from "../../src/interacto";
+import {GeneralTwoTouchDataImpl, TwoTouchDataImpl} from "../../src/interacto";
 
 describe("using a multi touch data", () => {
-    let data: TwoTouchDataImpl;
+    let data: GeneralTwoTouchDataImpl;
     let touchSrc1: Touch;
     let touchSrc2: Touch;
     let touchTgt1: Touch;
@@ -25,7 +24,7 @@ describe("using a multi touch data", () => {
     let evt: EventModifierData & UnitInteractionData;
 
     beforeEach(() => {
-        data = new TwoTouchDataImpl();
+        data = new GeneralTwoTouchDataImpl();
 
         touchSrc1 = {
             "force": 15,

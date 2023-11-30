@@ -37,9 +37,11 @@ import type {UndoHistoryBase} from "../undo/UndoHistoryBase";
 import type {MousePointsData} from "../interaction/MousePointsData";
 import type {TapsData} from "../interaction/TapsData";
 import type {VisitorBinding} from "./VisitorBinding";
-import type {TwoTouchData} from "../interaction/TwoTouchData";
+import type {GeneralTwoTouchData, TwoTouchData} from "../interaction/TwoTouchData";
 import type {ThreeTouchData} from "../interaction/ThreeTouchData";
 import type {FourTouchData} from "../interaction/FourTouchData";
+import type {RotationData} from "../interaction/RotationTouchData";
+import type {LineTouchData} from "../interaction/LineTouchData";
 
 export type PartialButtonTypedBinder<A = unknown> = InteractionBinder<Interaction<WidgetData<HTMLButtonElement>>, A>;
 export type PartialInputTypedBinder<A = unknown> = InteractionBinder<Interaction<WidgetData<HTMLInputElement>>, A>;
@@ -47,7 +49,9 @@ export type PartialSelectTypedBinder<A = unknown> = InteractionBinder<Interactio
 export type PartialSpinnerTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<WidgetData<HTMLInputElement>>, A>;
 export type PartialAnchorTypedBinder<A = unknown> = InteractionBinder<Interaction<WidgetData<HTMLAnchorElement>>, A>;
 export type PartialTextInputTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<WidgetData<HTMLInputElement | HTMLTextAreaElement>>, A>;
-export type PartialTwoTouchTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<TwoTouchData>, A>;
+export type PartialRotateTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<RotationData>, A>;
+export type PartialTwoPanTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<LineTouchData & TwoTouchData>, A>;
+export type PartialTwoTouchTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<GeneralTwoTouchData>, A>;
 export type PartialThreeTouchTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<ThreeTouchData>, A>;
 export type PartialFourTouchTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<FourTouchData>, A>;
 export type PartialTouchSrcTgtTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<SrcTgtPointsData<TouchData>>, A>;
@@ -246,7 +250,7 @@ export abstract class Bindings<H extends UndoHistoryBase> {
      * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
      */
     public abstract twoPanVerticalBinder<A>(pxTolerance: number, minLength?: number, accInit?: A):
-    PartialTwoTouchTypedBinder<A>;
+    PartialTwoPanTypedBinder<A>;
 
     /**
      * Creates a binding that uses a vertical pan interaction (two-touch).
@@ -254,7 +258,7 @@ export abstract class Bindings<H extends UndoHistoryBase> {
      * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
      */
     public abstract twoPanHorizontalBinder<A>(pxTolerance: number, minLength?: number, accInit?: A):
-    PartialTwoTouchTypedBinder<A>;
+    PartialTwoPanTypedBinder<A>;
 
     /**
      * Creates a binding that uses a left pan interaction (two-touch).
@@ -262,7 +266,7 @@ export abstract class Bindings<H extends UndoHistoryBase> {
      * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
      */
     public abstract twoPanLeftBinder<A>(pxTolerance: number, minLength?: number, accInit?: A):
-    PartialTwoTouchTypedBinder<A>;
+    PartialTwoPanTypedBinder<A>;
 
     /**
      * Creates a binding that uses a right pan interaction (two-touch).
@@ -270,7 +274,7 @@ export abstract class Bindings<H extends UndoHistoryBase> {
      * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
      */
     public abstract twoPanRightBinder<A>(pxTolerance: number, minLength?: number, accInit?: A):
-    PartialTwoTouchTypedBinder<A>;
+    PartialTwoPanTypedBinder<A>;
 
     /**
      * Creates a binding that uses a top pan interaction (two-touch).
@@ -278,7 +282,7 @@ export abstract class Bindings<H extends UndoHistoryBase> {
      * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
      */
     public abstract twoPanTopBinder<A>(pxTolerance: number, minLength?: number, accInit?: A):
-    PartialTwoTouchTypedBinder<A>;
+    PartialTwoPanTypedBinder<A>;
 
     /**
      * Creates a binding that uses a bottom pan interaction (two-touch).
@@ -286,7 +290,15 @@ export abstract class Bindings<H extends UndoHistoryBase> {
      * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
      */
     public abstract twoPanBottomBinder<A>(pxTolerance: number, minLength?: number, accInit?: A):
-    PartialTwoTouchTypedBinder<A>;
+    PartialTwoPanTypedBinder<A>;
+
+    /**
+     * Creates a binding that uses the rotate interaction (two-touch interaction, with the first point
+     * that must remain static).
+     * @param pxTolerance - The tolerance rate in pixels accepted while executing the rotation (i.e.
+     * the acceptance rate when moving the fixation/first point).
+     */
+    public abstract rotateBinder<A>(pxTolerance: number, accInit?: A): PartialRotateTypedBinder<A>;
 
     /**
      * Creates a binding that uses the pinch interaction.

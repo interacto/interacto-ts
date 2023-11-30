@@ -12,10 +12,15 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import type {LineTouchData} from "./LineTouchData";
 import type {MultiTouchData} from "./MultiTouchData";
+import type {RotationData} from "./RotationTouchData";
 import type {SrcTgtPointsData} from "./SrcTgtPointsData";
 import type {TouchData} from "./TouchData";
 
+/**
+ * The commun type for all two touch interaction data.
+ */
 export interface TwoTouchData extends MultiTouchData {
     /**
      * The first touch
@@ -58,42 +63,6 @@ export interface TwoTouchData extends MultiTouchData {
     readonly diffScreenY: number;
 
     /**
-     * Returns true if all the touch lines are vertical in the same direction.
-     * @param pxTolerance - The pixel tolerance for considering the line vertical.
-     */
-    isVertical(pxTolerance: number): boolean;
-
-    /**
-     * Returns true if all the touch lines are horizontal in the same direction.
-     * @param pxTolerance - The pixel tolerance for considering the line horizontal.
-     */
-    isHorizontal(pxTolerance: number): boolean;
-
-    /**
-     * Returns true if the gesture (all the lines) is going to the left.
-     * @param pxTolerance - The pixel tolerance for considering the line horizontal.
-     */
-    isLeft(pxTolerance: number): boolean;
-
-    /**
-     * Returns true if the gesture (all the lines) is going to the right.
-     * @param pxTolerance - The pixel tolerance for considering the line horizontal.
-     */
-    isRight(pxTolerance: number): boolean;
-
-    /**
-     * Returns true if the gesture (all the lines) is going to the top.
-     * @param pxTolerance - The pixel tolerance for considering the line vertical.
-     */
-    isTop(pxTolerance: number): boolean;
-
-    /**
-     * Returns true if the gesture (all the lines) is going to the bottom.
-     * @param pxTolerance - The pixel tolerance for considering the line vertical.
-     */
-    isBottom(pxTolerance: number): boolean;
-
-    /**
      * Returns the distance between the end position of the touches divided the distance between the starting position of the touches.
      * If more or less than two touches are involved, or if the touches do not get closer during the interaction or follow the same line,
      * the method returns undefined.
@@ -101,3 +70,8 @@ export interface TwoTouchData extends MultiTouchData {
      */
     pinchFactor(pxTolerance: number): number | undefined;
 }
+
+/**
+ * A two touch interaction type that encompasses all the possible two touch interaction data.
+ */
+export type GeneralTwoTouchData = LineTouchData & RotationData;
