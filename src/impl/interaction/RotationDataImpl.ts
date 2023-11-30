@@ -12,16 +12,23 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {InteractionData} from "./InteractionData";
-import type {SrcTgtPointsData} from "./SrcTgtPointsData";
-import type {TouchData} from "./TouchData";
+import type {RotationData} from "../../api/interaction/RotationTouchData";
+import type {TouchData} from "../../api/interaction/TouchData";
+import {TwoTouchDataImpl} from "./TwoTouchDataImpl";
 
 /**
- * Multi-touch interaction data interface
+ * The implementation of the rotation interaction data.
  */
-export interface MultiTouchData extends InteractionData {
-    /**
-     * The list of touch data.
-     */
-    readonly touches: ReadonlyArray<SrcTgtPointsData<TouchData>>;
+export class RotationDataImpl extends TwoTouchDataImpl implements RotationData {
+    public constructor() {
+        super();
+    }
+
+    public get rotationAngle(): number {
+        return this.computeAngle(this.t1.src, this.t2.src) - this.computeAngle(this.t1.src, this.t2.tgt);
+    }
+
+    private computeAngle(t1: TouchData, t2: TouchData): number {
+        return Math.atan2(t2.clientX - t1.clientX, t1.clientY - t2.clientY);
+    }
 }

@@ -13,7 +13,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMHandler, Logger, TwoTouchDnD} from "../../../src/interacto";
+import type {FSMHandler, Logger, TwoPan} from "../../../src/interacto";
 import {twoBottomPan, twoHPan, twoLeftPan, twoRightPan, twoTopPan, twoVPan} from "../../../src/interacto";
 import {robot} from "../StubEvents";
 import type {MockProxy} from "jest-mock-extended";
@@ -23,7 +23,7 @@ describe("using two pan interactions", () => {
     let canvas: HTMLElement;
     let handler: FSMHandler;
     let logger: Logger & MockProxy<Logger>;
-    let interaction: TwoTouchDnD;
+    let interaction: TwoPan;
 
     beforeEach(() => {
         handler = mock<FSMHandler>();

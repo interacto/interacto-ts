@@ -19,12 +19,15 @@ import type {TwoTouchData} from "../../api/interaction/TwoTouchData";
 import type {UnitInteractionData} from "../../api/interaction/UnitInteractionData";
 import {SrcTgtTouchDataImpl} from "./SrcTgtTouchDataImpl";
 
-export class TwoTouchDataImpl implements TwoTouchData {
+/**
+ * The implementation class of TwoTouchData
+ */
+export abstract class TwoTouchDataImpl implements TwoTouchData {
     protected readonly t1: SrcTgtTouchDataImpl;
 
     protected readonly t2: SrcTgtTouchDataImpl;
 
-    public constructor() {
+    protected constructor() {
         this.t1 = new SrcTgtTouchDataImpl();
         this.t2 = new SrcTgtTouchDataImpl();
     }
@@ -66,30 +69,6 @@ export class TwoTouchDataImpl implements TwoTouchData {
                 this.t2.copyTgt(data, evt, allTouches);
             }
         }
-    }
-
-    public isVertical(pxTolerance: number): boolean {
-        return this.isTop(pxTolerance) || this.isBottom(pxTolerance);
-    }
-
-    public isHorizontal(pxTolerance: number): boolean {
-        return this.isLeft(pxTolerance) || this.isRight(pxTolerance);
-    }
-
-    public isLeft(pxTolerance: number): boolean {
-        return this.t1.isLeft(pxTolerance) && this.t2.isLeft(pxTolerance);
-    }
-
-    public isRight(pxTolerance: number): boolean {
-        return this.t1.isRight(pxTolerance) && this.t2.isRight(pxTolerance);
-    }
-
-    public isTop(pxTolerance: number): boolean {
-        return this.t1.isTop(pxTolerance) && this.t2.isTop(pxTolerance);
-    }
-
-    public isBottom(pxTolerance: number): boolean {
-        return this.t1.isBottom(pxTolerance) && this.t2.isBottom(pxTolerance);
     }
 
     public get diffClientX(): number {

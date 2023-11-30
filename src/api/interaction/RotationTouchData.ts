@@ -12,16 +12,15 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {InteractionData} from "./InteractionData";
-import type {SrcTgtPointsData} from "./SrcTgtPointsData";
-import type {TouchData} from "./TouchData";
+import type {TwoTouchData} from "./TwoTouchData";
 
 /**
- * Multi-touch interaction data interface
+ * The two-touch interaction data that represents a rotation.
  */
-export interface MultiTouchData extends InteractionData {
+export interface RotationData extends TwoTouchData {
     /**
-     * The list of touch data.
+     * The computed rotation angle. This angle is computed following
+     * the clockwise direction.
      */
-    readonly touches: ReadonlyArray<SrcTgtPointsData<TouchData>>;
+    rotationAngle: number;
 }

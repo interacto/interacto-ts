@@ -12,15 +12,15 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMHandler, Logger} from "../../../src/interacto";
-import {TwoTouchDnD} from "../../../src/interacto";
+import type {FSMHandler, Logger, TwoTouch} from "../../../src/interacto";
+import {twoTouch} from "../../../src/interacto";
 import {robot} from "../StubEvents";
 import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
 import {checkTouchPoint} from "../../Utils";
 
 describe("using a multi touch interaction", () => {
-    let interaction: TwoTouchDnD;
+    let interaction: TwoTouch;
     let canvas: HTMLElement;
     let handler: FSMHandler;
     let logger: Logger & MockProxy<Logger>;
@@ -28,7 +28,7 @@ describe("using a multi touch interaction", () => {
     beforeEach(() => {
         handler = mock<FSMHandler>();
         logger = mock<Logger>();
-        interaction = new TwoTouchDnD(logger);
+        interaction = twoTouch(logger)();
         interaction.fsm.addHandler(handler);
         canvas = document.createElement("canvas");
         interaction.registerToNodes([canvas]);

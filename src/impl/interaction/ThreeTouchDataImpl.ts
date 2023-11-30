@@ -17,10 +17,10 @@ import type {SrcTgtPointsData} from "../../api/interaction/SrcTgtPointsData";
 import type {ThreeTouchData} from "../../api/interaction/ThreeTouchData";
 import type {TouchData} from "../../api/interaction/TouchData";
 import type {UnitInteractionData} from "../../api/interaction/UnitInteractionData";
+import {GeneralTwoTouchDataImpl} from "./GeneralTwoTouchDataImpl";
 import {SrcTgtTouchDataImpl} from "./SrcTgtTouchDataImpl";
-import {TwoTouchDataImpl} from "./TwoTouchDataImpl";
 
-export class ThreeTouchDataImpl extends TwoTouchDataImpl implements ThreeTouchData {
+export class ThreeTouchDataImpl extends GeneralTwoTouchDataImpl implements ThreeTouchData {
     protected readonly t3: SrcTgtTouchDataImpl;
 
     public constructor() {
