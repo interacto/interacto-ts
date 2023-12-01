@@ -13,21 +13,26 @@
  */
 
 import type {LineTouchData} from "../../api/interaction/LineTouchData";
-import type {RotationData} from "../../api/interaction/RotationTouchData";
+import type {RotationTouchData} from "../../api/interaction/RotationTouchData";
+import type {ScaleTouchData} from "../../api/interaction/ScaleTouchData";
 import type {GeneralTwoTouchData} from "../../api/interaction/TwoTouchData";
-import {RotationDataImpl} from "./RotationDataImpl";
+import {RotationTouchDataImpl} from "./RotationTouchDataImpl";
+import {ScaleTouchDataImpl} from "./ScaleTouchDataImpl";
 import {TwoPanDataImpl} from "./TwoPanDataImpl";
 import {TwoTouchDataImpl} from "./TwoTouchDataImpl";
 
 export class GeneralTwoTouchDataImpl extends TwoTouchDataImpl implements GeneralTwoTouchData {
-    private readonly rotateData: RotationData;
+    private readonly rotateData: RotationTouchData;
 
     private readonly panData: LineTouchData;
 
+    private readonly scaleData: ScaleTouchData;
+
     public constructor() {
         super();
-        this.rotateData = new RotationDataImpl();
+        this.rotateData = new RotationTouchDataImpl();
         this.panData = new TwoPanDataImpl();
+        this.scaleData = new ScaleTouchDataImpl();
     }
 
     public isVertical(pxTolerance: number): boolean {
@@ -56,5 +61,9 @@ export class GeneralTwoTouchDataImpl extends TwoTouchDataImpl implements General
 
     public get rotationAngle(): number {
         return this.rotateData.rotationAngle;
+    }
+
+    public scalingRatio(pxTolerance: number): number {
+        return this.scaleData.scalingRatio(pxTolerance);
     }
 }

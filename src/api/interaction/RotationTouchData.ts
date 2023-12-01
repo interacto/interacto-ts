@@ -17,7 +17,7 @@ import type {TwoTouchData} from "./TwoTouchData";
 /**
  * The two-touch interaction data that represents a rotation.
  */
-export interface RotationData extends TwoTouchData {
+export interface RotationTouchData extends TwoTouchData {
     /**
      * The computed rotation angle. This angle is computed following
      * the clockwise direction.

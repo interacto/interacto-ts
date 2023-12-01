@@ -196,7 +196,7 @@ describe("events lost by the browser do not block bindings", () => {
         });
 
         test("the pinch binding not blocked", async () => {
-            const b2 = bindings.pinchBinder(10)
+            const b2 = bindings.scaleBinder(10)
                 .toProduce(() => new StubCmd(true))
                 .on(elt)
                 .bind();
