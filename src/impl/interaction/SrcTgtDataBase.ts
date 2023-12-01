@@ -64,14 +64,14 @@ export abstract class SrcTgtDataBase<T extends PointBaseData, S extends Flushabl
 
     public velocity(direction: "all" | "horiz" | "vert"): number {
         switch (direction) {
-        case "all":
-            return (Math.hypot(this.diffScreenX, this.diffScreenY) / this.duration) * 1000;
-        case "horiz":
-            return (Math.abs(this.diffScreenX) / this.duration) * 1000;
-        case "vert":
-            return (Math.abs(this.diffScreenY) / this.duration) * 1000;
-        default:
-            return 0;
+            case "all":
+                return (Math.hypot(this.diffScreenX, this.diffScreenY) / this.duration) * 1000;
+            case "horiz":
+                return (Math.abs(this.diffScreenX) / this.duration) * 1000;
+            case "vert":
+                return (Math.abs(this.diffScreenY) / this.duration) * 1000;
+            default:
+                return 0;
         }
     }
 

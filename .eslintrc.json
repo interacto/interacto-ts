@@ -124,7 +124,8 @@
     "@typescript-eslint/explicit-member-accessibility": ["error", { "accessibility": "explicit" }],
     "@typescript-eslint/indent": ["error", 4, {
         "FunctionDeclaration": { "parameters": "first" },
-        "FunctionExpression": { "parameters": "first" }
+        "FunctionExpression": { "parameters": "first" },
+        "SwitchCase": 1
     }],
 
     "@typescript-eslint/prefer-nullish-coalescing": ["error",
