@@ -15,8 +15,7 @@
 import {StubCmd} from "../command/StubCmd";
 import {robot} from "../interaction/StubEvents";
 import type {Binding, Bindings, FSMHandler, Interaction, SrcTgtPointsData, TouchData, UndoHistoryBase} from "../../src/interacto";
-import {BindingsContext} from "../../src/interacto";
-import {BindingsImpl, UndoHistoryImpl} from "../../src/interacto";
+import {BindingsContext, BindingsImpl, UndoHistoryImpl} from "../../src/interacto";
 import {mock} from "jest-mock-extended";
 
 let binding: Binding<StubCmd, Interaction<SrcTgtPointsData<TouchData>>, unknown> | undefined;

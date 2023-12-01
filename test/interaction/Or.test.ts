@@ -14,8 +14,7 @@
 
 import {mock, type MockProxy} from "jest-mock-extended";
 import type {FSMHandler, KeysData, Logger} from "../../src/interacto";
-import {Clicks, KeysDataImpl, KeysTyped, PointsDataImpl} from "../../src/interacto";
-import {MouseDown, Or, TouchStart} from "../../src/interacto";
+import {Clicks, KeysDataImpl, KeysTyped, PointsDataImpl, MouseDown, Or, TouchStart} from "../../src/interacto";
 import {robot} from "interacto-nono";
 
 describe("testing an OR interaction", () => {

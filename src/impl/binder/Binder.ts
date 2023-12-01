@@ -26,8 +26,7 @@ import {isEltRef} from "../../api/binder/BaseBinderBuilder";
 import type {Logger} from "../../api/logging/Logger";
 import {AnonCmd} from "../command/AnonCmd";
 import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
-import type {When} from "../../api/binder/When";
-import type {WhenType} from "../../api/binder/When";
+import type {When, WhenType} from "../../api/binder/When";
 import type {RuleName, Severity} from "../../api/binding/Linting";
 
 /**

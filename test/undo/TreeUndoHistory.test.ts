@@ -16,7 +16,7 @@ import type {Undoable} from "../../src/api/undo/Undoable";
 import {mock} from "jest-mock-extended";
 import type {TreeUndoHistory} from "../../src/api/undo/TreeUndoHistory";
 import {TreeUndoHistoryImpl} from "../../src/impl/undo/TreeUndoHistoryImpl";
-import {TestScheduler} from "rxjs/internal/testing/TestScheduler";
+import {TestScheduler} from "rxjs/testing";
 
 interface Undoable4Test extends Undoable {
     foo: number;

@@ -13,8 +13,7 @@
  */
 
 import type {UndoHistoryBase} from "./UndoHistoryBase";
-import type {Undoable} from "./Undoable";
-import type {UndoableSnapshot} from "./Undoable";
+import type {Undoable, UndoableSnapshot} from "./Undoable";
 import type {Observable} from "rxjs";
 
 /**

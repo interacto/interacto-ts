@@ -13,8 +13,7 @@
  */
 
 import type {FSMHandler, Logger} from "../../../src/interacto";
-import {TimedTap} from "../../../src/interacto";
-import {TapDataImpl, TouchDataImpl} from "../../../src/interacto";
+import {TimedTap, TapDataImpl, TouchDataImpl} from "../../../src/interacto";
 import {robot} from "../StubEvents";
 import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";

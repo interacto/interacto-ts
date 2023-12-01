@@ -58,18 +58,26 @@
     "plugin:@typescript-eslint/all",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "plugin:unicorn/all",
+    "plugin:import/recommended",
+    "plugin:import/typescript",
     "plugin:eslint-plugin-array-func/recommended"
   ],
   "rules": {
     "id-length": "off",
     "no-new": "off",
     "no-underscore-dangle": "off",
-    "no-useless-constructor": "off",
     "@typescript-eslint/prefer-readonly-parameter-types": "off",
     "@typescript-eslint/class-methods-use-this": "off",
 
     "tsdoc/syntax": "error",
 
+    "import/no-deprecated": "error",
+    "import/no-empty-named-blocks": "error",
+    "import/no-extraneous-dependencies": "error",
+    "import/no-mutable-exports": "error",
+    "import/no-absolute-path": "error",
+    "import/no-useless-path-segments": "error",
+    "import/no-self-import": "error",
     "unicorn/switch-case-braces": "off",
     "unicorn/no-thenable": "off",
     "no-duplicate-imports": "off",

@@ -13,8 +13,7 @@
  */
 
 import type {FSMHandler, Logger} from "../../../src/interacto";
-import {TimedClick} from "../../../src/interacto";
-import {PointDataImpl} from "../../../src/interacto";
+import {PointDataImpl, TimedClick} from "../../../src/interacto";
 import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
 import {createMouseEvent2, robot} from "../StubEvents";

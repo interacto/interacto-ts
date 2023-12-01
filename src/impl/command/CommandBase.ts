@@ -12,8 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {Command} from "../../api/command/Command";
-import type {CmdStatus} from "../../api/command/Command";
+import type {Command, CmdStatus} from "../../api/command/Command";
 
 /**
  * The base implementation class for coding UI commands.
