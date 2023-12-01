@@ -69,6 +69,7 @@
 
     "tsdoc/syntax": "error",
 
+    "unicorn/switch-case-braces": "off",
     "unicorn/no-thenable": "off",
     "no-duplicate-imports": "off",
     "func-style": "off",

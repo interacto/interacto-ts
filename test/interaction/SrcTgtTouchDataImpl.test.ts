@@ -114,8 +114,7 @@ describe("using a srctgttouch data", () => {
     });
 
     test("velocity", () => {
-        // velocity should be sqrt(deltaX^2 + deltaY^2) / velocity  = sqrt(16 + 9) / 10 = 0.5
-        expect(data.velocity).toBe(0.5);
+        expect(data.velocity("all")).toBe(500);
     });
 
     test("isHorizontal OK", () => {

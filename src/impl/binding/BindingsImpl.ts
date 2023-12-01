@@ -243,168 +243,77 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
             .usingInteraction<LongTouch, A>(() => new LongTouch(duration, this.logger));
     }
 
-    /**
-     * Creates a binding that uses the swipe interaction.
-     * If this velocity is not reached, the interaction is cancelled.
-     * @param horizontal - Defines whether the swipe is horizontal or vertical
-     * @param minVelocity - The minimal minVelocity to reach for validating the swipe. In pixels per second.
-     * @param minLength - The minimal distance from the starting point to the release point for validating the swipe
-     * @param nbTouches - The number of touches required to start the interaction
-     * @param pxTolerance - The tolerance rate in pixels accepted while executing the swipe
-     */
-    public swipeBinder<A>(horizontal: boolean, minVelocity: number, minLength: number, nbTouches: number,
-                          _pxTolerance: number, accInit?: A): PartialMultiTouchTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
-            .usingInteraction<MultiTouch, A>(() => new MultiTouch(nbTouches, true, this.logger))
-            // .when(i => (horizontal ? i.isHorizontal(pxTolerance) : i.isVertical(pxTolerance)))
-            .when(i => i.touches[0] !== undefined &&
-                (horizontal ? Math.abs(i.touches[0].diffScreenX) >= minLength : Math.abs(i.touches[0].diffScreenY) >= minLength))
-            // The velocity value is in pixels/ms, so conversion is necessary
-            .when(i => i.touches[0] !== undefined && i.touches[0].velocity * 1000 >= minVelocity);
-    }
-
-    /**
-     * Creates a binding that uses the pan interaction (in all direction, one touch).
-     * The involved user interaction is TouchDnD.
-     * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
-     */
     public panBinder<A>(cancellable: boolean, accInit?: A): PartialTouchSrcTgtTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<TouchDnD, A>(() => new TouchDnD(this.logger, cancellable));
     }
 
-    /**
-     * Creates a binding that uses a vertical pan interaction (one-touch).
-     * @param minLength - The minimal distance from the starting point to the release point for validating the pan
-     * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
-     * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
-     */
-    public panVerticalBinder<A>(pxTolerance: number, cancellable: boolean, minLength?: number, accInit?: A):
+    public panVerticalBinder<A>(pxTolerance: number, cancellable: boolean, minLength?: number, minVelocity?: number, accInit?: A):
     PartialTouchSrcTgtTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
-            .usingInteraction<TouchDnD, A>(vPan(this.logger, cancellable, pxTolerance, minLength));
+            .usingInteraction<TouchDnD, A>(vPan(this.logger, cancellable, pxTolerance, minLength, minVelocity));
     }
 
-    /**
-     * Creates a binding that uses a horizontal pan interaction (one-touch).
-     * @param minLength - The minimal distance from the starting point to the release point for validating the pan
-     * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
-     * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
-     */
-    public panHorizontalBinder<A>(pxTolerance: number, cancellable: boolean, minLength?: number, accInit?: A):
+    public panHorizontalBinder<A>(pxTolerance: number, cancellable: boolean, minLength?: number, minVelocity?: number, accInit?: A):
     PartialTouchSrcTgtTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
-            .usingInteraction<TouchDnD, A>(hPan(this.logger, cancellable, pxTolerance, minLength));
+            .usingInteraction<TouchDnD, A>(hPan(this.logger, cancellable, pxTolerance, minLength, minVelocity));
     }
 
-    /**
-     * Creates a binding that uses a left pan interaction (one-touch).
-     * @param minLength - The minimal distance from the starting point to the release point for validating the pan
-     * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
-     * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
-     */
-    public panLeftBinder<A>(pxTolerance: number, cancellable: boolean, minLength?: number, accInit?: A):
+    public panLeftBinder<A>(pxTolerance: number, cancellable: boolean, minLength?: number, minVelocity?: number, accInit?: A):
     PartialTouchSrcTgtTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
-            .usingInteraction<TouchDnD, A>(leftPan(this.logger, cancellable, pxTolerance, minLength));
+            .usingInteraction<TouchDnD, A>(leftPan(this.logger, cancellable, pxTolerance, minLength, minVelocity));
     }
 
-    /**
-     * Creates a binding that uses a right pan interaction (one-touch).
-     * @param minLength - The minimal distance from the starting point to the release point for validating the pan
-     * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
-     * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
-     */
-    public panRightBinder<A>(pxTolerance: number, cancellable: boolean, minLength?: number, accInit?: A):
+    public panRightBinder<A>(pxTolerance: number, cancellable: boolean, minLength?: number, minVelocity?: number, accInit?: A):
     PartialTouchSrcTgtTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
-            .usingInteraction<TouchDnD, A>(rightPan(this.logger, cancellable, pxTolerance, minLength));
+            .usingInteraction<TouchDnD, A>(rightPan(this.logger, cancellable, pxTolerance, minLength, minVelocity));
     }
 
-    /**
-     * Creates a binding that uses a top pan interaction (one-touch).
-     * @param minLength - The minimal distance from the starting point to the release point for validating the pan
-     * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
-     * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
-     */
-    public panTopBinder<A>(pxTolerance: number, cancellable: boolean, minLength?: number, accInit?: A):
+    public panTopBinder<A>(pxTolerance: number, cancellable: boolean, minLength?: number, minVelocity?: number, accInit?: A):
     PartialTouchSrcTgtTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
-            .usingInteraction<TouchDnD, A>(topPan(this.logger, cancellable, pxTolerance, minLength));
+            .usingInteraction<TouchDnD, A>(topPan(this.logger, cancellable, pxTolerance, minLength, minVelocity));
     }
 
-    /**
-     * Creates a binding that uses a bottom pan interaction (one-touch).
-     * @param minLength - The minimal distance from the starting point to the release point for validating the pan
-     * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
-     * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
-     */
-    public panBottomBinder<A>(pxTolerance: number, cancellable: boolean, minLength?: number, accInit?: A):
+    public panBottomBinder<A>(pxTolerance: number, cancellable: boolean, minLength?: number, minVelocity?: number, accInit?: A):
     PartialTouchSrcTgtTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
-            .usingInteraction<TouchDnD, A>(bottomPan(this.logger, cancellable, pxTolerance, minLength));
+            .usingInteraction<TouchDnD, A>(bottomPan(this.logger, cancellable, pxTolerance, minLength, minVelocity));
     }
 
-    /**
-     * Creates a binding that uses a vertical pan interaction (two-touch).
-     * @param minLength - The minimal distance from the starting point to the release point for validating the pan
-     * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
-     */
     public twoPanVerticalBinder<A>(pxTolerance: number, minLength?: number, accInit?: A):
     PartialTwoPanTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<TwoPan, A>(twoVPan(this.logger, pxTolerance, minLength));
     }
 
-    /**
-     * Creates a binding that uses a horizontal pan interaction (two-touch).
-     * @param minLength - The minimal distance from the starting point to the release point for validating the pan
-     * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
-     */
     public twoPanHorizontalBinder<A>(pxTolerance: number, minLength?: number, accInit?: A):
     PartialTwoPanTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<TwoPan, A>(twoHPan(this.logger, pxTolerance, minLength));
     }
 
-    /**
-     * Creates a binding that uses a left pan interaction (two-touch).
-     * @param minLength - The minimal distance from the starting point to the release point for validating the pan
-     * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
-     */
     public twoPanLeftBinder<A>(pxTolerance: number, minLength?: number, accInit?: A):
     PartialTwoPanTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<TwoPan, A>(twoLeftPan(this.logger, pxTolerance, minLength));
     }
 
-    /**
-     * Creates a binding that uses a right pan interaction (two-touch).
-     * @param minLength - The minimal distance from the starting point to the release point for validating the pan
-     * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
-     */
     public twoPanRightBinder<A>(pxTolerance: number, minLength?: number, accInit?: A):
     PartialTwoPanTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<TwoPan, A>(twoRightPan(this.logger, pxTolerance, minLength));
     }
 
-    /**
-     * Creates a binding that uses a top pan interaction (two-touch).
-     * @param minLength - The minimal distance from the starting point to the release point for validating the pan
-     * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
-     */
     public twoPanTopBinder<A>(pxTolerance: number, minLength?: number, accInit?: A):
     PartialTwoPanTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<TwoPan, A>(twoTopPan(this.logger, pxTolerance, minLength));
     }
 
-    /**
-     * Creates a binding that uses a bottom pan interaction (two-touch).
-     * @param minLength - The minimal distance from the starting point to the release point for validating the pan
-     * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
-     */
     public twoPanBottomBinder<A>(pxTolerance: number, minLength?: number, accInit?: A):
     PartialTwoPanTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
