@@ -150,7 +150,7 @@ describe("events lost by the browser do not block bindings", () => {
         });
 
         test("the swipe binding not blocked", async () => {
-            const b2 = bindings.swipeBinder(true, 400, 200, 1, 10)
+            const b2 = bindings.panHorizontalBinder(10, false, 400, 200)
                 .on(elt)
                 .toProduce(() => new StubCmd())
                 .bind();

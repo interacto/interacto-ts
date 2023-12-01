@@ -174,18 +174,6 @@ export abstract class Bindings<H extends UndoHistoryBase> {
     public abstract longTouchBinder<A>(duration: number, accInit?: A): PartialTouchTypedBinder<A>;
 
     /**
-     * Creates a binding that uses the swipe interaction.
-     * If this velocity is not reached, the interaction is cancelled.
-     * @param horizontal - Defines whether the swipe is horizontal or vertical
-     * @param minVelocity - The minimal minVelocity to reach for validating the swipe. In pixels per second.
-     * @param minLength - The minimal distance from the starting point to the release point for validating the swipe
-     * @param nbTouches - The number of touches required to start the interaction
-     * @param pxTolerance - The tolerance rate in pixels accepted while executing the swipe
-     */
-    public abstract swipeBinder<A>(horizontal: boolean, minVelocity: number, minLength: number, nbTouches: number,
-        pxTolerance: number, accInit?: A): PartialMultiTouchTypedBinder<A>;
-
-    /**
      * Creates a binding that uses the pan interaction (in all direction, one touch).
      * The involved user interaction is TouchDnD.
      * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
@@ -193,57 +181,63 @@ export abstract class Bindings<H extends UndoHistoryBase> {
     public abstract panBinder<A>(cancellable: boolean, accInit?: A): PartialTouchSrcTgtTypedBinder<A>;
 
     /**
-     * Creates a binding that uses a vertical pan interaction (one-touch).
+     * Creates a binding that uses a vertical pan (or swipe if minVelocity is used) interaction (one-touch).
      * @param minLength - The minimal distance from the starting point to the release point for validating the pan
+     * @param minVelocity - The pan while be a swipe: the minimal minVelocity to reach for validating the swipe. In pixels per second.
      * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
      * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
      */
-    public abstract panVerticalBinder<A>(pxTolerance: number, cancellable: boolean, minLength?: number, accInit?: A):
+    public abstract panVerticalBinder<A>(pxTolerance: number, cancellable: boolean, minLength?: number, minVelocity?: number, accInit?: A):
     PartialTouchSrcTgtTypedBinder<A>;
 
     /**
-     * Creates a binding that uses a vertical pan interaction (one-touch).
+     * Creates a binding that uses a vertical pan interaction (or swipe if minVelocity is used) interaction (one-touch).
      * @param minLength - The minimal distance from the starting point to the release point for validating the pan
+     * @param minVelocity - The pan while be a swipe: the minimal minVelocity to reach for validating the swipe. In pixels per second.
      * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
      * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
      */
-    public abstract panHorizontalBinder<A>(pxTolerance: number, cancellable: boolean, minLength?: number, accInit?: A):
+    public abstract panHorizontalBinder<A>(pxTolerance: number, cancellable: boolean, minLength?: number, minVelocity?: number, accInit?: A):
     PartialTouchSrcTgtTypedBinder<A>;
 
     /**
-     * Creates a binding that uses a left pan interaction (one-touch).
+     * Creates a binding that uses a left pan interaction (or swipe if minVelocity is used) interaction (one-touch).
      * @param minLength - The minimal distance from the starting point to the release point for validating the pan
+     * @param minVelocity - The pan while be a swipe: the minimal minVelocity to reach for validating the swipe. In pixels per second.
      * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
      * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
      */
-    public abstract panLeftBinder<A>(pxTolerance: number, cancellable: boolean, minLength?: number, accInit?: A):
+    public abstract panLeftBinder<A>(pxTolerance: number, cancellable: boolean, minLength?: number, minVelocity?: number, accInit?: A):
     PartialTouchSrcTgtTypedBinder<A>;
 
     /**
-     * Creates a binding that uses a right pan interaction (one-touch).
+     * Creates a binding that uses a right pan interaction (or swipe if minVelocity is used) interaction (one-touch).
      * @param minLength - The minimal distance from the starting point to the release point for validating the pan
+     * @param minVelocity - The pan while be a swipe: the minimal minVelocity to reach for validating the swipe. In pixels per second.
      * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
      * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
      */
-    public abstract panRightBinder<A>(pxTolerance: number, cancellable: boolean, minLength?: number, accInit?: A):
+    public abstract panRightBinder<A>(pxTolerance: number, cancellable: boolean, minLength?: number, minVelocity?: number, accInit?: A):
     PartialTouchSrcTgtTypedBinder<A>;
 
     /**
-     * Creates a binding that uses a top pan interaction (one-touch).
+     * Creates a binding that uses a top pan interaction (or swipe if minVelocity is used) interaction (one-touch).
      * @param minLength - The minimal distance from the starting point to the release point for validating the pan
+     * @param minVelocity - The pan while be a swipe: the minimal minVelocity to reach for validating the swipe. In pixels per second.
      * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
      * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
      */
-    public abstract panTopBinder<A>(pxTolerance: number, cancellable: boolean, minLength?: number, accInit?: A):
+    public abstract panTopBinder<A>(pxTolerance: number, cancellable: boolean, minLength?: number, minVelocity?: number, accInit?: A):
     PartialTouchSrcTgtTypedBinder<A>;
 
     /**
-     * Creates a binding that uses a bottom pan interaction (one-touch).
+     * Creates a binding that uses a bottom pan interaction (or swipe if minVelocity is used) interaction (one-touch).
      * @param minLength - The minimal distance from the starting point to the release point for validating the pan
+     * @param minVelocity - The pan while be a swipe: the minimal minVelocity to reach for validating the swipe. In pixels per second.
      * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
      * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
      */
-    public abstract panBottomBinder<A>(pxTolerance: number, cancellable: boolean, minLength?: number, accInit?: A):
+    public abstract panBottomBinder<A>(pxTolerance: number, cancellable: boolean, minLength?: number, minVelocity?: number, accInit?: A):
     PartialTouchSrcTgtTypedBinder<A>;
 
     /**

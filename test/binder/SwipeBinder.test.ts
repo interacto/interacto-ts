@@ -14,13 +14,12 @@
  */
 import {StubCmd} from "../command/StubCmd";
 import {robot} from "../interaction/StubEvents";
-import type {Binding, FSMHandler, Interaction, MultiTouchData, UndoHistoryBase} from "../../src/interacto";
+import type {Binding, Bindings, FSMHandler, Interaction, SrcTgtPointsData, TouchData, UndoHistoryBase} from "../../src/interacto";
+import {BindingsContext} from "../../src/interacto";
 import {BindingsImpl, UndoHistoryImpl} from "../../src/interacto";
-import {BindingsContext} from "../../src/impl/binding/BindingsContext";
-import type {Bindings} from "../../src/api/binding/Bindings";
 import {mock} from "jest-mock-extended";
 
-let binding: Binding<StubCmd, Interaction<MultiTouchData>, unknown> | undefined;
+let binding: Binding<StubCmd, Interaction<SrcTgtPointsData<TouchData>>, unknown> | undefined;
 let c1: HTMLElement;
 let ctx: BindingsContext;
 let bindings: Bindings<UndoHistoryBase>;
@@ -40,7 +39,7 @@ describe("using a swipe binder", () => {
     });
 
     test("touch move: too slow too short", () => {
-        binding = bindings.swipeBinder(true, 400, 200, 1, 10)
+        binding = bindings.panHorizontalBinder(10, false, 400, 200)
             .toProduce(() => new StubCmd(true))
             .on(c1)
             .bind();
@@ -56,7 +55,7 @@ describe("using a swipe binder", () => {
     });
 
     test.each([20, -30])("touch move KO not horizontal enough with %s", y => {
-        binding = bindings.swipeBinder(true, 400, 200, 1, 10)
+        binding = bindings.panHorizontalBinder(10, false, 400, 200)
             .toProduce(() => new StubCmd(true))
             .on(c1)
             .bind();
@@ -72,7 +71,7 @@ describe("using a swipe binder", () => {
     });
 
     test.each([40, -50])("touch move move release not horizontal enough with %s", y => {
-        binding = bindings.swipeBinder(true, 400, 200, 1, 10)
+        binding = bindings.panHorizontalBinder(10, false, 400, 200)
             .toProduce(() => new StubCmd(true))
             .on(c1)
             .bind();
@@ -89,7 +88,7 @@ describe("using a swipe binder", () => {
     });
 
     test("touch move move too short too slow", () => {
-        binding = bindings.swipeBinder(true, 400, 200, 1, 10)
+        binding = bindings.panHorizontalBinder(10, false, 400, 200)
             .toProduce(() => new StubCmd(true))
             .on(c1)
             .bind();
@@ -106,7 +105,7 @@ describe("using a swipe binder", () => {
     });
 
     test("touch move move too short velocity OK", () => {
-        binding = bindings.swipeBinder(true, 400, 200, 1, 10)
+        binding = bindings.panHorizontalBinder(10, false, 400, 200)
             .toProduce(() => new StubCmd(true))
             .on(c1)
             .bind();
@@ -123,7 +122,7 @@ describe("using a swipe binder", () => {
     });
 
     test("touch move move distance OK short too slow", () => {
-        binding = bindings.swipeBinder(true, 400, 200, 1, 10)
+        binding = bindings.panHorizontalBinder(10, false, 400, 200)
             .toProduce(() => new StubCmd(true))
             .on(c1)
             .bind();
@@ -140,7 +139,7 @@ describe("using a swipe binder", () => {
     });
 
     test("touch move move release distance velocity OK 1s", () => {
-        binding = bindings.swipeBinder(true, 400, 200, 1, 10)
+        binding = bindings.panHorizontalBinder(10, false, 400, 200)
             .toProduce(() => new StubCmd(true))
             .on(c1)
             .bind();
@@ -158,29 +157,8 @@ describe("using a swipe binder", () => {
         expect(ctx.getCmd(0)).toBeInstanceOf(StubCmd);
     });
 
-    test("swipe starts but another touch occurs (move) cancels the interaction", () => {
-        binding = bindings.swipeBinder(true, 400, 200, 1, 10)
-            .toProduce(() => new StubCmd(true))
-            .on(c1)
-            .bind();
-
-        const newHandler = mock<FSMHandler>();
-        binding.interaction.fsm.addHandler(newHandler);
-
-        robot(c1)
-            .touchstart({}, [{"identifier": 3, "screenX": 50, "screenY": 20, "clientX": 100, "clientY": 200}], 5000)
-            .touchmove({}, [{"identifier": 3, "screenX": 160, "screenY": 30, "clientX": 160, "clientY": 201}], 5500)
-            .touchmove({}, [{"identifier": 2, "screenX": 260, "screenY": 30, "clientX": 160, "clientY": 201}], 5550)
-            .touchmove({}, [{"identifier": 3, "screenX": 250, "screenY": 30, "clientX": 500, "clientY": 210}], 6000)
-            .touchend({}, [{"identifier": 3, "screenX": 450, "screenY": 30, "clientX": 500, "clientY": 210}], 6000);
-
-        expect(ctx.commands).toHaveLength(0);
-        expect(newHandler.fsmCancels).toHaveBeenCalledTimes(1);
-        expect(newHandler.fsmStops).not.toHaveBeenCalled();
-    });
-
     test("swipe starts but another touch occurs cancels the interaction", () => {
-        binding = bindings.swipeBinder(true, 400, 200, 1, 10)
+        binding = bindings.panHorizontalBinder(10, false, 400, 200)
             .toProduce(() => new StubCmd(true))
             .on(c1)
             .bind();
@@ -201,7 +179,7 @@ describe("using a swipe binder", () => {
     });
 
     test("one touch and then swipes does not swipe", () => {
-        binding = bindings.swipeBinder(true, 400, 200, 2, 10)
+        binding = bindings.panHorizontalBinder(10, false, 400, 200)
             .toProduce(() => new StubCmd(true))
             .on(c1)
             .bind();
@@ -219,18 +197,17 @@ describe("using a swipe binder", () => {
         expect(ctx.commands).toHaveLength(0);
     });
 
-    test("touch move move release distance velocity OK 200px", () => {
-        binding = bindings.swipeBinder(true, 400, 200, 1, 10)
+    test("touch move move release distance velocity OK 200 px/s", () => {
+        binding = bindings.panHorizontalBinder(10, false, 200, 400)
             .toProduce(() => new StubCmd(true))
             .on(c1)
             .bind();
 
         robot(c1)
-            .keepData()
             .touchstart({}, [{"identifier": 3, "screenX": 50, "screenY": 20, "clientX": 100, "clientY": 200}], 5000)
-            .touchmove({}, [{"screenX": 160, "screenY": 30, "clientX": 160, "clientY": 201}], 5200)
-            .touchmove({}, [{"screenX": 250, "screenY": 30, "clientX": 300, "clientY": 210}], 5500)
-            .touchend({}, [{"screenX": 250, "screenY": 30, "clientX": 300, "clientY": 210}], 5500);
+            .touchmove({},  [{"identifier": 3, "screenX": 160, "screenY": 30, "clientX": 160, "clientY": 201}], 5200)
+            .touchmove({},  [{"identifier": 3, "screenX": 250, "screenY": 30, "clientX": 300, "clientY": 210}], 5500)
+            .touchend({},   [{"identifier": 3, "screenX": 250, "screenY": 30, "clientX": 300, "clientY": 210}], 5500);
 
         expect(binding).toBeDefined();
         expect(binding.timesCancelled).toBe(0);

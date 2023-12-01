@@ -734,8 +734,8 @@ describe("using bindings", () => {
     });
 
     test("that swipe binder works", () => {
-        bindings.swipeBinder(true, 400, 200, 1, 10)
-            .toProduce((_i: MultiTouchData) => new StubCmd(true))
+        bindings.panRightBinder(10, false, 400, 200)
+            .toProduce((_i: SrcTgtPointsData<TouchData>) => new StubCmd(true))
             .on(elt)
             .bind();
 

@@ -69,8 +69,9 @@ export interface SrcTgtPointsData<T extends PointBaseData> extends InteractionDa
 
     /**
      * The velocity of the move, in pixels per millisecond.
+     * @param direction - The direciton to consider.
      */
-    readonly velocity: number;
+    velocity(direction: "all" | "horiz" | "vert"): number;
 
     /**
      * Returns true if the line between the two points is relatively vertical.

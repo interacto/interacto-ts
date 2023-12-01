@@ -62,8 +62,17 @@ export abstract class SrcTgtDataBase<T extends PointBaseData, S extends Flushabl
         return this.tgtData.timeStamp - this.srcData.timeStamp;
     }
 
-    public get velocity(): number {
-        return Math.hypot(this.diffScreenX, this.diffScreenY) / this.duration;
+    public velocity(direction: "all" | "horiz" | "vert"): number {
+        switch (direction) {
+        case "all":
+            return (Math.hypot(this.diffScreenX, this.diffScreenY) / this.duration) * 1000;
+        case "horiz":
+            return (Math.abs(this.diffScreenX) / this.duration) * 1000;
+        case "vert":
+            return (Math.abs(this.diffScreenY) / this.duration) * 1000;
+        default:
+            return 0;
+        }
     }
 
     public isHorizontal(pxTolerance: number): boolean {
