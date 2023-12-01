@@ -20,6 +20,10 @@ import {KeyDataImpl} from "../KeyDataImpl";
 import type {Logger} from "../../../api/logging/Logger";
 import {KeyTransition} from "../../fsm/KeyTransition";
 
+interface KeyDownFSMHandler extends FSMDataHandler {
+    onKeyPressed(event: KeyboardEvent): void;
+}
+
 /**
  * An FSM for a single key pressure.
  */
@@ -45,10 +49,6 @@ export class KeyDownFSM extends FSMImpl<KeyDownFSMHandler> {
         super.reinit();
     }
 
-}
-
-interface KeyDownFSMHandler extends FSMDataHandler {
-    onKeyPressed(event: KeyboardEvent): void;
 }
 
 /**

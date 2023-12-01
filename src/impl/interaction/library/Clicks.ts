@@ -21,6 +21,10 @@ import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 import type {Logger} from "../../../api/logging/Logger";
 import {MousePointsDataImpl} from "../MousePointsDataImpl";
 
+interface ClicksFSMHandler extends FSMDataHandler {
+    click(evt: MouseEvent): void;
+}
+
 export class ClicksFSM extends FSMImpl<ClicksFSMHandler> {
     private countClicks: number;
 
@@ -71,10 +75,6 @@ export class ClicksFSM extends FSMImpl<ClicksFSMHandler> {
         super.reinit();
         this.countClicks = 0;
     }
-}
-
-interface ClicksFSMHandler extends FSMDataHandler {
-    click(evt: MouseEvent): void;
 }
 
 export class Clicks extends InteractionBase<MousePointsDataImpl, MousePointsDataImpl, ClicksFSM> {

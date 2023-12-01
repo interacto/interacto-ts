@@ -26,6 +26,10 @@ import type {StdState} from "../../fsm/StdState";
 import type {PointsData} from "../../../api/interaction/PointsData";
 import type {TouchData} from "../../../api/interaction/TouchData";
 
+interface TapFSMHandler extends FSMDataHandler {
+    tap(evt: TouchEvent): void;
+}
+
 /**
  * The FSM for the Tap interaction
  */
@@ -96,10 +100,6 @@ export class TapFSM extends FSMImpl<TapFSMHandler> {
         super.reinit();
         this.countTaps = 0;
     }
-}
-
-interface TapFSMHandler extends FSMDataHandler {
-    tap(evt: TouchEvent): void;
 }
 
 /**

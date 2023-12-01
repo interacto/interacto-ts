@@ -20,6 +20,10 @@ import {PointDataImpl} from "../PointDataImpl";
 import type {Logger} from "../../../api/logging/Logger";
 import {MouseTransition} from "../../fsm/MouseTransition";
 
+interface MouseUpFSMHandler extends FSMDataHandler {
+    initToPress(event: MouseEvent): void;
+}
+
 export class MouseUpFSM extends FSMImpl<MouseUpFSMHandler> {
     public constructor(logger: Logger, dataHandler: MouseUpFSMHandler) {
         super(logger, dataHandler);
@@ -29,10 +33,6 @@ export class MouseUpFSM extends FSMImpl<MouseUpFSMHandler> {
                 this.dataHandler?.initToPress(event);
             });
     }
-}
-
-interface MouseUpFSMHandler extends FSMDataHandler {
-    initToPress(event: MouseEvent): void;
 }
 
 /**

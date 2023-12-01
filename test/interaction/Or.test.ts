@@ -12,7 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {mock, type MockProxy} from "jest-mock-extended";
+import {mock} from "jest-mock-extended";
+import type {MockProxy} from "jest-mock-extended";
 import type {FSMHandler, KeysData, Logger} from "../../src/interacto";
 import {Clicks, KeysDataImpl, KeysTyped, PointsDataImpl, MouseDown, Or, TouchStart} from "../../src/interacto";
 import {robot} from "interacto-nono";

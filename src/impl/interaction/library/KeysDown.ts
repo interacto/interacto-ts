@@ -20,6 +20,10 @@ import {InteractionBase} from "../InteractionBase";
 import type {Logger} from "../../../api/logging/Logger";
 import {KeyTransition} from "../../fsm/KeyTransition";
 
+interface KeysDownFSMHandler extends FSMDataHandler {
+    onKeyPressed(event: KeyboardEvent): void;
+}
+
 /**
  * This interaction permits to define combo a key pressed that can be used to define shortcuts, etc.
  */
@@ -51,10 +55,6 @@ export class KeysDownFSM extends FSMImpl<KeysDownFSMHandler> {
         this.currentCodes.length = 0;
         super.reinit();
     }
-}
-
-interface KeysDownFSMHandler extends FSMDataHandler {
-    onKeyPressed(event: KeyboardEvent): void;
 }
 
 /**

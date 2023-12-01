@@ -20,6 +20,10 @@ import {InteractionBase} from "../InteractionBase";
 import type {Logger} from "../../../api/logging/Logger";
 import {KeyTransition} from "../../fsm/KeyTransition";
 
+interface KeyTypedFSMHandler extends FSMDataHandler {
+    onKeyTyped(event: KeyboardEvent): void;
+}
+
 /**
  * The FSM that describes a keyboard touch typed.
  */
@@ -47,10 +51,6 @@ export class KeyTypedFSM extends FSMImpl<KeyTypedFSMHandler> {
         super.reinit();
         this.checkKey = undefined;
     }
-}
-
-interface KeyTypedFSMHandler extends FSMDataHandler {
-    onKeyTyped(event: KeyboardEvent): void;
 }
 
 /**

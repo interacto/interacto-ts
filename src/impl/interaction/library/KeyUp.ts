@@ -20,6 +20,10 @@ import {KeyDataImpl} from "../KeyDataImpl";
 import type {Logger} from "../../../api/logging/Logger";
 import {KeyTransition} from "../../fsm/KeyTransition";
 
+interface KeyUpFSMHandler extends FSMDataHandler {
+    onKeyUp(event: KeyboardEvent): void;
+}
+
 /**
  * An FSM for a single key release.
  */
@@ -40,10 +44,6 @@ export class KeyUpFSM extends FSMImpl<KeyUpFSMHandler> {
             },
             (ev: KeyboardEvent): boolean => this.modifiersAccepted || (!ev.altKey && !ev.ctrlKey && !ev.shiftKey && !ev.metaKey));
     }
-}
-
-interface KeyUpFSMHandler extends FSMDataHandler {
-    onKeyUp(event: KeyboardEvent): void;
 }
 
 /**

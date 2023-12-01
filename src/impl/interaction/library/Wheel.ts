@@ -20,6 +20,10 @@ import {WheelDataImpl} from "../WheelDataImpl";
 import type {WheelData} from "../../../api/interaction/WheelData";
 import type {Logger} from "../../../api/logging/Logger";
 
+interface WheelFSMHandler extends FSMDataHandler {
+    initToMoved(event: WheelEvent): void;
+}
+
 /**
  * The FSM for wheel interactions
  */
@@ -35,10 +39,6 @@ export class WheelFSM extends FSMImpl<WheelFSMHandler> {
                 this.dataHandler?.initToMoved(evt);
             });
     }
-}
-
-interface WheelFSMHandler extends FSMDataHandler {
-    initToMoved(event: WheelEvent): void;
 }
 
 export class Wheel extends InteractionBase<WheelData, WheelDataImpl, WheelFSM> {

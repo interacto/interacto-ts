@@ -22,6 +22,10 @@ import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 import {WidgetDataImpl} from "../WidgetDataImpl";
 import type {Logger} from "../../../api/logging/Logger";
 
+interface SpinnerChangedHandler extends FSMDataHandler {
+    initToChangedHandler(event: Event): void;
+}
+
 export class SpinnerChangedFSM extends FSMImpl<SpinnerChangedHandler> {
     /** The time gap between the two spinner events. */
     private static timeGap = 300;
@@ -58,10 +62,6 @@ export class SpinnerChangedFSM extends FSMImpl<SpinnerChangedHandler> {
         new SpinnerChangedTransition(changed, changed, spinnerAction);
         new TimeoutTransition(changed, this.addTerminalState("ended"), SpinnerChangedFSM.timeGapSupplier);
     }
-}
-
-interface SpinnerChangedHandler extends FSMDataHandler {
-    initToChangedHandler(event: Event): void;
 }
 
 /**

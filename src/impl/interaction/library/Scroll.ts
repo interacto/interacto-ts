@@ -20,6 +20,10 @@ import {InteractionBase} from "../InteractionBase";
 import {ScrollDataImpl} from "../ScrollDataImpl";
 import type {Logger} from "../../../api/logging/Logger";
 
+interface ScrollFSMHandler extends FSMDataHandler {
+    initToScroll(event: Event): void;
+}
+
 /**
  * An FSM for scrolling.
  */
@@ -32,10 +36,6 @@ export class ScrollFSM extends FSMImpl<ScrollFSMHandler> {
                 this.dataHandler?.initToScroll(evt);
             });
     }
-}
-
-interface ScrollFSMHandler extends FSMDataHandler {
-    initToScroll(event: Event): void;
 }
 
 /**

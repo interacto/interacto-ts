@@ -21,6 +21,10 @@ import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import type {Logger} from "../../../api/logging/Logger";
 import {KeyTransition} from "../../fsm/KeyTransition";
 
+interface KeyTypedFSMHandler extends FSMDataHandler {
+    onKeyTyped(event: Event): void;
+}
+
 /**
  * An FSM for typing several keyboard touches.
  * One can type on multiple keys. The FSM ends after a timeout (a delay after the latest
@@ -55,10 +59,6 @@ export class KeysTypedFSM extends FSMImpl<KeyTypedFSMHandler> {
 
         new TimeoutTransition(keyup, this.addTerminalState("timeouted"), KeysTypedFSM.timeGapSupplier);
     }
-}
-
-interface KeyTypedFSMHandler extends FSMDataHandler {
-    onKeyTyped(event: Event): void;
 }
 
 /**

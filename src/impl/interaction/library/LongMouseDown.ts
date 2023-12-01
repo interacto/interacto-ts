@@ -21,6 +21,10 @@ import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 import type {Logger} from "../../../api/logging/Logger";
 import {MouseTransition} from "../../fsm/MouseTransition";
 
+interface LongMouseDownFSMHandler extends FSMDataHandler {
+    press(evt: MouseEvent): void;
+}
+
 /**
  * The FSM for the LongPress interaction
  */
@@ -65,10 +69,6 @@ export class LongMouseDownFSM extends FSMImpl<LongMouseDownFSMHandler> {
         super.reinit();
         this.currentButton = undefined;
     }
-}
-
-interface LongMouseDownFSMHandler extends FSMDataHandler {
-    press(evt: MouseEvent): void;
 }
 
 export class LongMouseDown extends InteractionBase<PointData, PointDataImpl, LongMouseDownFSM> {

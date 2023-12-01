@@ -21,6 +21,10 @@ import {PointDataImpl} from "../PointDataImpl";
 import type {Logger} from "../../../api/logging/Logger";
 import {MouseTransition} from "../../fsm/MouseTransition";
 
+interface MouseLeaveFSMHandler extends FSMDataHandler {
+    onExit(event: MouseEvent): void;
+}
+
 /**
  * The FSM for mouseout interactions
  */
@@ -48,10 +52,6 @@ export class MouseLeaveFSM extends FSMImpl<MouseLeaveFSMHandler> {
             new MouseTransition(this.initState, exited, "mouseleave", action);
         }
     }
-}
-
-interface MouseLeaveFSMHandler extends FSMDataHandler {
-    onExit(event: MouseEvent): void;
 }
 
 export class MouseLeave extends InteractionBase<PointData, PointDataImpl, MouseLeaveFSM> {

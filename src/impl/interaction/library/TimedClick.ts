@@ -21,6 +21,10 @@ import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 import {InteractionBase} from "../InteractionBase";
 import {PointDataImpl} from "../PointDataImpl";
 
+interface ClickFSMHandler extends FSMDataHandler {
+    initToClicked(event: MouseEvent): void;
+}
+
 export class TimedClickFSM extends FSMImpl<ClickFSMHandler> {
     private currentButton: number | undefined;
 
@@ -66,10 +70,6 @@ export class TimedClickFSM extends FSMImpl<ClickFSMHandler> {
         super.reinit();
         this.currentButton = undefined;
     }
-}
-
-interface ClickFSMHandler extends FSMDataHandler {
-    initToClicked(event: MouseEvent): void;
 }
 
 export class TimedClick extends InteractionBase<PointData, PointDataImpl, TimedClickFSM> {

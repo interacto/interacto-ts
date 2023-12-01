@@ -20,6 +20,10 @@ import {InteractionBase} from "../InteractionBase";
 import {PointDataImpl} from "../PointDataImpl";
 import type {Logger} from "../../../api/logging/Logger";
 
+interface ClickFSMHandler extends FSMDataHandler {
+    initToClicked(event: MouseEvent): void;
+}
+
 /**
  * The FSM for click interactions
  */
@@ -54,10 +58,6 @@ export class ClickFSM extends FSMImpl<ClickFSMHandler> {
         super.reinit();
         this.checkButton = undefined;
     }
-}
-
-interface ClickFSMHandler extends FSMDataHandler {
-    initToClicked(event: MouseEvent): void;
 }
 
 export class Click extends InteractionBase<PointData, PointDataImpl, ClickFSM> {

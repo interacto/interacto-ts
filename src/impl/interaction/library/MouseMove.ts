@@ -20,6 +20,10 @@ import {PointDataImpl} from "../PointDataImpl";
 import type {Logger} from "../../../api/logging/Logger";
 import {MouseTransition} from "../../fsm/MouseTransition";
 
+interface MouseMoveFSMHandler extends FSMDataHandler {
+    onMove(event: MouseEvent): void;
+}
+
 /**
  * The FSM for mouseover interactions
  */
@@ -35,10 +39,6 @@ export class MouseMoveFSM extends FSMImpl<MouseMoveFSMHandler> {
                 this.dataHandler?.onMove(event);
             });
     }
-}
-
-interface MouseMoveFSMHandler extends FSMDataHandler {
-    onMove(event: MouseEvent): void;
 }
 
 export class MouseMove extends InteractionBase<PointData, PointDataImpl, MouseMoveFSM> {
