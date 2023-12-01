@@ -16,7 +16,7 @@ import type {Command} from "../command/Command";
 import type {InteractionData} from "../interaction/InteractionData";
 import type {Interaction} from "../interaction/Interaction";
 import type {Binding} from "./Binding";
-import type {Checker} from "../../impl/binding/Checker";
+import type {Checker} from "../checker/Checker";
 
 /**
  * Permits to observe the bindings produced using `Bindings` routines.
@@ -33,5 +33,8 @@ export interface BindingsObserver {
      */
     clearObservedBindings(): void;
 
+    /**
+     * The type checker of the current context.
+     */
     readonly checker: Checker;
 }

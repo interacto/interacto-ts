@@ -17,7 +17,7 @@ import type {BaseBinderBuilder, Widget} from "./BaseBinderBuilder";
 import type {LogLevel} from "../logging/LogLevel";
 import type {Interaction, InteractionDataType} from "../interaction/Interaction";
 import type {WhenType} from "./When";
-import type {RuleName, Severity} from "../binding/Linting";
+import type {RuleName, Severity} from "../checker/Checker";
 
 /**
  * The binding builder API that already knows the type of user interaction the bindings will use

@@ -20,9 +20,8 @@ import type {InteractionUpdateBinder} from "./InteractionUpdateBinder";
 import type {BaseBinder} from "./BaseBinder";
 import type {Interaction, InteractionDataType} from "../interaction/Interaction";
 import type {Widget} from "./BaseBinderBuilder";
-import type {AnonCmd} from "../../impl/command/AnonCmd";
 import type {WhenType} from "./When";
-import type {RuleName, Severity} from "../binding/Linting";
+import type {RuleName, Severity} from "../checker/Checker";
 
 /**
  * The base interface for building bindings based on non-trivial user interactions (eg DnD) with routines
@@ -45,7 +44,7 @@ export interface BaseUpdateBinder extends BaseUpdateBinderBuilder, BaseBinder {
 
     toProduce<C extends Command>(fn: () => C): CmdUpdateBinder<C>;
 
-    toProduceAnon(fn: () => void): CmdUpdateBinder<AnonCmd>;
+    toProduceAnon(fn: () => void): CmdUpdateBinder<Command>;
 
     usingInteraction<I extends Interaction<D>, A, D extends InteractionData = InteractionDataType<I>>
     (fn: () => I): InteractionUpdateBinder<I, A, D>;

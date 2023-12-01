@@ -29,8 +29,6 @@ import type {KeysData} from "../interaction/KeysData";
 import type {BaseUpdateBinder} from "../binder/BaseUpdateBinder";
 import type {EltRef, Widget} from "../binder/BaseBinderBuilder";
 import type {Binding} from "./Binding";
-import type {Undo} from "../../impl/command/library/Undo";
-import type {Redo} from "../../impl/command/library/Redo";
 import type {Logger} from "../logging/Logger";
 import type {WheelData} from "../interaction/WheelData";
 import type {UndoHistoryBase} from "../undo/UndoHistoryBase";
@@ -43,6 +41,7 @@ import type {FourTouchData} from "../interaction/FourTouchData";
 import type {RotationTouchData} from "../interaction/RotationTouchData";
 import type {LineTouchData} from "../interaction/LineTouchData";
 import type {ScaleTouchData} from "../interaction/ScaleTouchData";
+import type {Command} from "../command/Command";
 
 export type PartialButtonTypedBinder<A = unknown> = InteractionBinder<Interaction<WidgetData<HTMLButtonElement>>, A>;
 export type PartialInputTypedBinder<A = unknown> = InteractionBinder<Interaction<WidgetData<HTMLInputElement>>, A>;
@@ -423,7 +422,8 @@ export abstract class Bindings<H extends UndoHistoryBase> {
      * @param catchFn - The function that will treat the errors for both undo and redo bindings
      */
     public abstract undoRedoBinder(undo: Widget<HTMLButtonElement>, redo: Widget<HTMLButtonElement>, catchFn?: ((err: unknown) => void)):
-    [Binding<Undo, Interaction<WidgetData<HTMLButtonElement>>, unknown>, Binding<Redo, Interaction<WidgetData<HTMLButtonElement>>, unknown>];
+    [Binding<Command, Interaction<WidgetData<HTMLButtonElement>>, unknown>,
+        Binding<Command, Interaction<WidgetData<HTMLButtonElement>>, unknown>];
 
     /**
      * Clears all the data of this binding context:

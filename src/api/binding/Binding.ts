@@ -17,7 +17,7 @@ import type {Command} from "../command/Command";
 import type {Observable} from "rxjs";
 import type {InteractionData} from "../interaction/InteractionData";
 import type {VisitorBinding} from "./VisitorBinding";
-import type {RuleName, Severity} from "./Linting";
+import type {RuleName, Severity} from "../checker/Checker";
 
 /**
  * The concept of binding and its related services.

@@ -12,10 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {ConcurrentAndFSM} from "../../impl/fsm/ConcurrentAndFSM";
-import type {ConcurrentXOrFSM} from "../../impl/fsm/ConcurrentXOrFSM";
-import type {FSMDataHandler} from "../../impl/fsm/FSMDataHandler";
-import type {TimeoutTransition} from "../../impl/fsm/TimeoutTransition";
+import type {ConcurrentFSM} from "./ConcurrentFSM";
 import type {FSM} from "./FSM";
 import type {InputState} from "./InputState";
 import type {OutputState} from "./OutputState";
@@ -28,9 +25,9 @@ import type {Transition} from "./Transition";
 export interface VisitorFSM {
     visitFSM(fsm: FSM): void;
 
-    visitAndConcurrentFSM(fsm: ConcurrentAndFSM<FSM, FSMDataHandler>): void;
+    visitAndConcurrentFSM(fsm: ConcurrentFSM<FSM>): void;
 
-    visitXOrConcurrentFSM(fsm: ConcurrentXOrFSM<FSM, FSMDataHandler>): void;
+    visitXOrConcurrentFSM(fsm: ConcurrentFSM<FSM>): void;
 
     visitState(state: OutputState & State): void;
 
@@ -42,5 +39,5 @@ export interface VisitorFSM {
 
     visitTransition(transition: Transition<Event>): void;
 
-    visitTimeoutTransition(transition: TimeoutTransition): void;
+    visitTimeoutTransition(transition: Transition<Event>): void;
 }

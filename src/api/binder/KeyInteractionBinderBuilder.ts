@@ -18,7 +18,7 @@ import type {LogLevel} from "../logging/LogLevel";
 import type {Interaction, InteractionDataType} from "../interaction/Interaction";
 import type {Widget} from "./BaseBinderBuilder";
 import type {WhenType} from "./When";
-import type {RuleName, Severity} from "../binding/Linting";
+import type {RuleName, Severity} from "../checker/Checker";
 
 /**
  * The binding builder API for key-based user interactions,

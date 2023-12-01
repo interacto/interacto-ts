@@ -17,7 +17,7 @@ import type {BaseUpdateBinderBuilder} from "./BaseUpdateBinderBuilder";
 import type {LogLevel} from "../logging/LogLevel";
 import type {Widget} from "./BaseBinderBuilder";
 import type {WhenType} from "./When";
-import type {RuleName, Severity} from "../binding/Linting";
+import type {RuleName, Severity} from "../checker/Checker";
 
 /**
  * The binding builder API that already knows the type of UI command

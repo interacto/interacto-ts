@@ -16,11 +16,8 @@ import type {FSM} from "../../api/fsm/FSM";
 import type {State} from "../../api/fsm/State";
 import type {OutputState} from "../../api/fsm/OutputState";
 import type {Transition} from "../../api/fsm/Transition";
-import type {ConcurrentAndFSM} from "./ConcurrentAndFSM";
-import type {ConcurrentXOrFSM} from "./ConcurrentXOrFSM";
 import type {InputState} from "../../api/fsm/InputState";
-import type {TimeoutTransition} from "./TimeoutTransition";
-import type {FSMDataHandler} from "./FSMDataHandler";
+import type {ConcurrentFSM} from "../../api/fsm/ConcurrentFSM";
 
 /**
  * A depth-first implementation of the FSM visitor. No treatment here, just visiting.
@@ -33,13 +30,13 @@ export class VisitorFSMDepthFirst implements VisitorFSM {
         this.visited = new Set();
     }
 
-    public visitAndConcurrentFSM(fsm: ConcurrentAndFSM<FSM, FSMDataHandler>): void {
+    public visitAndConcurrentFSM(fsm: ConcurrentFSM<FSM>): void {
         for (const f of fsm.getAllConccurFSMs()) {
             f.acceptVisitor(this);
         }
     }
 
-    public visitXOrConcurrentFSM(fsm: ConcurrentXOrFSM<FSM, FSMDataHandler>): void {
+    public visitXOrConcurrentFSM(fsm: ConcurrentFSM<FSM>): void {
         for (const f of fsm.getAllConccurFSMs()) {
             f.acceptVisitor(this);
         }
@@ -75,7 +72,7 @@ export class VisitorFSMDepthFirst implements VisitorFSM {
         transition.target.acceptVisitor(this);
     }
 
-    public visitTimeoutTransition(transition: TimeoutTransition): void {
+    public visitTimeoutTransition(transition: Transition<Event>): void {
         transition.target.acceptVisitor(this);
     }
 

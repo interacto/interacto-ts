@@ -19,7 +19,7 @@ import type {InteractionCmdUpdateBinder} from "./InteractionCmdUpdateBinder";
 import type {Interaction, InteractionDataType} from "../interaction/Interaction";
 import type {Widget} from "./BaseBinderBuilder";
 import type {WhenType} from "./When";
-import type {RuleName, Severity} from "../binding/Linting";
+import type {RuleName, Severity} from "../checker/Checker";
 
 /**
  * The binder API that already knows the type of UI command

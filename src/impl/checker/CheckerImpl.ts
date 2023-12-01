@@ -13,7 +13,7 @@
  */
 
 import type {Binding} from "../../api/binding/Binding";
-import type {LinterRule, RuleName, Severity} from "../../api/binding/Linting";
+import type {Checker, LinterRule, RuleName, Severity} from "../../api/checker/Checker";
 import type {Command} from "../../api/command/Command";
 import type {Interaction} from "../../api/interaction/Interaction";
 import type {InteractionData} from "../../api/interaction/InteractionData";
@@ -33,7 +33,10 @@ import {leftPan, rightPan, vPan, hPan, topPan, bottomPan} from "../interaction/l
 import {TouchDnD} from "../interaction/library/TouchDnD";
 import {twoBottomPan, twoHPan, twoLeftPan, twoRightPan, twoTopPan, twoVPan} from "../interaction/library/TwoPans";
 
-export class Checker {
+/**
+ * An implementation of the Checker API
+ */
+export class CheckerImpl implements Checker {
     private readonly linterRules: Map<RuleName, Severity>;
 
     private readonly cacheIncluded: Map<string, Set<string>>;

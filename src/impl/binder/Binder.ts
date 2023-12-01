@@ -27,7 +27,7 @@ import type {Logger} from "../../api/logging/Logger";
 import {AnonCmd} from "../command/AnonCmd";
 import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
 import type {When, WhenType} from "../../api/binder/When";
-import type {RuleName, Severity} from "../../api/binding/Linting";
+import type {RuleName, Severity} from "../../api/checker/Checker";
 
 /**
  * The base class that defines the concept of binding builder (called binder).
@@ -269,10 +269,10 @@ implements CmdBinder<C>, InteractionBinder<I, A, D>, InteractionCmdBinder<C, I, 
         return dup as unknown as Binder<C2, I, A, D>;
     }
 
-    public toProduceAnon(fn: () => void): Binder<AnonCmd, I, A, D> {
+    public toProduceAnon(fn: () => void): Binder<Command, I, A, D> {
         const dup = this.duplicate();
-        dup.produceFn = ((): AnonCmd => new AnonCmd(fn)) as unknown as (i: D | undefined) => C;
-        return dup as unknown as Binder<AnonCmd, I, A, D>;
+        dup.produceFn = ((): Command => new AnonCmd(fn)) as unknown as (i: D | undefined) => C;
+        return dup as unknown as Binder<Command, I, A, D>;
     }
 
     public abstract bind(): Binding<C, I, A, D>;

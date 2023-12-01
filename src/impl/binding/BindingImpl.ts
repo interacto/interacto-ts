@@ -23,7 +23,7 @@ import type {Interaction, InteractionDataType} from "../../api/interaction/Inter
 import type {Logger} from "../../api/logging/Logger";
 import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
 import type {VisitorBinding} from "../../api/binding/VisitorBinding";
-import type {RuleName, Severity} from "../../api/binding/Linting";
+import type {RuleName, Severity} from "../../api/checker/Checker";
 
 /**
  * The base class to do bindings, i.e. bindings between user interactions and (undoable) commands.

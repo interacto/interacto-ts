@@ -12,8 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {Bindings, UndoHistory} from "../../src/interacto";
-import {BindingsImpl, Checker, UndoHistoryImpl} from "../../src/interacto";
+import type {Bindings, UndoHistory, Checker} from "../../src/interacto";
+import {BindingsImpl, UndoHistoryImpl, CheckerImpl} from "../../src/interacto";
 
 describe("binding checker", () => {
     let checker: Checker;
@@ -22,7 +22,7 @@ describe("binding checker", () => {
     let bindings: Bindings<UndoHistory>;
 
     beforeEach(() => {
-        checker = new Checker();
+        checker = new CheckerImpl();
         w1 = document.createElement("button");
         w2 = document.createElement("div");
         bindings = new BindingsImpl<UndoHistory>(new UndoHistoryImpl());

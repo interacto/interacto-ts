@@ -25,10 +25,9 @@ import type {Interaction, InteractionDataType} from "../../api/interaction/Inter
 import type {Widget} from "../../api/binder/BaseBinderBuilder";
 import type {BindingsObserver} from "../../api/binding/BindingsObserver";
 import type {Logger} from "../../api/logging/Logger";
-import type {AnonCmd} from "../command/AnonCmd";
 import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
 import type {WhenType} from "../../api/binder/When";
-import type {RuleName, Severity} from "../../api/binding/Linting";
+import type {RuleName, Severity} from "../../api/checker/Checker";
 
 /**
  * The base binding builder to create bindings between a keys pressure interaction and a given command.
@@ -180,8 +179,8 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, A, D extend
         return super.toProduce(fn) as KeysBinder<C2, I, A, D>;
     }
 
-    public override toProduceAnon(fn: () => void): KeysBinder<AnonCmd, I, A, D> {
-        return super.toProduceAnon(fn) as KeysBinder<AnonCmd, I, A, D>;
+    public override toProduceAnon(fn: () => void): KeysBinder<Command, I, A, D> {
+        return super.toProduceAnon(fn) as KeysBinder<Command, I, A, D>;
     }
 
     public override usingInteraction<I2 extends Interaction<D2>, A2, D2 extends InteractionData = InteractionDataType<I2>>

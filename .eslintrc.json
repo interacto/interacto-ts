@@ -78,6 +78,10 @@
     "import/no-absolute-path": "error",
     "import/no-useless-path-segments": "error",
     "import/no-self-import": "error",
+    "import/no-restricted-paths": ["error", { "zones": [ {
+      "target": "./src/api",
+      "from": "./src/impl"
+    }]}],
     "unicorn/switch-case-braces": "off",
     "unicorn/no-thenable": "off",
     "no-duplicate-imports": "off",

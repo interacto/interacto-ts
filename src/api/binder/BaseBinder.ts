@@ -11,16 +11,15 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import type {LogLevel} from "../logging/LogLevel";
+import type {LogLevel} from "../../interacto";
 import type {Command} from "../command/Command";
 import type {InteractionData} from "../interaction/InteractionData";
 import type {BaseBinderBuilder, Widget} from "./BaseBinderBuilder";
 import type {InteractionBinder} from "./InteractionBinder";
 import type {CmdBinder} from "./CmdBinder";
 import type {Interaction, InteractionDataType} from "../interaction/Interaction";
-import type {AnonCmd} from "../../impl/command/AnonCmd";
 import type {WhenType} from "./When";
-import type {RuleName, Severity} from "../binding/Linting";
+import type {RuleName, Severity} from "../checker/Checker";
 
 /**
  * The base interface for building bindings with routines
@@ -56,7 +55,7 @@ export interface BaseBinder extends BaseBinderBuilder {
      * @param fn - The anonymous command.
      * @returns A clone of the current binder to chain the building configuration.
      */
-    toProduceAnon(fn: () => void): CmdBinder<AnonCmd>;
+    toProduceAnon(fn: () => void): CmdBinder<Command>;
 
     /**
      * Defines how to create the user interaction that the binding will use to create UI commands.

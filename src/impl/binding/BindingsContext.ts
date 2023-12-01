@@ -18,7 +18,8 @@ import type {Command} from "../../api/command/Command";
 import type {Interaction} from "../../api/interaction/Interaction";
 import type {InteractionData} from "../../api/interaction/InteractionData";
 import type {Subscription} from "rxjs/internal/Subscription";
-import {Checker} from "./Checker";
+import type {Checker} from "../../api/checker/Checker";
+import {CheckerImpl} from "../checker/CheckerImpl";
 
 /**
  * An object for observing creates bindings.
@@ -46,7 +47,7 @@ export class BindingsContext implements BindingsObserver {
         this.binds = [];
         this.disposables = [];
         this.cmds = [];
-        this.checker = new Checker();
+        this.checker = new CheckerImpl();
     }
 
     public observeBinding(binding: Binding<Command, Interaction<InteractionData>, unknown>): void {

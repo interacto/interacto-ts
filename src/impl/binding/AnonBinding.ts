@@ -22,7 +22,7 @@ import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
 import type {When} from "../../api/binder/When";
 import {isWhenAtEnd, isWhenAtStart, isWhenAtThen, isWhenStrict} from "../../api/binder/When";
 import {CancelFSMError} from "../fsm/CancelFSMError";
-import type {RuleName, Severity} from "../../api/binding/Linting";
+import type {RuleName, Severity} from "../../api/checker/Checker";
 
 export class AnonBinding<C extends Command, I extends Interaction<D>, A, D extends InteractionData = InteractionDataType<I>>
     extends BindingImpl<C, I, A, D> {

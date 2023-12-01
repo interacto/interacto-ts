@@ -89,7 +89,7 @@ import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
 import {TouchStart} from "../interaction/library/TouchStart";
 import {Or} from "../interaction/Or";
 import type {VisitorBinding} from "../../api/binding/VisitorBinding";
-import type {LinterRule} from "../../api/binding/Linting";
+import type {LinterRule} from "../../api/checker/Checker";
 import type {XTouchDnD} from "../interaction/library/XTouch";
 import {ThreeTouchDnD, FourTouchDnD, twoTouch} from "../interaction/library/XTouch";
 import {bottomPan, hPan, leftPan, rightPan, topPan, vPan} from "../interaction/library/Pans";

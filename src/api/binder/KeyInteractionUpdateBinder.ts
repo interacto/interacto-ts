@@ -20,9 +20,8 @@ import type {InteractionUpdateBinderBuilder} from "./InteractionUpdateBinderBuil
 import type {KeyBinderBuilder} from "./KeyBinderBuilder";
 import type {Interaction, InteractionDataType} from "../interaction/Interaction";
 import type {Widget} from "./BaseBinderBuilder";
-import type {AnonCmd} from "../../impl/command/AnonCmd";
 import type {WhenType} from "./When";
-import type {RuleName, Severity} from "../binding/Linting";
+import type {RuleName, Severity} from "../checker/Checker";
 
 /**
  * The binder API for key-based user interactions, that already knows the type of the user interaction to use
@@ -63,5 +62,5 @@ export interface KeyInteractionUpdateBinder<I extends Interaction<D>, A, D exten
 
     toProduce<C extends Command>(fn: (i: D) => C): KeyInteractionCmdUpdateBinder<C, I, A, D>;
 
-    toProduceAnon(fn: () => void): KeyInteractionCmdUpdateBinder<AnonCmd, I, A, D>;
+    toProduceAnon(fn: () => void): KeyInteractionCmdUpdateBinder<Command, I, A, D>;
 }
