@@ -104,6 +104,9 @@
         ]
       }
     ],
+    "import/no-unassigned-import": "error",
+    "import/newline-after-import": "error",
+    "import/first": "error",
     "unicorn/switch-case-braces": "off",
     "unicorn/no-thenable": "off",
     "no-duplicate-imports": "off",
