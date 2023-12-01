@@ -38,7 +38,7 @@ describe("using a pinch binder", () => {
     });
 
     test("pinch OK", () => {
-        binding = bindings.pinchBinder(10)
+        binding = bindings.scaleBinder(10)
             .toProduce(() => new StubCmd(true))
             .on(c1)
             .bind();
@@ -59,7 +59,7 @@ describe("using a pinch binder", () => {
     });
 
     test("pinch KO wrong direction", () => {
-        binding = bindings.pinchBinder(10)
+        binding = bindings.scaleBinder(10)
             .toProduce(() => new StubCmd(true))
             .on(c1)
             .bind();
@@ -79,7 +79,7 @@ describe("using a pinch binder", () => {
     });
 
     test("pinch KO not enough touches", () => {
-        binding = bindings.pinchBinder(10)
+        binding = bindings.scaleBinder(10)
             .toProduce(() => new StubCmd(true))
             .on(c1)
             .bind();

@@ -12,23 +12,15 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {RotationData} from "../../api/interaction/RotationTouchData";
-import type {TouchData} from "../../api/interaction/TouchData";
-import {TwoTouchDataImpl} from "./TwoTouchDataImpl";
+import type {TwoTouchData} from "./TwoTouchData";
 
 /**
- * The implementation of the rotation interaction data.
+ * The two-touch interaction data that represents a scale/pinch gesture.
  */
-export class RotationDataImpl extends TwoTouchDataImpl implements RotationData {
-    public constructor() {
-        super();
-    }
-
-    public get rotationAngle(): number {
-        return this.computeAngle(this.t1.src, this.t2.src) - this.computeAngle(this.t1.src, this.t2.tgt);
-    }
-
-    private computeAngle(t1: TouchData, t2: TouchData): number {
-        return Math.atan2(t2.clientX - t1.clientX, t1.clientY - t2.clientY);
-    }
+export interface ScaleTouchData extends TwoTouchData {
+    /**
+     * The computed scaling ratio. The distance between the end position
+     * of the touches divided the distance between the starting position of the touches.
+     */
+    scalingRatio(pxTolerance: number): number;
 }

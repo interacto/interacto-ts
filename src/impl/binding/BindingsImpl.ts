@@ -75,7 +75,8 @@ import type {
     PartialThreeTouchTypedBinder,
     PartialFourTouchTypedBinder,
     PartialRotateTypedBinder,
-    PartialTwoPanTypedBinder
+    PartialTwoPanTypedBinder,
+    PartialScaleTypedBinder
 } from "../../api/binding/Bindings";
 import {Bindings} from "../../api/binding/Bindings";
 import type {Logger} from "../../api/logging/Logger";
@@ -92,8 +93,8 @@ import type {LinterRule} from "../../api/binding/Linting";
 import type {XTouchDnD} from "../interaction/library/XTouch";
 import {ThreeTouchDnD, FourTouchDnD, twoTouch} from "../interaction/library/XTouch";
 import {bottomPan, hPan, leftPan, rightPan, topPan, vPan} from "../interaction/library/Pans";
-import type {Rotate} from "../interaction/library/TwoTouch";
-import {rotate} from "../interaction/library/TwoTouch";
+import type {Rotate, Scale} from "../interaction/library/TwoTouch";
+import {rotate, scale} from "../interaction/library/TwoTouch";
 import type {TwoPan} from "../interaction/library/TwoPans";
 import {twoBottomPan, twoHPan, twoLeftPan, twoRightPan, twoTopPan, twoVPan} from "../interaction/library/TwoPans";
 import type {GeneralTwoTouchDataImpl} from "../interaction/GeneralTwoTouchDataImpl";
@@ -181,8 +182,8 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
      * @param handle - The selectable part of the spring widget.
      * @param spring - The line between the handle and the previous position of the element.
      */
-    public reciprocalTouchDnDBinder<A>(handle: EltRef<SVGCircleElement>, spring: EltRef<SVGLineElement>, accInit?: A
-    ): PartialTouchSrcTgtTypedBinder<A> {
+    public reciprocalTouchDnDBinder<A>(handle: EltRef<SVGCircleElement>, spring: EltRef<SVGLineElement>, accInit?: A):
+    PartialTouchSrcTgtTypedBinder<A> {
         const anim = new DwellSpringAnimation(handle, spring);
 
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
@@ -415,14 +416,9 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
             .usingInteraction<Rotate, A>(rotate(this.logger, pxTolerance));
     }
 
-    /**
-     * Creates a binding that uses the pinch interaction.
-     * @param pxTolerance - The tolerance rate in pixels accepted while executing the pinch
-     */
-    public pinchBinder<A>(pxTolerance: number, accInit?: A): PartialTwoTouchTypedBinder<A> {
+    public scaleBinder<A>(pxTolerance: number, accInit?: A): PartialScaleTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
-            .usingInteraction<XTouchDnD<GeneralTwoTouchData, GeneralTwoTouchDataImpl>, A>(twoTouch(this.logger))
-            .when(i => i.pinchFactor(pxTolerance) !== undefined);
+            .usingInteraction<Scale, A>(scale(this.logger, pxTolerance));
     }
 
     /**

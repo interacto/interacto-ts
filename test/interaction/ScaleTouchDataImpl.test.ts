@@ -12,11 +12,11 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import {ScaleTouchDataImpl} from "../../src/impl/interaction/ScaleTouchDataImpl";
 import type {EventModifierData, UnitInteractionData} from "../../src/interacto";
-import {GeneralTwoTouchDataImpl, TwoTouchDataImpl} from "../../src/interacto";
 
-describe("using a multi touch data", () => {
-    let data: GeneralTwoTouchDataImpl;
+describe("using a scale touch data", () => {
+    let data: ScaleTouchDataImpl;
     let touchSrc1: Touch;
     let touchSrc2: Touch;
     let touchTgt1: Touch;
@@ -24,7 +24,7 @@ describe("using a multi touch data", () => {
     let evt: EventModifierData & UnitInteractionData;
 
     beforeEach(() => {
-        data = new GeneralTwoTouchDataImpl();
+        data = new ScaleTouchDataImpl();
 
         touchSrc1 = {
             "force": 15,
@@ -97,36 +97,36 @@ describe("using a multi touch data", () => {
         };
     });
 
-    test("pinchFactor OK", () => {
+    test("scalingRatio OK", () => {
         data.initTouch(touchSrc1, evt, []);
         data.initTouch(touchSrc2, evt, []);
         data.copyTouch(touchTgt1, evt, []);
         data.copyTouch(touchTgt2, evt, []);
 
-        expect(data.pinchFactor(0.72)).toBeCloseTo(3.1018);
+        expect(data.scalingRatio(0.72)).toBeCloseTo(3.1018);
     });
 
-    test("pinchFactor undefined invalid number of touches", () => {
+    test("scalingRatio undefined invalid number of touches", () => {
         data.initTouch(touchSrc1, evt, []);
         data.copyTouch(touchTgt1, evt, []);
 
-        expect(data.pinchFactor(1)).toBeUndefined();
+        expect(data.scalingRatio(1)).toBe(0);
     });
 
-    test("pinchFactor undefined same direction", () => {
+    test("scalingRatio undefined same direction", () => {
         data.initTouch(touchSrc1, evt, []);
         data.initTouch({...touchSrc1, "identifier": touchSrc1.identifier + 1}, evt, []);
         data.copyTouch(touchTgt1, evt, []);
         data.copyTouch({...touchTgt1, "identifier": touchTgt1.identifier + 1}, evt, []);
 
-        expect(data.pinchFactor(1)).toBeUndefined();
+        expect(data.scalingRatio(1)).toBe(0);
     });
 
     test("project", () => {
-        expect(TwoTouchDataImpl.project([2, 3], [1, -2])).toBeCloseTo(-0.8);
+        expect(ScaleTouchDataImpl.project([2, 3], [1, -2])).toBeCloseTo(-0.8);
     });
 
     test("distance", () => {
-        expect(TwoTouchDataImpl.distance([20, 22], [5, 6])).toBeCloseTo(21.93);
+        expect(ScaleTouchDataImpl.distance([20, 22], [5, 6])).toBeCloseTo(21.93);
     });
 });

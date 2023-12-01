@@ -754,7 +754,7 @@ describe("using bindings", () => {
     });
 
     test("that pinch binder works", () => {
-        bindings.pinchBinder(10)
+        bindings.scaleBinder(10)
             .toProduce((_i: MultiTouchData) => new StubCmd(true))
             .on(elt)
             .bind();

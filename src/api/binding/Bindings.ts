@@ -40,8 +40,9 @@ import type {VisitorBinding} from "./VisitorBinding";
 import type {GeneralTwoTouchData, TwoTouchData} from "../interaction/TwoTouchData";
 import type {ThreeTouchData} from "../interaction/ThreeTouchData";
 import type {FourTouchData} from "../interaction/FourTouchData";
-import type {RotationData} from "../interaction/RotationTouchData";
+import type {RotationTouchData} from "../interaction/RotationTouchData";
 import type {LineTouchData} from "../interaction/LineTouchData";
+import type {ScaleTouchData} from "../interaction/ScaleTouchData";
 
 export type PartialButtonTypedBinder<A = unknown> = InteractionBinder<Interaction<WidgetData<HTMLButtonElement>>, A>;
 export type PartialInputTypedBinder<A = unknown> = InteractionBinder<Interaction<WidgetData<HTMLInputElement>>, A>;
@@ -49,7 +50,8 @@ export type PartialSelectTypedBinder<A = unknown> = InteractionBinder<Interactio
 export type PartialSpinnerTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<WidgetData<HTMLInputElement>>, A>;
 export type PartialAnchorTypedBinder<A = unknown> = InteractionBinder<Interaction<WidgetData<HTMLAnchorElement>>, A>;
 export type PartialTextInputTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<WidgetData<HTMLInputElement | HTMLTextAreaElement>>, A>;
-export type PartialRotateTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<RotationData>, A>;
+export type PartialRotateTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<RotationTouchData>, A>;
+export type PartialScaleTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<ScaleTouchData>, A>;
 export type PartialTwoPanTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<LineTouchData & TwoTouchData>, A>;
 export type PartialTwoTouchTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<GeneralTwoTouchData>, A>;
 export type PartialThreeTouchTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<ThreeTouchData>, A>;
@@ -301,10 +303,10 @@ export abstract class Bindings<H extends UndoHistoryBase> {
     public abstract rotateBinder<A>(pxTolerance: number, accInit?: A): PartialRotateTypedBinder<A>;
 
     /**
-     * Creates a binding that uses the pinch interaction.
-     * @param pxTolerance - The tolerance rate in pixels accepted while executing the pinch
+     * Creates a binding that uses the scale/pinch touch interaction.
+     * @param pxTolerance - The tolerance rate in pixels accepted while executing the scale/pinch gesture
      */
-    public abstract pinchBinder<A>(pxTolerance: number, accInit?: A): PartialMultiTouchTypedBinder<A>;
+    public abstract scaleBinder<A>(pxTolerance: number, accInit?: A): PartialScaleTypedBinder<A>;
 
     /**
      * Creates a binding that uses the click interaction.
