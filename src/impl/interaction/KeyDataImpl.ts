@@ -47,8 +47,10 @@ export class KeyDataImpl extends InteractionDataBase implements KeyData, Flushab
 
     public override copy(data: KeyData): void {
         super.copy(data);
-        // Cannot use Object.assign because of a strange implementation of Event
-        // that prevents accessing the properties
+        /*
+         * Cannot use Object.assign because of a strange implementation of Event
+         * that prevents accessing the properties
+         */
         this.codeData = data.code;
         this.keyData = data.key;
         this.locationData = data.location;

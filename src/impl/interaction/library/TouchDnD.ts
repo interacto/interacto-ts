@@ -70,8 +70,10 @@ export class TouchDnDFSM extends FSMImpl<TouchDnDFSMHandler> {
 
         new TouchTransition(this.initState, this.touched, "touchstart", touchDown);
 
-        // If the touch up event is lost by the browser and another touch down occurs
-        // we must restart the interaction
+        /*
+         * If the touch up event is lost by the browser and another touch down occurs
+         * we must restart the interaction
+         */
         new TouchTransition(this.touched, this.touched, "touchstart", touchDown, fixTouchDownCheck);
 
         if (this.movementRequired) {
@@ -94,8 +96,10 @@ export class TouchDnDFSM extends FSMImpl<TouchDnDFSMHandler> {
         new TouchTransition(this.touched, this.moved, "touchmove", moved, movedPredicate);
         new TouchTransition(this.moved, this.moved, "touchmove", moved, movedPredicate);
 
-        // If the touch up event is lost by the browser and another touch down occurs
-        // we must restart the interaction
+        /*
+         * If the touch up event is lost by the browser and another touch down occurs
+         * we must restart the interaction
+         */
         new TouchTransition(this.moved, this.touched, "touchstart", touchDown, fixTouchDownCheck);
 
         // Transitions used if the DnD can be cancelled by releasing the touch on a dwell spring element
@@ -105,8 +109,10 @@ export class TouchDnDFSM extends FSMImpl<TouchDnDFSMHandler> {
                     this.dataHandler?.onRelease(event);
                 },
                 (event: TouchEvent): boolean => {
-                // Touch event behaviour is not consistent with mouse events: event.tgt.target points to the original element, not to the one
-                // currently targeted. So we have to retrieve the current target manually.
+                /*
+                 * Touch event behaviour is not consistent with mouse events: event.tgt.target points to the original element, not to the one
+                 * currently targeted. So we have to retrieve the current target manually.
+                 */
                     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                     const touch = event.changedTouches[0]!;
                     const tgt = document.elementFromPoint(touch.clientX, touch.clientY);

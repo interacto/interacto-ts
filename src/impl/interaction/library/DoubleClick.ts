@@ -123,9 +123,11 @@ export class DoubleClick extends InteractionBase<PointData, PointDataImpl, Doubl
                 this.reinitData();
             }
         };
-        // We give the interaction to the first click as this click interaction
-        // will contains the data: so that this interaction will fill the data
-        // of the double-click.
+        /*
+         * We give the interaction to the first click as this click interaction
+         * will contains the data: so that this interaction will fill the data
+         * of the double-click.
+         */
         new Click(logger, this.fsm.firstClickFSM, this._data);
     }
 }

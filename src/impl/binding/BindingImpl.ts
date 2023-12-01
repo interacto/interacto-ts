@@ -165,8 +165,10 @@ implements Binding<C, I, A, D> {
     protected createCommand(): C | undefined {
         try {
             const cmd = this.cmdProducer(this.interaction.data);
-            // Updating the name of the binding according to the name of the command.
-            // Cannot be done elsewhere since we cannot access the concrete type of the command.
+            /*
+             * Updating the name of the binding according to the name of the command.
+             * Cannot be done elsewhere since we cannot access the concrete type of the command.
+             */
             if (this._name === undefined) {
                 this._name = `${this._interaction.constructor.name}:${cmd.constructor.name}`;
             }
@@ -452,17 +454,21 @@ implements Binding<C, I, A, D> {
             }
         }
 
-        // Required to keep the command as because of async it may be set
-        // to undefined right after
+        /*
+         * Required to keep the command as because of async it may be set
+         * to undefined right after
+         */
         const result = cmd.execute();
 
         if (result instanceof Promise) {
             result.then(executed => {
                 this._cmd = cmd;
                 this.afterCmdExecuted(cmd, executed);
-                // Cannot put these two lines in a finally block:
-                // tests will failed as finally is called *after* the promise is resolved
-                // provoking sync issues (treatments are done as soon as the promise is resolved)
+                /*
+                 * Cannot put these two lines in a finally block:
+                 * tests will failed as finally is called *after* the promise is resolved
+                 * provoking sync issues (treatments are done as soon as the promise is resolved)
+                 */
                 this._cmd = undefined;
                 this._timeEnded++;
             }).catch((error: unknown) => {

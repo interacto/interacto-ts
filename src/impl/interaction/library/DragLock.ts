@@ -123,8 +123,10 @@ export class DragLock extends InteractionBase<SrcTgtPointsData<PointData>, SrcTg
 
         super(new DragLockFSM(logger, handler), new SrcTgtPointsDataImpl(), logger, name ?? DragLock.name);
 
-        // We give the interactions to the initial and final double-clicks as these interactions
-        // will contain the data: so that these interactions will fill the data of the draglock.
+        /*
+         * We give the interactions to the initial and final double-clicks as these interactions
+         * will contain the data: so that these interactions will fill the data of the draglock.
+         */
         new DoubleClick(logger, this.fsm.firstDbleClick, this.data.src as PointDataImpl);
         new DoubleClick(logger, this.fsm.sndDbleClick, this.data.tgt as PointDataImpl);
     }

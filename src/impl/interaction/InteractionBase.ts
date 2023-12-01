@@ -144,8 +144,10 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
                 rejection = reject;
                 timeout = setTimeout(() => {
                     try {
-                        // Do not put this code into the then block
-                        // as it must be executed BEFORE resolving the promise.
+                        /*
+                         * Do not put this code into the then block
+                         * as it must be executed BEFORE resolving the promise.
+                         */
                         const evt: Event | undefined = this.latestThrottledEvent;
                         this.latestThrottledEvent = undefined;
                         if (evt !== undefined) {

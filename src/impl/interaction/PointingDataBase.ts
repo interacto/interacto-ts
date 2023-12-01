@@ -52,8 +52,10 @@ export abstract class PointingDataBase extends InteractionDataBase implements Po
 
     public override copy(data: PointBaseData): void {
         super.copy(data);
-        // Cannot use Object.assign because of a strange implementation of Event
-        // that prevents accessing the properties
+        /*
+         * Cannot use Object.assign because of a strange implementation of Event
+         * that prevents accessing the properties
+         */
         this.clientXData = data.clientX;
         this.clientYData = data.clientY;
         this.pageXData = data.pageX;

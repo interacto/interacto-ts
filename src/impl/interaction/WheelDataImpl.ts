@@ -37,8 +37,10 @@ export class WheelDataImpl extends PointDataImpl implements WheelData {
 
     public override copy(data: WheelData): void {
         super.copy(data);
-        // Cannot use Object.assign because of a strange implementation of Event
-        // that prevents accessing the properties
+        /*
+         * Cannot use Object.assign because of a strange implementation of Event
+         * that prevents accessing the properties
+         */
         this.deltaXData = data.deltaX;
         this.deltaYData = data.deltaY;
         this.deltaZData = data.deltaZ;

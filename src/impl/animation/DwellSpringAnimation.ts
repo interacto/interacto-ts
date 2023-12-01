@@ -46,8 +46,10 @@ export class DwellSpringAnimation {
     }
 
     public process(i: SrcTgtPointsData<PointData | TouchData>): void {
-        // Management of the dwell and spring
-        // The element to use for this interaction (handle) must have the "ioDwellSpring" class
+        /*
+         * Management of the dwell and spring
+         * The element to use for this interaction (handle) must have the "ioDwellSpring" class
+         */
         if (this.displaySpring) {
             const distance = Math.hypot((i.tgt.clientX - this.positionSpring.x), (i.tgt.clientY - this.positionSpring.y));
             if (Math.abs(distance) > (this.radius * 4)) {

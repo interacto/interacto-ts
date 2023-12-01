@@ -62,8 +62,10 @@ export class MultiTouchFSM extends ConcurrentAndFSM<TouchDnDFSM, TouchDnDFSMHand
                 .find(fsm => fsm.getTouchId() !== undefined && fsm.getTouchId() === event.changedTouches[i]?.identifier);
 
             if (first === undefined) {
-                // If no FSM found, two meanings:
-                // 1/ the touch event is unexpected since all the FSMs are running, so cancelling
+                /*
+                 * If no FSM found, two meanings:
+                 * 1/ the touch event is unexpected since all the FSMs are running, so cancelling
+                 */
                 const remainingFSM = this.conccurFSMs.find(fsm => fsm.getTouchId() === undefined);
                 if (remainingFSM === undefined) {
                     this.onCancelling();

@@ -64,21 +64,23 @@ export class ScaleTouchDataImpl extends TwoTouchDataImpl implements ScaleTouchDa
             return 0;
         }
 
-        // 6. Calculate the ratio between the distance between the end position of the touches
-        // and the distance between the starting position of the touches
+        /*
+         * 6. Calculate the ratio between the distance between the end position of the touches
+         * and the distance between the starting position of the touches
+         */
         return ScaleTouchDataImpl.distance(tgt1, tgt2) / ScaleTouchDataImpl.distance(src1, src2);
     }
 
     /**
-         * Returns the value of the projection of vector1 on vector2
-         */
+     * Returns the value of the projection of vector1 on vector2
+     */
     public static project(vector1: [number, number], vector2: [number, number]): number {
         return (vector1[0] * vector2[0] + vector1[1] * vector2[1]) / (vector2[0] ** 2 + vector2[1] ** 2);
     }
 
     /**
-         * Returns the distance between point1 and point2
-         */
+     * Returns the distance between point1 and point2
+     */
     public static distance(point1: [number, number], point2: [number, number]): number {
         return Math.hypot((point2[0] - point1[0]), (point2[1] - point1[1]));
     }

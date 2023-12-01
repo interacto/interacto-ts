@@ -82,8 +82,10 @@ export class TouchDataImpl extends PointingDataBase implements TouchData {
 
     public static mergeTouchEventData(touch: Touch, evt: EventModifierData & UnitInteractionData, allTouches: Array<Touch>): TouchData {
         const data = new TouchDataImpl();
-        // Not beautiful code but other tries did not work
-        // 'assign' and spread do not work with events (polyfill concern? Or front interfaces for legacy back API?).
+        /*
+         * Not beautiful code but other tries did not work
+         * 'assign' and spread do not work with events (polyfill concern? Or front interfaces for legacy back API?).
+         */
         data.copy({
             "clientX": touch.clientX,
             "clientY": touch.clientY,

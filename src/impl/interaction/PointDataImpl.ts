@@ -47,8 +47,10 @@ export class PointDataImpl extends PointingDataBase implements PointData {
 
     public override copy(data: PointData): void {
         super.copy(data);
-        // Cannot use Object.assign because of a strange implementation of Event
-        // that prevents accessing the properties
+        /*
+         * Cannot use Object.assign because of a strange implementation of Event
+         * that prevents accessing the properties
+         */
         this.buttonData = data.button;
         this.buttonsData = data.buttons;
         this.movementXData = data.movementX;

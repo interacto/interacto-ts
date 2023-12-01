@@ -10,8 +10,10 @@ export abstract class InteractionDataBase implements UnitInteractionData, Flusha
     protected timeStampData = 0;
 
     public copy(data: UnitInteractionData): void {
-        // Cannot use Object.assign because of a strange implementation of Event
-        // that prevents accessing the properties
+        /*
+         * Cannot use Object.assign because of a strange implementation of Event
+         * that prevents accessing the properties
+         */
         this.currentTargetData = data.currentTarget;
         this.targetData = data.target;
         this.timeStampData = data.timeStamp;
