@@ -12,14 +12,14 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {LineTouchData} from "../../api/interaction/LineTouchData";
-import type {RotationTouchData} from "../../api/interaction/RotationTouchData";
-import type {ScaleTouchData} from "../../api/interaction/ScaleTouchData";
-import type {GeneralTwoTouchData} from "../../api/interaction/TwoTouchData";
 import {RotationTouchDataImpl} from "./RotationTouchDataImpl";
 import {ScaleTouchDataImpl} from "./ScaleTouchDataImpl";
 import {TwoPanDataImpl} from "./TwoPanDataImpl";
 import {TwoTouchDataImpl} from "./TwoTouchDataImpl";
+import type {LineTouchData} from "../../api/interaction/LineTouchData";
+import type {RotationTouchData} from "../../api/interaction/RotationTouchData";
+import type {ScaleTouchData} from "../../api/interaction/ScaleTouchData";
+import type {GeneralTwoTouchData} from "../../api/interaction/TwoTouchData";
 
 export class GeneralTwoTouchDataImpl extends TwoTouchDataImpl implements GeneralTwoTouchData {
     private readonly rotateData: RotationTouchData;

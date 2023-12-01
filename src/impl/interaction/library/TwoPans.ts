@@ -12,12 +12,12 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import {XTouchDnD} from "./XTouch";
+import {InteractionBuilderImpl} from "../InteractionBuilderImpl";
+import {TwoPanDataImpl} from "../TwoPanDataImpl";
 import type {LineTouchData} from "../../../api/interaction/LineTouchData";
 import type {TwoTouchData} from "../../../api/interaction/TwoTouchData";
 import type {Logger} from "../../../api/logging/Logger";
-import {InteractionBuilderImpl} from "../InteractionBuilderImpl";
-import {TwoPanDataImpl} from "../TwoPanDataImpl";
-import {XTouchDnD} from "./XTouch";
 
 export type TwoPan = XTouchDnD<LineTouchData & TwoTouchData, TwoPanDataImpl>;
 

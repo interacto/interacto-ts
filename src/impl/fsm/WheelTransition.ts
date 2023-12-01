@@ -12,10 +12,10 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {InputState} from "../../api/fsm/InputState";
-import type {OutputState} from "../../api/fsm/OutputState";
 import {TransitionBase} from "./TransitionBase";
 import type {EventType} from "../../api/fsm/EventType";
+import type {InputState} from "../../api/fsm/InputState";
+import type {OutputState} from "../../api/fsm/OutputState";
 
 /**
  * This transition corresponds to the user moving a mouse wheel or a similar input device.

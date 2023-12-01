@@ -13,8 +13,8 @@
  */
 
 import {PointDataImpl} from "./PointDataImpl";
-import type {PointData} from "../../api/interaction/PointData";
 import {SrcTgtDataBase} from "./SrcTgtDataBase";
+import type {PointData} from "../../api/interaction/PointData";
 
 export class SrcTgtPointsDataImpl extends SrcTgtDataBase<PointData, PointDataImpl> {
     public constructor() {

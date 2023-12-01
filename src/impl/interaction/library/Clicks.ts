@@ -12,14 +12,14 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {FSMImpl} from "../../fsm/FSMImpl";
 import {ClickTransition} from "../../fsm/ClickTransition";
-import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import {InteractionBase} from "../InteractionBase";
-import {PointDataImpl} from "../PointDataImpl";
+import {FSMImpl} from "../../fsm/FSMImpl";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
-import type {Logger} from "../../../api/logging/Logger";
+import {InteractionBase} from "../InteractionBase";
 import {MousePointsDataImpl} from "../MousePointsDataImpl";
+import {PointDataImpl} from "../PointDataImpl";
+import type {Logger} from "../../../api/logging/Logger";
+import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 
 interface ClicksFSMHandler extends FSMDataHandler {
     click(evt: MouseEvent): void;

@@ -12,12 +12,12 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {OutputState} from "../../src/api/fsm/OutputState";
-import type {MockProxy} from "jest-mock-extended";
+import {ButtonPressedTransition} from "../../src/impl/fsm/ButtonPressedTransition";
+import {createEventWithTarget} from "../interaction/StubEvents";
 import {mock} from "jest-mock-extended";
 import type {InputState} from "../../src/api/fsm/InputState";
-import {createEventWithTarget} from "../interaction/StubEvents";
-import {ButtonPressedTransition} from "../../src/impl/fsm/ButtonPressedTransition";
+import type {OutputState} from "../../src/api/fsm/OutputState";
+import type {MockProxy} from "jest-mock-extended";
 
 let tr: ButtonPressedTransition;
 let src: MockProxy<OutputState> & OutputState;

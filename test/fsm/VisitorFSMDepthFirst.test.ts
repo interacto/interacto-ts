@@ -12,10 +12,10 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {Logger, FSMDataHandler, FSMImpl, FSM, InputState, OutputState, State,
-    Transition, TimeoutTransition, ConcurrentAndFSM, ConcurrentXOrFSM} from "../../src/interacto";
 import {ClickFSM, DnD, DoubleClickFSM, KeyTyped, LongTouch, MouseDown, MultiTouch, TouchDnD, VisitorFSMDepthFirst} from "../../src/interacto";
 import {mock} from "jest-mock-extended";
+import type {Logger, FSMDataHandler, FSMImpl, FSM, InputState, OutputState, State,
+    Transition, TimeoutTransition, ConcurrentAndFSM, ConcurrentXOrFSM} from "../../src/interacto";
 
 let visitedFSM: FSMImpl<FSMDataHandler>;
 let visitor: StubVisitor;

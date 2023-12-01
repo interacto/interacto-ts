@@ -13,13 +13,13 @@
  */
 
 import {FSMImpl} from "../../fsm/FSMImpl";
-import {InteractionBase} from "../InteractionBase";
-import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
-import type {TouchData} from "../../../api/interaction/TouchData";
-import {TouchDataImpl} from "../TouchDataImpl";
-import type {Logger} from "../../../api/logging/Logger";
 import {TouchTransition} from "../../fsm/TouchTransition";
+import {InteractionBase} from "../InteractionBase";
+import {TouchDataImpl} from "../TouchDataImpl";
+import type {TouchData} from "../../../api/interaction/TouchData";
+import type {Logger} from "../../../api/logging/Logger";
+import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 
 /**
  * The FSM for the LongTouch interaction

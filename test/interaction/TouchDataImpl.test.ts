@@ -13,8 +13,8 @@
  */
 
 import {TouchDataImpl} from "../../src/impl/interaction/TouchDataImpl";
-import type {TouchData} from "../../src/api/interaction/TouchData";
 import type {EventModifierData} from "../../src/api/interaction/EventModifierData";
+import type {TouchData} from "../../src/api/interaction/TouchData";
 import type {UnitInteractionData} from "../../src/api/interaction/UnitInteractionData";
 
 describe("using a touch data", () => {

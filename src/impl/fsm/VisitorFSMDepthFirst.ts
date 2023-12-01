@@ -11,13 +11,13 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import type {VisitorFSM} from "../../api/fsm/VisitorFSM";
-import type {FSM} from "../../api/fsm/FSM";
-import type {State} from "../../api/fsm/State";
-import type {OutputState} from "../../api/fsm/OutputState";
-import type {Transition} from "../../api/fsm/Transition";
-import type {InputState} from "../../api/fsm/InputState";
 import type {ConcurrentFSM} from "../../api/fsm/ConcurrentFSM";
+import type {FSM} from "../../api/fsm/FSM";
+import type {InputState} from "../../api/fsm/InputState";
+import type {OutputState} from "../../api/fsm/OutputState";
+import type {State} from "../../api/fsm/State";
+import type {Transition} from "../../api/fsm/Transition";
+import type {VisitorFSM} from "../../api/fsm/VisitorFSM";
 
 /**
  * A depth-first implementation of the FSM visitor. No treatment here, just visiting.

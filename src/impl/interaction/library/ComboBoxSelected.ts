@@ -12,14 +12,14 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {isComboBox} from "../../fsm/Events";
-import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import type {WidgetData} from "../../../api/interaction/WidgetData";
 import {ComboBoxTransition} from "../../fsm/ComboBoxTransition";
+import {isComboBox} from "../../fsm/Events";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {WidgetDataImpl} from "../WidgetDataImpl";
+import type {WidgetData} from "../../../api/interaction/WidgetData";
 import type {Logger} from "../../../api/logging/Logger";
+import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 
 class ComboBoxSelectedFSM extends FSMImpl<ComboBoxSelectedHandler> {
     public constructor(logger: Logger, dataHandler: ComboBoxSelectedHandler) {

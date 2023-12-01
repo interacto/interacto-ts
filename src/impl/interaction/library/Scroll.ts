@@ -12,13 +12,13 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import {ScrollTransition} from "../../fsm/ScrollTransition";
-import type {ScrollData} from "../../../api/interaction/ScrollData";
 import {FSMImpl} from "../../fsm/FSMImpl";
+import {ScrollTransition} from "../../fsm/ScrollTransition";
 import {InteractionBase} from "../InteractionBase";
 import {ScrollDataImpl} from "../ScrollDataImpl";
+import type {ScrollData} from "../../../api/interaction/ScrollData";
 import type {Logger} from "../../../api/logging/Logger";
+import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 
 interface ScrollFSMHandler extends FSMDataHandler {
     initToScroll(event: Event): void;

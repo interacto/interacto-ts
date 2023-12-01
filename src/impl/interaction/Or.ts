@@ -12,15 +12,15 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMDataHandler} from "../fsm/FSMDataHandler";
-import type {FSM} from "../../api/fsm/FSM";
 import {ConcurrentInteraction} from "./ConcurrentInteraction";
-import type {InteractionBase, InteractionDataImplType} from "./InteractionBase";
-import type {InteractionData} from "../../api/interaction/InteractionData";
-import type {Flushable} from "./Flushable";
-import type {Logger} from "../../api/logging/Logger";
-import type {InteractionDataType} from "../../api/interaction/Interaction";
 import {ConcurrentXOrFSM} from "../fsm/ConcurrentXOrFSM";
+import type {Flushable} from "./Flushable";
+import type {InteractionBase, InteractionDataImplType} from "./InteractionBase";
+import type {FSM} from "../../api/fsm/FSM";
+import type {InteractionDataType} from "../../api/interaction/Interaction";
+import type {InteractionData} from "../../api/interaction/InteractionData";
+import type {Logger} from "../../api/logging/Logger";
+import type {FSMDataHandler} from "../fsm/FSMDataHandler";
 
 export class Or<
     I1 extends InteractionBase<D1, D1Impl, FSM>,

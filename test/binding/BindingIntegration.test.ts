@@ -12,8 +12,6 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {mock} from "jest-mock-extended";
-import type {FSM, FSMDataHandler, Logger, UndoHistory} from "../../src/interacto";
 import {
     BindingImpl,
     ClickTransition,
@@ -23,6 +21,8 @@ import {
 import {StubCmd} from "../command/StubCmd";
 import {InteractionStub} from "../interaction/InteractionStub";
 import {createMouseEvent} from "../interaction/StubEvents";
+import {mock} from "jest-mock-extended";
+import type {FSM, FSMDataHandler, Logger, UndoHistory} from "../../src/interacto";
 
 let interaction: InteractionStub;
 let binding: BindingImpl<StubCmd, InteractionStub, unknown>;

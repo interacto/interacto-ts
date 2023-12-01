@@ -12,10 +12,10 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import {CancelFSMError} from "../fsm/CancelFSMError";
 import type {Interaction, InteractionDataType} from "../../api/interaction/Interaction";
 import type {InteractionBuilder} from "../../api/interaction/InteractionBuilder";
 import type {InteractionData} from "../../api/interaction/InteractionData";
-import {CancelFSMError} from "../fsm/CancelFSMError";
 
 /**
  * An implementation of `InteractionBuilder`.

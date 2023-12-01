@@ -11,14 +11,14 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import {isColorChoice} from "../../fsm/Events";
-import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import type {WidgetData} from "../../../api/interaction/WidgetData";
 import {ColorPickedTransition} from "../../fsm/ColorPickedTransition";
+import {isColorChoice} from "../../fsm/Events";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {WidgetDataImpl} from "../WidgetDataImpl";
+import type {WidgetData} from "../../../api/interaction/WidgetData";
 import type {Logger} from "../../../api/logging/Logger";
+import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 
 class ColorPickedFSM extends FSMImpl<ColorPickedHandler> {
     public constructor(logger: Logger, dataHandler: ColorPickedHandler) {

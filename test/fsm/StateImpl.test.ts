@@ -12,10 +12,10 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {VisitorFSM} from "../../src/api/fsm/VisitorFSM";
-import type {FSMDataHandler, Logger, StateBase} from "../../src/interacto";
 import {FSMImpl, StdState} from "../../src/interacto";
 import {mock} from "jest-mock-extended";
+import type {VisitorFSM} from "../../src/api/fsm/VisitorFSM";
+import type {FSMDataHandler, Logger, StateBase} from "../../src/interacto";
 
 describe("using a state impl", () => {
     let state: StateBase;

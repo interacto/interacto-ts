@@ -84,6 +84,26 @@
     }]}],
     "import/consistent-type-specifier-style": ["error", "prefer-top-level"],
     "import/exports-last": "error",
+    "import/order": [
+      "error",
+      {
+        "newlines-between": "never",
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        },
+        "groups": [
+          "index",
+          "sibling",
+          "parent",
+          "internal",
+          "external",
+          "builtin",
+          "object",
+          "type"
+        ]
+      }
+    ],
     "unicorn/switch-case-braces": "off",
     "unicorn/no-thenable": "off",
     "no-duplicate-imports": "off",

@@ -12,16 +12,16 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {Click, ClickFSM} from "./Click";
 import {FSMImpl} from "../../fsm/FSMImpl";
-import type {PointData} from "../../../api/interaction/PointData";
-import {InteractionBase} from "../InteractionBase";
-import {PointDataImpl} from "../PointDataImpl";
+import {MouseTransition} from "../../fsm/MouseTransition";
 import {SubFSMTransition} from "../../fsm/SubFSMTransition";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
+import {InteractionBase} from "../InteractionBase";
+import {PointDataImpl} from "../PointDataImpl";
+import type {PointData} from "../../../api/interaction/PointData";
 import type {Logger} from "../../../api/logging/Logger";
-import {MouseTransition} from "../../fsm/MouseTransition";
+import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 
 export class DoubleClickFSM extends FSMImpl<FSMDataHandler> {
     /** The time gap between the two spinner events. */

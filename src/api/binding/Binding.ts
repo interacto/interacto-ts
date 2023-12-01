@@ -12,12 +12,12 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {Interaction, InteractionDataType} from "../interaction/Interaction";
-import type {Command} from "../command/Command";
-import type {Observable} from "rxjs";
-import type {InteractionData} from "../interaction/InteractionData";
 import type {VisitorBinding} from "./VisitorBinding";
 import type {RuleName, Severity} from "../checker/Checker";
+import type {Command} from "../command/Command";
+import type {Interaction, InteractionDataType} from "../interaction/Interaction";
+import type {InteractionData} from "../interaction/InteractionData";
+import type {Observable} from "rxjs";
 
 /**
  * The concept of binding and its related services.

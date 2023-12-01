@@ -12,13 +12,13 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import {GeneralTwoTouchDataImpl} from "./GeneralTwoTouchDataImpl";
+import {SrcTgtTouchDataImpl} from "./SrcTgtTouchDataImpl";
 import type {EventModifierData} from "../../api/interaction/EventModifierData";
 import type {SrcTgtPointsData} from "../../api/interaction/SrcTgtPointsData";
 import type {ThreeTouchData} from "../../api/interaction/ThreeTouchData";
 import type {TouchData} from "../../api/interaction/TouchData";
 import type {UnitInteractionData} from "../../api/interaction/UnitInteractionData";
-import {GeneralTwoTouchDataImpl} from "./GeneralTwoTouchDataImpl";
-import {SrcTgtTouchDataImpl} from "./SrcTgtTouchDataImpl";
 
 export class ThreeTouchDataImpl extends GeneralTwoTouchDataImpl implements ThreeTouchData {
     protected readonly t3: SrcTgtTouchDataImpl;

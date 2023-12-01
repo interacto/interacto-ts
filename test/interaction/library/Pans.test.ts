@@ -12,11 +12,11 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMHandler, Logger, TouchDnD} from "../../../src/interacto";
 import {bottomPan, hPan, vPan, leftPan, rightPan, topPan} from "../../../src/interacto";
 import {robot} from "../StubEvents";
-import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
+import type {FSMHandler, Logger, TouchDnD} from "../../../src/interacto";
+import type {MockProxy} from "jest-mock-extended";
 
 describe("using pan interactions", () => {
     let canvas: HTMLElement;

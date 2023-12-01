@@ -12,12 +12,12 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {Observable} from "rxjs";
-import type {OutputState} from "./OutputState";
-import type {State} from "./State";
 import type {FSMHandler} from "./FSMHandler";
 import type {InputState} from "./InputState";
+import type {OutputState} from "./OutputState";
+import type {State} from "./State";
 import type {VisitorFSM} from "./VisitorFSM";
+import type {Observable} from "rxjs";
 
 /**
  * A finite state machine that defines the behavior of a user interaction.

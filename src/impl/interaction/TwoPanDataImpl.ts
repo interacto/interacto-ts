@@ -12,8 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {LineTouchData} from "../../api/interaction/LineTouchData";
 import {TwoTouchDataImpl} from "./TwoTouchDataImpl";
+import type {LineTouchData} from "../../api/interaction/LineTouchData";
 
 export class TwoPanDataImpl extends TwoTouchDataImpl implements LineTouchData {
     public constructor() {

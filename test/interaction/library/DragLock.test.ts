@@ -12,12 +12,12 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMHandler, Logger} from "../../../src/interacto";
 import {DragLock} from "../../../src/interacto";
 import {createMouseEvent} from "../StubEvents";
-import type {MockProxy} from "jest-mock-extended";
-import {mock} from "jest-mock-extended";
 import {robot} from "interacto-nono";
+import {mock} from "jest-mock-extended";
+import type {FSMHandler, Logger} from "../../../src/interacto";
+import type {MockProxy} from "jest-mock-extended";
 
 describe("using a drag lock interaction", () => {
     let interaction: DragLock;

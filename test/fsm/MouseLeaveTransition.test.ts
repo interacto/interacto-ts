@@ -12,12 +12,12 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMImpl} from "../../src/impl/fsm/FSMImpl";
+import {MouseTransition} from "../../src/impl/fsm/MouseTransition";
 import {StdState} from "../../src/impl/fsm/StdState";
 import {createMouseEvent, createTouchEvent} from "../interaction/StubEvents";
 import {mock} from "jest-mock-extended";
 import type {FSMDataHandler} from "../../src/impl/fsm/FSMDataHandler";
-import {MouseTransition} from "../../src/impl/fsm/MouseTransition";
+import type {FSMImpl} from "../../src/impl/fsm/FSMImpl";
 
 describe("using a mouse leave transition", () => {
     let tr: MouseTransition;

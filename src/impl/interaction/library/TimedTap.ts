@@ -12,16 +12,16 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import {TapFSM} from "./Tap";
+import {TimeoutTransition} from "../../fsm/TimeoutTransition";
+import {InteractionBase} from "../InteractionBase";
+import {TapDataImpl} from "../TapDataImpl";
+import {TouchDataImpl} from "../TouchDataImpl";
 import type {PointsData} from "../../../api/interaction/PointsData";
 import type {TouchData} from "../../../api/interaction/TouchData";
 import type {Logger} from "../../../api/logging/Logger";
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import {TimeoutTransition} from "../../fsm/TimeoutTransition";
-import {InteractionBase} from "../InteractionBase";
 import type {PointsDataImpl} from "../PointsDataImpl";
-import {TapDataImpl} from "../TapDataImpl";
-import {TouchDataImpl} from "../TouchDataImpl";
-import {TapFSM} from "./Tap";
 
 class TimedTapFSM extends TapFSM {
     public constructor(duration: number, nbTaps: number, logger: Logger, dataHandler: TapFSMHandler) {

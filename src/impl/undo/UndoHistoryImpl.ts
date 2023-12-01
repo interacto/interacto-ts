@@ -12,10 +12,10 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import {UndoHistory} from "../../api/undo/UndoHistory";
+import {Subject} from "rxjs";
 import type {Undoable} from "../../api/undo/Undoable";
 import type {Observable} from "rxjs";
-import {Subject} from "rxjs";
-import {UndoHistory} from "../../api/undo/UndoHistory";
 
 export class UndoHistoryImpl extends UndoHistory {
     /**

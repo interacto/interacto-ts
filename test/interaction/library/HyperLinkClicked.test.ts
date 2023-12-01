@@ -12,11 +12,11 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMHandler, Logger} from "../../../src/interacto";
 import {HyperLinkClicked} from "../../../src/interacto";
-import type {MockProxy} from "jest-mock-extended";
-import {mock} from "jest-mock-extended";
 import {robot} from "interacto-nono";
+import {mock} from "jest-mock-extended";
+import type {FSMHandler, Logger} from "../../../src/interacto";
+import type {MockProxy} from "jest-mock-extended";
 
 describe("using a hyper link interaction", () => {
     let interaction: HyperLinkClicked;

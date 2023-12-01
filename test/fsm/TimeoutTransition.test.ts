@@ -13,14 +13,14 @@
  */
 
 import {CancelFSMError} from "../../src/impl/fsm/CancelFSMError";
-import type {FSMImpl} from "../../src/impl/fsm/FSMImpl";
+import {TimeoutTransition} from "../../src/impl/fsm/TimeoutTransition";
+import {mock} from "jest-mock-extended";
 import type {InputState} from "../../src/api/fsm/InputState";
 import type {OutputState} from "../../src/api/fsm/OutputState";
-import {TimeoutTransition} from "../../src/impl/fsm/TimeoutTransition";
-import type {MockProxy} from "jest-mock-extended";
-import {mock} from "jest-mock-extended";
 import type {Logger} from "../../src/api/logging/Logger";
 import type {FSMDataHandler} from "../../src/impl/fsm/FSMDataHandler";
+import type {FSMImpl} from "../../src/impl/fsm/FSMImpl";
+import type {MockProxy} from "jest-mock-extended";
 
 describe("using a timeout transition", () => {
     let evt: TimeoutTransition;

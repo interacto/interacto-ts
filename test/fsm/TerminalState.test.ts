@@ -12,12 +12,12 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import {TerminalState} from "../../src/impl/fsm/TerminalState";
+import {mock} from "jest-mock-extended";
+import type {VisitorFSM} from "../../src/api/fsm/VisitorFSM";
+import type {FSMDataHandler} from "../../src/impl/fsm/FSMDataHandler";
 import type {FSMImpl} from "../../src/impl/fsm/FSMImpl";
 import type {MockProxy} from "jest-mock-extended";
-import {mock} from "jest-mock-extended";
-import type {FSMDataHandler} from "../../src/impl/fsm/FSMDataHandler";
-import type {VisitorFSM} from "../../src/api/fsm/VisitorFSM";
-import {TerminalState} from "../../src/impl/fsm/TerminalState";
 
 describe("using a terminal state", () => {
     let state: TerminalState;

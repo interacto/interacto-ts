@@ -1,14 +1,14 @@
-import type {MockProxy} from "jest-mock-extended";
-import {mock} from "jest-mock-extended";
-import type {Undoable} from "../../src/api/undo/Undoable";
-import {robot} from "../interaction/StubEvents";
-import {BindingsImpl} from "../../src/impl/binding/BindingsImpl";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
-import type {Bindings} from "../../src/api/binding/Bindings";
-import {Undo} from "../../src/impl/command/library/Undo";
+import {BindingsImpl} from "../../src/impl/binding/BindingsImpl";
 import {Redo} from "../../src/impl/command/library/Redo";
-import type {UndoHistoryBase} from "../../src/api/undo/UndoHistoryBase";
+import {Undo} from "../../src/impl/command/library/Undo";
 import {UndoHistoryImpl} from "../../src/impl/undo/UndoHistoryImpl";
+import {robot} from "../interaction/StubEvents";
+import {mock} from "jest-mock-extended";
+import type {Bindings} from "../../src/api/binding/Bindings";
+import type {Undoable} from "../../src/api/undo/Undoable";
+import type {UndoHistoryBase} from "../../src/api/undo/UndoHistoryBase";
+import type {MockProxy} from "jest-mock-extended";
 
 let bundo: HTMLButtonElement;
 let bredo: HTMLButtonElement;

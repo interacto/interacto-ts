@@ -12,18 +12,18 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FourTouchData} from "../../../api/interaction/FourTouchData";
-import type {ThreeTouchData} from "../../../api/interaction/ThreeTouchData";
-import type {GeneralTwoTouchData, TwoTouchData} from "../../../api/interaction/TwoTouchData";
-import type {Logger} from "../../../api/logging/Logger";
+import {MultiTouchFSM} from "./MultiTouch";
 import {ConcurrentInteraction} from "../ConcurrentInteraction";
 import {FourTouchDataImpl} from "../FourTouchDataImpl";
 import {GeneralTwoTouchDataImpl} from "../GeneralTwoTouchDataImpl";
 import {InteractionBuilderImpl} from "../InteractionBuilderImpl";
 import {ThreeTouchDataImpl} from "../ThreeTouchDataImpl";
-import type {TwoTouchDataImpl} from "../TwoTouchDataImpl";
-import {MultiTouchFSM} from "./MultiTouch";
 import type {TouchDnDFSMHandler} from "./TouchDnD";
+import type {FourTouchData} from "../../../api/interaction/FourTouchData";
+import type {ThreeTouchData} from "../../../api/interaction/ThreeTouchData";
+import type {GeneralTwoTouchData, TwoTouchData} from "../../../api/interaction/TwoTouchData";
+import type {Logger} from "../../../api/logging/Logger";
+import type {TwoTouchDataImpl} from "../TwoTouchDataImpl";
 
 /**
  * The X-touch represents any touch interaction that involve more than one touch.

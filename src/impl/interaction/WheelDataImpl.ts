@@ -12,8 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {WheelData} from "../../api/interaction/WheelData";
 import {PointDataImpl} from "./PointDataImpl";
+import type {WheelData} from "../../api/interaction/WheelData";
 
 /**
  * Single point interaction data whith mousewheel implementation with write accesses.

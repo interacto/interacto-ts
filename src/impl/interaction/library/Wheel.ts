@@ -12,13 +12,13 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {FSMImpl} from "../../fsm/FSMImpl";
-import {InteractionBase} from "../InteractionBase";
 import {WheelTransition} from "../../fsm/WheelTransition";
+import {InteractionBase} from "../InteractionBase";
 import {WheelDataImpl} from "../WheelDataImpl";
 import type {WheelData} from "../../../api/interaction/WheelData";
 import type {Logger} from "../../../api/logging/Logger";
+import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 
 interface WheelFSMHandler extends FSMDataHandler {
     initToMoved(event: WheelEvent): void;

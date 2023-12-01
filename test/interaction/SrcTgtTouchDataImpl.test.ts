@@ -12,8 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {TouchDataImpl} from "../../src/impl/interaction/TouchDataImpl";
 import {SrcTgtTouchDataImpl} from "../../src/impl/interaction/SrcTgtTouchDataImpl";
+import {TouchDataImpl} from "../../src/impl/interaction/TouchDataImpl";
 import type {EventModifierData} from "../../src/api/interaction/EventModifierData";
 import type {UnitInteractionData} from "../../src/api/interaction/UnitInteractionData";
 

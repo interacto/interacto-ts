@@ -12,14 +12,14 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {BindingsObserver} from "../../api/binding/BindingsObserver";
+import {CheckerImpl} from "../checker/CheckerImpl";
 import type {Binding} from "../../api/binding/Binding";
+import type {BindingsObserver} from "../../api/binding/BindingsObserver";
+import type {Checker} from "../../api/checker/Checker";
 import type {Command} from "../../api/command/Command";
 import type {Interaction} from "../../api/interaction/Interaction";
 import type {InteractionData} from "../../api/interaction/InteractionData";
 import type {Subscription} from "rxjs/internal/Subscription";
-import type {Checker} from "../../api/checker/Checker";
-import {CheckerImpl} from "../checker/CheckerImpl";
 
 /**
  * An object for observing creates bindings.

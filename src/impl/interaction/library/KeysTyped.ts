@@ -13,13 +13,13 @@
  */
 
 import {FSMImpl} from "../../fsm/FSMImpl";
-import {InteractionBase} from "../InteractionBase";
-import {TimeoutTransition} from "../../fsm/TimeoutTransition";
-import type {KeysData} from "../../../api/interaction/KeysData";
-import {KeysDataImpl} from "../KeysDataImpl";
-import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import type {Logger} from "../../../api/logging/Logger";
 import {KeyTransition} from "../../fsm/KeyTransition";
+import {TimeoutTransition} from "../../fsm/TimeoutTransition";
+import {InteractionBase} from "../InteractionBase";
+import {KeysDataImpl} from "../KeysDataImpl";
+import type {KeysData} from "../../../api/interaction/KeysData";
+import type {Logger} from "../../../api/logging/Logger";
+import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 
 interface KeyTypedFSMHandler extends FSMDataHandler {
     onKeyTyped(event: Event): void;

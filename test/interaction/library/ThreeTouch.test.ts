@@ -13,11 +13,11 @@
  */
 
 import {ThreeTouchDnD} from "../../../src/interacto";
-import type {FSMHandler, Logger} from "../../../src/interacto";
-import {robot} from "../StubEvents";
-import type {MockProxy} from "jest-mock-extended";
-import {mock} from "jest-mock-extended";
 import {checkTouchPoint} from "../../Utils";
+import {robot} from "../StubEvents";
+import {mock} from "jest-mock-extended";
+import type {FSMHandler, Logger} from "../../../src/interacto";
+import type {MockProxy} from "jest-mock-extended";
 
 describe("using a multi touch interaction", () => {
     let interaction: ThreeTouchDnD;

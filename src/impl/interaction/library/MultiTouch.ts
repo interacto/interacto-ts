@@ -12,13 +12,13 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import {TouchDnDFSM} from "./TouchDnD";
 import {ConcurrentAndFSM} from "../../fsm/ConcurrentAndFSM";
 import {ConcurrentInteraction} from "../ConcurrentInteraction";
-import type {MultiTouchData} from "../../../api/interaction/MultiTouchData";
-import type {TouchDnDFSMHandler} from "./TouchDnD";
-import {TouchDnDFSM} from "./TouchDnD";
 import {MultiTouchDataImpl} from "../MultiTouchDataImpl";
 import {SrcTgtTouchDataImpl} from "../SrcTgtTouchDataImpl";
+import type {TouchDnDFSMHandler} from "./TouchDnD";
+import type {MultiTouchData} from "../../../api/interaction/MultiTouchData";
 import type {Logger} from "../../../api/logging/Logger";
 
 /**

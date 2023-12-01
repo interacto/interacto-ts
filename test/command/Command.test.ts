@@ -12,8 +12,8 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import {CommandBase} from "../../src/impl/command/CommandBase";
 import {StubCmd} from "./StubCmd";
+import {CommandBase} from "../../src/impl/command/CommandBase";
 
 describe("using a command", () => {
     let cmd: StubCmd;

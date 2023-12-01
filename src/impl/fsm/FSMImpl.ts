@@ -12,26 +12,26 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {State} from "../../api/fsm/State";
-import {InitState} from "./InitState";
-import type {OutputState} from "../../api/fsm/OutputState";
-import {isOutputStateType} from "../../api/fsm/OutputState";
-import type {FSMHandler} from "../../api/fsm/FSMHandler";
-import {TimeoutTransition} from "./TimeoutTransition";
-import type {InputState} from "../../api/fsm/InputState";
-import type {FSMDataHandler} from "./FSMDataHandler";
-import {isKeyDownEvent, isKeyUpEvent} from "./Events";
-import type {Observable} from "rxjs";
-import {Subject} from "rxjs";
-import {remove, removeAt} from "../util/ArrayUtil";
 import {CancelFSMError} from "./CancelFSMError";
-import type {FSM} from "../../api/fsm/FSM";
-import type {Logger} from "../../api/logging/Logger";
+import {CancellingState} from "./CancellingState";
+import {isKeyDownEvent, isKeyUpEvent} from "./Events";
+import {InitState} from "./InitState";
 import {StdState} from "./StdState";
 import {TerminalState} from "./TerminalState";
-import {CancellingState} from "./CancellingState";
+import {TimeoutTransition} from "./TimeoutTransition";
+import {isOutputStateType} from "../../api/fsm/OutputState";
 import {MustBeUndoableCmdError} from "../binding/MustBeUndoableCmdError";
+import {remove, removeAt} from "../util/ArrayUtil";
+import {Subject} from "rxjs";
+import type {FSMDataHandler} from "./FSMDataHandler";
+import type {FSM} from "../../api/fsm/FSM";
+import type {FSMHandler} from "../../api/fsm/FSMHandler";
+import type {InputState} from "../../api/fsm/InputState";
+import type {OutputState} from "../../api/fsm/OutputState";
+import type {State} from "../../api/fsm/State";
 import type {VisitorFSM} from "../../api/fsm/VisitorFSM";
+import type {Logger} from "../../api/logging/Logger";
+import type {Observable} from "rxjs";
 
 /**
  * A finite state machine that defines the behavior of a user interaction.

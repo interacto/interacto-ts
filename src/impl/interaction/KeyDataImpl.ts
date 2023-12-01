@@ -12,9 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {KeyData} from "../../api/interaction/KeyData";
-import type {Flushable} from "./Flushable";
 import {InteractionDataBase} from "./InteractionDataBase";
+import type {Flushable} from "./Flushable";
+import type {KeyData} from "../../api/interaction/KeyData";
 
 export class KeyDataImpl extends InteractionDataBase implements KeyData, Flushable {
     private codeData = "";

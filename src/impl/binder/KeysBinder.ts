@@ -12,22 +12,22 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {Command} from "../../api/command/Command";
-import type {LogLevel} from "../../api/logging/LogLevel";
-import type {Binding} from "../../api/binding/Binding";
-import {AnonBinding} from "../binding/AnonBinding";
-import type {InteractionData} from "../../api/interaction/InteractionData";
-import {KeysDataImpl} from "../interaction/KeysDataImpl";
-import {KeyDataImpl} from "../interaction/KeyDataImpl";
 import {UpdateBinder} from "./UpdateBinder";
-import type {KeyInteractionCmdUpdateBinder} from "../../api/binder/KeyInteractionCmdUpdateBinder";
-import type {Interaction, InteractionDataType} from "../../api/interaction/Interaction";
+import {AnonBinding} from "../binding/AnonBinding";
+import {KeyDataImpl} from "../interaction/KeyDataImpl";
+import {KeysDataImpl} from "../interaction/KeysDataImpl";
 import type {Widget} from "../../api/binder/BaseBinderBuilder";
-import type {BindingsObserver} from "../../api/binding/BindingsObserver";
-import type {Logger} from "../../api/logging/Logger";
-import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
+import type {KeyInteractionCmdUpdateBinder} from "../../api/binder/KeyInteractionCmdUpdateBinder";
 import type {WhenType} from "../../api/binder/When";
+import type {Binding} from "../../api/binding/Binding";
+import type {BindingsObserver} from "../../api/binding/BindingsObserver";
 import type {RuleName, Severity} from "../../api/checker/Checker";
+import type {Command} from "../../api/command/Command";
+import type {Interaction, InteractionDataType} from "../../api/interaction/Interaction";
+import type {InteractionData} from "../../api/interaction/InteractionData";
+import type {Logger} from "../../api/logging/Logger";
+import type {LogLevel} from "../../api/logging/LogLevel";
+import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
 
 /**
  * The base binding builder to create bindings between a keys pressure interaction and a given command.

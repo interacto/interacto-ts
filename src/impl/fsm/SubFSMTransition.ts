@@ -12,17 +12,17 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import {CancellingState} from "./CancellingState";
+import {TerminalState} from "./TerminalState";
 import {TransitionBase} from "./TransitionBase";
+import {isOutputStateType} from "../../api/fsm/OutputState";
+import type {EventType} from "../../api/fsm/EventType";
 import type {FSM} from "../../api/fsm/FSM";
 import type {FSMHandler} from "../../api/fsm/FSMHandler";
-import type {OutputState} from "../../api/fsm/OutputState";
-import {isOutputStateType} from "../../api/fsm/OutputState";
 import type {InputState} from "../../api/fsm/InputState";
-import {TerminalState} from "./TerminalState";
-import {CancellingState} from "./CancellingState";
-import type {Subscription} from "rxjs";
+import type {OutputState} from "../../api/fsm/OutputState";
 import type {Transition} from "../../api/fsm/Transition";
-import type {EventType} from "../../api/fsm/EventType";
+import type {Subscription} from "rxjs";
 
 /**
  * A transition that refers to another FSM.

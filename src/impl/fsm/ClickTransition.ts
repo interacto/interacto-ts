@@ -12,9 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import {MouseTransition} from "./MouseTransition";
 import type {InputState} from "../../api/fsm/InputState";
 import type {OutputState} from "../../api/fsm/OutputState";
-import {MouseTransition} from "./MouseTransition";
 
 /**
  * This transition corresponds to a pressure of a button of a pointing device.

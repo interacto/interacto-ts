@@ -13,8 +13,8 @@
  */
 
 import {OutputStateBase} from "./OutputStateBase";
-import type {InputState} from "../../api/fsm/InputState";
 import type {FSM} from "../../api/fsm/FSM";
+import type {InputState} from "../../api/fsm/InputState";
 import type {VisitorFSM} from "../../api/fsm/VisitorFSM";
 
 /**

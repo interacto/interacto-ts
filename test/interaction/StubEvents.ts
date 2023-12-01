@@ -12,11 +12,11 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import {NonoRobotImpl} from "interacto-nono";
 import type {EventType} from "../../src/api/fsm/EventType";
 import type {PointData} from "../../src/api/interaction/PointData";
 import type {WheelData} from "../../src/api/interaction/WheelData";
 import type {NonoRobot} from "interacto-nono";
-import {NonoRobotImpl} from "interacto-nono";
 
 class JestNonoRobotImpl extends NonoRobotImpl implements JestNonoRobot {
     public constructor(target?: EventTarget) {

@@ -13,11 +13,11 @@
  */
 
 import {BoxCheckPressedTransition} from "../../src/impl/fsm/BoxCheckPressedTransition";
-import type {OutputState} from "../../src/api/fsm/OutputState";
-import type {MockProxy} from "jest-mock-extended";
+import {createEventWithTarget} from "../interaction/StubEvents";
 import {mock} from "jest-mock-extended";
 import type {InputState} from "../../src/api/fsm/InputState";
-import {createEventWithTarget} from "../interaction/StubEvents";
+import type {OutputState} from "../../src/api/fsm/OutputState";
+import type {MockProxy} from "jest-mock-extended";
 
 let tr: BoxCheckPressedTransition;
 let src: MockProxy<OutputState> & OutputState;

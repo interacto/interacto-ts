@@ -11,14 +11,14 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import type {InteractionData} from "../interaction/InteractionData";
-import type {InteractionBinderBuilder} from "./InteractionBinderBuilder";
-import type {LogLevel} from "../logging/LogLevel";
-import type {Interaction, InteractionDataType} from "../interaction/Interaction";
 import type {Widget} from "./BaseBinderBuilder";
 import type {BaseUpdateBinderBuilder} from "./BaseUpdateBinderBuilder";
+import type {InteractionBinderBuilder} from "./InteractionBinderBuilder";
 import type {WhenType} from "./When";
 import type {RuleName, Severity} from "../checker/Checker";
+import type {Interaction, InteractionDataType} from "../interaction/Interaction";
+import type {InteractionData} from "../interaction/InteractionData";
+import type {LogLevel} from "../logging/LogLevel";
 
 /**
  * The binding builder API that already knows the type of user interaction the bindings will use

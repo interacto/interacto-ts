@@ -13,14 +13,14 @@
  */
 
 import {isTextInput} from "../../fsm/Events";
-import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import type {WidgetData} from "../../../api/interaction/WidgetData";
+import {FSMImpl} from "../../fsm/FSMImpl";
 import {TextInputChangedTransition} from "../../fsm/TextInputChangedTransition";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
-import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {WidgetDataImpl} from "../WidgetDataImpl";
+import type {WidgetData} from "../../../api/interaction/WidgetData";
 import type {Logger} from "../../../api/logging/Logger";
+import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 
 class TextInputChangedFSM extends FSMImpl<TextInputChangedHandler> {
     /** The time gap between the two spinner events. */

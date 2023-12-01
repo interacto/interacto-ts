@@ -12,11 +12,11 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMDataHandler, FSMHandler, Logger} from "../../../src/interacto";
 import {LongMouseDown, PointDataImpl} from "../../../src/interacto";
 import {createMouseEvent, robot} from "../StubEvents";
-import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
+import type {FSMDataHandler, FSMHandler, Logger} from "../../../src/interacto";
+import type {MockProxy} from "jest-mock-extended";
 
 describe("using a long mouse down interaction", () => {
     let interaction: LongMouseDown;

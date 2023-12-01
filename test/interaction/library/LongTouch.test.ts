@@ -12,12 +12,12 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMHandler, Logger} from "../../../src/interacto";
 import {LongTouch, TouchDataImpl} from "../../../src/interacto";
-import {createTouchEvent, robot} from "../StubEvents";
-import type {MockProxy} from "jest-mock-extended";
-import {mock} from "jest-mock-extended";
 import {checkTouchPoint} from "../../Utils";
+import {createTouchEvent, robot} from "../StubEvents";
+import {mock} from "jest-mock-extended";
+import type {FSMHandler, Logger} from "../../../src/interacto";
+import type {MockProxy} from "jest-mock-extended";
 
 describe("using a long touch interaction", () => {
     let interaction: LongTouch;

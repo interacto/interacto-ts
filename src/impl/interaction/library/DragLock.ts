@@ -12,18 +12,18 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {DoubleClick, DoubleClickFSM} from "./DoubleClick";
-import {FSMImpl} from "../../fsm/FSMImpl";
-import type {SrcTgtPointsData} from "../../../api/interaction/SrcTgtPointsData";
-import {InteractionBase} from "../InteractionBase";
-import type {PointDataImpl} from "../PointDataImpl";
 import {EscapeKeyPressureTransition} from "../../fsm/EscapeKeyPressureTransition";
+import {FSMImpl} from "../../fsm/FSMImpl";
+import {MouseTransition} from "../../fsm/MouseTransition";
+import {SubFSMTransition} from "../../fsm/SubFSMTransition";
+import {InteractionBase} from "../InteractionBase";
 import {SrcTgtPointsDataImpl} from "../SrcTgtPointsDataImpl";
 import type {PointData} from "../../../api/interaction/PointData";
-import {SubFSMTransition} from "../../fsm/SubFSMTransition";
+import type {SrcTgtPointsData} from "../../../api/interaction/SrcTgtPointsData";
 import type {Logger} from "../../../api/logging/Logger";
-import {MouseTransition} from "../../fsm/MouseTransition";
+import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
+import type {PointDataImpl} from "../PointDataImpl";
 
 class DragLockFSM extends FSMImpl<DragLockFSMHandler> {
     public readonly firstDbleClick: DoubleClickFSM;

@@ -13,13 +13,13 @@
  */
 
 import {isHyperLink} from "../../fsm/Events";
-import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import type {WidgetData} from "../../../api/interaction/WidgetData";
-import {HyperLinkTransition} from "../../fsm/HyperLinkTransition";
 import {FSMImpl} from "../../fsm/FSMImpl";
+import {HyperLinkTransition} from "../../fsm/HyperLinkTransition";
 import {InteractionBase} from "../InteractionBase";
 import {WidgetDataImpl} from "../WidgetDataImpl";
+import type {WidgetData} from "../../../api/interaction/WidgetData";
 import type {Logger} from "../../../api/logging/Logger";
+import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 
 class HyperLinkClickedFSM extends FSMImpl<HyperLinkClickedFSMHandler> {
     public constructor(logger: Logger, dataHandler: HyperLinkClickedFSMHandler) {

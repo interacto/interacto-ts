@@ -12,11 +12,11 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMDataHandler, InputState, Logger, Transition, StdState, TerminalState} from "../../src/interacto";
-import {FSMImpl, SubFSMTransition} from "../../src/interacto";
 import {SubStubTransition1} from "./StubTransitionOk";
+import {FSMImpl, SubFSMTransition} from "../../src/interacto";
 import {createMouseEvent} from "../interaction/StubEvents";
 import {mock} from "jest-mock-extended";
+import type {FSMDataHandler, InputState, Logger, Transition, StdState, TerminalState} from "../../src/interacto";
 
 describe("using a sub fsm transition", () => {
     let tr: SubFSMTransition;

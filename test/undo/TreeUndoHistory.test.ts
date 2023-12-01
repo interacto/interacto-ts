@@ -12,11 +12,11 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {Undoable} from "../../src/api/undo/Undoable";
-import {mock} from "jest-mock-extended";
-import type {TreeUndoHistory} from "../../src/api/undo/TreeUndoHistory";
 import {TreeUndoHistoryImpl} from "../../src/impl/undo/TreeUndoHistoryImpl";
+import {mock} from "jest-mock-extended";
 import {TestScheduler} from "rxjs/testing";
+import type {TreeUndoHistory} from "../../src/api/undo/TreeUndoHistory";
+import type {Undoable} from "../../src/api/undo/Undoable";
 
 interface Undoable4Test extends Undoable {
     foo: number;

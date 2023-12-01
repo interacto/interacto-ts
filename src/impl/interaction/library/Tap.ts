@@ -12,19 +12,19 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {InteractionBase} from "../InteractionBase";
 import {FSMImpl} from "../../fsm/FSMImpl";
-import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import {TouchDataImpl} from "../TouchDataImpl";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
-import type {Logger} from "../../../api/logging/Logger";
 import {TouchTransition} from "../../fsm/TouchTransition";
-import type {PointsDataImpl} from "../PointsDataImpl";
+import {InteractionBase} from "../InteractionBase";
 import {TapDataImpl} from "../TapDataImpl";
-import type {CancellingState} from "../../fsm/CancellingState";
-import type {StdState} from "../../fsm/StdState";
+import {TouchDataImpl} from "../TouchDataImpl";
 import type {PointsData} from "../../../api/interaction/PointsData";
 import type {TouchData} from "../../../api/interaction/TouchData";
+import type {Logger} from "../../../api/logging/Logger";
+import type {CancellingState} from "../../fsm/CancellingState";
+import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
+import type {StdState} from "../../fsm/StdState";
+import type {PointsDataImpl} from "../PointsDataImpl";
 
 interface TapFSMHandler extends FSMDataHandler {
     tap(evt: TouchEvent): void;

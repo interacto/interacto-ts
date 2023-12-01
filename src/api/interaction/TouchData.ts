@@ -12,8 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {UnitInteractionData} from "./UnitInteractionData";
 import type {PointBaseData} from "./PointBaseData";
+import type {UnitInteractionData} from "./UnitInteractionData";
 
 /**
  * The touch interaction data interface

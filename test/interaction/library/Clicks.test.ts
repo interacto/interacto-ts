@@ -12,14 +12,14 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {MockProxy} from "jest-mock-extended";
-import {mock} from "jest-mock-extended";
-import type {FSMHandler} from "../../../src/api/fsm/FSMHandler";
 import {Clicks} from "../../../src/impl/interaction/library/Clicks";
 import {createMouseEvent} from "../StubEvents";
 import {robot} from "interacto-nono";
-import type {LoggerImpl} from "../../../src/impl/logging/LoggerImpl";
+import {mock} from "jest-mock-extended";
+import type {FSMHandler} from "../../../src/api/fsm/FSMHandler";
 import type {Logger} from "../../../src/api/logging/Logger";
+import type {LoggerImpl} from "../../../src/impl/logging/LoggerImpl";
+import type {MockProxy} from "jest-mock-extended";
 
 describe("using a clicks interaction", () => {
     let interaction: Clicks;

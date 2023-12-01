@@ -12,30 +12,30 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {Command} from "../../src/api/command/Command";
-import type {Binding} from "../../src/api/binding/Binding";
-import type {InteractionData} from "../../src/api/interaction/InteractionData";
+import {KeysBinder} from "../../src/impl/binder/KeysBinder";
+import {BindingsContext} from "../../src/impl/binding/BindingsContext";
 import {BindingsImpl} from "../../src/impl/binding/BindingsImpl";
+import {KeyDown} from "../../src/impl/interaction/library/KeyDown";
+import {MouseDown} from "../../src/impl/interaction/library/MouseDown";
+import {UndoHistoryImpl} from "../../src/impl/undo/UndoHistoryImpl";
 import {StubCmd} from "../command/StubCmd";
 import {createKeyEvent} from "../interaction/StubEvents";
-import type {Interaction} from "../../src/api/interaction/Interaction";
-import {mock} from "jest-mock-extended";
-import type {BindingsObserver} from "../../src/api/binding/BindingsObserver";
-import {KeysBinder} from "../../src/impl/binder/KeysBinder";
-import {KeyDown} from "../../src/impl/interaction/library/KeyDown";
-import type {KeysData} from "../../src/api/interaction/KeysData";
-import {BindingsContext} from "../../src/impl/binding/BindingsContext";
-import type {Logger} from "../../src/api/logging/Logger";
-import type {EltRef} from "../../src/api/binder/BaseBinderBuilder";
-import type {UndoHistory} from "../../src/api/undo/UndoHistory";
-import {MouseDown} from "../../src/impl/interaction/library/MouseDown";
-import type {KeyInteractionCmdBinder} from "../../src/api/binder/KeyInteractionCmdBinder";
-import type {KeyData} from "../../src/api/interaction/KeyData";
-import type {Bindings} from "../../src/api/binding/Bindings";
 import {robot} from "interacto-nono";
-import {UndoHistoryImpl} from "../../src/impl/undo/UndoHistoryImpl";
-import type {UndoHistoryBase} from "../../src/api/undo/UndoHistoryBase";
+import {mock} from "jest-mock-extended";
 import clearAllTimers = jest.clearAllTimers;
+import type {EltRef} from "../../src/api/binder/BaseBinderBuilder";
+import type {KeyInteractionCmdBinder} from "../../src/api/binder/KeyInteractionCmdBinder";
+import type {Binding} from "../../src/api/binding/Binding";
+import type {Bindings} from "../../src/api/binding/Bindings";
+import type {BindingsObserver} from "../../src/api/binding/BindingsObserver";
+import type {Command} from "../../src/api/command/Command";
+import type {Interaction} from "../../src/api/interaction/Interaction";
+import type {InteractionData} from "../../src/api/interaction/InteractionData";
+import type {KeyData} from "../../src/api/interaction/KeyData";
+import type {KeysData} from "../../src/api/interaction/KeysData";
+import type {Logger} from "../../src/api/logging/Logger";
+import type {UndoHistory} from "../../src/api/undo/UndoHistory";
+import type {UndoHistoryBase} from "../../src/api/undo/UndoHistoryBase";
 
 let elt: HTMLElement;
 let binding: Binding<Command, Interaction<InteractionData>, unknown> | undefined;

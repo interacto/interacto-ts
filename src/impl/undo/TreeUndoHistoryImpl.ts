@@ -12,12 +12,12 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {UndoableTreeNode, UndoableTreeNodeDTO, TreeUndoHistoryDTO} from "../../api/undo/TreeUndoHistory";
 import {TreeUndoHistory} from "../../api/undo/TreeUndoHistory";
-import type {Undoable, UndoableSnapshot} from "../../api/undo/Undoable";
 import {remove} from "../util/ArrayUtil";
-import type {Observable} from "rxjs";
 import {Subject} from "rxjs";
+import type {UndoableTreeNode, UndoableTreeNodeDTO, TreeUndoHistoryDTO} from "../../api/undo/TreeUndoHistory";
+import type {Undoable, UndoableSnapshot} from "../../api/undo/Undoable";
+import type {Observable} from "rxjs";
 
 /**
  * Implementation of UndoableTreeNode

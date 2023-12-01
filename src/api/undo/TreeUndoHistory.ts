@@ -12,8 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {UndoHistoryBase} from "./UndoHistoryBase";
 import type {Undoable, UndoableSnapshot} from "./Undoable";
+import type {UndoHistoryBase} from "./UndoHistoryBase";
 import type {Observable} from "rxjs";
 
 /**

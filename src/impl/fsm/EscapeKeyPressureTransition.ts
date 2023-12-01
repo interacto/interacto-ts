@@ -12,10 +12,10 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {InputState} from "../../api/fsm/InputState";
-import type {OutputState} from "../../api/fsm/OutputState";
 import {KeyCode} from "./Events";
 import {KeyTransition} from "./KeyTransition";
+import type {InputState} from "../../api/fsm/InputState";
+import type {OutputState} from "../../api/fsm/OutputState";
 
 /**
  * This transition should be used to cancel an interaction using key ESCAPE.

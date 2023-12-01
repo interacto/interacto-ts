@@ -12,8 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {ScaleTouchData} from "../../api/interaction/ScaleTouchData";
 import {TwoTouchDataImpl} from "./TwoTouchDataImpl";
+import type {ScaleTouchData} from "../../api/interaction/ScaleTouchData";
 
 /**
  * The implementation of the scale/pinch interaction data.

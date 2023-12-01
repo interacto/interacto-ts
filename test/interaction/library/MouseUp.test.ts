@@ -12,11 +12,11 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMHandler, Logger} from "../../../src/interacto";
 import {MouseUp} from "../../../src/interacto";
-import type {MockProxy} from "jest-mock-extended";
-import {mock} from "jest-mock-extended";
 import {robot} from "interacto-nono";
+import {mock} from "jest-mock-extended";
+import type {FSMHandler, Logger} from "../../../src/interacto";
+import type {MockProxy} from "jest-mock-extended";
 
 describe("using a mouse up interaction", () => {
     let interaction: MouseUp;

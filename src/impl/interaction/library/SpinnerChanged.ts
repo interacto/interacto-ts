@@ -13,14 +13,14 @@
  */
 
 import {isSpinner} from "../../fsm/Events";
-import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import type {WidgetData} from "../../../api/interaction/WidgetData";
-import {SpinnerChangedTransition} from "../../fsm/SpinnerChangedTransition";
 import {FSMImpl} from "../../fsm/FSMImpl";
-import {InteractionBase} from "../InteractionBase";
+import {SpinnerChangedTransition} from "../../fsm/SpinnerChangedTransition";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
+import {InteractionBase} from "../InteractionBase";
 import {WidgetDataImpl} from "../WidgetDataImpl";
+import type {WidgetData} from "../../../api/interaction/WidgetData";
 import type {Logger} from "../../../api/logging/Logger";
+import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 
 interface SpinnerChangedHandler extends FSMDataHandler {
     initToChangedHandler(event: Event): void;

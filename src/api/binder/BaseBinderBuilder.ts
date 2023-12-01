@@ -11,9 +11,9 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
+import type {WhenType} from "./When";
 import type {RuleName, Severity} from "../checker/Checker";
 import type {LogLevel} from "../logging/LogLevel";
-import type {WhenType} from "./When";
 
 /**
  * For supporting Angular ElementReference without any dependency to Angular.

@@ -12,17 +12,17 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import {keyEventTypes, mouseEventTypes, touchEventTypes} from "../../api/fsm/EventType";
+import {InitState} from "../fsm/InitState";
+import type {Flushable} from "./Flushable";
+import type {EventType, KeyEventType, MouseEventType, TouchEventType} from "../../api/fsm/EventType";
 import type {FSM} from "../../api/fsm/FSM";
 import type {OutputState} from "../../api/fsm/OutputState";
-import {InitState} from "../fsm/InitState";
-import type {InteractionData} from "../../api/interaction/InteractionData";
-import type {Subscription} from "rxjs";
 import type {Interaction} from "../../api/interaction/Interaction";
-import type {EventType, KeyEventType, MouseEventType, TouchEventType} from "../../api/fsm/EventType";
-import type {Flushable} from "./Flushable";
-import type {Logger} from "../../api/logging/Logger";
-import {keyEventTypes, mouseEventTypes, touchEventTypes} from "../../api/fsm/EventType";
+import type {InteractionData} from "../../api/interaction/InteractionData";
 import type {VisitorInteraction} from "../../api/interaction/VisitorInteraction";
+import type {Logger} from "../../api/logging/Logger";
+import type {Subscription} from "rxjs";
 
 interface CancellablePromise extends Promise<void> {
     cancel: () => void;

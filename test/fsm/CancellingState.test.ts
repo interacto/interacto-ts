@@ -13,12 +13,12 @@
  */
 
 import {CancellingState} from "../../src/impl/fsm/CancellingState";
-import type {FSMImpl} from "../../src/impl/fsm/FSMImpl";
-import type {OutputState} from "../../src/api/fsm/OutputState";
-import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
-import type {FSMDataHandler} from "../../src/impl/fsm/FSMDataHandler";
+import type {OutputState} from "../../src/api/fsm/OutputState";
 import type {VisitorFSM} from "../../src/api/fsm/VisitorFSM";
+import type {FSMDataHandler} from "../../src/impl/fsm/FSMDataHandler";
+import type {FSMImpl} from "../../src/impl/fsm/FSMImpl";
+import type {MockProxy} from "jest-mock-extended";
 
 describe("using a cancelling state", () => {
     let state: CancellingState;

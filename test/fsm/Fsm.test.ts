@@ -12,10 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {Subject} from "rxjs";
-import type {FSMHandler, Logger, OutputState, FSMDataHandler,
-    CancellingState,
-    TerminalState} from "../../src/interacto";
+import {StubTransitionOK, SubStubTransition1, SubStubTransition2, SubStubTransition3} from "./StubTransitionOk";
 import {
     CancelFSMError,
     FSMImpl,
@@ -24,11 +21,14 @@ import {
     SubFSMTransition,
     TimeoutTransition
 } from "../../src/interacto";
-import {StubTransitionOK, SubStubTransition1, SubStubTransition2, SubStubTransition3} from "./StubTransitionOk";
-import type {MockProxy} from "jest-mock-extended";
-import {mock} from "jest-mock-extended";
 import {createKeyEvent, createMouseEvent, createTouchEvent} from "../interaction/StubEvents";
+import {mock} from "jest-mock-extended";
 import type {VisitorFSM} from "../../src/api/fsm/VisitorFSM";
+import type {FSMHandler, Logger, OutputState, FSMDataHandler,
+    CancellingState,
+    TerminalState} from "../../src/interacto";
+import type {MockProxy} from "jest-mock-extended";
+import type {Subject} from "rxjs";
 
 let fsm: FSMImpl<FSMDataHandler>;
 let handler: FSMHandler & MockProxy<FSMHandler>;

@@ -12,27 +12,27 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {Subject} from "rxjs";
+import {InteractionStub} from "./InteractionStub";
+import {createMouseEvent} from "./StubEvents";
 import {FSMImpl} from "../../src/impl/fsm/FSMImpl";
 import {InitState} from "../../src/impl/fsm/InitState";
-import type {OutputState} from "../../src/api/fsm/OutputState";
+import {MouseTransition} from "../../src/impl/fsm/MouseTransition";
 import {StdState} from "../../src/impl/fsm/StdState";
-import {InteractionStub} from "./InteractionStub";
-import type {MockProxy} from "jest-mock-extended";
-import {mock} from "jest-mock-extended";
-import {flushPromises} from "../Utils";
-import type {MouseEventForTest} from "./StubEvents";
-import {createMouseEvent} from "./StubEvents";
-import advanceTimersByTime = jest.advanceTimersByTime;
-import runAllTimers = jest.runAllTimers;
-import clearAllTimers = jest.clearAllTimers;
-import type {Logger} from "../../src/api/logging/Logger";
 import {TransitionBase} from "../../src/impl/fsm/TransitionBase";
+import {flushPromises} from "../Utils";
+import {mock} from "jest-mock-extended";
+import {Subject} from "rxjs";
+import clearAllTimers = jest.clearAllTimers;
+import runAllTimers = jest.runAllTimers;
+import advanceTimersByTime = jest.advanceTimersByTime;
+import type {MouseEventForTest} from "./StubEvents";
 import type {EventType} from "../../src/api/fsm/EventType";
 import type {InputState} from "../../src/api/fsm/InputState";
+import type {OutputState} from "../../src/api/fsm/OutputState";
+import type {Logger} from "../../src/api/logging/Logger";
 import type {FSMDataHandler} from "../../src/impl/fsm/FSMDataHandler";
-import {MouseTransition} from "../../src/impl/fsm/MouseTransition";
 import type {VisitorInteraction} from "../../src/interacto";
+import type {MockProxy} from "jest-mock-extended";
 
 describe("using a base interaction", () => {
     let interaction: InteractionStub;

@@ -12,10 +12,10 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {OutputState} from "../../api/fsm/OutputState";
-import type {InputState} from "../../api/fsm/InputState";
-import type {Transition} from "../../api/fsm/Transition";
 import type {EventType} from "../../api/fsm/EventType";
+import type {InputState} from "../../api/fsm/InputState";
+import type {OutputState} from "../../api/fsm/OutputState";
+import type {Transition} from "../../api/fsm/Transition";
 import type {VisitorFSM} from "../../api/fsm/VisitorFSM";
 
 /**

@@ -12,9 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {VisitorFSM} from "../fsm/VisitorFSM";
 import type {Interaction} from "./Interaction";
 import type {InteractionData} from "./InteractionData";
+import type {VisitorFSM} from "../fsm/VisitorFSM";
 
 /**
  * The main interface for visiting user interactions.

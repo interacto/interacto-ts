@@ -12,13 +12,13 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {RotationTouchData} from "../../../api/interaction/RotationTouchData";
-import type {ScaleTouchData} from "../../../api/interaction/ScaleTouchData";
-import type {Logger} from "../../../api/logging/Logger";
+import {XTouchDnD} from "./XTouch";
 import {InteractionBuilderImpl} from "../InteractionBuilderImpl";
 import {RotationTouchDataImpl} from "../RotationTouchDataImpl";
 import {ScaleTouchDataImpl} from "../ScaleTouchDataImpl";
-import {XTouchDnD} from "./XTouch";
+import type {RotationTouchData} from "../../../api/interaction/RotationTouchData";
+import type {ScaleTouchData} from "../../../api/interaction/ScaleTouchData";
+import type {Logger} from "../../../api/logging/Logger";
 
 /**
  * Define a type for touch interactions performing a rotation.

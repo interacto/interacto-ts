@@ -13,9 +13,9 @@
  */
 
 import type {EltRef} from "../../api/binder/BaseBinderBuilder";
+import type {PointData} from "../../api/interaction/PointData";
 import type {SrcTgtPointsData} from "../../api/interaction/SrcTgtPointsData";
 import type {TouchData} from "../../api/interaction/TouchData";
-import type {PointData} from "../../api/interaction/PointData";
 
 /**
  * Controls the dwell and spring animation.

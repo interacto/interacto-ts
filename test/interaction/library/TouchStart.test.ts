@@ -12,11 +12,11 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMHandler, Logger} from "../../../src/interacto";
 import {TouchStart} from "../../../src/interacto";
 import {robot} from "interacto-nono";
-import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
+import type {FSMHandler, Logger} from "../../../src/interacto";
+import type {MockProxy} from "jest-mock-extended";
 
 describe("using a TouchStart interaction", () => {
     let interaction: TouchStart;

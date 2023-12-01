@@ -12,16 +12,16 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {InteractionBase} from "../InteractionBase";
-import {FSMImpl} from "../../fsm/FSMImpl";
-import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import {getTouch} from "../../fsm/Events";
+import {FSMImpl} from "../../fsm/FSMImpl";
+import {TouchTransition} from "../../fsm/TouchTransition";
+import {InteractionBase} from "../InteractionBase";
 import {SrcTgtTouchDataImpl} from "../SrcTgtTouchDataImpl";
 import type {SrcTgtPointsData} from "../../../api/interaction/SrcTgtPointsData";
 import type {TouchData} from "../../../api/interaction/TouchData";
 import type {Logger} from "../../../api/logging/Logger";
-import {TouchTransition} from "../../fsm/TouchTransition";
 import type {CancellingState} from "../../fsm/CancellingState";
+import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import type {StdState} from "../../fsm/StdState";
 
 /**

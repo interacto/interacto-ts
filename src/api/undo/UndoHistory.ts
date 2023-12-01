@@ -13,8 +13,8 @@
  */
 
 import type {Undoable} from "./Undoable";
-import type {Observable} from "rxjs";
 import type {UndoHistoryBase} from "./UndoHistoryBase";
+import type {Observable} from "rxjs";
 
 /**
  * A history of undone/redone objects.

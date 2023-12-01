@@ -12,14 +12,14 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMDataHandler, FSMHandler, Logger} from "../../src/interacto";
 import {
     ClickTransition,
     ConcurrentAndFSM,
     FSMImpl, MouseTransition
 } from "../../src/interacto";
-import {mock} from "jest-mock-extended";
 import {createMouseEvent} from "../interaction/StubEvents";
+import {mock} from "jest-mock-extended";
+import type {FSMDataHandler, FSMHandler, Logger} from "../../src/interacto";
 
 class StubTouchFSM extends FSMImpl<FSMDataHandler> {
     public cpt: number;

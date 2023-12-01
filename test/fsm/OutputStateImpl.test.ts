@@ -12,18 +12,18 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMImpl} from "../../src/impl/fsm/FSMImpl";
-import type {InputState} from "../../src/api/fsm/InputState";
-import {OutputStateBase} from "../../src/impl/fsm/OutputStateBase";
 import {StubTransitionOK} from "./StubTransitionOk";
-import {StdState} from "../../src/impl/fsm/StdState";
-import type {MockProxy} from "jest-mock-extended";
-import {mock} from "jest-mock-extended";
-import type {Transition} from "../../src/api/fsm/Transition";
-import type {OutputState} from "../../src/api/fsm/OutputState";
 import {isOutputStateType} from "../../src/api/fsm/OutputState";
+import {OutputStateBase} from "../../src/impl/fsm/OutputStateBase";
+import {StdState} from "../../src/impl/fsm/StdState";
+import {mock} from "jest-mock-extended";
 import type {FSM} from "../../src/api/fsm/FSM";
+import type {InputState} from "../../src/api/fsm/InputState";
+import type {OutputState} from "../../src/api/fsm/OutputState";
+import type {Transition} from "../../src/api/fsm/Transition";
 import type {FSMDataHandler} from "../../src/impl/fsm/FSMDataHandler";
+import type {FSMImpl} from "../../src/impl/fsm/FSMImpl";
+import type {MockProxy} from "jest-mock-extended";
 
 describe("using an output state", () => {
     let state: OutputStateBase;

@@ -12,9 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import {TwoTouchDataImpl} from "./TwoTouchDataImpl";
 import type {RotationTouchData} from "../../api/interaction/RotationTouchData";
 import type {TouchData} from "../../api/interaction/TouchData";
-import {TwoTouchDataImpl} from "./TwoTouchDataImpl";
 
 /**
  * The implementation of the rotation interaction data.

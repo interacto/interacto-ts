@@ -12,18 +12,18 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {Observable} from "rxjs";
-import {Subject} from "rxjs";
-import type {Command} from "../../api/command/Command";
-import type {InteractionData} from "../../api/interaction/InteractionData";
-import {isUndoableType} from "../../api/undo/Undoable";
 import {MustBeUndoableCmdError} from "./MustBeUndoableCmdError";
+import {isUndoableType} from "../../api/undo/Undoable";
+import {Subject} from "rxjs";
 import type {Binding} from "../../api/binding/Binding";
-import type {Interaction, InteractionDataType} from "../../api/interaction/Interaction";
-import type {Logger} from "../../api/logging/Logger";
-import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
 import type {VisitorBinding} from "../../api/binding/VisitorBinding";
 import type {RuleName, Severity} from "../../api/checker/Checker";
+import type {Command} from "../../api/command/Command";
+import type {Interaction, InteractionDataType} from "../../api/interaction/Interaction";
+import type {InteractionData} from "../../api/interaction/InteractionData";
+import type {Logger} from "../../api/logging/Logger";
+import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
+import type {Observable} from "rxjs";
 
 /**
  * The base class to do bindings, i.e. bindings between user interactions and (undoable) commands.

@@ -11,13 +11,13 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import type {Subscription} from "rxjs";
-import type {Binding, UndoHistoryBase, Logger} from "../../src/interacto";
 import {BindingsImpl, MouseDown, UndoHistoryImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {createKeyEvent, createMouseEvent} from "../interaction/StubEvents";
-import type {Bindings} from "../../src/api/binding/Bindings";
 import {mock} from "jest-mock-extended";
+import type {Bindings} from "../../src/api/binding/Bindings";
+import type {Binding, UndoHistoryBase, Logger} from "../../src/interacto";
+import type {Subscription} from "rxjs";
 
 let canvas1: HTMLElement;
 let canvas2: HTMLElement;

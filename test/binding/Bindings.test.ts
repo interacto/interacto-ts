@@ -12,6 +12,15 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import {
+    AnonCmd,
+    BindingsContext,
+    BindingsImpl,
+    UndoHistoryImpl
+} from "../../src/interacto";
+import {StubCmd, StubUndoableCmd} from "../command/StubCmd";
+import {createMouseEvent, robot} from "../interaction/StubEvents";
+import {mock} from "jest-mock-extended";
 import type {
     Binding,
     Bindings,
@@ -35,16 +44,7 @@ import type {
     VisitorBinding,
     WidgetData
 } from "../../src/interacto";
-import {
-    AnonCmd,
-    BindingsContext,
-    BindingsImpl,
-    UndoHistoryImpl
-} from "../../src/interacto";
-import {StubCmd, StubUndoableCmd} from "../command/StubCmd";
 import type {MouseEventForTest} from "../interaction/StubEvents";
-import {createMouseEvent, robot} from "../interaction/StubEvents";
-import {mock} from "jest-mock-extended";
 
 let elt: HTMLElement;
 let ctx: BindingsContext;

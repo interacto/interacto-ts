@@ -12,13 +12,13 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import type {KeysData} from "../../../api/interaction/KeysData";
 import {FSMImpl} from "../../fsm/FSMImpl";
-import {KeysDataImpl} from "../KeysDataImpl";
-import {InteractionBase} from "../InteractionBase";
-import type {Logger} from "../../../api/logging/Logger";
 import {KeyTransition} from "../../fsm/KeyTransition";
+import {InteractionBase} from "../InteractionBase";
+import {KeysDataImpl} from "../KeysDataImpl";
+import type {KeysData} from "../../../api/interaction/KeysData";
+import type {Logger} from "../../../api/logging/Logger";
+import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 
 interface KeysDownFSMHandler extends FSMDataHandler {
     onKeyPressed(event: KeyboardEvent): void;

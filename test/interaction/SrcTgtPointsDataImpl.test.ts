@@ -12,8 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {SrcTgtPointsDataImpl} from "../../src/impl/interaction/SrcTgtPointsDataImpl";
 import {PointDataImpl} from "../../src/impl/interaction/PointDataImpl";
+import {SrcTgtPointsDataImpl} from "../../src/impl/interaction/SrcTgtPointsDataImpl";
 
 describe("using a scrtgtpoints data", () => {
     let data: SrcTgtPointsDataImpl;

@@ -12,17 +12,17 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {InteractionData} from "../../api/interaction/InteractionData";
-import type {LogLevel} from "../../api/logging/LogLevel";
 import {BindingImpl} from "./BindingImpl";
-import type {Command} from "../../api/command/Command";
-import type {Interaction, InteractionDataType} from "../../api/interaction/Interaction";
-import type {Logger} from "../../api/logging/Logger";
-import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
-import type {When} from "../../api/binder/When";
 import {isWhenAtEnd, isWhenAtStart, isWhenAtThen, isWhenStrict} from "../../api/binder/When";
 import {CancelFSMError} from "../fsm/CancelFSMError";
+import type {When} from "../../api/binder/When";
 import type {RuleName, Severity} from "../../api/checker/Checker";
+import type {Command} from "../../api/command/Command";
+import type {Interaction, InteractionDataType} from "../../api/interaction/Interaction";
+import type {InteractionData} from "../../api/interaction/InteractionData";
+import type {Logger} from "../../api/logging/Logger";
+import type {LogLevel} from "../../api/logging/LogLevel";
+import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
 
 export class AnonBinding<C extends Command, I extends Interaction<D>, A, D extends InteractionData = InteractionDataType<I>>
     extends BindingImpl<C, I, A, D> {

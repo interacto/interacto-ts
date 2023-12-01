@@ -12,15 +12,15 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {InteractionData} from "../interaction/InteractionData";
-import type {InteractionBinderBuilder} from "./InteractionBinderBuilder";
-import type {LogLevel} from "../logging/LogLevel";
-import type {Command} from "../command/Command";
-import type {InteractionCmdBinder} from "./InteractionCmdBinder";
-import type {Interaction, InteractionDataType} from "../interaction/Interaction";
 import type {Widget} from "./BaseBinderBuilder";
+import type {InteractionBinderBuilder} from "./InteractionBinderBuilder";
+import type {InteractionCmdBinder} from "./InteractionCmdBinder";
 import type {WhenType} from "./When";
 import type {RuleName, Severity} from "../checker/Checker";
+import type {Command} from "../command/Command";
+import type {Interaction, InteractionDataType} from "../interaction/Interaction";
+import type {InteractionData} from "../interaction/InteractionData";
+import type {LogLevel} from "../logging/LogLevel";
 
 /**
  * The binder API that already knows the type of user interaction the bindings will use.

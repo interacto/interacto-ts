@@ -12,9 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 import type {BaseBinderBuilder, Widget} from "./BaseBinderBuilder";
-import type {LogLevel} from "../logging/LogLevel";
 import type {WhenType} from "./When";
 import type {RuleName, Severity} from "../checker/Checker";
+import type {LogLevel} from "../logging/LogLevel";
 
 /**
  * The base interface for building bindings based on non-trivial user interactions (eg DnD).

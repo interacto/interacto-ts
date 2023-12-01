@@ -13,16 +13,16 @@
  */
 
 import {UpdateBinder} from "../../src/impl/binder/UpdateBinder";
-import type {Command} from "../../src/api/command/Command";
-import type {InteractionData} from "../../src/api/interaction/InteractionData";
-import {mock} from "jest-mock-extended";
-import type {Interaction} from "../../src/api/interaction/Interaction";
-import type {BindingsObserver} from "../../src/api/binding/BindingsObserver";
 import {MouseDown} from "../../src/impl/interaction/library/MouseDown";
-import clearAllMocks = jest.clearAllMocks;
-import type {UndoHistory} from "../../src/api/undo/UndoHistory";
 import {UndoHistoryImpl} from "../../src/impl/undo/UndoHistoryImpl";
+import {mock} from "jest-mock-extended";
+import clearAllMocks = jest.clearAllMocks;
+import type {BindingsObserver} from "../../src/api/binding/BindingsObserver";
+import type {Command} from "../../src/api/command/Command";
+import type {Interaction} from "../../src/api/interaction/Interaction";
+import type {InteractionData} from "../../src/api/interaction/InteractionData";
 import type {Logger} from "../../src/api/logging/Logger";
+import type {UndoHistory} from "../../src/api/undo/UndoHistory";
 
 describe("using an update binder", () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

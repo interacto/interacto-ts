@@ -12,9 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {Logger, FSM, InteractionData, Flushable, OutputState} from "../../src/interacto";
 import {InteractionBase, PointDataImpl} from "../../src/interacto";
 import {mock} from "jest-mock-extended";
+import type {Logger, FSM, InteractionData, Flushable, OutputState} from "../../src/interacto";
 
 export class InteractionStub extends InteractionBase<InteractionData, Flushable & InteractionData, FSM> {
     public constructor(fsm: FSM, logger?: Logger) {

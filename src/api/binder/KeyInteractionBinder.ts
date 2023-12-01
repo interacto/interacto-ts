@@ -11,15 +11,15 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import type {InteractionData} from "../interaction/InteractionData";
-import type {KeyInteractionBinderBuilder} from "./KeyInteractionBinderBuilder";
-import type {LogLevel} from "../logging/LogLevel";
-import type {Command} from "../command/Command";
-import type {KeyInteractionCmdBinder} from "./KeyInteractionCmdBinder";
-import type {Interaction, InteractionDataType} from "../interaction/Interaction";
 import type {Widget} from "./BaseBinderBuilder";
+import type {KeyInteractionBinderBuilder} from "./KeyInteractionBinderBuilder";
+import type {KeyInteractionCmdBinder} from "./KeyInteractionCmdBinder";
 import type {WhenType} from "./When";
 import type {RuleName, Severity} from "../checker/Checker";
+import type {Command} from "../command/Command";
+import type {Interaction, InteractionDataType} from "../interaction/Interaction";
+import type {InteractionData} from "../interaction/InteractionData";
+import type {LogLevel} from "../logging/LogLevel";
 
 /**
  * The binder API for key-based user interactions, that already knows the type of the user interaction to use.

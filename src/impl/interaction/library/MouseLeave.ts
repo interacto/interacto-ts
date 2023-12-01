@@ -12,14 +12,14 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import {TerminalState} from "../../fsm/TerminalState";
-import type {PointData} from "../../../api/interaction/PointData";
 import {FSMImpl} from "../../fsm/FSMImpl";
+import {MouseTransition} from "../../fsm/MouseTransition";
+import {TerminalState} from "../../fsm/TerminalState";
 import {InteractionBase} from "../InteractionBase";
 import {PointDataImpl} from "../PointDataImpl";
+import type {PointData} from "../../../api/interaction/PointData";
 import type {Logger} from "../../../api/logging/Logger";
-import {MouseTransition} from "../../fsm/MouseTransition";
+import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 
 interface MouseLeaveFSMHandler extends FSMDataHandler {
     onExit(event: MouseEvent): void;

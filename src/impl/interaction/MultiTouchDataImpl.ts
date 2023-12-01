@@ -12,9 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {MultiTouchData} from "../../api/interaction/MultiTouchData";
-import type {SrcTgtTouchDataImpl} from "./SrcTgtTouchDataImpl";
 import type {Flushable} from "./Flushable";
+import type {SrcTgtTouchDataImpl} from "./SrcTgtTouchDataImpl";
+import type {MultiTouchData} from "../../api/interaction/MultiTouchData";
 import type {SrcTgtPointsData} from "../../api/interaction/SrcTgtPointsData";
 import type {TouchData} from "../../api/interaction/TouchData";
 

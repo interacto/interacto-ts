@@ -12,8 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {PointData} from "../../api/interaction/PointData";
 import {PointsDataImpl} from "./PointsDataImpl";
+import type {PointData} from "../../api/interaction/PointData";
 
 /**
  * Tapping interaction data implementation

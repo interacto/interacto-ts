@@ -12,8 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {Bindings, UndoHistory, Checker} from "../../src/interacto";
 import {BindingsImpl, UndoHistoryImpl, CheckerImpl} from "../../src/interacto";
+import type {Bindings, UndoHistory, Checker} from "../../src/interacto";
 
 describe("binding checker", () => {
     let checker: Checker;

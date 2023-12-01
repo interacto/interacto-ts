@@ -12,25 +12,19 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {ButtonPressed} from "../interaction/library/ButtonPressed";
-import type {WidgetData} from "../../api/interaction/WidgetData";
+import {Bindings} from "../../api/binding/Bindings";
+import {DwellSpringAnimation} from "../animation/DwellSpringAnimation";
+import {KeysBinder} from "../binder/KeysBinder";
 import {UpdateBinder} from "../binder/UpdateBinder";
+import {Redo} from "../command/library/Redo";
+import {Undo} from "../command/library/Undo";
 import {BoxChecked} from "../interaction/library/BoxChecked";
+import {ButtonPressed} from "../interaction/library/ButtonPressed";
+import {Click} from "../interaction/library/Click";
+import {Clicks} from "../interaction/library/Clicks";
 import {ColorPicked} from "../interaction/library/ColorPicked";
 import {ComboBoxSelected} from "../interaction/library/ComboBoxSelected";
-import {SpinnerChanged} from "../interaction/library/SpinnerChanged";
 import {DatePicked} from "../interaction/library/DatePicked";
-import type {Interaction} from "../../api/interaction/Interaction";
-import type {InteractionData} from "../../api/interaction/InteractionData";
-import type {CommandBase} from "../command/CommandBase";
-import type {BaseUpdateBinder} from "../../api/binder/BaseUpdateBinder";
-import type {BindingsObserver} from "../../api/binding/BindingsObserver";
-import {TextInputChanged} from "../interaction/library/TextInputChanged";
-import {MultiTouch} from "../interaction/library/MultiTouch";
-import {Tap} from "../interaction/library/Tap";
-import {LongTouch} from "../interaction/library/LongTouch";
-import {Click} from "../interaction/library/Click";
-import {MouseDown} from "../interaction/library/MouseDown";
 import {DnD} from "../interaction/library/DnD";
 import {DoubleClick} from "../interaction/library/DoubleClick";
 import {DragLock} from "../interaction/library/DragLock";
@@ -39,18 +33,31 @@ import {KeyDown} from "../interaction/library/KeyDown";
 import {KeysDown} from "../interaction/library/KeysDown";
 import {KeysTyped} from "../interaction/library/KeysTyped";
 import {KeyTyped} from "../interaction/library/KeyTyped";
-import {Scroll} from "../interaction/library/Scroll";
-import {KeysBinder} from "../binder/KeysBinder";
-import {TouchDnD} from "../interaction/library/TouchDnD";
+import {KeyUp} from "../interaction/library/KeyUp";
 import {LongMouseDown} from "../interaction/library/LongMouseDown";
-import {Clicks} from "../interaction/library/Clicks";
-import {MouseLeave} from "../interaction/library/MouseLeave";
+import {LongTouch} from "../interaction/library/LongTouch";
+import {MouseDown} from "../interaction/library/MouseDown";
 import {MouseEnter} from "../interaction/library/MouseEnter";
+import {MouseLeave} from "../interaction/library/MouseLeave";
 import {MouseMove} from "../interaction/library/MouseMove";
+import {MouseUp} from "../interaction/library/MouseUp";
+import {MultiTouch} from "../interaction/library/MultiTouch";
+import {bottomPan, hPan, leftPan, rightPan, topPan, vPan} from "../interaction/library/Pans";
+import {Scroll} from "../interaction/library/Scroll";
+import {SpinnerChanged} from "../interaction/library/SpinnerChanged";
+import {Tap} from "../interaction/library/Tap";
+import {TextInputChanged} from "../interaction/library/TextInputChanged";
+import {TouchDnD} from "../interaction/library/TouchDnD";
+import {TouchStart} from "../interaction/library/TouchStart";
+import {twoBottomPan, twoHPan, twoLeftPan, twoRightPan, twoTopPan, twoVPan} from "../interaction/library/TwoPans";
+import {rotate, scale} from "../interaction/library/TwoTouch";
+import {Wheel} from "../interaction/library/Wheel";
+import {ThreeTouchDnD, FourTouchDnD, twoTouch} from "../interaction/library/XTouch";
+import {Or} from "../interaction/Or";
+import {LoggerImpl} from "../logging/LoggerImpl";
 import type {EltRef, Widget} from "../../api/binder/BaseBinderBuilder";
-import {Undo} from "../command/library/Undo";
+import type {BaseUpdateBinder} from "../../api/binder/BaseUpdateBinder";
 import type {Binding} from "../../api/binding/Binding";
-import {Redo} from "../command/library/Redo";
 import type {
     PartialAnchorTypedBinder,
     PartialButtonTypedBinder,
@@ -78,27 +85,20 @@ import type {
     PartialTwoPanTypedBinder,
     PartialScaleTypedBinder
 } from "../../api/binding/Bindings";
-import {Bindings} from "../../api/binding/Bindings";
-import type {Logger} from "../../api/logging/Logger";
-import {LoggerImpl} from "../logging/LoggerImpl";
-import {Wheel} from "../interaction/library/Wheel";
-import {KeyUp} from "../interaction/library/KeyUp";
-import {MouseUp} from "../interaction/library/MouseUp";
-import {DwellSpringAnimation} from "../animation/DwellSpringAnimation";
-import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
-import {TouchStart} from "../interaction/library/TouchStart";
-import {Or} from "../interaction/Or";
+import type {BindingsObserver} from "../../api/binding/BindingsObserver";
 import type {VisitorBinding} from "../../api/binding/VisitorBinding";
 import type {LinterRule} from "../../api/checker/Checker";
-import type {XTouchDnD} from "../interaction/library/XTouch";
-import {ThreeTouchDnD, FourTouchDnD, twoTouch} from "../interaction/library/XTouch";
-import {bottomPan, hPan, leftPan, rightPan, topPan, vPan} from "../interaction/library/Pans";
-import type {Rotate, Scale} from "../interaction/library/TwoTouch";
-import {rotate, scale} from "../interaction/library/TwoTouch";
-import type {TwoPan} from "../interaction/library/TwoPans";
-import {twoBottomPan, twoHPan, twoLeftPan, twoRightPan, twoTopPan, twoVPan} from "../interaction/library/TwoPans";
-import type {GeneralTwoTouchDataImpl} from "../interaction/GeneralTwoTouchDataImpl";
+import type {Interaction} from "../../api/interaction/Interaction";
+import type {InteractionData} from "../../api/interaction/InteractionData";
 import type {GeneralTwoTouchData} from "../../api/interaction/TwoTouchData";
+import type {WidgetData} from "../../api/interaction/WidgetData";
+import type {Logger} from "../../api/logging/Logger";
+import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
+import type {CommandBase} from "../command/CommandBase";
+import type {GeneralTwoTouchDataImpl} from "../interaction/GeneralTwoTouchDataImpl";
+import type {TwoPan} from "../interaction/library/TwoPans";
+import type {Rotate, Scale} from "../interaction/library/TwoTouch";
+import type {XTouchDnD} from "../interaction/library/XTouch";
 
 export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
     protected observer: BindingsObserver | undefined;

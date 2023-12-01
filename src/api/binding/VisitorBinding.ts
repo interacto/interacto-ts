@@ -12,13 +12,13 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import type {Binding} from "./Binding";
+import type {Bindings} from "./Bindings";
 import type {Command} from "../command/Command";
 import type {Interaction} from "../interaction/Interaction";
 import type {InteractionData} from "../interaction/InteractionData";
 import type {VisitorInteraction} from "../interaction/VisitorInteraction";
 import type {UndoHistoryBase} from "../undo/UndoHistoryBase";
-import type {Binding} from "./Binding";
-import type {Bindings} from "./Bindings";
 
 /**
  * The main interface for visiting user interactions.

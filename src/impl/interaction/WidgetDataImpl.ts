@@ -12,9 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {WidgetData} from "../../api/interaction/WidgetData";
-import type {Flushable} from "./Flushable";
 import {InteractionDataBase} from "./InteractionDataBase";
+import type {Flushable} from "./Flushable";
+import type {WidgetData} from "../../api/interaction/WidgetData";
 
 export class WidgetDataImpl<T> extends InteractionDataBase implements WidgetData<T>, Flushable {
     public get widget(): T | undefined {

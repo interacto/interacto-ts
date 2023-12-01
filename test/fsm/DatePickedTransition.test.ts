@@ -12,12 +12,12 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {OutputState} from "../../src/api/fsm/OutputState";
-import type {MockProxy} from "jest-mock-extended";
+import {DatePickedTransition} from "../../src/impl/fsm/DatePickedTransition";
+import {createEventWithTarget} from "../interaction/StubEvents";
 import {mock} from "jest-mock-extended";
 import type {InputState} from "../../src/api/fsm/InputState";
-import {createEventWithTarget} from "../interaction/StubEvents";
-import {DatePickedTransition} from "../../src/impl/fsm/DatePickedTransition";
+import type {OutputState} from "../../src/api/fsm/OutputState";
+import type {MockProxy} from "jest-mock-extended";
 
 describe("using a date picked transition", () => {
     let tr: DatePickedTransition;

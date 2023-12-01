@@ -12,9 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import type {Flushable} from "./Flushable";
 import type {PointBaseData} from "../../api/interaction/PointBaseData";
 import type {SrcTgtPointsData} from "../../api/interaction/SrcTgtPointsData";
-import type {Flushable} from "./Flushable";
 
 export abstract class SrcTgtDataBase<T extends PointBaseData, S extends Flushable & T> implements SrcTgtPointsData<T> {
     protected readonly srcData: S;

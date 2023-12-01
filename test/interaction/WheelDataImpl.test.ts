@@ -12,8 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {WheelData} from "../../src/api/interaction/WheelData";
 import {WheelDataImpl} from "../../src/impl/interaction/WheelDataImpl";
+import type {WheelData} from "../../src/api/interaction/WheelData";
 
 describe("using a wheel data", () => {
     let data: WheelDataImpl;

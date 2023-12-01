@@ -13,8 +13,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {PointData} from "../../api/interaction/PointData";
 import {PointingDataBase} from "./PointingDataBase";
+import type {PointData} from "../../api/interaction/PointData";
 
 /**
  * Single point interaction data implementation with write accesses.

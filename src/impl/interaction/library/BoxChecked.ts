@@ -14,12 +14,12 @@
 
 import {BoxCheckPressedTransition} from "../../fsm/BoxCheckPressedTransition";
 import {isCheckBox} from "../../fsm/Events";
-import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import type {WidgetData} from "../../../api/interaction/WidgetData";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {WidgetDataImpl} from "../WidgetDataImpl";
+import type {WidgetData} from "../../../api/interaction/WidgetData";
 import type {Logger} from "../../../api/logging/Logger";
+import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 
 class BoxCheckedFSM extends FSMImpl<BoxCheckedHandler> {
     public constructor(logger: Logger, dataHandler: BoxCheckedHandler) {

@@ -12,11 +12,11 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSMHandler, KeyData, Logger} from "../../../src/interacto";
 import {KeysDataImpl, KeysDown} from "../../../src/interacto";
 import {robot} from "interacto-nono";
-import type {MockProxy} from "jest-mock-extended";
 import {mock} from "jest-mock-extended";
+import type {FSMHandler, KeyData, Logger} from "../../../src/interacto";
+import type {MockProxy} from "jest-mock-extended";
 
 describe("using a keys down interaction", () => {
     let interaction: KeysDown;

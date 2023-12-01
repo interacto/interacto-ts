@@ -11,17 +11,17 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
+import type {BaseBinder} from "./BaseBinder";
+import type {Widget} from "./BaseBinderBuilder";
 import type {BaseUpdateBinderBuilder} from "./BaseUpdateBinderBuilder";
-import type {LogLevel} from "../logging/LogLevel";
-import type {Command} from "../command/Command";
-import type {InteractionData} from "../interaction/InteractionData";
 import type {CmdUpdateBinder} from "./CmdUpdateBinder";
 import type {InteractionUpdateBinder} from "./InteractionUpdateBinder";
-import type {BaseBinder} from "./BaseBinder";
-import type {Interaction, InteractionDataType} from "../interaction/Interaction";
-import type {Widget} from "./BaseBinderBuilder";
 import type {WhenType} from "./When";
 import type {RuleName, Severity} from "../checker/Checker";
+import type {Command} from "../command/Command";
+import type {Interaction, InteractionDataType} from "../interaction/Interaction";
+import type {InteractionData} from "../interaction/InteractionData";
+import type {LogLevel} from "../logging/LogLevel";
 
 /**
  * The base interface for building bindings based on non-trivial user interactions (eg DnD) with routines

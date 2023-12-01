@@ -12,8 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {UndoableCommand} from "../UndoableCommand";
 import {SetProperty} from "./SetProperty";
+import {UndoableCommand} from "../UndoableCommand";
 
 /**
  * An undoable command that changes the value of a set of object properties.

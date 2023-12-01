@@ -12,22 +12,22 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {LogLevel} from "../../api/logging/LogLevel";
-import type {InteractionData} from "../../api/interaction/InteractionData";
-import type {Command} from "../../api/command/Command";
+import {isEltRef} from "../../api/binder/BaseBinderBuilder";
+import {AnonCmd} from "../command/AnonCmd";
+import type {Widget} from "../../api/binder/BaseBinderBuilder";
 import type {CmdBinder} from "../../api/binder/CmdBinder";
 import type {InteractionBinder} from "../../api/binder/InteractionBinder";
 import type {InteractionCmdBinder} from "../../api/binder/InteractionCmdBinder";
+import type {When, WhenType} from "../../api/binder/When";
 import type {Binding} from "../../api/binding/Binding";
 import type {BindingsObserver} from "../../api/binding/BindingsObserver";
-import type {Interaction, InteractionDataType} from "../../api/interaction/Interaction";
-import type {Widget} from "../../api/binder/BaseBinderBuilder";
-import {isEltRef} from "../../api/binder/BaseBinderBuilder";
-import type {Logger} from "../../api/logging/Logger";
-import {AnonCmd} from "../command/AnonCmd";
-import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
-import type {When, WhenType} from "../../api/binder/When";
 import type {RuleName, Severity} from "../../api/checker/Checker";
+import type {Command} from "../../api/command/Command";
+import type {Interaction, InteractionDataType} from "../../api/interaction/Interaction";
+import type {InteractionData} from "../../api/interaction/InteractionData";
+import type {Logger} from "../../api/logging/Logger";
+import type {LogLevel} from "../../api/logging/LogLevel";
+import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
 
 /**
  * The base class that defines the concept of binding builder (called binder).

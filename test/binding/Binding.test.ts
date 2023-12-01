@@ -12,12 +12,12 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {InteractionData, Undoable, UndoHistory, VisitorBinding} from "../../src/interacto";
 import {BindingImpl, FSMImpl, MustBeUndoableCmdError, UndoHistoryImpl} from "../../src/interacto";
 import {StubCmd, StubUndoableCmd} from "../command/StubCmd";
 import {InteractionStub} from "../interaction/InteractionStub";
-import type {Logger} from "../../src/api/logging/Logger";
 import {mock} from "jest-mock-extended";
+import type {Logger} from "../../src/api/logging/Logger";
+import type {InteractionData, Undoable, UndoHistory, VisitorBinding} from "../../src/interacto";
 
 class BindingStub extends BindingImpl<StubCmd, InteractionStub, unknown> {
     public whenStartOK: boolean;

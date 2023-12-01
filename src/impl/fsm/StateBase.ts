@@ -12,8 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {State} from "../../api/fsm/State";
 import type {FSM} from "../../api/fsm/FSM";
+import type {State} from "../../api/fsm/State";
 import type {VisitorFSM} from "../../api/fsm/VisitorFSM";
 
 /**

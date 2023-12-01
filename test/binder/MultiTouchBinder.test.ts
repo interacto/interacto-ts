@@ -11,13 +11,13 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import type {Binding, FSM, Interaction, InteractionBase, InteractionData, UndoHistoryBase} from "../../src/interacto";
+import {BindingsContext} from "../../src/impl/binding/BindingsContext";
 import {BindingsImpl, UndoHistoryImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
-import {BindingsContext} from "../../src/impl/binding/BindingsContext";
-import type {Flushable} from "../../src/impl/interaction/Flushable";
-import type {Bindings} from "../../src/api/binding/Bindings";
 import {robot} from "interacto-nono";
+import type {Bindings} from "../../src/api/binding/Bindings";
+import type {Flushable} from "../../src/impl/interaction/Flushable";
+import type {Binding, FSM, Interaction, InteractionBase, InteractionData, UndoHistoryBase} from "../../src/interacto";
 
 let c1: HTMLElement;
 let binding: Binding<StubCmd, Interaction<InteractionData>, unknown> | undefined;

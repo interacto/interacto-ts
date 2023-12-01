@@ -12,9 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {Logger} from "../../../api/logging/Logger";
-import {InteractionBuilderImpl} from "../InteractionBuilderImpl";
 import {TouchDnD} from "./TouchDnD";
+import {InteractionBuilderImpl} from "../InteractionBuilderImpl";
+import type {Logger} from "../../../api/logging/Logger";
 
 /**
  * Creates the horizontal pan (or a swipe if minVelocity is used).

@@ -12,19 +12,14 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {Binding} from "../../api/binding/Binding";
-import type {Checker, LinterRule, RuleName, Severity} from "../../api/checker/Checker";
-import type {Command} from "../../api/command/Command";
-import type {Interaction} from "../../api/interaction/Interaction";
-import type {InteractionData} from "../../api/interaction/InteractionData";
 import {Click} from "../interaction/library/Click";
 import {Clicks} from "../interaction/library/Clicks";
 import {DoubleClick} from "../interaction/library/DoubleClick";
 import {DragLock} from "../interaction/library/DragLock";
 import {KeyDown} from "../interaction/library/KeyDown";
+import {KeysTyped} from "../interaction/library/KeysTyped";
 import {KeyTyped} from "../interaction/library/KeyTyped";
 import {KeyUp} from "../interaction/library/KeyUp";
-import {KeysTyped} from "../interaction/library/KeysTyped";
 import {LongMouseDown} from "../interaction/library/LongMouseDown";
 import {MouseDown} from "../interaction/library/MouseDown";
 import {MouseUp} from "../interaction/library/MouseUp";
@@ -32,6 +27,11 @@ import {MultiTouch} from "../interaction/library/MultiTouch";
 import {leftPan, rightPan, vPan, hPan, topPan, bottomPan} from "../interaction/library/Pans";
 import {TouchDnD} from "../interaction/library/TouchDnD";
 import {twoBottomPan, twoHPan, twoLeftPan, twoRightPan, twoTopPan, twoVPan} from "../interaction/library/TwoPans";
+import type {Binding} from "../../api/binding/Binding";
+import type {Checker, LinterRule, RuleName, Severity} from "../../api/checker/Checker";
+import type {Command} from "../../api/command/Command";
+import type {Interaction} from "../../api/interaction/Interaction";
+import type {InteractionData} from "../../api/interaction/InteractionData";
 
 /**
  * An implementation of the Checker API

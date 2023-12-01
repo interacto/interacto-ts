@@ -12,13 +12,13 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {FSM} from "../../api/fsm/FSM";
-import type {FSMHandler} from "../../api/fsm/FSMHandler";
 import {FSMImpl} from "./FSMImpl";
 import type {FSMDataHandler} from "./FSMDataHandler";
-import type {Logger} from "../../api/logging/Logger";
 import type {ConcurrentFSM} from "../../api/fsm/ConcurrentFSM";
+import type {FSM} from "../../api/fsm/FSM";
+import type {FSMHandler} from "../../api/fsm/FSMHandler";
 import type {VisitorFSM} from "../../api/fsm/VisitorFSM";
+import type {Logger} from "../../api/logging/Logger";
 
 /**
  * A concurrent FSM: an FSM that contains multiple FSMs that run concurrently.

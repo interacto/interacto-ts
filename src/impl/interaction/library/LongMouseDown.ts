@@ -13,13 +13,13 @@
  */
 
 import {FSMImpl} from "../../fsm/FSMImpl";
-import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import {InteractionBase} from "../InteractionBase";
-import type {PointData} from "../../../api/interaction/PointData";
-import {PointDataImpl} from "../PointDataImpl";
-import {TimeoutTransition} from "../../fsm/TimeoutTransition";
-import type {Logger} from "../../../api/logging/Logger";
 import {MouseTransition} from "../../fsm/MouseTransition";
+import {TimeoutTransition} from "../../fsm/TimeoutTransition";
+import {InteractionBase} from "../InteractionBase";
+import {PointDataImpl} from "../PointDataImpl";
+import type {PointData} from "../../../api/interaction/PointData";
+import type {Logger} from "../../../api/logging/Logger";
+import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 
 interface LongMouseDownFSMHandler extends FSMDataHandler {
     press(evt: MouseEvent): void;

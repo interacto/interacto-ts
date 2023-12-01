@@ -12,13 +12,13 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {StdState} from "../../src/impl/fsm/StdState";
-import type {TransitionBase} from "../../src/impl/fsm/TransitionBase";
-import type {FSMImpl} from "../../src/impl/fsm/FSMImpl";
 import {StubTransitionOK} from "./StubTransitionOk";
+import {StdState} from "../../src/impl/fsm/StdState";
 import {mock} from "jest-mock-extended";
-import type {FSMDataHandler} from "../../src/impl/fsm/FSMDataHandler";
 import type {VisitorFSM} from "../../src/api/fsm/VisitorFSM";
+import type {FSMDataHandler} from "../../src/impl/fsm/FSMDataHandler";
+import type {FSMImpl} from "../../src/impl/fsm/FSMImpl";
+import type {TransitionBase} from "../../src/impl/fsm/TransitionBase";
 
 describe("using a transition", () => {
     let tr: TransitionBase<Event>;

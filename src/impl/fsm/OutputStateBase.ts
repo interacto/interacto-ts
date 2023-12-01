@@ -12,11 +12,11 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {StateBase} from "./StateBase";
-import type {OutputState} from "../../api/fsm/OutputState";
-import type {FSM} from "../../api/fsm/FSM";
-import type {Transition} from "../../api/fsm/Transition";
 import {CancelFSMError} from "./CancelFSMError";
+import {StateBase} from "./StateBase";
+import type {FSM} from "../../api/fsm/FSM";
+import type {OutputState} from "../../api/fsm/OutputState";
+import type {Transition} from "../../api/fsm/Transition";
 
 /**
  * Base implementation of the OutputState interface.

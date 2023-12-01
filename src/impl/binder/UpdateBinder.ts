@@ -13,20 +13,20 @@
  */
 
 import {Binder} from "./Binder";
-import type {InteractionData} from "../../api/interaction/InteractionData";
-import type {Command} from "../../api/command/Command";
+import {AnonBinding} from "../binding/AnonBinding";
+import type {Widget} from "../../api/binder/BaseBinderBuilder";
 import type {CmdUpdateBinder} from "../../api/binder/CmdUpdateBinder";
 import type {InteractionCmdUpdateBinder} from "../../api/binder/InteractionCmdUpdateBinder";
-import type {LogLevel} from "../../api/logging/LogLevel";
-import type {Binding} from "../../api/binding/Binding";
-import {AnonBinding} from "../binding/AnonBinding";
-import type {Interaction, InteractionDataType} from "../../api/interaction/Interaction";
-import type {Widget} from "../../api/binder/BaseBinderBuilder";
-import type {BindingsObserver} from "../../api/binding/BindingsObserver";
-import type {Logger} from "../../api/logging/Logger";
-import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
 import type {WhenType} from "../../api/binder/When";
+import type {Binding} from "../../api/binding/Binding";
+import type {BindingsObserver} from "../../api/binding/BindingsObserver";
 import type {RuleName, Severity} from "../../api/checker/Checker";
+import type {Command} from "../../api/command/Command";
+import type {Interaction, InteractionDataType} from "../../api/interaction/Interaction";
+import type {InteractionData} from "../../api/interaction/InteractionData";
+import type {Logger} from "../../api/logging/Logger";
+import type {LogLevel} from "../../api/logging/LogLevel";
+import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
 
 /**
  * The base binding builder for bindings where commands can be updated while the user interaction is running.

@@ -12,8 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {UnitInteractionData} from "./UnitInteractionData";
 import type {EventModifierData} from "./EventModifierData";
+import type {UnitInteractionData} from "./UnitInteractionData";
 
 /**
  * The data of keyboard-based user interactions.

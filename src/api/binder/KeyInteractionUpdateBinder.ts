@@ -12,16 +12,16 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {InteractionData} from "../interaction/InteractionData";
-import type {LogLevel} from "../logging/LogLevel";
-import type {Command} from "../command/Command";
-import type {KeyInteractionCmdUpdateBinder} from "./KeyInteractionCmdUpdateBinder";
+import type {Widget} from "./BaseBinderBuilder";
 import type {InteractionUpdateBinderBuilder} from "./InteractionUpdateBinderBuilder";
 import type {KeyBinderBuilder} from "./KeyBinderBuilder";
-import type {Interaction, InteractionDataType} from "../interaction/Interaction";
-import type {Widget} from "./BaseBinderBuilder";
+import type {KeyInteractionCmdUpdateBinder} from "./KeyInteractionCmdUpdateBinder";
 import type {WhenType} from "./When";
 import type {RuleName, Severity} from "../checker/Checker";
+import type {Command} from "../command/Command";
+import type {Interaction, InteractionDataType} from "../interaction/Interaction";
+import type {InteractionData} from "../interaction/InteractionData";
+import type {LogLevel} from "../logging/LogLevel";
 
 /**
  * The binder API for key-based user interactions, that already knows the type of the user interaction to use

@@ -12,19 +12,13 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {CommandBase} from "../../src/impl/command/CommandBase";
-import type {Binding} from "../../src/api/binding/Binding";
-import type {Interaction} from "../../src/api/interaction/Interaction";
-import type {InteractionData} from "../../src/api/interaction/InteractionData";
-import {Subject} from "rxjs";
-import {flushPromises} from "../Utils";
-import {robot} from "../interaction/StubEvents";
-import type {BindingImpl} from "../../src/impl/binding/BindingImpl";
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
-import type {Bindings} from "../../src/api/binding/Bindings";
 import {BindingsImpl} from "../../src/impl/binding/BindingsImpl";
-import type {UndoHistoryBase} from "../../src/api/undo/UndoHistoryBase";
+import {CommandBase} from "../../src/impl/command/CommandBase";
 import {UndoHistoryImpl} from "../../src/impl/undo/UndoHistoryImpl";
+import {robot} from "../interaction/StubEvents";
+import {flushPromises} from "../Utils";
+import {Subject} from "rxjs";
 import useFakeTimers = jest.useFakeTimers;
 import clearAllTimers = jest.clearAllTimers;
 import useRealTimers = jest.useRealTimers;
@@ -32,6 +26,12 @@ import runAllTimers = jest.runAllTimers;
 import advanceTimersByTime = jest.advanceTimersByTime;
 import fn = jest.fn;
 import clearAllMocks = jest.clearAllMocks;
+import type {Binding} from "../../src/api/binding/Binding";
+import type {Bindings} from "../../src/api/binding/Bindings";
+import type {Interaction} from "../../src/api/interaction/Interaction";
+import type {InteractionData} from "../../src/api/interaction/InteractionData";
+import type {UndoHistoryBase} from "../../src/api/undo/UndoHistoryBase";
+import type {BindingImpl} from "../../src/impl/binding/BindingImpl";
 
 class Model {
     public data: Array<string> = ["Foo", "Bar", "Yo"];

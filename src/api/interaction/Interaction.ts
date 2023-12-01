@@ -13,8 +13,8 @@
  */
 
 import type {InteractionData} from "./InteractionData";
-import type {FSM} from "../fsm/FSM";
 import type {VisitorInteraction} from "./VisitorInteraction";
+import type {FSM} from "../fsm/FSM";
 
 /**
  * Infers the interaction data type from an interaction
