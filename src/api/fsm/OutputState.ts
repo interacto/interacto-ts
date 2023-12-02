@@ -45,6 +45,11 @@ export interface OutputState extends State {
     addTransition(tr: Transition<Event>): void;
 }
 
+/**
+ * Tests whether the given object is an OutputState.
+ * @param obj - The object to test.
+ * @returns True: the object is an OutputState
+ */
 export function isOutputStateType(obj: State | undefined): obj is OutputState {
     if (obj === undefined) {
         return false;

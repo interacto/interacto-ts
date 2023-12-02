@@ -43,6 +43,7 @@ export class ConcurrentAndFSM<F extends FSM, T extends FSMDataHandler> extends F
     /**
      * Creates the FSM
      * @param fsms - The main concurrent FSMs
+     * @param logger - The logger to use
      * @param secondaries - The secondary FSMs. Not considered in some steps.
      * @param totalReinit - Defines whether a cancellation of one of the fsms, reinits all the fsms.
      */

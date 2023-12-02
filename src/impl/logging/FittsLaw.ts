@@ -48,6 +48,7 @@ export class FittsLawDataImpl {
     /**
      * The ID part of the Fitt's law.
      * @param we - Effective target width (std dev on distances), to be used instead of the classical distance.
+     * @returns The ID
      */
     public getID(we?: number): number {
         return Math.log2((this.d / (we ?? this.w)) + 1);
@@ -123,6 +124,7 @@ export class FittsLaw {
 
     /**
      * Computes the effective target width (std dev on distances).
+     * @returns The effective target width.
      */
     public get we(): number {
         const ds = this.data.map(d => d.d);
@@ -135,6 +137,7 @@ export class FittsLaw {
      * Computes the a and b coefficent of the regression line.
      * @param effectiveTargetW - If true, will consider the effective target width. Otherwise will consider
      * the computed distances.
+     * @returns the regression lien coefficients.
      */
     public getAB(effectiveTargetW = false): [a: number, b: number, r: number] {
         // Linear regression

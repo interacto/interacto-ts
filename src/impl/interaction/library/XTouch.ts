@@ -32,6 +32,10 @@ import type {TwoTouchDataImpl} from "../TwoTouchDataImpl";
 export class XTouchDnD<T extends TwoTouchData, S extends T & TwoTouchDataImpl> extends ConcurrentInteraction<T, S, MultiTouchFSM> {
     /**
      * Creates the interaction.
+     * @param nbTouches - The number of touches of the interaction
+     * @param logger - The logger to use for this interaction
+     * @param dataImpl - The interaction data instance to use.
+     * @param name - The name of the user interaction
      * @param fsm - The optional FSM provided for the interaction
      * @param movementRequired - Whether the DnD starts after the touch point has begun moving (default)
      * or as soon as the screen is touched. The latter is used for the MultiTouch interaction.
@@ -73,6 +77,8 @@ export type TwoTouch = XTouchDnD<GeneralTwoTouchData, GeneralTwoTouchDataImpl>;
 
 /**
  * Creates a two-touch user interaction
+ * @param logger - The logger to use for this interaction
+ * @returns A supplier that produces an interaction instance when called
  */
 export function twoTouch(logger: Logger): () => TwoTouch {
     return new InteractionBuilderImpl(name => new XTouchDnD<GeneralTwoTouchData, GeneralTwoTouchDataImpl>(2, logger,

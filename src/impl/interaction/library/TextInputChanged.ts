@@ -26,7 +26,10 @@ class TextInputChangedFSM extends FSMImpl<TextInputChangedHandler> {
     /** The time gap between the two spinner events. */
     private readonly _timeGap: number = 1000;
 
-    /** The supplier that provides the time gap. */
+    /**
+     * The supplier that provides the time gap.
+     * @returns The time gap
+     */
     private readonly timeGapSupplier: () => number = () => this.getTimeGap();
 
     /**

@@ -75,6 +75,7 @@ class UndoableTreeNodeDTOImpl implements UndoableTreeNodeDTO {
     /**
      * Produces a tree node from the DTO node. This operates recurcively on
      * children, so that it converts all the tree node.
+     * @param dto - The DTO to convert
      * @param fn - The convertion method for the undoable.
      * @param parent - The parent node of the one to create.
      * @returns The created tree node (and its children) and the list of created nodes.

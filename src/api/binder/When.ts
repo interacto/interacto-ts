@@ -37,6 +37,7 @@ export type WhenType =
  * States whether the WhenType concerns the beginning of a binding execution (at start).
  * Not that 'then' is included since 'then' is called at start. This includes both strict and non strict mode.
  * @param type -- The WhenType to test
+ * @returns True: when executed at start
  */
 export function isWhenAtStart(type: WhenType): boolean {
     // 'then' is triggered at 'start' so used here
@@ -47,6 +48,7 @@ export function isWhenAtStart(type: WhenType): boolean {
  * States whether the WhenType concerns the running of a binding execution.
  * This includes both strict and non strict mode.
  * @param type -- The WhenType to test
+ * @returns True: when executed at then
  */
 export function isWhenAtThen(type: WhenType): boolean {
     return type === "strictThen" || type === "then" || type === "nonStrict" || type === "strict";
@@ -56,6 +58,7 @@ export function isWhenAtThen(type: WhenType): boolean {
  * States whether the WhenType concerns the end of a binding execution.
  * This includes both strict and non strict mode.
  * @param type -- The WhenType to test
+ * @returns True: when executed at end
  */
 export function isWhenAtEnd(type: WhenType): boolean {
     return type === "end" || type === "nonStrict" || type === "strict";
@@ -64,6 +67,7 @@ export function isWhenAtEnd(type: WhenType): boolean {
 /**
  * States whether the WhenType is a strict mode.
  * @param type -- The WhenType to test
+ * @returns True: when is strict
  */
 export function isWhenStrict(type: WhenType): boolean {
     // 'end' is always strict
@@ -80,6 +84,10 @@ export interface When<D, A> {
      * @param i -- The interaction data.
      */
     fn: (i: D, acc: Readonly<A>) => boolean;
+
+    /**
+     * The type of the when
+     */
     type: WhenType;
 }
 

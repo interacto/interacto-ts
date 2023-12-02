@@ -25,6 +25,7 @@ export interface EltRef<T> {
 /**
  * Checks whether the given object matches the EltRef structure.
  * @param o - The object to check
+ * @returns The casted object if is an EltRef.
  */
 export function isEltRef(o: unknown): o is EltRef<EventTarget> {
     if (o === undefined || o === null) {

@@ -48,6 +48,11 @@ export interface Undoable {
     getVisualSnapshot(): UndoableSnapshot;
 }
 
+/**
+ * Tests whether the given object is an Undoable.
+ * @param obj - The object to test.
+ * @returns True: the object is an Undoable
+ */
 export function isUndoableType(obj: unknown): obj is Undoable {
     if (typeof obj !== "object" || obj === null) {
         return false;

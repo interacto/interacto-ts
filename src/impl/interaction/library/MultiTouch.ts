@@ -27,6 +27,10 @@ import type {Logger} from "../../../api/logging/Logger";
 export class MultiTouchFSM extends ConcurrentAndFSM<TouchDnDFSM, TouchDnDFSMHandler> {
     /**
      * Creates the FSM.
+     * @param nbTouch - The number of touches of the interaction
+     * @param totalReinit - Defines whether a cancellation of one of the fsms, reinits all the fsms.
+     * @param logger - The logger to use for this interaction
+     * @param dataHandler - The data handler the FSM will use
      * @param movementRequired - Whether the DnD starts after the touch point has begun moving (default)
      * or as soon as the screen is touched. The latter is used for the MultiTouch interaction.
      */

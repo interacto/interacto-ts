@@ -23,8 +23,10 @@ export type TwoPan = XTouchDnD<LineTouchData & TwoTouchData, TwoPanDataImpl>;
 
 /**
  * Creates the horizontal pan that uses two touches.
+ * @param logger - The logger to use for this interaction
  * @param pxTolerance - The pixel tolerance for considering the line horizontal.
  * @param minLength - The minimal distance from the starting point to the release point for validating the pan
+ * @returns The supplier that will produce the interaction when called
  */
 export function twoHPan(logger: Logger, pxTolerance: number, minLength?: number): () => TwoPan {
     return new InteractionBuilderImpl(name => new XTouchDnD<LineTouchData & TwoTouchData, TwoPanDataImpl>(2, logger,
@@ -37,8 +39,10 @@ export function twoHPan(logger: Logger, pxTolerance: number, minLength?: number)
 
 /**
  * Creates the vertical pan that uses two touches.
+ * @param logger - The logger to use for this interaction
  * @param pxTolerance - The pixel tolerance for considering the line vertical.
  * @param minLength - The minimal distance from the starting point to the release point for validating the pan
+ * @returns The supplier that will produce the interaction when called
  */
 export function twoVPan(logger: Logger, pxTolerance: number, minLength?: number): () => TwoPan {
     return new InteractionBuilderImpl(name => new XTouchDnD<LineTouchData & TwoTouchData, TwoPanDataImpl>(2, logger,
@@ -51,9 +55,10 @@ export function twoVPan(logger: Logger, pxTolerance: number, minLength?: number)
 
 /**
  * Creates a left pan that uses two touches.
+ * @param logger - The logger to use for this interaction
  * @param pxTolerance - The pixel tolerance for considering the line to the left.
  * @param minLength - The minimal distance from the starting point to the release point for validating the pan
- * @param fsm - The optional FSM provided for the interaction
+ * @returns The supplier that will produce the interaction when called
  */
 export function twoLeftPan(logger: Logger, pxTolerance: number, minLength?: number): () => TwoPan {
     return new InteractionBuilderImpl(name => new XTouchDnD<LineTouchData & TwoTouchData, TwoPanDataImpl>(2, logger,
@@ -66,9 +71,10 @@ export function twoLeftPan(logger: Logger, pxTolerance: number, minLength?: numb
 
 /**
  * Creates a right pan that uses two touches.
+ * @param logger - The logger to use for this interaction
  * @param pxTolerance - The pixel tolerance for considering the line to the right.
  * @param minLength - The minimal distance from the starting point to the release point for validating the pan
- * @param fsm - The optional FSM provided for the interaction
+ * @returns The supplier that will produce the interaction when called
  */
 export function twoRightPan(logger: Logger, pxTolerance: number, minLength?: number): () => TwoPan {
     return new InteractionBuilderImpl(name => new XTouchDnD<LineTouchData & TwoTouchData, TwoPanDataImpl>(2, logger,
@@ -81,9 +87,10 @@ export function twoRightPan(logger: Logger, pxTolerance: number, minLength?: num
 
 /**
  * Creates a top pan that uses two touches.
+ * @param logger - The logger to use for this interaction
  * @param pxTolerance - The pixel tolerance for considering the line to the top.
  * @param minLength - The minimal distance from the starting point to the release point for validating the pan
- * @param fsm - The optional FSM provided for the interaction
+ * @returns The supplier that will produce the interaction when called
  */
 export function twoTopPan(logger: Logger, pxTolerance: number, minLength?: number): () => TwoPan {
     return new InteractionBuilderImpl(name => new XTouchDnD<LineTouchData & TwoTouchData, TwoPanDataImpl>(2, logger,
@@ -96,9 +103,10 @@ export function twoTopPan(logger: Logger, pxTolerance: number, minLength?: numbe
 
 /**
  * Creates a bottom pan that uses two touches.
+ * @param logger - The logger to use for this interaction
  * @param pxTolerance - The pixel tolerance for considering the line to the bottom.
  * @param minLength - The minimal distance from the starting point to the release point for validating the pan
- * @param fsm - The optional FSM provided for the interaction
+ * @returns The supplier that will produce the interaction when called
  */
 export function twoBottomPan(logger: Logger, pxTolerance: number, minLength?: number): () => TwoPan {
     return new InteractionBuilderImpl(name => new XTouchDnD<LineTouchData & TwoTouchData, TwoPanDataImpl>(2, logger,

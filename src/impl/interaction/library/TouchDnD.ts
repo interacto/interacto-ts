@@ -43,6 +43,8 @@ export class TouchDnDFSM extends FSMImpl<TouchDnDFSMHandler> {
     /**
      * Creates the FSM.
      * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
+     * @param logger - The logger to use for this interaction
+     * @param dataHandler - The data handler the FSM will use
      * @param movementRequired - Whether the DnD starts after the touch point has begun moving (default)
      * or as soon as the screen is touched. The latter is used for the MultiTouch interaction.
      */
@@ -179,6 +181,7 @@ export interface TouchDnDFSMHandler extends FSMDataHandler {
 export class TouchDnD extends InteractionBase<SrcTgtPointsData<TouchData>, SrcTgtTouchDataImpl, OneTouchDnDFSM> {
     /**
      * Creates the interaction.
+     * @param logger - The logger to use for this interaction
      * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
      * @param fsm - The optional FSM provided for the interaction
      */

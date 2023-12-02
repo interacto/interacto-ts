@@ -10,7 +10,8 @@
     "@typescript-eslint",
     "eslint-plugin-tsdoc",
     "unicorn",
-    "eslint-plugin-array-func"
+    "eslint-plugin-array-func",
+    "import"
   ],
   "env": {
     "browser": true,
@@ -22,7 +23,7 @@
   "overrides": [
     {
       "files": [
-        "test/**/*.test.ts"
+        "test/**/*.ts"
       ],
       "env": {
         "jest": true
@@ -48,7 +49,8 @@
         "max-lines-per-function": "off",
         "object-property-newline": "off",
         "complexity": ["error", { "max": 20 }],
-        "unicorn/no-null": "off"
+        "unicorn/no-null": "off",
+        "jsdoc/require-jsdoc": "off"
       }
     }
   ],
@@ -60,7 +62,8 @@
     "plugin:unicorn/all",
     "plugin:import/recommended",
     "plugin:import/typescript",
-    "plugin:eslint-plugin-array-func/recommended"
+    "plugin:eslint-plugin-array-func/recommended",
+    "plugin:jsdoc/recommended-typescript-error"
   ],
   "rules": {
     "id-length": "off",
@@ -69,8 +72,10 @@
     "@typescript-eslint/prefer-readonly-parameter-types": "off",
     "@typescript-eslint/class-methods-use-this": "off",
 
-    "tsdoc/syntax": "error",
+    "jsdoc/require-param": "off",
 
+    "jsdoc/check-tag-names": ["error", {"definedTags": ["typeParam"]}],
+    "tsdoc/syntax": "error",
     "import/no-deprecated": "error",
     "import/no-empty-named-blocks": "error",
     "import/no-extraneous-dependencies": "error",

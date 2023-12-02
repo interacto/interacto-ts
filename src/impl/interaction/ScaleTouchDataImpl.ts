@@ -72,14 +72,14 @@ export class ScaleTouchDataImpl extends TwoTouchDataImpl implements ScaleTouchDa
     }
 
     /**
-     * Returns the value of the projection of vector1 on vector2
+     * @returns The value of the projection of vector1 on vector2
      */
     public static project(vector1: [number, number], vector2: [number, number]): number {
         return (vector1[0] * vector2[0] + vector1[1] * vector2[1]) / (vector2[0] ** 2 + vector2[1] ** 2);
     }
 
     /**
-     * Returns the distance between point1 and point2
+     * @returns the distance between point1 and point2
      */
     public static distance(point1: [number, number], point2: [number, number]): number {
         return Math.hypot((point2[0] - point1[0]), (point2[1] - point1[1]));

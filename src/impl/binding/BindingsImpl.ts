@@ -176,12 +176,6 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
             .usingInteraction<TouchStart, A>(() => new TouchStart(this.logger));
     }
 
-    /**
-     * Creates a binding that uses the Reciprocal DnD interaction with a touch.
-     * A spring handle can be pressed on a long click to return the element back to its previous position.
-     * @param handle - The selectable part of the spring widget.
-     * @param spring - The line between the handle and the previous position of the element.
-     */
     public reciprocalTouchDnDBinder<A>(handle: EltRef<SVGCircleElement>, spring: EltRef<SVGLineElement>, accInit?: A):
     PartialTouchSrcTgtTypedBinder<A> {
         const anim = new DwellSpringAnimation(handle, spring);
@@ -197,12 +191,6 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
             });
     }
 
-    /**
-     * Creates a binding that uses the multi-touch user interaction.
-     * @param nbTouches - The number of required touches.
-     * A multi-touch starts when all its touches have started.
-     * A multi-touch ends when the number of required touches is greater than the number of touches.
-     */
     public multiTouchBinder<A>(nbTouches: number, accInit?: A): PartialMultiTouchTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<MultiTouch, A>(() => new MultiTouch(nbTouches, false, this.logger));
@@ -223,21 +211,11 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
             .usingInteraction<FourTouchDnD, A>(() => new FourTouchDnD(this.logger));
     }
 
-    /**
-     * Creates a binding that uses the tap user interaction.
-     * @param nbTap - The number of required taps.
-     * If this number is not reached after a timeout, the interaction is cancelled.
-     */
     public tapBinder<A>(nbTap: number, accInit?: A): PartialTapsTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<Tap, A>(() => new Tap(nbTap, this.logger));
     }
 
-    /**
-     * Creates a binding that uses the long touch interaction.
-     * @param duration - The duration of the touch to end the user interaction.
-     * If this duration is not reached, the interaction is cancelled.
-     */
     public longTouchBinder<A>(duration: number, accInit?: A): PartialTouchTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<LongTouch, A>(() => new LongTouch(duration, this.logger));
@@ -330,116 +308,66 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
             .usingInteraction<Scale, A>(scale(this.logger, pxTolerance));
     }
 
-    /**
-     * Creates a binding that uses the click interaction.
-     */
     public clickBinder<A>(accInit?: A): PartialPointTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<Click, A>(() => new Click(this.logger));
     }
 
-    /**
-     * Creates a binding that uses the double click interaction.
-     */
     public dbleClickBinder<A>(accInit?: A): PartialUpdatePointTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<DoubleClick, A>(() => new DoubleClick(this.logger));
     }
 
-    /**
-     * Creates a binding that uses the MouseUp (mouse button released) interaction.
-     */
     public mouseUpBinder<A>(accInit?: A): PartialPointTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<MouseUp, A>(() => new MouseUp(this.logger));
     }
 
-    /**
-     * Creates a binding that uses the MouseDown (mouse button pressed) interaction.
-     */
     public mouseDownBinder<A>(accInit?: A): PartialPointTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<MouseDown, A>(() => new MouseDown(this.logger));
     }
 
-    /**
-     * Creates a binding that uses the LongMouseDown
-     * (mouse button pressed for a certain amount of time) interaction.
-     * @param duration - The duration of the pressure to end the user interaction.
-     * If this duration is not reached, the interaction is cancelled.
-     */
     public longMouseDownBinder<A>(duration: number, accInit?: A): PartialUpdatePointTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<LongMouseDown, A>(() => new LongMouseDown(duration, this.logger));
     }
 
-    /**
-     * Creates a binding for clicking n times.
-     * @param nbClicks - The number of clicks to do.
-     * If this number is not reached, the interaction is cancelled after a timeout of 1s.
-     */
     public clicksBinder<A>(nbClicks: number, accInit?: A): PartialPointsTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<Clicks, A>(() => new Clicks(nbClicks, this.logger));
     }
 
-    /**
-     * Creates a binding that uses the MouseLeave (mouse cursor leaves the element) interaction.
-     * @param withBubbling - True: event bubbling is enabled and events on child elements will be registered
-     */
     public mouseLeaveBinder<A>(withBubbling: boolean, accInit?: A): PartialPointTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<MouseLeave, A>(() => new MouseLeave(withBubbling, this.logger));
     }
 
-    /**
-     * Creates a binding that uses the MouseEnter (mouse cursor enters the element) interaction.
-     * @param withBubbling - True: event bubbling is enabled and events on child elements will be registered
-     */
     public mouseEnterBinder<A>(withBubbling: boolean, accInit?: A): PartialPointTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<MouseEnter, A>(() => new MouseEnter(withBubbling, this.logger));
     }
 
-    /**
-     * Creates a binding that uses the MouseMove (mouse cursor moves) interaction.
-     */
     public mouseMoveBinder<A>(accInit?: A): PartialPointTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<MouseMove, A>(() => new MouseMove(this.logger));
     }
 
-    /**
-     * Creates a binding that uses the Wheel (user uses a mouse scrolling wheel) interaction.
-     */
     public wheelBinder<A>(accInit?: A): PartialWheelTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<Wheel, A>(() => new Wheel(this.logger));
     }
 
-    /**
-     * Creates a binding that uses the mouse scroll interaction.
-     */
     public scrollBinder<A>(accInit?: A): PartialScrollTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<Scroll, A>(() => new Scroll(this.logger));
     }
 
-    /**
-     * Creates a binding that uses the DnD interaction.
-     * @param cancellable - True: the escape key will cancel the DnD.
-     */
     public dndBinder<A>(cancellable: boolean, accInit?: A): PartialPointSrcTgtTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<DnD, A>(() => new DnD(cancellable, this.logger));
     }
 
-    /**
-     * Creates a binding that uses the Reciprocal DnD interaction.
-     * A spring handle can be pressed on a long click to return the element back to its previous position.
-     * @param handle - The selectable part of the spring widget.
-     * @param spring - The line between the handle and the previous position of the element.
-     */
     public reciprocalDndBinder<A>(handle: EltRef<SVGCircleElement>, spring: EltRef<SVGLineElement>, accInit?: A): PartialPointSrcTgtTypedBinder<A> {
         const anim = new DwellSpringAnimation(handle, spring);
 
@@ -454,27 +382,16 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
             });
     }
 
-    /**
-     * Creates a binding that uses the drag lock interaction.
-     */
     public dragLockBinder<A>(accInit?: A): PartialPointSrcTgtTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<DragLock, A>(() => new DragLock(this.logger));
     }
 
-    /**
-     * Creates a binding that uses the KeyUp (key released) interaction.
-     * @param modifierAccepted - True: the interaction will consider key modifiers.
-     */
     public keyUpBinder<A>(modifierAccepted: boolean, accInit?: A): PartialKeyTypedBinder<A> {
         return new KeysBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<KeyUp, A>(() => new KeyUp(this.logger, modifierAccepted));
     }
 
-    /**
-     * Creates a binding that uses the KeyDown (key pressed) interaction.
-     * @param modifierAccepted - True: the interaction will consider key modifiers.
-     */
     public keyDownBinder<A>(modifierAccepted: boolean, accInit?: A): PartialKeyTypedBinder<A> {
         return new KeysBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<KeyDown, A>(() => new KeyDown(this.logger, modifierAccepted));

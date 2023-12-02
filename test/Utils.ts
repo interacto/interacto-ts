@@ -18,6 +18,7 @@ import type {TouchData} from "../src/api/interaction/TouchData";
 
 /**
  * Flushes the ongoing promises
+ * @returns The promise to flush.
  */
 export async function flushPromises(): Promise<unknown> {
     jest.useRealTimers();

@@ -73,7 +73,7 @@ export class MultiTouchDataImpl implements MultiTouchData, Flushable {
     }
 
     /**
-     * Returns true if the line of each touch is relatively horizontal and in the same direction.
+     * @returns True if the line of each touch is relatively horizontal and in the same direction.
      * @param pxTolerance - The pixel tolerance for considering the line horizontal.
      */
     public isHorizontal(pxTolerance: number): boolean {
@@ -93,7 +93,7 @@ export class MultiTouchDataImpl implements MultiTouchData, Flushable {
     }
 
     /**
-     * Returns true if the line of each touch is relatively vertical and in the same direction.
+     * @returns True if the line of each touch is relatively vertical and in the same direction.
      * @param pxTolerance - The pixel tolerance for considering the lines vertical.
      */
     public isVertical(pxTolerance: number): boolean {

@@ -18,10 +18,12 @@ import type {Logger} from "../../../api/logging/Logger";
 
 /**
  * Creates the horizontal pan (or a swipe if minVelocity is used).
+ * @param logger - The logger to use for this interaction
  * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
  * @param pxTolerance - The pixel tolerance for considering the line horizontal.
  * @param minLength - The minimal distance from the starting point to the release point for validating the pan
  * @param minVelocity - The minimal minVelocity to reach for validating the swipe. In pixels per second.
+ * @returns The supplier that will produce the interaction when called
  */
 export function hPan(logger: Logger, cancellable: boolean,
                      pxTolerance: number, minLength?: number, minVelocity?: number): () => TouchDnD {
@@ -35,10 +37,12 @@ export function hPan(logger: Logger, cancellable: boolean,
 
 /**
  * Creates the vertical pan (or a swipe if minVelocity is used).
+ * @param logger - The logger to use for this interaction
  * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
  * @param pxTolerance - The pixel tolerance for considering the line vertical.
  * @param minLength - The minimal distance from the starting point to the release point for validating the pan
  * @param minVelocity - The minimal minVelocity to reach for validating the swipe. In pixels per second.
+ * @returns The supplier that will produce the interaction when called
  */
 export function vPan(logger: Logger, cancellable: boolean,
                      pxTolerance: number, minLength?: number, minVelocity?: number): () => TouchDnD {
@@ -52,10 +56,12 @@ export function vPan(logger: Logger, cancellable: boolean,
 
 /**
  * Creates a left pan (or a swipe if minVelocity is used).
+ * @param logger - The logger to use for this interaction
  * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
  * @param pxTolerance - The pixel tolerance for considering the line to the left.
  * @param minLength - The minimal distance from the starting point to the release point for validating the pan
  * @param minVelocity - The minimal minVelocity to reach for validating the swipe. In pixels per second.
+ * @returns The supplier that will produce the interaction when called
  */
 export function leftPan(logger: Logger, cancellable: boolean,
                         pxTolerance: number, minLength?: number, minVelocity?: number): () => TouchDnD {
@@ -69,10 +75,12 @@ export function leftPan(logger: Logger, cancellable: boolean,
 
 /**
  * Creates a right pan (or a swipe if minVelocity is used).
+ * @param logger - The logger to use for this interaction
  * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
  * @param pxTolerance - The pixel tolerance for considering the line to the right.
  * @param minLength - The minimal distance from the starting point to the release point for validating the pan
  * @param minVelocity - The minimal minVelocity to reach for validating the swipe. In pixels per second.
+ * @returns The supplier that will produce the interaction when called
  */
 export function rightPan(logger: Logger, cancellable: boolean,
                          pxTolerance: number, minLength?: number, minVelocity?: number): () => TouchDnD {
@@ -86,10 +94,12 @@ export function rightPan(logger: Logger, cancellable: boolean,
 
 /**
  * Creates a top pan (or a swipe if minVelocity is used).
+ * @param logger - The logger to use for this interaction
  * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
  * @param pxTolerance - The pixel tolerance for considering the line to the top.
  * @param minLength - The minimal distance from the starting point to the release point for validating the pan
  * @param minVelocity - The minimal minVelocity to reach for validating the swipe. In pixels per second.
+ * @returns The supplier that will produce the interaction when called
  */
 export function topPan(logger: Logger, cancellable: boolean,
                        pxTolerance: number, minLength?: number, minVelocity?: number): () => TouchDnD {
@@ -103,10 +113,12 @@ export function topPan(logger: Logger, cancellable: boolean,
 
 /**
  * Creates a bottom pan (or a swipe if minVelocity is used).
+ * @param logger - The logger to use for this interaction
  * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
  * @param pxTolerance - The pixel tolerance for considering the line to the bottom.
  * @param minLength - The minimal distance from the starting point to the release point for validating the pan
  * @param minVelocity - The minimal minVelocity to reach for validating the swipe. In pixels per second.
+ * @returns The supplier that will produce the interaction when called
  */
 export function bottomPan(logger: Logger, cancellable: boolean,
                           pxTolerance: number, minLength?: number, minVelocity?: number): () => TouchDnD {

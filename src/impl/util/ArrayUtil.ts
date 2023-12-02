@@ -12,6 +12,11 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+/**
+ * Removes the given element from the array.
+ * @param array - The array to mutate.
+ * @param elt - The element to remove.
+ */
 export function remove<T>(array: Array<T>, elt: T): void {
     const index = array.indexOf(elt);
     if (index > -1) {
@@ -19,6 +24,12 @@ export function remove<T>(array: Array<T>, elt: T): void {
     }
 }
 
+/**
+ * Removes the element at the given position.
+ * @param array - The array to mutate.
+ * @param index - The index where to remove
+ * @returns The removed element or nothing.
+ */
 export function removeAt<T>(array: Array<T>, index: number): T | undefined {
     if (index > -1) {
         return array.splice(index, 1)[0];

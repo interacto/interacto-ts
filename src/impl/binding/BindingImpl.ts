@@ -82,13 +82,15 @@ implements Binding<C, I, A, D> {
     /**
      * Creates a binding.
      * @param continuousExecution - Specifies whether the command must be executed on each step of the interaction.
+     * @param interaction - The user interaction of the binding.
      * @param cmdProducer - The type of the command that will be created. Used to instantiate the command by reflexivity.
      * The class must be public and must have a constructor with no parameter.
-     * @param interaction - The user interaction of the binding.
      * @param widgets - The widgets on which the binding will operate.
      * @param undoHistory - The undo/redo history.
      * @param logger - The logger to use
+     * @param linterRules - The linting rules to use
      * @param name - The optional name of the binding. If not provided, computed based on the interaction and command names
+     * @param accInit - The initial accumulator to use during the binding execution.
      */
     public constructor(continuousExecution: boolean, interaction: I, cmdProducer: (i?: D) => C,
                        widgets: ReadonlyArray<unknown>, undoHistory: UndoHistoryBase, logger: Logger,

@@ -67,21 +67,21 @@ export class BindingsContext implements BindingsObserver {
     }
 
     /**
-     * Returns a read-only array of the gathered bindings.
+     * @returns A read-only array of the gathered bindings.
      */
     public get bindings(): ReadonlyArray<Binding<Command, Interaction<InteractionData>, unknown>> {
         return this.binds;
     }
 
     /**
-     * Returns a read-only array of the commands produced by the gathered bindings.
+     * @returns A read-only array of the commands produced by the gathered bindings.
      */
     public get commands(): ReadonlyArray<Command> {
         return this.cmds.map(tuple => tuple[0]);
     }
 
     /**
-     * Returns the command at the given index. The command is casted into the provided generic type.
+     * @returns The command at the given index. The command is casted into the provided generic type.
      * @param index - The index of the command (in the order of production)
      * @typeParam C - The type of the command to return.
      */
@@ -90,7 +90,7 @@ export class BindingsContext implements BindingsObserver {
     }
 
     /**
-     * Returns the commands produced by the given binding.
+     * @returns The commands produced by the given binding.
      * @param binding - binding The binding to consider
      */
     public getCmdsProducedBy(binding: Binding<Command, Interaction<InteractionData>, unknown>): ReadonlyArray<Command> {

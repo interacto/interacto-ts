@@ -34,7 +34,10 @@ export class KeysTypedFSM extends FSMImpl<KeyTypedFSMHandler> {
     /** The time gap between the two spinner events. */
     private static readonly timeGap: number = 1000;
 
-    /** The supplier that provides the time gap. */
+    /**
+     * The supplier that provides the time gap.
+     * @returns The time gap.
+     */
     private static readonly timeGapSupplier: () => number = () => KeysTypedFSM.getTimeGap();
 
     private static getTimeGap(): number {

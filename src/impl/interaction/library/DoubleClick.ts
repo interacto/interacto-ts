@@ -27,7 +27,10 @@ export class DoubleClickFSM extends FSMImpl<FSMDataHandler> {
     /** The time gap between the two spinner events. */
     private static timeGap = 300;
 
-    /** The supplier that provides the time gap. */
+    /**
+     * The supplier that provides the time gap.
+     * @returns The time gap
+     */
     private static readonly timeGapSupplier: () => number = () => DoubleClickFSM.getTimeGap();
 
     /**
