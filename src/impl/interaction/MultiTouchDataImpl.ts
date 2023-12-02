@@ -19,15 +19,27 @@ import type {SrcTgtPointsData} from "../../api/interaction/SrcTgtPointsData";
 import type {TouchData} from "../../api/interaction/TouchData";
 
 /**
+ * Base class for multi-touch data.
+ */
+export abstract class MultiTouchDataBase implements MultiTouchData {
+    public readonly abstract touches: ReadonlyArray<SrcTgtPointsData<TouchData>>;
+
+    public velocity(direction: "all" | "horiz" | "vert"): number {
+        return this.touches.reduce((sum, t) => sum + t.velocity(direction), 0) / this.touches.length;
+    }
+}
+
+/**
  * Multi-touch interaction data implementation
  */
-export class MultiTouchDataImpl implements MultiTouchData, Flushable {
+export class MultiTouchDataImpl extends MultiTouchDataBase implements Flushable {
     protected readonly touchesData: Map<number, SrcTgtTouchDataImpl>;
 
     /**
      * Creates the interaction data
      */
     public constructor() {
+        super();
         this.touchesData = new Map<number, SrcTgtTouchDataImpl>();
     }
 
