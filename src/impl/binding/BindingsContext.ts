@@ -81,8 +81,8 @@ export class BindingsContext implements BindingsObserver {
     }
 
     /**
-     * @returns The command at the given index. The command is casted into the provided generic type.
      * @param index - The index of the command (in the order of production)
+     * @returns The command at the given index. The command is casted into the provided generic type.
      * @typeParam C - The type of the command to return.
      */
     public getCmd<C extends Command>(index: number): C | undefined {
@@ -90,8 +90,8 @@ export class BindingsContext implements BindingsObserver {
     }
 
     /**
-     * @returns The commands produced by the given binding.
      * @param binding - binding The binding to consider
+     * @returns The commands produced by the given binding.
      */
     public getCmdsProducedBy(binding: Binding<Command, Interaction<InteractionData>, unknown>): ReadonlyArray<Command> {
         return this.cmds

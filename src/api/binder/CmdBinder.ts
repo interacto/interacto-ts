@@ -42,9 +42,9 @@ export interface CmdBinder<C extends Command> extends CmdBinderBuilder<C> {
     /**
      * Defines how to create the user interaction that the binding will use to create UI commands.
      * @param fn - The supplier that will return a new user interaction.
+     * @returns A clone of the current binder to chain the building configuration.
      * @typeParam D - The user interaction data type
      * @typeParam I - The user interaction type
-     * @returns A clone of the current binder to chain the building configuration.
      */
     usingInteraction<I extends Interaction<D>, A, D extends InteractionData = InteractionDataType<I>>
     (fn: () => I): InteractionCmdBinder<C, I, A, D>;

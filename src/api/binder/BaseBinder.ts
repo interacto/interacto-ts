@@ -45,8 +45,8 @@ export interface BaseBinder extends BaseBinderBuilder {
     /**
      * Defines how to create the UI command that the binding will produce.
      * @param fn - The supplier that will return a new UI command on each call.
-     * @typeParam C - The type of the UI command
      * @returns A clone of the current binder to chain the building configuration.
+     * @typeParam C - The type of the UI command
      */
     toProduce<C extends Command>(fn: () => C): CmdBinder<C>;
 
@@ -60,9 +60,9 @@ export interface BaseBinder extends BaseBinderBuilder {
     /**
      * Defines how to create the user interaction that the binding will use to create UI commands.
      * @param fn - The supplier that will return an instance of the user interaction to use. Called once.
+     * @returns A clone of the current binder to chain the building configuration.
      * @typeParam D - The user interaction data type
      * @typeParam I - The user interaction type
-     * @returns A clone of the current binder to chain the building configuration.
      */
     usingInteraction<I extends Interaction<D>, A, D extends InteractionData = InteractionDataType<I>>(fn: () => I): InteractionBinder<I, A, D>;
 }
