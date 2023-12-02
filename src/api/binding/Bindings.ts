@@ -242,49 +242,55 @@ export abstract class Bindings<H extends UndoHistoryBase> {
     /**
      * Creates a binding that uses a vertical pan interaction (two-touch).
      * @param minLength - The minimal distance from the starting point to the release point for validating the pan
+     * @param minVelocity - The pan while be a swipe: the minimal minVelocity to reach for validating the swipe. In pixels per second.
      * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
      */
-    public abstract twoPanVerticalBinder<A>(pxTolerance: number, minLength?: number, accInit?: A):
+    public abstract twoPanVerticalBinder<A>(pxTolerance: number, minLength?: number, minVelocity?: number, accInit?: A):
     PartialTwoPanTypedBinder<A>;
 
     /**
      * Creates a binding that uses a vertical pan interaction (two-touch).
      * @param minLength - The minimal distance from the starting point to the release point for validating the pan
+     * @param minVelocity - The pan while be a swipe: the minimal minVelocity to reach for validating the swipe. In pixels per second.
      * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
      */
-    public abstract twoPanHorizontalBinder<A>(pxTolerance: number, minLength?: number, accInit?: A):
+    public abstract twoPanHorizontalBinder<A>(pxTolerance: number, minLength?: number, minVelocity?: number, accInit?: A):
     PartialTwoPanTypedBinder<A>;
 
     /**
      * Creates a binding that uses a left pan interaction (two-touch).
      * @param minLength - The minimal distance from the starting point to the release point for validating the pan
+     * @param minVelocity - The pan while be a swipe: the minimal minVelocity to reach for validating the swipe. In pixels per second.
      * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
      */
-    public abstract twoPanLeftBinder<A>(pxTolerance: number, minLength?: number, accInit?: A):
+    public abstract twoPanLeftBinder<A>(pxTolerance: number, minLength?: number, minVelocity?: number, accInit?: A):
     PartialTwoPanTypedBinder<A>;
 
     /**
      * Creates a binding that uses a right pan interaction (two-touch).
      * @param minLength - The minimal distance from the starting point to the release point for validating the pan
+     * @param minVelocity - The pan while be a swipe: the minimal minVelocity to reach for validating the swipe. In pixels per second.
      * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
      */
-    public abstract twoPanRightBinder<A>(pxTolerance: number, minLength?: number, accInit?: A):
+    public abstract twoPanRightBinder<A>(pxTolerance: number, minLength?: number, minVelocity?: number, accInit?: A):
     PartialTwoPanTypedBinder<A>;
 
     /**
      * Creates a binding that uses a top pan interaction (two-touch).
      * @param minLength - The minimal distance from the starting point to the release point for validating the pan
+     * @param minVelocity - The pan while be a swipe: the minimal minVelocity to reach for validating the swipe. In pixels per second.
      * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
      */
-    public abstract twoPanTopBinder<A>(pxTolerance: number, minLength?: number, accInit?: A):
+    public abstract twoPanTopBinder<A>(pxTolerance: number, minLength?: number, minVelocity?: number, accInit?: A):
     PartialTwoPanTypedBinder<A>;
 
     /**
      * Creates a binding that uses a bottom pan interaction (two-touch).
      * @param minLength - The minimal distance from the starting point to the release point for validating the pan
+     * @param minVelocity - The pan while be a swipe: the minimal minVelocity to reach for validating the swipe. In pixels per second.
      * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
      */
-    public abstract twoPanBottomBinder<A>(pxTolerance: number, minLength?: number, accInit?: A):
+    public abstract twoPanBottomBinder<A>(pxTolerance: number, minLength?: number, minVelocity?: number, accInit?: A):
     PartialTwoPanTypedBinder<A>;
 
     /**

@@ -12,6 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import {MultiTouchDataBase} from "./MultiTouchDataImpl";
 import {SrcTgtTouchDataImpl} from "./SrcTgtTouchDataImpl";
 import type {EventModifierData} from "../../api/interaction/EventModifierData";
 import type {SrcTgtPointsData} from "../../api/interaction/SrcTgtPointsData";
@@ -22,12 +23,13 @@ import type {UnitInteractionData} from "../../api/interaction/UnitInteractionDat
 /**
  * The implementation class of TwoTouchData
  */
-export abstract class TwoTouchDataImpl implements TwoTouchData {
+export abstract class TwoTouchDataImpl extends MultiTouchDataBase implements TwoTouchData {
     protected readonly t1: SrcTgtTouchDataImpl;
 
     protected readonly t2: SrcTgtTouchDataImpl;
 
     protected constructor() {
+        super();
         this.t1 = new SrcTgtTouchDataImpl();
         this.t2 = new SrcTgtTouchDataImpl();
     }

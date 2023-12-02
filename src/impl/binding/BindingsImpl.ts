@@ -262,40 +262,40 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
             .usingInteraction<TouchDnD, A>(bottomPan(this.logger, cancellable, pxTolerance, minLength, minVelocity));
     }
 
-    public twoPanVerticalBinder<A>(pxTolerance: number, minLength?: number, accInit?: A):
+    public twoPanVerticalBinder<A>(pxTolerance: number, minLength?: number, minVelocity?: number, accInit?: A):
     PartialTwoPanTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
-            .usingInteraction<TwoPan, A>(twoVPan(this.logger, pxTolerance, minLength));
+            .usingInteraction<TwoPan, A>(twoVPan(this.logger, pxTolerance, minLength, minVelocity));
     }
 
-    public twoPanHorizontalBinder<A>(pxTolerance: number, minLength?: number, accInit?: A):
+    public twoPanHorizontalBinder<A>(pxTolerance: number, minLength?: number, minVelocity?: number, accInit?: A):
     PartialTwoPanTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
-            .usingInteraction<TwoPan, A>(twoHPan(this.logger, pxTolerance, minLength));
+            .usingInteraction<TwoPan, A>(twoHPan(this.logger, pxTolerance, minLength, minVelocity));
     }
 
-    public twoPanLeftBinder<A>(pxTolerance: number, minLength?: number, accInit?: A):
+    public twoPanLeftBinder<A>(pxTolerance: number, minLength?: number, minVelocity?: number, accInit?: A):
     PartialTwoPanTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
-            .usingInteraction<TwoPan, A>(twoLeftPan(this.logger, pxTolerance, minLength));
+            .usingInteraction<TwoPan, A>(twoLeftPan(this.logger, pxTolerance, minLength, minVelocity));
     }
 
-    public twoPanRightBinder<A>(pxTolerance: number, minLength?: number, accInit?: A):
+    public twoPanRightBinder<A>(pxTolerance: number, minLength?: number, minVelocity?: number, accInit?: A):
     PartialTwoPanTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
-            .usingInteraction<TwoPan, A>(twoRightPan(this.logger, pxTolerance, minLength));
+            .usingInteraction<TwoPan, A>(twoRightPan(this.logger, pxTolerance, minLength, minVelocity));
     }
 
-    public twoPanTopBinder<A>(pxTolerance: number, minLength?: number, accInit?: A):
+    public twoPanTopBinder<A>(pxTolerance: number, minLength?: number, minVelocity?: number, accInit?: A):
     PartialTwoPanTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
-            .usingInteraction<TwoPan, A>(twoTopPan(this.logger, pxTolerance, minLength));
+            .usingInteraction<TwoPan, A>(twoTopPan(this.logger, pxTolerance, minLength, minVelocity));
     }
 
-    public twoPanBottomBinder<A>(pxTolerance: number, minLength?: number, accInit?: A):
+    public twoPanBottomBinder<A>(pxTolerance: number, minLength?: number, minVelocity?: number, accInit?: A):
     PartialTwoPanTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
-            .usingInteraction<TwoPan, A>(twoBottomPan(this.logger, pxTolerance, minLength));
+            .usingInteraction<TwoPan, A>(twoBottomPan(this.logger, pxTolerance, minLength, minVelocity));
     }
 
     public rotateBinder<A>(pxTolerance: number, accInit?: A): PartialRotateTypedBinder<A> {

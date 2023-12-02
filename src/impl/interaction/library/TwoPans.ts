@@ -26,13 +26,15 @@ export type TwoPan = XTouchDnD<LineTouchData & TwoTouchData, TwoPanDataImpl>;
  * @param logger - The logger to use for this interaction
  * @param pxTolerance - The pixel tolerance for considering the line horizontal.
  * @param minLength - The minimal distance from the starting point to the release point for validating the pan
+ * @param minVelocity - The minimal minVelocity to reach for validating the swipe. In pixels per second.
  * @returns The supplier that will produce the interaction when called
  */
-export function twoHPan(logger: Logger, pxTolerance: number, minLength?: number): () => TwoPan {
+export function twoHPan(logger: Logger, pxTolerance: number, minLength?: number, minVelocity?: number): () => TwoPan {
     return new InteractionBuilderImpl(name => new XTouchDnD<LineTouchData & TwoTouchData, TwoPanDataImpl>(2, logger,
         new TwoPanDataImpl(), name, undefined, true))
         .firstAndThen(data => data.isHorizontal(pxTolerance))
-        .end(data => minLength === undefined || Math.abs(data.diffScreenX) >= minLength)
+        .end(data => (minLength === undefined || Math.abs(data.diffScreenX) >= minLength) &&
+                    (minVelocity === undefined || data.velocity("horiz") >= minVelocity))
         .name(twoHPan.name)
         .build();
 }
@@ -42,13 +44,15 @@ export function twoHPan(logger: Logger, pxTolerance: number, minLength?: number)
  * @param logger - The logger to use for this interaction
  * @param pxTolerance - The pixel tolerance for considering the line vertical.
  * @param minLength - The minimal distance from the starting point to the release point for validating the pan
+ * @param minVelocity - The minimal minVelocity to reach for validating the swipe. In pixels per second.
  * @returns The supplier that will produce the interaction when called
  */
-export function twoVPan(logger: Logger, pxTolerance: number, minLength?: number): () => TwoPan {
+export function twoVPan(logger: Logger, pxTolerance: number, minLength?: number, minVelocity?: number): () => TwoPan {
     return new InteractionBuilderImpl(name => new XTouchDnD<LineTouchData & TwoTouchData, TwoPanDataImpl>(2, logger,
         new TwoPanDataImpl(), name, undefined, true))
         .firstAndThen(data => data.isVertical(pxTolerance))
-        .end(data => minLength === undefined || Math.abs(data.diffScreenY) >= minLength)
+        .end(data => (minLength === undefined || Math.abs(data.diffScreenY) >= minLength) &&
+                    (minVelocity === undefined || data.velocity("horiz") >= minVelocity))
         .name(twoVPan.name)
         .build();
 }
@@ -58,13 +62,15 @@ export function twoVPan(logger: Logger, pxTolerance: number, minLength?: number)
  * @param logger - The logger to use for this interaction
  * @param pxTolerance - The pixel tolerance for considering the line to the left.
  * @param minLength - The minimal distance from the starting point to the release point for validating the pan
+ * @param minVelocity - The minimal minVelocity to reach for validating the swipe. In pixels per second.
  * @returns The supplier that will produce the interaction when called
  */
-export function twoLeftPan(logger: Logger, pxTolerance: number, minLength?: number): () => TwoPan {
+export function twoLeftPan(logger: Logger, pxTolerance: number, minLength?: number, minVelocity?: number): () => TwoPan {
     return new InteractionBuilderImpl(name => new XTouchDnD<LineTouchData & TwoTouchData, TwoPanDataImpl>(2, logger,
         new TwoPanDataImpl(), name, undefined, true))
         .firstAndThen(data => data.isLeft(pxTolerance))
-        .end(data => minLength === undefined || Math.abs(data.diffScreenX) >= minLength)
+        .end(data => (minLength === undefined || Math.abs(data.diffScreenX) >= minLength) &&
+                    (minVelocity === undefined || data.velocity("horiz") >= minVelocity))
         .name(twoLeftPan.name)
         .build();
 }
@@ -74,13 +80,15 @@ export function twoLeftPan(logger: Logger, pxTolerance: number, minLength?: numb
  * @param logger - The logger to use for this interaction
  * @param pxTolerance - The pixel tolerance for considering the line to the right.
  * @param minLength - The minimal distance from the starting point to the release point for validating the pan
+ * @param minVelocity - The minimal minVelocity to reach for validating the swipe. In pixels per second.
  * @returns The supplier that will produce the interaction when called
  */
-export function twoRightPan(logger: Logger, pxTolerance: number, minLength?: number): () => TwoPan {
+export function twoRightPan(logger: Logger, pxTolerance: number, minLength?: number, minVelocity?: number): () => TwoPan {
     return new InteractionBuilderImpl(name => new XTouchDnD<LineTouchData & TwoTouchData, TwoPanDataImpl>(2, logger,
         new TwoPanDataImpl(), name, undefined, true))
         .firstAndThen(data => data.isRight(pxTolerance))
-        .end(data => minLength === undefined || Math.abs(data.diffScreenX) >= minLength)
+        .end(data => (minLength === undefined || Math.abs(data.diffScreenX) >= minLength) &&
+                    (minVelocity === undefined || data.velocity("horiz") >= minVelocity))
         .name(twoRightPan.name)
         .build();
 }
@@ -90,13 +98,15 @@ export function twoRightPan(logger: Logger, pxTolerance: number, minLength?: num
  * @param logger - The logger to use for this interaction
  * @param pxTolerance - The pixel tolerance for considering the line to the top.
  * @param minLength - The minimal distance from the starting point to the release point for validating the pan
+ * @param minVelocity - The minimal minVelocity to reach for validating the swipe. In pixels per second.
  * @returns The supplier that will produce the interaction when called
  */
-export function twoTopPan(logger: Logger, pxTolerance: number, minLength?: number): () => TwoPan {
+export function twoTopPan(logger: Logger, pxTolerance: number, minLength?: number, minVelocity?: number): () => TwoPan {
     return new InteractionBuilderImpl(name => new XTouchDnD<LineTouchData & TwoTouchData, TwoPanDataImpl>(2, logger,
         new TwoPanDataImpl(), name, undefined, true))
         .firstAndThen(data => data.isTop(pxTolerance))
-        .end(data => minLength === undefined || Math.abs(data.diffScreenY) >= minLength)
+        .end(data => (minLength === undefined || Math.abs(data.diffScreenY) >= minLength) &&
+                    (minVelocity === undefined || data.velocity("horiz") >= minVelocity))
         .name(twoTopPan.name)
         .build();
 }
@@ -106,13 +116,15 @@ export function twoTopPan(logger: Logger, pxTolerance: number, minLength?: numbe
  * @param logger - The logger to use for this interaction
  * @param pxTolerance - The pixel tolerance for considering the line to the bottom.
  * @param minLength - The minimal distance from the starting point to the release point for validating the pan
+ * @param minVelocity - The minimal minVelocity to reach for validating the swipe. In pixels per second.
  * @returns The supplier that will produce the interaction when called
  */
-export function twoBottomPan(logger: Logger, pxTolerance: number, minLength?: number): () => TwoPan {
+export function twoBottomPan(logger: Logger, pxTolerance: number, minLength?: number, minVelocity?: number): () => TwoPan {
     return new InteractionBuilderImpl(name => new XTouchDnD<LineTouchData & TwoTouchData, TwoPanDataImpl>(2, logger,
         new TwoPanDataImpl(), name, undefined, true))
         .firstAndThen(data => data.isBottom(pxTolerance))
-        .end(data => minLength === undefined || Math.abs(data.diffScreenY) >= minLength)
+        .end(data => (minLength === undefined || Math.abs(data.diffScreenY) >= minLength) &&
+            (minVelocity === undefined || data.velocity("horiz") >= minVelocity))
         .name(twoBottomPan.name)
         .build();
 }

@@ -24,4 +24,11 @@ export interface MultiTouchData extends InteractionData {
      * The list of touch data.
      */
     readonly touches: ReadonlyArray<SrcTgtPointsData<TouchData>>;
+
+    /**
+     * The velocity of the move, in pixels per millisecond.
+     * For multi-touch, the velocity is the mean of all the touch velocities.
+     * @param direction - The direciton to consider.
+     */
+    velocity(direction: "all" | "horiz" | "vert"): number;
 }
