@@ -44,6 +44,7 @@ export class SubFSMTransition extends TransitionBase<Event> {
      * @param srcState - The source state of the transition.
      * @param tgtState - The output state of the transition.
      * @param fsm - The inner FSM that composes the transition.
+     * @param action - The action to execute when going through the transition
      */
     public constructor(srcState: OutputState, tgtState: InputState, fsm: FSM,
                        action?: (evt: Event) => void) {

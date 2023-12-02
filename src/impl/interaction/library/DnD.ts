@@ -98,6 +98,9 @@ interface DnDFSMHandler extends FSMDataHandler {
 export class DnD extends InteractionBase<SrcTgtPointsData<PointData>, SrcTgtPointsDataImpl, DnDFSM> {
     /**
      * Creates the interaction.
+     * @param cancellable - True: the interaction can be cancelled
+     * @param logger - The logger to use for this interaction
+     * @param name - The name of the user interaction
      */
     public constructor(cancellable: boolean, logger: Logger, name?: string) {
         const handler: DnDFSMHandler = {

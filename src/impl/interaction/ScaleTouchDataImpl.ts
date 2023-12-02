@@ -72,6 +72,8 @@ export class ScaleTouchDataImpl extends TwoTouchDataImpl implements ScaleTouchDa
     }
 
     /**
+     * @param vector1 - The first vector of the projection
+     * @param vector2 -The second vector of the projection
      * @returns The value of the projection of vector1 on vector2
      */
     public static project(vector1: [number, number], vector2: [number, number]): number {
@@ -79,6 +81,8 @@ export class ScaleTouchDataImpl extends TwoTouchDataImpl implements ScaleTouchDa
     }
 
     /**
+     * @param point1 - The first point
+     * @param point2 - The second point
      * @returns the distance between point1 and point2
      */
     public static distance(point1: [number, number], point2: [number, number]): number {

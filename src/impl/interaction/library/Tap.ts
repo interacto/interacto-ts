@@ -46,6 +46,9 @@ export class TapFSM extends FSMImpl<TapFSMHandler> {
 
     /**
      * Creates the Tap FSM
+     * @param nbTaps - The number of taps to support
+     * @param logger - The logger to use for this interaction
+     * @param dataHandler - The data handler the FSM will use
      */
     public constructor(nbTaps: number, logger: Logger, dataHandler: TapFSMHandler) {
         super(logger, dataHandler);
@@ -112,6 +115,8 @@ export class Tap extends InteractionBase<PointsData<TouchData>, PointsDataImpl<T
      * Creates the tap interaction
      * @param numberTaps - The number of taps expected to end the interaction.
      * If this number is not reached after a timeout, the interaction is cancelled.
+     * @param logger - The logger to use for this interaction
+     * @param name - The name of the user interaction
      */
     public constructor(numberTaps: number, logger: Logger, name?: string) {
         const handler: TapFSMHandler = {

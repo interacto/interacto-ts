@@ -42,6 +42,8 @@ interface DatePickedHandler extends FSMDataHandler {
 export class DatePicked extends InteractionBase<WidgetData<HTMLInputElement>, WidgetDataImpl<HTMLInputElement>, DatePickedFSM> {
     /**
      * Creates the interaction.
+     * @param logger - The logger to use for this interaction
+     * @param name - The name of the user interaction
      */
     public constructor(logger: Logger, name?: string) {
         const handler: DatePickedHandler = {

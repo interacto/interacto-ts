@@ -32,6 +32,9 @@ export class ClicksFSM extends FSMImpl<ClicksFSMHandler> {
 
     /**
      * Creates the Clicks FSM
+     * @param nbClicks - The number of clicks to manage
+     * @param logger - The logger to use for this interaction
+     * @param dataHandler - The data handler the FSM will use
      */
     public constructor(nbClicks: number, logger: Logger, dataHandler: ClicksFSMHandler) {
         super(logger, dataHandler);
@@ -82,6 +85,8 @@ export class Clicks extends InteractionBase<MousePointsDataImpl, MousePointsData
      * Creates the clicks interaction
      * @param numberClicks - The number of clicks expected to end the interaction.
      * If this number is not reached after a timeout, the interaction is cancelled.
+     * @param logger - The logger to use for this interaction
+     * @param name - The name of the user interaction
      */
     public constructor(numberClicks: number, logger: Logger, name?: string) {
         const handler: ClicksFSMHandler = {

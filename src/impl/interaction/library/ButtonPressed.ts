@@ -27,6 +27,8 @@ import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 class ButtonPressedFSM extends FSMImpl<ButtonPressedFSMHandler> {
     /**
      * Creates the FSM
+     * @param logger - The logger to use for this interaction
+     * @param dataHandler - The data handler the FSM will use
      */
     public constructor(logger: Logger, dataHandler: ButtonPressedFSMHandler) {
         super(logger, dataHandler);
@@ -49,6 +51,8 @@ export class ButtonPressed extends InteractionBase<WidgetData<HTMLButtonElement>
 WidgetDataImpl<HTMLButtonElement>, FSMImpl<ButtonPressedFSMHandler>> {
     /**
      * Creates the interaction.
+     * @param logger - The logger to use for this interaction
+     * @param name - The name of the user interaction
      */
     public constructor(logger: Logger, name?: string) {
         const handler: ButtonPressedFSMHandler = {

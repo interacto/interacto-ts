@@ -46,6 +46,7 @@ export class ConcurrentAndFSM<F extends FSM, T extends FSMDataHandler> extends F
      * @param logger - The logger to use
      * @param secondaries - The secondary FSMs. Not considered in some steps.
      * @param totalReinit - Defines whether a cancellation of one of the fsms, reinits all the fsms.
+     * @param dataHandler - The data handler the FSM will use
      */
     public constructor(fsms: ReadonlyArray<F>, logger: Logger, secondaries: ReadonlyArray<F> = [],
                        totalReinit = false, dataHandler?: T) {

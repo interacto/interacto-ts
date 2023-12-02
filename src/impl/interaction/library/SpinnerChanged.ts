@@ -73,6 +73,8 @@ export class SpinnerChangedFSM extends FSMImpl<SpinnerChangedHandler> {
 export class SpinnerChanged extends InteractionBase<WidgetData<HTMLInputElement>, WidgetDataImpl<HTMLInputElement>, SpinnerChangedFSM> {
     /**
      * Creates the interaction.
+     * @param logger - The logger to use for this interaction
+     * @param name - The name of the user interaction
      */
     public constructor(logger: Logger, name?: string) {
         const handler: SpinnerChangedHandler = {

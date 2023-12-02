@@ -27,6 +27,9 @@ export class TouchTransition extends TransitionBase<TouchEvent> {
      * Defines a transition.
      * @param srcState - The source state of the transition.
      * @param tgtState - The srcObject state of the transition.
+     * @param eventType - The type of touch event
+     * @param action - The action to execute when going through the transition
+     * @param guard - The guard to fulfil to execute the transition
      */
     public constructor(srcState: OutputState, tgtState: InputState, eventType: TouchEventType,
                        action?: (evt: TouchEvent) => void, guard?: (evt: TouchEvent) => boolean) {

@@ -44,6 +44,8 @@ export class ScrollFSM extends FSMImpl<ScrollFSMHandler> {
 export class Scroll extends InteractionBase<ScrollData, ScrollDataImpl, ScrollFSM> {
     /**
      * Creates the interaction.
+     * @param logger - The logger to use for this interaction
+     * @param name - The name of the user interaction
      */
     public constructor(logger: Logger, name?: string) {
         const handler: ScrollFSMHandler = {

@@ -98,6 +98,8 @@ export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouch
      * Creates the multi-touch interaction
      * @param nbTouches - The number of touches.
      * @param strict - Defines whether too many touches than expected cancelled the ongoing interaction
+     * @param logger - The logger to use for this interaction
+     * @param name - The name of the user interaction
      */
     public constructor(nbTouches: number, strict: boolean, logger: Logger, name?: string) {
         const handler: TouchDnDFSMHandler = {

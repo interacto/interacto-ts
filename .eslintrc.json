@@ -72,8 +72,6 @@
     "@typescript-eslint/prefer-readonly-parameter-types": "off",
     "@typescript-eslint/class-methods-use-this": "off",
 
-    "jsdoc/require-param": "off",
-
     "jsdoc/sort-tags": "error",
     "jsdoc/no-bad-blocks": "error",
     "jsdoc/check-tag-names": ["error", {"definedTags": ["typeParam"]}],

@@ -32,6 +32,8 @@ export class KeysDownFSM extends FSMImpl<KeysDownFSMHandler> {
 
     /**
      * Creates the FSM.
+     * @param logger - The logger to use for this interaction
+     * @param dataHandler - The data handler the FSM will use
      */
     public constructor(logger: Logger, dataHandler: KeysDownFSMHandler) {
         super(logger, dataHandler);
@@ -64,6 +66,8 @@ export class KeysDownFSM extends FSMImpl<KeysDownFSMHandler> {
 export class KeysDown extends InteractionBase<KeysData, KeysDataImpl, KeysDownFSM> {
     /**
      * Creates the user interaction.
+     * @param logger - The logger to use for this interaction
+     * @param name - The name of the user interaction
      */
     public constructor(logger: Logger, name?: string) {
         const handler: KeysDownFSMHandler = {

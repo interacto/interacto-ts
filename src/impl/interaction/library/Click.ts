@@ -32,6 +32,8 @@ export class ClickFSM extends FSMImpl<ClickFSMHandler> {
 
     /**
      * Creates the FSM
+     * @param logger - The logger to use for this interaction
+     * @param dataHandler - The data handler the FSM will use
      */
     public constructor(logger: Logger, dataHandler?: ClickFSMHandler) {
         super(logger, dataHandler);
@@ -63,6 +65,10 @@ export class ClickFSM extends FSMImpl<ClickFSMHandler> {
 export class Click extends InteractionBase<PointData, PointDataImpl, ClickFSM> {
     /**
      * Creates the interaction.
+     * @param logger - The logger to use for this interaction
+     * @param fsm - The optional FSM provided for the interaction
+     * @param data - The interaction data to use
+     * @param name - The name of the user interaction
      */
     public constructor(logger: Logger, fsm?: ClickFSM, data?: PointDataImpl, name?: string) {
         super(fsm ?? new ClickFSM(logger), data ?? new PointDataImpl(), logger, name ?? Click.name);

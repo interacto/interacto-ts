@@ -152,6 +152,8 @@ export class OneTouchDnDFSM extends TouchDnDFSM {
     /**
      * Creates a DnD touch FSM that only works with one touch.
      * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
+     * @param logger - The logger to use for this interaction
+     * @param dataHandler - The data handler the FSM will use
      */
     public constructor(cancellable: boolean, logger: Logger, dataHandler: TouchDnDFSMHandler) {
         super(cancellable, logger, dataHandler, true);
@@ -184,6 +186,7 @@ export class TouchDnD extends InteractionBase<SrcTgtPointsData<TouchData>, SrcTg
      * @param logger - The logger to use for this interaction
      * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
      * @param fsm - The optional FSM provided for the interaction
+     * @param name - The name of the user interaction
      */
     public constructor(logger: Logger, cancellable: boolean, fsm?: OneTouchDnDFSM, name?: string) {
         const handler: TouchDnDFSMHandler = {

@@ -59,6 +59,8 @@ export class KeyTypedFSM extends FSMImpl<KeyTypedFSMHandler> {
 export class KeyTyped extends InteractionBase<KeyData, KeyDataImpl, KeyTypedFSM> {
     /**
      * Creates the user interaction.
+     * @param logger - The logger to use for this interaction
+     * @param name - The name of the user interaction
      */
     public constructor(logger: Logger, name?: string) {
         const handler: KeyTypedFSMHandler = {

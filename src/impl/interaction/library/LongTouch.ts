@@ -32,6 +32,8 @@ class LongTouchFSM extends FSMImpl<LongTouchFSMHandler> {
     /**
      * Creates the long touch FSM
      * @param duration - Defines the duration of the touch interaction.
+     * @param logger - The logger to use for this interaction
+     * @param dataHandler - The data handler the FSM will use
      */
     public constructor(duration: number, logger: Logger, dataHandler: LongTouchFSMHandler) {
         super(logger, dataHandler);
@@ -78,6 +80,8 @@ export class LongTouch extends InteractionBase<TouchData, TouchDataImpl, LongTou
      * Creates the long tap interaction
      * @param duration - The duration of the touch required to ends the user interaction
      * If this duration is not reached, the interaction is cancelled.
+     * @param logger - The logger to use for this interaction
+     * @param name - The name of the user interaction
      */
     public constructor(duration: number, logger: Logger, name?: string) {
         const handler: LongTouchFSMHandler = {

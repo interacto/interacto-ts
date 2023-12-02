@@ -36,6 +36,8 @@ export class LongMouseDownFSM extends FSMImpl<LongMouseDownFSMHandler> {
     /**
      * Creates the long press FSM
      * @param duration - Defines the duration of the long press interaction (in ms).
+     * @param logger - The logger to use for this interaction
+     * @param dataHandler - The data handler the FSM will use
      */
     public constructor(duration: number, logger: Logger, dataHandler: LongMouseDownFSMHandler) {
         super(logger, dataHandler);
@@ -76,6 +78,8 @@ export class LongMouseDown extends InteractionBase<PointData, PointDataImpl, Lon
      * Creates the long press interaction
      * @param duration - The duration of the pressure required to end the user interaction (in ms)
      * If this duration is not reached, the interaction is cancelled.
+     * @param logger - The logger to use for this interaction
+     * @param name - The name of the user interaction
      */
     public constructor(duration: number, logger: Logger, name?: string) {
         const handler: LongMouseDownFSMHandler = {

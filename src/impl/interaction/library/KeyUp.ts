@@ -33,6 +33,8 @@ export class KeyUpFSM extends FSMImpl<KeyUpFSMHandler> {
     /**
      * Creates the FSM.
      * @param modifierAccepted - True: the FSM will consider key modifiers.
+     * @param logger - The logger to use for this interaction
+     * @param dataHandler - The data handler the FSM will use
      */
     public constructor(modifierAccepted: boolean, logger: Logger, dataHandler: KeyUpFSMHandler) {
         super(logger, dataHandler);

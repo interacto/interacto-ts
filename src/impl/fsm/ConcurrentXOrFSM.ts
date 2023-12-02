@@ -34,6 +34,8 @@ export class ConcurrentXOrFSM<F extends FSM, T extends FSMDataHandler> extends F
     /**
      * Creates the FSM
      * @param fsms - The main concurrent FSMs
+     * @param logger - The logger to use for logging FSM messages
+     * @param dataHandler - The data handler the FSM will use
      */
     public constructor(fsms: ReadonlyArray<F>, logger: Logger, dataHandler?: T) {
         // eslint-disable-next-line no-console

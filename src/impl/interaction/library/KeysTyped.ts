@@ -46,6 +46,8 @@ export class KeysTypedFSM extends FSMImpl<KeyTypedFSMHandler> {
 
     /**
      * Creates the FSM.
+     * @param logger - The logger to use for this interaction
+     * @param dataHandler - The data handler the FSM will use
      */
     public constructor(logger: Logger, dataHandler: KeyTypedFSMHandler) {
         super(logger, dataHandler);
@@ -72,6 +74,8 @@ export class KeysTypedFSM extends FSMImpl<KeyTypedFSMHandler> {
 export class KeysTyped extends InteractionBase<KeysData, KeysDataImpl, KeysTypedFSM> {
     /**
      * Creates the user interaction.
+     * @param logger - The logger to use for this interaction
+     * @param name - The name of the user interaction
      */
     public constructor(logger: Logger, name?: string) {
         const handler: KeyTypedFSMHandler = {

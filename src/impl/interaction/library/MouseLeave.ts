@@ -36,6 +36,9 @@ export class MouseLeaveFSM extends FSMImpl<MouseLeaveFSMHandler> {
 
     /**
      * Creates the FSM
+     * @param withBubbling - True: event bubbling will be done
+     * @param logger - The logger to use for this interaction
+     * @param dataHandler - The data handler the FSM will use
      */
     public constructor(withBubbling: boolean, logger: Logger, dataHandler: MouseLeaveFSMHandler) {
         super(logger, dataHandler);
@@ -57,6 +60,9 @@ export class MouseLeaveFSM extends FSMImpl<MouseLeaveFSMHandler> {
 export class MouseLeave extends InteractionBase<PointData, PointDataImpl, MouseLeaveFSM> {
     /**
      * Creates the interaction.
+     * @param withBubbling - True: the event bullebing will be done
+     * @param logger - The logger to use for this interaction
+     * @param name - The name of the user interaction
      */
     public constructor(withBubbling: boolean, logger: Logger, name?: string) {
         const handler: MouseLeaveFSMHandler = {

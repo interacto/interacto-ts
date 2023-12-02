@@ -30,6 +30,8 @@ interface WheelFSMHandler extends FSMDataHandler {
 export class WheelFSM extends FSMImpl<WheelFSMHandler> {
     /**
      * Creates the FSM
+     * @param logger - The logger to use for this interaction
+     * @param dataHandler - The data handler the FSM will use
      */
     public constructor(logger: Logger, dataHandler: WheelFSMHandler) {
         super(logger, dataHandler);
@@ -44,6 +46,10 @@ export class WheelFSM extends FSMImpl<WheelFSMHandler> {
 export class Wheel extends InteractionBase<WheelData, WheelDataImpl, WheelFSM> {
     /**
      * Creates the interaction.
+     * @param logger - The logger to use for this interaction
+     * @param fsm - The optional FSM provided for the interaction
+     * @param data - The interaction data to use
+     * @param name - The name of the user interaction
      */
     public constructor(logger: Logger, fsm?: WheelFSM, data?: WheelDataImpl, name?: string) {
         const handler: WheelFSMHandler = {

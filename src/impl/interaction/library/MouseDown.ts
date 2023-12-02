@@ -41,6 +41,8 @@ interface MouseDownFSMHandler extends FSMDataHandler {
 export class MouseDown extends InteractionBase<PointData, PointDataImpl, MouseDownFSM> {
     /**
      * Creates the interaction.
+     * @param logger - The logger to use for this interaction
+     * @param name - The name of the user interaction
      */
     public constructor(logger: Logger, name?: string) {
         const handler: MouseDownFSMHandler = {

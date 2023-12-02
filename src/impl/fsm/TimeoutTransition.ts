@@ -44,6 +44,7 @@ export class TimeoutTransition extends TransitionBase<Event> {
      * @param tgtState - The output state of the transition.
      * @param timeout - The function that returns the timeout value in ms.
      * @param logger - The logger to use.
+     * @param action - The action to execute when going through the transition
      */
     public constructor(srcState: OutputState, tgtState: InputState, timeout: () => number, logger?: Logger,
                        action?: (evt: Event) => void) {

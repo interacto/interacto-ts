@@ -26,6 +26,10 @@ export class BoxCheckPressedTransition extends TransitionBase<InputEvent> {
 
     /**
      * Creates the transition.
+     * @param srcState - The source state of the transition
+     * @param tgtState - The output state of the transition
+     * @param action - The action to execute when going through the transition
+     * @param guard - The guard to fulfil to execute the transition
      */
     public constructor(srcState: OutputState, tgtState: InputState,
                        action?: (evt: InputEvent) => void, guard?: (evt: InputEvent) => boolean) {

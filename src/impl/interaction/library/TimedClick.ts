@@ -32,6 +32,10 @@ export class TimedClickFSM extends FSMImpl<ClickFSMHandler> {
 
     /**
      * Creates the FSM
+     * @param duration - The max duration of the click
+     * @param logger - The logger to use for this interaction
+     * @param button - The button to be used
+     * @param dataHandler - The data handler the FSM will use
      */
     public constructor(duration: number, logger: Logger, button?: number, dataHandler?: ClickFSMHandler) {
         super(logger, dataHandler);
@@ -77,6 +81,11 @@ export class TimedClick extends InteractionBase<PointData, PointDataImpl, TimedC
      * Creates the interaction.
      * @param duration - The duration of the touch required to ends the user interaction
      * If this duration is not reached, the interaction is cancelled.
+     * @param logger - The logger to use for this interaction
+     * @param button - The mouse button to use
+     * @param fsm - The optional FSM provided for the interaction
+     * @param data - The interaction data to use
+     * @param name - The name of the user interaction
      */
     public constructor(duration: number, logger: Logger, button?: number, fsm?: TimedClickFSM, data?: PointDataImpl, name?: string) {
         super(fsm ?? new TimedClickFSM(duration, logger, button), data ?? new PointDataImpl(), logger, name ?? TimedClick.name);

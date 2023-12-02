@@ -87,6 +87,8 @@ export class FSMImpl<T extends FSMDataHandler> implements FSM {
 
     /**
      * Creates the FSM.
+     * @param logger - The logger to use for logging FSM messages
+     * @param dataHandler - The data handler the FSM will use
      */
     public constructor(logger: Logger, dataHandler?: T) {
         this._dataHandler = dataHandler;
@@ -467,6 +469,7 @@ export class FSMImpl<T extends FSMDataHandler> implements FSM {
 
     /**
      * Notifies handlers that an error occured.
+     * @param err - The error to handle
      */
     protected notifyHandlerOnError(err: unknown): void {
         try {
