@@ -74,7 +74,7 @@ export class TapFSM extends FSMImpl<TapFSMHandler> {
 
         // No multi-touch
         new TouchTransition(this.downState, this.cancelState, "touchstart", undefined,
-            (evt: TouchEvent): boolean => Array.from(evt.touches).some(t => t.identifier === this.touchID));
+            (evt: TouchEvent): boolean => Array.from(evt.touches).some(touch => touch.identifier === this.touchID));
 
         // Required to clean touch events lost by the browser
         new TouchTransition(this.downState, this.downState, "touchstart",
@@ -85,7 +85,7 @@ export class TapFSM extends FSMImpl<TapFSMHandler> {
                 this.dataHandler?.tap(event);
             },
             // To detect the event is lost, checking it is not part of the touches any more
-            (evt: TouchEvent): boolean => Array.from(evt.touches).filter(t => t.identifier === this.touchID).length === 0);
+            (evt: TouchEvent): boolean => Array.from(evt.touches).filter(touch => touch.identifier === this.touchID).length === 0);
 
         new TouchTransition(this.downState, this.addTerminalState("ended"), "touchend", undefined,
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

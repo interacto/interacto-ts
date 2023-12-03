@@ -27,15 +27,15 @@ export interface EltRef<T> {
 
 /**
  * Checks whether the given object matches the EltRef structure.
- * @param o - The object to check
+ * @param obj - The object to check
  * @returns The casted object if is an EltRef.
  */
-export function isEltRef(o: unknown): o is EltRef<EventTarget> {
-    if (o === undefined || o === null) {
+export function isEltRef(obj: unknown): obj is EltRef<EventTarget> {
+    if (obj === undefined || obj === null) {
         return false;
     }
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    return (o as EltRef<unknown>).nativeElement instanceof EventTarget;
+    return (obj as EltRef<unknown>).nativeElement instanceof EventTarget;
 }
 
 /**

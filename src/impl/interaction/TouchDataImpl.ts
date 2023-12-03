@@ -66,9 +66,9 @@ export class TouchDataImpl extends PointingDataBase implements TouchData {
         this.radiusXData = data.radiusX;
         this.radiusYData = data.radiusY;
         this.rotationAngleData = data.rotationAngle;
-        this._allTouches = data.allTouches.map(t => {
+        this._allTouches = data.allTouches.map(touch => {
             const newT = new TouchDataImpl();
-            newT.copy(t);
+            newT.copy(touch);
             return newT;
         });
     }
@@ -102,7 +102,7 @@ export class TouchDataImpl extends PointingDataBase implements TouchData {
             "screenX": touch.screenX,
             "screenY": touch.screenY,
             "target": touch.target,
-            "allTouches": allTouches.map(t => TouchDataImpl.mergeTouchEventData(t, evt, [])),
+            "allTouches": allTouches.map(currTouch => TouchDataImpl.mergeTouchEventData(currTouch, evt, [])),
             "timeStamp": evt.timeStamp,
             "altKey": evt.altKey,
             "shiftKey": evt.shiftKey,

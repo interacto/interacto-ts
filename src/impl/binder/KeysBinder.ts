@@ -65,7 +65,7 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, A, D extend
 
             if (this.isCode) {
                 if (i instanceof KeysDataImpl) {
-                    currentKeys = i.keys.map(k => k.code);
+                    currentKeys = i.keys.map(key => key.code);
                 } else {
                     if (i instanceof KeyDataImpl) {
                         currentKeys = [i.code];
@@ -73,7 +73,7 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, A, D extend
                 }
             } else {
                 if (i instanceof KeysDataImpl) {
-                    currentKeys = i.keys.map(k => k.key);
+                    currentKeys = i.keys.map(key => key.key);
                 } else {
                     if (i instanceof KeyDataImpl) {
                         currentKeys = [i.key];
@@ -82,7 +82,7 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, A, D extend
             }
 
             return (this.keysOrCodes.length === 0 || this.keysOrCodes.length === currentKeys.length &&
-                    currentKeys.every((v: string) => this.keysOrCodes.includes(v)));
+                    currentKeys.every((key: string) => this.keysOrCodes.includes(key)));
         };
 
         this.whenFnArray.push({

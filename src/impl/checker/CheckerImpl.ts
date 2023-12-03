@@ -72,14 +72,14 @@ export class CheckerImpl implements Checker {
                                  binds: ReadonlyArray<Binding<Command, Interaction<InteractionData>, unknown>>): void {
         // support OR by splitting name with -
         this.checkRule("same-interactions", this.getSameInteractionSeverity(binding), binding, binds,
-            b => binding.interaction.name === b.interaction.name,
+            currBinding => binding.interaction.name === currBinding.interaction.name,
             "[same-interactions] Two bindings use the same user interaction on same widget.");
     }
 
     public checkSameData(binding: Binding<Command, Interaction<InteractionData>, unknown>,
                          binds: ReadonlyArray<Binding<Command, Interaction<InteractionData>, unknown>>): void {
         this.checkRule("same-data", this.getSameDataSeverity(binding), binding, binds,
-            b => binding.interaction.data.constructor === b.interaction.data.constructor,
+            currBinding => binding.interaction.data.constructor === currBinding.interaction.data.constructor,
             "[same-data] Two bindings use the same user interaction data type on same widget.");
     }
 
@@ -87,7 +87,7 @@ export class CheckerImpl implements Checker {
                          binds: ReadonlyArray<Binding<Command, Interaction<InteractionData>, unknown>>): void {
         // support OR
         this.checkRule("included", this.getIncludedSeverity(binding), binding, binds,
-            b => this.isIncluded(binding.interaction.name, b.interaction.name),
+            currBinding => this.isIncluded(binding.interaction.name, currBinding.interaction.name),
             "[included] The interaction of the first binding is included into the interaction of a second one.");
     }
 
@@ -97,8 +97,9 @@ export class CheckerImpl implements Checker {
                       predicate: (b: Binding<Command, Interaction<InteractionData>, unknown>) => boolean, msg: string): void {
         if (severity !== "ignore" && !binding.isWhenDefined() &&
             binds
-                .filter(b => b.linterRules.get(ruleName) !== "ignore" && !b.isWhenDefined())
-                .some(b => predicate(b) && this.isWidgetSetsIntersecting(binding.interaction.registeredNodes, b.interaction.registeredNodes))
+                .filter(currBinding => currBinding.linterRules.get(ruleName) !== "ignore" && !currBinding.isWhenDefined())
+                .some(currBinding => predicate(currBinding) &&
+                    this.isWidgetSetsIntersecting(binding.interaction.registeredNodes, currBinding.interaction.registeredNodes))
         ) {
             this.printLinterMsg(severity, msg);
         }
@@ -121,7 +122,7 @@ export class CheckerImpl implements Checker {
     }
 
     private isWidgetSetsIntersecting(w1: ReadonlySet<unknown>, w2: ReadonlySet<unknown>): boolean {
-        return Array.from(w1.values()).some(w => w2.has(w));
+        return Array.from(w1.values()).some(widget => w2.has(widget));
     }
 
     private printLinterMsg(severity: Severity, msg: string): void {

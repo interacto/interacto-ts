@@ -44,8 +44,8 @@ export class XTouchDnD<T extends TwoTouchData, S extends T & TwoTouchDataImpl> e
         const handler: TouchDnDFSMHandler = {
             "onTouch": (evt: TouchEvent): void => {
                 const all = Array.from(evt.touches);
-                for (const t of Array.from(evt.changedTouches)) {
-                    this._data.initTouch(t, evt, all);
+                for (const touch of Array.from(evt.changedTouches)) {
+                    this._data.initTouch(touch, evt, all);
                 }
             },
             "onMove": (evt: TouchEvent): void => {
@@ -64,8 +64,8 @@ export class XTouchDnD<T extends TwoTouchData, S extends T & TwoTouchDataImpl> e
 
     protected setTgtData(evt: TouchEvent): void {
         const all = Array.from(evt.touches);
-        for (const t of Array.from(evt.changedTouches)) {
-            this._data.copyTouch(t, evt, all);
+        for (const touch of Array.from(evt.changedTouches)) {
+            this._data.copyTouch(touch, evt, all);
         }
     }
 }

@@ -187,7 +187,7 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<TouchDnD, A>(() => new TouchDnD(this.logger, true))
             .on(handle)
-            .then((_, i) => {
+            .then((_c, i) => {
                 anim.process(i);
             })
             .endOrCancel(() => {
@@ -378,7 +378,7 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<DnD, A>(() => new DnD(true, this.logger))
             .on(handle)
-            .then((_, i) => {
+            .then((_c, i) => {
                 anim.process(i);
             })
             .endOrCancel(() => {

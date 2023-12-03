@@ -36,8 +36,8 @@ export class ButtonPressedTransition extends TransitionBase<InputEvent> {
         super(srcState, tgtState, action, guard);
     }
 
-    public accept(e: Event): e is InputEvent {
-        return e.currentTarget !== null && isButton(e.currentTarget);
+    public accept(evt: Event): evt is InputEvent {
+        return evt.currentTarget !== null && isButton(evt.currentTarget);
     }
 
     public getAcceptedEvents(): ReadonlySet<EventType> {

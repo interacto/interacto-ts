@@ -35,7 +35,7 @@ export class MultiTouchFSM extends ConcurrentAndFSM<TouchDnDFSM, TouchDnDFSMHand
      * or as soon as the screen is touched. The latter is used for the MultiTouch interaction.
      */
     public constructor(nbTouch: number, totalReinit: boolean, logger: Logger, dataHandler: TouchDnDFSMHandler, movementRequired = false) {
-        super(Array.from(Array.from({"length": nbTouch}).keys(), _ => new TouchDnDFSM(false, logger, dataHandler, movementRequired)),
+        super(Array.from(Array.from({"length": nbTouch}).keys(), () => new TouchDnDFSM(false, logger, dataHandler, movementRequired)),
             logger, totalReinit ? [new TouchDnDFSM(false, logger, dataHandler, movementRequired)] : [], totalReinit, dataHandler);
     }
 
@@ -105,22 +105,22 @@ export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouch
         const handler: TouchDnDFSMHandler = {
             "onTouch": (event: TouchEvent): void => {
                 const all = Array.from(event.touches);
-                for (const t of Array.from(event.changedTouches)) {
+                for (const touch of Array.from(event.changedTouches)) {
                     const data = new SrcTgtTouchDataImpl();
-                    data.copySrc(t, event, all);
-                    data.copyTgt(t, event, all);
+                    data.copySrc(touch, event, all);
+                    data.copyTgt(touch, event, all);
                     this._data.addTouchData(data);
                 }
             },
             "onMove": (event: TouchEvent): void => {
-                for (const t of Array.from(event.changedTouches)) {
-                    this._data.setTouch(t, event);
+                for (const touch of Array.from(event.changedTouches)) {
+                    this._data.setTouch(touch, event);
                 }
             },
 
             "onRelease": (event: TouchEvent): void => {
-                for (const t of Array.from(event.changedTouches)) {
-                    this._data.setTouch(t, event);
+                for (const touch of Array.from(event.changedTouches)) {
+                    this._data.setTouch(touch, event);
                 }
             },
 

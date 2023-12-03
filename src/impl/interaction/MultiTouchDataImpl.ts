@@ -25,7 +25,7 @@ export abstract class MultiTouchDataBase implements MultiTouchData {
     public readonly abstract touches: ReadonlyArray<SrcTgtPointsData<TouchData>>;
 
     public velocity(direction: "all" | "horiz" | "vert"): number {
-        return this.touches.reduce((sum, t) => sum + t.velocity(direction), 0) / this.touches.length;
+        return this.touches.reduce((sum, touch) => sum + touch.velocity(direction), 0) / this.touches.length;
     }
 }
 

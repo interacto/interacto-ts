@@ -318,14 +318,14 @@ implements Binding<C, I, A, D> {
         }
     }
 
-    private cancelContinousWithEffectsCmd(c: C): void {
-        if (isUndoableType(c)) {
-            c.undo();
+    private cancelContinousWithEffectsCmd(cmd: C): void {
+        if (isUndoableType(cmd)) {
+            cmd.undo();
             if (this.logCmd) {
-                this.logger.logCmdMsg("Command undone", c.constructor.name);
+                this.logger.logCmdMsg("Command undone", cmd.constructor.name);
             }
         } else {
-            throw new MustBeUndoableCmdError(c);
+            throw new MustBeUndoableCmdError(cmd);
         }
     }
 

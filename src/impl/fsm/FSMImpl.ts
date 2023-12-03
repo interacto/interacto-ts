@@ -363,7 +363,7 @@ export class FSMImpl<T extends FSMDataHandler> implements FSM {
      */
     protected checkTimeoutTransition(): void {
         const tr = this.currentState.transitions
-            .find(t => t instanceof TimeoutTransition) as TimeoutTransition | undefined;
+            .find(trans => trans instanceof TimeoutTransition) as TimeoutTransition | undefined;
 
         if (tr !== undefined) {
             if (this.log) {

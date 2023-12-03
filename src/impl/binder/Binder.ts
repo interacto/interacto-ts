@@ -160,16 +160,16 @@ implements CmdBinder<C>, InteractionBinder<I, A, D>, InteractionCmdBinder<C, I, 
         const ws = Array
             .from(widgets)
             .concat(widget)
-            .map(w => {
-                if (isEltRef(w)) {
-                    return w.nativeElement;
+            .map(currWidget => {
+                if (isEltRef(currWidget)) {
+                    return currWidget.nativeElement;
                 }
-                return w;
+                return currWidget;
             });
         // eslint-disable-next-line unicorn/prefer-spread
-        const w: ReadonlyArray<unknown> = this.widgets.length === 0 ? ws : Array.from(this.widgets).concat(ws);
+        const currWidget: ReadonlyArray<unknown> = this.widgets.length === 0 ? ws : Array.from(this.widgets).concat(ws);
         const dup = this.duplicate();
-        dup.widgets = w;
+        dup.widgets = currWidget;
         return dup;
     }
 

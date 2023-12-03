@@ -85,8 +85,8 @@ class UndoableTreeNodeDTOImpl implements UndoableTreeNodeDTO {
         const node = new UndoableTreeNodeImpl(fn(dto.undoable), dto.id, parent);
         const res = dto.children.map(child => UndoableTreeNodeDTOImpl.toNode(child, fn, node));
 
-        node.children.push(...res.map(r => r[0]));
-        const nodes = [node, ...res.flatMap(r => r[1])];
+        node.children.push(...res.map(currNodeTree => currNodeTree[0]));
+        const nodes = [node, ...res.flatMap(currNodeTree => currNodeTree[1])];
 
         return [node, nodes];
     }
@@ -226,10 +226,10 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
 
     private gatherToRoot(node: UndoableTreeNode | undefined): Array<UndoableTreeNode> {
         const path = new Array<UndoableTreeNode>();
-        let n = node;
-        while (n !== this.root && n !== undefined) {
-            path.push(n);
-            n = n.parent;
+        let currentNode = node;
+        while (currentNode !== this.root && currentNode !== undefined) {
+            path.push(currentNode);
+            currentNode = currentNode.parent;
         }
         return path.reverse();
     }
@@ -275,12 +275,12 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
 
     public undo(): void {
         if (this.currentNode !== this.root) {
-            const u = this.currentNode.undoable;
+            const currentUndoable = this.currentNode.undoable;
             this.currentNode.undo();
             this._currentNode = this.currentNode.parent ?? this.root;
             this.addToPath();
             this.undoPublisher.next(this.getLastUndo());
-            this.redoPublisher.next(u);
+            this.redoPublisher.next(currentUndoable);
         }
     }
 
@@ -395,10 +395,10 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
         }
 
         const res = dtoHistory.roots.map(root => UndoableTreeNodeDTOImpl.toNode(root, fn, this.root));
-        this.root.children.push(...res.map(r => r[0]));
+        this.root.children.push(...res.map(currRoot => currRoot[0]));
 
-        for (const n of res.flatMap(r => r[1])) {
-            this.undoableNodes[n.id] = n;
+        for (const currNode of res.flatMap(currRoot => currRoot[1])) {
+            this.undoableNodes[currNode.id] = currNode;
         }
 
         this._currentNode = this.root;

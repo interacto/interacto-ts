@@ -165,10 +165,10 @@ export class LoggerImpl implements Logger {
     }
 
     public logBindingEnd(bindingName: string, cancelled: boolean): void {
-        const logs = this.ongoingBindings.filter(d => bindingName.includes(d.name));
+        const logs = this.ongoingBindings.filter(bind => bindingName.includes(bind.name));
 
         // Removing these logs
-        this.ongoingBindings = this.ongoingBindings.filter(d => !logs.includes(d));
+        this.ongoingBindings = this.ongoingBindings.filter(bind => !logs.includes(bind));
 
         if (logs.length === 1) {
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

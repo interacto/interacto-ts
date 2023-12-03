@@ -133,11 +133,11 @@ export class ConcurrentAndFSM<F extends FSM, T extends FSMDataHandler> extends F
 
     public override fullReinit(): void {
         if (this.totalReinit) {
-            for (const f of this.conccurFSMs) {
-                f.fullReinit();
+            for (const fsm of this.conccurFSMs) {
+                fsm.fullReinit();
             }
-            for (const f of this.secondaryFSMs) {
-                f.fullReinit();
+            for (const fsm of this.secondaryFSMs) {
+                fsm.fullReinit();
             }
         }
         super.fullReinit();

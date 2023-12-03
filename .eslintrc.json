@@ -31,6 +31,7 @@
       "extends": ["plugin:jest/all"],
       "plugins": ["jest"],
       "rules": {
+        "id-length": "off",
         "jest/max-expects": "off",
         "jest/no-disabled-tests": "warn",
         "jest/prefer-spy-on": "off",
@@ -66,12 +67,12 @@
     "plugin:jsdoc/recommended-typescript-error"
   ],
   "rules": {
-    "id-length": "off",
     "no-new": "off",
-    "no-underscore-dangle": "off",
     "@typescript-eslint/prefer-readonly-parameter-types": "off",
     "@typescript-eslint/class-methods-use-this": "off",
 
+    "no-underscore-dangle": "off",
+    "id-length": ["error", {"exceptions": ["x", "y", "i", "j", "c"]}],
     "jsdoc/require-jsdoc": ["error", {"contexts":["TSTypeAliasDeclaration","TSInterfaceDeclaration","TSPropertySignature"],"publicOnly":{"ancestorsOnly":true},"require":{"ClassDeclaration":true,"ClassExpression":true}}],
     "jsdoc/sort-tags": "error",
     "jsdoc/no-bad-blocks": "error",

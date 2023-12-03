@@ -39,12 +39,12 @@ export class SetProperties<T> extends UndoableCommand {
         return this._newvalues;
     }
 
-    public set newvalues(v: Partial<T>) {
-        this._newvalues = v;
+    public set newvalues(value: Partial<T>) {
+        this._newvalues = value;
 
         // eslint-disable-next-line guard-for-in,no-restricted-syntax
-        for (const key in v) {
-            this.compositeCmds.push(new SetProperty<T, keyof T>(this.obj, key, v[key] as T[keyof T]));
+        for (const key in value) {
+            this.compositeCmds.push(new SetProperty<T, keyof T>(this.obj, key, value[key] as T[keyof T]));
         }
     }
 

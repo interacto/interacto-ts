@@ -68,7 +68,8 @@ export class TouchDnDFSM extends FSMImpl<TouchDnDFSMHandler> {
             this.dataHandler?.onTouch(event);
         };
 
-        const fixTouchDownCheck = (event: TouchEvent): boolean => !Array.from(event.touches).some(t => t.identifier === this.touchID);
+        const fixTouchDownCheck = (event: TouchEvent): boolean =>
+            !Array.from(event.touches).some(touch => touch.identifier === this.touchID);
 
         new TouchTransition(this.initState, this.touched, "touchstart", touchDown);
 

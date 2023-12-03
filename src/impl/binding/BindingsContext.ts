@@ -58,11 +58,11 @@ export class BindingsContext implements BindingsObserver {
     }
 
     public clearObservedBindings(): void {
-        for (const d of this.disposables) {
-            d.unsubscribe();
+        for (const dispos of this.disposables) {
+            dispos.unsubscribe();
         }
-        for (const b of this.binds) {
-            b.uninstallBinding();
+        for (const bind of this.binds) {
+            bind.uninstallBinding();
         }
     }
 
@@ -95,7 +95,7 @@ export class BindingsContext implements BindingsObserver {
      */
     public getCmdsProducedBy(binding: Binding<Command, Interaction<InteractionData>, unknown>): ReadonlyArray<Command> {
         return this.cmds
-            .filter(c => c[1] === binding)
-            .map(c => c[0]);
+            .filter(cmd => cmd[1] === binding)
+            .map(cmd => cmd[0]);
     }
 }

@@ -192,14 +192,14 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
 
         const currEvents: ReadonlyArray<EventType> = this.getCurrentAcceptedEvents(newState);
         const events: ReadonlyArray<EventType> = Array.from(this.getEventTypesOf(oldState));
-        const eventsToRemove: ReadonlyArray<EventType> = events.filter(e => !currEvents.includes(e));
-        const eventsToAdd: ReadonlyArray<EventType> = currEvents.filter(e => !events.includes(e));
-        for (const n of this._registeredNodes) {
+        const eventsToRemove: ReadonlyArray<EventType> = events.filter(evt => !currEvents.includes(evt));
+        const eventsToAdd: ReadonlyArray<EventType> = currEvents.filter(evt => !events.includes(evt));
+        for (const node of this._registeredNodes) {
             for (const type of eventsToRemove) {
-                this.unregisterEventToNode(type, n);
+                this.unregisterEventToNode(type, node);
             }
             for (const type of eventsToAdd) {
-                this.registerEventToNode(type, n);
+                this.registerEventToNode(type, node);
             }
         }
     }
@@ -222,8 +222,8 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
     protected getEventTypesOf(state: OutputState): ReadonlySet<EventType> {
         // Optimisation to avoid map and reduce
         const result = new Set<EventType>();
-        for (const t of state.transitions) {
-            for (const evt of t.getAcceptedEvents()) {
+        for (const trans of state.transitions) {
+            for (const evt of trans.getAcceptedEvents()) {
                 result.add(evt);
             }
         }
@@ -231,16 +231,16 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
     }
 
     public registerToNodes(widgets: ReadonlyArray<unknown>): void {
-        for (const w of widgets) {
-            this._registeredNodes.add(w);
-            this.onNewNodeRegistered(w);
+        for (const widget of widgets) {
+            this._registeredNodes.add(widget);
+            this.onNewNodeRegistered(widget);
         }
     }
 
     protected unregisterFromNodes(widgets: ReadonlyArray<unknown>): void {
-        for (const w of widgets) {
-            this._registeredNodes.delete(w);
-            this.onNodeUnregistered(w);
+        for (const widget of widgets) {
+            this._registeredNodes.delete(widget);
+            this.onNodeUnregistered(widget);
         }
     }
 
@@ -467,12 +467,12 @@ export abstract class InteractionBase<D extends InteractionData, DImpl extends D
 
     public uninstall(): void {
         this.disposable.unsubscribe();
-        for (const n of this._registeredNodes) {
-            this.onNodeUnregistered(n);
+        for (const node of this._registeredNodes) {
+            this.onNodeUnregistered(node);
         }
         this._registeredNodes.clear();
-        for (const m of this.mutationObservers) {
-            m.disconnect();
+        for (const obs of this.mutationObservers) {
+            obs.disconnect();
         }
         this.mutationObservers.length = 0;
         this.setActivated(false);

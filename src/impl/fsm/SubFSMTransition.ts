@@ -137,8 +137,8 @@ export class SubFSMTransition extends TransitionBase<Event> {
     public getAcceptedEvents(): ReadonlySet<EventType> {
         // Optimisation to avoid map and reduce
         const result = new Set<EventType>();
-        for (const t of this.subFSM.initState.transitions) {
-            for (const evt of t.getAcceptedEvents()) {
+        for (const trans of this.subFSM.initState.transitions) {
+            for (const evt of trans.getAcceptedEvents()) {
                 result.add(evt);
             }
         }

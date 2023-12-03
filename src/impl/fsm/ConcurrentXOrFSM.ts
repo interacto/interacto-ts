@@ -101,15 +101,15 @@ export class ConcurrentXOrFSM<F extends FSM, T extends FSMDataHandler> extends F
     }
 
     public override fullReinit(): void {
-        for (const f of this._conccurFSMs) {
-            f.fullReinit();
+        for (const fsm of this._conccurFSMs) {
+            fsm.fullReinit();
         }
         super.fullReinit();
     }
 
     public override reinit(): void {
-        for (const f of this._conccurFSMs) {
-            f.reinit();
+        for (const fsm of this._conccurFSMs) {
+            fsm.reinit();
         }
         super.reinit();
     }

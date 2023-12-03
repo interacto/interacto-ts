@@ -31,14 +31,14 @@ export class VisitorFSMDepthFirst implements VisitorFSM {
     }
 
     public visitAndConcurrentFSM(fsm: ConcurrentFSM<FSM>): void {
-        for (const f of fsm.getAllConccurFSMs()) {
-            f.acceptVisitor(this);
+        for (const concFSM of fsm.getAllConccurFSMs()) {
+            concFSM.acceptVisitor(this);
         }
     }
 
     public visitXOrConcurrentFSM(fsm: ConcurrentFSM<FSM>): void {
-        for (const f of fsm.getAllConccurFSMs()) {
-            f.acceptVisitor(this);
+        for (const concFSM of fsm.getAllConccurFSMs()) {
+            concFSM.acceptVisitor(this);
         }
     }
 
