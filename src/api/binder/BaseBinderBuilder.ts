@@ -19,6 +19,9 @@ import type {LogLevel} from "../logging/LogLevel";
  * For supporting Angular ElementReference without any dependency to Angular.
  */
 export interface EltRef<T> {
+    /**
+     * The native element that refers to the widget.
+     */
     nativeElement: T;
 }
 

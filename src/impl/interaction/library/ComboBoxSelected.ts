@@ -39,7 +39,6 @@ interface ComboBoxSelectedHandler extends FSMDataHandler {
 /**
  * A user interaction for CheckBox
  */
-
 export class ComboBoxSelected extends InteractionBase<WidgetData<HTMLSelectElement>, WidgetDataImpl<HTMLSelectElement>, ComboBoxSelectedFSM> {
     /**
      * Creates the interaction.

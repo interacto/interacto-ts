@@ -57,6 +57,9 @@ export class MouseLeaveFSM extends FSMImpl<MouseLeaveFSMHandler> {
     }
 }
 
+/**
+ * The mouse leave interaction. Corresponds to the single event MouseLeave
+ */
 export class MouseLeave extends InteractionBase<PointData, PointDataImpl, MouseLeaveFSM> {
     /**
      * Creates the interaction.

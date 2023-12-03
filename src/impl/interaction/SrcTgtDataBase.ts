@@ -16,6 +16,11 @@ import type {Flushable} from "./Flushable";
 import type {PointBaseData} from "../../api/interaction/PointBaseData";
 import type {SrcTgtPointsData} from "../../api/interaction/SrcTgtPointsData";
 
+/**
+ * The user interaction base data for DnD-like interactions
+ * @typeParam T - The interface of the point interaction data
+ * @typeParam S - The class of the point interaction data
+ */
 export abstract class SrcTgtDataBase<T extends PointBaseData, S extends Flushable & T> implements SrcTgtPointsData<T> {
     protected readonly srcData: S;
 

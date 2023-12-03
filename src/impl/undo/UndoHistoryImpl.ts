@@ -17,6 +17,9 @@ import {Subject} from "rxjs";
 import type {Undoable} from "../../api/undo/Undoable";
 import type {Observable} from "rxjs";
 
+/**
+ * Implementation of the undo history (linear)
+ */
 export class UndoHistoryImpl extends UndoHistory {
     /**
      * Contains the undoable objects.
@@ -37,6 +40,9 @@ export class UndoHistoryImpl extends UndoHistory {
 
     private readonly redoPublisher: Subject<Undoable | undefined>;
 
+    /**
+     * Create the undo history
+     */
     public constructor() {
         super();
         this.sizeMax = 0;

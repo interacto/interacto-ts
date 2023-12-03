@@ -20,6 +20,9 @@ import type {ThreeTouchData} from "../../api/interaction/ThreeTouchData";
 import type {TouchData} from "../../api/interaction/TouchData";
 import type {UnitInteractionData} from "../../api/interaction/UnitInteractionData";
 
+/**
+ * The user interaction data for three-touch interactions
+ */
 export class ThreeTouchDataImpl extends GeneralTwoTouchDataImpl implements ThreeTouchData {
     protected readonly t3: SrcTgtTouchDataImpl;
 

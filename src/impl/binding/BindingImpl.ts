@@ -29,6 +29,8 @@ import type {Observable} from "rxjs";
  * The base class to do bindings, i.e. bindings between user interactions and (undoable) commands.
  * @typeParam C - The type of the command that will produce this binding.
  * @typeParam I - The type of the interaction that will use this binding.
+ * @typeParam A - The type of the accumulator.
+ * @typeParam D - The interaction data type (infered from the interaction type)
  */
 export class BindingImpl<C extends Command, I extends Interaction<D>, A, D extends InteractionData = InteractionDataType<I>>
 implements Binding<C, I, A, D> {

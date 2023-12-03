@@ -43,30 +43,105 @@ import type {WidgetData} from "../interaction/WidgetData";
 import type {Logger} from "../logging/Logger";
 import type {UndoHistoryBase} from "../undo/UndoHistoryBase";
 
+/**
+ * Defines a partly defined binder for buttons
+ */
 export type PartialButtonTypedBinder<A = unknown> = InteractionBinder<Interaction<WidgetData<HTMLButtonElement>>, A>;
+/**
+ * Defines a partly defined binder for inputs
+ */
 export type PartialInputTypedBinder<A = unknown> = InteractionBinder<Interaction<WidgetData<HTMLInputElement>>, A>;
+/**
+ * Defines a partly defined binder for selects
+ */
 export type PartialSelectTypedBinder<A = unknown> = InteractionBinder<Interaction<WidgetData<HTMLSelectElement>>, A>;
+/**
+ * Defines a partly defined binder for spinners
+ */
 export type PartialSpinnerTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<WidgetData<HTMLInputElement>>, A>;
+/**
+ * Defines a partly defined binder for anchors
+ */
 export type PartialAnchorTypedBinder<A = unknown> = InteractionBinder<Interaction<WidgetData<HTMLAnchorElement>>, A>;
+/**
+ * Defines a partly defined binder for text inputs
+ */
 export type PartialTextInputTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<WidgetData<HTMLInputElement | HTMLTextAreaElement>>, A>;
+/**
+ * Defines a partly defined binder for touch rotations
+ */
 export type PartialRotateTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<RotationTouchData>, A>;
+/**
+ * Defines a partly defined binder for touch scalings
+ */
 export type PartialScaleTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<ScaleTouchData>, A>;
+/**
+ * Defines a partly defined binder for two-touch pans
+ */
 export type PartialTwoPanTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<LineTouchData & TwoTouchData>, A>;
+/**
+ * Defines a partly defined binder for two touch interactions
+ */
 export type PartialTwoTouchTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<GeneralTwoTouchData>, A>;
+/**
+ * Defines a partly defined binder for three touch interactions
+ */
 export type PartialThreeTouchTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<ThreeTouchData>, A>;
+/**
+ * Defines a partly defined binder for four touch interactions
+ */
 export type PartialFourTouchTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<FourTouchData>, A>;
+/**
+ * Defines a partly defined binder for DnD touch interactions
+ */
 export type PartialTouchSrcTgtTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<SrcTgtPointsData<TouchData>>, A>;
+/**
+ * Defines a partly defined binder for multi-touch interactions
+ */
 export type PartialMultiTouchTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<MultiTouchData>, A>;
+/**
+ * Defines a partly defined binder for taps
+ */
 export type PartialTapsTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<TapsData>, A>;
+/**
+ * Defines a partly defined binder for touch types
+ */
 export type PartialTouchTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<TouchData>, A>;
+/**
+ * Defines a partly defined binder for one point interactions
+ */
 export type PartialPointTypedBinder<A = unknown> = InteractionBinder<Interaction<PointData>, A>;
+/**
+ * Defines a partly defined binder for wheel interactions
+ */
 export type PartialWheelTypedBinder<A = unknown> = InteractionBinder<Interaction<WheelData>, A>;
+/**
+ * Defines a partly defined binder for scroll interactions
+ */
 export type PartialScrollTypedBinder<A = unknown> = InteractionBinder<Interaction<ScrollData>, A>;
+/**
+ * Defines a partly defined binder for one point interactions that updates in time
+ */
 export type PartialUpdatePointTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<PointData>, A>;
+/**
+ * Defines a partly defined binder for multi-point interactions
+ */
 export type PartialPointsTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<MousePointsData>, A>;
+/**
+ * Defines a partly defined binder for DnD-like interactions
+ */
 export type PartialPointSrcTgtTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<SrcTgtPointsData<PointData>>, A>;
+/**
+ * Defines a partly defined binder for key interactions
+ */
 export type PartialKeyTypedBinder<A = unknown> = KeyInteractionBinder<Interaction<KeyData>, A>;
+/**
+ * Defines a partly defined binder for keys interactions
+ */
 export type PartialKeysTypedBinder<A = unknown> = KeyInteractionUpdateBinder<Interaction<KeysData>, A>;
+/**
+ * Defines a partly defined binder for mouse or touch interactions
+ */
 export type PartialPointOrTouchTypedBinder<A = unknown> = InteractionBinder<Interaction<PointData | TouchData>, A>;
 
 /**

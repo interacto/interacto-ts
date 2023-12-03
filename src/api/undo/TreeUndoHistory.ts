@@ -86,8 +86,14 @@ export interface UndoableTreeNodeDTO {
  * The DTO for tree nodes used while exporting a tree-based history.
  */
 export interface TreeUndoHistoryDTO {
+    /**
+     * The current history path in the tree
+     */
     readonly path: ReadonlyArray<number>;
 
+    /**
+     * The different roots of the tree.
+     */
     readonly roots: ReadonlyArray<UndoableTreeNodeDTO>;
 }
 

@@ -23,6 +23,9 @@ import type {PointData} from "../../../api/interaction/PointData";
 import type {Logger} from "../../../api/logging/Logger";
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 
+/**
+ * The FSM for the mouse double click interaction
+ */
 export class DoubleClickFSM extends FSMImpl<FSMDataHandler> {
     /** The time gap between the two spinner events. */
     private static timeGap = 300;
@@ -117,6 +120,9 @@ export class DoubleClickFSM extends FSMImpl<FSMDataHandler> {
     }
 }
 
+/**
+ * The mouse double click interaction
+ */
 export class DoubleClick extends InteractionBase<PointData, PointDataImpl, DoubleClickFSM> {
     public constructor(logger: Logger, fsm?: DoubleClickFSM, data?: PointDataImpl, name?: string) {
         super(fsm ?? new DoubleClickFSM(logger), data ?? new PointDataImpl(), logger, name ?? DoubleClick.name);

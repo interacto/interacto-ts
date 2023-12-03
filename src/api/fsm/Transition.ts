@@ -20,6 +20,9 @@ import type {VisitorFSM} from "./VisitorFSM";
  * The concept of FSM transition.
  */
 export interface Transition<E extends Event> {
+    /**
+     * The target state of the transition
+     */
     readonly target: InputState;
 
     /**

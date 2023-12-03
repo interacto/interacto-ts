@@ -15,6 +15,9 @@
 import {InteractionDataBase} from "./InteractionDataBase";
 import type {PointBaseData} from "../../api/interaction/PointBaseData";
 
+/**
+ * The base implementation class for single point interaction data.
+ */
 export abstract class PointingDataBase extends InteractionDataBase implements PointBaseData {
     protected clientXData = 0;
 

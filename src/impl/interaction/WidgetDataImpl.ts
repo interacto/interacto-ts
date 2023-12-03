@@ -16,6 +16,9 @@ import {InteractionDataBase} from "./InteractionDataBase";
 import type {Flushable} from "./Flushable";
 import type {WidgetData} from "../../api/interaction/WidgetData";
 
+/**
+ * The user interaction data for widget based interaction
+ */
 export class WidgetDataImpl<T> extends InteractionDataBase implements WidgetData<T>, Flushable {
     public get widget(): T | undefined {
         return this.targetData as unknown as T;

@@ -26,8 +26,14 @@ export interface Logger {
      */
     serverAddress: string | undefined;
 
+    /**
+     * The version of the app
+     */
     readonly frontVersion: string | undefined;
 
+    /**
+     * The ID of the current session
+     */
     readonly sessionID: string;
 
     /**

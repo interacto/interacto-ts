@@ -15,6 +15,9 @@
 import type {Logger} from "../../api/logging/Logger";
 import type {LogLevel} from "../../api/logging/LogLevel";
 
+/**
+ * The logging item
+ */
 export class LoggingData {
     public readonly name: string;
 
@@ -51,6 +54,9 @@ export class LoggingData {
     }
 }
 
+/**
+ * A logging usage item
+ */
 export class UsageLog {
     public name: string;
 
@@ -80,6 +86,9 @@ export class UsageLog {
     }
 }
 
+/**
+ * An implementation of the logger
+ */
 export class LoggerImpl implements Logger {
     public writeConsole: boolean;
 

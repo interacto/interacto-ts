@@ -18,6 +18,9 @@ import type {EventModifierData} from "../../api/interaction/EventModifierData";
 import type {TouchData} from "../../api/interaction/TouchData";
 import type {UnitInteractionData} from "../../api/interaction/UnitInteractionData";
 
+/**
+ * The user interaction data for touch-DnD interactions
+ */
 export class SrcTgtTouchDataImpl extends SrcTgtDataBase<TouchData, TouchDataImpl> {
     public constructor() {
         super(new TouchDataImpl(), new TouchDataImpl());

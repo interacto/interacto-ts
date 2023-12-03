@@ -22,6 +22,15 @@ import type {InteractionData} from "../../api/interaction/InteractionData";
 import type {Logger} from "../../api/logging/Logger";
 import type {FSMDataHandler} from "../fsm/FSMDataHandler";
 
+/**
+ * The Or user interaction. This is an XOr. Either one of the two interactions
+ * can run at a given instant.
+ * @typeParam I1 - The type of the first interaction
+ * @typeParam I2 - The type of the second interaction
+ * @typeParam D1 - The type of the first interaction data
+ * @typeParam D1Impl - The class of the first interaction data
+ * @typeParam D2Impl - The class of the second interaction data
+ */
 export class Or<
     I1 extends InteractionBase<D1, D1Impl, FSM>,
     I2 extends InteractionBase<D2, D2Impl, FSM>,

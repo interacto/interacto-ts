@@ -148,6 +148,9 @@ export class TouchDnDFSM extends FSMImpl<TouchDnDFSMHandler> {
     }
 }
 
+/**
+ * The FSM of the one touch DnD interaction
+ */
 export class OneTouchDnDFSM extends TouchDnDFSM {
     /**
      * Creates a DnD touch FSM that only works with one touch.
@@ -169,11 +172,26 @@ export class OneTouchDnDFSM extends TouchDnDFSM {
     }
 }
 
+/**
+ * The data handler for the touch DnD interaction
+ */
 export interface TouchDnDFSMHandler extends FSMDataHandler {
+    /**
+     * On a touch
+     * @param event - The event to process.
+     */
     onTouch(event: TouchEvent): void;
 
+    /**
+     * On a move
+     * @param event - The event to process.
+     */
     onMove(event: TouchEvent): void;
 
+    /**
+     * On a release
+     * @param event - The event to process.
+     */
     onRelease(event: TouchEvent): void;
 }
 

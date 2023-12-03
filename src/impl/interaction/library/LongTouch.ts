@@ -75,6 +75,9 @@ interface LongTouchFSMHandler extends FSMDataHandler {
     tap(evt: TouchEvent): void;
 }
 
+/**
+ * The long touch interaction.
+ */
 export class LongTouch extends InteractionBase<TouchData, TouchDataImpl, LongTouchFSM> {
     /**
      * Creates the long tap interaction

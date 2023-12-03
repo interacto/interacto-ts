@@ -21,6 +21,10 @@ import type {FSM} from "../fsm/FSM";
  */
 export type InteractionDataType<T> = T extends Interaction<infer D> ? D : never;
 
+/**
+ * The concept of user interaction.
+ * @typeParam D - The type of the interaction data
+ */
 export interface Interaction<D extends InteractionData> {
     /**
      * Sets whether the user interaction will stop immediately the propagation

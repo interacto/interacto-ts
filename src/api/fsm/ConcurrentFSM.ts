@@ -13,6 +13,9 @@
  */
 import type {FSM} from "./FSM";
 
+/**
+ * Defines an FSM that contains concurrent FSMs
+ */
 export interface ConcurrentFSM<F extends FSM> extends FSM {
     /**
      * @returns All the main and secondary FSMs

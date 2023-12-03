@@ -12,6 +12,9 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+/**
+ * The interaction data for touch interactions that follow a line (e.g. vertical pan)
+ */
 export interface LineTouchData {
     /**
      * Returns true if all the touch lines are vertical in the same direction.

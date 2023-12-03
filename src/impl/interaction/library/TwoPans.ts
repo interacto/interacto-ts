@@ -19,6 +19,9 @@ import type {LineTouchData} from "../../../api/interaction/LineTouchData";
 import type {TwoTouchData} from "../../../api/interaction/TwoTouchData";
 import type {Logger} from "../../../api/logging/Logger";
 
+/**
+ * A type for two-touch pan user interactions
+ */
 export type TwoPan = XTouchDnD<LineTouchData & TwoTouchData, TwoPanDataImpl>;
 
 /**

@@ -24,6 +24,9 @@ interface MouseUpFSMHandler extends FSMDataHandler {
     initToPress(event: MouseEvent): void;
 }
 
+/**
+ * The FSM of the mosue up interaction
+ */
 export class MouseUpFSM extends FSMImpl<MouseUpFSMHandler> {
     public constructor(logger: Logger, dataHandler: MouseUpFSMHandler) {
         super(logger, dataHandler);

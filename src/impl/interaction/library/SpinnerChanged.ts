@@ -26,6 +26,9 @@ interface SpinnerChangedHandler extends FSMDataHandler {
     initToChangedHandler(event: Event): void;
 }
 
+/**
+ * The FSM of the spinner interaction
+ */
 export class SpinnerChangedFSM extends FSMImpl<SpinnerChangedHandler> {
     /** The time gap between the two spinner events. */
     private static timeGap = 300;

@@ -16,6 +16,9 @@ import type {SrcTgtPointsData} from "./SrcTgtPointsData";
 import type {TouchData} from "./TouchData";
 import type {TwoTouchData} from "./TwoTouchData";
 
+/**
+ * The interaction data type of three-touch interaction
+ */
 export interface ThreeTouchData extends TwoTouchData {
     /**
      * The third touch

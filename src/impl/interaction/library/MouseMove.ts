@@ -43,6 +43,9 @@ export class MouseMoveFSM extends FSMImpl<MouseMoveFSMHandler> {
     }
 }
 
+/**
+ * The mouse move interaction. Corresponds to the single event MouseMove
+ */
 export class MouseMove extends InteractionBase<PointData, PointDataImpl, MouseMoveFSM> {
     /**
      * Creates the interaction.

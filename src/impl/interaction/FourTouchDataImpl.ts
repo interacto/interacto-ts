@@ -20,6 +20,9 @@ import type {SrcTgtPointsData} from "../../api/interaction/SrcTgtPointsData";
 import type {TouchData} from "../../api/interaction/TouchData";
 import type {UnitInteractionData} from "../../api/interaction/UnitInteractionData";
 
+/**
+ * The interaction data for four-touch user interactions.
+ */
 export class FourTouchDataImpl extends ThreeTouchDataImpl implements FourTouchData {
     private readonly t4: SrcTgtTouchDataImpl;
 

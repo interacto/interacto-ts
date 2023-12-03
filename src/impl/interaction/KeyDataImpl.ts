@@ -16,6 +16,9 @@ import {InteractionDataBase} from "./InteractionDataBase";
 import type {Flushable} from "./Flushable";
 import type {KeyData} from "../../api/interaction/KeyData";
 
+/**
+ * The interaction data that stores a single key.
+ */
 export class KeyDataImpl extends InteractionDataBase implements KeyData, Flushable {
     private codeData = "";
 

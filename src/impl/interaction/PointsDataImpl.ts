@@ -15,6 +15,9 @@
 import type {PointBaseData} from "../../api/interaction/PointBaseData";
 import type {PointsData} from "../../api/interaction/PointsData";
 
+/**
+ * The base implementation class for interaction data that stores points.
+ */
 export abstract class PointsDataImpl<D extends PointBaseData> implements PointsData<D> {
     protected readonly pointsData: Array<D>;
 

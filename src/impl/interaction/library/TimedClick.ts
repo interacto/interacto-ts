@@ -25,6 +25,9 @@ interface ClickFSMHandler extends FSMDataHandler {
     initToClicked(event: MouseEvent): void;
 }
 
+/**
+ * The FSM of the timed click interaction
+ */
 export class TimedClickFSM extends FSMImpl<ClickFSMHandler> {
     private currentButton: number | undefined;
 
@@ -76,6 +79,9 @@ export class TimedClickFSM extends FSMImpl<ClickFSMHandler> {
     }
 }
 
+/**
+ * A click interaction that is cancelled if the mouse up is not done before a given delay
+ */
 export class TimedClick extends InteractionBase<PointData, PointDataImpl, TimedClickFSM> {
     /**
      * Creates the interaction.

@@ -62,6 +62,9 @@ export class ClickFSM extends FSMImpl<ClickFSMHandler> {
     }
 }
 
+/**
+ * The click interaction.
+ */
 export class Click extends InteractionBase<PointData, PointDataImpl, ClickFSM> {
     /**
      * Creates the interaction.

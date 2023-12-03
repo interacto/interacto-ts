@@ -12,6 +12,12 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+/**
+ * Defines the concept of flushable objects.
+ */
 export interface Flushable {
+    /**
+     * Flushes data.
+     */
     flush(): void;
 }

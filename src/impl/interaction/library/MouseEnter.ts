@@ -56,6 +56,9 @@ export class MouseEnterFSM extends FSMImpl<MouseEnterFSMHandler> {
     }
 }
 
+/**
+ * The mouse enter interaction. Corresponds to the single event mouseEnter
+ */
 export class MouseEnter extends InteractionBase<PointData, PointDataImpl, MouseEnterFSM> {
     /**
      * Creates the interaction.

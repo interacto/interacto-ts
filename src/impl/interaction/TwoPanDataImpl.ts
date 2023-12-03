@@ -15,6 +15,9 @@
 import {TwoTouchDataImpl} from "./TwoTouchDataImpl";
 import type {LineTouchData} from "../../api/interaction/LineTouchData";
 
+/**
+ * The user interaction data for two-touch pan interactions
+ */
 export class TwoPanDataImpl extends TwoTouchDataImpl implements LineTouchData {
     public constructor() {
         super();

@@ -18,7 +18,6 @@ import type {PointData} from "./PointData";
  * Interaction data for a single pointing device with buttons and a wheel at a single position.
  * See: {@link https://developer.mozilla.org/en-US/docs/Web/API/WheelEvent} (documentation extracted from here)
  */
-
 export interface WheelData extends PointData {
 
     /**
