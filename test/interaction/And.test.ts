@@ -16,41 +16,14 @@ import {rightPan, Then} from "../../src/interacto";
 import {robot} from "interacto-nono";
 import {mock} from "jest-mock-extended";
 import type {Logger} from "../../src/api/logging/Logger";
-import type {FSMHandler, SrcTgtPointsData, SrcTgtTouchDataImpl, TouchData, TouchDnD} from "../../src/interacto";
+import type {FSMHandler, SrcTgtPointsData, TouchData, TouchDnD} from "../../src/interacto";
 import type {MockProxy} from "jest-mock-extended";
-
-// interface ThenInteraction<IX extends Array<InteractionBase<InteractionData, Flushable & InteractionData, FSM>>,
-//     DX extends Array<unknown>,
-//     DXImpl extends Array<Flushable>> {
-// }
-
-// class Then<
-//     I1 extends InteractionBase<D1, D1Impl, FSM>,
-//     I2 extends InteractionBase<D2, D2Impl, FSM>,
-//     D1 extends InteractionData = InteractionDataType<I1>,
-//     D2 extends InteractionData = InteractionDataType<I2>,
-//     D1Impl extends D1 & Flushable = InteractionDataImplType<I1>,
-//     D2Impl extends D2 & Flushable = InteractionDataImplType<I2>>
-//     extends InteractionBase<ThenData<[D1, D2]>, ThenDataImpl<[D1Impl, D2Impl]>, FSM> {
-
-//     private readonly i1: I1;
-
-//     private readonly i2: I2;
-
-//     public constructor(i1: I1, i2: I2, logger: Logger) {
-//         super(new ThenFSM([i1.fsm, i2.fsm], logger),
-//             new ThenDataImpl([i1.data as unknown as D1Impl, i2.data as unknown as D2Impl]), logger, `${i1.name}-${i2.name}`);
-//         this.i1 = i1;
-//         this.i2 = i2;
-//     }
-// }
 
 describe("that then interaction works", () => {
     const theLogger: Logger & MockProxy<Logger> = mock<Logger>();
     let canvas: HTMLElement;
     let interaction: Then<[TouchDnD, TouchDnD],
-    [SrcTgtPointsData<TouchData>, SrcTgtPointsData<TouchData>],
-    [SrcTgtTouchDataImpl, SrcTgtTouchDataImpl]>;
+    [SrcTgtPointsData<TouchData>, SrcTgtPointsData<TouchData>]>;
     let handler: FSMHandler;
 
     beforeEach(() => {
@@ -58,8 +31,7 @@ describe("that then interaction works", () => {
         canvas = document.createElement("canvas");
         jest.useFakeTimers();
         interaction = new Then<[TouchDnD, TouchDnD],
-        [SrcTgtPointsData<TouchData>, SrcTgtPointsData<TouchData>],
-        [SrcTgtTouchDataImpl, SrcTgtTouchDataImpl]>(
+        [SrcTgtPointsData<TouchData>, SrcTgtPointsData<TouchData>]>(
             [rightPan(theLogger, false, 10, 100)(), rightPan(theLogger, false, 10, 100)()], theLogger);
 
         interaction.fsm.addHandler(handler);

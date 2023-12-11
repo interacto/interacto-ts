@@ -17,6 +17,7 @@ import {ThenDataImpl} from "./ThenDataImpl";
 import {ThenFSM} from "../fsm/ThenFSM";
 import type {Flushable} from "./Flushable";
 import type {FSM} from "../../api/fsm/FSM";
+import type {Interaction, InteractionsDataTypes} from "../../api/interaction/Interaction";
 import type {InteractionData} from "../../api/interaction/InteractionData";
 import type {ThenData} from "../../api/interaction/ThenData";
 import type {Logger} from "../../api/logging/Logger";
@@ -24,16 +25,16 @@ import type {Logger} from "../../api/logging/Logger";
 /**
  * A user interaction composed of a serie of sub user interactions.
  */
-export class Then<IX extends Array<InteractionBase<InteractionData, Flushable & InteractionData, FSM>>,
-    DX extends Array<unknown>,
-    DXImpl extends Array<Flushable> & DX>
-    extends InteractionBase<ThenData<DX>, ThenDataImpl<DXImpl>, FSM> {
+export class Then<
+    IX extends Array<Interaction<InteractionData>>,
+    DX extends Array<InteractionData> = InteractionsDataTypes<IX>>
+    extends InteractionBase<ThenData<DX>, ThenDataImpl<Array<Flushable> & DX>, FSM> {
 
     private readonly ix: IX;
 
     public constructor(ix: IX, logger: Logger) {
         super(new ThenFSM(ix.map(inter => inter.fsm), logger),
-            new ThenDataImpl(ix.map(inter => inter.data) as unknown as DXImpl), logger, "");
+            new ThenDataImpl(ix.map(inter => inter.data) as unknown as Array<Flushable> & DX), logger, "");
         this.ix = ix;
     }
 

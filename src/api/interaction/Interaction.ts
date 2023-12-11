@@ -22,6 +22,14 @@ import type {FSM} from "../fsm/FSM";
 export type InteractionDataType<T> = T extends Interaction<infer D> ? D : never;
 
 /**
+ * Infers the interaction data types from an array of interactions
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type InteractionsDataTypes<A extends Array<Interaction<any>>> = {
+    [K in keyof A]: A[K] extends Interaction<infer T> ? T : never;
+};
+
+/**
  * The concept of user interaction.
  * @typeParam D - The type of the interaction data
  */
@@ -108,9 +116,19 @@ export interface Interaction<D extends InteractionData> {
     setThrottleTimeout(timeout: number): void;
 
     /**
-     * Reinitialises the user interaction
+     * Fully reinitialises the user interaction, its data and its FSM (flushes FSM revents)
      */
     fullReinit(): void;
+
+    /**
+     * Reinitialises the user interaction, its data and its FSM
+     */
+    reinit(): void;
+
+    /**
+     * Reinitialises the interaction data
+     */
+    reinitData(): void;
 
     /**
      * Uninstall the user interaction. Used to free memory.
