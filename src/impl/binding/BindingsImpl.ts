@@ -54,6 +54,7 @@ import {rotate, scale} from "../interaction/library/TwoTouch";
 import {Wheel} from "../interaction/library/Wheel";
 import {ThreeTouchDnD, FourTouchDnD, twoTouch} from "../interaction/library/XTouch";
 import {Or} from "../interaction/Or";
+import {Then} from "../interaction/Then";
 import {LoggerImpl} from "../logging/LoggerImpl";
 import type {EltRef, Widget} from "../../api/binder/BaseBinderBuilder";
 import type {BaseUpdateBinder} from "../../api/binder/BaseUpdateBinder";
@@ -83,7 +84,8 @@ import type {
     PartialFourTouchTypedBinder,
     PartialRotateTypedBinder,
     PartialTwoPanTypedBinder,
-    PartialScaleTypedBinder
+    PartialScaleTypedBinder,
+    PartialThenBinder
 } from "../../api/binding/Bindings";
 import type {BindingsObserver} from "../../api/binding/BindingsObserver";
 import type {VisitorBinding} from "../../api/binding/VisitorBinding";
@@ -419,6 +421,11 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
     public mouseDownOrTouchStartBinder<A>(accInit?: A): PartialPointOrTouchTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<Or<MouseDown, TouchStart>, A>(() => new Or(new MouseDown(this.logger), new TouchStart(this.logger), this.logger));
+    }
+
+    public combine<IX extends Array<Interaction<InteractionData>>, A>(interactions: IX, accInit?: A): PartialThenBinder<IX, A> {
+        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+            .usingInteraction<Then<IX>, A>(() => new Then<IX>(interactions, this.logger));
     }
 
     public undoRedoBinder(undo: Widget<HTMLButtonElement>, redo: Widget<HTMLButtonElement>,

@@ -16,6 +16,8 @@ import {
     AnonCmd,
     BindingsContext,
     BindingsImpl,
+    Click,
+    KeyTyped,
     UndoHistoryImpl
 } from "../../src/interacto";
 import {StubCmd, StubUndoableCmd} from "../command/StubCmd";
@@ -30,6 +32,7 @@ import type {
     Interaction,
     InteractionCmdUpdateBinder,
     InteractionData,
+    KeyData,
     KeysData,
     Logger,
     MousePointsData,
@@ -38,6 +41,7 @@ import type {
     ScrollData,
     SrcTgtPointsData,
     TapsData,
+    ThenData,
     TouchData,
     UndoHistory,
     UndoHistoryBase,
@@ -1840,6 +1844,23 @@ describe("using bindings", () => {
                 expect(binding.timesEnded).toBe(0);
                 expect(binding.timesCancelled).toBe(1);
             });
+        });
+    });
+
+    describe("combine works", () => {
+        test("with two interactions", () => {
+            bindings
+                .combine([new Click(logger), new KeyTyped(logger)])
+                .on(elt)
+                .toProduce((_i: ThenData<Array<KeyData | PointData>>) => new StubCmd(true))
+                .bind();
+
+            robot(elt)
+                .click()
+                .keydown()
+                .keyup();
+
+            expect(ctx.commands).toHaveLength(1);
         });
     });
 });

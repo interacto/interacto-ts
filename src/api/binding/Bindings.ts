@@ -23,7 +23,8 @@ import type {KeyInteractionBinder} from "../binder/KeyInteractionBinder";
 import type {KeyInteractionUpdateBinder} from "../binder/KeyInteractionUpdateBinder";
 import type {Command} from "../command/Command";
 import type {FourTouchData} from "../interaction/FourTouchData";
-import type {Interaction} from "../interaction/Interaction";
+import type {Interaction, InteractionsDataTypes} from "../interaction/Interaction";
+import type {InteractionData} from "../interaction/InteractionData";
 import type {KeyData} from "../interaction/KeyData";
 import type {KeysData} from "../interaction/KeysData";
 import type {LineTouchData} from "../interaction/LineTouchData";
@@ -35,6 +36,7 @@ import type {ScaleTouchData} from "../interaction/ScaleTouchData";
 import type {ScrollData} from "../interaction/ScrollData";
 import type {SrcTgtPointsData} from "../interaction/SrcTgtPointsData";
 import type {TapsData} from "../interaction/TapsData";
+import type {ThenData} from "../interaction/ThenData";
 import type {ThreeTouchData} from "../interaction/ThreeTouchData";
 import type {TouchData} from "../interaction/TouchData";
 import type {GeneralTwoTouchData, TwoTouchData} from "../interaction/TwoTouchData";
@@ -143,6 +145,11 @@ export type PartialKeysTypedBinder<A = unknown> = KeyInteractionUpdateBinder<Int
  * Defines a partly defined binder for mouse or touch interactions
  */
 export type PartialPointOrTouchTypedBinder<A = unknown> = InteractionBinder<Interaction<PointData | TouchData>, A>;
+/**
+ * Defines a partly defined binder for sequence of user interactions.
+ */
+export type PartialThenBinder<XS extends Array<Interaction<InteractionData>>, A = unknown> =
+    InteractionUpdateBinder<Interaction<ThenData<InteractionsDataTypes<XS>>>, A, ThenData<InteractionsDataTypes<XS>>>;
 
 /**
  * A contextual object for creating binders and thus bindings.
@@ -505,6 +512,13 @@ export abstract class Bindings<H extends UndoHistoryBase> {
     public abstract undoRedoBinder(undo: Widget<HTMLButtonElement>, redo: Widget<HTMLButtonElement>, catchFn?: ((err: unknown) => void)):
     [Binding<Command, Interaction<WidgetData<HTMLButtonElement>>, unknown>,
         Binding<Command, Interaction<WidgetData<HTMLButtonElement>>, unknown>];
+
+    /**
+     * Create a binding that uses an ordered sequence of user interactions
+     * @param interactions - The sequence of user interaction
+     */
+    public abstract combine<XS extends Array<Interaction<InteractionData>>, A>(interactions: XS, accInit?: A):
+    PartialThenBinder<XS, A>;
 
     /**
      * Clears all the data of this binding context:
