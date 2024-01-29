@@ -18,6 +18,7 @@ import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 import {InteractionBase} from "../InteractionBase";
 import {MousePointsDataImpl} from "../MousePointsDataImpl";
 import {PointDataImpl} from "../PointDataImpl";
+import type {MousePointsData} from "../../../api/interaction/MousePointsData";
 import type {Logger} from "../../../api/logging/Logger";
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 
@@ -86,7 +87,7 @@ export class ClicksFSM extends FSMImpl<ClicksFSMHandler> {
 /**
  * The clicks interaction. A user can click several times in different places.
  */
-export class Clicks extends InteractionBase<MousePointsDataImpl, MousePointsDataImpl, ClicksFSM> {
+export class Clicks extends InteractionBase<MousePointsData, MousePointsDataImpl, ClicksFSM> {
     /**
      * Creates the clicks interaction
      * @param numberClicks - The number of clicks expected to end the interaction.

@@ -31,6 +31,7 @@ import type {LineTouchData} from "../interaction/LineTouchData";
 import type {MousePointsData} from "../interaction/MousePointsData";
 import type {MultiTouchData} from "../interaction/MultiTouchData";
 import type {PointData} from "../interaction/PointData";
+import type {PointsData} from "../interaction/PointsData";
 import type {RotationTouchData} from "../interaction/RotationTouchData";
 import type {ScaleTouchData} from "../interaction/ScaleTouchData";
 import type {ScrollData} from "../interaction/ScrollData";
@@ -145,6 +146,14 @@ export type PartialKeysTypedBinder<A = unknown> = KeyInteractionUpdateBinder<Int
  * Defines a partly defined binder for mouse or touch interactions
  */
 export type PartialPointOrTouchTypedBinder<A = unknown> = InteractionBinder<Interaction<PointData | TouchData>, A>;
+/**
+ * Defines a partly defined binder for mouse or touch tap interactions
+ */
+export type PartialPointsOrTapsTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<MousePointsData | PointsData<TouchData>>, A>;
+/**
+ * Defines a partly defined binder for mouse or touch DnD interactions
+ */
+export type PartialTouchMouseDnDTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<SrcTgtPointsData<PointData | TouchData>>, A>;
 /**
  * Defines a partly defined binder for sequence of user interactions.
  */
@@ -502,6 +511,22 @@ export abstract class Bindings<H extends UndoHistoryBase> {
      * Creates a binding that uses either a mouse down or a touch start interaction.
      */
     public abstract mouseDownOrTouchStartBinder<A>(accInit?: A): PartialPointOrTouchTypedBinder<A>;
+
+    /**
+     * Creates a binding that uses either a tap or a clicks interaction.
+     */
+    public abstract tapsOrClicksBinder<A>(nbTap: number, accInit?: A): PartialPointsOrTapsTypedBinder<A>;
+
+    /**
+     * Creates a binding that uses either a longpress or a longtouch interaction.
+     */
+    public abstract longpressOrTouchBinder<A>(duration: number, accInit?: A): PartialPointOrTouchTypedBinder<A>;
+
+    /**
+     * Creates a binding that uses either a longpress or a longtouch interaction.
+     */
+    public abstract reciprocalMouseOrTouchDnD<A>(handle: EltRef<SVGCircleElement>, spring: EltRef<SVGLineElement>,
+        accInit?: A): PartialTouchMouseDnDTypedBinder<A>;
 
     /**
      * Creates two bindings for undo and redo operations with buttons.

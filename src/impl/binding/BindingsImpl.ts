@@ -85,7 +85,9 @@ import type {
     PartialRotateTypedBinder,
     PartialTwoPanTypedBinder,
     PartialScaleTypedBinder,
-    PartialThenBinder
+    PartialThenBinder,
+    PartialPointsOrTapsTypedBinder,
+    PartialTouchMouseDnDTypedBinder
 } from "../../api/binding/Bindings";
 import type {BindingsObserver} from "../../api/binding/BindingsObserver";
 import type {VisitorBinding} from "../../api/binding/VisitorBinding";
@@ -188,6 +190,22 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
 
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<TouchDnD, A>(() => new TouchDnD(this.logger, true))
+            .on(handle)
+            .then((_c, i) => {
+                anim.process(i);
+            })
+            .endOrCancel(() => {
+                anim.end();
+            });
+    }
+
+    public reciprocalMouseOrTouchDnD<A>(handle: EltRef<SVGCircleElement>, spring: EltRef<SVGLineElement>,
+                                        accInit?: A): PartialTouchMouseDnDTypedBinder<A> {
+        const anim = new DwellSpringAnimation(handle, spring);
+
+        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+            .usingInteraction<Or<TouchDnD, DnD>, A>(() => new Or<TouchDnD, DnD>(
+            new TouchDnD(this.logger, true), new DnD(true, this.logger), this.logger))
             .on(handle)
             .then((_c, i) => {
                 anim.process(i);
@@ -421,6 +439,17 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
     public mouseDownOrTouchStartBinder<A>(accInit?: A): PartialPointOrTouchTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<Or<MouseDown, TouchStart>, A>(() => new Or(new MouseDown(this.logger), new TouchStart(this.logger), this.logger));
+    }
+
+    public tapsOrClicksBinder<A>(nbTap: number, accInit?: A): PartialPointsOrTapsTypedBinder<A> {
+        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+            .usingInteraction<Or<Tap, Clicks>, A>(() => new Or(new Tap(nbTap, this.logger), new Clicks(nbTap, this.logger), this.logger));
+    }
+
+    public  longpressOrTouchBinder<A>(duration: number, accInit?: A): PartialPointOrTouchTypedBinder<A> {
+        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+            .usingInteraction<Or<LongMouseDown, LongTouch>, A>(
+            () => new Or(new LongMouseDown(duration, this.logger), new LongTouch(duration, this.logger), this.logger));
     }
 
     public combine<IX extends Array<Interaction<InteractionData>>, A>(interactions: IX, accInit?: A): PartialThenBinder<IX, A> {
