@@ -30,14 +30,17 @@ interface KeyTypedFSMHandler extends FSMDataHandler {
 export class KeyTypedFSM extends FSMImpl<KeyTypedFSMHandler> {
     private checkKey: string | undefined;
 
-    public constructor(logger: Logger, dataHandler: KeyTypedFSMHandler) {
+    public constructor(logger: Logger, dataHandler: KeyTypedFSMHandler, key?: string) {
         super(logger, dataHandler);
 
+        this.checkKey = key;
         const pressed = this.addStdState("pressed");
 
         new KeyTransition(this.initState, pressed, "keydown",
             (event: KeyboardEvent): void => {
-                this.checkKey = event.code;
+                if (this.checkKey === undefined) {
+                    this.checkKey = event.code;
+                }
             });
 
         new KeyTransition(pressed, this.addTerminalState("typed", true), "keyup",
@@ -60,9 +63,10 @@ export class KeyTyped extends InteractionBase<KeyData, KeyDataImpl, KeyTypedFSM>
     /**
      * Creates the user interaction.
      * @param logger - The logger to use for this interaction
+     * @param key - The expected key. Do nothing if the involved key is different
      * @param name - The name of the user interaction
      */
-    public constructor(logger: Logger, name?: string) {
+    public constructor(logger: Logger, key?: string, name?: string) {
         const handler: KeyTypedFSMHandler = {
             "onKeyTyped": (event: KeyboardEvent): void => {
                 this._data.copy(event);
@@ -72,6 +76,6 @@ export class KeyTyped extends InteractionBase<KeyData, KeyDataImpl, KeyTypedFSM>
             }
         };
 
-        super(new KeyTypedFSM(logger, handler), new KeyDataImpl(), logger, name ?? KeyTyped.name);
+        super(new KeyTypedFSM(logger, handler, key), new KeyDataImpl(), logger, name ?? KeyTyped.name);
     }
 }

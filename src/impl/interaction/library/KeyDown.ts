@@ -35,8 +35,9 @@ export class KeyDownFSM extends FSMImpl<KeyDownFSMHandler> {
      * @param modifierAccepted - True: the FSM will consider key modifiers.
      * @param logger - The logger to use for this interaction
      * @param dataHandler - The data handler the FSM will use
+     * @param key - The optional accpeted key code
      */
-    public constructor(modifierAccepted: boolean, logger: Logger, dataHandler: KeyDownFSMHandler) {
+    public constructor(modifierAccepted: boolean, logger: Logger, dataHandler: KeyDownFSMHandler, key?: string) {
         super(logger, dataHandler);
         this.modifiersAccepted = modifierAccepted;
 
@@ -44,7 +45,8 @@ export class KeyDownFSM extends FSMImpl<KeyDownFSMHandler> {
             (evt: KeyboardEvent): void => {
                 this.dataHandler?.onKeyPressed(evt);
             },
-            (evt: KeyboardEvent): boolean => this.modifiersAccepted || (!evt.altKey && !evt.ctrlKey && !evt.shiftKey && !evt.metaKey));
+            (evt: KeyboardEvent): boolean => (key === undefined || key === evt.code) &&
+                (this.modifiersAccepted || (!evt.altKey && !evt.ctrlKey && !evt.shiftKey && !evt.metaKey)));
     }
 
     public override reinit(): void {
@@ -58,7 +60,7 @@ export class KeyDownFSM extends FSMImpl<KeyDownFSMHandler> {
  */
 export class KeyDown extends InteractionBase<KeyData, KeyDataImpl, KeyDownFSM> {
 
-    public constructor(logger: Logger, modifierAccepted: boolean, fsm?: KeyDownFSM, name?: string) {
+    public constructor(logger: Logger, modifierAccepted: boolean, key?: string, fsm?: KeyDownFSM, name?: string) {
         const handler: KeyDownFSMHandler = {
             "onKeyPressed": (event: KeyboardEvent): void => {
                 this._data.copy(event);
@@ -68,6 +70,6 @@ export class KeyDown extends InteractionBase<KeyData, KeyDataImpl, KeyDownFSM> {
             }
         };
 
-        super(fsm ?? new KeyDownFSM(modifierAccepted, logger, handler), new KeyDataImpl(), logger, name ?? KeyDown.name);
+        super(fsm ?? new KeyDownFSM(modifierAccepted, logger, handler, key), new KeyDataImpl(), logger, name ?? KeyDown.name);
     }
 }
