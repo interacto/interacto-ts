@@ -38,8 +38,6 @@ export class ConcurrentXOrFSM<F extends FSM, T extends FSMDataHandler> extends F
      * @param dataHandler - The data handler the FSM will use
      */
     public constructor(fsms: ReadonlyArray<F>, logger: Logger, dataHandler?: T) {
-        // eslint-disable-next-line no-console
-        console.log(new Set(fsms.map(fsm => fsm.constructor.name)));
         if (new Set(fsms.map(fsm => fsm.constructor.name)).size !== fsms.length) {
             throw new Error("Cannot create an XOR interaction using two interactions of the same type");
         }
