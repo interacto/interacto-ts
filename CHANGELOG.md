@@ -1,3 +1,63 @@
+# 8.0.0
+
+* feat(interaction): 2, 3, 4 touchdata
+* feat(interaction): can substitute tap and clicks interactions
+* feat(interaction): can visit interactions
+* feat(interaction): composing user interactions
+* feat(interaction): key interactions have a key parameter (#88)
+* feat(interaction): new implementations of pan interactions
+* feat(interaction): 'or' interaction
+* feat(interaction): pan interactions
+* feat(interaction): timedclick
+* feat(interaction): timed tap
+* feat(interaction): touch rotation (#82)
+* feat(interaction): touchstart interaction
+* feat(interaction): two three four touches
+* feat(interaction): two touch pan
+* feat(interaction): two-touch swipe (#85)
+* feat(api): interactions should expose their widgets
+* feat(binder): accumulator in routines
+* feat(binder): linting in the binder api
+* feat(binder): various 'or' binders (#89)
+* feat(binder): pan binders
+* feat(binding): can visit binding
+* feat(binding): default generics for bindings
+* feat(binding): routine for touch start
+* feat(fsm): can visit FSMs
+* feat(not): cancelling interaction operator (#87)
+
+* build(ci): ignoring some files
+* build(pkg): commit msg linter
+* chore(ci): master to main
+* chore(deps): deps updated
+* chore(lint): activating more rules
+* ci(action): launch the CI on PR too
+* config(ci): Github ci
+* doc(readme): readme updated
+
+* fix(binding): removing useless types
+* fix(cmd): better undo name of setProperty
+* fix(code): activating id length rule
+* fix(code): better formatting multi-line comments
+* fix(code): better separation between api and impl
+* fix(code): correct position of exported elements
+* fix(code): imports now sorted
+* fix(code): using import estlint plugin to fix various issues
+* fix(format): fixing switch indentation
+* fix(helper): removing useless function
+* fix(import): do not use barrel to import
+* fix(interaction): better swipe implementation (#84)
+* fix(interaction): concur interactions should not be fully reinit if 'totalReinit'
+* fix(interaction): correct scale/pinch interaction and binding (#83)
+* fix(interaction): dead code
+* fix(interaction): default id of touch should be -1
+* fix(interaction): touchDnD must restart on move after cancellation
+* fix(interaction): touchDnD requires a move
+* fix(interaction): touchdnd should work with one touch only
+* fix(lint): fix sqrt lint
+* fix(lint): include pan interactions in checker
+* fix(smell): updating to TS 5 and activating various rules
+
 # 7.4.0
 
 * change(api): union type for log level instead of enum
