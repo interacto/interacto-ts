@@ -7,6 +7,10 @@
   "out": "docs",
   "tsconfig": "./tsconfig.json",
   "name": "Interacto",
+  "navigationLinks": {
+    "Docs": "https://interacto.github.io/",
+    "GitHub": "https://github.com/interacto/interacto-ts"
+  },
   "kindSortOrder": [
     "Reference",
     "Project",
