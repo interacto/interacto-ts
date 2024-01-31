@@ -27,6 +27,7 @@ interface MouseLeaveFSMHandler extends FSMDataHandler {
 
 /**
  * The FSM for mouseout interactions
+ * @category FSM
  */
 export class MouseLeaveFSM extends FSMImpl<MouseLeaveFSMHandler> {
     /**
@@ -59,6 +60,7 @@ export class MouseLeaveFSM extends FSMImpl<MouseLeaveFSMHandler> {
 
 /**
  * The mouse leave interaction. Corresponds to the single event MouseLeave
+ * @category Interaction Library
  */
 export class MouseLeave extends InteractionBase<PointData, PointDataImpl, MouseLeaveFSM> {
     /**

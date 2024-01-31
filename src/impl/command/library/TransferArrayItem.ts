@@ -16,6 +16,7 @@ import {UndoableCommand} from "../UndoableCommand";
 
 /**
  * An undoable command that transfers an element from one array to another.
+ * @category Command
  */
 export class TransferArrayItem<T> extends UndoableCommand {
     /**

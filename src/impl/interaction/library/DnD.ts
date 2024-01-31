@@ -94,6 +94,7 @@ interface DnDFSMHandler extends FSMDataHandler {
 
 /**
  * A user interaction for Drag and Drop
+ * @category Interaction Library
  */
 export class DnD extends InteractionBase<SrcTgtPointsData<PointData>, SrcTgtPointsDataImpl, DnDFSM> {
     /**

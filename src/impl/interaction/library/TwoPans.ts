@@ -21,6 +21,7 @@ import type {Logger} from "../../../api/logging/Logger";
 
 /**
  * A type for two-touch pan user interactions
+ * @category Interaction Library
  */
 export type TwoPan = XTouchDnD<LineTouchData & TwoTouchData, TwoPanDataImpl>;
 
@@ -31,6 +32,7 @@ export type TwoPan = XTouchDnD<LineTouchData & TwoTouchData, TwoPanDataImpl>;
  * @param minLength - The minimal distance from the starting point to the release point for validating the pan
  * @param minVelocity - The minimal minVelocity to reach for validating the swipe. In pixels per second.
  * @returns The supplier that will produce the interaction when called
+ * @category Interaction Library
  */
 export function twoHPan(logger: Logger, pxTolerance: number, minLength?: number, minVelocity?: number): () => TwoPan {
     return new InteractionBuilderImpl(name => new XTouchDnD<LineTouchData & TwoTouchData, TwoPanDataImpl>(2, logger,
@@ -49,6 +51,7 @@ export function twoHPan(logger: Logger, pxTolerance: number, minLength?: number,
  * @param minLength - The minimal distance from the starting point to the release point for validating the pan
  * @param minVelocity - The minimal minVelocity to reach for validating the swipe. In pixels per second.
  * @returns The supplier that will produce the interaction when called
+ * @category Interaction Library
  */
 export function twoVPan(logger: Logger, pxTolerance: number, minLength?: number, minVelocity?: number): () => TwoPan {
     return new InteractionBuilderImpl(name => new XTouchDnD<LineTouchData & TwoTouchData, TwoPanDataImpl>(2, logger,
@@ -67,6 +70,7 @@ export function twoVPan(logger: Logger, pxTolerance: number, minLength?: number,
  * @param minLength - The minimal distance from the starting point to the release point for validating the pan
  * @param minVelocity - The minimal minVelocity to reach for validating the swipe. In pixels per second.
  * @returns The supplier that will produce the interaction when called
+ * @category Interaction Library
  */
 export function twoLeftPan(logger: Logger, pxTolerance: number, minLength?: number, minVelocity?: number): () => TwoPan {
     return new InteractionBuilderImpl(name => new XTouchDnD<LineTouchData & TwoTouchData, TwoPanDataImpl>(2, logger,
@@ -85,6 +89,7 @@ export function twoLeftPan(logger: Logger, pxTolerance: number, minLength?: numb
  * @param minLength - The minimal distance from the starting point to the release point for validating the pan
  * @param minVelocity - The minimal minVelocity to reach for validating the swipe. In pixels per second.
  * @returns The supplier that will produce the interaction when called
+ * @category Interaction Library
  */
 export function twoRightPan(logger: Logger, pxTolerance: number, minLength?: number, minVelocity?: number): () => TwoPan {
     return new InteractionBuilderImpl(name => new XTouchDnD<LineTouchData & TwoTouchData, TwoPanDataImpl>(2, logger,
@@ -103,6 +108,7 @@ export function twoRightPan(logger: Logger, pxTolerance: number, minLength?: num
  * @param minLength - The minimal distance from the starting point to the release point for validating the pan
  * @param minVelocity - The minimal minVelocity to reach for validating the swipe. In pixels per second.
  * @returns The supplier that will produce the interaction when called
+ * @category Interaction Library
  */
 export function twoTopPan(logger: Logger, pxTolerance: number, minLength?: number, minVelocity?: number): () => TwoPan {
     return new InteractionBuilderImpl(name => new XTouchDnD<LineTouchData & TwoTouchData, TwoPanDataImpl>(2, logger,
@@ -121,6 +127,7 @@ export function twoTopPan(logger: Logger, pxTolerance: number, minLength?: numbe
  * @param minLength - The minimal distance from the starting point to the release point for validating the pan
  * @param minVelocity - The minimal minVelocity to reach for validating the swipe. In pixels per second.
  * @returns The supplier that will produce the interaction when called
+ * @category Interaction Library
  */
 export function twoBottomPan(logger: Logger, pxTolerance: number, minLength?: number, minVelocity?: number): () => TwoPan {
     return new InteractionBuilderImpl(name => new XTouchDnD<LineTouchData & TwoTouchData, TwoPanDataImpl>(2, logger,

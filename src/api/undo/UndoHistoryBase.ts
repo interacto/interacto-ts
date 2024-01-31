@@ -17,6 +17,7 @@ import type {Observable} from "rxjs";
 
 /**
  * The base interface for undo histories.
+ * @category API History
  */
 export interface UndoHistoryBase {
     /**

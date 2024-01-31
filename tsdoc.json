@@ -4,6 +4,9 @@
     {
       "tagName": "@file",
       "syntaxKind": "modifier"
+    }, {
+      "tagName": "@category",
+      "syntaxKind": "block"
     }
   ]
 }

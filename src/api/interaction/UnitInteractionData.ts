@@ -17,6 +17,7 @@ import type {InteractionData} from "./InteractionData";
 /**
  * Basic data of user interactions.
  * See https://developer.mozilla.org/en-US/docs/Web/API/Event (documentation extracted from here)
+ * @category API Interaction Data
  */
 export interface UnitInteractionData extends InteractionData {
     /**

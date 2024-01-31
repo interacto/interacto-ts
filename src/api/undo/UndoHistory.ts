@@ -20,6 +20,7 @@ import type {Observable} from "rxjs";
  * A history of undone/redone objects.
  * Why a pure abstract class and not an interface?
  * Because interfaces are not retained at runtime in TS and we want DI (that thus cannot inject interface types).
+ * @category API History
  */
 export abstract class UndoHistory implements UndoHistoryBase {
     public abstract add(undoable: Undoable): void;

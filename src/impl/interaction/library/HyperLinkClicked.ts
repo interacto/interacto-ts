@@ -38,6 +38,7 @@ interface HyperLinkClickedFSMHandler extends FSMDataHandler {
 
 /**
  * A user interaction for CheckBox
+ * @category Interaction Library
  */
 export class HyperLinkClicked extends InteractionBase<WidgetData<HTMLAnchorElement>, WidgetDataImpl<HTMLAnchorElement>, HyperLinkClickedFSM> {
     /**

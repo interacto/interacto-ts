@@ -14,5 +14,6 @@
 
 /**
  * Logging level to log interactions, bindings, and commands.
+ * @category Logging
  */
 export type LogLevel = "binding" | "command" | "interaction" | "usage";

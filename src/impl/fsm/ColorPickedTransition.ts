@@ -20,6 +20,7 @@ import type {OutputState} from "../../api/fsm/OutputState";
 
 /**
  * An FSM transition for the ColorPicked HTML element.
+ * @category FSM Transition
  */
 export class ColorPickedTransition extends TransitionBase<Event> {
     private static readonly acceptedEvents: ReadonlySet<EventType> = new Set(["input"]);

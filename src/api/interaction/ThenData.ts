@@ -14,6 +14,7 @@
 
 /**
  * Interaction data for Then user interaction.
+ * @category API Interaction Data
  */
 export interface ThenData<DX extends Array<unknown>> {
     /**

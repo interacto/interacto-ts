@@ -17,6 +17,7 @@ import type {InteractionData} from "./InteractionData";
 /**
  * Interaction data that contains a widget.
  * @typeParam T - The type of the widget.
+ * @category API Interaction Data
  */
 export interface WidgetData<T> extends InteractionData {
     /**

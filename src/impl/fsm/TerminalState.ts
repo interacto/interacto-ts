@@ -21,6 +21,7 @@ import type {VisitorFSM} from "../../api/fsm/VisitorFSM";
  * An FSM state.
  * A terminal state ends normally an FSM.
  * @typeParam E - The type of events the FSM processes.
+ * @category FSM
  */
 export class TerminalState extends StateBase implements InputState {
     /**

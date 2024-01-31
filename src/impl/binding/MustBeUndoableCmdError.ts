@@ -14,6 +14,7 @@
 
 /**
  * The error to use when the command being processsed should be undoable.
+ * @category Helper
  */
 export class MustBeUndoableCmdError extends Error {
     public constructor(cmdProducer: unknown) {

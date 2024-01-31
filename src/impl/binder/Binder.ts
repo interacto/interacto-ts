@@ -33,6 +33,7 @@ import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
  * The base class that defines the concept of binding builder (called binder).
  * @typeParam C - The type of the action to produce.
  * @typeParam I - The type of the user interaction to bind.
+ * @category Binding
  */
 export abstract class Binder<C extends Command, I extends Interaction<D>, A, D extends InteractionData = InteractionDataType<I>>
 implements CmdBinder<C>, InteractionBinder<I, A, D>, InteractionCmdBinder<C, I, A, D> {

@@ -32,6 +32,7 @@ interface TapFSMHandler extends FSMDataHandler {
 
 /**
  * The FSM for the Tap interaction
+ * @category FSM
  */
 export class TapFSM extends FSMImpl<TapFSMHandler> {
     private countTaps: number;
@@ -109,6 +110,7 @@ export class TapFSM extends FSMImpl<TapFSMHandler> {
  * A tap user interaction.
  * This touch interaction takes as input the number of taps expected to end the interaction.
  * If this number is not reached after a timeout, the interaction is cancelled.
+ * @category Interaction Library
  */
 export class Tap extends InteractionBase<PointsData<TouchData>, PointsDataImpl<TouchData>, TapFSM> {
     /**

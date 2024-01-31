@@ -19,6 +19,7 @@ import type {VisitorFSM} from "../../api/fsm/VisitorFSM";
 /**
  * An FSM state.
  * An initial state is the unique state that can start an FSM.
+ * @category FSM
  */
 export class InitState extends OutputStateBase {
     public constructor(stateMachine: FSM, stateName: string) {

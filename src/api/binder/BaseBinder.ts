@@ -24,6 +24,7 @@ import type {InteractionData} from "../interaction/InteractionData";
 /**
  * The base interface for building bindings with routines
  * for defining the UI command and the user interaction to use.
+ * @category Helper
  */
 export interface BaseBinder extends BaseBinderBuilder {
     on<W>(widget: ReadonlyArray<Widget<W>> | Widget<W>, ...widgets: ReadonlyArray<Widget<W>>): BaseBinder;

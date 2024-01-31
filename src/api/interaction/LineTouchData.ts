@@ -14,6 +14,7 @@
 
 /**
  * The interaction data for touch interactions that follow a line (e.g. vertical pan)
+ * @category API Interaction Data
  */
 export interface LineTouchData {
     /**

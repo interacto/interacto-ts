@@ -18,6 +18,7 @@ import type {KeyData} from "../../api/interaction/KeyData";
 
 /**
  * The interaction data that stores a single key.
+ * @category Interaction Data
  */
 export class KeyDataImpl extends InteractionDataBase implements KeyData, Flushable {
     private codeData = "";

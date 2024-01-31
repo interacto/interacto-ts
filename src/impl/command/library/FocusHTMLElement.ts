@@ -15,6 +15,7 @@ import {CommandBase} from "../CommandBase";
 
 /**
  * A predefined command for focusing a given element
+ * @category Command
  */
 export class FocusHTMLElement extends CommandBase {
     private readonly element: unknown;

@@ -44,6 +44,7 @@ interface TapFSMHandler extends FSMDataHandler {
  * while touching, if the timeout is reached the interaction is cancelled.
  * This touch interaction takes as input the timeout (in ms) the number of taps expected to end the interaction.
  * If this number is not reached after a timeout, the interaction is cancelled.
+ * @category Interaction Library
  */
 export class TimedTap extends InteractionBase<PointsData<TouchData>, PointsDataImpl<TouchData>, TapFSM> {
     /**

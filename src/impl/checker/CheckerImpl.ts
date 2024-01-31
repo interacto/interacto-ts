@@ -35,6 +35,7 @@ import type {InteractionData} from "../../api/interaction/InteractionData";
 
 /**
  * An implementation of the Checker API
+ * @category Checker
  */
 export class CheckerImpl implements Checker {
     private readonly linterRules: Map<RuleName, Severity>;

@@ -16,6 +16,7 @@
  * Removes the given element from the array.
  * @param array - The array to mutate.
  * @param elt - The element to remove.
+ * @category Helper
  */
 export function remove<T>(array: Array<T>, elt: T): void {
     const index = array.indexOf(elt);
@@ -29,6 +30,7 @@ export function remove<T>(array: Array<T>, elt: T): void {
  * @param array - The array to mutate.
  * @param index - The index where to remove
  * @returns The removed element or nothing.
+ * @category Helper
  */
 export function removeAt<T>(array: Array<T>, index: number): T | undefined {
     if (index > -1) {

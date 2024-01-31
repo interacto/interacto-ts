@@ -20,6 +20,7 @@ import type {OutputState} from "../../api/fsm/OutputState";
 
 /**
  * An FSM transition for the CheckBox HTML element.
+ * @category FSM Transition
  */
 export class BoxCheckPressedTransition extends TransitionBase<InputEvent> {
     private static readonly acceptedEvents: ReadonlySet<EventType> = new Set(["input"]);

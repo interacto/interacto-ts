@@ -48,114 +48,142 @@ import type {UndoHistoryBase} from "../undo/UndoHistoryBase";
 
 /**
  * Defines a partly defined binder for buttons
+ * @category API Binding
  */
 export type PartialButtonTypedBinder<A = unknown> = InteractionBinder<Interaction<WidgetData<HTMLButtonElement>>, A>;
 /**
  * Defines a partly defined binder for inputs
+ * @category API Binding
  */
 export type PartialInputTypedBinder<A = unknown> = InteractionBinder<Interaction<WidgetData<HTMLInputElement>>, A>;
 /**
  * Defines a partly defined binder for selects
+ * @category API Binding
  */
 export type PartialSelectTypedBinder<A = unknown> = InteractionBinder<Interaction<WidgetData<HTMLSelectElement>>, A>;
 /**
  * Defines a partly defined binder for spinners
+ * @category API Binding
  */
 export type PartialSpinnerTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<WidgetData<HTMLInputElement>>, A>;
 /**
  * Defines a partly defined binder for anchors
+ * @category API Binding
  */
 export type PartialAnchorTypedBinder<A = unknown> = InteractionBinder<Interaction<WidgetData<HTMLAnchorElement>>, A>;
 /**
  * Defines a partly defined binder for text inputs
+ * @category API Binding
  */
 export type PartialTextInputTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<WidgetData<HTMLInputElement | HTMLTextAreaElement>>, A>;
 /**
  * Defines a partly defined binder for touch rotations
+ * @category API Binding
  */
 export type PartialRotateTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<RotationTouchData>, A>;
 /**
  * Defines a partly defined binder for touch scalings
+ * @category API Binding
  */
 export type PartialScaleTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<ScaleTouchData>, A>;
 /**
  * Defines a partly defined binder for two-touch pans
+ * @category API Binding
  */
 export type PartialTwoPanTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<LineTouchData & TwoTouchData>, A>;
 /**
  * Defines a partly defined binder for two touch interactions
+ * @category API Binding
  */
 export type PartialTwoTouchTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<GeneralTwoTouchData>, A>;
 /**
  * Defines a partly defined binder for three touch interactions
+ * @category API Binding
  */
 export type PartialThreeTouchTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<ThreeTouchData>, A>;
 /**
  * Defines a partly defined binder for four touch interactions
+ * @category API Binding
  */
 export type PartialFourTouchTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<FourTouchData>, A>;
 /**
  * Defines a partly defined binder for DnD touch interactions
+ * @category API Binding
  */
 export type PartialTouchSrcTgtTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<SrcTgtPointsData<TouchData>>, A>;
 /**
  * Defines a partly defined binder for multi-touch interactions
+ * @category API Binding
  */
 export type PartialMultiTouchTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<MultiTouchData>, A>;
 /**
  * Defines a partly defined binder for taps
+ * @category API Binding
  */
 export type PartialTapsTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<TapsData>, A>;
 /**
  * Defines a partly defined binder for touch types
+ * @category API Binding
  */
 export type PartialTouchTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<TouchData>, A>;
 /**
  * Defines a partly defined binder for one point interactions
+ * @category API Binding
  */
 export type PartialPointTypedBinder<A = unknown> = InteractionBinder<Interaction<PointData>, A>;
 /**
  * Defines a partly defined binder for wheel interactions
+ * @category API Binding
  */
 export type PartialWheelTypedBinder<A = unknown> = InteractionBinder<Interaction<WheelData>, A>;
 /**
  * Defines a partly defined binder for scroll interactions
+ * @category API Binding
  */
 export type PartialScrollTypedBinder<A = unknown> = InteractionBinder<Interaction<ScrollData>, A>;
 /**
  * Defines a partly defined binder for one point interactions that updates in time
+ * @category API Binding
  */
 export type PartialUpdatePointTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<PointData>, A>;
 /**
  * Defines a partly defined binder for multi-point interactions
+ * @category API Binding
  */
 export type PartialPointsTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<MousePointsData>, A>;
 /**
  * Defines a partly defined binder for DnD-like interactions
+ * @category API Binding
  */
 export type PartialPointSrcTgtTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<SrcTgtPointsData<PointData>>, A>;
 /**
  * Defines a partly defined binder for key interactions
+ * @category API Binding
  */
 export type PartialKeyTypedBinder<A = unknown> = KeyInteractionBinder<Interaction<KeyData>, A>;
 /**
  * Defines a partly defined binder for keys interactions
+ * @category API Binding
  */
 export type PartialKeysTypedBinder<A = unknown> = KeyInteractionUpdateBinder<Interaction<KeysData>, A>;
 /**
  * Defines a partly defined binder for mouse or touch interactions
+ * @category API Binding
  */
 export type PartialPointOrTouchTypedBinder<A = unknown> = InteractionBinder<Interaction<PointData | TouchData>, A>;
 /**
  * Defines a partly defined binder for mouse or touch tap interactions
+ * @category API Binding
  */
 export type PartialPointsOrTapsTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<MousePointsData | PointsData<TouchData>>, A>;
 /**
  * Defines a partly defined binder for mouse or touch DnD interactions
+ * @category API Binding
  */
 export type PartialTouchMouseDnDTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<SrcTgtPointsData<PointData | TouchData>>, A>;
 /**
  * Defines a partly defined binder for sequence of user interactions.
+ * @category API Binding
  */
 export type PartialThenBinder<XS extends Array<Interaction<InteractionData>>, A = unknown> =
     InteractionUpdateBinder<Interaction<ThenData<InteractionsDataTypes<XS>>>, A, ThenData<InteractionsDataTypes<XS>>>;
@@ -167,6 +195,7 @@ export type PartialThenBinder<XS extends Array<Interaction<InteractionData>>, A 
  * Why a pure abstract class and not an interface?
  * Because interfaces are not retained at runtime in TS and we want DI (that thus cannot inject interface types).
  * @typeParam H -- The undo history algorithm
+ * @category API Binding
  */
 export abstract class Bindings<H extends UndoHistoryBase> {
     /**

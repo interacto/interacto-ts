@@ -17,6 +17,7 @@ import type {Undoable, UndoableSnapshot} from "../../api/undo/Undoable";
 
 /**
  * The base class for undoable UI commands.
+ * @category Command
  */
 export abstract class UndoableCommand extends CommandBase implements Undoable {
     public getUndoName(): string {

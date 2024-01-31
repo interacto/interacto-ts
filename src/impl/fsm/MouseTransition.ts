@@ -19,6 +19,7 @@ import type {OutputState} from "../../api/fsm/OutputState";
 
 /**
  * The base transition for mouse events.
+ * @category FSM Transition
  */
 export class MouseTransition extends TransitionBase<MouseEvent> {
     private readonly acceptedEvents: ReadonlySet<EventType>;

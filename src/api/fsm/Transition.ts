@@ -18,6 +18,7 @@ import type {VisitorFSM} from "./VisitorFSM";
 
 /**
  * The concept of FSM transition.
+ * @category API FSM
  */
 export interface Transition<E extends Event> {
     /**

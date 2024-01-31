@@ -20,6 +20,7 @@ import type {TouchData} from "../../api/interaction/TouchData";
 /**
  * Controls the dwell and spring animation.
  * See the reciprocal DnD binders.
+ * @category Helper
  */
 export class DwellSpringAnimation {
     private displaySpring = false;

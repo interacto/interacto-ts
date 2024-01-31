@@ -17,6 +17,7 @@ import type {KeyData} from "./KeyData";
 
 /**
  * The data of keyboard-based user interactions that use several keys.
+ * @category API Interaction Data
  */
 export interface KeysData extends InteractionData {
     /**

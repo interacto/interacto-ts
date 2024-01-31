@@ -17,6 +17,7 @@ import type {PointsData} from "./PointsData";
 
 /**
  * Mouse interaction data that contains a set of points and the current position of the mouse.
+ * @category API Interaction Data
  */
 export interface MousePointsData extends PointsData<PointData> {
     /**

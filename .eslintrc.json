@@ -76,7 +76,7 @@
     "jsdoc/require-jsdoc": ["error", {"contexts":["TSTypeAliasDeclaration","TSInterfaceDeclaration","TSPropertySignature"],"publicOnly":{"ancestorsOnly":true},"require":{"ClassDeclaration":true,"ClassExpression":true}}],
     "jsdoc/sort-tags": "error",
     "jsdoc/no-bad-blocks": "error",
-    "jsdoc/check-tag-names": ["error", {"definedTags": ["typeParam"]}],
+    "jsdoc/check-tag-names": ["error", {"definedTags": ["typeParam", "category"]}],
     "tsdoc/syntax": "error",
     "import/no-deprecated": "error",
     "import/no-empty-named-blocks": "error",

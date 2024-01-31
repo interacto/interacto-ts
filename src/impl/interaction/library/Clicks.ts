@@ -28,6 +28,7 @@ interface ClicksFSMHandler extends FSMDataHandler {
 
 /**
  * The FSM that defines the behavior of the clicks interaction
+ * @category FSM
  */
 export class ClicksFSM extends FSMImpl<ClicksFSMHandler> {
     private countClicks: number;
@@ -86,6 +87,7 @@ export class ClicksFSM extends FSMImpl<ClicksFSMHandler> {
 
 /**
  * The clicks interaction. A user can click several times in different places.
+ * @category Interaction Library
  */
 export class Clicks extends InteractionBase<MousePointsData, MousePointsDataImpl, ClicksFSM> {
     /**

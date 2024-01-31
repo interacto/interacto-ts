@@ -21,6 +21,7 @@ import type {Observable} from "rxjs";
 
 /**
  * A finite state machine that defines the behavior of a user interaction.
+ * @category API FSM
  */
 export interface FSM {
     /**

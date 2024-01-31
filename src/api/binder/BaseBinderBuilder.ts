@@ -17,6 +17,7 @@ import type {LogLevel} from "../logging/LogLevel";
 
 /**
  * For supporting Angular ElementReference without any dependency to Angular.
+ * @category Helper
  */
 export interface EltRef<T> {
     /**
@@ -29,6 +30,7 @@ export interface EltRef<T> {
  * Checks whether the given object matches the EltRef structure.
  * @param obj - The object to check
  * @returns The casted object if is an EltRef.
+ * @category Helper
  */
 export function isEltRef(obj: unknown): obj is EltRef<EventTarget> {
     if (obj === undefined || obj === null) {
@@ -40,11 +42,13 @@ export function isEltRef(obj: unknown): obj is EltRef<EventTarget> {
 
 /**
  * This alias refers to either an EvenTarget object or a reference to an EvenTarget object.
+ * @category Helper
  */
 export type Widget<T> = EltRef<T> | T;
 
 /**
  * The base interface for building bindings (what we call in Interacto a binder).
+ * @category Helper
  */
 export interface BaseBinderBuilder {
     /**

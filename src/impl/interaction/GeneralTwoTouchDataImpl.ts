@@ -24,6 +24,7 @@ import type {GeneralTwoTouchData} from "../../api/interaction/TwoTouchData";
 /**
  * The interaction data that stores all information related to two-touch based user
  * interactions.
+ * @category Interaction Data
  */
 export class GeneralTwoTouchDataImpl extends TwoTouchDataImpl implements GeneralTwoTouchData {
     private readonly rotateData: RotationTouchData;

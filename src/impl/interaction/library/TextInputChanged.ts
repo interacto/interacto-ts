@@ -67,6 +67,7 @@ interface TextInputChangedHandler extends FSMDataHandler {
 
 /**
  * A user interaction for Number input.
+ * @category Interaction Library
  */
 export class TextInputChanged extends InteractionBase<WidgetData<HTMLInputElement | HTMLTextAreaElement>,
 WidgetDataImpl<HTMLInputElement | HTMLTextAreaElement>, TextInputChangedFSM> {

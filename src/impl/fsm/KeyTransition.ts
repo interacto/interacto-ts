@@ -19,6 +19,7 @@ import type {OutputState} from "../../api/fsm/OutputState";
 
 /**
  * A transition for a keys.
+ * @category FSM Transition
  */
 export class KeyTransition extends TransitionBase<KeyboardEvent> {
     private readonly acceptedEvents: ReadonlySet<EventType> = new Set(["wheel"]);

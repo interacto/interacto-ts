@@ -17,6 +17,7 @@ import type {WheelData} from "../../api/interaction/WheelData";
 
 /**
  * Single point interaction data whith mousewheel implementation with write accesses.
+ * @category Interaction Data
  */
 export class WheelDataImpl extends PointDataImpl implements WheelData {
     private deltaModeData = 0;

@@ -20,6 +20,7 @@ import type {TouchData} from "../../api/interaction/TouchData";
 
 /**
  * Base class for multi-touch data.
+ * @category Interaction Data
  */
 export abstract class MultiTouchDataBase implements MultiTouchData {
     public readonly abstract touches: ReadonlyArray<SrcTgtPointsData<TouchData>>;
@@ -31,6 +32,7 @@ export abstract class MultiTouchDataBase implements MultiTouchData {
 
 /**
  * Multi-touch interaction data implementation
+ * @category Interaction Data
  */
 export class MultiTouchDataImpl extends MultiTouchDataBase implements Flushable {
     protected readonly touchesData: Map<number, SrcTgtTouchDataImpl>;

@@ -107,6 +107,7 @@ import type {XTouchDnD} from "../interaction/library/XTouch";
 /**
  * Implementation of Bindings. This class to be used in DI
  * for creating binders and bindings.
+ * @category Binding
  */
 export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
     protected observer: BindingsObserver | undefined;

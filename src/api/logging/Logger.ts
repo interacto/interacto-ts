@@ -14,6 +14,7 @@
 
 /**
  * The logging system for Interacto
+ * @category Logging
  */
 export interface Logger {
     /**

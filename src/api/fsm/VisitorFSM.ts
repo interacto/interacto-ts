@@ -21,6 +21,7 @@ import type {Transition} from "./Transition";
 
 /**
  * The main interface for visiting FSMs.
+ * @category API FSM
  */
 export interface VisitorFSM {
     visitFSM(fsm: FSM): void;

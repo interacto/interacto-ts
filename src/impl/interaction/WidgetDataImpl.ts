@@ -18,6 +18,7 @@ import type {WidgetData} from "../../api/interaction/WidgetData";
 
 /**
  * The user interaction data for widget based interaction
+ * @category Interaction Data
  */
 export class WidgetDataImpl<T> extends InteractionDataBase implements WidgetData<T>, Flushable {
     public get widget(): T | undefined {

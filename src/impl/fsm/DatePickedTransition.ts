@@ -20,6 +20,7 @@ import type {OutputState} from "../../api/fsm/OutputState";
 
 /**
  * An FSM transition for the DatePicker HTML element.
+ * @category FSM Transition
  */
 export class DatePickedTransition extends TransitionBase<Event> {
     private static readonly acceptedEvents: ReadonlySet<EventType> = new Set(["input"]);

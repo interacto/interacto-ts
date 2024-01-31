@@ -28,6 +28,7 @@ import type {TwoTouchDataImpl} from "../TwoTouchDataImpl";
 /**
  * The X-touch represents any touch interaction that involve more than one touch.
  * This class is usually used to build more complex touch interactions.
+ * @category Interaction Library
  */
 export class XTouchDnD<T extends TwoTouchData, S extends T & TwoTouchDataImpl> extends ConcurrentInteraction<T, S, MultiTouchFSM> {
     /**
@@ -72,6 +73,7 @@ export class XTouchDnD<T extends TwoTouchData, S extends T & TwoTouchDataImpl> e
 
 /**
  * A shortcut that defines a two-touch interactions.
+ * @category Interaction Library
  */
 export type TwoTouch = XTouchDnD<GeneralTwoTouchData, GeneralTwoTouchDataImpl>;
 
@@ -79,6 +81,7 @@ export type TwoTouch = XTouchDnD<GeneralTwoTouchData, GeneralTwoTouchDataImpl>;
  * Creates a two-touch user interaction
  * @param logger - The logger to use for this interaction
  * @returns A supplier that produces an interaction instance when called
+ * @category Interaction Library
  */
 export function twoTouch(logger: Logger): () => TwoTouch {
     return new InteractionBuilderImpl(name => new XTouchDnD<GeneralTwoTouchData, GeneralTwoTouchDataImpl>(2, logger,
@@ -89,6 +92,7 @@ export function twoTouch(logger: Logger): () => TwoTouch {
 
 /**
  * A touch interaction that involves three touches exactly.
+ * @category Interaction Library
  */
 export class ThreeTouchDnD extends XTouchDnD<ThreeTouchData, ThreeTouchDataImpl> {
     public constructor(logger: Logger, name?: string, movementRequired?: boolean) {
@@ -98,6 +102,7 @@ export class ThreeTouchDnD extends XTouchDnD<ThreeTouchData, ThreeTouchDataImpl>
 
 /**
  * A touch interaction that involves four touches exactly.
+ * @category Interaction Library
  */
 export class FourTouchDnD extends XTouchDnD<FourTouchData, FourTouchDataImpl> {
     public constructor(logger: Logger, name?: string, movementRequired?: boolean) {

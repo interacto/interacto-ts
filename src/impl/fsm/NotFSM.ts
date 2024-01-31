@@ -22,6 +22,7 @@ import type {Logger} from "../../api/logging/Logger";
  * An FSM that corresponds to the ! operator.
  * DnD ! KeyTyped("ESC")  uses a NotFSM where DnD gives is the main FSM
  * and KeyTyped the FSM that can cancel the FSMs.
+ * @category FSM
  */
 export class NotFSM<H extends FSMDataHandler> extends ConcurrentAndFSM<FSM, H> {
     private readonly mainFSM: FSM;

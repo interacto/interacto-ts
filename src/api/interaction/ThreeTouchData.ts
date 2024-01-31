@@ -18,6 +18,7 @@ import type {TwoTouchData} from "./TwoTouchData";
 
 /**
  * The interaction data type of three-touch interaction
+ * @category API Interaction Data
  */
 export interface ThreeTouchData extends TwoTouchData {
     /**

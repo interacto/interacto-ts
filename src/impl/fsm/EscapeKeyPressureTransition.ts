@@ -19,6 +19,7 @@ import type {OutputState} from "../../api/fsm/OutputState";
 
 /**
  * This transition should be used to cancel an interaction using key ESCAPE.
+ * @category FSM Transition
  */
 export class EscapeKeyPressureTransition extends KeyTransition {
     public constructor(srcState: OutputState, tgtState: InputState, action?: (evt: KeyboardEvent) => void) {

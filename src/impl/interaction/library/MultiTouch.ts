@@ -23,6 +23,7 @@ import type {Logger} from "../../../api/logging/Logger";
 
 /**
  * The FSM that defines a multi-touch interaction (that works like a DnD)
+ * @category FSM
  */
 export class MultiTouchFSM extends ConcurrentAndFSM<TouchDnDFSM, TouchDnDFSMHandler> {
     /**
@@ -92,6 +93,7 @@ export class MultiTouchFSM extends ConcurrentAndFSM<TouchDnDFSM, TouchDnDFSMHand
  * A multi-touch user interaction.
  * A multi-touch starts when all its touches have started.
  * A multi-touch ends when the number of required touches is greater than the number of touches.
+ * @category Interaction
  */
 export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouchDataImpl, MultiTouchFSM> {
     /**
@@ -100,6 +102,7 @@ export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouch
      * @param strict - Defines whether too many touches than expected cancelled the ongoing interaction
      * @param logger - The logger to use for this interaction
      * @param name - The name of the user interaction
+     * @category Interaction Library
      */
     public constructor(nbTouches: number, strict: boolean, logger: Logger, name?: string) {
         const handler: TouchDnDFSMHandler = {

@@ -23,6 +23,7 @@ import type {LogLevel} from "../logging/LogLevel";
  * The binding builder API that already knows the type of user interaction the bindings will use
  * @typeParam I - The type of the user interaction
  * @typeParam D - The type of the interaction data of the user interaction
+ * @category Helper
  */
 export interface InteractionBinderBuilder<I extends Interaction<D>, A, D extends InteractionData = InteractionDataType<I>>
     extends BaseBinderBuilder {

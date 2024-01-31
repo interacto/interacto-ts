@@ -18,6 +18,7 @@ import type {Observable} from "rxjs";
 
 /**
  * The interface for nodes in a tree-based history.
+ * @category API History
  */
 export interface UndoableTreeNode {
     /**
@@ -63,6 +64,7 @@ export interface UndoableTreeNode {
 
 /**
  * The DTO interface used when exporting a tree-based history.
+ * @category Helper
  */
 export interface UndoableTreeNodeDTO {
     /**
@@ -84,6 +86,7 @@ export interface UndoableTreeNodeDTO {
 
 /**
  * The DTO for tree nodes used while exporting a tree-based history.
+ * @category Helper
  */
 export interface TreeUndoHistoryDTO {
     /**
@@ -102,6 +105,7 @@ export interface TreeUndoHistoryDTO {
  * On adding undoables after an undo operation, the redoable objects are no more flush but
  * kept in the history as a granch of the graph.
  * Useful for exploration.
+ * @category API History
  */
 export abstract class TreeUndoHistory implements UndoHistoryBase {
     /**

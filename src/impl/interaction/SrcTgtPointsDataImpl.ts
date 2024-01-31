@@ -18,6 +18,7 @@ import type {PointData} from "../../api/interaction/PointData";
 
 /**
  * The user interaction data for mouse-based DnD interactions
+ * @category Interaction Data
  */
 export class SrcTgtPointsDataImpl extends SrcTgtDataBase<PointData, PointDataImpl> {
     public constructor() {

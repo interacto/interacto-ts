@@ -17,6 +17,7 @@ import type {UndoHistoryBase} from "../../../api/undo/UndoHistoryBase";
 
 /**
  * A Redo action.
+ * @category Command
  */
 export class Redo extends CommandBase {
     protected readonly history: UndoHistoryBase;

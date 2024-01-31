@@ -28,6 +28,7 @@ import type {Subscription} from "rxjs";
  * A transition that refers to another FSM.
  * Entering this transition starts the underlying sub-FSM.
  * To leave the transition, the sub-FSM must end.
+ * @category FSM Transition
  */
 export class SubFSMTransition extends TransitionBase<Event> {
     private readonly subFSM: FSM;

@@ -14,6 +14,7 @@
 
 /**
  * The error an FSM will throw to cancel the user interaction.
+ * @category FSM
  */
 export class CancelFSMError extends Error {
     public constructor() {

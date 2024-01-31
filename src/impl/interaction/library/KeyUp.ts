@@ -26,6 +26,7 @@ interface KeyUpFSMHandler extends FSMDataHandler {
 
 /**
  * An FSM for a single key release.
+ * @category FSM
  */
 export class KeyUpFSM extends FSMImpl<KeyUpFSMHandler> {
     private readonly modifiersAccepted: boolean;
@@ -50,6 +51,7 @@ export class KeyUpFSM extends FSMImpl<KeyUpFSMHandler> {
 
 /**
  * A user interaction for releasing a key on a keyboard
+ * @category Interaction Library
  */
 export class KeyUp extends InteractionBase<KeyData, KeyDataImpl, KeyUpFSM> {
     public constructor(logger: Logger, modifierAccepted: boolean, fsm?: KeyUpFSM, name?: string) {

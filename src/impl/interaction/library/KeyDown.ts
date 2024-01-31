@@ -26,6 +26,7 @@ interface KeyDownFSMHandler extends FSMDataHandler {
 
 /**
  * An FSM for a single key pressure.
+ * @category FSM
  */
 export class KeyDownFSM extends FSMImpl<KeyDownFSMHandler> {
     private readonly modifiersAccepted: boolean;
@@ -57,6 +58,7 @@ export class KeyDownFSM extends FSMImpl<KeyDownFSMHandler> {
 
 /**
  * A user interaction for pressing a key on a keyboard
+ * @category Interaction Library
  */
 export class KeyDown extends InteractionBase<KeyData, KeyDataImpl, KeyDownFSM> {
 

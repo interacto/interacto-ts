@@ -17,6 +17,7 @@ import type {UndoHistoryBase} from "../../../api/undo/UndoHistoryBase";
 
 /**
  * An Undo command.
+ * @category Command
  */
 export class Undo extends CommandBase {
     protected readonly history: UndoHistoryBase;

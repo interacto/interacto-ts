@@ -20,6 +20,7 @@ import type {OutputState} from "../../api/fsm/OutputState";
 
 /**
  * An FSM transition for the different text input HTML element.
+ * @category FSM Transition
  */
 export class TextInputChangedTransition extends TransitionBase<Event> {
     private static readonly acceptedEvents: ReadonlySet<EventType> = new Set(["input"]);

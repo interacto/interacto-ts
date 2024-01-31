@@ -102,6 +102,7 @@ interface DragLockFSMHandler extends FSMDataHandler {
 
 /**
  * The drag-lock user interaction
+ * @category Interaction Library
  */
 export class DragLock extends InteractionBase<SrcTgtPointsData<PointData>, SrcTgtPointsDataImpl, DragLockFSM> {
     /**

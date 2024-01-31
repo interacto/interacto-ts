@@ -19,6 +19,7 @@ import type {OutputState} from "../../api/fsm/OutputState";
 
 /**
  * This transition corresponds to the user moving a mouse wheel or a similar input device.
+ * @category FSM Transition
  */
 export class WheelTransition extends TransitionBase<WheelEvent> {
     private static readonly acceptedEvents: ReadonlySet<EventType> = new Set(["wheel"]);

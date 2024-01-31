@@ -23,6 +23,7 @@ import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 
 /**
  * The FSM for button pressures.
+ * @category Interaction Library
  */
 class ButtonPressedFSM extends FSMImpl<ButtonPressedFSMHandler> {
     /**
@@ -46,6 +47,7 @@ interface ButtonPressedFSMHandler extends FSMDataHandler {
 
 /**
  * A user interaction for buttons.
+ * @category Interaction
  */
 export class ButtonPressed extends InteractionBase<WidgetData<HTMLButtonElement>,
 WidgetDataImpl<HTMLButtonElement>, FSMImpl<ButtonPressedFSMHandler>> {

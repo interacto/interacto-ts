@@ -24,6 +24,7 @@ import type {Subscription} from "rxjs/internal/Subscription";
 /**
  * An object for observing creates bindings.
  * Can be used with `Bindings.setBindingObserver` to set the global bindings observer
+ * @category Binding
  */
 export class BindingsContext implements BindingsObserver {
     /**

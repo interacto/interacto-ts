@@ -28,6 +28,7 @@ interface SpinnerChangedHandler extends FSMDataHandler {
 
 /**
  * The FSM of the spinner interaction
+ * @category FSM
  */
 export class SpinnerChangedFSM extends FSMImpl<SpinnerChangedHandler> {
     /** The time gap between the two spinner events. */
@@ -72,6 +73,7 @@ export class SpinnerChangedFSM extends FSMImpl<SpinnerChangedHandler> {
 
 /**
  * A user interaction for Number input.
+ * @category Interaction Library
  */
 export class SpinnerChanged extends InteractionBase<WidgetData<HTMLInputElement>, WidgetDataImpl<HTMLInputElement>, SpinnerChangedFSM> {
     /**

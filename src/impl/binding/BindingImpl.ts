@@ -31,6 +31,7 @@ import type {Observable} from "rxjs";
  * @typeParam I - The type of the interaction that will use this binding.
  * @typeParam A - The type of the accumulator.
  * @typeParam D - The interaction data type (infered from the interaction type)
+ * @category Binding
  */
 export class BindingImpl<C extends Command, I extends Interaction<D>, A, D extends InteractionData = InteractionDataType<I>>
 implements Binding<C, I, A, D> {

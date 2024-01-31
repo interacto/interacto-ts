@@ -18,6 +18,7 @@
  * Note that there is no 'start' (just 'strictStart') since 'then' encompasses 'start'.
  * Strict modes cancel the binding execution, while non-strict modes just prevent the creation/execution of the
  * command at a given instant.
+ * @category API Binding
  */
 export type WhenType =
 /** The predicate will be executed at the end and will cancel the binding execution if not fulfilled. */
@@ -38,6 +39,7 @@ export type WhenType =
  * Not that 'then' is included since 'then' is called at start. This includes both strict and non strict mode.
  * @param type -- The WhenType to test
  * @returns True: when executed at start
+ * @category Helper
  */
 export function isWhenAtStart(type: WhenType): boolean {
     // 'then' is triggered at 'start' so used here
@@ -49,6 +51,7 @@ export function isWhenAtStart(type: WhenType): boolean {
  * This includes both strict and non strict mode.
  * @param type -- The WhenType to test
  * @returns True: when executed at then
+ * @category Helper
  */
 export function isWhenAtThen(type: WhenType): boolean {
     return type === "strictThen" || type === "then" || type === "nonStrict" || type === "strict";
@@ -59,6 +62,7 @@ export function isWhenAtThen(type: WhenType): boolean {
  * This includes both strict and non strict mode.
  * @param type -- The WhenType to test
  * @returns True: when executed at end
+ * @category Helper
  */
 export function isWhenAtEnd(type: WhenType): boolean {
     return type === "end" || type === "nonStrict" || type === "strict";
@@ -68,6 +72,7 @@ export function isWhenAtEnd(type: WhenType): boolean {
  * States whether the WhenType is a strict mode.
  * @param type -- The WhenType to test
  * @returns True: when is strict
+ * @category Helper
  */
 export function isWhenStrict(type: WhenType): boolean {
     // 'end' is always strict
@@ -77,6 +82,7 @@ export function isWhenStrict(type: WhenType): boolean {
 /**
  * The type of a when condition: it contains both the predicate and the mode (ie when the predicate must be checked).
  * @typeParam D -- The interaction data type
+ * @category API Binding
  */
 export interface When<D, A> {
     /**

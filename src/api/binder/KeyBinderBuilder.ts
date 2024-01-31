@@ -14,6 +14,7 @@
 
 /**
  * The binding builder API that support key-based routines
+ * @category Helper
  */
 export interface KeyBinderBuilder {
     /**

@@ -16,6 +16,7 @@ import type {TwoTouchData} from "./TwoTouchData";
 
 /**
  * The two-touch interaction data that represents a rotation.
+ * @category API Interaction Data
  */
 export interface RotationTouchData extends TwoTouchData {
     /**

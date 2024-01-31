@@ -17,6 +17,7 @@ import {CommandBase} from "./CommandBase";
 /**
  * An anonymous command that takes an anonymous function as a parameter corresponding to the command to execute.
  * The goal of this command is to avoid the creation of a command class for a small command.
+ * @category Command
  */
 export class AnonCmd extends CommandBase {
     private readonly exec: () => void;

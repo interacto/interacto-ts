@@ -26,6 +26,7 @@ import type {StdState} from "../../fsm/StdState";
 
 /**
  * The FSM that defines a touch interaction (that works like a DnD)
+ * @category FSM
  */
 export class TouchDnDFSM extends FSMImpl<TouchDnDFSMHandler> {
     protected touchID: number | undefined;
@@ -151,6 +152,7 @@ export class TouchDnDFSM extends FSMImpl<TouchDnDFSMHandler> {
 
 /**
  * The FSM of the one touch DnD interaction
+ * @category FSM
  */
 export class OneTouchDnDFSM extends TouchDnDFSM {
     /**
@@ -175,6 +177,7 @@ export class OneTouchDnDFSM extends TouchDnDFSM {
 
 /**
  * The data handler for the touch DnD interaction
+ * @category Helper
  */
 export interface TouchDnDFSMHandler extends FSMDataHandler {
     /**
@@ -198,6 +201,7 @@ export interface TouchDnDFSMHandler extends FSMDataHandler {
 
 /**
  * A touch interaction (that works as a DnD)
+ * @category Interaction Library
  */
 export class TouchDnD extends InteractionBase<SrcTgtPointsData<TouchData>, SrcTgtTouchDataImpl, OneTouchDnDFSM> {
     /**

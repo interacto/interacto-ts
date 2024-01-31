@@ -26,6 +26,7 @@ interface MouseUpFSMHandler extends FSMDataHandler {
 
 /**
  * The FSM of the mosue up interaction
+ * @category FSM
  */
 export class MouseUpFSM extends FSMImpl<MouseUpFSMHandler> {
     public constructor(logger: Logger, dataHandler: MouseUpFSMHandler) {
@@ -40,6 +41,7 @@ export class MouseUpFSM extends FSMImpl<MouseUpFSMHandler> {
 
 /**
  * A user interaction for releasing a mouse button.
+ * @category Interaction Library
  */
 export class MouseUp extends InteractionBase<PointData, PointDataImpl, MouseUpFSM> {
     /**

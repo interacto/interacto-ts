@@ -20,6 +20,7 @@ import type {UnitInteractionData} from "./UnitInteractionData";
  * See https://developer.mozilla.org/en-US/docs/Web/API/TouchEvent and
  * https://developer.mozilla.org/en-US/docs/Web/API/Touch
  * (documentation extracted from there)
+ * @category API Interaction Data
  */
 export interface TouchData extends PointBaseData, UnitInteractionData {
     /**

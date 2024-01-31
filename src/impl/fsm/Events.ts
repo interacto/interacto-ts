@@ -17,6 +17,7 @@
  * @param touches - The list of touches to search in.
  * @param idToFind - The ID of the touch to find.
  * @returns The found touch or nothing.
+ * @category Helper
  */
 export function getTouch(touches: TouchList, idToFind?: number): Touch | undefined {
     for (const touch of touches) {
@@ -31,6 +32,7 @@ export function getTouch(touches: TouchList, idToFind?: number): Touch | undefin
  * Tests whether the given object is a HTML button.
  * @param target - The object to test.
  * @returns True: the object is a HTML button
+ * @category Helper
  */
 export function isButton(target: EventTarget): target is HTMLButtonElement {
     return target instanceof HTMLButtonElement;
@@ -40,6 +42,7 @@ export function isButton(target: EventTarget): target is HTMLButtonElement {
  * Tests whether the given object is a HTML checkbox.
  * @param target - The object to test.
  * @returns True: the object is a HTML checkbox.
+ * @category Helper
  */
 export function isCheckBox(target: EventTarget): target is HTMLInputElement {
     return target instanceof HTMLInputElement && target.getAttribute("type") === "checkbox";
@@ -49,6 +52,7 @@ export function isCheckBox(target: EventTarget): target is HTMLInputElement {
  * Tests whether the given object is a HTML ColorChoice.
  * @param target - The object to test.
  * @returns True: the object is a HTML ColorChoice.
+ * @category Helper
  */
 export function isColorChoice(target: EventTarget): target is HTMLInputElement {
     return target instanceof HTMLInputElement && target.getAttribute("type") === "color";
@@ -58,6 +62,7 @@ export function isColorChoice(target: EventTarget): target is HTMLInputElement {
  * Tests whether the given object is a HTML ComboBox.
  * @param target - The object to test.
  * @returns True: the object is a HTML ComboBox
+ * @category Helper
  */
 export function isComboBox(target: EventTarget): target is HTMLSelectElement {
     return target instanceof HTMLSelectElement;
@@ -67,6 +72,7 @@ export function isComboBox(target: EventTarget): target is HTMLSelectElement {
  * Tests whether the given object is a HTML DatePicker.
  * @param target - The object to test.
  * @returns True: the object is a HTML DatePicker
+ * @category Helper
  */
 export function isDatePicker(target: EventTarget): target is HTMLInputElement {
     return target instanceof HTMLInputElement && target.getAttribute("type") === "date";
@@ -76,6 +82,7 @@ export function isDatePicker(target: EventTarget): target is HTMLInputElement {
  * Tests whether the given object is a HTML spinner.
  * @param target - The object to test.
  * @returns True: the object is a HTML spinner
+ * @category Helper
  */
 export function isSpinner(target: EventTarget): target is HTMLInputElement {
     return target instanceof HTMLInputElement && target.getAttribute("type") === "number";
@@ -85,6 +92,7 @@ export function isSpinner(target: EventTarget): target is HTMLInputElement {
  * Tests whether the given object is a HTML hyperlink.
  * @param target - The object to test.
  * @returns True: the object is a HTML hyperlink
+ * @category Helper
  */
 export function isHyperLink(target: EventTarget): target is HTMLAnchorElement {
     return target instanceof HTMLAnchorElement;
@@ -94,6 +102,7 @@ export function isHyperLink(target: EventTarget): target is HTMLAnchorElement {
  * Tests whether the given object is a HTML text input.
  * @param target - The object to test.
  * @returns True: the object is a HTML text input
+ * @category Helper
  */
 export function isTextInput(target: EventTarget): target is HTMLInputElement | HTMLTextAreaElement {
     return (target instanceof HTMLInputElement && target.getAttribute("type") === "text") ||
@@ -104,6 +113,7 @@ export function isTextInput(target: EventTarget): target is HTMLInputElement | H
  * Tests whether the given object is a keydown event.
  * @param event - The object to test.
  * @returns True: the object is a keydown event
+ * @category Helper
  */
 export function isKeyDownEvent(event: Event): event is KeyboardEvent {
     return event instanceof KeyboardEvent && event.type === "keydown";
@@ -113,6 +123,7 @@ export function isKeyDownEvent(event: Event): event is KeyboardEvent {
  * Tests whether the given object is a keyup event.
  * @param event - The object to test.
  * @returns True: the object is a keyup event
+ * @category Helper
  */
 export function isKeyUpEvent(event: Event): event is KeyboardEvent {
     return event instanceof KeyboardEvent && event.type === "keyup";
@@ -120,6 +131,7 @@ export function isKeyUpEvent(event: Event): event is KeyboardEvent {
 
 /**
  * A list of key codes.
+ * @category Helper
  */
 export enum KeyCode {
     escape = 27

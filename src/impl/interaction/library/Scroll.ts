@@ -26,6 +26,7 @@ interface ScrollFSMHandler extends FSMDataHandler {
 
 /**
  * An FSM for scrolling.
+ * @category FSM
  */
 export class ScrollFSM extends FSMImpl<ScrollFSMHandler> {
     public constructor(logger: Logger, dataHandler: ScrollFSMHandler) {
@@ -40,6 +41,7 @@ export class ScrollFSM extends FSMImpl<ScrollFSMHandler> {
 
 /**
  * A user interaction for scrolling using a mouse wheel. Consists of a single scroll.
+ * @category Interaction Library
  */
 export class Scroll extends InteractionBase<ScrollData, ScrollDataImpl, ScrollFSM> {
     /**

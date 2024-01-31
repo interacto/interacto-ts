@@ -31,6 +31,7 @@ import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
 /**
  * The base binding builder for bindings where commands can be updated while the user interaction is running.
  * @typeParam C - The type of the command to produce.
+ * @category Binding
  */
 export class UpdateBinder<C extends Command, I extends Interaction<D>, A, D extends InteractionData = InteractionDataType<I>>
     extends Binder<C, I, A, D> implements CmdUpdateBinder<C>, InteractionCmdUpdateBinder<C, I, A, D> {

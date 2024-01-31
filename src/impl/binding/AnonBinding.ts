@@ -30,6 +30,7 @@ import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
  * @typeParam I - The type of the interaction that will use this binding.
  * @typeParam A - The type of the accumulator.
  * @typeParam D - The interaction data type (infered from the interaction type)
+ * @category Binding
  */
 export class AnonBinding<C extends Command, I extends Interaction<D>, A, D extends InteractionData = InteractionDataType<I>>
     extends BindingImpl<C, I, A, D> {

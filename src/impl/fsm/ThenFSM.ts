@@ -23,6 +23,7 @@ import type {Logger} from "../../api/logging/Logger";
 
 /**
  * An FSM that executes a serie of sub-FSMs.
+ * @category FSM
  */
 export class ThenFSM<T extends FSMDataHandler> extends FSMImpl<T> {
     public constructor(fsms: Array<FSM>, logger: Logger) {

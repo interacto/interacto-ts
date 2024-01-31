@@ -17,6 +17,7 @@ import type {UnitInteractionData} from "./UnitInteractionData";
 /**
  * Data of user interactions that have key modifires.
  * Documentation from the Mozilla Web API website.
+ * @category API Interaction Data
  */
 export interface EventModifierData extends UnitInteractionData {
     /**

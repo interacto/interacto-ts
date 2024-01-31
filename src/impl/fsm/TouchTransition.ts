@@ -19,6 +19,7 @@ import type {OutputState} from "../../api/fsm/OutputState";
 
 /**
  * This transition defines a touch move.
+ * @category FSM Transition
  */
 export class TouchTransition extends TransitionBase<TouchEvent> {
     private readonly acceptedEvents: ReadonlySet<EventType>;

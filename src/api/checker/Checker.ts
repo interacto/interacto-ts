@@ -19,21 +19,25 @@ import type {InteractionData} from "../interaction/InteractionData";
 
 /**
  * A string type for the rule names.
+ * @category Checker
  */
 export type RuleName = "included" | "same-data" | "same-interactions";
 
 /**
  * A string type for the severity level.
+ * @category Checker
  */
 export type Severity = "err" | "ignore" | "warn";
 
 /**
  * A type that defines a linter rule.
+ * @category Checker
  */
 export type LinterRule = [name: RuleName, severity: Severity];
 
 /**
  * The interaction type check.
+ * @category Checker
  */
 export interface Checker {
     setLinterRules(...rules: ReadonlyArray<LinterRule>): void;

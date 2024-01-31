@@ -18,6 +18,7 @@ import type {PointBaseData} from "./PointBaseData";
 /**
  * Interaction data for a single pointing device that moves from a source
  * position to a target position.
+ * @category API Interaction Data
  */
 export interface SrcTgtPointsData<T extends PointBaseData> extends InteractionData {
     /**

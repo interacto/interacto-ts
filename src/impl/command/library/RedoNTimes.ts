@@ -17,6 +17,7 @@ import type {UndoHistory} from "../../../api/undo/UndoHistory";
 
 /**
  * An Redo command that redoes the last N commands.
+ * @category Command
  */
 export class RedoNTimes extends CommandBase {
     protected readonly history: UndoHistory;

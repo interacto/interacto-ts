@@ -20,6 +20,7 @@ import type {UnitInteractionData} from "../../api/interaction/UnitInteractionDat
 
 /**
  * The user interaction data for touch-DnD interactions
+ * @category Interaction Data
  */
 export class SrcTgtTouchDataImpl extends SrcTgtDataBase<TouchData, TouchDataImpl> {
     public constructor() {

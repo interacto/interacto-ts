@@ -17,5 +17,6 @@ import type {TouchData} from "./TouchData";
 
 /**
  * Interaction data that contains a set of points.
+ * @category API Interaction Data
  */
 export type TapsData = PointsData<TouchData>;

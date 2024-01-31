@@ -17,6 +17,7 @@ import type {VisitorFSM} from "./VisitorFSM";
 
 /**
  * The base type of an FSM state.
+ * @category API FSM
  */
 export interface State {
     /**

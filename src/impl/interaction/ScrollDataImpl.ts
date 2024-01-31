@@ -18,6 +18,7 @@ import type {ScrollData} from "../../api/interaction/ScrollData";
 
 /**
  * Scrolling interaction data implementation with write access.
+ * @category Interaction Data
  */
 export class ScrollDataImpl extends InteractionDataBase implements ScrollData, Flushable {
     protected scrollXData = 0;

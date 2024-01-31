@@ -14,16 +14,19 @@
 
 /**
  * The basic accepted types for producing snapshots of undoable commands
+ * @category API History
  */
 export type PrimitiveUndoableSnapshot = HTMLElement | SVGElement | string;
 
 /**
  * The type of the visual snpashot that an undoable command can produce
+ * @category API History
  */
 export type UndoableSnapshot = PrimitiveUndoableSnapshot | Promise<PrimitiveUndoableSnapshot> | undefined;
 
 /**
  * An interface for undoable objects.
+ * @category API History
  */
 export interface Undoable {
     /**
@@ -52,6 +55,7 @@ export interface Undoable {
  * Tests whether the given object is an Undoable.
  * @param obj - The object to test.
  * @returns True: the object is an Undoable
+ * @category Helper
  */
 export function isUndoableType(obj: unknown): obj is Undoable {
     if (typeof obj !== "object" || obj === null) {

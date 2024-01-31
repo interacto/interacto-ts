@@ -18,6 +18,7 @@ import {UndoableCommand} from "../UndoableCommand";
 /**
  * An undoable command that changes the value of a set of object properties.
  * @typeParam T - The type of the object to change
+ * @category Command
  */
 export class SetProperties<T> extends UndoableCommand {
     public readonly obj: T;

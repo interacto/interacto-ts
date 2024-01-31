@@ -22,6 +22,7 @@ import type {UnitInteractionData} from "../../api/interaction/UnitInteractionDat
 
 /**
  * The implementation class of TwoTouchData
+ * @category Interaction Data
  */
 export abstract class TwoTouchDataImpl extends MultiTouchDataBase implements TwoTouchData {
     protected readonly t1: SrcTgtTouchDataImpl;

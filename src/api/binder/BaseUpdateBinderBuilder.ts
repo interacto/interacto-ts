@@ -18,6 +18,7 @@ import type {LogLevel} from "../logging/LogLevel";
 
 /**
  * The base interface for building bindings based on non-trivial user interactions (eg DnD).
+ * @category Helper
  */
 export interface BaseUpdateBinderBuilder extends BaseBinderBuilder {
     /**

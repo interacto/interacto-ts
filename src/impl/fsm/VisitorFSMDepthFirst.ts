@@ -22,6 +22,7 @@ import type {VisitorFSM} from "../../api/fsm/VisitorFSM";
 /**
  * A depth-first implementation of the FSM visitor. No treatment here, just visiting.
  * To customize this visitor, extends it and override the different methods.
+ * @category FSM
  */
 export class VisitorFSMDepthFirst implements VisitorFSM {
     private readonly visited: Set<State>;

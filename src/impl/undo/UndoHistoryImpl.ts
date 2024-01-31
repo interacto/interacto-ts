@@ -19,6 +19,7 @@ import type {Observable} from "rxjs";
 
 /**
  * Implementation of the undo history (linear)
+ * @category History
  */
 export class UndoHistoryImpl extends UndoHistory {
     /**

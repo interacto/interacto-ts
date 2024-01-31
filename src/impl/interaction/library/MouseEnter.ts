@@ -26,6 +26,7 @@ interface MouseEnterFSMHandler extends FSMDataHandler {
 
 /**
  * The FSM for mouseover interactions
+ * @category FSM
  */
 export class MouseEnterFSM extends FSMImpl<MouseEnterFSMHandler> {
     /**
@@ -58,6 +59,7 @@ export class MouseEnterFSM extends FSMImpl<MouseEnterFSMHandler> {
 
 /**
  * The mouse enter interaction. Corresponds to the single event mouseEnter
+ * @category Interaction Library
  */
 export class MouseEnter extends InteractionBase<PointData, PointDataImpl, MouseEnterFSM> {
     /**

@@ -27,6 +27,7 @@ interface LongMouseDownFSMHandler extends FSMDataHandler {
 
 /**
  * The FSM for the LongPress interaction
+ * @category FSM
  */
 export class LongMouseDownFSM extends FSMImpl<LongMouseDownFSMHandler> {
     private readonly duration: number;
@@ -75,6 +76,7 @@ export class LongMouseDownFSM extends FSMImpl<LongMouseDownFSMHandler> {
 
 /**
  * The long mouse down interaction. The interaction ends after a delay after having a mouse down (with no mouse up)
+ * @category Interaction Library
  */
 export class LongMouseDown extends InteractionBase<PointData, PointDataImpl, LongMouseDownFSM> {
     /**

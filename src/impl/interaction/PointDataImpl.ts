@@ -18,6 +18,7 @@ import type {PointData} from "../../api/interaction/PointData";
 
 /**
  * Single point interaction data implementation with write accesses.
+ * @category Interaction Data
  */
 export class PointDataImpl extends PointingDataBase implements PointData {
     protected buttonData = 0;

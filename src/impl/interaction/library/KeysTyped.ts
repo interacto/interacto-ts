@@ -29,6 +29,7 @@ interface KeyTypedFSMHandler extends FSMDataHandler {
  * An FSM for typing several keyboard touches.
  * One can type on multiple keys. The FSM ends after a timeout (a delay after the latest
  * typed key).
+ * @category FSM
  */
 export class KeysTypedFSM extends FSMImpl<KeyTypedFSMHandler> {
     /** The time gap between the two spinner events. */
@@ -70,6 +71,7 @@ export class KeysTypedFSM extends FSMImpl<KeyTypedFSMHandler> {
  * A user interaction for typing several keyboard keys.
  * One can type on multiple keys. The interaction ends after a timeout (a delay after the latest
  * typed key).
+ * @category Interaction Library
  */
 export class KeysTyped extends InteractionBase<KeysData, KeysDataImpl, KeysTypedFSM> {
     /**

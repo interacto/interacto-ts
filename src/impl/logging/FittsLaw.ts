@@ -21,6 +21,7 @@ import type {Subscription} from "rxjs";
 
 /**
  * Fitt's Law data. Immutable.
+ * @category Logging
  */
 export class FittsLawDataImpl {
     public readonly t: number;
@@ -58,6 +59,7 @@ export class FittsLawDataImpl {
 
 /**
  * Permits to compute Fitt's law data based on the usage of two Interacto bindings.
+ * @category Logging
  */
 export class FittsLaw {
     private readonly obsSrc: Subscription;

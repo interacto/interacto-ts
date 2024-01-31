@@ -20,6 +20,7 @@ import type {InteractionData} from "../interaction/InteractionData";
 
 /**
  * Permits to observe the bindings produced using `Bindings` routines.
+ * @category API Binding
  */
 export interface BindingsObserver {
     /**

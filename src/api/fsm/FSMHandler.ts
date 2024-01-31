@@ -15,6 +15,7 @@
 /**
  * Defines a handler that can register an FSM to receive notifications
  * about changes in the state of the FSM.
+ * @category API FSM
  */
 export interface FSMHandler {
     /**

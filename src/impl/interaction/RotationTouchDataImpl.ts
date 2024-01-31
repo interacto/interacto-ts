@@ -18,6 +18,7 @@ import type {TouchData} from "../../api/interaction/TouchData";
 
 /**
  * The implementation of the rotation interaction data.
+ * @category Interaction Data
  */
 export class RotationTouchDataImpl extends TwoTouchDataImpl implements RotationTouchData {
     public constructor() {

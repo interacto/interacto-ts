@@ -26,6 +26,7 @@ interface ClickFSMHandler extends FSMDataHandler {
 
 /**
  * The FSM for click interactions
+ * @category FSM
  */
 export class ClickFSM extends FSMImpl<ClickFSMHandler> {
     private checkButton: number | undefined;
@@ -64,6 +65,7 @@ export class ClickFSM extends FSMImpl<ClickFSMHandler> {
 
 /**
  * The click interaction.
+ * @category Interaction Library
  */
 export class Click extends InteractionBase<PointData, PointDataImpl, ClickFSM> {
     /**

@@ -14,6 +14,7 @@
 
 /**
  * Defines the concept of flushable objects.
+ * @category Helper
  */
 export interface Flushable {
     /**

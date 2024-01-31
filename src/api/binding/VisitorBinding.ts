@@ -22,6 +22,7 @@ import type {UndoHistoryBase} from "../undo/UndoHistoryBase";
 
 /**
  * The main interface for visiting user interactions.
+ * @category API Binding
  */
 export interface VisitorBinding extends VisitorInteraction {
     visitBinding(binding: Binding<Command, Interaction<InteractionData>, unknown>): void;

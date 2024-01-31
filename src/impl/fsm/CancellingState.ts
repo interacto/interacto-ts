@@ -20,6 +20,7 @@ import type {VisitorFSM} from "../../api/fsm/VisitorFSM";
 /**
  * A state of an FSM.
  * A cancelling state cancels the FSM of a user interaction.
+ * @category FSM
  */
 export class CancellingState extends StateBase implements InputState {
     /**

@@ -22,6 +22,7 @@ import type {VisitorFSM} from "../../api/fsm/VisitorFSM";
  * A standard state can compose an FSM.
  * They do not start, stop, cancel an FSM.
  * They accept input and output events.
+ * @category FSM
  */
 export class StdState extends OutputStateBase implements InputState {
     /**

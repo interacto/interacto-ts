@@ -25,6 +25,7 @@ import type {LogLevel} from "../logging/LogLevel";
  * The binder API that already knows the type of UI command
  * the bindings will produce. Routines related to interactions that can be updated are provided ('then').
  * @typeParam C - The type of the produced UI commands
+ * @category Helper
  */
 export interface CmdUpdateBinder<C extends Command> extends CmdUpdateBinderBuilder<C> {
     then(fn: (c: C) => void): CmdUpdateBinder<C>;

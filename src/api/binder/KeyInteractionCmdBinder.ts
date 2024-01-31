@@ -28,6 +28,7 @@ import type {LogLevel} from "../logging/LogLevel";
  * @typeParam C - The type of the produced UI commands
  * @typeParam I - The type of the user interaction
  * @typeParam D - The type of the interaction data of the user interaction
+ * @category API Binding
  */
 export interface KeyInteractionCmdBinder<C extends Command, I extends Interaction<D>, A, D extends InteractionData = InteractionDataType<I>>
     extends KeyInteractionBinderBuilder<I, A, D>, InteractionCmdBinder<C, I, A, D> {

@@ -26,6 +26,7 @@ import type {LogLevel} from "../logging/LogLevel";
 /**
  * The base interface for building bindings based on non-trivial user interactions (eg DnD) with routines
  * for defining the UI command and the user interaction to use.
+ * @category Helper
  */
 export interface BaseUpdateBinder extends BaseUpdateBinderBuilder, BaseBinder {
     on<W>(widget: ReadonlyArray<Widget<W>> | Widget<W>, ...widgets: ReadonlyArray<Widget<W>>): BaseUpdateBinder;

@@ -5,6 +5,7 @@ import type {UnitInteractionData} from "../../api/interaction/UnitInteractionDat
 /**
  * The base implementation class for most of interaction data.
  * Contains basic information.
+ * @category Interaction Data
  */
 export abstract class InteractionDataBase implements UnitInteractionData, Flushable {
     protected currentTargetData: EventTarget | null = null;

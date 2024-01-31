@@ -18,6 +18,7 @@ import type {Transition} from "./Transition";
 /**
  * Defines a type of state that can produce as output events.
  * @typeParam E - The type of events the FSM processes.
+ * @category API FSM
  */
 export interface OutputState extends State {
     /**
@@ -49,6 +50,7 @@ export interface OutputState extends State {
  * Tests whether the given object is an OutputState.
  * @param obj - The object to test.
  * @returns True: the object is an OutputState
+ * @category Helper
  */
 export function isOutputStateType(obj: State | undefined): obj is OutputState {
     if (obj === undefined) {

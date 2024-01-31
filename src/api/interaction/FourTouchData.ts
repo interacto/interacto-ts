@@ -18,6 +18,7 @@ import type {TouchData} from "./TouchData";
 
 /**
  * The interaction data for four-touch interactions
+ * @category API Interaction Data
  */
 export interface FourTouchData extends ThreeTouchData {
     /**

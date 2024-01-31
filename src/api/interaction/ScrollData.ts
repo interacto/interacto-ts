@@ -16,6 +16,7 @@ import type {UnitInteractionData} from "./UnitInteractionData";
 
 /**
  * Scrolling interaction data
+ * @category API Interaction Data
  */
 export interface ScrollData extends UnitInteractionData {
     /**

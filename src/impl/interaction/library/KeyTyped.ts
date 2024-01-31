@@ -26,6 +26,7 @@ interface KeyTypedFSMHandler extends FSMDataHandler {
 
 /**
  * The FSM that describes a keyboard touch typed.
+ * @category FSM
  */
 export class KeyTypedFSM extends FSMImpl<KeyTypedFSMHandler> {
     private checkKey: string | undefined;
@@ -58,6 +59,7 @@ export class KeyTypedFSM extends FSMImpl<KeyTypedFSMHandler> {
 
 /**
  * A user interaction for pressing, then releasing a keyboard key
+ * @category Interaction Library
  */
 export class KeyTyped extends InteractionBase<KeyData, KeyDataImpl, KeyTypedFSM> {
     /**

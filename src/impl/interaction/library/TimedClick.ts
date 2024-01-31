@@ -27,6 +27,7 @@ interface ClickFSMHandler extends FSMDataHandler {
 
 /**
  * The FSM of the timed click interaction
+ * @category FSM
  */
 export class TimedClickFSM extends FSMImpl<ClickFSMHandler> {
     private currentButton: number | undefined;
@@ -81,6 +82,7 @@ export class TimedClickFSM extends FSMImpl<ClickFSMHandler> {
 
 /**
  * A click interaction that is cancelled if the mouse up is not done before a given delay
+ * @category Interaction Library
  */
 export class TimedClick extends InteractionBase<PointData, PointDataImpl, TimedClickFSM> {
     /**

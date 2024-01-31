@@ -21,6 +21,7 @@ import type {TouchData} from "./TouchData";
 
 /**
  * The commun type for all two touch interaction data.
+ * @category API Interaction Data
  */
 export interface TwoTouchData extends MultiTouchData {
     /**
@@ -66,5 +67,6 @@ export interface TwoTouchData extends MultiTouchData {
 
 /**
  * A two touch interaction type that encompasses all the possible two touch interaction data.
+ * @category API Interaction Data
  */
 export type GeneralTwoTouchData = LineTouchData & RotationTouchData & ScaleTouchData;

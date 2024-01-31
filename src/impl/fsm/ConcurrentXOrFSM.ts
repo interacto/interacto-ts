@@ -24,6 +24,7 @@ import type {Logger} from "../../api/logging/Logger";
  * A concurrent FSM: an FSM that contains multiple FSMs where only one of them can run at
  * the same time. This is thus a XOR concurrent FSM.
  * If one FSM has started, the other ones cannot start.
+ * @category FSM
  */
 export class ConcurrentXOrFSM<F extends FSM, T extends FSMDataHandler> extends FSMImpl<T> implements ConcurrentFSM<F> {
     /**

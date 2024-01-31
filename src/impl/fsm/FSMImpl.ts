@@ -35,6 +35,7 @@ import type {Observable} from "rxjs";
 
 /**
  * A finite state machine that defines the behavior of a user interaction.
+ * @category FSM
  */
 export class FSMImpl<T extends FSMDataHandler> implements FSM {
     protected _dataHandler: T | undefined;

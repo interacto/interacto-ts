@@ -26,6 +26,7 @@ interface WheelFSMHandler extends FSMDataHandler {
 
 /**
  * The FSM for wheel interactions
+ * @category FSM
  */
 export class WheelFSM extends FSMImpl<WheelFSMHandler> {
     /**
@@ -45,6 +46,7 @@ export class WheelFSM extends FSMImpl<WheelFSMHandler> {
 
 /**
  * The mouse wheel interaction
+ * @category Interaction Library
  */
 export class Wheel extends InteractionBase<WheelData, WheelDataImpl, WheelFSM> {
     /**

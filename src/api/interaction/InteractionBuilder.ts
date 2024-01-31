@@ -20,6 +20,7 @@ import type {InteractionData} from "./InteractionData";
  * with specific predicates that restricts the execution of the user
  * interaction. These predicates can run at the start, the updates,
  * and the end of the user interaction execution.
+ * @category API Interaction
  */
 export interface InteractionBuilder<I extends Interaction<D>, D extends InteractionData = InteractionDataType<I>> {
     /**

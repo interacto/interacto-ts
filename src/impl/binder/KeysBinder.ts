@@ -32,6 +32,7 @@ import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
 /**
  * The base binding builder to create bindings between a keys pressure interaction and a given command.
  * @typeParam C - The type of the command to produce.
+ * @category Binding
  */
 export class KeysBinder<C extends Command, I extends Interaction<D>, A, D extends InteractionData = InteractionDataType<I>>
     extends UpdateBinder<C, I, A, D> implements KeyInteractionCmdUpdateBinder<C, I, A, D> {

@@ -26,6 +26,7 @@ import type {LogLevel} from "../logging/LogLevel";
  * (for user interactions that can be updated).
  * @typeParam I - The type of the user interaction
  * @typeParam D - The type of the interaction data of the user interaction
+ * @category Helper
  */
 export interface InteractionUpdateBinder<I extends Interaction<D>, A, D extends InteractionData = InteractionDataType<I>>
     extends InteractionUpdateBinderBuilder<I, A, D> {

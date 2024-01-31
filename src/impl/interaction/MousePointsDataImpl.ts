@@ -17,6 +17,7 @@ import type {PointData} from "../../api/interaction/PointData";
 
 /**
  * Tapping interaction data implementation
+ * @category Interaction Data
  */
 export class MousePointsDataImpl extends PointsDataImpl<PointData> {
     private currentPositionData: PointData | undefined;

@@ -17,6 +17,7 @@
  * It follows the command design pattern.
  * It contains statements to execute to perform the command.
  * The interface Undoable can be used to add undo/redo features to a command.
+ * @category API Command
  */
 export interface Command {
     /**
@@ -68,6 +69,7 @@ export interface Command {
 
 /**
  * Defines the different states of the command.
+ * @category API Command
  */
 export type CmdStatus =
 /** When the command has been cancelled. */

@@ -21,6 +21,7 @@ import type {Observable} from "rxjs";
 
 /**
  * Implementation of UndoableTreeNode
+ * @category History
  */
 class UndoableTreeNodeImpl implements UndoableTreeNode {
     public lastChildUndone: UndoableTreeNode | undefined;
@@ -94,6 +95,7 @@ class UndoableTreeNodeDTOImpl implements UndoableTreeNodeDTO {
 
 /**
  * An implementation of the TreeUndoHistory interface
+ * @category History
  */
 export class TreeUndoHistoryImpl extends TreeUndoHistory {
     private idCounter: number;

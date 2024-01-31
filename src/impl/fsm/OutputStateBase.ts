@@ -20,6 +20,7 @@ import type {Transition} from "../../api/fsm/Transition";
 
 /**
  * Base implementation of the OutputState interface.
+ * @category FSM
  */
 export abstract class OutputStateBase extends StateBase implements OutputState {
     protected readonly _transitions: Array<Transition<Event>>;

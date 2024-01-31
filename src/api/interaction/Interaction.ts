@@ -18,11 +18,13 @@ import type {FSM} from "../fsm/FSM";
 
 /**
  * Infers the interaction data type from an interaction
+ * @category API Interaction
  */
 export type InteractionDataType<T> = T extends Interaction<infer D> ? D : never;
 
 /**
  * Infers the interaction data types from an array of interactions
+ * @category API Interaction
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type InteractionsDataTypes<A extends Array<Interaction<any>>> = {
@@ -32,6 +34,7 @@ export type InteractionsDataTypes<A extends Array<Interaction<any>>> = {
 /**
  * The concept of user interaction.
  * @typeParam D - The type of the interaction data
+ * @category API Interaction
  */
 export interface Interaction<D extends InteractionData> {
     /**

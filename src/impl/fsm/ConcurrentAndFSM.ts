@@ -26,6 +26,7 @@ import type {Logger} from "../../api/logging/Logger";
  * this is a AND concurrent FSM as all the sub FSMs must run.
  * This FSM can have secondary FSMs that are optionals, i.e. not mandatory for the main
  * FSM to start.
+ * @category FSM
  */
 export class ConcurrentAndFSM<F extends FSM, T extends FSMDataHandler> extends FSMImpl<T> implements ConcurrentFSM<F> {
     /**

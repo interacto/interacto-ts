@@ -18,6 +18,7 @@ import type {KeysData} from "../../api/interaction/KeysData";
 
 /**
  * The user interaction data that stores a sequence of used keys.
+ * @category Interaction Data
  */
 export class KeysDataImpl implements KeysData, Flushable {
     private readonly keysData: Array<KeyData> = [];

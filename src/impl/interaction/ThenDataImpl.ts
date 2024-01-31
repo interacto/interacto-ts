@@ -17,6 +17,7 @@ import type {ThenData} from "../../api/interaction/ThenData";
 /**
  * The implementation of ThenData
  * @typeParam DX - The types of the sub interaction data.
+ * @category Interaction Data
  */
 export class ThenDataImpl<DX extends Array<Flushable>> implements ThenData<DX>, Flushable {
     public readonly dx: DX;

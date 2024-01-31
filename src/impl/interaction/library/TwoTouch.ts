@@ -22,11 +22,13 @@ import type {Logger} from "../../../api/logging/Logger";
 
 /**
  * Define a type for touch interactions performing a rotation.
+ * @category Interaction Library
  */
 export type Rotate = XTouchDnD<RotationTouchData, RotationTouchDataImpl>;
 
 /**
  * Define a type for touch interactions performing a scale/pinch.
+ * @category Interaction Library
  */
 export type Scale = XTouchDnD<ScaleTouchData, ScaleTouchDataImpl>;
 
@@ -35,6 +37,7 @@ export type Scale = XTouchDnD<ScaleTouchData, ScaleTouchDataImpl>;
  * @param logger - The logger to use for this interaction
  * @param pxTolerance - The pixel tolerance for considering the rotation (tolerance while moving the fixation point).
  * @returns The supplier that will produce the interaction when called
+ * @category Interaction Library
  */
 export function rotate(logger: Logger, pxTolerance: number): () => Rotate {
     return new InteractionBuilderImpl(name => new XTouchDnD<RotationTouchData, RotationTouchDataImpl>(2, logger,
@@ -50,6 +53,7 @@ export function rotate(logger: Logger, pxTolerance: number): () => Rotate {
  * @param pxTolerance - The pixel tolerance for considering the scale/pinch (tolerance as the two
  * points must be on the same line).
  * @returns The supplier that will produce the interaction when called
+ * @category Interaction Library
  */
 export function scale(logger: Logger, pxTolerance: number): () => Scale {
     return new InteractionBuilderImpl(name => new XTouchDnD<ScaleTouchData, ScaleTouchDataImpl>(2, logger,

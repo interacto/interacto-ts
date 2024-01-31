@@ -30,6 +30,7 @@ import type {FSMDataHandler} from "../fsm/FSMDataHandler";
  * @typeParam D1 - The type of the first interaction data
  * @typeParam D1Impl - The class of the first interaction data
  * @typeParam D2Impl - The class of the second interaction data
+ * @category Interaction Library
  */
 export class Or<
     I1 extends InteractionBase<D1, D1Impl, FSM>,

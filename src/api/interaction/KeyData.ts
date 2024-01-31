@@ -18,6 +18,7 @@ import type {UnitInteractionData} from "./UnitInteractionData";
 /**
  * The data of keyboard-based user interactions.
  * Based on: https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent (documentation extracted from here)
+ * @category API Interaction Data
  */
 export interface KeyData extends UnitInteractionData, EventModifierData {
     /**

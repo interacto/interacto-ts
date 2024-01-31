@@ -19,6 +19,7 @@ import type {InteractionData} from "../../api/interaction/InteractionData";
 
 /**
  * An implementation of `InteractionBuilder`.
+ * @category Interaction
  */
 export class InteractionBuilderImpl<I extends Interaction<D>, D extends InteractionData = InteractionDataType<I>>
 implements InteractionBuilder<I, D> {

@@ -37,6 +37,7 @@ interface MouseDownFSMHandler extends FSMDataHandler {
 
 /**
  * A user interaction for pressing down a mouse button.
+ * @category Interaction Library
  */
 export class MouseDown extends InteractionBase<PointData, PointDataImpl, MouseDownFSM> {
     /**

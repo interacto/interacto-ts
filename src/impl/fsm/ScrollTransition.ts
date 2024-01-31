@@ -19,6 +19,7 @@ import type {OutputState} from "../../api/fsm/OutputState";
 
 /**
  * This transition corresponds to the scroll of a window
+ * @category FSM Transition
  */
 export class ScrollTransition extends TransitionBase<Event> {
     private static readonly acceptedEvents: ReadonlySet<EventType> = new Set(["scroll"]);

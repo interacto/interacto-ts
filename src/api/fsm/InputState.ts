@@ -16,6 +16,7 @@ import type {State} from "./State";
 
 /**
  * Defines a type of state that can receive input events.
+ * @category API FSM
  */
 export interface InputState extends State {
     /**

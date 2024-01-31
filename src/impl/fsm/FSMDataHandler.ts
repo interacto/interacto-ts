@@ -14,6 +14,7 @@
 
 /**
  * The base interface for listening FSMs behavior.
+ * @category API FSM
  */
 export interface FSMDataHandler {
     /**

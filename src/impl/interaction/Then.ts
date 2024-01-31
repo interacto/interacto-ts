@@ -24,6 +24,7 @@ import type {Logger} from "../../api/logging/Logger";
 
 /**
  * A user interaction composed of a serie of sub user interactions.
+ * @category Interaction Library
  */
 export class Then<
     IX extends Array<Interaction<InteractionData>>,

@@ -24,6 +24,7 @@ import type {Logger} from "../../../api/logging/Logger";
  * @param minLength - The minimal distance from the starting point to the release point for validating the pan
  * @param minVelocity - The minimal minVelocity to reach for validating the swipe. In pixels per second.
  * @returns The supplier that will produce the interaction when called
+ * @category Interaction Library
  */
 export function hPan(logger: Logger, cancellable: boolean,
                      pxTolerance: number, minLength?: number, minVelocity?: number): () => TouchDnD {
@@ -43,6 +44,7 @@ export function hPan(logger: Logger, cancellable: boolean,
  * @param minLength - The minimal distance from the starting point to the release point for validating the pan
  * @param minVelocity - The minimal minVelocity to reach for validating the swipe. In pixels per second.
  * @returns The supplier that will produce the interaction when called
+ * @category Interaction Library
  */
 export function vPan(logger: Logger, cancellable: boolean,
                      pxTolerance: number, minLength?: number, minVelocity?: number): () => TouchDnD {
@@ -62,6 +64,7 @@ export function vPan(logger: Logger, cancellable: boolean,
  * @param minLength - The minimal distance from the starting point to the release point for validating the pan
  * @param minVelocity - The minimal minVelocity to reach for validating the swipe. In pixels per second.
  * @returns The supplier that will produce the interaction when called
+ * @category Interaction Library
  */
 export function leftPan(logger: Logger, cancellable: boolean,
                         pxTolerance: number, minLength?: number, minVelocity?: number): () => TouchDnD {
@@ -81,6 +84,7 @@ export function leftPan(logger: Logger, cancellable: boolean,
  * @param minLength - The minimal distance from the starting point to the release point for validating the pan
  * @param minVelocity - The minimal minVelocity to reach for validating the swipe. In pixels per second.
  * @returns The supplier that will produce the interaction when called
+ * @category Interaction Library
  */
 export function rightPan(logger: Logger, cancellable: boolean,
                          pxTolerance: number, minLength?: number, minVelocity?: number): () => TouchDnD {
@@ -100,6 +104,7 @@ export function rightPan(logger: Logger, cancellable: boolean,
  * @param minLength - The minimal distance from the starting point to the release point for validating the pan
  * @param minVelocity - The minimal minVelocity to reach for validating the swipe. In pixels per second.
  * @returns The supplier that will produce the interaction when called
+ * @category Interaction Library
  */
 export function topPan(logger: Logger, cancellable: boolean,
                        pxTolerance: number, minLength?: number, minVelocity?: number): () => TouchDnD {
@@ -119,6 +124,7 @@ export function topPan(logger: Logger, cancellable: boolean,
  * @param minLength - The minimal distance from the starting point to the release point for validating the pan
  * @param minVelocity - The minimal minVelocity to reach for validating the swipe. In pixels per second.
  * @returns The supplier that will produce the interaction when called
+ * @category Interaction Library
  */
 export function bottomPan(logger: Logger, cancellable: boolean,
                           pxTolerance: number, minLength?: number, minVelocity?: number): () => TouchDnD {

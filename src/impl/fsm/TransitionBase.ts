@@ -20,6 +20,7 @@ import type {VisitorFSM} from "../../api/fsm/VisitorFSM";
 
 /**
  * The base implementation of a FSM transition.
+ * @category FSM Transition
  */
 export abstract class TransitionBase<E extends Event> implements Transition<E> {
     public readonly src: OutputState;

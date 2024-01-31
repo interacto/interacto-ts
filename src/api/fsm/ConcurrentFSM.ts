@@ -15,6 +15,7 @@ import type {FSM} from "./FSM";
 
 /**
  * Defines an FSM that contains concurrent FSMs
+ * @category API FSM
  */
 export interface ConcurrentFSM<F extends FSM> extends FSM {
     /**

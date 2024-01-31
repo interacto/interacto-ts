@@ -26,6 +26,7 @@ interface KeysDownFSMHandler extends FSMDataHandler {
 
 /**
  * This interaction permits to define combo a key pressed that can be used to define shortcuts, etc.
+ * @category FSM
  */
 export class KeysDownFSM extends FSMImpl<KeysDownFSMHandler> {
     private readonly currentCodes: Array<string>;
@@ -62,6 +63,7 @@ export class KeysDownFSM extends FSMImpl<KeysDownFSMHandler> {
 /**
  * Several keys pressed at the same time.
  * Starts on a key pressure. Ends as soon as one of the pressed keys is released.
+ * @category Interaction Library
  */
 export class KeysDown extends InteractionBase<KeysData, KeysDataImpl, KeysDownFSM> {
     /**

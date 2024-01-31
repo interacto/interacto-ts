@@ -18,6 +18,7 @@ import type {VisitorFSM} from "../fsm/VisitorFSM";
 
 /**
  * The main interface for visiting user interactions.
+ * @category API Interaction
  */
 export interface VisitorInteraction extends VisitorFSM {
     visitInteraction(interaction: Interaction<InteractionData>): void;

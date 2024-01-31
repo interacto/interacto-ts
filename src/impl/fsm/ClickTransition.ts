@@ -18,6 +18,7 @@ import type {OutputState} from "../../api/fsm/OutputState";
 
 /**
  * This transition corresponds to a pressure of a button of a pointing device.
+ * @category FSM Transition
  */
 export class ClickTransition extends MouseTransition {
     /**

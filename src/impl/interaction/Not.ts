@@ -26,6 +26,7 @@ import type {FSMDataHandler} from "../fsm/FSMDataHandler";
  * An interaction that corresponds to the ! operator.
  * DnD ! KeyTyped("ESC")  uses a Not interaction where DnD is the main interaction
  * and KeyTyped the one that can cancel the interactions.
+ * @category Interaction Library
  */
 export class Not<I extends InteractionBase<DI & InteractionData, DI & DImpl & Flushable, FSM>, N extends Interaction<InteractionData>,
     DI = InteractionDataType<I>, DImpl = InteractionDataImplType<I>>

@@ -17,6 +17,7 @@ import type {ScaleTouchData} from "../../api/interaction/ScaleTouchData";
 
 /**
  * The implementation of the scale/pinch interaction data.
+ * @category Interaction Data
  */
 export class ScaleTouchDataImpl extends TwoTouchDataImpl implements ScaleTouchData {
     public constructor() {

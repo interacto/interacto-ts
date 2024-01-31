@@ -18,6 +18,7 @@ import type {VisitorFSM} from "../../api/fsm/VisitorFSM";
 
 /**
  * The base implementation of the State interface.
+ * @category FSM
  */
 export abstract class StateBase implements State {
     public readonly fsm: FSM;

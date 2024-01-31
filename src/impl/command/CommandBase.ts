@@ -16,6 +16,7 @@ import type {Command, CmdStatus} from "../../api/command/Command";
 
 /**
  * The base implementation class for coding UI commands.
+ * @category Command
  */
 export abstract class CommandBase implements Command {
     /**

@@ -22,6 +22,7 @@ import type {Logger} from "../../api/logging/Logger";
 /**
  * A timeout transition is an FSM transition that is not executed by an event:
  * the FSM goes through such a transition on a timeout.
+ * @category FSM Transition
  */
 export class TimeoutTransition extends TransitionBase<Event> {
     /**
