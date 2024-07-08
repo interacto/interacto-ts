@@ -33,13 +33,13 @@ describe("using an undo history", () => {
         undoable.getUndoName.mockReturnValue("undoredomsg");
     });
 
-    test("undoCallundo", () => {
+    test("undo called", () => {
         instance.add(undoable);
         instance.undo();
         expect(undoable.undo).toHaveBeenCalledTimes(1);
     });
 
-    test("redowithUndoDonewithGlobalUndoable", () => {
+    test("undo and redo called", () => {
         instance.add(undoable);
         instance.undo();
         instance.redo();
@@ -47,17 +47,18 @@ describe("using an undo history", () => {
         expect(undoable.redo).toHaveBeenCalledTimes(1);
     });
 
-    test("redowhenRedoEmpty", () => {
+    test("redo not called", () => {
+        instance.add(undoable);
         instance.redo();
         expect(undoable.redo).not.toHaveBeenCalled();
     });
 
-    test("undowhenUndoEmpty", () => {
+    test("undo ok when empty", () => {
         instance.undo();
-        expect(undoable.undo).not.toHaveBeenCalled();
+        expect(instance.getLastUndo()).toBeUndefined();
     });
 
-    test("redoCallredo", () => {
+    test("get last undo ok on add", () => {
         instance.add(undoable);
         instance.undo();
         instance.redo();
