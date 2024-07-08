@@ -13,6 +13,7 @@
  */
 
 import {Clicks, KeysDataImpl, KeysTyped, PointsDataImpl, MouseDown, Or, TouchStart} from "../../src/interacto";
+import { afterEach, beforeEach, describe, expect, jest, test } from "@jest/globals";
 import {robot} from "interacto-nono";
 import {mock} from "jest-mock-extended";
 import type {FSMHandler, KeysData, Logger} from "../../src/interacto";

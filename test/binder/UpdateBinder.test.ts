@@ -15,8 +15,8 @@
 import {UpdateBinder} from "../../src/impl/binder/UpdateBinder";
 import {MouseDown} from "../../src/impl/interaction/library/MouseDown";
 import {UndoHistoryImpl} from "../../src/impl/undo/UndoHistoryImpl";
+import { afterEach, beforeEach, describe, expect, test, jest } from "@jest/globals";
 import {mock} from "jest-mock-extended";
-import clearAllMocks = jest.clearAllMocks;
 import type {BindingsObserver} from "../../src/api/binding/BindingsObserver";
 import type {Command} from "../../src/api/command/Command";
 import type {Interaction} from "../../src/api/interaction/Interaction";
@@ -35,7 +35,7 @@ describe("using an update binder", () => {
     });
 
     afterEach(() => {
-        clearAllMocks();
+        jest.clearAllMocks();
     });
 
     test("that is crashes when calling bind without an interaction supplier", () => {

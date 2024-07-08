@@ -13,6 +13,7 @@
  */
 
 import {TreeUndoHistoryImpl} from "../../src/impl/undo/TreeUndoHistoryImpl";
+import { afterEach, beforeEach, describe, expect, jest, test } from "@jest/globals";
 import {mock} from "jest-mock-extended";
 import {TestScheduler} from "rxjs/testing";
 import type {TreeUndoHistory} from "../../src/api/undo/TreeUndoHistory";
@@ -23,7 +24,6 @@ interface Undoable4Test extends Undoable {
 
     bar: string;
 }
-
 describe("using a tree undo history", () => {
     let history: TreeUndoHistory;
     let undoable0: Undoable4Test;

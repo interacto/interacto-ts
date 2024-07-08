@@ -13,6 +13,7 @@
  */
 
 import {ClickFSM, DnD, DoubleClickFSM, KeyTyped, LongTouch, MouseDown, MultiTouch, TouchDnD, VisitorFSMDepthFirst} from "../../src/interacto";
+import { beforeEach, describe, expect, test } from "@jest/globals";
 import {mock} from "jest-mock-extended";
 import type {Logger, FSMDataHandler, FSMImpl, FSM, InputState, OutputState, State,
     Transition, TimeoutTransition, ConcurrentAndFSM, ConcurrentXOrFSM} from "../../src/interacto";
@@ -68,7 +69,6 @@ class StubVisitor extends VisitorFSMDepthFirst {
         super.visitTimeoutTransition(transition);
     }
 }
-
 describe("using the std FSM visitor implementation", () => {
     beforeEach(() => {
         visitor = new StubVisitor();

@@ -14,6 +14,7 @@
 
 import {Wheel, WheelDataImpl} from "../../../src/interacto";
 import {createWheelEvent2} from "../StubEvents";
+import { beforeEach, describe, expect, jest, test } from "@jest/globals";
 import {robot} from "interacto-nono";
 import {mock} from "jest-mock-extended";
 import type {FSMHandler, Logger} from "../../../src/interacto";

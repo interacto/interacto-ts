@@ -14,6 +14,7 @@
 
 import {PointDataImpl, TimedClick} from "../../../src/interacto";
 import {createMouseEvent2, robot} from "../StubEvents";
+import { afterEach, beforeEach, describe, expect, jest, test } from "@jest/globals";
 import {mock} from "jest-mock-extended";
 import type {FSMHandler, Logger} from "../../../src/interacto";
 import type {MockProxy} from "jest-mock-extended";

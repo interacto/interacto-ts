@@ -14,6 +14,7 @@
 import {BindingsImpl, MouseDown, UndoHistoryImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {createKeyEvent, createMouseEvent} from "../interaction/StubEvents";
+import { afterEach, beforeEach, describe, expect, test } from "@jest/globals";
 import {mock} from "jest-mock-extended";
 import type {Bindings} from "../../src/api/binding/Bindings";
 import type {Binding, UndoHistoryBase, Logger} from "../../src/interacto";
@@ -25,7 +26,6 @@ let binding1: Binding<StubCmd, MouseDown, unknown>;
 let binding2: Binding<StubCmd, MouseDown, unknown>;
 let disposable: Subscription | undefined;
 let bindings: Bindings<UndoHistoryBase>;
-
 describe("using a block event binder", () => {
     beforeEach(() => {
         bindings = new BindingsImpl(new UndoHistoryImpl());

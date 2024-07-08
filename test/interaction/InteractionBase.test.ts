@@ -20,11 +20,9 @@ import {MouseTransition} from "../../src/impl/fsm/MouseTransition";
 import {StdState} from "../../src/impl/fsm/StdState";
 import {TransitionBase} from "../../src/impl/fsm/TransitionBase";
 import {flushPromises} from "../Utils";
+import { afterEach, beforeEach, describe, expect, jest, test } from "@jest/globals";
 import {mock} from "jest-mock-extended";
 import {Subject} from "rxjs";
-import clearAllTimers = jest.clearAllTimers;
-import runAllTimers = jest.runAllTimers;
-import advanceTimersByTime = jest.advanceTimersByTime;
 import type {MouseEventForTest} from "./StubEvents";
 import type {EventType} from "../../src/api/fsm/EventType";
 import type {InputState} from "../../src/api/fsm/InputState";
@@ -283,13 +281,13 @@ describe("using a base interaction", () => {
         });
 
         afterEach(async () => {
-            clearAllTimers();
+            jest.clearAllTimers();
             await flushPromises();
         });
 
         test("throttle with a single event > timeout", async() => {
             interaction.processEvent(undefined as never as Event);
-            runAllTimers();
+            jest.runAllTimers();
             await flushPromises();
 
             expect(logger.logInteractionErr).not.toHaveBeenCalled();
@@ -305,9 +303,9 @@ describe("using a base interaction", () => {
 
         test("throttle with two events of same type < timeout", async() => {
             interaction.processEvent(evt1);
-            advanceTimersByTime(2);
+            jest.advanceTimersByTime(2);
             interaction.processEvent(evt2);
-            runAllTimers();
+            jest.runAllTimers();
             await flushPromises();
 
             expect(fsm.process).toHaveBeenNthCalledWith(1, evt2);
@@ -316,11 +314,11 @@ describe("using a base interaction", () => {
 
         test("throttle with three events of same type < timeout", async() => {
             interaction.processEvent(evt1);
-            advanceTimersByTime(2);
+            jest.advanceTimersByTime(2);
             interaction.processEvent(evt2);
-            advanceTimersByTime(7);
+            jest.advanceTimersByTime(7);
             interaction.processEvent(evt3);
-            runAllTimers();
+            jest.runAllTimers();
             await flushPromises();
 
             expect(fsm.process).toHaveBeenNthCalledWith(1, evt3);
@@ -329,13 +327,13 @@ describe("using a base interaction", () => {
 
         test("throttle with four events of same type < timeout", async() => {
             interaction.processEvent(evt1);
-            advanceTimersByTime(2);
+            jest.advanceTimersByTime(2);
             interaction.processEvent(evt2);
-            advanceTimersByTime(3);
+            jest.advanceTimersByTime(3);
             interaction.processEvent(evt3);
-            advanceTimersByTime(1);
+            jest.advanceTimersByTime(1);
             interaction.processEvent(evt4);
-            runAllTimers();
+            jest.runAllTimers();
             await flushPromises();
 
             expect(fsm.process).toHaveBeenNthCalledWith(1, evt4);
@@ -344,9 +342,9 @@ describe("using a base interaction", () => {
 
         test("throttle with two events of same type > timeout", async() => {
             interaction.processEvent(evt1);
-            advanceTimersByTime(11);
+            jest.advanceTimersByTime(11);
             interaction.processEvent(evt2);
-            runAllTimers();
+            jest.runAllTimers();
             await flushPromises();
 
             expect(fsm.process).toHaveBeenCalledTimes(2);
@@ -356,11 +354,11 @@ describe("using a base interaction", () => {
 
         test("throttle with three events of same type > timeout", async() => {
             interaction.processEvent(evt1);
-            advanceTimersByTime(9);
+            jest.advanceTimersByTime(9);
             interaction.processEvent(evt2);
-            advanceTimersByTime(15);
+            jest.advanceTimersByTime(15);
             interaction.processEvent(evt3);
-            runAllTimers();
+            jest.runAllTimers();
             await flushPromises();
 
             expect(fsm.process).toHaveBeenNthCalledWith(1, evt2);
@@ -370,13 +368,13 @@ describe("using a base interaction", () => {
 
         test("throttle with four events of same type > timeout", async() => {
             interaction.processEvent(evt1);
-            advanceTimersByTime(9);
+            jest.advanceTimersByTime(9);
             interaction.processEvent(evt2);
-            advanceTimersByTime(15);
+            jest.advanceTimersByTime(15);
             interaction.processEvent(evt3);
-            advanceTimersByTime(10);
+            jest.advanceTimersByTime(10);
             interaction.processEvent(evt4);
-            runAllTimers();
+            jest.runAllTimers();
             await flushPromises();
 
             expect(fsm.process).toHaveBeenNthCalledWith(1, evt2);
@@ -387,9 +385,9 @@ describe("using a base interaction", () => {
 
         test("throttle with two events of different types < timeout", async() => {
             interaction.processEvent(evt1);
-            advanceTimersByTime(2);
+            jest.advanceTimersByTime(2);
             interaction.processEvent(evtDiff);
-            runAllTimers();
+            jest.runAllTimers();
             await flushPromises();
 
             expect(fsm.process).toHaveBeenNthCalledWith(1, evt1);
@@ -399,13 +397,13 @@ describe("using a base interaction", () => {
 
         test("throttle with three + one events of different types < timeout", async() => {
             interaction.processEvent(evt1);
-            advanceTimersByTime(2);
+            jest.advanceTimersByTime(2);
             interaction.processEvent(evt2);
-            advanceTimersByTime(2);
+            jest.advanceTimersByTime(2);
             interaction.processEvent(evt3);
-            advanceTimersByTime(2);
+            jest.advanceTimersByTime(2);
             interaction.processEvent(evtDiff);
-            runAllTimers();
+            jest.runAllTimers();
             await flushPromises();
 
             expect(fsm.process).toHaveBeenNthCalledWith(1, evt3);
@@ -415,13 +413,13 @@ describe("using a base interaction", () => {
 
         test("throttle with one + three events of different types < timeout", async() => {
             interaction.processEvent(evtDiff);
-            advanceTimersByTime(2);
+            jest.advanceTimersByTime(2);
             interaction.processEvent(evt1);
-            advanceTimersByTime(2);
+            jest.advanceTimersByTime(2);
             interaction.processEvent(evt2);
-            advanceTimersByTime(2);
+            jest.advanceTimersByTime(2);
             interaction.processEvent(evt3);
-            runAllTimers();
+            jest.runAllTimers();
             await flushPromises();
 
             expect(fsm.process).toHaveBeenNthCalledWith(1, evtDiff);
@@ -431,11 +429,11 @@ describe("using a base interaction", () => {
 
         test("throttle with one + three events of different types > timeout", async() => {
             interaction.processEvent(evt1);
-            advanceTimersByTime(12);
+            jest.advanceTimersByTime(12);
             interaction.processEvent(evt2);
-            advanceTimersByTime(5);
+            jest.advanceTimersByTime(5);
             interaction.processEvent(evt3);
-            runAllTimers();
+            jest.runAllTimers();
             await flushPromises();
 
             expect(fsm.process).toHaveBeenNthCalledWith(1, evt1);
@@ -451,9 +449,9 @@ describe("using a base interaction", () => {
                     throw new Error("YOLO");
                 });
             interaction.processEvent(evt1);
-            advanceTimersByTime(2);
+            jest.advanceTimersByTime(2);
             interaction.processEvent(evtDiff);
-            runAllTimers();
+            jest.runAllTimers();
             await flushPromises();
             expect(logger.logInteractionErr).toHaveBeenCalledWith("Error during the throttling process", new Error("YOLO"), "InteractionStub");
         });
@@ -468,9 +466,9 @@ describe("using a base interaction", () => {
                     throw new Error("YOLO");
                 });
             interaction.processEvent(evt1);
-            advanceTimersByTime(2);
+            jest.advanceTimersByTime(2);
             interaction.processEvent(evtDiff);
-            runAllTimers();
+            jest.runAllTimers();
             await flushPromises();
             expect(logger.logInteractionErr).not.toHaveBeenCalled();
         });
@@ -484,9 +482,9 @@ describe("using a base interaction", () => {
                     throw 42;
                 });
             interaction.processEvent(evt1);
-            advanceTimersByTime(2);
+            jest.advanceTimersByTime(2);
             interaction.processEvent(evtDiff);
-            runAllTimers();
+            jest.runAllTimers();
             await flushPromises();
             expect(logger.logInteractionErr).toHaveBeenCalledWith("Error during the throttling process", 42, "InteractionStub");
         });

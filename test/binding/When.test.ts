@@ -13,6 +13,7 @@
  */
 
 import {isWhenAtEnd, isWhenAtStart, isWhenAtThen, isWhenStrict} from "../../src/api/binder/When";
+import { describe, expect, test } from "@jest/globals";
 
 describe("test WhenType", () => {
     test("isWhenAtStart", () => {

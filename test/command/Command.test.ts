@@ -14,6 +14,7 @@
  */
 import {StubCmd} from "./StubCmd";
 import {CommandBase} from "../../src/impl/command/CommandBase";
+import { afterEach, beforeEach, describe, expect, jest, test } from "@jest/globals";
 
 describe("using a command", () => {
     let cmd: StubCmd;

@@ -14,6 +14,7 @@
 
 import {CancelFSMError} from "../../src/impl/fsm/CancelFSMError";
 import {TimeoutTransition} from "../../src/impl/fsm/TimeoutTransition";
+import { afterEach, beforeEach, describe, expect, jest, test } from "@jest/globals";
 import {mock} from "jest-mock-extended";
 import type {InputState} from "../../src/api/fsm/InputState";
 import type {OutputState} from "../../src/api/fsm/OutputState";

@@ -14,6 +14,7 @@
 
 import {SrcTgtTouchDataImpl} from "../../src/impl/interaction/SrcTgtTouchDataImpl";
 import {TouchDataImpl} from "../../src/impl/interaction/TouchDataImpl";
+import { beforeEach, describe, expect, test } from "@jest/globals";
 import type {EventModifierData} from "../../src/api/interaction/EventModifierData";
 import type {UnitInteractionData} from "../../src/api/interaction/UnitInteractionData";
 

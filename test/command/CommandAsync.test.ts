@@ -18,14 +18,8 @@ import {CommandBase} from "../../src/impl/command/CommandBase";
 import {UndoHistoryImpl} from "../../src/impl/undo/UndoHistoryImpl";
 import {robot} from "../interaction/StubEvents";
 import {flushPromises} from "../Utils";
+import { afterEach, beforeEach, describe, expect, test, jest } from "@jest/globals";
 import {Subject} from "rxjs";
-import useFakeTimers = jest.useFakeTimers;
-import clearAllTimers = jest.clearAllTimers;
-import useRealTimers = jest.useRealTimers;
-import runAllTimers = jest.runAllTimers;
-import advanceTimersByTime = jest.advanceTimersByTime;
-import fn = jest.fn;
-import clearAllMocks = jest.clearAllMocks;
 import type {Binding} from "../../src/api/binding/Binding";
 import type {Bindings} from "../../src/api/binding/Bindings";
 import type {Interaction} from "../../src/api/interaction/Interaction";
@@ -76,7 +70,6 @@ let data: Model;
 let binding: Binding<StubAsyncCmd, Interaction<InteractionData>, unknown> | undefined;
 let ctx: BindingsContext;
 let bindings: Bindings<UndoHistoryBase>;
-
 describe("testing async commands and bindings", () => {
     beforeEach(() => {
         bindings = new BindingsImpl(new UndoHistoryImpl());
@@ -88,14 +81,14 @@ describe("testing async commands and bindings", () => {
 
     afterEach(async () => {
         bindings.clear();
-        clearAllTimers();
-        clearAllMocks();
+        jest.clearAllTimers();
+        jest.clearAllMocks();
         await flushPromises();
     });
 
     describe("async command alone", () => {
         test("when promise not ended command not ended", () => {
-            useFakeTimers();
+            jest.useFakeTimers();
             const res = cmd.execute();
 
             expect(res).toBeDefined();
@@ -104,7 +97,7 @@ describe("testing async commands and bindings", () => {
         });
 
         test("when promise ended command also ended", async () => {
-            useRealTimers();
+            jest.useRealTimers();
             const res = await cmd.execute();
 
             expect(res).toBeDefined();
@@ -113,7 +106,7 @@ describe("testing async commands and bindings", () => {
         });
 
         test("two commands executed", async () => {
-            useRealTimers();
+            jest.useRealTimers();
             const cmd2 = new StubAsyncCmd(data);
             await Promise.all([cmd.execute(), cmd2.execute()]);
 
@@ -125,7 +118,7 @@ describe("testing async commands and bindings", () => {
         let button1: HTMLButtonElement;
 
         beforeEach(() => {
-            useFakeTimers();
+            jest.useFakeTimers();
             button1 = document.createElement("button");
         });
 
@@ -136,7 +129,7 @@ describe("testing async commands and bindings", () => {
                 .bind();
 
             button1.click();
-            runAllTimers();
+            jest.runAllTimers();
             await flushPromises();
 
             expect(binding).toBeDefined();
@@ -157,7 +150,7 @@ describe("testing async commands and bindings", () => {
                 .bind();
 
             button1.click();
-            advanceTimersByTime(49);
+            jest.advanceTimersByTime(49);
             await flushPromises();
             expect(binding.command).toBeDefined();
             expect(end).not.toHaveBeenCalled();
@@ -176,7 +169,7 @@ describe("testing async commands and bindings", () => {
                 .bind();
 
             button1.click();
-            advanceTimersByTime(51);
+            jest.advanceTimersByTime(51);
             await flushPromises();
             expect(binding.command).toBeUndefined();
             expect(end).toHaveBeenCalledTimes(1);
@@ -185,7 +178,7 @@ describe("testing async commands and bindings", () => {
 
         test("two button clicks with async command work in good time order (1)", async () => {
             binding = bindings.buttonBinder()
-                .toProduce(fn()
+                .toProduce(jest.fn<() => StubAsyncCmd>()
                     .mockReturnValueOnce(new StubAsyncCmd(data, 100))
                     .mockReturnValueOnce(new StubAsyncCmd(data, 5)))
                 .on(button1)
@@ -193,8 +186,8 @@ describe("testing async commands and bindings", () => {
 
             button1.click();
             button1.click();
-            advanceTimersByTime(10);
-            runAllTimers();
+            jest.advanceTimersByTime(10);
+            jest.runAllTimers();
             await flushPromises();
 
             expect(binding).toBeDefined();
@@ -209,7 +202,7 @@ describe("testing async commands and bindings", () => {
 
         test("two button clicks with async command work in good time order (2)", async () => {
             binding = bindings.buttonBinder()
-                .toProduce(fn()
+                .toProduce(jest.fn<() => StubAsyncCmd>()
                     .mockReturnValueOnce(new StubAsyncCmd(data, 5))
                     .mockReturnValueOnce(new StubAsyncCmd(data, 100)))
                 .on(button1)
@@ -217,8 +210,8 @@ describe("testing async commands and bindings", () => {
 
             button1.click();
             button1.click();
-            advanceTimersByTime(10);
-            runAllTimers();
+            jest.advanceTimersByTime(10);
+            jest.runAllTimers();
             await flushPromises();
 
             expect(binding.command).toBeUndefined();
@@ -235,7 +228,7 @@ describe("testing async commands and bindings", () => {
             const first = jest.fn(() => {});
 
             binding = bindings.buttonBinder()
-                .toProduce(fn()
+                .toProduce(jest.fn<() => StubAsyncCmd>()
                     .mockReturnValueOnce(cmd)
                     .mockReturnValueOnce(cmd2))
                 .end(end)
@@ -244,9 +237,9 @@ describe("testing async commands and bindings", () => {
                 .bind();
 
             button1.click();
-            runAllTimers();
+            jest.runAllTimers();
             button1.click();
-            runAllTimers();
+            jest.runAllTimers();
             await flushPromises();
 
             expect(first).toHaveBeenCalledTimes(2);
@@ -264,7 +257,7 @@ describe("testing async commands and bindings", () => {
             const first = jest.fn(() => {});
 
             binding = bindings.buttonBinder()
-                .toProduce(fn()
+                .toProduce(jest.fn<() => StubAsyncCmd>()
                     .mockReturnValueOnce(cmd)
                     .mockReturnValueOnce(cmd2))
                 .end(end)
@@ -273,12 +266,12 @@ describe("testing async commands and bindings", () => {
                 .bind();
 
             button1.click();
-            advanceTimersByTime(40);
+            jest.advanceTimersByTime(40);
             button1.click();
             // Triggering the command cmd2
-            advanceTimersByTime(20);
+            jest.advanceTimersByTime(20);
             // Triggering the command cmd
-            runAllTimers();
+            jest.runAllTimers();
             await flushPromises();
 
             expect(first).toHaveBeenCalledTimes(2);
@@ -296,7 +289,7 @@ describe("testing async commands and bindings", () => {
                 .bind();
 
             button1.click();
-            runAllTimers();
+            jest.runAllTimers();
             await flushPromises();
 
             expect(binding).toBeDefined();
@@ -316,7 +309,7 @@ describe("testing async commands and bindings", () => {
             // @ts-expect-error
             (binding as unknown).cmdsProduced.unsubscribe();
             button1.click();
-            runAllTimers();
+            jest.runAllTimers();
             await flushPromises();
 
             // Need to reopen the stream not to provoke crash on flush
@@ -361,7 +354,7 @@ describe("testing async commands and bindings", () => {
 
             button1.click();
             button1.click();
-            runAllTimers();
+            jest.runAllTimers();
             await flushPromises();
             expect(button1.disabled).toBeFalsy();
             expect(ctx.commands).toHaveLength(1);
@@ -372,7 +365,7 @@ describe("testing async commands and bindings", () => {
         let canvas: HTMLCanvasElement;
 
         beforeEach(() => {
-            useFakeTimers();
+            jest.useFakeTimers();
             canvas = document.createElement("canvas");
         });
 
@@ -387,7 +380,7 @@ describe("testing async commands and bindings", () => {
                 .mousemove()
                 .mouseup();
 
-            runAllTimers();
+            jest.runAllTimers();
             await flushPromises();
 
             expect(binding).toBeDefined();
@@ -414,7 +407,7 @@ describe("testing async commands and bindings", () => {
                 .mousemove()
                 .mouseup();
 
-            runAllTimers();
+            jest.runAllTimers();
             await flushPromises();
 
             expect(binding).toBeDefined();
@@ -441,7 +434,7 @@ describe("testing async commands and bindings", () => {
                 .mousemove()
                 .mouseup();
 
-            runAllTimers();
+            jest.runAllTimers();
             await flushPromises();
 
             expect(binding.command).toBeUndefined();
@@ -472,7 +465,7 @@ describe("testing async commands and bindings", () => {
                 .mousemove()
                 .mouseup();
 
-            runAllTimers();
+            jest.runAllTimers();
             await flushPromises();
 
             expect(binding.command).toBeUndefined();
@@ -486,7 +479,7 @@ describe("testing async commands and bindings", () => {
         let canvas: HTMLCanvasElement;
 
         beforeEach(() => {
-            useFakeTimers();
+            jest.useFakeTimers();
             canvas = document.createElement("canvas");
         });
 
@@ -505,7 +498,7 @@ describe("testing async commands and bindings", () => {
                 .touchmove({}, [{"identifier": 3}])
                 .touchend({}, [{"identifier": 1}]);
 
-            runAllTimers();
+            jest.runAllTimers();
             await flushPromises();
 
             expect(binding).toBeDefined();

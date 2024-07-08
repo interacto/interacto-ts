@@ -14,6 +14,7 @@
 
 import {TouchDataImpl, TouchDnD} from "../../../src/interacto";
 import {robot} from "../StubEvents";
+import { afterEach, beforeEach, describe, expect, jest, test } from "@jest/globals";
 import {mock} from "jest-mock-extended";
 import type {FSMHandler, Logger} from "../../../src/interacto";
 import type {MockProxy} from "jest-mock-extended";
@@ -35,7 +36,7 @@ describe("using a touch dnd interaction", () => {
         interaction.fsm.addHandler(handler);
         canvas = document.createElement("canvas");
         // document.elementFromPoint is undefined
-        document.elementFromPoint = jest.fn().mockImplementation(() => null);
+        document.elementFromPoint = jest.fn<() => Element | null>().mockImplementation(() => null);
         interaction.registerToNodes([canvas]);
     });
 
@@ -343,7 +344,7 @@ describe("using a touch dnd interaction", () => {
         canvas.append(div);
         div.classList.add("ioDwellSpring");
         interaction.registerToNodes([canvas, div]);
-        document.elementFromPoint = jest.fn().mockImplementation(() => div);
+        document.elementFromPoint = jest.fn<() => Element | null>().mockImplementation(() => div);
 
         robot(canvas)
             .keepData()
@@ -394,7 +395,7 @@ describe("using a touch dnd interaction", () => {
             interaction.fsm.addHandler(handler);
             canvas = document.createElement("canvas");
             // document.elementFromPoint is undefined
-            document.elementFromPoint = jest.fn().mockImplementation(() => null);
+            document.elementFromPoint = jest.fn<() => Element | null>().mockImplementation(() => null);
             interaction.registerToNodes([canvas]);
         });
 
@@ -429,7 +430,7 @@ describe("using a touch dnd interaction", () => {
             canvas.append(div);
             div.classList.add("ioDwellSpring");
             interaction.registerToNodes([canvas, div]);
-            document.elementFromPoint = jest.fn().mockImplementation(() => div);
+            document.elementFromPoint = jest.fn<() => Element | null>().mockImplementation(() => div);
 
             robot(canvas)
                 .keepData()

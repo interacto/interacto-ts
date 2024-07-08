@@ -21,6 +21,7 @@ import {
 import {StubCmd} from "../command/StubCmd";
 import {InteractionStub} from "../interaction/InteractionStub";
 import {createMouseEvent} from "../interaction/StubEvents";
+import { afterEach, beforeEach, describe, expect, jest, test } from "@jest/globals";
 import {mock} from "jest-mock-extended";
 import type {FSM, FSMDataHandler, Logger, UndoHistory} from "../../src/interacto";
 
@@ -36,7 +37,6 @@ class OneTrFSM extends FSMImpl<FSMDataHandler> {
         new ClickTransition(this.initState, this.addTerminalState("s1"));
     }
 }
-
 describe("executing a binding", () => {
     beforeEach(() => {
         history = new UndoHistoryImpl();

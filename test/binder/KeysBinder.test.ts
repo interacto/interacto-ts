@@ -20,9 +20,9 @@ import {MouseDown} from "../../src/impl/interaction/library/MouseDown";
 import {UndoHistoryImpl} from "../../src/impl/undo/UndoHistoryImpl";
 import {StubCmd} from "../command/StubCmd";
 import {createKeyEvent} from "../interaction/StubEvents";
+import { afterEach, beforeEach, describe, expect, jest, test } from "@jest/globals";
 import {robot} from "interacto-nono";
 import {mock} from "jest-mock-extended";
-import clearAllTimers = jest.clearAllTimers;
 import type {EltRef} from "../../src/api/binder/BaseBinderBuilder";
 import type {KeyInteractionCmdBinder} from "../../src/api/binder/KeyInteractionCmdBinder";
 import type {Binding} from "../../src/api/binding/Binding";
@@ -41,7 +41,6 @@ let elt: HTMLElement;
 let binding: Binding<Command, Interaction<InteractionData>, unknown> | undefined;
 let ctx: BindingsContext;
 let bindings: Bindings<UndoHistoryBase>;
-
 describe("using a key binder", () => {
     beforeEach(() => {
         bindings = new BindingsImpl(new UndoHistoryImpl());
@@ -53,7 +52,7 @@ describe("using a key binder", () => {
 
     afterEach(() => {
         bindings.clear();
-        clearAllTimers();
+        jest.clearAllTimers();
         jest.clearAllMocks();
     });
 

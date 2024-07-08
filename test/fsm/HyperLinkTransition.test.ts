@@ -14,6 +14,7 @@
 
 import {HyperLinkTransition} from "../../src/impl/fsm/HyperLinkTransition";
 import {createEventWithTarget} from "../interaction/StubEvents";
+import { beforeEach, describe, expect, test } from "@jest/globals";
 import {mock} from "jest-mock-extended";
 import type {InputState} from "../../src/api/fsm/InputState";
 import type {OutputState} from "../../src/api/fsm/OutputState";

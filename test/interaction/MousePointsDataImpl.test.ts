@@ -14,6 +14,7 @@
 
 import {MousePointsDataImpl} from "../../src/impl/interaction/MousePointsDataImpl";
 import {PointDataImpl} from "../../src/impl/interaction/PointDataImpl";
+import { beforeEach, describe, expect, test } from "@jest/globals";
 
 describe("using a points data", () => {
     let data: MousePointsDataImpl;

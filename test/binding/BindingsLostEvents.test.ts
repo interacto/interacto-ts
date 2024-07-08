@@ -16,13 +16,13 @@ import {BindingsImpl} from "../../src/impl/binding/BindingsImpl";
 import {UndoHistoryImpl} from "../../src/impl/undo/UndoHistoryImpl";
 import {StubCmd} from "../command/StubCmd";
 import {robot} from "../interaction/StubEvents";
+import { afterEach, beforeEach, describe, expect, jest, test } from "@jest/globals";
 import type {Bindings} from "../../src/api/binding/Bindings";
 import type {UndoHistoryBase} from "../../src/api/undo/UndoHistoryBase";
 
 let elt: HTMLElement;
 let bindings: Bindings<UndoHistoryBase>;
 let div2: HTMLElement;
-
 describe("events lost by the browser do not block bindings", () => {
     beforeEach(async () => {
         bindings = new BindingsImpl(new UndoHistoryImpl());

@@ -15,6 +15,7 @@ import {BindingsContext} from "../../src/impl/binding/BindingsContext";
 import {BindingsImpl, UndoHistoryImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {createTouchEvent} from "../interaction/StubEvents";
+import { afterEach, beforeEach, describe, expect, jest, test } from "@jest/globals";
 import type {Bindings} from "../../src/api/binding/Bindings";
 import type {Flushable} from "../../src/impl/interaction/Flushable";
 import type {Binding, FSM, Interaction, InteractionBase, InteractionData, UndoHistoryBase} from "../../src/interacto";
@@ -23,7 +24,6 @@ let binding: Binding<StubCmd, Interaction<InteractionData>, unknown> | undefined
 let cmd: StubCmd;
 let ctx: BindingsContext;
 let bindings: Bindings<UndoHistoryBase>;
-
 describe("using a long touch binder", () => {
     beforeEach(() => {
         bindings = new BindingsImpl(new UndoHistoryImpl());

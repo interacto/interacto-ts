@@ -14,6 +14,7 @@
  */
 
 import {UndoableCommand} from "../../src/impl/command/UndoableCommand";
+import { beforeEach, describe, expect, test } from "@jest/globals";
 
 let cmd: UndoableCommand;
 
@@ -26,7 +27,6 @@ class ExampleUndoableCmd extends UndoableCommand {
 
     public undo(): void {}
 }
-
 describe("using an undoable command", () => {
     beforeEach(() => {
         cmd = new ExampleUndoableCmd();

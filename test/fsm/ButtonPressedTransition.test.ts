@@ -14,6 +14,7 @@
 
 import {ButtonPressedTransition} from "../../src/impl/fsm/ButtonPressedTransition";
 import {createEventWithTarget} from "../interaction/StubEvents";
+import { beforeEach, describe, expect, test } from "@jest/globals";
 import {mock} from "jest-mock-extended";
 import type {InputState} from "../../src/api/fsm/InputState";
 import type {OutputState} from "../../src/api/fsm/OutputState";
@@ -23,7 +24,6 @@ let tr: ButtonPressedTransition;
 let src: MockProxy<OutputState> & OutputState;
 let tgt: InputState & MockProxy<InputState>;
 let evt: Event;
-
 describe("using a button pressed transition", () => {
     beforeEach(() => {
         src = mock<OutputState>();

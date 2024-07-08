@@ -22,6 +22,7 @@ import {
     TimeoutTransition
 } from "../../src/interacto";
 import {createKeyEvent, createMouseEvent, createTouchEvent} from "../interaction/StubEvents";
+import { beforeEach, describe, expect, jest, test } from "@jest/globals";
 import {mock} from "jest-mock-extended";
 import type {VisitorFSM} from "../../src/api/fsm/VisitorFSM";
 import type {FSMHandler, Logger, OutputState, FSMDataHandler,
@@ -33,7 +34,6 @@ import type {Subject} from "rxjs";
 let fsm: FSMImpl<FSMDataHandler>;
 let handler: FSMHandler & MockProxy<FSMHandler>;
 let logger: Logger;
-
 describe("using an FSM", () => {
     beforeEach(() => {
         logger = mock<Logger>();

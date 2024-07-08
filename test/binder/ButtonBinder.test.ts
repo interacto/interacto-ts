@@ -15,6 +15,7 @@
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
 import {BindingsImpl, UndoHistoryImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
+import { afterEach, beforeEach, describe, expect, jest, test } from "@jest/globals";
 import type {Bindings} from "../../src/api/binding/Bindings";
 import type {Binding, EltRef, Interaction, InteractionData, UndoHistoryBase} from "../../src/interacto";
 
@@ -24,7 +25,6 @@ let binding: Binding<StubCmd, Interaction<InteractionData>, unknown> | undefined
 let cmd: StubCmd;
 let ctx: BindingsContext;
 let bindings: Bindings<UndoHistoryBase>;
-
 describe("using a button binder", () => {
     beforeEach(() => {
         bindings = new BindingsImpl(new UndoHistoryImpl());

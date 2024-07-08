@@ -13,6 +13,7 @@
  */
 
 import {isUndoableType} from "../../src/interacto";
+import { describe, expect, test } from "@jest/globals";
 
 describe("using an undoable", () => {
     test("undefined is not undoable", () => {

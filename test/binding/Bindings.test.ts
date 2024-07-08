@@ -22,6 +22,7 @@ import {
 } from "../../src/interacto";
 import {StubCmd, StubUndoableCmd} from "../command/StubCmd";
 import {createMouseEvent, robot} from "../interaction/StubEvents";
+import { afterEach, beforeEach, describe, expect, jest, test } from "@jest/globals";
 import {mock} from "jest-mock-extended";
 import type {
     Binding,
@@ -54,7 +55,6 @@ let elt: HTMLElement;
 let ctx: BindingsContext;
 let bindings: Bindings<UndoHistoryBase>;
 let logger: Logger;
-
 describe("using bindings", () => {
     beforeEach(() => {
         logger = mock<Logger>();
@@ -533,7 +533,7 @@ describe("using bindings", () => {
         handle.classList.add("ioDwellSpring");
 
         // document.elementFromPoint is undefined
-        document.elementFromPoint = jest.fn().mockImplementation(() => null);
+        document.elementFromPoint = jest.fn<() => Element | null>().mockImplementation(() => null);
 
         bindings.reciprocalTouchDnDBinder(handleRef, springRef)
             .on(elt)
@@ -547,7 +547,7 @@ describe("using bindings", () => {
             .touchend()
             .touchstart()
             .touchmove();
-        document.elementFromPoint = jest.fn().mockImplementation(() => handle);
+        document.elementFromPoint = jest.fn<() => Element | null>().mockImplementation(() => handle);
         robot(handle)
             .touchend({}, [{"identifier": 1, "target": handle}]);
 

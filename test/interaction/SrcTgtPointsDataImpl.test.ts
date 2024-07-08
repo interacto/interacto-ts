@@ -14,6 +14,7 @@
 
 import {PointDataImpl} from "../../src/impl/interaction/PointDataImpl";
 import {SrcTgtPointsDataImpl} from "../../src/impl/interaction/SrcTgtPointsDataImpl";
+import { beforeEach, describe, expect, test } from "@jest/globals";
 
 describe("using a scrtgtpoints data", () => {
     let data: SrcTgtPointsDataImpl;

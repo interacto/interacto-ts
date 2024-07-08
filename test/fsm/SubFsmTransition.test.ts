@@ -15,8 +15,9 @@
 import {SubStubTransition1} from "./StubTransitionOk";
 import {FSMImpl, SubFSMTransition} from "../../src/interacto";
 import {createMouseEvent} from "../interaction/StubEvents";
+import { beforeEach, describe, expect, jest, test } from "@jest/globals";
 import {mock} from "jest-mock-extended";
-import type {FSMDataHandler, InputState, Logger, Transition, StdState, TerminalState} from "../../src/interacto";
+import type {FSMDataHandler, InputState, Logger, Transition, StdState, TerminalState, EventType} from "../../src/interacto";
 
 describe("using a sub fsm transition", () => {
     let tr: SubFSMTransition;
@@ -84,7 +85,7 @@ describe("using a sub fsm transition", () => {
 
     test("get accepted events", () => {
         const tr2 = {} as Transition<Event>;
-        tr2.getAcceptedEvents = jest.fn(() => new Set(["click", "auxclick"]));
+        tr2.getAcceptedEvents = jest.fn<() => ReadonlySet<EventType>>(() => new Set(["click", "auxclick"]));
         fsm.initState.addTransition(tr2);
         const evts = tr.getAcceptedEvents();
         expect(Array.from(evts)).toHaveLength(2);

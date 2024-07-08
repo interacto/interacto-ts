@@ -14,6 +14,7 @@
  */
 
 import {SetProperty} from "../../../src/impl/command/library/SetProperty";
+import { beforeEach, describe, expect, test } from "@jest/globals";
 
 class SecondStubSetProp {
     public val: Array<number> = [];
@@ -34,7 +35,6 @@ class StubForSetProp {
         this._foo2 = val;
     }
 }
-
 describe("using a set property command", () => {
     let obj: StubForSetProp;
 

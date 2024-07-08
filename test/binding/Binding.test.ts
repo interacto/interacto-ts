@@ -15,6 +15,7 @@
 import {BindingImpl, FSMImpl, MustBeUndoableCmdError, UndoHistoryImpl} from "../../src/interacto";
 import {StubCmd, StubUndoableCmd} from "../command/StubCmd";
 import {InteractionStub} from "../interaction/InteractionStub";
+import { afterEach, beforeEach, describe, expect, jest, test } from "@jest/globals";
 import {mock} from "jest-mock-extended";
 import type {Logger} from "../../src/api/logging/Logger";
 import type {InteractionData, Undoable, UndoHistory, VisitorBinding} from "../../src/interacto";
@@ -68,7 +69,6 @@ class CmdStubUndoable extends StubCmd implements Undoable {
         return undefined;
     }
 }
-
 describe("using a binding", () => {
     let binding: BindingStub;
     let history: UndoHistory;

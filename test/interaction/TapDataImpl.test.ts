@@ -14,6 +14,7 @@
 
 import {TapDataImpl} from "../../src/impl/interaction/TapDataImpl";
 import {TouchDataImpl} from "../../src/impl/interaction/TouchDataImpl";
+import { beforeEach, describe, expect, test } from "@jest/globals";
 
 describe("using a tap data", () => {
     let data: TapDataImpl;

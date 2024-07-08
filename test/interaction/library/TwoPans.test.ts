@@ -15,6 +15,7 @@
 
 import {twoBottomPan, twoHPan, twoLeftPan, twoRightPan, twoTopPan, twoVPan} from "../../../src/interacto";
 import {robot} from "../StubEvents";
+import { afterEach, beforeEach, describe, expect, jest, test } from "@jest/globals";
 import {mock} from "jest-mock-extended";
 import type {FSMHandler, Logger, TwoPan} from "../../../src/interacto";
 import type {MockProxy} from "jest-mock-extended";
@@ -29,7 +30,7 @@ describe("using two pan interactions", () => {
         handler = mock<FSMHandler>();
         logger = mock<Logger>();
         canvas = document.createElement("canvas");
-        document.elementFromPoint = jest.fn().mockImplementation(() => null);
+        document.elementFromPoint = jest.fn<() => Element | null>().mockImplementation(() => null);
     });
 
     afterEach(() => {

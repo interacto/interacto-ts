@@ -14,6 +14,7 @@
 
 import {BoxCheckPressedTransition} from "../../src/impl/fsm/BoxCheckPressedTransition";
 import {createEventWithTarget} from "../interaction/StubEvents";
+import { beforeEach, describe, expect, test } from "@jest/globals";
 import {mock} from "jest-mock-extended";
 import type {InputState} from "../../src/api/fsm/InputState";
 import type {OutputState} from "../../src/api/fsm/OutputState";
@@ -23,7 +24,6 @@ let tr: BoxCheckPressedTransition;
 let src: MockProxy<OutputState> & OutputState;
 let tgt: InputState & MockProxy<InputState>;
 let evt: Event;
-
 describe("using a checkbox transition", () => {
     beforeEach(() => {
         src = mock<OutputState>();

@@ -14,6 +14,7 @@
  */
 
 import {AnonCmd} from "../../src/impl/command/AnonCmd";
+import { describe, expect, jest, test } from "@jest/globals";
 
 describe("using an anon command", () => {
     let cmd: AnonCmd;

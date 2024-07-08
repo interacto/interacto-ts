@@ -18,6 +18,7 @@ import {
     FSMImpl, MouseTransition
 } from "../../src/interacto";
 import {createMouseEvent} from "../interaction/StubEvents";
+import { beforeEach, describe, expect, jest, test } from "@jest/globals";
 import {mock} from "jest-mock-extended";
 import type {FSMDataHandler, FSMHandler, Logger} from "../../src/interacto";
 
@@ -38,7 +39,6 @@ class StubTouchFSM extends FSMImpl<FSMDataHandler> {
         new ClickTransition(moved, this.addCancellingState("cancelled"), undefined, guard);
     }
 }
-
 describe("using a concurrent FSM", () => {
     let fsm: ConcurrentAndFSM<StubTouchFSM, FSMDataHandler>;
     let fsm1: StubTouchFSM;

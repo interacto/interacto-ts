@@ -14,6 +14,7 @@
 
 import {KeyDataImpl} from "../../src/impl/interaction/KeyDataImpl";
 import {KeysDataImpl} from "../../src/impl/interaction/KeysDataImpl";
+import { beforeEach, describe, expect, test } from "@jest/globals";
 
 describe("using a keys data", () => {
     let data: KeysDataImpl;

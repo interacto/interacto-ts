@@ -12,6 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { jest } from "@jest/globals";
 import {NonoRobotImpl} from "interacto-nono";
 import type {EventType} from "../../src/api/fsm/EventType";
 import type {PointData} from "../../src/api/interaction/PointData";

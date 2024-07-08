@@ -15,6 +15,7 @@
 import {StdState} from "../../src/impl/fsm/StdState";
 import {WheelTransition} from "../../src/impl/fsm/WheelTransition";
 import {createMouseEvent, createTouchEvent, createWheelEvent} from "../interaction/StubEvents";
+import { beforeEach, describe, expect, test } from "@jest/globals";
 import {mock} from "jest-mock-extended";
 import type {FSMDataHandler} from "../../src/impl/fsm/FSMDataHandler";
 import type {FSMImpl} from "../../src/impl/fsm/FSMImpl";
