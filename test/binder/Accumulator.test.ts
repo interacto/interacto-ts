@@ -414,7 +414,7 @@ describe("testing an accumulator", () => {
             const elt = document.createElement("canvas");
             let val = 0;
 
-            bindings.tapBinder(3, {"cpt": 0})
+            bindings.tapsBinder(3, {"cpt": 0})
                 .toProduce(() => cmd)
                 .then((_c, _i, acc) => {
                     acc.cpt++;

@@ -19,7 +19,7 @@ import type {TouchData} from "../../api/interaction/TouchData";
  * Tapping interaction data implementation
  * @category Interaction Data
  */
-export class TapDataImpl extends PointsDataImpl<TouchData> {
+export class TapsDataImpl extends PointsDataImpl<TouchData> {
     /**
      * Creates the interaction data
      */

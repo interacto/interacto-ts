@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {Tap, TapDataImpl, TouchDataImpl} from "../../../src/interacto";
+import {Taps, TapsDataImpl, TouchDataImpl} from "../../../src/interacto";
 import {checkTouchPoint} from "../../Utils";
 import {robot} from "../StubEvents";
 import { afterEach, beforeEach, describe, expect, jest, test } from "@jest/globals";
@@ -20,8 +20,8 @@ import {mock} from "jest-mock-extended";
 import type {FSMHandler, Logger} from "../../../src/interacto";
 import type {MockProxy} from "jest-mock-extended";
 
-describe("using a tap interaction", () => {
-    let interaction: Tap;
+describe("using a Taps interaction", () => {
+    let interaction: Taps;
     let canvas: HTMLElement;
     let handler: FSMHandler;
     let logger: Logger & MockProxy<Logger>;
@@ -38,10 +38,10 @@ describe("using a tap interaction", () => {
         jest.clearAllTimers();
     });
 
-    describe("tap 1", () => {
+    describe("taps 1", () => {
         beforeEach(() => {
             logger = mock<Logger>();
-            interaction = new Tap(1, logger);
+            interaction = new Taps(1, logger);
             interaction.fsm.addHandler(handler);
             interaction.registerToNodes([canvas]);
         });
@@ -97,7 +97,7 @@ describe("using a tap interaction", () => {
             expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
         });
 
-        test("moving after before the touch cancels the tap", () => {
+        test("moving after before the touch cancels the Taps", () => {
             robot(canvas)
                 .keepData()
                 .touchstart({}, [{"identifier": 2}])
@@ -126,9 +126,9 @@ describe("using a tap interaction", () => {
         });
     });
 
-    describe("tap 2", () => {
+    describe("taps 2", () => {
         beforeEach(() => {
-            interaction = new Tap(2, mock<Logger>());
+            interaction = new Taps(2, mock<Logger>());
             interaction.fsm.addHandler(handler);
             interaction.registerToNodes([canvas]);
         });
@@ -137,7 +137,7 @@ describe("using a tap interaction", () => {
             interaction.uninstall();
         });
 
-        test("moving after before the touches cancels the tap", () => {
+        test("moving after before the touches cancels the Taps", () => {
             robot(canvas)
                 .keepData()
                 .touchstart({}, [{"identifier": 2}])
@@ -194,7 +194,7 @@ describe("using a tap interaction", () => {
             expect(handler.fsmCancels).not.toHaveBeenCalled();
         });
 
-        test("tap restarts with different id", () => {
+        test("taps restarts with different id", () => {
             robot(canvas)
                 .keepData()
                 .touchstart({}, [{"identifier": 1}])
@@ -211,7 +211,7 @@ describe("using a tap interaction", () => {
         });
 
         test("two touches data", () => {
-            const touch = new TapDataImpl();
+            const touch = new TapsDataImpl();
 
             const newHandler = mock<FSMHandler>();
             newHandler.fsmStops = jest.fn(() => {
@@ -235,7 +235,7 @@ describe("using a tap interaction", () => {
 
     describe("tap 3", () => {
         beforeEach(() => {
-            interaction = new Tap(3, mock<Logger>());
+            interaction = new Taps(3, mock<Logger>());
             interaction.fsm.addHandler(handler);
             interaction.registerToNodes([canvas]);
         });
@@ -244,7 +244,7 @@ describe("using a tap interaction", () => {
             interaction.uninstall();
         });
 
-        test("two taps", () => {
+        test("two Tapss", () => {
             robot(canvas)
                 .keepData()
                 .touchstart({}, [{"identifier": 2}])
@@ -304,7 +304,7 @@ describe("using a tap interaction", () => {
         });
 
         test("three touches data", () => {
-            const touch = new TapDataImpl();
+            const touch = new TapsDataImpl();
 
             const newHandler = mock<FSMHandler>();
             newHandler.fsmStops = jest.fn(() => {

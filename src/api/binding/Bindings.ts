@@ -275,10 +275,10 @@ export abstract class Bindings<H extends UndoHistoryBase> {
 
     /**
      * Creates a binding that uses the tap user interaction.
-     * @param nbTap - The number of required taps.
+     * @param tapsCount - The number of required taps.
      * If this number is not reached after a timeout, the interaction is cancelled.
      */
-    public abstract tapBinder<A>(nbTap: number, accInit?: A): PartialTapsTypedBinder<A>;
+    public abstract tapsBinder<A>(tapsCount: number, accInit?: A): PartialTapsTypedBinder<A>;
 
     /**
      * Creates a binding that uses the MouseDown (mouse button pressed) interaction.

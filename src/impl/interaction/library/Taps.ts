@@ -16,7 +16,7 @@ import {FSMImpl} from "../../fsm/FSMImpl";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 import {TouchTransition} from "../../fsm/TouchTransition";
 import {InteractionBase} from "../InteractionBase";
-import {TapDataImpl} from "../TapDataImpl";
+import {TapsDataImpl} from "../TapsDataImpl";
 import {TouchDataImpl} from "../TouchDataImpl";
 import type {PointsData} from "../../../api/interaction/PointsData";
 import type {TouchData} from "../../../api/interaction/TouchData";
@@ -24,17 +24,16 @@ import type {Logger} from "../../../api/logging/Logger";
 import type {CancellingState} from "../../fsm/CancellingState";
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import type {StdState} from "../../fsm/StdState";
-import type {PointsDataImpl} from "../PointsDataImpl";
 
-interface TapFSMHandler extends FSMDataHandler {
+interface TapsFSMHandler extends FSMDataHandler {
     tap(evt: TouchEvent): void;
 }
 
 /**
- * The FSM for the Tap interaction
+ * The FSM for the Taps interaction
  * @category FSM
  */
-export class TapFSM extends FSMImpl<TapFSMHandler> {
+export class TapsFSM extends FSMImpl<TapsFSMHandler> {
     private countTaps: number;
 
     private readonly nbTaps: number;
@@ -51,7 +50,7 @@ export class TapFSM extends FSMImpl<TapFSMHandler> {
      * @param logger - The logger to use for this interaction
      * @param dataHandler - The data handler the FSM will use
      */
-    public constructor(nbTaps: number, logger: Logger, dataHandler: TapFSMHandler) {
+    public constructor(nbTaps: number, logger: Logger, dataHandler: TapsFSMHandler) {
         super(logger, dataHandler);
         this.nbTaps = nbTaps;
         this.countTaps = 0;
@@ -107,21 +106,21 @@ export class TapFSM extends FSMImpl<TapFSMHandler> {
 }
 
 /**
- * A tap user interaction.
+ * A tap user interaction. Manage several taps. For single tap, use the tap interaction.
  * This touch interaction takes as input the number of taps expected to end the interaction.
  * If this number is not reached after a timeout, the interaction is cancelled.
  * @category Interaction Library
  */
-export class Tap extends InteractionBase<PointsData<TouchData>, PointsDataImpl<TouchData>, TapFSM> {
+export class Taps extends InteractionBase<PointsData<TouchData>, TapsDataImpl, TapsFSM> {
     /**
      * Creates the tap interaction
-     * @param numberTaps - The number of taps expected to end the interaction.
+     * @param numberTaps - The number of taps expected to end the interaction. Must be greater than 1.
      * If this number is not reached after a timeout, the interaction is cancelled.
      * @param logger - The logger to use for this interaction
      * @param name - The name of the user interaction
      */
     public constructor(numberTaps: number, logger: Logger, name?: string) {
-        const handler: TapFSMHandler = {
+        const handler: TapsFSMHandler = {
             "tap": (evt: TouchEvent): void => {
                 if (evt.changedTouches.length > 0) {
                     const touch = new TouchDataImpl();
@@ -135,6 +134,6 @@ export class Tap extends InteractionBase<PointsData<TouchData>, PointsDataImpl<T
             }
         };
 
-        super(new TapFSM(numberTaps, logger, handler), new TapDataImpl(), logger, name ?? Tap.name);
+        super(new TapsFSM(numberTaps, logger, handler), new TapsDataImpl(), logger, name ?? Taps.name);
     }
 }

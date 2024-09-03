@@ -1513,7 +1513,7 @@ describe("using bindings", () => {
                 .on(elt)
                 .toProduce((_i: TouchData) => new StubCmd(true))
                 .bind();
-            binding = bindings.tapBinder(1)
+            binding = bindings.tapsBinder(1)
                 .toProduce((_i: TapsData) => new StubCmd(true))
                 .on(elt)
                 .bind();

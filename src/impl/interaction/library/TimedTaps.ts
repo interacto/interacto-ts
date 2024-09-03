@@ -12,18 +12,17 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {TapFSM} from "./Tap";
+import {TapsFSM} from "./Taps";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 import {InteractionBase} from "../InteractionBase";
-import {TapDataImpl} from "../TapDataImpl";
+import {TapsDataImpl} from "../TapsDataImpl";
 import {TouchDataImpl} from "../TouchDataImpl";
 import type {PointsData} from "../../../api/interaction/PointsData";
 import type {TouchData} from "../../../api/interaction/TouchData";
 import type {Logger} from "../../../api/logging/Logger";
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import type {PointsDataImpl} from "../PointsDataImpl";
 
-class TimedTapFSM extends TapFSM {
+class TimedTapsFSM extends TapsFSM {
     public constructor(duration: number, nbTaps: number, logger: Logger, dataHandler: TapFSMHandler) {
         super(nbTaps, logger, dataHandler);
 
@@ -46,7 +45,7 @@ interface TapFSMHandler extends FSMDataHandler {
  * If this number is not reached after a timeout, the interaction is cancelled.
  * @category Interaction Library
  */
-export class TimedTap extends InteractionBase<PointsData<TouchData>, PointsDataImpl<TouchData>, TapFSM> {
+export class TimedTaps extends InteractionBase<PointsData<TouchData>, TapsDataImpl, TimedTapsFSM> {
     /**
      * Creates the timed tap interaction
      * @param duration - The max duration before a timeout while touching.
@@ -70,6 +69,6 @@ export class TimedTap extends InteractionBase<PointsData<TouchData>, PointsDataI
             }
         };
 
-        super(new TimedTapFSM(duration, numberTaps, logger, handler), new TapDataImpl(), logger, name ?? TimedTap.name);
+        super(new TimedTapsFSM(duration, numberTaps, logger, handler), new TapsDataImpl(), logger, name ?? TimedTaps.name);
     }
 }

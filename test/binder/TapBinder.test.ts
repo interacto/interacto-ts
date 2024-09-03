@@ -48,7 +48,7 @@ describe("using a tap binder", () => {
         test("run tap produces cmd", () => {
             jest.spyOn(cmd, "execute");
 
-            binding = bindings.tapBinder(2)
+            binding = bindings.tapsBinder(2)
                 .toProduce(() => cmd)
                 .on(c1)
                 .bind();
@@ -67,7 +67,7 @@ describe("using a tap binder", () => {
         });
 
         test("run tap two times recycle events", () => {
-            binding = bindings.tapBinder(2)
+            binding = bindings.tapsBinder(2)
                 .toProduce(() => new StubCmd(true))
                 .on(c1)
                 .bind();
@@ -88,7 +88,7 @@ describe("using a tap binder", () => {
         });
 
         test("unsubscribe does not trigger the binding", () => {
-            binding = bindings.tapBinder(2)
+            binding = bindings.tapsBinder(2)
                 .toProduce(() => cmd)
                 .on(c1)
                 .bind();
@@ -112,7 +112,7 @@ describe("using a tap binder", () => {
         });
 
         test("dynamic registration with nothing added", () => {
-            binding = bindings.tapBinder(2)
+            binding = bindings.tapsBinder(2)
                 .toProduce(() => cmd)
                 .onDynamic(doc)
                 .bind();
@@ -128,7 +128,7 @@ describe("using a tap binder", () => {
         });
 
         test("dynamic registration with a node added", async () => {
-            binding = bindings.tapBinder(2)
+            binding = bindings.tapsBinder(2)
                 .toProduce(() => cmd)
                 .onDynamic(doc)
                 .bind();
@@ -157,7 +157,7 @@ describe("using a tap binder", () => {
             // Waiting for the mutation changes to be done.
             await Promise.resolve();
 
-            binding = bindings.tapBinder(2)
+            binding = bindings.tapsBinder(2)
                 .toProduce(() => cmd)
                 .onDynamic(doc)
                 .bind();
@@ -174,7 +174,7 @@ describe("using a tap binder", () => {
         });
 
         test("dynamic registration with a node added and removed", async () => {
-            binding = bindings.tapBinder(1)
+            binding = bindings.tapsBinder(1)
                 .toProduce(() => cmd)
                 .onDynamic(doc)
                 .bind();
@@ -200,7 +200,7 @@ describe("using a tap binder", () => {
             doc.append(rect);
             await Promise.resolve();
 
-            binding = bindings.tapBinder(3)
+            binding = bindings.tapsBinder(3)
                 .toProduce(() => cmd)
                 .onDynamic(doc)
                 .bind();

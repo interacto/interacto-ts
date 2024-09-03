@@ -45,7 +45,7 @@ import {MultiTouch} from "../interaction/library/MultiTouch";
 import {bottomPan, hPan, leftPan, rightPan, topPan, vPan} from "../interaction/library/Pans";
 import {Scroll} from "../interaction/library/Scroll";
 import {SpinnerChanged} from "../interaction/library/SpinnerChanged";
-import {Tap} from "../interaction/library/Tap";
+import {Taps} from "../interaction/library/Taps";
 import {TextInputChanged} from "../interaction/library/TextInputChanged";
 import {TouchDnD} from "../interaction/library/TouchDnD";
 import {TouchStart} from "../interaction/library/TouchStart";
@@ -236,9 +236,9 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
             .usingInteraction<FourTouchDnD, A>(() => new FourTouchDnD(this.logger));
     }
 
-    public tapBinder<A>(nbTap: number, accInit?: A): PartialTapsTypedBinder<A> {
+    public tapsBinder<A>(tapsCount: number, accInit?: A): PartialTapsTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
-            .usingInteraction<Tap, A>(() => new Tap(nbTap, this.logger));
+            .usingInteraction<Taps, A>(() => new Taps(tapsCount, this.logger));
     }
 
     public longTouchBinder<A>(duration: number, accInit?: A): PartialTouchTypedBinder<A> {
@@ -444,7 +444,7 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
 
     public tapsOrClicksBinder<A>(nbTap: number, accInit?: A): PartialPointsOrTapsTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
-            .usingInteraction<Or<Tap, Clicks>, A>(() => new Or(new Tap(nbTap, this.logger), new Clicks(nbTap, this.logger), this.logger));
+            .usingInteraction<Or<Taps, Clicks>, A>(() => new Or(new Taps(nbTap, this.logger), new Clicks(nbTap, this.logger), this.logger));
     }
 
     public  longpressOrTouchBinder<A>(duration: number, accInit?: A): PartialPointOrTouchTypedBinder<A> {

@@ -51,7 +51,7 @@ describe("events lost by the browser do not block bindings", () => {
         });
 
         test("the tap binding not blocked", async () => {
-            const b2 = bindings.tapBinder(1)
+            const b2 = bindings.tapsBinder(1)
                 .on(elt)
                 .toProduce(() => new StubCmd())
                 .bind();

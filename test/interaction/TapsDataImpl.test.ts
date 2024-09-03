@@ -12,16 +12,16 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {TapDataImpl} from "../../src/impl/interaction/TapDataImpl";
+import {TapsDataImpl} from "../../src/impl/interaction/TapsDataImpl";
 import {TouchDataImpl} from "../../src/impl/interaction/TouchDataImpl";
 import { beforeEach, describe, expect, test } from "@jest/globals";
 
 describe("using a tap data", () => {
-    let data: TapDataImpl;
+    let data: TapsDataImpl;
     let touchData: TouchDataImpl;
 
     beforeEach(() => {
-        data = new TapDataImpl();
+        data = new TapsDataImpl();
         touchData = new TouchDataImpl();
         touchData.copy({
             "force": 15,

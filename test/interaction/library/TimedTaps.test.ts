@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {TimedTap, TapDataImpl, TouchDataImpl} from "../../../src/interacto";
+import {TimedTaps, TapsDataImpl, TouchDataImpl} from "../../../src/interacto";
 import {checkTouchPoint} from "../../Utils";
 import {robot} from "../StubEvents";
 import { afterEach, beforeEach, describe, expect, jest, test } from "@jest/globals";
@@ -20,8 +20,8 @@ import {mock} from "jest-mock-extended";
 import type {FSMHandler, Logger} from "../../../src/interacto";
 import type {MockProxy} from "jest-mock-extended";
 
-describe("using a timed tap interaction", () => {
-    let interaction: TimedTap;
+describe("using a timed taps interaction", () => {
+    let interaction: TimedTaps;
     let canvas: HTMLElement;
     let handler: FSMHandler;
     let logger: Logger & MockProxy<Logger>;
@@ -41,7 +41,7 @@ describe("using a timed tap interaction", () => {
     describe("tap 1", () => {
         beforeEach(() => {
             logger = mock<Logger>();
-            interaction = new TimedTap(300, 1, logger);
+            interaction = new TimedTaps(300, 1, logger);
             interaction.fsm.addHandler(handler);
             interaction.registerToNodes([canvas]);
         });
@@ -128,7 +128,7 @@ describe("using a timed tap interaction", () => {
 
     describe("tap 2", () => {
         beforeEach(() => {
-            interaction = new TimedTap(400, 2, mock<Logger>());
+            interaction = new TimedTaps(400, 2, mock<Logger>());
             interaction.fsm.addHandler(handler);
             interaction.registerToNodes([canvas]);
         });
@@ -228,7 +228,7 @@ describe("using a timed tap interaction", () => {
         });
 
         test("two touches data", () => {
-            const touch = new TapDataImpl();
+            const touch = new TapsDataImpl();
 
             const newHandler = mock<FSMHandler>();
             newHandler.fsmStops = jest.fn(() => {
@@ -252,7 +252,7 @@ describe("using a timed tap interaction", () => {
 
     describe("tap 3", () => {
         beforeEach(() => {
-            interaction = new TimedTap(100, 3, mock<Logger>());
+            interaction = new TimedTaps(100, 3, mock<Logger>());
             interaction.fsm.addHandler(handler);
             interaction.registerToNodes([canvas]);
         });
@@ -321,7 +321,7 @@ describe("using a timed tap interaction", () => {
         });
 
         test("three touches data", () => {
-            const touch = new TapDataImpl();
+            const touch = new TapsDataImpl();
 
             const newHandler = mock<FSMHandler>();
             newHandler.fsmStops = jest.fn(() => {
