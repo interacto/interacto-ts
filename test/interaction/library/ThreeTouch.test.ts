@@ -51,7 +51,6 @@ describe("using a multi touch interaction", () => {
             .filter(fsm => fsm.started)).toHaveLength(2);
     });
 
-    // eslint-disable-next-line jest/expect-expect
     test("touch1 touch2 data", () => {
         robot(canvas)
             .touchstart({}, [{"identifier": 2, "screenX": 11, "screenY": 23, "clientX": 11, "clientY": 23}])
@@ -78,7 +77,6 @@ describe("using a multi touch interaction", () => {
         expect(handler.fsmCancels).not.toHaveBeenCalled();
     });
 
-    // eslint-disable-next-line jest/expect-expect
     test("touch2 data", () => {
         robot(canvas)
             .touchstart({}, [{"identifier": 1, "screenX": 11, "screenY": 23, "clientX": 11, "clientY": 23}])
@@ -105,7 +103,6 @@ describe("using a multi touch interaction", () => {
         expect(handler.fsmStops).not.toHaveBeenCalled();
     });
 
-    // eslint-disable-next-line jest/expect-expect
     test("touch3 data", () => {
         robot(canvas)
             .touchstart({}, [{"identifier": 1, "screenX": 11, "screenY": 23, "clientX": 11, "clientY": 23}])

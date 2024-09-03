@@ -342,7 +342,6 @@ describe("using a multi touch interaction", () => {
         expect(data3).toBe(150);
     });
 
-    // eslint-disable-next-line jest/expect-expect
     test("touch end data", () => {
         const data1s = new TouchDataImpl();
         const data1t = new TouchDataImpl();

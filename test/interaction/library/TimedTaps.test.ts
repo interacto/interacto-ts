@@ -108,7 +108,6 @@ describe("using a timed taps interaction", () => {
             expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
         });
 
-        // eslint-disable-next-line jest/expect-expect
         test("one touch data", () => {
             const touch = new TouchDataImpl();
             const newHandler = mock<FSMHandler>();

@@ -21,9 +21,9 @@ import type {Undoable} from "../../src/api/undo/Undoable";
 
 interface Undoable4Test extends Undoable {
     foo: number;
-
     bar: string;
 }
+
 describe("using a tree undo history", () => {
     let history: TreeUndoHistory;
     let undoable0: Undoable4Test;
@@ -114,7 +114,6 @@ describe("using a tree undo history", () => {
             testScheduler.flush();
         });
 
-        // eslint-disable-next-line jest/expect-expect
         test("one add", () => {
             testScheduler.run(helpers => {
                 const {cold, expectObservable} = helpers;
@@ -127,7 +126,6 @@ describe("using a tree undo history", () => {
             });
         });
 
-        // eslint-disable-next-line jest/expect-expect
         test("two adds", () => {
             testScheduler.run(helpers => {
                 const {cold, expectObservable} = helpers;
@@ -140,7 +138,6 @@ describe("using a tree undo history", () => {
             });
         });
 
-        // eslint-disable-next-line jest/expect-expect
         test("one add one undo", () => {
             testScheduler.run(helpers => {
                 const {cold, expectObservable} = helpers;
@@ -155,7 +152,6 @@ describe("using a tree undo history", () => {
             });
         });
 
-        // eslint-disable-next-line jest/expect-expect
         test("one add one undo redo", () => {
             testScheduler.run(helpers => {
                 const {cold, expectObservable} = helpers;
@@ -174,7 +170,6 @@ describe("using a tree undo history", () => {
             });
         });
 
-        // eslint-disable-next-line jest/expect-expect
         test("three add then go to", () => {
             testScheduler.run(helpers => {
                 const {cold, expectObservable} = helpers;
@@ -194,7 +189,6 @@ describe("using a tree undo history", () => {
             });
         });
 
-        // eslint-disable-next-line jest/expect-expect
         test("two add one undo one new add", () => {
             testScheduler.run(helpers => {
                 const {cold, expectObservable} = helpers;

@@ -75,7 +75,6 @@ describe("using a multi touch interaction", () => {
         expect(handler.fsmCancels).not.toHaveBeenCalled();
     });
 
-    // eslint-disable-next-line jest/expect-expect
     test("touch2 data", () => {
         robot(canvas)
             .touchstart({}, [{"identifier": 1, "screenX": 11, "screenY": 23, "clientX": 11, "clientY": 23}])
