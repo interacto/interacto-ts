@@ -221,8 +221,8 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
 
     private goToFromRoot(id: number): void {
         const undoables = this.gatherToRoot(this.undoableNodes[id]);
-        for (let i = undoables.length - 1; i >= 0; i--) {
-            undoables[i]?.redo();
+        for (const undoable of undoables) {
+            undoable.redo();
         }
     }
 

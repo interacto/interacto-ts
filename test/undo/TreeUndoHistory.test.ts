@@ -14,10 +14,11 @@
 
 import {TreeUndoHistoryImpl} from "../../src/impl/undo/TreeUndoHistoryImpl";
 import { afterEach, beforeEach, describe, expect, jest, test } from "@jest/globals";
-import {mock} from "jest-mock-extended";
+import {mock } from "jest-mock-extended";
 import {TestScheduler} from "rxjs/testing";
 import type {TreeUndoHistory} from "../../src/api/undo/TreeUndoHistory";
 import type {Undoable} from "../../src/api/undo/Undoable";
+import type {MockProxy} from "jest-mock-extended";
 
 interface Undoable4Test extends Undoable {
     foo: number;
@@ -26,15 +27,21 @@ interface Undoable4Test extends Undoable {
 
 describe("using a tree undo history", () => {
     let history: TreeUndoHistory;
-    let undoable0: Undoable4Test;
-    let undoable1: Undoable4Test;
-    let undoable2: Undoable4Test;
+    let undoable0: MockProxy<Undoable4Test> & Undoable4Test;
+    let undoable1: MockProxy<Undoable4Test> & Undoable4Test;
+    let undoable2: MockProxy<Undoable4Test> & Undoable4Test;
 
     beforeEach(() => {
         history = new TreeUndoHistoryImpl();
-        undoable0 = mock<Undoable4Test>();
-        undoable1 = mock<Undoable4Test>();
-        undoable2 = mock<Undoable4Test>();
+        undoable0 = mock<Undoable4Test>({
+            foo: 0
+        });
+        undoable1 = mock<Undoable4Test>({
+            foo: 1
+        });
+        undoable2 = mock<Undoable4Test>({
+            foo: 2
+        });
     });
 
     afterEach(() => {
@@ -207,11 +214,43 @@ describe("using a tree undo history", () => {
                     {"a": undefined, "b": undefined, "c": undoable1, "d": undefined});
             });
         });
+
+        test("three add one, undo to root, redo to leaf", () => {
+            const res2: Array<number> = [];
+            undoable0.redo.mockImplementation(() => {
+                res2.push(0);
+            });
+            undoable1.redo.mockImplementation(() => {
+                res2.push(1);
+            });
+            undoable2.redo.mockImplementation(() => {
+                res2.push(2);
+            });
+
+            testScheduler.run(helpers => {
+                const {cold, expectObservable} = helpers;
+                cold("-a-b-c-d-e", {
+                    "a": () => history.add(undoable0),
+                    "b": () => history.add(undoable1),
+                    "c": () => history.add(undoable2),
+                    "d": () => history.goTo(-1),
+                    "e": () => history.goTo(2),
+                }).subscribe(v => {
+                    v();
+                });
+
+                expectObservable(history.undosObservable()).toBe("-a-b-c-d-e",
+                    {"a": undoable0, "b": undoable1, "c": undoable2, "d": undefined, "e": undoable2});
+                expectObservable(history.redosObservable()).toBe("-a-b-c-d-e",
+                    {"a": undefined, "b": undefined, "c": undefined, "d": undoable0, "e": undefined});
+            });
+            expect(res2).toStrictEqual([0, 1, 2]);
+        });
     });
 
     describe("and using a single undoable", () => {
         beforeEach(() => {
-            undoable0.getVisualSnapshot = (): string => "foo";
+            undoable0.getVisualSnapshot.mockImplementation((): string => "foo");
             history.add(undoable0);
         });
 
@@ -315,13 +354,13 @@ describe("using a tree undo history", () => {
         });
 
         test("get last redoable message when one element and ahs a redo", () => {
-            undoable0.getUndoName = (): string => "fooo";
+            undoable0.getUndoName.mockImplementation((): string => "fooo");
             history.undo();
             expect(history.getLastRedoMessage()).toBe("fooo");
         });
 
         test("get last redoable message or empty when one element and ahs a redo", () => {
-            undoable0.getUndoName = (): string => "barr";
+            undoable0.getUndoName.mockImplementation((): string => "barr");
             history.undo();
             expect(history.getLastOrEmptyRedoMessage()).toBe("barr");
         });
@@ -676,7 +715,7 @@ describe("using a tree undo history", () => {
         });
 
         test("get last undoable message or empty when move to 2", () => {
-            undoable1.getUndoName = (): string => "foo1";
+            undoable1.getUndoName.mockImplementation((): string => "foo1");
             history.goTo(1);
             expect(history.getLastOrEmptyUndoMessage()).toBe("foo1");
         });
@@ -689,7 +728,7 @@ describe("using a tree undo history", () => {
         });
 
         test("get last redoable message when moving to 2 and undo", () => {
-            undoable2.getUndoName = (): string => "fooo2";
+            undoable2.getUndoName.mockImplementation((): string => "fooo2");
             history.goTo(2);
             history.undo();
             expect(history.getLastRedoMessage()).toBe("fooo2");
