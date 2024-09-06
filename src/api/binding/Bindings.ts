@@ -122,6 +122,11 @@ export type PartialMultiTouchTypedBinder<A = unknown> = InteractionUpdateBinder<
  */
 export type PartialTapsTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<TapsData>, A>;
 /**
+ * Defines a partly defined binder for tap
+ * @category API Binding
+ */
+export type PartialTapTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<TouchData>, A>;
+/**
  * Defines a partly defined binder for touch types
  * @category API Binding
  */
@@ -274,11 +279,16 @@ export abstract class Bindings<H extends UndoHistoryBase> {
     public abstract fourTouchBinder<A>(accInit?: A): PartialFourTouchTypedBinder<A>;
 
     /**
-     * Creates a binding that uses the tap user interaction.
+     * Creates a binding that uses the taps user interaction.
      * @param tapsCount - The number of required taps.
      * If this number is not reached after a timeout, the interaction is cancelled.
      */
     public abstract tapsBinder<A>(tapsCount: number, accInit?: A): PartialTapsTypedBinder<A>;
+
+    /**
+     * Creates a binding that uses the tap user interaction (single tap).
+     */
+    public abstract tapBinder<A>(accInit?: A): PartialTapTypedBinder<A>;
 
     /**
      * Creates a binding that uses the MouseDown (mouse button pressed) interaction.
@@ -542,9 +552,14 @@ export abstract class Bindings<H extends UndoHistoryBase> {
     public abstract mouseDownOrTouchStartBinder<A>(accInit?: A): PartialPointOrTouchTypedBinder<A>;
 
     /**
-     * Creates a binding that uses either a tap or a clicks interaction.
+     * Creates a binding that uses either a taps or a clicks interaction.
      */
     public abstract tapsOrClicksBinder<A>(nbTap: number, accInit?: A): PartialPointsOrTapsTypedBinder<A>;
+
+    /**
+     * Creates a binding that uses either a tap or a click interaction.
+     */
+    public abstract tapOrClickBinder<A>(accInit?: A): PartialPointOrTouchTypedBinder<A>;
 
     /**
      * Creates a binding that uses either a longpress or a longtouch interaction.

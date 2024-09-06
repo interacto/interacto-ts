@@ -45,6 +45,7 @@ import {MultiTouch} from "../interaction/library/MultiTouch";
 import {bottomPan, hPan, leftPan, rightPan, topPan, vPan} from "../interaction/library/Pans";
 import {Scroll} from "../interaction/library/Scroll";
 import {SpinnerChanged} from "../interaction/library/SpinnerChanged";
+import {Tap} from "../interaction/library/Tap";
 import {Taps} from "../interaction/library/Taps";
 import {TextInputChanged} from "../interaction/library/TextInputChanged";
 import {TouchDnD} from "../interaction/library/TouchDnD";
@@ -87,7 +88,8 @@ import type {
     PartialScaleTypedBinder,
     PartialThenBinder,
     PartialPointsOrTapsTypedBinder,
-    PartialTouchMouseDnDTypedBinder
+    PartialTouchMouseDnDTypedBinder,
+    PartialTapTypedBinder
 } from "../../api/binding/Bindings";
 import type {BindingsObserver} from "../../api/binding/BindingsObserver";
 import type {VisitorBinding} from "../../api/binding/VisitorBinding";
@@ -239,6 +241,11 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
     public tapsBinder<A>(tapsCount: number, accInit?: A): PartialTapsTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<Taps, A>(() => new Taps(tapsCount, this.logger));
+    }
+
+    public tapBinder<A>(accInit?: A): PartialTapTypedBinder<A> {
+        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+            .usingInteraction<Tap, A>(() => new Tap(this.logger));
     }
 
     public longTouchBinder<A>(duration: number, accInit?: A): PartialTouchTypedBinder<A> {
@@ -445,6 +452,11 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
     public tapsOrClicksBinder<A>(nbTap: number, accInit?: A): PartialPointsOrTapsTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<Or<Taps, Clicks>, A>(() => new Or(new Taps(nbTap, this.logger), new Clicks(nbTap, this.logger), this.logger));
+    }
+
+    public tapOrClickBinder<A>(accInit?: A): PartialPointOrTouchTypedBinder<A> {
+        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+            .usingInteraction<Or<Tap, Click>, A>(() => new Or(new Tap(this.logger), new Click(this.logger), this.logger));
     }
 
     public  longpressOrTouchBinder<A>(duration: number, accInit?: A): PartialPointOrTouchTypedBinder<A> {

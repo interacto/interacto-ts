@@ -182,6 +182,7 @@ export * from "./impl/interaction/library/MultiTouch";
 export * from "./impl/interaction/library/Pans";
 export * from "./impl/interaction/library/Scroll";
 export * from "./impl/interaction/library/SpinnerChanged";
+export * from "./impl/interaction/library/Tap";
 export * from "./impl/interaction/library/Taps";
 export * from "./impl/interaction/library/TextInputChanged";
 export * from "./impl/interaction/library/TimedClick";
