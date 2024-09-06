@@ -1,6 +1,7 @@
 import dts from 'rollup-plugin-dts';
 import esbuild from 'rollup-plugin-esbuild';
 import pkg from './package.json' assert { type: 'json' };
+import terser from '@rollup/plugin-terser';
 
 const name = pkg.main.replace(/\.js$/, '');
 
@@ -12,7 +13,7 @@ const bundle = config => ({
 
 export default [
   bundle({
-    plugins: [esbuild()],
+    plugins: [esbuild(), terser()],
     output: [
       {
         file: `${name}.js`,
