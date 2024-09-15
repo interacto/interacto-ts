@@ -1,3 +1,17 @@
+# 8.1.0
+* feat(interaction): tap interaction
+* fix(interaction): tap must be taps
+* fix(undo): tree redo issue
+
+* chore(deps): test deps updated
+* chore(pkg): moving to TS 5.3
+* chore(rollup): use of terser for compressing the pkg
+* docs(ts-doc): adding categories
+* docs(ts-doc): adding links
+* fix(test): fix linter ignore rule
+* style(test): test names fixed
+
+
 # 8.0.0
 
 * feat(interaction): 2, 3, 4 touchdata
