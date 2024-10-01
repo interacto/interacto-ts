@@ -28,6 +28,14 @@ describe("using a command", () => {
         jest.clearAllMocks();
     });
 
+    test("equals true by default if same", () => {
+        expect(cmd.equals(cmd)).toBe(true);
+    });
+
+    test("equals false by default, not same", () => {
+        expect(new StubCmd().equals(new StubCmd())).toBe(false);
+    });
+
     test("cando default", () => {
         const command = new class extends CommandBase {
             protected execution(): void {

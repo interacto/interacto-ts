@@ -65,6 +65,16 @@ export interface Command {
      * @returns The status of the command.
      */
     getStatus(): CmdStatus;
+
+    /**
+     * States whether the two commands are equals.
+     * By default, if `cmd` is the same object that `this`,
+     * the method returns true. Developers can override this
+     * method to defined their own implementation to be used,
+     * for example, in a command history to merge equivalent commands.
+     * @param cmd - The command to compare with 'this'.
+     */
+    equals(cmd: Command): boolean;
 }
 
 /**

@@ -39,6 +39,10 @@ export abstract class CommandBase implements Command {
         this.status = "flushed";
     }
 
+    public equals(cmd: Command): boolean {
+        return this === cmd;
+    }
+
     /**
      * Actions may need to create a memento before their first execution.
      * This is the goal of the operation that should be overridden.
