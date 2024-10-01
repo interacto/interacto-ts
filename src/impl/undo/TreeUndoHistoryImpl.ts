@@ -128,7 +128,10 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
                 return "root";
             },
             redo(): void {},
-            undo(): void {}
+            undo(): void {},
+            equals(_undoable: Undoable): boolean {
+                return false;
+            }
         }, -1, undefined);
         this._currentNode = this.root;
         this.undoPublisher = new Subject();

@@ -68,6 +68,10 @@ class CmdStubUndoable extends StubCmd implements Undoable {
     public getVisualSnapshot(): SVGElement | string | undefined {
         return undefined;
     }
+
+    public equals(_undoable: Undoable): boolean {
+        return false;
+    }
 }
 describe("using a binding", () => {
     let binding: BindingStub;

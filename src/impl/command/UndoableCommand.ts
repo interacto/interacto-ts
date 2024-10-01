@@ -28,6 +28,10 @@ export abstract class UndoableCommand extends CommandBase implements Undoable {
         return undefined;
     }
 
+    public equals(undoable: Undoable): boolean {
+        return this === undoable;
+    }
+
     public abstract redo(): void;
 
     public abstract undo(): void;

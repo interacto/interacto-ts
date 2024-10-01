@@ -295,4 +295,48 @@ describe("using an undo history", () => {
         expect(instance.getUndo()).toHaveLength(2);
         expect(instance.getRedo()).toHaveLength(0);
     });
+
+    describe("using a history that considers equal commands", () => {
+        let undoableA: Undoable;
+        let undoableB: Undoable;
+        let undoableC: Undoable;
+        let undoableD: Undoable;
+        let undoableE: Undoable;
+
+        beforeEach(() => {
+            instance = new UndoHistoryImpl(true);
+            undoableA = mock<Undoable>();
+            undoableB = mock<Undoable>();
+            undoableC = mock<Undoable>();
+            undoableD = mock<Undoable>();
+            undoableE = mock<Undoable>();
+
+            instance.add(undoableA);
+            instance.add(undoableB);
+            instance.add(undoableC);
+            instance.add(undoableD);
+        });
+
+        test("does a redo if equal command", () => {
+            // A *B C D
+            instance.undo();
+            instance.undo();
+            undoableC.equals = jest.fn(() => true);
+            instance.add(undoableE);
+
+            expect(instance.getLastUndo()).toBe(undoableC);
+            expect(instance.getLastRedo()).toBe(undoableD);
+        });
+
+        test("clears redos if not equal command", () => {
+            // A *B C D
+            instance.undo();
+            instance.undo();
+            undoableC.equals = jest.fn(() => false);
+            instance.add(undoableE);
+
+            expect(instance.getLastUndo()).toBe(undoableE);
+            expect(instance.getLastRedo()).toBeUndefined();
+        });
+    });
 });

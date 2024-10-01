@@ -49,6 +49,16 @@ export interface Undoable {
      * @returns Information about the impact of the commmand as an SVG element or text.
      */
     getVisualSnapshot(): UndoableSnapshot;
+
+    /**
+     * States whether the two commands are equals.
+     * By default, if `cmd` is the same object that `this`,
+     * the method returns true. Developers can override this
+     * method to defined their own implementation to be used,
+     * for example, in a command history to merge equivalent commands.
+     * @param undoable - The command to compare with 'this'.
+     */
+    equals(undoable: Undoable): boolean;
 }
 
 /**

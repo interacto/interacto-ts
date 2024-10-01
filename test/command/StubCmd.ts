@@ -56,4 +56,8 @@ export class StubUndoableCmd extends StubCmd implements Undoable {
     public getVisualSnapshot(): SVGElement | string | undefined {
         return undefined;
     }
+
+    public equals(_undoable: Undoable): boolean {
+        return false;
+    }
 }

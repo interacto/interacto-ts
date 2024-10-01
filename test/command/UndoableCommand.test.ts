@@ -39,4 +39,12 @@ describe("using an undoable command", () => {
     test("get VisualSnapshot", () => {
         expect(cmd.getVisualSnapshot()).toBeUndefined();
     });
+
+    test("equals true by default if same", () => {
+        expect(cmd.equals(cmd)).toBe(true);
+    });
+
+    test("equals false by default, not same", () => {
+        expect(new ExampleUndoableCmd().equals(new ExampleUndoableCmd())).toBe(false);
+    });
 });

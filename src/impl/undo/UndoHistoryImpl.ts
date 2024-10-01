@@ -32,6 +32,8 @@ export class UndoHistoryImpl extends UndoHistory {
      */
     private readonly redos: Array<Undoable>;
 
+    private readonly considerEqualCmd: boolean;
+
     /**
      * The maximal number of undo.
      */
@@ -43,8 +45,12 @@ export class UndoHistoryImpl extends UndoHistory {
 
     /**
      * Create the undo history
+     * @param considerEqualCmd - By default, executing a command erases the redoable commands.
+     * When executing a command (and adding this command in the history), this option adds a new check:
+     * if the newly executed command equals the next redoable one, then the redoable stack is not clear
+     * but the history moves to the next redoable command (i.e., perform a redo instead of really adding the command).
      */
-    public constructor() {
+    public constructor(considerEqualCmd = false) {
         super();
         this.sizeMax = 0;
         this.undos = [];
@@ -52,6 +58,7 @@ export class UndoHistoryImpl extends UndoHistory {
         this.sizeMax = 20;
         this.undoPublisher = new Subject();
         this.redoPublisher = new Subject();
+        this.considerEqualCmd = considerEqualCmd;
     }
 
     public undosObservable(): Observable<Undoable | undefined> {
@@ -83,9 +90,14 @@ export class UndoHistoryImpl extends UndoHistory {
                 this.undos.shift();
             }
 
-            this.undos.push(undoable);
-            this.undoPublisher.next(undoable);
-            this.clearRedo();
+            const lastRedo = this.redos.at(-1);
+            if (this.considerEqualCmd && lastRedo !== undefined && lastRedo.equals(undoable)) {
+                this.redo();
+            } else {
+                this.undos.push(undoable);
+                this.undoPublisher.next(undoable);
+                this.clearRedo();
+            }
         }
     }
 
