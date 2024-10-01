@@ -83,7 +83,7 @@ export class BindingsContext implements BindingsObserver {
 
     /**
      * @param index - The index of the command (in the order of production)
-     * @returns The command at the given index. The command is casted into the provided generic type.
+     * @returns The command at the given index. The command is cast into the provided generic type.
      * @typeParam C - The type of the command to return.
      */
     public getCmd<C extends Command>(index: number): C | undefined {
