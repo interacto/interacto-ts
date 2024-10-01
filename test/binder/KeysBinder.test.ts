@@ -41,6 +41,7 @@ let elt: HTMLElement;
 let binding: Binding<Command, Interaction<InteractionData>, unknown> | undefined;
 let ctx: BindingsContext;
 let bindings: Bindings<UndoHistoryBase>;
+
 describe("using a key binder", () => {
     beforeEach(() => {
         bindings = new BindingsImpl(new UndoHistoryImpl());

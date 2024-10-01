@@ -24,6 +24,7 @@ let binding: Binding<StubCmd, Interaction<InteractionData>, unknown> | undefined
 let cmd: StubCmd;
 let ctx: BindingsContext;
 let bindings: Bindings<UndoHistoryBase>;
+
 describe("using a tap binder", () => {
     beforeEach(() => {
         bindings = new BindingsImpl(new UndoHistoryImpl());

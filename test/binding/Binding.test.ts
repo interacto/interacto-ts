@@ -73,6 +73,7 @@ class CmdStubUndoable extends StubCmd implements Undoable {
         return false;
     }
 }
+
 describe("using a binding", () => {
     let binding: BindingStub;
     let history: UndoHistory;

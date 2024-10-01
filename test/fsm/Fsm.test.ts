@@ -34,6 +34,7 @@ import type {Subject} from "rxjs";
 let fsm: FSMImpl<FSMDataHandler>;
 let handler: FSMHandler & MockProxy<FSMHandler>;
 let logger: Logger;
+
 describe("using an FSM", () => {
     beforeEach(() => {
         logger = mock<Logger>();

@@ -35,6 +35,7 @@ class StubForSetProp {
         this._foo2 = val;
     }
 }
+
 describe("using a set property command", () => {
     let obj: StubForSetProp;
 

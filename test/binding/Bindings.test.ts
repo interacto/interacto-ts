@@ -55,6 +55,7 @@ let elt: HTMLElement;
 let ctx: BindingsContext;
 let bindings: Bindings<UndoHistoryBase>;
 let logger: Logger;
+
 describe("using bindings", () => {
     beforeEach(() => {
         logger = mock<Logger>();

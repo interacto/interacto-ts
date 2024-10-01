@@ -129,6 +129,7 @@ describe("using a touch data", () => {
     test("default values", () => {
         expect(data).toStrictEqual(defaultData);
     });
+
     test("copy", () => {
         data.copy(newData);
         expect(data.force).toBe(newData.force);

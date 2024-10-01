@@ -70,6 +70,7 @@ let data: Model;
 let binding: Binding<StubAsyncCmd, Interaction<InteractionData>, unknown> | undefined;
 let ctx: BindingsContext;
 let bindings: Bindings<UndoHistoryBase>;
+
 describe("testing async commands and bindings", () => {
     beforeEach(() => {
         bindings = new BindingsImpl(new UndoHistoryImpl());

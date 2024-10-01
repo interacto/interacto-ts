@@ -26,6 +26,7 @@ let binding1: Binding<StubCmd, MouseDown, unknown>;
 let binding2: Binding<StubCmd, MouseDown, unknown>;
 let disposable: Subscription | undefined;
 let bindings: Bindings<UndoHistoryBase>;
+
 describe("using a block event binder", () => {
     beforeEach(() => {
         bindings = new BindingsImpl(new UndoHistoryImpl());

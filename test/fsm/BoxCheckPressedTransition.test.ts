@@ -24,6 +24,7 @@ let tr: BoxCheckPressedTransition;
 let src: MockProxy<OutputState> & OutputState;
 let tgt: InputState & MockProxy<InputState>;
 let evt: Event;
+
 describe("using a checkbox transition", () => {
     beforeEach(() => {
         src = mock<OutputState>();

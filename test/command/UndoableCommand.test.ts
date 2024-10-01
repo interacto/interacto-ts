@@ -27,6 +27,7 @@ class ExampleUndoableCmd extends UndoableCommand {
 
     public undo(): void {}
 }
+
 describe("using an undoable command", () => {
     beforeEach(() => {
         cmd = new ExampleUndoableCmd();

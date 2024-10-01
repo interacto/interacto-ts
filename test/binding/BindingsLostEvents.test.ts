@@ -23,6 +23,7 @@ import type {UndoHistoryBase} from "../../src/api/undo/UndoHistoryBase";
 let elt: HTMLElement;
 let bindings: Bindings<UndoHistoryBase>;
 let div2: HTMLElement;
+
 describe("events lost by the browser do not block bindings", () => {
     beforeEach(async () => {
         bindings = new BindingsImpl(new UndoHistoryImpl());

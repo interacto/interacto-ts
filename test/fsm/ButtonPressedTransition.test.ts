@@ -24,6 +24,7 @@ let tr: ButtonPressedTransition;
 let src: MockProxy<OutputState> & OutputState;
 let tgt: InputState & MockProxy<InputState>;
 let evt: Event;
+
 describe("using a button pressed transition", () => {
     beforeEach(() => {
         src = mock<OutputState>();

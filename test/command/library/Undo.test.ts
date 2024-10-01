@@ -21,6 +21,7 @@ import type {MockProxy} from "jest-mock-extended";
 
 let cmd: Undo;
 let collector: MockProxy<UndoHistory> & UndoHistory;
+
 describe("base undo testing", () => {
     beforeEach(() => {
         collector = mock<UndoHistory>();

@@ -69,6 +69,7 @@ class StubVisitor extends VisitorFSMDepthFirst {
         super.visitTimeoutTransition(transition);
     }
 }
+
 describe("using the std FSM visitor implementation", () => {
     beforeEach(() => {
         visitor = new StubVisitor();

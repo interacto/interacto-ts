@@ -23,6 +23,7 @@ let binding: Binding<StubCmd, Interaction<SrcTgtPointsData<TouchData>>, unknown>
 let c1: HTMLElement;
 let ctx: BindingsContext;
 let bindings: Bindings<UndoHistoryBase>;
+
 describe("using a swipe binder", () => {
     beforeEach(() => {
         bindings = new BindingsImpl(new UndoHistoryImpl());

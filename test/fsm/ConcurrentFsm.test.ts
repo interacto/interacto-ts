@@ -39,6 +39,7 @@ class StubTouchFSM extends FSMImpl<FSMDataHandler> {
         new ClickTransition(moved, this.addCancellingState("cancelled"), undefined, guard);
     }
 }
+
 describe("using a concurrent FSM", () => {
     let fsm: ConcurrentAndFSM<StubTouchFSM, FSMDataHandler>;
     let fsm1: StubTouchFSM;

@@ -25,6 +25,7 @@ let binding: Binding<StubCmd, Interaction<InteractionData>, unknown> | undefined
 let cmd: StubCmd;
 let ctx: BindingsContext;
 let bindings: Bindings<UndoHistoryBase>;
+
 describe("using a combobox binder", () => {
     beforeEach(() => {
         bindings = new BindingsImpl(new UndoHistoryImpl());

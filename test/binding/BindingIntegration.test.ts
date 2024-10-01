@@ -37,6 +37,7 @@ class OneTrFSM extends FSMImpl<FSMDataHandler> {
         new ClickTransition(this.initState, this.addTerminalState("s1"));
     }
 }
+
 describe("executing a binding", () => {
     beforeEach(() => {
         history = new UndoHistoryImpl();

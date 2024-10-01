@@ -24,6 +24,7 @@ let button1: HTMLButtonElement;
 let cmd: StubCmd;
 let ctx: BindingsContext;
 let bindings: Bindings<UndoHistoryBase>;
+
 describe("testing an accumulator", () => {
     beforeEach(() => {
         bindings = new BindingsImpl(new UndoHistoryImpl());
