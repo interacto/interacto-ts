@@ -30,7 +30,6 @@ import type {Bindings} from "../../src/api/binding/Bindings";
 import type {BindingsObserver} from "../../src/api/binding/BindingsObserver";
 import type {Command} from "../../src/api/command/Command";
 import type {Interaction} from "../../src/api/interaction/Interaction";
-import type {InteractionData} from "../../src/api/interaction/InteractionData";
 import type {KeyData} from "../../src/api/interaction/KeyData";
 import type {KeysData} from "../../src/api/interaction/KeysData";
 import type {Logger} from "../../src/api/logging/Logger";
@@ -38,7 +37,7 @@ import type {UndoHistory} from "../../src/api/undo/UndoHistory";
 import type {UndoHistoryBase} from "../../src/api/undo/UndoHistoryBase";
 
 let elt: HTMLElement;
-let binding: Binding<Command, Interaction<InteractionData>, unknown> | undefined;
+let binding: Binding<Command, Interaction<object>, unknown> | undefined;
 let ctx: BindingsContext;
 let bindings: Bindings<UndoHistoryBase>;
 
@@ -62,7 +61,7 @@ describe("using a key binder", () => {
     });
 
     test("that is crashes when calling bind without a command supplier", () => {
-        const binder = new KeysBinder(bindings.undoHistory, mock<Logger>()).usingInteraction(() => mock<Interaction<InteractionData>>());
+        const binder = new KeysBinder(bindings.undoHistory, mock<Logger>()).usingInteraction(() => mock<Interaction<object>>());
         expect(() => binder.bind()).toThrow("The command supplier cannot be undefined here");
     });
 

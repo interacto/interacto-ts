@@ -18,7 +18,6 @@ import type {ConcurrentFSM} from "../../api/fsm/ConcurrentFSM";
 import type {EventType} from "../../api/fsm/EventType";
 import type {FSM} from "../../api/fsm/FSM";
 import type {OutputState} from "../../api/fsm/OutputState";
-import type {InteractionData} from "../../api/interaction/InteractionData";
 import type {Logger} from "../../api/logging/Logger";
 import type {Subscription} from "rxjs/internal/Subscription";
 
@@ -28,7 +27,7 @@ import type {Subscription} from "rxjs/internal/Subscription";
  * @typeParam F - The type of the FSM.
  * @category Interaction
  */
-export abstract class ConcurrentInteraction<D extends InteractionData, DImpl extends D & Flushable, F extends ConcurrentFSM<FSM>>
+export abstract class ConcurrentInteraction<D extends object, DImpl extends D & Flushable, F extends ConcurrentFSM<FSM>>
     extends InteractionBase<D, DImpl, F> {
     private readonly subscriptions: Array<Subscription>;
 

@@ -15,7 +15,6 @@
 import type {Binding} from "../binding/Binding";
 import type {Command} from "../command/Command";
 import type {Interaction} from "../interaction/Interaction";
-import type {InteractionData} from "../interaction/InteractionData";
 
 /**
  * A string type for the rule names.
@@ -42,15 +41,15 @@ export type LinterRule = [name: RuleName, severity: Severity];
 export interface Checker {
     setLinterRules(...rules: ReadonlyArray<LinterRule>): void;
 
-    checkRules(binding: Binding<Command, Interaction<InteractionData>, unknown>,
-        binds: ReadonlyArray<Binding<Command, Interaction<InteractionData>, unknown>>): void;
+    checkRules(binding: Binding<Command, Interaction<object>, unknown>,
+        binds: ReadonlyArray<Binding<Command, Interaction<object>, unknown>>): void;
 
-    checkSameInteractions(binding: Binding<Command, Interaction<InteractionData>, unknown>,
-        binds: ReadonlyArray<Binding<Command, Interaction<InteractionData>, unknown>>): void;
+    checkSameInteractions(binding: Binding<Command, Interaction<object>, unknown>,
+        binds: ReadonlyArray<Binding<Command, Interaction<object>, unknown>>): void;
 
-    checkSameData(binding: Binding<Command, Interaction<InteractionData>, unknown>,
-        binds: ReadonlyArray<Binding<Command, Interaction<InteractionData>, unknown>>): void;
+    checkSameData(binding: Binding<Command, Interaction<object>, unknown>,
+        binds: ReadonlyArray<Binding<Command, Interaction<object>, unknown>>): void;
 
-    checkIncluded(binding: Binding<Command, Interaction<InteractionData>, unknown>,
-        binds: ReadonlyArray<Binding<Command, Interaction<InteractionData>, unknown>>): void;
+    checkIncluded(binding: Binding<Command, Interaction<object>, unknown>,
+        binds: ReadonlyArray<Binding<Command, Interaction<object>, unknown>>): void;
 }

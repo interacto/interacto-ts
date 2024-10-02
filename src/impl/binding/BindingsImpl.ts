@@ -95,7 +95,6 @@ import type {BindingsObserver} from "../../api/binding/BindingsObserver";
 import type {VisitorBinding} from "../../api/binding/VisitorBinding";
 import type {LinterRule} from "../../api/checker/Checker";
 import type {Interaction} from "../../api/interaction/Interaction";
-import type {InteractionData} from "../../api/interaction/InteractionData";
 import type {GeneralTwoTouchData} from "../../api/interaction/TwoTouchData";
 import type {WidgetData} from "../../api/interaction/WidgetData";
 import type {Logger} from "../../api/logging/Logger";
@@ -133,7 +132,7 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
     }
 
     public nodeBinder<A>(accInit?: A): BaseUpdateBinder {
-        return new UpdateBinder<CommandBase, Interaction<InteractionData>, A>(this.undoHistory,
+        return new UpdateBinder<CommandBase, Interaction<object>, A>(this.undoHistory,
             this.logger, this.observer, undefined, accInit) as BaseUpdateBinder;
     }
 
@@ -465,7 +464,7 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
             () => new Or(new LongMouseDown(duration, this.logger), new LongTouch(duration, this.logger), this.logger));
     }
 
-    public combine<IX extends Array<Interaction<InteractionData>>, A>(interactions: IX, accInit?: A): PartialThenBinder<IX, A> {
+    public combine<IX extends Array<Interaction<object>>, A>(interactions: IX, accInit?: A): PartialThenBinder<IX, A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<Then<IX>, A>(() => new Then<IX>(interactions, this.logger));
     }

@@ -42,7 +42,6 @@ export * from "./api/interaction/EventModifierData";
 export * from "./api/interaction/FourTouchData";
 export * from "./api/interaction/Interaction";
 export * from "./api/interaction/InteractionBuilder";
-export * from "./api/interaction/InteractionData";
 export * from "./api/interaction/KeyData";
 export * from "./api/interaction/KeysData";
 export * from "./api/interaction/LineTouchData";

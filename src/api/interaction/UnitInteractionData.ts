@@ -12,14 +12,12 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {InteractionData} from "./InteractionData";
-
 /**
  * Basic data of user interactions.
  * See https://developer.mozilla.org/en-US/docs/Web/API/Event (documentation extracted from here)
  * @category API Interaction Data
  */
-export interface UnitInteractionData extends InteractionData {
+export interface UnitInteractionData {
     /**
      * The time at which the event was created (in milliseconds).
      * By specification, this value is time since epoch—but in reality, browsers' definitions vary.

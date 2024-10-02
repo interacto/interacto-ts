@@ -19,7 +19,6 @@ import type {When} from "../../api/binder/When";
 import type {RuleName, Severity} from "../../api/checker/Checker";
 import type {Command} from "../../api/command/Command";
 import type {Interaction, InteractionDataType} from "../../api/interaction/Interaction";
-import type {InteractionData} from "../../api/interaction/InteractionData";
 import type {Logger} from "../../api/logging/Logger";
 import type {LogLevel} from "../../api/logging/LogLevel";
 import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
@@ -32,7 +31,7 @@ import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
  * @typeParam D - The interaction data type (infered from the interaction type)
  * @category Binding
  */
-export class AnonBinding<C extends Command, I extends Interaction<D>, A, D extends InteractionData = InteractionDataType<I>>
+export class AnonBinding<C extends Command, I extends Interaction<D>, A, D extends object = InteractionDataType<I>>
     extends BindingImpl<C, I, A, D> {
 
     private readonly firstFn: ((c: C, i: D, acc: A) => void) | undefined;

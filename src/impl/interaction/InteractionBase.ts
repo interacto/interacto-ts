@@ -19,7 +19,6 @@ import type {EventType, KeyEventType, MouseEventType, TouchEventType} from "../.
 import type {FSM} from "../../api/fsm/FSM";
 import type {OutputState} from "../../api/fsm/OutputState";
 import type {Interaction} from "../../api/interaction/Interaction";
-import type {InteractionData} from "../../api/interaction/InteractionData";
 import type {VisitorInteraction} from "../../api/interaction/VisitorInteraction";
 import type {Logger} from "../../api/logging/Logger";
 import type {Subscription} from "rxjs";
@@ -41,7 +40,7 @@ export type InteractionDataImplType<T> = T extends InteractionBase<any, infer DI
  * @typeParam F - The type of the FSM.
  * @category Interaction
  */
-export abstract class InteractionBase<D extends InteractionData, DImpl extends D & Flushable, F extends FSM> implements Interaction<D> {
+export abstract class InteractionBase<D extends object, DImpl extends D & Flushable, F extends FSM> implements Interaction<D> {
     /**
      * The current nodes that the interaction works on
      */

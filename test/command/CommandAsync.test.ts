@@ -23,7 +23,6 @@ import {Subject} from "rxjs";
 import type {Binding} from "../../src/api/binding/Binding";
 import type {Bindings} from "../../src/api/binding/Bindings";
 import type {Interaction} from "../../src/api/interaction/Interaction";
-import type {InteractionData} from "../../src/api/interaction/InteractionData";
 import type {UndoHistoryBase} from "../../src/api/undo/UndoHistoryBase";
 import type {BindingImpl} from "../../src/impl/binding/BindingImpl";
 
@@ -67,7 +66,7 @@ class StubAsyncCmd extends CommandBase {
 
 let cmd: StubAsyncCmd;
 let data: Model;
-let binding: Binding<StubAsyncCmd, Interaction<InteractionData>, unknown> | undefined;
+let binding: Binding<StubAsyncCmd, Interaction<object>, unknown> | undefined;
 let ctx: BindingsContext;
 let bindings: Bindings<UndoHistoryBase>;
 
@@ -456,7 +455,7 @@ describe("testing async commands and bindings", () => {
                 .log("command")
                 .bind();
 
-            jest.spyOn(binding as BindingImpl<StubAsyncCmd, Interaction<InteractionData>, unknown>,
+            jest.spyOn(binding as BindingImpl<StubAsyncCmd, Interaction<object>, unknown>,
                 "ifCannotExecuteCmd").mockImplementation(() => {
                 throw new Error("Error");
             });

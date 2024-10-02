@@ -12,7 +12,6 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {InteractionData} from "./InteractionData";
 import type {PointBaseData} from "./PointBaseData";
 
 /**
@@ -20,7 +19,7 @@ import type {PointBaseData} from "./PointBaseData";
  * position to a target position.
  * @category API Interaction Data
  */
-export interface SrcTgtPointsData<T extends PointBaseData> extends InteractionData {
+export interface SrcTgtPointsData<T extends PointBaseData> {
     /**
      * The source point data.
      */

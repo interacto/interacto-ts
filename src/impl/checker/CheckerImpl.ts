@@ -31,7 +31,6 @@ import type {Binding} from "../../api/binding/Binding";
 import type {Checker, LinterRule, RuleName, Severity} from "../../api/checker/Checker";
 import type {Command} from "../../api/command/Command";
 import type {Interaction} from "../../api/interaction/Interaction";
-import type {InteractionData} from "../../api/interaction/InteractionData";
 
 /**
  * An implementation of the Checker API
@@ -59,8 +58,8 @@ export class CheckerImpl implements Checker {
         }
     }
 
-    public checkRules(binding: Binding<Command, Interaction<InteractionData>, unknown>,
-                      binds: ReadonlyArray<Binding<Command, Interaction<InteractionData>, unknown>>): void {
+    public checkRules(binding: Binding<Command, Interaction<object>, unknown>,
+                      binds: ReadonlyArray<Binding<Command, Interaction<object>, unknown>>): void {
         this.checkSameData(binding, binds);
         // Do not check same-interaction if already checked same-data with the same severity
         if (this.getSameDataSeverity() !== this.getSameInteractionSeverity()) {
@@ -69,23 +68,23 @@ export class CheckerImpl implements Checker {
         this.checkIncluded(binding, binds);
     }
 
-    public checkSameInteractions(binding: Binding<Command, Interaction<InteractionData>, unknown>,
-                                 binds: ReadonlyArray<Binding<Command, Interaction<InteractionData>, unknown>>): void {
+    public checkSameInteractions(binding: Binding<Command, Interaction<object>, unknown>,
+                                 binds: ReadonlyArray<Binding<Command, Interaction<object>, unknown>>): void {
         // support OR by splitting name with -
         this.checkRule("same-interactions", this.getSameInteractionSeverity(binding), binding, binds,
             currBinding => binding.interaction.name === currBinding.interaction.name,
             "[same-interactions] Two bindings use the same user interaction on same widget.");
     }
 
-    public checkSameData(binding: Binding<Command, Interaction<InteractionData>, unknown>,
-                         binds: ReadonlyArray<Binding<Command, Interaction<InteractionData>, unknown>>): void {
+    public checkSameData(binding: Binding<Command, Interaction<object>, unknown>,
+                         binds: ReadonlyArray<Binding<Command, Interaction<object>, unknown>>): void {
         this.checkRule("same-data", this.getSameDataSeverity(binding), binding, binds,
             currBinding => binding.interaction.data.constructor === currBinding.interaction.data.constructor,
             "[same-data] Two bindings use the same user interaction data type on same widget.");
     }
 
-    public checkIncluded(binding: Binding<Command, Interaction<InteractionData>, unknown>,
-                         binds: ReadonlyArray<Binding<Command, Interaction<InteractionData>, unknown>>): void {
+    public checkIncluded(binding: Binding<Command, Interaction<object>, unknown>,
+                         binds: ReadonlyArray<Binding<Command, Interaction<object>, unknown>>): void {
         // support OR
         this.checkRule("included", this.getIncludedSeverity(binding), binding, binds,
             currBinding => this.isIncluded(binding.interaction.name, currBinding.interaction.name),
@@ -93,9 +92,9 @@ export class CheckerImpl implements Checker {
     }
 
     private checkRule(ruleName: RuleName, severity: Severity,
-                      binding: Binding<Command, Interaction<InteractionData>, unknown>,
-                      binds: ReadonlyArray<Binding<Command, Interaction<InteractionData>, unknown>>,
-                      predicate: (b: Binding<Command, Interaction<InteractionData>, unknown>) => boolean, msg: string): void {
+                      binding: Binding<Command, Interaction<object>, unknown>,
+                      binds: ReadonlyArray<Binding<Command, Interaction<object>, unknown>>,
+                      predicate: (b: Binding<Command, Interaction<object>, unknown>) => boolean, msg: string): void {
         if (severity !== "ignore" && !binding.isWhenDefined() &&
             binds
                 .filter(currBinding => currBinding.linterRules.get(ruleName) !== "ignore" && !currBinding.isWhenDefined())
@@ -110,15 +109,15 @@ export class CheckerImpl implements Checker {
         return (this.cacheIncluded.get(i1)?.has(i2) ?? false) || (this.cacheIncluded.get(i2)?.has(i1) ?? false);
     }
 
-    private getSameDataSeverity(binding?: Binding<Command, Interaction<InteractionData>, unknown>): Severity {
+    private getSameDataSeverity(binding?: Binding<Command, Interaction<object>, unknown>): Severity {
         return binding?.linterRules.get("same-data") ?? this.linterRules.get("same-data") ?? "err";
     }
 
-    private getSameInteractionSeverity(binding?: Binding<Command, Interaction<InteractionData>, unknown>): Severity {
+    private getSameInteractionSeverity(binding?: Binding<Command, Interaction<object>, unknown>): Severity {
         return binding?.linterRules.get("same-interactions") ?? this.linterRules.get("same-interactions") ?? "err";
     }
 
-    private getIncludedSeverity(binding?: Binding<Command, Interaction<InteractionData>, unknown>): Severity {
+    private getIncludedSeverity(binding?: Binding<Command, Interaction<object>, unknown>): Severity {
         return binding?.linterRules.get("included") ?? this.linterRules.get("included") ?? "err";
     }
 

@@ -17,7 +17,6 @@ import type {InteractionBinderBuilder} from "./InteractionBinderBuilder";
 import type {WhenType} from "./When";
 import type {RuleName, Severity} from "../checker/Checker";
 import type {Interaction, InteractionDataType} from "../interaction/Interaction";
-import type {InteractionData} from "../interaction/InteractionData";
 import type {LogLevel} from "../logging/LogLevel";
 
 /**
@@ -27,7 +26,7 @@ import type {LogLevel} from "../logging/LogLevel";
  * @typeParam D - The type of the interaction data of the user interaction
  * @category Helper
  */
-export interface InteractionUpdateBinderBuilder<I extends Interaction<D>, A, D extends InteractionData = InteractionDataType<I>>
+export interface InteractionUpdateBinderBuilder<I extends Interaction<D>, A, D extends object = InteractionDataType<I>>
     extends InteractionBinderBuilder <I, A, D>, BaseUpdateBinderBuilder {
     /**
      * Defines what to do when a command is cancelled (because the interaction is cancelled).

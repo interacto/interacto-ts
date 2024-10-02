@@ -20,7 +20,6 @@ import {mock} from "jest-mock-extended";
 import type {BindingsObserver} from "../../src/api/binding/BindingsObserver";
 import type {Command} from "../../src/api/command/Command";
 import type {Interaction} from "../../src/api/interaction/Interaction";
-import type {InteractionData} from "../../src/api/interaction/InteractionData";
 import type {Logger} from "../../src/api/logging/Logger";
 import type {UndoHistory} from "../../src/api/undo/UndoHistory";
 
@@ -43,7 +42,7 @@ describe("using an update binder", () => {
     });
 
     test("that is crashes when calling bind without a command supplier", () => {
-        binder = binder.usingInteraction(() => mock<Interaction<InteractionData>>());
+        binder = binder.usingInteraction(() => mock<Interaction<object>>());
         expect(() => binder.bind()).toThrow("The command supplier cannot be undefined here");
     });
 

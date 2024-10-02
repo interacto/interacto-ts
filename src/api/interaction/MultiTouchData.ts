@@ -12,7 +12,6 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {InteractionData} from "./InteractionData";
 import type {SrcTgtPointsData} from "./SrcTgtPointsData";
 import type {TouchData} from "./TouchData";
 
@@ -20,7 +19,7 @@ import type {TouchData} from "./TouchData";
  * Multi-touch interaction data interface
  * @category API Interaction Data
  */
-export interface MultiTouchData extends InteractionData {
+export interface MultiTouchData {
     /**
      * The list of touch data.
      */

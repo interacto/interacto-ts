@@ -18,7 +18,7 @@ import {InteractionStub} from "../interaction/InteractionStub";
 import { afterEach, beforeEach, describe, expect, jest, test } from "@jest/globals";
 import {mock} from "jest-mock-extended";
 import type {Logger} from "../../src/api/logging/Logger";
-import type {InteractionData, Undoable, UndoHistory, VisitorBinding} from "../../src/interacto";
+import type {Undoable, UndoHistory, VisitorBinding} from "../../src/interacto";
 
 class BindingStub extends BindingImpl<StubCmd, InteractionStub, unknown> {
     public whenStartOK: boolean;
@@ -28,7 +28,7 @@ class BindingStub extends BindingImpl<StubCmd, InteractionStub, unknown> {
     public whenUpdateOK: boolean;
 
     public constructor(history: UndoHistory, logger: Logger, continuous: boolean,
-                       cmdCreation: (i?: InteractionData) => StubCmd, interaction: InteractionStub) {
+                       cmdCreation: (i?: object) => StubCmd, interaction: InteractionStub) {
         super(continuous, interaction, cmdCreation, [], history, logger, new Map());
         this.whenStartOK = false;
         this.whenEndOK = false;

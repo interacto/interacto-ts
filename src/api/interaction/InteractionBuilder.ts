@@ -13,7 +13,6 @@
  */
 
 import type {Interaction, InteractionDataType} from "./Interaction";
-import type {InteractionData} from "./InteractionData";
 
 /**
  * A builder for customizing an existing user interaction
@@ -22,7 +21,7 @@ import type {InteractionData} from "./InteractionData";
  * and the end of the user interaction execution.
  * @category API Interaction
  */
-export interface InteractionBuilder<I extends Interaction<D>, D extends InteractionData = InteractionDataType<I>> {
+export interface InteractionBuilder<I extends Interaction<D>, D extends object = InteractionDataType<I>> {
     /**
      * A predicate to execution just before the interaction starts.
      * @param predicate - The predicate to execute. If it returns true, the

@@ -16,7 +16,6 @@ import type {VisitorBinding} from "./VisitorBinding";
 import type {RuleName, Severity} from "../checker/Checker";
 import type {Command} from "../command/Command";
 import type {Interaction, InteractionDataType} from "../interaction/Interaction";
-import type {InteractionData} from "../interaction/InteractionData";
 import type {Observable} from "rxjs";
 
 /**
@@ -27,7 +26,7 @@ import type {Observable} from "rxjs";
  * @typeParam D - The interaction data type (infered from the interaction type)
  * @category API Binding
  */
-export interface Binding<C extends Command, I extends Interaction<D>, A, D extends InteractionData = InteractionDataType<I>> {
+export interface Binding<C extends Command, I extends Interaction<D>, A, D extends object = InteractionDataType<I>> {
     /**
      * The name of the binding
      */

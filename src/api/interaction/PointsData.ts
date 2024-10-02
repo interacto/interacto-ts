@@ -12,14 +12,13 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {InteractionData} from "./InteractionData";
 import type {PointBaseData} from "./PointBaseData";
 
 /**
  * Interaction data that contains a set of points.
  * @category API Interaction Data
  */
-export interface PointsData<D extends PointBaseData> extends InteractionData {
+export interface PointsData<D extends PointBaseData> {
     /**
      * @returns The series of points.
      */

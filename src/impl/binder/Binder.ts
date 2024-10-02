@@ -24,7 +24,6 @@ import type {BindingsObserver} from "../../api/binding/BindingsObserver";
 import type {RuleName, Severity} from "../../api/checker/Checker";
 import type {Command} from "../../api/command/Command";
 import type {Interaction, InteractionDataType} from "../../api/interaction/Interaction";
-import type {InteractionData} from "../../api/interaction/InteractionData";
 import type {Logger} from "../../api/logging/Logger";
 import type {LogLevel} from "../../api/logging/LogLevel";
 import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
@@ -35,7 +34,7 @@ import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
  * @typeParam I - The type of the user interaction to bind.
  * @category Binding
  */
-export abstract class Binder<C extends Command, I extends Interaction<D>, A, D extends InteractionData = InteractionDataType<I>>
+export abstract class Binder<C extends Command, I extends Interaction<D>, A, D extends object = InteractionDataType<I>>
 implements CmdBinder<C>, InteractionBinder<I, A, D>, InteractionCmdBinder<C, I, A, D> {
 
     protected firstFn?: (c: C, i: D, acc: A) => void;
@@ -257,7 +256,7 @@ implements CmdBinder<C>, InteractionBinder<I, A, D>, InteractionCmdBinder<C, I, 
         return dup;
     }
 
-    public usingInteraction<I2 extends Interaction<D2>, A2, D2 extends InteractionData = InteractionDataType<I2>>
+    public usingInteraction<I2 extends Interaction<D2>, A2, D2 extends object = InteractionDataType<I2>>
     (fn: () => I2): Binder<C, I2, A2, D2> {
         const dup = this.duplicate();
         dup.usingFn = fn as unknown as () => I;

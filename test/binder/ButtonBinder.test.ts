@@ -17,11 +17,11 @@ import {BindingsImpl, UndoHistoryImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import { afterEach, beforeEach, describe, expect, jest, test } from "@jest/globals";
 import type {Bindings} from "../../src/api/binding/Bindings";
-import type {Binding, EltRef, Interaction, InteractionData, UndoHistoryBase} from "../../src/interacto";
+import type {Binding, EltRef, Interaction, UndoHistoryBase} from "../../src/interacto";
 
 let button1: HTMLButtonElement;
 let button2: HTMLButtonElement;
-let binding: Binding<StubCmd, Interaction<InteractionData>, unknown> | undefined;
+let binding: Binding<StubCmd, Interaction<object>, unknown> | undefined;
 let cmd: StubCmd;
 let ctx: BindingsContext;
 let bindings: Bindings<UndoHistoryBase>;

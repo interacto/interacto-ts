@@ -12,7 +12,6 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {InteractionData} from "./InteractionData";
 import type {VisitorInteraction} from "./VisitorInteraction";
 import type {FSM} from "../fsm/FSM";
 
@@ -20,7 +19,7 @@ import type {FSM} from "../fsm/FSM";
  * Infers the interaction data type from an interaction
  * @category API Interaction
  */
-export type InteractionDataType<T> = T extends Interaction<infer D> ? D : never;
+export type InteractionDataType<T> = T extends Interaction<infer D> ? D & object : never;
 
 /**
  * Infers the interaction data types from an array of interactions
@@ -36,7 +35,7 @@ export type InteractionsDataTypes<A extends Array<Interaction<any>>> = {
  * @typeParam D - The type of the interaction data
  * @category API Interaction
  */
-export interface Interaction<D extends InteractionData> {
+export interface Interaction<D extends object> {
     /**
      * Sets whether the user interaction will stop immediately the propagation
      * of events processed by this user interaction to others listeners.

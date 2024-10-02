@@ -24,7 +24,6 @@ import type {KeyInteractionUpdateBinder} from "../binder/KeyInteractionUpdateBin
 import type {Command} from "../command/Command";
 import type {FourTouchData} from "../interaction/FourTouchData";
 import type {Interaction, InteractionsDataTypes} from "../interaction/Interaction";
-import type {InteractionData} from "../interaction/InteractionData";
 import type {KeyData} from "../interaction/KeyData";
 import type {KeysData} from "../interaction/KeysData";
 import type {LineTouchData} from "../interaction/LineTouchData";
@@ -190,7 +189,7 @@ export type PartialTouchMouseDnDTypedBinder<A = unknown> = InteractionUpdateBind
  * Defines a partly defined binder for sequence of user interactions.
  * @category API Binding
  */
-export type PartialThenBinder<XS extends Array<Interaction<InteractionData>>, A = unknown> =
+export type PartialThenBinder<XS extends Array<Interaction<object>>, A = unknown> =
     InteractionUpdateBinder<Interaction<ThenData<InteractionsDataTypes<XS>>>, A, ThenData<InteractionsDataTypes<XS>>>;
 
 /**
@@ -586,7 +585,7 @@ export abstract class Bindings<H extends UndoHistoryBase> {
      * Create a binding that uses an ordered sequence of user interactions
      * @param interactions - The sequence of user interaction
      */
-    public abstract combine<XS extends Array<Interaction<InteractionData>>, A>(interactions: XS, accInit?: A):
+    public abstract combine<XS extends Array<Interaction<object>>, A>(interactions: XS, accInit?: A):
     PartialThenBinder<XS, A>;
 
     /**

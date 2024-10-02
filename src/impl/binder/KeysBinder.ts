@@ -24,7 +24,6 @@ import type {BindingsObserver} from "../../api/binding/BindingsObserver";
 import type {RuleName, Severity} from "../../api/checker/Checker";
 import type {Command} from "../../api/command/Command";
 import type {Interaction, InteractionDataType} from "../../api/interaction/Interaction";
-import type {InteractionData} from "../../api/interaction/InteractionData";
 import type {Logger} from "../../api/logging/Logger";
 import type {LogLevel} from "../../api/logging/LogLevel";
 import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
@@ -34,7 +33,7 @@ import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
  * @typeParam C - The type of the command to produce.
  * @category Binding
  */
-export class KeysBinder<C extends Command, I extends Interaction<D>, A, D extends InteractionData = InteractionDataType<I>>
+export class KeysBinder<C extends Command, I extends Interaction<D>, A, D extends object = InteractionDataType<I>>
     extends UpdateBinder<C, I, A, D> implements KeyInteractionCmdUpdateBinder<C, I, A, D> {
 
     private keysOrCodes: ReadonlyArray<string>;
@@ -184,7 +183,7 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, A, D extend
         return super.toProduceAnon(fn) as KeysBinder<Command, I, A, D>;
     }
 
-    public override usingInteraction<I2 extends Interaction<D2>, A2, D2 extends InteractionData = InteractionDataType<I2>>
+    public override usingInteraction<I2 extends Interaction<D2>, A2, D2 extends object = InteractionDataType<I2>>
     (fn: () => I2): KeysBinder<C, I2, A2, D2> {
         return super.usingInteraction(fn as unknown as () => Interaction<InteractionDataType<I2>>) as unknown as KeysBinder<C, I2, A2, D2>;
     }

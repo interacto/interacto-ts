@@ -18,7 +18,6 @@ import type {BindingsObserver} from "../../api/binding/BindingsObserver";
 import type {Checker} from "../../api/checker/Checker";
 import type {Command} from "../../api/command/Command";
 import type {Interaction} from "../../api/interaction/Interaction";
-import type {InteractionData} from "../../api/interaction/InteractionData";
 import type {Subscription} from "rxjs/internal/Subscription";
 
 /**
@@ -30,7 +29,7 @@ export class BindingsContext implements BindingsObserver {
     /**
      * The bindings gathered when created using `Bindings` routines
      */
-    private readonly binds: Array<Binding<Command, Interaction<InteractionData>, unknown>>;
+    private readonly binds: Array<Binding<Command, Interaction<object>, unknown>>;
 
     /**
      * For each gathered binding, listening the produced commands
@@ -40,7 +39,7 @@ export class BindingsContext implements BindingsObserver {
     /**
      * The commands produced by the gathered bindings
      */
-    private readonly cmds: Array<[Command, Binding<Command, Interaction<InteractionData>, unknown>]>;
+    private readonly cmds: Array<[Command, Binding<Command, Interaction<object>, unknown>]>;
 
     public readonly checker: Checker;
 
@@ -51,7 +50,7 @@ export class BindingsContext implements BindingsObserver {
         this.checker = new CheckerImpl();
     }
 
-    public observeBinding(binding: Binding<Command, Interaction<InteractionData>, unknown>): void {
+    public observeBinding(binding: Binding<Command, Interaction<object>, unknown>): void {
         this.checker.checkRules(binding, this.binds);
 
         this.binds.push(binding);
@@ -70,7 +69,7 @@ export class BindingsContext implements BindingsObserver {
     /**
      * @returns A read-only array of the gathered bindings.
      */
-    public get bindings(): ReadonlyArray<Binding<Command, Interaction<InteractionData>, unknown>> {
+    public get bindings(): ReadonlyArray<Binding<Command, Interaction<object>, unknown>> {
         return this.binds;
     }
 
@@ -94,7 +93,7 @@ export class BindingsContext implements BindingsObserver {
      * @param binding - binding The binding to consider
      * @returns The commands produced by the given binding.
      */
-    public getCmdsProducedBy(binding: Binding<Command, Interaction<InteractionData>, unknown>): ReadonlyArray<Command> {
+    public getCmdsProducedBy(binding: Binding<Command, Interaction<object>, unknown>): ReadonlyArray<Command> {
         return this.cmds
             .filter(cmd => cmd[1] === binding)
             .map(cmd => cmd[0]);

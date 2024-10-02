@@ -13,7 +13,6 @@
  */
 
 import type {Interaction} from "./Interaction";
-import type {InteractionData} from "./InteractionData";
 import type {VisitorFSM} from "../fsm/VisitorFSM";
 
 /**
@@ -21,5 +20,5 @@ import type {VisitorFSM} from "../fsm/VisitorFSM";
  * @category API Interaction
  */
 export interface VisitorInteraction extends VisitorFSM {
-    visitInteraction(interaction: Interaction<InteractionData>): void;
+    visitInteraction(interaction: Interaction<object>): void;
 }

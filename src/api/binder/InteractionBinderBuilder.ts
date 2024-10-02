@@ -16,7 +16,6 @@ import type {BaseBinderBuilder, Widget} from "./BaseBinderBuilder";
 import type {WhenType} from "./When";
 import type {RuleName, Severity} from "../checker/Checker";
 import type {Interaction, InteractionDataType} from "../interaction/Interaction";
-import type {InteractionData} from "../interaction/InteractionData";
 import type {LogLevel} from "../logging/LogLevel";
 
 /**
@@ -25,7 +24,7 @@ import type {LogLevel} from "../logging/LogLevel";
  * @typeParam D - The type of the interaction data of the user interaction
  * @category Helper
  */
-export interface InteractionBinderBuilder<I extends Interaction<D>, A, D extends InteractionData = InteractionDataType<I>>
+export interface InteractionBinderBuilder<I extends Interaction<D>, A, D extends object = InteractionDataType<I>>
     extends BaseBinderBuilder {
     /**
      * Specifies the conditions to fulfill to initialise, update, or execute the command while the interaction is running.

@@ -20,7 +20,6 @@ import type {VisitorBinding} from "../../api/binding/VisitorBinding";
 import type {RuleName, Severity} from "../../api/checker/Checker";
 import type {Command} from "../../api/command/Command";
 import type {Interaction, InteractionDataType} from "../../api/interaction/Interaction";
-import type {InteractionData} from "../../api/interaction/InteractionData";
 import type {Logger} from "../../api/logging/Logger";
 import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
 import type {Observable} from "rxjs";
@@ -33,7 +32,7 @@ import type {Observable} from "rxjs";
  * @typeParam D - The interaction data type (infered from the interaction type)
  * @category Binding
  */
-export class BindingImpl<C extends Command, I extends Interaction<D>, A, D extends InteractionData = InteractionDataType<I>>
+export class BindingImpl<C extends Command, I extends Interaction<D>, A, D extends object = InteractionDataType<I>>
 implements Binding<C, I, A, D> {
 
     protected _name: string | undefined;

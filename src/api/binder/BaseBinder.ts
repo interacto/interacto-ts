@@ -19,7 +19,6 @@ import type {LogLevel} from "../../interacto";
 import type {RuleName, Severity} from "../checker/Checker";
 import type {Command} from "../command/Command";
 import type {Interaction, InteractionDataType} from "../interaction/Interaction";
-import type {InteractionData} from "../interaction/InteractionData";
 
 /**
  * The base interface for building bindings with routines
@@ -65,5 +64,5 @@ export interface BaseBinder extends BaseBinderBuilder {
      * @typeParam D - The user interaction data type
      * @typeParam I - The user interaction type
      */
-    usingInteraction<I extends Interaction<D>, A, D extends InteractionData = InteractionDataType<I>>(fn: () => I): InteractionBinder<I, A, D>;
+    usingInteraction<I extends Interaction<D>, A, D extends object = InteractionDataType<I>>(fn: () => I): InteractionBinder<I, A, D>;
 }

@@ -32,7 +32,6 @@ import type {
     EltRef,
     Interaction,
     InteractionCmdUpdateBinder,
-    InteractionData,
     KeyData,
     KeysData,
     Logger,
@@ -1506,8 +1505,8 @@ describe("using bindings", () => {
     });
 
     describe("tap and longPress conflict", () => {
-        let binding: Binding<Command, Interaction<InteractionData>, unknown>;
-        let binding2: Binding<Command, Interaction<InteractionData>, unknown>;
+        let binding: Binding<Command, Interaction<object>, unknown>;
+        let binding2: Binding<Command, Interaction<object>, unknown>;
 
         beforeEach(() => {
             binding2 = bindings.longTouchBinder(50)
@@ -1539,8 +1538,8 @@ describe("using bindings", () => {
     });
 
     describe("two longTouch", () => {
-        let binding: Binding<Command, Interaction<InteractionData>, unknown>;
-        let binding2: Binding<Command, Interaction<InteractionData>, unknown>;
+        let binding: Binding<Command, Interaction<object>, unknown>;
+        let binding2: Binding<Command, Interaction<object>, unknown>;
 
         test("two longTouch stopImmediatePropagation", () => {
             binding2 = bindings.longTouchBinder(10)

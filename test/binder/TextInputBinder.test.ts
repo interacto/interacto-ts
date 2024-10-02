@@ -17,10 +17,10 @@ import {BindingsImpl, UndoHistoryImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import { afterEach, beforeEach, describe, expect, jest, test } from "@jest/globals";
 import type {Bindings} from "../../src/api/binding/Bindings";
-import type {Binding, Interaction, InteractionData, UndoHistoryBase} from "../../src/interacto";
+import type {Binding, Interaction, UndoHistoryBase} from "../../src/interacto";
 
 let txt1: HTMLInputElement | HTMLTextAreaElement;
-let binding: Binding<StubCmd, Interaction<InteractionData>, unknown> | undefined;
+let binding: Binding<StubCmd, Interaction<object>, unknown> | undefined;
 let cmd: StubCmd;
 let ctx: BindingsContext;
 let bindings: Bindings<UndoHistoryBase>;

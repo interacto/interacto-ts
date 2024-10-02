@@ -15,13 +15,12 @@
 import {CancelFSMError} from "../fsm/CancelFSMError";
 import type {Interaction, InteractionDataType} from "../../api/interaction/Interaction";
 import type {InteractionBuilder} from "../../api/interaction/InteractionBuilder";
-import type {InteractionData} from "../../api/interaction/InteractionData";
 
 /**
  * An implementation of `InteractionBuilder`.
  * @category Interaction
  */
-export class InteractionBuilderImpl<I extends Interaction<D>, D extends InteractionData = InteractionDataType<I>>
+export class InteractionBuilderImpl<I extends Interaction<D>, D extends object = InteractionDataType<I>>
 implements InteractionBuilder<I, D> {
     private readonly iCtor: (name?: string) => I;
 

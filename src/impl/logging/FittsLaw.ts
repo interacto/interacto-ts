@@ -16,7 +16,6 @@
 import type {Binding} from "../../api/binding/Binding";
 import type {Command} from "../../api/command/Command";
 import type {Interaction} from "../../api/interaction/Interaction";
-import type {InteractionData} from "../../api/interaction/InteractionData";
 import type {Subscription} from "rxjs";
 
 /**
@@ -82,8 +81,8 @@ export class FittsLaw {
      * @param target - The optional target object. If not provided, the target object will be inferred
      * from event data.
      */
-    public constructor(bSrc: Binding<Command, Interaction<InteractionData>, unknown>,
-                       bTgt: Binding<Command, Interaction<InteractionData>, unknown>,
+    public constructor(bSrc: Binding<Command, Interaction<object>, unknown>,
+                       bTgt: Binding<Command, Interaction<object>, unknown>,
                        target?: Element) {
         this.data = [];
         this.providedTarget = target;

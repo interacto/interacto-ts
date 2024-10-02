@@ -20,7 +20,6 @@ import type {Binding} from "../binding/Binding";
 import type {RuleName, Severity} from "../checker/Checker";
 import type {Command} from "../command/Command";
 import type {Interaction, InteractionDataType} from "../interaction/Interaction";
-import type {InteractionData} from "../interaction/InteractionData";
 import type {LogLevel} from "../logging/LogLevel";
 
 /**
@@ -31,7 +30,7 @@ import type {LogLevel} from "../logging/LogLevel";
  * @typeParam D - The type of the interaction data of the user interaction
  * @category API Binding
  */
-export interface InteractionCmdUpdateBinder<C extends Command, I extends Interaction<D>, A, D extends InteractionData = InteractionDataType<I>>
+export interface InteractionCmdUpdateBinder<C extends Command, I extends Interaction<D>, A, D extends object = InteractionDataType<I>>
     extends InteractionCmdBinder<C, I, A, D>, CmdUpdateBinderBuilder<C>, InteractionUpdateBinderBuilder<I, A, D> {
     /**
      * Permits to update the command on each interaction update.

@@ -20,7 +20,6 @@ import type {WhenType} from "./When";
 import type {RuleName, Severity} from "../checker/Checker";
 import type {Command} from "../command/Command";
 import type {Interaction, InteractionDataType} from "../interaction/Interaction";
-import type {InteractionData} from "../interaction/InteractionData";
 import type {LogLevel} from "../logging/LogLevel";
 
 /**
@@ -47,7 +46,7 @@ export interface BaseUpdateBinder extends BaseUpdateBinderBuilder, BaseBinder {
 
     toProduceAnon(fn: () => void): CmdUpdateBinder<Command>;
 
-    usingInteraction<I extends Interaction<D>, A, D extends InteractionData = InteractionDataType<I>>
+    usingInteraction<I extends Interaction<D>, A, D extends object = InteractionDataType<I>>
     (fn: () => I): InteractionUpdateBinder<I, A, D>;
 
     stopImmediatePropagation(): BaseUpdateBinder;

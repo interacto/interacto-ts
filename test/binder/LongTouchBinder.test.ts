@@ -18,9 +18,9 @@ import {createTouchEvent} from "../interaction/StubEvents";
 import { afterEach, beforeEach, describe, expect, jest, test } from "@jest/globals";
 import type {Bindings} from "../../src/api/binding/Bindings";
 import type {Flushable} from "../../src/impl/interaction/Flushable";
-import type {Binding, FSM, Interaction, InteractionBase, InteractionData, UndoHistoryBase} from "../../src/interacto";
+import type {Binding, FSM, Interaction, InteractionBase, UndoHistoryBase} from "../../src/interacto";
 
-let binding: Binding<StubCmd, Interaction<InteractionData>, unknown> | undefined;
+let binding: Binding<StubCmd, Interaction<object>, unknown> | undefined;
 let cmd: StubCmd;
 let ctx: BindingsContext;
 let bindings: Bindings<UndoHistoryBase>;
@@ -96,7 +96,7 @@ describe("using a long touch binder", () => {
                 .on(c1)
                 .bind();
 
-            (binding.interaction as InteractionBase<InteractionData, Flushable & InteractionData, FSM>).onNodeUnregistered(c1);
+            (binding.interaction as InteractionBase<object, Flushable & object, FSM>).onNodeUnregistered(c1);
 
             c1.dispatchEvent(createTouchEvent("touchstart", 1, c1, 11, 23, 110, 230));
 

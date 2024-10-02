@@ -19,7 +19,6 @@ import type {WhenType} from "./When";
 import type {RuleName, Severity} from "../checker/Checker";
 import type {Command} from "../command/Command";
 import type {Interaction, InteractionDataType} from "../interaction/Interaction";
-import type {InteractionData} from "../interaction/InteractionData";
 import type {LogLevel} from "../logging/LogLevel";
 
 /**
@@ -28,7 +27,7 @@ import type {LogLevel} from "../logging/LogLevel";
  * @typeParam D - The type of the interaction data of the user interaction
  * @category Helper
  */
-export interface InteractionBinder<I extends Interaction<D>, A, D extends InteractionData = InteractionDataType<I>>
+export interface InteractionBinder<I extends Interaction<D>, A, D extends object = InteractionDataType<I>>
     extends InteractionBinderBuilder<I, A, D> {
     when(fn: (i: D, acc: Readonly<A>) => boolean, mode?: WhenType): InteractionBinder<I, A, D>;
 
