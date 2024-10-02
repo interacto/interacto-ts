@@ -144,7 +144,7 @@ describe("using a timeout transition", () => {
     test("fsm throws not an error in thread", () => {
         jest.spyOn(fsm, "onTimeout");
         fsm.onTimeout.mockImplementation((): void => {
-            // eslint-disable-next-line @typescript-eslint/no-throw-literal
+            // eslint-disable-next-line no-throw-literal
             throw 42;
         });
         evt.startTimeout();
@@ -156,7 +156,7 @@ describe("using a timeout transition", () => {
         evt = new TimeoutTransition(src, tgt, () => 500);
         jest.spyOn(fsm, "onTimeout");
         fsm.onTimeout.mockImplementation((): void => {
-            // eslint-disable-next-line @typescript-eslint/no-throw-literal
+            // eslint-disable-next-line no-throw-literal
             throw 42;
         });
         evt.startTimeout();

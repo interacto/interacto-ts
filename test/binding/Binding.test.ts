@@ -518,7 +518,7 @@ describe("using a binding", () => {
 
         test("execute crash with not an error", () => {
             const supplier = (): StubCmd => {
-                // eslint-disable-next-line @typescript-eslint/no-throw-literal
+                // eslint-disable-next-line no-throw-literal
                 throw "yolo";
             };
 

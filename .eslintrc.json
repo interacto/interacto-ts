@@ -9,6 +9,7 @@
   "plugins": [
     "@typescript-eslint",
     "eslint-plugin-tsdoc",
+    "@stylistic",
     "unicorn",
     "eslint-plugin-array-func",
     "import"
@@ -32,6 +33,9 @@
       "plugins": ["jest"],
       "rules": {
         "id-length": "off",
+        "@typescript-eslint/only-throw-error": "off",
+        "jest/padding-around-all": "off",
+        "jest/padding-around-expect-groups": "off",
         "jest/max-expects": "off",
         "jest/no-disabled-tests": "warn",
         "jest/prefer-spy-on": "off",
@@ -75,9 +79,11 @@
   ],
   "rules": {
     "no-new": "off",
+    "@typescript-eslint/consistent-type-exports": "off",
     "@typescript-eslint/prefer-readonly-parameter-types": "off",
     "@typescript-eslint/class-methods-use-this": "off",
-
+    "@typescript-eslint/no-unnecessary-type-parameters": "off",
+    "@typescript-eslint/prefer-optional-chain": "off",
     "no-underscore-dangle": "off",
     "id-length": ["error", {"exceptions": ["x", "y", "i", "j", "c"]}],
     "jsdoc/require-jsdoc": ["error", {"contexts":["TSTypeAliasDeclaration","TSInterfaceDeclaration","TSPropertySignature"],"publicOnly":{"ancestorsOnly":true},"require":{"ClassDeclaration":true,"ClassExpression":true}}],
@@ -173,7 +179,7 @@
     "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
     "@typescript-eslint/array-type": ["error", { "default": "generic"}],
     "@typescript-eslint/explicit-member-accessibility": ["error", { "accessibility": "explicit" }],
-    "@typescript-eslint/indent": ["error", 4, {
+    "@stylistic/indent": ["error", 4, {
         "FunctionDeclaration": { "parameters": "first" },
         "FunctionExpression": { "parameters": "first" },
         "SwitchCase": 1
@@ -181,7 +187,7 @@
 
     "@typescript-eslint/prefer-nullish-coalescing": ["error",
       {"ignoreMixedLogicalExpressions" : false, "ignoreConditionalTests": false}],
-    "@typescript-eslint/quotes": [
+    "@stylistic/quotes": [
         "error",
         "double"
     ],

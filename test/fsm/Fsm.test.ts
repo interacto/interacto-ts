@@ -161,7 +161,7 @@ describe("using an FSM", () => {
 
     test("that errors caught on start with not an error", () => {
         handler.fsmStarts = jest.fn(() => {
-            // eslint-disable-next-line @typescript-eslint/no-throw-literal
+            // eslint-disable-next-line no-throw-literal
             throw "42";
         });
         fsm.addHandler(handler);
@@ -200,7 +200,7 @@ describe("using an FSM", () => {
 
     test("that errors caught on update with not an error", () => {
         handler.fsmUpdates = jest.fn(() => {
-            // eslint-disable-next-line @typescript-eslint/no-throw-literal
+            // eslint-disable-next-line no-throw-literal
             throw "err";
         });
         fsm.onStarting();
@@ -240,7 +240,7 @@ describe("using an FSM", () => {
 
     test("that errors caught on end with not an error", () => {
         handler.fsmStops = jest.fn(() => {
-            // eslint-disable-next-line @typescript-eslint/no-throw-literal
+            // eslint-disable-next-line no-throw-literal
             throw "foo";
         });
         fsm.onStarting();
@@ -280,7 +280,7 @@ describe("using an FSM", () => {
 
     test("that errors caught on cancel with not an error", () => {
         handler.fsmCancels = jest.fn(() => {
-            // eslint-disable-next-line @typescript-eslint/no-throw-literal
+            // eslint-disable-next-line no-throw-literal
             throw "yolo";
         });
         fsm.onStarting();

@@ -478,7 +478,7 @@ describe("using a base interaction", () => {
             spy
                 .mockReturnValueOnce(true)
                 .mockImplementationOnce(() => {
-                    // eslint-disable-next-line @typescript-eslint/no-throw-literal
+                    // eslint-disable-next-line no-throw-literal
                     throw 42;
                 });
             interaction.processEvent(evt1);
