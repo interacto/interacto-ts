@@ -84,4 +84,12 @@ export interface UndoHistoryBase {
      * that no redoable object are stored anymore.
      */
     redosObservable(): Observable<Undoable | undefined>;
+
+    /**
+     *  By default, executing a command erases the redoable commands.
+     * When executing a command (and adding this command in the history), this option adds a new check:
+     * if the newly executed command equals the next redoable one, then the redoable stack is not clear
+     * but the history moves to the next redoable command (i.e., perform a redo instead of really adding the command).
+     */
+    get considersEqualCmds(): boolean;
 }

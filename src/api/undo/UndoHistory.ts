@@ -66,4 +66,6 @@ export abstract class UndoHistory implements UndoHistoryBase {
      * @param max - The max number of saved undoable objects. Must be great than 0.
      */
     public abstract setSizeMax(max: number): void;
+
+    public abstract get considersEqualCmds(): boolean;
 }

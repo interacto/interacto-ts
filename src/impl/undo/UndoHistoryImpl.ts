@@ -32,7 +32,7 @@ export class UndoHistoryImpl extends UndoHistory {
      */
     private readonly redos: Array<Undoable>;
 
-    private readonly considerEqualCmd: boolean;
+    public readonly considersEqualCmds: boolean;
 
     /**
      * The maximal number of undo.
@@ -58,7 +58,7 @@ export class UndoHistoryImpl extends UndoHistory {
         this.sizeMax = 20;
         this.undoPublisher = new Subject();
         this.redoPublisher = new Subject();
-        this.considerEqualCmd = considerEqualCmd;
+        this.considersEqualCmds = considerEqualCmd;
     }
 
     public undosObservable(): Observable<Undoable | undefined> {
@@ -91,7 +91,7 @@ export class UndoHistoryImpl extends UndoHistory {
             }
 
             const lastRedo = this.redos.at(-1);
-            if (this.considerEqualCmd && lastRedo !== undefined && lastRedo.equals(undoable)) {
+            if (this.considersEqualCmds && lastRedo !== undefined && lastRedo.equals(undoable)) {
                 this.redo();
             } else {
                 this.undos.push(undoable);

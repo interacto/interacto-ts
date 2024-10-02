@@ -110,13 +110,24 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
 
     public readonly root: UndoableTreeNode;
 
+    public readonly considersEqualCmds: boolean;
+
     private readonly _path: Array<number>;
 
     private readonly _keepPath: boolean;
 
-    public constructor(keepPath = false) {
+    /**
+     * Create the undo history
+     * @param keepPath - If true, cannot delete branches. Keeps all the paths (branches).
+     * @param considerEqualCmd - By default, executing a command erases the redoable commands.
+     * When executing a command (and adding this command in the history), this option adds a new check:
+     * if the newly executed command equals the next redoable one, then the redoable stack is not clear
+     * but the history moves to the next redoable command (i.e., perform a redo instead of really adding the command).
+     */
+    public constructor(keepPath = false, considerEqualCmd = false) {
         super();
         this._keepPath = keepPath;
+        this.considersEqualCmds = considerEqualCmd;
         this._path = [];
         this.undoableNodes = [];
         this.idCounter = 0;
@@ -139,14 +150,24 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
     }
 
     public add(undoable: Undoable): void {
-        const node = new UndoableTreeNodeImpl(undoable, this.idCounter, this.currentNode);
-        this.undoableNodes[this.idCounter] = node;
-        this.currentNode.children.push(node);
-        this._currentNode = node;
-        this.addToPath();
-        this.idCounter++;
-        this.undoPublisher.next(undoable);
-        this.redoPublisher.next(undefined);
+        let equalCmd: UndoableTreeNode | undefined;
+
+        if (this.considersEqualCmds) {
+            equalCmd = this._currentNode.children.find(child => child.undoable.equals(undoable));
+        }
+
+        if (equalCmd === undefined) {
+            const node = new UndoableTreeNodeImpl(undoable, this.idCounter, this.currentNode);
+            this.undoableNodes[this.idCounter] = node;
+            this.currentNode.children.push(node);
+            this._currentNode = node;
+            this.addToPath();
+            this.idCounter++;
+            this.undoPublisher.next(undoable);
+            this.redoPublisher.next(undefined);
+        } else {
+            this.goTo(equalCmd.id);
+        }
     }
 
     public get currentNode(): UndoableTreeNode {

@@ -34,6 +34,10 @@ describe("using an undo history", () => {
         undoable.getUndoName.mockReturnValue("undoredomsg");
     });
 
+    test("option considersEqualCmds not activated", () => {
+        expect(history.considersEqualCmds).toBeFalsy();
+    })
+
     test("undo called", () => {
         history.add(undoable);
         history.undo();
@@ -316,6 +320,10 @@ describe("using an undo history", () => {
             history.add(undoableC);
             history.add(undoableD);
         });
+
+        test("option considersEqualCmds activated", () => {
+            expect(history.considersEqualCmds).toBeTruthy();
+        })
 
         test("does a redo if equal command", () => {
             // A *B C D
