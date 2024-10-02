@@ -51,7 +51,7 @@ export class LoggingData {
     public toString(): string {
         const withstack = this.stack === undefined ? "" : `, ${this.stack}`;
         const withversion = this.frontVersion === undefined ? "" : ` ${this.frontVersion}`;
-        return `${this.type}${withversion} [${this.sessionID}] [${this.level}:${this.name}] at ${this.date}: '${this.msg}'${withstack}`;
+        return `${this.type}${withversion} [${this.sessionID}] [${this.level}:${this.name}] at ${this.date.toString()}: '${this.msg}'${withstack}`;
     }
 }
 
@@ -84,7 +84,7 @@ export class UsageLog {
     public toString(): string {
         const withversion = this.frontVersion === undefined ? "" : ` v:${this.frontVersion}`;
         return `Usage.${withversion} id:${this.sessionID} binding:${this.name} ` +
-            `date:${this.date} duration:${this.duration} cancelled:${String(this.cancelled)}`;
+            `date:${this.date.toString()} duration:${this.duration.toString()} cancelled:${String(this.cancelled)}`;
     }
 }
 
