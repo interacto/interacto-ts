@@ -111,7 +111,7 @@ export class TapsFSM extends FSMImpl<TapsFSMHandler> {
  * If this number is not reached after a timeout, the interaction is cancelled.
  * @category Interaction Library
  */
-export class Taps extends InteractionBase<PointsData<TouchData>, TapsDataImpl, TapsFSM> {
+export class Taps extends InteractionBase<PointsData<TouchData>, TapsDataImpl> {
     /**
      * Creates the tap interaction
      * @param numberTaps - The number of taps expected to end the interaction. Must be greater than 1.

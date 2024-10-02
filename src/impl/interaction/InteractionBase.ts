@@ -40,7 +40,7 @@ export type InteractionDataImplType<T> = T extends InteractionBase<any, infer DI
  * @typeParam F - The type of the FSM.
  * @category Interaction
  */
-export abstract class InteractionBase<D extends object, DImpl extends D & Flushable, F extends FSM> implements Interaction<D> {
+export abstract class InteractionBase<D extends object, DImpl extends D & Flushable, F extends FSM = FSM> implements Interaction<D> {
     /**
      * The current nodes that the interaction works on
      */

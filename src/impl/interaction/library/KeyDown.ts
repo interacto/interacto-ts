@@ -60,7 +60,7 @@ export class KeyDownFSM extends FSMImpl<KeyDownFSMHandler> {
  * A user interaction for pressing a key on a keyboard
  * @category Interaction Library
  */
-export class KeyDown extends InteractionBase<KeyData, KeyDataImpl, KeyDownFSM> {
+export class KeyDown extends InteractionBase<KeyData, KeyDataImpl> {
 
     public constructor(logger: Logger, modifierAccepted: boolean, key?: string, fsm?: KeyDownFSM, name?: string) {
         const handler: KeyDownFSMHandler = {

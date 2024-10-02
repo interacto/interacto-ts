@@ -78,7 +78,7 @@ export class LongMouseDownFSM extends FSMImpl<LongMouseDownFSMHandler> {
  * The long mouse down interaction. The interaction ends after a delay after having a mouse down (with no mouse up)
  * @category Interaction Library
  */
-export class LongMouseDown extends InteractionBase<PointData, PointDataImpl, LongMouseDownFSM> {
+export class LongMouseDown extends InteractionBase<PointData, PointDataImpl> {
     /**
      * Creates the long press interaction
      * @param duration - The duration of the pressure required to end the user interaction (in ms)

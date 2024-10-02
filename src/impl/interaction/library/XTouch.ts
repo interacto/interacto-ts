@@ -30,7 +30,7 @@ import type {TwoTouchDataImpl} from "../TwoTouchDataImpl";
  * This class is usually used to build more complex touch interactions.
  * @category Interaction Library
  */
-export class XTouchDnD<T extends TwoTouchData, S extends T & TwoTouchDataImpl> extends ConcurrentInteraction<T, S, MultiTouchFSM> {
+export class XTouchDnD<T extends TwoTouchData, S extends T & TwoTouchDataImpl> extends ConcurrentInteraction<T, S> {
     /**
      * Creates the interaction.
      * @param nbTouches - The number of touches of the interaction

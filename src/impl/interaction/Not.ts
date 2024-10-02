@@ -16,7 +16,6 @@ import {ConcurrentInteraction} from "./ConcurrentInteraction";
 import {NotFSM} from "../fsm/NotFSM";
 import type {Flushable} from "./Flushable";
 import type {InteractionBase, InteractionDataImplType} from "./InteractionBase";
-import type {FSM} from "../../api/fsm/FSM";
 import type {Interaction, InteractionDataType} from "../../api/interaction/Interaction";
 import type {Logger} from "../../api/logging/Logger";
 import type {FSMDataHandler} from "../fsm/FSMDataHandler";
@@ -27,7 +26,7 @@ import type {FSMDataHandler} from "../fsm/FSMDataHandler";
  * and KeyTyped the one that can cancel the interactions.
  * @category Interaction Library
  */
-export class Not<I extends InteractionBase<DI & object, DI & DImpl & Flushable, FSM>, N extends Interaction<object>,
+export class Not<I extends InteractionBase<DI & object, DI & DImpl & Flushable>, N extends Interaction<object>,
     DI = InteractionDataType<I>, DImpl = InteractionDataImplType<I>>
     extends ConcurrentInteraction<DI & object, DI & DImpl & Flushable, NotFSM<FSMDataHandler>> {
 

@@ -40,7 +40,7 @@ interface BoxCheckedHandler extends FSMDataHandler {
  * A user interaction for CheckBox.
  * @category Interaction Library
  */
-export class BoxChecked extends InteractionBase<WidgetData<HTMLInputElement>, WidgetDataImpl<HTMLInputElement>, BoxCheckedFSM> {
+export class BoxChecked extends InteractionBase<WidgetData<HTMLInputElement>, WidgetDataImpl<HTMLInputElement>> {
     /**
      * Creates the interaction.
      * @param logger - The logger to use for this interaction

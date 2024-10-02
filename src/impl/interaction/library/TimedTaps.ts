@@ -45,7 +45,7 @@ interface TapFSMHandler extends FSMDataHandler {
  * If this number is not reached after a timeout, the interaction is cancelled.
  * @category Interaction Library
  */
-export class TimedTaps extends InteractionBase<PointsData<TouchData>, TapsDataImpl, TimedTapsFSM> {
+export class TimedTaps extends InteractionBase<PointsData<TouchData>, TapsDataImpl> {
     /**
      * Creates the timed tap interaction
      * @param duration - The max duration before a timeout while touching.

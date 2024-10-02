@@ -44,7 +44,7 @@ describe("using a multi touch interaction", () => {
         robot(canvas)
             .touchstart({}, [{"identifier": 3}]);
 
-        expect(interaction.fsm.conccurFSMs
+        expect(interaction.fsm.getAllConccurFSMs()
             .filter(fsm => fsm.started)).toHaveLength(1);
         expect(interaction.isRunning()).toBeFalsy();
         expect(handler.fsmStarts).not.toHaveBeenCalled();
@@ -67,7 +67,7 @@ describe("using a multi touch interaction", () => {
             .touchstart({}, [{"identifier": 1}])
             .touchstart({}, [{"identifier": 2}]);
 
-        expect(interaction.fsm.conccurFSMs
+        expect(interaction.fsm.getAllConccurFSMs()
             .filter(fsm => fsm.started)).toHaveLength(2);
         expect(interaction.isRunning()).toBeFalsy();
         expect(handler.fsmStarts).not.toHaveBeenCalled();
@@ -111,7 +111,7 @@ describe("using a multi touch interaction", () => {
             .touchstart({}, [{"identifier": 3}])
             .touchstart({}, [{"identifier": 2}]);
 
-        expect(interaction.fsm.conccurFSMs
+        expect(interaction.fsm.getAllConccurFSMs()
             .filter(fsm => fsm.started)).toHaveLength(3);
         expect(interaction.isRunning()).toBeTruthy();
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
@@ -141,7 +141,7 @@ describe("using a multi touch interaction", () => {
             .touchstart({}, [{"identifier": 3}])
             .touchstart({}, [{"identifier": 3}]);
 
-        expect(interaction.fsm.conccurFSMs.filter(fsm => fsm.started)).toHaveLength(2);
+        expect(interaction.fsm.getAllConccurFSMs().filter(fsm => fsm.started)).toHaveLength(2);
         expect(interaction.isRunning()).toBeFalsy();
         expect(handler.fsmStarts).not.toHaveBeenCalled();
         expect(handler.fsmUpdates).not.toHaveBeenCalled();
@@ -265,9 +265,9 @@ describe("using a multi touch interaction", () => {
             .touchstart({}, [{"identifier": 1}], 5000)
             .touchstart({}, [{"identifier": 2}], 5000);
 
-        expect(interaction.fsm.conccurFSMs[0].started).toBeTruthy();
-        expect(interaction.fsm.conccurFSMs[1].started).toBeTruthy();
-        expect(interaction.fsm.conccurFSMs[2].started).toBeTruthy();
+        expect(interaction.fsm.getAllConccurFSMs()[0].started).toBeTruthy();
+        expect(interaction.fsm.getAllConccurFSMs()[1].started).toBeTruthy();
+        expect(interaction.fsm.getAllConccurFSMs()[2].started).toBeTruthy();
         expect(interaction.fsm.started).toBeTruthy();
     });
 
@@ -296,9 +296,9 @@ describe("using a multi touch interaction", () => {
         robot(canvas)
             .touchstart({}, [{"identifier": 3, "screenX": 50, "screenY": 20, "clientX": 100, "clientY": 200}], 5000);
 
-        expect(interaction.fsm.conccurFSMs[0].started).toBeTruthy();
-        expect(interaction.fsm.conccurFSMs[1].started).toBeFalsy();
-        expect(interaction.fsm.conccurFSMs[2].started).toBeFalsy();
+        expect(interaction.fsm.getAllConccurFSMs()[0].started).toBeTruthy();
+        expect(interaction.fsm.getAllConccurFSMs()[1].started).toBeFalsy();
+        expect(interaction.fsm.getAllConccurFSMs()[2].started).toBeFalsy();
         expect(interaction.fsm.started).toBeFalsy();
     });
 

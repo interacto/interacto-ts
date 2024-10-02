@@ -18,7 +18,7 @@ import {robot} from "../interaction/StubEvents";
 import { afterEach, beforeEach, describe, expect, jest, test } from "@jest/globals";
 import type {Bindings} from "../../src/api/binding/Bindings";
 import type {Flushable} from "../../src/impl/interaction/Flushable";
-import type {Binding, FSM, Interaction, InteractionBase, UndoHistoryBase} from "../../src/interacto";
+import type {Binding, Interaction, InteractionBase, UndoHistoryBase} from "../../src/interacto";
 
 let binding: Binding<StubCmd, Interaction<object>, unknown> | undefined;
 let cmd: StubCmd;
@@ -94,7 +94,7 @@ describe("using a tap binder", () => {
                 .on(c1)
                 .bind();
 
-            (binding.interaction as InteractionBase<object, Flushable & object, FSM>).onNodeUnregistered(c1);
+            (binding.interaction as InteractionBase<object, Flushable & object>).onNodeUnregistered(c1);
 
             robot(c1)
                 .keepData()

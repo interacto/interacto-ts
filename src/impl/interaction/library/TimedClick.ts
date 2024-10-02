@@ -84,7 +84,7 @@ export class TimedClickFSM extends FSMImpl<ClickFSMHandler> {
  * A click interaction that is cancelled if the mouse up is not done before a given delay
  * @category Interaction Library
  */
-export class TimedClick extends InteractionBase<PointData, PointDataImpl, TimedClickFSM> {
+export class TimedClick extends InteractionBase<PointData, PointDataImpl> {
     /**
      * Creates the interaction.
      * @param duration - The duration of the touch required to ends the user interaction
@@ -96,8 +96,9 @@ export class TimedClick extends InteractionBase<PointData, PointDataImpl, TimedC
      * @param name - The name of the user interaction
      */
     public constructor(duration: number, logger: Logger, button?: number, fsm?: TimedClickFSM, data?: PointDataImpl, name?: string) {
-        super(fsm ?? new TimedClickFSM(duration, logger, button), data ?? new PointDataImpl(), logger, name ?? TimedClick.name);
-        this.fsm.dataHandler = {
+        const theFSM = fsm ?? new TimedClickFSM(duration, logger, button);
+        super(theFSM, data ?? new PointDataImpl(), logger, name ?? TimedClick.name);
+        theFSM.dataHandler = {
             "initToClicked": (evt: MouseEvent): void => {
                 this._data.copy(evt);
             },

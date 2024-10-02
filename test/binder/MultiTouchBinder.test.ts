@@ -18,7 +18,7 @@ import { afterEach, beforeEach, describe, expect, jest, test } from "@jest/globa
 import {robot} from "interacto-nono";
 import type {Bindings} from "../../src/api/binding/Bindings";
 import type {Flushable} from "../../src/impl/interaction/Flushable";
-import type {Binding, FSM, Interaction, InteractionBase, UndoHistoryBase} from "../../src/interacto";
+import type {Binding, Interaction, InteractionBase, UndoHistoryBase} from "../../src/interacto";
 
 let c1: HTMLElement;
 let binding: Binding<StubCmd, Interaction<object>, unknown> | undefined;
@@ -111,7 +111,7 @@ describe("using a multi touch binder", () => {
             .on(c1)
             .bind();
 
-        (binding.interaction as InteractionBase<object, Flushable & object, FSM>).onNodeUnregistered(c1);
+        (binding.interaction as InteractionBase<object, Flushable & object>).onNodeUnregistered(c1);
 
         robot(c1)
             .touchstart({}, [{"identifier": 1}])

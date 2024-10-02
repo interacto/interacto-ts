@@ -16,7 +16,6 @@ import {InteractionBase} from "./InteractionBase";
 import {ThenDataImpl} from "./ThenDataImpl";
 import {ThenFSM} from "../fsm/ThenFSM";
 import type {Flushable} from "./Flushable";
-import type {FSM} from "../../api/fsm/FSM";
 import type {Interaction, InteractionsDataTypes} from "../../api/interaction/Interaction";
 import type {ThenData} from "../../api/interaction/ThenData";
 import type {Logger} from "../../api/logging/Logger";
@@ -28,7 +27,7 @@ import type {Logger} from "../../api/logging/Logger";
 export class Then<
     IX extends Array<Interaction<object>>,
     DX extends Array<object> = InteractionsDataTypes<IX>>
-    extends InteractionBase<ThenData<DX>, ThenDataImpl<Array<Flushable> & DX>, FSM> {
+    extends InteractionBase<ThenData<DX>, ThenDataImpl<Array<Flushable> & DX>> {
 
     private readonly ix: IX;
 

@@ -73,7 +73,7 @@ export class KeysTypedFSM extends FSMImpl<KeyTypedFSMHandler> {
  * typed key).
  * @category Interaction Library
  */
-export class KeysTyped extends InteractionBase<KeysData, KeysDataImpl, KeysTypedFSM> {
+export class KeysTyped extends InteractionBase<KeysData, KeysDataImpl> {
     /**
      * Creates the user interaction.
      * @param logger - The logger to use for this interaction

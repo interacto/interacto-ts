@@ -27,7 +27,7 @@ import type {Subscription} from "rxjs/internal/Subscription";
  * @typeParam F - The type of the FSM.
  * @category Interaction
  */
-export abstract class ConcurrentInteraction<D extends object, DImpl extends D & Flushable, F extends ConcurrentFSM<FSM>>
+export abstract class ConcurrentInteraction<D extends object, DImpl extends D & Flushable, F extends ConcurrentFSM<FSM> = ConcurrentFSM<FSM>>
     extends InteractionBase<D, DImpl, F> {
     private readonly subscriptions: Array<Subscription>;
 

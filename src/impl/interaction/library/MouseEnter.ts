@@ -61,7 +61,7 @@ export class MouseEnterFSM extends FSMImpl<MouseEnterFSMHandler> {
  * The mouse enter interaction. Corresponds to the single event mouseEnter
  * @category Interaction Library
  */
-export class MouseEnter extends InteractionBase<PointData, PointDataImpl, MouseEnterFSM> {
+export class MouseEnter extends InteractionBase<PointData, PointDataImpl> {
     /**
      * Creates the interaction.
      * @param withBubbling - True: the event bubbling will be done

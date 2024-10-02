@@ -65,7 +65,7 @@ export class KeysDownFSM extends FSMImpl<KeysDownFSMHandler> {
  * Starts on a key pressure. Ends as soon as one of the pressed keys is released.
  * @category Interaction Library
  */
-export class KeysDown extends InteractionBase<KeysData, KeysDataImpl, KeysDownFSM> {
+export class KeysDown extends InteractionBase<KeysData, KeysDataImpl> {
     /**
      * Creates the user interaction.
      * @param logger - The logger to use for this interaction

@@ -48,7 +48,7 @@ export class WheelFSM extends FSMImpl<WheelFSMHandler> {
  * The mouse wheel interaction
  * @category Interaction Library
  */
-export class Wheel extends InteractionBase<WheelData, WheelDataImpl, WheelFSM> {
+export class Wheel extends InteractionBase<WheelData, WheelDataImpl> {
     /**
      * Creates the interaction.
      * @param logger - The logger to use for this interaction

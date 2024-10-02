@@ -104,7 +104,7 @@ interface DragLockFSMHandler extends FSMDataHandler {
  * The drag-lock user interaction
  * @category Interaction Library
  */
-export class DragLock extends InteractionBase<SrcTgtPointsData<PointData>, SrcTgtPointsDataImpl, DragLockFSM> {
+export class DragLock extends InteractionBase<SrcTgtPointsData<PointData>, SrcTgtPointsDataImpl> {
     /**
      * Creates a drag lock.
      * @param logger - The logger to use for this interaction
@@ -124,13 +124,14 @@ export class DragLock extends InteractionBase<SrcTgtPointsData<PointData>, SrcTg
             }
         };
 
-        super(new DragLockFSM(logger, handler), new SrcTgtPointsDataImpl(), logger, name ?? DragLock.name);
+        const theFSM = new DragLockFSM(logger, handler);
+        super(theFSM, new SrcTgtPointsDataImpl(), logger, name ?? DragLock.name);
 
         /*
          * We give the interactions to the initial and final double-clicks as these interactions
-         * will contain the data: so that these interactions will fill the data of the draglock.
+         * will contain the data: so that these interactions will fill the data with the draglock.
          */
-        new DoubleClick(logger, this.fsm.firstDbleClick, this.data.src as PointDataImpl);
-        new DoubleClick(logger, this.fsm.sndDbleClick, this.data.tgt as PointDataImpl);
+        new DoubleClick(logger, theFSM.firstDbleClick, this.data.src as PointDataImpl);
+        new DoubleClick(logger, theFSM.sndDbleClick, this.data.tgt as PointDataImpl);
     }
 }

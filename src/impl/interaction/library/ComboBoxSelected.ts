@@ -40,7 +40,7 @@ interface ComboBoxSelectedHandler extends FSMDataHandler {
  * A user interaction for CheckBox
  * @category Interaction Library
  */
-export class ComboBoxSelected extends InteractionBase<WidgetData<HTMLSelectElement>, WidgetDataImpl<HTMLSelectElement>, ComboBoxSelectedFSM> {
+export class ComboBoxSelected extends InteractionBase<WidgetData<HTMLSelectElement>, WidgetDataImpl<HTMLSelectElement>> {
     /**
      * Creates the interaction.
      * @param logger - The logger to use for this interaction

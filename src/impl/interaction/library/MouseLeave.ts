@@ -62,7 +62,7 @@ export class MouseLeaveFSM extends FSMImpl<MouseLeaveFSMHandler> {
  * The mouse leave interaction. Corresponds to the single event MouseLeave
  * @category Interaction Library
  */
-export class MouseLeave extends InteractionBase<PointData, PointDataImpl, MouseLeaveFSM> {
+export class MouseLeave extends InteractionBase<PointData, PointDataImpl> {
     /**
      * Creates the interaction.
      * @param withBubbling - True: the event bullebing will be done

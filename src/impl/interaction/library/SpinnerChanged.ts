@@ -75,7 +75,7 @@ export class SpinnerChangedFSM extends FSMImpl<SpinnerChangedHandler> {
  * A user interaction for Number input.
  * @category Interaction Library
  */
-export class SpinnerChanged extends InteractionBase<WidgetData<HTMLInputElement>, WidgetDataImpl<HTMLInputElement>, SpinnerChangedFSM> {
+export class SpinnerChanged extends InteractionBase<WidgetData<HTMLInputElement>, WidgetDataImpl<HTMLInputElement>> {
     /**
      * Creates the interaction.
      * @param logger - The logger to use for this interaction

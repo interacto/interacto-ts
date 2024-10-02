@@ -79,7 +79,7 @@ interface LongTouchFSMHandler extends FSMDataHandler {
  * The long touch interaction.
  * @category Interaction Library
  */
-export class LongTouch extends InteractionBase<TouchData, TouchDataImpl, LongTouchFSM> {
+export class LongTouch extends InteractionBase<TouchData, TouchDataImpl> {
     /**
      * Creates the long tap interaction
      * @param duration - The duration of the touch required to ends the user interaction

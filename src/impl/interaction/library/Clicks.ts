@@ -89,7 +89,7 @@ export class ClicksFSM extends FSMImpl<ClicksFSMHandler> {
  * The clicks interaction. A user can click several times in different places.
  * @category Interaction Library
  */
-export class Clicks extends InteractionBase<MousePointsData, MousePointsDataImpl, ClicksFSM> {
+export class Clicks extends InteractionBase<MousePointsData, MousePointsDataImpl> {
     /**
      * Creates the clicks interaction
      * @param numberClicks - The number of clicks expected to end the interaction.

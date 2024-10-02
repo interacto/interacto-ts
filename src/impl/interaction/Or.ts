@@ -32,8 +32,8 @@ import type {FSMDataHandler} from "../fsm/FSMDataHandler";
  * @category Interaction Library
  */
 export class Or<
-    I1 extends InteractionBase<D1, D1Impl, FSM>,
-    I2 extends InteractionBase<D2, D2Impl, FSM>,
+    I1 extends InteractionBase<D1, D1Impl>,
+    I2 extends InteractionBase<D2, D2Impl>,
     D1 extends object = InteractionDataType<I1>,
     D2 extends object = InteractionDataType<I2>,
     D1Impl extends D1 & Flushable = InteractionDataImplType<I1>,

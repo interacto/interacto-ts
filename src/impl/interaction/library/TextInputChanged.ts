@@ -70,7 +70,7 @@ interface TextInputChangedHandler extends FSMDataHandler {
  * @category Interaction Library
  */
 export class TextInputChanged extends InteractionBase<WidgetData<HTMLInputElement | HTMLTextAreaElement>,
-    WidgetDataImpl<HTMLInputElement | HTMLTextAreaElement>, TextInputChangedFSM> {
+    WidgetDataImpl<HTMLInputElement | HTMLTextAreaElement>> {
 
     public constructor(logger: Logger, timeGap?: number, name?: string) {
         const handler: TextInputChangedHandler = {

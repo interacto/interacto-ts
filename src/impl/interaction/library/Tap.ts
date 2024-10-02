@@ -80,7 +80,7 @@ export class TapFSM extends FSMImpl<TapFSMHandler> {
  * A tap user interaction. Manage a single tap. For multiple taps, use the taps interaction.
  * @category Interaction Library
  */
-export class Tap extends InteractionBase<TouchData, TouchDataImpl, TapFSM> {
+export class Tap extends InteractionBase<TouchData, TouchDataImpl> {
     /**
      * Creates the tap interaction
      * @param logger - The logger to use for this interaction

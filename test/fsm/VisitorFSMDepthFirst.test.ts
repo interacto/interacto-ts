@@ -15,10 +15,10 @@
 import {ClickFSM, DnD, DoubleClickFSM, KeyTyped, LongTouch, MouseDown, MultiTouch, TouchDnD, VisitorFSMDepthFirst} from "../../src/interacto";
 import { beforeEach, describe, expect, test } from "@jest/globals";
 import {mock} from "jest-mock-extended";
-import type {Logger, FSMDataHandler, FSMImpl, FSM, InputState, OutputState, State,
+import type {Logger, FSMDataHandler, FSM, InputState, OutputState, State,
     Transition, TimeoutTransition, ConcurrentAndFSM, ConcurrentXOrFSM} from "../../src/interacto";
 
-let visitedFSM: FSMImpl<FSMDataHandler>;
+let visitedFSM: FSM;
 let visitor: StubVisitor;
 
 class StubVisitor extends VisitorFSMDepthFirst {

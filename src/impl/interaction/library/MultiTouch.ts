@@ -95,7 +95,7 @@ export class MultiTouchFSM extends ConcurrentAndFSM<TouchDnDFSM, TouchDnDFSMHand
  * A multi-touch ends when the number of required touches is greater than the number of touches.
  * @category Interaction
  */
-export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouchDataImpl, MultiTouchFSM> {
+export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouchDataImpl> {
     /**
      * Creates the multi-touch interaction
      * @param nbTouches - The number of touches.
@@ -105,7 +105,7 @@ export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouch
      * @category Interaction Library
      */
     public constructor(nbTouches: number, strict: boolean, logger: Logger, name?: string) {
-        const handler: TouchDnDFSMHandler = {
+        const theFSM = new MultiTouchFSM(nbTouches, strict, logger, {
             "onTouch": (event: TouchEvent): void => {
                 const all = Array.from(event.touches);
                 for (const touch of Array.from(event.changedTouches)) {
@@ -128,7 +128,7 @@ export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouch
             },
 
             "reinitData": (): void => {
-                const currentIDs = new Set(this.fsm.conccurFSMs
+                const currentIDs = new Set(theFSM.conccurFSMs
                     .filter(fsm => fsm.started)
                     .map(fsm => fsm.getTouchId()));
 
@@ -140,8 +140,8 @@ export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouch
                         (this.data as MultiTouchDataImpl).removeTouchData(data.src.identifier);
                     });
             }
-        };
+        });
 
-        super(new MultiTouchFSM(nbTouches, strict, logger, handler), new MultiTouchDataImpl(), logger, name ?? MultiTouch.name);
+        super(theFSM, new MultiTouchDataImpl(), logger, name ?? MultiTouch.name);
     }
 }

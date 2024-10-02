@@ -43,7 +43,7 @@ export class MouseUpFSM extends FSMImpl<MouseUpFSMHandler> {
  * A user interaction for releasing a mouse button.
  * @category Interaction Library
  */
-export class MouseUp extends InteractionBase<PointData, PointDataImpl, MouseUpFSM> {
+export class MouseUp extends InteractionBase<PointData, PointDataImpl> {
     /**
      * Creates the interaction.
      * @param logger - The logger to use for this interaction

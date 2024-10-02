@@ -96,7 +96,7 @@ interface DnDFSMHandler extends FSMDataHandler {
  * A user interaction for Drag and Drop
  * @category Interaction Library
  */
-export class DnD extends InteractionBase<SrcTgtPointsData<PointData>, SrcTgtPointsDataImpl, DnDFSM> {
+export class DnD extends InteractionBase<SrcTgtPointsData<PointData>, SrcTgtPointsDataImpl> {
     /**
      * Creates the interaction.
      * @param cancellable - True: the interaction can be cancelled

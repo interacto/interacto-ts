@@ -203,7 +203,7 @@ export interface TouchDnDFSMHandler extends FSMDataHandler {
  * A touch interaction (that works as a DnD)
  * @category Interaction Library
  */
-export class TouchDnD extends InteractionBase<SrcTgtPointsData<TouchData>, SrcTgtTouchDataImpl, OneTouchDnDFSM> {
+export class TouchDnD extends InteractionBase<SrcTgtPointsData<TouchData>, SrcTgtTouchDataImpl> {
     /**
      * Creates the interaction.
      * @param logger - The logger to use for this interaction

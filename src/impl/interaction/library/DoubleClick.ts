@@ -125,20 +125,21 @@ export class DoubleClickFSM extends FSMImpl<FSMDataHandler> {
  * The mouse double click interaction
  * @category Interaction Library
  */
-export class DoubleClick extends InteractionBase<PointData, PointDataImpl, DoubleClickFSM> {
+export class DoubleClick extends InteractionBase<PointData, PointDataImpl> {
     public constructor(logger: Logger, fsm?: DoubleClickFSM, data?: PointDataImpl, name?: string) {
-        super(fsm ?? new DoubleClickFSM(logger), data ?? new PointDataImpl(), logger, name ?? DoubleClick.name);
+        const theFSM = fsm ?? new DoubleClickFSM(logger);
+        super(theFSM, data ?? new PointDataImpl(), logger, name ?? DoubleClick.name);
 
-        this.fsm.dataHandler = {
+        theFSM.dataHandler = {
             "reinitData": (): void => {
                 this.reinitData();
             }
         };
         /*
          * We give the interaction to the first click as this click interaction
-         * will contains the data: so that this interaction will fill the data
+         * will contain the data: so that this interaction will fill the data
          * of the double-click.
          */
-        new Click(logger, this.fsm.firstClickFSM, this._data);
+        new Click(logger, theFSM.firstClickFSM, this._data);
     }
 }

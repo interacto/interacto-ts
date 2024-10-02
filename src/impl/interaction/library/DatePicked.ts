@@ -40,7 +40,7 @@ interface DatePickedHandler extends FSMDataHandler {
  * A user interaction for Date input.
  * @category Interaction Library
  */
-export class DatePicked extends InteractionBase<WidgetData<HTMLInputElement>, WidgetDataImpl<HTMLInputElement>, DatePickedFSM> {
+export class DatePicked extends InteractionBase<WidgetData<HTMLInputElement>, WidgetDataImpl<HTMLInputElement>> {
     /**
      * Creates the interaction.
      * @param logger - The logger to use for this interaction

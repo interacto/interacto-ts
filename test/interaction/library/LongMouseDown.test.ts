@@ -12,11 +12,11 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {LongMouseDown, PointDataImpl} from "../../../src/interacto";
+import { LongMouseDown, PointDataImpl} from "../../../src/interacto";
 import {createMouseEvent, robot} from "../StubEvents";
 import { afterEach, beforeEach, describe, expect, jest, test } from "@jest/globals";
 import {mock} from "jest-mock-extended";
-import type {FSMDataHandler, FSMHandler, Logger} from "../../../src/interacto";
+import type {FSMDataHandler, FSMHandler, Logger,FSMImpl} from "../../../src/interacto";
 import type {MockProxy} from "jest-mock-extended";
 
 describe("using a long mouse down interaction", () => {
@@ -44,18 +44,18 @@ describe("using a long mouse down interaction", () => {
 
         test("that has data handler", () => {
             interaction = new LongMouseDown(1, mock<Logger>());
-            expect(interaction.fsm.dataHandler).toBeDefined();
+            expect((interaction.fsm as FSMImpl<FSMDataHandler>).dataHandler).toBeDefined();
         });
 
         test("that reinit cleans data", () => {
             interaction = new LongMouseDown(100, mock<Logger>());
-            jest.spyOn(interaction.fsm.dataHandler as FSMDataHandler, "reinitData");
+            jest.spyOn((interaction.fsm as FSMImpl<FSMDataHandler>).dataHandler as FSMDataHandler, "reinitData");
             interaction.processEvent(createMouseEvent("mousedown", canvas, 15, 20, 160, 21, 2));
             interaction.reinit();
             expect(interaction.data.button).toBe(0);
             expect(interaction.data.currentTarget).toBeNull();
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            expect(interaction.fsm.dataHandler!.reinitData).toHaveBeenCalledWith();
+            expect((interaction.fsm as FSMImpl<FSMDataHandler>).dataHandler!.reinitData).toHaveBeenCalledWith();
         });
 
         describe.each([1000, 2000])("long press %s", duration => {

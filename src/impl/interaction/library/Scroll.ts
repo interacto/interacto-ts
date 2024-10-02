@@ -43,7 +43,7 @@ export class ScrollFSM extends FSMImpl<ScrollFSMHandler> {
  * A user interaction for scrolling using a mouse wheel. Consists of a single scroll.
  * @category Interaction Library
  */
-export class Scroll extends InteractionBase<ScrollData, ScrollDataImpl, ScrollFSM> {
+export class Scroll extends InteractionBase<ScrollData, ScrollDataImpl> {
     /**
      * Creates the interaction.
      * @param logger - The logger to use for this interaction

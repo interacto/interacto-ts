@@ -47,7 +47,7 @@ describe("using a multi touch interaction", () => {
 
         expect(interaction.isRunning()).toBeFalsy();
         expect(handler.fsmStarts).not.toHaveBeenCalled();
-        expect(interaction.fsm.conccurFSMs
+        expect(interaction.fsm.getAllConccurFSMs()
             .filter(fsm => fsm.started)).toHaveLength(2);
     });
 
@@ -69,7 +69,7 @@ describe("using a multi touch interaction", () => {
             .touchstart({}, [{"identifier": 1}])
             .touchstart({}, [{"identifier": 2}]);
 
-        expect(interaction.fsm.conccurFSMs
+        expect(interaction.fsm.getAllConccurFSMs()
             .filter(fsm => fsm.started)).toHaveLength(2);
         expect(interaction.isRunning()).toBeFalsy();
         expect(handler.fsmStarts).not.toHaveBeenCalled();
@@ -95,7 +95,7 @@ describe("using a multi touch interaction", () => {
             .touchstart({}, [{"identifier": 3}])
             .touchstart({}, [{"identifier": 2}]);
 
-        expect(interaction.fsm.conccurFSMs
+        expect(interaction.fsm.getAllConccurFSMs()
             .filter(fsm => fsm.started)).toHaveLength(3);
         expect(interaction.isRunning()).toBeTruthy();
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
@@ -121,7 +121,7 @@ describe("using a multi touch interaction", () => {
             .touchstart({}, [{"identifier": 2}])
             .touchstart({}, [{"identifier": 4}]);
 
-        expect(interaction.fsm.conccurFSMs
+        expect(interaction.fsm.getAllConccurFSMs()
             .filter(fsm => fsm.started)).toHaveLength(0);
         expect(interaction.isRunning()).toBeFalsy();
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);

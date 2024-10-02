@@ -39,7 +39,7 @@ interface TouchStartFSMHandler extends FSMDataHandler {
  * A user interaction for touching down
  * @category Interaction Library
  */
-export class TouchStart extends InteractionBase<TouchData, TouchDataImpl, TouchStartFSM> {
+export class TouchStart extends InteractionBase<TouchData, TouchDataImpl> {
     /**
      * Creates the interaction.
      * @param logger - The logger to use for this interaction

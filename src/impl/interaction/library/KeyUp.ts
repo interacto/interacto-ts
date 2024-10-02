@@ -53,7 +53,7 @@ export class KeyUpFSM extends FSMImpl<KeyUpFSMHandler> {
  * A user interaction for releasing a key on a keyboard
  * @category Interaction Library
  */
-export class KeyUp extends InteractionBase<KeyData, KeyDataImpl, KeyUpFSM> {
+export class KeyUp extends InteractionBase<KeyData, KeyDataImpl> {
     public constructor(logger: Logger, modifierAccepted: boolean, fsm?: KeyUpFSM, name?: string) {
         const handler: KeyUpFSMHandler = {
             "onKeyUp": (event: KeyboardEvent): void => {
