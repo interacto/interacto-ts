@@ -50,7 +50,7 @@ interface ButtonPressedFSMHandler extends FSMDataHandler {
  * @category Interaction
  */
 export class ButtonPressed extends InteractionBase<WidgetData<HTMLButtonElement>,
-WidgetDataImpl<HTMLButtonElement>, FSMImpl<ButtonPressedFSMHandler>> {
+    WidgetDataImpl<HTMLButtonElement>, FSMImpl<ButtonPressedFSMHandler>> {
     /**
      * Creates the interaction.
      * @param logger - The logger to use for this interaction

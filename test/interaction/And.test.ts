@@ -24,7 +24,7 @@ describe("that then interaction works", () => {
     const theLogger: Logger & MockProxy<Logger> = mock<Logger>();
     let canvas: HTMLElement;
     let interaction: Then<[TouchDnD, TouchDnD],
-    [SrcTgtPointsData<TouchData>, SrcTgtPointsData<TouchData>]>;
+        [SrcTgtPointsData<TouchData>, SrcTgtPointsData<TouchData>]>;
     let handler: FSMHandler;
 
     beforeEach(() => {
@@ -32,7 +32,7 @@ describe("that then interaction works", () => {
         canvas = document.createElement("canvas");
         jest.useFakeTimers();
         interaction = new Then<[TouchDnD, TouchDnD],
-        [SrcTgtPointsData<TouchData>, SrcTgtPointsData<TouchData>]>(
+            [SrcTgtPointsData<TouchData>, SrcTgtPointsData<TouchData>]>(
             [rightPan(theLogger, false, 10, 100)(), rightPan(theLogger, false, 10, 100)()], theLogger);
 
         interaction.fsm.addHandler(handler);

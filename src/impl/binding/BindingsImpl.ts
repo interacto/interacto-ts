@@ -207,7 +207,7 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
 
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<Or<TouchDnD, DnD>, A>(() => new Or<TouchDnD, DnD>(
-            new TouchDnD(this.logger, true), new DnD(true, this.logger), this.logger))
+                new TouchDnD(this.logger, true), new DnD(true, this.logger), this.logger))
             .on(handle)
             .then((_c, i) => {
                 anim.process(i);
@@ -461,7 +461,7 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
     public  longpressOrTouchBinder<A>(duration: number, accInit?: A): PartialPointOrTouchTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<Or<LongMouseDown, LongTouch>, A>(
-            () => new Or(new LongMouseDown(duration, this.logger), new LongTouch(duration, this.logger), this.logger));
+                () => new Or(new LongMouseDown(duration, this.logger), new LongTouch(duration, this.logger), this.logger));
     }
 
     public combine<IX extends Array<Interaction<object>>, A>(interactions: IX, accInit?: A): PartialThenBinder<IX, A> {
