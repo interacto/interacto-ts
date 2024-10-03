@@ -24,7 +24,7 @@ import type {Logger} from "../../../api/logging/Logger";
  * The FSM for click interactions
  * @category FSM
  */
-export class ClickFSM extends FSMImpl<MouseEvtFSMHandler> {
+export class ClickFSM extends FSMImpl {
     private checkButton: number | undefined;
 
     /**
@@ -38,7 +38,7 @@ export class ClickFSM extends FSMImpl<MouseEvtFSMHandler> {
         new ClickTransition(this.initState, this.addTerminalState("clicked"),
             (evt: MouseEvent): void => {
                 this.setCheckButton(evt.button);
-                this.dataHandler?.mouseEvt(evt);
+                dataHandler?.mouseEvt(evt);
             },
             (evt: MouseEvent): boolean => this.checkButton === undefined || evt.button === this.checkButton);
     }
@@ -72,15 +72,14 @@ export class Click extends InteractionBase<PointData, PointDataImpl> {
      * @param name - The name of the user interaction
      */
     public constructor(logger: Logger, fsm?: ClickFSM, data?: PointDataImpl, name?: string) {
-        const theFSM = fsm ?? new ClickFSM(logger);
-        super(theFSM, data ?? new PointDataImpl(), logger, name ?? Click.name);
-        theFSM.dataHandler = {
+        const theFSM = fsm ?? new ClickFSM(logger, {
             "mouseEvt": (evt: MouseEvent): void => {
                 this._data.copy(evt);
             },
             "reinitData": (): void => {
                 this.reinitData();
             }
-        };
+        });
+        super(theFSM, data ?? new PointDataImpl(), logger, name ?? Click.name);
     }
 }

@@ -19,11 +19,11 @@ import {MouseTransition} from "../../fsm/MouseTransition";
 import {SubFSMTransition} from "../../fsm/SubFSMTransition";
 import {InteractionBase} from "../InteractionBase";
 import {SrcTgtPointsDataImpl} from "../SrcTgtPointsDataImpl";
+import type {MouseEvtFSMHandler} from "./LongMouseDown";
 import type {PointData} from "../../../api/interaction/PointData";
 import type {SrcTgtPointsData} from "../../../api/interaction/SrcTgtPointsData";
 import type {Logger} from "../../../api/logging/Logger";
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-import type {PointDataImpl} from "../PointDataImpl";
 
 class DragLockFSM extends FSMImpl {
     public readonly firstDbleClick: DoubleClickFSM;
@@ -32,10 +32,11 @@ class DragLockFSM extends FSMImpl {
 
     protected checkButton: number | undefined;
 
-    public constructor(logger: Logger, dataHandler: DragLockFSMHandler) {
+    public constructor(logger: Logger, dataHandler: DragLockFSMHandler,
+                       dbleClick1Handler: MouseEvtFSMHandler, dbleClick2Handler: MouseEvtFSMHandler) {
         super(logger, dataHandler);
-        this.firstDbleClick = new DoubleClickFSM(logger);
-        this.sndDbleClick = new DoubleClickFSM(logger);
+        this.firstDbleClick = new DoubleClickFSM(logger, undefined, dbleClick1Handler);
+        this.sndDbleClick = new DoubleClickFSM(logger, undefined, dbleClick2Handler);
 
         const cancelDbleClick = new DoubleClickFSM(logger);
         const errorHandler = {
@@ -113,25 +114,40 @@ export class DragLock extends InteractionBase<SrcTgtPointsData<PointData>, SrcTg
     public constructor(logger: Logger, name?: string) {
         const handler: DragLockFSMHandler = {
             "onMove": (evt: MouseEvent): void => {
-                (this.data.tgt as PointDataImpl).copy(evt);
+                this._data.tgt.copy(evt);
             },
             "onFirstDbleClick": (): void => {
                 // On the first double-click we have to set the tgt point by copying the src data.
-                (this.data.tgt as PointDataImpl).copy(this.data.src);
+                this._data.tgt.copy(this.data.src);
             },
             "reinitData": (): void => {
                 this.reinitData();
             }
         };
 
-        const theFSM = new DragLockFSM(logger, handler);
+        const theFSM = new DragLockFSM(logger, handler, {
+            "mouseEvt": (evt: MouseEvent): void => {
+                this._data.src.copy(evt);
+            },
+            "reinitData": (): void => {
+                this.reinitData();
+            }
+        }, {
+            "mouseEvt": (evt: MouseEvent): void => {
+                this._data.tgt.copy(evt);
+            },
+            "reinitData": (): void => {
+                this.reinitData();
+            }
+        });
+
         super(theFSM, new SrcTgtPointsDataImpl(), logger, name ?? DragLock.name);
 
         /*
          * We give the interactions to the initial and final double-clicks as these interactions
          * will contain the data: so that these interactions will fill the data with the draglock.
          */
-        new DoubleClick(logger, theFSM.firstDbleClick, this.data.src as PointDataImpl);
-        new DoubleClick(logger, theFSM.sndDbleClick, this.data.tgt as PointDataImpl);
+        new DoubleClick(logger, theFSM.firstDbleClick, this._data.src);
+        new DoubleClick(logger, theFSM.sndDbleClick, this._data.tgt);
     }
 }

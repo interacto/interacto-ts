@@ -32,4 +32,12 @@ export class SrcTgtPointsDataImpl extends SrcTgtDataBase<PointData, PointDataImp
     public copyTgt(data: PointData): void {
         this.tgtData.copy(data);
     }
+
+    public override get src(): PointDataImpl {
+        return this.srcData;
+    }
+
+    public override get tgt(): PointDataImpl {
+        return this.tgtData;
+    }
 }

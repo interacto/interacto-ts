@@ -19,6 +19,7 @@ import {SubFSMTransition} from "../../fsm/SubFSMTransition";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 import {InteractionBase} from "../InteractionBase";
 import {PointDataImpl} from "../PointDataImpl";
+import type {MouseEvtFSMHandler} from "./LongMouseDown";
 import type {PointData} from "../../../api/interaction/PointData";
 import type {Logger} from "../../../api/logging/Logger";
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
@@ -60,9 +61,9 @@ export class DoubleClickFSM extends FSMImpl {
 
     private checkButton: number | undefined;
 
-    public constructor(logger: Logger, dataHandler?: FSMDataHandler) {
+    public constructor(logger: Logger, dataHandler?: FSMDataHandler, subDataHandler?: MouseEvtFSMHandler) {
         super(logger, dataHandler);
-        this.firstClickFSM = new ClickFSM(logger);
+        this.firstClickFSM = new ClickFSM(logger, subDataHandler);
         this.sndClickFSM = new ClickFSM(logger);
 
         const errorHandler = {
@@ -128,6 +129,13 @@ export class DoubleClickFSM extends FSMImpl {
 export class DoubleClick extends InteractionBase<PointData, PointDataImpl> {
     public constructor(logger: Logger, fsm?: DoubleClickFSM, data?: PointDataImpl, name?: string) {
         const theFSM = fsm ?? new DoubleClickFSM(logger, {
+            "reinitData": (): void => {
+                this.reinitData();
+            }
+        }, {
+            "mouseEvt": (evt: MouseEvent): void => {
+                this._data.copy(evt);
+            },
             "reinitData": (): void => {
                 this.reinitData();
             }
