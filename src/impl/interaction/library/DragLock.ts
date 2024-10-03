@@ -25,7 +25,7 @@ import type {Logger} from "../../../api/logging/Logger";
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import type {PointDataImpl} from "../PointDataImpl";
 
-class DragLockFSM extends FSMImpl<DragLockFSMHandler> {
+class DragLockFSM extends FSMImpl {
     public readonly firstDbleClick: DoubleClickFSM;
 
     public readonly sndDbleClick: DoubleClickFSM;
@@ -57,14 +57,14 @@ class DragLockFSM extends FSMImpl<DragLockFSMHandler> {
                 const checkButton = this.firstDbleClick.getCheckButton();
                 this.sndDbleClick.setCheckButton(checkButton);
                 cancelDbleClick.setCheckButton(checkButton);
-                this.dataHandler?.onFirstDbleClick();
+                dataHandler.onFirstDbleClick();
             });
 
         new SubFSMTransition(locked, cancelled, cancelDbleClick);
 
         const move = new MouseTransition(locked, moved, "mousemove",
             (event: MouseEvent): void => {
-                this.dataHandler?.onMove(event);
+                dataHandler.onMove(event);
             });
 
         new MouseTransition(moved, moved, "mousemove", move.action);

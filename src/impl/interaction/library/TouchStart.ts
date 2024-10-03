@@ -16,23 +16,19 @@ import {FSMImpl} from "../../fsm/FSMImpl";
 import {TouchTransition} from "../../fsm/TouchTransition";
 import {InteractionBase} from "../InteractionBase";
 import {TouchDataImpl} from "../TouchDataImpl";
+import type {TouchFSMDataHandler} from "./LongTouch";
 import type {TouchData} from "../../../api/interaction/TouchData";
 import type {Logger} from "../../../api/logging/Logger";
-import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 
-class TouchStartFSM extends FSMImpl<TouchStartFSMHandler> {
-    public constructor(logger: Logger, dataHandler: TouchStartFSMHandler) {
+class TouchStartFSM extends FSMImpl {
+    public constructor(logger: Logger, dataHandler: TouchFSMDataHandler) {
         super(logger, dataHandler);
 
         new TouchTransition(this.initState, this.addTerminalState("touched"), "touchstart",
             (event: TouchEvent): void => {
-                this.dataHandler?.initToTouch(event);
+                dataHandler.touchEvent(event);
             });
     }
-}
-
-interface TouchStartFSMHandler extends FSMDataHandler {
-    initToTouch(event: TouchEvent): void;
 }
 
 /**
@@ -46,8 +42,8 @@ export class TouchStart extends InteractionBase<TouchData, TouchDataImpl> {
      * @param name - The name of the user interaction
      */
     public constructor(logger: Logger, name?: string) {
-        const handler: TouchStartFSMHandler = {
-            "initToTouch": (evt: TouchEvent): void => {
+        const handler: TouchFSMDataHandler = {
+            "touchEvent": (evt: TouchEvent): void => {
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 this._data.copy(TouchDataImpl.mergeTouchEventData(evt.changedTouches[0]!, evt, Array.from(evt.touches)));
             },

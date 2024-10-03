@@ -28,13 +28,12 @@ import type {EventType} from "../../src/api/fsm/EventType";
 import type {InputState} from "../../src/api/fsm/InputState";
 import type {OutputState} from "../../src/api/fsm/OutputState";
 import type {Logger} from "../../src/api/logging/Logger";
-import type {FSMDataHandler} from "../../src/impl/fsm/FSMDataHandler";
 import type {VisitorInteraction} from "../../src/interacto";
 import type {MockProxy} from "jest-mock-extended";
 
 describe("using a base interaction", () => {
     let interaction: InteractionStub;
-    let fsm: FSMImpl<FSMDataHandler> & MockProxy<FSMImpl<FSMDataHandler>>;
+    let fsm: FSMImpl & MockProxy<FSMImpl>;
     let currentStateObs: Subject<[OutputState, OutputState]>;
     let currentState: OutputState;
     let logger: Logger;
@@ -57,7 +56,7 @@ describe("using a base interaction", () => {
     beforeEach(() => {
         logger = mock<Logger>();
         currentStateObs = new Subject();
-        fsm = mock<FSMImpl<FSMDataHandler>>();
+        fsm = mock<FSMImpl>();
         Object.defineProperty(fsm, "currentStateObservable", {
             "get": jest.fn(() => currentStateObs)
         });

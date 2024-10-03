@@ -20,13 +20,13 @@ import type {WidgetData} from "../../../api/interaction/WidgetData";
 import type {Logger} from "../../../api/logging/Logger";
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 
-class ColorPickedFSM extends FSMImpl<ColorPickedHandler> {
+class ColorPickedFSM extends FSMImpl {
     public constructor(logger: Logger, dataHandler: ColorPickedHandler) {
         super(logger, dataHandler);
 
         new ColorPickedTransition(this.initState, this.addTerminalState("picked"),
             (evt: Event): void => {
-                this.dataHandler?.initToPickedHandler(evt);
+                dataHandler.initToPickedHandler(evt);
             });
     }
 }

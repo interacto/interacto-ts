@@ -21,13 +21,13 @@ import type {WidgetData} from "../../../api/interaction/WidgetData";
 import type {Logger} from "../../../api/logging/Logger";
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 
-class ComboBoxSelectedFSM extends FSMImpl<ComboBoxSelectedHandler> {
+class ComboBoxSelectedFSM extends FSMImpl {
     public constructor(logger: Logger, dataHandler: ComboBoxSelectedHandler) {
         super(logger, dataHandler);
 
         new ComboBoxTransition(this.initState, this.addTerminalState("selected"),
             (evt: Event): void => {
-                this.dataHandler?.initToSelectedHandler(evt);
+                dataHandler.initToSelectedHandler(evt);
             });
     }
 }

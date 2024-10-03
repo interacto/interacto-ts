@@ -38,7 +38,7 @@ export class Or<
     D2 extends object = InteractionDataType<I2>,
     D1Impl extends D1 & Flushable = InteractionDataImplType<I1>,
     D2Impl extends D2 & Flushable = InteractionDataImplType<I2>>
-    extends ConcurrentInteraction<D1 | D2, D1Impl | D2Impl, ConcurrentXOrFSM<FSM, FSMDataHandler>> {
+    extends ConcurrentInteraction<D1 | D2, D1Impl | D2Impl, ConcurrentXOrFSM<FSM>> {
     private readonly i1: I1;
 
     private readonly i2: I2;

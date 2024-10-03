@@ -21,13 +21,13 @@ import type {WidgetData} from "../../../api/interaction/WidgetData";
 import type {Logger} from "../../../api/logging/Logger";
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 
-class BoxCheckedFSM extends FSMImpl<BoxCheckedHandler> {
+class BoxCheckedFSM extends FSMImpl {
     public constructor(logger: Logger, dataHandler: BoxCheckedHandler) {
         super(logger, dataHandler);
 
         new BoxCheckPressedTransition(this.initState, this.addTerminalState("checked"),
             (evt: InputEvent): void => {
-                this.dataHandler?.initToCheckHandler(evt);
+                dataHandler.initToCheckHandler(evt);
             });
     }
 }
@@ -47,7 +47,7 @@ export class BoxChecked extends InteractionBase<WidgetData<HTMLInputElement>, Wi
      * @param name - The name of the user interaction
      */
     public constructor(logger: Logger, name?: string) {
-        const handler: BoxCheckedHandler = {
+        const handler = {
             "initToCheckHandler": (event: Event): void => {
                 this._data.copy(event);
             },

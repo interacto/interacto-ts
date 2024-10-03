@@ -16,19 +16,15 @@ import {FSMImpl} from "../../fsm/FSMImpl";
 import {MouseTransition} from "../../fsm/MouseTransition";
 import {InteractionBase} from "../InteractionBase";
 import {PointDataImpl} from "../PointDataImpl";
+import type {MouseEvtFSMHandler} from "./LongMouseDown";
 import type {PointData} from "../../../api/interaction/PointData";
 import type {Logger} from "../../../api/logging/Logger";
-import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-
-interface MouseEnterFSMHandler extends FSMDataHandler {
-    onEnter(event: MouseEvent): void;
-}
 
 /**
  * The FSM for mouseover interactions
  * @category FSM
  */
-export class MouseEnterFSM extends FSMImpl<MouseEnterFSMHandler> {
+export class MouseEnterFSM extends FSMImpl {
     /**
      * Indicates if event bubbling is enabled for the interaction
      */
@@ -40,13 +36,13 @@ export class MouseEnterFSM extends FSMImpl<MouseEnterFSMHandler> {
      * @param logger - The logger to use for this interaction
      * @param dataHandler - The data handler the FSM will use
      */
-    public constructor(withBubbling: boolean, logger: Logger, dataHandler: MouseEnterFSMHandler) {
+    public constructor(withBubbling: boolean, logger: Logger, dataHandler: MouseEvtFSMHandler) {
         super(logger, dataHandler);
         this.withBubbling = withBubbling;
 
         const entered = this.addTerminalState("entered");
         const action = (event: MouseEvent): void => {
-            this.dataHandler?.onEnter(event);
+            dataHandler.mouseEvt(event);
         };
 
         if (this.withBubbling) {
@@ -69,8 +65,8 @@ export class MouseEnter extends InteractionBase<PointData, PointDataImpl> {
      * @param name - The name of the user interaction
      */
     public constructor(withBubbling: boolean, logger: Logger, name?: string) {
-        const handler: MouseEnterFSMHandler = {
-            "onEnter": (evt: MouseEvent): void => {
+        const handler: MouseEvtFSMHandler = {
+            "mouseEvt": (evt: MouseEvent): void => {
                 this._data.copy(evt);
             },
             "reinitData": (): void => {

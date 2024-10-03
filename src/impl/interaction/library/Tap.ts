@@ -16,21 +16,17 @@ import {FSMImpl} from "../../fsm/FSMImpl";
 import {TouchTransition} from "../../fsm/TouchTransition";
 import {InteractionBase} from "../InteractionBase";
 import {TouchDataImpl} from "../TouchDataImpl";
+import type {TouchFSMDataHandler} from "./LongTouch";
 import type {TouchData} from "../../../api/interaction/TouchData";
 import type {Logger} from "../../../api/logging/Logger";
 import type {CancellingState} from "../../fsm/CancellingState";
-import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import type {StdState} from "../../fsm/StdState";
-
-interface TapFSMHandler extends FSMDataHandler {
-    tap(evt: TouchEvent): void;
-}
 
 /**
  * The FSM for the Tap interaction
  * @category FSM
  */
-export class TapFSM extends FSMImpl<TapFSMHandler> {
+export class TapFSM extends FSMImpl {
     protected readonly downState: StdState;
     protected readonly cancelState: CancellingState;
     private touchID?: number;
@@ -40,7 +36,7 @@ export class TapFSM extends FSMImpl<TapFSMHandler> {
      * @param logger - The logger to use for this interaction
      * @param dataHandler - The data handler the FSM will use
      */
-    public constructor(logger: Logger, dataHandler: TapFSMHandler) {
+    public constructor(logger: Logger, dataHandler: TouchFSMDataHandler) {
         super(logger, dataHandler);
 
         this.downState = this.addStdState("down");
@@ -50,7 +46,7 @@ export class TapFSM extends FSMImpl<TapFSMHandler> {
         const action = (event: TouchEvent): void => {
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             this.touchID = event.changedTouches[0]!.identifier;
-            this.dataHandler?.tap(event);
+            dataHandler.touchEvent(event);
         };
 
         new TouchTransition(this.initState, this.downState, "touchstart", action);
@@ -87,8 +83,8 @@ export class Tap extends InteractionBase<TouchData, TouchDataImpl> {
      * @param name - The name of the user interaction
      */
     public constructor(logger: Logger, name?: string) {
-        const handler: TapFSMHandler = {
-            "tap": (evt: TouchEvent): void => {
+        const handler: TouchFSMDataHandler = {
+            "touchEvent": (evt: TouchEvent): void => {
                 if (evt.changedTouches.length > 0) {
                     const touch = new TouchDataImpl();
                     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

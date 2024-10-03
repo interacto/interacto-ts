@@ -28,7 +28,7 @@ import type {Logger} from "../../api/logging/Logger";
  * FSM to start.
  * @category FSM
  */
-export class ConcurrentAndFSM<F extends FSM, T extends FSMDataHandler> extends FSMImpl<T> implements ConcurrentFSM<F> {
+export class ConcurrentAndFSM<F extends FSM, T extends FSMDataHandler = FSMDataHandler> extends FSMImpl<T> implements ConcurrentFSM<F> {
     /**
      * The main fsms
      */

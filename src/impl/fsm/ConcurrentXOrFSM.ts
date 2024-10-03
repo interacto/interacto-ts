@@ -26,7 +26,7 @@ import type {Logger} from "../../api/logging/Logger";
  * If one FSM has started, the other ones cannot start.
  * @category FSM
  */
-export class ConcurrentXOrFSM<F extends FSM, T extends FSMDataHandler> extends FSMImpl<T> implements ConcurrentFSM<F> {
+export class ConcurrentXOrFSM<F extends FSM, T extends FSMDataHandler = FSMDataHandler> extends FSMImpl<T> implements ConcurrentFSM<F> {
     /**
      * The main fsms
      */

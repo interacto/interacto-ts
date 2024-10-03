@@ -25,7 +25,7 @@ import type {Logger} from "../../../api/logging/Logger";
  * The FSM that defines a multi-touch interaction (that works like a DnD)
  * @category FSM
  */
-export class MultiTouchFSM extends ConcurrentAndFSM<TouchDnDFSM, TouchDnDFSMHandler> {
+export class MultiTouchFSM extends ConcurrentAndFSM<TouchDnDFSM> {
     /**
      * Creates the FSM.
      * @param nbTouch - The number of touches of the interaction

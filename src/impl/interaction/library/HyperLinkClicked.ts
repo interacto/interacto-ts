@@ -21,13 +21,13 @@ import type {WidgetData} from "../../../api/interaction/WidgetData";
 import type {Logger} from "../../../api/logging/Logger";
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 
-class HyperLinkClickedFSM extends FSMImpl<HyperLinkClickedFSMHandler> {
+class HyperLinkClickedFSM extends FSMImpl {
     public constructor(logger: Logger, dataHandler: HyperLinkClickedFSMHandler) {
         super(logger, dataHandler);
 
         new HyperLinkTransition(this.initState, this.addTerminalState("clicked"),
             (evt: Event): void => {
-                this.dataHandler?.initToClickedHandler(evt);
+                dataHandler.initToClickedHandler(evt);
             });
     }
 }

@@ -19,7 +19,6 @@ import {mock} from "jest-mock-extended";
 import type {InputState} from "../../src/api/fsm/InputState";
 import type {OutputState} from "../../src/api/fsm/OutputState";
 import type {Logger} from "../../src/api/logging/Logger";
-import type {FSMDataHandler} from "../../src/impl/fsm/FSMDataHandler";
 import type {FSMImpl} from "../../src/impl/fsm/FSMImpl";
 import type {MockProxy} from "jest-mock-extended";
 
@@ -27,13 +26,13 @@ describe("using a timeout transition", () => {
     let evt: TimeoutTransition;
     let src: MockProxy<OutputState> & OutputState;
     let tgt: InputState & MockProxy<InputState>;
-    let fsm: FSMImpl<FSMDataHandler> & MockProxy<FSMImpl<FSMDataHandler>>;
+    let fsm: FSMImpl & MockProxy<FSMImpl>;
     let logger: Logger;
 
     beforeEach(() => {
         logger = mock<Logger>();
         jest.useFakeTimers();
-        fsm = mock<FSMImpl<FSMDataHandler>>();
+        fsm = mock<FSMImpl>();
         src = mock<OutputState>();
         tgt = mock<InputState>();
         Object.defineProperty(src, "fsm", {

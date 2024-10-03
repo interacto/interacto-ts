@@ -16,19 +16,15 @@ import {FSMImpl} from "../../fsm/FSMImpl";
 import {KeyTransition} from "../../fsm/KeyTransition";
 import {InteractionBase} from "../InteractionBase";
 import {KeyDataImpl} from "../KeyDataImpl";
+import type {KeyEvtFSMHandler} from "./KeysDown";
 import type {KeyData} from "../../../api/interaction/KeyData";
 import type {Logger} from "../../../api/logging/Logger";
-import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-
-interface KeyUpFSMHandler extends FSMDataHandler {
-    onKeyUp(event: KeyboardEvent): void;
-}
 
 /**
  * An FSM for a single key release.
  * @category FSM
  */
-export class KeyUpFSM extends FSMImpl<KeyUpFSMHandler> {
+export class KeyUpFSM extends FSMImpl {
     private readonly modifiersAccepted: boolean;
 
     /**
@@ -37,13 +33,13 @@ export class KeyUpFSM extends FSMImpl<KeyUpFSMHandler> {
      * @param logger - The logger to use for this interaction
      * @param dataHandler - The data handler the FSM will use
      */
-    public constructor(modifierAccepted: boolean, logger: Logger, dataHandler: KeyUpFSMHandler) {
+    public constructor(modifierAccepted: boolean, logger: Logger, dataHandler: KeyEvtFSMHandler) {
         super(logger, dataHandler);
         this.modifiersAccepted = modifierAccepted;
 
         new KeyTransition(this.initState, this.addTerminalState("released"), "keyup",
             (evt: KeyboardEvent): void => {
-                this.dataHandler?.onKeyUp(evt);
+                dataHandler.onKeyEvt(evt);
             },
             (ev: KeyboardEvent): boolean => this.modifiersAccepted || (!ev.altKey && !ev.ctrlKey && !ev.shiftKey && !ev.metaKey));
     }
@@ -55,8 +51,8 @@ export class KeyUpFSM extends FSMImpl<KeyUpFSMHandler> {
  */
 export class KeyUp extends InteractionBase<KeyData, KeyDataImpl> {
     public constructor(logger: Logger, modifierAccepted: boolean, fsm?: KeyUpFSM, name?: string) {
-        const handler: KeyUpFSMHandler = {
-            "onKeyUp": (event: KeyboardEvent): void => {
+        const handler: KeyEvtFSMHandler = {
+            "onKeyEvt": (event: KeyboardEvent): void => {
                 this._data.copy(event);
             },
             "reinitData": (): void => {

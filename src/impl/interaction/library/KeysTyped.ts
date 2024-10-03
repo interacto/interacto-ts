@@ -17,13 +17,9 @@ import {KeyTransition} from "../../fsm/KeyTransition";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 import {InteractionBase} from "../InteractionBase";
 import {KeysDataImpl} from "../KeysDataImpl";
+import type {KeyEvtFSMHandler} from "./KeysDown";
 import type {KeysData} from "../../../api/interaction/KeysData";
 import type {Logger} from "../../../api/logging/Logger";
-import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-
-interface KeyTypedFSMHandler extends FSMDataHandler {
-    onKeyTyped(event: Event): void;
-}
 
 /**
  * An FSM for typing several keyboard touches.
@@ -31,7 +27,7 @@ interface KeyTypedFSMHandler extends FSMDataHandler {
  * typed key).
  * @category FSM
  */
-export class KeysTypedFSM extends FSMImpl<KeyTypedFSMHandler> {
+export class KeysTypedFSM extends FSMImpl {
     /** The time gap between the two spinner events. */
     private static readonly timeGap: number = 1000;
 
@@ -50,13 +46,13 @@ export class KeysTypedFSM extends FSMImpl<KeyTypedFSMHandler> {
      * @param logger - The logger to use for this interaction
      * @param dataHandler - The data handler the FSM will use
      */
-    public constructor(logger: Logger, dataHandler: KeyTypedFSMHandler) {
+    public constructor(logger: Logger, dataHandler: KeyEvtFSMHandler) {
         super(logger, dataHandler);
 
         const keyup = this.addStdState("keyup");
 
         const action = (event: KeyboardEvent): void => {
-            this.dataHandler?.onKeyTyped(event);
+            dataHandler.onKeyEvt(event);
         };
 
         new KeyTransition(this.initState, keyup, "keyup", action);
@@ -80,8 +76,8 @@ export class KeysTyped extends InteractionBase<KeysData, KeysDataImpl> {
      * @param name - The name of the user interaction
      */
     public constructor(logger: Logger, name?: string) {
-        const handler: KeyTypedFSMHandler = {
-            "onKeyTyped": (event: KeyboardEvent): void => {
+        const handler: KeyEvtFSMHandler = {
+            "onKeyEvt": (event: KeyboardEvent): void => {
                 this._data.addKey(event);
             },
             "reinitData": (): void => {

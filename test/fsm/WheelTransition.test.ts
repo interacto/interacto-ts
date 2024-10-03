@@ -17,7 +17,6 @@ import {WheelTransition} from "../../src/impl/fsm/WheelTransition";
 import {createMouseEvent, createTouchEvent, createWheelEvent} from "../interaction/StubEvents";
 import { beforeEach, describe, expect, test } from "@jest/globals";
 import {mock} from "jest-mock-extended";
-import type {FSMDataHandler} from "../../src/impl/fsm/FSMDataHandler";
 import type {FSMImpl} from "../../src/impl/fsm/FSMImpl";
 
 describe("using a wheel transition", () => {
@@ -25,7 +24,7 @@ describe("using a wheel transition", () => {
     let canvas: HTMLCanvasElement;
 
     beforeEach(() => {
-        tr = new WheelTransition(new StdState(mock<FSMImpl<FSMDataHandler>>(), "a"), new StdState(mock<FSMImpl<FSMDataHandler>>(), "b"));
+        tr = new WheelTransition(new StdState(mock<FSMImpl>(), "a"), new StdState(mock<FSMImpl>(), "b"));
         canvas = document.createElement("canvas");
     });
 

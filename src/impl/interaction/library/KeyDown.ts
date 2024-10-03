@@ -16,19 +16,15 @@ import {FSMImpl} from "../../fsm/FSMImpl";
 import {KeyTransition} from "../../fsm/KeyTransition";
 import {InteractionBase} from "../InteractionBase";
 import {KeyDataImpl} from "../KeyDataImpl";
+import type {KeyEvtFSMHandler} from "./KeysDown";
 import type {KeyData} from "../../../api/interaction/KeyData";
 import type {Logger} from "../../../api/logging/Logger";
-import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-
-interface KeyDownFSMHandler extends FSMDataHandler {
-    onKeyPressed(event: KeyboardEvent): void;
-}
 
 /**
  * An FSM for a single key pressure.
  * @category FSM
  */
-export class KeyDownFSM extends FSMImpl<KeyDownFSMHandler> {
+export class KeyDownFSM extends FSMImpl {
     private readonly modifiersAccepted: boolean;
 
     /**
@@ -36,15 +32,15 @@ export class KeyDownFSM extends FSMImpl<KeyDownFSMHandler> {
      * @param modifierAccepted - True: the FSM will consider key modifiers.
      * @param logger - The logger to use for this interaction
      * @param dataHandler - The data handler the FSM will use
-     * @param key - The optional accpeted key code
+     * @param key - The optional accepted key code
      */
-    public constructor(modifierAccepted: boolean, logger: Logger, dataHandler: KeyDownFSMHandler, key?: string) {
+    public constructor(modifierAccepted: boolean, logger: Logger, dataHandler: KeyEvtFSMHandler, key?: string) {
         super(logger, dataHandler);
         this.modifiersAccepted = modifierAccepted;
 
         new KeyTransition(this.initState, this.addTerminalState("pressed"), "keydown",
             (evt: KeyboardEvent): void => {
-                this.dataHandler?.onKeyPressed(evt);
+                dataHandler.onKeyEvt(evt);
             },
             (evt: KeyboardEvent): boolean => (key === undefined || key === evt.code) &&
                 (this.modifiersAccepted || (!evt.altKey && !evt.ctrlKey && !evt.shiftKey && !evt.metaKey)));
@@ -63,8 +59,8 @@ export class KeyDownFSM extends FSMImpl<KeyDownFSMHandler> {
 export class KeyDown extends InteractionBase<KeyData, KeyDataImpl> {
 
     public constructor(logger: Logger, modifierAccepted: boolean, key?: string, fsm?: KeyDownFSM, name?: string) {
-        const handler: KeyDownFSMHandler = {
-            "onKeyPressed": (event: KeyboardEvent): void => {
+        const handler: KeyEvtFSMHandler = {
+            "onKeyEvt": (event: KeyboardEvent): void => {
                 this._data.copy(event);
             },
             "reinitData": (): void => {

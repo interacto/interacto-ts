@@ -24,7 +24,7 @@ import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 /**
  * The FSM for the LongTouch interaction
  */
-class LongTouchFSM extends FSMImpl<LongTouchFSMHandler> {
+class LongTouchFSM extends FSMImpl<TouchFSMDataHandler> {
     private readonly duration: number;
 
     private currentTouchID: number | undefined;
@@ -35,7 +35,7 @@ class LongTouchFSM extends FSMImpl<LongTouchFSMHandler> {
      * @param logger - The logger to use for this interaction
      * @param dataHandler - The data handler the FSM will use
      */
-    public constructor(duration: number, logger: Logger, dataHandler: LongTouchFSMHandler) {
+    public constructor(duration: number, logger: Logger, dataHandler: TouchFSMDataHandler) {
         super(logger, dataHandler);
 
         if (duration <= 0) {
@@ -52,7 +52,7 @@ class LongTouchFSM extends FSMImpl<LongTouchFSMHandler> {
             (event: TouchEvent): void => {
                 if (event.changedTouches[0] !== undefined) {
                     this.currentTouchID = event.changedTouches[0].identifier;
-                    this.dataHandler?.tap(event);
+                    dataHandler.touchEvent(event);
                 }
             });
 
@@ -71,8 +71,11 @@ class LongTouchFSM extends FSMImpl<LongTouchFSMHandler> {
     }
 }
 
-interface LongTouchFSMHandler extends FSMDataHandler {
-    tap(evt: TouchEvent): void;
+/**
+ * The data handler that maps a single touch event to an FSM
+ */
+export interface TouchFSMDataHandler extends FSMDataHandler {
+    touchEvent(evt: TouchEvent): void;
 }
 
 /**
@@ -88,8 +91,8 @@ export class LongTouch extends InteractionBase<TouchData, TouchDataImpl> {
      * @param name - The name of the user interaction
      */
     public constructor(duration: number, logger: Logger, name?: string) {
-        const handler: LongTouchFSMHandler = {
-            "tap": (evt: TouchEvent): void => {
+        const handler: TouchFSMDataHandler = {
+            "touchEvent": (evt: TouchEvent): void => {
                 if (evt.changedTouches[0] !== undefined) {
                     this._data.copy(TouchDataImpl.mergeTouchEventData(evt.changedTouches[0], evt, Array.from(evt.touches)));
                 }

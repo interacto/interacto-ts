@@ -28,13 +28,13 @@ interface ScrollFSMHandler extends FSMDataHandler {
  * An FSM for scrolling.
  * @category FSM
  */
-export class ScrollFSM extends FSMImpl<ScrollFSMHandler> {
+export class ScrollFSM extends FSMImpl {
     public constructor(logger: Logger, dataHandler: ScrollFSMHandler) {
         super(logger, dataHandler);
 
         new ScrollTransition(this.initState, this.addTerminalState("scrolled"),
             (evt: Event): void => {
-                this.dataHandler?.initToScroll(evt);
+                dataHandler.initToScroll(evt);
             });
     }
 }
@@ -50,7 +50,7 @@ export class Scroll extends InteractionBase<ScrollData, ScrollDataImpl> {
      * @param name - The name of the user interaction
      */
     public constructor(logger: Logger, name?: string) {
-        const handler: ScrollFSMHandler = {
+        const handler = {
             "initToScroll": (event: Event): void => {
                 this._data.setScrollData(event);
             },

@@ -24,14 +24,12 @@ import {
 import {createKeyEvent, createMouseEvent, createTouchEvent} from "../interaction/StubEvents";
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
 import {mock} from "jest-mock-extended";
-import type {VisitorFSM} from "../../src/api/fsm/VisitorFSM";
-import type {FSMHandler, Logger, OutputState, FSMDataHandler,
-    CancellingState,
-    TerminalState} from "../../src/interacto";
+import type {FSMHandler, Logger, OutputState, CancellingState, TerminalState, VisitorFSM
+} from "../../src/interacto";
 import type {MockProxy} from "jest-mock-extended";
 import type {Subject} from "rxjs";
 
-let fsm: FSMImpl<FSMDataHandler>;
+let fsm: FSMImpl;
 let handler: FSMHandler & MockProxy<FSMHandler>;
 let logger: Logger;
 
@@ -629,7 +627,7 @@ describe("using an FSM", () => {
     });
 
     describe("testWithSubFSM", () => {
-        let mainfsm: FSMImpl<FSMDataHandler>;
+        let mainfsm: FSMImpl;
         let s1: StdState;
         let subS1: StdState;
         let subS2: StdState;

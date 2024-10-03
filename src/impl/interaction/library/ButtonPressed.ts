@@ -25,7 +25,7 @@ import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
  * The FSM for button pressures.
  * @category Interaction Library
  */
-class ButtonPressedFSM extends FSMImpl<ButtonPressedFSMHandler> {
+class ButtonPressedFSM extends FSMImpl {
     /**
      * Creates the FSM
      * @param logger - The logger to use for this interaction
@@ -36,7 +36,7 @@ class ButtonPressedFSM extends FSMImpl<ButtonPressedFSMHandler> {
 
         new ButtonPressedTransition(this.initState, this.addTerminalState("pressed"),
             (evt: InputEvent): void => {
-                this.dataHandler?.initToPressedHandler(evt);
+                dataHandler.initToPressedHandler(evt);
             });
     }
 }

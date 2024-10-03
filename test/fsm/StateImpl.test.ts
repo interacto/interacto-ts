@@ -16,11 +16,11 @@ import {FSMImpl, StdState} from "../../src/interacto";
 import { beforeEach, describe, expect, test } from "@jest/globals";
 import {mock} from "jest-mock-extended";
 import type {VisitorFSM} from "../../src/api/fsm/VisitorFSM";
-import type {FSMDataHandler, Logger, StateBase} from "../../src/interacto";
+import type {Logger, StateBase} from "../../src/interacto";
 
 describe("using a state impl", () => {
     let state: StateBase;
-    let fsm: FSMImpl<FSMDataHandler>;
+    let fsm: FSMImpl;
 
     beforeEach(() => {
         fsm = new FSMImpl(mock<Logger>());

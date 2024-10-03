@@ -25,7 +25,7 @@ import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 /**
  * The FSM for DnD interactions.
  */
-class DnDFSM extends FSMImpl<DnDFSMHandler> {
+class DnDFSM extends FSMImpl {
     private readonly cancellable: boolean;
 
     private buttonToCheck: number | undefined;
@@ -47,14 +47,14 @@ class DnDFSM extends FSMImpl<DnDFSMHandler> {
         new MouseTransition(this.initState, pressed, "mousedown",
             (evt: MouseEvent): void => {
                 this.buttonToCheck = evt.button;
-                this.dataHandler?.onPress(evt);
+                dataHandler.onPress(evt);
             });
 
         new MouseTransition(pressed, cancelled, "mouseup", (evt: MouseEvent): boolean => evt.button === this.buttonToCheck);
 
         const move = new MouseTransition(pressed, dragged, "mousemove",
             (evt: MouseEvent): void => {
-                this.dataHandler?.onDrag(evt);
+                dataHandler.onDrag(evt);
             },
             (evt: MouseEvent): boolean => evt.button === this.buttonToCheck);
 
@@ -62,7 +62,7 @@ class DnDFSM extends FSMImpl<DnDFSMHandler> {
 
         new MouseTransition(dragged, this.addTerminalState("released"), "mouseup",
             (event: MouseEvent): void => {
-                this.dataHandler?.onRelease(event);
+                dataHandler.onRelease(event);
             },
             (event: MouseEvent): boolean => {
                 const tgt = event.currentTarget;

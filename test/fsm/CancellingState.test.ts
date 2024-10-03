@@ -17,16 +17,15 @@ import { beforeEach, describe, expect, jest, test } from "@jest/globals";
 import {mock} from "jest-mock-extended";
 import type {OutputState} from "../../src/api/fsm/OutputState";
 import type {VisitorFSM} from "../../src/api/fsm/VisitorFSM";
-import type {FSMDataHandler} from "../../src/impl/fsm/FSMDataHandler";
 import type {FSMImpl} from "../../src/impl/fsm/FSMImpl";
 import type {MockProxy} from "jest-mock-extended";
 
 describe("using a cancelling state", () => {
     let state: CancellingState;
-    let fsm: FSMImpl<FSMDataHandler> & MockProxy<FSMImpl<FSMDataHandler>>;
+    let fsm: FSMImpl & MockProxy<FSMImpl>;
 
     beforeEach(() => {
-        fsm = mock<FSMImpl<FSMDataHandler>>();
+        fsm = mock<FSMImpl>();
         state = new CancellingState(fsm, "os");
     });
 

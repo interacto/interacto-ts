@@ -20,15 +20,18 @@ import type {KeysData} from "../../../api/interaction/KeysData";
 import type {Logger} from "../../../api/logging/Logger";
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 
-interface KeysDownFSMHandler extends FSMDataHandler {
-    onKeyPressed(event: KeyboardEvent): void;
+/**
+ * The data handler that makes the link between a single key event handler and an FSM
+ */
+export interface KeyEvtFSMHandler extends FSMDataHandler {
+    onKeyEvt(event: KeyboardEvent): void;
 }
 
 /**
  * This interaction permits to define combo a key pressed that can be used to define shortcuts, etc.
  * @category FSM
  */
-export class KeysDownFSM extends FSMImpl<KeysDownFSMHandler> {
+export class KeysDownFSM extends FSMImpl {
     private readonly currentCodes: Array<string>;
 
     /**
@@ -36,7 +39,7 @@ export class KeysDownFSM extends FSMImpl<KeysDownFSMHandler> {
      * @param logger - The logger to use for this interaction
      * @param dataHandler - The data handler the FSM will use
      */
-    public constructor(logger: Logger, dataHandler: KeysDownFSMHandler) {
+    public constructor(logger: Logger, dataHandler: KeyEvtFSMHandler) {
         super(logger, dataHandler);
         this.currentCodes = [];
 
@@ -44,7 +47,7 @@ export class KeysDownFSM extends FSMImpl<KeysDownFSMHandler> {
 
         const actionkp = (evt: KeyboardEvent): void => {
             this.currentCodes.push(evt.code);
-            this.dataHandler?.onKeyPressed(evt);
+            dataHandler.onKeyEvt(evt);
         };
         new KeyTransition(this.initState, pressed, "keydown", actionkp);
 
@@ -72,8 +75,8 @@ export class KeysDown extends InteractionBase<KeysData, KeysDataImpl> {
      * @param name - The name of the user interaction
      */
     public constructor(logger: Logger, name?: string) {
-        const handler: KeysDownFSMHandler = {
-            "onKeyPressed": (event: KeyboardEvent): void => {
+        const handler: KeyEvtFSMHandler = {
+            "onKeyEvt": (event: KeyboardEvent): void => {
                 this._data.addKey(event);
             },
             "reinitData": (): void => {

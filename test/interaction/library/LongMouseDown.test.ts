@@ -44,18 +44,18 @@ describe("using a long mouse down interaction", () => {
 
         test("that has data handler", () => {
             interaction = new LongMouseDown(1, mock<Logger>());
-            expect((interaction.fsm as FSMImpl<FSMDataHandler>).dataHandler).toBeDefined();
+            expect((interaction.fsm as FSMImpl).dataHandler).toBeDefined();
         });
 
         test("that reinit cleans data", () => {
             interaction = new LongMouseDown(100, mock<Logger>());
-            jest.spyOn((interaction.fsm as FSMImpl<FSMDataHandler>).dataHandler as FSMDataHandler, "reinitData");
+            jest.spyOn((interaction.fsm as FSMImpl).dataHandler as FSMDataHandler, "reinitData");
             interaction.processEvent(createMouseEvent("mousedown", canvas, 15, 20, 160, 21, 2));
             interaction.reinit();
             expect(interaction.data.button).toBe(0);
             expect(interaction.data.currentTarget).toBeNull();
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            expect((interaction.fsm as FSMImpl<FSMDataHandler>).dataHandler!.reinitData).toHaveBeenCalledWith();
+            expect((interaction.fsm as FSMImpl).dataHandler!.reinitData).toHaveBeenCalledWith();
         });
 
         describe.each([1000, 2000])("long press %s", duration => {

@@ -23,7 +23,7 @@ import {InteractionStub} from "../interaction/InteractionStub";
 import {createMouseEvent} from "../interaction/StubEvents";
 import { afterEach, beforeEach, describe, expect, jest, test } from "@jest/globals";
 import {mock} from "jest-mock-extended";
-import type {FSM, FSMDataHandler, Logger, UndoHistory} from "../../src/interacto";
+import type {FSM, Logger, UndoHistory} from "../../src/interacto";
 
 let interaction: InteractionStub;
 let binding: BindingImpl<StubCmd, InteractionStub, unknown>;
@@ -31,7 +31,7 @@ let fsm: FSM;
 let cmd: StubCmd;
 let history: UndoHistory;
 
-class OneTrFSM extends FSMImpl<FSMDataHandler> {
+class OneTrFSM extends FSMImpl {
     public constructor() {
         super(mock<Logger>());
         new ClickTransition(this.initState, this.addTerminalState("s1"));

@@ -22,16 +22,15 @@ import type {FSM} from "../../src/api/fsm/FSM";
 import type {InputState} from "../../src/api/fsm/InputState";
 import type {OutputState} from "../../src/api/fsm/OutputState";
 import type {Transition} from "../../src/api/fsm/Transition";
-import type {FSMDataHandler} from "../../src/impl/fsm/FSMDataHandler";
 import type {FSMImpl} from "../../src/impl/fsm/FSMImpl";
 import type {MockProxy} from "jest-mock-extended";
 
 describe("using an output state", () => {
     let state: OutputStateBase;
-    let fsm: FSMImpl<FSMDataHandler> & MockProxy<FSMImpl<FSMDataHandler>>;
+    let fsm: FSMImpl & MockProxy<FSMImpl>;
 
     beforeEach(() => {
-        fsm = mock<FSMImpl<FSMDataHandler>>();
+        fsm = mock<FSMImpl>();
         state = new class extends OutputStateBase {
             public constructor() {
                 super(fsm, "os");

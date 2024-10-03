@@ -15,7 +15,7 @@
 import {ClickFSM, DnD, DoubleClickFSM, KeyTyped, LongTouch, MouseDown, MultiTouch, TouchDnD, VisitorFSMDepthFirst} from "../../src/interacto";
 import { beforeEach, describe, expect, test } from "@jest/globals";
 import {mock} from "jest-mock-extended";
-import type {Logger, FSMDataHandler, FSM, InputState, OutputState, State,
+import type {Logger, FSM, InputState, OutputState, State,
     Transition, TimeoutTransition, ConcurrentAndFSM, ConcurrentXOrFSM} from "../../src/interacto";
 
 let visitedFSM: FSM;
@@ -29,12 +29,12 @@ class StubVisitor extends VisitorFSMDepthFirst {
         super.visitFSM(fsm);
     }
 
-    public override visitAndConcurrentFSM(fsm: ConcurrentAndFSM<FSM, FSMDataHandler>): void {
+    public override visitAndConcurrentFSM(fsm: ConcurrentAndFSM<FSM>): void {
         this.res += "&";
         super.visitAndConcurrentFSM(fsm);
     }
 
-    public override visitXOrConcurrentFSM(fsm: ConcurrentXOrFSM<FSM, FSMDataHandler>): void {
+    public override visitXOrConcurrentFSM(fsm: ConcurrentXOrFSM<FSM>): void {
         this.res += "|";
         super.visitXOrConcurrentFSM(fsm);
     }

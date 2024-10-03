@@ -17,7 +17,6 @@ import {TouchTransition} from "../../src/impl/fsm/TouchTransition";
 import {createMouseEvent, createTouchEvent} from "../interaction/StubEvents";
 import { beforeEach, describe, expect, test } from "@jest/globals";
 import {mock} from "jest-mock-extended";
-import type {FSMDataHandler} from "../../src/impl/fsm/FSMDataHandler";
 import type {FSMImpl} from "../../src/impl/fsm/FSMImpl";
 
 describe("using a touch pressure transition", () => {
@@ -25,8 +24,8 @@ describe("using a touch pressure transition", () => {
     let canvas: HTMLCanvasElement;
 
     beforeEach(() => {
-        tr = new TouchTransition(new StdState(mock<FSMImpl<FSMDataHandler>>(), "a"),
-            new StdState(mock<FSMImpl<FSMDataHandler>>(), "b"), "touchstart");
+        tr = new TouchTransition(new StdState(mock<FSMImpl>(), "a"),
+            new StdState(mock<FSMImpl>(), "b"), "touchstart");
         canvas = document.createElement("canvas");
     });
 

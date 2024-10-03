@@ -16,25 +16,21 @@ import {FSMImpl} from "../../fsm/FSMImpl";
 import {MouseTransition} from "../../fsm/MouseTransition";
 import {InteractionBase} from "../InteractionBase";
 import {PointDataImpl} from "../PointDataImpl";
+import type {MouseEvtFSMHandler} from "./LongMouseDown";
 import type {PointData} from "../../../api/interaction/PointData";
 import type {Logger} from "../../../api/logging/Logger";
-import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-
-interface MouseUpFSMHandler extends FSMDataHandler {
-    initToPress(event: MouseEvent): void;
-}
 
 /**
  * The FSM of the mosue up interaction
  * @category FSM
  */
-export class MouseUpFSM extends FSMImpl<MouseUpFSMHandler> {
-    public constructor(logger: Logger, dataHandler: MouseUpFSMHandler) {
+export class MouseUpFSM extends FSMImpl {
+    public constructor(logger: Logger, dataHandler: MouseEvtFSMHandler) {
         super(logger, dataHandler);
 
         new MouseTransition(this.initState, this.addTerminalState("released"), "mouseup",
             (event: MouseEvent): void => {
-                this.dataHandler?.initToPress(event);
+                dataHandler.mouseEvt(event);
             });
     }
 }
@@ -50,8 +46,8 @@ export class MouseUp extends InteractionBase<PointData, PointDataImpl> {
      * @param name - The name of the user interaction
      */
     public constructor(logger: Logger, name?: string) {
-        const handler: MouseUpFSMHandler = {
-            "initToPress": (evt: MouseEvent): void => {
+        const handler: MouseEvtFSMHandler = {
+            "mouseEvt": (evt: MouseEvent): void => {
                 this._data.copy(evt);
             },
             "reinitData": (): void => {

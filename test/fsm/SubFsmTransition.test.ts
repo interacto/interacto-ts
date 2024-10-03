@@ -17,12 +17,12 @@ import {FSMImpl, SubFSMTransition} from "../../src/interacto";
 import {createMouseEvent} from "../interaction/StubEvents";
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
 import {mock} from "jest-mock-extended";
-import type {FSMDataHandler, InputState, Logger, Transition, StdState, TerminalState, EventType} from "../../src/interacto";
+import type {InputState, Logger, Transition, StdState, TerminalState, EventType} from "../../src/interacto";
 
 describe("using a sub fsm transition", () => {
     let tr: SubFSMTransition;
-    let fsm: FSMImpl<FSMDataHandler>;
-    let mainfsm: FSMImpl<FSMDataHandler>;
+    let fsm: FSMImpl;
+    let mainfsm: FSMImpl;
     let s1: StdState;
     let s2: StdState;
     let subS: TerminalState;

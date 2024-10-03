@@ -20,15 +20,18 @@ import type {WheelData} from "../../../api/interaction/WheelData";
 import type {Logger} from "../../../api/logging/Logger";
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 
+/**
+ * The FSM handler that binds a single wheel event handler to an FSM
+ */
 interface WheelFSMHandler extends FSMDataHandler {
-    initToMoved(event: WheelEvent): void;
+    wheelEvent(event: WheelEvent): void;
 }
 
 /**
  * The FSM for wheel interactions
  * @category FSM
  */
-export class WheelFSM extends FSMImpl<WheelFSMHandler> {
+class WheelFSM extends FSMImpl {
     /**
      * Creates the FSM
      * @param logger - The logger to use for this interaction
@@ -39,7 +42,7 @@ export class WheelFSM extends FSMImpl<WheelFSMHandler> {
 
         new WheelTransition(this.initState, this.addTerminalState("moved"),
             (evt: WheelEvent): void => {
-                this.dataHandler?.initToMoved(evt);
+                dataHandler.wheelEvent(evt);
             });
     }
 }
@@ -57,8 +60,8 @@ export class Wheel extends InteractionBase<WheelData, WheelDataImpl> {
      * @param name - The name of the user interaction
      */
     public constructor(logger: Logger, fsm?: WheelFSM, data?: WheelDataImpl, name?: string) {
-        const handler: WheelFSMHandler = {
-            "initToMoved": (evt: WheelEvent): void => {
+        const handler = {
+            "wheelEvent": (evt: WheelEvent): void => {
                 this._data.copy(evt);
             },
             "reinitData": (): void => {

@@ -21,13 +21,13 @@ import type {WidgetData} from "../../../api/interaction/WidgetData";
 import type {Logger} from "../../../api/logging/Logger";
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 
-class DatePickedFSM extends FSMImpl<DatePickedHandler> {
+class DatePickedFSM extends FSMImpl {
     public constructor(logger: Logger, dataHandler: DatePickedHandler) {
         super(logger, dataHandler);
 
         new DatePickedTransition(this.initState, this.addTerminalState("picked"),
             (evt: Event): void => {
-                this.dataHandler?.initToPickedHandler(evt);
+                dataHandler.initToPickedHandler(evt);
             });
     }
 }

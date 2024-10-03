@@ -21,15 +21,18 @@ import type {PointData} from "../../../api/interaction/PointData";
 import type {Logger} from "../../../api/logging/Logger";
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 
-interface LongMouseDownFSMHandler extends FSMDataHandler {
-    press(evt: MouseEvent): void;
+/**
+ * The data handler that makes the link between a single mouse event and an FSM
+ */
+export interface MouseEvtFSMHandler extends FSMDataHandler {
+    mouseEvt(evt: MouseEvent): void;
 }
 
 /**
  * The FSM for the LongPress interaction
  * @category FSM
  */
-export class LongMouseDownFSM extends FSMImpl<LongMouseDownFSMHandler> {
+export class LongMouseDownFSM extends FSMImpl {
     private readonly duration: number;
 
     private currentButton: number | undefined;
@@ -40,7 +43,7 @@ export class LongMouseDownFSM extends FSMImpl<LongMouseDownFSMHandler> {
      * @param logger - The logger to use for this interaction
      * @param dataHandler - The data handler the FSM will use
      */
-    public constructor(duration: number, logger: Logger, dataHandler: LongMouseDownFSMHandler) {
+    public constructor(duration: number, logger: Logger, dataHandler: MouseEvtFSMHandler) {
         super(logger, dataHandler);
 
         if (duration <= 0) {
@@ -57,7 +60,7 @@ export class LongMouseDownFSM extends FSMImpl<LongMouseDownFSMHandler> {
         new MouseTransition(this.initState, down, "mousedown",
             (evt: MouseEvent): void => {
                 this.currentButton = evt.button;
-                this.dataHandler?.press(evt);
+                dataHandler.mouseEvt(evt);
             });
 
         const move = new MouseTransition(down, cancelled, "mousemove", undefined,
@@ -87,8 +90,8 @@ export class LongMouseDown extends InteractionBase<PointData, PointDataImpl> {
      * @param name - The name of the user interaction
      */
     public constructor(duration: number, logger: Logger, name?: string) {
-        const handler: LongMouseDownFSMHandler = {
-            "press": (evt: MouseEvent): void => {
+        const handler: MouseEvtFSMHandler = {
+            "mouseEvt": (evt: MouseEvent): void => {
                 this._data.copy(evt);
             },
             "reinitData": (): void => {

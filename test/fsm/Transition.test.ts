@@ -17,7 +17,6 @@ import {StdState} from "../../src/impl/fsm/StdState";
 import { beforeEach, describe, expect, test } from "@jest/globals";
 import {mock} from "jest-mock-extended";
 import type {VisitorFSM} from "../../src/api/fsm/VisitorFSM";
-import type {FSMDataHandler} from "../../src/impl/fsm/FSMDataHandler";
 import type {FSMImpl} from "../../src/impl/fsm/FSMImpl";
 import type {TransitionBase} from "../../src/impl/fsm/TransitionBase";
 
@@ -27,7 +26,7 @@ describe("using a transition", () => {
     let state2: StdState;
 
     beforeEach(() => {
-        const fsm: FSMImpl<FSMDataHandler> = mock<FSMImpl<FSMDataHandler>>();
+        const fsm: FSMImpl = mock<FSMImpl>();
         state1 = new StdState(fsm, "s1");
         state2 = new StdState(fsm, "s2");
         tr = new StubTransitionOK(state1, state2);

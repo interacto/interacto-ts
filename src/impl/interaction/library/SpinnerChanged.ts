@@ -30,7 +30,7 @@ interface SpinnerChangedHandler extends FSMDataHandler {
  * The FSM of the spinner interaction
  * @category FSM
  */
-export class SpinnerChangedFSM extends FSMImpl<SpinnerChangedHandler> {
+export class SpinnerChangedFSM extends FSMImpl {
     /** The time gap between the two spinner events. */
     private static timeGap = 300;
 
@@ -62,7 +62,7 @@ export class SpinnerChangedFSM extends FSMImpl<SpinnerChangedHandler> {
 
         const changed = this.addStdState("changed");
         const spinnerAction = (evt: Event): void => {
-            this.dataHandler?.initToChangedHandler(evt);
+            dataHandler.initToChangedHandler(evt);
         };
 
         new SpinnerChangedTransition(this.initState, changed, spinnerAction);
@@ -82,7 +82,7 @@ export class SpinnerChanged extends InteractionBase<WidgetData<HTMLInputElement>
      * @param name - The name of the user interaction
      */
     public constructor(logger: Logger, name?: string) {
-        const handler: SpinnerChangedHandler = {
+        const handler = {
             "initToChangedHandler": (event: Event): void => {
                 this._data.copy(event);
             },

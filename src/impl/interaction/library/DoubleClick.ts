@@ -27,7 +27,7 @@ import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
  * The FSM for the mouse double click interaction
  * @category FSM
  */
-export class DoubleClickFSM extends FSMImpl<FSMDataHandler> {
+export class DoubleClickFSM extends FSMImpl {
     /** The time gap between the two spinner events. */
     private static timeGap = 300;
 
@@ -127,14 +127,12 @@ export class DoubleClickFSM extends FSMImpl<FSMDataHandler> {
  */
 export class DoubleClick extends InteractionBase<PointData, PointDataImpl> {
     public constructor(logger: Logger, fsm?: DoubleClickFSM, data?: PointDataImpl, name?: string) {
-        const theFSM = fsm ?? new DoubleClickFSM(logger);
-        super(theFSM, data ?? new PointDataImpl(), logger, name ?? DoubleClick.name);
-
-        theFSM.dataHandler = {
+        const theFSM = fsm ?? new DoubleClickFSM(logger, {
             "reinitData": (): void => {
                 this.reinitData();
             }
-        };
+        });
+        super(theFSM, data ?? new PointDataImpl(), logger, name ?? DoubleClick.name);
         /*
          * We give the interaction to the first click as this click interaction
          * will contain the data: so that this interaction will fill the data

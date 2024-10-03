@@ -16,19 +16,15 @@ import {ClickTransition} from "../../fsm/ClickTransition";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {PointDataImpl} from "../PointDataImpl";
+import type {MouseEvtFSMHandler} from "./LongMouseDown";
 import type {PointData} from "../../../api/interaction/PointData";
 import type {Logger} from "../../../api/logging/Logger";
-import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-
-interface ClickFSMHandler extends FSMDataHandler {
-    initToClicked(event: MouseEvent): void;
-}
 
 /**
  * The FSM for click interactions
  * @category FSM
  */
-export class ClickFSM extends FSMImpl<ClickFSMHandler> {
+export class ClickFSM extends FSMImpl<MouseEvtFSMHandler> {
     private checkButton: number | undefined;
 
     /**
@@ -36,13 +32,13 @@ export class ClickFSM extends FSMImpl<ClickFSMHandler> {
      * @param logger - The logger to use for this interaction
      * @param dataHandler - The data handler the FSM will use
      */
-    public constructor(logger: Logger, dataHandler?: ClickFSMHandler) {
+    public constructor(logger: Logger, dataHandler?: MouseEvtFSMHandler) {
         super(logger, dataHandler);
 
         new ClickTransition(this.initState, this.addTerminalState("clicked"),
             (evt: MouseEvent): void => {
                 this.setCheckButton(evt.button);
-                this.dataHandler?.initToClicked(evt);
+                this.dataHandler?.mouseEvt(evt);
             },
             (evt: MouseEvent): boolean => this.checkButton === undefined || evt.button === this.checkButton);
     }
@@ -77,11 +73,9 @@ export class Click extends InteractionBase<PointData, PointDataImpl> {
      */
     public constructor(logger: Logger, fsm?: ClickFSM, data?: PointDataImpl, name?: string) {
         const theFSM = fsm ?? new ClickFSM(logger);
-
         super(theFSM, data ?? new PointDataImpl(), logger, name ?? Click.name);
-
         theFSM.dataHandler = {
-            "initToClicked": (evt: MouseEvent): void => {
+            "mouseEvt": (evt: MouseEvent): void => {
                 this._data.copy(evt);
             },
             "reinitData": (): void => {

@@ -22,7 +22,7 @@ import type {WidgetData} from "../../../api/interaction/WidgetData";
 import type {Logger} from "../../../api/logging/Logger";
 import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 
-class TextInputChangedFSM extends FSMImpl<TextInputChangedHandler> {
+class TextInputChangedFSM extends FSMImpl {
     /** The time gap between the two spinner events. */
     private readonly _timeGap: number = 1000;
 
@@ -49,12 +49,12 @@ class TextInputChangedFSM extends FSMImpl<TextInputChangedHandler> {
 
         new TextInputChangedTransition(this.initState, changed,
             (evt: Event): void => {
-                this.dataHandler?.initToChangedHandler(evt);
+                dataHandler.initToChangedHandler(evt);
             });
 
         new TextInputChangedTransition(changed, changed,
             (evt: Event): void => {
-                this.dataHandler?.initToChangedHandler(evt);
+                dataHandler.initToChangedHandler(evt);
             });
 
         new TimeoutTransition(changed, this.addTerminalState("ended"), this.timeGapSupplier);
