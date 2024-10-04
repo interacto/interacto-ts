@@ -16,7 +16,6 @@ import {FSMImpl} from "../../fsm/FSMImpl";
 import {KeyTransition} from "../../fsm/KeyTransition";
 import {InteractionBase} from "../InteractionBase";
 import {KeyDataImpl} from "../KeyDataImpl";
-import type {KeyEvtFSMHandler} from "./KeysDown";
 import type {KeyData} from "../../../api/interaction/KeyData";
 import type {Logger} from "../../../api/logging/Logger";
 
@@ -31,16 +30,13 @@ export class KeyUpFSM extends FSMImpl {
      * Creates the FSM.
      * @param modifierAccepted - True: the FSM will consider key modifiers.
      * @param logger - The logger to use for this interaction
-     * @param dataHandler - The data handler the FSM will use
+     * @param action - The action executed on a key up
      */
-    public constructor(modifierAccepted: boolean, logger: Logger, dataHandler: KeyEvtFSMHandler) {
-        super(logger, dataHandler);
+    public constructor(modifierAccepted: boolean, logger: Logger, action: (evt: KeyboardEvent) => void) {
+        super(logger);
         this.modifiersAccepted = modifierAccepted;
 
-        new KeyTransition(this.initState, this.addTerminalState("released"), "keyup",
-            (evt: KeyboardEvent): void => {
-                dataHandler.onKeyEvt(evt);
-            },
+        new KeyTransition(this.initState, this.addTerminalState("released"), "keyup", action,
             (ev: KeyboardEvent): boolean => this.modifiersAccepted || (!ev.altKey && !ev.ctrlKey && !ev.shiftKey && !ev.metaKey));
     }
 }
@@ -51,15 +47,9 @@ export class KeyUpFSM extends FSMImpl {
  */
 export class KeyUp extends InteractionBase<KeyData, KeyDataImpl> {
     public constructor(logger: Logger, modifierAccepted: boolean, fsm?: KeyUpFSM, name?: string) {
-        const handler: KeyEvtFSMHandler = {
-            "onKeyEvt": (event: KeyboardEvent): void => {
-                this._data.copy(event);
-            },
-            "reinitData": (): void => {
-                this.reinitData();
-            }
+        const action = (event: KeyboardEvent): void => {
+            this._data.copy(event);
         };
-
-        super(fsm ?? new KeyUpFSM(modifierAccepted, logger, handler), new KeyDataImpl(), logger, name ?? KeyUp.name);
+        super(fsm ?? new KeyUpFSM(modifierAccepted, logger, action), new KeyDataImpl(), logger, name ?? KeyUp.name);
     }
 }

@@ -18,6 +18,7 @@ import {ConcurrentInteraction} from "../ConcurrentInteraction";
 import {MultiTouchDataImpl} from "../MultiTouchDataImpl";
 import {SrcTgtTouchDataImpl} from "../SrcTgtTouchDataImpl";
 import type {TouchDnDFSMHandler} from "./TouchDnD";
+import type {FSMHandler} from "../../../api/fsm/FSMHandler";
 import type {MultiTouchData} from "../../../api/interaction/MultiTouchData";
 import type {Logger} from "../../../api/logging/Logger";
 
@@ -37,7 +38,7 @@ export class MultiTouchFSM extends ConcurrentAndFSM<TouchDnDFSM> {
      */
     public constructor(nbTouch: number, totalReinit: boolean, logger: Logger, dataHandler: TouchDnDFSMHandler, movementRequired = false) {
         super(Array.from(Array.from({"length": nbTouch}).keys(), () => new TouchDnDFSM(false, logger, dataHandler, movementRequired)),
-            logger, totalReinit ? [new TouchDnDFSM(false, logger, dataHandler, movementRequired)] : [], totalReinit, dataHandler);
+            logger, totalReinit ? [new TouchDnDFSM(false, logger, dataHandler, movementRequired)] : [], totalReinit);
     }
 
     public override process(event: Event): boolean {
@@ -125,9 +126,11 @@ export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouch
                 for (const touch of Array.from(event.changedTouches)) {
                     this._data.setTouch(touch, event);
                 }
-            },
+            }
+        });
 
-            "reinitData": (): void => {
+        const reinitHandler: FSMHandler = {
+            "fsmReinit": (): void => {
                 const currentIDs = new Set(theFSM.conccurFSMs
                     .filter(fsm => fsm.started)
                     .map(fsm => fsm.getTouchId()));
@@ -140,8 +143,13 @@ export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouch
                         (this.data as MultiTouchDataImpl).removeTouchData(data.src.identifier);
                     });
             }
-        });
+        };
 
-        super(theFSM, new MultiTouchDataImpl(), logger, name ?? MultiTouch.name);
+        // Have to add a reinit handler for each concc FSM
+        for (const concc of theFSM.conccurFSMs) {
+            concc.addHandler(reinitHandler);
+        }
+
+        super(theFSM, new MultiTouchDataImpl(), logger, name ?? MultiTouch.name, false);
     }
 }

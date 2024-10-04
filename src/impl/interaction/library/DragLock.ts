@@ -19,11 +19,9 @@ import {MouseTransition} from "../../fsm/MouseTransition";
 import {SubFSMTransition} from "../../fsm/SubFSMTransition";
 import {InteractionBase} from "../InteractionBase";
 import {SrcTgtPointsDataImpl} from "../SrcTgtPointsDataImpl";
-import type {MouseEvtFSMHandler} from "./LongMouseDown";
 import type {PointData} from "../../../api/interaction/PointData";
 import type {SrcTgtPointsData} from "../../../api/interaction/SrcTgtPointsData";
 import type {Logger} from "../../../api/logging/Logger";
-import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 
 class DragLockFSM extends FSMImpl {
     public readonly firstDbleClick: DoubleClickFSM;
@@ -32,11 +30,11 @@ class DragLockFSM extends FSMImpl {
 
     protected checkButton: number | undefined;
 
-    public constructor(logger: Logger, dataHandler: DragLockFSMHandler,
-                       dbleClick1Handler: MouseEvtFSMHandler, dbleClick2Handler: MouseEvtFSMHandler) {
-        super(logger, dataHandler);
-        this.firstDbleClick = new DoubleClickFSM(logger, undefined, dbleClick1Handler);
-        this.sndDbleClick = new DoubleClickFSM(logger, undefined, dbleClick2Handler);
+    public constructor(logger: Logger, handler: DragLockFSMHandler,
+                       dbleClick1Action: (evt: MouseEvent) => void, dbleClick2Action: (evt: MouseEvent) => void) {
+        super(logger);
+        this.firstDbleClick = new DoubleClickFSM(logger, dbleClick1Action);
+        this.sndDbleClick = new DoubleClickFSM(logger, dbleClick2Action);
 
         const cancelDbleClick = new DoubleClickFSM(logger);
         const errorHandler = {
@@ -58,14 +56,14 @@ class DragLockFSM extends FSMImpl {
                 const checkButton = this.firstDbleClick.getCheckButton();
                 this.sndDbleClick.setCheckButton(checkButton);
                 cancelDbleClick.setCheckButton(checkButton);
-                dataHandler.onFirstDbleClick();
+                handler.onFirstDbleClick();
             });
 
         new SubFSMTransition(locked, cancelled, cancelDbleClick);
 
         const move = new MouseTransition(locked, moved, "mousemove",
             (event: MouseEvent): void => {
-                dataHandler.onMove(event);
+                handler.onMove(event);
             });
 
         new MouseTransition(moved, moved, "mousemove", move.action);
@@ -96,7 +94,7 @@ class DragLockFSM extends FSMImpl {
     }
 }
 
-interface DragLockFSMHandler extends FSMDataHandler {
+interface DragLockFSMHandler {
     onMove(event: MouseEvent): void;
     onFirstDbleClick(): void;
 }
@@ -119,26 +117,13 @@ export class DragLock extends InteractionBase<SrcTgtPointsData<PointData>, SrcTg
             "onFirstDbleClick": (): void => {
                 // On the first double-click we have to set the tgt point by copying the src data.
                 this._data.tgt.copy(this.data.src);
-            },
-            "reinitData": (): void => {
-                this.reinitData();
             }
         };
 
-        const theFSM = new DragLockFSM(logger, handler, {
-            "mouseEvt": (evt: MouseEvent): void => {
-                this._data.src.copy(evt);
-            },
-            "reinitData": (): void => {
-                this.reinitData();
-            }
-        }, {
-            "mouseEvt": (evt: MouseEvent): void => {
-                this._data.tgt.copy(evt);
-            },
-            "reinitData": (): void => {
-                this.reinitData();
-            }
+        const theFSM = new DragLockFSM(logger, handler, (evt: MouseEvent): void => {
+            this._data.src.copy(evt);
+        }, (evt: MouseEvent): void => {
+            this._data.tgt.copy(evt);
         });
 
         super(theFSM, new SrcTgtPointsDataImpl(), logger, name ?? DragLock.name);

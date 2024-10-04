@@ -102,7 +102,6 @@ export * from "./impl/fsm/ConcurrentXOrFSM";
 export * from "./impl/fsm/DatePickedTransition";
 export * from "./impl/fsm/EscapeKeyPressureTransition";
 export * from "./impl/fsm/Events";
-export * from "./impl/fsm/FSMDataHandler";
 export * from "./impl/fsm/FSMImpl";
 export * from "./impl/fsm/HyperLinkTransition";
 export * from "./impl/fsm/InitState";

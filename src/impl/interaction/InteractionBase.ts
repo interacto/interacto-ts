@@ -96,8 +96,9 @@ export abstract class InteractionBase<D extends object, DImpl extends D & Flusha
      * @param data - The interaction data.
      * @param logger - The logger to use for this interaction
      * @param name - The real name of the interaction
+     * @param reinitDataOnFSMReinit - Reinits the interaction data when the FSM is reinitialized. True by default
      */
-    protected constructor(fsm: F, data: DImpl, logger: Logger, name: string) {
+    protected constructor(fsm: F, data: DImpl, logger: Logger, name: string, reinitDataOnFSMReinit = true) {
         this._name = name;
         this.logger = logger;
         this.activated = false;
@@ -114,6 +115,14 @@ export abstract class InteractionBase<D extends object, DImpl extends D & Flusha
         this._dynamicRegisteredNodes = new Set<unknown>();
         this.mutationObservers = [];
         this.throttleTimeout = 0;
+
+        if (reinitDataOnFSMReinit) {
+            this.fsm.addHandler({
+                "fsmReinit": () => {
+                    this.reinitData();
+                }
+            });
+        }
     }
 
     public reinitData(): void {

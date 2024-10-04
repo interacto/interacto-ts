@@ -99,6 +99,18 @@ describe("using a key typed interaction", () => {
                 .keyup();
             expect(data.code).toBe("z");
         });
+
+        test("clear Data", () => {
+            robot(text)
+                .keepData()
+                .keydown({"code": "z"})
+                .keyup();
+
+            expect(handler.fsmReinit).toHaveBeenCalledTimes(1);
+            expect(interaction.data.key).toBe("");
+            expect(interaction.data.code).toBe("");
+            expect(interaction.data.currentTarget).toBeNull();
+        });
     });
 
     describe("with the key", () => {

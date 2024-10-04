@@ -458,7 +458,7 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
             .usingInteraction<Or<Tap, Click>, A>(() => new Or(new Tap(this.logger), new Click(this.logger), this.logger));
     }
 
-    public  longpressOrTouchBinder<A>(duration: number, accInit?: A): PartialPointOrTouchTypedBinder<A> {
+    public longpressOrTouchBinder<A>(duration: number, accInit?: A): PartialPointOrTouchTypedBinder<A> {
         return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<Or<LongMouseDown, LongTouch>, A>(
                 () => new Or(new LongMouseDown(duration, this.logger), new LongTouch(duration, this.logger), this.logger));

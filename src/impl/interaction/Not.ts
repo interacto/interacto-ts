@@ -18,7 +18,6 @@ import type {Flushable} from "./Flushable";
 import type {InteractionBase, InteractionDataImplType} from "./InteractionBase";
 import type {Interaction, InteractionDataType} from "../../api/interaction/Interaction";
 import type {Logger} from "../../api/logging/Logger";
-import type {FSMDataHandler} from "../fsm/FSMDataHandler";
 
 /**
  * An interaction that corresponds to the ! operator.
@@ -28,7 +27,7 @@ import type {FSMDataHandler} from "../fsm/FSMDataHandler";
  */
 export class Not<I extends InteractionBase<DI & object, DI & DImpl & Flushable>, N extends Interaction<object>,
     DI = InteractionDataType<I>, DImpl = InteractionDataImplType<I>>
-    extends ConcurrentInteraction<DI & object, DI & DImpl & Flushable, NotFSM<FSMDataHandler>> {
+    extends ConcurrentInteraction<DI & object, DI & DImpl & Flushable, NotFSM> {
 
     private readonly mainInteraction: I;
 

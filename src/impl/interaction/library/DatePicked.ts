@@ -19,21 +19,12 @@ import {InteractionBase} from "../InteractionBase";
 import {WidgetDataImpl} from "../WidgetDataImpl";
 import type {WidgetData} from "../../../api/interaction/WidgetData";
 import type {Logger} from "../../../api/logging/Logger";
-import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 
 class DatePickedFSM extends FSMImpl {
-    public constructor(logger: Logger, dataHandler: DatePickedHandler) {
-        super(logger, dataHandler);
-
-        new DatePickedTransition(this.initState, this.addTerminalState("picked"),
-            (evt: Event): void => {
-                dataHandler.initToPickedHandler(evt);
-            });
+    public constructor(logger: Logger, action: (event: Event) => void) {
+        super(logger);
+        new DatePickedTransition(this.initState, this.addTerminalState("picked"), action);
     }
-}
-
-interface DatePickedHandler extends FSMDataHandler {
-    initToPickedHandler(event: Event): void;
 }
 
 /**
@@ -47,16 +38,11 @@ export class DatePicked extends InteractionBase<WidgetData<HTMLInputElement>, Wi
      * @param name - The name of the user interaction
      */
     public constructor(logger: Logger, name?: string) {
-        const handler: DatePickedHandler = {
-            "initToPickedHandler": (event: Event): void => {
-                this._data.copy(event);
-            },
-            "reinitData": (): void => {
-                this.reinitData();
-            }
+        const action = (event: Event): void => {
+            this._data.copy(event);
         };
 
-        super(new DatePickedFSM(logger, handler), new WidgetDataImpl<HTMLInputElement>(), logger, name ?? DatePicked.name);
+        super(new DatePickedFSM(logger, action), new WidgetDataImpl<HTMLInputElement>(), logger, name ?? DatePicked.name);
     }
 
     public override onNewNodeRegistered(node: EventTarget): void {

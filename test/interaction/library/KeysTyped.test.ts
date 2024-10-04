@@ -145,4 +145,18 @@ describe("using a keys typed interaction", () => {
         expect(data.keys).toHaveLength(1);
         expect(data.keys[0].code).toBe("z");
     });
+
+    test("clear Data", () => {
+        interaction.registerToNodes([text]);
+        robot(text)
+            .keepData()
+            .keydown({"code": "b"})
+            .keyup()
+            .keydown({"code": "a"})
+            .keyup();
+        jest.runOnlyPendingTimers();
+
+        expect(handler.fsmReinit).toHaveBeenCalledTimes(1);
+        expect(interaction.data.keys).toHaveLength(0);
+    });
 });

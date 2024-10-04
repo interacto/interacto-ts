@@ -24,8 +24,7 @@ import {
 import {createKeyEvent, createMouseEvent, createTouchEvent} from "../interaction/StubEvents";
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
 import {mock} from "jest-mock-extended";
-import type {FSMHandler, Logger, OutputState, CancellingState, TerminalState, VisitorFSM
-} from "../../src/interacto";
+import type {FSMHandler, Logger, OutputState, CancellingState, TerminalState, VisitorFSM} from "../../src/interacto";
 import type {MockProxy} from "jest-mock-extended";
 import type {Subject} from "rxjs";
 

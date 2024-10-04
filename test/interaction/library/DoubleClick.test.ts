@@ -72,6 +72,19 @@ describe("using a double click interaction", () => {
         expect(data.currentTarget).toBe(canvas);
     });
 
+    test("check data cleared", () => {
+        interaction.registerToNodes([canvas]);
+        const newHandler = mock<FSMHandler>();
+        interaction.fsm.addHandler(newHandler);
+        robot(canvas).click({"clientX": 11, "clientY": 23}, 2);
+
+        expect(newHandler.fsmReinit).toHaveBeenCalledTimes(1);
+        expect(interaction.data.clientX).toBe(0);
+        expect(interaction.data.clientY).toBe(0);
+        expect(interaction.data.button).toBe(0);
+        expect(interaction.data.currentTarget).toBeNull();
+    });
+
     test("that two double clicks ok", () => {
         interaction.registerToNodes([canvas]);
         robot()

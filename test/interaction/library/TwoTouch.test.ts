@@ -142,4 +142,16 @@ describe("using a multi touch interaction", () => {
         expect(handler.fsmStops).toHaveBeenCalledTimes(1);
         expect(handler.fsmCancels).not.toHaveBeenCalled();
     });
+
+    test("clear data", () => {
+        robot(canvas)
+            .touchstart({}, [{"identifier": 1}])
+            .touchstart({}, [{"identifier": 2}])
+            .touchmove({}, [{"identifier": 2}])
+            .touchend({}, [{"identifier": 2}]);
+
+        expect(handler.fsmReinit).toHaveBeenCalledTimes(1);
+        expect(interaction.data.touch1.src.target).toBeNull();
+        expect(interaction.data.touch2.src.target).toBeNull();
+    });
 });

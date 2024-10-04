@@ -308,4 +308,19 @@ describe("using a drag lock interaction", () => {
         expect(interaction.data.src.clientY).toBe(23);
         expect(interaction.data.src.button).toBe(2);
     });
+
+    test("clear Data", () => {
+        interaction.registerToNodes([canvas]);
+        robot()
+            .click(canvas, 2)
+            .mousemove()
+            .click({}, 2);
+
+        expect(handler.fsmReinit).toHaveBeenCalledTimes(1);
+        expect(interaction.data.src.screenX).toBe(0);
+        expect(interaction.data.tgt.screenY).toBe(0);
+        expect(interaction.data.src.pageX).toBe(0);
+        expect(interaction.data.src.target).toBeNull();
+        expect(interaction.data.tgt.currentTarget).toBeNull();
+    });
 });

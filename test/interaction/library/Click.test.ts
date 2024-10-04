@@ -124,4 +124,16 @@ describe("using a click interaction", () => {
         expect(data.screenY).toBe(222);
         expect(data.button).toBe(1);
     });
+
+    test("clear Data", () => {
+        const newHandler = mock<FSMHandler>();
+        interaction.fsm.addHandler(newHandler);
+        interaction.registerToNodes([canvas]);
+        robot().click({"target": canvas, "button": 1, "screenX": 111, "screenY": 222, "clientX": 11, "clientY": 22});
+        expect(newHandler.fsmReinit).toHaveBeenCalledTimes(1);
+        expect(interaction.data.clientX).toBe(0);
+        expect(interaction.data.clientY).toBe(0);
+        expect(interaction.data.button).toBe(0);
+        expect(interaction.data.currentTarget).toBeNull();
+    });
 });

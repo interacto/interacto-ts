@@ -123,6 +123,16 @@ describe("using a timed taps interaction", () => {
 
             checkTouchPoint(touch, 15, 21, 14, 20, 5, canvas);
         });
+
+        test("clear Data", () => {
+            robot(canvas)
+                .keepData()
+                .touchstart({}, [{"identifier": 2}])
+                .touchend();
+
+            expect(handler.fsmReinit).toHaveBeenCalledTimes(1);
+            expect(interaction.data.points).toHaveLength(0);
+        });
     });
 
     describe("tap 2", () => {

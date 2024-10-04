@@ -69,4 +69,20 @@ describe("using a text input interaction", () => {
 
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     });
+
+    test("data ok", () => {
+        interaction.registerToNodes([textArea]);
+        robot(textArea).input();
+
+        expect(interaction.data.widget).toBe(textArea);
+    });
+
+    test("data clear ok", () => {
+        interaction.registerToNodes([textArea]);
+        robot(textArea).input();
+        jest.runOnlyPendingTimers();
+
+        expect(handler.fsmReinit).toHaveBeenCalledTimes(1);
+        expect(interaction.data.widget).toBeNull();
+    });
 });

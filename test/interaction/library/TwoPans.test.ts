@@ -78,6 +78,15 @@ describe("using two pan interactions", () => {
 
             expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         });
+
+        test("clear data", () => {
+            robot(canvas)
+                .twoPan(1, 2, 10, "left", 10);
+
+            expect(handler.fsmReinit).toHaveBeenCalledTimes(2);
+            expect(interaction.data.touch1.src.target).toBeNull();
+            expect(interaction.data.touch2.src.target).toBeNull();
+        });
     });
 
     describe("using a vertical two-pan interaction", () => {

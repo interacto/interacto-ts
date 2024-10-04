@@ -17,7 +17,6 @@ import {MouseTransition} from "../../fsm/MouseTransition";
 import {TerminalState} from "../../fsm/TerminalState";
 import {InteractionBase} from "../InteractionBase";
 import {PointDataImpl} from "../PointDataImpl";
-import type {MouseEvtFSMHandler} from "./LongMouseDown";
 import type {PointData} from "../../../api/interaction/PointData";
 import type {Logger} from "../../../api/logging/Logger";
 
@@ -35,16 +34,13 @@ export class MouseLeaveFSM extends FSMImpl {
      * Creates the FSM
      * @param withBubbling - True: event bubbling will be done
      * @param logger - The logger to use for this interaction
-     * @param dataHandler - The data handler the FSM will use
+     * @param action - The action executed on a mouse leave
      */
-    public constructor(withBubbling: boolean, logger: Logger, dataHandler: MouseEvtFSMHandler) {
-        super(logger, dataHandler);
+    public constructor(withBubbling: boolean, logger: Logger, action: (event: MouseEvent) => void) {
+        super(logger);
         this.withBubbling = withBubbling;
 
         const exited = new TerminalState(this, "exited");
-        const action = (event: MouseEvent): void => {
-            dataHandler.mouseEvt(event);
-        };
 
         if (this.withBubbling) {
             new MouseTransition(this.initState, exited, "mouseout", action);
@@ -61,20 +57,15 @@ export class MouseLeaveFSM extends FSMImpl {
 export class MouseLeave extends InteractionBase<PointData, PointDataImpl> {
     /**
      * Creates the interaction.
-     * @param withBubbling - True: the event bullebing will be done
+     * @param withBubbling - True: the event bubbling will be done
      * @param logger - The logger to use for this interaction
      * @param name - The name of the user interaction
      */
     public constructor(withBubbling: boolean, logger: Logger, name?: string) {
-        const handler: MouseEvtFSMHandler = {
-            "mouseEvt": (evt: MouseEvent): void => {
-                this._data.copy(evt);
-            },
-            "reinitData": (): void => {
-                this.reinitData();
-            }
+        const action = (evt: MouseEvent): void => {
+            this._data.copy(evt);
         };
 
-        super(new MouseLeaveFSM(withBubbling, logger, handler), new PointDataImpl(), logger, name ?? MouseLeave.name);
+        super(new MouseLeaveFSM(withBubbling, logger, action), new PointDataImpl(), logger, name ?? MouseLeave.name);
     }
 }

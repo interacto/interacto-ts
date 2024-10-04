@@ -54,4 +54,27 @@ describe("using a mouse down interaction", () => {
 
         expect(logger.logInteractionMsg).not.toHaveBeenCalled();
     });
+
+    test("data ok", () => {
+        let data;
+        interaction.fsm.addHandler({
+            "fsmStops": () => {
+                data = interaction.data.currentTarget;
+            }
+        });
+        interaction.registerToNodes([canvas]);
+        robot(canvas).mousedown();
+
+        expect(data).toBe(canvas);
+    });
+
+    test("data clear ok", () => {
+        interaction.registerToNodes([canvas]);
+        robot(canvas).mousedown();
+
+        expect(handler.fsmReinit).toHaveBeenCalledTimes(1);
+        expect(interaction.data.currentTarget).toBeNull();
+        expect(interaction.data.clientX).toBe(0);
+        expect(interaction.data.screenX).toBe(0);
+    });
 });

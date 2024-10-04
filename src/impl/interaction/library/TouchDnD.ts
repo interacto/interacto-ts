@@ -21,7 +21,6 @@ import type {SrcTgtPointsData} from "../../../api/interaction/SrcTgtPointsData";
 import type {TouchData} from "../../../api/interaction/TouchData";
 import type {Logger} from "../../../api/logging/Logger";
 import type {CancellingState} from "../../fsm/CancellingState";
-import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 import type {StdState} from "../../fsm/StdState";
 
 /**
@@ -50,7 +49,7 @@ export class TouchDnDFSM extends FSMImpl {
      * or as soon as the screen is touched. The latter is used for the MultiTouch interaction.
      */
     public constructor(cancellable: boolean, logger: Logger, dataHandler: TouchDnDFSMHandler, movementRequired = true) {
-        super(logger, dataHandler);
+        super(logger);
         this.touchID = undefined;
         this.cancellable = cancellable;
         this.movementRequired = movementRequired;
@@ -179,7 +178,7 @@ export class OneTouchDnDFSM extends TouchDnDFSM {
  * The data handler for the touch DnD interaction
  * @category Helper
  */
-export interface TouchDnDFSMHandler extends FSMDataHandler {
+export interface TouchDnDFSMHandler {
     /**
      * On a touch
      * @param event - The event to process.
@@ -226,9 +225,6 @@ export class TouchDnD extends InteractionBase<SrcTgtPointsData<TouchData>, SrcTg
             },
             "onRelease": (evt: TouchEvent): void => {
                 this.setTgtData(evt);
-            },
-            "reinitData": (): void => {
-                this.reinitData();
             }
         };
 

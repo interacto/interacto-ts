@@ -17,7 +17,6 @@ import {MouseTransition} from "../../fsm/MouseTransition";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 import {InteractionBase} from "../InteractionBase";
 import {PointDataImpl} from "../PointDataImpl";
-import type {MouseEvtFSMHandler} from "./LongMouseDown";
 import type {PointData} from "../../../api/interaction/PointData";
 import type {Logger} from "../../../api/logging/Logger";
 
@@ -35,10 +34,10 @@ export class TimedClickFSM extends FSMImpl {
      * @param duration - The max duration of the click
      * @param logger - The logger to use for this interaction
      * @param button - The button to be used
-     * @param dataHandler - The data handler the FSM will use
+     * @param action - The action executed on a click
      */
-    public constructor(duration: number, logger: Logger, button?: number, dataHandler?: MouseEvtFSMHandler) {
-        super(logger, dataHandler);
+    public constructor(duration: number, logger: Logger, button?: number, action?: (evt: MouseEvent) => void) {
+        super(logger);
 
         if (duration <= 0) {
             throw new Error("Incorrect duration");
@@ -52,13 +51,13 @@ export class TimedClickFSM extends FSMImpl {
         new MouseTransition(this.initState, pressed, "mousedown",
             (evt: MouseEvent): void => {
                 this.setButtonToCheck(evt.button);
-                dataHandler?.mouseEvt(evt);
+                action?.(evt);
             },
             (evt: MouseEvent): boolean => this.buttonToConsider === undefined || evt.button === this.buttonToConsider);
 
         new MouseTransition(pressed, this.addTerminalState("clicked", true), "mouseup",
             (evt: MouseEvent): void => {
-                dataHandler?.mouseEvt(evt);
+                action?.(evt);
             },
             (evt: MouseEvent): boolean => this.currentButton === undefined || evt.button === this.currentButton);
 
@@ -92,13 +91,8 @@ export class TimedClick extends InteractionBase<PointData, PointDataImpl> {
      * @param name - The name of the user interaction
      */
     public constructor(duration: number, logger: Logger, button?: number, fsm?: TimedClickFSM, data?: PointDataImpl, name?: string) {
-        const theFSM = fsm ?? new TimedClickFSM(duration, logger, button, {
-            "mouseEvt": (evt: MouseEvent): void => {
-                this._data.copy(evt);
-            },
-            "reinitData": (): void => {
-                this.reinitData();
-            }
+        const theFSM = fsm ?? new TimedClickFSM(duration, logger, button, (evt: MouseEvent): void => {
+            this._data.copy(evt);
         });
         super(theFSM, data ?? new PointDataImpl(), logger, name ?? TimedClick.name);
     }

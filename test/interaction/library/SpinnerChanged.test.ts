@@ -138,4 +138,27 @@ describe("using a spinner changed interaction", () => {
 
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     });
+
+    test("data ok", () => {
+        let data;
+        interaction.fsm.addHandler({
+            "fsmStops": () => {
+                data = interaction.data.widget;
+            }
+        });
+        interaction.registerToNodes([spinner]);
+        robot(spinner).input();
+        jest.runAllTimers();
+
+        expect(data).toBe(spinner);
+    });
+
+    test("data clear ok", () => {
+        interaction.registerToNodes([spinner]);
+        robot(spinner).input();
+        jest.runAllTimers();
+
+        expect(handler.fsmReinit).toHaveBeenCalledTimes(1);
+        expect(interaction.data.widget).toBeNull();
+    });
 });

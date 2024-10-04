@@ -14,7 +14,6 @@
 
 import {CancelFSMError} from "./CancelFSMError";
 import {ConcurrentAndFSM} from "./ConcurrentAndFSM";
-import type {FSMDataHandler} from "./FSMDataHandler";
 import type {FSM} from "../../api/fsm/FSM";
 import type {Logger} from "../../api/logging/Logger";
 
@@ -24,7 +23,7 @@ import type {Logger} from "../../api/logging/Logger";
  * and KeyTyped the FSM that can cancel the FSMs.
  * @category FSM
  */
-export class NotFSM<H extends FSMDataHandler> extends ConcurrentAndFSM<FSM, H> {
+export class NotFSM extends ConcurrentAndFSM<FSM> {
     private readonly mainFSM: FSM;
 
     public constructor(mainFSM: FSM, negFSM: FSM, logger: Logger) {

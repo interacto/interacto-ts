@@ -19,7 +19,6 @@ import type {InteractionBase, InteractionDataImplType} from "./InteractionBase";
 import type {FSM} from "../../api/fsm/FSM";
 import type {InteractionDataType} from "../../api/interaction/Interaction";
 import type {Logger} from "../../api/logging/Logger";
-import type {FSMDataHandler} from "../fsm/FSMDataHandler";
 
 /**
  * The Or user interaction. This is an XOr. Either one of the two interactions
@@ -44,12 +43,9 @@ export class Or<
     private readonly i2: I2;
 
     public constructor(i1: I1, i2: I2, logger: Logger) {
-        const handler: FSMDataHandler = {
-            "reinitData": () => {}
-        };
-        super(new ConcurrentXOrFSM([i1.fsm, i2.fsm], logger, handler), {
+        super(new ConcurrentXOrFSM([i1.fsm, i2.fsm], logger), {
             "flush": () => {}
-        } as D1Impl | D2Impl, logger, `${i1.name}-${i2.name}`);
+        } as D1Impl | D2Impl, logger, `${i1.name}-${i2.name}`, false);
         this.i1 = i1;
         this.i2 = i2;
     }

@@ -85,4 +85,25 @@ describe("using a button pressed interaction", () => {
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     });
+
+    test("data ok", () => {
+        let data;
+        interaction.fsm.addHandler({
+            "fsmStops": () => {
+                data = interaction.data.widget;
+            }
+        });
+        interaction.registerToNodes([button]);
+        button.click();
+
+        expect(data).toBe(button);
+    });
+
+    test("data clear ok", () => {
+        interaction.registerToNodes([button]);
+        button.click();
+
+        expect(handler.fsmReinit).toHaveBeenCalledTimes(1);
+        expect(interaction.data.widget).toBeNull();
+    });
 });

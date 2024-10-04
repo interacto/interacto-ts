@@ -18,7 +18,6 @@ import {TouchTransition} from "../../fsm/TouchTransition";
 import {InteractionBase} from "../InteractionBase";
 import {TapsDataImpl} from "../TapsDataImpl";
 import {TouchDataImpl} from "../TouchDataImpl";
-import type {TouchFSMDataHandler} from "./LongTouch";
 import type {PointsData} from "../../../api/interaction/PointsData";
 import type {TouchData} from "../../../api/interaction/TouchData";
 import type {Logger} from "../../../api/logging/Logger";
@@ -44,10 +43,10 @@ export class TapsFSM extends FSMImpl {
      * Creates the Tap FSM
      * @param nbTaps - The number of taps to support
      * @param logger - The logger to use for this interaction
-     * @param dataHandler - The data handler the FSM will use
+     * @param handler - The action executed on a tap.
      */
-    public constructor(nbTaps: number, logger: Logger, dataHandler: TouchFSMDataHandler) {
-        super(logger, dataHandler);
+    public constructor(nbTaps: number, logger: Logger, handler: (event: TouchEvent) => void) {
+        super(logger);
         this.nbTaps = nbTaps;
         this.countTaps = 0;
 
@@ -58,7 +57,7 @@ export class TapsFSM extends FSMImpl {
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             this.touchID = event.changedTouches[0]!.identifier;
             this.countTaps++;
-            dataHandler.touchEvent(event);
+            handler(event);
         };
 
         new TouchTransition(this.initState, this.downState, "touchstart", action);
@@ -78,7 +77,7 @@ export class TapsFSM extends FSMImpl {
             (event: TouchEvent): void => {
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 this.touchID = event.changedTouches[0]!.identifier;
-                dataHandler.touchEvent(event);
+                handler(event);
             },
             // To detect the event is lost, checking it is not part of the touches any more
             (evt: TouchEvent): boolean => Array.from(evt.touches).filter(touch => touch.identifier === this.touchID).length === 0);
@@ -116,20 +115,15 @@ export class Taps extends InteractionBase<PointsData<TouchData>, TapsDataImpl> {
      * @param name - The name of the user interaction
      */
     public constructor(numberTaps: number, logger: Logger, name?: string) {
-        const handler: TouchFSMDataHandler = {
-            "touchEvent": (evt: TouchEvent): void => {
-                if (evt.changedTouches.length > 0) {
-                    const touch = new TouchDataImpl();
-                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                    touch.copy(TouchDataImpl.mergeTouchEventData(evt.changedTouches[0]!, evt, Array.from(evt.touches)));
-                    this._data.addPoint(touch);
-                }
-            },
-            "reinitData": (): void => {
-                this.reinitData();
+        const action = (evt: TouchEvent): void => {
+            if (evt.changedTouches.length > 0) {
+                const touch = new TouchDataImpl();
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                touch.copy(TouchDataImpl.mergeTouchEventData(evt.changedTouches[0]!, evt, Array.from(evt.touches)));
+                this._data.addPoint(touch);
             }
         };
 
-        super(new TapsFSM(numberTaps, logger, handler), new TapsDataImpl(), logger, name ?? Taps.name);
+        super(new TapsFSM(numberTaps, logger, action), new TapsDataImpl(), logger, name ?? Taps.name);
     }
 }

@@ -16,7 +16,6 @@ import {FSMImpl} from "../../fsm/FSMImpl";
 import {TouchTransition} from "../../fsm/TouchTransition";
 import {InteractionBase} from "../InteractionBase";
 import {TouchDataImpl} from "../TouchDataImpl";
-import type {TouchFSMDataHandler} from "./LongTouch";
 import type {TouchData} from "../../../api/interaction/TouchData";
 import type {Logger} from "../../../api/logging/Logger";
 import type {CancellingState} from "../../fsm/CancellingState";
@@ -34,10 +33,10 @@ export class TapFSM extends FSMImpl {
     /**
      * Creates the Tap FSM
      * @param logger - The logger to use for this interaction
-     * @param dataHandler - The data handler the FSM will use
+     * @param handler - The action executed on a tap.
      */
-    public constructor(logger: Logger, dataHandler: TouchFSMDataHandler) {
-        super(logger, dataHandler);
+    public constructor(logger: Logger, handler: (event: TouchEvent) => void) {
+        super(logger);
 
         this.downState = this.addStdState("down");
         const up = this.addTerminalState("up");
@@ -46,7 +45,7 @@ export class TapFSM extends FSMImpl {
         const action = (event: TouchEvent): void => {
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             this.touchID = event.changedTouches[0]!.identifier;
-            dataHandler.touchEvent(event);
+            handler(event);
         };
 
         new TouchTransition(this.initState, this.downState, "touchstart", action);
@@ -83,20 +82,15 @@ export class Tap extends InteractionBase<TouchData, TouchDataImpl> {
      * @param name - The name of the user interaction
      */
     public constructor(logger: Logger, name?: string) {
-        const handler: TouchFSMDataHandler = {
-            "touchEvent": (evt: TouchEvent): void => {
-                if (evt.changedTouches.length > 0) {
-                    const touch = new TouchDataImpl();
-                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                    touch.copy(TouchDataImpl.mergeTouchEventData(evt.changedTouches[0]!, evt, Array.from(evt.touches)));
-                    this._data.copy(touch);
-                }
-            },
-            "reinitData": (): void => {
-                this.reinitData();
+        const action = (evt: TouchEvent): void => {
+            if (evt.changedTouches.length > 0) {
+                const touch = new TouchDataImpl();
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                touch.copy(TouchDataImpl.mergeTouchEventData(evt.changedTouches[0]!, evt, Array.from(evt.touches)));
+                this._data.copy(touch);
             }
         };
 
-        super(new TapFSM(logger, handler), new TouchDataImpl(), logger, name ?? Tap.name);
+        super(new TapFSM(logger, action), new TouchDataImpl(), logger, name ?? Tap.name);
     }
 }

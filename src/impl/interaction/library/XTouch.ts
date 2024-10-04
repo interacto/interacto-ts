@@ -54,9 +54,6 @@ export class XTouchDnD<T extends TwoTouchData, S extends T & TwoTouchDataImpl> e
             },
             "onRelease": (evt: TouchEvent): void => {
                 this.setTgtData(evt);
-            },
-            "reinitData": (): void => {
-                this.reinitData();
             }
         };
 

@@ -20,11 +20,6 @@ import {InteractionBase} from "../InteractionBase";
 import {WidgetDataImpl} from "../WidgetDataImpl";
 import type {WidgetData} from "../../../api/interaction/WidgetData";
 import type {Logger} from "../../../api/logging/Logger";
-import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-
-interface SpinnerChangedHandler extends FSMDataHandler {
-    initToChangedHandler(event: Event): void;
-}
 
 /**
  * The FSM of the spinner interaction
@@ -57,16 +52,13 @@ export class SpinnerChangedFSM extends FSMImpl {
         }
     }
 
-    public constructor(logger: Logger, dataHandler: SpinnerChangedHandler) {
-        super(logger, dataHandler);
+    public constructor(logger: Logger, action: (evt: Event) => void) {
+        super(logger);
 
         const changed = this.addStdState("changed");
-        const spinnerAction = (evt: Event): void => {
-            dataHandler.initToChangedHandler(evt);
-        };
 
-        new SpinnerChangedTransition(this.initState, changed, spinnerAction);
-        new SpinnerChangedTransition(changed, changed, spinnerAction);
+        new SpinnerChangedTransition(this.initState, changed, action);
+        new SpinnerChangedTransition(changed, changed, action);
         new TimeoutTransition(changed, this.addTerminalState("ended"), SpinnerChangedFSM.timeGapSupplier);
     }
 }
@@ -82,16 +74,10 @@ export class SpinnerChanged extends InteractionBase<WidgetData<HTMLInputElement>
      * @param name - The name of the user interaction
      */
     public constructor(logger: Logger, name?: string) {
-        const handler = {
-            "initToChangedHandler": (event: Event): void => {
-                this._data.copy(event);
-            },
-            "reinitData": (): void => {
-                this.reinitData();
-            }
+        const action = (event: Event): void => {
+            this._data.copy(event);
         };
-
-        super(new SpinnerChangedFSM(logger, handler), new WidgetDataImpl<HTMLInputElement>(), logger, name ?? SpinnerChanged.name);
+        super(new SpinnerChangedFSM(logger, action), new WidgetDataImpl<HTMLInputElement>(), logger, name ?? SpinnerChanged.name);
     }
 
     public override onNewNodeRegistered(node: EventTarget): void {

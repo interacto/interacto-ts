@@ -78,4 +78,25 @@ describe("using a hyper link interaction", () => {
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     });
+
+    test("data ok", () => {
+        let data;
+        interaction.fsm.addHandler({
+            "fsmStops": () => {
+                data = interaction.data.widget;
+            }
+        });
+        interaction.registerToNodes([url]);
+        robot(url).input();
+
+        expect(data).toBe(url);
+    });
+
+    test("data clear ok", () => {
+        interaction.registerToNodes([url]);
+        robot(url).input();
+
+        expect(handler.fsmReinit).toHaveBeenCalledTimes(1);
+        expect(interaction.data.widget).toBeNull();
+    });
 });

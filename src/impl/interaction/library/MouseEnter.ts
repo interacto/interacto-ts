@@ -16,7 +16,6 @@ import {FSMImpl} from "../../fsm/FSMImpl";
 import {MouseTransition} from "../../fsm/MouseTransition";
 import {InteractionBase} from "../InteractionBase";
 import {PointDataImpl} from "../PointDataImpl";
-import type {MouseEvtFSMHandler} from "./LongMouseDown";
 import type {PointData} from "../../../api/interaction/PointData";
 import type {Logger} from "../../../api/logging/Logger";
 
@@ -34,16 +33,13 @@ export class MouseEnterFSM extends FSMImpl {
      * Creates the FSM
      * @param withBubbling - True: event bubbling will be done
      * @param logger - The logger to use for this interaction
-     * @param dataHandler - The data handler the FSM will use
+     * @param action - The action executed on a mouse enter
      */
-    public constructor(withBubbling: boolean, logger: Logger, dataHandler: MouseEvtFSMHandler) {
-        super(logger, dataHandler);
+    public constructor(withBubbling: boolean, logger: Logger, action: (event: MouseEvent) => void) {
+        super(logger);
         this.withBubbling = withBubbling;
 
         const entered = this.addTerminalState("entered");
-        const action = (event: MouseEvent): void => {
-            dataHandler.mouseEvt(event);
-        };
 
         if (this.withBubbling) {
             new MouseTransition(this.initState, entered, "mouseover", action);
@@ -65,15 +61,10 @@ export class MouseEnter extends InteractionBase<PointData, PointDataImpl> {
      * @param name - The name of the user interaction
      */
     public constructor(withBubbling: boolean, logger: Logger, name?: string) {
-        const handler: MouseEvtFSMHandler = {
-            "mouseEvt": (evt: MouseEvent): void => {
-                this._data.copy(evt);
-            },
-            "reinitData": (): void => {
-                this.reinitData();
-            }
+        const action = (evt: MouseEvent): void => {
+            this._data.copy(evt);
         };
 
-        super(new MouseEnterFSM(withBubbling, logger, handler), new PointDataImpl(), logger, name ?? MouseEnter.name);
+        super(new MouseEnterFSM(withBubbling, logger, action), new PointDataImpl(), logger, name ?? MouseEnter.name);
     }
 }

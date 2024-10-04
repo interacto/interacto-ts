@@ -175,9 +175,9 @@ describe("testing an OR interaction", () => {
         test("once an interaction has stopped, it is reinit", () => {
             jest.spyOn(i1, "reinitData");
             jest.spyOn(i2, "reinitData");
-            jest.spyOn(interaction, "reinitData");
             robot(canvas).click(undefined, 2);
             expect(i1.reinitData).toHaveBeenCalledTimes(2);
+            expect(i2.reinitData).toHaveBeenCalledTimes(1);
         });
     });
 

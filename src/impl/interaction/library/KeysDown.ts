@@ -18,14 +18,6 @@ import {InteractionBase} from "../InteractionBase";
 import {KeysDataImpl} from "../KeysDataImpl";
 import type {KeysData} from "../../../api/interaction/KeysData";
 import type {Logger} from "../../../api/logging/Logger";
-import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-
-/**
- * The data handler that makes the link between a single key event handler and an FSM
- */
-export interface KeyEvtFSMHandler extends FSMDataHandler {
-    onKeyEvt(event: KeyboardEvent): void;
-}
 
 /**
  * This interaction permits to define combo a key pressed that can be used to define shortcuts, etc.
@@ -37,17 +29,17 @@ export class KeysDownFSM extends FSMImpl {
     /**
      * Creates the FSM.
      * @param logger - The logger to use for this interaction
-     * @param dataHandler - The data handler the FSM will use
+     * @param action - The action executed on keys down
      */
-    public constructor(logger: Logger, dataHandler: KeyEvtFSMHandler) {
-        super(logger, dataHandler);
+    public constructor(logger: Logger, action: (evt: KeyboardEvent) => void) {
+        super(logger);
         this.currentCodes = [];
 
         const pressed = this.addStdState("pressed");
 
         const actionkp = (evt: KeyboardEvent): void => {
             this.currentCodes.push(evt.code);
-            dataHandler.onKeyEvt(evt);
+            action(evt);
         };
         new KeyTransition(this.initState, pressed, "keydown", actionkp);
 
@@ -75,15 +67,9 @@ export class KeysDown extends InteractionBase<KeysData, KeysDataImpl> {
      * @param name - The name of the user interaction
      */
     public constructor(logger: Logger, name?: string) {
-        const handler: KeyEvtFSMHandler = {
-            "onKeyEvt": (event: KeyboardEvent): void => {
-                this._data.addKey(event);
-            },
-            "reinitData": (): void => {
-                this.reinitData();
-            }
+        const action = (event: KeyboardEvent): void => {
+            this._data.addKey(event);
         };
-
-        super(new KeysDownFSM(logger, handler), new KeysDataImpl(), logger, name ?? KeysDown.name);
+        super(new KeysDownFSM(logger, action), new KeysDataImpl(), logger, name ?? KeysDown.name);
     }
 }

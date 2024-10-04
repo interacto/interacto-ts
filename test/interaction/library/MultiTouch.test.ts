@@ -376,4 +376,32 @@ describe("using a multi touch interaction", () => {
         checkTouchPoint(data3s, 210, 130, 210, 130, 2, canvas);
         checkTouchPoint(data3t, 11, 23, 11, 23, 2, canvas);
     });
+
+    test("clear data", () => {
+        robot(canvas)
+            .touchstart({}, [{"identifier": 1}])
+            .touchstart({}, [{"identifier": 2}])
+            .touchmove({}, [{"identifier": 2}])
+            .touchstart({}, [{"identifier": 3}])
+            .touchmove({}, [{"identifier": 3}])
+            .touchend({}, [{"identifier": 2}]);
+
+        expect(handler.fsmReinit).toHaveBeenCalledTimes(1);
+        expect(interaction.data.touches).toHaveLength(2);
+    });
+
+    test("clear all data", () => {
+        robot(canvas)
+            .touchstart({}, [{"identifier": 1}])
+            .touchstart({}, [{"identifier": 2}])
+            .touchmove({}, [{"identifier": 2}])
+            .touchstart({}, [{"identifier": 3}])
+            .touchmove({}, [{"identifier": 3}])
+            .touchend({}, [{"identifier": 2}])
+            .touchend({}, [{"identifier": 1}])
+            .touchend({}, [{"identifier": 3}]);
+
+        expect(handler.fsmReinit).toHaveBeenCalledTimes(3);
+        expect(interaction.data.touches).toHaveLength(0);
+    });
 });

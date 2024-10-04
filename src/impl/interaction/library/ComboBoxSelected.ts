@@ -19,21 +19,12 @@ import {InteractionBase} from "../InteractionBase";
 import {WidgetDataImpl} from "../WidgetDataImpl";
 import type {WidgetData} from "../../../api/interaction/WidgetData";
 import type {Logger} from "../../../api/logging/Logger";
-import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 
 class ComboBoxSelectedFSM extends FSMImpl {
-    public constructor(logger: Logger, dataHandler: ComboBoxSelectedHandler) {
-        super(logger, dataHandler);
-
-        new ComboBoxTransition(this.initState, this.addTerminalState("selected"),
-            (evt: Event): void => {
-                dataHandler.initToSelectedHandler(evt);
-            });
+    public constructor(logger: Logger, action: (evt: Event) => void) {
+        super(logger);
+        new ComboBoxTransition(this.initState, this.addTerminalState("selected"), action);
     }
-}
-
-interface ComboBoxSelectedHandler extends FSMDataHandler {
-    initToSelectedHandler(event: Event): void;
 }
 
 /**
@@ -47,16 +38,10 @@ export class ComboBoxSelected extends InteractionBase<WidgetData<HTMLSelectEleme
      * @param name - The name of the user interaction
      */
     public constructor(logger: Logger, name?: string) {
-        const handler: ComboBoxSelectedHandler = {
-            "initToSelectedHandler": (event: Event): void => {
-                this._data.copy(event);
-            },
-            "reinitData": (): void => {
-                this.reinitData();
-            }
+        const action = (event: Event): void => {
+            this._data.copy(event);
         };
-
-        super(new ComboBoxSelectedFSM(logger, handler), new WidgetDataImpl<HTMLSelectElement>(), logger, name ?? ComboBoxSelected.name);
+        super(new ComboBoxSelectedFSM(logger, action), new WidgetDataImpl<HTMLSelectElement>(), logger, name ?? ComboBoxSelected.name);
     }
 
     public override onNewNodeRegistered(node: EventTarget): void {

@@ -23,7 +23,6 @@ import {isOutputStateType} from "../../api/fsm/OutputState";
 import {MustBeUndoableCmdError} from "../binding/MustBeUndoableCmdError";
 import {remove, removeAt} from "../util/ArrayUtil";
 import {Subject} from "rxjs";
-import type {FSMDataHandler} from "./FSMDataHandler";
 import type {FSM} from "../../api/fsm/FSM";
 import type {FSMHandler} from "../../api/fsm/FSMHandler";
 import type {InputState} from "../../api/fsm/InputState";
@@ -37,9 +36,7 @@ import type {Observable} from "rxjs";
  * A finite state machine that defines the behavior of a user interaction.
  * @category FSM
  */
-export class FSMImpl<T extends FSMDataHandler = FSMDataHandler> implements FSM {
-    protected _dataHandler: T | undefined;
-
+export class FSMImpl implements FSM {
     protected readonly logger: Logger;
 
     public _log: boolean;
@@ -89,10 +86,8 @@ export class FSMImpl<T extends FSMDataHandler = FSMDataHandler> implements FSM {
     /**
      * Creates the FSM.
      * @param logger - The logger to use for logging FSM messages
-     * @param dataHandler - The data handler the FSM will use
      */
-    public constructor(logger: Logger, dataHandler?: T) {
-        this._dataHandler = dataHandler;
+    public constructor(logger: Logger) {
         this.logger = logger;
         this.inner = false;
         this._started = false;
@@ -169,14 +164,6 @@ export class FSMImpl<T extends FSMDataHandler = FSMDataHandler> implements FSM {
 
     public set log(log: boolean) {
         this._log = log;
-    }
-
-    public get dataHandler(): T | undefined {
-        return this._dataHandler;
-    }
-
-    public set dataHandler(dataHandler: T | undefined) {
-        this._dataHandler = dataHandler;
     }
 
     /**
@@ -324,8 +311,10 @@ export class FSMImpl<T extends FSMDataHandler = FSMDataHandler> implements FSM {
         this.currentTimeout = undefined;
         this.currentSubFSM?.reinit();
 
-        if (this.dataHandler !== undefined && !this.inner) {
-            this.dataHandler.reinitData();
+        if (!this.inner) {
+            for (const handler of this.handlers) {
+                handler.fsmReinit?.();
+            }
         }
     }
 
@@ -498,6 +487,6 @@ export class FSMImpl<T extends FSMDataHandler = FSMDataHandler> implements FSM {
             state.uninstall();
         }
         this._states.length = 0;
-        this.dataHandler = undefined;
+        this.handlers.length = 0;
     }
 }

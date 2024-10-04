@@ -19,7 +19,6 @@ import {InteractionBase} from "../InteractionBase";
 import {WidgetDataImpl} from "../WidgetDataImpl";
 import type {WidgetData} from "../../../api/interaction/WidgetData";
 import type {Logger} from "../../../api/logging/Logger";
-import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 
 /**
  * The FSM for button pressures.
@@ -29,20 +28,12 @@ class ButtonPressedFSM extends FSMImpl {
     /**
      * Creates the FSM
      * @param logger - The logger to use for this interaction
-     * @param dataHandler - The data handler the FSM will use
+     * @param action - The action to perform on the button pressure.
      */
-    public constructor(logger: Logger, dataHandler: ButtonPressedFSMHandler) {
-        super(logger, dataHandler);
-
-        new ButtonPressedTransition(this.initState, this.addTerminalState("pressed"),
-            (evt: InputEvent): void => {
-                dataHandler.initToPressedHandler(evt);
-            });
+    public constructor(logger: Logger, action: (evt: InputEvent) => void) {
+        super(logger);
+        new ButtonPressedTransition(this.initState, this.addTerminalState("pressed"), action);
     }
-}
-
-interface ButtonPressedFSMHandler extends FSMDataHandler {
-    initToPressedHandler(event: InputEvent): void;
 }
 
 /**
@@ -56,16 +47,10 @@ export class ButtonPressed extends InteractionBase<WidgetData<HTMLButtonElement>
      * @param name - The name of the user interaction
      */
     public constructor(logger: Logger, name?: string) {
-        const handler: ButtonPressedFSMHandler = {
-            "initToPressedHandler": (event: InputEvent): void => {
-                this._data.copy(event);
-            },
-            "reinitData": (): void => {
-                this.reinitData();
-            }
+        const action = (event: InputEvent): void => {
+            this._data.copy(event);
         };
-
-        super(new ButtonPressedFSM(logger, handler), new WidgetDataImpl<HTMLButtonElement>(), logger, name ?? ButtonPressed.name);
+        super(new ButtonPressedFSM(logger, action), new WidgetDataImpl<HTMLButtonElement>(), logger, name ?? ButtonPressed.name);
     }
 
     public override onNewNodeRegistered(node: EventTarget): void {

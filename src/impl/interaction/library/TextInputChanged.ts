@@ -20,7 +20,6 @@ import {InteractionBase} from "../InteractionBase";
 import {WidgetDataImpl} from "../WidgetDataImpl";
 import type {WidgetData} from "../../../api/interaction/WidgetData";
 import type {Logger} from "../../../api/logging/Logger";
-import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 
 class TextInputChangedFSM extends FSMImpl {
     /** The time gap between the two spinner events. */
@@ -39,30 +38,18 @@ class TextInputChangedFSM extends FSMImpl {
         return this._timeGap;
     }
 
-    public constructor(logger: Logger, dataHandler: TextInputChangedHandler, timeSet?: number) {
-        super(logger, dataHandler);
+    public constructor(logger: Logger, action: (evt: Event) => void, timeSet?: number) {
+        super(logger);
         if (timeSet !== undefined) {
             this._timeGap = timeSet;
         }
 
         const changed = this.addStdState("changed");
 
-        new TextInputChangedTransition(this.initState, changed,
-            (evt: Event): void => {
-                dataHandler.initToChangedHandler(evt);
-            });
-
-        new TextInputChangedTransition(changed, changed,
-            (evt: Event): void => {
-                dataHandler.initToChangedHandler(evt);
-            });
-
+        new TextInputChangedTransition(this.initState, changed, action);
+        new TextInputChangedTransition(changed, changed, action);
         new TimeoutTransition(changed, this.addTerminalState("ended"), this.timeGapSupplier);
     }
-}
-
-interface TextInputChangedHandler extends FSMDataHandler {
-    initToChangedHandler(event: Event): void;
 }
 
 /**
@@ -73,16 +60,11 @@ export class TextInputChanged extends InteractionBase<WidgetData<HTMLInputElemen
     WidgetDataImpl<HTMLInputElement | HTMLTextAreaElement>> {
 
     public constructor(logger: Logger, timeGap?: number, name?: string) {
-        const handler: TextInputChangedHandler = {
-            "initToChangedHandler": (event: Event): void => {
-                this._data.copy(event);
-            },
-            "reinitData": (): void => {
-                this.reinitData();
-            }
+        const action = (event: Event): void => {
+            this._data.copy(event);
         };
 
-        super(new TextInputChangedFSM(logger, handler, timeGap),
+        super(new TextInputChangedFSM(logger, action, timeGap),
             new WidgetDataImpl<HTMLInputElement | HTMLTextAreaElement>(), logger, name ?? TextInputChanged.name);
     }
 

@@ -26,14 +26,18 @@ describe("that then interaction works", () => {
     let interaction: Then<[TouchDnD, TouchDnD],
         [SrcTgtPointsData<TouchData>, SrcTgtPointsData<TouchData>]>;
     let handler: FSMHandler;
+    let i1: TouchDnD;
+    let i2: TouchDnD;
 
     beforeEach(() => {
         handler = mock<FSMHandler>();
         canvas = document.createElement("canvas");
         jest.useFakeTimers();
+        i1 = rightPan(theLogger, false, 10, 100)();
+        i2 = rightPan(theLogger, false, 10, 100)();
         interaction = new Then<[TouchDnD, TouchDnD],
             [SrcTgtPointsData<TouchData>, SrcTgtPointsData<TouchData>]>(
-            [rightPan(theLogger, false, 10, 100)(), rightPan(theLogger, false, 10, 100)()], theLogger);
+            [i1, i2], theLogger);
 
         interaction.fsm.addHandler(handler);
         interaction.registerToNodes([canvas]);
@@ -60,6 +64,18 @@ describe("that then interaction works", () => {
 
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+    });
+
+    test("once an interaction has stopped, it is reinit", () => {
+        jest.spyOn(i1, "reinitData");
+        jest.spyOn(i2, "reinitData");
+        jest.spyOn(interaction, "reinitData");
+        robot(canvas)
+            .pan(1, 200, "right", {clientX: 0, clientY: 0})
+            .pan(2, 200, "right", {clientX: 0, clientY: 0});
+        expect(i1.reinitData).toHaveBeenCalledTimes(1);
+        expect(i2.reinitData).toHaveBeenCalledTimes(1);
+        expect(interaction.reinitData).toHaveBeenCalledTimes(1);
     });
 });
 

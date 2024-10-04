@@ -19,21 +19,12 @@ import {InteractionBase} from "../InteractionBase";
 import {WidgetDataImpl} from "../WidgetDataImpl";
 import type {WidgetData} from "../../../api/interaction/WidgetData";
 import type {Logger} from "../../../api/logging/Logger";
-import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 
 class BoxCheckedFSM extends FSMImpl {
-    public constructor(logger: Logger, dataHandler: BoxCheckedHandler) {
-        super(logger, dataHandler);
-
-        new BoxCheckPressedTransition(this.initState, this.addTerminalState("checked"),
-            (evt: InputEvent): void => {
-                dataHandler.initToCheckHandler(evt);
-            });
+    public constructor(logger: Logger, action: (event: InputEvent) => void) {
+        super(logger);
+        new BoxCheckPressedTransition(this.initState, this.addTerminalState("checked"), action);
     }
-}
-
-interface BoxCheckedHandler extends FSMDataHandler {
-    initToCheckHandler(event: Event): void;
 }
 
 /**
@@ -47,16 +38,10 @@ export class BoxChecked extends InteractionBase<WidgetData<HTMLInputElement>, Wi
      * @param name - The name of the user interaction
      */
     public constructor(logger: Logger, name?: string) {
-        const handler = {
-            "initToCheckHandler": (event: Event): void => {
-                this._data.copy(event);
-            },
-            "reinitData": (): void => {
-                this.reinitData();
-            }
+        const action = (event: Event): void => {
+            this._data.copy(event);
         };
-
-        super(new BoxCheckedFSM(logger, handler), new WidgetDataImpl<HTMLInputElement>(), logger, name ?? BoxChecked.name);
+        super(new BoxCheckedFSM(logger, action), new WidgetDataImpl<HTMLInputElement>(), logger, name ?? BoxChecked.name);
     }
 
     public override onNewNodeRegistered(node: EventTarget): void {

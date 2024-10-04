@@ -86,4 +86,25 @@ describe("using a box checked interaction", () => {
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     });
+
+    test("data ok", () => {
+        let data;
+        interaction.fsm.addHandler({
+            "fsmStops": () => {
+                data = interaction.data.widget;
+            }
+        });
+        interaction.registerToNodes([boxCheck]);
+        robot().input(boxCheck);
+
+        expect(data).toBe(boxCheck);
+    });
+
+    test("data clear ok", () => {
+        interaction.registerToNodes([boxCheck]);
+        robot().input(boxCheck);
+
+        expect(handler.fsmReinit).toHaveBeenCalledTimes(1);
+        expect(interaction.data.widget).toBeNull();
+    });
 });

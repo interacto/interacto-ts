@@ -230,6 +230,19 @@ describe("using a Taps interaction", () => {
             expect(touch.points).toHaveLength(2);
             checkTouchPoint(touch.points[0], 16, 21, 15, 20, 3, canvas);
         });
+
+        test("data clear ok", () => {
+            robot(canvas)
+                .keepData()
+                .touchstart({}, [{"identifier": 3, "screenX": 15, "screenY": 20, "clientX": 16, "clientY": 21}])
+                .touchend({}, [{"identifier": 3, "screenX": 15, "screenY": 20, "clientX": 16, "clientY": 21}])
+                .touchstart({}, [{"identifier": 2, "screenX": 12, "screenY": 27, "clientX": 14, "clientY": 28}])
+                .touchend({}, [{"identifier": 2, "screenX": 12, "screenY": 27, "clientX": 14, "clientY": 28}])
+                .runOnlyPendingTimers();
+
+            expect(handler.fsmReinit).toHaveBeenCalledTimes(1);
+            expect(interaction.data.points).toHaveLength(0);
+        });
     });
 
     describe("tap 3", () => {

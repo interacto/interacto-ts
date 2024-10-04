@@ -81,4 +81,14 @@ describe("using a scroll interaction", () => {
 
         expect(logger.logInteractionMsg).not.toHaveBeenCalled();
     });
+
+    test("data clear ok", () => {
+        interaction.registerToNodes([canvas]);
+        robot(canvas).scroll();
+
+        expect(handler.fsmReinit).toHaveBeenCalledTimes(1);
+        expect(interaction.data.currentTarget).toBeNull();
+        expect(interaction.data.scrollX).toBe(0);
+        expect(interaction.data.scrollY).toBe(0);
+    });
 });

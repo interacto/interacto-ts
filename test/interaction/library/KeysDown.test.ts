@@ -154,4 +154,17 @@ describe("using a keys down interaction", () => {
         expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
         expect(handler.fsmStops).toHaveBeenCalledTimes(2);
     });
+
+    test("clear Data", () => {
+        interaction.registerToNodes([text]);
+        robot(text)
+            .keydown({"code": "A"})
+            .keydown({"code": "B"})
+            .keyup({"code": "B"})
+            .keyup({"code": "A"});
+
+        // Two, because recycling keydown event
+        expect(handler.fsmReinit).toHaveBeenCalledTimes(2);
+        expect(interaction.data.keys).toHaveLength(0);
+    });
 });

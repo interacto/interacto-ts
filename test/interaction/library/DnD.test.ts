@@ -298,4 +298,20 @@ describe("using a DnD interaction", () => {
         expect(diffScreenX).toBe(2);
         expect(diffScreenY).toBe(2);
     });
+
+    test("clear Data", () => {
+        interaction.registerToNodes([canvas]);
+        robot(canvas)
+            .mousedown()
+            .mousemove()
+            .mousemove()
+            .mouseup();
+
+        expect(handler.fsmReinit).toHaveBeenCalledTimes(1);
+        expect(interaction.data.src.clientX).toBe(0);
+        expect(interaction.data.tgt.clientY).toBe(0);
+        expect(interaction.data.src.buttons).toBe(0);
+        expect(interaction.data.src.currentTarget).toBeNull();
+        expect(interaction.data.tgt.target).toBeNull();
+    });
 });

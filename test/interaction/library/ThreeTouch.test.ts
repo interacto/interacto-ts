@@ -158,4 +158,15 @@ describe("using a multi touch interaction", () => {
         expect(handler.fsmStops).toHaveBeenCalledTimes(1);
         expect(handler.fsmCancels).not.toHaveBeenCalled();
     });
+
+    test("clear Data", () => {
+        robot(canvas)
+            .touchstart({}, [{"identifier": 1}])
+            .touchend({}, [{"identifier": 1}]);
+
+        expect(handler.fsmReinit).toHaveBeenCalledTimes(1);
+        expect(interaction.data.touch1.src.target).toBeNull();
+        expect(interaction.data.touch2.src.target).toBeNull();
+        expect(interaction.data.touch3.src.target).toBeNull();
+    });
 });

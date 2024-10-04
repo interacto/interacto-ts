@@ -12,8 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {TouchStart} from "../../../src/interacto";
-import { beforeEach, describe, expect, test } from "@jest/globals";
+import {TouchDataImpl, TouchStart} from "../../../src/interacto";
+import {beforeEach, describe, expect, jest, test} from "@jest/globals";
 import {robot} from "interacto-nono";
 import {mock} from "jest-mock-extended";
 import type {FSMHandler, Logger} from "../../../src/interacto";
@@ -53,5 +53,35 @@ describe("using a TouchStart interaction", () => {
         robot(canvas).touchstart({}, [{"identifier": 2}]);
 
         expect(logger.logInteractionMsg).not.toHaveBeenCalled();
+    });
+
+    test("data ok", () => {
+        const touch = new TouchDataImpl();
+        const newHandler = mock<FSMHandler>();
+        newHandler.fsmStarts = jest.fn(() => {
+            touch.copy(interaction.data);
+        });
+        interaction.fsm.addHandler(newHandler);
+        interaction.registerToNodes([canvas]);
+        robot(canvas)
+            .keepData()
+            .touchstart({}, [{"identifier": 5, "screenX": 24, "screenY": 20, "clientX": 15, "clientY": 21}]);
+
+        expect(touch.allTouches).toHaveLength(1);
+        expect(touch.screenX).toBe(24);
+        expect(touch.clientX).toBe(15);
+        expect(touch.target).toBe(canvas);
+    });
+
+    test("data clear ok", () => {
+        interaction.registerToNodes([canvas]);
+        robot(canvas)
+            .keepData()
+            .touchstart({}, [{"identifier": 2}]);
+
+        expect(handler.fsmReinit).toHaveBeenCalledTimes(1);
+        expect(interaction.data.allTouches).toHaveLength(0);
+        expect(interaction.data.screenX).toBe(0);
+        expect(interaction.data.target).toBeNull();
     });
 });

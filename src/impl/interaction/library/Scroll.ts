@@ -18,24 +18,20 @@ import {InteractionBase} from "../InteractionBase";
 import {ScrollDataImpl} from "../ScrollDataImpl";
 import type {ScrollData} from "../../../api/interaction/ScrollData";
 import type {Logger} from "../../../api/logging/Logger";
-import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-
-interface ScrollFSMHandler extends FSMDataHandler {
-    initToScroll(event: Event): void;
-}
 
 /**
  * An FSM for scrolling.
  * @category FSM
  */
 export class ScrollFSM extends FSMImpl {
-    public constructor(logger: Logger, dataHandler: ScrollFSMHandler) {
-        super(logger, dataHandler);
-
-        new ScrollTransition(this.initState, this.addTerminalState("scrolled"),
-            (evt: Event): void => {
-                dataHandler.initToScroll(evt);
-            });
+    /**
+     * Creates the scroll FSM
+     * @param logger - The logger to use for this interaction
+     * @param action - The action executed on a scroll
+     */
+    public constructor(logger: Logger, action: (evt: Event) => void) {
+        super(logger);
+        new ScrollTransition(this.initState, this.addTerminalState("scrolled"), action);
     }
 }
 
@@ -50,15 +46,10 @@ export class Scroll extends InteractionBase<ScrollData, ScrollDataImpl> {
      * @param name - The name of the user interaction
      */
     public constructor(logger: Logger, name?: string) {
-        const handler = {
-            "initToScroll": (event: Event): void => {
-                this._data.setScrollData(event);
-            },
-            "reinitData": (): void => {
-                this.reinitData();
-            }
+        const action = (event: Event): void => {
+            this._data.setScrollData(event);
         };
 
-        super(new ScrollFSM(logger, handler), new ScrollDataImpl(), logger, name ?? Scroll.name);
+        super(new ScrollFSM(logger, action), new ScrollDataImpl(), logger, name ?? Scroll.name);
     }
 }

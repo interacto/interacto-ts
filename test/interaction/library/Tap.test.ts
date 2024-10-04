@@ -115,4 +115,16 @@ describe("using a Tap interaction", () => {
 
         checkTouchPoint(touch, 15, 21, 14, 20, 5, canvas);
     });
+
+    test("data clear ok", () => {
+        robot(canvas)
+            .keepData()
+            .touchstart({}, [{"identifier": 2}])
+            .touchend();
+
+        expect(handler.fsmReinit).toHaveBeenCalledTimes(1);
+        expect(interaction.data.allTouches).toHaveLength(0);
+        expect(interaction.data.screenX).toBe(0);
+        expect(interaction.data.target).toBeNull();
+    });
 });

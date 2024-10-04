@@ -205,9 +205,9 @@ describe("using a swipe binder", () => {
 
         robot(c1)
             .touchstart({}, [{"identifier": 3, "screenX": 50, "screenY": 20, "clientX": 100, "clientY": 200}], 5000)
-            .touchmove({},  [{"identifier": 3, "screenX": 160, "screenY": 30, "clientX": 160, "clientY": 201}], 5200)
-            .touchmove({},  [{"identifier": 3, "screenX": 250, "screenY": 30, "clientX": 300, "clientY": 210}], 5500)
-            .touchend({},   [{"identifier": 3, "screenX": 250, "screenY": 30, "clientX": 300, "clientY": 210}], 5500);
+            .touchmove({}, [{"identifier": 3, "screenX": 160, "screenY": 30, "clientX": 160, "clientY": 201}], 5200)
+            .touchmove({}, [{"identifier": 3, "screenX": 250, "screenY": 30, "clientX": 300, "clientY": 210}], 5500)
+            .touchend({}, [{"identifier": 3, "screenX": 250, "screenY": 30, "clientX": 300, "clientY": 210}], 5500);
 
         expect(binding).toBeDefined();
         expect(binding.timesCancelled).toBe(0);

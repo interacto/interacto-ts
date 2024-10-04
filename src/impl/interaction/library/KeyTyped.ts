@@ -16,7 +16,6 @@ import {FSMImpl} from "../../fsm/FSMImpl";
 import {KeyTransition} from "../../fsm/KeyTransition";
 import {InteractionBase} from "../InteractionBase";
 import {KeyDataImpl} from "../KeyDataImpl";
-import type {KeyEvtFSMHandler} from "./KeysDown";
 import type {KeyData} from "../../../api/interaction/KeyData";
 import type {Logger} from "../../../api/logging/Logger";
 
@@ -27,8 +26,8 @@ import type {Logger} from "../../../api/logging/Logger";
 export class KeyTypedFSM extends FSMImpl {
     private checkKey: string | undefined;
 
-    public constructor(logger: Logger, dataHandler: KeyEvtFSMHandler, key?: string) {
-        super(logger, dataHandler);
+    public constructor(logger: Logger, action: (event: KeyboardEvent) => void, key?: string) {
+        super(logger);
 
         this.checkKey = key;
         const pressed = this.addStdState("pressed");
@@ -40,10 +39,7 @@ export class KeyTypedFSM extends FSMImpl {
                 }
             });
 
-        new KeyTransition(pressed, this.addTerminalState("typed", true), "keyup",
-            (evt: KeyboardEvent): void => {
-                dataHandler.onKeyEvt(evt);
-            },
+        new KeyTransition(pressed, this.addTerminalState("typed", true), "keyup", action,
             (evt: KeyboardEvent): boolean => this.checkKey === undefined || evt.code === this.checkKey);
     }
 
@@ -65,15 +61,9 @@ export class KeyTyped extends InteractionBase<KeyData, KeyDataImpl> {
      * @param name - The name of the user interaction
      */
     public constructor(logger: Logger, key?: string, name?: string) {
-        const handler: KeyEvtFSMHandler = {
-            "onKeyEvt": (event: KeyboardEvent): void => {
-                this._data.copy(event);
-            },
-            "reinitData": (): void => {
-                this.reinitData();
-            }
+        const action = (event: KeyboardEvent): void => {
+            this._data.copy(event);
         };
-
-        super(new KeyTypedFSM(logger, handler, key), new KeyDataImpl(), logger, name ?? KeyTyped.name);
+        super(new KeyTypedFSM(logger, action, key), new KeyDataImpl(), logger, name ?? KeyTyped.name);
     }
 }

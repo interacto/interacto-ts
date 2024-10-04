@@ -19,21 +19,12 @@ import {InteractionBase} from "../InteractionBase";
 import {WidgetDataImpl} from "../WidgetDataImpl";
 import type {WidgetData} from "../../../api/interaction/WidgetData";
 import type {Logger} from "../../../api/logging/Logger";
-import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 
 class HyperLinkClickedFSM extends FSMImpl {
-    public constructor(logger: Logger, dataHandler: HyperLinkClickedFSMHandler) {
-        super(logger, dataHandler);
-
-        new HyperLinkTransition(this.initState, this.addTerminalState("clicked"),
-            (evt: Event): void => {
-                dataHandler.initToClickedHandler(evt);
-            });
+    public constructor(logger: Logger, action: (evt: Event) => void) {
+        super(logger);
+        new HyperLinkTransition(this.initState, this.addTerminalState("clicked"), action);
     }
-}
-
-interface HyperLinkClickedFSMHandler extends FSMDataHandler {
-    initToClickedHandler(event: Event): void;
 }
 
 /**
@@ -47,16 +38,10 @@ export class HyperLinkClicked extends InteractionBase<WidgetData<HTMLAnchorEleme
      * @param name - The name of the user interaction
      */
     public constructor(logger: Logger, name?: string) {
-        const handler: HyperLinkClickedFSMHandler = {
-            "initToClickedHandler": (event: Event): void => {
-                this._data.copy(event);
-            },
-            "reinitData": (): void => {
-                this.reinitData();
-            }
+        const action = (event: Event): void => {
+            this._data.copy(event);
         };
-
-        super(new HyperLinkClickedFSM(logger, handler), new WidgetDataImpl<HTMLAnchorElement>(), logger, name ?? HyperLinkClicked.name);
+        super(new HyperLinkClickedFSM(logger, action), new WidgetDataImpl<HTMLAnchorElement>(), logger, name ?? HyperLinkClicked.name);
     }
 
     public override onNewNodeRegistered(node: EventTarget): void {

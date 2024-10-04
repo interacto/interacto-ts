@@ -80,6 +80,16 @@ describe("using a key down interaction", () => {
             expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
             expect(handler.fsmStops).toHaveBeenCalledTimes(2);
         });
+
+        test("clear Data", () => {
+            robot(text)
+                .keydown({"code": "a"});
+
+            expect(handler.fsmReinit).toHaveBeenCalledTimes(1);
+            expect(interaction.data.key).toBe("");
+            expect(interaction.data.code).toBe("");
+            expect(interaction.data.currentTarget).toBeNull();
+        });
     });
 
     describe("with the key", () => {

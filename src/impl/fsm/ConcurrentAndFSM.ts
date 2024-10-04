@@ -13,7 +13,6 @@
  */
 
 import {FSMImpl} from "./FSMImpl";
-import type {FSMDataHandler} from "./FSMDataHandler";
 import type {ConcurrentFSM} from "../../api/fsm/ConcurrentFSM";
 import type {FSM} from "../../api/fsm/FSM";
 import type {FSMHandler} from "../../api/fsm/FSMHandler";
@@ -28,7 +27,7 @@ import type {Logger} from "../../api/logging/Logger";
  * FSM to start.
  * @category FSM
  */
-export class ConcurrentAndFSM<F extends FSM, T extends FSMDataHandler = FSMDataHandler> extends FSMImpl<T> implements ConcurrentFSM<F> {
+export class ConcurrentAndFSM<F extends FSM> extends FSMImpl implements ConcurrentFSM<F> {
     /**
      * The main fsms
      */
@@ -47,11 +46,9 @@ export class ConcurrentAndFSM<F extends FSM, T extends FSMDataHandler = FSMDataH
      * @param logger - The logger to use
      * @param secondaries - The secondary FSMs. Not considered in some steps.
      * @param totalReinit - Defines whether a cancellation of one of the fsms, reinits all the fsms.
-     * @param dataHandler - The data handler the FSM will use
      */
-    public constructor(fsms: ReadonlyArray<F>, logger: Logger, secondaries: ReadonlyArray<F> = [],
-                       totalReinit = false, dataHandler?: T) {
-        super(logger, dataHandler);
+    public constructor(fsms: ReadonlyArray<F>, logger: Logger, secondaries: ReadonlyArray<F> = [], totalReinit = false) {
+        super(logger);
 
         this.totalReinit = totalReinit;
 

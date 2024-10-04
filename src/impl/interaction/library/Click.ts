@@ -16,7 +16,6 @@ import {ClickTransition} from "../../fsm/ClickTransition";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {InteractionBase} from "../InteractionBase";
 import {PointDataImpl} from "../PointDataImpl";
-import type {MouseEvtFSMHandler} from "./LongMouseDown";
 import type {PointData} from "../../../api/interaction/PointData";
 import type {Logger} from "../../../api/logging/Logger";
 
@@ -30,15 +29,15 @@ export class ClickFSM extends FSMImpl {
     /**
      * Creates the FSM
      * @param logger - The logger to use for this interaction
-     * @param dataHandler - The data handler the FSM will use
+     * @param action - The action executed on a click
      */
-    public constructor(logger: Logger, dataHandler?: MouseEvtFSMHandler) {
-        super(logger, dataHandler);
+    public constructor(logger: Logger, action?: (evt: MouseEvent) => void) {
+        super(logger);
 
         new ClickTransition(this.initState, this.addTerminalState("clicked"),
             (evt: MouseEvent): void => {
                 this.setCheckButton(evt.button);
-                dataHandler?.mouseEvt(evt);
+                action?.(evt);
             },
             (evt: MouseEvent): boolean => this.checkButton === undefined || evt.button === this.checkButton);
     }
@@ -72,13 +71,8 @@ export class Click extends InteractionBase<PointData, PointDataImpl> {
      * @param name - The name of the user interaction
      */
     public constructor(logger: Logger, fsm?: ClickFSM, data?: PointDataImpl, name?: string) {
-        const theFSM = fsm ?? new ClickFSM(logger, {
-            "mouseEvt": (evt: MouseEvent): void => {
-                this._data.copy(evt);
-            },
-            "reinitData": (): void => {
-                this.reinitData();
-            }
+        const theFSM = fsm ?? new ClickFSM(logger, (evt: MouseEvent): void => {
+            this._data.copy(evt);
         });
         super(theFSM, data ?? new PointDataImpl(), logger, name ?? Click.name);
     }

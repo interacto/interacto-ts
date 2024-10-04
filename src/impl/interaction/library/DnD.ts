@@ -20,7 +20,6 @@ import {SrcTgtPointsDataImpl} from "../SrcTgtPointsDataImpl";
 import type {PointData} from "../../../api/interaction/PointData";
 import type {SrcTgtPointsData} from "../../../api/interaction/SrcTgtPointsData";
 import type {Logger} from "../../../api/logging/Logger";
-import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 
 /**
  * The FSM for DnD interactions.
@@ -34,10 +33,10 @@ class DnDFSM extends FSMImpl {
      * Creates the FSM
      * @param cancellable - True: the FSM can be cancelled using the ESC key.
      * @param logger - The logger to use
-     * @param dataHandler - The handler that will receive notifications from the FSM.
+     * @param handler - The handler that will receive notifications from the FSM.
      */
-    public constructor(cancellable: boolean, logger: Logger, dataHandler: DnDFSMHandler) {
-        super(logger, dataHandler);
+    public constructor(cancellable: boolean, logger: Logger, handler: DnDFSMHandler) {
+        super(logger);
         this.cancellable = cancellable;
 
         const pressed = this.addStdState("pressed");
@@ -47,14 +46,14 @@ class DnDFSM extends FSMImpl {
         new MouseTransition(this.initState, pressed, "mousedown",
             (evt: MouseEvent): void => {
                 this.buttonToCheck = evt.button;
-                dataHandler.onPress(evt);
+                handler.onPress(evt);
             });
 
         new MouseTransition(pressed, cancelled, "mouseup", (evt: MouseEvent): boolean => evt.button === this.buttonToCheck);
 
         const move = new MouseTransition(pressed, dragged, "mousemove",
             (evt: MouseEvent): void => {
-                dataHandler.onDrag(evt);
+                handler.onDrag(evt);
             },
             (evt: MouseEvent): boolean => evt.button === this.buttonToCheck);
 
@@ -62,7 +61,7 @@ class DnDFSM extends FSMImpl {
 
         new MouseTransition(dragged, this.addTerminalState("released"), "mouseup",
             (event: MouseEvent): void => {
-                dataHandler.onRelease(event);
+                handler.onRelease(event);
             },
             (event: MouseEvent): boolean => {
                 const tgt = event.currentTarget;
@@ -86,7 +85,7 @@ class DnDFSM extends FSMImpl {
     }
 }
 
-interface DnDFSMHandler extends FSMDataHandler {
+interface DnDFSMHandler {
     onPress(event: Event): void;
     onDrag(event: Event): void;
     onRelease(event: Event): void;
@@ -114,9 +113,6 @@ export class DnD extends InteractionBase<SrcTgtPointsData<PointData>, SrcTgtPoin
             },
             "onRelease": (evt: MouseEvent): void => {
                 this._data.copyTgt(evt);
-            },
-            "reinitData": (): void => {
-                this.reinitData();
             }
         };
 

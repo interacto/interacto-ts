@@ -153,5 +153,16 @@ describe("using a clicks interaction", () => {
             expect(data[1].screenY).toBe(201);
             expect(data[1].button).toBe(1);
         });
+
+        test("data clear ok", () => {
+            interaction.registerToNodes([canvas]);
+            robot(canvas)
+                .click({"screenX": 1025, "screenY": 210, "clientX": 1040, "clientY": 1201, "button": 1})
+                .click({"screenX": 1250, "screenY": 201, "clientX": 1040, "clientY": 1021, "button": 1});
+            jest.runAllTimers();
+
+            expect(handler.fsmReinit).toHaveBeenCalledTimes(1);
+            expect(interaction.data.points).toHaveLength(0);
+        });
     });
 });

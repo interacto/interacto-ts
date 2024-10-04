@@ -203,4 +203,16 @@ describe("using a timed click interaction", () => {
         expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
         expect(handler.fsmStops).toHaveBeenCalledTimes(2);
     });
+
+    test("clear Data", () => {
+        interaction.registerToNodes([canvas]);
+        robot()
+            .mousedown({"target": canvas, "button": 2})
+            .mouseup({"target": canvas, "button": 2});
+        expect(handler.fsmReinit).toHaveBeenCalledTimes(1);
+        expect(interaction.data.clientX).toBe(0);
+        expect(interaction.data.clientY).toBe(0);
+        expect(interaction.data.button).toBe(0);
+        expect(interaction.data.currentTarget).toBeNull();
+    });
 });

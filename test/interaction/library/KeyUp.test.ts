@@ -75,4 +75,15 @@ describe("using a key up interaction", () => {
         expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
         expect(handler.fsmStops).toHaveBeenCalledTimes(2);
     });
+
+    test("clear Data", () => {
+        interaction.registerToNodes([text]);
+        robot(text)
+            .keyup({"code": "a"});
+
+        expect(handler.fsmReinit).toHaveBeenCalledTimes(1);
+        expect(interaction.data.key).toBe("");
+        expect(interaction.data.code).toBe("");
+        expect(interaction.data.currentTarget).toBeNull();
+    });
 });

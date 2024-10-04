@@ -17,7 +17,6 @@ import {KeyTransition} from "../../fsm/KeyTransition";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 import {InteractionBase} from "../InteractionBase";
 import {KeysDataImpl} from "../KeysDataImpl";
-import type {KeyEvtFSMHandler} from "./KeysDown";
 import type {KeysData} from "../../../api/interaction/KeysData";
 import type {Logger} from "../../../api/logging/Logger";
 
@@ -44,21 +43,13 @@ export class KeysTypedFSM extends FSMImpl {
     /**
      * Creates the FSM.
      * @param logger - The logger to use for this interaction
-     * @param dataHandler - The data handler the FSM will use
+     * @param action - The action executed on a key typed
      */
-    public constructor(logger: Logger, dataHandler: KeyEvtFSMHandler) {
-        super(logger, dataHandler);
-
+    public constructor(logger: Logger, action: (event: KeyboardEvent) => void) {
+        super(logger);
         const keyup = this.addStdState("keyup");
-
-        const action = (event: KeyboardEvent): void => {
-            dataHandler.onKeyEvt(event);
-        };
-
         new KeyTransition(this.initState, keyup, "keyup", action);
-
         new KeyTransition(keyup, keyup, "keyup", action);
-
         new TimeoutTransition(keyup, this.addTerminalState("timeouted"), KeysTypedFSM.timeGapSupplier);
     }
 }
@@ -76,15 +67,9 @@ export class KeysTyped extends InteractionBase<KeysData, KeysDataImpl> {
      * @param name - The name of the user interaction
      */
     public constructor(logger: Logger, name?: string) {
-        const handler: KeyEvtFSMHandler = {
-            "onKeyEvt": (event: KeyboardEvent): void => {
-                this._data.addKey(event);
-            },
-            "reinitData": (): void => {
-                this.reinitData();
-            }
+        const action = (event: KeyboardEvent): void => {
+            this._data.addKey(event);
         };
-
-        super(new KeysTypedFSM(logger, handler), new KeysDataImpl(), logger, name ?? KeysTyped.name);
+        super(new KeysTypedFSM(logger, action), new KeysDataImpl(), logger, name ?? KeysTyped.name);
     }
 }

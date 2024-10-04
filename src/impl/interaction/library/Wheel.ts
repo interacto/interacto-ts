@@ -18,14 +18,6 @@ import {InteractionBase} from "../InteractionBase";
 import {WheelDataImpl} from "../WheelDataImpl";
 import type {WheelData} from "../../../api/interaction/WheelData";
 import type {Logger} from "../../../api/logging/Logger";
-import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-
-/**
- * The FSM handler that binds a single wheel event handler to an FSM
- */
-interface WheelFSMHandler extends FSMDataHandler {
-    wheelEvent(event: WheelEvent): void;
-}
 
 /**
  * The FSM for wheel interactions
@@ -35,15 +27,11 @@ class WheelFSM extends FSMImpl {
     /**
      * Creates the FSM
      * @param logger - The logger to use for this interaction
-     * @param dataHandler - The data handler the FSM will use
+     * @param action - The action executed on a wheel
      */
-    public constructor(logger: Logger, dataHandler: WheelFSMHandler) {
-        super(logger, dataHandler);
-
-        new WheelTransition(this.initState, this.addTerminalState("moved"),
-            (evt: WheelEvent): void => {
-                dataHandler.wheelEvent(evt);
-            });
+    public constructor(logger: Logger, action: (evt: WheelEvent) => void) {
+        super(logger);
+        new WheelTransition(this.initState, this.addTerminalState("moved"), action);
     }
 }
 
@@ -60,15 +48,9 @@ export class Wheel extends InteractionBase<WheelData, WheelDataImpl> {
      * @param name - The name of the user interaction
      */
     public constructor(logger: Logger, fsm?: WheelFSM, data?: WheelDataImpl, name?: string) {
-        const handler = {
-            "wheelEvent": (evt: WheelEvent): void => {
-                this._data.copy(evt);
-            },
-            "reinitData": (): void => {
-                this.reinitData();
-            }
+        const action = (evt: WheelEvent): void => {
+            this._data.copy(evt);
         };
-
-        super(fsm ?? new WheelFSM(logger, handler), data ?? new WheelDataImpl(), logger, name ?? Wheel.name);
+        super(fsm ?? new WheelFSM(logger, action), data ?? new WheelDataImpl(), logger, name ?? Wheel.name);
     }
 }

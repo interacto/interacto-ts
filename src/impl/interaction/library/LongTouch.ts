@@ -19,12 +19,11 @@ import {InteractionBase} from "../InteractionBase";
 import {TouchDataImpl} from "../TouchDataImpl";
 import type {TouchData} from "../../../api/interaction/TouchData";
 import type {Logger} from "../../../api/logging/Logger";
-import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 
 /**
  * The FSM for the LongTouch interaction
  */
-class LongTouchFSM extends FSMImpl<TouchFSMDataHandler> {
+class LongTouchFSM extends FSMImpl {
     private readonly duration: number;
 
     private currentTouchID: number | undefined;
@@ -33,10 +32,10 @@ class LongTouchFSM extends FSMImpl<TouchFSMDataHandler> {
      * Creates the long touch FSM
      * @param duration - Defines the duration of the touch interaction.
      * @param logger - The logger to use for this interaction
-     * @param dataHandler - The data handler the FSM will use
+     * @param action - The action executed on a long touch
      */
-    public constructor(duration: number, logger: Logger, dataHandler: TouchFSMDataHandler) {
-        super(logger, dataHandler);
+    public constructor(duration: number, logger: Logger, action: (event: TouchEvent) => void) {
+        super(logger);
 
         if (duration <= 0) {
             throw new Error("Incorrect duration");
@@ -52,7 +51,7 @@ class LongTouchFSM extends FSMImpl<TouchFSMDataHandler> {
             (event: TouchEvent): void => {
                 if (event.changedTouches[0] !== undefined) {
                     this.currentTouchID = event.changedTouches[0].identifier;
-                    dataHandler.touchEvent(event);
+                    action(event);
                 }
             });
 
@@ -72,13 +71,6 @@ class LongTouchFSM extends FSMImpl<TouchFSMDataHandler> {
 }
 
 /**
- * The data handler that maps a single touch event to an FSM
- */
-export interface TouchFSMDataHandler extends FSMDataHandler {
-    touchEvent(evt: TouchEvent): void;
-}
-
-/**
  * The long touch interaction.
  * @category Interaction Library
  */
@@ -91,17 +83,12 @@ export class LongTouch extends InteractionBase<TouchData, TouchDataImpl> {
      * @param name - The name of the user interaction
      */
     public constructor(duration: number, logger: Logger, name?: string) {
-        const handler: TouchFSMDataHandler = {
-            "touchEvent": (evt: TouchEvent): void => {
-                if (evt.changedTouches[0] !== undefined) {
-                    this._data.copy(TouchDataImpl.mergeTouchEventData(evt.changedTouches[0], evt, Array.from(evt.touches)));
-                }
-            },
-            "reinitData": (): void => {
-                this.reinitData();
+        const action = (evt: TouchEvent): void => {
+            if (evt.changedTouches[0] !== undefined) {
+                this._data.copy(TouchDataImpl.mergeTouchEventData(evt.changedTouches[0], evt, Array.from(evt.touches)));
             }
         };
 
-        super(new LongTouchFSM(duration, logger, handler), new TouchDataImpl(), logger, name ?? LongTouch.name);
+        super(new LongTouchFSM(duration, logger, action), new TouchDataImpl(), logger, name ?? LongTouch.name);
     }
 }

@@ -126,6 +126,19 @@ describe("using a long touch interaction", () => {
                 expect(handler.fsmStops).toHaveBeenCalledTimes(1);
                 expect(handler.fsmCancels).not.toHaveBeenCalled();
             });
+
+            test("data clear ok", () => {
+                robot()
+                    .keepData()
+                    .touchstart(canvas, [{"identifier": 3, "screenX": 15, "screenY": 20, "clientX": 160, "clientY": 21}])
+                    .touchend();
+
+                expect(handler.fsmReinit).toHaveBeenCalledTimes(1);
+                expect(interaction.data.currentTarget).toBeNull();
+                expect(interaction.data.clientX).toBe(0);
+                expect(interaction.data.screenX).toBe(0);
+                expect(interaction.data.allTouches).toHaveLength(0);
+            });
         });
     });
 });

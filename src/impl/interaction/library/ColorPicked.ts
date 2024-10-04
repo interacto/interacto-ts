@@ -18,21 +18,12 @@ import {InteractionBase} from "../InteractionBase";
 import {WidgetDataImpl} from "../WidgetDataImpl";
 import type {WidgetData} from "../../../api/interaction/WidgetData";
 import type {Logger} from "../../../api/logging/Logger";
-import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
 
 class ColorPickedFSM extends FSMImpl {
-    public constructor(logger: Logger, dataHandler: ColorPickedHandler) {
-        super(logger, dataHandler);
-
-        new ColorPickedTransition(this.initState, this.addTerminalState("picked"),
-            (evt: Event): void => {
-                dataHandler.initToPickedHandler(evt);
-            });
+    public constructor(logger: Logger, action: (evt: Event) => void) {
+        super(logger);
+        new ColorPickedTransition(this.initState, this.addTerminalState("picked"), action);
     }
-}
-
-interface ColorPickedHandler extends FSMDataHandler {
-    initToPickedHandler(event: Event): void;
 }
 
 /**
@@ -46,16 +37,10 @@ export class ColorPicked extends InteractionBase<WidgetData<HTMLInputElement>, W
      * @param name - The name of the user interaction
      */
     public constructor(logger: Logger, name?: string) {
-        const handler: ColorPickedHandler = {
-            "initToPickedHandler": (event: Event): void => {
-                this._data.copy(event);
-            },
-            "reinitData": (): void => {
-                this.reinitData();
-            }
+        const action = (event: Event): void => {
+            this._data.copy(event);
         };
-
-        super(new ColorPickedFSM(logger, handler), new WidgetDataImpl<HTMLInputElement>(), logger, name ?? ColorPicked.name);
+        super(new ColorPickedFSM(logger, action), new WidgetDataImpl<HTMLInputElement>(), logger, name ?? ColorPicked.name);
     }
 
     public override onNewNodeRegistered(node: EventTarget): void {

@@ -18,7 +18,6 @@ import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 import {InteractionBase} from "../InteractionBase";
 import {MousePointsDataImpl} from "../MousePointsDataImpl";
 import {PointDataImpl} from "../PointDataImpl";
-import type {MouseEvtFSMHandler} from "./LongMouseDown";
 import type {MousePointsData} from "../../../api/interaction/MousePointsData";
 import type {Logger} from "../../../api/logging/Logger";
 
@@ -35,10 +34,10 @@ export class ClicksFSM extends FSMImpl {
      * Creates the Clicks FSM
      * @param nbClicks - The number of clicks to manage
      * @param logger - The logger to use for this interaction
-     * @param dataHandler - The data handler the FSM will use
+     * @param action - The action executed on a click
      */
-    public constructor(nbClicks: number, logger: Logger, dataHandler: MouseEvtFSMHandler) {
-        super(logger, dataHandler);
+    public constructor(nbClicks: number, logger: Logger, action: (evt: MouseEvent) => void) {
+        super(logger);
 
         if (nbClicks <= 0) {
             throw new Error("The number of clicks must be greater than 1");
@@ -56,19 +55,19 @@ export class ClicksFSM extends FSMImpl {
         new ClickTransition(this.initState, clicked,
             (evt: MouseEvent): void => {
                 this.countClicks++;
-                dataHandler.mouseEvt(evt);
+                action(evt);
             });
 
         new ClickTransition(clicked, clicked,
             (evt: MouseEvent): void => {
                 this.countClicks++;
-                dataHandler.mouseEvt(evt);
+                action(evt);
             },
             (): boolean => (this.countClicks + 1) < this.nbClicks);
 
         new ClickTransition(clicked, this.addTerminalState("ended"),
             (evt: MouseEvent): void => {
-                dataHandler.mouseEvt(evt);
+                action(evt);
             },
             (): boolean => (this.countClicks + 1) === this.nbClicks);
 
@@ -94,17 +93,11 @@ export class Clicks extends InteractionBase<MousePointsData, MousePointsDataImpl
      * @param name - The name of the user interaction
      */
     public constructor(numberClicks: number, logger: Logger, name?: string) {
-        const handler: MouseEvtFSMHandler = {
-            "mouseEvt": (evt: MouseEvent): void => {
-                const pt = new PointDataImpl();
-                pt.copy(evt);
-                this._data.addPoint(pt);
-            },
-            "reinitData": (): void => {
-                this.reinitData();
-            }
+        const action = (evt: MouseEvent): void => {
+            const pt = new PointDataImpl();
+            pt.copy(evt);
+            this._data.addPoint(pt);
         };
-
-        super(new ClicksFSM(numberClicks, logger, handler), new MousePointsDataImpl(), logger, name ?? Clicks.name);
+        super(new ClicksFSM(numberClicks, logger, action), new MousePointsDataImpl(), logger, name ?? Clicks.name);
     }
 }

@@ -130,4 +130,14 @@ describe("using a mouse move interaction", () => {
         expect(data.screenX).toBe(111);
         expect(data.screenY).toBe(222);
     });
+
+    test("data clear ok", () => {
+        interaction.registerToNodes([canvas]);
+        robot(canvas).mousemove({"screenX": 111, "screenY": 222, "clientX": 11, "clientY": 22});
+
+        expect(handler.fsmReinit).toHaveBeenCalledTimes(1);
+        expect(interaction.data.currentTarget).toBeNull();
+        expect(interaction.data.clientX).toBe(0);
+        expect(interaction.data.screenX).toBe(0);
+    });
 });

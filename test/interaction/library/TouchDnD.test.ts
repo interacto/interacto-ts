@@ -384,6 +384,17 @@ describe("using a touch dnd interaction", () => {
         expect(interaction.isRunning()).toBeFalsy();
     });
 
+    test("clear data", () => {
+        robot(canvas)
+            .touchstart({}, [{"identifier": 3, "screenX": 11, "screenY": 23, "clientX": 12, "clientY": 25}])
+            .touchmove({}, [{"identifier": 3, "screenX": 11, "screenY": 24, "clientX": 14, "clientY": 28}])
+            .touchend({}, [{"identifier": 3, "screenX": 171, "screenY": 274, "clientX": 174, "clientY": 278}]);
+
+        expect(handler.fsmReinit).toHaveBeenCalledTimes(1);
+        expect(interaction.data.src.target).toBeNull();
+        expect(interaction.data.tgt.target).toBeNull();
+    });
+
     describe("not cancellable", () => {
         beforeEach(() => {
             srcData = new TouchDataImpl();

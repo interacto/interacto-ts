@@ -252,6 +252,15 @@ describe("using pan interactions", () => {
 
             expect(handler.fsmStops).toHaveBeenCalledTimes(1);
         });
+
+        test("clear data", () => {
+            robot(canvas)
+                .pan(1, 100, "right", {}, 8, 2);
+
+            expect(handler.fsmReinit).toHaveBeenCalledTimes(1);
+            expect(interaction.data.src.target).toBeNull();
+            expect(interaction.data.tgt.target).toBeNull();
+        });
     });
 
     describe("using a top pan interaction", () => {

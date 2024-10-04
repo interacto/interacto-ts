@@ -86,4 +86,25 @@ describe("using a color picked interaction", () => {
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     });
+
+    test("data ok", () => {
+        let data;
+        interaction.fsm.addHandler({
+            "fsmStops": () => {
+                data = interaction.data.widget;
+            }
+        });
+        interaction.registerToNodes([colorBox]);
+        robot().input(colorBox);
+
+        expect(data).toBe(colorBox);
+    });
+
+    test("data clear ok", () => {
+        interaction.registerToNodes([colorBox]);
+        robot().input(colorBox);
+
+        expect(handler.fsmReinit).toHaveBeenCalledTimes(1);
+        expect(interaction.data.widget).toBeNull();
+    });
 });

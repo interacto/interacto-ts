@@ -85,4 +85,25 @@ describe("using a combo box interaction", () => {
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     });
+
+    test("data ok", () => {
+        let data;
+        interaction.fsm.addHandler({
+            "fsmStops": () => {
+                data = interaction.data.widget;
+            }
+        });
+        interaction.registerToNodes([comboBox]);
+        robot().input(comboBox);
+
+        expect(data).toBe(comboBox);
+    });
+
+    test("data clear ok", () => {
+        interaction.registerToNodes([comboBox]);
+        robot().input(comboBox);
+
+        expect(handler.fsmReinit).toHaveBeenCalledTimes(1);
+        expect(interaction.data.widget).toBeNull();
+    });
 });

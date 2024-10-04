@@ -16,7 +16,6 @@ import {FSMImpl} from "./FSMImpl";
 import {StdState} from "./StdState";
 import {SubFSMTransition} from "./SubFSMTransition";
 import {TerminalState} from "./TerminalState";
-import type {FSMDataHandler} from "./FSMDataHandler";
 import type {FSM} from "../../api/fsm/FSM";
 import type {OutputState} from "../../api/fsm/OutputState";
 import type {Logger} from "../../api/logging/Logger";
@@ -25,7 +24,7 @@ import type {Logger} from "../../api/logging/Logger";
  * An FSM that executes a serie of sub-FSMs.
  * @category FSM
  */
-export class ThenFSM<T extends FSMDataHandler> extends FSMImpl<T> {
+export class ThenFSM extends FSMImpl {
     public constructor(fsms: Array<FSM>, logger: Logger) {
         super(logger);
 

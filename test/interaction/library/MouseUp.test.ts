@@ -54,4 +54,14 @@ describe("using a mouse up interaction", () => {
 
         expect(logger.logInteractionMsg).not.toHaveBeenCalled();
     });
+
+    test("data clear ok", () => {
+        interaction.registerToNodes([canvas]);
+        robot(canvas).mouseup({"screenX": 111, "screenY": 222, "clientX": 11, "clientY": 22});
+
+        expect(handler.fsmReinit).toHaveBeenCalledTimes(1);
+        expect(interaction.data.currentTarget).toBeNull();
+        expect(interaction.data.clientX).toBe(0);
+        expect(interaction.data.screenX).toBe(0);
+    });
 });

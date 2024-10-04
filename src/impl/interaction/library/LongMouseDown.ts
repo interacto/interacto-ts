@@ -19,14 +19,6 @@ import {InteractionBase} from "../InteractionBase";
 import {PointDataImpl} from "../PointDataImpl";
 import type {PointData} from "../../../api/interaction/PointData";
 import type {Logger} from "../../../api/logging/Logger";
-import type {FSMDataHandler} from "../../fsm/FSMDataHandler";
-
-/**
- * The data handler that makes the link between a single mouse event and an FSM
- */
-export interface MouseEvtFSMHandler extends FSMDataHandler {
-    mouseEvt(evt: MouseEvent): void;
-}
 
 /**
  * The FSM for the LongPress interaction
@@ -41,10 +33,10 @@ export class LongMouseDownFSM extends FSMImpl {
      * Creates the long press FSM
      * @param duration - Defines the duration of the long press interaction (in ms).
      * @param logger - The logger to use for this interaction
-     * @param dataHandler - The data handler the FSM will use
+     * @param action - The action executed on long mouse down
      */
-    public constructor(duration: number, logger: Logger, dataHandler: MouseEvtFSMHandler) {
-        super(logger, dataHandler);
+    public constructor(duration: number, logger: Logger, action: (evt: MouseEvent) => void) {
+        super(logger);
 
         if (duration <= 0) {
             throw new Error("Incorrect duration");
@@ -60,7 +52,7 @@ export class LongMouseDownFSM extends FSMImpl {
         new MouseTransition(this.initState, down, "mousedown",
             (evt: MouseEvent): void => {
                 this.currentButton = evt.button;
-                dataHandler.mouseEvt(evt);
+                action(evt);
             });
 
         const move = new MouseTransition(down, cancelled, "mousemove", undefined,
@@ -90,15 +82,9 @@ export class LongMouseDown extends InteractionBase<PointData, PointDataImpl> {
      * @param name - The name of the user interaction
      */
     public constructor(duration: number, logger: Logger, name?: string) {
-        const handler: MouseEvtFSMHandler = {
-            "mouseEvt": (evt: MouseEvent): void => {
-                this._data.copy(evt);
-            },
-            "reinitData": (): void => {
-                this.reinitData();
-            }
+        const action = (evt: MouseEvent): void => {
+            this._data.copy(evt);
         };
-
-        super(new LongMouseDownFSM(duration, logger, handler), new PointDataImpl(), logger, name ?? LongMouseDown.name);
+        super(new LongMouseDownFSM(duration, logger, action), new PointDataImpl(), logger, name ?? LongMouseDown.name);
     }
 }

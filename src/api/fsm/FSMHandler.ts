@@ -51,5 +51,10 @@ export interface FSMHandler {
     preFsmUpdate?(): void;
 
     preFsmStop?(): void;
+
+    /**
+     * When the FSM is reinitialized.
+     */
+    fsmReinit?(): void;
 }
 

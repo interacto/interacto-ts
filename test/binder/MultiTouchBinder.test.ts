@@ -11,14 +11,11 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import {BindingsContext} from "../../src/impl/binding/BindingsContext";
-import {BindingsImpl, UndoHistoryImpl} from "../../src/interacto";
+import { BindingsContext, BindingsImpl, UndoHistoryImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import { afterEach, beforeEach, describe, expect, jest, test } from "@jest/globals";
 import {robot} from "interacto-nono";
-import type {Bindings} from "../../src/api/binding/Bindings";
-import type {Flushable} from "../../src/impl/interaction/Flushable";
-import type {Binding, Interaction, InteractionBase, UndoHistoryBase} from "../../src/interacto";
+import type {Binding, Interaction, InteractionBase, UndoHistoryBase, MultiTouch, Bindings, Flushable} from "../../src/interacto";
 
 let c1: HTMLElement;
 let binding: Binding<StubCmd, Interaction<object>, unknown> | undefined;
@@ -87,14 +84,6 @@ describe("using a multi touch binder", () => {
             .touchmove()
             .touchend({}, [{"identifier": 1}]);
 
-        // c1.dispatchEvent(createTouchEvent("touchstart", 1, c1, 11, 23, 110, 230));
-        // c1.dispatchEvent(createTouchEvent("touchstart", 2, c1, 31, 13, 310, 130));
-        // c1.dispatchEvent(createTouchEvent("touchmove", 2, c1, 15, 30, 150, 300));
-        // c1.dispatchEvent(createTouchEvent("touchend", 2, c1, 15, 30, 150, 300));
-        // c1.dispatchEvent(createTouchEvent("touchstart", 3, c1, 31, 13, 310, 130));
-        // c1.dispatchEvent(createTouchEvent("touchmove", 3, c1, 15, 30, 150, 300));
-        // c1.dispatchEvent(createTouchEvent("touchend", 1, c1, 15, 30, 150, 300));
-
         expect(binding).toBeDefined();
         expect(ctx.commands).toHaveLength(2);
         expect(dataFirst).toHaveLength(2);
@@ -103,6 +92,24 @@ describe("using a multi touch binder", () => {
         expect(data).toHaveLength(2);
         expect(data[0]).toBe(2);
         expect(data[1]).toBe(2);
+    });
+
+    test("clear data", () => {
+        binding = bindings.multiTouchBinder(2)
+            .toProduce(() => new StubCmd(true))
+            .on(c1)
+            .bind();
+
+        robot(c1)
+            .keepData()
+            .touchstart({}, [{"identifier": 1}])
+            .touchstart({}, [{"identifier": 2}])
+            .touchmove()
+            .touchend()
+            .touchend({}, [{"identifier": 1}]);
+
+        const interaction = binding.interaction as MultiTouch;
+        expect(interaction.data.touches).toHaveLength(0);
     });
 
     test("unsubscribe does not trigger the binding", () => {

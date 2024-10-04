@@ -118,4 +118,15 @@ describe("using a wheel interaction", () => {
         expect(data.deltaZ).toBe(20);
         expect(data.deltaMode).toBe(21);
     });
+
+    test("data clear ok", () => {
+        interaction.registerToNodes([canvas]);
+        robot().wheel({"target": canvas, "button": 1, "screenX": 111, "screenY": 222, "clientX": 11, "clientY": 22,
+            "deltaX": 18, "deltaY": 19, "deltaZ": 20, "deltaMode": 21});
+
+        expect(handler.fsmReinit).toHaveBeenCalledTimes(1);
+        expect(interaction.data.screenX).toBe(0);
+        expect(interaction.data.deltaX).toBe(0);
+        expect(interaction.data.target).toBeNull();
+    });
 });

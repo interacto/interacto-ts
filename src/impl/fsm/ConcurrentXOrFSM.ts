@@ -13,7 +13,6 @@
  */
 
 import {FSMImpl} from "./FSMImpl";
-import type {FSMDataHandler} from "./FSMDataHandler";
 import type {ConcurrentFSM} from "../../api/fsm/ConcurrentFSM";
 import type {FSM} from "../../api/fsm/FSM";
 import type {FSMHandler} from "../../api/fsm/FSMHandler";
@@ -26,7 +25,7 @@ import type {Logger} from "../../api/logging/Logger";
  * If one FSM has started, the other ones cannot start.
  * @category FSM
  */
-export class ConcurrentXOrFSM<F extends FSM, T extends FSMDataHandler = FSMDataHandler> extends FSMImpl<T> implements ConcurrentFSM<F> {
+export class ConcurrentXOrFSM<F extends FSM> extends FSMImpl implements ConcurrentFSM<F> {
     /**
      * The main fsms
      */
@@ -36,14 +35,13 @@ export class ConcurrentXOrFSM<F extends FSM, T extends FSMDataHandler = FSMDataH
      * Creates the FSM
      * @param fsms - The main concurrent FSMs
      * @param logger - The logger to use for logging FSM messages
-     * @param dataHandler - The data handler the FSM will use
      */
-    public constructor(fsms: ReadonlyArray<F>, logger: Logger, dataHandler?: T) {
+    public constructor(fsms: ReadonlyArray<F>, logger: Logger) {
         if (new Set(fsms.map(fsm => fsm.constructor.name)).size !== fsms.length) {
             throw new Error("Cannot create an XOR interaction using two interactions of the same type");
         }
 
-        super(logger, dataHandler);
+        super(logger);
 
         const handler: FSMHandler = {
             "fsmStarts": (): void => {
