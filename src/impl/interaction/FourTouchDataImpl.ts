@@ -36,6 +36,10 @@ export class FourTouchDataImpl extends ThreeTouchDataImpl implements FourTouchDa
         return this.t4;
     }
 
+    public override get touches(): ReadonlyArray<SrcTgtPointsData<TouchData>> {
+        return [this.t1, this.t2, this.t3, this.t4];
+    }
+
     public override initTouch(data: Touch, evt: EventModifierData & UnitInteractionData, allTouches: Array<Touch>): void {
         // If only t4 is not initialised
         if (this.t4.src.identifier === -1 && this.t3.src.identifier !== -1) {

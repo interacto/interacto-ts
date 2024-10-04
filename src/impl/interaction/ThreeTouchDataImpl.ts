@@ -36,6 +36,10 @@ export class ThreeTouchDataImpl extends GeneralTwoTouchDataImpl implements Three
         return this.t3;
     }
 
+    public override get touches(): ReadonlyArray<SrcTgtPointsData<TouchData>> {
+        return [this.t1, this.t2, this.t3];
+    }
+
     public override flush(): void {
         super.flush();
         this.t3.flush();
