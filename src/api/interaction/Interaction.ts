@@ -25,8 +25,7 @@ export type InteractionDataType<T> = T extends Interaction<infer D> ? D & object
  * Infers the interaction data types from an array of interactions
  * @category API Interaction
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type InteractionsDataTypes<A extends Array<Interaction<any>>> = {
+export type InteractionsDataTypes<A extends Array<Interaction<object>>> = {
     [K in keyof A]: A[K] extends Interaction<infer T> ? T : never;
 };
 

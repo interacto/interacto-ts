@@ -23,7 +23,13 @@ import type {VisitorInteraction} from "../../api/interaction/VisitorInteraction"
 import type {Logger} from "../../api/logging/Logger";
 import type {Subscription} from "rxjs";
 
-interface CancellablePromise extends Promise<void> {
+/**
+ * A promise that is cancellable.
+ */
+export interface CancellablePromise extends Promise<void> {
+    /**
+     * Called when the promise is cancelled.
+     */
     cancel: () => void;
 }
 
@@ -31,8 +37,7 @@ interface CancellablePromise extends Promise<void> {
  * Infers the type of the involved interaction data implementation
  * @category Interaction
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type InteractionDataImplType<T> = T extends InteractionBase<any, infer DImpl, any> ? DImpl : never;
+export type InteractionDataImplType<T> = T extends InteractionBase<object, infer DImpl> ? DImpl : never;
 
 /**
  * The base implementation of a user interaction.

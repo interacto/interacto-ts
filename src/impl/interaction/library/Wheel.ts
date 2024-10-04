@@ -43,14 +43,13 @@ export class Wheel extends InteractionBase<WheelData, WheelDataImpl> {
     /**
      * Creates the interaction.
      * @param logger - The logger to use for this interaction
-     * @param fsm - The optional FSM provided for the interaction
      * @param data - The interaction data to use
      * @param name - The name of the user interaction
      */
-    public constructor(logger: Logger, fsm?: WheelFSM, data?: WheelDataImpl, name?: string) {
+    public constructor(logger: Logger, data?: WheelDataImpl, name?: string) {
         const action = (evt: WheelEvent): void => {
             this._data.copy(evt);
         };
-        super(fsm ?? new WheelFSM(logger, action), data ?? new WheelDataImpl(), logger, name ?? Wheel.name);
+        super(new WheelFSM(logger, action), data ?? new WheelDataImpl(), logger, name ?? Wheel.name);
     }
 }
