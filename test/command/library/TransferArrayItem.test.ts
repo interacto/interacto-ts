@@ -14,7 +14,7 @@
  */
 
 import {TransferArrayItem} from "../../../src/impl/command/library/TransferArrayItem";
-import { beforeEach, describe, expect, test } from "@jest/globals";
+import {beforeEach, describe, expect, test} from "@jest/globals";
 
 describe("using a transfer array item command", () => {
     let cmd: TransferArrayItem<number>;

@@ -13,7 +13,7 @@
  */
 
 import {WheelDataImpl} from "../../src/impl/interaction/WheelDataImpl";
-import { beforeEach, describe, expect, test } from "@jest/globals";
+import {beforeEach, describe, expect, test} from "@jest/globals";
 import type {WheelData} from "../../src/api/interaction/WheelData";
 
 describe("using a wheel data", () => {

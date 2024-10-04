@@ -18,7 +18,7 @@ import {
     FSMImpl, MouseTransition
 } from "../../src/interacto";
 import {createMouseEvent} from "../interaction/StubEvents";
-import { beforeEach, describe, expect, jest, test } from "@jest/globals";
+import {beforeEach, describe, expect, jest, test} from "@jest/globals";
 import {mock} from "jest-mock-extended";
 import type {FSMHandler, Logger} from "../../src/interacto";
 

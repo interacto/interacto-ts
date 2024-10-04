@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { jest } from "@jest/globals";
+import {jest} from "@jest/globals";
 import {NonoRobotImpl} from "interacto-nono";
 import type {EventType} from "../../src/api/fsm/EventType";
 import type {PointData} from "../../src/api/interaction/PointData";
@@ -139,7 +139,7 @@ export function createWheelEvent2(type: "wheel",
 }
 
 export function createMouseEvent(type: "auxclick" | "click" | "mousedown" | "mouseenter" | "mouseleave" | "mousemove" |
-"mouseout" | "mouseover" | "mouseup",
+  "mouseout" | "mouseover" | "mouseup",
                                  target: EventTarget, screenX?: number, screenY?: number, clientX?: number,
                                  clientY?: number, buttonValue = 0): MouseEvent {
     const screenXvalue = screenX ?? 0;

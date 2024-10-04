@@ -13,7 +13,7 @@
  */
 
 import {WidgetDataImpl} from "../../src/impl/interaction/WidgetDataImpl";
-import { beforeEach, describe, expect, test } from "@jest/globals";
+import {beforeEach, describe, expect, test} from "@jest/globals";
 import type {UnitInteractionData} from "../../src/api/interaction/UnitInteractionData";
 
 describe("using a widget data", () => {

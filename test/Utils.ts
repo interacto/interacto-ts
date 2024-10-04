@@ -14,7 +14,7 @@
 
 // This files contains helper routines for testing the library.
 
-import { expect, jest } from "@jest/globals";
+import {expect, jest} from "@jest/globals";
 import type {TouchData} from "../src/api/interaction/TouchData";
 
 /**

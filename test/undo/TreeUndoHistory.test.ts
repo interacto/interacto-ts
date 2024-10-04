@@ -13,8 +13,8 @@
  */
 
 import {TreeUndoHistoryImpl} from "../../src/impl/undo/TreeUndoHistoryImpl";
-import { afterEach, beforeEach, describe, expect, jest, test } from "@jest/globals";
-import {mock } from "jest-mock-extended";
+import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
+import {mock} from "jest-mock-extended";
 import {TestScheduler} from "rxjs/testing";
 import type {TreeUndoHistory} from "../../src/api/undo/TreeUndoHistory";
 import type {Undoable} from "../../src/api/undo/Undoable";
@@ -55,7 +55,7 @@ describe("using a tree undo history", () => {
 
         test("option considersEqualCmds not activated", () => {
             expect(history.considersEqualCmds).toBeFalsy();
-        })
+        });
 
         test("initial history is empty", () => {
             expect(history.undoableNodes).toHaveLength(0);
@@ -242,7 +242,7 @@ describe("using a tree undo history", () => {
                         "b": () => history.add(undoable1),
                         "c": () => history.add(undoable2),
                         "d": () => history.goTo(-1),
-                        "e": () => history.goTo(2),
+                        "e": () => history.goTo(2)
                     }).subscribe(v => {
                         v();
                     });
@@ -997,7 +997,7 @@ describe("using a tree undo history", () => {
 
         test("option considersEqualCmds activated", () => {
             expect(history.considersEqualCmds).toBeTruthy();
-        })
+        });
 
         test("does not create a new branch", () => {
             history.add(undoableC);

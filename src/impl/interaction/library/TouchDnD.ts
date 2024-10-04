@@ -120,7 +120,7 @@ export class TouchDnDFSM extends FSMImpl {
                     const touch = event.changedTouches[0]!;
                     const tgt = document.elementFromPoint(touch.clientX, touch.clientY);
                     return touch.identifier === this.touchID &&
-                    (!(tgt instanceof Element) || !tgt.classList.contains("ioDwellSpring"));
+                      (!(tgt instanceof Element) || !tgt.classList.contains("ioDwellSpring"));
                 });
 
             new TouchTransition(this.moved, this.cancelled, "touchend", undefined,

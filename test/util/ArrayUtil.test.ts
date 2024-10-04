@@ -13,7 +13,7 @@
  */
 
 import {remove, removeAt} from "../../src/impl/util/ArrayUtil";
-import { beforeEach, describe, expect, test } from "@jest/globals";
+import {beforeEach, describe, expect, test} from "@jest/globals";
 
 describe("using a array util", () => {
     let arr: Array<string>;

@@ -39,7 +39,7 @@ export function twoHPan(logger: Logger, pxTolerance: number, minLength?: number,
         new TwoPanDataImpl(), name, undefined, true))
         .firstAndThen(data => data.isHorizontal(pxTolerance))
         .end(data => (minLength === undefined || Math.abs(data.diffScreenX) >= minLength) &&
-                    (minVelocity === undefined || data.velocity("horiz") >= minVelocity))
+          (minVelocity === undefined || data.velocity("horiz") >= minVelocity))
         .name(twoHPan.name)
         .build();
 }
@@ -58,7 +58,7 @@ export function twoVPan(logger: Logger, pxTolerance: number, minLength?: number,
         new TwoPanDataImpl(), name, undefined, true))
         .firstAndThen(data => data.isVertical(pxTolerance))
         .end(data => (minLength === undefined || Math.abs(data.diffScreenY) >= minLength) &&
-                    (minVelocity === undefined || data.velocity("horiz") >= minVelocity))
+          (minVelocity === undefined || data.velocity("horiz") >= minVelocity))
         .name(twoVPan.name)
         .build();
 }
@@ -77,7 +77,7 @@ export function twoLeftPan(logger: Logger, pxTolerance: number, minLength?: numb
         new TwoPanDataImpl(), name, undefined, true))
         .firstAndThen(data => data.isLeft(pxTolerance))
         .end(data => (minLength === undefined || Math.abs(data.diffScreenX) >= minLength) &&
-                    (minVelocity === undefined || data.velocity("horiz") >= minVelocity))
+          (minVelocity === undefined || data.velocity("horiz") >= minVelocity))
         .name(twoLeftPan.name)
         .build();
 }
@@ -96,7 +96,7 @@ export function twoRightPan(logger: Logger, pxTolerance: number, minLength?: num
         new TwoPanDataImpl(), name, undefined, true))
         .firstAndThen(data => data.isRight(pxTolerance))
         .end(data => (minLength === undefined || Math.abs(data.diffScreenX) >= minLength) &&
-                    (minVelocity === undefined || data.velocity("horiz") >= minVelocity))
+          (minVelocity === undefined || data.velocity("horiz") >= minVelocity))
         .name(twoRightPan.name)
         .build();
 }
@@ -115,7 +115,7 @@ export function twoTopPan(logger: Logger, pxTolerance: number, minLength?: numbe
         new TwoPanDataImpl(), name, undefined, true))
         .firstAndThen(data => data.isTop(pxTolerance))
         .end(data => (minLength === undefined || Math.abs(data.diffScreenY) >= minLength) &&
-                    (minVelocity === undefined || data.velocity("horiz") >= minVelocity))
+          (minVelocity === undefined || data.velocity("horiz") >= minVelocity))
         .name(twoTopPan.name)
         .build();
 }
@@ -134,7 +134,7 @@ export function twoBottomPan(logger: Logger, pxTolerance: number, minLength?: nu
         new TwoPanDataImpl(), name, undefined, true))
         .firstAndThen(data => data.isBottom(pxTolerance))
         .end(data => (minLength === undefined || Math.abs(data.diffScreenY) >= minLength) &&
-            (minVelocity === undefined || data.velocity("horiz") >= minVelocity))
+          (minVelocity === undefined || data.velocity("horiz") >= minVelocity))
         .name(twoBottomPan.name)
         .build();
 }

@@ -13,7 +13,7 @@
  */
 
 import {CancellingState} from "../../src/impl/fsm/CancellingState";
-import { beforeEach, describe, expect, jest, test } from "@jest/globals";
+import {beforeEach, describe, expect, jest, test} from "@jest/globals";
 import {mock} from "jest-mock-extended";
 import type {OutputState} from "../../src/api/fsm/OutputState";
 import type {VisitorFSM} from "../../src/api/fsm/VisitorFSM";

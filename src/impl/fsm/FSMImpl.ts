@@ -127,7 +127,7 @@ export class FSMImpl implements FSM {
 
         // Recycling events
         if (processed && isKeyDownEvent(event) && !(this._currentState instanceof InitState) &&
-            !this.eventsToProcess.some(evt => isKeyDownEvent(evt) && evt.code === event.code)) {
+          !this.eventsToProcess.some(evt => isKeyDownEvent(evt) && evt.code === event.code)) {
             this.addRemaningEventsToProcess(event);
         }
 

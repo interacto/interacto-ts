@@ -13,7 +13,7 @@
  */
 
 import {PointDataImpl} from "../../src/impl/interaction/PointDataImpl";
-import { beforeEach, describe, expect, test } from "@jest/globals";
+import {beforeEach, describe, expect, test} from "@jest/globals";
 import type {PointData} from "../../src/api/interaction/PointData";
 
 describe("using a point data", () => {

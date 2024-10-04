@@ -96,10 +96,10 @@ export class CheckerImpl implements Checker {
                       binds: ReadonlyArray<Binding<Command, Interaction<object>, unknown>>,
                       predicate: (b: Binding<Command, Interaction<object>, unknown>) => boolean, msg: string): void {
         if (severity !== "ignore" && !binding.isWhenDefined() &&
-            binds
-                .filter(currBinding => currBinding.linterRules.get(ruleName) !== "ignore" && !currBinding.isWhenDefined())
-                .some(currBinding => predicate(currBinding) &&
-                    this.isWidgetSetsIntersecting(binding.interaction.registeredNodes, currBinding.interaction.registeredNodes))
+          binds
+              .filter(currBinding => currBinding.linterRules.get(ruleName) !== "ignore" && !currBinding.isWhenDefined())
+              .some(currBinding => predicate(currBinding) &&
+                this.isWidgetSetsIntersecting(binding.interaction.registeredNodes, currBinding.interaction.registeredNodes))
         ) {
             this.printLinterMsg(severity, msg);
         }

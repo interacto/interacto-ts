@@ -15,7 +15,7 @@
 import {UpdateBinder} from "../../src/impl/binder/UpdateBinder";
 import {MouseDown} from "../../src/impl/interaction/library/MouseDown";
 import {UndoHistoryImpl} from "../../src/impl/undo/UndoHistoryImpl";
-import { afterEach, beforeEach, describe, expect, test, jest } from "@jest/globals";
+import {afterEach, beforeEach, describe, expect, test, jest} from "@jest/globals";
 import {mock} from "jest-mock-extended";
 import type {BindingsObserver} from "../../src/api/binding/BindingsObserver";
 import type {Command} from "../../src/api/command/Command";

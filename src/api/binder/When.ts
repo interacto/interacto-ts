@@ -22,17 +22,17 @@
  */
 export type WhenType =
 /** The predicate will be executed at the end and will cancel the binding execution if not fulfilled. */
-"end" |
+  "end" |
 /** The predicate will be executed at start/then/end without cancelling the binding execution. */
-"nonStrict" |
+  "nonStrict" |
 /** The predicate will be executed at start/then/end and will cancel the binding execution if not fulfilled. */
-"strict" |
+  "strict" |
 /** The predicate will be executed at start and will cancel the binding execution if not fulfilled. */
-"strictStart" |
+  "strictStart" |
 /** The predicate will be executed at start and at each update and will cancel the binding execution if not fulfilled. */
-"strictThen" |
+  "strictThen" |
 /** The predicate will be executed at start and at each update without cancelling the binding execution. */
-"then";
+  "then";
 
 /**
  * States whether the WhenType concerns the beginning of a binding execution (at start).

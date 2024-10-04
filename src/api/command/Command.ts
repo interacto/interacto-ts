@@ -73,12 +73,12 @@ export interface Command {
  */
 export type CmdStatus =
 /** When the command has been cancelled. */
-"cancelled" |
+  "cancelled" |
 /** When the command is created but not executed yet. */
-"created" |
+  "created" |
 /** When the command has been marked as done. */
-"done" |
+  "done" |
 /** When the command has been created and executed one time. */
-"executed" |
+  "executed" |
 /** The command has been flushed. In this case, the command must not be used anymore. */
-"flushed";
+  "flushed";

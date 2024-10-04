@@ -84,7 +84,7 @@ export class UsageLog {
     public toString(): string {
         const withversion = this.frontVersion === undefined ? "" : ` v:${this.frontVersion}`;
         return `Usage.${withversion} id:${this.sessionID} binding:${this.name} ` +
-            `date:${this.date.toString()} duration:${this.duration.toString()} cancelled:${String(this.cancelled)}`;
+          `date:${this.date.toString()} duration:${this.duration.toString()} cancelled:${String(this.cancelled)}`;
     }
 }
 

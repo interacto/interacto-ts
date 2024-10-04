@@ -13,7 +13,7 @@
  */
 
 import {UndoHistoryImpl} from "../../src/impl/undo/UndoHistoryImpl";
-import { beforeEach, describe, expect, jest, test } from "@jest/globals";
+import {beforeEach, describe, expect, jest, test} from "@jest/globals";
 import {mock} from "jest-mock-extended";
 import type {Undoable} from "../../src/api/undo/Undoable";
 import type {UndoHistory} from "../../src/api/undo/UndoHistory";
@@ -36,7 +36,7 @@ describe("using an undo history", () => {
 
     test("option considersEqualCmds not activated", () => {
         expect(history.considersEqualCmds).toBeFalsy();
-    })
+    });
 
     test("undo called", () => {
         history.add(undoable);
@@ -323,7 +323,7 @@ describe("using an undo history", () => {
 
         test("option considersEqualCmds activated", () => {
             expect(history.considersEqualCmds).toBeTruthy();
-        })
+        });
 
         test("does a redo if equal command", () => {
             // A *B C D

@@ -13,7 +13,7 @@
  */
 
 import {RedoNTimes} from "../../../src/impl/command/library/RedoNTimes";
-import { beforeEach, describe, expect, test } from "@jest/globals";
+import {beforeEach, describe, expect, test} from "@jest/globals";
 import {mock} from "jest-mock-extended";
 import type {Undoable} from "../../../src/api/undo/Undoable";
 import type {UndoHistory} from "../../../src/api/undo/UndoHistory";

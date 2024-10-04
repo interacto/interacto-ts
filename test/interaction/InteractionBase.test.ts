@@ -20,7 +20,7 @@ import {MouseTransition} from "../../src/impl/fsm/MouseTransition";
 import {StdState} from "../../src/impl/fsm/StdState";
 import {TransitionBase} from "../../src/impl/fsm/TransitionBase";
 import {flushPromises} from "../Utils";
-import { afterEach, beforeEach, describe, expect, jest, test } from "@jest/globals";
+import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
 import {mock} from "jest-mock-extended";
 import {Subject} from "rxjs";
 import type {MouseEventForTest} from "./StubEvents";

@@ -18,7 +18,7 @@ import {CommandBase} from "../../src/impl/command/CommandBase";
 import {UndoHistoryImpl} from "../../src/impl/undo/UndoHistoryImpl";
 import {robot} from "../interaction/StubEvents";
 import {flushPromises} from "../Utils";
-import { afterEach, beforeEach, describe, expect, test, jest } from "@jest/globals";
+import {afterEach, beforeEach, describe, expect, test, jest} from "@jest/globals";
 import {Subject} from "rxjs";
 import type {Binding} from "../../src/api/binding/Binding";
 import type {Bindings} from "../../src/api/binding/Bindings";

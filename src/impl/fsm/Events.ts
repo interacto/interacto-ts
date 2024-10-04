@@ -106,7 +106,7 @@ export function isHyperLink(target: EventTarget): target is HTMLAnchorElement {
  */
 export function isTextInput(target: EventTarget): target is HTMLInputElement | HTMLTextAreaElement {
     return (target instanceof HTMLInputElement && target.getAttribute("type") === "text") ||
-        target instanceof HTMLTextAreaElement;
+      target instanceof HTMLTextAreaElement;
 }
 
 /**

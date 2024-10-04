@@ -11,9 +11,9 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { BindingsContext, BindingsImpl, UndoHistoryImpl} from "../../src/interacto";
+import {BindingsContext, BindingsImpl, UndoHistoryImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
-import { afterEach, beforeEach, describe, expect, jest, test } from "@jest/globals";
+import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
 import {robot} from "interacto-nono";
 import type {Binding, Interaction, InteractionBase, UndoHistoryBase, MultiTouch, Bindings, Flushable} from "../../src/interacto";
 

@@ -71,7 +71,7 @@ export class TransferArrayItem<T> extends UndoableCommand {
 
     public override canExecute(): boolean {
         return (this._srcIndex >= 0 && this._srcIndex < this._srcArray.length) &&
-            (this._tgtIndex >= 0 && this._tgtIndex <= this._tgtArray.length);
+          (this._tgtIndex >= 0 && this._tgtIndex <= this._tgtArray.length);
     }
 
     public override getUndoName(): string {

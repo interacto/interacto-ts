@@ -14,7 +14,7 @@
  */
 
 import {SetProperties} from "../../../src/impl/command/library/SetProperties";
-import { beforeEach, describe, expect, test } from "@jest/globals";
+import {beforeEach, describe, expect, test} from "@jest/globals";
 
 class SecondStubSetProp {
     public val: Array<number> = [];

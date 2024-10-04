@@ -14,7 +14,7 @@
 
 import {StubTransitionOK} from "./StubTransitionOk";
 import {StdState} from "../../src/impl/fsm/StdState";
-import { beforeEach, describe, expect, test } from "@jest/globals";
+import {beforeEach, describe, expect, test} from "@jest/globals";
 import {mock} from "jest-mock-extended";
 import type {VisitorFSM} from "../../src/api/fsm/VisitorFSM";
 import type {FSMImpl} from "../../src/impl/fsm/FSMImpl";

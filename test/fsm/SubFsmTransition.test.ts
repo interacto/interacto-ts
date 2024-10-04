@@ -15,7 +15,7 @@
 import {SubStubTransition1} from "./StubTransitionOk";
 import {FSMImpl, SubFSMTransition} from "../../src/interacto";
 import {createMouseEvent} from "../interaction/StubEvents";
-import { beforeEach, describe, expect, jest, test } from "@jest/globals";
+import {beforeEach, describe, expect, jest, test} from "@jest/globals";
 import {mock} from "jest-mock-extended";
 import type {InputState, Logger, Transition, StdState, TerminalState, EventType} from "../../src/interacto";
 

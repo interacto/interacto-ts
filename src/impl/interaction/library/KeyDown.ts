@@ -39,7 +39,7 @@ export class KeyDownFSM extends FSMImpl {
 
         new KeyTransition(this.initState, this.addTerminalState("pressed"), "keydown", action,
             (evt: KeyboardEvent): boolean => (key === undefined || key === evt.code) &&
-                (this.modifiersAccepted || (!evt.altKey && !evt.ctrlKey && !evt.shiftKey && !evt.metaKey)));
+              (this.modifiersAccepted || (!evt.altKey && !evt.ctrlKey && !evt.shiftKey && !evt.metaKey)));
     }
 }
 

@@ -13,7 +13,7 @@
  */
 
 import {ScaleTouchDataImpl} from "../../src/impl/interaction/ScaleTouchDataImpl";
-import { beforeEach, describe, expect, test } from "@jest/globals";
+import {beforeEach, describe, expect, test} from "@jest/globals";
 import type {EventModifierData, UnitInteractionData} from "../../src/interacto";
 
 describe("using a scale touch data", () => {

@@ -82,7 +82,7 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, A, D extend
             }
 
             return (this.keysOrCodes.length === 0 || this.keysOrCodes.length === currentKeys.length &&
-                    currentKeys.every((key: string) => this.keysOrCodes.includes(key)));
+              currentKeys.every((key: string) => this.keysOrCodes.includes(key)));
         };
 
         this.whenFnArray.push({

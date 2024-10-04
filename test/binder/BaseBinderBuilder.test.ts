@@ -13,7 +13,7 @@
  */
 
 import {isEltRef} from "../../src/api/binder/BaseBinderBuilder";
-import { describe, expect, test } from "@jest/globals";
+import {describe, expect, test} from "@jest/globals";
 
 describe("using a base binder builder", () => {
     test("undefined is not eltref", () => {

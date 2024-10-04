@@ -13,7 +13,7 @@
  */
 
 import {ScrollDataImpl} from "../../src/impl/interaction/ScrollDataImpl";
-import { beforeEach, describe, expect, jest, test } from "@jest/globals";
+import {beforeEach, describe, expect, jest, test} from "@jest/globals";
 
 describe("using a scroll data", () => {
     let data: ScrollDataImpl;

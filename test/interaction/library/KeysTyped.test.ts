@@ -13,7 +13,7 @@
  */
 
 import {KeysDataImpl, KeysTyped} from "../../../src/interacto";
-import { beforeEach, describe, expect, jest, test } from "@jest/globals";
+import {beforeEach, describe, expect, jest, test} from "@jest/globals";
 import {robot} from "interacto-nono";
 import {mock} from "jest-mock-extended";
 import type {FSMHandler, KeyData, Logger} from "../../../src/interacto";

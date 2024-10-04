@@ -15,7 +15,7 @@
 import {BindingImpl, FSMImpl, MustBeUndoableCmdError, UndoHistoryImpl} from "../../src/interacto";
 import {StubCmd, StubUndoableCmd} from "../command/StubCmd";
 import {InteractionStub} from "../interaction/InteractionStub";
-import { afterEach, beforeEach, describe, expect, jest, test } from "@jest/globals";
+import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
 import {mock} from "jest-mock-extended";
 import type {Logger} from "../../src/api/logging/Logger";
 import type {Undoable, UndoHistory, VisitorBinding} from "../../src/interacto";

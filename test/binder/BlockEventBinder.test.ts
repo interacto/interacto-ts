@@ -14,7 +14,7 @@
 import {BindingsImpl, MouseDown, UndoHistoryImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {createKeyEvent, createMouseEvent} from "../interaction/StubEvents";
-import { afterEach, beforeEach, describe, expect, test } from "@jest/globals";
+import {afterEach, beforeEach, describe, expect, test} from "@jest/globals";
 import {mock} from "jest-mock-extended";
 import type {Bindings} from "../../src/api/binding/Bindings";
 import type {Binding, UndoHistoryBase, Logger} from "../../src/interacto";

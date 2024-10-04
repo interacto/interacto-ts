@@ -21,7 +21,7 @@ import {
 import {StubCmd} from "../command/StubCmd";
 import {InteractionStub} from "../interaction/InteractionStub";
 import {createMouseEvent} from "../interaction/StubEvents";
-import { afterEach, beforeEach, describe, expect, jest, test } from "@jest/globals";
+import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
 import {mock} from "jest-mock-extended";
 import type {FSM, Logger, UndoHistory} from "../../src/interacto";
 

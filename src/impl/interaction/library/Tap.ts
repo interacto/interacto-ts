@@ -27,7 +27,9 @@ import type {StdState} from "../../fsm/StdState";
  */
 export class TapFSM extends FSMImpl {
     protected readonly downState: StdState;
+
     protected readonly cancelState: CancellingState;
+
     private touchID?: number;
 
     /**

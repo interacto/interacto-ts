@@ -15,7 +15,7 @@
 import {BindingsContext, BindingsImpl, UndoHistoryImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {robot} from "../interaction/StubEvents";
-import { afterEach, beforeEach, describe, expect, jest, test } from "@jest/globals";
+import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
 import {mock} from "jest-mock-extended";
 import type {Binding, Bindings, FSMHandler, Interaction, SrcTgtPointsData, TouchData, UndoHistoryBase} from "../../src/interacto";
 

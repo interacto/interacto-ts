@@ -15,7 +15,7 @@
 import {BindingsContext} from "../../src/impl/binding/BindingsContext";
 import {BindingsImpl, UndoHistoryImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
-import { afterEach, beforeEach, describe, expect, jest, test } from "@jest/globals";
+import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
 import {robot} from "interacto-nono";
 import type {Bindings} from "../../src/api/binding/Bindings";
 import type {UndoHistoryBase} from "../../src/interacto";

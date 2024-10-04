@@ -18,7 +18,7 @@ import {
     isTextInput, KeyCode, getTouch
 } from "../../src/interacto";
 import {createKeyEvent, createTouchEvent} from "../interaction/StubEvents";
-import { beforeEach, describe, expect, test } from "@jest/globals";
+import {beforeEach, describe, expect, test} from "@jest/globals";
 
 describe("checking getTouch", () => {
     let touches: TouchList;
