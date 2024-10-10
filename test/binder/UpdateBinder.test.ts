@@ -12,16 +12,10 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {UpdateBinder} from "../../src/impl/binder/UpdateBinder";
-import {MouseDown} from "../../src/impl/interaction/library/MouseDown";
-import {UndoHistoryImpl} from "../../src/impl/undo/UndoHistoryImpl";
+import {UndoHistoryImpl, UpdateBinder, MouseDown} from "../../src/interacto";
 import {afterEach, beforeEach, describe, expect, test, jest} from "@jest/globals";
 import {mock} from "jest-mock-extended";
-import type {BindingsObserver} from "../../src/api/binding/BindingsObserver";
-import type {Command} from "../../src/api/command/Command";
-import type {Interaction} from "../../src/api/interaction/Interaction";
-import type {Logger} from "../../src/api/logging/Logger";
-import type {UndoHistory} from "../../src/api/undo/UndoHistory";
+import type {Command, Interaction, UndoHistory, Logger, BindingsObserver} from "../../src/interacto";
 
 describe("using an update binder", () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

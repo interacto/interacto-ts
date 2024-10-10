@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {isEltRef} from "../../src/api/binder/BaseBinderBuilder";
+import {isEltRef} from "../../src/interacto";
 import {describe, expect, test} from "@jest/globals";
 
 describe("using a base binder builder", () => {

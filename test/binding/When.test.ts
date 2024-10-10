@@ -12,7 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {isWhenAtEnd, isWhenAtStart, isWhenAtThen, isWhenStrict} from "../../src/api/binder/When";
+import {isWhenAtEnd, isWhenAtStart, isWhenAtThen, isWhenStrict} from "../../src/interacto";
 import {describe, expect, test} from "@jest/globals";
 
 describe("test WhenType", () => {

@@ -11,14 +11,11 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import {BindingsContext} from "../../src/impl/binding/BindingsContext";
-import {BindingsImpl, UndoHistoryImpl} from "../../src/interacto";
+import {BindingsContext, BindingsImpl, UndoHistoryImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {robot} from "../interaction/StubEvents";
 import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
-import type {Bindings} from "../../src/api/binding/Bindings";
-import type {Flushable} from "../../src/impl/interaction/Flushable";
-import type {Binding, Interaction, InteractionBase, UndoHistoryBase} from "../../src/interacto";
+import type {Binding, Interaction, InteractionBase, UndoHistoryBase, Bindings, Flushable} from "../../src/interacto";
 
 let binding: Binding<StubCmd, Interaction<object>, unknown> | undefined;
 let cmd: StubCmd;

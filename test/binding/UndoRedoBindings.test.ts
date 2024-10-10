@@ -1,14 +1,22 @@
-import {BindingsContext} from "../../src/impl/binding/BindingsContext";
-import {BindingsImpl} from "../../src/impl/binding/BindingsImpl";
-import {Redo} from "../../src/impl/command/library/Redo";
-import {Undo} from "../../src/impl/command/library/Undo";
-import {UndoHistoryImpl} from "../../src/impl/undo/UndoHistoryImpl";
+/*
+ * This file is part of Interacto.
+ * Interacto is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General export function License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * Interacto is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General export function License for more details.
+ * You should have received a copy of the GNU General export function License
+ * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+import {BindingsContext, BindingsImpl, Redo, Undo, UndoHistoryImpl} from "../../src/interacto";
 import {robot} from "../interaction/StubEvents";
 import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
 import {mock} from "jest-mock-extended";
-import type {Bindings} from "../../src/api/binding/Bindings";
-import type {Undoable} from "../../src/api/undo/Undoable";
-import type {UndoHistoryBase} from "../../src/api/undo/UndoHistoryBase";
+import type {Bindings, Undoable, UndoHistoryBase} from "../../src/interacto";
 import type {MockProxy} from "jest-mock-extended";
 
 let bundo: HTMLButtonElement;

@@ -11,13 +11,12 @@
  * You should have received a copy of the GNU General export function License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import {BindingsContext} from "../../src/impl/binding/BindingsContext";
-import {BindingsImpl, SpinnerChangedFSM, UndoHistoryImpl} from "../../src/interacto";
+
+import {BindingsContext, BindingsImpl, SpinnerChangedFSM, UndoHistoryImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
 import {robot} from "interacto-nono";
-import type {Bindings} from "../../src/api/binding/Bindings";
-import type {Binding, Interaction, WidgetData, UndoHistoryBase} from "../../src/interacto";
+import type {Binding, Interaction, WidgetData, UndoHistoryBase, Bindings} from "../../src/interacto";
 
 let widget1: HTMLInputElement;
 let widget2: HTMLInputElement;

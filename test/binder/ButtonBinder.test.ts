@@ -12,12 +12,10 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {BindingsContext} from "../../src/impl/binding/BindingsContext";
-import {BindingsImpl, UndoHistoryImpl} from "../../src/interacto";
+import {BindingsContext, BindingsImpl, UndoHistoryImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
-import type {Bindings} from "../../src/api/binding/Bindings";
-import type {Binding, EltRef, Interaction, UndoHistoryBase} from "../../src/interacto";
+import type {Binding, EltRef, Interaction, UndoHistoryBase, Bindings} from "../../src/interacto";
 
 let button1: HTMLButtonElement;
 let button2: HTMLButtonElement;
