@@ -1008,7 +1008,6 @@ describe("using bindings", () => {
                     throw err;
                 })
                 .catch(() => {
-                    // eslint-disable-next-line no-throw-literal
                     throw "YOLO";
                 })
                 .bind();
@@ -1026,7 +1025,6 @@ describe("using bindings", () => {
         test("when it crashes in 'first' with not an error", () => {
             baseBinder
                 .first((_c: StubCmd, _i: SrcTgtPointsData<TouchData>) => {
-                    // eslint-disable-next-line no-throw-literal
                     throw 42;
                 })
                 .bind();
@@ -1081,7 +1079,6 @@ describe("using bindings", () => {
         test("when it crashes in 'then' with not an error", () => {
             baseBinder
                 .then((_c: StubCmd, _i: SrcTgtPointsData<TouchData>) => {
-                    // eslint-disable-next-line no-throw-literal
                     throw "foo";
                 })
                 .bind();
@@ -1136,7 +1133,6 @@ describe("using bindings", () => {
         test("when it crashes in 'end' with not an error", () => {
             baseBinder
                 .end(() => {
-                    // eslint-disable-next-line no-throw-literal
                     throw 21;
                 })
                 .bind();
@@ -1191,7 +1187,6 @@ describe("using bindings", () => {
         test("when it crashes in 'endOrCancel' with not an error", () => {
             baseBinder
                 .endOrCancel((_i: SrcTgtPointsData<TouchData>) => {
-                    // eslint-disable-next-line no-throw-literal
                     throw true;
                 })
                 .bind();
@@ -1250,7 +1245,6 @@ describe("using bindings", () => {
                 .on(elt)
                 .toProduce((_i: SrcTgtPointsData<PointData>) => new StubCmd(true))
                 .cancel(() => {
-                    // eslint-disable-next-line no-throw-literal
                     throw "bar";
                 })
                 .bind();
@@ -1307,7 +1301,6 @@ describe("using bindings", () => {
             jest.spyOn(cmd, "hadEffect").mockReturnValue(false);
             baseBinder
                 .ifHadNoEffect(() => {
-                    // eslint-disable-next-line no-throw-literal
                     throw 11;
                 })
                 .bind();
@@ -1365,7 +1358,6 @@ describe("using bindings", () => {
             jest.spyOn(cmd, "hadEffect").mockReturnValue(true);
             baseBinder
                 .ifHadEffects(() => {
-                    // eslint-disable-next-line no-throw-literal
                     throw "YOLO";
                 })
                 .bind();
@@ -1419,7 +1411,6 @@ describe("using bindings", () => {
         test("when it crashes in 'when' with not an error", () => {
             baseBinder
                 .when(() => {
-                    // eslint-disable-next-line no-throw-literal
                     throw "msg";
                 })
                 .bind();
@@ -1488,7 +1479,6 @@ describe("using bindings", () => {
             cmd = new StubCmd(false);
             baseBinder
                 .ifCannotExecute(() => {
-                    // eslint-disable-next-line no-throw-literal
                     throw 1;
                 })
                 .bind();

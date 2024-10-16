@@ -206,7 +206,6 @@ implements Binding<C, I, A, D> {
     /**
      * Updates the current command. To override.
      */
-    // eslint-disable-next-line unicorn/no-thenable
     public then(): void {
         // To override.
     }

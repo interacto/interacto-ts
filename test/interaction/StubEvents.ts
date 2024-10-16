@@ -241,7 +241,6 @@ export function createEventWithTarget(target: EventTarget | null, type: string):
         "eventPhase": 0,
         "isTrusted": false,
         "returnValue": false,
-        // eslint-disable-next-line unicorn/no-null
         "srcElement": null,
         "timeStamp": 0,
         type,

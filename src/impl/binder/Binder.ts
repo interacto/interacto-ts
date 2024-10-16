@@ -156,7 +156,6 @@ implements CmdBinder<C>, InteractionBinder<I, A, D>, InteractionCmdBinder<C, I, 
     }
 
     public on<W>(widget: ReadonlyArray<Widget<W>> | Widget<W>, ...widgets: ReadonlyArray<Widget<W>>): Binder<C, I, A, D> {
-        // eslint-disable-next-line unicorn/prefer-spread
         const ws = Array
             .from(widgets)
             .concat(widget)
@@ -166,7 +165,6 @@ implements CmdBinder<C>, InteractionBinder<I, A, D>, InteractionCmdBinder<C, I, 
                 }
                 return currWidget;
             });
-        // eslint-disable-next-line unicorn/prefer-spread
         const currWidget: ReadonlyArray<unknown> = this.widgets.length === 0 ? ws : Array.from(this.widgets).concat(ws);
         const dup = this.duplicate();
         dup.widgets = currWidget;
@@ -176,7 +174,6 @@ implements CmdBinder<C>, InteractionBinder<I, A, D>, InteractionCmdBinder<C, I, 
     public onDynamic(node: Widget<Node>): Binder<C, I, A, D> {
         const dup = this.duplicate();
         const nodeEvt = isEltRef(node) ? node.nativeElement : node;
-        // eslint-disable-next-line unicorn/prefer-spread
         dup.dynamicNodes = Array.from(this.dynamicNodes).concat(nodeEvt);
         return dup;
     }

@@ -254,7 +254,6 @@ describe("using a binding", () => {
             jest.spyOn(binding, "endOrCancel");
             binding.whenStartOK = true;
             binding.interaction.fsm.onStarting();
-            // eslint-disable-next-line no-unused-expressions
             binding.command?.done();
             expect(() => {
                 binding.interaction.fsm.onCancelling();
@@ -517,7 +516,6 @@ describe("using a binding", () => {
 
         test("execute crash with not an error", () => {
             const supplier = (): StubCmd => {
-                // eslint-disable-next-line no-throw-literal
                 throw "yolo";
             };
 

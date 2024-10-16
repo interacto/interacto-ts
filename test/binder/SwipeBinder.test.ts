@@ -1,4 +1,3 @@
-/* eslint-disable jest/no-commented-out-tests */
 /*
  * This file is part of Interacto.
  * Interacto is free software: you can redistribute it and/or modify

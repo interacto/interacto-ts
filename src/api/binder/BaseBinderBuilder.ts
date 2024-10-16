@@ -36,7 +36,6 @@ export function isEltRef(obj: unknown): obj is EltRef<EventTarget> {
     if (obj === undefined || obj === null) {
         return false;
     }
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     return (obj as EltRef<unknown>).nativeElement instanceof EventTarget;
 }
 

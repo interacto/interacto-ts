@@ -107,7 +107,6 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, A, D exten
         }
     }
 
-    // eslint-disable-next-line unicorn/no-thenable
     public override then(): void {
         const cmd = this.command;
         if (this.thenFn !== undefined && cmd !== undefined) {

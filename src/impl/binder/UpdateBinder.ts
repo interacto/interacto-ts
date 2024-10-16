@@ -85,7 +85,6 @@ export class UpdateBinder<C extends Command, I extends Interaction<D>, A, D exte
         };
     }
 
-    // eslint-disable-next-line unicorn/no-thenable
     public then(fn: (c: C, i: D, acc: A) => void): UpdateBinder<C, I, A, D> {
         const dup = this.duplicate();
         dup.thenFnArray.push(fn);

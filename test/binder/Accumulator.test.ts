@@ -116,7 +116,6 @@ describe("testing an accumulator", () => {
                 .end((_c, _i, acc) => {
                     acc.bar = 2;
                 })
-                // eslint-disable-next-line jest/no-conditional-in-test
                 .when((_i, acc) => acc.bar === 0)
                 .on(button1)
                 .bind();

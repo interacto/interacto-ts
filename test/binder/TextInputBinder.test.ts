@@ -43,7 +43,6 @@ describe("using a text input binder", () => {
 
         jest.spyOn(cmd, "execute");
 
-        // eslint-disable-next-line jest/valid-expect-in-promise
         binding = bindings.textInputBinder()
             .toProduce(() => cmd)
             .then((_, i) => {
@@ -68,7 +67,6 @@ describe("using a text input binder", () => {
     });
 
     test("type text create command with a delay of 2 seconds", () => {
-        // eslint-disable-next-line jest/valid-expect-in-promise
         binding = bindings.textInputBinder(2)
             .toProduce(() => cmd)
             .on(txt1)
@@ -92,7 +90,6 @@ describe("using a text input binder", () => {
 
         jest.spyOn(cmd, "execute");
 
-        // eslint-disable-next-line jest/valid-expect-in-promise
         binding = bindings.textInputBinder()
             .toProduce(() => cmd)
             .then((_, i) => {
