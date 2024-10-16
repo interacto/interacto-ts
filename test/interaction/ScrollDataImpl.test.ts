@@ -23,7 +23,7 @@ describe("using a scroll data", () => {
         data = new ScrollDataImpl();
         evt = new UIEvent("mousedown");
 
-        const newWindow = {...window};
+        const newWindow = {...globalThis.window};
         Object.defineProperties(newWindow, {
             "scrollX": {
                 get(): number {
@@ -36,7 +36,7 @@ describe("using a scroll data", () => {
                 }
             }
         });
-        jest.spyOn(global, "window", "get")
+        jest.spyOn(globalThis.global, "window", "get")
             .mockReturnValue(newWindow);
     });
 

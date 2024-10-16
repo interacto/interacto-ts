@@ -145,7 +145,7 @@ describe("using a logger", () => {
             "setRequestHeader": jest.fn()
         };
 
-        jest.spyOn(window, "XMLHttpRequest").mockImplementation(() => xhrMock as XMLHttpRequest);
+        jest.spyOn(globalThis.window, "XMLHttpRequest").mockImplementation(() => xhrMock as XMLHttpRequest);
 
         logger.writeConsole = false;
         logger.serverAddress = "localhost";
@@ -252,7 +252,7 @@ describe("using a logger", () => {
             "setRequestHeader": jest.fn()
         };
 
-        jest.spyOn(window, "XMLHttpRequest").mockImplementation(() => xhrMock as XMLHttpRequest);
+        jest.spyOn(globalThis.window, "XMLHttpRequest").mockImplementation(() => xhrMock as XMLHttpRequest);
         logger.writeConsole = false;
         logger.serverAddress = "yolo";
         logger.logBindingStart("foo3");

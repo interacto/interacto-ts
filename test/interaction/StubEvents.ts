@@ -57,7 +57,7 @@ export function createTouchEvent(type: "touchend" | "touchmove" | "touchstart", 
     const clientXvalue = clientX ?? 0;
     const clientYvalue = clientY ?? 0;
     const evt = new TouchEvent(type, {
-        "view": window,
+        "view": globalThis.window,
         "bubbles": true,
         "cancelable": false,
         "detail": 1,
@@ -147,7 +147,7 @@ export function createMouseEvent(type: "auxclick" | "click" | "mousedown" | "mou
     const clientXvalue = clientX ?? 0;
     const clientYvalue = clientY ?? 0;
     return new MouseEvent(type, {
-        "view": window,
+        "view": globalThis.window,
         "bubbles": true,
         "cancelable": false,
         "detail": 1,
@@ -177,7 +177,7 @@ export function createWheelEvent(type: "wheel",
     const deltaYValue = deltaY ?? 0;
     const deltaZValue = deltaZ ?? 0;
     return new WheelEvent(type, {
-        "view": window,
+        "view": globalThis.window,
         "bubbles": true,
         "cancelable": false,
         "detail": 1,
@@ -202,7 +202,7 @@ export function createKeyEvent(type: "keydown" | "keyup", key = "", code = ""): 
     return new KeyboardEvent(type, {
         "cancelable": false,
         "bubbles": true,
-        "view": window,
+        "view": globalThis.window,
         code,
         key,
         "repeat": false
@@ -214,7 +214,7 @@ export function createUIEvent(type: EventType): UIEvent {
         "detail": 0,
         "bubbles": true,
         "cancelable": false,
-        "view": window
+        "view": globalThis.window
     });
 }
 

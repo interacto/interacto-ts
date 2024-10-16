@@ -60,7 +60,7 @@ export class DwellSpringAnimation {
             }
         } else {
             clearInterval(this.interval);
-            this.interval = window.setInterval(() => {
+            this.interval = globalThis.window.setInterval(() => {
                 clearInterval(this.interval);
                 this.displaySpring = true;
                 this.positionSpring = {

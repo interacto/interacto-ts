@@ -20,7 +20,7 @@
  */
 export function remove<T>(array: Array<T>, elt: T): void {
     const index = array.indexOf(elt);
-    if (index > -1) {
+    if (index !== -1) {
         array.splice(index, 1);
     }
 }

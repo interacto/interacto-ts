@@ -68,7 +68,7 @@ export class TimeoutTransition extends TransitionBase<Event> {
                 return;
             }
 
-            this.timeoutThread = window.setTimeout(() => {
+            this.timeoutThread = globalThis.window.setTimeout(() => {
                 try {
                     this.timeouted = true;
                     this.src.fsm.onTimeout();
