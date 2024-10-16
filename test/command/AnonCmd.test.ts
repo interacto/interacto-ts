@@ -13,7 +13,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {AnonCmd} from "../../src/impl/command/AnonCmd";
+import {AnonCmd} from "../../src/interacto";
 import {describe, expect, jest, test} from "@jest/globals";
 
 describe("using an anon command", () => {

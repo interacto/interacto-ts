@@ -12,19 +12,21 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {BindingsContext} from "../../src/impl/binding/BindingsContext";
-import {BindingsImpl} from "../../src/impl/binding/BindingsImpl";
-import {CommandBase} from "../../src/impl/command/CommandBase";
-import {UndoHistoryImpl} from "../../src/impl/undo/UndoHistoryImpl";
+import {
+    BindingsContext,
+    BindingsImpl,
+    CommandBase,
+    UndoHistoryImpl
+} from "../../src/interacto";
 import {robot} from "../interaction/StubEvents";
 import {flushPromises} from "../Utils";
 import {afterEach, beforeEach, describe, expect, test, jest} from "@jest/globals";
 import {Subject} from "rxjs";
-import type {Binding} from "../../src/api/binding/Binding";
-import type {Bindings} from "../../src/api/binding/Bindings";
-import type {Interaction} from "../../src/api/interaction/Interaction";
-import type {UndoHistoryBase} from "../../src/api/undo/UndoHistoryBase";
-import type {BindingImpl} from "../../src/impl/binding/BindingImpl";
+import type {Binding,
+    BindingImpl,
+    Bindings,
+    Interaction,
+    UndoHistoryBase} from "../../src/interacto";
 
 class Model {
     public data: Array<string> = ["Foo", "Bar", "Yo"];

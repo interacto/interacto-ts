@@ -12,8 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {CommandBase} from "../../src/impl/command/CommandBase";
-import type {Undoable} from "../../src/api/undo/Undoable";
+import {CommandBase} from "../../src/interacto";
+import type {Undoable} from "../../src/interacto";
 
 export class StubCmd extends CommandBase {
     public candoValue: boolean;

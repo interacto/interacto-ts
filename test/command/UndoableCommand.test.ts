@@ -13,7 +13,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {UndoableCommand} from "../../src/impl/command/UndoableCommand";
+import {UndoableCommand} from "../../src/interacto";
 import {beforeEach, describe, expect, test} from "@jest/globals";
 
 let cmd: UndoableCommand;

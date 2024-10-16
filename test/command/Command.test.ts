@@ -1,4 +1,3 @@
-/* eslint-disable unicorn/empty-brace-spaces */
 /*
  * This file is part of Interacto.
  * Interacto is free software: you can redistribute it and/or modify
@@ -12,8 +11,9 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 import {StubCmd} from "./StubCmd";
-import {CommandBase} from "../../src/impl/command/CommandBase";
+import {CommandBase} from "../../src/interacto";
 import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
 
 describe("using a command", () => {
@@ -30,8 +30,7 @@ describe("using a command", () => {
 
     test("cando default", () => {
         const command = new class extends CommandBase {
-            protected execution(): void {
-            }
+            protected execution(): void {}
         }();
 
         expect(command.canExecute()).toBeTruthy();

@@ -13,7 +13,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {SetProperty} from "../../../src/impl/command/library/SetProperty";
+import {SetProperty} from "../../../src/interacto";
 import {beforeEach, describe, expect, test} from "@jest/globals";
 
 class SecondStubSetProp {

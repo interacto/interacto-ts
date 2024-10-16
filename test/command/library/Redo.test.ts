@@ -12,11 +12,10 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {Redo} from "../../../src/impl/command/library/Redo";
+import {Redo} from "../../../src/interacto";
 import {beforeEach, describe, expect, test} from "@jest/globals";
 import {mock} from "jest-mock-extended";
-import type {Undoable} from "../../../src/api/undo/Undoable";
-import type {UndoHistory} from "../../../src/api/undo/UndoHistory";
+import type {Undoable, UndoHistory} from "../../../src/interacto";
 import type {MockProxy} from "jest-mock-extended";
 
 let cmd: Redo;

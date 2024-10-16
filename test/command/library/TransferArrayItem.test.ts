@@ -13,7 +13,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {TransferArrayItem} from "../../../src/impl/command/library/TransferArrayItem";
+import {TransferArrayItem} from "../../../src/interacto";
 import {beforeEach, describe, expect, test} from "@jest/globals";
 
 describe("using a transfer array item command", () => {
