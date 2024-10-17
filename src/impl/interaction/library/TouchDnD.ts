@@ -24,6 +24,30 @@ import type {CancellingState} from "../../fsm/CancellingState";
 import type {StdState} from "../../fsm/StdState";
 
 /**
+ * The data handler for the touch DnD interaction
+ * @category Helper
+ */
+export interface TouchDnDFSMHandler {
+    /**
+     * On a touch
+     * @param event - The event to process.
+     */
+    onTouch(event: TouchEvent): void;
+
+    /**
+     * On a move
+     * @param event - The event to process.
+     */
+    onMove(event: TouchEvent): void;
+
+    /**
+     * On a release
+     * @param event - The event to process.
+     */
+    onRelease(event: TouchEvent): void;
+}
+
+/**
  * The FSM that defines a touch interaction (that works like a DnD)
  * @category FSM
  */
@@ -172,30 +196,6 @@ export class OneTouchDnDFSM extends TouchDnDFSM {
         new TouchTransition(this.moved, this.cancelled, "touchstart", undefined, check);
         new TouchTransition(this.touched, this.cancelled, "touchstart", undefined, check);
     }
-}
-
-/**
- * The data handler for the touch DnD interaction
- * @category Helper
- */
-export interface TouchDnDFSMHandler {
-    /**
-     * On a touch
-     * @param event - The event to process.
-     */
-    onTouch(event: TouchEvent): void;
-
-    /**
-     * On a move
-     * @param event - The event to process.
-     */
-    onMove(event: TouchEvent): void;
-
-    /**
-     * On a release
-     * @param event - The event to process.
-     */
-    onRelease(event: TouchEvent): void;
 }
 
 /**

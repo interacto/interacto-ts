@@ -14,8 +14,6 @@
 
 import {TransitionBase} from "./TransitionBase";
 import type {EventType} from "../../api/fsm/EventType";
-import type {InputState} from "../../api/fsm/InputState";
-import type {OutputState} from "../../api/fsm/OutputState";
 
 /**
  * This transition corresponds to the user moving a mouse wheel or a similar input device.
@@ -23,18 +21,6 @@ import type {OutputState} from "../../api/fsm/OutputState";
  */
 export class WheelTransition extends TransitionBase<WheelEvent> {
     private static readonly acceptedEvents: ReadonlySet<EventType> = new Set(["wheel"]);
-
-    /**
-     * Creates the transition.
-     * @param srcState - The source state of the transition
-     * @param tgtState - The output state of the transition
-     * @param action - The action to execute when going through the transition
-     * @param guard - The guard to fulfil to execute the transition
-     */
-    public constructor(srcState: OutputState, tgtState: InputState,
-                       action?: (evt: WheelEvent) => void, guard?: (evt: WheelEvent) => boolean) {
-        super(srcState, tgtState, action, guard);
-    }
 
     public accept(event: Event): event is WheelEvent {
         return event instanceof WheelEvent && this.getAcceptedEvents().has(event.type as EventType);

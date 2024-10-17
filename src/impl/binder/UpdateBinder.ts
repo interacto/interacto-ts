@@ -32,6 +32,7 @@ import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
  * @typeParam C - The type of the command to produce.
  * @category Binding
  */
+// eslint-disable-next-line no-use-before-define
 export class UpdateBinder<C extends Command, I extends Interaction<D>, A, D extends object = InteractionDataType<I>>
     extends Binder<C, I, A, D> implements CmdUpdateBinder<C>, InteractionCmdUpdateBinder<C, I, A, D> {
 
@@ -171,6 +172,7 @@ export class UpdateBinder<C extends Command, I extends Interaction<D>, A, D exte
         return super.configureRules(ruleName, severity) as UpdateBinder<C, I, A, D>;
     }
 
+    // eslint-disable-next-line no-use-before-define
     public override usingInteraction<I2 extends Interaction<D2>, A2, D2 extends object = InteractionDataType<I2>>
     (fn: () => I2): UpdateBinder<C, I2, A2, D2> {
         return super.usingInteraction(fn) as UpdateBinder<C, I2, A2, D2>;

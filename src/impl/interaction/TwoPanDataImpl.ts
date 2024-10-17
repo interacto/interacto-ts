@@ -20,10 +20,6 @@ import type {LineTouchData} from "../../api/interaction/LineTouchData";
  * @category Interaction Data
  */
 export class TwoPanDataImpl extends TwoTouchDataImpl implements LineTouchData {
-    public constructor() {
-        super();
-    }
-
     public isVertical(pxTolerance: number): boolean {
         return this.isTop(pxTolerance) || this.isBottom(pxTolerance);
     }

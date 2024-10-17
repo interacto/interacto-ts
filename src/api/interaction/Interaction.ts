@@ -16,20 +16,6 @@ import type {VisitorInteraction} from "./VisitorInteraction";
 import type {FSM} from "../fsm/FSM";
 
 /**
- * Infers the interaction data type from an interaction
- * @category API Interaction
- */
-export type InteractionDataType<T> = T extends Interaction<infer D> ? D & object : never;
-
-/**
- * Infers the interaction data types from an array of interactions
- * @category API Interaction
- */
-export type InteractionsDataTypes<A extends Array<Interaction<object>>> = {
-    [K in keyof A]: A[K] extends Interaction<infer T> ? T : never;
-};
-
-/**
  * The concept of user interaction.
  * @typeParam D - The type of the interaction data
  * @category API Interaction
@@ -143,3 +129,17 @@ export interface Interaction<D extends object> {
      */
     acceptVisitor(visitor: VisitorInteraction): void;
 }
+
+/**
+ * Infers the interaction data type from an interaction
+ * @category API Interaction
+ */
+export type InteractionDataType<T> = T extends Interaction<infer D> ? D & object : never;
+
+/**
+ * Infers the interaction data types from an array of interactions
+ * @category API Interaction
+ */
+export type InteractionsDataTypes<A extends Array<Interaction<object>>> = {
+    [K in keyof A]: A[K] extends Interaction<infer T> ? T : never;
+};

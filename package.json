@@ -41,7 +41,6 @@
   "devDependencies": {
     "@commitlint/cli": "19.5.0",
     "@commitlint/config-conventional": "19.5.0",
-    "@eslint/compat": "1.2.0",
     "@eslint/eslintrc": "3.1.0",
     "@eslint/js": "9.12.0",
     "@jest/globals": "29.7.0",
@@ -49,10 +48,9 @@
     "@stryker-mutator/core": "7.3.0",
     "@stryker-mutator/jest-runner": "7.3.0",
     "@stylistic/eslint-plugin": "2.9.0",
+    "@types/eslint__js": "8.42.3",
     "@types/jest": "29.5.13",
     "@types/node": "20.14.10",
-    "@typescript-eslint/eslint-plugin": "8.9.0",
-    "@typescript-eslint/parser": "8.9.0",
     "barrelsby": "2.8.1",
     "eslint": "9.12.0",
     "eslint-plugin-array-func": "4.0.0",
@@ -72,7 +70,8 @@
     "rollup-plugin-esbuild": "6.1.1",
     "ts-jest": "29.2.5",
     "typedoc": "0.26.7",
-    "typescript": "5.5.4"
+    "typescript": "5.5.4",
+    "typescript-eslint": "8.9.0"
   },
   "scripts": {
     "package": "npm run pre-build && npm run build && npm run doc",

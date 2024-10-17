@@ -25,6 +25,7 @@ import type {Logger} from "../../api/logging/Logger";
  * and KeyTyped the one that can cancel the interactions.
  * @category Interaction Library
  */
+// eslint-disable-next-line no-use-before-define
 export class Not<I extends InteractionBase<DI & object, DI & DImpl & Flushable>, N extends Interaction<object>,
     DI = InteractionDataType<I>, DImpl = InteractionDataImplType<I>>
     extends ConcurrentInteraction<DI & object, DI & DImpl & Flushable, NotFSM> {

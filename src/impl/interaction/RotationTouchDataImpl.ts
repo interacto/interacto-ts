@@ -21,10 +21,6 @@ import type {TouchData} from "../../api/interaction/TouchData";
  * @category Interaction Data
  */
 export class RotationTouchDataImpl extends TwoTouchDataImpl implements RotationTouchData {
-    public constructor() {
-        super();
-    }
-
     public get rotationAngle(): number {
         return this.computeAngle(this.t1.src, this.t2.src) - this.computeAngle(this.t1.src, this.t2.tgt);
     }

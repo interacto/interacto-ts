@@ -26,6 +26,7 @@ import type {Observable} from "rxjs";
  * @typeParam D - The interaction data type (infered from the interaction type)
  * @category API Binding
  */
+// eslint-disable-next-line no-use-before-define
 export interface Binding<C extends Command, I extends Interaction<D>, A, D extends object = InteractionDataType<I>> {
     /**
      * The name of the binding

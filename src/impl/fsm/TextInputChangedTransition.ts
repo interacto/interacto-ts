@@ -15,8 +15,6 @@
 import {isTextInput} from "./Events";
 import {TransitionBase} from "./TransitionBase";
 import type {EventType} from "../../api/fsm/EventType";
-import type {InputState} from "../../api/fsm/InputState";
-import type {OutputState} from "../../api/fsm/OutputState";
 
 /**
  * An FSM transition for the different text input HTML element.
@@ -24,18 +22,6 @@ import type {OutputState} from "../../api/fsm/OutputState";
  */
 export class TextInputChangedTransition extends TransitionBase<Event> {
     private static readonly acceptedEvents: ReadonlySet<EventType> = new Set(["input"]);
-
-    /**
-     * Creates the transition.
-     * @param srcState - The source state of the transition
-     * @param tgtState - The output state of the transition
-     * @param action - The action to execute when going through the transition
-     * @param guard - The guard to fulfil to execute the transition
-     */
-    public constructor(srcState: OutputState, tgtState: InputState,
-                       action?: (evt: Event) => void, guard?: (evt: Event) => boolean) {
-        super(srcState, tgtState, action, guard);
-    }
 
     public accept(event: Event): event is Event {
         return event.currentTarget !== null && isTextInput(event.currentTarget);

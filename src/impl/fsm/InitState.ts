@@ -13,7 +13,6 @@
  */
 
 import {OutputStateBase} from "./OutputStateBase";
-import type {FSM} from "../../api/fsm/FSM";
 import type {VisitorFSM} from "../../api/fsm/VisitorFSM";
 
 /**
@@ -22,10 +21,6 @@ import type {VisitorFSM} from "../../api/fsm/VisitorFSM";
  * @category FSM
  */
 export class InitState extends OutputStateBase {
-    public constructor(stateMachine: FSM, stateName: string) {
-        super(stateMachine, stateName);
-    }
-
     public exit(): void {
         this.checkStartingState();
     }

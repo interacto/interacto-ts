@@ -32,6 +32,7 @@ import type {Observable} from "rxjs";
  * @typeParam D - The interaction data type (infered from the interaction type)
  * @category Binding
  */
+// eslint-disable-next-line no-use-before-define
 export class BindingImpl<C extends Command, I extends Interaction<D>, A, D extends object = InteractionDataType<I>>
 implements Binding<C, I, A, D> {
 

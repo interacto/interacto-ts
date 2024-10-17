@@ -45,6 +45,7 @@ export interface CmdUpdateBinder<C extends Command> extends CmdUpdateBinderBuild
 
     end(fn: (c: C) => void): CmdUpdateBinder<C>;
 
+    // eslint-disable-next-line no-use-before-define
     usingInteraction<I extends Interaction<D>, A, D extends object = InteractionDataType<I>>
     (fn: () => I): InteractionCmdUpdateBinder<C, I, A, D>;
 

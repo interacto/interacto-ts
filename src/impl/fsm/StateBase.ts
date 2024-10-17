@@ -30,7 +30,7 @@ export abstract class StateBase implements State {
      * @param stateMachine - The FSM that will contain the state.
      * @param stateName - The name of this state.
      */
-    protected constructor(stateMachine: FSM, stateName: string) {
+    public constructor(stateMachine: FSM, stateName: string) {
         this.fsm = stateMachine;
         this.name = stateName;
     }

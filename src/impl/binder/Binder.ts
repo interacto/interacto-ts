@@ -34,6 +34,7 @@ import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
  * @typeParam I - The type of the user interaction to bind.
  * @category Binding
  */
+// eslint-disable-next-line no-use-before-define
 export abstract class Binder<C extends Command, I extends Interaction<D>, A, D extends object = InteractionDataType<I>>
 implements CmdBinder<C>, InteractionBinder<I, A, D>, InteractionCmdBinder<C, I, A, D> {
 
@@ -253,6 +254,7 @@ implements CmdBinder<C>, InteractionBinder<I, A, D>, InteractionCmdBinder<C, I, 
         return dup;
     }
 
+    // eslint-disable-next-line no-use-before-define
     public usingInteraction<I2 extends Interaction<D2>, A2, D2 extends object = InteractionDataType<I2>>
     (fn: () => I2): Binder<C, I2, A2, D2> {
         const dup = this.duplicate();

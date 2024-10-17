@@ -30,6 +30,7 @@ import type {LogLevel} from "../logging/LogLevel";
  * @typeParam D - The type of the interaction data of the user interaction
  * @category API Binding
  */
+// eslint-disable-next-line no-use-before-define
 export interface InteractionCmdUpdateBinder<C extends Command, I extends Interaction<D>, A, D extends object = InteractionDataType<I>>
     extends InteractionCmdBinder<C, I, A, D>, CmdUpdateBinderBuilder<C>, InteractionUpdateBinderBuilder<I, A, D> {
     /**

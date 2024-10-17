@@ -41,10 +41,6 @@ export class StubCmd extends CommandBase {
 }
 
 export class StubUndoableCmd extends StubCmd implements Undoable {
-    public constructor(candoValue?: boolean) {
-        super(candoValue);
-    }
-
     public getUndoName(): string {
         return "";
     }

@@ -20,13 +20,6 @@ import type {TouchData} from "../../api/interaction/TouchData";
  * @category Interaction Data
  */
 export class TapsDataImpl extends PointsDataImpl<TouchData> {
-    /**
-     * Creates the interaction data
-     */
-    public constructor() {
-        super();
-    }
-
     public get lastId(): number | undefined {
         return this.pointsData.at(-1)?.identifier;
     }

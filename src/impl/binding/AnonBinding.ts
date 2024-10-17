@@ -31,6 +31,7 @@ import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
  * @typeParam D - The interaction data type (infered from the interaction type)
  * @category Binding
  */
+// eslint-disable-next-line no-use-before-define
 export class AnonBinding<C extends Command, I extends Interaction<D>, A, D extends object = InteractionDataType<I>>
     extends BindingImpl<C, I, A, D> {
 

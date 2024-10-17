@@ -20,10 +20,6 @@ import type {ScaleTouchData} from "../../api/interaction/ScaleTouchData";
  * @category Interaction Data
  */
 export class ScaleTouchDataImpl extends TwoTouchDataImpl implements ScaleTouchData {
-    public constructor() {
-        super();
-    }
-
     public scalingRatio(pxTolerance: number): number {
         // 1. Check that there are 2 touches
         const t0 = this.t1;

@@ -13,6 +13,22 @@
  */
 
 /**
+ * Defines the different states of the command.
+ * @category API Command
+ */
+export type CmdStatus =
+    /** When the command has been cancelled. */
+  "cancelled" |
+    /** When the command is created but not executed yet. */
+  "created" |
+    /** When the command has been marked as done. */
+  "done" |
+    /** When the command has been created and executed one time. */
+  "executed" |
+    /** The command has been flushed. In this case, the command must not be used anymore. */
+  "flushed";
+
+/**
  * A command is produced and executed in reaction of a user interaction.
  * It follows the command design pattern.
  * It contains statements to execute to perform the command.
@@ -66,19 +82,3 @@ export interface Command {
      */
     getStatus(): CmdStatus;
 }
-
-/**
- * Defines the different states of the command.
- * @category API Command
- */
-export type CmdStatus =
-/** When the command has been cancelled. */
-  "cancelled" |
-/** When the command is created but not executed yet. */
-  "created" |
-/** When the command has been marked as done. */
-  "done" |
-/** When the command has been created and executed one time. */
-  "executed" |
-/** The command has been flushed. In this case, the command must not be used anymore. */
-  "flushed";

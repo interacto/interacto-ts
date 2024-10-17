@@ -64,5 +64,6 @@ export interface BaseBinder extends BaseBinderBuilder {
      * @typeParam D - The user interaction data type
      * @typeParam I - The user interaction type
      */
+    // eslint-disable-next-line no-use-before-define
     usingInteraction<I extends Interaction<D>, A, D extends object = InteractionDataType<I>>(fn: () => I): InteractionBinder<I, A, D>;
 }

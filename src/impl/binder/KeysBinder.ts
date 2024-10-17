@@ -33,6 +33,7 @@ import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
  * @typeParam C - The type of the command to produce.
  * @category Binding
  */
+// eslint-disable-next-line no-use-before-define
 export class KeysBinder<C extends Command, I extends Interaction<D>, A, D extends object = InteractionDataType<I>>
     extends UpdateBinder<C, I, A, D> implements KeyInteractionCmdUpdateBinder<C, I, A, D> {
 
@@ -182,6 +183,7 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, A, D extend
         return super.toProduceAnon(fn) as KeysBinder<Command, I, A, D>;
     }
 
+    // eslint-disable-next-line no-use-before-define
     public override usingInteraction<I2 extends Interaction<D2>, A2, D2 extends object = InteractionDataType<I2>>
     (fn: () => I2): KeysBinder<C, I2, A2, D2> {
         return super.usingInteraction(fn as unknown as () => Interaction<InteractionDataType<I2>>) as unknown as KeysBinder<C, I2, A2, D2>;

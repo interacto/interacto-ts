@@ -19,11 +19,13 @@ import type {PointData} from "../../src/api/interaction/PointData";
 import type {WheelData} from "../../src/api/interaction/WheelData";
 import type {NonoRobot} from "interacto-nono";
 
-class JestNonoRobotImpl extends NonoRobotImpl implements JestNonoRobot {
-    public constructor(target?: EventTarget) {
-        super(target);
-    }
+export interface JestNonoRobot {
+    runOnlyPendingTimers(): this;
 
+    runAllTimers(): this;
+}
+
+class JestNonoRobotImpl extends NonoRobotImpl implements JestNonoRobot {
     public runOnlyPendingTimers(): this {
         jest.runOnlyPendingTimers();
         return this;
@@ -33,12 +35,6 @@ class JestNonoRobotImpl extends NonoRobotImpl implements JestNonoRobot {
         jest.runAllTimers();
         return this;
     }
-}
-
-export interface JestNonoRobot {
-    runOnlyPendingTimers(): this;
-
-    runAllTimers(): this;
 }
 
 export function robot(target?: EventTarget): JestNonoRobot & NonoRobot {

@@ -34,12 +34,6 @@ export interface CancellablePromise extends Promise<void> {
 }
 
 /**
- * Infers the type of the involved interaction data implementation
- * @category Interaction
- */
-export type InteractionDataImplType<T> = T extends InteractionBase<object, infer DImpl> ? DImpl : never;
-
-/**
  * The base implementation of a user interaction.
  * @typeParam D - The type of the interaction data.
  * @typeParam F - The type of the FSM.
@@ -505,3 +499,10 @@ export abstract class InteractionBase<D extends object, DImpl extends D & Flusha
         return this._dynamicRegisteredNodes;
     }
 }
+
+/**
+ * Infers the type of the involved interaction data implementation
+ * @category Interaction
+ */
+export type InteractionDataImplType<T> = T extends InteractionBase<object, infer DImpl> ? DImpl : never;
+

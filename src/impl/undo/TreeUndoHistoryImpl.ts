@@ -39,7 +39,7 @@ class UndoableTreeNodeImpl implements UndoableTreeNode {
     public constructor(undoable: Undoable, id: number, parent: UndoableTreeNode | undefined) {
         this.undoable = undoable;
         this.id = id;
-        this.children = new Array<UndoableTreeNode>();
+        this.children = [];
         this.parent = parent;
         this.cacheVisualSnap = undoable.getVisualSnapshot();
     }
@@ -140,7 +140,7 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
             },
             redo(): void {},
             undo(): void {},
-            equals(_undoable: Undoable): boolean {
+            equals(): boolean {
                 return false;
             }
         }, -1, undefined);
@@ -250,7 +250,7 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
     }
 
     private gatherToRoot(node: UndoableTreeNode | undefined): Array<UndoableTreeNode> {
-        const path = new Array<UndoableTreeNode>();
+        const path: Array<UndoableTreeNode> = [];
         let currentNode = node;
         while (currentNode !== this.root && currentNode !== undefined) {
             path.push(currentNode);

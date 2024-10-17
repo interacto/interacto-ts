@@ -38,8 +38,8 @@ export abstract class TransitionBase<E extends Event> implements Transition<E> {
      * @param action - The action to execute when going through the transition
      * @param guard - The guard to fulfil to execute the transition
      */
-    protected constructor(srcState: OutputState, tgtState: InputState,
-                          action?: (evt: E) => void, guard?: (evt: E) => boolean) {
+    public constructor(srcState: OutputState, tgtState: InputState,
+                       action?: (evt: E) => void, guard?: (evt: E) => boolean) {
         this.src = srcState;
         this.tgt = tgtState;
         this.action = action ?? ((): void => {});

@@ -30,7 +30,7 @@ export abstract class OutputStateBase extends StateBase implements OutputState {
      * @param stateMachine - The FSM that will contain the state.
      * @param stateName - The name of this state.
      */
-    protected constructor(stateMachine: FSM, stateName: string) {
+    public constructor(stateMachine: FSM, stateName: string) {
         super(stateMachine, stateName);
         this._transitions = [];
     }

@@ -21,6 +21,12 @@ import type {PointData} from "../../../api/interaction/PointData";
 import type {SrcTgtPointsData} from "../../../api/interaction/SrcTgtPointsData";
 import type {Logger} from "../../../api/logging/Logger";
 
+interface DnDFSMHandler {
+    onPress(event: Event): void;
+    onDrag(event: Event): void;
+    onRelease(event: Event): void;
+}
+
 /**
  * The FSM for DnD interactions.
  */
@@ -83,12 +89,6 @@ class DnDFSM extends FSMImpl {
         super.reinit();
         this.buttonToCheck = undefined;
     }
-}
-
-interface DnDFSMHandler {
-    onPress(event: Event): void;
-    onDrag(event: Event): void;
-    onRelease(event: Event): void;
 }
 
 /**

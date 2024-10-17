@@ -29,7 +29,7 @@ export abstract class TwoTouchDataImpl extends MultiTouchDataBase implements Two
 
     protected readonly t2: SrcTgtTouchDataImpl;
 
-    protected constructor() {
+    public constructor() {
         super();
         this.t1 = new SrcTgtTouchDataImpl();
         this.t2 = new SrcTgtTouchDataImpl();

@@ -25,7 +25,6 @@ import {mock} from "jest-mock-extended";
 import {Subject} from "rxjs";
 import type {MouseEventForTest} from "./StubEvents";
 import type {EventType} from "../../src/api/fsm/EventType";
-import type {InputState} from "../../src/api/fsm/InputState";
 import type {OutputState} from "../../src/api/fsm/OutputState";
 import type {Logger} from "../../src/api/logging/Logger";
 import type {VisitorInteraction} from "../../src/interacto";
@@ -39,10 +38,6 @@ describe("using a base interaction", () => {
     let logger: Logger;
 
     class StubWrongEventTransition extends TransitionBase<FocusEvent> {
-        public constructor(srcState: OutputState, tgtState: InputState) {
-            super(srcState, tgtState);
-        }
-
         public getAcceptedEvents(): ReadonlySet<EventType> {
             return new Set(["focus" as EventType]);
         }

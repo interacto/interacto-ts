@@ -18,9 +18,6 @@ import {mock} from "jest-mock-extended";
 import type {Logger, FSM, InputState, OutputState, State,
     Transition, TimeoutTransition, ConcurrentAndFSM, ConcurrentXOrFSM} from "../../src/interacto";
 
-let visitedFSM: FSM;
-let visitor: StubVisitor;
-
 class StubVisitor extends VisitorFSMDepthFirst {
     public res = "";
 
@@ -71,6 +68,9 @@ class StubVisitor extends VisitorFSMDepthFirst {
 }
 
 describe("using the std FSM visitor implementation", () => {
+    let visitedFSM: FSM;
+    let visitor: StubVisitor;
+
     beforeEach(() => {
         visitor = new StubVisitor();
     });
@@ -114,14 +114,12 @@ describe("using the std FSM visitor implementation", () => {
     test("visiting the touch Dnd FSM works", () => {
         visitedFSM = new TouchDnD(mock<Logger>(), false).fsm;
         visitedFSM.acceptVisitor(visitor);
-        // eslint-disable-next-line max-len
         expect(visitor.res).toBe(">i[init]-touchstart-s[touched]-touchstart-s[touched]-touchend-c[cancelled]-touchmove-s[moved]-touchmove-s[moved]-touchstart-s[touched]-touchend-t[released]-touchstart-c[cancelled]-touchstart-c[cancelled]");
     });
 
     test("visiting the multi-touch FSM works", () => {
         visitedFSM = new MultiTouch(2, false, mock<Logger>()).fsm;
         visitedFSM.acceptVisitor(visitor);
-        // eslint-disable-next-line max-len
         const subFSM = ">i[init]-touchstart-s[touched]-touchstart-s[touched]-touchend-t[released]-touchmove-s[moved]-touchmove-s[moved]-touchstart-s[touched]-touchend-t[released]";
         expect(visitor.res).toBe(`&${subFSM}${subFSM}`);
     });

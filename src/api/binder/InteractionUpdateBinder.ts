@@ -27,6 +27,7 @@ import type {LogLevel} from "../logging/LogLevel";
  * @typeParam D - The type of the interaction data of the user interaction
  * @category Helper
  */
+// eslint-disable-next-line no-use-before-define
 export interface InteractionUpdateBinder<I extends Interaction<D>, A, D extends object = InteractionDataType<I>>
     extends InteractionUpdateBinderBuilder<I, A, D> {
     on<W>(widget: ReadonlyArray<Widget<W>> | Widget<W>, ...widgets: ReadonlyArray<Widget<W>>): InteractionUpdateBinder<I, A, D>;

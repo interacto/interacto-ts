@@ -23,6 +23,11 @@ import type {PointData} from "../../../api/interaction/PointData";
 import type {SrcTgtPointsData} from "../../../api/interaction/SrcTgtPointsData";
 import type {Logger} from "../../../api/logging/Logger";
 
+interface DragLockFSMHandler {
+    onMove(event: MouseEvent): void;
+    onFirstDbleClick(): void;
+}
+
 class DragLockFSM extends FSMImpl {
     public readonly firstDbleClick: DoubleClickFSM;
 
@@ -92,11 +97,6 @@ class DragLockFSM extends FSMImpl {
         this.firstDbleClick.fullReinit();
         this.sndDbleClick.fullReinit();
     }
-}
-
-interface DragLockFSMHandler {
-    onMove(event: MouseEvent): void;
-    onFirstDbleClick(): void;
 }
 
 /**

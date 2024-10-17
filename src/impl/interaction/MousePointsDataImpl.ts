@@ -22,13 +22,6 @@ import type {PointData} from "../../api/interaction/PointData";
 export class MousePointsDataImpl extends PointsDataImpl<PointData> {
     private currentPositionData: PointData | undefined;
 
-    /**
-     * Creates the interaction data
-     */
-    public constructor() {
-        super();
-    }
-
     public get currentPosition(): PointData | undefined {
         return this.currentPositionData;
     }
