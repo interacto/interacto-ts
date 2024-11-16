@@ -284,7 +284,7 @@ export abstract class InteractionBase<D extends object, DImpl extends D & Flusha
             return;
         }
 
-        if (mouseEventTypes.includes(eventType as MouseEventType) || eventType === "wheel") {
+        if (mouseEventTypes.includes(eventType as MouseEventType) || eventType === ("wheel" satisfies EventType)) {
             node.addEventListener(eventType, this.getMouseHandler());
             return;
         }
@@ -296,7 +296,7 @@ export abstract class InteractionBase<D extends object, DImpl extends D & Flusha
             node.addEventListener(eventType, this.getKeyHandler());
             return;
         }
-        if (eventType === "scroll") {
+        if (eventType === ("scroll" satisfies EventType)) {
             node.addEventListener(eventType, this.getUIHandler());
 
         }
@@ -306,7 +306,7 @@ export abstract class InteractionBase<D extends object, DImpl extends D & Flusha
         if (!(node instanceof EventTarget)) {
             return;
         }
-        if (mouseEventTypes.includes(eventType as MouseEventType) || eventType === "wheel") {
+        if (mouseEventTypes.includes(eventType as MouseEventType) || eventType === ("wheel" satisfies EventType)) {
             node.removeEventListener(eventType, this.getMouseHandler());
             return;
         }
@@ -318,28 +318,28 @@ export abstract class InteractionBase<D extends object, DImpl extends D & Flusha
             node.removeEventListener(eventType, this.getKeyHandler());
             return;
         }
-        if (eventType === "scroll") {
+        if (eventType === ("scroll" satisfies EventType)) {
             node.removeEventListener(eventType, this.getUIHandler());
 
         }
     }
 
     protected registerActionHandlerClick(node: EventTarget): void {
-        node.addEventListener("click", this.getActionHandler());
-        node.addEventListener("auxclick", this.getActionHandler());
+        node.addEventListener("click" satisfies EventType, this.getActionHandler());
+        node.addEventListener("auxclick" satisfies EventType, this.getActionHandler());
     }
 
     protected unregisterActionHandlerClick(node: EventTarget): void {
-        node.removeEventListener("click", this.getActionHandler());
-        node.removeEventListener("auxclick", this.getActionHandler());
+        node.removeEventListener("click" satisfies EventType, this.getActionHandler());
+        node.removeEventListener("auxclick" satisfies EventType, this.getActionHandler());
     }
 
     protected registerActionHandlerInput(node: EventTarget): void {
-        node.addEventListener("input", this.getActionHandler());
+        node.addEventListener("input" satisfies EventType, this.getActionHandler());
     }
 
     protected unregisterActionHandlerInput(node: EventTarget): void {
-        node.removeEventListener("input", this.getActionHandler());
+        node.removeEventListener("input" satisfies EventType, this.getActionHandler());
     }
 
     protected getActionHandler(): EventListener {
