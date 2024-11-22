@@ -320,6 +320,77 @@ describe("using an undo history", () => {
             });
             expect(history.size()).toStrictEqual([0, 0]);
         });
+
+        test("set size max greater", () => {
+            history.setSizeMax(2);
+            history.add(undoable);
+            history.add(undoable2);
+
+            testScheduler.run(helpers => {
+                const {cold, expectObservable} = helpers;
+                cold("-a", {
+                    "a": () => history.setSizeMax(100)
+                }).subscribe(v => v());
+
+                expectObservable(history.redosObservable()).toBe("--");
+                expectObservable(history.undosObservable()).toBe("--");
+                expectObservable(history.sizeObservable()).toBe("--");
+            });
+
+            expect(history.size()).toStrictEqual([2, 0]);
+        });
+
+        test("set size max to 0", () => {
+            history.setSizeMax(10);
+            history.add(undoable);
+            history.add(undoable2);
+            history.undo();
+
+            testScheduler.run(helpers => {
+                const {cold, expectObservable} = helpers;
+                cold("-a", {
+                    "a": () => history.setSizeMax(0)
+                }).subscribe(v => v());
+
+                expectObservable(history.undosObservable()).toBe("-a", {"a": undefined});
+                expectObservable(history.redosObservable()).toBe("-a", {"a": undefined});
+                expectObservable(history.sizeObservable()).toBe("-a", {"a": [0, 0]});
+            });
+
+            expect(history.size()).toStrictEqual([0, 0]);
+        });
+
+        test("set size max to lower value", () => {
+            history.setSizeMax(10);
+            history.add(undoable);
+            history.add(undoable2);
+            history.undo();
+
+            testScheduler.run(helpers => {
+                const {cold, expectObservable} = helpers;
+                cold("-a", {
+                    "a": () => history.setSizeMax(1)
+                }).subscribe(v => v());
+
+                expectObservable(history.undosObservable()).toBe("--");
+                expectObservable(history.redosObservable()).toBe("-a", {"a": undefined});
+                expectObservable(history.sizeObservable()).toBe("-a", {"a": [1, 0]});
+            });
+
+            expect(history.size()).toStrictEqual([1, 0]);
+        });
+    });
+
+    test("use size max clean redos", () => {
+        history.add(undoable);
+        history.add(undoable2);
+        history.add(mock());
+        history.add(mock());
+        history.undo();
+        history.undo();
+        history.setSizeMax(1);
+
+        expect(history.size()).toStrictEqual([1, 0]);
     });
 
     test("crash in undo OK", () => {

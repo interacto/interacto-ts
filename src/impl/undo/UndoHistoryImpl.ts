@@ -167,8 +167,12 @@ export class UndoHistoryImpl extends UndoHistory {
     public setSizeMax(max: number): void {
         if (max >= 0) {
             const removed = this.undos.splice(0, this.undos.length - max);
-            if (this.undos.length === 0 && removed.length > 0) {
+            const willRemoved = removed.length > 0 || this.redos.length > 0;
+            if (removed.length > 0 && this.undos.length === 0) {
                 this.undoPublisher.next(undefined);
+            }
+            this.clearRedo();
+            if (willRemoved) {
                 this.publishSize();
             }
             this.sizeMax = max;
