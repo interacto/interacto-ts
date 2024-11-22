@@ -13,11 +13,12 @@
  */
 
 import {UndoHistoryImpl} from "../../src/impl/undo/UndoHistoryImpl";
-import {beforeEach, describe, expect, jest, test} from "@jest/globals";
+import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
 import {mock} from "jest-mock-extended";
 import type {Undoable} from "../../src/api/undo/Undoable";
 import type {UndoHistory} from "../../src/api/undo/UndoHistory";
 import type {MockProxy} from "jest-mock-extended";
+import {TestScheduler} from "rxjs/testing";
 
 describe("using an undo history", () => {
     jest.mock("../../src/api/undo/Undoable");
@@ -38,10 +39,21 @@ describe("using an undo history", () => {
         expect(history.considersEqualCmds).toBeFalsy();
     });
 
+    test("size add", () => {
+        history.add(undoable);
+        expect(history.size()).toStrictEqual([1, 0]);
+    });
+
     test("undo called", () => {
         history.add(undoable);
         history.undo();
         expect(undoable.undo).toHaveBeenCalledTimes(1);
+    });
+
+    test("size undo", () => {
+        history.add(undoable);
+        history.undo();
+        expect(history.size()).toStrictEqual([0, 1]);
     });
 
     test("undo and redo called", () => {
@@ -50,12 +62,14 @@ describe("using an undo history", () => {
         history.redo();
         expect(undoable.undo).toHaveBeenCalledTimes(1);
         expect(undoable.redo).toHaveBeenCalledTimes(1);
+        expect(history.size()).toStrictEqual([1, 0]);
     });
 
     test("redo not called", () => {
         history.add(undoable);
         history.redo();
         expect(undoable.redo).not.toHaveBeenCalled();
+        expect(history.size()).toStrictEqual([1, 0]);
     });
 
     test("undo ok when empty", () => {
@@ -77,7 +91,7 @@ describe("using an undo history", () => {
         history.add(undoable);
         history.add(undoable2);
         history.add(undoable3);
-        expect(history.getUndo()).toHaveLength(2);
+        expect(history.size()).toStrictEqual([2, 0]);
         expect(history.getUndo()[0]).toBe(undoable2);
         expect(history.getUndo()[1]).toBe(undoable3);
     });
@@ -247,32 +261,65 @@ describe("using an undo history", () => {
         expect(history.getLastUndo()).toBeUndefined();
     });
 
-    test("undos Added", () => {
-        const undos = new Array<Undoable | undefined>();
-        const undosStream = history.undosObservable().subscribe((e: Undoable | undefined) => undos.push(e));
+    describe("using a test scheduler", () => {
+        let testScheduler: TestScheduler;
 
-        history.add(undoable);
-        undosStream.unsubscribe();
+        beforeEach(() => {
+            testScheduler = new TestScheduler((actual, expected) => {
+                expect(actual).toStrictEqual(expected);
+            });
+        });
 
-        expect(undos).toHaveLength(1);
-        expect(undos[0]).toStrictEqual(undoable);
-    });
+        afterEach(() => {
+            testScheduler.flush();
+        });
 
-    test("undo Redo Added", () => {
-        const undos = new Array<Undoable | undefined>();
-        const redos = new Array<Undoable | undefined>();
-        const undosStream = history.undosObservable().subscribe((e: Undoable | undefined) => undos.push(e));
-        const redosStream = history.redosObservable().subscribe((e: Undoable | undefined) => redos.push(e));
+        test("undos Added", () => {
+            testScheduler.run(helpers => {
+                const {cold, expectObservable} = helpers;
+                cold("-a", {"a": () => history.add(undoable)}).subscribe(v => v());
 
-        history.add(undoable);
-        history.undo();
-        undosStream.unsubscribe();
-        redosStream.unsubscribe();
+                expectObservable(history.undosObservable()).toBe("-a", {"a": undoable});
+                expectObservable(history.sizeObservable()).toBe("-a", {"a": [1, 0]});
+            });
+            expect(history.size()).toStrictEqual([1, 0]);
+        });
 
-        expect(undos).toHaveLength(2);
-        expect(undos[1]).toBeUndefined();
-        expect(redos).toHaveLength(1);
-        expect(redos[0]).toBe(undoable);
+        test("one add one undo", () => {
+            testScheduler.run(helpers => {
+                const {cold, expectObservable} = helpers;
+                cold("-a-b", {"a": () => history.add(undoable), "b": () => history.undo()}).subscribe(v => {
+                    v();
+                });
+
+                expectObservable(history.undosObservable()).toBe("-a-b",
+                    {"a": undoable, "b": undefined});
+                expectObservable(history.redosObservable()).toBe("---b",
+                    {"b": undoable});
+            });
+            expect(history.size()).toStrictEqual([0, 1]);
+        });
+
+        test("observables ok", () => {
+            testScheduler.run(helpers => {
+                const {cold, expectObservable} = helpers;
+                cold("-a-b-c-d-e", {
+                    "a": () => history.add(undoable),
+                    "b": () => history.add(undoable2),
+                    "c": () => history.undo(),
+                    "d": () => history.redo(),
+                    "e": () => history.clear()
+                }).subscribe(v => v());
+
+                expectObservable(history.undosObservable()).toBe("-a-b-c-d-e",
+                    {"a": undoable, "b": undoable2, "c": undoable, "d": undoable2, "e": undefined});
+                expectObservable(history.redosObservable()).toBe("-----c-d--",
+                    {"c": undoable2, "d": undefined});
+                expectObservable(history.sizeObservable()).toBe("-a-b-c-d-e",
+                    {"a": [1, 0], "b": [2, 0], "c": [1, 1], "d": [2, 0], "e": [0, 0]});
+            });
+            expect(history.size()).toStrictEqual([0, 0]);
+        });
     });
 
     test("crash in undo OK", () => {

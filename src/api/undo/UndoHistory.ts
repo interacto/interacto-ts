@@ -68,4 +68,15 @@ export abstract class UndoHistory implements UndoHistoryBase {
     public abstract setSizeMax(max: number): void;
 
     public abstract get considersEqualCmds(): boolean;
+
+    /**
+     * The number of elements the history contains.
+     * Provide both the size of the undo and the redo stacks in the produced tuple.
+     */
+    public abstract size(): [undos: number, redos: number];
+
+    /**
+     * An RX object to observe the number of elements in the history.
+     */
+    public abstract sizeObservable(): Observable<[undos: number, redos: number]>;
 }

@@ -43,6 +43,8 @@ export class UndoHistoryImpl extends UndoHistory {
 
     private readonly redoPublisher: Subject<Undoable | undefined>;
 
+    private readonly sizePublisher: Subject<[number, number]>;
+
     /**
      * Create the undo history
      * @param considerEqualCmd - By default, executing a command erases the redoable commands.
@@ -58,6 +60,7 @@ export class UndoHistoryImpl extends UndoHistory {
         this.sizeMax = 20;
         this.undoPublisher = new Subject();
         this.redoPublisher = new Subject();
+        this.sizePublisher = new Subject();
         this.considersEqualCmds = considerEqualCmd;
     }
 
@@ -75,6 +78,7 @@ export class UndoHistoryImpl extends UndoHistory {
             this.undoPublisher.next(undefined);
         }
         this.clearRedo();
+        this.publishSize();
     }
 
     private clearRedo(): void {
@@ -97,6 +101,7 @@ export class UndoHistoryImpl extends UndoHistory {
                 this.undos.push(undoable);
                 this.undoPublisher.next(undoable);
                 this.clearRedo();
+                this.publishSize();
             }
         }
     }
@@ -111,6 +116,7 @@ export class UndoHistoryImpl extends UndoHistory {
                 this.redos.push(undoable);
                 this.undoPublisher.next(this.getLastUndo());
                 this.redoPublisher.next(undoable);
+                this.publishSize();
             }
         }
     }
@@ -125,6 +131,7 @@ export class UndoHistoryImpl extends UndoHistory {
                 this.undos.push(undoable);
                 this.undoPublisher.next(undoable);
                 this.redoPublisher.next(this.getLastRedo());
+                this.publishSize();
             }
         }
     }
@@ -162,6 +169,7 @@ export class UndoHistoryImpl extends UndoHistory {
             const removed = this.undos.splice(0, this.undos.length - max);
             if (this.undos.length === 0 && removed.length > 0) {
                 this.undoPublisher.next(undefined);
+                this.publishSize();
             }
             this.sizeMax = max;
         }
@@ -173,5 +181,17 @@ export class UndoHistoryImpl extends UndoHistory {
 
     public getRedo(): ReadonlyArray<Undoable> {
         return this.redos;
+    }
+
+    public override size(): [number, number] {
+        return [this.undos.length, this.redos.length];
+    }
+
+    public override sizeObservable(): Observable<[number, number]> {
+        return this.sizePublisher;
+    }
+
+    private publishSize(): void {
+        this.sizePublisher.next(this.size());
     }
 }
