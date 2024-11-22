@@ -74,10 +74,10 @@ class UndoableTreeNodeDTOImpl implements UndoableTreeNodeDTO {
     }
 
     /**
-     * Produces a tree node from the DTO node. This operates recurcively on
+     * Produces a tree node from the DTO node. This operates recursively on
      * children, so that it converts all the tree node.
      * @param dto - The DTO to convert
-     * @param fn - The convertion method for the undoable.
+     * @param fn - The conversion method for the undoable.
      * @param parent - The parent node of the one to create.
      * @returns The created tree node (and its children) and the list of created nodes.
      */
@@ -107,6 +107,8 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
     private readonly undoPublisher: Subject<Undoable | undefined>;
 
     private readonly redoPublisher: Subject<Undoable | undefined>;
+
+    private readonly sizePublisher: Subject<number>;
 
     public readonly root: UndoableTreeNode;
 
@@ -147,6 +149,7 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
         this._currentNode = this.root;
         this.undoPublisher = new Subject();
         this.redoPublisher = new Subject();
+        this.sizePublisher = new Subject();
     }
 
     public add(undoable: Undoable): void {
@@ -165,6 +168,7 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
             this.idCounter++;
             this.undoPublisher.next(undoable);
             this.redoPublisher.next(undefined);
+            this.sizePublisher.next(this.size());
         } else {
             this.goTo(equalCmd.id);
         }
@@ -182,6 +186,7 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
         this.idCounter = 0;
         this.undoPublisher.next(undefined);
         this.redoPublisher.next(undefined);
+        this.sizePublisher.next(0);
     }
 
     public delete(id: number): void {
@@ -213,6 +218,7 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
             if (node.parent.lastChildUndone === node) {
                 node.parent.lastChildUndone = undefined;
             }
+            this.sizePublisher.next(this.size());
         }
 
         // Cloning the array since 'delete' may alter the children list.
@@ -438,5 +444,19 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
 
         this.undoPublisher.next(this.getLastUndo());
         this.redoPublisher.next(this.getLastRedo());
+    }
+
+    public override size(): number {
+        return this.childrenNode(this.root);
+    }
+
+    private childrenNode(node: UndoableTreeNode): number {
+        return node.children
+            .map(child => this.childrenNode(child))
+            .reduce((x, y) => x + y, 0) + node.children.length;
+    }
+
+    public override sizeObservable(): Observable<number> {
+        return this.sizePublisher;
     }
 }

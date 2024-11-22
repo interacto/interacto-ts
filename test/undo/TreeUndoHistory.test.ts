@@ -59,25 +59,27 @@ describe("using a tree undo history", () => {
 
         test("initial history is empty", () => {
             expect(history.undoableNodes).toHaveLength(0);
+            expect(history.size()).toBe(0);
             expect(history.currentNode).toBe(history.root);
         });
 
         test("undo does nothing", () => {
             history.undo();
-            expect(history.undoableNodes).toHaveLength(0);
+            expect(history.size()).toBe(0);
             expect(history.currentNode).toBe(history.root);
         });
 
         test("go to empty ok", () => {
             history.goTo(0);
-            expect(history.undoableNodes).toHaveLength(0);
+            expect(history.size()).toBe(0);
             expect(history.currentNode).toBe(history.root);
         });
 
         test("delete invalid node ok", () => {
             history.delete(0);
-            expect(history.undoableNodes).toHaveLength(0);
+            expect(history.size()).toBe(0);
             expect(history.currentNode).toBe(history.root);
+            expect(history.size()).toBe(0);
         });
 
         test("get last undoable when empty", () => {
@@ -138,7 +140,10 @@ describe("using a tree undo history", () => {
                         .toBe("-a", {"a": undoable0});
                     expectObservable(history.redosObservable())
                         .toBe("-a", {"a": undefined});
+                    expectObservable(history.sizeObservable())
+                        .toBe("-a", {"a": 1});
                 });
+                expect(history.size()).toBe(1);
             });
 
             test("two adds", () => {
@@ -150,6 +155,28 @@ describe("using a tree undo history", () => {
                         {"a": undoable0, "b": undoable1});
                     expectObservable(history.redosObservable()).toBe("-a-b",
                         {"a": undefined, "b": undefined});
+                    expectObservable(history.sizeObservable()).toBe("-a-b",
+                        {"a": 1, "b": 2});
+                });
+                expect(history.size()).toBe(2);
+            });
+
+            test("delete obs size ok", () => {
+                testScheduler.run(helpers => {
+                    const {cold, expectObservable} = helpers;
+                    cold("-a-b-c-d", {"a": undoable0, "b": undoable1, "c": undoable2, "d": 2})
+                        .subscribe(v => {
+                            // eslint-disable-next-line jest/no-conditional-in-test
+                            if (typeof v === "number") {
+                                history.goTo(v - 1);
+                                history.delete(v);
+                            } else {
+                                history.add(v);
+                            }
+                        });
+
+                    expectObservable(history.sizeObservable()).toBe("-a-b-c-d",
+                        {"a": 1, "b": 2, "c": 3, "d": 2});
                 });
             });
 
@@ -165,6 +192,7 @@ describe("using a tree undo history", () => {
                     expectObservable(history.redosObservable()).toBe("-a-b",
                         {"a": undefined, "b": undoable0});
                 });
+                expect(history.size()).toBe(1);
             });
 
             test("one add one undo redo", () => {
@@ -183,6 +211,7 @@ describe("using a tree undo history", () => {
                     expectObservable(history.redosObservable()).toBe("-a-b-c",
                         {"a": undefined, "b": undoable0, "c": undefined});
                 });
+                expect(history.size()).toBe(1);
             });
 
             test("three add then go to", () => {
@@ -202,6 +231,7 @@ describe("using a tree undo history", () => {
                     expectObservable(history.redosObservable()).toBe("-a-b-c-d",
                         {"a": undefined, "b": undefined, "c": undefined, "d": undoable1});
                 });
+                expect(history.size()).toBe(3);
             });
 
             test("two add one undo one new add", () => {
@@ -221,6 +251,7 @@ describe("using a tree undo history", () => {
                     expectObservable(history.redosObservable()).toBe("-a-b-c-d",
                         {"a": undefined, "b": undefined, "c": undoable1, "d": undefined});
                 });
+                expect(history.size()).toBe(3);
             });
 
             test("three add one, undo to root, redo to leaf", () => {
@@ -253,6 +284,7 @@ describe("using a tree undo history", () => {
                         {"a": undefined, "b": undefined, "c": undefined, "d": undoable0, "e": undefined});
                 });
                 expect(res2).toStrictEqual([0, 1, 2]);
+                expect(history.size()).toBe(3);
             });
         });
 
@@ -292,7 +324,7 @@ describe("using a tree undo history", () => {
 
             test("undo works", () => {
                 history.undo();
-                expect(history.undoableNodes).toHaveLength(1);
+                expect(history.size()).toBe(1);
                 expect(history.undoableNodes[0]).toBeDefined();
                 expect(history.currentNode).toBe(history.root);
                 expect(undoable0.undo).toHaveBeenCalledTimes(1);
@@ -402,12 +434,14 @@ describe("using a tree undo history", () => {
                 expect(history.currentNode).toBe(history.root);
                 expect(history.currentNode.children).toHaveLength(0);
                 expect(history.undoableNodes).toHaveLength(0);
+                expect(history.size()).toBe(0);
             });
 
             test("clear then add restarts ID at 0", () => {
                 history.clear();
                 history.add(undoable1);
                 expect(history.undoableNodes[0]?.id).toBe(0);
+                expect(history.size()).toBe(1);
             });
 
             test("go to itself", () => {
@@ -457,19 +491,19 @@ describe("using a tree undo history", () => {
 
             test("delete negative node ID ok", () => {
                 history.delete(-1);
-                expect(history.undoableNodes).toHaveLength(1);
+                expect(history.size()).toBe(1);
                 expect(history.currentNode.undoable).toBe(undoable0);
             });
 
             test("delete invalid ok", () => {
                 history.delete(1);
-                expect(history.undoableNodes).toHaveLength(1);
+                expect(history.size()).toBe(1);
                 expect(history.currentNode.undoable).toBe(undoable0);
             });
 
             test("cannot delete the current branch", () => {
                 history.delete(0);
-                expect(history.undoableNodes).toHaveLength(1);
+                expect(history.size()).toBe(1);
                 expect(history.currentNode.undoable).toBe(undoable0);
             });
 
@@ -502,7 +536,7 @@ describe("using a tree undo history", () => {
                 });
 
                 expect(history.path).toHaveLength(0);
-                expect(history.undoableNodes).toHaveLength(1);
+                expect(history.size()).toBe(1);
                 expect((history.undoableNodes[0]?.undoable as Undoable4Test).foo).toBe(2);
             });
 
@@ -542,9 +576,12 @@ describe("using a tree undo history", () => {
                 history.add(undoable1);
             });
 
+            test("size", () => {
+                expect(history.size()).toBe(2);
+            });
+
             test("check structure", () => {
                 expect(history.currentNode.undoable).toBe(undoable1);
-                expect(history.undoableNodes).toHaveLength(2);
                 expect(history.undoableNodes[0]?.parent).toBe(history.root);
                 expect(history.undoableNodes[1]?.parent).toBe(history.root);
                 expect(history.undoableNodes[0]?.children).toHaveLength(0);
@@ -556,6 +593,7 @@ describe("using a tree undo history", () => {
                 history.delete(1);
                 expect(history.undoableNodes[0]?.undoable).toBe(undoable0);
                 expect(history.undoableNodes[1]?.undoable).toBeUndefined();
+                expect(history.size()).toBe(1);
             });
 
             test("positions OK", () => {
@@ -609,6 +647,10 @@ describe("using a tree undo history", () => {
                 history.add(undoable3);
                 history.undo();
                 history.add(undoable4);
+            });
+
+            test("size", () => {
+                expect(history.size()).toBe(5);
             });
 
             test("export", () => {
@@ -733,6 +775,7 @@ describe("using a tree undo history", () => {
                 history.undo();
                 history.delete(4);
                 expect(history.getLastRedo()).toBe(undoable3);
+                expect(history.size()).toBe(4);
             });
 
             test("get last redoable message when moving to 2 and undo", () => {
@@ -779,6 +822,7 @@ describe("using a tree undo history", () => {
             test("delete 1", () => {
                 history.delete(1);
 
+                expect(history.size()).toBe(4);
                 expect(history.currentNode.undoable).toBe(undoable4);
                 expect(history.undoableNodes[0]?.parent).toBe(history.root);
                 expect(history.undoableNodes[0]?.children).toHaveLength(1);
@@ -798,6 +842,7 @@ describe("using a tree undo history", () => {
                 history.goTo(0);
                 history.delete(2);
 
+                expect(history.size()).toBe(2);
                 expect(history.currentNode.undoable).toBe(undoable0);
                 expect(history.undoableNodes[0]?.parent).toBe(history.root);
                 expect(history.undoableNodes[0]?.children).toHaveLength(1);
@@ -813,6 +858,7 @@ describe("using a tree undo history", () => {
                 history.goTo(1);
                 history.delete(2);
 
+                expect(history.size()).toBe(2);
                 expect(history.currentNode.undoable).toBe(undoable1);
                 expect(history.undoableNodes[0]).toBeDefined();
                 expect(history.undoableNodes[1]).toBeDefined();
@@ -824,6 +870,7 @@ describe("using a tree undo history", () => {
             test("delete invalid 5", () => {
                 history.delete(5);
 
+                expect(history.size()).toBe(5);
                 expect(history.currentNode.undoable).toBe(undoable4);
                 expect(history.undoableNodes[0]?.children).toHaveLength(2);
                 expect(history.undoableNodes[1]?.children).toHaveLength(0);
@@ -892,6 +939,10 @@ describe("using a tree undo history", () => {
                 history.add(undoable13);
                 history.undo();
                 history.add(undoable14);
+            });
+
+            test("size", () => {
+                expect(history.size()).toBe(15);
             });
 
             test("tree structure is valid", () => {
@@ -1013,6 +1064,7 @@ describe("using a tree undo history", () => {
 
             expect(history.getLastUndo()).toBe(undoableC);
             expect(history.getLastRedo()).toBe(undoableD);
+            expect(history.size()).toBe(5);
         });
 
         test("does not create a new branch, other config", () => {
@@ -1029,6 +1081,7 @@ describe("using a tree undo history", () => {
 
             expect(history.getLastUndo()).toBe(undoableC);
             expect(history.getLastRedo()).toBe(undoableD);
+            expect(history.size()).toBe(5);
         });
     });
 });

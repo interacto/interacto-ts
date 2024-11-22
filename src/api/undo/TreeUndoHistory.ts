@@ -197,4 +197,14 @@ export abstract class TreeUndoHistory implements UndoHistoryBase {
     public abstract import(dtoHistory: TreeUndoHistoryDTO, fn: (dtoUndoable: unknown) => Undoable): void;
 
     public abstract get considersEqualCmds(): boolean;
+
+    /**
+     * The number of elements the history contains in all the branches
+     */
+    public abstract size(): number;
+
+    /**
+     * An RX object to observe the number of elements in the history.
+     */
+    public abstract sizeObservable(): Observable<number>;
 }
