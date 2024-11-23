@@ -106,6 +106,7 @@ export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouch
      * @category Interaction Library
      */
     public constructor(nbTouches: number, strict: boolean, logger: Logger, name?: string) {
+        const multiData = new MultiTouchDataImpl();
         const theFSM = new MultiTouchFSM(nbTouches, strict, logger, {
             "onTouch": (event: TouchEvent): void => {
                 const all = Array.from(event.touches);
@@ -140,7 +141,7 @@ export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouch
                     .filter(data => !currentIDs.has(data.src.identifier))
                     // eslint-disable-next-line unicorn/no-array-for-each
                     .forEach(data => {
-                        (this.data as MultiTouchDataImpl).removeTouchData(data.src.identifier);
+                        multiData.removeTouchData(data.src.identifier);
                     });
             }
         };
@@ -150,6 +151,6 @@ export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouch
             concc.addHandler(reinitHandler);
         }
 
-        super(theFSM, new MultiTouchDataImpl(), logger, name ?? MultiTouch.name, false);
+        super(theFSM, multiData, logger, name ?? MultiTouch.name, false);
     }
 }

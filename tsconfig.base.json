@@ -22,6 +22,7 @@
     "noFallthroughCasesInSwitch": true,
     "noPropertyAccessFromIndexSignature": true,
     "exactOptionalPropertyTypes": true,
-    "strict": true
+    "strict": true,
+    "noUncheckedSideEffectImports": true
   }
 }

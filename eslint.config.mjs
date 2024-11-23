@@ -127,6 +127,7 @@ export default [...[].concat(
             }],
             "@stylistic/quotes": ["error", "double"],
 
+            "@typescript-eslint/no-unsafe-type-assertion": "off",
             "@typescript-eslint/consistent-type-exports": "off",
             "@typescript-eslint/prefer-readonly-parameter-types": "off",
             "@typescript-eslint/class-methods-use-this": "off",
@@ -350,6 +351,7 @@ export default [...[].concat(
                 SwitchCase: 1,
             }],
 
+            "@typescript-eslint/no-unsafe-type-assertion": "off",
             "@typescript-eslint/only-throw-error": "off",
             "@typescript-eslint/prefer-destructuring": "off",
             "@typescript-eslint/unbound-method": "off",
