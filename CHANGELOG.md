@@ -1,7 +1,46 @@
+# 8.2.0
+
+* feat(command): `equals` method in Command
+* feat(history): consider equal commands for linear history
+* feat(history): histories can consider equal commands
+* feat(history): standard history has size methods
+* feat(history): tree history has size methods
+
+
+* fix(history): linear history, setsize had incorrect behavior
+* fix(code): smells removed
+* fix(interaction): fixes `touches` in three and four touch data
+
+
+* chore(ci): removing the jenkins file
+* chore(deps): updating deps
+* chore(ts): moving to TS 5.6
+
+
+* refactor(interaction): fsm impl are now hidden from the interaction class declaration
+* refactor(interaction): reducing the use of DSM handlers
+* refactor(interaction): removing FSM data handler
+* refactor(interaction): removing the useless interface `InteractionData`
+* refactor(interaction): simplifying the code of dble clicks and draglock
+* refactor(interaction): use of the satisfies keyword
+* refactor(code): various code cleaning operations
+
+
+* Tests cleaned
+* Tests added: tests for two touch data
+
+
+* docs(readme): readme updated
+* docs(ts): fix typo
+
+
 # 8.1.0
 * feat(interaction): tap interaction
+
+
 * fix(interaction): tap must be taps
 * fix(undo): tree redo issue
+
 
 * chore(deps): test deps updated
 * chore(pkg): moving to TS 5.3
@@ -40,6 +79,7 @@
 * feat(fsm): can visit FSMs
 * feat(not): cancelling interaction operator (#87)
 
+
 * build(ci): ignoring some files
 * build(pkg): commit msg linter
 * chore(ci): master to main
@@ -48,6 +88,7 @@
 * ci(action): launch the CI on PR too
 * config(ci): Github ci
 * doc(readme): readme updated
+
 
 * fix(binding): removing useless types
 * fix(cmd): better undo name of setProperty
