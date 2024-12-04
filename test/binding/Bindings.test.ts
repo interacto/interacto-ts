@@ -266,7 +266,7 @@ describe("using bindings", () => {
             .on(elt)
             .toProduce(() => new StubCmd(true))
             .bind();
-        robot().click(elt);
+        robot().click(elt, 1, false);
         expect(ctx.commands).toHaveLength(1);
     });
 
@@ -281,7 +281,7 @@ describe("using bindings", () => {
             .catch(fn)
             .bind();
 
-        robot(elt).click();
+        robot().click(elt, 1, false);
 
         expect(ctx.commands).toHaveLength(0);
         expect(fn).toHaveBeenCalledTimes(1);
@@ -293,7 +293,7 @@ describe("using bindings", () => {
             .on(elt)
             .toProduce(() => new StubCmd(true))
             .bind();
-        robot(elt).click({}, 2);
+        robot().click(elt, 2, false);
         expect(ctx.commands).toHaveLength(1);
     });
 
@@ -308,7 +308,7 @@ describe("using bindings", () => {
             .catch(fn)
             .bind();
 
-        robot(elt).click({}, 2);
+        robot().click(elt, 2, false);
 
         expect(ctx.commands).toHaveLength(0);
         expect(fn).toHaveBeenCalledTimes(1);
@@ -356,10 +356,10 @@ describe("using bindings", () => {
             .on(elt)
             .toProduce(() => new StubCmd(true))
             .bind();
-        robot(elt)
-            .click({}, 2)
+        robot()
+            .click(elt, 2, false)
             .mousemove()
-            .click({}, 2);
+            .click(elt, 2, false);
         expect(ctx.commands).toHaveLength(1);
     });
 
@@ -375,9 +375,9 @@ describe("using bindings", () => {
             .bind();
 
         robot(elt)
-            .click({}, 2)
+            .click({}, 2, false)
             .mousemove()
-            .click({}, 2);
+            .click({}, 2, false);
 
         expect(ctx.commands).toHaveLength(0);
         expect(fn).toHaveBeenCalledTimes(1);
@@ -616,12 +616,12 @@ describe("using bindings", () => {
             .bind();
 
         robot(elt)
-            .click({"button": 1})
+            .click({"button": 1}, 1, false)
             .runOnlyPendingTimers()
-            .auxclick({"button": 2}, 2)
+            .click({"button": 2}, 2, false)
             .mousemove()
             .mousemove()
-            .auxclick({"button": 2}, 2);
+            .click({"button": 2}, 2, false);
 
         expect(ctx.commands).toHaveLength(1);
     });
@@ -635,8 +635,8 @@ describe("using bindings", () => {
 
         robot(elt)
             .keepData()
-            .click({"button": 0})
-            .click();
+            .click({"button": 0}, 1, false)
+            .click(undefined, 1, false);
 
         expect(binding.interaction.isRunning()).toBeTruthy();
     });
@@ -656,12 +656,12 @@ describe("using bindings", () => {
             .bind();
 
         robot(elt)
-            .click({"button": 1})
+            .click({"button": 1}, 1, false)
             .runOnlyPendingTimers()
-            .auxclick({"button": 2}, 2)
+            .click({"button": 2}, 2, false)
             .mousemove()
             .mousemove()
-            .auxclick({"button": 2}, 2);
+            .click({"button": 2}, 2, false);
 
         expect(first).toHaveBeenCalledTimes(1);
         expect(end).toHaveBeenCalledTimes(1);
@@ -676,7 +676,7 @@ describe("using bindings", () => {
             .log("interaction")
             .bind();
 
-        robot(elt).click();
+        robot().click(elt, 1, false);
 
         expect(ctx.commands).toHaveLength(1);
     });
@@ -1845,8 +1845,8 @@ describe("using bindings", () => {
                 .toProduce((_i: ThenData<Array<KeyData | PointData>>) => new StubCmd(true))
                 .bind();
 
-            robot(elt)
-                .click()
+            robot()
+                .click(elt, 1, false)
                 .keydown()
                 .keyup();
 

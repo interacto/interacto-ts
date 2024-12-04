@@ -13,9 +13,8 @@
  */
 
 import {Clicks} from "../../../src/impl/interaction/library/Clicks";
-import {createMouseEvent} from "../StubEvents";
+import {createMouseEvent, robot} from "../StubEvents";
 import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
-import {robot} from "interacto-nono";
 import {mock} from "jest-mock-extended";
 import type {FSMHandler} from "../../../src/api/fsm/FSMHandler";
 import type {Logger} from "../../../src/api/logging/Logger";
@@ -43,6 +42,7 @@ describe("using a clicks interaction", () => {
             logger = mock<Logger>();
             canvas = document.createElement("canvas");
             interaction = new Clicks(nb, logger);
+            interaction.registerToNodes([canvas]);
             interaction.fsm.addHandler(handler);
         });
 
@@ -75,6 +75,13 @@ describe("using a clicks interaction", () => {
             expect(handler.fsmUpdates).toHaveBeenCalledTimes(nbClick);
             expect(handler.fsmStops).not.toHaveBeenCalled();
             expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
+        });
+
+        test("that interaction never interacts with handler after creation", () => {
+            expect(handler.fsmStarts).not.toHaveBeenCalled();
+            expect(handler.fsmUpdates).not.toHaveBeenCalled();
+            expect(handler.fsmStops).not.toHaveBeenCalled();
+            expect(handler.fsmCancels).not.toHaveBeenCalled();
         });
 
         test(`that ${nb} clicks is OK`, () => {
@@ -118,6 +125,20 @@ describe("using a clicks interaction", () => {
             expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
             expect(handler.fsmCancels).not.toHaveBeenCalled();
             expect(handler.fsmStops).toHaveBeenCalledTimes(2);
+        });
+
+        test(`that ${nb} clicks do not operate on moves`, () => {
+            robot(canvas)
+                .mousedown({"button": 1})
+                .mouseup({"button": 1});
+
+            robot(canvas)
+                .click({"button": 1}, nb - 1)
+                .runAllTimers();
+
+            expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+            expect(handler.fsmStops).toHaveBeenCalledTimes(0);
+            expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
         });
 
         test("that data first click ok", () => {

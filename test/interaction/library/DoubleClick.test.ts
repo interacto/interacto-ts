@@ -36,7 +36,7 @@ describe("using a double click interaction", () => {
 
     test("double click on a canvas starts and stops the interaction", () => {
         interaction.registerToNodes([canvas]);
-        robot().click(canvas, 2);
+        robot().click(canvas, 2, false);
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     });
@@ -44,14 +44,14 @@ describe("using a double click interaction", () => {
     test("log interaction is ok", () => {
         interaction.log(true);
         interaction.registerToNodes([canvas]);
-        robot().click(canvas, 2);
+        robot().click(canvas, 2, false);
 
-        expect(logger.logInteractionMsg).toHaveBeenCalledTimes(10);
+        expect(logger.logInteractionMsg).toHaveBeenCalledTimes(12);
     });
 
     test("no log interaction is ok", () => {
         interaction.registerToNodes([canvas]);
-        robot().click(canvas, 2);
+        robot().click(canvas, 2, false);
 
         expect(logger.logInteractionMsg).not.toHaveBeenCalled();
     });
@@ -65,7 +65,9 @@ describe("using a double click interaction", () => {
             data.copy(interaction.data);
         });
         interaction.fsm.addHandler(newHandler);
-        robot(canvas).click({"clientX": 11, "clientY": 23}, 2);
+        robot(canvas)
+            .click({"clientX": 11, "clientY": 23}, 2, false);
+
         expect(data.clientX).toBe(11);
         expect(data.clientY).toBe(23);
         expect(data.button).toBe(0);
@@ -76,7 +78,8 @@ describe("using a double click interaction", () => {
         interaction.registerToNodes([canvas]);
         const newHandler = mock<FSMHandler>();
         interaction.fsm.addHandler(newHandler);
-        robot(canvas).click({"clientX": 11, "clientY": 23}, 2);
+        robot(canvas)
+            .click({"clientX": 11, "clientY": 23}, 2, false);
 
         expect(newHandler.fsmReinit).toHaveBeenCalledTimes(1);
         expect(interaction.data.clientX).toBe(0);
@@ -88,9 +91,9 @@ describe("using a double click interaction", () => {
     test("that two double clicks ok", () => {
         interaction.registerToNodes([canvas]);
         robot()
-            .click(canvas, 2)
+            .click(canvas, 2, false)
             .runAllTimers()
-            .click(canvas, 2);
+            .click(canvas, 2, false);
         expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
         expect(handler.fsmCancels).not.toHaveBeenCalled();
         expect(handler.fsmStops).toHaveBeenCalledTimes(2);
@@ -99,9 +102,9 @@ describe("using a double click interaction", () => {
     test("move between clicks cancels the double click", () => {
         interaction.registerToNodes([canvas]);
         robot(canvas)
-            .click()
+            .click(undefined, 1, false)
             .mousemove()
-            .click();
+            .click(undefined, 1, false);
         expect(handler.fsmStarts).not.toHaveBeenCalled();
         expect(handler.fsmStops).not.toHaveBeenCalled();
     });
@@ -119,17 +122,17 @@ describe("using a double click interaction", () => {
     test("double click with two different mouse button for each click don't start the interaction", () => {
         interaction.registerToNodes([canvas]);
         robot(canvas)
-            .click({"button": 0})
-            .click({"button": 2});
+            .click({"button": 0}, 1, false)
+            .click({"button": 2}, 1, false);
         expect(handler.fsmStarts).not.toHaveBeenCalled();
     });
 
     test("check if the interaction is recycled after a cancel", () => {
         interaction.registerToNodes([canvas]);
         robot(canvas)
-            .click()
+            .click(undefined, 1, false)
             .mousemove()
-            .click(canvas, 2);
+            .click(canvas, 2, false);
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     });
@@ -137,9 +140,9 @@ describe("using a double click interaction", () => {
     test("check if the interaction work fine with bad move", () => {
         interaction.registerToNodes([canvas]);
         robot()
-            .click(canvas)
+            .click(canvas, 1, false)
             .mousemove({"button": 1})
-            .click();
+            .click(undefined, 1, false);
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmStops).toHaveBeenCalledTimes(1);
         expect(handler.fsmCancels).not.toHaveBeenCalled();
@@ -148,7 +151,7 @@ describe("using a double click interaction", () => {
     test("specific mouse button checking OK", () => {
         interaction.registerToNodes([canvas]);
         robot(canvas)
-            .auxclick({"button": 2}, 2);
+            .click({"button": 2}, 2, false);
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     });
@@ -156,9 +159,9 @@ describe("using a double click interaction", () => {
     test("dble Click OK After Delay", () => {
         interaction.registerToNodes([canvas]);
         robot(canvas)
-            .auxclick({"button": 2})
+            .click({"button": 2}, 1, false)
             .runOnlyPendingTimers()
-            .click({"button": 1}, 2);
+            .click({"button": 1}, 2, false);
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     });

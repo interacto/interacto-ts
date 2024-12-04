@@ -84,7 +84,7 @@ describe("using the std FSM visitor implementation", () => {
     test("visiting the click FSM works", () => {
         visitedFSM = new ClickFSM(mock<Logger>());
         visitedFSM.acceptVisitor(visitor);
-        expect(visitor.res).toBe(">i[init]-click,auxclick-t[clicked]");
+        expect(visitor.res).toBe(">i[init]-mousedown-s[down]-mouseup-t[clicked]");
     });
 
     test("visiting the key typed FSM works", () => {
@@ -96,7 +96,7 @@ describe("using the std FSM visitor implementation", () => {
     test("visiting the double click FSM works", () => {
         visitedFSM = new DoubleClickFSM(mock<Logger>());
         visitedFSM.acceptVisitor(visitor);
-        expect(visitor.res).toBe(">i[init]-click,auxclick-s[clicked]-mousemove-c[cancelled]-timeout-c[cancelled]-click,auxclick-t[dbleclicked]");
+        expect(visitor.res).toBe(">i[init]-mousedown-s[clicked]-mousemove-c[cancelled]-timeout-c[cancelled]-mousedown-t[dbleclicked]");
     });
 
     test("visiting the non-cancellable DnD FSM works", () => {

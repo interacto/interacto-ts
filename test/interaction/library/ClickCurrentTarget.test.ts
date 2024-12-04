@@ -43,7 +43,7 @@ describe("using a click interaction with a currenttarget", () => {
         });
 
         interaction.registerToNodes([groupe]);
-        robot().click(circle);
+        robot(circle).click(undefined, 1, false);
         expect(data.target).toBe(circle);
     });
 });

@@ -13,12 +13,12 @@
  */
 
 import {Click, PointDataImpl} from "../../../src/interacto";
-import {createMouseEvent2} from "../StubEvents";
 import {beforeEach, describe, expect, jest, test} from "@jest/globals";
 import {robot} from "interacto-nono";
 import {mock} from "jest-mock-extended";
 import type {FSMHandler, Logger} from "../../../src/interacto";
 import type {MockProxy} from "jest-mock-extended";
+import {createMouseEvent2} from "../StubEvents";
 
 describe("using a click interaction", () => {
     let interaction: Click;
@@ -36,22 +36,31 @@ describe("using a click interaction", () => {
 
     test("click on a element starts and stops the interaction Click", () => {
         interaction.registerToNodes([canvas]);
-        canvas.click();
+        robot(canvas).click({"button": 2}, 1, false);
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+    });
+
+    test("not same button does not trigger the click", () => {
+        interaction.registerToNodes([canvas]);
+        robot(canvas)
+            .mousedown({"button": 2})
+            .mouseup({"button": 1});
+        expect(handler.fsmStarts).not.toHaveBeenCalled();
+        expect(handler.fsmStops).not.toHaveBeenCalled();
     });
 
     test("log interaction is ok", () => {
         interaction.log(true);
         interaction.registerToNodes([canvas]);
-        canvas.click();
+        robot(canvas).click(undefined, 1, false);
 
-        expect(logger.logInteractionMsg).toHaveBeenCalledTimes(4);
+        expect(logger.logInteractionMsg).toHaveBeenCalledTimes(5);
     });
 
     test("no log interaction is ok", () => {
         interaction.registerToNodes([canvas]);
-        canvas.click();
+        robot(canvas).click(undefined, 1, false);
 
         expect(logger.logInteractionMsg).not.toHaveBeenCalled();
     });
@@ -65,16 +74,9 @@ describe("using a click interaction", () => {
     test("press on a canvas then move don't starts the interaction", () => {
         interaction.registerToNodes([canvas]);
         robot(canvas)
-            .mousedown()
-            .mousemove();
+            .mousedown({"button": 3})
+            .mousemove({"button": 3});
         expect(handler.fsmStarts).not.toHaveBeenCalled();
-    });
-
-    test("specific mouse button checking OK", () => {
-        interaction.registerToNodes([canvas]);
-        robot().auxclick({"target": canvas, "button": 2});
-        expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-        expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     });
 
     test("click Data", () => {
@@ -106,7 +108,8 @@ describe("using a click interaction", () => {
         handler.fsmStops = jest.fn(() => {
             data.copy(interaction.data);
         });
-        interaction.processEvent(createMouseEvent2("click", expected));
+        interaction.processEvent(createMouseEvent2("mousedown", expected));
+        interaction.processEvent(createMouseEvent2("mouseup", expected));
         expect(data).toStrictEqual(expected);
     });
 
@@ -117,7 +120,8 @@ describe("using a click interaction", () => {
             data.copy(interaction.data);
         });
         interaction.registerToNodes([canvas]);
-        robot().click({"target": canvas, "button": 1, "screenX": 111, "screenY": 222, "clientX": 11, "clientY": 22});
+        robot().click({"target": canvas, "button": 1, "screenX": 111, "screenY": 222, "clientX": 11, "clientY": 22}, 1, false);
+
         expect(data.clientX).toBe(11);
         expect(data.clientY).toBe(22);
         expect(data.screenX).toBe(111);
@@ -129,7 +133,8 @@ describe("using a click interaction", () => {
         const newHandler = mock<FSMHandler>();
         interaction.fsm.addHandler(newHandler);
         interaction.registerToNodes([canvas]);
-        robot().click({"target": canvas, "button": 1, "screenX": 111, "screenY": 222, "clientX": 11, "clientY": 22});
+        robot().click({"target": canvas, "button": 1, "screenX": 111, "screenY": 222, "clientX": 11, "clientY": 22}, 1, false);
+
         expect(newHandler.fsmReinit).toHaveBeenCalledTimes(1);
         expect(interaction.data.clientX).toBe(0);
         expect(interaction.data.clientY).toBe(0);

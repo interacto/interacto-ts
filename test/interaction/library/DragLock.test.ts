@@ -13,9 +13,8 @@
  */
 
 import {DragLock} from "../../../src/interacto";
-import {createMouseEvent} from "../StubEvents";
+import {robot} from "../StubEvents";
 import {beforeEach, describe, expect, jest, test} from "@jest/globals";
-import {robot} from "interacto-nono";
 import {mock} from "jest-mock-extended";
 import type {FSMHandler, Logger} from "../../../src/interacto";
 import type {MockProxy} from "jest-mock-extended";
@@ -42,9 +41,9 @@ describe("using a drag lock interaction", () => {
     test("drag lock is ok", () => {
         interaction.registerToNodes([canvas]);
         robot()
-            .click(canvas, 2)
+            .click(canvas, 2, false)
             .mousemove()
-            .click({}, 2);
+            .click({}, 2, false);
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmStops).toHaveBeenCalledTimes(1);
         expect(handler.fsmCancels).not.toHaveBeenCalled();
@@ -54,26 +53,26 @@ describe("using a drag lock interaction", () => {
         interaction.log(true);
         interaction.registerToNodes([canvas]);
         robot()
-            .click(canvas, 2)
+            .click(canvas, 2, false)
             .mousemove()
-            .click({}, 2);
+            .click({}, 2, false);
 
-        expect(logger.logInteractionMsg).toHaveBeenCalledTimes(24);
+        expect(logger.logInteractionMsg).toHaveBeenCalledTimes(28);
     });
 
     test("no log interaction is ok", () => {
         interaction.registerToNodes([canvas]);
         robot()
-            .click(canvas, 2)
+            .click(canvas, 2, false)
             .mousemove()
-            .click({}, 2);
+            .click({}, 2, false);
 
         expect(logger.logInteractionMsg).not.toHaveBeenCalled();
     });
 
     test("drag lock requires a least a move", () => {
         interaction.registerToNodes([canvas]);
-        robot().click(canvas, 4);
+        robot().click(canvas, 4, false);
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmStops).not.toHaveBeenCalled();
         expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
@@ -82,7 +81,7 @@ describe("using a drag lock interaction", () => {
     test("drag lock canceled on ESC", () => {
         interaction.registerToNodes([canvas]);
         robot()
-            .click(canvas, 2)
+            .click(canvas, 2, false)
             .keydown({"code": "27"});
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmStops).not.toHaveBeenCalled();
@@ -90,6 +89,7 @@ describe("using a drag lock interaction", () => {
     });
 
     test("check data with a normal execution", () => {
+        interaction.registerToNodes([canvas]);
         const newHandler = mock<FSMHandler>();
         newHandler.fsmStops = jest.fn(() => {
             sx = interaction.data.src.clientX;
@@ -98,11 +98,12 @@ describe("using a drag lock interaction", () => {
             ty = interaction.data.tgt.clientY;
         });
         interaction.fsm.addHandler(newHandler);
-        interaction.processEvent(createMouseEvent("click", canvas, undefined, undefined, 11, 23));
-        interaction.processEvent(createMouseEvent("click", canvas, undefined, undefined, 11, 23));
-        interaction.processEvent(createMouseEvent("mousemove", canvas, undefined, undefined, 20, 30));
-        interaction.processEvent(createMouseEvent("click", canvas, undefined, undefined, 22, 33));
-        interaction.processEvent(createMouseEvent("click", canvas, undefined, undefined, 22, 33));
+
+        robot(canvas)
+            .click({"clientX": 11, "clientY": 23}, 2, false)
+            .mousemove({"clientX": 20, "clientY": 30})
+            .click({"clientX": 22, "clientY": 33}, 2, false);
+
         expect(sx).toBe(11);
         expect(sy).toBe(23);
         expect(tx).toBe(22);
@@ -116,14 +117,14 @@ describe("using a drag lock interaction", () => {
     test("check update work during move", () => {
         interaction.registerToNodes([canvas]);
         robot()
-            .click(canvas, 2)
+            .click(canvas, 2, false)
             .mousemove();
         expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
     });
 
     test("check data update during a move", () => {
         interaction.registerToNodes([canvas]);
-        robot(canvas).click({"clientX": 11, "clientY": 23}, 2);
+        robot(canvas).click({"clientX": 11, "clientY": 23}, 2, false);
         const newHandler = mock<FSMHandler>();
         newHandler.fsmUpdates = jest.fn(() => {
             tx = interaction.data.tgt.clientX;
@@ -139,9 +140,9 @@ describe("using a drag lock interaction", () => {
     test("check data reinitialisation", () => {
         interaction.registerToNodes([canvas]);
         robot()
-            .click(canvas, 2)
+            .click(canvas, 2, false)
             .mousemove()
-            .click({}, 2);
+            .click({}, 2, false);
         expect(interaction.data.src.clientX).toBe(0);
         expect(interaction.data.src.clientY).toBe(0);
         expect(interaction.data.tgt.clientX).toBe(0);
@@ -151,7 +152,7 @@ describe("using a drag lock interaction", () => {
     test("check if canceled with Esc after a move", () => {
         interaction.registerToNodes([canvas]);
         robot()
-            .click(canvas, 2)
+            .click(canvas, 2, false)
             .mousemove()
             .keydown({"code": "27"});
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
@@ -162,46 +163,50 @@ describe("using a drag lock interaction", () => {
     test("check if the last DoubleClick with a different button don't stop the interaction", () => {
         interaction.registerToNodes([canvas]);
         robot(canvas)
-            .click({"button": 1}, 2)
-            .click({"button": 0}, 2);
+            .click({"button": 1}, 2, false)
+            .click({"button": 0}, 2, false);
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmStops).not.toHaveBeenCalled();
     });
 
     test("specific mouse button checking OK", () => {
         interaction.registerToNodes([canvas]);
-        interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23));
-        interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23));
-        interaction.processEvent(createMouseEvent("mousemove", canvas, undefined, undefined, 20, 30));
-        interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 22, 33));
-        interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 22, 33));
+
+        robot(canvas)
+            .click({"clientX": 11, "clientY": 23, "button": 3}, 2, false)
+            .mousemove({"clientX": 20, "clientY": 30})
+            .click({"clientX": 22, "clientY": 33, "button": 3}, 2, false);
+
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     });
 
     test("several moves ok", () => {
         interaction.registerToNodes([canvas]);
-        interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23));
-        interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23));
-        interaction.processEvent(createMouseEvent("mousemove", canvas, undefined, undefined, 20, 30));
-        interaction.processEvent(createMouseEvent("mousemove", canvas, undefined, undefined, 20, 30));
-        interaction.processEvent(createMouseEvent("mousemove", canvas, undefined, undefined, 20, 30));
-        interaction.processEvent(createMouseEvent("mousemove", canvas, undefined, undefined, 20, 30));
+
+        robot(canvas)
+            .click({"clientX": 11, "clientY": 23, "button": 3}, 2, false)
+            .mousemove({"clientX": 20, "clientY": 30})
+            .mousemove({"clientX": 20, "clientY": 30})
+            .mousemove({"clientX": 20, "clientY": 30})
+            .mousemove({"clientX": 20, "clientY": 30});
+
         expect(handler.fsmUpdates).toHaveBeenCalledTimes(5);
     });
 
     test("several moves ok with specific mouse button", () => {
         interaction.registerToNodes([canvas]);
-        interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
-        interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
-        interaction.processEvent(createMouseEvent("mousemove", canvas, undefined, undefined, 21, 30, 0));
-        interaction.processEvent(createMouseEvent("mousemove", canvas, undefined, undefined, 22, 30, 0));
-        interaction.processEvent(createMouseEvent("mousemove", canvas, undefined, undefined, 23, 30, 0));
-        interaction.processEvent(createMouseEvent("mousemove", canvas, undefined, undefined, 25, 30, 0));
-        interaction.processEvent(createMouseEvent("mousemove", canvas, undefined, undefined, 20, 30, 0));
-        interaction.processEvent(createMouseEvent("mousemove", canvas, undefined, undefined, 20, 30, 0));
-        interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
-        interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
+
+        robot(canvas)
+            .click({"clientX": 11, "clientY": 23, "button": 2}, 2, false)
+            .mousemove({"clientX": 20, "clientY": 30})
+            .mousemove({"clientX": 20, "clientY": 30})
+            .mousemove({"clientX": 20, "clientY": 30})
+            .mousemove({"clientX": 20, "clientY": 30})
+            .mousemove({"clientX": 20, "clientY": 30})
+            .mousemove({"clientX": 20, "clientY": 30})
+            .click({"clientX": 11, "clientY": 33, "button": 2}, 2, false);
+
         expect(handler.fsmUpdates).toHaveBeenCalledTimes(7);
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmStops).toHaveBeenCalledTimes(1);
@@ -209,11 +214,12 @@ describe("using a drag lock interaction", () => {
 
     test("timeout first double click", () => {
         interaction.registerToNodes([canvas]);
-        interaction.processEvent(createMouseEvent("click", canvas, undefined, undefined, 11, 23, 1));
-        jest.runOnlyPendingTimers();
 
-        interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
-        interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
+        robot(canvas)
+            .click({"clientX": 11, "clientY": 23, "button": 1}, 1, false)
+            .runOnlyPendingTimers()
+            .click({"clientX": 11, "clientY": 23, "button": 2}, 2, false);
+
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmCancels).not.toHaveBeenCalled();
         expect(handler.fsmStops).not.toHaveBeenCalled();
@@ -222,12 +228,13 @@ describe("using a drag lock interaction", () => {
 
     test("timeout first Click Update Still OK", () => {
         interaction.registerToNodes([canvas]);
-        interaction.processEvent(createMouseEvent("click", canvas, undefined, undefined, 11, 23, 1));
-        jest.runOnlyPendingTimers();
-        interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
-        interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
-        interaction.processEvent(createMouseEvent("mousemove", canvas, undefined, undefined, 21, 30, 2));
-        interaction.processEvent(createMouseEvent("mousemove", canvas, undefined, undefined, 21, 30, 2));
+
+        robot(canvas)
+            .click({"clientX": 11, "clientY": 23, "button": 1}, 1, false)
+            .runOnlyPendingTimers()
+            .click({"clientX": 11, "clientY": 23, "button": 2}, 2, false)
+            .mousemove({"clientX": 21, "clientY": 30})
+            .mousemove({"clientX": 21, "clientY": 30});
 
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmUpdates).toHaveBeenCalledTimes(3);
@@ -238,14 +245,14 @@ describe("using a drag lock interaction", () => {
     test("timeout first Click end Still OK", () => {
         interaction.log(true);
         interaction.registerToNodes([canvas]);
-        interaction.processEvent(createMouseEvent("click", canvas, undefined, undefined, 11, 23, 1));
-        jest.runOnlyPendingTimers();
-        interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
-        interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
-        interaction.processEvent(createMouseEvent("mousemove", canvas, undefined, undefined, 21, 30, 2));
-        interaction.processEvent(createMouseEvent("mousemove", canvas, undefined, undefined, 21, 30, 2));
-        interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
-        interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
+
+        robot(canvas)
+            .click({"clientX": 11, "clientY": 23, "button": 1}, 1, false)
+            .runOnlyPendingTimers()
+            .click({"clientX": 11, "clientY": 23, "button": 2}, 2, false)
+            .mousemove({"clientX": 21, "clientY": 30})
+            .mousemove({"clientX": 21, "clientY": 30})
+            .click({"clientX": 11, "clientY": 23, "button": 2}, 2, false);
 
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmUpdates).toHaveBeenCalledTimes(3);
@@ -255,41 +262,43 @@ describe("using a drag lock interaction", () => {
 
     test("timeout Second Click KO", () => {
         interaction.registerToNodes([canvas]);
-        interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
-        interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
-        interaction.processEvent(createMouseEvent("mousemove", canvas, undefined, undefined, 21, 30, 2));
-        interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
-        jest.runOnlyPendingTimers();
-        interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
+
+        robot(canvas)
+            .click({"clientX": 11, "clientY": 23, "button": 2}, 2, false)
+            .mousemove({"clientX": 21, "clientY": 30, "button": 2})
+            .click({"clientX": 11, "clientY": 23, "button": 2}, 1, false)
+            .runOnlyPendingTimers()
+            .click({"clientX": 11, "clientY": 23, "button": 2}, 1, false);
 
         expect(handler.fsmStops).not.toHaveBeenCalled();
     });
 
     test("timeout Second Click OK", () => {
         interaction.registerToNodes([canvas]);
-        interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
-        interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
-        interaction.processEvent(createMouseEvent("mousemove", canvas, undefined, undefined, 21, 30, 2));
-        interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
-        jest.runOnlyPendingTimers();
-        interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
-        interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
+
+        robot(canvas)
+            .click({"clientX": 11, "clientY": 23, "button": 2}, 2, false)
+            .mousemove({"clientX": 21, "clientY": 30, "button": 2})
+            .click({"clientX": 11, "clientY": 23, "button": 2}, 1, false)
+            .runOnlyPendingTimers()
+            .click({"clientX": 11, "clientY": 23, "button": 2}, 2, false);
 
         expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     });
 
     test("first Click Has target object", () => {
         interaction.registerToNodes([canvas]);
-        canvas.click();
-        canvas.click();
+        robot()
+            .click(canvas, 2, false);
 
         expect(interaction.data.tgt.target).toBe(canvas);
     });
 
     test("first Click Has target Values", () => {
         interaction.registerToNodes([canvas]);
-        interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
-        interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
+
+        robot(canvas)
+            .click({"clientX": 11, "clientY": 23, "button": 2}, 2, false);
 
         expect(interaction.data.tgt.clientX).toBe(11);
         expect(interaction.data.tgt.clientY).toBe(23);
@@ -298,9 +307,10 @@ describe("using a drag lock interaction", () => {
 
     test("move Has Still Src Values", () => {
         interaction.registerToNodes([canvas]);
-        interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
-        interaction.processEvent(createMouseEvent("auxclick", canvas, undefined, undefined, 11, 23, 2));
-        interaction.processEvent(createMouseEvent("mousemove", canvas, undefined, undefined, 21, 30, 2));
+
+        robot(canvas)
+            .click({"clientX": 11, "clientY": 23, "button": 2}, 2, false)
+            .mousemove({"clientX": 21, "clientY": 30, "button": 2});
 
         expect(interaction.data.tgt.clientX).toBe(21);
         expect(interaction.data.tgt.clientY).toBe(30);
@@ -312,9 +322,9 @@ describe("using a drag lock interaction", () => {
     test("clear Data", () => {
         interaction.registerToNodes([canvas]);
         robot()
-            .click(canvas, 2)
+            .click(canvas, 2, false)
             .mousemove()
-            .click({}, 2);
+            .click({}, 2, false);
 
         expect(handler.fsmReinit).toHaveBeenCalledTimes(1);
         expect(interaction.data.src.screenX).toBe(0);

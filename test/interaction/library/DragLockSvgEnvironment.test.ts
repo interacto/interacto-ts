@@ -13,7 +13,6 @@
  */
 
 import {DragLock, SrcTgtPointsDataImpl} from "../../../src/interacto";
-import {createMouseEvent} from "../StubEvents";
 import {beforeEach, describe, expect, jest, test} from "@jest/globals";
 import {robot} from "interacto-nono";
 import {mock} from "jest-mock-extended";
@@ -44,9 +43,9 @@ describe("using a drag lock interaction on SVG elements", () => {
     test("dragLock in a SVG environment", () => {
         interaction.registerToNodes([rect1, rect2]);
         robot()
-            .click(rect2, 2)
+            .click(rect2, 2, false)
             .mousemove()
-            .click(rect1, 2);
+            .click(rect1, 2, false);
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmUpdates).toHaveBeenCalledTimes(2);
         expect(handler.fsmStops).toHaveBeenCalledTimes(1);
@@ -61,11 +60,13 @@ describe("using a drag lock interaction on SVG elements", () => {
             data.copyTgt(interaction.data.tgt);
         });
         interaction.fsm.addHandler(newHandler);
-        interaction.processEvent(createMouseEvent("click", rect1, undefined, undefined, 11, 23));
-        interaction.processEvent(createMouseEvent("click", rect1, undefined, undefined, 11, 23));
-        interaction.processEvent(createMouseEvent("mousemove", svg, undefined, undefined, 20, 30));
-        interaction.processEvent(createMouseEvent("click", rect2, undefined, undefined, 22, 33));
-        interaction.processEvent(createMouseEvent("click", rect2, undefined, undefined, 22, 33));
+        interaction.registerToNodes([svg]);
+
+        robot()
+            .click({"target": rect1, "clientX": 11, "clientY": 23}, 2, false)
+            .mousemove({"target": svg, "clientX": 20, "clientY": 30})
+            .click({"target": rect2, "clientX": 22, "clientY": 33}, 2, false);
+
         expect(data.src.clientX).toBe(11);
         expect(data.src.clientY).toBe(23);
         expect(data.tgt.clientX).toBe(22);

@@ -12,8 +12,8 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {ClickTransition} from "../../fsm/ClickTransition";
 import {FSMImpl} from "../../fsm/FSMImpl";
+import {MouseTransition} from "../../fsm/MouseTransition";
 import {InteractionBase} from "../InteractionBase";
 import {PointDataImpl} from "../PointDataImpl";
 import type {PointData} from "../../../api/interaction/PointData";
@@ -34,11 +34,18 @@ export class ClickFSM extends FSMImpl {
     public constructor(logger: Logger, action?: (evt: MouseEvent) => void) {
         super(logger);
 
-        new ClickTransition(this.initState, this.addTerminalState("clicked"),
+        const down = this.addStdState("down");
+        const clicked = this.addTerminalState("clicked");
+
+        this.startingState = clicked;
+
+        new MouseTransition(this.initState, down, "mousedown",
             (evt: MouseEvent): void => {
                 this.setCheckButton(evt.button);
-                action?.(evt);
             },
+            (evt: MouseEvent): boolean => this.checkButton === undefined || evt.button === this.checkButton);
+
+        new MouseTransition(down, clicked, "mouseup", action,
             (evt: MouseEvent): boolean => this.checkButton === undefined || evt.button === this.checkButton);
     }
 

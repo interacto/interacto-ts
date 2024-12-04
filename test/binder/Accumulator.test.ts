@@ -466,7 +466,7 @@ describe("testing an accumulator", () => {
                 .on(elt)
                 .bind();
 
-            robot().click(elt);
+            robot().click(elt, 1, false);
 
             expect(val).toBe(1);
         });
@@ -484,7 +484,7 @@ describe("testing an accumulator", () => {
                 .on(elt)
                 .bind();
 
-            robot().click(elt, 2);
+            robot().click(elt, 2, false);
 
             expect(val).toBe(1);
         });
