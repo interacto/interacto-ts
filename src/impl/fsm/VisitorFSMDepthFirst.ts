@@ -16,6 +16,7 @@ import type {FSM} from "../../api/fsm/FSM";
 import type {InputState} from "../../api/fsm/InputState";
 import type {OutputState} from "../../api/fsm/OutputState";
 import type {State} from "../../api/fsm/State";
+import type {SubFSMTransition} from "../../api/fsm/SubFSMTransition";
 import type {Transition} from "../../api/fsm/Transition";
 import type {VisitorFSM} from "../../api/fsm/VisitorFSM";
 
@@ -74,6 +75,11 @@ export class VisitorFSMDepthFirst implements VisitorFSM {
     }
 
     public visitTimeoutTransition(transition: Transition<Event>): void {
+        transition.target.acceptVisitor(this);
+    }
+
+    public visitSubFSMTransition(transition: SubFSMTransition): void {
+        transition.getSubFSM().acceptVisitor(this);
         transition.target.acceptVisitor(this);
     }
 

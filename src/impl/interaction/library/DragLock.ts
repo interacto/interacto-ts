@@ -16,7 +16,7 @@ import {DoubleClick, DoubleClickFSM} from "./DoubleClick";
 import {EscapeKeyPressureTransition} from "../../fsm/EscapeKeyPressureTransition";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {MouseTransition} from "../../fsm/MouseTransition";
-import {SubFSMTransition} from "../../fsm/SubFSMTransition";
+import {SubFSMTransitionImpl} from "../../fsm/SubFSMTransitionImpl";
 import {InteractionBase} from "../InteractionBase";
 import {SrcTgtPointsDataImpl} from "../SrcTgtPointsDataImpl";
 import type {PointData} from "../../../api/interaction/PointData";
@@ -56,7 +56,7 @@ class DragLockFSM extends FSMImpl {
         const locked = this.addStdState("locked");
         const moved = this.addStdState("moved");
 
-        new SubFSMTransition(this.initState, locked, this.firstDbleClick,
+        new SubFSMTransitionImpl(this.initState, locked, this.firstDbleClick,
             (): void => {
                 const checkButton = this.firstDbleClick.getCheckButton();
                 this.sndDbleClick.setCheckButton(checkButton);
@@ -64,7 +64,7 @@ class DragLockFSM extends FSMImpl {
                 handler.onFirstDbleClick();
             });
 
-        new SubFSMTransition(locked, cancelled, cancelDbleClick);
+        new SubFSMTransitionImpl(locked, cancelled, cancelDbleClick);
 
         const move = new MouseTransition(locked, moved, "mousemove",
             (event: MouseEvent): void => {
@@ -75,7 +75,7 @@ class DragLockFSM extends FSMImpl {
 
         new EscapeKeyPressureTransition(locked, cancelled);
         new EscapeKeyPressureTransition(moved, cancelled);
-        new SubFSMTransition(moved, this.addTerminalState("dropped"), this.sndDbleClick);
+        new SubFSMTransitionImpl(moved, this.addTerminalState("dropped"), this.sndDbleClick);
     }
 
     // eslint-disable-next-line accessor-pairs

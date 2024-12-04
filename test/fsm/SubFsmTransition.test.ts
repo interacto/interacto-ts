@@ -13,14 +13,14 @@
  */
 
 import {SubStubTransition1} from "./StubTransitionOk";
-import {FSMImpl, SubFSMTransition} from "../../src/interacto";
+import {FSMImpl, SubFSMTransitionImpl} from "../../src/interacto";
 import {createMouseEvent} from "../interaction/StubEvents";
 import {beforeEach, describe, expect, jest, test} from "@jest/globals";
 import {mock} from "jest-mock-extended";
 import type {InputState, Logger, Transition, StdState, TerminalState, EventType} from "../../src/interacto";
 
 describe("using a sub fsm transition", () => {
-    let tr: SubFSMTransition;
+    let tr: SubFSMTransitionImpl;
     let fsm: FSMImpl;
     let mainfsm: FSMImpl;
     let s1: StdState;
@@ -34,7 +34,7 @@ describe("using a sub fsm transition", () => {
         s1 = mainfsm.addStdState("s1");
         s2 = mainfsm.addStdState("s2");
         subS = fsm.addTerminalState("sub1");
-        tr = new SubFSMTransition(s1, s2, fsm);
+        tr = new SubFSMTransitionImpl(s1, s2, fsm);
 
         new SubStubTransition1(fsm.initState, subS, true);
     });
@@ -42,6 +42,10 @@ describe("using a sub fsm transition", () => {
     test("inner", () => {
         expect(fsm.inner).toBeTruthy();
         expect(mainfsm.inner).toBeFalsy();
+    });
+
+    test("get sub fsm", () => {
+        expect(tr.getSubFSM()).toBe(fsm);
     });
 
     test("acceptFirstEvent", () => {
@@ -77,7 +81,7 @@ describe("using a sub fsm transition", () => {
     });
 
     test("uninstall", () => {
-        tr = new SubFSMTransition(s1, s2, fsm);
+        tr = new SubFSMTransitionImpl(s1, s2, fsm);
         jest.spyOn(fsm, "uninstall");
         tr.uninstall();
         expect(fsm.uninstall).toHaveBeenCalledTimes(1);

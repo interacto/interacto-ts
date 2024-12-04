@@ -15,7 +15,7 @@
 import {Click, ClickFSM} from "./Click";
 import {FSMImpl} from "../../fsm/FSMImpl";
 import {MouseTransition} from "../../fsm/MouseTransition";
-import {SubFSMTransition} from "../../fsm/SubFSMTransition";
+import {SubFSMTransitionImpl} from "../../fsm/SubFSMTransitionImpl";
 import {TimeoutTransition} from "../../fsm/TimeoutTransition";
 import {InteractionBase} from "../InteractionBase";
 import {PointDataImpl} from "../PointDataImpl";
@@ -76,7 +76,7 @@ export class DoubleClickFSM extends FSMImpl {
         const cancelled = this.addCancellingState("cancelled");
         const clicked = this.addStdState("clicked");
 
-        new SubFSMTransition(this.initState, clicked, this.firstClickFSM,
+        new SubFSMTransitionImpl(this.initState, clicked, this.firstClickFSM,
             (): void => {
                 this.setCheckButton(this.firstClickFSM.getCheckButton());
             });
@@ -85,7 +85,7 @@ export class DoubleClickFSM extends FSMImpl {
             (ev: Event): boolean => (this.checkButton === undefined || ev instanceof MouseEvent && ev.button === this.checkButton));
 
         new TimeoutTransition(clicked, cancelled, DoubleClickFSM.timeGapSupplier);
-        new SubFSMTransition(clicked, this.addTerminalState("dbleclicked", true), this.sndClickFSM);
+        new SubFSMTransitionImpl(clicked, this.addTerminalState("dbleclicked", true), this.sndClickFSM);
     }
 
     // eslint-disable-next-line accessor-pairs

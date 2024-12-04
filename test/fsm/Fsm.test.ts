@@ -18,7 +18,7 @@ import {
     FSMImpl,
     InitState,
     StdState,
-    SubFSMTransition,
+    SubFSMTransitionImpl,
     TimeoutTransition
 } from "../../src/interacto";
 import {createKeyEvent, createMouseEvent, createTouchEvent} from "../interaction/StubEvents";
@@ -634,7 +634,7 @@ describe("using an FSM", () => {
             fsm = new FSMImpl(logger);
             mainfsm = new FSMImpl(logger);
             s1 = mainfsm.addStdState("s1");
-            new SubFSMTransition(mainfsm.initState, s1, fsm);
+            new SubFSMTransitionImpl(mainfsm.initState, s1, fsm);
             mainfsm.addHandler(handler);
             subS1 = fsm.addStdState("subS1");
             subS2 = fsm.addStdState("subS2");
@@ -650,7 +650,7 @@ describe("using an FSM", () => {
             fsm = new FSMImpl(logger);
             mainfsm = new FSMImpl(logger);
             s1 = mainfsm.addStdState("s1");
-            new SubFSMTransition(mainfsm.initState, s1, fsm);
+            new SubFSMTransitionImpl(mainfsm.initState, s1, fsm);
             subS1 = fsm.addStdState("subS1");
             subS2 = fsm.addStdState("subS2");
             subT = fsm.addTerminalState("subT");
@@ -671,7 +671,7 @@ describe("using an FSM", () => {
             fsm = new FSMImpl(logger);
             mainfsm = new FSMImpl(logger);
             s1 = mainfsm.addStdState("s1");
-            new SubFSMTransition(mainfsm.initState, s1, fsm);
+            new SubFSMTransitionImpl(mainfsm.initState, s1, fsm);
             fsm.log = false;
             mainfsm.log = false;
             mainfsm.process(createMouseEvent("click", document.createElement("button")));
@@ -725,7 +725,7 @@ describe("using an FSM", () => {
         test("exitSubGoIntoCancelling", () => {
             const cancel = mainfsm.addCancellingState("cancel");
             mainfsm.initState.clearTransitions();
-            new SubFSMTransition(mainfsm.initState, cancel, fsm);
+            new SubFSMTransitionImpl(mainfsm.initState, cancel, fsm);
             mainfsm.process(createMouseEvent("click", document.createElement("button")));
             mainfsm.process(createKeyEvent("keydown", "a"));
             mainfsm.process(createMouseEvent("click", document.createElement("button")));
@@ -737,7 +737,7 @@ describe("using an FSM", () => {
         test("exitSubGoIntoTerminal", () => {
             const terminal = mainfsm.addTerminalState("terminal");
             mainfsm.initState.clearTransitions();
-            new SubFSMTransition(mainfsm.initState, terminal, fsm);
+            new SubFSMTransitionImpl(mainfsm.initState, terminal, fsm);
             mainfsm.process(createMouseEvent("click", document.createElement("button")));
             mainfsm.process(createKeyEvent("keydown", "a"));
             mainfsm.process(createMouseEvent("click", document.createElement("button")));

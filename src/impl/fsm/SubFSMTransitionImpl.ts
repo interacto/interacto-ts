@@ -21,7 +21,9 @@ import type {FSM} from "../../api/fsm/FSM";
 import type {FSMHandler} from "../../api/fsm/FSMHandler";
 import type {InputState} from "../../api/fsm/InputState";
 import type {OutputState} from "../../api/fsm/OutputState";
+import type {SubFSMTransition} from "../../api/fsm/SubFSMTransition";
 import type {Transition} from "../../api/fsm/Transition";
+import type {VisitorFSM} from "../../api/fsm/VisitorFSM";
 import type {Subscription} from "rxjs";
 
 /**
@@ -30,7 +32,7 @@ import type {Subscription} from "rxjs";
  * To leave the transition, the sub-FSM must end.
  * @category FSM Transition
  */
-export class SubFSMTransition extends TransitionBase<Event> {
+export class SubFSMTransitionImpl extends TransitionBase<Event> implements SubFSMTransition {
     private readonly subFSM: FSM;
 
     private readonly subFSMHandler: FSMHandler;
@@ -82,6 +84,10 @@ export class SubFSMTransition extends TransitionBase<Event> {
                 this.src.fsm.onError(err);
             }
         };
+    }
+
+    public getSubFSM(): Readonly<FSM> {
+        return this.subFSM;
     }
 
     /**
@@ -149,5 +155,9 @@ export class SubFSMTransition extends TransitionBase<Event> {
     public override uninstall(): void {
         this.unsetFSMHandler();
         this.subFSM.uninstall();
+    }
+
+    public override acceptVisitor(visitor: VisitorFSM): void {
+        visitor.visitSubFSMTransition(this);
     }
 }

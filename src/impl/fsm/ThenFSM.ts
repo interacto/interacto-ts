@@ -14,14 +14,14 @@
 
 import {FSMImpl} from "./FSMImpl";
 import {StdState} from "./StdState";
-import {SubFSMTransition} from "./SubFSMTransition";
+import {SubFSMTransitionImpl} from "./SubFSMTransitionImpl";
 import {TerminalState} from "./TerminalState";
 import type {FSM} from "../../api/fsm/FSM";
 import type {OutputState} from "../../api/fsm/OutputState";
 import type {Logger} from "../../api/logging/Logger";
 
 /**
- * An FSM that executes a serie of sub-FSMs.
+ * An FSM that executes a series of sub-FSMs.
  * @category FSM
  */
 export class ThenFSM extends FSMImpl {
@@ -33,10 +33,10 @@ export class ThenFSM extends FSMImpl {
 
         for (const [i, fsm] of fsms.entries()) {
             if (i === last) {
-                new SubFSMTransition(currentState, new TerminalState(this, i.toString()), fsm);
+                new SubFSMTransitionImpl(currentState, new TerminalState(this, i.toString()), fsm);
             } else {
                 const state = new StdState(this, i.toString());
-                new SubFSMTransition(currentState, state, fsm);
+                new SubFSMTransitionImpl(currentState, state, fsm);
                 currentState = state;
             }
         }
