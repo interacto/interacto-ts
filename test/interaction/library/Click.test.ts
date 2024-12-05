@@ -29,116 +29,171 @@ describe("using a click interaction", () => {
     beforeEach(() => {
         handler = mock<FSMHandler>();
         logger = mock<Logger>();
-        interaction = new Click(logger);
-        interaction.fsm.addHandler(handler);
         canvas = document.createElement("canvas");
     });
 
-    test("click on a element starts and stops the interaction Click", () => {
-        interaction.registerToNodes([canvas]);
-        robot(canvas).click({"button": 2}, 1, false);
-        expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-        expect(handler.fsmStops).toHaveBeenCalledTimes(1);
-    });
-
-    test("not same button does not trigger the click", () => {
-        interaction.registerToNodes([canvas]);
-        robot(canvas)
-            .mousedown({"button": 2})
-            .mouseup({"button": 1});
-        expect(handler.fsmStarts).not.toHaveBeenCalled();
-        expect(handler.fsmStops).not.toHaveBeenCalled();
-    });
-
-    test("log interaction is ok", () => {
-        interaction.log(true);
-        interaction.registerToNodes([canvas]);
-        robot(canvas).click(undefined, 1, false);
-
-        expect(logger.logInteractionMsg).toHaveBeenCalledTimes(5);
-    });
-
-    test("no log interaction is ok", () => {
-        interaction.registerToNodes([canvas]);
-        robot(canvas).click(undefined, 1, false);
-
-        expect(logger.logInteractionMsg).not.toHaveBeenCalled();
-    });
-
-    test("other event don't trigger the interaction.", () => {
-        interaction.registerToNodes([canvas]);
-        robot().input(canvas);
-        expect(handler.fsmStarts).not.toHaveBeenCalled();
-    });
-
-    test("press on a canvas then move don't starts the interaction", () => {
-        interaction.registerToNodes([canvas]);
-        robot(canvas)
-            .mousedown({"button": 3})
-            .mousemove({"button": 3});
-        expect(handler.fsmStarts).not.toHaveBeenCalled();
-    });
-
-    test("click Data", () => {
-        const data = new PointDataImpl();
-        const expected = new PointDataImpl();
-        expected.copy({
-            "altKey": true,
-            "button": 1,
-            "buttons": 0,
-            "clientX": 11,
-            "clientY": 22,
-            "ctrlKey": false,
-            "currentTarget": canvas,
-            "metaKey": true,
-            "movementX": 10,
-            "movementY": 20,
-            "offsetX": 30,
-            "offsetY": 40,
-            "pageX": 50,
-            "pageY": 60,
-            "relatedTarget": canvas,
-            "screenX": 111,
-            "screenY": 222,
-            "shiftKey": true,
-            "target": canvas,
-            "timeStamp": 0
+    describe("using a std click", () => {
+        beforeEach(() => {
+            interaction = new Click(logger);
+            interaction.fsm.addHandler(handler);
         });
 
-        handler.fsmStops = jest.fn(() => {
-            data.copy(interaction.data);
+        test("click on a element starts and stops the interaction Click", () => {
+            interaction.registerToNodes([canvas]);
+            robot(canvas).click({"button": 2}, 1, false);
+            expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+            expect(handler.fsmStops).toHaveBeenCalledTimes(1);
         });
-        interaction.processEvent(createMouseEvent2("mousedown", expected));
-        interaction.processEvent(createMouseEvent2("mouseup", expected));
-        expect(data).toStrictEqual(expected);
+
+        test("not same button does not trigger the click", () => {
+            interaction.registerToNodes([canvas]);
+            robot(canvas)
+                .mousedown({"button": 2})
+                .mouseup({"button": 1});
+            expect(handler.fsmStarts).not.toHaveBeenCalled();
+            expect(handler.fsmStops).not.toHaveBeenCalled();
+        });
+
+        test("log interaction is ok", () => {
+            interaction.log(true);
+            interaction.registerToNodes([canvas]);
+            robot(canvas).click(undefined, 1, false);
+
+            expect(logger.logInteractionMsg).toHaveBeenCalledTimes(5);
+        });
+
+        test("no log interaction is ok", () => {
+            interaction.registerToNodes([canvas]);
+            robot(canvas).click(undefined, 1, false);
+
+            expect(logger.logInteractionMsg).not.toHaveBeenCalled();
+        });
+
+        test("other event don't trigger the interaction.", () => {
+            interaction.registerToNodes([canvas]);
+            robot().input(canvas);
+            expect(handler.fsmStarts).not.toHaveBeenCalled();
+        });
+
+        test("press on a canvas then move don't starts the interaction", () => {
+            interaction.registerToNodes([canvas]);
+            robot(canvas)
+                .mousedown({"button": 3})
+                .mousemove({"button": 3});
+            expect(handler.fsmStarts).not.toHaveBeenCalled();
+        });
+
+        test("click Data", () => {
+            const data = new PointDataImpl();
+            const expected = new PointDataImpl();
+            expected.copy({
+                "altKey": true,
+                "button": 1,
+                "buttons": 0,
+                "clientX": 11,
+                "clientY": 22,
+                "ctrlKey": false,
+                "currentTarget": canvas,
+                "metaKey": true,
+                "movementX": 10,
+                "movementY": 20,
+                "offsetX": 30,
+                "offsetY": 40,
+                "pageX": 50,
+                "pageY": 60,
+                "relatedTarget": canvas,
+                "screenX": 111,
+                "screenY": 222,
+                "shiftKey": true,
+                "target": canvas,
+                "timeStamp": 0
+            });
+
+            handler.fsmStops = jest.fn(() => {
+                data.copy(interaction.data);
+            });
+            interaction.processEvent(createMouseEvent2("mousedown", expected));
+            interaction.processEvent(createMouseEvent2("mouseup", expected));
+            expect(data).toStrictEqual(expected);
+        });
+
+        test("click On Widget Data", () => {
+            const data = new PointDataImpl();
+
+            handler.fsmStops = jest.fn(() => {
+                data.copy(interaction.data);
+            });
+            interaction.registerToNodes([canvas]);
+            robot().click({"target": canvas, "button": 1, "screenX": 111, "screenY": 222, "clientX": 11, "clientY": 22}, 1, false);
+
+            expect(data.clientX).toBe(11);
+            expect(data.clientY).toBe(22);
+            expect(data.screenX).toBe(111);
+            expect(data.screenY).toBe(222);
+            expect(data.button).toBe(1);
+        });
+
+        test("clear Data", () => {
+            const newHandler = mock<FSMHandler>();
+            interaction.fsm.addHandler(newHandler);
+            interaction.registerToNodes([canvas]);
+            robot().click({"target": canvas, "button": 1, "screenX": 111, "screenY": 222, "clientX": 11, "clientY": 22}, 1, false);
+
+            expect(newHandler.fsmReinit).toHaveBeenCalledTimes(1);
+            expect(interaction.data.clientX).toBe(0);
+            expect(interaction.data.clientY).toBe(0);
+            expect(interaction.data.button).toBe(0);
+            expect(interaction.data.currentTarget).toBeNull();
+        });
     });
 
-    test("click On Widget Data", () => {
-        const data = new PointDataImpl();
-
-        handler.fsmStops = jest.fn(() => {
-            data.copy(interaction.data);
+    describe("using a click with a tolerance rate", () => {
+        beforeEach(() => {
+            interaction = new Click(logger, undefined, undefined, undefined, 10);
+            interaction.fsm.addHandler(handler);
+            interaction.registerToNodes([canvas]);
         });
-        interaction.registerToNodes([canvas]);
-        robot().click({"target": canvas, "button": 1, "screenX": 111, "screenY": 222, "clientX": 11, "clientY": 22}, 1, false);
 
-        expect(data.clientX).toBe(11);
-        expect(data.clientY).toBe(22);
-        expect(data.screenX).toBe(111);
-        expect(data.screenY).toBe(222);
-        expect(data.button).toBe(1);
-    });
+        test("click on a element starts and stops the click if does not move", () => {
+            robot(canvas).click({"clientX": 10, "clientY": 20, "button": 2}, 1, false);
+            expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+            expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+        });
 
-    test("clear Data", () => {
-        const newHandler = mock<FSMHandler>();
-        interaction.fsm.addHandler(newHandler);
-        interaction.registerToNodes([canvas]);
-        robot().click({"target": canvas, "button": 1, "screenX": 111, "screenY": 222, "clientX": 11, "clientY": 22}, 1, false);
+        test("the click cancels if moving beyond the tolerance rate (X position)", () => {
+            robot(canvas)
+                .mousedown({"clientX": 10, "clientY": 20, "button": 2})
+                .mousemove({"clientX": 21, "clientY": 20, "button": 2})
+                .mouseup({"clientX": 21, "clientY": 20, "button": 2});
+            expect(handler.fsmStops).not.toHaveBeenCalled();
+            expect(handler.fsmStarts).not.toHaveBeenCalled();
+        });
 
-        expect(newHandler.fsmReinit).toHaveBeenCalledTimes(1);
-        expect(interaction.data.clientX).toBe(0);
-        expect(interaction.data.clientY).toBe(0);
-        expect(interaction.data.button).toBe(0);
-        expect(interaction.data.currentTarget).toBeNull();
+        test("the click cancels if moving to the tolerance rate (X position)", () => {
+            robot(canvas)
+                .mousedown({"clientX": 10, "clientY": 20, "button": 2})
+                .mousemove({"clientX": 20, "clientY": 20, "button": 2})
+                .mouseup({"clientX": 20, "clientY": 20, "button": 2});
+            expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+            expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+        });
+
+        test("the click cancels if moving beyond the tolerance rate (Y position)", () => {
+            robot(canvas)
+                .mousedown({"clientX": 10, "clientY": 20, "button": 2})
+                .mousemove({"clientX": 11, "clientY": 9, "button": 2})
+                .mouseup({"clientX": 11, "clientY": 9, "button": 2});
+            expect(handler.fsmStops).not.toHaveBeenCalled();
+            expect(handler.fsmStarts).not.toHaveBeenCalled();
+        });
+
+        test("the click cancels if moving to the tolerance rate (Y position)", () => {
+            robot(canvas)
+                .mousedown({"clientX": 10, "clientY": 20, "button": 2})
+                .mousemove({"clientX": 10, "clientY": 10, "button": 2})
+                .mouseup({"clientX": 10, "clientY": 10, "button": 2});
+            expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+            expect(handler.fsmStops).toHaveBeenCalledTimes(1);
+        });
     });
 });

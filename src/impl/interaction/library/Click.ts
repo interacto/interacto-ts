@@ -30,8 +30,9 @@ export class ClickFSM extends FSMImpl {
      * Creates the FSM
      * @param logger - The logger to use for this interaction
      * @param action - The action executed on a click
+     * @param toleranceMove - The accepted number of pixel moves between the pressure and the release of the click
      */
-    public constructor(logger: Logger, action?: (evt: MouseEvent) => void) {
+    public constructor(logger: Logger, action?: (evt: MouseEvent) => void, toleranceMove?: number) {
         super(logger);
 
         const down = this.addStdState("down");
@@ -39,14 +40,24 @@ export class ClickFSM extends FSMImpl {
 
         this.startingState = clicked;
 
+        let firstX = 0;
+        let firstY = 0;
+
         new MouseTransition(this.initState, down, "mousedown",
             (evt: MouseEvent): void => {
+                firstX = evt.clientX;
+                firstY = evt.clientY;
                 this.setCheckButton(evt.button);
             },
             (evt: MouseEvent): boolean => this.checkButton === undefined || evt.button === this.checkButton);
 
         new MouseTransition(down, clicked, "mouseup", action,
             (evt: MouseEvent): boolean => this.checkButton === undefined || evt.button === this.checkButton);
+
+        if (toleranceMove !== undefined) {
+            new MouseTransition(down, this.addCancellingState("moved"), "mousemove", undefined,
+                evt => Math.abs(firstX - evt.clientX) > toleranceMove || Math.abs(firstY - evt.clientY) > toleranceMove);
+        }
     }
 
     public getCheckButton(): number {
@@ -76,11 +87,12 @@ export class Click extends InteractionBase<PointData, PointDataImpl> {
      * @param fsm - The optional FSM provided for the interaction
      * @param data - The interaction data to use
      * @param name - The name of the user interaction
+     * @param toleranceMove - The accepted number of pixel moves between the pressure and the release of the click
      */
-    public constructor(logger: Logger, fsm?: ClickFSM, data?: PointDataImpl, name?: string) {
+    public constructor(logger: Logger, fsm?: ClickFSM, data?: PointDataImpl, name?: string, toleranceMove?: number) {
         const theFSM = fsm ?? new ClickFSM(logger, (evt: MouseEvent): void => {
             this._data.copy(evt);
-        });
+        }, toleranceMove);
         super(theFSM, data ?? new PointDataImpl(), logger, name ?? Click.name);
     }
 }

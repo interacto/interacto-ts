@@ -36,10 +36,11 @@ class DragLockFSM extends FSMImpl {
     protected checkButton: number | undefined;
 
     public constructor(logger: Logger, handler: DragLockFSMHandler,
-                       dbleClick1Action: (evt: MouseEvent) => void, dbleClick2Action: (evt: MouseEvent) => void) {
+                       dbleClick1Action: (evt: MouseEvent) => void,
+                       dbleClick2Action: (evt: MouseEvent) => void, toleranceMove?: number) {
         super(logger);
-        this.firstDbleClick = new DoubleClickFSM(logger, dbleClick1Action);
-        this.sndDbleClick = new DoubleClickFSM(logger, dbleClick2Action);
+        this.firstDbleClick = new DoubleClickFSM(logger, dbleClick1Action, toleranceMove);
+        this.sndDbleClick = new DoubleClickFSM(logger, dbleClick2Action, toleranceMove);
 
         const cancelDbleClick = new DoubleClickFSM(logger);
         const errorHandler = {
@@ -108,8 +109,9 @@ export class DragLock extends InteractionBase<SrcTgtPointsData<PointData>, SrcTg
      * Creates a drag lock.
      * @param logger - The logger to use for this interaction
      * @param name - The name of the user interaction
+     * @param toleranceMove - The accepted number of pixel moves between the pressure and the release of the click
      */
-    public constructor(logger: Logger, name?: string) {
+    public constructor(logger: Logger, name?: string, toleranceMove?: number) {
         const handler: DragLockFSMHandler = {
             "onMove": (evt: MouseEvent): void => {
                 this._data.tgt.copy(evt);
@@ -124,7 +126,7 @@ export class DragLock extends InteractionBase<SrcTgtPointsData<PointData>, SrcTg
             this._data.src.copy(evt);
         }, (evt: MouseEvent): void => {
             this._data.tgt.copy(evt);
-        });
+        }, toleranceMove);
 
         super(theFSM, new SrcTgtPointsDataImpl(), logger, name ?? DragLock.name);
 

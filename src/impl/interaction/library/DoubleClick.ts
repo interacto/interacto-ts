@@ -59,16 +59,18 @@ export class DoubleClickFSM extends FSMImpl {
 
     private checkButton: number | undefined;
 
-    public constructor(logger: Logger, subAction?: (evt: MouseEvent) => void) {
+    public constructor(logger: Logger, subAction?: (evt: MouseEvent) => void, toleranceMove?: number) {
         super(logger);
-        this.firstClickFSM = new ClickFSM(logger, subAction);
-        this.sndClickFSM = new ClickFSM(logger);
+        this.firstClickFSM = new ClickFSM(logger, subAction, toleranceMove);
+        this.sndClickFSM = new ClickFSM(logger, undefined, toleranceMove);
 
         const errorHandler = {
             "fsmError": (err: unknown): void => {
                 this.notifyHandlerOnError(err);
             }
         };
+        let firstX = 0;
+        let firstY = 0;
 
         this.firstClickFSM.addHandler(errorHandler);
         this.sndClickFSM.addHandler(errorHandler);
@@ -77,12 +79,18 @@ export class DoubleClickFSM extends FSMImpl {
         const clicked = this.addStdState("clicked");
 
         new SubFSMTransitionImpl(this.initState, clicked, this.firstClickFSM,
-            (): void => {
+            (evt: Event): void => {
                 this.setCheckButton(this.firstClickFSM.getCheckButton());
+                if (evt instanceof MouseEvent) {
+                    firstX = evt.clientX;
+                    firstY = evt.clientY;
+                }
             });
 
-        new MouseTransition(clicked, cancelled, "mousemove", undefined,
-            (ev: Event): boolean => (this.checkButton === undefined || ev instanceof MouseEvent && ev.button === this.checkButton));
+        if (toleranceMove !== undefined) {
+            new MouseTransition(clicked, cancelled, "mousemove", undefined,
+                (evt: MouseEvent): boolean => Math.abs(firstX - evt.clientX) > toleranceMove || Math.abs(firstY - evt.clientY) > toleranceMove);
+        }
 
         new TimeoutTransition(clicked, cancelled, DoubleClickFSM.timeGapSupplier);
         new SubFSMTransitionImpl(clicked, this.addTerminalState("dbleclicked", true), this.sndClickFSM);
@@ -125,10 +133,18 @@ export class DoubleClickFSM extends FSMImpl {
  * @category Interaction Library
  */
 export class DoubleClick extends InteractionBase<PointData, PointDataImpl> {
-    public constructor(logger: Logger, fsm?: DoubleClickFSM, data?: PointDataImpl, name?: string) {
+    /**
+     * Creates the interaction
+     * @param logger - The logger to use for this interaction
+     * @param fsm - The optional FSM provided for the interaction
+     * @param data - The interaction data to use
+     * @param name - The name of the user interaction
+     * @param toleranceMove - The accepted number of pixel moves between the pressure and the release of each click
+     */
+    public constructor(logger: Logger, fsm?: DoubleClickFSM, data?: PointDataImpl, name?: string, toleranceMove?: number) {
         const theFSM = fsm ?? new DoubleClickFSM(logger, (evt: MouseEvent): void => {
             this._data.copy(evt);
-        });
+        }, toleranceMove);
         super(theFSM, data ?? new PointDataImpl(), logger, name ?? DoubleClick.name);
         /*
          * We give the interaction to the first click as this click interaction
