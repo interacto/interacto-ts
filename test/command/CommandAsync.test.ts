@@ -226,8 +226,8 @@ describe("testing async commands and bindings", () => {
         test("two button clicks with async command, first/end ok when waiting ongoing cmd", async () => {
             cmd = new StubAsyncCmd(data, 50);
             const cmd2 = new StubAsyncCmd(data, 5);
-            const end = jest.fn(() => {});
-            const first = jest.fn(() => {});
+            const end: (c: StubAsyncCmd, i: unknown, acc: unknown) => void = jest.fn(() => {});
+            const first: (c: StubAsyncCmd, i: unknown, acc: unknown) => void = jest.fn(() => {});
 
             binding = bindings.buttonBinder()
                 .toProduce(jest.fn<() => StubAsyncCmd>()
@@ -255,8 +255,8 @@ describe("testing async commands and bindings", () => {
         test("two button clicks with async command, first/end ok when not waiting ongoing cmd", async () => {
             cmd = new StubAsyncCmd(data, 100);
             const cmd2 = new StubAsyncCmd(data, 50);
-            const end = jest.fn(() => {});
-            const first = jest.fn(() => {});
+            const end: (c: StubAsyncCmd, i: unknown, acc: unknown) => void = jest.fn(() => {});
+            const first: (c: StubAsyncCmd, i: unknown, acc: unknown) => void = jest.fn(() => {});
 
             binding = bindings.buttonBinder()
                 .toProduce(jest.fn<() => StubAsyncCmd>()

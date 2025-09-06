@@ -159,7 +159,6 @@ export default [...[].concat(
                 ignoreConditionalTests: false,
             }],
             "@typescript-eslint/no-unused-vars": "off",
-
             "jsdoc/require-jsdoc": ["error", {
                 contexts: ["TSTypeAliasDeclaration", "TSInterfaceDeclaration", "TSPropertySignature"],
 
@@ -221,6 +220,8 @@ export default [...[].concat(
             "import/first": "error",
             "import/no-unresolved": "off",
 
+            "unicorn/no-array-reverse": "off", // temporary
+            "unicorn/prefer-class-fields": "off",
             "unicorn/switch-case-braces": "off",
             "unicorn/no-thenable": "off",
             "unicorn/prevent-abbreviations": "off",
@@ -313,6 +314,7 @@ export default [...[].concat(
             "jest/no-disabled-tests": "warn",
             "jest/prefer-spy-on": "off",
             "jest/prefer-expect-assertions": "off",
+            "jest/prefer-ending-with-an-expect": "off",
             "jest/expect-expect": ["error", {
                 assertFunctionNames: ["expect", "expectObservable", "checkTouchPoint"],
                 additionalTestBlockFunctions: [],
@@ -351,6 +353,7 @@ export default [...[].concat(
                 SwitchCase: 1,
             }],
 
+            "@typescript-eslint/no-misused-spread": "off",
             "@typescript-eslint/no-unsafe-type-assertion": "off",
             "@typescript-eslint/only-throw-error": "off",
             "@typescript-eslint/prefer-destructuring": "off",

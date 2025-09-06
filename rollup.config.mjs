@@ -1,6 +1,6 @@
 import dts from 'rollup-plugin-dts';
 import esbuild from 'rollup-plugin-esbuild';
-import pkg from './package.json' assert { type: 'json' };
+import pkg from './package.json' with { type: 'json' };
 import terser from '@rollup/plugin-terser';
 
 const name = pkg.main.replace(/\.js$/, '');

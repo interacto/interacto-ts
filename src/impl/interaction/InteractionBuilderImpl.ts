@@ -20,7 +20,6 @@ import type {InteractionBuilder} from "../../api/interaction/InteractionBuilder"
  * An implementation of `InteractionBuilder`.
  * @category Interaction
  */
-// eslint-disable-next-line no-use-before-define
 export class InteractionBuilderImpl<I extends Interaction<D>, D extends object = InteractionDataType<I>>
 implements InteractionBuilder<I, D> {
     private readonly iCtor: (name?: string) => I;

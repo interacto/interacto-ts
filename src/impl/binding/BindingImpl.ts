@@ -32,7 +32,6 @@ import type {Observable} from "rxjs";
  * @typeParam D - The interaction data type (infered from the interaction type)
  * @category Binding
  */
-// eslint-disable-next-line no-use-before-define
 export class BindingImpl<C extends Command, I extends Interaction<D>, A, D extends object = InteractionDataType<I>>
 implements Binding<C, I, A, D> {
 
@@ -174,9 +173,7 @@ implements Binding<C, I, A, D> {
              * Updating the name of the binding according to the name of the command.
              * Cannot be done elsewhere since we cannot access the concrete type of the command.
              */
-            if (this._name === undefined) {
-                this._name = `${this._interaction.constructor.name}:${cmd.constructor.name}`;
-            }
+            this._name ??= `${this._interaction.constructor.name}:${cmd.constructor.name}`;
             return cmd;
         } catch (error: unknown) {
             this.logger.logBindingErr("Error while creating a command", error);

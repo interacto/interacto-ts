@@ -18,7 +18,6 @@ import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals
 import type {Binding, Interaction, InteractionBase, UndoHistoryBase, Bindings, Flushable} from "../../src/interacto";
 
 let binding: Binding<StubCmd, Interaction<object>, unknown> | undefined;
-let cmd: StubCmd;
 let ctx: BindingsContext;
 let bindings: Bindings<UndoHistoryBase>;
 
@@ -89,7 +88,7 @@ describe("using a long touch binder", () => {
 
         test("unsubscribe does not trigger the binding", () => {
             binding = bindings.longTouchBinder(2000)
-                .toProduce(() => cmd)
+                .toProduce(() => new StubCmd(true))
                 .on(c1)
                 .bind();
 

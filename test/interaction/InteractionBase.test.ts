@@ -122,7 +122,7 @@ describe("using a base interaction", () => {
         const evt = {} as Event;
         interaction.setActivated(false);
         interaction.processEvent(evt);
-        expect(fsm.process).not.toHaveBeenCalledWith();
+        expect(fsm.process).not.toHaveBeenCalled();
     });
 
     test("getFSM", () => {
@@ -141,7 +141,7 @@ describe("using a base interaction", () => {
         interaction.uninstall();
         currentStateObs.next([{} as OutputState, {} as OutputState]);
         expect(interaction.isActivated()).toBeFalsy();
-        expect(interaction.updateEventsRegistered).not.toHaveBeenCalledWith();
+        expect(interaction.updateEventsRegistered).not.toHaveBeenCalled();
     });
 
     test("currentState", () => {

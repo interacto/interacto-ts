@@ -31,9 +31,7 @@ import type {Logger} from "../../api/logging/Logger";
  * @category Interaction Library
  */
 export class Or<
-    // eslint-disable-next-line no-use-before-define
     I1 extends InteractionBase<D1, D1Impl>,
-    // eslint-disable-next-line no-use-before-define
     I2 extends InteractionBase<D2, D2Impl>,
     D1 extends object = InteractionDataType<I1>,
     D2 extends object = InteractionDataType<I2>,

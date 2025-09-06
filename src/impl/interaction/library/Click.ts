@@ -65,9 +65,7 @@ export class ClickFSM extends FSMImpl {
     }
 
     public setCheckButton(buttonToCheck: number): void {
-        if (this.checkButton === undefined) {
-            this.checkButton = buttonToCheck;
-        }
+        this.checkButton ??= buttonToCheck;
     }
 
     public override reinit(): void {

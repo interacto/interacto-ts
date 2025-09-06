@@ -34,9 +34,7 @@ export class KeyTypedFSM extends FSMImpl {
 
         new KeyTransition(this.initState, pressed, "keydown",
             (event: KeyboardEvent): void => {
-                if (this.checkKey === undefined) {
-                    this.checkKey = event.code;
-                }
+                this.checkKey ??= event.code;
             });
 
         new KeyTransition(pressed, this.addTerminalState("typed", true), "keyup", action,

@@ -46,7 +46,6 @@ export interface CmdBinder<C extends Command> extends CmdBinderBuilder<C> {
      * @typeParam D - The user interaction data type
      * @typeParam I - The user interaction type
      */
-    // eslint-disable-next-line no-use-before-define
     usingInteraction<I extends Interaction<D>, A, D extends object = InteractionDataType<I>>
     (fn: () => I): InteractionCmdBinder<C, I, A, D>;
 

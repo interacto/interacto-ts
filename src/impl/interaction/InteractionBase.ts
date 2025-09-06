@@ -343,47 +343,37 @@ export abstract class InteractionBase<D extends object, DImpl extends D & Flusha
     }
 
     protected getActionHandler(): EventListener {
-        if (this.actionHandler === undefined) {
-            this.actionHandler = (evt): void => {
-                this.processEvent(evt);
-            };
-        }
+        this.actionHandler ??= (evt): void => {
+            this.processEvent(evt);
+        };
         return this.actionHandler;
     }
 
     protected getMouseHandler(): EventListener {
-        if (this.mouseHandler === undefined) {
-            this.mouseHandler = (evt: MouseEvent): void => {
-                this.processEvent(evt);
-            };
-        }
+        this.mouseHandler ??= (evt: MouseEvent): void => {
+            this.processEvent(evt);
+        };
         return this.mouseHandler as EventListener;
     }
 
     protected getTouchHandler(): EventListener {
-        if (this.touchHandler === undefined) {
-            this.touchHandler = (evt: TouchEvent): void => {
-                this.processEvent(evt);
-            };
-        }
+        this.touchHandler ??= (evt: TouchEvent): void => {
+            this.processEvent(evt);
+        };
         return this.touchHandler as EventListener;
     }
 
     protected getKeyHandler(): EventListener {
-        if (this.keyHandler === undefined) {
-            this.keyHandler = (evt: KeyboardEvent): void => {
-                this.processEvent(evt);
-            };
-        }
+        this.keyHandler ??= (evt: KeyboardEvent): void => {
+            this.processEvent(evt);
+        };
         return this.keyHandler as EventListener;
     }
 
     protected getUIHandler(): EventListener {
-        if (this.uiHandler === undefined) {
-            this.uiHandler = (evt: UIEvent): void => {
-                this.processEvent(evt);
-            };
-        }
+        this.uiHandler ??= (evt: UIEvent): void => {
+            this.processEvent(evt);
+        };
         return this.uiHandler as EventListener;
     }
 

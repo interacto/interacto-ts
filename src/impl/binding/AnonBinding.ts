@@ -31,7 +31,6 @@ import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
  * @typeParam D - The interaction data type (infered from the interaction type)
  * @category Binding
  */
-// eslint-disable-next-line no-use-before-define
 export class AnonBinding<C extends Command, I extends Interaction<D>, A, D extends object = InteractionDataType<I>>
     extends BindingImpl<C, I, A, D> {
 
@@ -204,7 +203,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, A, D exten
 
     private whenChecker(filterPredicate: (when: When<D, A>) => boolean): boolean {
         const ok = this.whenFn
-            ?.filter(filterPredicate)
+            ?.filter(elt => filterPredicate(elt))
             .every(when => this.executeWhen(when)) ?? false;
         if (this.logBinding) {
             this.logger.logBindingMsg(`Checking condition: ${String(ok)}`);

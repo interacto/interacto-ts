@@ -137,12 +137,12 @@ export class FSMImpl implements FSM {
     private processEvent(event: Event): boolean {
         if (this.currentSubFSM !== undefined) {
             if (this.log) {
-                this.logger.logInteractionMsg(`processing event ${String(event.type)} in a sub-FSM`, this.constructor.name);
+                this.logger.logInteractionMsg(`processing event ${event.type} in a sub-FSM`, this.constructor.name);
             }
             return this.currentSubFSM.process(event);
         }
         if (this.log) {
-            this.logger.logInteractionMsg(`processing event ${String(event.type)} at state
+            this.logger.logInteractionMsg(`processing event ${event.type} at state
             ${this.currentState.name}: ${this.constructor.name}`, this.constructor.name);
         }
 

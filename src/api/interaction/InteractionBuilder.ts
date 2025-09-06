@@ -21,7 +21,6 @@ import type {Interaction, InteractionDataType} from "./Interaction";
  * and the end of the user interaction execution.
  * @category API Interaction
  */
-// eslint-disable-next-line no-use-before-define
 export interface InteractionBuilder<I extends Interaction<D>, D extends object = InteractionDataType<I>> {
     /**
      * A predicate to execution just before the interaction starts.

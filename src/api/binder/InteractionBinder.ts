@@ -27,7 +27,6 @@ import type {LogLevel} from "../logging/LogLevel";
  * @typeParam D - The type of the interaction data of the user interaction
  * @category Helper
  */
-// eslint-disable-next-line no-use-before-define
 export interface InteractionBinder<I extends Interaction<D>, A, D extends object = InteractionDataType<I>>
     extends InteractionBinderBuilder<I, A, D> {
     when(fn: (i: D, acc: Readonly<A>) => boolean, mode?: WhenType): InteractionBinder<I, A, D>;

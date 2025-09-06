@@ -17,13 +17,11 @@ import {createKeyEvent, createMouseEvent} from "../interaction/StubEvents";
 import {afterEach, beforeEach, describe, expect, test} from "@jest/globals";
 import {mock} from "jest-mock-extended";
 import type {Binding, Bindings, UndoHistoryBase, Logger} from "../../src/interacto";
-import type {Subscription} from "rxjs";
 
 let canvas1: HTMLElement;
 let canvas2: HTMLElement;
 let binding1: Binding<StubCmd, MouseDown, unknown>;
 let binding2: Binding<StubCmd, MouseDown, unknown>;
-let disposable: Subscription | undefined;
 let bindings: Bindings<UndoHistoryBase>;
 
 describe("using a block event binder", () => {
@@ -35,7 +33,6 @@ describe("using a block event binder", () => {
     });
 
     afterEach(() => {
-        disposable?.unsubscribe();
         binding1.uninstallBinding();
         binding2.uninstallBinding();
         bindings.clear();

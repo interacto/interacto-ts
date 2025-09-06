@@ -46,7 +46,6 @@ export interface BaseUpdateBinder extends BaseUpdateBinderBuilder, BaseBinder {
 
     toProduceAnon(fn: () => void): CmdUpdateBinder<Command>;
 
-    // eslint-disable-next-line no-use-before-define
     usingInteraction<I extends Interaction<D>, A, D extends object = InteractionDataType<I>>
     (fn: () => I): InteractionUpdateBinder<I, A, D>;
 

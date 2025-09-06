@@ -104,9 +104,7 @@ export class DoubleClickFSM extends FSMImpl {
     }
 
     public setCheckButton(buttonToCheck: number): void {
-        if (this.checkButton === undefined) {
-            this.checkButton = buttonToCheck;
-        }
+        this.checkButton ??= buttonToCheck;
         this.sndClickFSM.setCheckButton(buttonToCheck);
     }
 
