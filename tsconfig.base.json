@@ -23,6 +23,10 @@
     "noPropertyAccessFromIndexSignature": true,
     "exactOptionalPropertyTypes": true,
     "strict": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "skipLibCheck": true
   }
 }
