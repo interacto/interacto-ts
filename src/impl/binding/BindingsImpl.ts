@@ -471,8 +471,8 @@ export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
 
     public undoRedoBinder(undo: Widget<HTMLButtonElement>, redo: Widget<HTMLButtonElement>,
                           catchFn: ((err: unknown) => void) = ((): void => {})):
-        [Binding<Undo, Interaction<WidgetData<HTMLButtonElement>>, unknown>,
-            Binding<Redo, Interaction<WidgetData<HTMLButtonElement>>, unknown>] {
+    [Binding<Undo, Interaction<WidgetData<HTMLButtonElement>>, unknown>,
+        Binding<Redo, Interaction<WidgetData<HTMLButtonElement>>, unknown>] {
         return [
             this.buttonBinder()
                 .on(undo)

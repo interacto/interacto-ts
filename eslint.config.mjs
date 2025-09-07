@@ -17,7 +17,7 @@ export default [...[].concat(
     importPlugin.flatConfigs.recommended,
     importPlugin.flatConfigs.typescript,
     importPlugin.flatConfigs.errors,
-    stylistic.configs["all-flat"],
+    stylistic.configs["all"],
     tseslint.configs.strictTypeChecked,
     tseslint.configs.eslintRecommended,
     tseslint.configs.recommendedTypeChecked,
@@ -349,7 +349,7 @@ export default [...[].concat(
                 FunctionExpression: {
                     parameters: "first",
                 },
-
+                assignmentOperator: 1,
                 SwitchCase: 1,
             }],
 

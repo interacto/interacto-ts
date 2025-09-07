@@ -17,7 +17,7 @@
  * @category API Command
  */
 export type CmdStatus =
-    /** When the command has been cancelled. */
+/** When the command has been cancelled. */
   "cancelled" |
     /** When the command is created but not executed yet. */
   "created" |
