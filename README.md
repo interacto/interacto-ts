@@ -16,7 +16,7 @@ See [https://interacto.github.io](https://interacto.github.io) for usages and do
 
 # How to install
 
-For Angular 15 to 18:
+For Angular 15 to 20:
 
 ```
 npm install interacto@latest
