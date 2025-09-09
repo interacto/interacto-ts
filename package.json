@@ -70,13 +70,15 @@
     "ts-jest": "29.4.1",
     "typedoc": "0.28.12",
     "typescript": "5.9.2",
-    "typescript-eslint": "8.42.0"
+    "typescript-eslint": "8.42.0",
+    "@typescript/native-preview": "^7.0.0-dev.20250908.1"
   },
   "scripts": {
     "package": "npm run pre-build && npm run build && npm run doc",
     "build": "rollup -c",
     "generate-barrels": "barrelsby -c ./barrelsby-config.json --delete",
     "compile": "tsc",
+    "compile-native": "tsgo",
     "compile-test": "tsc -p tsconfig.test.json",
     "pre-build": "npm run clean && npm run generate-barrels && npm run compile && npm run lint && npm run compile-test && npm run coverage",
     "clean": "(rm -rf dist out-test coverage .stryker-tmp)",
