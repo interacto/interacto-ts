@@ -10,6 +10,8 @@ on:
         - '**/*.cff'
         - '.husky'
 
+permissions: read-all
+
 jobs:
   build:
     runs-on: ubuntu-latest
