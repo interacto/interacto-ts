@@ -29,7 +29,6 @@ export interface OutputState extends State {
     /**
      * Actions done when a transition of the state is executed so
      * that this state is left.
-     * @throws CancelFSMException If leaving the state leads to a cancelling of the FSM execution.
      */
     exit(): void;
 

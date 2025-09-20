@@ -30,7 +30,6 @@ export interface Transition<E extends Event> {
      * Executes the transition.
      * @param event - The event to process.
      * @returns The potential output state.
-     * @throws CancelFSMException If the execution cancels the FSM execution.
      */
     execute(event: Event): InputState | undefined;
 

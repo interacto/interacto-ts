@@ -21,7 +21,6 @@ import type {State} from "./State";
 export interface InputState extends State {
     /**
      * Actions done while entering this state.
-     * @throws CancelFSMException If entering the state leads to a cancelling of the FSM execution.
      */
     enter(): void;
 }

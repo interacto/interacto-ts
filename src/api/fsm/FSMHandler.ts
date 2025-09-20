@@ -20,19 +20,16 @@
 export interface FSMHandler {
     /**
      * When the FSM starts.
-     * @throws CancelFSMException If the FSM must be cancelled.
      */
     fsmStarts?(): void;
 
     /**
      * When the FSM runs to new state.
-     * @throws CancelFSMException If the FSM must be cancelled.
      */
     fsmUpdates?(): void;
 
     /**
      * When the FSM enters a terminal state.
-     * @throws CancelFSMException If the FSM must be cancelled.
      */
     fsmStops?(): void;
 
