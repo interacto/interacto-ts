@@ -3,8 +3,6 @@ name: Interacto CI
 on:
     push:
     pull_request:
-      branches:
-        - main
       paths-ignore:
         - '**/*.md'
         - '**/*.cff'
