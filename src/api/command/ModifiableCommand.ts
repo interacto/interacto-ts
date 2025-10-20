@@ -14,7 +14,6 @@
 import {isUndoableType} from "../undo/Undoable";
 import {CommandBase} from "../../impl/command/CommandBase";
 
-
 const INTERACTO_MODIFIABLE: unique symbol = Symbol('interacto-cmd-modifiable');
 
 /**
@@ -24,22 +23,22 @@ const INTERACTO_MODIFIABLE: unique symbol = Symbol('interacto-cmd-modifiable');
  * @param propertyName The name of the property the decorator targets.
  */
 export function Modifiable(target: unknown, propertyName: string): void {
-    if(!isUndoableType(target)) {
+    if (!isUndoableType(target)) {
         console.log("The @Modifiable decorator currently operates on Interacto undoable commands only")
         return;
     }
 
     //Getting the object cache related to the modifiable symbol
-    const symbolValues: unknown = target.constructor[INTERACTO_MODIFIABLE];
+    const symbolValues: unknown = (target.constructor as any)[INTERACTO_MODIFIABLE];
     const set = symbolValues instanceof Set ? symbolValues as Set<string> : new Set<string>();
 
     // Adding the property in this cache
     set.add(propertyName);
-    target.constructor[INTERACTO_MODIFIABLE] = set;
+    (target.constructor as any)[INTERACTO_MODIFIABLE] = set;
 }
 
 export function isCmdModifiable(obj: CommandBase, key: string): boolean {
-    const modifiables: unknown = obj.constructor[INTERACTO_MODIFIABLE];
+    const modifiables: unknown = (obj.constructor as any)[INTERACTO_MODIFIABLE];
 
     if (modifiables instanceof Set) {
         return modifiables.has(key);
@@ -48,7 +47,7 @@ export function isCmdModifiable(obj: CommandBase, key: string): boolean {
 }
 
 export function modifyCmdAttributes(obj: unknown, attributes: { [key: string]: unknown }): void {
-    if(!(obj instanceof CommandBase) || !obj.isDone()) {
+    if (!(obj instanceof CommandBase) || !obj.isDone()) {
         console.log("Only already executed and done Interacto commands can be modified");
         return;
     }
@@ -56,10 +55,10 @@ export function modifyCmdAttributes(obj: unknown, attributes: { [key: string]: u
     Object.keys(attributes).forEach(key => {
         if (isCmdModifiable(obj, key)) {
             const value: unknown = attributes[key];
-            const type = typeof obj[key];
+            const type = typeof (obj as any)[key];
             const typeValue = typeof value;
             if (typeValue === type && typeValue) {
-                obj[key] = value;
+                (obj as any)[key] = value;
             } else {
                 console.error("Incorrect type");
             }
@@ -73,16 +72,16 @@ export function modifyCmdAttributes(obj: unknown, attributes: { [key: string]: u
  * Returns the set of modifiable (i.e., properties with the Interacto decorator Modifiable) properties of the given object.
  * @param obj The object to analyze.
  */
-export function getModifiableCmdAttributes(obj: unknown): Map<string, unknown> {
+export function getModifiableCmdAttributes(obj: Object): Map<string, unknown> {
     const modifiableAttributes = new Map<string, unknown>();
-    const modifiables: unknown = obj.constructor[INTERACTO_MODIFIABLE];
+    const modifiables: unknown = (obj.constructor as any)[INTERACTO_MODIFIABLE];
 
-    if (modifiables instanceof Set && obj instanceof Object) {
+    if (modifiables instanceof Set) {
         modifiables.forEach((key: unknown) => {
             if (typeof key === "string" && key in obj) {
-                const type = typeof obj[key];
+                const type = typeof (obj as any)[key];
                 if (type === "string" || type === "number" || type === "boolean") {
-                    modifiableAttributes.set(key, obj[key]);
+                    modifiableAttributes.set(key, (obj as any)[key]);
                 } else {
                     console.error(type, "Cannot modify a property that is not a string, number, or boolean");
                 }
