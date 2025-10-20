@@ -94,7 +94,7 @@ describe("using a modifiable decorator on commands", () => {
         });
 
         test("cannot modify one non-existing property", () => {
-            modifyCmdAttributes(cmd, {
+            modifyCmdAttributes(cmd as any, {
                 c2: "yolo",
                 a: -1
             });
@@ -104,7 +104,7 @@ describe("using a modifiable decorator on commands", () => {
         });
 
         test("cannot modify one property with a incorrectly typed value", () => {
-            modifyCmdAttributes(cmd, {
+            modifyCmdAttributes(cmd as any, {
                 a: "100",
                 b: "200"
             });
@@ -115,7 +115,7 @@ describe("using a modifiable decorator on commands", () => {
 
         test("get modifiable properties", () => {
             const attributes = getModifiableCmdAttributes(cmd);
-            expect(attributes).toEqual(new Map<string, unknown>([["a", 0], ["b", false]]));
+            expect(attributes).toEqual({"a": 0, "b": false});
         });
 
         describe("and an undoable command with incorrect usages of Modifiable", () => {
@@ -126,7 +126,7 @@ describe("using a modifiable decorator on commands", () => {
             });
 
             test("get modifiable properties does not include the ones badly typed", () => {
-                expect(getModifiableCmdAttributes(cmd)).toEqual(new Map<string, unknown>());
+                expect(getModifiableCmdAttributes(cmd)).toEqual({});
             });
         });
     });
@@ -144,7 +144,7 @@ describe("using a modifiable decorator on commands", () => {
         test("get modifiable properties", () => {
             const cmd = new CmdModifiableDouble2();
             const attributes = getModifiableCmdAttributes(cmd);
-            expect(attributes).toEqual(new Map<string, unknown>());
+            expect(attributes).toEqual({});
         });
 
         test("with an object", () => {
