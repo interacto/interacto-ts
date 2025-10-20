@@ -18,7 +18,7 @@ import {beforeEach, describe, expect, test} from "@jest/globals";
 
 let cmd: UndoableCommand;
 
-class ExampleUndoableCmd extends UndoableCommand {
+export class ExampleUndoableCmd extends UndoableCommand {
     protected execution(): Promise<void> | void {
         return undefined;
     }
