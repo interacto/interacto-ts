@@ -1,4 +1,4 @@
-import {getModifiableAttributes, Modifiable, modifyAttributes} from "../../../src/api/command/ModifiableCommand";
+import {getModifiableCmdAttributes, Modifiable, modifyCmdAttributes} from "../../../src/api/command/ModifiableCommand";
 import {beforeEach, describe, test} from "@jest/globals";
 import {ExampleUndoableCmd} from "../UndoableCommand.test";
 import {StubCmd} from "../StubCmd";
@@ -50,7 +50,7 @@ describe("using a modifiable decorator on commands", () => {
         });
 
         test("can modify one property with @Modifiable", () => {
-            modifyAttributes(cmd, {
+            modifyCmdAttributes(cmd, {
                 a: 21
             });
 
@@ -60,10 +60,10 @@ describe("using a modifiable decorator on commands", () => {
         });
 
         test("can modify one property several times with @Modifiable", () => {
-            modifyAttributes(cmd, {
+            modifyCmdAttributes(cmd, {
                 a: 21
             });
-            modifyAttributes(cmd, {
+            modifyCmdAttributes(cmd, {
                 a: 22
             });
 
@@ -71,7 +71,7 @@ describe("using a modifiable decorator on commands", () => {
         });
 
         test("can modify two properties with @Modifiable", () => {
-            modifyAttributes(cmd, {
+            modifyCmdAttributes(cmd, {
                 b: true,
                 a: 42
             });
@@ -82,7 +82,7 @@ describe("using a modifiable decorator on commands", () => {
         });
 
         test("cannot modify one property without @Modifiable", () => {
-            modifyAttributes(cmd, {
+            modifyCmdAttributes(cmd, {
                 c: "yolo",
                 a: 1
             });
@@ -93,7 +93,7 @@ describe("using a modifiable decorator on commands", () => {
         });
 
         test("cannot modify one non-existing property", () => {
-            modifyAttributes(cmd, {
+            modifyCmdAttributes(cmd, {
                 c2: "yolo",
                 a: -1
             });
@@ -103,7 +103,7 @@ describe("using a modifiable decorator on commands", () => {
         });
 
         test("cannot modify one property with a incorrectly typed value", () => {
-            modifyAttributes(cmd, {
+            modifyCmdAttributes(cmd, {
                 a: "100",
                 b: "200"
             });
@@ -113,7 +113,7 @@ describe("using a modifiable decorator on commands", () => {
         });
 
         test("get modifiable properties", () => {
-            const attributes = getModifiableAttributes(cmd);
+            const attributes = getModifiableCmdAttributes(cmd);
             expect(attributes).toEqual(new Map<string, unknown>([["a", 0], ["b", false]]));
         });
 
@@ -125,7 +125,7 @@ describe("using a modifiable decorator on commands", () => {
             });
 
             test("get modifiable properties does not include the ones badly typed", () => {
-                expect(getModifiableAttributes(cmd)).toEqual(new Map<string, unknown>());
+                expect(getModifiableCmdAttributes(cmd)).toEqual(new Map<string, unknown>());
             });
         });
     });
@@ -133,7 +133,7 @@ describe("using a modifiable decorator on commands", () => {
     describe("and an non-undoable command", () => {
         test("with a standard command", () => {
             const cmd = new CmdModifiableDouble2();
-            modifyAttributes(cmd, {
+            modifyCmdAttributes(cmd, {
                 a: 21
             });
 
@@ -142,13 +142,13 @@ describe("using a modifiable decorator on commands", () => {
 
         test("get modifiable properties", () => {
             const cmd = new CmdModifiableDouble2();
-            const attributes = getModifiableAttributes(cmd);
+            const attributes = getModifiableCmdAttributes(cmd);
             expect(attributes).toEqual(new Map<string, unknown>());
         });
 
         test("with an object", () => {
             const foo = new Foo();
-            modifyAttributes(foo, {
+            modifyCmdAttributes(foo, {
                 a: 21
             });
 

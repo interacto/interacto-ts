@@ -37,7 +37,7 @@ export function Modifiable(target: unknown, propertyName: string): void {
     target.constructor[INTERACTO_MODIFIABLE] = set;
 }
 
-export function isModifiable(obj: unknown, key: string): boolean {
+export function isCmdModifiable(obj: unknown, key: string): boolean {
     const modifiables: unknown = obj.constructor[INTERACTO_MODIFIABLE];
 
     if (modifiables instanceof Set) {
@@ -46,9 +46,9 @@ export function isModifiable(obj: unknown, key: string): boolean {
     return false;
 }
 
-export function modifyAttributes(obj: unknown, attributes: { [key: string]: unknown }): void {
+export function modifyCmdAttributes(obj: unknown, attributes: { [key: string]: unknown }): void {
     Object.keys(attributes).forEach(key => {
-        if (isModifiable(obj, key)) {
+        if (isCmdModifiable(obj, key)) {
             const value: unknown = attributes[key];
             const type = typeof obj[key];
             const typeValue = typeof value;
@@ -67,7 +67,7 @@ export function modifyAttributes(obj: unknown, attributes: { [key: string]: unkn
  * Returns the set of modifiable (i.e., properties with the Interacto decorator Modifiable) properties of the given object.
  * @param obj The object to analyze.
  */
-export function getModifiableAttributes(obj: unknown): Map<string, unknown> {
+export function getModifiableCmdAttributes(obj: unknown): Map<string, unknown> {
     const modifiableAttributes = new Map<string, unknown>();
     const modifiables: unknown = obj.constructor[INTERACTO_MODIFIABLE];
 
