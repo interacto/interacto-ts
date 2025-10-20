@@ -1,21 +1,16 @@
 import {getModifiableCmdAttributes, Modifiable, modifyCmdAttributes} from "../../../src/api/command/ModifiableCommand";
-import {beforeEach, describe, test} from "@jest/globals";
+import {beforeEach, describe, expect, test} from "@jest/globals";
 import {ExampleUndoableCmd} from "../UndoableCommand.test";
 import {StubCmd} from "../StubCmd";
 
 class CmdModifiableDouble2 extends StubCmd {
     @Modifiable
-    public a: number = 0;
-}
-
-class Foo {
-    @Modifiable
-    public a: number = 0;
+    public a = 0;
 }
 
 class CmdModifiableDouble3 extends ExampleUndoableCmd {
     @Modifiable
-    public a: Object = {};
+    public a = {};
 
     @Modifiable
     public b: Array<string> = [];
@@ -36,7 +31,7 @@ class CmdModifiableDouble extends ExampleUndoableCmd {
     public constructor() {
         super();
         this.a = 0;
-        this.b = false
+        this.b = false;
         this.c = "foo";
     }
 }
@@ -94,6 +89,7 @@ describe("using a modifiable decorator on commands", () => {
         });
 
         test("cannot modify one non-existing property", () => {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             modifyCmdAttributes(cmd as any, {
                 c2: "yolo",
                 a: -1
@@ -104,6 +100,7 @@ describe("using a modifiable decorator on commands", () => {
         });
 
         test("cannot modify one property with a incorrectly typed value", () => {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             modifyCmdAttributes(cmd as any, {
                 a: "100",
                 b: "200"
@@ -115,18 +112,12 @@ describe("using a modifiable decorator on commands", () => {
 
         test("get modifiable properties", () => {
             const attributes = getModifiableCmdAttributes(cmd);
-            expect(attributes).toEqual({"a": 0, "b": false});
+            expect(attributes).toStrictEqual({"a": 0, "b": false});
         });
 
         describe("and an undoable command with incorrect usages of Modifiable", () => {
-            let cmd: CmdModifiableDouble3;
-
-            beforeEach(() => {
-                cmd = new CmdModifiableDouble3();
-            });
-
             test("get modifiable properties does not include the ones badly typed", () => {
-                expect(getModifiableCmdAttributes(cmd)).toEqual({});
+                expect(getModifiableCmdAttributes(new CmdModifiableDouble3())).toStrictEqual({});
             });
         });
     });
@@ -144,16 +135,7 @@ describe("using a modifiable decorator on commands", () => {
         test("get modifiable properties", () => {
             const cmd = new CmdModifiableDouble2();
             const attributes = getModifiableCmdAttributes(cmd);
-            expect(attributes).toEqual({});
-        });
-
-        test("with an object", () => {
-            const foo = new Foo();
-            modifyCmdAttributes(foo, {
-                a: 21
-            });
-
-            expect(foo.a).toBe(0);
+            expect(attributes).toStrictEqual({});
         });
     });
 });
