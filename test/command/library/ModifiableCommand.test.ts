@@ -47,6 +47,7 @@ describe("using a modifiable decorator on commands", () => {
 
         beforeEach(() => {
             cmd = new CmdModifiableDouble();
+            cmd.done();
         });
 
         test("can modify one property with @Modifiable", () => {

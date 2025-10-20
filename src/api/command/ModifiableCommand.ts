@@ -12,6 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 import {isUndoableType} from "../undo/Undoable";
+import {CommandBase} from "../../impl/command/CommandBase";
 
 
 const INTERACTO_MODIFIABLE: unique symbol = Symbol('interacto-cmd-modifiable');
@@ -37,7 +38,7 @@ export function Modifiable(target: unknown, propertyName: string): void {
     target.constructor[INTERACTO_MODIFIABLE] = set;
 }
 
-export function isCmdModifiable(obj: unknown, key: string): boolean {
+export function isCmdModifiable(obj: CommandBase, key: string): boolean {
     const modifiables: unknown = obj.constructor[INTERACTO_MODIFIABLE];
 
     if (modifiables instanceof Set) {
@@ -47,6 +48,11 @@ export function isCmdModifiable(obj: unknown, key: string): boolean {
 }
 
 export function modifyCmdAttributes(obj: unknown, attributes: { [key: string]: unknown }): void {
+    if(!(obj instanceof CommandBase) || !obj.isDone()) {
+        console.log("Only already executed and done Interacto commands can be modified");
+        return;
+    }
+
     Object.keys(attributes).forEach(key => {
         if (isCmdModifiable(obj, key)) {
             const value: unknown = attributes[key];
