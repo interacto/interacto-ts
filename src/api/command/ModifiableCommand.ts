@@ -29,7 +29,8 @@ interface ModifiableMetadata {
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export function Modifiable(target: unknown, propertyName: string): void {
     if (!isUndoableType(target)) {
-        console.log("The @Modifiable decorator currently operates on Interacto undoable commands only");
+        // eslint-disable-next-line no-console
+        console.error("The @Modifiable decorator currently operates on Interacto undoable commands only");
         return;
     }
 
@@ -64,7 +65,8 @@ export function isCmdModifiable(obj: Command, key: string): boolean {
  */
 export function modifyCmdAttributes<T extends Command>(obj: T, attributes: Partial<T>): void {
     if (!obj.isDone()) {
-        console.log("Only already executed and done Interacto commands can be modified");
+        // eslint-disable-next-line no-console
+        console.error("Only already executed and done Interacto commands can be modified");
         return;
     }
 
@@ -75,10 +77,12 @@ export function modifyCmdAttributes<T extends Command>(obj: T, attributes: Parti
             if (typeof value === typeof obj[tkey]) {
                 obj[tkey] = value as (T & Command)[keyof T];
             } else {
-                console.error("Incorrect type");
+                // eslint-disable-next-line no-console
+                console.error("Trying to affect a value of an incorrect type to a parameter of a command");
             }
         } else {
-            console.error("Incorrect property");
+            // eslint-disable-next-line no-console
+            console.error("Trying to affect a value of an incorrect parameter of a command");
         }
     }
 }
@@ -100,6 +104,7 @@ export function getModifiableCmdAttributes<T>(obj: T & object): Partial<T> {
                 if (type === "string" || type === "number" || type === "boolean") {
                     modifiableAttributes[tkey] = obj[tkey];
                 } else {
+                    // eslint-disable-next-line no-console
                     console.error(type, "Cannot modify a property that is not a string, number, or boolean");
                 }
             }
