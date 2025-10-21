@@ -50,7 +50,7 @@ export function Modifiable(target: unknown, propertyName: string): void {
  * @param key - The property of the command to modify
  * @returns True if the property of the command can be modified.
  */
-export function isCmdModifiable(obj: Command & Undoable, key: string): boolean {
+export function isCmdModifiable(obj: Undoable, key: string): boolean {
     const modifiables: unknown = (obj.constructor as ModifiableMetadata)[INTERACTO_MODIFIABLE];
 
     if (modifiables instanceof Set) {
@@ -92,7 +92,7 @@ export function modifyCmdAttributes<T extends Command & Undoable>(obj: T, attrib
  * @param obj - The object to analyze.
  * @returns The set of modifiable (i.e., properties with the Interacto decorator Modifiable) properties of the given object.
  */
-export function getModifiableCmdAttributes<T extends Command & Undoable>(obj: T): Partial<T> {
+export function getModifiableCmdAttributes<T extends Undoable>(obj: T): Partial<T> {
     const modifiableAttributes: Partial<T> = {};
     const modifiables: unknown = (obj.constructor as ModifiableMetadata)[INTERACTO_MODIFIABLE];
 
