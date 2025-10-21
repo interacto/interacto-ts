@@ -1,4 +1,4 @@
-import {getModifiableCmdAttributes, Modifiable, modifyCmdAttributes} from "../../../src/api/command/ModifiableCommand";
+import {getModifiableCmdAttributes, isCmdModifiable, Modifiable, modifyCmdAttributes} from "../../../src/api/command/ModifiableCommand";
 import {beforeEach, describe, expect, test} from "@jest/globals";
 import {ExampleUndoableCmd, StubCmd} from "../StubCmd";
 
@@ -122,8 +122,14 @@ describe("using a modifiable decorator on commands", () => {
     });
 
     describe("and an non-undoable command", () => {
+        let cmd: CmdModifiableDouble2;
+
+        beforeEach(() => {
+            cmd = new CmdModifiableDouble2();
+            cmd.done();
+        });
+
         test("with a standard command", () => {
-            const cmd = new CmdModifiableDouble2();
             modifyCmdAttributes(cmd, {
                 a: 21
             });
@@ -132,9 +138,12 @@ describe("using a modifiable decorator on commands", () => {
         });
 
         test("get modifiable properties", () => {
-            const cmd = new CmdModifiableDouble2();
             const attributes = getModifiableCmdAttributes(cmd);
             expect(attributes).toStrictEqual({});
+        });
+
+        test("with not a set as cache", () => {
+            expect(isCmdModifiable(cmd, "a")).toBeFalsy();
         });
     });
 });
