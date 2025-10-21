@@ -121,6 +121,19 @@ describe("using a modifiable decorator on commands", () => {
         });
     });
 
+    describe("and an non-done command", () => {
+        test("cannot modify one property with @Modifiable", () => {
+            const cmd = new CmdModifiableDouble();
+            modifyCmdAttributes(cmd, {
+                a: 21,
+                b: true
+            });
+
+            expect(cmd.a).toBe(0);
+            expect(cmd.b).toBeFalsy();
+        });
+    });
+
     describe("and an non-undoable command", () => {
         let cmd: CmdModifiableDouble2;
 
