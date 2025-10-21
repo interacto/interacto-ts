@@ -1,6 +1,7 @@
 import {getModifiableCmdAttributes, isCmdModifiable, Modifiable, modifyCmdAttributes} from "../../../src/api/command/ModifiableCommand";
 import {beforeEach, describe, expect, test} from "@jest/globals";
 import {ExampleUndoableCmd, StubCmd} from "../StubCmd";
+import type {UndoableCommand} from "../../../src/impl/command/UndoableCommand";
 
 class CmdModifiableDouble2 extends StubCmd {
     @Modifiable
@@ -143,7 +144,8 @@ describe("using a modifiable decorator on commands", () => {
         });
 
         test("with a standard command", () => {
-            modifyCmdAttributes(cmd, {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            modifyCmdAttributes(cmd as any, {
                 a: 21
             });
 
@@ -151,12 +153,14 @@ describe("using a modifiable decorator on commands", () => {
         });
 
         test("get modifiable properties", () => {
-            const attributes = getModifiableCmdAttributes(cmd);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const attributes = getModifiableCmdAttributes(cmd as any as UndoableCommand);
             expect(attributes).toStrictEqual({});
         });
 
         test("with not a set as cache", () => {
-            expect(isCmdModifiable(cmd, "a")).toBeFalsy();
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            expect(isCmdModifiable(cmd as any as UndoableCommand, "a")).toBeFalsy();
         });
     });
 });
