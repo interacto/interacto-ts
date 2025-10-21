@@ -13,20 +13,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {UndoableCommand} from "../../src/interacto";
 import {beforeEach, describe, expect, test} from "@jest/globals";
+import {ExampleUndoableCmd} from "./StubCmd";
+import type {UndoableCommand} from "../../src/impl/command/UndoableCommand";
 
 let cmd: UndoableCommand;
-
-export class ExampleUndoableCmd extends UndoableCommand {
-    protected execution(): Promise<void> | void {
-        return undefined;
-    }
-
-    public redo(): void {}
-
-    public undo(): void {}
-}
 
 describe("using an undoable command", () => {
     beforeEach(() => {

@@ -12,8 +12,18 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {CommandBase} from "../../src/interacto";
+import {CommandBase, UndoableCommand} from "../../src/interacto";
 import type {Undoable} from "../../src/interacto";
+
+export class ExampleUndoableCmd extends UndoableCommand {
+    protected execution(): Promise<void> | void {
+        return undefined;
+    }
+
+    public redo(): void {}
+
+    public undo(): void {}
+}
 
 export class StubCmd extends CommandBase {
     public candoValue: boolean;
