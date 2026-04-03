@@ -1,7 +1,7 @@
-import {getModifiableCmdAttributes, isCmdModifiable, Modifiable, modifyCmdAttributes} from "../../../src/api/command/ModifiableCommand";
+import {getModifiableCmdAttributes, isCmdModifiable, Modifiable, modifyCmdAttributes} from "../../../src/interacto";
 import {beforeEach, describe, expect, test} from "@jest/globals";
 import {ExampleUndoableCmd, StubCmd} from "../StubCmd";
-import type {UndoableCommand} from "../../../src/impl/command/UndoableCommand";
+import type {UndoableCommand} from "../../../src/interacto";
 
 class CmdModifiableDouble2 extends StubCmd {
     @Modifiable
