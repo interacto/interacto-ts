@@ -56,7 +56,7 @@ describe("using a modifiable decorator on commands", () => {
             expect(cmd.c).toBe("foo");
         });
 
-        test("does nothing since same value (1 attr)", () => {
+        test("does nothing since same value (1 attribute)", () => {
             const res = modifyCmdAttributes(cmd, {
                 a: 0
             });
@@ -64,7 +64,7 @@ describe("using a modifiable decorator on commands", () => {
             expect(res).toBeFalsy();
         });
 
-        test("does nothing since same value (1 attr)", () => {
+        test("does nothing since same value (2 attributes)", () => {
             const res = modifyCmdAttributes(cmd, {
                 a: 0,
                 b: true

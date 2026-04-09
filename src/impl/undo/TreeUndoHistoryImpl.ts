@@ -18,8 +18,13 @@ import {remove} from "../util/ArrayUtil";
 import {Subject} from "rxjs";
 import type {UndoableTreeNode, UndoableTreeNodeDTO, TreeUndoHistoryDTO} from "../../api/undo/TreeUndoHistory";
 import type {Undoable, UndoableSnapshot} from "../../api/undo/Undoable";
-import type {Observable} from "rxjs";
 import type {UndoableCommand} from "../command/UndoableCommand";
+import type {Observable} from "rxjs";
+
+/**
+ * A temporary type for casting an undoable object constructor to then call it.
+ */
+type UndoableCtor = new () => UndoableCommand;
 
 /**
  * Implementation of UndoableTreeNode
@@ -154,7 +159,6 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
         this.sizePublisher = new Subject();
     }
 
-
     public add(undoable: Undoable): void {
         let equalCmd: UndoableTreeNode | undefined;
 
@@ -234,7 +238,6 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
         }
     }
 
-
     public getModifiableAttributesOf(id: number): object {
         const node = this.undoableNodes.at(id);
         if (node === undefined) {
@@ -243,9 +246,9 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
         return getModifiableCmdAttributes(node.undoable);
     }
 
-
     public applyModifiedAttributesOn(id: number, data: object): void {
-        const node = this.undoableNodes[id]; // not `at(i)` since at considers -1 as last one
+        // not `at(i)` since at considers -1 as last one
+        const node = this.undoableNodes[id];
         const parent = node?.parent;
         if (node === undefined || parent === undefined) {
             return;
@@ -256,7 +259,7 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
         // Apply the change to the targeted undoable object (the tree root of the cloned subtree)
         const hasBeenChanged = modifyCmdAttributes(cloneTree.undoable as UndoableCommand, data);
         // If the modification process does not modify the input undoable object, the process stops here
-        if(hasBeenChanged) {
+        if (hasBeenChanged) {
             // Moving to the parent of the modified item
             this.goTo(parent.id);
             // Executing the cloned undoable object
@@ -273,7 +276,7 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
     }
 
     private addClonedSubtree(currentNode: UndoableTreeNode): void {
-        for(const child of currentNode.children) {
+        for (const child of currentNode.children) {
             child.undoable.redo();
             this.add(child.undoable);
             this.undo();
@@ -283,7 +286,8 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
 
     private cloneSubtree(node: UndoableTreeNode, parent?: UndoableTreeNode): UndoableTreeNode {
         // Cloning the current undoable
-        let clone = new (node.undoable.constructor as any) as UndoableCommand;
+        // eslint-disable-next-line @stylistic/new-parens
+        let clone = new (node.undoable.constructor as UndoableCtor);
         clone = Object.assign(clone, node.undoable);
         // Creating a fake node to store the cloned branch
         const clonedNode = new UndoableTreeNodeImpl(clone, -1, parent);
@@ -294,8 +298,6 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
 
         return clonedNode;
     }
-
-
 
     public goTo(id: number): void {
         if (this.currentNode.id === id || this.undoableNodes.length === 0 || id >= this.undoableNodes.length || id < -1) {

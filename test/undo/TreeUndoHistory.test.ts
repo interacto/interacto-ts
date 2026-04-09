@@ -1098,14 +1098,14 @@ describe("using a tree undo history", () => {
         });
 
         test("returns empty object when id does not exist", () => {
-            expect(history.getModifiableAttributesOf(2)).toEqual({});
+            expect(history.getModifiableAttributesOf(2)).toStrictEqual({});
         });
 
         test("returns the current modifiable attributes of the targeted undoable", () => {
             const attrs = history.getModifiableAttributesOf(0);
             expect(Object.keys(attrs)).toContain("a");
             expect(Object.keys(attrs)).toContain("b");
-            expect(attrs).toEqual({
+            expect(attrs).toStrictEqual({
                 a: modCmd.a,
                 b: modCmd.b
             });
@@ -1132,8 +1132,8 @@ describe("using a tree undo history", () => {
             // A - B
             //   \ B'*
             expect(history.size()).toBe(3);
-            expect(history.root.children.length).toBe(1);
-            expect(history.root.children[0].children.length).toBe(2);
+            expect(history.root.children).toHaveLength(1);
+            expect(history.root.children[0].children).toHaveLength(2);
             expect(history.currentNode.undoable).toBe(history.root.children[0].children[1].undoable);
             expect(history.getLastUndo()).toBe(history.currentNode.undoable);
             expect(history.getLastRedo()).toBeUndefined();
@@ -1151,10 +1151,10 @@ describe("using a tree undo history", () => {
             //   \ B'* - C'
 
             expect(history.size()).toBe(5);
-            expect(history.root.children.length).toBe(1);
-            expect(history.root.children[0].children.length).toBe(2);
-            expect(history.root.children[0].children[0].children.length).toBe(1);
-            expect(history.root.children[0].children[1].children.length).toBe(1);
+            expect(history.root.children).toHaveLength(1);
+            expect(history.root.children[0].children).toHaveLength(2);
+            expect(history.root.children[0].children[0].children).toHaveLength(1);
+            expect(history.root.children[0].children[1].children).toHaveLength(1);
             expect(history.root.children[0].children[0].children[0].undoable).toBeInstanceOf(StubUndoableCmd);
             expect(history.root.children[0].children[1].children[0].undoable).toBeInstanceOf(StubUndoableCmd);
             expect(history.root.children[0].children[0].undoable).toBeInstanceOf(CmdModifiableDouble);
@@ -1178,14 +1178,14 @@ describe("using a tree undo history", () => {
             //        \ D'
 
             expect(history.size()).toBe(7);
-            expect(history.root.children.length).toBe(1);
-            expect(history.root.children[0].children.length).toBe(2);
-            expect(history.root.children[0].children[0].children.length).toBe(2);
-            expect(history.root.children[0].children[1].children.length).toBe(2);
-            expect(history.root.children[0].children[0].children[0].children.length).toBe(0);
-            expect(history.root.children[0].children[0].children[1].children.length).toBe(0);
-            expect(history.root.children[0].children[1].children[0].children.length).toBe(0);
-            expect(history.root.children[0].children[1].children[1].children.length).toBe(0);
+            expect(history.root.children).toHaveLength(1);
+            expect(history.root.children[0].children).toHaveLength(2);
+            expect(history.root.children[0].children[0].children).toHaveLength(2);
+            expect(history.root.children[0].children[1].children).toHaveLength(2);
+            expect(history.root.children[0].children[0].children[0].children).toHaveLength(0);
+            expect(history.root.children[0].children[0].children[1].children).toHaveLength(0);
+            expect(history.root.children[0].children[1].children[0].children).toHaveLength(0);
+            expect(history.root.children[0].children[1].children[1].children).toHaveLength(0);
             expect(history.root.children[0].children[0].children[1].undoable).toBeInstanceOf(CmdModifiableDouble);
             expect(history.root.children[0].children[1].children[1].undoable).toBeInstanceOf(CmdModifiableDouble);
             expect(history.root.children[0].children[0].children[0].undoable).toBeInstanceOf(StubUndoableCmd);
@@ -1202,16 +1202,8 @@ describe("using a tree undo history", () => {
 
             // A - B*
             expect(history.size()).toBe(2);
-            expect(history.root.children[0].children.length).toBe(1);
+            expect(history.root.children[0].children).toHaveLength(1);
             expect(history.currentNode.undoable).toBe(history.root.children[0].children[0].undoable);
-        });
-
-        test("no effect when trying to modify the root", () => {
-            // A - B*
-            history.applyModifiedAttributesOn(history.root.id, {
-                a: 0
-            });
-            expect(history.size()).toBe(2);
         });
 
         test("no effect when trying to modify the root", () => {

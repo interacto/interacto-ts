@@ -63,7 +63,7 @@ export function isCmdModifiable(obj: Undoable, key: string): boolean {
  * Modifies attributes of the given undoable command based on a given source partial object.
  * @param obj - The command to modify
  * @param attributes - The set of properties of the command to modify
- * @return True if the undoable command has been modified.
+ * @returns True if the undoable command has been modified.
  * False otherwise, for example, if no attribute has been modified (e.g., no corresponding attribute or
  * all the source and target attributes are equal).
  */
@@ -93,9 +93,8 @@ export function modifyCmdAttributes<T extends Command & Undoable>(obj: T, attrib
 
 /**
  * Retrieves the subset of attributes from an {@link Undoable} instance that are
- * considered modifiable (i.e., annotated with @Modifiable)
+ * considered modifiable (i.e., annotated with `@Modifiable`)
  * (only primitive types considered for the moment: string, number, or boolean).
- *
  * @param obj - The object from which to extract modifiable attributes.
  * @returns Partial<T> - An object (extracted from `obj`) containing only the properties that are
  * declared as modifiable.
