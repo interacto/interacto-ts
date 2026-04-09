@@ -12,12 +12,14 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import {getModifiableCmdAttributes, modifyCmdAttributes} from "../../api/command/ModifiableCommand";
 import {TreeUndoHistory} from "../../api/undo/TreeUndoHistory";
 import {remove} from "../util/ArrayUtil";
 import {Subject} from "rxjs";
 import type {UndoableTreeNode, UndoableTreeNodeDTO, TreeUndoHistoryDTO} from "../../api/undo/TreeUndoHistory";
 import type {Undoable, UndoableSnapshot} from "../../api/undo/Undoable";
 import type {Observable} from "rxjs";
+import type {UndoableCommand} from "../command/UndoableCommand";
 
 /**
  * Implementation of UndoableTreeNode
@@ -152,6 +154,7 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
         this.sizePublisher = new Subject();
     }
 
+
     public add(undoable: Undoable): void {
         let equalCmd: UndoableTreeNode | undefined;
 
@@ -230,6 +233,69 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
             this._currentNode = this.root;
         }
     }
+
+
+    public getModifiableAttributesOf(id: number): object {
+        const node = this.undoableNodes.at(id);
+        if (node === undefined) {
+            return {};
+        }
+        return getModifiableCmdAttributes(node.undoable);
+    }
+
+
+    public applyModifiedAttributesOn(id: number, data: object): void {
+        const node = this.undoableNodes[id]; // not `at(i)` since at considers -1 as last one
+        const parent = node?.parent;
+        if (node === undefined || parent === undefined) {
+            return;
+        }
+
+        // cloning the branch
+        const cloneTree = this.cloneSubtree(node);
+        // Apply the change to the targeted undoable object (the tree root of the cloned subtree)
+        const hasBeenChanged = modifyCmdAttributes(cloneTree.undoable as UndoableCommand, data);
+        // If the modification process does not modify the input undoable object, the process stops here
+        if(hasBeenChanged) {
+            // Moving to the parent of the modified item
+            this.goTo(parent.id);
+            // Executing the cloned undoable object
+            cloneTree.undoable.redo();
+            // Adding the novel commands to the history
+            this.add(cloneTree.undoable);
+            const currentId = this.currentNode.id;
+            // Adding and executing the cloned branch
+            // Execution is required to trigger the creation of this new history branch
+            this.addClonedSubtree(cloneTree);
+            // Going back to the original position
+            this.goTo(currentId);
+        }
+    }
+
+    private addClonedSubtree(currentNode: UndoableTreeNode): void {
+        for(const child of currentNode.children) {
+            child.undoable.redo();
+            this.add(child.undoable);
+            this.undo();
+            this.addClonedSubtree(child);
+        }
+    }
+
+    private cloneSubtree(node: UndoableTreeNode, parent?: UndoableTreeNode): UndoableTreeNode {
+        // Cloning the current undoable
+        let clone = new (node.undoable.constructor as any) as UndoableCommand;
+        clone = Object.assign(clone, node.undoable);
+        // Creating a fake node to store the cloned branch
+        const clonedNode = new UndoableTreeNodeImpl(clone, -1, parent);
+        // Cloning all the children
+        for (const child of Array.from(node.children)) {
+            clonedNode.children.push(this.cloneSubtree(child, clonedNode));
+        }
+
+        return clonedNode;
+    }
+
+
 
     public goTo(id: number): void {
         if (this.currentNode.id === id || this.undoableNodes.length === 0 || id >= this.undoableNodes.length || id < -1) {

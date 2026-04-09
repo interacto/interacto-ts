@@ -154,6 +154,27 @@ export abstract class TreeUndoHistory implements UndoHistoryBase {
     public abstract delete(id: number): void;
 
     /**
+     * Retrieves the modifiable attributes of the undoable node identified by the given id.
+     * See the method `getModifiableCmdAttributes` in the class `ModifiableCommand`.
+     * @param {number} id - The id of the undoable to retrieve.
+     * @return {object} An object containing the modifiable attributes of the targeted undoable node with their current values.
+     * The method returns an empty structured if no node matches the given id.
+     */
+    public abstract getModifiableAttributesOf(id: number): object;
+
+    /**
+     * Applies modified attributes to the command identified by the given `id` within the undoable nodes.
+     * Technically, the method clones the targeted undoable node, applies the modifications from `data`, re-executes the command,
+     * and then stores the novel cloned undoable node in the history.
+     *
+     * @param {number} id - The identifier of the undoable node to modify (to clone and then patch).
+     * The method does nothing if the id is not valid.
+     * @param {object} data - The attribute changes to apply to the command. JSON format.
+     * The elements of the JSON object must match with the class attributes (tagged with @Modifiable) of the undoable object.
+     */
+    public abstract applyModifiedAttributesOn(id: number, data: object): void;
+
+    /**
      * Computes the position (in the large) of each node.
      * Useful for layouting.
      */

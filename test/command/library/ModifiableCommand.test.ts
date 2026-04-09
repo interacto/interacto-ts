@@ -1,40 +1,7 @@
-import {getModifiableCmdAttributes, isCmdModifiable, Modifiable, modifyCmdAttributes} from "../../../src/interacto";
+import {getModifiableCmdAttributes, isCmdModifiable, modifyCmdAttributes} from "../../../src/interacto";
 import {beforeEach, describe, expect, test} from "@jest/globals";
-import {ExampleUndoableCmd, StubCmd} from "../StubCmd";
 import type {UndoableCommand} from "../../../src/interacto";
-
-class CmdModifiableDouble2 extends StubCmd {
-    @Modifiable
-    public a = 0;
-}
-
-class CmdModifiableDouble3 extends ExampleUndoableCmd {
-    @Modifiable
-    public a = {};
-
-    @Modifiable
-    public b: Array<string> = [];
-
-    @Modifiable
-    public c: number | undefined = undefined;
-}
-
-class CmdModifiableDouble extends ExampleUndoableCmd {
-    @Modifiable
-    public a: number;
-
-    @Modifiable
-    public b: boolean;
-
-    public c: string;
-
-    public constructor() {
-        super();
-        this.a = 0;
-        this.b = false;
-        this.c = "foo";
-    }
-}
+import {CmdModifiableDouble, CmdModifiableDouble2, CmdModifiableDouble3} from "../StubCmd";
 
 describe("using a modifiable decorator on commands", () => {
     describe("and an undoable command", () => {
@@ -46,10 +13,11 @@ describe("using a modifiable decorator on commands", () => {
         });
 
         test("can modify one property with @Modifiable", () => {
-            modifyCmdAttributes(cmd, {
+            const res = modifyCmdAttributes(cmd, {
                 a: 21
             });
 
+            expect(res).toBeTruthy();
             expect(cmd.a).toBe(21);
             expect(cmd.b).toBeFalsy();
             expect(cmd.c).toBe("foo");
@@ -88,6 +56,24 @@ describe("using a modifiable decorator on commands", () => {
             expect(cmd.c).toBe("foo");
         });
 
+        test("does nothing since same value (1 attr)", () => {
+            const res = modifyCmdAttributes(cmd, {
+                a: 0
+            });
+
+            expect(res).toBeFalsy();
+        });
+
+        test("does nothing since same value (1 attr)", () => {
+            const res = modifyCmdAttributes(cmd, {
+                a: 0,
+                b: true
+            });
+
+            expect(res).toBeTruthy();
+            expect(cmd.b).toBeTruthy();
+        });
+
         test("cannot modify one non-existing property", () => {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             modifyCmdAttributes(cmd as any, {
@@ -119,19 +105,6 @@ describe("using a modifiable decorator on commands", () => {
             test("get modifiable properties does not include the ones badly typed", () => {
                 expect(getModifiableCmdAttributes(new CmdModifiableDouble3())).toStrictEqual({});
             });
-        });
-    });
-
-    describe("and an non-done command", () => {
-        test("cannot modify one property with @Modifiable", () => {
-            const cmd = new CmdModifiableDouble();
-            modifyCmdAttributes(cmd, {
-                a: 21,
-                b: true
-            });
-
-            expect(cmd.a).toBe(0);
-            expect(cmd.b).toBeFalsy();
         });
     });
 

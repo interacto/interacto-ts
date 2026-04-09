@@ -60,23 +60,25 @@ export function isCmdModifiable(obj: Undoable, key: string): boolean {
 }
 
 /**
- * Modifies parameters of the given command
+ * Modifies attributes of the given undoable command based on a given source partial object.
  * @param obj - The command to modify
  * @param attributes - The set of properties of the command to modify
+ * @return True if the undoable command has been modified.
+ * False otherwise, for example, if no attribute has been modified (e.g., no corresponding attribute or
+ * all the source and target attributes are equal).
  */
-export function modifyCmdAttributes<T extends Command & Undoable>(obj: T, attributes: Partial<T>): void {
-    if (!obj.isDone()) {
-        // eslint-disable-next-line no-console
-        console.error("Only already executed and done Interacto commands can be modified");
-        return;
-    }
+export function modifyCmdAttributes<T extends Command & Undoable>(obj: T, attributes: Partial<T>): boolean {
+    let hasChanged = false;
 
     for (const key of Object.keys(attributes)) {
         if (isCmdModifiable(obj, key)) {
             const tkey = key as keyof T;
             const value = attributes[tkey];
             if (typeof value === typeof obj[tkey]) {
-                obj[tkey] = value as T[keyof T];
+                if (value !== obj[tkey]) {
+                    obj[tkey] = value as T[keyof T];
+                    hasChanged = true;
+                }
             } else {
                 // eslint-disable-next-line no-console
                 console.error("Trying to affect a value of an incorrect type to a parameter of a command");
@@ -86,11 +88,17 @@ export function modifyCmdAttributes<T extends Command & Undoable>(obj: T, attrib
             console.error("Trying to affect a value of an incorrect parameter of a command");
         }
     }
+    return hasChanged;
 }
 
 /**
- * @param obj - The object to analyze.
- * @returns The set of modifiable (i.e., properties with the Interacto decorator Modifiable) properties of the given object.
+ * Retrieves the subset of attributes from an {@link Undoable} instance that are
+ * considered modifiable (i.e., annotated with @Modifiable)
+ * (only primitive types considered for the moment: string, number, or boolean).
+ *
+ * @param obj - The object from which to extract modifiable attributes.
+ * @returns Partial<T> - An object (extracted from `obj`) containing only the properties that are
+ * declared as modifiable.
  */
 export function getModifiableCmdAttributes<T extends Undoable>(obj: T): Partial<T> {
     const modifiableAttributes: Partial<T> = {};
