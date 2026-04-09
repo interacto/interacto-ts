@@ -55,7 +55,7 @@ class DnDFSM extends FSMImpl {
                 handler.onPress(evt);
             });
 
-        new MouseTransition(pressed, cancelled, "mouseup", (evt: MouseEvent): boolean => evt.button === this.buttonToCheck);
+        new MouseTransition(pressed, cancelled, "mouseup", undefined, (evt: MouseEvent): boolean => evt.button === this.buttonToCheck);
 
         const move = new MouseTransition(pressed, dragged, "mousemove",
             (evt: MouseEvent): void => {
@@ -77,7 +77,7 @@ class DnDFSM extends FSMImpl {
         if (this.cancellable) {
             new EscapeKeyPressureTransition(pressed, cancelled);
             new EscapeKeyPressureTransition(dragged, cancelled);
-            new MouseTransition(dragged, cancelled, "mouseup",
+            new MouseTransition(dragged, cancelled, "mouseup", undefined,
                 (evt: MouseEvent): boolean => {
                     const tgt = evt.currentTarget;
                     return evt.button === this.buttonToCheck && tgt instanceof Element && tgt.classList.contains("ioDwellSpring");

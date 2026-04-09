@@ -29,7 +29,7 @@ describe("using two pan interactions", () => {
         handler = mock<FSMHandler>();
         logger = mock<Logger>();
         canvas = document.createElement("canvas");
-        document.elementFromPoint = jest.fn<() => Element | null>().mockImplementation(() => null);
+        document.elementFromPoint = jest.fn<() => Element | null>().mockReturnValue(null);
     });
 
     afterEach(() => {

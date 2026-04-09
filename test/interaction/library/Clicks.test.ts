@@ -137,7 +137,7 @@ describe("using a clicks interaction", () => {
                 .runAllTimers();
 
             expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
-            expect(handler.fsmStops).toHaveBeenCalledTimes(0);
+            expect(handler.fsmStops).not.toHaveBeenCalled();
             expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
         });
 

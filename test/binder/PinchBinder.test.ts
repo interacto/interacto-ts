@@ -50,7 +50,6 @@ describe("using a pinch binder", () => {
             .touchend({}, [{"identifier": 2, "screenX": 20, "screenY": 22, "clientX": 500, "clientY": 210}])
             .touchend({}, [{"identifier": 3, "screenX": 5, "screenY": 6, "clientX": 500, "clientY": 210}]);
 
-        expect(binding).toBeDefined();
         expect(binding.timesCancelled).toBe(0);
         expect(binding.timesEnded).toBe(1);
         expect(ctx.commands).toHaveLength(1);
@@ -71,7 +70,6 @@ describe("using a pinch binder", () => {
             .touchend({}, [{"identifier": 2, "screenX": 10, "screenY": 8, "clientX": 500, "clientY": 210}])
             .touchend({}, [{"identifier": 3, "screenX": 5, "screenY": 6, "clientX": 500, "clientY": 210}]);
 
-        expect(binding).toBeDefined();
         expect(binding.timesCancelled).toBe(1);
         expect(binding.timesEnded).toBe(0);
         expect(ctx.commands).toHaveLength(0);
@@ -88,7 +86,6 @@ describe("using a pinch binder", () => {
             .touchmove({}, [{"identifier": 2, "screenX": 20, "screenY": 22, "clientX": 100, "clientY": 200}])
             .touchend({}, [{"identifier": 2, "screenX": 20, "screenY": 22, "clientX": 500, "clientY": 210}]);
 
-        expect(binding).toBeDefined();
         expect(binding.timesCancelled).toBe(0);
         expect(binding.timesEnded).toBe(0);
         expect(ctx.commands).toHaveLength(0);

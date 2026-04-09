@@ -15,11 +15,10 @@ import {BindingsContext, BindingsImpl, UndoHistoryImpl} from "../../src/interact
 import {StubCmd} from "../command/StubCmd";
 import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
 import {robot} from "interacto-nono";
-import type {Binding, Interaction, WidgetData, UndoHistoryBase, Bindings} from "../../src/interacto";
+import type {WidgetData, UndoHistoryBase, Bindings} from "../../src/interacto";
 
 let widget1: HTMLInputElement;
 let widget2: HTMLInputElement;
-let binding: Binding<StubCmd, Interaction<object>, unknown> | undefined;
 let cmd: StubCmd;
 let ctx: BindingsContext;
 let bindings: Bindings<UndoHistoryBase>;
@@ -44,18 +43,17 @@ describe("using a date binder", () => {
     test("commandExecutedOnSingleDateFunction", () => {
         jest.spyOn(cmd, "execute");
 
-        binding = bindings.dateBinder()
+        bindings.dateBinder()
             .toProduce(_i => cmd)
             .on(widget1)
             .bind();
 
         robot(widget1).input();
-        expect(binding).toBeDefined();
         expect(cmd.execute).toHaveBeenCalledTimes(1);
     });
 
     test("commandExecutedOnTwoDates", () => {
-        binding = bindings.dateBinder()
+        bindings.dateBinder()
             .on(widget1, widget2)
             .toProduce(_i => new StubCmd(true))
             .bind();
@@ -63,14 +61,13 @@ describe("using a date binder", () => {
         robot(widget1).input();
         robot(widget2).input();
 
-        expect(binding).toBeDefined();
         expect(ctx.commands).toHaveLength(2);
     });
 
     test("init1Executed", () => {
         jest.spyOn(cmd, "execute");
 
-        binding = bindings.dateBinder()
+        bindings.dateBinder()
             .on(widget1)
             .toProduce(_i => cmd)
             .first((c: StubCmd) => {
@@ -80,7 +77,6 @@ describe("using a date binder", () => {
 
         robot(widget1).input();
 
-        expect(binding).toBeDefined();
         expect(cmd.value).toBe(10);
         expect(cmd.execute).toHaveBeenCalledTimes(1);
     });
@@ -88,7 +84,7 @@ describe("using a date binder", () => {
     test("checkFalse", () => {
         jest.spyOn(cmd, "execute");
 
-        binding = bindings.dateBinder()
+        bindings.dateBinder()
             .toProduce(_i => cmd)
             .on(widget1)
             .when((_i: WidgetData<HTMLInputElement>) => false)
@@ -96,7 +92,6 @@ describe("using a date binder", () => {
 
         robot(widget1).input();
 
-        expect(binding).toBeDefined();
         expect(cmd.execute).not.toHaveBeenCalled();
     });
 });

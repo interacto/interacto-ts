@@ -200,9 +200,9 @@ describe("using bindings", () => {
             .mousemove()
             .keydown({"code": "Escape"});
 
-        expect(logger.logInteractionErr).toHaveBeenCalledTimes(0);
+        expect(logger.logInteractionErr).not.toHaveBeenCalled();
         expect(logger.logBindingErr).toHaveBeenCalledTimes(1);
-        expect(logger.logCmdErr).toHaveBeenCalledTimes(0);
+        expect(logger.logCmdErr).not.toHaveBeenCalled();
     });
 
     test("undoable command registered", () => {
@@ -533,7 +533,7 @@ describe("using bindings", () => {
         handle.classList.add("ioDwellSpring");
 
         // document.elementFromPoint is undefined
-        document.elementFromPoint = jest.fn<() => Element | null>().mockImplementation(() => null);
+        document.elementFromPoint = jest.fn<() => Element | null>().mockReturnValue(null);
 
         bindings.reciprocalTouchDnDBinder(handleRef, springRef)
             .on(elt)
@@ -547,7 +547,7 @@ describe("using bindings", () => {
             .touchend()
             .touchstart()
             .touchmove();
-        document.elementFromPoint = jest.fn<() => Element | null>().mockImplementation(() => handle);
+        document.elementFromPoint = jest.fn<() => Element | null>().mockReturnValue(handle);
         robot(handle)
             .touchend({}, [{"identifier": 1, "target": handle}]);
 

@@ -120,7 +120,7 @@ describe("executing a binding", () => {
         jest.spyOn(binding, "ifCmdHadNoEffect");
         jest.spyOn(binding, "ifCmdHadEffects");
         jest.spyOn(binding, "ifCannotExecuteCmd");
-        jest.spyOn(cmd, "hadEffect").mockImplementation(() => false);
+        jest.spyOn(cmd, "hadEffect").mockReturnValue(false);
         fsm.process(createMouseEvent("click", document.createElement("button")));
 
         expect(dotItSpy).toHaveBeenCalledTimes(1);

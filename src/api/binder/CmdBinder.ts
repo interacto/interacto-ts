@@ -23,7 +23,7 @@ import type {LogLevel} from "../logging/LogLevel";
 /**
  * The binder API that already knows the type of UI command
  * the bindings will produce.
- * @typeParam C - The type of the produced UI Commands
+ * @template C - The type of the produced UI Commands
  * @category Helper
  */
 export interface CmdBinder<C extends Command> extends CmdBinderBuilder<C> {
@@ -41,10 +41,10 @@ export interface CmdBinder<C extends Command> extends CmdBinderBuilder<C> {
 
     /**
      * Defines how to create the user interaction that the binding will use to create UI commands.
+     * @template D - The user interaction data type
+     * @template I - The user interaction type
      * @param fn - The supplier that will return a new user interaction.
      * @returns A clone of the current binder to chain the building configuration.
-     * @typeParam D - The user interaction data type
-     * @typeParam I - The user interaction type
      */
     usingInteraction<I extends Interaction<D>, A, D extends object = InteractionDataType<I>>
     (fn: () => I): InteractionCmdBinder<C, I, A, D>;

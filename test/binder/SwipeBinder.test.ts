@@ -47,7 +47,6 @@ describe("using a swipe binder", () => {
             .touchstart({}, [{"identifier": 3, "screenX": 15, "screenY": 20, "clientX": 150, "clientY": 200}], 100)
             .touchmove({}, [{"identifier": 3, "screenX": 16, "screenY": 30, "clientX": 160, "clientY": 201}], 2000);
 
-        expect(binding).toBeDefined();
         expect(binding.timesCancelled).toBe(0);
         expect(binding.timesEnded).toBe(0);
         expect(ctx.commands).toHaveLength(0);
@@ -63,7 +62,6 @@ describe("using a swipe binder", () => {
             .touchstart({}, [{"identifier": 3, "screenX": 15, "screenY": 20, "clientX": 150, "clientY": 200}], 10)
             .touchmove({}, [{"identifier": 3, "screenX": 16, "screenY": 20 + y, "clientX": 160, "clientY": 200 + y}], 10);
 
-        expect(binding).toBeDefined();
         expect(binding.timesCancelled).toBe(0);
         expect(binding.timesEnded).toBe(0);
         expect(ctx.commands).toHaveLength(0);
@@ -81,7 +79,6 @@ describe("using a swipe binder", () => {
             .touchmove({}, [{"identifier": 3, "screenX": 350, "screenY": 20 + y, "clientX": 250, "clientY": 200 + y}], 6000)
             .touchend({}, [{"identifier": 3, "screenX": 350, "screenY": 20 + y, "clientX": 250, "clientY": 200 + y}], 6000);
 
-        expect(binding).toBeDefined();
         expect(binding.timesEnded).toBe(0);
         expect(ctx.commands).toHaveLength(0);
     });
@@ -97,7 +94,6 @@ describe("using a swipe binder", () => {
             .touchmove({}, [{"identifier": 3, "screenX": 200, "screenY": 30, "clientX": 160, "clientY": 201}], 5200)
             .touchmove({}, [{"identifier": 3, "screenX": 299, "screenY": 30, "clientX": 349, "clientY": 210}], 5399);
 
-        expect(binding).toBeDefined();
         expect(binding.timesCancelled).toBe(0);
         expect(binding.timesEnded).toBe(0);
         expect(ctx.commands).toHaveLength(0);
@@ -114,7 +110,6 @@ describe("using a swipe binder", () => {
             .touchmove({}, [{"identifier": 3, "screenX": 160, "screenY": 20, "clientX": 160, "clientY": 201}], 5050)
             .touchmove({}, [{"identifier": 3, "screenX": 200, "screenY": 30, "clientX": 200, "clientY": 210}], 5100);
 
-        expect(binding).toBeDefined();
         expect(binding.timesCancelled).toBe(0);
         expect(binding.timesEnded).toBe(0);
         expect(ctx.commands).toHaveLength(0);
@@ -131,7 +126,6 @@ describe("using a swipe binder", () => {
             .touchmove({}, [{"identifier": 3, "screenX": 160, "screenY": 30, "clientX": 160, "clientY": 201}], 6000)
             .touchmove({}, [{"identifier": 3, "screenX": 350, "screenY": 30, "clientX": 350, "clientY": 210}], 7000);
 
-        expect(binding).toBeDefined();
         expect(binding.timesCancelled).toBe(0);
         expect(binding.timesEnded).toBe(0);
         expect(ctx.commands).toHaveLength(0);
@@ -149,7 +143,6 @@ describe("using a swipe binder", () => {
             .touchmove({}, [{"identifier": 3, "screenX": 250, "screenY": 30, "clientX": 500, "clientY": 210}], 6000)
             .touchend({}, [{"identifier": 3, "screenX": 450, "screenY": 30, "clientX": 500, "clientY": 210}], 6000);
 
-        expect(binding).toBeDefined();
         expect(binding.timesCancelled).toBe(0);
         expect(binding.timesEnded).toBe(1);
         expect(ctx.commands).toHaveLength(1);
@@ -208,7 +201,6 @@ describe("using a swipe binder", () => {
             .touchmove({}, [{"identifier": 3, "screenX": 250, "screenY": 30, "clientX": 300, "clientY": 210}], 5500)
             .touchend({}, [{"identifier": 3, "screenX": 250, "screenY": 30, "clientX": 300, "clientY": 210}], 5500);
 
-        expect(binding).toBeDefined();
         expect(binding.timesCancelled).toBe(0);
         expect(binding.timesEnded).toBe(1);
         expect(ctx.commands).toHaveLength(1);

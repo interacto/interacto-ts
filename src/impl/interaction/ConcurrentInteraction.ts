@@ -23,8 +23,8 @@ import type {Subscription} from "rxjs/internal/Subscription";
 
 /**
  * The base implementation of a user interaction that uses concurrent FSMs.
- * @typeParam D - The type of the interaction data.
- * @typeParam F - The type of the FSM.
+ * @template D - The type of the interaction data.
+ * @template F - The type of the FSM.
  * @category Interaction
  */
 export abstract class ConcurrentInteraction<D extends object, DImpl extends D & Flushable, F extends ConcurrentFSM<FSM> = ConcurrentFSM<FSM>>

@@ -15,10 +15,9 @@
 import {BindingsContext, BindingsImpl, UndoHistoryImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
-import type {Binding, Interaction, UndoHistoryBase, Bindings} from "../../src/interacto";
+import type {UndoHistoryBase, Bindings} from "../../src/interacto";
 
 let txt1: HTMLInputElement | HTMLTextAreaElement;
-let binding: Binding<StubCmd, Interaction<object>, unknown> | undefined;
 let cmd: StubCmd;
 let ctx: BindingsContext;
 let bindings: Bindings<UndoHistoryBase>;
@@ -43,7 +42,7 @@ describe("using a text input binder", () => {
 
         jest.spyOn(cmd, "execute");
 
-        binding = bindings.textInputBinder()
+        bindings.textInputBinder()
             .toProduce(() => cmd)
             .then((_, i) => {
                 // eslint-disable-next-line jest/no-conditional-in-test
@@ -59,7 +58,6 @@ describe("using a text input binder", () => {
         txt1.value = "foo";
         txt1.dispatchEvent(new InputEvent("input"));
         jest.runOnlyPendingTimers();
-        expect(binding).not.toBeNull();
         expect(cmd.execute).toHaveBeenCalledTimes(1);
         expect(ctx.commands).toHaveLength(1);
         expect(ctx.getCmd(0)).toBe(cmd);
@@ -67,7 +65,7 @@ describe("using a text input binder", () => {
     });
 
     test("type text create command with a delay of 2 seconds", () => {
-        binding = bindings.textInputBinder(2)
+        bindings.textInputBinder(2)
             .toProduce(() => cmd)
             .on(txt1)
             .bind();
@@ -90,7 +88,7 @@ describe("using a text input binder", () => {
 
         jest.spyOn(cmd, "execute");
 
-        binding = bindings.textInputBinder()
+        bindings.textInputBinder()
             .toProduce(() => cmd)
             .then((_, i) => {
                 // eslint-disable-next-line jest/no-conditional-in-test
@@ -107,7 +105,6 @@ describe("using a text input binder", () => {
         txt1.value = "foo";
         txt1.dispatchEvent(new InputEvent("input"));
         jest.runOnlyPendingTimers();
-        expect(binding).toBeDefined();
         expect(cmd.execute).toHaveBeenCalledTimes(4);
         expect(ctx.commands).toHaveLength(1);
         expect(ctx.getCmd(0)).toBe(cmd);

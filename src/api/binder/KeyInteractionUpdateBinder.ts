@@ -25,8 +25,8 @@ import type {LogLevel} from "../logging/LogLevel";
 /**
  * The binder API for key-based user interactions, that already knows the type of the user interaction to use
  * (for user interactions that can be updated).
- * @typeParam I - The type of the user interaction
- * @typeParam D - The type of the interaction data of the user interaction
+ * @template I - The type of the user interaction
+ * @template D - The type of the interaction data of the user interaction
  * @category Helper
  */
 export interface KeyInteractionUpdateBinder<I extends Interaction<D>, A, D extends object = InteractionDataType<I>>

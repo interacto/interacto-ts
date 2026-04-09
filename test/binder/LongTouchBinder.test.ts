@@ -50,7 +50,6 @@ describe("using a long touch binder", () => {
             c1.dispatchEvent(createTouchEvent("touchstart", 1, c1, 11, 23, 110, 230));
             jest.runOnlyPendingTimers();
 
-            expect(binding).toBeDefined();
             expect(ctx.commands).toHaveLength(1);
             expect(ctx.getCmd(0)).toBeInstanceOf(StubCmd);
         });
@@ -66,7 +65,6 @@ describe("using a long touch binder", () => {
             c1.dispatchEvent(createTouchEvent("touchend", 1, c1, 11, 23, 110, 230));
             jest.runOnlyPendingTimers();
 
-            expect(binding).toBeDefined();
             expect(ctx.commands).toHaveLength(0);
         });
 
@@ -82,7 +80,6 @@ describe("using a long touch binder", () => {
             c1.dispatchEvent(createTouchEvent("touchstart", 1, c1, 11, 23, 110, 230));
             jest.runOnlyPendingTimers();
 
-            expect(binding).toBeDefined();
             expect(ctx.commands).toHaveLength(2);
         });
 
@@ -124,7 +121,6 @@ describe("using a long touch binder", () => {
             rect.dispatchEvent(createTouchEvent("touchend", 1, rect, 11, 23, 110, 230));
             jest.runOnlyPendingTimers();
 
-            expect(binding).toBeDefined();
             expect(ctx.commands).toHaveLength(0);
         });
 
@@ -145,7 +141,6 @@ describe("using a long touch binder", () => {
             rect.dispatchEvent(createTouchEvent("touchend", 1, rect, 11, 23, 110, 230));
             jest.runOnlyPendingTimers();
 
-            expect(binding).toBeDefined();
             expect(ctx.commands).toHaveLength(0);
         });
     });

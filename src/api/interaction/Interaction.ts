@@ -17,7 +17,7 @@ import type {FSM} from "../fsm/FSM";
 
 /**
  * The concept of user interaction.
- * @typeParam D - The type of the interaction data
+ * @template D - The type of the interaction data
  * @category API Interaction
  */
 export interface Interaction<D extends object> {

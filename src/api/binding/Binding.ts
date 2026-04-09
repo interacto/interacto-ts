@@ -20,10 +20,10 @@ import type {Observable} from "rxjs";
 
 /**
  * The concept of binding and its related services.
- * @typeParam C - The type of the command that will produce this binding.
- * @typeParam I - The type of the interaction that will use this binding.
- * @typeParam A - The type of the accumulator.
- * @typeParam D - The interaction data type (infered from the interaction type)
+ * @template C - The type of the command that will produce this binding.
+ * @template I - The type of the interaction that will use this binding.
+ * @template A - The type of the accumulator.
+ * @template D - The interaction data type (infered from the interaction type)
  * @category API Binding
  */
 export interface Binding<C extends Command, I extends Interaction<D>, A, D extends object = InteractionDataType<I>> {

@@ -46,7 +46,7 @@ describe("using a tap binder", () => {
         test("run tap produces cmd", () => {
             jest.spyOn(cmd, "execute");
 
-            binding = bindings.tapsBinder(2)
+            bindings.tapsBinder(2)
                 .toProduce(() => cmd)
                 .on(c1)
                 .bind();
@@ -58,14 +58,13 @@ describe("using a tap binder", () => {
                 .touchstart({}, [{"identifier": 2}])
                 .touchend();
 
-            expect(binding).toBeDefined();
             expect(cmd.execute).toHaveBeenCalledTimes(1);
             expect(ctx.commands).toHaveLength(1);
             expect(ctx.getCmd(0)).toBe(cmd);
         });
 
         test("run tap two times recycle events", () => {
-            binding = bindings.tapsBinder(2)
+            bindings.tapsBinder(2)
                 .toProduce(() => new StubCmd(true))
                 .on(c1)
                 .bind();
@@ -81,7 +80,6 @@ describe("using a tap binder", () => {
                 .touchstart({}, [{"identifier": 2}])
                 .touchend();
 
-            expect(binding).toBeDefined();
             expect(ctx.commands).toHaveLength(2);
         });
 
@@ -121,12 +119,11 @@ describe("using a tap binder", () => {
                 .touchend();
 
             expect(binding.running).toBeFalsy();
-            expect(binding).toBeDefined();
             expect(ctx.commands).toHaveLength(0);
         });
 
         test("dynamic registration with a node added", async () => {
-            binding = bindings.tapsBinder(2)
+            bindings.tapsBinder(2)
                 .toProduce(() => cmd)
                 .onDynamic(doc)
                 .bind();
@@ -155,7 +152,7 @@ describe("using a tap binder", () => {
             // Waiting for the mutation changes to be done.
             await Promise.resolve();
 
-            binding = bindings.tapsBinder(2)
+            bindings.tapsBinder(2)
                 .toProduce(() => cmd)
                 .onDynamic(doc)
                 .bind();
@@ -172,7 +169,7 @@ describe("using a tap binder", () => {
         });
 
         test("dynamic registration with a node added and removed", async () => {
-            binding = bindings.tapsBinder(1)
+            bindings.tapsBinder(1)
                 .toProduce(() => cmd)
                 .onDynamic(doc)
                 .bind();
@@ -189,7 +186,6 @@ describe("using a tap binder", () => {
                 .touchstart({}, [{"identifier": 2}])
                 .touchend();
 
-            expect(binding).toBeDefined();
             expect(ctx.commands).toHaveLength(0);
         });
 
@@ -198,7 +194,7 @@ describe("using a tap binder", () => {
             doc.append(rect);
             await Promise.resolve();
 
-            binding = bindings.tapsBinder(3)
+            bindings.tapsBinder(3)
                 .toProduce(() => cmd)
                 .onDynamic(doc)
                 .bind();
@@ -215,7 +211,6 @@ describe("using a tap binder", () => {
                 .touchstart({}, [{"identifier": 2}])
                 .touchend();
 
-            expect(binding).toBeDefined();
             expect(ctx.commands).toHaveLength(0);
         });
     });

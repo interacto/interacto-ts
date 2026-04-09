@@ -107,14 +107,6 @@ describe("using a tree undo history", () => {
             expect(history.getLastOrEmptyRedoMessage()).toBe("");
         });
 
-        test("undoable obs not null", () => {
-            expect(history.undosObservable()).toBeDefined();
-        });
-
-        test("redoable obs not null", () => {
-            expect(history.redosObservable()).toBeDefined();
-        });
-
         test("get positions when empty", () => {
             expect(Array.from(history.getPositions().keys())).toHaveLength(1);
         });
@@ -291,7 +283,7 @@ describe("using a tree undo history", () => {
 
         describe("and using a single undoable", () => {
             beforeEach(() => {
-                undoable0.getVisualSnapshot.mockImplementation((): string => "foo");
+                undoable0.getVisualSnapshot.mockReturnValue("foo");
                 history.add(undoable0);
             });
 
@@ -319,7 +311,6 @@ describe("using a tree undo history", () => {
                 expect(history.undoableNodes).toHaveLength(1);
                 expect(history.undoableNodes[0]).toBeDefined();
                 expect(history.undoableNodes[0]?.undoable).toBe(undoable0);
-                expect(history.currentNode).toBeDefined();
                 expect(history.currentNode.undoable).toBe(undoable0);
             });
 
@@ -385,7 +376,6 @@ describe("using a tree undo history", () => {
                 history.redo();
                 expect(history.undoableNodes).toHaveLength(1);
                 expect(history.undoableNodes[0]).toBeDefined();
-                expect(history.currentNode).toBeDefined();
                 expect(undoable0.redo).not.toHaveBeenCalledTimes(1);
             });
 
@@ -395,13 +385,13 @@ describe("using a tree undo history", () => {
             });
 
             test("get last redoable message when one element and ahs a redo", () => {
-                undoable0.getUndoName.mockImplementation((): string => "fooo");
+                undoable0.getUndoName.mockReturnValue("fooo");
                 history.undo();
                 expect(history.getLastRedoMessage()).toBe("fooo");
             });
 
             test("get last redoable message or empty when one element and ahs a redo", () => {
-                undoable0.getUndoName.mockImplementation((): string => "barr");
+                undoable0.getUndoName.mockReturnValue("barr");
                 history.undo();
                 expect(history.getLastOrEmptyRedoMessage()).toBe("barr");
             });
@@ -412,7 +402,6 @@ describe("using a tree undo history", () => {
                 expect(history.undoableNodes).toHaveLength(1);
                 expect(history.undoableNodes[0]).toBeDefined();
                 expect(history.undoableNodes[0]?.undoable).toBe(undoable0);
-                expect(history.currentNode).toBeDefined();
                 expect(undoable0.undo).toHaveBeenCalledTimes(1);
                 expect(undoable0.redo).toHaveBeenCalledTimes(1);
             });
@@ -766,7 +755,7 @@ describe("using a tree undo history", () => {
             });
 
             test("get last undoable message or empty when move to 2", () => {
-                undoable1.getUndoName.mockImplementation((): string => "foo1");
+                undoable1.getUndoName.mockReturnValue("foo1");
                 history.goTo(1);
                 expect(history.getLastOrEmptyUndoMessage()).toBe("foo1");
             });
@@ -780,7 +769,7 @@ describe("using a tree undo history", () => {
             });
 
             test("get last redoable message when moving to 2 and undo", () => {
-                undoable2.getUndoName.mockImplementation((): string => "fooo2");
+                undoable2.getUndoName.mockReturnValue("fooo2");
                 history.goTo(2);
                 history.undo();
                 expect(history.getLastRedoMessage()).toBe("fooo2");

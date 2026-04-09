@@ -16,8 +16,8 @@ import {UndoableCommand} from "../UndoableCommand";
 
 /**
  * An undoable command that changes the value of an object property.
- * @typeParam T - The type of the object to change
- * @typeParam S - The property of T to set
+ * @template T - The type of the object to change
+ * @template S - The property of T to set
  * @category Command
  */
 export class SetProperty<T, S extends keyof T> extends UndoableCommand {

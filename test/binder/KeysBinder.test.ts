@@ -440,7 +440,6 @@ describe("using a key binder", () => {
             .toProduce((_i: KeysData) => new StubCmd(true))
             .bind();
 
-        expect(binding).toBeDefined();
         expect(binding.name).toBe("aName");
     });
 
@@ -450,7 +449,6 @@ describe("using a key binder", () => {
             .toProduce((_i: KeysData) => new StubCmd(true))
             .bind();
 
-        expect(binding).toBeDefined();
         expect(binding.name).toBe("KeysTyped");
     });
 
@@ -472,7 +470,6 @@ describe("using a key binder", () => {
             .keyup({"code": "b"});
         jest.runOnlyPendingTimers();
 
-        expect(binding).toBeDefined();
         expect(ctx.commands).toHaveLength(1);
     });
 
@@ -492,7 +489,6 @@ describe("using a key binder", () => {
             .keyup({"code": "a"});
         jest.runOnlyPendingTimers();
 
-        expect(binding).toBeDefined();
         expect(ctx.commands).toHaveLength(1);
     });
 

@@ -204,7 +204,7 @@ describe("using a base interaction", () => {
     });
 
     test("no prevent default or propagation on unprocessed event", () => {
-        fsm.process.mockImplementationOnce(() => false);
+        fsm.process.mockReturnValueOnce(false);
         const div = document.createElement("div");
         const evt = createMouseEvent("mousedown", div);
         jest.spyOn(evt, "preventDefault");
@@ -219,7 +219,7 @@ describe("using a base interaction", () => {
     });
 
     test("prevent default on processed event", () => {
-        fsm.process.mockImplementationOnce(() => true);
+        fsm.process.mockReturnValueOnce(true);
         const div = document.createElement("div");
         const evt = createMouseEvent("mousedown", div);
         jest.spyOn(evt, "preventDefault");
@@ -235,7 +235,7 @@ describe("using a base interaction", () => {
     });
 
     test("stop propa on processed event", () => {
-        fsm.process.mockImplementationOnce(() => true);
+        fsm.process.mockReturnValueOnce(true);
         const div = document.createElement("div");
         const evt = createMouseEvent("mousedown", div);
         jest.spyOn(evt, "preventDefault");
@@ -292,7 +292,7 @@ describe("using a base interaction", () => {
             jest.advanceTimersByTime(9);
             await flushPromises();
 
-            expect(fsm.process).toHaveBeenCalledTimes(0);
+            expect(fsm.process).not.toHaveBeenCalled();
         });
 
         test("throttle with two events of same type < timeout", async() => {

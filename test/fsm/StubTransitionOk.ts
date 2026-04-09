@@ -25,6 +25,7 @@ export class StubTransitionOK<E extends Event> extends TransitionBase<E> {
         this._guard = guard ?? true;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     public accept(event: Event): event is E {
         return true;
     }
