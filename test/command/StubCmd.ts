@@ -12,8 +12,7 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {CommandBase, Modifiable, UndoableCommand} from "../../src/interacto";
-import type {Undoable} from "../../src/interacto";
+import {CommandBase, Modifiable, UndoableCommand, type Undoable} from "../../src/interacto";
 
 export class ExampleUndoableCmd extends UndoableCommand {
     protected execution(): Promise<void> | void {
@@ -105,5 +104,10 @@ export class CmdModifiableDouble extends ExampleUndoableCmd {
 
     public override redo(): void {
         this.re++;
+    }
+
+    public override equals(undoable: unknown): boolean {
+        return undoable instanceof CmdModifiableDouble && undoable.a === this.a && undoable.b === this.b &&
+          undoable.c === this.c && undoable.c === this.c;
     }
 }

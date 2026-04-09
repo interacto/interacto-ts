@@ -1118,7 +1118,7 @@ describe("using a tree undo history", () => {
         beforeEach(() => {
             cmd = new CmdModifiableDouble();
             cmd.done();
-            history = new TreeUndoHistoryImpl();
+            history = new TreeUndoHistoryImpl(true, true);
             history.add(new CmdModifiableDouble3());
             history.add(cmd);
             // A - B*
@@ -1212,6 +1212,19 @@ describe("using a tree undo history", () => {
                 a: 0
             });
             expect(history.size()).toBe(2);
+        });
+
+        test("no effect when modified command equals an sibling one", () => {
+            history.applyModifiedAttributesOn(history.root.children[0].children[0].id, {
+                a: 10
+            });
+            // A - B( 0)
+            //   \ B(10)'*
+            history.applyModifiedAttributesOn(history.root.children[0].children[0].id, {
+                a: 10
+            });
+            expect(history.size()).toBe(3);
+            expect(history.root.children[0].children).toHaveLength(2);
         });
     });
 });

@@ -260,18 +260,25 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
         const hasBeenChanged = modifyCmdAttributes(cloneTree.undoable as UndoableCommand, data);
         // If the modification process does not modify the input undoable object, the process stops here
         if (hasBeenChanged) {
-            // Moving to the parent of the modified item
-            this.goTo(parent.id);
-            // Executing the cloned undoable object
-            cloneTree.undoable.redo();
-            // Adding the novel commands to the history
-            this.add(cloneTree.undoable);
-            const currentId = this.currentNode.id;
-            // Adding and executing the cloned branch
-            // Execution is required to trigger the creation of this new history branch
-            this.addClonedSubtree(cloneTree);
-            // Going back to the original position
-            this.goTo(currentId);
+            // If we have to check equal undoables, then checking the siblings
+            const isNew = !this.considersEqualCmds ||
+              !parent.children.some(elt => cloneTree.undoable.equals(elt.undoable));
+
+            if (isNew) {
+                // Moving to the parent of the modified item
+                this.goTo(parent.id);
+                // Executing the cloned undoable object
+                cloneTree.undoable.redo();
+                // Adding the novel commands to the history
+                this.add(cloneTree.undoable);
+                const currentId = this.currentNode.id;
+                // Adding and executing the cloned branch
+                // Execution is required to trigger the creation of this new history branch
+                this.addClonedSubtree(cloneTree);
+                // Going back to the original position
+                this.goTo(currentId);
+            }
+
         }
     }
 
