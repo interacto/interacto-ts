@@ -1218,8 +1218,9 @@ describe("using a tree undo history", () => {
             history.applyModifiedAttributesOn(history.root.children[0].children[0].id, {
                 a: 10
             });
-            // A - B( 0)
-            //   \ B(10)'*
+            history.goTo(history.root.children[0].children[0].id);
+            // A - B( 0)*
+            //   \ B(10)'
             history.applyModifiedAttributesOn(history.root.children[0].children[0].id, {
                 a: 10
             });
