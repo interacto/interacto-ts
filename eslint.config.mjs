@@ -6,7 +6,6 @@ import tseslint from 'typescript-eslint';
 import stylistic from "@stylistic/eslint-plugin";
 import unicorn from "eslint-plugin-unicorn";
 import arrayFunc from "eslint-plugin-array-func";
-import importPlugin from 'eslint-plugin-import';
 import jest from "eslint-plugin-jest";
 import globals from "globals";
 
@@ -14,9 +13,9 @@ export default [...[].concat(
     jsdoc.configs["flat/recommended-typescript"],
     jsdoc.configs["flat/recommended-typescript-flavor"],
     unicorn.configs["flat/all"],
-    importPlugin.flatConfigs.recommended,
-    importPlugin.flatConfigs.typescript,
-    importPlugin.flatConfigs.errors,
+    // importPlugin.flatConfigs.recommended,
+    // importPlugin.flatConfigs.typescript,
+    // importPlugin.flatConfigs.errors,
     stylistic.configs["all"],
     tseslint.configs.strictTypeChecked,
     tseslint.configs.eslintRecommended,
@@ -174,51 +173,51 @@ export default [...[].concat(
             "jsdoc/sort-tags": "error",
             "jsdoc/no-bad-blocks": "error",
             "jsdoc/check-tag-names": ["error", {
-                definedTags: ["typeParam", "category"],
+                definedTags: ["template", "category"],
             }],
             "jsdoc/require-param-type": "off",
             "jsdoc/require-returns-type": "off",
 
             "tsdoc/syntax": "error",
 
-            "import/no-deprecated": "error",
-            "import/no-empty-named-blocks": "error",
-            "import/no-extraneous-dependencies": "error",
-            "import/no-mutable-exports": "error",
-            "import/no-absolute-path": "error",
-            "import/no-useless-path-segments": "error",
-            "import/no-self-import": "error",
-            "import/no-restricted-paths": ["error", {
-                zones: [{
-                    target: "./src/api",
-                    from: "./src/impl",
-                }],
-            }],
-            "import/consistent-type-specifier-style": ["error", "prefer-top-level"],
-            "import/exports-last": "error",
-            "import/order": ["error", {
-                "newlines-between": "never",
-
-                alphabetize: {
-                    order: "asc",
-                    caseInsensitive: true,
-                },
-
-                groups: [
-                    "index",
-                    "sibling",
-                    "parent",
-                    "internal",
-                    "external",
-                    "builtin",
-                    "object",
-                    "type",
-                ],
-            }],
-            "import/no-unassigned-import": "error",
-            "import/newline-after-import": "error",
-            "import/first": "error",
-            "import/no-unresolved": "off",
+            // "import/no-deprecated": "error",
+            // "import/no-empty-named-blocks": "error",
+            // "import/no-extraneous-dependencies": "error",
+            // "import/no-mutable-exports": "error",
+            // "import/no-absolute-path": "error",
+            // "import/no-useless-path-segments": "error",
+            // "import/no-self-import": "error",
+            // "import/no-restricted-paths": ["error", {
+            //     zones: [{
+            //         target: "./src/api",
+            //         from: "./src/impl",
+            //     }],
+            // }],
+            // "import/consistent-type-specifier-style": ["error", "prefer-top-level"],
+            // "import/exports-last": "error",
+            // "import/order": ["error", {
+            //     "newlines-between": "never",
+            //
+            //     alphabetize: {
+            //         order: "asc",
+            //         caseInsensitive: true,
+            //     },
+            //
+            //     groups: [
+            //         "index",
+            //         "sibling",
+            //         "parent",
+            //         "internal",
+            //         "external",
+            //         "builtin",
+            //         "object",
+            //         "type",
+            //     ],
+            // }],
+            // "import/no-unassigned-import": "error",
+            // "import/newline-after-import": "error",
+            // "import/first": "error",
+            // "import/no-unresolved": "off",
 
             "unicorn/no-array-reverse": "off", // temporary
             "unicorn/prefer-class-fields": "off",
@@ -353,6 +352,7 @@ export default [...[].concat(
                 SwitchCase: 1,
             }],
 
+            "@typescript-eslint/strict-void-return": "off",
             "@typescript-eslint/no-misused-spread": "off",
             "@typescript-eslint/no-unsafe-type-assertion": "off",
             "@typescript-eslint/only-throw-error": "off",

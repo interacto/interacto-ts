@@ -128,7 +128,7 @@ describe("using a long mouse down interaction", () => {
                     .runOnlyPendingTimers();
                 expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
                 expect(handler.fsmStops).toHaveBeenCalledTimes(1);
-                expect(handler.fsmCancels).toHaveBeenCalledTimes(0);
+                expect(handler.fsmCancels).not.toHaveBeenCalled();
             });
 
             test("mouse move cancels the long pressure", () => {

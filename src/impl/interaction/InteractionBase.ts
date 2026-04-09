@@ -35,8 +35,8 @@ export interface CancellablePromise extends Promise<void> {
 
 /**
  * The base implementation of a user interaction.
- * @typeParam D - The type of the interaction data.
- * @typeParam F - The type of the FSM.
+ * @template D - The type of the interaction data.
+ * @template F - The type of the FSM.
  * @category Interaction
  */
 export abstract class InteractionBase<D extends object, DImpl extends D & Flushable, F extends FSM = FSM> implements Interaction<D> {

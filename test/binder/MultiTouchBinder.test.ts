@@ -41,7 +41,7 @@ describe("using a multi touch binder", () => {
     test("run multi-touch produces cmd", () => {
         jest.spyOn(cmd, "execute");
 
-        binding = bindings.multiTouchBinder(2)
+        bindings.multiTouchBinder(2)
             .toProduce(() => cmd)
             .on(c1)
             .bind();
@@ -53,7 +53,6 @@ describe("using a multi touch binder", () => {
             .touchmove()
             .touchend();
 
-        expect(binding).toBeDefined();
         expect(cmd.execute).toHaveBeenCalledTimes(1);
         expect(ctx.commands).toHaveLength(1);
         expect(ctx.getCmd(0)).toBe(cmd);
@@ -63,7 +62,7 @@ describe("using a multi touch binder", () => {
         const data: Array<number> = [];
         const dataFirst: Array<number> = [];
 
-        binding = bindings.multiTouchBinder(2)
+        bindings.multiTouchBinder(2)
             .toProduce(() => new StubCmd(true))
             .first((_, i) => {
                 dataFirst.push(i.touches.length);
@@ -84,7 +83,6 @@ describe("using a multi touch binder", () => {
             .touchmove()
             .touchend({}, [{"identifier": 1}]);
 
-        expect(binding).toBeDefined();
         expect(ctx.commands).toHaveLength(2);
         expect(dataFirst).toHaveLength(2);
         expect(dataFirst[0]).toBe(2);

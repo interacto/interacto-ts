@@ -81,7 +81,7 @@ export function isWhenStrict(type: WhenType): boolean {
 
 /**
  * The type of a when condition: it contains both the predicate and the mode (ie when the predicate must be checked).
- * @typeParam D -- The interaction data type
+ * @template D -- The interaction data type
  * @category API Binding
  */
 export interface When<D, A> {

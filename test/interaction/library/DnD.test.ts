@@ -60,6 +60,22 @@ describe("using a DnD interaction", () => {
         expect(handler.fsmCancels).not.toHaveBeenCalled();
     });
 
+    test("press and then release cancels the DnD", () => {
+        interaction.registerToNodes([canvas]);
+        robot(canvas)
+            .mousedown({"button": 1})
+            .mouseup({"button": 1});
+        expect(interaction.fsm.currentState).toBe(interaction.fsm.initState);
+    });
+
+    test("press and release using another device does nothing", () => {
+        interaction.registerToNodes([canvas]);
+        robot(canvas)
+            .mousedown({"button": 1})
+            .mouseup({"button": 2});
+        expect(interaction.fsm.currentState).not.toBe(interaction.fsm.initState);
+    });
+
     test("data of the  press and drag part of the interaction", () => {
         let tx: number | undefined;
         let ty: number | undefined;

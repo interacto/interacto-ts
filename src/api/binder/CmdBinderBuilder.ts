@@ -19,7 +19,7 @@ import type {LogLevel} from "../logging/LogLevel";
 
 /**
  * The binding builder API that already knows the type of UI command the bindings will produce
- * @typeParam C - The type of the produced UI Commands
+ * @template C - The type of the produced UI Commands
  * @category Helper
  */
 export interface CmdBinderBuilder<C extends Command> extends BaseBinderBuilder {

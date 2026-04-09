@@ -7,6 +7,9 @@
     }, {
       "tagName": "@category",
       "syntaxKind": "block"
+    }, {
+      "tagName": "@template",
+      "syntaxKind": "block"
     }
   ]
 }

@@ -23,11 +23,11 @@ import type {Logger} from "../../api/logging/Logger";
 /**
  * The Or user interaction. This is an XOr. Either one of the two interactions
  * can run at a given instant.
- * @typeParam I1 - The type of the first interaction
- * @typeParam I2 - The type of the second interaction
- * @typeParam D1 - The type of the first interaction data
- * @typeParam D1Impl - The class of the first interaction data
- * @typeParam D2Impl - The class of the second interaction data
+ * @template I1 - The type of the first interaction
+ * @template I2 - The type of the second interaction
+ * @template D1 - The type of the first interaction data
+ * @template D1Impl - The class of the first interaction data
+ * @template D2Impl - The class of the second interaction data
  * @category Interaction Library
  */
 export class Or<

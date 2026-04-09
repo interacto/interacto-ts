@@ -91,18 +91,17 @@ describe("testing async commands and bindings", () => {
     describe("async command alone", () => {
         test("when promise not ended command not ended", () => {
             jest.useFakeTimers();
-            const res = cmd.execute();
+            // eslint-disable-next-line no-void
+            void cmd.execute();
 
-            expect(res).toBeDefined();
             expect(cmd.getStatus()).toBe("created");
             expect(data.data).toStrictEqual(["Foo", "Bar", "Yo"]);
         });
 
         test("when promise ended command also ended", async () => {
             jest.useRealTimers();
-            const res = await cmd.execute();
+            await cmd.execute();
 
-            expect(res).toBeDefined();
             expect(cmd.getStatus()).toBe("executed");
             expect(data.data).toStrictEqual(["Foo", "Bar"]);
         });
@@ -134,7 +133,6 @@ describe("testing async commands and bindings", () => {
             jest.runAllTimers();
             await flushPromises();
 
-            expect(binding).toBeDefined();
             expect(binding.command).toBeUndefined();
             expect(ctx.commands).toHaveLength(1);
             expect(ctx.commands[0].getStatus()).toBe("done");
@@ -192,7 +190,6 @@ describe("testing async commands and bindings", () => {
             jest.runAllTimers();
             await flushPromises();
 
-            expect(binding).toBeDefined();
             expect(binding.command).toBeUndefined();
             expect(ctx.commands).toHaveLength(2);
             expect(ctx.commands[0].getStatus()).toBe("done");
@@ -294,7 +291,6 @@ describe("testing async commands and bindings", () => {
             jest.runAllTimers();
             await flushPromises();
 
-            expect(binding).toBeDefined();
             expect(binding.timesEnded).toBe(1);
             expect(binding.command).toBeUndefined();
             expect(ctx.commands).toHaveLength(1);
@@ -319,7 +315,6 @@ describe("testing async commands and bindings", () => {
             // @ts-expect-error
             (binding as unknown).cmdsProduced = new Subject();
 
-            expect(binding).toBeDefined();
             expect(binding.command).toBeUndefined();
             expect(binding.timesEnded).toBe(1);
             expect(ctx.commands).toHaveLength(0);
@@ -385,7 +380,6 @@ describe("testing async commands and bindings", () => {
             jest.runAllTimers();
             await flushPromises();
 
-            expect(binding).toBeDefined();
             expect(binding.command).toBeUndefined();
             expect(binding.timesEnded).toBe(1);
             expect(ctx.commands).toHaveLength(1);
@@ -412,7 +406,6 @@ describe("testing async commands and bindings", () => {
             jest.runAllTimers();
             await flushPromises();
 
-            expect(binding).toBeDefined();
             expect(binding.command).toBeUndefined();
             expect(binding.timesEnded).toBe(1);
             expect(ctx.commands).toHaveLength(1);
@@ -503,7 +496,6 @@ describe("testing async commands and bindings", () => {
             jest.runAllTimers();
             await flushPromises();
 
-            expect(binding).toBeDefined();
             expect(ctx.commands).toHaveLength(2);
         });
     });

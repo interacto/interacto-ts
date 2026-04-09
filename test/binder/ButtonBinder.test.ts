@@ -48,7 +48,6 @@ describe("using a button binder", () => {
             .bind();
 
         button1.click();
-        expect(binding).toBeDefined();
         expect(cmd.execute).toHaveBeenCalledTimes(1);
         expect(ctx.commands).toHaveLength(1);
         expect(ctx.commands[0]).toBe(cmd);
@@ -63,7 +62,6 @@ describe("using a button binder", () => {
             .bind();
 
         button1.click();
-        expect(binding).toBeDefined();
         expect(cmd.execute).toHaveBeenCalledTimes(1);
     });
 
@@ -80,7 +78,6 @@ describe("using a button binder", () => {
         button2.click();
         button1.click();
 
-        expect(binding).toBeDefined();
         expect(ctx.commands).toHaveLength(2);
         expect(ctx.getCmd(0)).not.toBe(ctx.getCmd(1));
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -217,7 +214,6 @@ describe("using a button binder", () => {
 
         button1.click();
 
-        expect(binding).toBeDefined();
         expect(cmd.value).toBe(20);
         expect(cmd.execute).toHaveBeenCalledTimes(1);
     });
@@ -235,7 +231,6 @@ describe("using a button binder", () => {
 
         button1.click();
 
-        expect(binding).toBeDefined();
         expect(cmd.value).toBe(10);
         expect(cmd.execute).toHaveBeenCalledTimes(1);
     });
@@ -251,7 +246,6 @@ describe("using a button binder", () => {
 
         button1.click();
 
-        expect(binding).toBeDefined();
         expect(cmd.execute).not.toHaveBeenCalled();
     });
 
@@ -269,7 +263,6 @@ describe("using a button binder", () => {
 
         button1.click();
 
-        expect(binding).toBeDefined();
         expect(cmd.execute).toHaveBeenCalledTimes(1);
         expect(cpt).toBe(1);
     });
@@ -347,7 +340,6 @@ describe("using a button binder", () => {
 
         expect(binding.interaction.preventDefault).toBeTruthy();
         expect(binding.interaction.stopImmediatePropagation).toBeFalsy();
-        expect(binding).toBeDefined();
     });
 
     test("stop propag set", () => {
@@ -359,7 +351,6 @@ describe("using a button binder", () => {
 
         expect(binding.interaction.stopImmediatePropagation).toBeTruthy();
         expect(binding.interaction.preventDefault).toBeFalsy();
-        expect(binding).toBeDefined();
     });
 
     test("set name", () => {
@@ -370,7 +361,6 @@ describe("using a button binder", () => {
             .name("yoo")
             .bind();
 
-        expect(binding).toBeDefined();
         expect(binding.name).toBe("yoo");
     });
 
@@ -380,7 +370,6 @@ describe("using a button binder", () => {
             .on(button1)
             .bind();
 
-        expect(binding).toBeDefined();
         expect(binding.name).toBe("ButtonPressed");
     });
 
@@ -399,7 +388,6 @@ describe("using a button binder", () => {
         button1.click();
         button2.click();
 
-        expect(binding).toBeDefined();
         expect(ctx.commands).toHaveLength(1);
     });
 
@@ -423,7 +411,6 @@ describe("using a button binder", () => {
 
             button1.click();
 
-            expect(binding).toBeDefined();
             expect(ctx.commands).toHaveLength(1);
         });
 
@@ -441,7 +428,6 @@ describe("using a button binder", () => {
             button2.click();
             button3.click();
 
-            expect(binding).toBeDefined();
             expect(ctx.commands).toHaveLength(2);
         });
 
@@ -453,7 +439,6 @@ describe("using a button binder", () => {
 
             div.click();
 
-            expect(binding).toBeDefined();
             expect(ctx.commands).toHaveLength(0);
         });
 

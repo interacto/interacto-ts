@@ -198,7 +198,7 @@ export type PartialThenBinder<XS extends Array<Interaction<object>>, A = unknown
  * Provides an undo/redo history.
  * Why a pure abstract class and not an interface?
  * Because interfaces are not retained at runtime in TS and we want DI (that thus cannot inject interface types).
- * @typeParam H -- The undo history algorithm
+ * @template H -- The undo history algorithm
  * @category API Binding
  */
 export abstract class Bindings<H extends UndoHistoryBase> {

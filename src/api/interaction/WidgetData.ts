@@ -14,12 +14,12 @@
 
 /**
  * Interaction data that contains a widget.
- * @typeParam T - The type of the widget.
+ * @template T - The type of the widget.
  * @category API Interaction Data
  */
 export interface WidgetData<T> {
     /**
      * The widget used during the interaction.
      */
-    readonly widget: T | undefined;
+    readonly widget: T | null;
 }

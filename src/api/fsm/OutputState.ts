@@ -17,7 +17,7 @@ import type {Transition} from "./Transition";
 
 /**
  * Defines a type of state that can produce as output events.
- * @typeParam E - The type of events the FSM processes.
+ * @template E - The type of events the FSM processes.
  * @category API FSM
  */
 export interface OutputState extends State {

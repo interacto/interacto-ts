@@ -54,7 +54,9 @@ export class BindingsContext implements BindingsObserver {
         this.checker.checkRules(binding, this.binds);
 
         this.binds.push(binding);
-        this.disposables.push(binding.produces.subscribe(cmd => this.cmds.push([cmd, binding])));
+        this.disposables.push(binding.produces.subscribe(cmd => {
+            this.cmds.push([cmd, binding]);
+        }));
     }
 
     public clearObservedBindings(): void {
@@ -81,9 +83,9 @@ export class BindingsContext implements BindingsObserver {
     }
 
     /**
+     * @template C - The type of the command to return.
      * @param index - The index of the command (in the order of production)
      * @returns The command at the given index. The command is cast into the provided generic type.
-     * @typeParam C - The type of the command to return.
      */
     public getCmd<C extends Command>(index: number): C | undefined {
         return this.cmds[index]?.[0] as C | undefined;
