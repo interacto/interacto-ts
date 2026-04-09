@@ -19,6 +19,7 @@ import {TestScheduler} from "rxjs/testing";
 import type {TreeUndoHistory} from "../../src/api/undo/TreeUndoHistory";
 import type {Undoable} from "../../src/api/undo/Undoable";
 import type {MockProxy} from "jest-mock-extended";
+import {CmdModifiableDouble, CmdModifiableDouble3, StubUndoableCmd} from "../command/StubCmd";
 
 interface Undoable4Test extends Undoable {
     foo: number;
@@ -1082,6 +1083,149 @@ describe("using a tree undo history", () => {
             expect(history.getLastUndo()).toBe(undoableC);
             expect(history.getLastRedo()).toBe(undoableD);
             expect(history.size()).toBe(5);
+        });
+    });
+
+    describe("getModifiableAttributesOf", () => {
+        let modCmd: CmdModifiableDouble;
+
+        beforeEach(() => {
+            history = new TreeUndoHistoryImpl();
+            modCmd = new CmdModifiableDouble();
+            // execute the command to make its attributes available
+            modCmd.done();
+            history.add(modCmd);
+        });
+
+        test("returns empty object when id does not exist", () => {
+            expect(history.getModifiableAttributesOf(2)).toStrictEqual({});
+        });
+
+        test("returns the current modifiable attributes of the targeted undoable", () => {
+            const attrs = history.getModifiableAttributesOf(0);
+            expect(Object.keys(attrs)).toContain("a");
+            expect(Object.keys(attrs)).toContain("b");
+            expect(attrs).toStrictEqual({
+                a: modCmd.a,
+                b: modCmd.b
+            });
+        });
+    });
+
+    describe("using a standard tree history storing modifiable commands", () => {
+        let cmd: CmdModifiableDouble;
+
+        beforeEach(() => {
+            cmd = new CmdModifiableDouble();
+            cmd.done();
+            history = new TreeUndoHistoryImpl(true, true);
+            history.add(new CmdModifiableDouble3());
+            history.add(cmd);
+            // A - B*
+        });
+
+        test("can modify the lastest modifiable command with no following command", () => {
+            history.applyModifiedAttributesOn(history.currentNode.id, {
+                a: 42
+            });
+
+            // A - B
+            //   \ B'*
+            expect(history.size()).toBe(3);
+            expect(history.root.children).toHaveLength(1);
+            expect(history.root.children[0].children).toHaveLength(2);
+            expect(history.currentNode.undoable).toBe(history.root.children[0].children[1].undoable);
+            expect(history.getLastUndo()).toBe(history.currentNode.undoable);
+            expect(history.getLastRedo()).toBeUndefined();
+            expect((history.currentNode.undoable as CmdModifiableDouble).re).toBe(1);
+        });
+
+        test("can modify the lastest modifiable command and re-execute the line undoables that follow", () => {
+            history.add(new StubUndoableCmd());
+            // A - B - C*
+
+            history.applyModifiedAttributesOn(history.root.children[0].children[0].id, {
+                a: 42
+            });
+            // A - B  - C
+            //   \ B'* - C'
+
+            expect(history.size()).toBe(5);
+            expect(history.root.children).toHaveLength(1);
+            expect(history.root.children[0].children).toHaveLength(2);
+            expect(history.root.children[0].children[0].children).toHaveLength(1);
+            expect(history.root.children[0].children[1].children).toHaveLength(1);
+            expect(history.root.children[0].children[0].children[0].undoable).toBeInstanceOf(StubUndoableCmd);
+            expect(history.root.children[0].children[1].children[0].undoable).toBeInstanceOf(StubUndoableCmd);
+            expect(history.root.children[0].children[0].undoable).toBeInstanceOf(CmdModifiableDouble);
+            expect(history.root.children[0].children[1].undoable).toBeInstanceOf(CmdModifiableDouble);
+            expect(history.currentNode.undoable).toBe(history.root.children[0].children[1].undoable);
+        });
+
+        test("can modify the lastest modifiable command and re-execute the tree undoables that follow", () => {
+            history.add(new StubUndoableCmd());
+            history.undo();
+            history.add(new CmdModifiableDouble());
+            // A - B - C
+            //       \ D*
+
+            history.applyModifiedAttributesOn(history.root.children[0].children[0].id, {
+                a: 42
+            });
+            // A - B  - C
+            //        \ D
+            //   \ B'* - C'
+            //        \ D'
+
+            expect(history.size()).toBe(7);
+            expect(history.root.children).toHaveLength(1);
+            expect(history.root.children[0].children).toHaveLength(2);
+            expect(history.root.children[0].children[0].children).toHaveLength(2);
+            expect(history.root.children[0].children[1].children).toHaveLength(2);
+            expect(history.root.children[0].children[0].children[0].children).toHaveLength(0);
+            expect(history.root.children[0].children[0].children[1].children).toHaveLength(0);
+            expect(history.root.children[0].children[1].children[0].children).toHaveLength(0);
+            expect(history.root.children[0].children[1].children[1].children).toHaveLength(0);
+            expect(history.root.children[0].children[0].children[1].undoable).toBeInstanceOf(CmdModifiableDouble);
+            expect(history.root.children[0].children[1].children[1].undoable).toBeInstanceOf(CmdModifiableDouble);
+            expect(history.root.children[0].children[0].children[0].undoable).toBeInstanceOf(StubUndoableCmd);
+            expect(history.root.children[0].children[1].children[0].undoable).toBeInstanceOf(StubUndoableCmd);
+            expect(history.root.children[0].children[0].undoable).toBeInstanceOf(CmdModifiableDouble);
+            expect(history.root.children[0].children[1].undoable).toBeInstanceOf(CmdModifiableDouble);
+            expect(history.currentNode.undoable).toBe(history.root.children[0].children[1].undoable);
+        });
+
+        test("no effect when the changes do not change the single targeted attribute", () => {
+            history.applyModifiedAttributesOn(history.currentNode.id, {
+                a: 0
+            });
+
+            // A - B*
+            expect(history.size()).toBe(2);
+            expect(history.root.children[0].children).toHaveLength(1);
+            expect(history.currentNode.undoable).toBe(history.root.children[0].children[0].undoable);
+        });
+
+        test("no effect when trying to modify the root", () => {
+            // A - B*
+            history.applyModifiedAttributesOn(history.root.id, {
+                a: 0
+            });
+            expect(history.size()).toBe(2);
+        });
+
+        test("no effect when modified command equals an sibling one", () => {
+            history.applyModifiedAttributesOn(history.root.children[0].children[0].id, {
+                a: 10
+            });
+            history.goTo(history.root.children[0].children[0].id);
+            // A - B( 0)*
+            //   \ B(10)'
+            history.applyModifiedAttributesOn(history.root.children[0].children[0].id, {
+                a: 10
+            });
+            expect(history.size()).toBe(3);
+            expect(history.root.children[0].children).toHaveLength(2);
         });
     });
 });

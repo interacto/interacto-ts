@@ -78,7 +78,7 @@ export default [...[].concat(
             "sort-imports": "off",
             "no-magic-numbers": "off",
             "indent": "off",
-            "multiline-comment-style": ["error", "starred-block"],
+            "multiline-comment-style": "off",
             "arrow-parens": ["error", "as-needed"],
             "complexity": ["error", {
                 max: 10,

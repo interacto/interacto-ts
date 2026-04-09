@@ -12,8 +12,17 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {CommandBase} from "../../src/interacto";
-import type {Undoable} from "../../src/interacto";
+import {CommandBase, Modifiable, UndoableCommand, type Undoable} from "../../src/interacto";
+
+export class ExampleUndoableCmd extends UndoableCommand {
+    protected execution(): Promise<void> | void {
+        return undefined;
+    }
+
+    public redo(): void {}
+
+    public undo(): void {}
+}
 
 export class StubCmd extends CommandBase {
     public candoValue: boolean;
@@ -55,5 +64,50 @@ export class StubUndoableCmd extends StubCmd implements Undoable {
 
     public equals(_undoable: Undoable): boolean {
         return false;
+    }
+}
+
+export class CmdModifiableDouble2 extends StubCmd {
+    @Modifiable
+    public a = 0;
+}
+
+export class CmdModifiableDouble3 extends ExampleUndoableCmd {
+    @Modifiable
+    public a = {};
+
+    @Modifiable
+    public b: Array<string> = [];
+
+    @Modifiable
+    public c: number | undefined = undefined;
+}
+
+export class CmdModifiableDouble extends ExampleUndoableCmd {
+    @Modifiable
+    public a: number;
+
+    @Modifiable
+    public b: boolean;
+
+    public c: string;
+
+    public re: number;
+
+    public constructor() {
+        super();
+        this.a = 0;
+        this.b = false;
+        this.c = "foo";
+        this.re = 0;
+    }
+
+    public override redo(): void {
+        this.re++;
+    }
+
+    public override equals(undoable: unknown): boolean {
+        return undoable instanceof CmdModifiableDouble && undoable.a === this.a && undoable.b === this.b &&
+          undoable.c === this.c && undoable.c === this.c;
     }
 }
