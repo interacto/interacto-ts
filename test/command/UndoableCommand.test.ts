@@ -15,9 +15,8 @@
 
 import {beforeEach, describe, expect, test} from "@jest/globals";
 import {ExampleUndoableCmd} from "./StubCmd";
-import type {UndoableCommand} from "../../src/impl/command/UndoableCommand";
 
-let cmd: UndoableCommand;
+let cmd: ExampleUndoableCmd;
 
 describe("using an undoable command", () => {
     beforeEach(() => {

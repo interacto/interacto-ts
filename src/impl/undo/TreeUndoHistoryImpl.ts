@@ -18,7 +18,7 @@ import {remove} from "../util/ArrayUtil";
 import {Subject} from "rxjs";
 import type {UndoableTreeNode, UndoableTreeNodeDTO, TreeUndoHistoryDTO} from "../../api/undo/TreeUndoHistory";
 import type {Undoable, UndoableSnapshot} from "../../api/undo/Undoable";
-import type {UndoableCommand} from "../command/UndoableCommand";
+import {UndoableCommand} from "../command/UndoableCommand";
 import type {Observable} from "rxjs";
 
 /**
@@ -267,10 +267,7 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
             if (isNew) {
                 // Moving to the parent of the modified item
                 this.goTo(parent.id);
-                // Executing the cloned undoable object
-                cloneTree.undoable.redo();
-                // Adding the novel commands to the history
-                this.add(cloneTree.undoable);
+                this.proceedModifiedNode(cloneTree);
                 const currentId = this.currentNode.id;
                 // Adding and executing the cloned branch
                 // Execution is required to trigger the creation of this new history branch
@@ -282,10 +279,20 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
         }
     }
 
+    private proceedModifiedNode(currentNode: UndoableTreeNode): void {
+        // Executing the cloned undoable object
+        currentNode.undoable.redo();
+        // Must refresh the visual snapshot cache
+        if (currentNode.undoable instanceof UndoableCommand) {
+            currentNode.undoable.refreshCache();
+        }
+        // Adding the novel commands to the history
+        this.add(currentNode.undoable);
+    }
+
     private addClonedSubtree(currentNode: UndoableTreeNode): void {
         for (const child of currentNode.children) {
-            child.undoable.redo();
-            this.add(child.undoable);
+            this.proceedModifiedNode(child);
             this.undo();
             this.addClonedSubtree(child);
         }
