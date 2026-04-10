@@ -12,24 +12,24 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {BindingsContext, BindingsImpl, Redo, Undo, UndoHistoryImpl} from "../../src/interacto";
+import {BindingsContext, BindingsImpl, Redo, Undo, LinearHistoryImpl} from "../../src/interacto";
 import {robot} from "../interaction/StubEvents";
 import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
 import {mock} from "jest-mock-extended";
-import type {Bindings, Undoable, UndoHistoryBase} from "../../src/interacto";
+import type {Bindings, Undoable, LinearHistoryBase} from "../../src/interacto";
 import type {MockProxy} from "jest-mock-extended";
 
 let bundo: HTMLButtonElement;
 let bredo: HTMLButtonElement;
 let ctx: BindingsContext;
-let bindings: Bindings<UndoHistoryBase>;
+let bindings: Bindings<LinearHistoryBase>;
 let undoable: MockProxy<Undoable> & Undoable;
 let fn: jest.Mock;
 
-describe("test undo redo bindings", () => {
+describe("test history redo bindings", () => {
     beforeEach(() => {
         fn = jest.fn();
-        bindings = new BindingsImpl(new UndoHistoryImpl());
+        bindings = new BindingsImpl(new LinearHistoryImpl());
         ctx = new BindingsContext();
         bindings.setBindingObserver(ctx);
         bundo = document.createElement("button");
@@ -42,7 +42,7 @@ describe("test undo redo bindings", () => {
         jest.clearAllMocks();
     });
 
-    describe("test undo bindings", () => {
+    describe("test history bindings", () => {
         beforeEach(() => {
             undoable.undo.mockImplementation(() => {
                 throw new Error("errr");
@@ -50,7 +50,7 @@ describe("test undo redo bindings", () => {
             bindings.undoHistory.add(undoable);
         });
 
-        test("undo/redo: undo crash caught in binding", () => {
+        test("history/redo: history crash caught in binding", () => {
             bindings
                 .buttonBinder()
                 .toProduce(() => new Undo(bindings.undoHistory))
@@ -65,7 +65,7 @@ describe("test undo redo bindings", () => {
             expect(bindings.undoHistory.getLastRedo()).toBe(undoable);
         });
 
-        test("undo/redo bindings: undo crash caught in binding by provided function", () => {
+        test("history/redo bindings: history crash caught in binding by provided function", () => {
             bindings.undoRedoBinder(bundo, bredo, fn);
 
             robot(bundo).click();
@@ -76,7 +76,7 @@ describe("test undo redo bindings", () => {
             expect(bindings.undoHistory.getLastRedo()).toBe(undoable);
         });
 
-        test("undo/redo bindings: undo works correctly", () => {
+        test("history/redo bindings: history works correctly", () => {
             undoable.undo.mockImplementation(() => {});
 
             bindings.undoRedoBinder(bundo, bredo);
@@ -96,7 +96,7 @@ describe("test undo redo bindings", () => {
             bindings.undoHistory.undo();
         });
 
-        test("undo/redo: redo crash caught in binding", () => {
+        test("history/redo: redo crash caught in binding", () => {
             bindings
                 .buttonBinder()
                 .toProduce(() => new Redo(bindings.undoHistory))
@@ -111,7 +111,7 @@ describe("test undo redo bindings", () => {
             expect(bindings.undoHistory.getLastUndo()).toBe(undoable);
         });
 
-        test("undo/redo bindings: redo crash caught in binding by provided function", () => {
+        test("history/redo bindings: redo crash caught in binding by provided function", () => {
             bindings.undoRedoBinder(bundo, bredo, fn);
 
             robot(bredo).click();
@@ -122,7 +122,7 @@ describe("test undo redo bindings", () => {
             expect(bindings.undoHistory.getLastUndo()).toBe(undoable);
         });
 
-        test("undo/redo bindings: redo works correctly", () => {
+        test("history/redo bindings: redo works correctly", () => {
             undoable.redo.mockImplementation(() => {});
 
             bindings.undoRedoBinder(bundo, bredo);

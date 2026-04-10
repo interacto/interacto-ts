@@ -17,7 +17,7 @@ import type {Bindings} from "./Bindings";
 import type {Command} from "../command/Command";
 import type {Interaction} from "../interaction/Interaction";
 import type {VisitorInteraction} from "../interaction/VisitorInteraction";
-import type {UndoHistoryBase} from "../undo/UndoHistoryBase";
+import type {LinearHistoryBase} from "../history/LinearHistoryBase";
 
 /**
  * The main interface for visiting user interactions.
@@ -26,5 +26,5 @@ import type {UndoHistoryBase} from "../undo/UndoHistoryBase";
 export interface VisitorBinding extends VisitorInteraction {
     visitBinding(binding: Binding<Command, Interaction<object>, unknown>): void;
 
-    visitBindings(bindings: Bindings<UndoHistoryBase>): void;
+    visitBindings(bindings: Bindings<LinearHistoryBase>): void;
 }

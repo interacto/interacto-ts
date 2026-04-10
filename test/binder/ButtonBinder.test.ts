@@ -12,21 +12,21 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {BindingsContext, BindingsImpl, UndoHistoryImpl} from "../../src/interacto";
+import {BindingsContext, BindingsImpl, LinearHistoryImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
-import type {Binding, EltRef, Interaction, UndoHistoryBase, Bindings} from "../../src/interacto";
+import type {Binding, EltRef, Interaction, LinearHistoryBase, Bindings} from "../../src/interacto";
 
 let button1: HTMLButtonElement;
 let button2: HTMLButtonElement;
 let binding: Binding<StubCmd, Interaction<object>, unknown> | undefined;
 let cmd: StubCmd;
 let ctx: BindingsContext;
-let bindings: Bindings<UndoHistoryBase>;
+let bindings: Bindings<LinearHistoryBase>;
 
 describe("using a button binder", () => {
     beforeEach(() => {
-        bindings = new BindingsImpl(new UndoHistoryImpl());
+        bindings = new BindingsImpl(new LinearHistoryImpl());
         ctx = new BindingsContext();
         bindings.setBindingObserver(ctx);
         button1 = document.createElement("button");

@@ -26,7 +26,7 @@ import type {Command} from "../../api/command/Command";
 import type {Interaction, InteractionDataType} from "../../api/interaction/Interaction";
 import type {Logger} from "../../api/logging/Logger";
 import type {LogLevel} from "../../api/logging/LogLevel";
-import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
+import type {LinearHistoryBase} from "../../api/history/LinearHistoryBase";
 
 /**
  * The base binding builder to create bindings between a keys pressure interaction and a given command.
@@ -42,7 +42,7 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, A, D extend
 
     // private readonly checkCodeFn: (i: InteractionData) => boolean;
 
-    public constructor(undoHistory: UndoHistoryBase, logger: Logger, observer?: BindingsObserver,
+    public constructor(undoHistory: LinearHistoryBase, logger: Logger, observer?: BindingsObserver,
                        binder?: Partial<KeysBinder<C, I, A, D>>, acc?: A) {
         super(undoHistory, logger, observer, binder, acc);
 

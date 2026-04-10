@@ -19,7 +19,7 @@
 export type PrimitiveUndoableSnapshot = HTMLElement | SVGElement | string;
 
 /**
- * The type of the visual snpashot that an undoable command can produce
+ * The type of the visual snapshot that an undoable command can produce
  * @category API History
  */
 export type UndoableSnapshot = PrimitiveUndoableSnapshot | Promise<PrimitiveUndoableSnapshot> | undefined;
@@ -40,13 +40,13 @@ export interface Undoable {
     redo(): void;
 
     /**
-     * @returns The name of the undo command.
+     * @returns The name of the history command.
      */
     getUndoName(): string;
 
     /**
      * Gives some information about the impact of a command.
-     * @returns Information about the impact of the commmand as an SVG element or text.
+     * @returns Information about the impact of the command as an SVG element or text.
      */
     getVisualSnapshot(): UndoableSnapshot;
 

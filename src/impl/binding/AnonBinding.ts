@@ -21,7 +21,7 @@ import type {Command} from "../../api/command/Command";
 import type {Interaction, InteractionDataType} from "../../api/interaction/Interaction";
 import type {Logger} from "../../api/logging/Logger";
 import type {LogLevel} from "../../api/logging/LogLevel";
-import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
+import type {LinearHistoryBase} from "../../api/history/LinearHistoryBase";
 
 /**
  * A special implementation of a binding to be used in binders.
@@ -54,7 +54,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, A, D exten
 
     private readonly onErrFn: ((ex: unknown) => void) | undefined;
 
-    public constructor(continuousExec: boolean, interaction: I, undoHistory: UndoHistoryBase,
+    public constructor(continuousExec: boolean, interaction: I, undoHistory: LinearHistoryBase,
                        logger: Logger, cmdSupplierFn: (d: D | undefined) => C,
                        widgets: ReadonlyArray<unknown>, dynamicNodes: ReadonlyArray<Node>,
                        loggers: ReadonlyArray<LogLevel>, timeoutThrottle: number,

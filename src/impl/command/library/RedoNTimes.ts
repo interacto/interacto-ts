@@ -13,18 +13,18 @@
  */
 
 import {CommandBase} from "../CommandBase";
-import type {UndoHistory} from "../../../api/undo/UndoHistory";
+import type {LinearHistory} from "../../../api/history/LinearHistory";
 
 /**
  * An Redo command that redoes the last N commands.
  * @category Command
  */
 export class RedoNTimes extends CommandBase {
-    protected readonly history: UndoHistory;
+    protected readonly history: LinearHistory;
 
     protected readonly numberOfRedos: number;
 
-    public constructor(undoHistory: UndoHistory, numberOfRedos: number) {
+    public constructor(undoHistory: LinearHistory, numberOfRedos: number) {
         super();
         this.history = undoHistory;
         this.numberOfRedos = numberOfRedos;

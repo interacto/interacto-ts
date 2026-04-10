@@ -12,19 +12,19 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {BindingsImpl, UndoHistoryImpl} from "../../src/interacto";
+import {BindingsImpl, LinearHistoryImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {robot} from "../interaction/StubEvents";
 import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
-import type {Bindings, UndoHistoryBase} from "../../src/interacto";
+import type {Bindings, LinearHistoryBase} from "../../src/interacto";
 
 let elt: HTMLElement;
-let bindings: Bindings<UndoHistoryBase>;
+let bindings: Bindings<LinearHistoryBase>;
 let div2: HTMLElement;
 
 describe("events lost by the browser do not block bindings", () => {
     beforeEach(async () => {
-        bindings = new BindingsImpl(new UndoHistoryImpl());
+        bindings = new BindingsImpl(new LinearHistoryImpl());
         jest.useFakeTimers();
         elt = document.createElement("div");
 

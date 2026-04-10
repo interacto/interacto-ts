@@ -12,18 +12,18 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {UndoHistoryImpl, UpdateBinder, MouseDown} from "../../src/interacto";
+import {LinearHistoryImpl, UpdateBinder, MouseDown} from "../../src/interacto";
 import {afterEach, beforeEach, describe, expect, test, jest} from "@jest/globals";
 import {mock} from "jest-mock-extended";
-import type {Command, Interaction, UndoHistory, Logger, BindingsObserver} from "../../src/interacto";
+import type {Command, Interaction, LinearHistory, Logger, BindingsObserver} from "../../src/interacto";
 
 describe("using an update binder", () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let binder: UpdateBinder<Command, Interaction<any>, unknown>;
-    let history: UndoHistory;
+    let history: LinearHistory;
 
     beforeEach(() => {
-        history = new UndoHistoryImpl();
+        history = new LinearHistoryImpl();
         binder = new UpdateBinder(history, mock<Logger>());
     });
 

@@ -13,16 +13,16 @@
  */
 
 import type {Undoable, UndoableSnapshot} from "./Undoable";
-import type {UndoHistoryBase} from "./UndoHistoryBase";
+import type {LinearHistoryBase} from "./LinearHistoryBase";
 import type {Observable} from "rxjs";
 
 /**
- * The interface for nodes in a tree-based history.
+ * The type that defines the concept of a node stored in a tree-based history.
  * @category API History
  */
 export interface UndoableTreeNode {
     /**
-     * Among the children of the node, iidentifies the one that was undone recently.
+     * Among the children of the node, identifies the one that was undone recently.
      */
     lastChildUndone: UndoableTreeNode | undefined;
 
@@ -73,7 +73,7 @@ export interface UndoableTreeNodeDTO {
     readonly id: number;
 
     /**
-     * The undoable object contained in the node, in an unkown format as
+     * The undoable object contained in the node, in an unknown format as
      * the format is defined by the developer while exporting the history.
      */
     readonly undoable: unknown;
@@ -101,13 +101,13 @@ export interface TreeUndoHistoryDTO {
 }
 
 /**
- * Tree-based undo history.
- * On adding undoables after an undo operation, the redoable objects are no more flush but
- * kept in the history as a granch of the graph.
+ * The type that defines the concept of a tree-based history.
+ * On adding undoable objects after a history operation, the redoable objects are no more flush but
+ * kept in the history as a branch of the graph.
  * Useful for exploration.
  * @category API History
  */
-export abstract class TreeUndoHistory implements UndoHistoryBase {
+export abstract class TreeHistory implements LinearHistoryBase {
     /**
      * States whether the path of kept. If kept, users cannot delete
      * nodes.
@@ -134,7 +134,7 @@ export abstract class TreeUndoHistory implements UndoHistoryBase {
 
     /**
      * The current node. As the history is a tree in which one can navigate using
-     * undo, redo, gotTo, this current node refers to the node
+     * history, redo, gotTo, this current node refers to the node
      * where the system state is.
      */
     public abstract get currentNode(): UndoableTreeNode;
@@ -212,7 +212,7 @@ export abstract class TreeUndoHistory implements UndoHistoryBase {
     /**
      * Imports the given DTO history. Flushes the current history.
      * @param dtoHistory - The DTO history to import.
-     * @param fn - The convertion fonction that transforms undoable DTO (of nodes) into Undoable.
+     * @param fn - The transformation function that transforms undoable DTO (of nodes) into Undoable.
      */
     public abstract import(dtoHistory: TreeUndoHistoryDTO, fn: (dtoUndoable: unknown) => Undoable): void;
 

@@ -15,15 +15,15 @@
 import {Undo} from "../../../src/interacto";
 import {beforeEach, describe, expect, test} from "@jest/globals";
 import {mock} from "jest-mock-extended";
-import type {Undoable, UndoHistory} from "../../../src/interacto";
+import type {Undoable, LinearHistory} from "../../../src/interacto";
 import type {MockProxy} from "jest-mock-extended";
 
 let cmd: Undo;
-let collector: MockProxy<UndoHistory> & UndoHistory;
+let collector: MockProxy<LinearHistory> & LinearHistory;
 
-describe("base undo testing", () => {
+describe("base history testing", () => {
     beforeEach(() => {
-        collector = mock<UndoHistory>();
+        collector = mock<LinearHistory>();
         cmd = new Undo(collector);
     });
 

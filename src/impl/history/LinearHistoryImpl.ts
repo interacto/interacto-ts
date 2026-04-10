@@ -12,16 +12,16 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {UndoHistory} from "../../api/undo/UndoHistory";
+import {LinearHistory} from "../../api/history/LinearHistory";
 import {Subject} from "rxjs";
-import type {Undoable} from "../../api/undo/Undoable";
+import type {Undoable} from "../../api/history/Undoable";
 import type {Observable} from "rxjs";
 
 /**
- * Implementation of the undo history (linear)
+ * Implementation of the linear history
  * @category History
  */
-export class UndoHistoryImpl extends UndoHistory {
+export class LinearHistoryImpl extends LinearHistory {
     /**
      * Contains the undoable objects.
      */
@@ -48,7 +48,7 @@ export class UndoHistoryImpl extends UndoHistory {
     private readonly sizePublisher: Subject<[number, number]>;
 
     /**
-     * Create the undo history
+     * Create the history history
      * @param considerEqualCmd - By default, executing a command erases the redoable commands.
      * When executing a command (and adding this command in the history), this option adds a new check:
      * if the newly executed command equals the next redoable one, then the redoable stack is not clear

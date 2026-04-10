@@ -13,11 +13,11 @@
  */
 
 import {getModifiableCmdAttributes, modifyCmdAttributes} from "../../api/command/ModifiableCommand";
-import {TreeUndoHistory} from "../../api/undo/TreeUndoHistory";
+import {TreeHistory} from "../../api/history/TreeHistory";
 import {remove} from "../util/ArrayUtil";
 import {Subject} from "rxjs";
-import type {UndoableTreeNode, UndoableTreeNodeDTO, TreeUndoHistoryDTO} from "../../api/undo/TreeUndoHistory";
-import type {Undoable, UndoableSnapshot} from "../../api/undo/Undoable";
+import type {UndoableTreeNode, UndoableTreeNodeDTO, TreeUndoHistoryDTO} from "../../api/history/TreeHistory";
+import type {Undoable, UndoableSnapshot} from "../../api/history/Undoable";
 import {UndoableCommand} from "../command/UndoableCommand";
 import type {Observable} from "rxjs";
 
@@ -101,10 +101,10 @@ class UndoableTreeNodeDTOImpl implements UndoableTreeNodeDTO {
 }
 
 /**
- * An implementation of the TreeUndoHistory interface
+ * An implementation of the TreeHistory interface
  * @category History
  */
-export class TreeUndoHistoryImpl extends TreeUndoHistory {
+export class TreeHistoryImpl extends TreeHistory {
     private idCounter: number;
 
     private _currentNode: UndoableTreeNode;
@@ -126,7 +126,7 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
     private readonly _keepPath: boolean;
 
     /**
-     * Create the undo history
+     * Create the tree-based history
      * @param keepPath - If true, cannot delete branches. Keeps all the paths (branches).
      * @param considerEqualCmd - By default, executing a command erases the redoable commands.
      * When executing a command (and adding this command in the history), this option adds a new check:
@@ -360,7 +360,7 @@ export class TreeUndoHistoryImpl extends TreeUndoHistory {
 
         /*
          * When taking different paths,
-         * we undo from the source path to the common node,
+         * we history from the source path to the common node,
          */
         for (let j = pathSrc.length - 1; j > i; j--) {
             pathSrc[j]?.undo();

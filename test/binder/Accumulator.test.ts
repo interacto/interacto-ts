@@ -12,20 +12,20 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {BindingsContext, BindingsImpl, UndoHistoryImpl} from "../../src/interacto";
+import {BindingsContext, BindingsImpl, LinearHistoryImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
 import {robot} from "interacto-nono";
-import type {UndoHistoryBase, Bindings} from "../../src/interacto";
+import type {LinearHistoryBase, Bindings} from "../../src/interacto";
 
 let button1: HTMLButtonElement;
 let cmd: StubCmd;
 let ctx: BindingsContext;
-let bindings: Bindings<UndoHistoryBase>;
+let bindings: Bindings<LinearHistoryBase>;
 
 describe("testing an accumulator", () => {
     beforeEach(() => {
-        bindings = new BindingsImpl(new UndoHistoryImpl());
+        bindings = new BindingsImpl(new LinearHistoryImpl());
         ctx = new BindingsContext();
         bindings.setBindingObserver(ctx);
         button1 = document.createElement("button");

@@ -13,16 +13,16 @@
  */
 
 import type {Undoable} from "./Undoable";
-import type {UndoHistoryBase} from "./UndoHistoryBase";
+import type {LinearHistoryBase} from "./LinearHistoryBase";
 import type {Observable} from "rxjs";
 
 /**
- * A history of undone/redone objects.
+ * A linear command history.
  * Why a pure abstract class and not an interface?
  * Because interfaces are not retained at runtime in TS and we want DI (that thus cannot inject interface types).
  * @category API History
  */
-export abstract class UndoHistory implements UndoHistoryBase {
+export abstract class LinearHistory implements LinearHistoryBase {
     public abstract add(undoable: Undoable): void;
 
     public abstract clear(): void;
@@ -73,7 +73,7 @@ export abstract class UndoHistory implements UndoHistoryBase {
 
     /**
      * The number of elements the history contains.
-     * Provide both the size of the undo and the redo stacks in the produced tuple.
+     * Provide both the size of the history and the redo stacks in the produced tuple.
      */
     public abstract size(): [undos: number, redos: number];
 

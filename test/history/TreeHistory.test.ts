@@ -12,12 +12,12 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {TreeUndoHistoryImpl} from "../../src/impl/undo/TreeUndoHistoryImpl";
+import {TreeHistoryImpl} from "../../src/impl/history/TreeHistoryImpl";
 import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
 import {mock} from "jest-mock-extended";
 import {TestScheduler} from "rxjs/testing";
-import type {TreeUndoHistory} from "../../src/api/undo/TreeUndoHistory";
-import type {Undoable} from "../../src/api/undo/Undoable";
+import type {TreeHistory} from "../../src/api/history/TreeHistory";
+import type {Undoable} from "../../src/api/history/Undoable";
 import type {MockProxy} from "jest-mock-extended";
 import {CmdModifiableDouble, CmdModifiableDouble3, StubUndoableCmd} from "../command/StubCmd";
 
@@ -26,8 +26,8 @@ interface Undoable4Test extends Undoable {
     bar: string;
 }
 
-describe("using a tree undo history", () => {
-    let history: TreeUndoHistory;
+describe("using a tree-based history", () => {
+    let history: TreeHistory;
     let undoable0: MockProxy<Undoable4Test> & Undoable4Test;
     let undoable1: MockProxy<Undoable4Test> & Undoable4Test;
     let undoable2: MockProxy<Undoable4Test> & Undoable4Test;
@@ -51,7 +51,7 @@ describe("using a tree undo history", () => {
 
     describe("using a standard tree history", () => {
         beforeEach(() => {
-            history = new TreeUndoHistoryImpl();
+            history = new TreeHistoryImpl();
         });
 
         test("option considersEqualCmds not activated", () => {
@@ -64,7 +64,7 @@ describe("using a tree undo history", () => {
             expect(history.currentNode).toBe(history.root);
         });
 
-        test("undo does nothing", () => {
+        test("history does nothing", () => {
             history.undo();
             expect(history.size()).toBe(0);
             expect(history.currentNode).toBe(history.root);
@@ -173,7 +173,7 @@ describe("using a tree undo history", () => {
                 });
             });
 
-            test("one add one undo", () => {
+            test("one add one history", () => {
                 testScheduler.run(helpers => {
                     const {cold, expectObservable} = helpers;
                     cold("-a-b", {"a": () => history.add(undoable0), "b": () => history.undo()}).subscribe(v => {
@@ -188,7 +188,7 @@ describe("using a tree undo history", () => {
                 expect(history.size()).toBe(1);
             });
 
-            test("one add one undo redo", () => {
+            test("one add one history redo", () => {
                 testScheduler.run(helpers => {
                     const {cold, expectObservable} = helpers;
                     cold("-a-b-c", {
@@ -227,7 +227,7 @@ describe("using a tree undo history", () => {
                 expect(history.size()).toBe(3);
             });
 
-            test("two add one undo one new add", () => {
+            test("two add one history one new add", () => {
                 testScheduler.run(helpers => {
                     const {cold, expectObservable} = helpers;
                     cold("-a-b-c-d", {
@@ -247,7 +247,7 @@ describe("using a tree undo history", () => {
                 expect(history.size()).toBe(3);
             });
 
-            test("three add one, undo to root, redo to leaf", () => {
+            test("three add one, history to root, redo to leaf", () => {
                 const res2: Array<number> = [];
                 undoable0.redo.mockImplementation(() => {
                     res2.push(0);
@@ -314,7 +314,7 @@ describe("using a tree undo history", () => {
                 expect(history.currentNode.undoable).toBe(undoable0);
             });
 
-            test("undo works", () => {
+            test("history works", () => {
                 history.undo();
                 expect(history.size()).toBe(1);
                 expect(history.undoableNodes[0]).toBeDefined();
@@ -333,7 +333,7 @@ describe("using a tree undo history", () => {
                 expect(toRedos[0]).toStrictEqual(undoable0);
             });
 
-            test("undo observation works", () => {
+            test("history observation works", () => {
                 const undos = new Array<Undoable | undefined>();
                 const undosStream = history.undosObservable().subscribe((e: Undoable | undefined) => undos.push(e));
 
@@ -344,7 +344,7 @@ describe("using a tree undo history", () => {
                 expect(undos[0]).toStrictEqual(undoable1);
             });
 
-            test("undo and redo observation works on multiple operations", () => {
+            test("history and redo observation works on multiple operations", () => {
                 const undos = new Array<Undoable | undefined>();
                 const redos = new Array<Undoable | undefined>();
                 const undosStream = history.undosObservable().subscribe((e: Undoable | undefined) => undos.push(e));
@@ -396,7 +396,7 @@ describe("using a tree undo history", () => {
                 expect(history.getLastOrEmptyRedoMessage()).toBe("barr");
             });
 
-            test("undo redo works", () => {
+            test("history redo works", () => {
                 history.undo();
                 history.redo();
                 expect(history.undoableNodes).toHaveLength(1);
@@ -406,7 +406,7 @@ describe("using a tree undo history", () => {
                 expect(undoable0.redo).toHaveBeenCalledTimes(1);
             });
 
-            test("undo new command, creates a branch", () => {
+            test("history new command, creates a branch", () => {
                 history.undo();
                 history.add(undoable1);
                 expect(history.undoableNodes).toHaveLength(2);
@@ -742,7 +742,7 @@ describe("using a tree undo history", () => {
                 expect(history.getLastRedo()).toBeUndefined();
             });
 
-            test("get last redoable when moving to 4 and undo", () => {
+            test("get last redoable when moving to 4 and history", () => {
                 history.goTo(4);
                 history.undo();
                 expect(history.getLastRedo()).toBe(undoable4);
@@ -760,7 +760,7 @@ describe("using a tree undo history", () => {
                 expect(history.getLastOrEmptyUndoMessage()).toBe("foo1");
             });
 
-            test("get last redoable when moving to 4 and undo and delete 4", () => {
+            test("get last redoable when moving to 4 and history and delete 4", () => {
                 history.goTo(4);
                 history.undo();
                 history.delete(4);
@@ -768,14 +768,14 @@ describe("using a tree undo history", () => {
                 expect(history.size()).toBe(4);
             });
 
-            test("get last redoable message when moving to 2 and undo", () => {
+            test("get last redoable message when moving to 2 and history", () => {
                 undoable2.getUndoName.mockReturnValue("fooo2");
                 history.goTo(2);
                 history.undo();
                 expect(history.getLastRedoMessage()).toBe("fooo2");
             });
 
-            test("get last redoable or empty message when moving to 3 and undo", () => {
+            test("get last redoable or empty message when moving to 3 and history", () => {
                 undoable3.getUndoName = (): string => "fooo4";
                 history.goTo(3);
                 history.undo();
@@ -1024,7 +1024,7 @@ describe("using a tree undo history", () => {
         let undoableF: Undoable;
 
         beforeEach(() => {
-            history = new TreeUndoHistoryImpl(false, true);
+            history = new TreeHistoryImpl(false, true);
             undoableA = mock<Undoable>();
             undoableB = mock<Undoable>();
             undoableC = mock<Undoable>();
@@ -1079,7 +1079,7 @@ describe("using a tree undo history", () => {
         let modCmd: CmdModifiableDouble;
 
         beforeEach(() => {
-            history = new TreeUndoHistoryImpl();
+            history = new TreeHistoryImpl();
             modCmd = new CmdModifiableDouble();
             // execute the command to make its attributes available
             modCmd.done();
@@ -1107,7 +1107,7 @@ describe("using a tree undo history", () => {
         beforeEach(() => {
             cmd = new CmdModifiableDouble();
             cmd.done();
-            history = new TreeUndoHistoryImpl(true, true);
+            history = new TreeHistoryImpl(true, true);
             history.add(new CmdModifiableDouble3());
             history.add(cmd);
             // A - B*

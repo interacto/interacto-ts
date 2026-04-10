@@ -12,21 +12,21 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {BindingsImpl, UndoHistoryImpl, CheckerImpl} from "../../src/interacto";
+import {BindingsImpl, LinearHistoryImpl, CheckerImpl} from "../../src/interacto";
 import {afterEach, beforeEach, describe, expect, test} from "@jest/globals";
-import type {Bindings, UndoHistory, Checker} from "../../src/interacto";
+import type {Bindings, LinearHistory, Checker} from "../../src/interacto";
 
 describe("binding checker", () => {
     let checker: Checker;
     let w1: unknown;
     let w2: unknown;
-    let bindings: Bindings<UndoHistory>;
+    let bindings: Bindings<LinearHistory>;
 
     beforeEach(() => {
         checker = new CheckerImpl();
         w1 = document.createElement("button");
         w2 = document.createElement("div");
-        bindings = new BindingsImpl<UndoHistory>(new UndoHistoryImpl());
+        bindings = new BindingsImpl<LinearHistory>(new LinearHistoryImpl());
     });
 
     afterEach(() => {
