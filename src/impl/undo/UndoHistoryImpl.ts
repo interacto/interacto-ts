@@ -35,7 +35,9 @@ export class UndoHistoryImpl extends UndoHistory {
     public readonly considersEqualCmds: boolean;
 
     /**
-     * The maximal number of undo.
+     * The maximal number of undoable objects.
+     * -1 (or any negative value) corresponds to an unlimited size.
+     * 0 corresponds to a history that stores nothing.
      */
     private sizeMax: number;
 
@@ -54,10 +56,9 @@ export class UndoHistoryImpl extends UndoHistory {
      */
     public constructor(considerEqualCmd = false) {
         super();
-        this.sizeMax = 0;
+        this.sizeMax = -1;
         this.undos = [];
         this.redos = [];
-        this.sizeMax = 20;
         this.undoPublisher = new Subject();
         this.redoPublisher = new Subject();
         this.sizePublisher = new Subject();
@@ -89,7 +90,7 @@ export class UndoHistoryImpl extends UndoHistory {
     }
 
     public add(undoable: Undoable): void {
-        if (this.sizeMax > 0) {
+        if (this.sizeMax !== 0) {
             if (this.undos.length === this.sizeMax) {
                 this.undos.shift();
             }
@@ -175,8 +176,8 @@ export class UndoHistoryImpl extends UndoHistory {
             if (willRemoved) {
                 this.publishSize();
             }
-            this.sizeMax = max;
         }
+        this.sizeMax = max;
     }
 
     public getUndo(): ReadonlyArray<Undoable> {

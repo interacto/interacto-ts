@@ -184,10 +184,14 @@ describe("using an undo history", () => {
         expect(history.getSizeMax()).toBe(21);
     });
 
-    test("sizeMaxMutatorsSizeKO", () => {
-        history.setSizeMax(5);
+    test("changing size max to negative one is ok and unlimited", () => {
+        history.setSizeMax(2);
         history.setSizeMax(-1);
-        expect(history.getSizeMax()).toBe(5);
+        history.add(undoable);
+        history.add(undoable2);
+        history.add(mock<Undoable>());
+        expect(history.getSizeMax()).toBe(-1);
+        expect(history.size()).toStrictEqual([3, 0]);
     });
 
     test("getLastRedoNothingStart", () => {
