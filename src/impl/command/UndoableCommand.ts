@@ -64,7 +64,7 @@ export abstract class UndoableCommand<T extends UndoableSnapshot = undefined> ex
         return undefined;
     }
 
-    public equals(undoable: Undoable): boolean {
+    public equals(undoable: unknown): boolean {
         return this === undoable;
     }
 
