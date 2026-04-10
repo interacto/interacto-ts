@@ -32,7 +32,7 @@ export type CmdStatus =
  * A command is produced and executed in reaction of a user interaction.
  * It follows the command design pattern.
  * It contains statements to execute to perform the command.
- * The interface Undoable can be used to add undo/redo features to a command.
+ * The interface Undoable can be used to add history/redo features to a command.
  * @category API Command
  */
 export interface Command {

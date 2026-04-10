@@ -12,23 +12,23 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {UndoHistoryImpl} from "../../src/impl/undo/UndoHistoryImpl";
+import {LinearHistoryImpl} from "../../src/impl/history/LinearHistoryImpl";
 import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
 import {mock} from "jest-mock-extended";
-import type {Undoable} from "../../src/api/undo/Undoable";
-import type {UndoHistory} from "../../src/api/undo/UndoHistory";
+import type {Undoable} from "../../src/api/history/Undoable";
+import type {LinearHistory} from "../../src/api/history/LinearHistory";
 import type {MockProxy} from "jest-mock-extended";
 import {TestScheduler} from "rxjs/testing";
 
-describe("using an undo history", () => {
-    jest.mock("../../src/api/undo/Undoable");
+describe("using an linear history", () => {
+    jest.mock("../../src/api/history/Undoable");
 
     let undoable: MockProxy<Undoable> & Undoable;
     let undoable2: MockProxy<Undoable> & Undoable;
-    let history: UndoHistory;
+    let history: LinearHistory;
 
     beforeEach(() => {
-        history = new UndoHistoryImpl();
+        history = new LinearHistoryImpl();
         history.setSizeMax(10);
         undoable = mock<Undoable>();
         undoable2 = mock<Undoable>();
@@ -44,19 +44,19 @@ describe("using an undo history", () => {
         expect(history.size()).toStrictEqual([1, 0]);
     });
 
-    test("undo called", () => {
+    test("history called", () => {
         history.add(undoable);
         history.undo();
         expect(undoable.undo).toHaveBeenCalledTimes(1);
     });
 
-    test("size undo", () => {
+    test("size history", () => {
         history.add(undoable);
         history.undo();
         expect(history.size()).toStrictEqual([0, 1]);
     });
 
-    test("undo and redo called", () => {
+    test("history and redo called", () => {
         history.add(undoable);
         history.undo();
         history.redo();
@@ -72,12 +72,12 @@ describe("using an undo history", () => {
         expect(history.size()).toStrictEqual([1, 0]);
     });
 
-    test("undo ok when empty", () => {
+    test("history ok when empty", () => {
         history.undo();
         expect(history.getLastUndo()).toBeUndefined();
     });
 
-    test("get last undo ok on add", () => {
+    test("get last history ok on add", () => {
         history.add(undoable);
         history.undo();
         history.redo();
@@ -289,7 +289,7 @@ describe("using an undo history", () => {
             expect(history.size()).toStrictEqual([1, 0]);
         });
 
-        test("one add one undo", () => {
+        test("one add one history", () => {
             testScheduler.run(helpers => {
                 const {cold, expectObservable} = helpers;
                 cold("-a-b", {"a": () => history.add(undoable), "b": () => history.undo()}).subscribe(v => {
@@ -397,7 +397,7 @@ describe("using an undo history", () => {
         expect(history.size()).toStrictEqual([1, 0]);
     });
 
-    test("crash in undo OK", () => {
+    test("crash in history OK", () => {
         undoable2.undo.mockImplementation(() => {
             throw new Error("err");
         });
@@ -430,7 +430,7 @@ describe("using an undo history", () => {
         let undoableE: Undoable;
 
         beforeEach(() => {
-            history = new UndoHistoryImpl(true);
+            history = new LinearHistoryImpl(true);
             undoableA = mock<Undoable>();
             undoableB = mock<Undoable>();
             undoableC = mock<Undoable>();

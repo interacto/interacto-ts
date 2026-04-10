@@ -12,12 +12,12 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {BindingImpl, FSMImpl, MustBeUndoableCmdError, UndoHistoryImpl} from "../../src/interacto";
+import {BindingImpl, FSMImpl, MustBeUndoableCmdError, LinearHistoryImpl} from "../../src/interacto";
 import {StubCmd, StubUndoableCmd} from "../command/StubCmd";
 import {InteractionStub} from "../interaction/InteractionStub";
 import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
 import {mock} from "jest-mock-extended";
-import type {Undoable, UndoHistory, VisitorBinding, Logger} from "../../src/interacto";
+import type {Undoable, LinearHistory, VisitorBinding, Logger} from "../../src/interacto";
 
 class BindingStub extends BindingImpl<StubCmd, InteractionStub, unknown> {
     public whenStartOK: boolean;
@@ -26,7 +26,7 @@ class BindingStub extends BindingImpl<StubCmd, InteractionStub, unknown> {
 
     public whenUpdateOK: boolean;
 
-    public constructor(history: UndoHistory, logger: Logger, continuous: boolean,
+    public constructor(history: LinearHistory, logger: Logger, continuous: boolean,
                        cmdCreation: (i?: object) => StubCmd, interaction: InteractionStub) {
         super(continuous, interaction, cmdCreation, [], history, logger, new Map());
         this.whenStartOK = false;
@@ -75,12 +75,12 @@ class CmdStubUndoable extends StubCmd implements Undoable {
 
 describe("using a binding", () => {
     let binding: BindingStub;
-    let history: UndoHistory;
+    let history: LinearHistory;
     let logger: Logger;
 
     beforeEach(() => {
         logger = mock<Logger>();
-        history = new UndoHistoryImpl();
+        history = new LinearHistoryImpl();
         binding = new BindingStub(history, logger, false, () => new StubCmd(), new InteractionStub(new FSMImpl(logger)));
         binding.activated = true;
     });

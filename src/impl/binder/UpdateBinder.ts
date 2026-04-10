@@ -25,7 +25,7 @@ import type {Command} from "../../api/command/Command";
 import type {Interaction, InteractionDataType} from "../../api/interaction/Interaction";
 import type {Logger} from "../../api/logging/Logger";
 import type {LogLevel} from "../../api/logging/LogLevel";
-import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
+import type {LinearHistoryBase} from "../../api/history/LinearHistoryBase";
 
 /**
  * The base binding builder for bindings where commands can be updated while the user interaction is running.
@@ -51,7 +51,7 @@ export class UpdateBinder<C extends Command, I extends Interaction<D>, A, D exte
 
     protected endOrCancelFnArray: Array<(i: D, acc: A) => void> = [];
 
-    public constructor(undoHistory: UndoHistoryBase, logger: Logger, observer?: BindingsObserver,
+    public constructor(undoHistory: LinearHistoryBase, logger: Logger, observer?: BindingsObserver,
                        binder?: Partial<UpdateBinder<C, I, A, D>>, acc?: A) {
         super(undoHistory, logger, observer, binder, acc);
 

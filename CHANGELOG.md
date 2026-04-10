@@ -303,7 +303,7 @@
 * change(api): encapsulating the bindings routines into a class
 * change(api): moving the undo/redo history into the bindings class. So removing the Single instance.
 * change(api): moving implementation classes into the impl folder
-* change(api): separating API / implementation of the UndoHistory
+* change(api): separating API / implementation of the LinearHistory
 * change(api): the error class must be located in the impl folder
 * change(api): the useless command registry and the registration policy removed
 * change(api): major refactoring of interaction data to match the Web API

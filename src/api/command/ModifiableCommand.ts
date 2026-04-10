@@ -11,9 +11,9 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import {isUndoableType} from "../undo/Undoable";
+import {isUndoableType} from "../history/Undoable";
 import type {Command} from "./Command";
-import type {Undoable} from "../undo/Undoable";
+import type {Undoable} from "../history/Undoable";
 
 const INTERACTO_MODIFIABLE: unique symbol = Symbol("interacto-cmd-modifiable");
 

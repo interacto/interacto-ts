@@ -26,7 +26,7 @@ import type {Command} from "../../api/command/Command";
 import type {Interaction, InteractionDataType} from "../../api/interaction/Interaction";
 import type {Logger} from "../../api/logging/Logger";
 import type {LogLevel} from "../../api/logging/LogLevel";
-import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
+import type {LinearHistoryBase} from "../../api/history/LinearHistoryBase";
 
 /**
  * The base class that defines the concept of binding builder (called binder).
@@ -67,7 +67,7 @@ implements CmdBinder<C>, InteractionBinder<I, A, D>, InteractionCmdBinder<C, I, 
 
     protected observer: BindingsObserver | undefined;
 
-    protected undoHistory: UndoHistoryBase;
+    protected undoHistory: LinearHistoryBase;
 
     protected logger: Logger;
 
@@ -89,7 +89,7 @@ implements CmdBinder<C>, InteractionBinder<I, A, D>, InteractionCmdBinder<C, I, 
 
     protected linterRules: Map<RuleName, Severity>;
 
-    protected constructor(undoHistory: UndoHistoryBase, logger: Logger, observer?: BindingsObserver,
+    protected constructor(undoHistory: LinearHistoryBase, logger: Logger, observer?: BindingsObserver,
                           binder?: Partial<Binder<C, I, A, D>>, acc?: A) {
         this.widgets = [];
         this.dynamicNodes = [];

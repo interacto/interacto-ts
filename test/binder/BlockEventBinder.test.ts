@@ -11,22 +11,22 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import {BindingsImpl, MouseDown, UndoHistoryImpl} from "../../src/interacto";
+import {BindingsImpl, MouseDown, LinearHistoryImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {createKeyEvent, createMouseEvent} from "../interaction/StubEvents";
 import {afterEach, beforeEach, describe, expect, test} from "@jest/globals";
 import {mock} from "jest-mock-extended";
-import type {Binding, Bindings, UndoHistoryBase, Logger} from "../../src/interacto";
+import type {Binding, Bindings, LinearHistoryBase, Logger} from "../../src/interacto";
 
 let canvas1: HTMLElement;
 let canvas2: HTMLElement;
 let binding1: Binding<StubCmd, MouseDown, unknown>;
 let binding2: Binding<StubCmd, MouseDown, unknown>;
-let bindings: Bindings<UndoHistoryBase>;
+let bindings: Bindings<LinearHistoryBase>;
 
 describe("using a block event binder", () => {
     beforeEach(() => {
-        bindings = new BindingsImpl(new UndoHistoryImpl());
+        bindings = new BindingsImpl(new LinearHistoryImpl());
         document.documentElement.innerHTML = "<html><div><canvas id='c1'> <canvas id='c2'/> </canvas></html>";
         canvas1 = document.querySelector("#c1") as HTMLElement;
         canvas2 = document.querySelector("#c2") as HTMLElement;

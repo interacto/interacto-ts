@@ -36,7 +36,7 @@ describe("using an undoable", () => {
         expect(isUndoableType({})).toBeFalsy();
     });
 
-    test("object missing undo is not undoable", () => {
+    test("object missing history is not undoable", () => {
         expect(isUndoableType({
             "redo": () => {},
             "getUndoName": () => {}

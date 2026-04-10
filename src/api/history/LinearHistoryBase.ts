@@ -16,10 +16,10 @@ import type {Undoable} from "./Undoable";
 import type {Observable} from "rxjs";
 
 /**
- * The base interface for undo histories.
+ * The base interface for linear histories.
  * @category API History
  */
-export interface UndoHistoryBase {
+export interface LinearHistoryBase {
     /**
      * Undoes the last undoable object.
      */

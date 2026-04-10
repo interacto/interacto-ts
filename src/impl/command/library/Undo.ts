@@ -13,16 +13,16 @@
  */
 
 import {CommandBase} from "../CommandBase";
-import type {UndoHistoryBase} from "../../../api/undo/UndoHistoryBase";
+import type {LinearHistoryBase} from "../../../api/history/LinearHistoryBase";
 
 /**
  * An Undo command.
  * @category Command
  */
 export class Undo extends CommandBase {
-    protected readonly history: UndoHistoryBase;
+    protected readonly history: LinearHistoryBase;
 
-    public constructor(undoHistory: UndoHistoryBase) {
+    public constructor(undoHistory: LinearHistoryBase) {
         super();
         this.history = undoHistory;
     }

@@ -16,20 +16,20 @@ import {
     BindingImpl,
     ClickTransition,
     FSMImpl,
-    UndoHistoryImpl
+    LinearHistoryImpl
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {InteractionStub} from "../interaction/InteractionStub";
 import {createMouseEvent} from "../interaction/StubEvents";
 import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
 import {mock} from "jest-mock-extended";
-import type {FSM, Logger, UndoHistory} from "../../src/interacto";
+import type {FSM, Logger, LinearHistory} from "../../src/interacto";
 
 let interaction: InteractionStub;
 let binding: BindingImpl<StubCmd, InteractionStub, unknown>;
 let fsm: FSM;
 let cmd: StubCmd;
-let history: UndoHistory;
+let history: LinearHistory;
 
 class OneTrFSM extends FSMImpl {
     public constructor() {
@@ -40,7 +40,7 @@ class OneTrFSM extends FSMImpl {
 
 describe("executing a binding", () => {
     beforeEach(() => {
-        history = new UndoHistoryImpl();
+        history = new LinearHistoryImpl();
         jest.clearAllMocks();
         cmd = new StubCmd();
         cmd.candoValue = true;

@@ -13,7 +13,7 @@
  */
 
 import {MustBeUndoableCmdError} from "./MustBeUndoableCmdError";
-import {isUndoableType} from "../../api/undo/Undoable";
+import {isUndoableType} from "../../api/history/Undoable";
 import {Subject} from "rxjs";
 import type {Binding} from "../../api/binding/Binding";
 import type {VisitorBinding} from "../../api/binding/VisitorBinding";
@@ -21,7 +21,7 @@ import type {RuleName, Severity} from "../../api/checker/Checker";
 import type {Command} from "../../api/command/Command";
 import type {Interaction, InteractionDataType} from "../../api/interaction/Interaction";
 import type {Logger} from "../../api/logging/Logger";
-import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
+import type {LinearHistoryBase} from "../../api/history/LinearHistoryBase";
 import type {Observable} from "rxjs";
 
 /**
@@ -68,7 +68,7 @@ implements Binding<C, I, A, D> {
 
     protected readonly accumulatorInit: A | undefined;
 
-    protected undoHistory: UndoHistoryBase;
+    protected undoHistory: LinearHistoryBase;
 
     protected logger: Logger;
 
@@ -88,14 +88,14 @@ implements Binding<C, I, A, D> {
      * @param cmdProducer - The type of the command that will be created. Used to instantiate the command by reflexivity.
      * The class must be public and must have a constructor with no parameter.
      * @param widgets - The widgets on which the binding will operate.
-     * @param undoHistory - The undo/redo history.
+     * @param undoHistory - The history/redo history.
      * @param logger - The logger to use
      * @param linterRules - The linting rules to use
      * @param name - The optional name of the binding. If not provided, computed based on the interaction and command names
      * @param accInit - The initial accumulator to use during the binding execution.
      */
     public constructor(continuousExecution: boolean, interaction: I, cmdProducer: (i?: D) => C,
-                       widgets: ReadonlyArray<unknown>, undoHistory: UndoHistoryBase, logger: Logger,
+                       widgets: ReadonlyArray<unknown>, undoHistory: LinearHistoryBase, logger: Logger,
                        linterRules: ReadonlyMap<RuleName, Severity>, name?: string, accInit?: A) {
         // The name is partial until the binding procudes its first command
         this._name = name;

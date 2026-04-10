@@ -101,7 +101,7 @@ describe("using a set properties command", () => {
             expect(obj.bar).toBe(obj2);
         });
 
-        test("undo works", async () => {
+        test("history works", async () => {
             await cmd.execute();
             cmd.undo();
             expect(obj.foo).toBe(-1);

@@ -43,7 +43,7 @@ import type {GeneralTwoTouchData, TwoTouchData} from "../interaction/TwoTouchDat
 import type {WheelData} from "../interaction/WheelData";
 import type {WidgetData} from "../interaction/WidgetData";
 import type {Logger} from "../logging/Logger";
-import type {UndoHistoryBase} from "../undo/UndoHistoryBase";
+import type {LinearHistoryBase} from "../history/LinearHistoryBase";
 
 /**
  * Defines a partly defined binder for buttons
@@ -195,15 +195,15 @@ export type PartialThenBinder<XS extends Array<Interaction<object>>, A = unknown
 /**
  * A contextual object for creating binders and thus bindings.
  * allows the observation of the created bindings.
- * Provides an undo/redo history.
+ * Provides an history/redo history.
  * Why a pure abstract class and not an interface?
- * Because interfaces are not retained at runtime in TS and we want DI (that thus cannot inject interface types).
- * @template H -- The undo history algorithm
+ * Because interfaces are not retained at run time in TS, and we want DI (that thus cannot inject interface types).
+ * @template H -- The linear history
  * @category API Binding
  */
-export abstract class Bindings<H extends UndoHistoryBase> {
+export abstract class Bindings<H extends LinearHistoryBase> {
     /**
-     * The undo/redo history of the current binding context
+     * The history/redo history of the current binding context
      */
     public abstract readonly undoHistory: H;
 
@@ -572,10 +572,10 @@ export abstract class Bindings<H extends UndoHistoryBase> {
         accInit?: A): PartialTouchMouseDnDTypedBinder<A>;
 
     /**
-     * Creates two bindings for undo and redo operations with buttons.
-     * @param undo - The undo button
+     * Creates two bindings for history and redo operations with buttons.
+     * @param undo - The history button
      * @param redo - The redo button
-     * @param catchFn - The function that will treat the errors for both undo and redo bindings
+     * @param catchFn - The function that will treat the errors for both history and redo bindings
      */
     public abstract undoRedoBinder(undo: Widget<HTMLButtonElement>, redo: Widget<HTMLButtonElement>, catchFn?: ((err: unknown) => void)):
     [Binding<Command, Interaction<WidgetData<HTMLButtonElement>>, unknown>,
@@ -591,7 +591,7 @@ export abstract class Bindings<H extends UndoHistoryBase> {
     /**
      * Clears all the data of this binding context:
      * the possible current `BindingsObserver` object;
-     * the undo/redo history.
+     * the history/redo history.
      */
     public abstract clear(): void;
 

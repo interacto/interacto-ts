@@ -16,7 +16,7 @@ import {
     BindingsContext,
     BindingsImpl,
     CommandBase,
-    UndoHistoryImpl
+    LinearHistoryImpl
 } from "../../src/interacto";
 import {robot} from "../interaction/StubEvents";
 import {flushPromises} from "../Utils";
@@ -26,7 +26,7 @@ import type {Binding,
     BindingImpl,
     Bindings,
     Interaction,
-    UndoHistoryBase} from "../../src/interacto";
+    LinearHistoryBase} from "../../src/interacto";
 
 class Model {
     public data: Array<string> = ["Foo", "Bar", "Yo"];
@@ -70,11 +70,11 @@ let cmd: StubAsyncCmd;
 let data: Model;
 let binding: Binding<StubAsyncCmd, Interaction<object>, unknown> | undefined;
 let ctx: BindingsContext;
-let bindings: Bindings<UndoHistoryBase>;
+let bindings: Bindings<LinearHistoryBase>;
 
 describe("testing async commands and bindings", () => {
     beforeEach(() => {
-        bindings = new BindingsImpl(new UndoHistoryImpl());
+        bindings = new BindingsImpl(new LinearHistoryImpl());
         ctx = new BindingsContext();
         bindings.setBindingObserver(ctx);
         data = new Model();

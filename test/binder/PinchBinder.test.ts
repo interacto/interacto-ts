@@ -11,20 +11,20 @@
  * You should have received a copy of the GNU General Public License
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
-import {BindingsContext, BindingsImpl, UndoHistoryImpl} from "../../src/interacto";
+import {BindingsContext, BindingsImpl, LinearHistoryImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {robot} from "../interaction/StubEvents";
 import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
-import type {Binding, Interaction, UndoHistoryBase, Bindings} from "../../src/interacto";
+import type {Binding, Interaction, LinearHistoryBase, Bindings} from "../../src/interacto";
 
 let binding: Binding<StubCmd, Interaction<object>, unknown> | undefined;
 let c1: HTMLElement;
 let ctx: BindingsContext;
-let bindings: Bindings<UndoHistoryBase>;
+let bindings: Bindings<LinearHistoryBase>;
 
 describe("using a pinch binder", () => {
     beforeEach(() => {
-        bindings = new BindingsImpl(new UndoHistoryImpl());
+        bindings = new BindingsImpl(new LinearHistoryImpl());
         ctx = new BindingsContext();
         bindings.setBindingObserver(ctx);
         jest.useFakeTimers();

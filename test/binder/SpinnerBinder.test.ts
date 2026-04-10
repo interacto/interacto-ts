@@ -12,21 +12,21 @@
  * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {BindingsContext, BindingsImpl, SpinnerChangedFSM, UndoHistoryImpl} from "../../src/interacto";
+import {BindingsContext, BindingsImpl, SpinnerChangedFSM, LinearHistoryImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
 import {robot} from "interacto-nono";
-import type {WidgetData, UndoHistoryBase, Bindings} from "../../src/interacto";
+import type {WidgetData, LinearHistoryBase, Bindings} from "../../src/interacto";
 
 let widget1: HTMLInputElement;
 let widget2: HTMLInputElement;
 let cmd: StubCmd;
 let ctx: BindingsContext;
-let bindings: Bindings<UndoHistoryBase>;
+let bindings: Bindings<LinearHistoryBase>;
 
 describe("using a spinner binder", () => {
     beforeEach(() => {
-        bindings = new BindingsImpl(new UndoHistoryImpl());
+        bindings = new BindingsImpl(new LinearHistoryImpl());
         ctx = new BindingsContext();
         bindings.setBindingObserver(ctx);
         jest.useFakeTimers();

@@ -59,7 +59,7 @@ describe("using a set property command", () => {
             expect(obj.foo).toBe(3);
         });
 
-        test("undo works", async () => {
+        test("history works", async () => {
             obj.foo = 1;
             await cmd.execute();
             cmd.undo();
@@ -74,7 +74,7 @@ describe("using a set property command", () => {
             expect(obj.foo).toBe(3);
         });
 
-        test("undo name", () => {
+        test("history name", () => {
             expect(cmd.getUndoName()).toBe("Set 'foo' value: 3");
         });
     });
@@ -105,7 +105,7 @@ describe("using a set property command", () => {
             expect(obj.foo2).toBe("yoo");
         });
 
-        test("undo works", async () => {
+        test("history works", async () => {
             obj.foo2 = "fooo";
             await cmd.execute();
             cmd.undo();
@@ -120,7 +120,7 @@ describe("using a set property command", () => {
             expect(obj.foo2).toBe("yolo");
         });
 
-        test("undo name", () => {
+        test("history name", () => {
             expect(cmd.getUndoName()).toBe("Set 'foo2' value: yolo");
         });
     });
@@ -144,7 +144,7 @@ describe("using a set property command", () => {
             expect(obj.bar).toBe(obj2);
         });
 
-        test("undo works", async () => {
+        test("history works", async () => {
             const obj3 = new SecondStubSetProp();
             obj3.val = [4, 5];
             obj.bar = obj3;
@@ -163,7 +163,7 @@ describe("using a set property command", () => {
             expect(obj.bar).toBe(obj2);
         });
 
-        test("undo name", () => {
+        test("history name", () => {
             expect(cmd.getUndoName()).toBe("Set 'bar' value: [object Object]");
         });
     });

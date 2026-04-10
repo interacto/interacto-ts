@@ -13,7 +13,7 @@
  */
 
 import {CommandBase} from "./CommandBase";
-import type {Undoable, UndoableSnapshot} from "../../api/undo/Undoable";
+import type {Undoable, UndoableSnapshot} from "../../api/history/Undoable";
 
 /**
  * The base class for undoable UI commands.

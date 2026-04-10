@@ -18,7 +18,7 @@ import {
     BindingsImpl,
     Click,
     KeyTyped,
-    UndoHistoryImpl
+    LinearHistoryImpl
 } from "../../src/interacto";
 import {StubCmd, StubUndoableCmd} from "../command/StubCmd";
 import {createMouseEvent, robot} from "../interaction/StubEvents";
@@ -43,8 +43,8 @@ import type {
     TapsData,
     ThenData,
     TouchData,
-    UndoHistory,
-    UndoHistoryBase,
+    LinearHistory,
+    LinearHistoryBase,
     VisitorBinding,
     WidgetData
 } from "../../src/interacto";
@@ -52,13 +52,13 @@ import type {MouseEventForTest} from "../interaction/StubEvents";
 
 let elt: HTMLElement;
 let ctx: BindingsContext;
-let bindings: Bindings<UndoHistoryBase>;
+let bindings: Bindings<LinearHistoryBase>;
 let logger: Logger;
 
 describe("using bindings", () => {
     beforeEach(() => {
         logger = mock<Logger>();
-        bindings = new BindingsImpl(new UndoHistoryImpl(), logger);
+        bindings = new BindingsImpl(new LinearHistoryImpl(), logger);
         ctx = new BindingsContext();
         bindings.setBindingObserver(ctx);
         jest.useFakeTimers();
@@ -72,7 +72,7 @@ describe("using bindings", () => {
     });
 
     test("with specific history", () => {
-        const h = mock<UndoHistory>();
+        const h = mock<LinearHistory>();
         bindings = new BindingsImpl(h);
 
         expect(h).toBe(bindings.undoHistory);
@@ -214,7 +214,7 @@ describe("using bindings", () => {
         expect(bindings.undoHistory.getLastUndo()).toBeDefined();
     });
 
-    test("undo redo binders on undo", () => {
+    test("history redo binders on history", () => {
         const undo = document.createElement("button");
         const redo = document.createElement("button");
         bindings.mouseDownBinder()
@@ -231,7 +231,7 @@ describe("using bindings", () => {
         expect(ctx.getCmdsProducedBy(undos[0])).toHaveLength(1);
     });
 
-    test("undo redo binders on redo", () => {
+    test("history redo binders on redo", () => {
         const undo = document.createElement("button");
         const redo = document.createElement("button");
         bindings.mouseDownBinder()

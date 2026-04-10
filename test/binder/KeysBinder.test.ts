@@ -16,7 +16,7 @@ import {
     BindingsContext,
     BindingsImpl,
     KeysBinder,
-    UndoHistoryImpl, KeyDown, MouseDown
+    LinearHistoryImpl, KeyDown, MouseDown
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {createKeyEvent} from "../interaction/StubEvents";
@@ -28,17 +28,17 @@ import type {
     Bindings, BindingsObserver,
     Command,
     Interaction,
-    UndoHistoryBase, Logger, KeysData, EltRef, UndoHistory, KeyInteractionCmdBinder, KeyData
+    LinearHistoryBase, Logger, KeysData, EltRef, LinearHistory, KeyInteractionCmdBinder, KeyData
 } from "../../src/interacto";
 
 let elt: HTMLElement;
 let binding: Binding<Command, Interaction<object>, unknown> | undefined;
 let ctx: BindingsContext;
-let bindings: Bindings<UndoHistoryBase>;
+let bindings: Bindings<LinearHistoryBase>;
 
 describe("using a key binder", () => {
     beforeEach(() => {
-        bindings = new BindingsImpl(new UndoHistoryImpl());
+        bindings = new BindingsImpl(new LinearHistoryImpl());
         ctx = new BindingsContext();
         bindings.setBindingObserver(ctx);
         jest.useFakeTimers();
@@ -718,7 +718,7 @@ describe("using a key binder", () => {
     });
 
     test("key binding with invalid interaction key data", () => {
-        binding = new KeysBinder(mock<UndoHistory>(), mock<Logger>(), ctx, undefined)
+        binding = new KeysBinder(mock<LinearHistory>(), mock<Logger>(), ctx, undefined)
             .usingInteraction(() => new MouseDown(mock<Logger>()))
             .toProduce(() => new StubCmd(true))
             .on(elt)

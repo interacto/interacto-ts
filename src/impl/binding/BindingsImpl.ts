@@ -98,7 +98,7 @@ import type {Interaction} from "../../api/interaction/Interaction";
 import type {GeneralTwoTouchData} from "../../api/interaction/TwoTouchData";
 import type {WidgetData} from "../../api/interaction/WidgetData";
 import type {Logger} from "../../api/logging/Logger";
-import type {UndoHistoryBase} from "../../api/undo/UndoHistoryBase";
+import type {LinearHistoryBase} from "../../api/history/LinearHistoryBase";
 import type {CommandBase} from "../command/CommandBase";
 import type {GeneralTwoTouchDataImpl} from "../interaction/GeneralTwoTouchDataImpl";
 import type {TwoPan} from "../interaction/library/TwoPans";
@@ -110,7 +110,7 @@ import type {XTouchDnD} from "../interaction/library/XTouch";
  * for creating binders and bindings.
  * @category Binding
  */
-export class BindingsImpl<H extends UndoHistoryBase> extends Bindings<H> {
+export class BindingsImpl<H extends LinearHistoryBase> extends Bindings<H> {
     protected observer: BindingsObserver | undefined;
 
     protected readonly undoHistoryData: H;
