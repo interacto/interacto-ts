@@ -122,6 +122,10 @@ export interface FSM {
      */
     stopCurrentTimeout(): void;
 
+    /**
+     * Enters the FSM into the given standard state.
+     * @param state - The state to go into.
+     */
     enterStdState(state: InputState & OutputState): void;
 
     /**

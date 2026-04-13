@@ -14,6 +14,7 @@
 
 /**
  * Removes the given element from the array.
+ * @template T - The type of the array content.
  * @param array - The array to mutate.
  * @param elt - The element to remove.
  * @category Helper
@@ -27,6 +28,7 @@ export function remove<T>(array: Array<T>, elt: T): void {
 
 /**
  * Removes the element at the given position.
+ * @template T - The type of the array content.
  * @param array - The array to mutate.
  * @param index - The index where to remove
  * @returns The removed element or nothing.

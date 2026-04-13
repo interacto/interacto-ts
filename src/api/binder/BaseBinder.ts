@@ -26,6 +26,9 @@ import type {Interaction, InteractionDataType} from "../interaction/Interaction"
  * @category Helper
  */
 export interface BaseBinder extends BaseBinderBuilder {
+    /**
+     * @override
+     */
     on<W>(widget: ReadonlyArray<Widget<W>> | Widget<W>, ...widgets: ReadonlyArray<Widget<W>>): BaseBinder;
 
     onDynamic(node: Widget<Node>): BaseBinder;

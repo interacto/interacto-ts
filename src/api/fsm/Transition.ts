@@ -33,8 +33,18 @@ export interface Transition<E extends Event> {
      */
     execute(event: Event): InputState | undefined;
 
+    /**
+     * The guard of the transition. It checks whether the provided event allows to trigger the transition.
+     * @param event - The event to check.
+     * @returns True if using the given event the guard would accept to trigger the transition.
+     */
     guard(event: E): boolean;
 
+    /**
+     * Checks whether the transition accepts the given event.
+     * @param event - The event to check
+     * @returns True if the event accepts to trigger the transition.
+     */
     accept(event: Event): event is E;
 
     /**

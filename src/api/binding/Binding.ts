@@ -23,7 +23,7 @@ import type {Observable} from "rxjs";
  * @template C - The type of the command that will produce this binding.
  * @template I - The type of the interaction that will use this binding.
  * @template A - The type of the accumulator.
- * @template D - The interaction data type (infered from the interaction type)
+ * @template D - The interaction data type (inferred from the interaction type)
  * @category API Binding
  */
 export interface Binding<C extends Command, I extends Interaction<D>, A, D extends object = InteractionDataType<I>> {
@@ -85,13 +85,13 @@ export interface Binding<C extends Command, I extends Interaction<D>, A, D exten
 
     /**
      * Information method.
-     * @returns The number of times the binding successfully ended (nevermind a command was created or not).
+     * @returns The number of times the binding successfully ended (never mind a command was created or not).
      */
     readonly timesEnded: number;
 
     /**
      * Information method.
-     * The number of times the binding was cancelled (nevermind a command was created or not).
+     * The number of times the binding was canceled (never mind a command was created or not).
      */
     readonly timesCancelled: number;
 
@@ -103,6 +103,9 @@ export interface Binding<C extends Command, I extends Interaction<D>, A, D exten
      */
     isWhenDefined(): boolean;
 
+    /**
+     * Flushes the binding. Interaction and data are flushed. No listening widgets any more.
+     */
     uninstallBinding(): void;
 
     /**

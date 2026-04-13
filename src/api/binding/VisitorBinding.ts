@@ -24,7 +24,15 @@ import type {LinearHistoryBase} from "../history/LinearHistoryBase";
  * @category API Binding
  */
 export interface VisitorBinding extends VisitorInteraction {
+    /**
+     * Called when visiting a binding.
+     * @param binding - The binding that is visited.
+     */
     visitBinding(binding: Binding<Command, Interaction<object>, unknown>): void;
 
+    /**
+     * Called when visiting a set of bindings.
+     * @param bindings - The bindings that are visited.
+     */
     visitBindings(bindings: Bindings<LinearHistoryBase>): void;
 }

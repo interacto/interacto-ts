@@ -43,10 +43,19 @@ export interface FSMHandler {
      */
     fsmError?(err: unknown): void;
 
+    /**
+     * Just before an FSM starts.
+     */
     preFsmStart?(): void;
 
+    /**
+     * Just before an FSM updates.
+     */
     preFsmUpdate?(): void;
 
+    /**
+     * Just before an FSM stops.
+     */
     preFsmStop?(): void;
 
     /**
