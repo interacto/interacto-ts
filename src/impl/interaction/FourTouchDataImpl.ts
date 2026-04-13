@@ -6,10 +6,10 @@
  * (at your option) any later version.
  * Interacto is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License
- * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
+ * along with Interacto. If not, see <https://www.gnu.org/licenses/>.
  */
 
 import {SrcTgtTouchDataImpl} from "./SrcTgtTouchDataImpl";
@@ -41,7 +41,7 @@ export class FourTouchDataImpl extends ThreeTouchDataImpl implements FourTouchDa
     }
 
     public override initTouch(data: Touch, evt: EventModifierData & UnitInteractionData, allTouches: Array<Touch>): void {
-        // If only t4 is not initialised
+        // If only t4 is not initialized
         if (this.t4.src.identifier === -1 && this.t3.src.identifier !== -1) {
             this.t4.copySrc(data, evt, allTouches);
             this.t4.copyTgt(data, evt, allTouches);

@@ -6,10 +6,10 @@
  * (at your option) any later version.
  * Interacto is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License
- * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
+ * along with Interacto. If not, see <https://www.gnu.org/licenses/>.
  */
 
 import {ClickTransition} from "../../fsm/ClickTransition";
@@ -88,7 +88,7 @@ export class Clicks extends InteractionBase<MousePointsData, MousePointsDataImpl
     /**
      * Creates the clicks interaction
      * @param numberClicks - The number of clicks expected to end the interaction.
-     * If this number is not reached after a timeout, the interaction is cancelled.
+     * If this number is not reached after a timeout, the interaction is canceled.
      * @param logger - The logger to use for this interaction
      * @param name - The name of the user interaction
      */

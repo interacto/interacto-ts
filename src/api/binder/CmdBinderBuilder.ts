@@ -6,10 +6,10 @@
  * (at your option) any later version.
  * Interacto is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License
- * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
+ * along with Interacto. If not, see <https://www.gnu.org/licenses/>.
  */
 import type {BaseBinderBuilder, Widget} from "./BaseBinderBuilder";
 import type {WhenType} from "./When";
@@ -24,10 +24,10 @@ import type {LogLevel} from "../logging/LogLevel";
  */
 export interface CmdBinderBuilder<C extends Command> extends BaseBinderBuilder {
     /**
-     * Specifies the initialisation of the command when the interaction starts.
+     * Specifies the initialization of the command when the interaction starts.
      * Each time the interaction starts, an instance of the command is created and configured by the given callback.
-     * A binder can have several cummulative 'first' routines.
-     * @param fn - The callback method that initialises the command.
+     * A binder can have several cumulative 'first' routines.
+     * @param fn - The callback method that initializes the command.
      * This callback takes as arguments the command to configure.
      * @returns A clone of the current binder to chain the building configuration.
      */

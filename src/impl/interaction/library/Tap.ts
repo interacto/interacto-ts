@@ -6,10 +6,10 @@
  * (at your option) any later version.
  * Interacto is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License
- * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
+ * along with Interacto. If not, see <https://www.gnu.org/licenses/>.
  */
 
 import {FSMImpl} from "../../fsm/FSMImpl";
@@ -64,7 +64,7 @@ export class TapFSM extends FSMImpl {
         new TouchTransition(this.downState, this.downState, "touchstart",
             // Replacing the current tap
             action,
-            // To detect the event is lost, checking it is not part of the touches any more
+            // To detect the event is lost, checking it is not part of the touches anymore
             (evt: TouchEvent): boolean => Array.from(evt.touches).filter(touch => touch.identifier === this.touchID).length === 0);
 
         new TouchTransition(this.downState, up, "touchend", undefined,

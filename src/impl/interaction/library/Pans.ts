@@ -6,10 +6,10 @@
  * (at your option) any later version.
  * Interacto is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License
- * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
+ * along with Interacto. If not, see <https://www.gnu.org/licenses/>.
  */
 
 import {TouchDnD} from "./TouchDnD";
@@ -19,7 +19,7 @@ import type {Logger} from "../../../api/logging/Logger";
 /**
  * Creates the horizontal pan (or a swipe if minVelocity is used).
  * @param logger - The logger to use for this interaction
- * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
+ * @param cancellable - Whether the DnD can be canceled by interacting with a dwell-and-spring element.
  * @param pxTolerance - The pixel tolerance for considering the line horizontal.
  * @param minLength - The minimal distance from the starting point to the release point for validating the pan
  * @param minVelocity - The minimal minVelocity to reach for validating the swipe. In pixels per second.
@@ -39,7 +39,7 @@ export function hPan(logger: Logger, cancellable: boolean,
 /**
  * Creates the vertical pan (or a swipe if minVelocity is used).
  * @param logger - The logger to use for this interaction
- * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
+ * @param cancellable - Whether the DnD can be canceled by interacting with a dwell-and-spring element.
  * @param pxTolerance - The pixel tolerance for considering the line vertical.
  * @param minLength - The minimal distance from the starting point to the release point for validating the pan
  * @param minVelocity - The minimal minVelocity to reach for validating the swipe. In pixels per second.
@@ -59,7 +59,7 @@ export function vPan(logger: Logger, cancellable: boolean,
 /**
  * Creates a left pan (or a swipe if minVelocity is used).
  * @param logger - The logger to use for this interaction
- * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
+ * @param cancellable - Whether the DnD can be canceled by interacting with a dwell-and-spring element.
  * @param pxTolerance - The pixel tolerance for considering the line to the left.
  * @param minLength - The minimal distance from the starting point to the release point for validating the pan
  * @param minVelocity - The minimal minVelocity to reach for validating the swipe. In pixels per second.
@@ -79,7 +79,7 @@ export function leftPan(logger: Logger, cancellable: boolean,
 /**
  * Creates a right pan (or a swipe if minVelocity is used).
  * @param logger - The logger to use for this interaction
- * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
+ * @param cancellable - Whether the DnD can be canceled by interacting with a dwell-and-spring element.
  * @param pxTolerance - The pixel tolerance for considering the line to the right.
  * @param minLength - The minimal distance from the starting point to the release point for validating the pan
  * @param minVelocity - The minimal minVelocity to reach for validating the swipe. In pixels per second.
@@ -99,7 +99,7 @@ export function rightPan(logger: Logger, cancellable: boolean,
 /**
  * Creates a top pan (or a swipe if minVelocity is used).
  * @param logger - The logger to use for this interaction
- * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
+ * @param cancellable - Whether the DnD can be canceled by interacting with a dwell-and-spring element.
  * @param pxTolerance - The pixel tolerance for considering the line to the top.
  * @param minLength - The minimal distance from the starting point to the release point for validating the pan
  * @param minVelocity - The minimal minVelocity to reach for validating the swipe. In pixels per second.
@@ -119,7 +119,7 @@ export function topPan(logger: Logger, cancellable: boolean,
 /**
  * Creates a bottom pan (or a swipe if minVelocity is used).
  * @param logger - The logger to use for this interaction
- * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
+ * @param cancellable - Whether the DnD can be canceled by interacting with a dwell-and-spring element.
  * @param pxTolerance - The pixel tolerance for considering the line to the bottom.
  * @param minLength - The minimal distance from the starting point to the release point for validating the pan
  * @param minVelocity - The minimal minVelocity to reach for validating the swipe. In pixels per second.

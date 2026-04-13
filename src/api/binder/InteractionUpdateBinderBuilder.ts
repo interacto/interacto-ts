@@ -6,10 +6,10 @@
  * (at your option) any later version.
  * Interacto is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License
- * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
+ * along with Interacto. If not, see <https://www.gnu.org/licenses/>.
  */
 import type {Widget} from "./BaseBinderBuilder";
 import type {BaseUpdateBinderBuilder} from "./BaseUpdateBinderBuilder";
@@ -29,17 +29,17 @@ import type {LogLevel} from "../logging/LogLevel";
 export interface InteractionUpdateBinderBuilder<I extends Interaction<D>, A, D extends object = InteractionDataType<I>>
     extends InteractionBinderBuilder <I, A, D>, BaseUpdateBinderBuilder {
     /**
-     * Defines what to do when a command is cancelled (because the interaction is cancelled).
-     * The undoable command is automatically cancelled so that nothing must be done on the command.
-     * A binder can have several cummulative 'cancel' routines.
+     * Defines what to do when a command is canceled (because the interaction is canceled).
+     * The undoable command is automatically canceled so that nothing must be done on the command.
+     * A binder can have several cumulative 'cancel' routines.
      * @returns A clone of the current binder to chain the building configuration.
      */
     cancel(fn: (i: D, acc: A) => void): InteractionUpdateBinderBuilder<I, A, D>;
 
     /**
-     * Defines what to do when a command is cancelled (because the interaction is cancelled).
-     * The undoable command is automatically cancelled so that nothing must be done on the command.
-     * A binder can have several cummulative 'endOrCancel' routines.
+     * Defines what to do when a command is canceled (because the interaction is canceled).
+     * The undoable command is automatically canceled so that nothing must be done on the command.
+     * A binder can have several cumulative 'endOrCancel' routines.
      * @returns A clone of the current binder to chain the building configuration.
      */
     endOrCancel(fn: (i: D, acc: A) => void): InteractionUpdateBinderBuilder<I, A, D>;

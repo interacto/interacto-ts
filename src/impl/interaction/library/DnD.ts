@@ -6,10 +6,10 @@
  * (at your option) any later version.
  * Interacto is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License
- * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
+ * along with Interacto. If not, see <https://www.gnu.org/licenses/>.
  */
 
 import {EscapeKeyPressureTransition} from "../../fsm/EscapeKeyPressureTransition";
@@ -37,7 +37,7 @@ class DnDFSM extends FSMImpl {
 
     /**
      * Creates the FSM
-     * @param cancellable - True: the FSM can be cancelled using the ESC key.
+     * @param cancellable - True: the FSM can be canceled using the ESC key.
      * @param logger - The logger to use
      * @param handler - The handler that will receive notifications from the FSM.
      */

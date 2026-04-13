@@ -6,10 +6,10 @@
  * (at your option) any later version.
  * Interacto is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License
- * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
+ * along with Interacto. If not, see <https://www.gnu.org/licenses/>.
  */
 
 import {FSMImpl} from "../../fsm/FSMImpl";
@@ -79,7 +79,7 @@ export class TapsFSM extends FSMImpl {
                 this.touchID = event.changedTouches[0]!.identifier;
                 handler(event);
             },
-            // To detect the event is lost, checking it is not part of the touches any more
+            // To detect the event is lost, checking it is not part of the touches anymore
             (evt: TouchEvent): boolean => Array.from(evt.touches).filter(touch => touch.identifier === this.touchID).length === 0);
 
         new TouchTransition(this.downState, this.addTerminalState("ended"), "touchend", undefined,
@@ -103,14 +103,14 @@ export class TapsFSM extends FSMImpl {
 /**
  * A tap user interaction. Manage several taps. For single tap, use the tap interaction.
  * This touch interaction takes as input the number of taps expected to end the interaction.
- * If this number is not reached after a timeout, the interaction is cancelled.
+ * If this number is not reached after a timeout, the interaction is canceled.
  * @category Interaction Library
  */
 export class Taps extends InteractionBase<PointsData<TouchData>, TapsDataImpl> {
     /**
      * Creates the tap interaction
      * @param numberTaps - The number of taps expected to end the interaction. Must be greater than 1.
-     * If this number is not reached after a timeout, the interaction is cancelled.
+     * If this number is not reached after a timeout, the interaction is canceled.
      * @param logger - The logger to use for this interaction
      * @param name - The name of the user interaction
      */

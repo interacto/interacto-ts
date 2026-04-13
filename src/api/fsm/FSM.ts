@@ -6,10 +6,10 @@
  * (at your option) any later version.
  * Interacto is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License
- * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
+ * along with Interacto. If not, see <https://www.gnu.org/licenses/>.
  */
 
 import type {FSMHandler} from "./FSMHandler";
@@ -46,7 +46,7 @@ export interface FSM {
     readonly initState: OutputState;
 
     /**
-     * By default an FSM triggers its 'start' event when it leaves its initial state.
+     * By default, an FSM triggers its 'start' event when it leaves its initial state.
      * In some cases, this is not the case. For example, a double-click interaction is an FSM that must trigger
      * its start event when the FSM reaches... its terminal state. Similarly, a DnD must trigger its start event
      * on the first move, not on the first press.
@@ -122,6 +122,10 @@ export interface FSM {
      */
     stopCurrentTimeout(): void;
 
+    /**
+     * Enters the FSM into the given standard state.
+     * @param state - The state to go into.
+     */
     enterStdState(state: InputState & OutputState): void;
 
     /**

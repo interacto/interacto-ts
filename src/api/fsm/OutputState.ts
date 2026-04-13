@@ -6,10 +6,10 @@
  * (at your option) any later version.
  * Interacto is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License
- * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
+ * along with Interacto. If not, see <https://www.gnu.org/licenses/>.
  */
 
 import type {State} from "./State";
@@ -33,7 +33,7 @@ export interface OutputState extends State {
     exit(): void;
 
     /**
-     * Asks to the state to process of the given event.
+     * Asks the state to process of the given event.
      * @param event - The event to process. Can be null.
      */
     process(event: Event): boolean;

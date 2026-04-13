@@ -6,10 +6,10 @@
  * (at your option) any later version.
  * Interacto is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License
- * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
+ * along with Interacto. If not, see <https://www.gnu.org/licenses/>.
  */
 import type {BaseBinder} from "./BaseBinder";
 import type {Widget} from "./BaseBinderBuilder";
@@ -23,7 +23,7 @@ import type {Interaction, InteractionDataType} from "../interaction/Interaction"
 import type {LogLevel} from "../logging/LogLevel";
 
 /**
- * The base interface for building bindings based on non-trivial user interactions (eg DnD) with routines
+ * The base interface for building bindings based on non-trivial user interactions (e.g. DnD) with routines
  * for defining the UI command and the user interaction to use.
  * @category Helper
  */

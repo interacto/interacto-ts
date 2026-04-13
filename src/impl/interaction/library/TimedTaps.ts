@@ -6,10 +6,10 @@
  * (at your option) any later version.
  * Interacto is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License
- * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
+ * along with Interacto. If not, see <https://www.gnu.org/licenses/>.
  */
 
 import {TapsFSM} from "./Taps";
@@ -35,9 +35,9 @@ class TimedTapsFSM extends TapsFSM {
 
 /**
  * A tap user interaction that has a timeout:
- * while touching, if the timeout is reached the interaction is cancelled.
+ * while touching, if the timeout is reached the interaction is canceled.
  * This touch interaction takes as input the timeout (in ms) the number of taps expected to end the interaction.
- * If this number is not reached after a timeout, the interaction is cancelled.
+ * If this number is not reached after a timeout, the interaction is canceled.
  * @category Interaction Library
  */
 export class TimedTaps extends InteractionBase<PointsData<TouchData>, TapsDataImpl> {
@@ -45,7 +45,7 @@ export class TimedTaps extends InteractionBase<PointsData<TouchData>, TapsDataIm
      * Creates the timed tap interaction
      * @param duration - The max duration before a timeout while touching.
      * @param numberTaps - The number of taps expected to end the interaction.
-     * If this number is not reached after a timeout, the interaction is cancelled.
+     * If this number is not reached after a timeout, the interaction is canceled.
      * @param logger - The logger to use for this interaction
      * @param name - The name of the user interaction
      */

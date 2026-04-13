@@ -6,10 +6,10 @@
  * (at your option) any later version.
  * Interacto is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License
- * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
+ * along with Interacto. If not, see <https://www.gnu.org/licenses/>.
  */
 
 import {getTouch} from "../../fsm/Events";
@@ -66,7 +66,7 @@ export class TouchDnDFSM extends FSMImpl {
 
     /**
      * Creates the FSM.
-     * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
+     * @param cancellable - Whether the DnD can be canceled by interacting with a dwell-and-spring element.
      * @param logger - The logger to use for this interaction
      * @param dataHandler - The data handler the FSM will use
      * @param movementRequired - Whether the DnD starts after the touch point has begun moving (default)
@@ -129,7 +129,7 @@ export class TouchDnDFSM extends FSMImpl {
          */
         new TouchTransition(this.moved, this.touched, "touchstart", touchDown, fixTouchDownCheck);
 
-        // Transitions used if the DnD can be cancelled by releasing the touch on a dwell spring element
+        // Transitions used if the DnD can be canceled by releasing the touch on a dwell spring element
         if (this.cancellable) {
             new TouchTransition(this.moved, released, "touchend",
                 (event: TouchEvent): void => {
@@ -137,7 +137,7 @@ export class TouchDnDFSM extends FSMImpl {
                 },
                 (event: TouchEvent): boolean => {
                 /*
-                 * Touch event behaviour is not consistent with mouse events: event.tgt.target points to the original element, not to the one
+                 * Touch event behavior is not consistent with mouse events: event.tgt.target points to the original element, not to the one
                  * currently targeted. So we have to retrieve the current target manually.
                  */
                     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -180,7 +180,7 @@ export class TouchDnDFSM extends FSMImpl {
 export class OneTouchDnDFSM extends TouchDnDFSM {
     /**
      * Creates a DnD touch FSM that only works with one touch.
-     * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
+     * @param cancellable - Whether the DnD can be canceled by interacting with a dwell-and-spring element.
      * @param logger - The logger to use for this interaction
      * @param dataHandler - The data handler the FSM will use
      */
@@ -206,7 +206,7 @@ export class TouchDnD extends InteractionBase<SrcTgtPointsData<TouchData>, SrcTg
     /**
      * Creates the interaction.
      * @param logger - The logger to use for this interaction
-     * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
+     * @param cancellable - Whether the DnD can be canceled by interacting with a dwell-and-spring element.
      * @param fsm - The optional FSM provided for the interaction
      * @param name - The name of the user interaction
      */

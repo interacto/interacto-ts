@@ -6,10 +6,10 @@
  * (at your option) any later version.
  * Interacto is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License
- * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
+ * along with Interacto. If not, see <https://www.gnu.org/licenses/>.
  */
 
 import {LinearHistory} from "../../api/history/LinearHistory";
@@ -48,7 +48,7 @@ export class LinearHistoryImpl extends LinearHistory {
     private readonly sizePublisher: Subject<[number, number]>;
 
     /**
-     * Create the history history
+     * Create the linear history
      * @param considerEqualCmd - By default, executing a command erases the redoable commands.
      * When executing a command (and adding this command in the history), this option adds a new check:
      * if the newly executed command equals the next redoable one, then the redoable stack is not clear

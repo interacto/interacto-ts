@@ -6,10 +6,10 @@
  * (at your option) any later version.
  * Interacto is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License
- * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
+ * along with Interacto. If not, see <https://www.gnu.org/licenses/>.
  */
 
 import type {BaseBinderBuilder, Widget} from "./BaseBinderBuilder";
@@ -27,9 +27,9 @@ import type {LogLevel} from "../logging/LogLevel";
 export interface InteractionBinderBuilder<I extends Interaction<D>, A, D extends object = InteractionDataType<I>>
     extends BaseBinderBuilder {
     /**
-     * Specifies the conditions to fulfill to initialise, update, or execute the command while the interaction is running.
-     * A binder can have several cummulative 'when' routines.
-     * @param fn - The predicate that checks whether the command can be initialised, updated, or executed.
+     * Specifies the conditions to fulfill to initialize, update, or execute the command while the interaction is running.
+     * A binder can have several cumulative 'when' routines.
+     * @param fn - The predicate that checks whether the command can be initialized, updated, or executed.
      * This predicate takes as arguments the data of the ongoing user interaction involved in the binding.
      * @returns A clone of the current binder to chain the building configuration.
      */

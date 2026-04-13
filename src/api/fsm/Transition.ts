@@ -6,10 +6,10 @@
  * (at your option) any later version.
  * Interacto is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License
- * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
+ * along with Interacto. If not, see <https://www.gnu.org/licenses/>.
  */
 
 import type {EventType} from "./EventType";
@@ -33,8 +33,18 @@ export interface Transition<E extends Event> {
      */
     execute(event: Event): InputState | undefined;
 
+    /**
+     * The guard of the transition. It checks whether the provided event allows to trigger the transition.
+     * @param event - The event to check.
+     * @returns True if using the given event the guard would accept to trigger the transition.
+     */
     guard(event: E): boolean;
 
+    /**
+     * Checks whether the transition accepts the given event.
+     * @param event - The event to check
+     * @returns True if the event accepts to trigger the transition.
+     */
     accept(event: Event): event is E;
 
     /**

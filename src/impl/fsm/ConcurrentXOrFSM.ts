@@ -6,10 +6,10 @@
  * (at your option) any later version.
  * Interacto is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License
- * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
+ * along with Interacto. If not, see <https://www.gnu.org/licenses/>.
  */
 
 import {FSMImpl} from "./FSMImpl";
@@ -21,7 +21,7 @@ import type {Logger} from "../../api/logging/Logger";
 
 /**
  * A concurrent FSM: an FSM that contains multiple FSMs where only one of them can run at
- * the same time. This is thus a XOR concurrent FSM.
+ * the same time. This is thus an XOR concurrent FSM.
  * If one FSM has started, the other ones cannot start.
  * @category FSM
  */

@@ -6,10 +6,10 @@
  * (at your option) any later version.
  * Interacto is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License
- * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
+ * along with Interacto. If not, see <https://www.gnu.org/licenses/>.
  */
 import type {Widget} from "./BaseBinderBuilder";
 import type {CmdUpdateBinderBuilder} from "./CmdUpdateBinderBuilder";
@@ -34,7 +34,7 @@ export interface InteractionCmdUpdateBinder<C extends Command, I extends Interac
     extends InteractionCmdBinder<C, I, A, D>, CmdUpdateBinderBuilder<C>, InteractionUpdateBinderBuilder<I, A, D> {
     /**
      * Permits to update the command on each interaction update.
-     * A binder can have several cummulative 'then' routines.
+     * A binder can have several cumulative 'then' routines.
      * This routine is called only if 'when' returns true (ie only if
      * the condition for producing the command is respected).
      * See 'ifCannotExecute' for a 'then' when this condition is not respected.

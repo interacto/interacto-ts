@@ -6,10 +6,10 @@
  * (at your option) any later version.
  * Interacto is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License
- * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
+ * along with Interacto. If not, see <https://www.gnu.org/licenses/>.
  */
 
 import {InteractionBase} from "./InteractionBase";
@@ -37,7 +37,7 @@ export abstract class ConcurrentInteraction<D extends object, DImpl extends D & 
      * @param data - The interaction data.
      * @param logger - The logger to use for this interaction
      * @param name - The real name of the interaction
-     * @param reinitDataOnFSMReinit - Reinits the interaction data when the FSM is reinitialized. True by default
+     * @param reinitDataOnFSMReinit - Reinitializes the interaction data when the FSM is reinitialized. True by default
      */
     protected constructor(fsm: F, data: DImpl, logger: Logger, name: string, reinitDataOnFSMReinit = true) {
         super(fsm, data, logger, name, reinitDataOnFSMReinit);

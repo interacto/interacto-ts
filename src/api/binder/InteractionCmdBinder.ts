@@ -6,10 +6,10 @@
  * (at your option) any later version.
  * Interacto is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License
- * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
+ * along with Interacto. If not, see <https://www.gnu.org/licenses/>.
  */
 import type {Widget} from "./BaseBinderBuilder";
 import type {CmdBinderBuilder} from "./CmdBinderBuilder";
@@ -31,10 +31,10 @@ import type {LogLevel} from "../logging/LogLevel";
 export interface InteractionCmdBinder<C extends Command, I extends Interaction<D>, A, D extends object = InteractionDataType<I>>
     extends CmdBinderBuilder<C>, InteractionBinderBuilder<I, A, D> {
     /**
-     * Specifies the initialisation of the command when the interaction starts.
+     * Specifies the initialization of the command when the interaction starts.
      * Each time the interaction starts, an instance of the command is created and configured by the given callback.
-     * A binder can have several cummulative 'first' routines.
-     * @param fn - The callback method that initialises the command.
+     * A binder can have several cumulative 'first' routines.
+     * @param fn - The callback method that initializes the command.
      * This callback takes as arguments both the command and interaction data involved in the binding.
      * @returns The binder to chain the building configuration.
      */
@@ -42,7 +42,7 @@ export interface InteractionCmdBinder<C extends Command, I extends Interaction<D
 
     /**
      * Specifies what to do end when an interaction ends (after the end/endOrCancel routines) and the command has produced an effect.
-     * A binder can have several cummulative 'ifHadEffects' routines.
+     * A binder can have several cumulative 'ifHadEffects' routines.
      * @param fn - The callback method to specify what to do when an interaction ends and the command produced an effect.
      * @returns The binder to chain the building configuration.
      */
@@ -50,7 +50,7 @@ export interface InteractionCmdBinder<C extends Command, I extends Interaction<D
 
     /**
      * Specifies what to do end when an interaction ends (after the end/endOrCancel routines) and the command did not produce an effect.
-     * A binder can have several cummulative 'ifHadNoEffect' routines.
+     * A binder can have several cumulative 'ifHadNoEffect' routines.
      * @param fn - The callback method to specify what to do when an interaction ends and the command did not produce an effect.
      * @returns The binder to chain the building configuration.
      */
@@ -58,7 +58,7 @@ export interface InteractionCmdBinder<C extends Command, I extends Interaction<D
 
     /**
      * Specifies what to do end when an interaction ends and the command could not be executed.
-     * A binder can have several cummulative 'ifCannotExecute' routines.
+     * A binder can have several cumulative 'ifCannotExecute' routines.
      * @param fn - The callback method to specify what to do when an interaction ends and the command could not be executed.
      * @returns The binder to chain the building configuration.
      */
@@ -66,8 +66,8 @@ export interface InteractionCmdBinder<C extends Command, I extends Interaction<D
 
     /**
      * Specifies what to do end when an interaction ends (when the last event of the interaction has occurred, but just after
-     * the interaction is reinitialised and the command finally executed and discarded / saved).
-     * A binder can have several cummulative 'end' routines.
+     * the interaction is re-initialized and the command finally executed and discarded / saved).
+     * A binder can have several cumulative 'end' routines.
      * @param fn - The callback method to specify what to do when an interaction ends.
      * @returns The binder to chain the building configuration.
      */

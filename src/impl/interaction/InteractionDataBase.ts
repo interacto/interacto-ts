@@ -3,7 +3,7 @@ import type {Flushable} from "./Flushable";
 import type {UnitInteractionData} from "../../api/interaction/UnitInteractionData";
 
 /**
- * The base implementation class for most of interaction data.
+ * The base implementation class for most interaction data.
  * Contains basic information.
  * @category Interaction Data
  */

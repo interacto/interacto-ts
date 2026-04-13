@@ -6,10 +6,10 @@
  * (at your option) any later version.
  * Interacto is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License
- * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
+ * along with Interacto. If not, see <https://www.gnu.org/licenses/>.
  */
 
 import {FSMImpl} from "./FSMImpl";
@@ -45,7 +45,7 @@ export class ConcurrentAndFSM<F extends FSM> extends FSMImpl implements Concurre
      * @param fsms - The main concurrent FSMs
      * @param logger - The logger to use
      * @param secondaries - The secondary FSMs. Not considered in some steps.
-     * @param totalReinit - Defines whether a cancellation of one of the fsms, reinits all the fsms.
+     * @param totalReinit - Defines whether a cancellation of one of the fsms, reinitializes all the fsms.
      */
     public constructor(fsms: ReadonlyArray<F>, logger: Logger, secondaries: ReadonlyArray<F> = [], totalReinit = false) {
         super(logger);

@@ -6,14 +6,15 @@
  * (at your option) any later version.
  * Interacto is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License
- * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
+ * along with Interacto. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
  * Removes the given element from the array.
+ * @template T - The type of the array content.
  * @param array - The array to mutate.
  * @param elt - The element to remove.
  * @category Helper
@@ -27,6 +28,7 @@ export function remove<T>(array: Array<T>, elt: T): void {
 
 /**
  * Removes the element at the given position.
+ * @template T - The type of the array content.
  * @param array - The array to mutate.
  * @param index - The index where to remove
  * @returns The removed element or nothing.

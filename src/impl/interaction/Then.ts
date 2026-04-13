@@ -6,10 +6,10 @@
  * (at your option) any later version.
  * Interacto is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License
- * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
+ * along with Interacto. If not, see <https://www.gnu.org/licenses/>.
  */
 
 import {InteractionBase} from "./InteractionBase";
@@ -21,7 +21,7 @@ import type {ThenData} from "../../api/interaction/ThenData";
 import type {Logger} from "../../api/logging/Logger";
 
 /**
- * A user interaction composed of a serie of sub user interactions.
+ * A user interaction composed of a sequence of sub user interactions.
  * @category Interaction Library
  */
 export class Then<

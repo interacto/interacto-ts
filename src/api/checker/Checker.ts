@@ -6,10 +6,10 @@
  * (at your option) any later version.
  * Interacto is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License
- * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
+ * along with Interacto. If not, see <https://www.gnu.org/licenses/>.
  */
 
 import type {Binding} from "../binding/Binding";
@@ -39,17 +39,41 @@ export type LinterRule = [name: RuleName, severity: Severity];
  * @category Checker
  */
 export interface Checker {
+    /**
+     * Defines the set of rules to check.
+     * @param rules - The rules to check.
+     */
     setLinterRules(...rules: ReadonlyArray<LinterRule>): void;
 
+    /**
+     * Checks the selected rules on the provided binding.
+     * @param binding - The binding to check.
+     * @param binds - The other bindings to analyze.
+     */
     checkRules(binding: Binding<Command, Interaction<object>, unknown>,
         binds: ReadonlyArray<Binding<Command, Interaction<object>, unknown>>): void;
 
+    /**
+     * Checks the rule 'same interaction' on the provided binding.
+     * @param binding - The binding to check.
+     * @param binds - The other bindings to analyze.
+     */
     checkSameInteractions(binding: Binding<Command, Interaction<object>, unknown>,
         binds: ReadonlyArray<Binding<Command, Interaction<object>, unknown>>): void;
 
+    /**
+     * Checks the rule 'same data' on the provided binding.
+     * @param binding - The binding to check.
+     * @param binds - The other bindings to analyze.
+     */
     checkSameData(binding: Binding<Command, Interaction<object>, unknown>,
         binds: ReadonlyArray<Binding<Command, Interaction<object>, unknown>>): void;
 
+    /**
+     * Checks the rule 'included' on the provided binding.
+     * @param binding - The binding to check.
+     * @param binds - The other bindings to analyze.
+     */
     checkIncluded(binding: Binding<Command, Interaction<object>, unknown>,
         binds: ReadonlyArray<Binding<Command, Interaction<object>, unknown>>): void;
 }

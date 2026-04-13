@@ -6,10 +6,10 @@
  * (at your option) any later version.
  * Interacto is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License
- * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
+ * along with Interacto. If not, see <https://www.gnu.org/licenses/>.
  */
 
 import type {VisitorInteraction} from "./VisitorInteraction";
@@ -74,7 +74,7 @@ export interface Interaction<D extends object> {
     /**
      * Sets whether the user interaction is activated.
      * When not activated, a user interaction does not process
-     * input events any more.
+     * input events anymore.
      * @param activated - True: the user interaction will be activated.
      */
     setActivated(activated: boolean): void;
@@ -119,7 +119,7 @@ export interface Interaction<D extends object> {
 
     /**
      * Uninstall the user interaction. Used to free memory.
-     * Then, user interaction can be used any more.
+     * Then, user interaction can be used anymore.
      */
     uninstall(): void;
 

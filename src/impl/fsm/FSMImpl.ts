@@ -6,10 +6,10 @@
  * (at your option) any later version.
  * Interacto is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License
- * along with Interacto.  If not, see <https://www.gnu.org/licenses/>.
+ * along with Interacto. If not, see <https://www.gnu.org/licenses/>.
  */
 
 import {CancelFSMError} from "./CancelFSMError";
@@ -196,7 +196,7 @@ export class FSMImpl implements FSM {
     }
 
     /**
-     * The end of the FSM execution, the events still (eg keyPress) in process must be recycled to be reused in the FSM.
+     * The end of the FSM execution, the events still (e.g. keyPress) in process must be recycled to be reused in the FSM.
      */
     protected processRemainingEvents(): void {
         const list: ReadonlyArray<Event> = Array.from(this.eventsToProcess);
@@ -441,7 +441,7 @@ export class FSMImpl implements FSM {
     }
 
     /**
-     * Notifies handler that the interaction is cancelled.
+     * Notifies handler that the interaction is canceled.
      */
     protected notifyHandlerOnCancel(): void {
         try {
@@ -457,7 +457,7 @@ export class FSMImpl implements FSM {
     }
 
     /**
-     * Notifies handlers that an error occured.
+     * Notifies handlers that an error occurred.
      * @param err - The error to handle
      */
     protected notifyHandlerOnError(err: unknown): void {
