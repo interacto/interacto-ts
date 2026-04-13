@@ -36,7 +36,7 @@ export type WhenType =
 
 /**
  * States whether the WhenType concerns the beginning of a binding execution (at start).
- * Not that 'then' is included since 'then' is called at start. This includes both strict and non strict mode.
+ * Not that 'then' is included since 'then' is called at start. This includes both strict and non-strict mode.
  * @param type -- The WhenType to test
  * @returns True: when executed at start
  * @category Helper
@@ -48,7 +48,7 @@ export function isWhenAtStart(type: WhenType): boolean {
 
 /**
  * States whether the WhenType concerns the running of a binding execution.
- * This includes both strict and non strict mode.
+ * This includes both strict and non-strict mode.
  * @param type -- The WhenType to test
  * @returns True: when executed at then
  * @category Helper
@@ -59,7 +59,7 @@ export function isWhenAtThen(type: WhenType): boolean {
 
 /**
  * States whether the WhenType concerns the end of a binding execution.
- * This includes both strict and non strict mode.
+ * This includes both strict and non-strict mode.
  * @param type -- The WhenType to test
  * @returns True: when executed at end
  * @category Helper
@@ -80,7 +80,7 @@ export function isWhenStrict(type: WhenType): boolean {
 }
 
 /**
- * The type of a when condition: it contains both the predicate and the mode (ie when the predicate must be checked).
+ * The type of 'when' condition: it contains both the predicate and the mode (ie when the predicate must be checked).
  * @template D -- The interaction data type
  * @category API Binding
  */

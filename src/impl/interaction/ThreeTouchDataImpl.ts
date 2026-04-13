@@ -46,7 +46,7 @@ export class ThreeTouchDataImpl extends GeneralTwoTouchDataImpl implements Three
     }
 
     public override initTouch(data: Touch, evt: EventModifierData & UnitInteractionData, allTouches: Array<Touch>): void {
-        // If only t3 is not initialised
+        // If only t3 is not initialized
         if (this.t3.src.identifier === -1 && this.t2.src.identifier !== -1) {
             this.t3.copySrc(data, evt, allTouches);
             this.t3.copyTgt(data, evt, allTouches);

@@ -45,7 +45,7 @@ export class ConcurrentAndFSM<F extends FSM> extends FSMImpl implements Concurre
      * @param fsms - The main concurrent FSMs
      * @param logger - The logger to use
      * @param secondaries - The secondary FSMs. Not considered in some steps.
-     * @param totalReinit - Defines whether a cancellation of one of the fsms, reinits all the fsms.
+     * @param totalReinit - Defines whether a cancellation of one of the fsms, reinitializes all the fsms.
      */
     public constructor(fsms: ReadonlyArray<F>, logger: Logger, secondaries: ReadonlyArray<F> = [], totalReinit = false) {
         super(logger);

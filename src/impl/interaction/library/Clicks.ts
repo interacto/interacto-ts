@@ -88,7 +88,7 @@ export class Clicks extends InteractionBase<MousePointsData, MousePointsDataImpl
     /**
      * Creates the clicks interaction
      * @param numberClicks - The number of clicks expected to end the interaction.
-     * If this number is not reached after a timeout, the interaction is cancelled.
+     * If this number is not reached after a timeout, the interaction is canceled.
      * @param logger - The logger to use for this interaction
      * @param name - The name of the user interaction
      */

@@ -136,8 +136,8 @@ export class FittsLaw {
     }
 
     /**
-     * Computes the a and b coefficent of the regression line.
-     * @param effectiveTargetW - If true, will consider the effective target width. Otherwise will consider
+     * Computes the a and b coefficient of the regression line.
+     * @param effectiveTargetW - If true, will consider the effective target width. Otherwise, will consider
      * the computed distances.
      * @returns the regression lien coefficients.
      */

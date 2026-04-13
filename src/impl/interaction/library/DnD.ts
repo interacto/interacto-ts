@@ -37,7 +37,7 @@ class DnDFSM extends FSMImpl {
 
     /**
      * Creates the FSM
-     * @param cancellable - True: the FSM can be cancelled using the ESC key.
+     * @param cancellable - True: the FSM can be canceled using the ESC key.
      * @param logger - The logger to use
      * @param handler - The handler that will receive notifications from the FSM.
      */

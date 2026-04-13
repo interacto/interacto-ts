@@ -77,7 +77,7 @@ export class LongMouseDown extends InteractionBase<PointData, PointDataImpl> {
     /**
      * Creates the long press interaction
      * @param duration - The duration of the pressure required to end the user interaction (in ms)
-     * If this duration is not reached, the interaction is cancelled.
+     * If this duration is not reached, the interaction is canceled.
      * @param logger - The logger to use for this interaction
      * @param name - The name of the user interaction
      */

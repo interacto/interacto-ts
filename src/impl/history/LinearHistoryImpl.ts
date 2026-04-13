@@ -48,7 +48,7 @@ export class LinearHistoryImpl extends LinearHistory {
     private readonly sizePublisher: Subject<[number, number]>;
 
     /**
-     * Create the history history
+     * Create the linear history
      * @param considerEqualCmd - By default, executing a command erases the redoable commands.
      * When executing a command (and adding this command in the history), this option adds a new check:
      * if the newly executed command equals the next redoable one, then the redoable stack is not clear

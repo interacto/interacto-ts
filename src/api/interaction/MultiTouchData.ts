@@ -16,7 +16,7 @@ import type {SrcTgtPointsData} from "./SrcTgtPointsData";
 import type {TouchData} from "./TouchData";
 
 /**
- * Multi-touch interaction data interface
+ * Multitouch interaction data interface
  * @category API Interaction Data
  */
 export interface MultiTouchData {
@@ -27,8 +27,8 @@ export interface MultiTouchData {
 
     /**
      * The velocity of the move, in pixels per millisecond.
-     * For multi-touch, the velocity is the mean of all the touch velocities.
-     * @param direction - The direciton to consider.
+     * For multitouch, the velocity is the mean of all the touch velocities.
+     * @param direction - The direction to consider.
      */
     velocity(direction: "all" | "horiz" | "vert"): number;
 }

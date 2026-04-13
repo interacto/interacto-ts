@@ -64,7 +64,7 @@ export class TapFSM extends FSMImpl {
         new TouchTransition(this.downState, this.downState, "touchstart",
             // Replacing the current tap
             action,
-            // To detect the event is lost, checking it is not part of the touches any more
+            // To detect the event is lost, checking it is not part of the touches anymore
             (evt: TouchEvent): boolean => Array.from(evt.touches).filter(touch => touch.identifier === this.touchID).length === 0);
 
         new TouchTransition(this.downState, up, "touchend", undefined,

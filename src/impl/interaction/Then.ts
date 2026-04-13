@@ -21,7 +21,7 @@ import type {ThenData} from "../../api/interaction/ThenData";
 import type {Logger} from "../../api/logging/Logger";
 
 /**
- * A user interaction composed of a serie of sub user interactions.
+ * A user interaction composed of a sequence of sub user interactions.
  * @category Interaction Library
  */
 export class Then<

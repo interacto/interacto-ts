@@ -74,7 +74,7 @@ export interface Interaction<D extends object> {
     /**
      * Sets whether the user interaction is activated.
      * When not activated, a user interaction does not process
-     * input events any more.
+     * input events anymore.
      * @param activated - True: the user interaction will be activated.
      */
     setActivated(activated: boolean): void;
@@ -119,7 +119,7 @@ export interface Interaction<D extends object> {
 
     /**
      * Uninstall the user interaction. Used to free memory.
-     * Then, user interaction can be used any more.
+     * Then, user interaction can be used anymore.
      */
     uninstall(): void;
 

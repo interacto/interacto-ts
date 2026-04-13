@@ -28,7 +28,7 @@ import type {Subscription} from "rxjs";
  */
 export interface CancellablePromise extends Promise<void> {
     /**
-     * Called when the promise is cancelled.
+     * Called when the promise is canceled.
      */
     cancel: () => void;
 }

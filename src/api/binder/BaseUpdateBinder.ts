@@ -23,7 +23,7 @@ import type {Interaction, InteractionDataType} from "../interaction/Interaction"
 import type {LogLevel} from "../logging/LogLevel";
 
 /**
- * The base interface for building bindings based on non-trivial user interactions (eg DnD) with routines
+ * The base interface for building bindings based on non-trivial user interactions (e.g. DnD) with routines
  * for defining the UI command and the user interaction to use.
  * @category Helper
  */

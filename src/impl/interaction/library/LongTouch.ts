@@ -78,7 +78,7 @@ export class LongTouch extends InteractionBase<TouchData, TouchDataImpl> {
     /**
      * Creates the long tap interaction
      * @param duration - The duration of the touch required to ends the user interaction
-     * If this duration is not reached, the interaction is cancelled.
+     * If this duration is not reached, the interaction is canceled.
      * @param logger - The logger to use for this interaction
      * @param name - The name of the user interaction
      */

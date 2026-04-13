@@ -35,7 +35,7 @@ export interface Undoable {
     undo(): void;
 
     /**
-     * Redoes the cancelled command.
+     * Redoes the canceled command.
      */
     redo(): void;
 

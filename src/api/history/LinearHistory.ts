@@ -19,7 +19,7 @@ import type {Observable} from "rxjs";
 /**
  * A linear command history.
  * Why a pure abstract class and not an interface?
- * Because interfaces are not retained at runtime in TS and we want DI (that thus cannot inject interface types).
+ * Because interfaces are not retained at runtime in TS, and we want DI (that thus cannot inject interface types).
  * @category API History
  */
 export abstract class LinearHistory implements LinearHistoryBase {

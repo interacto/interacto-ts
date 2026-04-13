@@ -34,7 +34,7 @@ export interface InteractionCmdUpdateBinder<C extends Command, I extends Interac
     extends InteractionCmdBinder<C, I, A, D>, CmdUpdateBinderBuilder<C>, InteractionUpdateBinderBuilder<I, A, D> {
     /**
      * Permits to update the command on each interaction update.
-     * A binder can have several cummulative 'then' routines.
+     * A binder can have several cumulative 'then' routines.
      * This routine is called only if 'when' returns true (ie only if
      * the condition for producing the command is respected).
      * See 'ifCannotExecute' for a 'then' when this condition is not respected.

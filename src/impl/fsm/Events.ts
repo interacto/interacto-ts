@@ -29,9 +29,9 @@ export function getTouch(touches: TouchList, idToFind?: number): Touch | undefin
 }
 
 /**
- * Tests whether the given object is a HTML button.
+ * Tests whether the given object is an HTML button.
  * @param target - The object to test.
- * @returns True: the object is a HTML button
+ * @returns True: the object is an HTML button
  * @category Helper
  */
 export function isButton(target: EventTarget): target is HTMLButtonElement {
@@ -39,9 +39,9 @@ export function isButton(target: EventTarget): target is HTMLButtonElement {
 }
 
 /**
- * Tests whether the given object is a HTML checkbox.
+ * Tests whether the given object is an HTML checkbox.
  * @param target - The object to test.
- * @returns True: the object is a HTML checkbox.
+ * @returns True: the object is an HTML checkbox.
  * @category Helper
  */
 export function isCheckBox(target: EventTarget): target is HTMLInputElement {
@@ -49,9 +49,9 @@ export function isCheckBox(target: EventTarget): target is HTMLInputElement {
 }
 
 /**
- * Tests whether the given object is a HTML ColorChoice.
+ * Tests whether the given object is an HTML ColorChoice.
  * @param target - The object to test.
- * @returns True: the object is a HTML ColorChoice.
+ * @returns True: the object is an HTML ColorChoice.
  * @category Helper
  */
 export function isColorChoice(target: EventTarget): target is HTMLInputElement {
@@ -59,9 +59,9 @@ export function isColorChoice(target: EventTarget): target is HTMLInputElement {
 }
 
 /**
- * Tests whether the given object is a HTML ComboBox.
+ * Tests whether the given object is an HTML ComboBox.
  * @param target - The object to test.
- * @returns True: the object is a HTML ComboBox
+ * @returns True: the object is an HTML ComboBox
  * @category Helper
  */
 export function isComboBox(target: EventTarget): target is HTMLSelectElement {
@@ -69,9 +69,9 @@ export function isComboBox(target: EventTarget): target is HTMLSelectElement {
 }
 
 /**
- * Tests whether the given object is a HTML DatePicker.
+ * Tests whether the given object is an HTML DatePicker.
  * @param target - The object to test.
- * @returns True: the object is a HTML DatePicker
+ * @returns True: the object is an HTML DatePicker
  * @category Helper
  */
 export function isDatePicker(target: EventTarget): target is HTMLInputElement {
@@ -79,9 +79,9 @@ export function isDatePicker(target: EventTarget): target is HTMLInputElement {
 }
 
 /**
- * Tests whether the given object is a HTML spinner.
+ * Tests whether the given object is an HTML spinner.
  * @param target - The object to test.
- * @returns True: the object is a HTML spinner
+ * @returns True: the object is an HTML spinner
  * @category Helper
  */
 export function isSpinner(target: EventTarget): target is HTMLInputElement {
@@ -89,9 +89,9 @@ export function isSpinner(target: EventTarget): target is HTMLInputElement {
 }
 
 /**
- * Tests whether the given object is a HTML hyperlink.
+ * Tests whether the given object is an HTML hyperlink.
  * @param target - The object to test.
- * @returns True: the object is a HTML hyperlink
+ * @returns True: the object is an HTML hyperlink
  * @category Helper
  */
 export function isHyperLink(target: EventTarget): target is HTMLAnchorElement {
@@ -99,9 +99,9 @@ export function isHyperLink(target: EventTarget): target is HTMLAnchorElement {
 }
 
 /**
- * Tests whether the given object is a HTML text input.
+ * Tests whether the given object is an HTML text input.
  * @param target - The object to test.
- * @returns True: the object is a HTML text input
+ * @returns True: the object is an HTML text input
  * @category Helper
  */
 export function isTextInput(target: EventTarget): target is HTMLInputElement | HTMLTextAreaElement {

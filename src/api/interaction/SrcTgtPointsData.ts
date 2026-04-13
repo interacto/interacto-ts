@@ -69,7 +69,7 @@ export interface SrcTgtPointsData<T extends PointBaseData> {
 
     /**
      * The velocity of the move, in pixels per millisecond.
-     * @param direction - The direciton to consider.
+     * @param direction - The direction to consider.
      */
     velocity(direction: "all" | "horiz" | "vert"): number;
 

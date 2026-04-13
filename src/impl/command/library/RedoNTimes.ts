@@ -16,7 +16,7 @@ import {CommandBase} from "../CommandBase";
 import type {LinearHistory} from "../../../api/history/LinearHistory";
 
 /**
- * An Redo command that redoes the last N commands.
+ * A Redo command that redoes the last N commands.
  * @category Command
  */
 export class RedoNTimes extends CommandBase {

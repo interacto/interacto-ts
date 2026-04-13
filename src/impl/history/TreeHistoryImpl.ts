@@ -358,10 +358,6 @@ export class TreeHistoryImpl extends TreeHistory {
             i++;
         }
 
-        /*
-         * When taking different paths,
-         * we history from the source path to the common node,
-         */
         for (let j = pathSrc.length - 1; j > i; j--) {
             pathSrc[j]?.undo();
         }

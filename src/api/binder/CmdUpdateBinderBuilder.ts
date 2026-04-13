@@ -28,7 +28,7 @@ import type {LogLevel} from "../logging/LogLevel";
 export interface CmdUpdateBinderBuilder<C extends Command> extends CmdBinderBuilder<C>, BaseUpdateBinderBuilder {
     /**
      * Permits to update the command on each interaction update.
-     * A binder can have several cummulative 'then' routines.
+     * A binder can have several cumulative 'then' routines.
      * This routine is called only if 'when' returns true (ie only if
      * the condition for producing the command is respected).
      * See 'ifCannotExecute' for a 'then' when this condition is not respected.

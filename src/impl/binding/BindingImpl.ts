@@ -29,7 +29,7 @@ import type {Observable} from "rxjs";
  * @template C - The type of the command that will produce this binding.
  * @template I - The type of the interaction that will use this binding.
  * @template A - The type of the accumulator.
- * @template D - The interaction data type (infered from the interaction type)
+ * @template D - The interaction data type (inferred from the interaction type)
  * @category Binding
  */
 export class BindingImpl<C extends Command, I extends Interaction<D>, A, D extends object = InteractionDataType<I>>
@@ -97,7 +97,7 @@ implements Binding<C, I, A, D> {
     public constructor(continuousExecution: boolean, interaction: I, cmdProducer: (i?: D) => C,
                        widgets: ReadonlyArray<unknown>, undoHistory: LinearHistoryBase, logger: Logger,
                        linterRules: ReadonlyMap<RuleName, Severity>, name?: string, accInit?: A) {
-        // The name is partial until the binding procudes its first command
+        // The name is partial until the binding produces its first command
         this._name = name;
         this.linterRules = linterRules;
         this.accumulatorInit = accInit;
@@ -195,7 +195,7 @@ implements Binding<C, I, A, D> {
     }
 
     /**
-     * After being created, this method initialises the command. To override.
+     * After being created, this method initializes the command. To override.
      */
     public first(): void {
         // To override.
@@ -216,21 +216,21 @@ implements Binding<C, I, A, D> {
     }
 
     /**
-     * When the interaction is cancelled. To override.
+     * When the interaction is canceled. To override.
      */
     public cancel(): void {
         // To override.
     }
 
     /**
-     * When the interaction ends or is cancelled. To override.
+     * When the interaction ends or is canceled. To override.
      */
     public endOrCancel(): void {
         // To override.
     }
 
     /**
-     * Called when an executed command did not had effect. To override.
+     * Called when an executed command did not have effect. To override.
      */
     public ifCmdHadNoEffect(): void {
         // To override.
@@ -298,7 +298,7 @@ implements Binding<C, I, A, D> {
 
             try {
                 if (this.continuousCmdExecution) {
-                    this.cancelContinousWithEffectsCmd(this._cmd);
+                    this.cancelContinuousWithEffectsCmd(this._cmd);
                 }
             } finally {
                 this._cmd = undefined;
@@ -315,7 +315,7 @@ implements Binding<C, I, A, D> {
         }
     }
 
-    private cancelContinousWithEffectsCmd(cmd: C): void {
+    private cancelContinuousWithEffectsCmd(cmd: C): void {
         if (isUndoableType(cmd)) {
             cmd.undo();
             if (this.logCmd) {
@@ -426,7 +426,7 @@ implements Binding<C, I, A, D> {
 
                 try {
                     if (this.continuousCmdExecution) {
-                        this.cancelContinousWithEffectsCmd(this._cmd);
+                        this.cancelContinuousWithEffectsCmd(this._cmd);
                     }
                 } finally {
                     this._cmd = undefined;
@@ -467,7 +467,7 @@ implements Binding<C, I, A, D> {
                 this.afterCmdExecuted(cmd, executed);
                 /*
                  * Cannot put these two lines in a finally block:
-                 * tests will failed as finally is called *after* the promise is resolved
+                 * tests will fail as finally is called *after* the promise is resolved
                  * provoking sync issues (treatments are done as soon as the promise is resolved)
                  */
                 this._cmd = undefined;

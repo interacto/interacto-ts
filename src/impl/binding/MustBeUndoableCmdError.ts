@@ -13,7 +13,7 @@
  */
 
 /**
- * The error to use when the command being processsed should be undoable.
+ * The error to use when the command being processed should be undoable.
  * @category Helper
  */
 export class MustBeUndoableCmdError extends Error {

@@ -19,7 +19,7 @@ import type {SrcTgtPointsData} from "../../api/interaction/SrcTgtPointsData";
 import type {TouchData} from "../../api/interaction/TouchData";
 
 /**
- * Base class for multi-touch data.
+ * Base class for multitouch data.
  * @category Interaction Data
  */
 export abstract class MultiTouchDataBase implements MultiTouchData {
@@ -31,7 +31,7 @@ export abstract class MultiTouchDataBase implements MultiTouchData {
 }
 
 /**
- * Multi-touch interaction data implementation
+ * Multitouch interaction data implementation
  * @category Interaction Data
  */
 export class MultiTouchDataImpl extends MultiTouchDataBase implements Flushable {
@@ -50,7 +50,7 @@ export class MultiTouchDataImpl extends MultiTouchDataBase implements Flushable 
     }
 
     /**
-     * Adds a touch data to this multi-touch data
+     * Adds a touch data to this multitouch data
      * @param data - The touch data to add
      */
     public addTouchData(data: SrcTgtTouchDataImpl): void {

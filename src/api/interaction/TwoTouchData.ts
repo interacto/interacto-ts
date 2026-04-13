@@ -20,7 +20,7 @@ import type {SrcTgtPointsData} from "./SrcTgtPointsData";
 import type {TouchData} from "./TouchData";
 
 /**
- * The commun type for all two touch interaction data.
+ * The common type for all two touch interaction data.
  * @category API Interaction Data
  */
 export interface TwoTouchData extends MultiTouchData {

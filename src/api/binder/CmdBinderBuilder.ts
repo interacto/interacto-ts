@@ -24,10 +24,10 @@ import type {LogLevel} from "../logging/LogLevel";
  */
 export interface CmdBinderBuilder<C extends Command> extends BaseBinderBuilder {
     /**
-     * Specifies the initialisation of the command when the interaction starts.
+     * Specifies the initialization of the command when the interaction starts.
      * Each time the interaction starts, an instance of the command is created and configured by the given callback.
-     * A binder can have several cummulative 'first' routines.
-     * @param fn - The callback method that initialises the command.
+     * A binder can have several cumulative 'first' routines.
+     * @param fn - The callback method that initializes the command.
      * This callback takes as arguments the command to configure.
      * @returns A clone of the current binder to chain the building configuration.
      */

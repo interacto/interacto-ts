@@ -46,7 +46,7 @@ export interface FSM {
     readonly initState: OutputState;
 
     /**
-     * By default an FSM triggers its 'start' event when it leaves its initial state.
+     * By default, an FSM triggers its 'start' event when it leaves its initial state.
      * In some cases, this is not the case. For example, a double-click interaction is an FSM that must trigger
      * its start event when the FSM reaches... its terminal state. Similarly, a DnD must trigger its start event
      * on the first move, not on the first press.

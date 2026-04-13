@@ -33,7 +33,7 @@ export interface OutputState extends State {
     exit(): void;
 
     /**
-     * Asks to the state to process of the given event.
+     * Asks the state to process of the given event.
      * @param event - The event to process. Can be null.
      */
     process(event: Event): boolean;

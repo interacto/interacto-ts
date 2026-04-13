@@ -23,7 +23,7 @@ import type {MultiTouchData} from "../../../api/interaction/MultiTouchData";
 import type {Logger} from "../../../api/logging/Logger";
 
 /**
- * The FSM that defines a multi-touch interaction (that works like a DnD)
+ * The FSM that defines a multitouch interaction (that works like a DnD)
  * @category FSM
  */
 export class MultiTouchFSM extends ConcurrentAndFSM<TouchDnDFSM> {
@@ -91,16 +91,16 @@ export class MultiTouchFSM extends ConcurrentAndFSM<TouchDnDFSM> {
 }
 
 /**
- * A multi-touch user interaction.
- * A multi-touch starts when all its touches have started.
- * A multi-touch ends when the number of required touches is greater than the number of touches.
+ * A multitouch user interaction.
+ * A multitouch starts when all its touches have started.
+ * A multitouch ends when the number of required touches is greater than the number of touches.
  * @category Interaction
  */
 export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouchDataImpl> {
     /**
-     * Creates the multi-touch interaction
+     * Creates the multitouch interaction
      * @param nbTouches - The number of touches.
-     * @param strict - Defines whether too many touches than expected cancelled the ongoing interaction
+     * @param strict - Defines whether too many touches than expected canceled the ongoing interaction
      * @param logger - The logger to use for this interaction
      * @param name - The name of the user interaction
      * @category Interaction Library

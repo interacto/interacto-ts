@@ -29,7 +29,7 @@ export interface EltRef<T> {
 /**
  * Checks whether the given object matches the EltRef structure.
  * @param obj - The object to check
- * @returns The casted object if is an EltRef.
+ * @returns The object after casting if is an EltRef.
  * @category Helper
  */
 export function isEltRef(obj: unknown): obj is EltRef<EventTarget> {
@@ -52,8 +52,8 @@ export type Widget<T> = EltRef<T> | T;
 export interface BaseBinderBuilder {
     /**
      * Specifies the widgets on which the binding will operate.
-     * When a widget is added to this list, this widget is binded to this binding.
-     * When widget is removed from this list, this widget is unbinded from this binding.
+     * When a widget is added to this list, this widget is bound to this binding.
+     * When widget is removed from this list, this widget is unbounded from this binding.
      * @param widget - The mandatory first widget
      * @param widgets - The list of the widgets involved in the bindings.
      * @returns A clone of the current binder to chain the building configuration.
@@ -69,9 +69,9 @@ export interface BaseBinderBuilder {
     onDynamic(node: Widget<Node>): BaseBinderBuilder;
 
     /**
-     * Specifies the conditions to fulfill to initialise, update, or execute the command while the interaction is running.
-     * A binder can have several cummulative 'when' routines.
-     * @param fn - The predicate that checks whether the command can be initialised, updated, or executed.
+     * Specifies the conditions to fulfill to initialize, update, or execute the command while the interaction is running.
+     * A binder can have several cumulative 'when' routines.
+     * @param fn - The predicate that checks whether the command can be initialized, updated, or executed.
      * @param mode -- The execution mode of the 'when' predicate. If not defined, the non-strict mode will be used.
      * @returns A clone of the current binder to chain the building configuration.
      */
@@ -79,7 +79,7 @@ export interface BaseBinderBuilder {
 
     /**
      * Defines actions to perform when a binding ends.
-     * A binder can have several cummulative 'end' routines.
+     * A binder can have several cumulative 'end' routines.
      * @param fn - The command to execute on each binding end.
      * @returns A clone of the current builder to chain the building configuration.
      */
@@ -87,7 +87,7 @@ export interface BaseBinderBuilder {
 
     /**
      * Specifies the logging level to use.
-     * A binder can have several cummulative 'log' routines, eg:
+     * A binder can have several cumulative 'log' routines, eg:
      * log(LogLevel.INTERACTION).log(LogLevel.COMMAND)
      * @param level - The logging level to use.
      * @returns A clone of the current binder to chain the building configuration.
@@ -109,9 +109,9 @@ export interface BaseBinderBuilder {
 
     /**
      * Allows the processing of errors during the execution of the binding.
-     * Errors reported here are errors thrown in arrow functions provided to the
+     * Errors reported here are errors thrown in arrow functions provided to
      * the different routines of the binder and errors triggered by the command.
-     * A binder can have several cummulative 'catch' routines.
+     * A binder can have several cumulative 'catch' routines.
      * @param fn - The function to process the error caught by the binding during its execution
      * @returns A clone of the current binder to chain the building configuration.
      */

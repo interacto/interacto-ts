@@ -104,7 +104,7 @@ export interface Binding<C extends Command, I extends Interaction<D>, A, D exten
     isWhenDefined(): boolean;
 
     /**
-     * Flushes the binding. Interaction and data are flushed. No listening widgets any more.
+     * Flushes the binding. Interaction and data are flushed. No listening widgets anymore.
      */
     uninstallBinding(): void;
 

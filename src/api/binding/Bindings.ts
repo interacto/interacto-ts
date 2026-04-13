@@ -81,7 +81,7 @@ export type PartialTextInputTypedBinder<A = unknown> = InteractionUpdateBinder<I
  */
 export type PartialRotateTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<RotationTouchData>, A>;
 /**
- * Defines a partly defined binder for touch scalings
+ * Defines a partly defined binder for touch scaling interactions
  * @category API Binding
  */
 export type PartialScaleTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<ScaleTouchData>, A>;
@@ -111,7 +111,7 @@ export type PartialFourTouchTypedBinder<A = unknown> = InteractionUpdateBinder<I
  */
 export type PartialTouchSrcTgtTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<SrcTgtPointsData<TouchData>>, A>;
 /**
- * Defines a partly defined binder for multi-touch interactions
+ * Defines a partly defined binder for multitouch interactions
  * @category API Binding
  */
 export type PartialMultiTouchTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<MultiTouchData>, A>;
@@ -151,7 +151,7 @@ export type PartialScrollTypedBinder<A = unknown> = InteractionBinder<Interactio
  */
 export type PartialUpdatePointTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<PointData>, A>;
 /**
- * Defines a partly defined binder for multi-point interactions
+ * Defines a partly defined binder for multipoint interactions
  * @category API Binding
  */
 export type PartialPointsTypedBinder<A = unknown> = InteractionUpdateBinder<Interaction<MousePointsData>, A>;
@@ -195,7 +195,7 @@ export type PartialThenBinder<XS extends Array<Interaction<object>>, A = unknown
 /**
  * A contextual object for creating binders and thus bindings.
  * allows the observation of the created bindings.
- * Provides an history/redo history.
+ * Provides a history/redo history.
  * Why a pure abstract class and not an interface?
  * Because interfaces are not retained at run time in TS, and we want DI (that thus cannot inject interface types).
  * @template H -- The linear history
@@ -234,7 +234,7 @@ export abstract class Bindings<H extends LinearHistoryBase> {
      * Creates a binding that uses a text interaction. This binder takes as argument a timeout value:
      * using this text writing interaction, a user can write a sequence of letters and then stops for
      * more than x milliseconds (x is the value of timeout). After this delay the binding executes the command.
-     * This is a mainstream optimisation that many text processing tools implement to limit the number of editing actions.
+     * This is a mainstream optimization that many text processing tools implement to limit the number of editing actions.
      * @param timeout - The timeout in milliseconds after which the interaction stops and the command produced.
      */
     public abstract textInputBinder<A>(timeout?: number, accInit?: A): PartialTextInputTypedBinder<A>;
@@ -255,10 +255,10 @@ export abstract class Bindings<H extends LinearHistoryBase> {
     PartialTouchSrcTgtTypedBinder<A>;
 
     /**
-     * Creates a binding that uses the multi-touch user interaction.
+     * Creates a binding that uses the multitouch user interaction.
      * @param nbTouches - The number of required touches.
-     * A multi-touch starts when all its touches have started.
-     * A multi-touch ends when the number of required touches is greater than the number of touches.
+     * A multitouch starts when all its touches have started.
+     * A multitouch ends when the number of required touches is greater than the number of touches.
      */
     public abstract multiTouchBinder<A>(nbTouches: number, accInit?: A): PartialMultiTouchTypedBinder<A>;
 
@@ -280,7 +280,7 @@ export abstract class Bindings<H extends LinearHistoryBase> {
     /**
      * Creates a binding that uses the taps user interaction.
      * @param tapsCount - The number of required taps.
-     * If this number is not reached after a timeout, the interaction is cancelled.
+     * If this number is not reached after a timeout, the interaction is canceled.
      */
     public abstract tapsBinder<A>(tapsCount: number, accInit?: A): PartialTapsTypedBinder<A>;
 
@@ -297,14 +297,14 @@ export abstract class Bindings<H extends LinearHistoryBase> {
     /**
      * Creates a binding that uses the long touch interaction.
      * @param duration - The duration of the touch to end the user interaction.
-     * If this duration is not reached, the interaction is cancelled.
+     * If this duration is not reached, the interaction is canceled.
      */
     public abstract longTouchBinder<A>(duration: number, accInit?: A): PartialTouchTypedBinder<A>;
 
     /**
      * Creates a binding that uses the pan interaction (in all direction, one touch).
      * The involved user interaction is TouchDnD.
-     * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
+     * @param cancellable - Whether the DnD can be canceled by interacting with a dwell-and-spring element.
      */
     public abstract panBinder<A>(cancellable: boolean, accInit?: A): PartialTouchSrcTgtTypedBinder<A>;
 
@@ -313,7 +313,7 @@ export abstract class Bindings<H extends LinearHistoryBase> {
      * @param minLength - The minimal distance from the starting point to the release point for validating the pan
      * @param minVelocity - The pan while be a swipe: the minimal minVelocity to reach for validating the swipe. In pixels per second.
      * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
-     * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
+     * @param cancellable - Whether the DnD can be canceled by interacting with a dwell-and-spring element.
      */
     public abstract panVerticalBinder<A>(pxTolerance: number, cancellable: boolean, minLength?: number, minVelocity?: number, accInit?: A):
     PartialTouchSrcTgtTypedBinder<A>;
@@ -323,7 +323,7 @@ export abstract class Bindings<H extends LinearHistoryBase> {
      * @param minLength - The minimal distance from the starting point to the release point for validating the pan
      * @param minVelocity - The pan while be a swipe: the minimal minVelocity to reach for validating the swipe. In pixels per second.
      * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
-     * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
+     * @param cancellable - Whether the DnD can be canceled by interacting with a dwell-and-spring element.
      */
     public abstract panHorizontalBinder<A>(pxTolerance: number, cancellable: boolean, minLength?: number, minVelocity?: number, accInit?: A):
     PartialTouchSrcTgtTypedBinder<A>;
@@ -333,7 +333,7 @@ export abstract class Bindings<H extends LinearHistoryBase> {
      * @param minLength - The minimal distance from the starting point to the release point for validating the pan
      * @param minVelocity - The pan while be a swipe: the minimal minVelocity to reach for validating the swipe. In pixels per second.
      * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
-     * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
+     * @param cancellable - Whether the DnD can be canceled by interacting with a dwell-and-spring element.
      */
     public abstract panLeftBinder<A>(pxTolerance: number, cancellable: boolean, minLength?: number, minVelocity?: number, accInit?: A):
     PartialTouchSrcTgtTypedBinder<A>;
@@ -343,7 +343,7 @@ export abstract class Bindings<H extends LinearHistoryBase> {
      * @param minLength - The minimal distance from the starting point to the release point for validating the pan
      * @param minVelocity - The pan while be a swipe: the minimal minVelocity to reach for validating the swipe. In pixels per second.
      * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
-     * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
+     * @param cancellable - Whether the DnD can be canceled by interacting with a dwell-and-spring element.
      */
     public abstract panRightBinder<A>(pxTolerance: number, cancellable: boolean, minLength?: number, minVelocity?: number, accInit?: A):
     PartialTouchSrcTgtTypedBinder<A>;
@@ -353,7 +353,7 @@ export abstract class Bindings<H extends LinearHistoryBase> {
      * @param minLength - The minimal distance from the starting point to the release point for validating the pan
      * @param minVelocity - The pan while be a swipe: the minimal minVelocity to reach for validating the swipe. In pixels per second.
      * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
-     * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
+     * @param cancellable - Whether the DnD can be canceled by interacting with a dwell-and-spring element.
      */
     public abstract panTopBinder<A>(pxTolerance: number, cancellable: boolean, minLength?: number, minVelocity?: number, accInit?: A):
     PartialTouchSrcTgtTypedBinder<A>;
@@ -363,7 +363,7 @@ export abstract class Bindings<H extends LinearHistoryBase> {
      * @param minLength - The minimal distance from the starting point to the release point for validating the pan
      * @param minVelocity - The pan while be a swipe: the minimal minVelocity to reach for validating the swipe. In pixels per second.
      * @param pxTolerance - The tolerance rate in pixels accepted while executing the pan
-     * @param cancellable - Whether the DnD can be cancelled by interacting with a dwell-and-spring element.
+     * @param cancellable - Whether the DnD can be canceled by interacting with a dwell-and-spring element.
      */
     public abstract panBottomBinder<A>(pxTolerance: number, cancellable: boolean, minLength?: number, minVelocity?: number, accInit?: A):
     PartialTouchSrcTgtTypedBinder<A>;
@@ -465,14 +465,14 @@ export abstract class Bindings<H extends LinearHistoryBase> {
      * Creates a binding that uses the LongMouseDown
      * (mouse button pressed for a certain amount of time) interaction.
      * @param duration - The duration of the pressure to end the user interaction.
-     * If this duration is not reached, the interaction is cancelled.
+     * If this duration is not reached, the interaction is canceled.
      */
     public abstract longMouseDownBinder<A>(duration: number, accInit?: A): PartialUpdatePointTypedBinder<A>;
 
     /**
      * Creates a binding for clicking n times.
      * @param nbClicks - The number of clicks to do.
-     * If this number is not reached, the interaction is cancelled after a timeout of 1s.
+     * If this number is not reached, the interaction is canceled after a timeout of 1s.
      */
     public abstract clicksBinder<A>(nbClicks: number, accInit?: A): PartialPointsTypedBinder<A>;
 
@@ -500,7 +500,7 @@ export abstract class Bindings<H extends LinearHistoryBase> {
 
     /**
      * Creates a binding that uses the DnD interaction.
-     * @param cancellable - True: the escape key will cancels the DnD.
+     * @param cancellable - True: the escape key will cancel the DnD.
      */
     public abstract dndBinder<A>(cancellable: boolean, accInit?: A): PartialPointSrcTgtTypedBinder<A>;
 

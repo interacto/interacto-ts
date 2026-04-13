@@ -41,7 +41,7 @@ export class FourTouchDataImpl extends ThreeTouchDataImpl implements FourTouchDa
     }
 
     public override initTouch(data: Touch, evt: EventModifierData & UnitInteractionData, allTouches: Array<Touch>): void {
-        // If only t4 is not initialised
+        // If only t4 is not initialized
         if (this.t4.src.identifier === -1 && this.t3.src.identifier !== -1) {
             this.t4.copySrc(data, evt, allTouches);
             this.t4.copyTgt(data, evt, allTouches);

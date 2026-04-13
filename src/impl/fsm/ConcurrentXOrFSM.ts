@@ -21,7 +21,7 @@ import type {Logger} from "../../api/logging/Logger";
 
 /**
  * A concurrent FSM: an FSM that contains multiple FSMs where only one of them can run at
- * the same time. This is thus a XOR concurrent FSM.
+ * the same time. This is thus an XOR concurrent FSM.
  * If one FSM has started, the other ones cannot start.
  * @category FSM
  */

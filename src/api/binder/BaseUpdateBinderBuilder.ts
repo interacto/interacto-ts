@@ -17,7 +17,7 @@ import type {RuleName, Severity} from "../checker/Checker";
 import type {LogLevel} from "../logging/LogLevel";
 
 /**
- * The base interface for building bindings based on non-trivial user interactions (eg DnD).
+ * The base interface for building bindings based on non-trivial user interactions (e.g. DnD).
  * @category Helper
  */
 export interface BaseUpdateBinderBuilder extends BaseBinderBuilder {

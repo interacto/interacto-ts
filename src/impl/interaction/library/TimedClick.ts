@@ -76,14 +76,14 @@ export class TimedClickFSM extends FSMImpl {
 }
 
 /**
- * A click interaction that is cancelled if the mouse up is not done before a given delay
+ * A click interaction that is canceled if the mouse up is not done before a given delay
  * @category Interaction Library
  */
 export class TimedClick extends InteractionBase<PointData, PointDataImpl> {
     /**
      * Creates the interaction.
      * @param duration - The duration of the touch required to ends the user interaction
-     * If this duration is not reached, the interaction is cancelled.
+     * If this duration is not reached, the interaction is canceled.
      * @param logger - The logger to use for this interaction
      * @param button - The mouse button to use
      * @param fsm - The optional FSM provided for the interaction

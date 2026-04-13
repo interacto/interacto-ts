@@ -37,7 +37,7 @@ export abstract class ConcurrentInteraction<D extends object, DImpl extends D & 
      * @param data - The interaction data.
      * @param logger - The logger to use for this interaction
      * @param name - The real name of the interaction
-     * @param reinitDataOnFSMReinit - Reinits the interaction data when the FSM is reinitialized. True by default
+     * @param reinitDataOnFSMReinit - Reinitializes the interaction data when the FSM is reinitialized. True by default
      */
     protected constructor(fsm: F, data: DImpl, logger: Logger, name: string, reinitDataOnFSMReinit = true) {
         super(fsm, data, logger, name, reinitDataOnFSMReinit);
