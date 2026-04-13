@@ -77,7 +77,7 @@ describe("using a tree-based history", () => {
         });
 
         test("delete invalid node ok", () => {
-            history.delete(0);
+            history.deleteFrom(0);
             expect(history.size()).toBe(0);
             expect(history.currentNode).toBe(history.root);
             expect(history.size()).toBe(0);
@@ -162,7 +162,7 @@ describe("using a tree-based history", () => {
                             // eslint-disable-next-line jest/no-conditional-in-test
                             if (typeof v === "number") {
                                 history.goTo(v - 1);
-                                history.delete(v);
+                                history.deleteFrom(v);
                             } else {
                                 history.add(v);
                             }
@@ -480,19 +480,19 @@ describe("using a tree-based history", () => {
             });
 
             test("delete negative node ID ok", () => {
-                history.delete(-1);
+                history.deleteFrom(-1);
                 expect(history.size()).toBe(1);
                 expect(history.currentNode.undoable).toBe(undoable0);
             });
 
             test("delete invalid ok", () => {
-                history.delete(1);
+                history.deleteFrom(1);
                 expect(history.size()).toBe(1);
                 expect(history.currentNode.undoable).toBe(undoable0);
             });
 
             test("cannot delete the current branch", () => {
-                history.delete(0);
+                history.deleteFrom(0);
                 expect(history.size()).toBe(1);
                 expect(history.currentNode.undoable).toBe(undoable0);
             });
@@ -580,7 +580,7 @@ describe("using a tree-based history", () => {
 
             test("delete one root is OK", () => {
                 history.goTo(-1);
-                history.delete(1);
+                history.deleteFrom(1);
                 expect(history.undoableNodes[0]?.undoable).toBe(undoable0);
                 expect(history.undoableNodes[1]?.undoable).toBeUndefined();
                 expect(history.size()).toBe(1);
@@ -763,7 +763,7 @@ describe("using a tree-based history", () => {
             test("get last redoable when moving to 4 and history and delete 4", () => {
                 history.goTo(4);
                 history.undo();
-                history.delete(4);
+                history.deleteFrom(4);
                 expect(history.getLastRedo()).toBe(undoable3);
                 expect(history.size()).toBe(4);
             });
@@ -810,7 +810,7 @@ describe("using a tree-based history", () => {
             });
 
             test("delete 1", () => {
-                history.delete(1);
+                history.deleteFrom(1);
 
                 expect(history.size()).toBe(4);
                 expect(history.currentNode.undoable).toBe(undoable4);
@@ -830,7 +830,7 @@ describe("using a tree-based history", () => {
 
             test("delete 2", () => {
                 history.goTo(0);
-                history.delete(2);
+                history.deleteFrom(2);
 
                 expect(history.size()).toBe(2);
                 expect(history.currentNode.undoable).toBe(undoable0);
@@ -846,7 +846,7 @@ describe("using a tree-based history", () => {
 
             test("delete 0", () => {
                 history.goTo(1);
-                history.delete(2);
+                history.deleteFrom(2);
 
                 expect(history.size()).toBe(2);
                 expect(history.currentNode.undoable).toBe(undoable1);
@@ -858,7 +858,7 @@ describe("using a tree-based history", () => {
             });
 
             test("delete invalid 5", () => {
-                history.delete(5);
+                history.deleteFrom(5);
 
                 expect(history.size()).toBe(5);
                 expect(history.currentNode.undoable).toBe(undoable4);

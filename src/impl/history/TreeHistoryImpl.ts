@@ -196,7 +196,7 @@ export class TreeHistoryImpl extends TreeHistory {
         this.sizePublisher.next(0);
     }
 
-    public delete(id: number): void {
+    public deleteFrom(id: number): void {
         // Cannot delete if keeping path
         if (this.keepPath) {
             return;
@@ -230,7 +230,7 @@ export class TreeHistoryImpl extends TreeHistory {
 
         // Cloning the array since 'delete' may alter the children list.
         for (const child of Array.from(node.children)) {
-            this.delete(child.id);
+            this.deleteFrom(child.id);
         }
 
         if (this.currentNode === node) {
