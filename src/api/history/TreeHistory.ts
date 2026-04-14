@@ -146,12 +146,21 @@ export abstract class TreeHistory implements LinearHistoryBase {
     public abstract goTo(id: number): void;
 
     /**
-     * Deletes the targeted node. Works only if the history does not keep the
-     * usage path (see path()).
-     * @param id - The node ID to remove. It removes all the branch from this node.
-     * Does not remove the branch if the current node is in it.
+     * Deletes the targeted node and all its descendants.
+     * Works only if the history does not keep the usage path (see path()).
+     * @param id - The node ID to remove. It removes all the branch starting from this node included.
+     * Does nothing if the current node is part of the nodes to be removed.
      */
-    public abstract delete(id: number): void;
+    public abstract deleteFrom(id: number): void;
+
+    /**
+     * Creates an alternative branch that does not contain the targeted node.
+     * If the targeted node has no child, nothing happens.
+     * Otherwise, the history creates a new branch at the parent level without the targeted node.
+     * Does not delete anything, so compatible with the usage path (see path()).
+     * @param id - The node ID to remove.
+     */
+    public abstract deleteNode(id: number): void;
 
     /**
      * Retrieves the modifiable attributes of the undoable node identified by the given id.
