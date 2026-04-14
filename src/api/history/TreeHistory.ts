@@ -154,6 +154,15 @@ export abstract class TreeHistory implements LinearHistoryBase {
     public abstract deleteFrom(id: number): void;
 
     /**
+     * Creates an alternative branch that does not contain the targeted node.
+     * If the targeted node has no child, nothing happens.
+     * Otherwise, the history creates a new branch at the parent level without the targeted node.
+     * Does not delete anything, so compatible with the usage path (see path()).
+     * @param id - The node ID to remove.
+     */
+    public abstract deleteNode(id: number): void;
+
+    /**
      * Retrieves the modifiable attributes of the undoable node identified by the given id.
      * See the method `getModifiableCmdAttributes` in the class `ModifiableCommand`.
      * @param id - The id of the undoable to retrieve.

@@ -197,14 +197,10 @@ export class TreeHistoryImpl extends TreeHistory {
     }
 
     public deleteFrom(id: number): void {
-        // Cannot delete if keeping path
-        if (this.keepPath) {
-            return;
-        }
-
         const node = this.undoableNodes[id];
 
-        if (node === undefined) {
+        // Cannot delete if keeping path
+        if (this.keepPath || node === undefined) {
             return;
         }
 
@@ -246,6 +242,26 @@ export class TreeHistoryImpl extends TreeHistory {
         return getModifiableCmdAttributes(node.undoable);
     }
 
+    public deleteNode(id: number): void {
+        const node = this.undoableNodes[id];
+        const parent = node?.parent;
+
+        // Cannot delete if keeping path.
+        // If the node to delete has no child, just a simple removal.
+        if (this.keepPath || parent === undefined || node === undefined || node.children.length === 0) {
+            return;
+        }
+
+        const currentId = this.currentNode.id;
+        this.goTo(parent.id);
+        // Cloning the child trees of the node to remove.
+        // The goal is to create new branches at the parent level without the node to remove.
+        const clonedTree = this.cloneSubtree(node);
+        this.addClonedSubtree(clonedTree);
+        // Going back to the original position
+        this.goTo(currentId);
+    }
+
     public applyModifiedAttributesOn(id: number, data: object): void {
         // not `at(i)` since at considers -1 as last one
         const node = this.undoableNodes[id];
@@ -279,19 +295,28 @@ export class TreeHistoryImpl extends TreeHistory {
         }
     }
 
-    private proceedModifiedNode(currentNode: UndoableTreeNode): void {
+    /**
+     * Takes a modified command and re-processes it within the history
+     * @param node - The modified command to re-executed
+     */
+    private proceedModifiedNode(node: UndoableTreeNode): void {
         // Executing the cloned undoable object
-        currentNode.undoable.redo();
+        node.undoable.redo();
         // Must refresh the visual snapshot cache
-        if (currentNode.undoable instanceof UndoableCommand) {
-            currentNode.undoable.refreshCache();
+        if (node.undoable instanceof UndoableCommand) {
+            node.undoable.refreshCache();
         }
         // Adding the novel commands to the history
-        this.add(currentNode.undoable);
+        this.add(node.undoable);
     }
 
-    private addClonedSubtree(currentNode: UndoableTreeNode): void {
-        for (const child of currentNode.children) {
+    /**
+     * Adds the given node and its child trees in the history.
+     * Re-execute the added nodes.
+     * @param node - The node to add (and its children)
+     */
+    private addClonedSubtree(node: UndoableTreeNode): void {
+        for (const child of node.children) {
             this.proceedModifiedNode(child);
             this.undo();
             this.addClonedSubtree(child);

@@ -1101,6 +1101,55 @@ describe("using a tree-based history", () => {
         });
     });
 
+    describe("when deleting nodes", () => {
+        beforeEach(() => {
+            history = new TreeHistoryImpl(false, true);
+            history.add(undoable0);
+            history.add(undoable1);
+            // A - B*
+        });
+
+        test("no effect when using bad id", () => {
+            history.goTo(history.root.children[0].id);
+            history.deleteNode(10);
+            // A* - B
+            expect(history.size()).toBe(2);
+        });
+
+        test("does nothing the node if it has no child", () => {
+            history.goTo(history.root.children[0].id);
+            history.deleteNode(history.root.children[0].children[0].id);
+            // A* - B
+            expect(history.size()).toBe(2);
+            expect(history.currentNode.undoable).toBe(undoable0);
+        });
+
+        test("no effect if trying to remove the root", () => {
+            history.deleteNode(history.root.id);
+            // A - B*
+            expect(history.size()).toBe(2);
+        });
+
+        test("creates a branch with correct undoable objects", () => {
+            history.add(new CmdModifiableDouble());
+            history.undo();
+            history.add(new CmdModifiableDouble3());
+            // A - B - C|D*
+            history.deleteNode(1);
+
+            // A - B - C|D*
+            //   - C'
+            //   - D'
+            expect(history.size()).toBe(6);
+            expect(history.root.children).toHaveLength(1);
+            expect(history.root.children[0].children).toHaveLength(3);
+            expect(history.root.children[0].children[0].children).toHaveLength(2);
+            expect(history.root.children[0].children[1].undoable).toBeInstanceOf(CmdModifiableDouble);
+            expect(history.root.children[0].children[2].undoable).toBeInstanceOf(CmdModifiableDouble3);
+            expect(history.root.children[0].children[0].undoable).toBe(undoable1);
+        });
+    });
+
     describe("using a standard tree history storing modifiable commands", () => {
         let cmd: CmdModifiableDouble;
 
