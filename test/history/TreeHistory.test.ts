@@ -16,8 +16,7 @@ import {TreeHistoryImpl} from "../../src/impl/history/TreeHistoryImpl";
 import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
 import {mock} from "jest-mock-extended";
 import {TestScheduler} from "rxjs/testing";
-import type {TreeHistory} from "../../src/api/history/TreeHistory";
-import type {Undoable} from "../../src/api/history/Undoable";
+import type {UndoableCommand, TreeHistory, Undoable} from "../../src/interacto";
 import type {MockProxy} from "jest-mock-extended";
 import {CmdModifiableDouble, CmdModifiableDouble3, StubUndoableCmd} from "../command/StubCmd";
 
@@ -1101,11 +1100,20 @@ describe("using a tree-based history", () => {
         });
     });
 
-    describe("when deleting nodes", () => {
+    describe("when deleting/inserting nodes", () => {
+        let cmd1: CmdModifiableDouble3;
+        let cmd2: StubUndoableCmd;
+        let cmd3: CmdModifiableDouble;
+
         beforeEach(() => {
+            cmd2 = new StubUndoableCmd();
+            cmd1 = new CmdModifiableDouble3();
+            cmd3 = new CmdModifiableDouble();
+            cmd1.done();
+            cmd2.done();
             history = new TreeHistoryImpl(false, true);
-            history.add(undoable0);
-            history.add(undoable1);
+            history.add(cmd1);
+            history.add(cmd2);
             // A - B*
         });
 
@@ -1121,7 +1129,7 @@ describe("using a tree-based history", () => {
             history.deleteNode(history.root.children[0].children[0].id);
             // A* - B
             expect(history.size()).toBe(2);
-            expect(history.currentNode.undoable).toBe(undoable0);
+            expect(history.currentNode.undoable).toBe(cmd1);
         });
 
         test("no effect if trying to remove the root", () => {
@@ -1146,7 +1154,49 @@ describe("using a tree-based history", () => {
             expect(history.root.children[0].children[0].children).toHaveLength(2);
             expect(history.root.children[0].children[1].undoable).toBeInstanceOf(CmdModifiableDouble);
             expect(history.root.children[0].children[2].undoable).toBeInstanceOf(CmdModifiableDouble3);
-            expect(history.root.children[0].children[0].undoable).toBe(undoable1);
+            expect(history.root.children[0].children[0].undoable).toBe(cmd2);
+        });
+
+        test("no effect if inserting an undoable at a given invalid ID (negative value)", () => {
+            history.insertUndoable(undoable2, -1);
+            expect(history.size()).toBe(2);
+        });
+
+        test("no effect if inserting an undoable at a given invalid ID (bad positive value)", () => {
+            history.insertUndoable(undoable2, 2);
+            expect(history.size()).toBe(2);
+        });
+
+        test("inserts creates a branch if the parent node has children", () => {
+            jest.spyOn(cmd3, "done");
+            jest.spyOn(cmd3, "execute");
+            history.insertUndoable(cmd3, 0, 0);
+            expect(history.size()).toBe(4);
+            expect(history.root.children).toHaveLength(1);
+            expect(history.root.children[0].children).toHaveLength(2);
+            expect(history.root.children[0].children[1].children).toHaveLength(1);
+            expect(history.root.children[0].children[1].children[0].children).toHaveLength(0);
+            expect(history.root.children[0].children[1].undoable).toBe(cmd3);
+            expect(history.root.children[0].children[1].children[0].undoable).toBeInstanceOf(StubUndoableCmd);
+            expect(history.currentNode.undoable).toBe(cmd2);
+            expect(cmd3.done).toHaveBeenCalledTimes(1);
+            expect(cmd3.execute).toHaveBeenCalledTimes(1);
+            expect((history.root.children[0].children[1].children[0].undoable as UndoableCommand).isDone()).toBeTruthy();
+        });
+
+        test("inserts does not create a branch if the parent has no child", () => {
+            jest.spyOn(cmd3, "done");
+            jest.spyOn(cmd3, "execute");
+            history.insertUndoable(cmd3, 1);
+            expect(history.size()).toBe(3);
+            expect(history.root.children).toHaveLength(1);
+            expect(history.root.children[0].children).toHaveLength(1);
+            expect(history.root.children[0].children[0].children).toHaveLength(1);
+            expect(history.root.children[0].children[0].children[0].children).toHaveLength(0);
+            expect(history.root.children[0].children[0].children[0].undoable).toBe(cmd3);
+            expect(history.currentNode.undoable).toBe(cmd2);
+            expect(cmd3.done).toHaveBeenCalledTimes(1);
+            expect(cmd3.execute).toHaveBeenCalledTimes(1);
         });
     });
 
