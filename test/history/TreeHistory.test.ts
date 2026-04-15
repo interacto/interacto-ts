@@ -1198,6 +1198,20 @@ describe("using a tree-based history", () => {
             expect(cmd3.done).toHaveBeenCalledTimes(1);
             expect(cmd3.execute).toHaveBeenCalledTimes(1);
         });
+
+        test("inserts event if not a UndoableCommand", () => {
+            history.insertUndoable(undoable0, 1);
+            expect(history.size()).toBe(3);
+            expect(history.root.children[0].children[0].children[0].undoable).toBe(undoable0);
+            expect(history.currentNode.undoable).toBe(cmd2);
+        });
+
+        test("inserts and refresh if done", () => {
+            cmd3.done();
+            jest.spyOn(cmd3, "refreshCache");
+            history.insertUndoable(cmd3, 1);
+            expect(cmd3.refreshCache).toHaveBeenCalledTimes(1);
+        });
     });
 
     describe("using a standard tree history storing modifiable commands", () => {
