@@ -24,9 +24,9 @@ export class UndoNTimes extends CommandBase {
 
     protected readonly numberOfUndos: number;
 
-    public constructor(undoHistory: LinearHistory, numberOfUndos: number) {
+    public constructor(history: LinearHistory, numberOfUndos: number) {
         super();
-        this.history = undoHistory;
+        this.history = history;
         this.numberOfUndos = numberOfUndos;
     }
 

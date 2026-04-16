@@ -22,9 +22,9 @@ import type {LinearHistoryBase} from "../../../api/history/LinearHistoryBase";
 export class Redo extends CommandBase {
     protected readonly history: LinearHistoryBase;
 
-    public constructor(undoHistory: LinearHistoryBase) {
+    public constructor(history: LinearHistoryBase) {
         super();
-        this.history = undoHistory;
+        this.history = history;
     }
 
     public override canExecute(): boolean {

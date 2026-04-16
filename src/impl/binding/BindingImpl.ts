@@ -68,7 +68,7 @@ implements Binding<C, I, A, D> {
 
     protected readonly accumulatorInit: A | undefined;
 
-    protected undoHistory: LinearHistoryBase;
+    protected cmdHistory: LinearHistoryBase;
 
     protected logger: Logger;
 
@@ -88,14 +88,14 @@ implements Binding<C, I, A, D> {
      * @param cmdProducer - The type of the command that will be created. Used to instantiate the command by reflexivity.
      * The class must be public and must have a constructor with no parameter.
      * @param widgets - The widgets on which the binding will operate.
-     * @param undoHistory - The history/redo history.
+     * @param history - The command history.
      * @param logger - The logger to use
      * @param linterRules - The linting rules to use
      * @param name - The optional name of the binding. If not provided, computed based on the interaction and command names
      * @param accInit - The initial accumulator to use during the binding execution.
      */
     public constructor(continuousExecution: boolean, interaction: I, cmdProducer: (i?: D) => C,
-                       widgets: ReadonlyArray<unknown>, undoHistory: LinearHistoryBase, logger: Logger,
+                       widgets: ReadonlyArray<unknown>, history: LinearHistoryBase, logger: Logger,
                        linterRules: ReadonlyMap<RuleName, Severity>, name?: string, accInit?: A) {
         // The name is partial until the binding produces its first command
         this._name = name;
@@ -113,7 +113,7 @@ implements Binding<C, I, A, D> {
         this._cmd = undefined;
         this.continuousCmdExecution = continuousExecution;
         this._activated = true;
-        this.undoHistory = undoHistory;
+        this.cmdHistory = history;
         this.logger = logger;
         this._interaction.fsm.addHandler({
             "fsmStarts": () => {
@@ -534,7 +534,7 @@ implements Binding<C, I, A, D> {
 
         if (hadEffect) {
             if (isUndoableType(cmd)) {
-                this.undoHistory.add(cmd);
+                this.cmdHistory.add(cmd);
             }
             this.ifCmdHadEffects();
         } else {

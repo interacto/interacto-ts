@@ -113,13 +113,13 @@ import type {XTouchDnD} from "../interaction/library/XTouch";
 export class BindingsImpl<H extends LinearHistoryBase> extends Bindings<H> {
     protected observer: BindingsObserver | undefined;
 
-    protected readonly undoHistoryData: H;
+    protected readonly historyData: H;
 
     public readonly logger: Logger;
 
     public constructor(history: H, logger?: Logger) {
         super();
-        this.undoHistoryData = history;
+        this.historyData = history;
         this.logger = logger ?? new LoggerImpl();
     }
 
@@ -127,62 +127,62 @@ export class BindingsImpl<H extends LinearHistoryBase> extends Bindings<H> {
         this.observer?.checker.setLinterRules(...rules);
     }
 
-    public get undoHistory(): H {
-        return this.undoHistoryData;
+    public get cmdhistory(): H {
+        return this.historyData;
     }
 
     public nodeBinder<A>(accInit?: A): BaseUpdateBinder {
-        return new UpdateBinder<CommandBase, Interaction<object>, A>(this.undoHistory,
+        return new UpdateBinder<CommandBase, Interaction<object>, A>(this.cmdhistory,
             this.logger, this.observer, undefined, accInit) as BaseUpdateBinder;
     }
 
     public buttonBinder<A>(accInit?: A): PartialButtonTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<ButtonPressed, A>(() => new ButtonPressed(this.logger));
     }
 
     public checkboxBinder<A>(accInit?: A): PartialInputTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<BoxChecked, A>(() => new BoxChecked(this.logger));
     }
 
     public colorPickerBinder<A>(accInit?: A): PartialInputTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<ColorPicked, A>(() => new ColorPicked(this.logger));
     }
 
     public comboBoxBinder<A>(accInit?: A): PartialSelectTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<ComboBoxSelected, A>(() => new ComboBoxSelected(this.logger));
     }
 
     public spinnerBinder<A>(accInit?: A): PartialSpinnerTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<SpinnerChanged, A>(() => new SpinnerChanged(this.logger));
     }
 
     public dateBinder<A>(accInit?: A): PartialInputTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<DatePicked, A>(() => new DatePicked(this.logger));
     }
 
     public hyperlinkBinder<A>(accInit?: A): PartialAnchorTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<HyperLinkClicked, A>(() => new HyperLinkClicked(this.logger));
     }
 
     public textInputBinder<A>(timeout?: number, accInit?: A): PartialTextInputTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<TextInputChanged, A>(() => new TextInputChanged(this.logger, timeout));
     }
 
     public touchDnDBinder<A>(cancellable: boolean, accInit?: A): PartialTouchSrcTgtTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<TouchDnD, A>(() => new TouchDnD(this.logger, cancellable));
     }
 
     public override touchStartBinder<A>(accInit?: A): PartialTouchTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<TouchStart, A>(() => new TouchStart(this.logger));
     }
 
@@ -190,7 +190,7 @@ export class BindingsImpl<H extends LinearHistoryBase> extends Bindings<H> {
     PartialTouchSrcTgtTypedBinder<A> {
         const anim = new DwellSpringAnimation(handle, spring);
 
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<TouchDnD, A>(() => new TouchDnD(this.logger, true))
             .on(handle)
             .then((_c, i) => {
@@ -205,7 +205,7 @@ export class BindingsImpl<H extends LinearHistoryBase> extends Bindings<H> {
                                         accInit?: A): PartialTouchMouseDnDTypedBinder<A> {
         const anim = new DwellSpringAnimation(handle, spring);
 
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<Or<TouchDnD, DnD>, A>(() => new Or<TouchDnD, DnD>(
                 new TouchDnD(this.logger, true), new DnD(true, this.logger), this.logger))
             .on(handle)
@@ -218,191 +218,191 @@ export class BindingsImpl<H extends LinearHistoryBase> extends Bindings<H> {
     }
 
     public multiTouchBinder<A>(nbTouches: number, accInit?: A): PartialMultiTouchTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<MultiTouch, A>(() => new MultiTouch(nbTouches, false, this.logger));
     }
 
     public twoTouchBinder<A>(accInit?: A): PartialTwoTouchTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<XTouchDnD<GeneralTwoTouchData, GeneralTwoTouchDataImpl>, A>(twoTouch(this.logger));
     }
 
     public threeTouchBinder<A>(accInit?: A): PartialThreeTouchTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<ThreeTouchDnD, A>(() => new ThreeTouchDnD(this.logger));
     }
 
     public fourTouchBinder<A>(accInit?: A): PartialFourTouchTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<FourTouchDnD, A>(() => new FourTouchDnD(this.logger));
     }
 
     public tapsBinder<A>(tapsCount: number, accInit?: A): PartialTapsTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<Taps, A>(() => new Taps(tapsCount, this.logger));
     }
 
     public tapBinder<A>(accInit?: A): PartialTapTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<Tap, A>(() => new Tap(this.logger));
     }
 
     public longTouchBinder<A>(duration: number, accInit?: A): PartialTouchTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<LongTouch, A>(() => new LongTouch(duration, this.logger));
     }
 
     public panBinder<A>(cancellable: boolean, accInit?: A): PartialTouchSrcTgtTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<TouchDnD, A>(() => new TouchDnD(this.logger, cancellable));
     }
 
     public panVerticalBinder<A>(pxTolerance: number, cancellable: boolean, minLength?: number, minVelocity?: number, accInit?: A):
     PartialTouchSrcTgtTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<TouchDnD, A>(vPan(this.logger, cancellable, pxTolerance, minLength, minVelocity));
     }
 
     public panHorizontalBinder<A>(pxTolerance: number, cancellable: boolean, minLength?: number, minVelocity?: number, accInit?: A):
     PartialTouchSrcTgtTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<TouchDnD, A>(hPan(this.logger, cancellable, pxTolerance, minLength, minVelocity));
     }
 
     public panLeftBinder<A>(pxTolerance: number, cancellable: boolean, minLength?: number, minVelocity?: number, accInit?: A):
     PartialTouchSrcTgtTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<TouchDnD, A>(leftPan(this.logger, cancellable, pxTolerance, minLength, minVelocity));
     }
 
     public panRightBinder<A>(pxTolerance: number, cancellable: boolean, minLength?: number, minVelocity?: number, accInit?: A):
     PartialTouchSrcTgtTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<TouchDnD, A>(rightPan(this.logger, cancellable, pxTolerance, minLength, minVelocity));
     }
 
     public panTopBinder<A>(pxTolerance: number, cancellable: boolean, minLength?: number, minVelocity?: number, accInit?: A):
     PartialTouchSrcTgtTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<TouchDnD, A>(topPan(this.logger, cancellable, pxTolerance, minLength, minVelocity));
     }
 
     public panBottomBinder<A>(pxTolerance: number, cancellable: boolean, minLength?: number, minVelocity?: number, accInit?: A):
     PartialTouchSrcTgtTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<TouchDnD, A>(bottomPan(this.logger, cancellable, pxTolerance, minLength, minVelocity));
     }
 
     public twoPanVerticalBinder<A>(pxTolerance: number, minLength?: number, minVelocity?: number, accInit?: A):
     PartialTwoPanTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<TwoPan, A>(twoVPan(this.logger, pxTolerance, minLength, minVelocity));
     }
 
     public twoPanHorizontalBinder<A>(pxTolerance: number, minLength?: number, minVelocity?: number, accInit?: A):
     PartialTwoPanTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<TwoPan, A>(twoHPan(this.logger, pxTolerance, minLength, minVelocity));
     }
 
     public twoPanLeftBinder<A>(pxTolerance: number, minLength?: number, minVelocity?: number, accInit?: A):
     PartialTwoPanTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<TwoPan, A>(twoLeftPan(this.logger, pxTolerance, minLength, minVelocity));
     }
 
     public twoPanRightBinder<A>(pxTolerance: number, minLength?: number, minVelocity?: number, accInit?: A):
     PartialTwoPanTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<TwoPan, A>(twoRightPan(this.logger, pxTolerance, minLength, minVelocity));
     }
 
     public twoPanTopBinder<A>(pxTolerance: number, minLength?: number, minVelocity?: number, accInit?: A):
     PartialTwoPanTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<TwoPan, A>(twoTopPan(this.logger, pxTolerance, minLength, minVelocity));
     }
 
     public twoPanBottomBinder<A>(pxTolerance: number, minLength?: number, minVelocity?: number, accInit?: A):
     PartialTwoPanTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<TwoPan, A>(twoBottomPan(this.logger, pxTolerance, minLength, minVelocity));
     }
 
     public rotateBinder<A>(pxTolerance: number, accInit?: A): PartialRotateTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<Rotate, A>(rotate(this.logger, pxTolerance));
     }
 
     public scaleBinder<A>(pxTolerance: number, accInit?: A): PartialScaleTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<Scale, A>(scale(this.logger, pxTolerance));
     }
 
     public clickBinder<A>(accInit?: A): PartialPointTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<Click, A>(() => new Click(this.logger));
     }
 
     public dbleClickBinder<A>(accInit?: A): PartialUpdatePointTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<DoubleClick, A>(() => new DoubleClick(this.logger));
     }
 
     public mouseUpBinder<A>(accInit?: A): PartialPointTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<MouseUp, A>(() => new MouseUp(this.logger));
     }
 
     public mouseDownBinder<A>(accInit?: A): PartialPointTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<MouseDown, A>(() => new MouseDown(this.logger));
     }
 
     public longMouseDownBinder<A>(duration: number, accInit?: A): PartialUpdatePointTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<LongMouseDown, A>(() => new LongMouseDown(duration, this.logger));
     }
 
     public clicksBinder<A>(nbClicks: number, accInit?: A): PartialPointsTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<Clicks, A>(() => new Clicks(nbClicks, this.logger));
     }
 
     public mouseLeaveBinder<A>(withBubbling: boolean, accInit?: A): PartialPointTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<MouseLeave, A>(() => new MouseLeave(withBubbling, this.logger));
     }
 
     public mouseEnterBinder<A>(withBubbling: boolean, accInit?: A): PartialPointTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<MouseEnter, A>(() => new MouseEnter(withBubbling, this.logger));
     }
 
     public mouseMoveBinder<A>(accInit?: A): PartialPointTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<MouseMove, A>(() => new MouseMove(this.logger));
     }
 
     public wheelBinder<A>(accInit?: A): PartialWheelTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<Wheel, A>(() => new Wheel(this.logger));
     }
 
     public scrollBinder<A>(accInit?: A): PartialScrollTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<Scroll, A>(() => new Scroll(this.logger));
     }
 
     public dndBinder<A>(cancellable: boolean, accInit?: A): PartialPointSrcTgtTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<DnD, A>(() => new DnD(cancellable, this.logger));
     }
 
     public reciprocalDndBinder<A>(handle: EltRef<SVGCircleElement>, spring: EltRef<SVGLineElement>, accInit?: A): PartialPointSrcTgtTypedBinder<A> {
         const anim = new DwellSpringAnimation(handle, spring);
 
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<DnD, A>(() => new DnD(true, this.logger))
             .on(handle)
             .then((_c, i) => {
@@ -414,58 +414,58 @@ export class BindingsImpl<H extends LinearHistoryBase> extends Bindings<H> {
     }
 
     public dragLockBinder<A>(accInit?: A): PartialPointSrcTgtTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<DragLock, A>(() => new DragLock(this.logger));
     }
 
     public keyUpBinder<A>(modifierAccepted: boolean, accInit?: A): PartialKeyTypedBinder<A> {
-        return new KeysBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new KeysBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<KeyUp, A>(() => new KeyUp(this.logger, modifierAccepted));
     }
 
     public keyDownBinder<A>(modifierAccepted: boolean, accInit?: A): PartialKeyTypedBinder<A> {
-        return new KeysBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new KeysBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<KeyDown, A>(() => new KeyDown(this.logger, modifierAccepted));
     }
 
     public keysDownBinder<A>(accInit?: A): PartialKeysTypedBinder<A> {
-        return new KeysBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new KeysBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<KeysDown, A>(() => new KeysDown(this.logger));
     }
 
     public keysTypeBinder<A>(accInit?: A): PartialKeysTypedBinder<A> {
-        return new KeysBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new KeysBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<KeysTyped, A>(() => new KeysTyped(this.logger));
     }
 
     public keyTypeBinder<A>(accInit?: A): PartialKeyTypedBinder<A> {
-        return new KeysBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new KeysBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<KeyTyped, A>(() => new KeyTyped(this.logger));
     }
 
     public mouseDownOrTouchStartBinder<A>(accInit?: A): PartialPointOrTouchTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<Or<MouseDown, TouchStart>, A>(() => new Or(new MouseDown(this.logger), new TouchStart(this.logger), this.logger));
     }
 
     public tapsOrClicksBinder<A>(nbTap: number, accInit?: A): PartialPointsOrTapsTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<Or<Taps, Clicks>, A>(() => new Or(new Taps(nbTap, this.logger), new Clicks(nbTap, this.logger), this.logger));
     }
 
     public tapOrClickBinder<A>(accInit?: A): PartialPointOrTouchTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<Or<Tap, Click>, A>(() => new Or(new Tap(this.logger), new Click(this.logger), this.logger));
     }
 
     public longpressOrTouchBinder<A>(duration: number, accInit?: A): PartialPointOrTouchTypedBinder<A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<Or<LongMouseDown, LongTouch>, A>(
                 () => new Or(new LongMouseDown(duration, this.logger), new LongTouch(duration, this.logger), this.logger));
     }
 
     public combine<IX extends Array<Interaction<object>>, A>(interactions: IX, accInit?: A): PartialThenBinder<IX, A> {
-        return new UpdateBinder(this.undoHistory, this.logger, this.observer, undefined, accInit)
+        return new UpdateBinder(this.cmdhistory, this.logger, this.observer, undefined, accInit)
             .usingInteraction<Then<IX>, A>(() => new Then<IX>(interactions, this.logger));
     }
 
@@ -476,12 +476,12 @@ export class BindingsImpl<H extends LinearHistoryBase> extends Bindings<H> {
         return [
             this.buttonBinder()
                 .on(undo)
-                .toProduce(() => new Undo(this.undoHistory))
+                .toProduce(() => new Undo(this.cmdhistory))
                 .catch(catchFn)
                 .bind(),
             this.buttonBinder()
                 .on(redo)
-                .toProduce(() => new Redo(this.undoHistory))
+                .toProduce(() => new Redo(this.cmdhistory))
                 .catch(catchFn)
                 .bind()
         ];
@@ -489,7 +489,7 @@ export class BindingsImpl<H extends LinearHistoryBase> extends Bindings<H> {
 
     public clear(): void {
         this.observer?.clearObservedBindings();
-        this.undoHistory.clear();
+        this.cmdhistory.clear();
     }
 
     public setBindingObserver(obs?: BindingsObserver): void {

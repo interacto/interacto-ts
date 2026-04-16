@@ -195,7 +195,7 @@ export type PartialThenBinder<XS extends Array<Interaction<object>>, A = unknown
 /**
  * A contextual object for creating binders and thus bindings.
  * allows the observation of the created bindings.
- * Provides a history/redo history.
+ * Provides a command history.
  * Why a pure abstract class and not an interface?
  * Because interfaces are not retained at run time in TS, and we want DI (that thus cannot inject interface types).
  * @template H -- The linear history
@@ -205,7 +205,7 @@ export abstract class Bindings<H extends LinearHistoryBase> {
     /**
      * The history/redo history of the current binding context
      */
-    public abstract readonly undoHistory: H;
+    public abstract readonly cmdhistory: H;
 
     public abstract readonly logger: Logger;
 

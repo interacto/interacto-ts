@@ -47,13 +47,13 @@ describe("test history redo bindings", () => {
             undoable.undo.mockImplementation(() => {
                 throw new Error("errr");
             });
-            bindings.undoHistory.add(undoable);
+            bindings.cmdhistory.add(undoable);
         });
 
-        test("history/redo: history crash caught in binding", () => {
+        test("undo/redo: history crash caught in binding", () => {
             bindings
                 .buttonBinder()
-                .toProduce(() => new Undo(bindings.undoHistory))
+                .toProduce(() => new Undo(bindings.cmdhistory))
                 .on(bundo)
                 .catch(fn)
                 .bind();
@@ -61,29 +61,29 @@ describe("test history redo bindings", () => {
             robot(bundo).click();
             expect(fn).toHaveBeenCalledTimes(1);
             expect(fn).toHaveBeenCalledWith(new Error("errr"));
-            expect(bindings.undoHistory.getLastUndo()).toBeUndefined();
-            expect(bindings.undoHistory.getLastRedo()).toBe(undoable);
+            expect(bindings.cmdhistory.getLastUndo()).toBeUndefined();
+            expect(bindings.cmdhistory.getLastRedo()).toBe(undoable);
         });
 
-        test("history/redo bindings: history crash caught in binding by provided function", () => {
+        test("undo/redo bindings: history crash caught in binding by provided function", () => {
             bindings.undoRedoBinder(bundo, bredo, fn);
 
             robot(bundo).click();
 
             expect(fn).toHaveBeenCalledTimes(1);
             expect(fn).toHaveBeenCalledWith(new Error("errr"));
-            expect(bindings.undoHistory.getLastUndo()).toBeUndefined();
-            expect(bindings.undoHistory.getLastRedo()).toBe(undoable);
+            expect(bindings.cmdhistory.getLastUndo()).toBeUndefined();
+            expect(bindings.cmdhistory.getLastRedo()).toBe(undoable);
         });
 
-        test("history/redo bindings: history works correctly", () => {
+        test("undo/redo bindings: history works correctly", () => {
             undoable.undo.mockImplementation(() => {});
 
             bindings.undoRedoBinder(bundo, bredo);
             robot(bundo).click();
 
-            expect(bindings.undoHistory.getLastUndo()).toBeUndefined();
-            expect(bindings.undoHistory.getLastRedo()).toBe(undoable);
+            expect(bindings.cmdhistory.getLastUndo()).toBeUndefined();
+            expect(bindings.cmdhistory.getLastRedo()).toBe(undoable);
         });
     });
 
@@ -92,14 +92,14 @@ describe("test history redo bindings", () => {
             undoable.redo.mockImplementation(() => {
                 throw new Error("err");
             });
-            bindings.undoHistory.add(undoable);
-            bindings.undoHistory.undo();
+            bindings.cmdhistory.add(undoable);
+            bindings.cmdhistory.undo();
         });
 
-        test("history/redo: redo crash caught in binding", () => {
+        test("undo/redo: redo crash caught in binding", () => {
             bindings
                 .buttonBinder()
-                .toProduce(() => new Redo(bindings.undoHistory))
+                .toProduce(() => new Redo(bindings.cmdhistory))
                 .on(bredo)
                 .catch(fn)
                 .bind();
@@ -107,29 +107,29 @@ describe("test history redo bindings", () => {
             robot(bredo).click();
             expect(fn).toHaveBeenCalledTimes(1);
             expect(fn).toHaveBeenCalledWith(new Error("err"));
-            expect(bindings.undoHistory.getLastRedo()).toBeUndefined();
-            expect(bindings.undoHistory.getLastUndo()).toBe(undoable);
+            expect(bindings.cmdhistory.getLastRedo()).toBeUndefined();
+            expect(bindings.cmdhistory.getLastUndo()).toBe(undoable);
         });
 
-        test("history/redo bindings: redo crash caught in binding by provided function", () => {
+        test("undo/redo bindings: redo crash caught in binding by provided function", () => {
             bindings.undoRedoBinder(bundo, bredo, fn);
 
             robot(bredo).click();
 
             expect(fn).toHaveBeenCalledTimes(1);
             expect(fn).toHaveBeenCalledWith(new Error("err"));
-            expect(bindings.undoHistory.getLastRedo()).toBeUndefined();
-            expect(bindings.undoHistory.getLastUndo()).toBe(undoable);
+            expect(bindings.cmdhistory.getLastRedo()).toBeUndefined();
+            expect(bindings.cmdhistory.getLastUndo()).toBe(undoable);
         });
 
-        test("history/redo bindings: redo works correctly", () => {
+        test("undo/redo bindings: redo works correctly", () => {
             undoable.redo.mockImplementation(() => {});
 
             bindings.undoRedoBinder(bundo, bredo);
             robot(bredo).click();
 
-            expect(bindings.undoHistory.getLastRedo()).toBeUndefined();
-            expect(bindings.undoHistory.getLastUndo()).toBe(undoable);
+            expect(bindings.cmdhistory.getLastRedo()).toBeUndefined();
+            expect(bindings.cmdhistory.getLastUndo()).toBe(undoable);
         });
     });
 });

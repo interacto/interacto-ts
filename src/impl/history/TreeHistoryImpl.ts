@@ -16,7 +16,7 @@ import {getModifiableCmdAttributes, modifyCmdAttributes} from "../../api/command
 import {TreeHistory} from "../../api/history/TreeHistory";
 import {remove} from "../util/ArrayUtil";
 import {Subject} from "rxjs";
-import type {TreeHistoryNode, TreeHistoryNodeDTO, TreeUndoHistoryDTO} from "../../api/history/TreeHistory";
+import type {TreeHistoryNode, TreeHistoryNodeDTO, TreeHistoryDTO} from "../../api/history/TreeHistory";
 import type {Undoable, UndoableSnapshot} from "../../api/history/Undoable";
 import {UndoableCommand} from "../command/UndoableCommand";
 import type {Observable} from "rxjs";
@@ -546,14 +546,14 @@ export class TreeHistoryImpl extends TreeHistory {
         }
     }
 
-    public override export(fn: (undoable: Undoable) => unknown): TreeUndoHistoryDTO {
+    public override export(fn: (undoable: Undoable) => unknown): TreeHistoryDTO {
         return {
             "roots": this.root.children.map(child => new UndoableTreeNodeDTOImpl(child, fn)),
             "path": this.path
         };
     }
 
-    public override import(dtoHistory: TreeUndoHistoryDTO, fn: (dtoUndoable: unknown) => Undoable): void {
+    public override import(dtoHistory: TreeHistoryDTO, fn: (dtoUndoable: unknown) => Undoable): void {
         this.clear();
 
         if (this.keepPath) {

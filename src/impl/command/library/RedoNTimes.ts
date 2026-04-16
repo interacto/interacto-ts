@@ -24,9 +24,9 @@ export class RedoNTimes extends CommandBase {
 
     protected readonly numberOfRedos: number;
 
-    public constructor(undoHistory: LinearHistory, numberOfRedos: number) {
+    public constructor(history: LinearHistory, numberOfRedos: number) {
         super();
-        this.history = undoHistory;
+        this.history = history;
         this.numberOfRedos = numberOfRedos;
     }
 

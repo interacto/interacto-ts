@@ -54,7 +54,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, A, D exten
 
     private readonly onErrFn: ((ex: unknown) => void) | undefined;
 
-    public constructor(continuousExec: boolean, interaction: I, undoHistory: LinearHistoryBase,
+    public constructor(continuousExec: boolean, interaction: I, cmdHistory: LinearHistoryBase,
                        logger: Logger, cmdSupplierFn: (d: D | undefined) => C,
                        widgets: ReadonlyArray<unknown>, dynamicNodes: ReadonlyArray<Node>,
                        loggers: ReadonlyArray<LogLevel>, timeoutThrottle: number,
@@ -65,7 +65,7 @@ export class AnonBinding<C extends Command, I extends Interaction<D>, A, D exten
                        endOrCancelFn?: (i: D, acc: A) => void, hadEffectsFn?: (c: C, i: D, acc: A) => void,
                        hadNoEffectFn?: (c: C, i: D, acc: A) => void, cannotExecFn?: (c: C, i: D, acc: A) => void,
                        onErrFn?: (ex: unknown) => void, name?: string, accInit?: A) {
-        super(continuousExec, interaction, cmdSupplierFn, widgets, undoHistory, logger, linterRules, name, accInit);
+        super(continuousExec, interaction, cmdSupplierFn, widgets, cmdHistory, logger, linterRules, name, accInit);
         this.configureLoggers(loggers);
         this.firstFn = firstFn;
         this.thenFn = thenFn;
