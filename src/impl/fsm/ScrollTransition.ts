@@ -19,11 +19,11 @@ import type {EventType} from "../../api/fsm/EventType";
  * This transition corresponds to the scroll of a window
  * @category FSM Transition
  */
-export class ScrollTransition extends TransitionBase<Event> {
+export class ScrollTransition extends TransitionBase<UIEvent> {
     private static readonly acceptedEvents: ReadonlySet<EventType> = new Set(["scroll"]);
 
-    public accept(event: Event): event is Event {
-        return event.type === "scroll";
+    public accept(event: Event): event is UIEvent {
+        return event instanceof UIEvent && event.type === "scroll";
     }
 
     public getAcceptedEvents(): ReadonlySet<EventType> {

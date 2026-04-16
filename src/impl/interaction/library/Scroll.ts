@@ -29,7 +29,7 @@ export class ScrollFSM extends FSMImpl {
      * @param logger - The logger to use for this interaction
      * @param action - The action executed on a scroll
      */
-    public constructor(logger: Logger, action: (evt: Event) => void) {
+    public constructor(logger: Logger, action: (evt: UIEvent) => void) {
         super(logger);
         new ScrollTransition(this.initState, this.addTerminalState("scrolled"), action);
     }
@@ -46,7 +46,7 @@ export class Scroll extends InteractionBase<ScrollData, ScrollDataImpl> {
      * @param name - The name of the user interaction
      */
     public constructor(logger: Logger, name?: string) {
-        const action = (event: Event): void => {
+        const action = (event: UIEvent): void => {
             this._data.setScrollData(event);
         };
 
