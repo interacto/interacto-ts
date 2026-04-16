@@ -20,11 +20,11 @@ import type {Observable} from "rxjs";
  * The type that defines the concept of a node stored in a tree-based history.
  * @category API History
  */
-export interface UndoableTreeNode {
+export interface TreeHistoryNode {
     /**
      * Among the children of the node, identifies the one that was undone recently.
      */
-    lastChildUndone: UndoableTreeNode | undefined;
+    lastChildUndone: TreeHistoryNode | undefined;
 
     /**
      * The unique ID of the node among the tree.
@@ -39,12 +39,12 @@ export interface UndoableTreeNode {
     /**
      * The possible parent node.
      */
-    readonly parent: UndoableTreeNode | undefined;
+    readonly parent: TreeHistoryNode | undefined;
 
     /**
      * The children of the node.
      */
-    readonly children: Array<UndoableTreeNode>;
+    readonly children: Array<TreeHistoryNode>;
 
     /**
      * The visual snapshot of the node. Used to render the tree history.
@@ -66,7 +66,7 @@ export interface UndoableTreeNode {
  * The DTO interface used when exporting a tree-based history.
  * @category Helper
  */
-export interface UndoableTreeNodeDTO {
+export interface TreeHistoryNodeDTO {
     /**
      * The unique ID of the node among the tree.
      */
@@ -81,7 +81,7 @@ export interface UndoableTreeNodeDTO {
     /**
      * The children of the node, in their DTO format.
      */
-    readonly children: ReadonlyArray<UndoableTreeNodeDTO>;
+    readonly children: ReadonlyArray<TreeHistoryNodeDTO>;
 }
 
 /**
@@ -97,7 +97,7 @@ export interface TreeUndoHistoryDTO {
     /**
      * The different roots of the tree.
      */
-    readonly roots: ReadonlyArray<UndoableTreeNodeDTO>;
+    readonly roots: ReadonlyArray<TreeHistoryNodeDTO>;
 }
 
 /**
@@ -125,19 +125,19 @@ export abstract class TreeHistory implements LinearHistoryBase {
      * The root node of the history. It is a fake node (it does not refer
      * to any undoable object).
      */
-    public abstract get root(): UndoableTreeNode;
+    public abstract get root(): TreeHistoryNode;
 
     /**
      * All the nodes of the tree.
      */
-    public abstract get undoableNodes(): Array<UndoableTreeNode | undefined>;
+    public abstract get undoableNodes(): Array<TreeHistoryNode | undefined>;
 
     /**
      * The current node. As the history is a tree in which one can navigate using
      * history, redo, gotTo, this current node refers to the node
      * where the system state is.
      */
-    public abstract get currentNode(): UndoableTreeNode;
+    public abstract get currentNode(): TreeHistoryNode;
 
     /**
      * Moves to the given node ID.
@@ -161,6 +161,17 @@ export abstract class TreeHistory implements LinearHistoryBase {
      * @param id - The node ID to remove.
      */
     public abstract deleteNode(id: number): void;
+
+    /**
+     * Inserts the given undoable as a child of the given node.
+     * It creates a new branch using the given undoable object.
+     * So, does not remove or alter
+     * @param undoable - The node to insert.
+     * @param parentId - The node parent. If invalid, nothing is done.
+     * @param childPosition - The position in the children list of the parent, where to insert the undoable.
+     * If invalid (e.g. negative value), the undoable is inserted at the end of the children list.
+     */
+    public abstract insertUndoable(undoable: Undoable, parentId: number, childPosition?: number): void;
 
     /**
      * Retrieves the modifiable attributes of the undoable node identified by the given id.

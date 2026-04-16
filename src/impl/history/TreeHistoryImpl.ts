@@ -16,7 +16,7 @@ import {getModifiableCmdAttributes, modifyCmdAttributes} from "../../api/command
 import {TreeHistory} from "../../api/history/TreeHistory";
 import {remove} from "../util/ArrayUtil";
 import {Subject} from "rxjs";
-import type {UndoableTreeNode, UndoableTreeNodeDTO, TreeUndoHistoryDTO} from "../../api/history/TreeHistory";
+import type {TreeHistoryNode, TreeHistoryNodeDTO, TreeUndoHistoryDTO} from "../../api/history/TreeHistory";
 import type {Undoable, UndoableSnapshot} from "../../api/history/Undoable";
 import {UndoableCommand} from "../command/UndoableCommand";
 import type {Observable} from "rxjs";
@@ -27,23 +27,23 @@ import type {Observable} from "rxjs";
 type UndoableCtor = new () => UndoableCommand;
 
 /**
- * Implementation of UndoableTreeNode
+ * Implementation of TreeHistoryNode
  * @category History
  */
-class UndoableTreeNodeImpl implements UndoableTreeNode {
-    public lastChildUndone: UndoableTreeNode | undefined;
+class TreeHistoryNodeImpl implements TreeHistoryNode {
+    public lastChildUndone: TreeHistoryNode | undefined;
 
-    public readonly children: Array<UndoableTreeNode>;
+    public readonly children: Array<TreeHistoryNode>;
 
     public readonly id: number;
 
-    public readonly parent: UndoableTreeNode | undefined;
+    public readonly parent: TreeHistoryNode | undefined;
 
     public readonly undoable: Undoable;
 
     private readonly cacheVisualSnap: UndoableSnapshot;
 
-    public constructor(undoable: Undoable, id: number, parent: UndoableTreeNode | undefined) {
+    public constructor(undoable: Undoable, id: number, parent: TreeHistoryNode | undefined) {
         this.undoable = undoable;
         this.id = id;
         this.children = [];
@@ -67,14 +67,14 @@ class UndoableTreeNodeImpl implements UndoableTreeNode {
     }
 }
 
-class UndoableTreeNodeDTOImpl implements UndoableTreeNodeDTO {
-    public readonly children: ReadonlyArray<UndoableTreeNodeDTO>;
+class UndoableTreeNodeDTOImpl implements TreeHistoryNodeDTO {
+    public readonly children: ReadonlyArray<TreeHistoryNodeDTO>;
 
     public readonly id: number;
 
     public readonly undoable: unknown;
 
-    public constructor(node: UndoableTreeNode, fn: (undoable: Undoable) => unknown) {
+    public constructor(node: TreeHistoryNode, fn: (undoable: Undoable) => unknown) {
         this.id = node.id;
         this.undoable = fn(node.undoable);
         this.children = node.children.map(child => new UndoableTreeNodeDTOImpl(child, fn));
@@ -88,9 +88,9 @@ class UndoableTreeNodeDTOImpl implements UndoableTreeNodeDTO {
      * @param parent - The parent node of the one to create.
      * @returns The created tree node (and its children) and the list of created nodes.
      */
-    public static toNode(dto: UndoableTreeNodeDTO, fn: (dtoUndoable: unknown) => Undoable, parent: UndoableTreeNode):
-    [UndoableTreeNode, Array<UndoableTreeNode>] {
-        const node = new UndoableTreeNodeImpl(fn(dto.undoable), dto.id, parent);
+    public static toNode(dto: TreeHistoryNodeDTO, fn: (dtoUndoable: unknown) => Undoable, parent: TreeHistoryNode):
+    [TreeHistoryNode, Array<TreeHistoryNode>] {
+        const node = new TreeHistoryNodeImpl(fn(dto.undoable), dto.id, parent);
         const res = dto.children.map(child => UndoableTreeNodeDTOImpl.toNode(child, fn, node));
 
         node.children.push(...res.map(currNodeTree => currNodeTree[0]));
@@ -107,9 +107,9 @@ class UndoableTreeNodeDTOImpl implements UndoableTreeNodeDTO {
 export class TreeHistoryImpl extends TreeHistory {
     private idCounter: number;
 
-    private _currentNode: UndoableTreeNode;
+    private _currentNode: TreeHistoryNode;
 
-    public readonly undoableNodes: Array<UndoableTreeNode | undefined>;
+    public readonly undoableNodes: Array<TreeHistoryNode | undefined>;
 
     private readonly undoPublisher: Subject<Undoable | undefined>;
 
@@ -117,7 +117,7 @@ export class TreeHistoryImpl extends TreeHistory {
 
     private readonly sizePublisher: Subject<number>;
 
-    public readonly root: UndoableTreeNode;
+    public readonly root: TreeHistoryNode;
 
     public readonly considersEqualCmds: boolean;
 
@@ -140,7 +140,7 @@ export class TreeHistoryImpl extends TreeHistory {
         this._path = [];
         this.undoableNodes = [];
         this.idCounter = 0;
-        this.root = new UndoableTreeNodeImpl({
+        this.root = new TreeHistoryNodeImpl({
             getUndoName(): string {
                 return "";
             },
@@ -160,14 +160,14 @@ export class TreeHistoryImpl extends TreeHistory {
     }
 
     public add(undoable: Undoable): void {
-        let equalCmd: UndoableTreeNode | undefined;
+        let equalCmd: TreeHistoryNode | undefined;
 
         if (this.considersEqualCmds) {
             equalCmd = this._currentNode.children.find(child => child.undoable.equals(undoable));
         }
 
         if (equalCmd === undefined) {
-            const node = new UndoableTreeNodeImpl(undoable, this.idCounter, this.currentNode);
+            const node = new TreeHistoryNodeImpl(undoable, this.idCounter, this.currentNode);
             this.undoableNodes[this.idCounter] = node;
             this.currentNode.children.push(node);
             this._currentNode = node;
@@ -181,7 +181,7 @@ export class TreeHistoryImpl extends TreeHistory {
         }
     }
 
-    public get currentNode(): UndoableTreeNode {
+    public get currentNode(): TreeHistoryNode {
         return this._currentNode;
     }
 
@@ -295,11 +295,43 @@ export class TreeHistoryImpl extends TreeHistory {
         }
     }
 
+    public insertUndoable(undoable: Undoable, parentId: number, childPosition = -1): void {
+        // Checking that the parent id is valid
+        const node = this.undoableNodes[parentId];
+        if (node === undefined) {
+            return;
+        }
+        const prevId = this.currentNode.id;
+        const child = node.children[childPosition];
+        this.goTo(parentId);
+
+        if (undoable instanceof UndoableCommand) {
+            if (undoable.isDone()) {
+                undoable.refreshCache();
+            } else {
+                // eslint-disable-next-line no-void
+                void undoable.execute();
+                undoable.done();
+            }
+        }
+        this.add(undoable);
+
+        // If the child position is not valid, adding the undoable object at the end of the children list of the parent
+        if (child !== undefined) {
+            const clonedBranch = this.cloneSubtree(child);
+            this.proceedModifiedNode(clonedBranch);
+            this.addClonedSubtree(clonedBranch);
+        }
+
+        // Going back to the original position
+        this.goTo(prevId);
+    }
+
     /**
      * Takes a modified command and re-processes it within the history
      * @param node - The modified command to re-executed
      */
-    private proceedModifiedNode(node: UndoableTreeNode): void {
+    private proceedModifiedNode(node: TreeHistoryNode): void {
         // Executing the cloned undoable object
         node.undoable.redo();
         // Must refresh the visual snapshot cache
@@ -315,7 +347,7 @@ export class TreeHistoryImpl extends TreeHistory {
      * Re-execute the added nodes.
      * @param node - The node to add (and its children)
      */
-    private addClonedSubtree(node: UndoableTreeNode): void {
+    private addClonedSubtree(node: TreeHistoryNode): void {
         for (const child of node.children) {
             this.proceedModifiedNode(child);
             this.undo();
@@ -323,13 +355,13 @@ export class TreeHistoryImpl extends TreeHistory {
         }
     }
 
-    private cloneSubtree(node: UndoableTreeNode, parent?: UndoableTreeNode): UndoableTreeNode {
+    private cloneSubtree(node: TreeHistoryNode, parent?: TreeHistoryNode): TreeHistoryNode {
         // Cloning the current undoable
         // eslint-disable-next-line @stylistic/new-parens
         let clone = new (node.undoable.constructor as UndoableCtor);
         clone = Object.assign(clone, node.undoable);
         // Creating a fake node to store the cloned branch
-        const clonedNode = new UndoableTreeNodeImpl(clone, -1, parent);
+        const clonedNode = new TreeHistoryNodeImpl(clone, -1, parent);
         // Cloning all the children
         for (const child of Array.from(node.children)) {
             clonedNode.children.push(this.cloneSubtree(child, clonedNode));
@@ -362,8 +394,8 @@ export class TreeHistoryImpl extends TreeHistory {
         }
     }
 
-    private gatherToRoot(node: UndoableTreeNode | undefined): Array<UndoableTreeNode> {
-        const path: Array<UndoableTreeNode> = [];
+    private gatherToRoot(node: TreeHistoryNode | undefined): Array<TreeHistoryNode> {
+        const path: Array<TreeHistoryNode> = [];
         let currentNode = node;
         while (currentNode !== this.root && currentNode !== undefined) {
             path.push(currentNode);
@@ -424,7 +456,7 @@ export class TreeHistoryImpl extends TreeHistory {
         return positions;
     }
 
-    private getPositionNode(node: UndoableTreeNode, positions: Map<number, number>, counter: number): number {
+    private getPositionNode(node: TreeHistoryNode, positions: Map<number, number>, counter: number): number {
         const [child0, child1] = node.children;
 
         // length === 0
@@ -553,7 +585,7 @@ export class TreeHistoryImpl extends TreeHistory {
         return this.childrenNode(this.root);
     }
 
-    private childrenNode(node: UndoableTreeNode): number {
+    private childrenNode(node: TreeHistoryNode): number {
         return node.children
             .map(child => this.childrenNode(child))
             .reduce((x, y) => x + y, 0) + node.children.length;
