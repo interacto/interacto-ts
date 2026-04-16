@@ -75,7 +75,7 @@ describe("using bindings", () => {
         const h = mock<LinearHistory>();
         bindings = new BindingsImpl(h);
 
-        expect(h).toBe(bindings.undoHistory);
+        expect(h).toBe(bindings.cmdhistory);
     });
 
     test("accept visitor works", () => {
@@ -211,7 +211,7 @@ describe("using bindings", () => {
             .toProduce(() => new StubUndoableCmd(true))
             .bind();
         robot(elt).mousedown();
-        expect(bindings.undoHistory.getLastUndo()).toBeDefined();
+        expect(bindings.cmdhistory.getLastUndo()).toBeDefined();
     });
 
     test("history redo binders on history", () => {
@@ -226,8 +226,8 @@ describe("using bindings", () => {
             .mousedown(elt)
             .click(undo);
 
-        expect(bindings.undoHistory.getLastRedo()).toBeDefined();
-        expect(bindings.undoHistory.getLastUndo()).toBeUndefined();
+        expect(bindings.cmdhistory.getLastRedo()).toBeDefined();
+        expect(bindings.cmdhistory.getLastUndo()).toBeUndefined();
         expect(ctx.getCmdsProducedBy(undos[0])).toHaveLength(1);
     });
 
@@ -244,8 +244,8 @@ describe("using bindings", () => {
             .mousedown(elt)
             .click(undo)
             .click(redo);
-        expect(bindings.undoHistory.getLastRedo()).toBeUndefined();
-        expect(bindings.undoHistory.getLastUndo()).toBeDefined();
+        expect(bindings.cmdhistory.getLastRedo()).toBeUndefined();
+        expect(bindings.cmdhistory.getLastUndo()).toBeDefined();
         expect(ctx.getCmdsProducedBy(undos[1])).toHaveLength(1);
     });
 

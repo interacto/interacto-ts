@@ -67,7 +67,7 @@ implements CmdBinder<C>, InteractionBinder<I, A, D>, InteractionCmdBinder<C, I, 
 
     protected observer: BindingsObserver | undefined;
 
-    protected undoHistory: LinearHistoryBase;
+    protected cmdHistory: LinearHistoryBase;
 
     protected logger: Logger;
 
@@ -89,7 +89,7 @@ implements CmdBinder<C>, InteractionBinder<I, A, D>, InteractionCmdBinder<C, I, 
 
     protected linterRules: Map<RuleName, Severity>;
 
-    protected constructor(undoHistory: LinearHistoryBase, logger: Logger, observer?: BindingsObserver,
+    protected constructor(cmdHistory: LinearHistoryBase, logger: Logger, observer?: BindingsObserver,
                           binder?: Partial<Binder<C, I, A, D>>, acc?: A) {
         this.widgets = [];
         this.dynamicNodes = [];
@@ -101,7 +101,7 @@ implements CmdBinder<C>, InteractionBinder<I, A, D>, InteractionCmdBinder<C, I, 
         Object.assign(this, binder);
 
         this.accInit = acc;
-        this.undoHistory = undoHistory;
+        this.cmdHistory = cmdHistory;
         this.logger = logger;
         this.observer = observer;
 

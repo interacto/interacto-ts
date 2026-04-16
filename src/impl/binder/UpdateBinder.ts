@@ -51,9 +51,9 @@ export class UpdateBinder<C extends Command, I extends Interaction<D>, A, D exte
 
     protected endOrCancelFnArray: Array<(i: D, acc: A) => void> = [];
 
-    public constructor(undoHistory: LinearHistoryBase, logger: Logger, observer?: BindingsObserver,
+    public constructor(cmdHistory: LinearHistoryBase, logger: Logger, observer?: BindingsObserver,
                        binder?: Partial<UpdateBinder<C, I, A, D>>, acc?: A) {
-        super(undoHistory, logger, observer, binder, acc);
+        super(cmdHistory, logger, observer, binder, acc);
 
         this.continuousCmdExecution = false;
         this.throttleTimeout = 0;
@@ -185,7 +185,7 @@ export class UpdateBinder<C extends Command, I extends Interaction<D>, A, D exte
     }
 
     protected duplicate(): UpdateBinder<C, I, A, D> {
-        return new UpdateBinder<C, I, A, D>(this.undoHistory, this.logger, this.observer, this);
+        return new UpdateBinder<C, I, A, D>(this.cmdHistory, this.logger, this.observer, this);
     }
 
     public bind(): Binding<C, I, A, D> {
@@ -197,7 +197,7 @@ export class UpdateBinder<C extends Command, I extends Interaction<D>, A, D exte
             throw new Error("The command supplier cannot be undefined here");
         }
 
-        const binding = new AnonBinding(this.continuousCmdExecution, this.usingFn(), this.undoHistory, this.logger, this.produceFn,
+        const binding = new AnonBinding(this.continuousCmdExecution, this.usingFn(), this.cmdHistory, this.logger, this.produceFn,
             Array.from(this.widgets), Array.from(this.dynamicNodes), Array.from(this.logLevels),
             this.throttleTimeout, this.stopPropagation, this.prevDefault, new Map(this.linterRules), this.firstFn, this.thenFn,
             Array.from(this.whenFnArray), this.endFn, this.cancelFn, this.endOrCancelFn, this.hadEffectsFn,

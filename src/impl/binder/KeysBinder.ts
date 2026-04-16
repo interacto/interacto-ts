@@ -42,9 +42,9 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, A, D extend
 
     // private readonly checkCodeFn: (i: InteractionData) => boolean;
 
-    public constructor(undoHistory: LinearHistoryBase, logger: Logger, observer?: BindingsObserver,
+    public constructor(cmdHistory: LinearHistoryBase, logger: Logger, observer?: BindingsObserver,
                        binder?: Partial<KeysBinder<C, I, A, D>>, acc?: A) {
-        super(undoHistory, logger, observer, binder, acc);
+        super(cmdHistory, logger, observer, binder, acc);
 
         this.isCode = false;
         this.keysOrCodes = [];
@@ -188,7 +188,7 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, A, D extend
     }
 
     protected override duplicate(): KeysBinder<C, I, A, D> {
-        return new KeysBinder(this.undoHistory, this.logger, this.observer, this);
+        return new KeysBinder(this.cmdHistory, this.logger, this.observer, this);
     }
 
     public override bind(): Binding<C, I, A, D> {
@@ -200,7 +200,7 @@ export class KeysBinder<C extends Command, I extends Interaction<D>, A, D extend
             throw new Error("The command supplier cannot be undefined here");
         }
 
-        const binding = new AnonBinding(this.continuousCmdExecution, this.usingFn(), this.undoHistory,
+        const binding = new AnonBinding(this.continuousCmdExecution, this.usingFn(), this.cmdHistory,
             this.logger, this.produceFn, Array.from(this.widgets), Array.from(this.dynamicNodes),
             Array.from(this.logLevels), this.throttleTimeout, this.stopPropagation, this.prevDefault,
             new Map(this.linterRules), this.firstFn, this.thenFn, Array.from(this.whenFnArray),

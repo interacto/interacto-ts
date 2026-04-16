@@ -88,7 +88,7 @@ export interface TreeHistoryNodeDTO {
  * The DTO for tree nodes used while exporting a tree-based history.
  * @category Helper
  */
-export interface TreeUndoHistoryDTO {
+export interface TreeHistoryDTO {
     /**
      * The current history path in the tree
      */
@@ -227,14 +227,14 @@ export abstract class TreeHistory implements LinearHistoryBase {
      * Exports the history.
      * @param fn - The function that converts undoable objects into ad-hoc formats.
      */
-    public abstract export(fn: (undoable: Undoable) => unknown): TreeUndoHistoryDTO;
+    public abstract export(fn: (undoable: Undoable) => unknown): TreeHistoryDTO;
 
     /**
      * Imports the given DTO history. Flushes the current history.
      * @param dtoHistory - The DTO history to import.
      * @param fn - The transformation function that transforms undoable DTO (of nodes) into Undoable.
      */
-    public abstract import(dtoHistory: TreeUndoHistoryDTO, fn: (dtoUndoable: unknown) => Undoable): void;
+    public abstract import(dtoHistory: TreeHistoryDTO, fn: (dtoUndoable: unknown) => Undoable): void;
 
     public abstract get considersEqualCmds(): boolean;
 

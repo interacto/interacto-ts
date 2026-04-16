@@ -52,17 +52,17 @@ describe("using a key binder", () => {
     });
 
     test("that is crashes when calling bind without an interaction supplier", () => {
-        expect(() => new KeysBinder(bindings.undoHistory, mock<Logger>()).bind()).toThrow("The interaction supplier cannot be undefined here");
+        expect(() => new KeysBinder(bindings.cmdhistory, mock<Logger>()).bind()).toThrow("The interaction supplier cannot be undefined here");
     });
 
     test("that is crashes when calling bind without a command supplier", () => {
-        const binder = new KeysBinder(bindings.undoHistory, mock<Logger>()).usingInteraction(() => mock<Interaction<object>>());
+        const binder = new KeysBinder(bindings.cmdhistory, mock<Logger>()).usingInteraction(() => mock<Interaction<object>>());
         expect(() => binder.bind()).toThrow("The command supplier cannot be undefined here");
     });
 
     test("that observer is used on bind", () => {
         const obs = mock<BindingsObserver>();
-        const binder = new KeysBinder(bindings.undoHistory, mock<Logger>(), obs)
+        const binder = new KeysBinder(bindings.cmdhistory, mock<Logger>(), obs)
             .usingInteraction(() => new KeyDown(mock<Logger>(), false))
             .toProduce(() => mock<Command>());
 
