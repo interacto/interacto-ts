@@ -36,7 +36,7 @@ describe("using a scroll data", () => {
                 }
             }
         });
-        jest.spyOn(globalThis.global, "window", "get")
+        jest.spyOn(evt, "view", "get")
             .mockReturnValue(newWindow);
     });
 

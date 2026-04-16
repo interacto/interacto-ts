@@ -39,10 +39,10 @@ export class ScrollDataImpl extends InteractionDataBase implements ScrollData, F
         return this.scrollYData;
     }
 
-    public setScrollData(event: Event): void {
+    public setScrollData(event: UIEvent): void {
         super.copy(event);
 
-        this.scrollXData = window.scrollX;
-        this.scrollYData = window.scrollY;
+        this.scrollXData = event.view?.scrollX ?? 0;
+        this.scrollYData = event.view?.scrollY ?? 0;
     }
 }
