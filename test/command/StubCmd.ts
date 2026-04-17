@@ -12,8 +12,7 @@
  * along with Interacto. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {CommandBase, Modifiable, UndoableCommand, type Undoable} from "../../src/interacto";
-import {Selective} from "../../src/api/command/Selective";
+import {CommandBase, Modifiable, UndoableCommand, Selective, type Undoable} from "../../src/interacto";
 
 export class ExampleUndoableCmd extends UndoableCommand {
     protected execution(): Promise<void> | void {
