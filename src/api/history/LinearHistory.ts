@@ -81,4 +81,15 @@ export abstract class LinearHistory implements LinearHistoryBase {
      * An RX object to observe the number of elements in the history.
      */
     public abstract sizeObservable(): Observable<[undos: number, redos: number]>;
+
+    /**
+     * Gets all the selective commands matching the given selective key.
+     * @param key - The key value used to extract the selective commands from the history.
+     * @param eqFn - The function to compare the selective keys. If not specified, the comparison will be
+     * done using the === operator.
+     * @returns Two arrays. The first one contains the matching commands in the undo stack.
+     * The second one contains the matching commands in the redo stack.
+     */
+    public abstract getSelectiveOf<T extends object | string | number>
+    (key: T, eqFn?: (v1: T, v2: T) => boolean): [Array<Undoable>, Array<Undoable>];
 }

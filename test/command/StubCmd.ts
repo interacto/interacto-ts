@@ -13,6 +13,7 @@
  */
 
 import {CommandBase, Modifiable, UndoableCommand, type Undoable} from "../../src/interacto";
+import {Selective} from "../../src/api/command/Selective";
 
 export class ExampleUndoableCmd extends UndoableCommand {
     protected execution(): Promise<void> | void {
@@ -109,5 +110,45 @@ export class CmdModifiableDouble extends ExampleUndoableCmd {
     public override equals(undoable: unknown): boolean {
         return undoable instanceof CmdModifiableDouble && undoable.a === this.a && undoable.b === this.b &&
           undoable.c === this.c && undoable.c === this.c;
+    }
+}
+
+export class CmdSeveralKeysSelective extends ExampleUndoableCmd {
+    @Selective
+    public key: unknown;
+
+    @Selective
+    public key2: unknown;
+
+    public constructor(key: unknown, key2: unknown) {
+        super();
+        this.key = key;
+        this.key2 = key2;
+    }
+}
+
+export class CmdSelective1 extends ExampleUndoableCmd {
+    @Selective
+    public key: unknown;
+
+    public constructor(key: unknown) {
+        super();
+        this.key = key;
+    }
+}
+
+export class CmdSelective2 extends ExampleUndoableCmd {
+    @Selective
+    public otherKey: unknown;
+
+    public constructor(key: unknown) {
+        super();
+        this.otherKey = key;
+    }
+}
+
+export class CmdSelectiveInheritance extends CmdSelective1 {
+    public constructor(key: object) {
+        super(key);
     }
 }

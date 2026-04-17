@@ -30,6 +30,7 @@ export * from "./api/binding/VisitorBinding";
 export * from "./api/checker/Checker";
 export * from "./api/command/Command";
 export * from "./api/command/ModifiableCommand";
+export * from "./api/command/Selective";
 export * from "./api/fsm/ConcurrentFSM";
 export * from "./api/fsm/EventType";
 export * from "./api/fsm/FSM";

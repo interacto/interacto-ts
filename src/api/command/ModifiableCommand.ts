@@ -45,7 +45,7 @@ export function Modifiable(target: unknown, propertyName: string): void {
 }
 
 /**
- * Checks whether the given object and its given are modifiable
+ * Checks whether the given object and its given property are modifiable
  * @param obj - The command to modify
  * @param key - The property of the command to modify
  * @returns True if the property of the command can be modified.

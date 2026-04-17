@@ -16,6 +16,7 @@ import {LinearHistory} from "../../api/history/LinearHistory";
 import {Subject} from "rxjs";
 import type {Undoable} from "../../api/history/Undoable";
 import type {Observable} from "rxjs";
+import {hasSelectiveValue} from "../../api/command/Selective";
 
 /**
  * Implementation of the linear history
@@ -198,5 +199,14 @@ export class LinearHistoryImpl extends LinearHistory {
 
     private publishSize(): void {
         this.sizePublisher.next(this.size());
+    }
+
+    public getSelectiveOf<T extends object | string | number>
+    (obj: T, eqFn?: (v1: T, v2: T) => boolean): [Array<Undoable>, Array<Undoable>] {
+        const fn = (undoable: Undoable): boolean => hasSelectiveValue(undoable, obj, eqFn);
+        return [
+            this.undos.filter(undoable => fn(undoable)),
+            this.redos.filter(undoable => fn(undoable))
+        ];
     }
 }
