@@ -14,9 +14,7 @@
 
 import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
 import {CmdSelective1, CmdSelective2, CmdSeveralKeysSelective, CmdSelectiveInheritance, ExampleUndoableCmd} from "./StubCmd";
-import {isCmdSelective, Selective} from "../../src/api/command/Selective";
-import type {LinearHistory} from "../../src/api/history/LinearHistory";
-import {LinearHistoryImpl} from "../../src/impl/history/LinearHistoryImpl";
+import {type LinearHistory, LinearHistoryImpl, isCmdSelective, Selective} from "../../src/interacto";
 
 interface Bar {
     bar2: boolean;
