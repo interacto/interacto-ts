@@ -118,4 +118,11 @@ export abstract class LinearHistory implements LinearHistoryBase {
      * If not valid, the method does nothing.
      */
     public abstract redoUpTo(index: number): void;
+
+    /**
+     * Gets all the unique selective objects of this history.
+     * @returns All the unique selective objects that used in the stored undoable objects.
+     * This concerns both the undo and redo stacks.
+     */
+    public abstract getAllSelectiveObjects(): ReadonlySet<unknown>;
 }

@@ -16,7 +16,7 @@ import {LinearHistory} from "../../api/history/LinearHistory";
 import {Subject} from "rxjs";
 import type {Undoable} from "../../api/history/Undoable";
 import type {Observable} from "rxjs";
-import {hasSelectiveValue} from "../../api/command/Selective";
+import {getSelectiveValue, hasSelectiveValue} from "../../api/command/Selective";
 
 /**
  * Implementation of the linear history
@@ -232,5 +232,16 @@ export class LinearHistoryImpl extends LinearHistory {
         for (let i = 0; i < count; i++) {
             this.redo();
         }
+    }
+
+    public getAllSelectiveObjects(): ReadonlySet<unknown> {
+        // Considering both the undo and redo stacks
+        // Using a set to remove duplicated values
+        return new Set([...this.undos, ...this.redos]
+            // Collecting the selective properties
+            .map((undoable: Undoable) => getSelectiveValue(undoable))
+            .filter(data => data !== undefined)
+            // Collecting only the value of the selective properties
+            .flatMap(data => Object.values(data)));
     }
 }

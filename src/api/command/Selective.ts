@@ -49,11 +49,11 @@ export function Selective(target: unknown, propertyName: string): void {
 
 /**
  * Gets the selective entries (key/value) of the given object.
- * @param obj - The object to analyze.
+ * @param obj - The object to analyze that may contain selective properties.
  * @returns `undefined` if the object is not selective. A set of entries (key/value) corresponding
  * to the selective keys and their values of the given object.
  */
-function getSelectiveValue<T extends object>(obj: T): Partial<T> | undefined {
+export function getSelectiveValue<T extends object>(obj: T): Partial<T> | undefined {
     const keys: unknown = (obj.constructor as SelectiveMetadata)[INTERACTO_SELECTIVE];
 
     if (keys instanceof Set) {

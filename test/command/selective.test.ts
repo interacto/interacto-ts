@@ -218,6 +218,36 @@ describe("using a selective command", () => {
             expect(res[0]).toStrictEqual([cmd2]);
             expect(res[1]).toHaveLength(0);
         });
+
+        test("getAllSelectiveObjects works with shared keys", () => {
+            history.add(cmd2);
+            history.add(cmd1);
+            const res = [...history.getAllSelectiveObjects()];
+            expect(res).toHaveLength(1);
+            expect(res).toContain(cmd1.key);
+            // expect(res).toContain(cmd2.otherKey);
+        });
+
+        test("getAllSelectiveObjects works with several keys", () => {
+            cmd2 = new CmdSelective2("foo");
+            history.add(cmd2);
+            history.add(cmd1);
+            const res = [...history.getAllSelectiveObjects()];
+            expect(res).toHaveLength(2);
+            expect(res).toContain(cmd1.key);
+            expect(res).toContain(cmd2.otherKey);
+        });
+
+        test("getAllSelectiveObjects works by considering the redo stack", () => {
+            cmd2 = new CmdSelective2("foo");
+            history.add(cmd2);
+            history.add(cmd1);
+            history.undo();
+            const res = [...history.getAllSelectiveObjects()];
+            expect(res).toHaveLength(2);
+            expect(res).toContain(cmd1.key);
+            expect(res).toContain(cmd2.otherKey);
+        });
     });
 
     describe("and a linear history and specific key comparison function", () => {
