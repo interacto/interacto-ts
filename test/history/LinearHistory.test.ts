@@ -50,6 +50,76 @@ describe("using an linear history", () => {
         expect(undoable.undo).toHaveBeenCalledTimes(1);
     });
 
+    test("undoUpTo does nothing if negative index", () => {
+        history.add(undoable);
+        history.undoUpTo(-1);
+        expect(history.getLastUndo()).toBe(undoable);
+        expect(undoable.undo).not.toHaveBeenCalled();
+    });
+
+    test("redoUpTo does nothing if negative index", () => {
+        history.add(undoable);
+        history.undo();
+        history.redoUpTo(-1);
+        expect(history.getLastRedo()).toBe(undoable);
+        expect(undoable.redo).not.toHaveBeenCalled();
+    });
+
+    test("undoUpTo does nothing if too high index", () => {
+        history.add(undoable);
+        history.undoUpTo(1);
+        expect(history.getLastUndo()).toBe(undoable);
+        expect(undoable.undo).not.toHaveBeenCalled();
+    });
+
+    test("redoUpTo does nothing if too high index", () => {
+        history.add(undoable);
+        history.undo();
+        history.redoUpTo(1);
+        expect(history.getLastRedo()).toBe(undoable);
+        expect(undoable.redo).not.toHaveBeenCalled();
+    });
+
+    test("undoUpTo undoes correctly with index 0", () => {
+        history.add(undoable);
+        history.add(undoable2);
+        history.undoUpTo(0);
+        expect(history.getLastUndo()).toBeUndefined();
+        expect(undoable.undo).toHaveBeenCalledTimes(1);
+        expect(undoable2.undo).toHaveBeenCalledTimes(1);
+    });
+
+    test("redoUpTo undoes correctly with index 0", () => {
+        history.add(undoable);
+        history.add(undoable2);
+        history.undo();
+        history.undo();
+        history.redoUpTo(0);
+        expect(history.getLastRedo()).toBeUndefined();
+        expect(undoable.redo).toHaveBeenCalledTimes(1);
+        expect(undoable2.redo).toHaveBeenCalledTimes(1);
+    });
+
+    test("undoUpTo undoes correctly", () => {
+        history.add(undoable);
+        history.add(undoable2);
+        history.undoUpTo(1);
+        expect(history.getLastUndo()).toBe(undoable);
+        expect(undoable.undo).not.toHaveBeenCalled();
+        expect(undoable2.undo).toHaveBeenCalledTimes(1);
+    });
+
+    test("redoUpTo undoes correctly", () => {
+        history.add(undoable);
+        history.add(undoable2);
+        history.undo();
+        history.undo();
+        history.redoUpTo(1);
+        expect(history.getLastRedo()).toBe(undoable2);
+        expect(undoable2.redo).not.toHaveBeenCalled();
+        expect(undoable.redo).toHaveBeenCalledTimes(1);
+    });
+
     test("size history", () => {
         history.add(undoable);
         history.undo();
@@ -96,21 +166,16 @@ describe("using an linear history", () => {
         expect(history.getUndo()[1]).toBe(undoable3);
     });
 
-    test("setSizeMaxKO", () => {
+    test("setting the size max does nothing if invalid", () => {
         history.setSizeMax(-1);
         history.add(undoable);
         expect(history.getLastUndo()).toBe(undoable);
     });
 
-    test("setSizeMax0KO", () => {
+    test("setting the size max does not store if 0", () => {
         history.setSizeMax(0);
         history.add(undoable);
         expect(history.getLastUndo()).toBeUndefined();
-    });
-
-    test("addUndoablewith0SizeUndoable", () => {
-        history.setSizeMax(0);
-        history.add(undoable);
         expect(history.getUndo()).toHaveLength(0);
         expect(history.getRedo()).toHaveLength(0);
     });

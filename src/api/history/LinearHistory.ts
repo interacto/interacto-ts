@@ -74,11 +74,15 @@ export abstract class LinearHistory implements LinearHistoryBase {
     /**
      * The number of elements the history contains.
      * Provide both the size of the history and the redo stacks in the produced tuple.
+     * @returns An observable of a two-element array. The first element is the size of the undo stack.
+     * The second element is the size of the redo stack.
      */
     public abstract size(): [undos: number, redos: number];
 
     /**
      * An RX object to observe the number of elements in the history.
+     * @returns An observable of a two-element array. The first element is the size of the undo stack.
+     * The second element is the size of the redo stack.
      */
     public abstract sizeObservable(): Observable<[undos: number, redos: number]>;
 
@@ -91,5 +95,27 @@ export abstract class LinearHistory implements LinearHistoryBase {
      * The second one contains the matching commands in the redo stack.
      */
     public abstract getSelectiveOf<T extends object | string | number>
-    (key: T, eqFn?: (v1: T, v2: T) => boolean): [Array<Undoable>, Array<Undoable>];
+    (key: T, eqFn?: (v1: T, v2: T) => boolean): [undos: Array<Undoable>, redos: Array<Undoable>];
+
+    /**
+     * Undoes the last undoable objects up to go to the provided index.
+     * Index 0 corresponds to undoing all the undoable elements.
+     * Index 1 is the oldest undoable elements.
+     * In this case, the method undoes all the elements up to this oldest one, but does not undo it.
+     * Index size()[0] is the most recent undoable elements (corresponds to getLastUndo())
+     * @param index - The index in the undo stack to undo up to it.
+     * If not valid, the method does nothing.
+     */
+    public abstract undoUpTo(index: number): void;
+
+    /**
+     * Redoes the last undoable objects up to go to the provided index.
+     * Index 0 corresponds to redoing all the undoable elements.
+     * Index 1 is the oldest undoable elements.
+     * In this case, the method redoes all the elements up to this oldest one, but does not redo it.
+     * Index size()[0] is the most recent undoable elements (corresponds to getLastRedo())
+     * @param index - The index in the redo stack to redo up to it.
+     * If not valid, the method does nothing.
+     */
+    public abstract redoUpTo(index: number): void;
 }

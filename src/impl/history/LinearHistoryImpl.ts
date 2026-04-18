@@ -189,11 +189,11 @@ export class LinearHistoryImpl extends LinearHistory {
         return this.redos;
     }
 
-    public override size(): [number, number] {
+    public override size(): [undos: number, redos: number] {
         return [this.undos.length, this.redos.length];
     }
 
-    public override sizeObservable(): Observable<[number, number]> {
+    public override sizeObservable(): Observable<[undos: number, redos: number]> {
         return this.sizePublisher;
     }
 
@@ -202,11 +202,35 @@ export class LinearHistoryImpl extends LinearHistory {
     }
 
     public getSelectiveOf<T extends object | string | number>
-    (obj: T, eqFn?: (v1: T, v2: T) => boolean): [Array<Undoable>, Array<Undoable>] {
+    (obj: T, eqFn?: (v1: T, v2: T) => boolean): [undos: Array<Undoable>, redos: Array<Undoable>] {
         const fn = (undoable: Undoable): boolean => hasSelectiveValue(undoable, obj, eqFn);
         return [
             this.undos.filter(undoable => fn(undoable)),
             this.redos.filter(undoable => fn(undoable))
         ];
+    }
+
+    public undoUpTo(index: number): void {
+        if (index < 0 || index >= this.undos.length) {
+            return;
+        }
+
+        const count = this.undos.length - index;
+
+        for (let i = 0; i < count; i++) {
+            this.undo();
+        }
+    }
+
+    public redoUpTo(index: number): void {
+        if (index < 0 || index >= this.redos.length) {
+            return;
+        }
+
+        const count = this.redos.length - index;
+
+        for (let i = 0; i < count; i++) {
+            this.redo();
+        }
     }
 }
