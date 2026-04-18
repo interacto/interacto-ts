@@ -201,12 +201,17 @@ export class LinearHistoryImpl extends LinearHistory {
         this.sizePublisher.next(this.size());
     }
 
-    public getSelectiveOf<T extends object | string | number>
-    (obj: T, eqFn?: (v1: T, v2: T) => boolean): [undos: Array<Undoable>, redos: Array<Undoable>] {
-        const fn = (undoable: Undoable): boolean => hasSelectiveValue(undoable, obj, eqFn);
+    public getSelectiveOf<T extends object | string | number> (obj: T, eqFn?: (v1: T, v2: T) => boolean):
+    [undos: Array<[undoable: Undoable, index: number]>, redos: Array<[undoable: Undoable, index: number]>] {
+        const fnFilter = (undoable: Undoable): boolean => hasSelectiveValue(undoable, obj, eqFn);
+        const fnMap = (undoable: Undoable, index: number): [undoable: Undoable, index: number] => [undoable, index];
         return [
-            this.undos.filter(undoable => fn(undoable)),
-            this.redos.filter(undoable => fn(undoable))
+            this.undos
+                .map((undoable, index) => fnMap(undoable, index))
+                .filter(undoable => fnFilter(undoable[0])),
+            this.redos
+                .map((undoable, index) => fnMap(undoable, index))
+                .filter(undoable => fnFilter(undoable[0]))
         ];
     }
 

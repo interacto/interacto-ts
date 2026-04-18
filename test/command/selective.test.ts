@@ -120,7 +120,7 @@ describe("using a selective command", () => {
             expect(res).toHaveLength(2);
             expect(res[0]).toHaveLength(2);
             expect(res[1]).toHaveLength(0);
-            expect(res[0]).toStrictEqual([cmd1, cmd2]);
+            expect(res[0]).toStrictEqual([[cmd1, 0], [cmd2, 2]]);
         });
 
         test("can find a selective command having inheritance", () => {
@@ -130,7 +130,7 @@ describe("using a selective command", () => {
             expect(res).toHaveLength(2);
             expect(res[0]).toHaveLength(1);
             expect(res[1]).toHaveLength(0);
-            expect(res[0]).toStrictEqual([cmd3]);
+            expect(res[0]).toStrictEqual([[cmd3, 1]]);
         });
 
         test("can find a selective command having several keys", () => {
@@ -140,7 +140,7 @@ describe("using a selective command", () => {
             expect(res).toHaveLength(2);
             expect(res[0]).toHaveLength(1);
             expect(res[1]).toHaveLength(0);
-            expect(res[0]).toStrictEqual([cmd4]);
+            expect(res[0]).toStrictEqual([[cmd4, 0]]);
         });
 
         test("works when the key is modified", () => {
@@ -153,7 +153,7 @@ describe("using a selective command", () => {
             expect(res).toHaveLength(2);
             expect(res[0]).toHaveLength(3);
             expect(res[1]).toHaveLength(0);
-            expect(res[0]).toStrictEqual([cmd2, cmd1, cmd3]);
+            expect(res[0]).toStrictEqual([[cmd2, 0], [cmd1, 1], [cmd3, 2]]);
         });
 
         test("works when keys are different", () => {
@@ -170,7 +170,7 @@ describe("using a selective command", () => {
             const res = history.getSelectiveOf(key);
             expect(res).toHaveLength(2);
             expect(res[1]).toHaveLength(0);
-            expect(res[0]).toStrictEqual([cmd1]);
+            expect(res[0]).toStrictEqual([[cmd1, 0]]);
         });
 
         test("works when undo", () => {
@@ -184,8 +184,8 @@ describe("using a selective command", () => {
             expect(res).toHaveLength(2);
             expect(res[0]).toHaveLength(2);
             expect(res[1]).toHaveLength(1);
-            expect(res[0]).toStrictEqual([cmd2, cmd1]);
-            expect(res[1]).toStrictEqual([cmd3]);
+            expect(res[0]).toStrictEqual([[cmd2, 0], [cmd1, 1]]);
+            expect(res[1]).toStrictEqual([[cmd3, 0]]);
         });
 
         test("works when full undo", () => {
@@ -196,7 +196,7 @@ describe("using a selective command", () => {
             const res = history.getSelectiveOf(key);
             expect(res).toHaveLength(2);
             expect(res[0]).toHaveLength(0);
-            expect(res[1]).toStrictEqual([cmd1, cmd2]);
+            expect(res[1]).toStrictEqual([[cmd1, 0], [cmd2, 1]]);
         });
 
         test("selective works with string keys", () => {
@@ -205,7 +205,7 @@ describe("using a selective command", () => {
             history.add(cmd1);
             const res = history.getSelectiveOf("foo");
             expect(res).toHaveLength(2);
-            expect(res[0]).toStrictEqual([cmd1]);
+            expect(res[0]).toStrictEqual([[cmd1, 1]]);
             expect(res[1]).toHaveLength(0);
         });
 
@@ -215,7 +215,7 @@ describe("using a selective command", () => {
             history.add(cmd1);
             const res = history.getSelectiveOf(42);
             expect(res).toHaveLength(2);
-            expect(res[0]).toStrictEqual([cmd2]);
+            expect(res[0]).toStrictEqual([[cmd2, 0]]);
             expect(res[1]).toHaveLength(0);
         });
 
@@ -301,7 +301,7 @@ describe("using a selective command", () => {
             expect(res).toHaveLength(2);
             expect(res[0]).toHaveLength(3);
             expect(res[1]).toHaveLength(0);
-            expect(res[0]).toStrictEqual([cmd1, cmd4, cmd5]);
+            expect(res[0]).toStrictEqual([[cmd1, 0], [cmd4, 3], [cmd5, 4]]);
         });
     });
 });

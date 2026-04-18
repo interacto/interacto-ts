@@ -93,9 +93,10 @@ export abstract class LinearHistory implements LinearHistoryBase {
      * done using the === operator.
      * @returns Two arrays. The first one contains the matching commands in the undo stack.
      * The second one contains the matching commands in the redo stack.
+     * Each undoable is associated with its index in its undo/redo stack.
      */
-    public abstract getSelectiveOf<T extends object | string | number>
-    (key: T, eqFn?: (v1: T, v2: T) => boolean): [undos: Array<Undoable>, redos: Array<Undoable>];
+    public abstract getSelectiveOf<T extends object | string | number> (key: T, eqFn?: (v1: T, v2: T) => boolean):
+    [undos: Array<[undoable: Undoable, index: number]>, redos: Array<[undoable: Undoable, index: number]>];
 
     /**
      * Undoes the last undoable objects up to go to the provided index.
