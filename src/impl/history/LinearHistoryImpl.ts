@@ -16,6 +16,7 @@ import {LinearHistory} from "../../api/history/LinearHistory";
 import {Subject} from "rxjs";
 import type {Undoable} from "../../api/history/Undoable";
 import type {Observable} from "rxjs";
+import {getSelectiveValue, hasSelectiveValue} from "../../api/command/Selective";
 
 /**
  * Implementation of the linear history
@@ -188,15 +189,64 @@ export class LinearHistoryImpl extends LinearHistory {
         return this.redos;
     }
 
-    public override size(): [number, number] {
+    public override size(): [undos: number, redos: number] {
         return [this.undos.length, this.redos.length];
     }
 
-    public override sizeObservable(): Observable<[number, number]> {
+    public override sizeObservable(): Observable<[undos: number, redos: number]> {
         return this.sizePublisher;
     }
 
     private publishSize(): void {
         this.sizePublisher.next(this.size());
+    }
+
+    public getSelectiveOf<T extends object | string | number> (obj: T, eqFn?: (v1: T, v2: T) => boolean):
+    [undos: Array<[undoable: Undoable, index: number]>, redos: Array<[undoable: Undoable, index: number]>] {
+        const fnFilter = (undoable: Undoable): boolean => hasSelectiveValue(undoable, obj, eqFn);
+        const fnMap = (undoable: Undoable, index: number): [undoable: Undoable, index: number] => [undoable, index];
+        return [
+            this.undos
+                .map((undoable, index) => fnMap(undoable, index))
+                .filter(undoable => fnFilter(undoable[0])),
+            this.redos
+                .map((undoable, index) => fnMap(undoable, index))
+                .filter(undoable => fnFilter(undoable[0]))
+        ];
+    }
+
+    public undoUpTo(index: number): void {
+        if (index < 0 || index >= this.undos.length) {
+            return;
+        }
+
+        const count = this.undos.length - index;
+
+        for (let i = 0; i < count; i++) {
+            this.undo();
+        }
+    }
+
+    public redoUpTo(index: number): void {
+        if (index < 0 || index >= this.redos.length) {
+            return;
+        }
+
+        const count = this.redos.length - index;
+
+        for (let i = 0; i < count; i++) {
+            this.redo();
+        }
+    }
+
+    public getAllSelectiveObjects(): ReadonlySet<unknown> {
+        // Considering both the undo and redo stacks
+        // Using a set to remove duplicated values
+        return new Set([...this.undos, ...this.redos]
+            // Collecting the selective properties
+            .map((undoable: Undoable) => getSelectiveValue(undoable))
+            .filter(data => data !== undefined)
+            // Collecting only the value of the selective properties
+            .flatMap(data => Object.values(data)));
     }
 }
