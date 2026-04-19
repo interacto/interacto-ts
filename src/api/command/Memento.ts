@@ -12,8 +12,6 @@
  * along with Interacto. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {CommandBase} from "../../impl/command/CommandBase";
-
 const INTERACTO_MEMENTO: unique symbol = Symbol("interacto-cmd-memento");
 
 interface MementoMetadata {
@@ -28,9 +26,9 @@ interface MementoMetadata {
  */
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export function Memento(target: unknown, propertyName: string): void {
-    if (!(target instanceof CommandBase)) {
+    if (!(target instanceof Object)) {
         // eslint-disable-next-line no-console
-        console.error("The @Memento decorator currently operates on Interacto commands only");
+        console.error("The @Memento decorator currently operates on objects only");
         return;
     }
 
