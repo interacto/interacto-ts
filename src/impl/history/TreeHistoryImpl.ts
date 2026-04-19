@@ -51,15 +51,15 @@ class TreeHistoryNodeImpl implements TreeHistoryNode {
         this.cacheVisualSnap = undoable.getVisualSnapshot();
     }
 
-    public undo(): void {
+    public undo(): Promise<void> | void {
         if (this.parent !== undefined) {
             this.parent.lastChildUndone = this;
         }
-        this.undoable.undo();
+        return this.undoable.undo();
     }
 
-    public redo(): void {
-        this.undoable.redo();
+    public redo(): Promise<void> | void {
+        return this.undoable.redo();
     }
 
     public get visualSnapshot(): UndoableSnapshot {
@@ -333,7 +333,8 @@ export class TreeHistoryImpl extends TreeHistory {
      */
     private proceedModifiedNode(node: TreeHistoryNode): void {
         // Executing the cloned undoable object
-        node.undoable.redo();
+        // eslint-disable-next-line no-void
+        void node.undoable.redo();
         // Must refresh the visual snapshot cache
         if (node.undoable instanceof UndoableCommand) {
             node.undoable.refreshCache();
@@ -350,7 +351,8 @@ export class TreeHistoryImpl extends TreeHistory {
     private addClonedSubtree(node: TreeHistoryNode): void {
         for (const child of node.children) {
             this.proceedModifiedNode(child);
-            this.undo();
+            // eslint-disable-next-line no-void
+            void this.undo();
             this.addClonedSubtree(child);
         }
     }
@@ -390,7 +392,8 @@ export class TreeHistoryImpl extends TreeHistory {
     private goToFromRoot(id: number): void {
         const undoables = this.gatherToRoot(this.undoableNodes[id]);
         for (const undoable of undoables) {
-            undoable.redo();
+            // eslint-disable-next-line no-void
+            void undoable.redo();
         }
     }
 
@@ -415,39 +418,47 @@ export class TreeHistoryImpl extends TreeHistory {
             i++;
         }
 
+        // Ignoring async for the moment
         for (let j = pathSrc.length - 1; j > i; j--) {
-            pathSrc[j]?.undo();
+            // eslint-disable-next-line no-void
+            void pathSrc[j]?.undo();
         }
         if (i < pathSrc.length) {
-            pathSrc[i]?.undo();
+            // eslint-disable-next-line no-void
+            void pathSrc[i]?.undo();
         }
         // to then redo the target path to the targeted node
         for (let j = i; j < pathTo.length; j++) {
-            pathTo[j]?.redo();
+            // eslint-disable-next-line no-void
+            void pathTo[j]?.redo();
         }
     }
 
-    public redo(): void {
+    public redo(): Promise<void> | void {
         const node = this.currentNode.lastChildUndone;
 
         if (node !== undefined) {
-            node.undoable.redo();
+            const res = node.undoable.redo();
             this._currentNode = node;
             this.addToPath();
             this.undoPublisher.next(node.undoable);
             this.redoPublisher.next(this.getLastRedo());
+            return res;
         }
+        return undefined;
     }
 
-    public undo(): void {
+    public undo(): Promise<void> | void {
         if (this.currentNode !== this.root) {
             const currentUndoable = this.currentNode.undoable;
-            this.currentNode.undo();
+            const res = this.currentNode.undo();
             this._currentNode = this.currentNode.parent ?? this.root;
             this.addToPath();
             this.undoPublisher.next(this.getLastUndo());
             this.redoPublisher.next(currentUndoable);
+            return res;
         }
+        return undefined;
     }
 
     public getPositions(): Map<number, number> {

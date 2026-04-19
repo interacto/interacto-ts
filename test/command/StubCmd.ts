@@ -18,10 +18,6 @@ export class ExampleUndoableCmd extends UndoableCommand {
     protected execution(): Promise<void> | void {
         return undefined;
     }
-
-    public redo(): void {}
-
-    public undo(): void {}
 }
 
 export class StubCmd extends CommandBase {

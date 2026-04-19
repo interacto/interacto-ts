@@ -78,7 +78,7 @@ export class TransferArrayItem<T> extends UndoableCommand {
         return this.cmdName;
     }
 
-    public redo(): void {
+    public override redo(): void {
         const elt = this._srcArray[this._srcIndex];
         if (elt !== undefined) {
             this._srcArray.splice(this._srcIndex, 1);
@@ -86,7 +86,7 @@ export class TransferArrayItem<T> extends UndoableCommand {
         }
     }
 
-    public undo(): void {
+    public override undo(): void {
         const elt = this._tgtArray[this._tgtIndex];
         if (elt !== undefined) {
             this._tgtArray.splice(this._tgtIndex, 1);

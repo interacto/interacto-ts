@@ -54,12 +54,12 @@ export interface TreeHistoryNode {
     /**
      * Undoes the undoable object of this node.
      */
-    undo(): void;
+    undo(): Promise<void> | void;
 
     /**
      * Redoes the undoable object of this node.
      */
-    redo(): void;
+    redo(): Promise<void> | void;
 }
 
 /**
@@ -215,11 +215,11 @@ export abstract class TreeHistory implements LinearHistoryBase {
 
     public abstract getLastUndoMessage(): string | undefined;
 
-    public abstract redo(): void;
+    public abstract redo(): Promise<void> | void;
 
     public abstract redosObservable(): Observable<Undoable | undefined>;
 
-    public abstract undo(): void;
+    public abstract undo(): Promise<void> | void;
 
     public abstract undosObservable(): Observable<Undoable | undefined>;
 

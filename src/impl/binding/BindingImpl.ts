@@ -317,7 +317,8 @@ implements Binding<C, I, A, D> {
 
     private cancelContinuousWithEffectsCmd(cmd: C): void {
         if (isUndoableType(cmd)) {
-            cmd.undo();
+            // eslint-disable-next-line no-void
+            void cmd.undo();
             if (this.logCmd) {
                 this.logger.logCmdMsg("Command undone", cmd.constructor.name);
             }

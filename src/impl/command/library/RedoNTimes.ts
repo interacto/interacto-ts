@@ -34,9 +34,15 @@ export class RedoNTimes extends CommandBase {
         return this.history.getRedo().length >= this.numberOfRedos;
     }
 
-    protected execution(): void {
+    protected execution(): Promise<void> | void {
+        let chain = Promise.resolve();
         for (let i = 0; i < this.numberOfRedos; i++) {
-            this.history.redo();
+            const res = this.history.redo();
+            if (res instanceof Promise) {
+                // eslint-disable-next-line  @typescript-eslint/promise-function-async
+                chain = chain.then(() => res);
+            }
         }
+        return chain;
     }
 }

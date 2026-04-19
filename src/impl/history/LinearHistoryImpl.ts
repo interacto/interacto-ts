@@ -98,7 +98,8 @@ export class LinearHistoryImpl extends LinearHistory {
 
             const lastRedo = this.redos.at(-1);
             if (this.considersEqualCmds && lastRedo !== undefined && lastRedo.equals(undoable)) {
-                this.redo();
+                // eslint-disable-next-line no-void
+                void this.redo();
             } else {
                 this.undos.push(undoable);
                 this.undoPublisher.next(undoable);
@@ -108,12 +109,12 @@ export class LinearHistoryImpl extends LinearHistory {
         }
     }
 
-    public undo(): void {
+    public undo(): Promise<void> | void {
         const undoable = this.undos.pop();
 
         if (undoable !== undefined) {
             try {
-                undoable.undo();
+                return undoable.undo();
             } finally {
                 this.redos.push(undoable);
                 this.undoPublisher.next(this.getLastUndo());
@@ -121,14 +122,15 @@ export class LinearHistoryImpl extends LinearHistory {
                 this.publishSize();
             }
         }
+        return undefined;
     }
 
-    public redo(): void {
+    public redo(): Promise<void> | void {
         const undoable = this.redos.pop();
 
         if (undoable !== undefined) {
             try {
-                undoable.redo();
+                return undoable.redo();
             } finally {
                 this.undos.push(undoable);
                 this.undoPublisher.next(undoable);
@@ -136,6 +138,7 @@ export class LinearHistoryImpl extends LinearHistory {
                 this.publishSize();
             }
         }
+        return undefined;
     }
 
     public getLastUndoMessage(): string | undefined {
@@ -201,7 +204,7 @@ export class LinearHistoryImpl extends LinearHistory {
         this.sizePublisher.next(this.size());
     }
 
-    public getSelectiveOf<T extends object | string | number> (obj: T, eqFn?: (v1: T, v2: T) => boolean):
+    public getSelectiveOf<T extends object | string | number | bigint> (obj: T, eqFn?: (v1: T, v2: T) => boolean):
     [undos: Array<[undoable: Undoable, index: number]>, redos: Array<[undoable: Undoable, index: number]>] {
         const fnFilter = (undoable: Undoable): boolean => hasSelectiveValue(undoable, obj, eqFn);
         const fnMap = (undoable: Undoable, index: number): [undoable: Undoable, index: number] => [undoable, index];
@@ -215,28 +218,42 @@ export class LinearHistoryImpl extends LinearHistory {
         ];
     }
 
-    public undoUpTo(index: number): void {
+    public undoUpTo(index: number): Promise<void> | void {
         if (index < 0 || index >= this.undos.length) {
-            return;
+            return undefined;
         }
 
         const count = this.undos.length - index;
+        let chain: Promise<void> = Promise.resolve();
 
         for (let i = 0; i < count; i++) {
-            this.undo();
+            const res = this.undo();
+            if (res instanceof Promise) {
+                // eslint-disable-next-line  @typescript-eslint/promise-function-async
+                chain = chain.then(() => res);
+            }
         }
+
+        return chain;
     }
 
-    public redoUpTo(index: number): void {
+    public redoUpTo(index: number): Promise<void> | void {
         if (index < 0 || index >= this.redos.length) {
-            return;
+            return undefined;
         }
 
         const count = this.redos.length - index;
+        let chain: Promise<void> = Promise.resolve();
 
         for (let i = 0; i < count; i++) {
-            this.redo();
+            const res = this.redo();
+            if (res instanceof Promise) {
+                // eslint-disable-next-line  @typescript-eslint/promise-function-async
+                chain = chain.then(() => res);
+            }
         }
+
+        return chain;
     }
 
     public getAllSelectiveObjects(): ReadonlySet<unknown> {

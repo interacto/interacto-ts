@@ -34,9 +34,15 @@ export class UndoNTimes extends CommandBase {
         return this.history.getUndo().length >= this.numberOfUndos;
     }
 
-    protected execution(): void {
+    protected execution(): Promise<void> | void {
+        let chain = Promise.resolve();
         for (let i = 0; i < this.numberOfUndos; i++) {
-            this.history.undo();
+            const res = this.history.undo();
+            if (res instanceof Promise) {
+                // eslint-disable-next-line  @typescript-eslint/promise-function-async
+                chain = chain.then(() => res);
+            }
         }
+        return chain;
     }
 }

@@ -32,12 +32,12 @@ export interface Undoable {
     /**
      * Cancels the command.
      */
-    undo(): void;
+    undo(): Promise<void> | void;
 
     /**
      * Redoes the canceled command.
      */
-    redo(): void;
+    redo(): Promise<void> | void;
 
     /**
      * @returns The name of the history command.
