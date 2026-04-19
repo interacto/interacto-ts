@@ -178,8 +178,8 @@ describe("using a selective command", () => {
             history.add(cmd1);
             history.add(new ExampleUndoableCmd());
             history.add(cmd3);
-            history.undo();
-            history.undo();
+            void history.undo();
+            void history.undo();
             const res = history.getSelectiveOf(key);
             expect(res).toHaveLength(2);
             expect(res[0]).toHaveLength(2);
@@ -191,8 +191,8 @@ describe("using a selective command", () => {
         test("works when full undo", () => {
             history.add(cmd2);
             history.add(cmd1);
-            history.undo();
-            history.undo();
+            void history.undo();
+            void history.undo();
             const res = history.getSelectiveOf(key);
             expect(res).toHaveLength(2);
             expect(res[0]).toHaveLength(0);
@@ -242,7 +242,7 @@ describe("using a selective command", () => {
             cmd2 = new CmdSelective2("foo");
             history.add(cmd2);
             history.add(cmd1);
-            history.undo();
+            void history.undo();
             const res = [...history.getAllSelectiveObjects()];
             expect(res).toHaveLength(2);
             expect(res).toContain(cmd1.key);

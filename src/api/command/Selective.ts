@@ -91,7 +91,7 @@ export function isCmdSelective<T extends object>(obj: T): boolean {
  * done using the === operator.
  * @returns True if the given object is selective and its selective property has as value the given `value`
  */
-export function hasSelectiveValue<V extends object | number | string>(
+export function hasSelectiveValue<V extends object | number | string | bigint>(
     obj: object, value: V, eqFn: ((v1: V, v2: V) => boolean) = (v1, v2) => v1 === v2): boolean {
 
     const res = getSelectiveValue(obj);

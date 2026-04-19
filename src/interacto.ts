@@ -29,6 +29,7 @@ export * from "./api/binding/BindingsObserver";
 export * from "./api/binding/VisitorBinding";
 export * from "./api/checker/Checker";
 export * from "./api/command/Command";
+export * from "./api/command/Memento";
 export * from "./api/command/ModifiableCommand";
 export * from "./api/command/Selective";
 export * from "./api/fsm/ConcurrentFSM";

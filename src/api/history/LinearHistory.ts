@@ -27,9 +27,9 @@ export abstract class LinearHistory implements LinearHistoryBase {
 
     public abstract clear(): void;
 
-    public abstract undo(): void;
+    public abstract undo(): Promise<void> | void;
 
-    public abstract redo(): void;
+    public abstract redo(): Promise<void> | void;
 
     /**
      * @returns The stack of saved undoable objects.
@@ -95,7 +95,7 @@ export abstract class LinearHistory implements LinearHistoryBase {
      * The second one contains the matching commands in the redo stack.
      * Each undoable is associated with its index in its undo/redo stack.
      */
-    public abstract getSelectiveOf<T extends object | string | number> (key: T, eqFn?: (v1: T, v2: T) => boolean):
+    public abstract getSelectiveOf<T extends object | string | number | bigint> (key: T, eqFn?: (v1: T, v2: T) => boolean):
     [undos: Array<[undoable: Undoable, index: number]>, redos: Array<[undoable: Undoable, index: number]>];
 
     /**
@@ -106,8 +106,9 @@ export abstract class LinearHistory implements LinearHistoryBase {
      * Index size()[0] is the most recent undoable elements (corresponds to getLastUndo())
      * @param index - The index in the undo stack to undo up to it.
      * If not valid, the method does nothing.
+     * @returns nothing or a promise (a chain of promises in fact) if the undo process is async.
      */
-    public abstract undoUpTo(index: number): void;
+    public abstract undoUpTo(index: number): Promise<void> | void;
 
     /**
      * Redoes the last undoable objects up to go to the provided index.
@@ -117,8 +118,9 @@ export abstract class LinearHistory implements LinearHistoryBase {
      * Index size()[0] is the most recent undoable elements (corresponds to getLastRedo())
      * @param index - The index in the redo stack to redo up to it.
      * If not valid, the method does nothing.
+     * @returns nothing or a promise (a chain of promises in fact) if the undo process is async.
      */
-    public abstract redoUpTo(index: number): void;
+    public abstract redoUpTo(index: number): Promise<void> | void;
 
     /**
      * Gets all the unique selective objects of this history.

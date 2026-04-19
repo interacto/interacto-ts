@@ -70,7 +70,7 @@ describe("using a set property command", () => {
             obj.foo = 2;
             await cmd.execute();
             cmd.undo();
-            cmd.redo();
+            void cmd.redo();
             expect(obj.foo).toBe(3);
         });
 
@@ -116,7 +116,7 @@ describe("using a set property command", () => {
             obj.foo2 = "fooo22";
             await cmd.execute();
             cmd.undo();
-            cmd.redo();
+            void cmd.redo();
             expect(obj.foo2).toBe("yolo");
         });
 
@@ -159,7 +159,7 @@ describe("using a set property command", () => {
             obj.bar = obj3;
             await cmd.execute();
             cmd.undo();
-            cmd.redo();
+            void cmd.redo();
             expect(obj.bar).toBe(obj2);
         });
 

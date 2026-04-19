@@ -14,6 +14,7 @@
 
 import {CommandBase} from "./CommandBase";
 import type {Undoable, UndoableSnapshot} from "../../api/history/Undoable";
+import {restoreMementoProperties} from "../../api/command/Memento";
 
 /**
  * The base class for undoable UI commands.
@@ -68,7 +69,11 @@ export abstract class UndoableCommand<T extends UndoableSnapshot = undefined> ex
         return this === undoable;
     }
 
-    public abstract redo(): void;
+    public redo(): Promise<void> | void {
+        return this.execution();
+    }
 
-    public abstract undo(): void;
+    public undo(): Promise<void> | void {
+        restoreMementoProperties(this);
+    }
 }

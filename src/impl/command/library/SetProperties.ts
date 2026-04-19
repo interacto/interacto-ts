@@ -59,13 +59,14 @@ export class SetProperties<T> extends UndoableCommand {
 
     protected execution(): void {}
 
-    public redo(): void {
+    public override redo(): void {
         for (const cmd of this.compositeCmds) {
-            cmd.redo();
+            // eslint-disable-next-line no-void
+            void cmd.redo();
         }
     }
 
-    public undo(): void {
+    public override undo(): void {
         for (const cmd of this.compositeCmds) {
             cmd.undo();
         }

@@ -91,7 +91,6 @@ describe("testing async commands and bindings", () => {
     describe("async command alone", () => {
         test("when promise not ended command not ended", () => {
             jest.useFakeTimers();
-            // eslint-disable-next-line no-void
             void cmd.execute();
 
             expect(cmd.getStatus()).toBe("created");

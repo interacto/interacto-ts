@@ -45,11 +45,7 @@ export class SetProperty<T, S extends keyof T> extends UndoableCommand {
         this.obj[this.prop] = this.newvalue;
     }
 
-    public redo(): void {
-        this.execution();
-    }
-
-    public undo(): void {
+    public override undo(): void {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         this.obj[this.prop] = this.mementoValue!;
     }

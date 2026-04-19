@@ -261,6 +261,7 @@ export default [...[].concat(
         },
         rules: {
             ...jest.configs['flat/all'].rules,
+            "no-void": "off",
             "no-new": "off",
             "no-underscore-dangle": "off",
             "no-duplicate-imports": "off",

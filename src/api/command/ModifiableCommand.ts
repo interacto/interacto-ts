@@ -108,7 +108,7 @@ export function getModifiableCmdAttributes<T extends Undoable>(obj: T): Partial<
             const tkey = key as keyof T;
             const type = typeof obj[tkey];
 
-            if (type === "string" || type === "number" || type === "boolean") {
+            if (type === "string" || type === "number" || type === "boolean" || type === "bigint") {
                 modifiableAttributes[tkey] = obj[tkey];
             } else {
                 // eslint-disable-next-line no-console

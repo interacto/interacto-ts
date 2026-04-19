@@ -31,7 +31,7 @@ export class Redo extends CommandBase {
         return this.history.getLastRedo() !== undefined;
     }
 
-    protected execution(): void {
-        this.history.redo();
+    protected execution(): Promise<void> | void {
+        return this.history.redo();
     }
 }

@@ -13,6 +13,7 @@
  */
 
 import type {Command, CmdStatus} from "../../api/command/Command";
+import {createMementoProperties} from "../../api/command/Memento";
 
 /**
  * The base implementation class for coding UI commands.
@@ -44,7 +45,9 @@ export abstract class CommandBase implements Command {
      * This is the goal of the operation that should be overridden.
      * This operator is called a single time before the first execution of the command.
      */
-    protected createMemento(): void {}
+    protected createMemento(): void {
+        createMementoProperties(this);
+    }
 
     public execute(): Promise<boolean> | boolean {
         let ok: boolean;

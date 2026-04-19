@@ -64,7 +64,7 @@ describe("using a tree-based history", () => {
         });
 
         test("history does nothing", () => {
-            history.undo();
+            void history.undo();
             expect(history.size()).toBe(0);
             expect(history.currentNode).toBe(history.root);
         });
@@ -175,7 +175,12 @@ describe("using a tree-based history", () => {
             test("one add one history", () => {
                 testScheduler.run(helpers => {
                     const {cold, expectObservable} = helpers;
-                    cold("-a-b", {"a": () => history.add(undoable0), "b": () => history.undo()}).subscribe(v => {
+                    cold("-a-b", {
+                        "a": () => history.add(undoable0),
+                        "b": () => {
+                            void history.undo();
+                        }
+                    }).subscribe(v => {
                         v();
                     });
 
@@ -192,8 +197,12 @@ describe("using a tree-based history", () => {
                     const {cold, expectObservable} = helpers;
                     cold("-a-b-c", {
                         "a": () => history.add(undoable0),
-                        "b": () => history.undo(),
-                        "c": () => history.redo()
+                        "b": () => {
+                            void history.undo();
+                        },
+                        "c": () => {
+                            void history.redo();
+                        }
                     }).subscribe(v => {
                         v();
                     });
@@ -232,7 +241,9 @@ describe("using a tree-based history", () => {
                     cold("-a-b-c-d", {
                         "a": () => history.add(undoable0),
                         "b": () => history.add(undoable1),
-                        "c": () => history.undo(),
+                        "c": () => {
+                            void history.undo();
+                        },
                         "d": () => history.add(undoable2)
                     }).subscribe(v => {
                         v();
@@ -314,7 +325,7 @@ describe("using a tree-based history", () => {
             });
 
             test("history works", () => {
-                history.undo();
+                void history.undo();
                 expect(history.size()).toBe(1);
                 expect(history.undoableNodes[0]).toBeDefined();
                 expect(history.currentNode).toBe(history.root);
@@ -325,7 +336,7 @@ describe("using a tree-based history", () => {
                 const toRedos = new Array<Undoable | undefined>();
                 const redosStream = history.redosObservable().subscribe((e: Undoable | undefined) => toRedos.push(e));
 
-                history.undo();
+                void history.undo();
                 redosStream.unsubscribe();
 
                 expect(toRedos).toHaveLength(1);
@@ -350,10 +361,10 @@ describe("using a tree-based history", () => {
                 const redosStream = history.redosObservable().subscribe((e: Undoable | undefined) => redos.push(e));
 
                 history.add(undoable1);
-                history.undo();
-                history.undo();
-                history.redo();
-                history.redo();
+                void history.undo();
+                void history.undo();
+                void history.redo();
+                void history.redo();
                 undosStream.unsubscribe();
                 redosStream.unsubscribe();
 
@@ -372,32 +383,32 @@ describe("using a tree-based history", () => {
             });
 
             test("redo does nothing", () => {
-                history.redo();
+                void history.redo();
                 expect(history.undoableNodes).toHaveLength(1);
                 expect(history.undoableNodes[0]).toBeDefined();
                 expect(undoable0.redo).not.toHaveBeenCalledTimes(1);
             });
 
             test("get last redoable when one element and has a redo", () => {
-                history.undo();
+                void history.undo();
                 expect(history.getLastRedo()).toBe(undoable0);
             });
 
             test("get last redoable message when one element and ahs a redo", () => {
                 undoable0.getUndoName.mockReturnValue("fooo");
-                history.undo();
+                void history.undo();
                 expect(history.getLastRedoMessage()).toBe("fooo");
             });
 
             test("get last redoable message or empty when one element and ahs a redo", () => {
                 undoable0.getUndoName.mockReturnValue("barr");
-                history.undo();
+                void history.undo();
                 expect(history.getLastOrEmptyRedoMessage()).toBe("barr");
             });
 
             test("history redo works", () => {
-                history.undo();
-                history.redo();
+                void history.undo();
+                void history.redo();
                 expect(history.undoableNodes).toHaveLength(1);
                 expect(history.undoableNodes[0]).toBeDefined();
                 expect(history.undoableNodes[0]?.undoable).toBe(undoable0);
@@ -406,7 +417,7 @@ describe("using a tree-based history", () => {
             });
 
             test("history new command, creates a branch", () => {
-                history.undo();
+                void history.undo();
                 history.add(undoable1);
                 expect(history.undoableNodes).toHaveLength(2);
                 expect(history.undoableNodes[0]?.undoable).toBe(undoable0);
@@ -443,7 +454,7 @@ describe("using a tree-based history", () => {
             });
 
             test("go to undoable1 from root", () => {
-                history.undo();
+                void history.undo();
                 history.goTo(0);
 
                 expect(history.currentNode.undoable).toBe(undoable0);
@@ -468,7 +479,7 @@ describe("using a tree-based history", () => {
             });
 
             test("go to undoable1 from undoable2", () => {
-                history.undo();
+                void history.undo();
                 history.add(undoable1);
                 history.goTo(0);
 
@@ -631,10 +642,10 @@ describe("using a tree-based history", () => {
                 //    3 4
                 history.add(undoable0);
                 history.add(undoable1);
-                history.undo();
+                void history.undo();
                 history.add(undoable2);
                 history.add(undoable3);
-                history.undo();
+                void history.undo();
                 history.add(undoable4);
             });
 
@@ -743,7 +754,7 @@ describe("using a tree-based history", () => {
 
             test("get last redoable when moving to 4 and history", () => {
                 history.goTo(4);
-                history.undo();
+                void history.undo();
                 expect(history.getLastRedo()).toBe(undoable4);
             });
 
@@ -761,7 +772,7 @@ describe("using a tree-based history", () => {
 
             test("get last redoable when moving to 4 and history and delete 4", () => {
                 history.goTo(4);
-                history.undo();
+                void history.undo();
                 history.deleteFrom(4);
                 expect(history.getLastRedo()).toBe(undoable3);
                 expect(history.size()).toBe(4);
@@ -770,14 +781,14 @@ describe("using a tree-based history", () => {
             test("get last redoable message when moving to 2 and history", () => {
                 undoable2.getUndoName.mockReturnValue("fooo2");
                 history.goTo(2);
-                history.undo();
+                void history.undo();
                 expect(history.getLastRedoMessage()).toBe("fooo2");
             });
 
             test("get last redoable or empty message when moving to 3 and history", () => {
                 undoable3.getUndoName = (): string => "fooo4";
                 history.goTo(3);
-                history.undo();
+                void history.undo();
                 expect(history.getLastRedoMessage()).toBe("fooo4");
             });
 
@@ -905,28 +916,28 @@ describe("using a tree-based history", () => {
                 history.add(undoable1);
                 history.add(undoable2);
                 history.add(undoable3);
-                history.undo();
+                void history.undo();
                 history.add(undoable4);
-                history.undo();
-                history.undo();
+                void history.undo();
+                void history.undo();
                 history.add(undoable5);
-                history.undo();
+                void history.undo();
                 history.add(undoable6);
                 history.add(undoable7);
-                history.undo();
-                history.undo();
-                history.undo();
+                void history.undo();
+                void history.undo();
+                void history.undo();
                 history.add(undoable8);
                 history.add(undoable9);
-                history.undo();
+                void history.undo();
                 history.add(undoable10);
-                history.undo();
+                void history.undo();
                 history.add(undoable11);
-                history.undo();
+                void history.undo();
                 history.add(undoable12);
                 history.goTo(5);
                 history.add(undoable13);
-                history.undo();
+                void history.undo();
                 history.add(undoable14);
             });
 
@@ -1042,12 +1053,12 @@ describe("using a tree-based history", () => {
         test("does not create a new branch", () => {
             history.add(undoableC);
             history.add(undoableD);
-            history.undo();
-            history.undo();
+            void history.undo();
+            void history.undo();
             history.add(undoableF);
             // A *B - C D
             //      \ F
-            history.undo();
+            void history.undo();
             undoableC.equals = jest.fn(() => true);
             history.add(undoableE);
 
@@ -1058,13 +1069,13 @@ describe("using a tree-based history", () => {
 
         test("does not create a new branch, other config", () => {
             history.add(undoableF);
-            history.undo();
+            void history.undo();
             history.add(undoableC);
             history.add(undoableD);
             // A *B - F
             //      \ C D
-            history.undo();
-            history.undo();
+            void history.undo();
+            void history.undo();
             undoableC.equals = jest.fn(() => true);
             history.add(undoableE);
 
@@ -1140,7 +1151,7 @@ describe("using a tree-based history", () => {
 
         test("creates a branch with correct undoable objects", () => {
             history.add(new CmdModifiableDouble());
-            history.undo();
+            void history.undo();
             history.add(new CmdModifiableDouble3());
             // A - B - C|D*
             history.deleteNode(1);
@@ -1266,7 +1277,7 @@ describe("using a tree-based history", () => {
 
         test("can modify the lastest modifiable command and re-execute the tree undoables that follow", () => {
             history.add(new StubUndoableCmd());
-            history.undo();
+            void history.undo();
             history.add(new CmdModifiableDouble());
             // A - B - C
             //       \ D*

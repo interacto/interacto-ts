@@ -93,7 +93,7 @@ describe("test history redo bindings", () => {
                 throw new Error("err");
             });
             bindings.cmdhistory.add(undoable);
-            bindings.cmdhistory.undo();
+            void bindings.cmdhistory.undo();
         });
 
         test("undo/redo: redo crash caught in binding", () => {

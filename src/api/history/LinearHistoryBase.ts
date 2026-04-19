@@ -22,13 +22,15 @@ import type {Observable} from "rxjs";
 export interface LinearHistoryBase {
     /**
      * Undoes the last undoable object.
+     * @returns nothing or a promise if the undo process is async.
      */
-    undo(): void;
+    undo(): Promise<void> | void;
 
     /**
      * Redoes the last undoable object.
+     * @returns nothing or a promise if the undo process is async.
      */
-    redo(): void;
+    redo(): Promise<void> | void;
 
     /**
      * Removes all the undoable objects of the collector.

@@ -31,7 +31,7 @@ export class Undo extends CommandBase {
         return this.history.getLastUndo() !== undefined;
     }
 
-    protected execution(): void {
-        this.history.undo();
+    protected execution(): Promise<void> | void {
+        return this.history.undo();
     }
 }

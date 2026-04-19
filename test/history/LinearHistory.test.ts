@@ -46,36 +46,36 @@ describe("using an linear history", () => {
 
     test("history called", () => {
         history.add(undoable);
-        history.undo();
+        void history.undo();
         expect(undoable.undo).toHaveBeenCalledTimes(1);
     });
 
     test("undoUpTo does nothing if negative index", () => {
         history.add(undoable);
-        history.undoUpTo(-1);
+        void history.undoUpTo(-1);
         expect(history.getLastUndo()).toBe(undoable);
         expect(undoable.undo).not.toHaveBeenCalled();
     });
 
     test("redoUpTo does nothing if negative index", () => {
         history.add(undoable);
-        history.undo();
-        history.redoUpTo(-1);
+        void history.undo();
+        void history.redoUpTo(-1);
         expect(history.getLastRedo()).toBe(undoable);
         expect(undoable.redo).not.toHaveBeenCalled();
     });
 
     test("undoUpTo does nothing if too high index", () => {
         history.add(undoable);
-        history.undoUpTo(1);
+        void history.undoUpTo(1);
         expect(history.getLastUndo()).toBe(undoable);
         expect(undoable.undo).not.toHaveBeenCalled();
     });
 
     test("redoUpTo does nothing if too high index", () => {
         history.add(undoable);
-        history.undo();
-        history.redoUpTo(1);
+        void history.undo();
+        void history.redoUpTo(1);
         expect(history.getLastRedo()).toBe(undoable);
         expect(undoable.redo).not.toHaveBeenCalled();
     });
@@ -83,7 +83,7 @@ describe("using an linear history", () => {
     test("undoUpTo undoes correctly with index 0", () => {
         history.add(undoable);
         history.add(undoable2);
-        history.undoUpTo(0);
+        void history.undoUpTo(0);
         expect(history.getLastUndo()).toBeUndefined();
         expect(undoable.undo).toHaveBeenCalledTimes(1);
         expect(undoable2.undo).toHaveBeenCalledTimes(1);
@@ -92,9 +92,9 @@ describe("using an linear history", () => {
     test("redoUpTo undoes correctly with index 0", () => {
         history.add(undoable);
         history.add(undoable2);
-        history.undo();
-        history.undo();
-        history.redoUpTo(0);
+        void history.undo();
+        void history.undo();
+        void history.redoUpTo(0);
         expect(history.getLastRedo()).toBeUndefined();
         expect(undoable.redo).toHaveBeenCalledTimes(1);
         expect(undoable2.redo).toHaveBeenCalledTimes(1);
@@ -103,7 +103,7 @@ describe("using an linear history", () => {
     test("undoUpTo undoes correctly", () => {
         history.add(undoable);
         history.add(undoable2);
-        history.undoUpTo(1);
+        void history.undoUpTo(1);
         expect(history.getLastUndo()).toBe(undoable);
         expect(undoable.undo).not.toHaveBeenCalled();
         expect(undoable2.undo).toHaveBeenCalledTimes(1);
@@ -112,9 +112,9 @@ describe("using an linear history", () => {
     test("redoUpTo undoes correctly", () => {
         history.add(undoable);
         history.add(undoable2);
-        history.undo();
-        history.undo();
-        history.redoUpTo(1);
+        void history.undo();
+        void history.undo();
+        void history.redoUpTo(1);
         expect(history.getLastRedo()).toBe(undoable2);
         expect(undoable2.redo).not.toHaveBeenCalled();
         expect(undoable.redo).toHaveBeenCalledTimes(1);
@@ -122,14 +122,14 @@ describe("using an linear history", () => {
 
     test("size history", () => {
         history.add(undoable);
-        history.undo();
+        void history.undo();
         expect(history.size()).toStrictEqual([0, 1]);
     });
 
     test("history and redo called", () => {
         history.add(undoable);
-        history.undo();
-        history.redo();
+        void history.undo();
+        void history.redo();
         expect(undoable.undo).toHaveBeenCalledTimes(1);
         expect(undoable.redo).toHaveBeenCalledTimes(1);
         expect(history.size()).toStrictEqual([1, 0]);
@@ -137,20 +137,20 @@ describe("using an linear history", () => {
 
     test("redo not called", () => {
         history.add(undoable);
-        history.redo();
+        void history.redo();
         expect(undoable.redo).not.toHaveBeenCalled();
         expect(history.size()).toStrictEqual([1, 0]);
     });
 
     test("history ok when empty", () => {
-        history.undo();
+        void history.undo();
         expect(history.getLastUndo()).toBeUndefined();
     });
 
     test("get last history ok on add", () => {
         history.add(undoable);
-        history.undo();
-        history.redo();
+        void history.undo();
+        void history.redo();
         expect(undoable.redo).toHaveBeenCalledTimes(1);
         expect(history.getLastUndo()).toBe(undoable);
     });
@@ -270,7 +270,7 @@ describe("using an linear history", () => {
 
     test("getLastRedoOKOnRedo", () => {
         history.add(undoable);
-        history.undo();
+        void history.undo();
         expect(history.getLastRedo()).toStrictEqual(undoable);
     });
 
@@ -311,20 +311,20 @@ describe("using an linear history", () => {
 
     test("getLastRedoMessageOK", () => {
         history.add(undoable);
-        history.undo();
+        void history.undo();
         expect(history.getLastRedoMessage()).toBe("undoredomsg");
     });
 
     test("lastOrEmptyRedoMessage OK", () => {
         history.add(undoable);
-        history.undo();
+        void history.undo();
         expect(history.getLastOrEmptyRedoMessage()).toBe("undoredomsg");
     });
 
     test("clear", () => {
         history.add(undoable);
         history.add(undoable2);
-        history.undo();
+        void history.undo();
         history.clear();
         expect(history.getLastRedo()).toBeUndefined();
         expect(history.getLastUndo()).toBeUndefined();
@@ -357,7 +357,12 @@ describe("using an linear history", () => {
         test("one add one history", () => {
             testScheduler.run(helpers => {
                 const {cold, expectObservable} = helpers;
-                cold("-a-b", {"a": () => history.add(undoable), "b": () => history.undo()}).subscribe(v => {
+                cold("-a-b", {
+                    "a": () => history.add(undoable),
+                    "b": () => {
+                        void history.undo();
+                    }
+                }).subscribe(v => {
                     v();
                 });
 
@@ -375,8 +380,12 @@ describe("using an linear history", () => {
                 cold("-a-b-c-d-e", {
                     "a": () => history.add(undoable),
                     "b": () => history.add(undoable2),
-                    "c": () => history.undo(),
-                    "d": () => history.redo(),
+                    "c": () => {
+                        void history.undo();
+                    },
+                    "d": () => {
+                        void history.redo();
+                    },
                     "e": () => history.clear()
                 }).subscribe(v => v());
 
@@ -413,7 +422,7 @@ describe("using an linear history", () => {
             history.setSizeMax(10);
             history.add(undoable);
             history.add(undoable2);
-            history.undo();
+            void history.undo();
 
             testScheduler.run(helpers => {
                 const {cold, expectObservable} = helpers;
@@ -433,7 +442,7 @@ describe("using an linear history", () => {
             history.setSizeMax(10);
             history.add(undoable);
             history.add(undoable2);
-            history.undo();
+            void history.undo();
 
             testScheduler.run(helpers => {
                 const {cold, expectObservable} = helpers;
@@ -455,8 +464,8 @@ describe("using an linear history", () => {
         history.add(undoable2);
         history.add(mock());
         history.add(mock());
-        history.undo();
-        history.undo();
+        void history.undo();
+        void history.undo();
         history.setSizeMax(1);
 
         expect(history.size()).toStrictEqual([1, 0]);
@@ -469,7 +478,9 @@ describe("using an linear history", () => {
         history.add(undoable);
         history.add(undoable2);
 
-        expect(() => history.undo()).toThrow(new Error("err"));
+        expect(() => {
+            void history.undo();
+        }).toThrow(new Error("err"));
         expect(history.getUndo()).toHaveLength(1);
         expect(history.getRedo()).toHaveLength(1);
     });
@@ -481,8 +492,10 @@ describe("using an linear history", () => {
         history.add(undoable);
         history.add(undoable2);
 
-        history.undo();
-        expect(() => history.redo()).toThrow(new Error("err2"));
+        void history.undo();
+        expect(() => {
+            void history.redo();
+        }).toThrow(new Error("err2"));
         expect(history.getUndo()).toHaveLength(2);
         expect(history.getRedo()).toHaveLength(0);
     });
@@ -514,8 +527,8 @@ describe("using an linear history", () => {
 
         test("does a redo if equal command", () => {
             // A *B C D
-            history.undo();
-            history.undo();
+            void history.undo();
+            void history.undo();
             undoableC.equals = jest.fn(() => true);
             history.add(undoableE);
 
@@ -525,8 +538,8 @@ describe("using an linear history", () => {
 
         test("clears redos if not equal command", () => {
             // A *B C D
-            history.undo();
-            history.undo();
+            void history.undo();
+            void history.undo();
             undoableC.equals = jest.fn(() => false);
             history.add(undoableE);
 
