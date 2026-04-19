@@ -14,7 +14,11 @@
 
 import {ExampleUndoableCmd} from "./StubCmd";
 import {Memento} from "../../src/interacto";
-import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
+import {beforeEach, describe, expect, test} from "@jest/globals";
+
+interface Data {
+    text: string;
+}
 
 class MementoCmd1 extends ExampleUndoableCmd {
     @Memento
@@ -38,15 +42,38 @@ class MementoCmd1 extends ExampleUndoableCmd {
     }
 }
 
-describe("using a command have memento decorators", () => {
+class MementoCmd2 extends ExampleUndoableCmd {
+    public data: Data;
+
+    public newTxt: string;
+
+    public constructor(data: Data, newTxt: string) {
+        super();
+        this.data = data;
+        this.newTxt = newTxt;
+        console.log("1data value", this.data);
+    }
+
+    @Memento
+    public get txt(): string {
+        console.log("data value", this.data);
+        return this.data.text;
+    }
+
+    public set txt(value: string) {
+        this.data.text = value;
+    }
+
+    public override execution(): void {
+        this.txt = this.newTxt;
+    }
+}
+
+describe("using a command that has memento decorators", () => {
     let cmd1: MementoCmd1;
 
     beforeEach(() => {
         cmd1 = new MementoCmd1(1, 2);
-    });
-
-    afterEach(() => {
-        jest.clearAllMocks();
     });
 
     test("command execution works as expected", () => {
@@ -81,5 +108,26 @@ describe("using a command have memento decorators", () => {
         expect(cmd1.x).toBe(1);
         expect(cmd1.y).toBe(2);
         expect(cmd1.newX).toBe(0);
+    });
+});
+
+describe("using a command that has a memento decorator on a getter", () => {
+    let cmd1: MementoCmd2;
+
+    beforeEach(() => {
+        cmd1 = new MementoCmd2({
+            text: "foo"
+        }, "bar");
+    });
+
+    test("command execution works as expected", () => {
+        void cmd1.execute();
+        expect(cmd1.data.text).toBe("bar");
+    });
+
+    test("command undo uses automated memento to restore values", () => {
+        void cmd1.execute();
+        void cmd1.undo();
+        expect(cmd1.data.text).toBe("foo");
     });
 });

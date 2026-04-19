@@ -38,9 +38,8 @@ export function Memento(target: unknown, propertyName: string): void {
     const symbolValues: unknown = (target.constructor as MementoMetadata)[INTERACTO_MEMENTO];
     const map = symbolValues instanceof Map ? symbolValues as Map<string, unknown> : new Map<string, unknown>();
 
-    // Adding the property in this cache
-    const tpropertyName = propertyName as keyof CommandBase;
-    map.set(propertyName, target[tpropertyName]);
+    // Adding the property in this cache (setting its value to undefined for the moment)
+    map.set(propertyName, undefined);
     (target.constructor as MementoMetadata)[INTERACTO_MEMENTO] = map;
 }
 
