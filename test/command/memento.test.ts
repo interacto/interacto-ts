@@ -51,12 +51,10 @@ class MementoCmd2 extends ExampleUndoableCmd {
         super();
         this.data = data;
         this.newTxt = newTxt;
-        console.log("1data value", this.data);
     }
 
     @Memento
     public get txt(): string {
-        console.log("data value", this.data);
         return this.data.text;
     }
 
