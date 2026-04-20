@@ -1,7 +1,20 @@
-import {getModifiableCmdAttributes, isCmdModifiable, modifyCmdAttributes} from "../../../src/interacto";
+import {getModifiableCmdAttributes, isCmdModifiable, Modifiable, modifyCmdAttributes} from "../../src/interacto";
 import {beforeEach, describe, expect, test} from "@jest/globals";
-import type {UndoableCommand} from "../../../src/interacto";
-import {CmdModifiableDouble, CmdModifiableDouble2, CmdModifiableDouble3} from "../StubCmd";
+import type {UndoableCommand} from "../../src/interacto";
+import {CmdModifiableDouble, CmdModifiableDouble2, CmdModifiableDouble3, ExampleUndoableCmd} from "./StubCmd";
+
+class CmdModifiableGet extends ExampleUndoableCmd {
+    public theX = 10;
+
+    @Modifiable
+    public get x(): number {
+        return this.theX;
+    }
+
+    public set x(value: number) {
+        this.theX = value;
+    }
+}
 
 describe("using a modifiable decorator on commands", () => {
     describe("and an undoable command", () => {
@@ -99,6 +112,15 @@ describe("using a modifiable decorator on commands", () => {
         test("get modifiable properties", () => {
             const attributes = getModifiableCmdAttributes(cmd);
             expect(attributes).toStrictEqual({"a": 0, "b": false});
+        });
+
+        test("get modifiable properties on getter", () => {
+            const cmd2 = new CmdModifiableGet();
+            const res = modifyCmdAttributes(cmd2, {
+                "x": 42
+            });
+            expect(res).toBeTruthy();
+            expect(cmd2.theX).toBe(42);
         });
 
         describe("and an undoable command with incorrect usages of Modifiable", () => {
