@@ -81,4 +81,13 @@ export interface Command {
      * @returns The status of the command.
      */
     getStatus(): CmdStatus;
+
+    /**
+     * The timestamp of the command.
+     * @returns The timestamp of the command when it is executed for the last time.
+     * If the command has not been executed, it returns 0.
+     * Note that due to timing attacks and fingerprinting countermeasures implemented in browsers,
+     * the timestamp may not be reliable.
+     */
+    getTimestamp(): number;
 }

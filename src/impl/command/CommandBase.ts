@@ -26,10 +26,16 @@ export abstract class CommandBase implements Command {
     protected status: CmdStatus;
 
     /**
+     * The timestamp of the command when it is executed for the last time.
+     */
+    protected timestamp: number;
+
+    /**
      * Creates the command with the status 'created'.
      */
     public constructor() {
         this.status = "created";
+        this.timestamp = 0;
     }
 
     /**
@@ -58,6 +64,7 @@ export abstract class CommandBase implements Command {
             ok = true;
 
             try {
+                this.timestamp = Date.now();
                 const result = this.execution();
                 if (result instanceof Promise) {
                     return result
@@ -112,5 +119,9 @@ export abstract class CommandBase implements Command {
 
     public canExecute(): boolean {
         return true;
+    }
+
+    public getTimestamp(): number {
+        return this.timestamp;
     }
 }
