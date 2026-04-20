@@ -280,7 +280,7 @@ describe("using a base interaction", () => {
         });
 
         test("throttle with a single event > timeout", async() => {
-            interaction.processEvent(undefined as never as Event);
+            interaction.processEvent(undefined as never);
             jest.runAllTimers();
             await flushPromises();
 

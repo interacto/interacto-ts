@@ -48,7 +48,7 @@ describe("using a wheel data", () => {
             "deltaY": 19,
             "deltaZ": 20,
             "deltaMode": 21
-        } as WheelData;
+        };
         defaultData = new WheelDataImpl();
         defaultData.copy({
             "button": 0,

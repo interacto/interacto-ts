@@ -36,7 +36,7 @@ describe("using a key data", () => {
             "timeStamp": 0,
             "target": null,
             "currentTarget": null
-        } as KeyData;
+        };
 
         defaultData = new KeyDataImpl();
         defaultData.copy({

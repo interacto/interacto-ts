@@ -133,7 +133,7 @@ export class BindingsImpl<H extends LinearHistoryBase> extends Bindings<H> {
 
     public nodeBinder<A>(accInit?: A): BaseUpdateBinder {
         return new UpdateBinder<CommandBase, Interaction<object>, A>(this.cmdhistory,
-            this.logger, this.observer, undefined, accInit) as BaseUpdateBinder;
+            this.logger, this.observer, undefined, accInit);
     }
 
     public buttonBinder<A>(accInit?: A): PartialButtonTypedBinder<A> {
