@@ -47,6 +47,23 @@ class CmdEditParagraph extends ExampleUndoableCmd {
     }
 }
 
+class CmdEditParagraph2 extends ExampleUndoableCmd {
+    public paragraph: Paragraph;
+
+    public txt: Txt;
+
+    public constructor(para: Paragraph, txt: Txt) {
+        super();
+        this.paragraph = para;
+        this.txt = txt;
+    }
+
+    @Selective
+    public get paragraphId(): number {
+        return this.paragraph.id;
+    }
+}
+
 describe("using a selective command", () => {
     afterEach(() => {
         jest.clearAllMocks();
@@ -225,7 +242,6 @@ describe("using a selective command", () => {
             const res = [...history.getAllSelectiveObjects()];
             expect(res).toHaveLength(1);
             expect(res).toContain(cmd1.key);
-            // expect(res).toContain(cmd2.otherKey);
         });
 
         test("getAllSelectiveObjects works with several keys", () => {
@@ -302,6 +318,14 @@ describe("using a selective command", () => {
             expect(res[0]).toHaveLength(3);
             expect(res[1]).toHaveLength(0);
             expect(res[0]).toStrictEqual([[cmd1, 0], [cmd4, 3], [cmd5, 4]]);
+        });
+
+        test("getAllSelectiveObjects works with getters", () => {
+            history = new LinearHistoryImpl();
+            history.add(new CmdEditParagraph2(p1, txt));
+            const res = [...history.getAllSelectiveObjects()];
+            expect(res).toHaveLength(1);
+            expect(res[0]).toBe(p1.id);
         });
     });
 });
