@@ -18,7 +18,6 @@ import {OutputStateBase} from "../../src/impl/fsm/OutputStateBase";
 import {StdState} from "../../src/impl/fsm/StdState";
 import {beforeEach, describe, expect, test} from "@jest/globals";
 import {mock} from "jest-mock-extended";
-import type {FSM} from "../../src/api/fsm/FSM";
 import type {InputState} from "../../src/api/fsm/InputState";
 import type {OutputState} from "../../src/api/fsm/OutputState";
 import type {Transition} from "../../src/api/fsm/Transition";
@@ -76,7 +75,7 @@ describe("using an output state", () => {
             "uninstall": () => {},
             "name": "foo",
             "process": () => false,
-            "fsm": fsm as FSM,
+            fsm,
             "transitions": new Array<Transition<Event>>(),
             "addTransition": () => {},
             "checkStartingState": () => false,
@@ -91,7 +90,7 @@ describe("using an output state", () => {
             "uninstall": () => {},
             "name": "foo",
             "process": () => false,
-            "fsm": fsm as FSM,
+            fsm,
             "transitions": new Array<Transition<Event>>(),
             "exit": () => {},
             "checkStartingState": () => false,
@@ -106,7 +105,7 @@ describe("using an output state", () => {
             "uninstall": () => {},
             "name": "foo",
             "addTransition": () => {},
-            "fsm": fsm as FSM,
+            fsm,
             "transitions": new Array<Transition<Event>>(),
             "exit": () => {},
             "checkStartingState": () => false,
@@ -121,7 +120,7 @@ describe("using an output state", () => {
             "uninstall": () => {},
             "name": "foo",
             "addTransition": () => {},
-            "fsm": fsm as FSM,
+            fsm,
             "process": () => false,
             "exit": () => {},
             "checkStartingState": () => false,
@@ -135,7 +134,7 @@ describe("using an output state", () => {
             "uninstall": () => {},
             "name": "foo",
             "addTransition": () => {},
-            "fsm": fsm as FSM,
+            fsm,
             "transitions": new Array<Transition<Event>>(),
             "exit": () => {},
             "checkStartingState": () => false,

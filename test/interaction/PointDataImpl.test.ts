@@ -44,7 +44,7 @@ describe("using a point data", () => {
             "timeStamp": 17,
             "target": new EventTarget(),
             "currentTarget": new EventTarget()
-        } as PointData;
+        };
         defaultData = new PointDataImpl();
         defaultData.copy({
             "button": 0,
