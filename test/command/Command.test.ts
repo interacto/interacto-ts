@@ -151,6 +151,28 @@ describe("using a command", () => {
         expect(cmd.getStatus()).toBe("cancelled");
     });
 
+    test("get timestamp when not executed", () => {
+        expect(cmd.getTimestamp()).toBe(0);
+    });
+
+    test("get timestamp when executed", () => {
+        jest.useFakeTimers();
+        jest.setSystemTime(100);
+        jest.advanceTimersByTime(123);
+        void cmd.execute();
+        expect(cmd.getTimestamp()).toBe(223);
+    });
+
+    test("get timestamp when re-executed", () => {
+        jest.useFakeTimers();
+        jest.setSystemTime(100);
+        jest.advanceTimersByTime(123);
+        void cmd.execute();
+        jest.advanceTimersByTime(1000);
+        void cmd.execute();
+        expect(cmd.getTimestamp()).toBe(1223);
+    });
+
     test("executed Two Times", async () => {
         jest.spyOn(cmd, "execute");
         await cmd.execute();
