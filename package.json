@@ -67,9 +67,9 @@
     "rollup-plugin-esbuild": "6.2.1",
     "ts-jest": "29.4.9",
     "typedoc": "0.28.19",
-    "typescript": "5.9.3",
+    "typescript": "6.0.3",
     "typescript-eslint": "8.59.0",
-    "@typescript/native-preview": "^7.0.0-dev.20260420.1"
+    "@typescript/native-preview": "^7.0.0-dev.20260427.1"
   },
   "scripts": {
     "package": "npm run pre-build && npm run build && npm run doc",
@@ -77,6 +77,7 @@
     "generate-barrels": "barrelsby -c ./barrelsby-config.json --delete",
     "compile": "tsc",
     "compile-native": "tsgo",
+    "compile-test-native": "tsgo -p tsconfig.test.json",
     "compile-test": "tsc -p tsconfig.test.json",
     "pre-build": "npm run clean && npm run generate-barrels && npm run compile && npm run lint && npm run compile-test && npm run coverage",
     "clean": "(rm -rf dist out-test coverage .stryker-tmp)",
