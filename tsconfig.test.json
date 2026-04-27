@@ -1,7 +1,9 @@
 {
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "out-test"
+    "rootDir": ".",
+    "outDir": "out-test",
+    "ignoreDeprecations": "6.0"
   },
   "include": [
     "test/**/*"
