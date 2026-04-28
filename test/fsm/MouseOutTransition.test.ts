@@ -15,8 +15,8 @@
 import {MouseTransition} from "../../src/impl/fsm/MouseTransition";
 import {StdState} from "../../src/impl/fsm/StdState";
 import {createMouseEvent, createTouchEvent} from "../interaction/StubEvents";
-import {beforeEach, describe, expect, test} from "@jest/globals";
-import {mock} from "jest-mock-extended";
+import {beforeEach, describe, expect, test} from "vitest";
+import {mock} from "vitest-mock-extended";
 import type {FSMImpl} from "../../src/impl/fsm/FSMImpl";
 
 describe("using a mouse out transition", () => {

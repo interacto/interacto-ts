@@ -13,11 +13,11 @@
  */
 
 import {KeysDataImpl, KeysDown} from "../../../src/interacto";
-import {beforeEach, describe, expect, jest, test} from "@jest/globals";
+import {beforeEach, describe, expect, vi, test} from "vitest";
 import {robot} from "interacto-nono";
-import {mock} from "jest-mock-extended";
+import {mock} from "vitest-mock-extended";
 import type {FSMHandler, KeyData, Logger} from "../../../src/interacto";
-import type {MockProxy} from "jest-mock-extended";
+import type {MockProxy} from "vitest-mock-extended";
 
 describe("using a keys down interaction", () => {
     let interaction: KeysDown;
@@ -46,7 +46,7 @@ describe("using a keys down interaction", () => {
         interaction.registerToNodes([text]);
 
         const newHandler = mock<FSMHandler>();
-        newHandler.fsmUpdates = jest.fn(() => {
+        newHandler.fsmUpdates = vi.fn(() => {
             data.addKey(interaction.data.keys.at(-1) as KeyData);
         });
         interaction.fsm.addHandler(newHandler);
@@ -71,7 +71,7 @@ describe("using a keys down interaction", () => {
         interaction.registerToNodes([text]);
 
         const newHandler = mock<FSMHandler>();
-        newHandler.fsmUpdates = jest.fn(() => {
+        newHandler.fsmUpdates = vi.fn(() => {
             data.addKey(interaction.data.keys.at(-1) as KeyData);
         });
         interaction.fsm.addHandler(newHandler);
@@ -125,7 +125,7 @@ describe("using a keys down interaction", () => {
             .keydown({"code": "A"})
             .keydown({"code": "B"});
         const newHandler = mock<FSMHandler>();
-        newHandler.fsmUpdates = jest.fn(() => {
+        newHandler.fsmUpdates = vi.fn(() => {
             data.addKey(interaction.data.keys.at(-1) as KeyData);
         });
         interaction.fsm.addHandler(newHandler);

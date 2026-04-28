@@ -14,8 +14,8 @@
 import {BindingsContext, BindingsImpl, LinearHistoryImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {robot} from "../interaction/StubEvents";
-import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
-import {mock} from "jest-mock-extended";
+import {afterEach, beforeEach, describe, expect, vi, test} from "vitest";
+import {mock} from "vitest-mock-extended";
 import type {Binding, Bindings, FSMHandler, Interaction, SrcTgtPointsData, TouchData, LinearHistoryBase} from "../../src/interacto";
 
 let binding: Binding<StubCmd, Interaction<SrcTgtPointsData<TouchData>>, unknown> | undefined;
@@ -28,13 +28,13 @@ describe("using a swipe binder", () => {
         bindings = new BindingsImpl(new LinearHistoryImpl());
         ctx = new BindingsContext();
         bindings.setBindingObserver(ctx);
-        jest.useFakeTimers();
+        vi.useFakeTimers();
         c1 = document.createElement("canvas");
     });
 
     afterEach(() => {
         bindings.clear();
-        jest.clearAllTimers();
+        vi.clearAllTimers();
     });
 
     test("touch move: too slow too short", () => {

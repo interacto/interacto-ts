@@ -15,10 +15,10 @@
 import {Taps, TapsDataImpl, TouchDataImpl} from "../../../src/interacto";
 import {checkTouchPoint} from "../../Utils";
 import {robot} from "../StubEvents";
-import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
-import {mock} from "jest-mock-extended";
+import {afterEach, beforeEach, describe, expect, vi, test} from "vitest";
+import {mock} from "vitest-mock-extended";
 import type {FSMHandler, Logger} from "../../../src/interacto";
-import type {MockProxy} from "jest-mock-extended";
+import type {MockProxy} from "vitest-mock-extended";
 
 describe("using a Taps interaction", () => {
     let interaction: Taps;
@@ -27,15 +27,15 @@ describe("using a Taps interaction", () => {
     let logger: Logger & MockProxy<Logger>;
 
     beforeEach(() => {
-        jest.useFakeTimers();
+        vi.useFakeTimers();
         handler = mock<FSMHandler>();
         canvas = document.createElement("canvas");
     });
 
     afterEach(() => {
         interaction.uninstall();
-        jest.clearAllMocks();
-        jest.clearAllTimers();
+        vi.clearAllMocks();
+        vi.clearAllTimers();
     });
 
     describe("taps 1", () => {
@@ -111,7 +111,7 @@ describe("using a Taps interaction", () => {
         test("one touch data", () => {
             const touch = new TouchDataImpl();
             const newHandler = mock<FSMHandler>();
-            newHandler.fsmStarts = jest.fn(() => {
+            newHandler.fsmStarts = vi.fn(() => {
                 touch.copy(interaction.data.points[0]);
             });
             interaction.fsm.addHandler(newHandler);
@@ -213,7 +213,7 @@ describe("using a Taps interaction", () => {
             const touch = new TapsDataImpl();
 
             const newHandler = mock<FSMHandler>();
-            newHandler.fsmStops = jest.fn(() => {
+            newHandler.fsmStops = vi.fn(() => {
                 for (const tap of interaction.data.points) {
                     touch.addPoint(tap);
                 }
@@ -319,7 +319,7 @@ describe("using a Taps interaction", () => {
             const touch = new TapsDataImpl();
 
             const newHandler = mock<FSMHandler>();
-            newHandler.fsmStops = jest.fn(() => {
+            newHandler.fsmStops = vi.fn(() => {
                 for (const tap of interaction.data.points) {
                     touch.addPoint(tap);
                 }

@@ -14,10 +14,10 @@
 
 import {PointDataImpl, TimedClick} from "../../../src/interacto";
 import {createMouseEvent2, robot} from "../StubEvents";
-import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
-import {mock} from "jest-mock-extended";
+import {afterEach, beforeEach, describe, expect, vi, test} from "vitest";
+import {mock} from "vitest-mock-extended";
 import type {FSMHandler, Logger} from "../../../src/interacto";
-import type {MockProxy} from "jest-mock-extended";
+import type {MockProxy} from "vitest-mock-extended";
 
 describe("using a timed click interaction", () => {
     let interaction: TimedClick;
@@ -31,12 +31,12 @@ describe("using a timed click interaction", () => {
         interaction = new TimedClick(300, logger);
         interaction.fsm.addHandler(handler);
         canvas = document.createElement("canvas");
-        jest.useFakeTimers();
+        vi.useFakeTimers();
     });
 
     afterEach(() => {
-        jest.clearAllTimers();
-        jest.clearAllMocks();
+        vi.clearAllTimers();
+        vi.clearAllMocks();
     });
 
     test("click on a element starts and stops the interaction TimedClick", () => {
@@ -116,7 +116,7 @@ describe("using a timed click interaction", () => {
             "timeStamp": 0
         });
 
-        handler.fsmStops = jest.fn(() => {
+        handler.fsmStops = vi.fn(() => {
             data.copy(interaction.data);
         });
 
@@ -128,7 +128,7 @@ describe("using a timed click interaction", () => {
     test("click On Widget Data", () => {
         const data = new PointDataImpl();
 
-        handler.fsmStops = jest.fn(() => {
+        handler.fsmStops = vi.fn(() => {
             data.copy(interaction.data);
         });
         interaction.registerToNodes([canvas]);
@@ -166,7 +166,7 @@ describe("using a timed click interaction", () => {
         robot(canvas)
             .mousedown()
             .do(() => {
-                jest.advanceTimersByTime(295);
+                vi.advanceTimersByTime(295);
             })
             .mouseup();
         expect(handler.fsmStops).toHaveBeenCalledTimes(1);

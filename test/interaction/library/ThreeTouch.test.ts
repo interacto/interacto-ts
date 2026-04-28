@@ -15,10 +15,10 @@
 import {ThreeTouchDnD} from "../../../src/interacto";
 import {checkTouchPoint} from "../../Utils";
 import {robot} from "../StubEvents";
-import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
-import {mock} from "jest-mock-extended";
+import {afterEach, beforeEach, describe, expect, vi, test} from "vitest";
+import {mock} from "vitest-mock-extended";
 import type {FSMHandler, Logger} from "../../../src/interacto";
-import type {MockProxy} from "jest-mock-extended";
+import type {MockProxy} from "vitest-mock-extended";
 
 describe("using a multi touch interaction", () => {
     let interaction: ThreeTouchDnD;
@@ -36,7 +36,7 @@ describe("using a multi touch interaction", () => {
     });
 
     afterEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
         interaction.uninstall();
     });
 

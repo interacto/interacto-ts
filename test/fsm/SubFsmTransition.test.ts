@@ -15,8 +15,8 @@
 import {SubStubTransition1} from "./StubTransitionOk";
 import {FSMImpl, SubFSMTransitionImpl} from "../../src/interacto";
 import {createMouseEvent} from "../interaction/StubEvents";
-import {beforeEach, describe, expect, jest, test} from "@jest/globals";
-import {mock} from "jest-mock-extended";
+import {beforeEach, describe, expect, vi, test} from "vitest";
+import {mock} from "vitest-mock-extended";
 import type {InputState, Logger, Transition, StdState, TerminalState, EventType} from "../../src/interacto";
 
 describe("using a sub fsm transition", () => {
@@ -28,7 +28,7 @@ describe("using a sub fsm transition", () => {
     let subS: TerminalState;
 
     beforeEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
         fsm = new FSMImpl(mock<Logger>());
         mainfsm = new FSMImpl(mock<Logger>());
         s1 = mainfsm.addStdState("s1");
@@ -82,14 +82,14 @@ describe("using a sub fsm transition", () => {
 
     test("uninstall", () => {
         tr = new SubFSMTransitionImpl(s1, s2, fsm);
-        jest.spyOn(fsm, "uninstall");
+        vi.spyOn(fsm, "uninstall");
         tr.uninstall();
         expect(fsm.uninstall).toHaveBeenCalledTimes(1);
     });
 
     test("get accepted events", () => {
         const tr2 = {} as Transition<Event>;
-        tr2.getAcceptedEvents = jest.fn<() => ReadonlySet<EventType>>(() => new Set(["click", "auxclick"]));
+        tr2.getAcceptedEvents = vi.fn<() => ReadonlySet<EventType>>(() => new Set(["click", "auxclick"]));
         fsm.initState.addTransition(tr2);
         const evts = tr.getAcceptedEvents();
         expect(Array.from(evts)).toHaveLength(2);
@@ -105,13 +105,13 @@ describe("using a sub fsm transition", () => {
     });
 
     test("executeExitSrcState", () => {
-        jest.spyOn(s1, "exit");
+        vi.spyOn(s1, "exit");
         tr.execute(createMouseEvent("click", document.createElement("button")));
         expect(s1.exit).toHaveBeenCalledTimes(1);
     });
 
     test("executeEnterTgtState", () => {
-        jest.spyOn(s2, "enter");
+        vi.spyOn(s2, "enter");
         tr.execute(createMouseEvent("click", document.createElement("button")));
         expect(s2.enter).toHaveBeenCalledTimes(1);
     });

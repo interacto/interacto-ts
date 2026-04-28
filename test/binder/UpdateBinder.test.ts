@@ -13,8 +13,8 @@
  */
 
 import {LinearHistoryImpl, UpdateBinder, MouseDown} from "../../src/interacto";
-import {afterEach, beforeEach, describe, expect, test, jest} from "@jest/globals";
-import {mock} from "jest-mock-extended";
+import {afterEach, beforeEach, describe, expect, test, vi} from "vitest";
+import {mock} from "vitest-mock-extended";
 import type {Command, Interaction, LinearHistory, Logger, BindingsObserver} from "../../src/interacto";
 
 describe("using an update binder", () => {
@@ -28,7 +28,7 @@ describe("using an update binder", () => {
     });
 
     afterEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     });
 
     test("that is crashes when calling bind without an interaction supplier", () => {

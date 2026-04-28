@@ -14,11 +14,11 @@
 
 import {PointDataImpl, MouseMove} from "../../../src/interacto";
 import {createMouseEvent, createMouseEvent2} from "../StubEvents";
-import {beforeEach, describe, expect, jest, test} from "@jest/globals";
+import {beforeEach, describe, expect, vi, test} from "vitest";
 import {robot} from "interacto-nono";
-import {mock} from "jest-mock-extended";
+import {mock} from "vitest-mock-extended";
 import type {FSMHandler, Logger} from "../../../src/interacto";
-import type {MockProxy} from "jest-mock-extended";
+import type {MockProxy} from "vitest-mock-extended";
 
 describe("using a mouse move interaction", () => {
     let interaction: MouseMove;
@@ -110,7 +110,7 @@ describe("using a mouse move interaction", () => {
             "timeStamp": 0
         });
 
-        handler.fsmStops = jest.fn(() => {
+        handler.fsmStops = vi.fn(() => {
             data.copy(interaction.data);
         });
         interaction.processEvent(createMouseEvent2("mousemove", expected));
@@ -120,7 +120,7 @@ describe("using a mouse move interaction", () => {
     test("mouse move On Widget Data", () => {
         const data = new PointDataImpl();
 
-        handler.fsmStops = jest.fn(() => {
+        handler.fsmStops = vi.fn(() => {
             data.copy(interaction.data);
         });
         interaction.registerToNodes([canvas]);

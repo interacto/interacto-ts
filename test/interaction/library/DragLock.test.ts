@@ -14,10 +14,10 @@
 
 import {DragLock} from "../../../src/interacto";
 import {robot} from "../StubEvents";
-import {beforeEach, describe, expect, jest, test} from "@jest/globals";
-import {mock} from "jest-mock-extended";
+import {beforeEach, describe, expect, vi, test} from "vitest";
+import {mock} from "vitest-mock-extended";
 import type {FSMHandler, Logger} from "../../../src/interacto";
-import type {MockProxy} from "jest-mock-extended";
+import type {MockProxy} from "vitest-mock-extended";
 
 describe("using a drag lock interaction", () => {
     let interaction: DragLock;
@@ -30,7 +30,7 @@ describe("using a drag lock interaction", () => {
     let logger: Logger & MockProxy<Logger>;
 
     beforeEach(() => {
-        jest.useFakeTimers();
+        vi.useFakeTimers();
         handler = mock<FSMHandler>();
         logger = mock<Logger>();
         canvas = document.createElement("canvas");
@@ -95,7 +95,7 @@ describe("using a drag lock interaction", () => {
         test("check data with a normal execution", () => {
             interaction.registerToNodes([canvas]);
             const newHandler = mock<FSMHandler>();
-            newHandler.fsmStops = jest.fn(() => {
+            newHandler.fsmStops = vi.fn(() => {
                 sx = interaction.data.src.clientX;
                 sy = interaction.data.src.clientY;
                 tx = interaction.data.tgt.clientX;
@@ -130,7 +130,7 @@ describe("using a drag lock interaction", () => {
             interaction.registerToNodes([canvas]);
             robot(canvas).click({"clientX": 11, "clientY": 23}, 2, false);
             const newHandler = mock<FSMHandler>();
-            newHandler.fsmUpdates = jest.fn(() => {
+            newHandler.fsmUpdates = vi.fn(() => {
                 tx = interaction.data.tgt.clientX;
                 ty = interaction.data.tgt.clientY;
             });

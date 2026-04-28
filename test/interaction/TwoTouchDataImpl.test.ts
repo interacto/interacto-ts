@@ -13,7 +13,7 @@
  */
 
 import {GeneralTwoTouchDataImpl} from "../../src/impl/interaction/GeneralTwoTouchDataImpl";
-import {beforeEach, describe, expect, jest, test} from "@jest/globals";
+import {beforeEach, describe, expect, vi, test} from "vitest";
 import type {SrcTgtTouchDataImpl} from "../../src/impl/interaction/SrcTgtTouchDataImpl";
 
 describe("using a touch data", () => {
@@ -36,8 +36,8 @@ describe("using a touch data", () => {
     });
 
     test("flush", () => {
-        jest.spyOn(data.touch1 as SrcTgtTouchDataImpl, "flush");
-        jest.spyOn(data.touch2 as SrcTgtTouchDataImpl, "flush");
+        vi.spyOn(data.touch1 as SrcTgtTouchDataImpl, "flush");
+        vi.spyOn(data.touch2 as SrcTgtTouchDataImpl, "flush");
 
         data.flush();
 

@@ -6,7 +6,7 @@ import tseslint from 'typescript-eslint';
 import stylistic from "@stylistic/eslint-plugin";
 import unicorn from "eslint-plugin-unicorn";
 import arrayFunc from "eslint-plugin-array-func";
-import jest from "eslint-plugin-jest";
+import vitest from '@vitest/eslint-plugin'
 import globals from "globals";
 
 export default [...[].concat(
@@ -243,9 +243,8 @@ export default [...[].concat(
     {
         files: ["test/**/*.ts"],
         plugins: {
-            jest
+            vitest
         },
-        ...jest.configs['flat/all'],
         languageOptions: {
             parser: tsParser,
             parserOptions: {
@@ -254,13 +253,13 @@ export default [...[].concat(
                 tsconfigRootDir: import.meta.dirname,
             },
             globals: {
-                ...globals.jest,
+                ...globals.vitest,
                 ...globals.node,
                 ...globals.browser
             }
         },
         rules: {
-            ...jest.configs['flat/all'].rules,
+            ...vitest.configs.all.rules,
             "no-void": "off",
             "no-new": "off",
             "no-underscore-dangle": "off",
@@ -308,23 +307,25 @@ export default [...[].concat(
             "default-param-last": "off",
             "require-await": "off",
 
-            "jest/padding-around-all": "off",
-            "jest/padding-around-expect-groups": "off",
-            "jest/max-expects": "off",
-            "jest/no-disabled-tests": "warn",
-            "jest/prefer-spy-on": "off",
-            "jest/prefer-expect-assertions": "off",
-            "jest/prefer-ending-with-an-expect": "off",
-            "jest/expect-expect": ["error", {
+            "vitest/padding-around-all": "off",
+            "vitest/padding-around-expect-groups": "off",
+            "vitest/max-expects": "off",
+            "vitest/no-disabled-tests": "warn",
+            "vitest/prefer-spy-on": "off",
+            "vitest/prefer-expect-assertions": "off",
+            "vitest/prefer-ending-with-an-expect": "off",
+            "vitest/expect-expect": ["error", {
                 assertFunctionNames: ["expect", "expectObservable", "checkTouchPoint"],
                 additionalTestBlockFunctions: [],
             }],
-            "jest/no-hooks": "off",
-            "jest/require-hook": "off",
-            "jest/consistent-test-it": ["error", {
+            "vitest/no-hooks": "off",
+            "vitest/require-hook": "off",
+            "vitest/consistent-test-it": ["error", {
                 fn: "test",
                 withinDescribe: "test",
             }],
+            "vitest/require-mock-type-parameters": "off",
+            "vitest/prefer-strict-boolean-matchers": "off",
 
             "@stylistic/block-spacing": "off",
             "@stylistic/padded-blocks": "off",

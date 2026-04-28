@@ -15,8 +15,8 @@
 import {BindingImpl, FSMImpl, MustBeUndoableCmdError, LinearHistoryImpl} from "../../src/interacto";
 import {StubCmd, StubUndoableCmd} from "../command/StubCmd";
 import {InteractionStub} from "../interaction/InteractionStub";
-import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
-import {mock} from "jest-mock-extended";
+import {afterEach, beforeEach, describe, expect, vi, test} from "vitest";
+import {mock} from "vitest-mock-extended";
 import type {Undoable, LinearHistory, VisitorBinding, Logger} from "../../src/interacto";
 
 class BindingStub extends BindingImpl<StubCmd, InteractionStub, unknown> {
@@ -87,16 +87,16 @@ describe("using a binding", () => {
 
     afterEach(() => {
         history.clear();
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     });
 
     describe("nominal cases", () => {
         afterEach(() => {
-            // eslint-disable-next-line jest/no-standalone-expect
+            // eslint-disable-next-line vitest/no-standalone-expect
             expect(logger.logInteractionErr).not.toHaveBeenCalled();
-            // eslint-disable-next-line jest/no-standalone-expect
+            // eslint-disable-next-line vitest/no-standalone-expect
             expect(logger.logCmdErr).not.toHaveBeenCalled();
-            // eslint-disable-next-line jest/no-standalone-expect
+            // eslint-disable-next-line vitest/no-standalone-expect
             expect(logger.logBindingErr).not.toHaveBeenCalled();
         });
 
@@ -215,7 +215,7 @@ describe("using a binding", () => {
         });
 
         test("clear events", () => {
-            jest.spyOn(binding.interaction, "fullReinit");
+            vi.spyOn(binding.interaction, "fullReinit");
             binding.clearEvents();
             expect(binding.interaction.fullReinit).toHaveBeenCalledTimes(1);
         });
@@ -226,8 +226,8 @@ describe("using a binding", () => {
             binding.logCmd = true;
             binding.interaction.fsm.onStarting();
             const cmd = binding.command;
-            jest.spyOn(binding, "cancel");
-            jest.spyOn(binding, "endOrCancel");
+            vi.spyOn(binding, "cancel");
+            vi.spyOn(binding, "endOrCancel");
             binding.interaction.fsm.onCancelling();
             binding.interaction.fsm.onCancelling();
             binding.interaction.fsm.onCancelling();
@@ -240,7 +240,7 @@ describe("using a binding", () => {
 
         test("cancel interaction two times", () => {
             binding.whenStartOK = true;
-            jest.spyOn(binding, "cancel");
+            vi.spyOn(binding, "cancel");
             binding.interaction.fsm.onStarting();
             binding.interaction.fsm.onCancelling();
             binding.interaction.fsm.onStarting();
@@ -250,8 +250,8 @@ describe("using a binding", () => {
 
         test("cancel interaction continuous not undoable", () => {
             binding = new BindingStub(history, logger, true, () => new StubCmd(), new InteractionStub(new FSMImpl(logger)));
-            jest.spyOn(binding, "cancel");
-            jest.spyOn(binding, "endOrCancel");
+            vi.spyOn(binding, "cancel");
+            vi.spyOn(binding, "endOrCancel");
             binding.whenStartOK = true;
             binding.interaction.fsm.onStarting();
             binding.command?.done();
@@ -267,11 +267,11 @@ describe("using a binding", () => {
 
         test("cancel interaction continuous undoable", () => {
             const cmd = new CmdStubUndoable();
-            jest.spyOn(cmd, "undo");
-            jest.spyOn(cmd, "cancel");
+            vi.spyOn(cmd, "undo");
+            vi.spyOn(cmd, "cancel");
             binding = new BindingStub(history, logger, true, () => cmd, new InteractionStub(new FSMImpl(logger)));
-            jest.spyOn(binding, "cancel");
-            jest.spyOn(binding, "endOrCancel");
+            vi.spyOn(binding, "cancel");
+            vi.spyOn(binding, "endOrCancel");
             binding.whenStartOK = true;
             binding.logCmd = true;
             binding.interaction.fsm.onStarting();
@@ -284,7 +284,7 @@ describe("using a binding", () => {
 
         test("name contains the command name on execution", () => {
             const cmd = new CmdStubUndoable();
-            jest.spyOn(cmd, "undo");
+            vi.spyOn(cmd, "undo");
             binding = new BindingStub(history, logger, true, () => cmd, new InteractionStub(new FSMImpl(logger)));
             binding.whenStartOK = true;
             binding.interaction.fsm.onStarting();
@@ -293,7 +293,7 @@ describe("using a binding", () => {
 
         test("cancel interaction continuous undoable no log", () => {
             const cmd = new CmdStubUndoable();
-            jest.spyOn(cmd, "undo");
+            vi.spyOn(cmd, "undo");
             binding = new BindingStub(history, logger, true, () => cmd, new InteractionStub(new FSMImpl(logger)));
             binding.whenStartOK = true;
             binding.interaction.fsm.onStarting();
@@ -302,7 +302,7 @@ describe("using a binding", () => {
         });
 
         test("update activated with log cmd not ok", () => {
-            jest.spyOn(binding, "then");
+            vi.spyOn(binding, "then");
             binding.whenStartOK = false;
             binding.logBinding = true;
             binding.interaction.fsm.onStarting();
@@ -311,7 +311,7 @@ describe("using a binding", () => {
         });
 
         test("update activated no log cmd ok", () => {
-            jest.spyOn(binding, "then");
+            vi.spyOn(binding, "then");
             binding.whenStartOK = true;
             binding.whenUpdateOK = true;
             binding.interaction.fsm.onStarting();
@@ -320,7 +320,7 @@ describe("using a binding", () => {
         });
 
         test("update activated with log cmd ok", () => {
-            jest.spyOn(binding, "then");
+            vi.spyOn(binding, "then");
             binding.whenStartOK = true;
             binding.whenUpdateOK = true;
             binding.logCmd = true;
@@ -332,8 +332,8 @@ describe("using a binding", () => {
         test("update not activated", () => {
             binding.whenStartOK = true;
             binding.interaction.fsm.onStarting();
-            jest.spyOn(binding, "first");
-            jest.spyOn(binding, "then");
+            vi.spyOn(binding, "first");
+            vi.spyOn(binding, "then");
             binding.activated = false;
             binding.interaction.fsm.onUpdating();
             expect(binding.first).not.toHaveBeenCalledWith();
@@ -341,7 +341,7 @@ describe("using a binding", () => {
         });
 
         test("update when cmd not created", () => {
-            jest.spyOn(binding, "first");
+            vi.spyOn(binding, "first");
             binding.whenStartOK = false;
             binding.whenUpdateOK = true;
             binding.interaction.fsm.onStarting();
@@ -354,10 +354,10 @@ describe("using a binding", () => {
         test("update continuous with log cannotDo", () => {
             binding = new BindingStub(history, logger, true, () => {
                 const cmd = new StubCmd();
-                jest.spyOn(cmd, "execute");
+                vi.spyOn(cmd, "execute");
                 return cmd;
             }, new InteractionStub(new FSMImpl(logger)));
-            jest.spyOn(binding, "ifCannotExecuteCmd");
+            vi.spyOn(binding, "ifCannotExecuteCmd");
             binding.whenStartOK = true;
             binding.whenUpdateOK = true;
             binding.logCmd = true;
@@ -372,10 +372,10 @@ describe("using a binding", () => {
         test("update continuous not log canDo", () => {
             binding = new BindingStub(history, logger, true, () => {
                 const cmd = new StubCmd();
-                jest.spyOn(cmd, "execute");
+                vi.spyOn(cmd, "execute");
                 return cmd;
             }, new InteractionStub(new FSMImpl(logger)));
-            jest.spyOn(binding, "ifCannotExecuteCmd");
+            vi.spyOn(binding, "ifCannotExecuteCmd");
             binding.whenStartOK = true;
             binding.whenUpdateOK = true;
             binding.interaction.fsm.onStarting();
@@ -421,7 +421,7 @@ describe("using a binding", () => {
         });
 
         test("uninstall Binding", () => {
-            jest.spyOn(binding.interaction, "uninstall");
+            vi.spyOn(binding.interaction, "uninstall");
             binding.uninstallBinding();
             expect(binding.activated).toBeFalsy();
             expect(binding.interaction.uninstall).toHaveBeenCalledTimes(1);
@@ -491,9 +491,9 @@ describe("using a binding", () => {
 
     describe("crash in binding", () => {
         afterEach(() => {
-            // eslint-disable-next-line jest/no-standalone-expect
+            // eslint-disable-next-line vitest/no-standalone-expect
             expect(logger.logInteractionErr).not.toHaveBeenCalled();
-            // eslint-disable-next-line jest/no-standalone-expect
+            // eslint-disable-next-line vitest/no-standalone-expect
             expect(logger.logCmdErr).not.toHaveBeenCalled();
         });
 
@@ -505,8 +505,8 @@ describe("using a binding", () => {
 
             binding = new BindingStub(history, logger, true, supplier, new InteractionStub(new FSMImpl(logger)));
             binding.whenStartOK = true;
-            jest.spyOn(binding, "first");
-            jest.spyOn(binding, "catch");
+            vi.spyOn(binding, "first");
+            vi.spyOn(binding, "catch");
             binding.interaction.fsm.onStarting();
             expect(binding.command).toBeUndefined();
             expect(logger.logBindingErr).toHaveBeenCalledWith("Error while creating a command", ex);
@@ -521,7 +521,7 @@ describe("using a binding", () => {
 
             binding = new BindingStub(history, logger, true, supplier, new InteractionStub(new FSMImpl(logger)));
             binding.whenStartOK = true;
-            jest.spyOn(binding, "first");
+            vi.spyOn(binding, "first");
             binding.interaction.fsm.onStarting();
             expect(binding.command).toBeUndefined();
             expect(logger.logBindingErr).toHaveBeenCalledWith("Error while creating a command", "yolo");
@@ -548,7 +548,7 @@ describe("using a binding", () => {
                 throw ex;
             };
             binding = new BindingStub(history, logger, true, supplier, new InteractionStub(new FSMImpl(logger)));
-            jest.spyOn(binding, "first");
+            vi.spyOn(binding, "first");
             binding.whenStartOK = false;
             binding.whenUpdateOK = true;
             binding.interaction.fsm.onStarting();
@@ -560,11 +560,11 @@ describe("using a binding", () => {
 
         test("command undone when 'when' is false on interaction end", () => {
             const cmd = new StubUndoableCmd(true);
-            jest.spyOn(cmd, "undo");
-            jest.spyOn(cmd, "cancel");
+            vi.spyOn(cmd, "undo");
+            vi.spyOn(cmd, "cancel");
             binding = new BindingStub(history, logger, true, (): StubCmd => cmd, new InteractionStub(new FSMImpl(logger)));
-            jest.spyOn(binding, "cancel");
-            jest.spyOn(binding, "endOrCancel");
+            vi.spyOn(binding, "cancel");
+            vi.spyOn(binding, "endOrCancel");
             binding.whenStartOK = true;
             binding.interaction.fsm.onStarting();
             binding.interaction.fsm.onUpdating();
@@ -581,10 +581,10 @@ describe("using a binding", () => {
 
         test("command not undoable when 'when' is false on interaction end", () => {
             const cmd = new StubCmd(true, true);
-            jest.spyOn(cmd, "cancel");
+            vi.spyOn(cmd, "cancel");
             binding = new BindingStub(history, logger, true, (): StubCmd => cmd, new InteractionStub(new FSMImpl(logger)));
-            jest.spyOn(binding, "cancel");
-            jest.spyOn(binding, "endOrCancel");
+            vi.spyOn(binding, "cancel");
+            vi.spyOn(binding, "endOrCancel");
             binding.whenStartOK = true;
             binding.interaction.fsm.onStarting();
             binding.interaction.fsm.onUpdating();

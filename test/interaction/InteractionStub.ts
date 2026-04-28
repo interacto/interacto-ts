@@ -13,7 +13,7 @@
  */
 
 import {InteractionBase, PointDataImpl} from "../../src/interacto";
-import {mock} from "jest-mock-extended";
+import {mock} from "vitest-mock-extended";
 import type {Logger, FSM, Flushable, OutputState} from "../../src/interacto";
 
 export class InteractionStub extends InteractionBase<object, Flushable & object> {

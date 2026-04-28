@@ -15,10 +15,10 @@
 import {Tap, TouchDataImpl} from "../../../src/interacto";
 import {checkTouchPoint} from "../../Utils";
 import {robot} from "../StubEvents";
-import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
-import {mock} from "jest-mock-extended";
+import {afterEach, beforeEach, describe, expect, vi, test} from "vitest";
+import {mock} from "vitest-mock-extended";
 import type {FSMHandler, Logger} from "../../../src/interacto";
-import type {MockProxy} from "jest-mock-extended";
+import type {MockProxy} from "vitest-mock-extended";
 
 describe("using a Tap interaction", () => {
     let interaction: Tap;
@@ -27,7 +27,7 @@ describe("using a Tap interaction", () => {
     let logger: Logger & MockProxy<Logger>;
 
     beforeEach(() => {
-        jest.useFakeTimers();
+        vi.useFakeTimers();
         handler = mock<FSMHandler>();
         canvas = document.createElement("canvas");
         logger = mock<Logger>();
@@ -38,8 +38,8 @@ describe("using a Tap interaction", () => {
 
     afterEach(() => {
         interaction.uninstall();
-        jest.clearAllMocks();
-        jest.clearAllTimers();
+        vi.clearAllMocks();
+        vi.clearAllTimers();
     });
 
     test("one touchstart", () => {
@@ -103,7 +103,7 @@ describe("using a Tap interaction", () => {
     test("one touch data", () => {
         const touch = new TouchDataImpl();
         const newHandler = mock<FSMHandler>();
-        newHandler.fsmStarts = jest.fn(() => {
+        newHandler.fsmStarts = vi.fn(() => {
             touch.copy(interaction.data);
         });
         interaction.fsm.addHandler(newHandler);

@@ -15,7 +15,7 @@
 import {BindingsImpl, LinearHistoryImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {robot} from "../interaction/StubEvents";
-import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
+import {afterEach, beforeEach, describe, expect, vi, test} from "vitest";
 import type {Bindings, LinearHistoryBase} from "../../src/interacto";
 
 let elt: HTMLElement;
@@ -25,7 +25,7 @@ let div2: HTMLElement;
 describe("events lost by the browser do not block bindings", () => {
     beforeEach(async () => {
         bindings = new BindingsImpl(new LinearHistoryImpl());
-        jest.useFakeTimers();
+        vi.useFakeTimers();
         elt = document.createElement("div");
 
         div2 = document.createElement("div");
@@ -35,8 +35,8 @@ describe("events lost by the browser do not block bindings", () => {
 
     afterEach(() => {
         bindings.clear();
-        jest.clearAllTimers();
-        jest.clearAllMocks();
+        vi.clearAllTimers();
+        vi.clearAllMocks();
     });
 
     describe("with touch events", () => {
@@ -57,7 +57,7 @@ describe("events lost by the browser do not block bindings", () => {
 
             // The first event remove the child
             robot(div2).touchstart({}, [{"identifier": 1}]);
-            jest.advanceTimersByTime(200);
+            vi.advanceTimersByTime(200);
             await Promise.resolve();
             // The second event is captured by the child but since removed
             // from its parent, the parent does not capture it
@@ -80,7 +80,7 @@ describe("events lost by the browser do not block bindings", () => {
 
             // The first event remove the child
             robot(div2).touchstart({}, [{"identifier": 1}]);
-            jest.advanceTimersByTime(200);
+            vi.advanceTimersByTime(200);
             await Promise.resolve();
             // The second event is captured by the child but since removed
             // from its parent, the parent does not capture it
@@ -107,7 +107,7 @@ describe("events lost by the browser do not block bindings", () => {
 
             // The first event remove the child
             robot(div2).touchstart({}, [{"identifier": 1}]);
-            jest.advanceTimersByTime(200);
+            vi.advanceTimersByTime(200);
             await Promise.resolve();
             // The second event is captured by the child but since removed
             // from its parent, the parent does not capture it
@@ -156,7 +156,7 @@ describe("events lost by the browser do not block bindings", () => {
 
             // The first event remove the child
             robot(div2).touchstart({}, [{"identifier": 1}]);
-            jest.advanceTimersByTime(200);
+            vi.advanceTimersByTime(200);
             await Promise.resolve();
             // The second event is captured by the child but since removed
             // from its parent, the parent does not capture it
@@ -178,7 +178,7 @@ describe("events lost by the browser do not block bindings", () => {
 
             // The first event remove the child
             robot(div2).touchstart({}, [{"identifier": 1}]);
-            jest.advanceTimersByTime(200);
+            vi.advanceTimersByTime(200);
             await Promise.resolve();
             // The second event is captured by the child but since removed
             // from its parent, the parent does not capture it
@@ -202,7 +202,7 @@ describe("events lost by the browser do not block bindings", () => {
 
             // The first event remove the child
             robot(div2).touchstart({}, [{"identifier": 1}]);
-            jest.advanceTimersByTime(200);
+            vi.advanceTimersByTime(200);
             await Promise.resolve();
             // The second event is captured by the child but since removed
             // from its parent, the parent does not capture it
@@ -235,7 +235,7 @@ describe("events lost by the browser do not block bindings", () => {
 
         // The first event remove the child
         robot(div2).mousedown();
-        jest.advanceTimersByTime(200);
+        vi.advanceTimersByTime(200);
         await Promise.resolve();
         // The second event is captured by the child but since removed
         // from its parent, the parent does not capture it

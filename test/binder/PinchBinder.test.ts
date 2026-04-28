@@ -14,7 +14,7 @@
 import {BindingsContext, BindingsImpl, LinearHistoryImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {robot} from "../interaction/StubEvents";
-import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
+import {afterEach, beforeEach, describe, expect, vi, test} from "vitest";
 import type {Binding, Interaction, LinearHistoryBase, Bindings} from "../../src/interacto";
 
 let binding: Binding<StubCmd, Interaction<object>, unknown> | undefined;
@@ -27,13 +27,13 @@ describe("using a pinch binder", () => {
         bindings = new BindingsImpl(new LinearHistoryImpl());
         ctx = new BindingsContext();
         bindings.setBindingObserver(ctx);
-        jest.useFakeTimers();
+        vi.useFakeTimers();
         c1 = document.createElement("canvas");
     });
 
     afterEach(() => {
         bindings.clear();
-        jest.clearAllTimers();
+        vi.clearAllTimers();
     });
 
     test("pinch OK", () => {

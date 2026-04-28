@@ -12,7 +12,7 @@
  * along with Interacto. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
+import {afterEach, beforeEach, describe, expect, vi, test} from "vitest";
 import {CmdSelective1, CmdSelective2, CmdSeveralKeysSelective, CmdSelectiveInheritance, ExampleUndoableCmd} from "./StubCmd";
 import {type LinearHistory, LinearHistoryImpl, isCmdSelective, Selective} from "../../src/interacto";
 
@@ -66,11 +66,11 @@ class CmdEditParagraph2 extends ExampleUndoableCmd {
 
 describe("using a selective command", () => {
     afterEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     });
 
     test("does not work with a non-command object", () => {
-        const logSpy = jest.spyOn(globalThis.console, "error");
+        const logSpy = vi.spyOn(globalThis.console, "error");
         logSpy.mockReset();
         // eslint-disable-next-line new-cap
         Selective({}, "key");
@@ -80,7 +80,7 @@ describe("using a selective command", () => {
     });
 
     test("can have multiple selective keys", () => {
-        const logSpy = jest.spyOn(globalThis.console, "error");
+        const logSpy = vi.spyOn(globalThis.console, "error");
         logSpy.mockReset();
         // eslint-disable-next-line new-cap
         Selective(new CmdSeveralKeysSelective({}, {}), "key");

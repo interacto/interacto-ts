@@ -14,7 +14,7 @@
 
 import {BindingsContext, BindingsImpl, LinearHistoryImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
-import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
+import {afterEach, beforeEach, describe, expect, vi, test} from "vitest";
 import type {LinearHistoryBase, Bindings} from "../../src/interacto";
 
 let txt1: HTMLInputElement | HTMLTextAreaElement;
@@ -27,25 +27,24 @@ describe("using a text input binder", () => {
         bindings = new BindingsImpl(new LinearHistoryImpl());
         ctx = new BindingsContext();
         bindings.setBindingObserver(ctx);
-        jest.useFakeTimers();
+        vi.useFakeTimers();
         txt1 = document.createElement("textarea");
         cmd = new StubCmd(true);
     });
 
     afterEach(() => {
-        jest.clearAllTimers();
+        vi.clearAllTimers();
         bindings.clear();
     });
 
     test("type text create command", () => {
         const textonUpdate = new Array<string>();
 
-        jest.spyOn(cmd, "execute");
+        vi.spyOn(cmd, "execute");
 
         bindings.textInputBinder()
             .toProduce(() => cmd)
             .then((_, i) => {
-                // eslint-disable-next-line jest/no-conditional-in-test
                 textonUpdate.push(i.widget?.value ?? "");
             })
             .on(txt1)
@@ -57,7 +56,7 @@ describe("using a text input binder", () => {
         txt1.dispatchEvent(new InputEvent("input"));
         txt1.value = "foo";
         txt1.dispatchEvent(new InputEvent("input"));
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
         expect(cmd.execute).toHaveBeenCalledTimes(1);
         expect(ctx.commands).toHaveLength(1);
         expect(ctx.getCmd(0)).toBe(cmd);
@@ -78,7 +77,7 @@ describe("using a text input binder", () => {
         txt1.dispatchEvent(new InputEvent("input"));
         txt1.value = "foo";
         txt1.dispatchEvent(new InputEvent("input"));
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
         expect(ctx.commands).toHaveLength(1);
         expect(ctx.getCmd(0)).toBe(cmd);
     });
@@ -86,12 +85,11 @@ describe("using a text input binder", () => {
     test("type text exec several times the command", () => {
         const textonUpdate = new Array<string>();
 
-        jest.spyOn(cmd, "execute");
+        vi.spyOn(cmd, "execute");
 
         bindings.textInputBinder()
             .toProduce(() => cmd)
             .then((_, i) => {
-                // eslint-disable-next-line jest/no-conditional-in-test
                 textonUpdate.push(i.widget?.value ?? "");
             })
             .on(txt1)
@@ -104,7 +102,7 @@ describe("using a text input binder", () => {
         txt1.dispatchEvent(new InputEvent("input"));
         txt1.value = "foo";
         txt1.dispatchEvent(new InputEvent("input"));
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
         expect(cmd.execute).toHaveBeenCalledTimes(4);
         expect(ctx.commands).toHaveLength(1);
         expect(ctx.getCmd(0)).toBe(cmd);

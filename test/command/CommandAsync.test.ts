@@ -20,7 +20,7 @@ import {
 } from "../../src/interacto";
 import {robot} from "../interaction/StubEvents";
 import {flushPromises} from "../Utils";
-import {afterEach, beforeEach, describe, expect, test, jest} from "@jest/globals";
+import {afterEach, beforeEach, describe, expect, test, vi} from "vitest";
 import {Subject} from "rxjs";
 import type {Binding,
     BindingImpl,
@@ -83,14 +83,14 @@ describe("testing async commands and bindings", () => {
 
     afterEach(async () => {
         bindings.clear();
-        jest.clearAllTimers();
-        jest.clearAllMocks();
+        vi.clearAllTimers();
+        vi.clearAllMocks();
         await flushPromises();
     });
 
     describe("async command alone", () => {
         test("when promise not ended command not ended", () => {
-            jest.useFakeTimers();
+            vi.useFakeTimers();
             void cmd.execute();
 
             expect(cmd.getStatus()).toBe("created");
@@ -98,7 +98,7 @@ describe("testing async commands and bindings", () => {
         });
 
         test("when promise ended command also ended", async () => {
-            jest.useRealTimers();
+            vi.useRealTimers();
             await cmd.execute();
 
             expect(cmd.getStatus()).toBe("executed");
@@ -106,7 +106,7 @@ describe("testing async commands and bindings", () => {
         });
 
         test("two commands executed", async () => {
-            jest.useRealTimers();
+            vi.useRealTimers();
             const cmd2 = new StubAsyncCmd(data);
             await Promise.all([cmd.execute(), cmd2.execute()]);
 
@@ -118,7 +118,7 @@ describe("testing async commands and bindings", () => {
         let button1: HTMLButtonElement;
 
         beforeEach(() => {
-            jest.useFakeTimers();
+            vi.useFakeTimers();
             button1 = document.createElement("button");
         });
 
@@ -129,7 +129,7 @@ describe("testing async commands and bindings", () => {
                 .bind();
 
             button1.click();
-            jest.runAllTimers();
+            vi.runAllTimers();
             await flushPromises();
 
             expect(binding.command).toBeUndefined();
@@ -139,8 +139,8 @@ describe("testing async commands and bindings", () => {
         });
 
         test("button binding with async command does not end when the command is not disposed", async () => {
-            const end = jest.fn(() => {});
-            const first = jest.fn(() => {});
+            const end = vi.fn(() => {});
+            const first = vi.fn(() => {});
             binding = bindings.buttonBinder()
                 .toProduce(() => new StubAsyncCmd(data, 50))
                 .on(button1)
@@ -149,7 +149,7 @@ describe("testing async commands and bindings", () => {
                 .bind();
 
             button1.click();
-            jest.advanceTimersByTime(49);
+            vi.advanceTimersByTime(49);
             await flushPromises();
             expect(binding.command).toBeDefined();
             expect(end).not.toHaveBeenCalled();
@@ -158,8 +158,8 @@ describe("testing async commands and bindings", () => {
         });
 
         test("button binding with async command ends when the command is disposed", async () => {
-            const end = jest.fn(() => {});
-            const first = jest.fn(() => {});
+            const end = vi.fn(() => {});
+            const first = vi.fn(() => {});
             binding = bindings.buttonBinder()
                 .toProduce(() => new StubAsyncCmd(data, 50))
                 .on(button1)
@@ -168,7 +168,7 @@ describe("testing async commands and bindings", () => {
                 .bind();
 
             button1.click();
-            jest.advanceTimersByTime(51);
+            vi.advanceTimersByTime(51);
             await flushPromises();
             expect(binding.command).toBeUndefined();
             expect(end).toHaveBeenCalledTimes(1);
@@ -177,7 +177,7 @@ describe("testing async commands and bindings", () => {
 
         test("two button clicks with async command work in good time order (1)", async () => {
             binding = bindings.buttonBinder()
-                .toProduce(jest.fn<() => StubAsyncCmd>()
+                .toProduce(vi.fn<() => StubAsyncCmd>()
                     .mockReturnValueOnce(new StubAsyncCmd(data, 100))
                     .mockReturnValueOnce(new StubAsyncCmd(data, 5)))
                 .on(button1)
@@ -185,8 +185,8 @@ describe("testing async commands and bindings", () => {
 
             button1.click();
             button1.click();
-            jest.advanceTimersByTime(10);
-            jest.runAllTimers();
+            vi.advanceTimersByTime(10);
+            vi.runAllTimers();
             await flushPromises();
 
             expect(binding.command).toBeUndefined();
@@ -200,7 +200,7 @@ describe("testing async commands and bindings", () => {
 
         test("two button clicks with async command work in good time order (2)", async () => {
             binding = bindings.buttonBinder()
-                .toProduce(jest.fn<() => StubAsyncCmd>()
+                .toProduce(vi.fn<() => StubAsyncCmd>()
                     .mockReturnValueOnce(new StubAsyncCmd(data, 5))
                     .mockReturnValueOnce(new StubAsyncCmd(data, 100)))
                 .on(button1)
@@ -208,8 +208,8 @@ describe("testing async commands and bindings", () => {
 
             button1.click();
             button1.click();
-            jest.advanceTimersByTime(10);
-            jest.runAllTimers();
+            vi.advanceTimersByTime(10);
+            vi.runAllTimers();
             await flushPromises();
 
             expect(binding.command).toBeUndefined();
@@ -222,11 +222,11 @@ describe("testing async commands and bindings", () => {
         test("two button clicks with async command, first/end ok when waiting ongoing cmd", async () => {
             cmd = new StubAsyncCmd(data, 50);
             const cmd2 = new StubAsyncCmd(data, 5);
-            const end: (c: StubAsyncCmd, i: unknown, acc: unknown) => void = jest.fn(() => {});
-            const first: (c: StubAsyncCmd, i: unknown, acc: unknown) => void = jest.fn(() => {});
+            const end: (c: StubAsyncCmd, i: unknown, acc: unknown) => void = vi.fn(() => {});
+            const first: (c: StubAsyncCmd, i: unknown, acc: unknown) => void = vi.fn(() => {});
 
             binding = bindings.buttonBinder()
-                .toProduce(jest.fn<() => StubAsyncCmd>()
+                .toProduce(vi.fn<() => StubAsyncCmd>()
                     .mockReturnValueOnce(cmd)
                     .mockReturnValueOnce(cmd2))
                 .end(end)
@@ -235,9 +235,9 @@ describe("testing async commands and bindings", () => {
                 .bind();
 
             button1.click();
-            jest.runAllTimers();
+            vi.runAllTimers();
             button1.click();
-            jest.runAllTimers();
+            vi.runAllTimers();
             await flushPromises();
 
             expect(first).toHaveBeenCalledTimes(2);
@@ -251,11 +251,11 @@ describe("testing async commands and bindings", () => {
         test("two button clicks with async command, first/end ok when not waiting ongoing cmd", async () => {
             cmd = new StubAsyncCmd(data, 100);
             const cmd2 = new StubAsyncCmd(data, 50);
-            const end: (c: StubAsyncCmd, i: unknown, acc: unknown) => void = jest.fn(() => {});
-            const first: (c: StubAsyncCmd, i: unknown, acc: unknown) => void = jest.fn(() => {});
+            const end: (c: StubAsyncCmd, i: unknown, acc: unknown) => void = vi.fn(() => {});
+            const first: (c: StubAsyncCmd, i: unknown, acc: unknown) => void = vi.fn(() => {});
 
             binding = bindings.buttonBinder()
-                .toProduce(jest.fn<() => StubAsyncCmd>()
+                .toProduce(vi.fn<() => StubAsyncCmd>()
                     .mockReturnValueOnce(cmd)
                     .mockReturnValueOnce(cmd2))
                 .end(end)
@@ -264,12 +264,12 @@ describe("testing async commands and bindings", () => {
                 .bind();
 
             button1.click();
-            jest.advanceTimersByTime(40);
+            vi.advanceTimersByTime(40);
             button1.click();
             // Triggering the command cmd2
-            jest.advanceTimersByTime(20);
+            vi.advanceTimersByTime(20);
             // Triggering the command cmd
-            jest.runAllTimers();
+            vi.runAllTimers();
             await flushPromises();
 
             expect(first).toHaveBeenCalledTimes(2);
@@ -287,7 +287,7 @@ describe("testing async commands and bindings", () => {
                 .bind();
 
             button1.click();
-            jest.runAllTimers();
+            vi.runAllTimers();
             await flushPromises();
 
             expect(binding.timesEnded).toBe(1);
@@ -306,7 +306,7 @@ describe("testing async commands and bindings", () => {
             // @ts-expect-error
             (binding as unknown).cmdsProduced.unsubscribe();
             button1.click();
-            jest.runAllTimers();
+            vi.runAllTimers();
             await flushPromises();
 
             // Need to reopen the stream not to provoke crash on flush
@@ -332,7 +332,7 @@ describe("testing async commands and bindings", () => {
                 .bind();
 
             button1.click();
-            jest.advanceTimersByTime(49);
+            vi.advanceTimersByTime(49);
             expect(button1.disabled).toBeTruthy();
         });
 
@@ -350,7 +350,7 @@ describe("testing async commands and bindings", () => {
 
             button1.click();
             button1.click();
-            jest.runAllTimers();
+            vi.runAllTimers();
             await flushPromises();
             expect(button1.disabled).toBeFalsy();
             expect(ctx.commands).toHaveLength(1);
@@ -361,7 +361,7 @@ describe("testing async commands and bindings", () => {
         let canvas: HTMLCanvasElement;
 
         beforeEach(() => {
-            jest.useFakeTimers();
+            vi.useFakeTimers();
             canvas = document.createElement("canvas");
         });
 
@@ -376,7 +376,7 @@ describe("testing async commands and bindings", () => {
                 .mousemove()
                 .mouseup();
 
-            jest.runAllTimers();
+            vi.runAllTimers();
             await flushPromises();
 
             expect(binding.command).toBeUndefined();
@@ -385,7 +385,7 @@ describe("testing async commands and bindings", () => {
         });
 
         test("dnd binding with async command and continuous execution", async () => {
-            const cannot = jest.fn(() => {});
+            const cannot = vi.fn(() => {});
 
             binding = bindings.dndBinder(false)
                 .toProduce(() => new StubAsyncCmd(data))
@@ -402,7 +402,7 @@ describe("testing async commands and bindings", () => {
                 .mousemove()
                 .mouseup();
 
-            jest.runAllTimers();
+            vi.runAllTimers();
             await flushPromises();
 
             expect(binding.command).toBeUndefined();
@@ -413,7 +413,7 @@ describe("testing async commands and bindings", () => {
         });
 
         test("dnd binding with async command and continuous execution with no log", async () => {
-            const cannot = jest.fn(() => {});
+            const cannot = vi.fn(() => {});
 
             binding = bindings.dndBinder(false)
                 .toProduce(() => new StubAsyncCmd(data))
@@ -428,7 +428,7 @@ describe("testing async commands and bindings", () => {
                 .mousemove()
                 .mouseup();
 
-            jest.runAllTimers();
+            vi.runAllTimers();
             await flushPromises();
 
             expect(binding.command).toBeUndefined();
@@ -439,7 +439,7 @@ describe("testing async commands and bindings", () => {
         });
 
         test("dnd binding with async command and continuous execution and crash", async () => {
-            const cannot = jest.fn(() => {});
+            const cannot = vi.fn(() => {});
 
             binding = bindings.dndBinder(false)
                 .toProduce(() => new StubAsyncCmd(data, 50, false))
@@ -449,7 +449,7 @@ describe("testing async commands and bindings", () => {
                 .log("command")
                 .bind();
 
-            jest.spyOn(binding as BindingImpl<StubAsyncCmd, Interaction<object>, unknown>,
+            vi.spyOn(binding as BindingImpl<StubAsyncCmd, Interaction<object>, unknown>,
                 "ifCannotExecuteCmd").mockImplementation(() => {
                 throw new Error("Error");
             });
@@ -459,7 +459,7 @@ describe("testing async commands and bindings", () => {
                 .mousemove()
                 .mouseup();
 
-            jest.runAllTimers();
+            vi.runAllTimers();
             await flushPromises();
 
             expect(binding.command).toBeUndefined();
@@ -473,7 +473,7 @@ describe("testing async commands and bindings", () => {
         let canvas: HTMLCanvasElement;
 
         beforeEach(() => {
-            jest.useFakeTimers();
+            vi.useFakeTimers();
             canvas = document.createElement("canvas");
         });
 
@@ -492,7 +492,7 @@ describe("testing async commands and bindings", () => {
                 .touchmove({}, [{"identifier": 3}])
                 .touchend({}, [{"identifier": 1}]);
 
-            jest.runAllTimers();
+            vi.runAllTimers();
             await flushPromises();
 
             expect(ctx.commands).toHaveLength(2);

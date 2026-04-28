@@ -14,10 +14,10 @@
 
 import {DoubleClick, PointDataImpl} from "../../../src/interacto";
 import {robot} from "../StubEvents";
-import {beforeEach, describe, expect, jest, test} from "@jest/globals";
-import {mock} from "jest-mock-extended";
+import {beforeEach, describe, expect, vi, test} from "vitest";
+import {mock} from "vitest-mock-extended";
 import type {FSMHandler, Logger} from "../../../src/interacto";
-import type {MockProxy} from "jest-mock-extended";
+import type {MockProxy} from "vitest-mock-extended";
 
 describe("using a double click interaction", () => {
     let interaction: DoubleClick;
@@ -26,7 +26,7 @@ describe("using a double click interaction", () => {
     let logger: Logger & MockProxy<Logger>;
 
     beforeEach(() => {
-        jest.useFakeTimers();
+        vi.useFakeTimers();
         handler = mock<FSMHandler>();
         logger = mock<Logger>();
         canvas = document.createElement("canvas");
@@ -65,7 +65,7 @@ describe("using a double click interaction", () => {
 
             interaction.registerToNodes([canvas]);
             const newHandler = mock<FSMHandler>();
-            newHandler.fsmStops = jest.fn(() => {
+            newHandler.fsmStops = vi.fn(() => {
                 data.copy(interaction.data);
             });
             interaction.fsm.addHandler(newHandler);

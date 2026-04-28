@@ -22,10 +22,10 @@ import {
     TimeoutTransition
 } from "../../src/interacto";
 import {createKeyEvent, createMouseEvent, createTouchEvent} from "../interaction/StubEvents";
-import {beforeEach, describe, expect, jest, test} from "@jest/globals";
-import {mock} from "jest-mock-extended";
+import {beforeEach, describe, expect, vi, test} from "vitest";
+import {mock} from "vitest-mock-extended";
 import type {FSMHandler, Logger, OutputState, CancellingState, TerminalState, VisitorFSM} from "../../src/interacto";
-import type {MockProxy} from "jest-mock-extended";
+import type {MockProxy} from "vitest-mock-extended";
 import type {Subject} from "rxjs";
 
 let fsm: FSMImpl;
@@ -35,7 +35,7 @@ let logger: Logger;
 describe("using an FSM", () => {
     beforeEach(() => {
         logger = mock<Logger>();
-        jest.clearAllMocks();
+        vi.clearAllMocks();
         fsm = new FSMImpl(logger);
         handler = mock<FSMHandler>();
     });
@@ -133,7 +133,7 @@ describe("using an FSM", () => {
     });
 
     test("that errors caught on start with an error", () => {
-        handler.fsmStarts = jest.fn(() => {
+        handler.fsmStarts = vi.fn(() => {
             throw new Error("crash provoked");
         });
         fsm.addHandler(handler);
@@ -146,7 +146,7 @@ describe("using an FSM", () => {
 
     test("that errors caught on start with an error with no logger", () => {
         fsm = new FSMImpl(logger);
-        handler.fsmStarts = jest.fn(() => {
+        handler.fsmStarts = vi.fn(() => {
             throw new Error("crash provoked2");
         });
         fsm.addHandler(handler);
@@ -157,7 +157,7 @@ describe("using an FSM", () => {
     });
 
     test("that errors caught on start with not an error", () => {
-        handler.fsmStarts = jest.fn(() => {
+        handler.fsmStarts = vi.fn(() => {
             throw "42";
         });
         fsm.addHandler(handler);
@@ -169,7 +169,7 @@ describe("using an FSM", () => {
     });
 
     test("that errors caught on update with an error", () => {
-        handler.fsmUpdates = jest.fn(() => {
+        handler.fsmUpdates = vi.fn(() => {
             throw new Error("crash provoked on update");
         });
         fsm.onStarting();
@@ -183,7 +183,7 @@ describe("using an FSM", () => {
 
     test("that errors caught on update with an error with no logger", () => {
         fsm = new FSMImpl(logger);
-        handler.fsmUpdates = jest.fn(() => {
+        handler.fsmUpdates = vi.fn(() => {
             throw new Error("crash provoked on update2");
         });
         fsm.onStarting();
@@ -195,7 +195,7 @@ describe("using an FSM", () => {
     });
 
     test("that errors caught on update with not an error", () => {
-        handler.fsmUpdates = jest.fn(() => {
+        handler.fsmUpdates = vi.fn(() => {
             throw "err";
         });
         fsm.onStarting();
@@ -208,7 +208,7 @@ describe("using an FSM", () => {
     });
 
     test("that errors caught on end with an error", () => {
-        handler.fsmStops = jest.fn(() => {
+        handler.fsmStops = vi.fn(() => {
             throw new Error("crash provoked on end");
         });
         fsm.onStarting();
@@ -222,7 +222,7 @@ describe("using an FSM", () => {
 
     test("that errors caught on end with an error with no logger", () => {
         fsm = new FSMImpl(logger);
-        handler.fsmStops = jest.fn(() => {
+        handler.fsmStops = vi.fn(() => {
             throw new Error("crash provoked on end");
         });
         fsm.onStarting();
@@ -234,7 +234,7 @@ describe("using an FSM", () => {
     });
 
     test("that errors caught on end with not an error", () => {
-        handler.fsmStops = jest.fn(() => {
+        handler.fsmStops = vi.fn(() => {
             throw "foo";
         });
         fsm.onStarting();
@@ -247,7 +247,7 @@ describe("using an FSM", () => {
     });
 
     test("that errors caught on cancel with an error", () => {
-        handler.fsmCancels = jest.fn(() => {
+        handler.fsmCancels = vi.fn(() => {
             throw new Error("crash provoked on cancel");
         });
         fsm.onStarting();
@@ -261,7 +261,7 @@ describe("using an FSM", () => {
 
     test("that errors caught on cancel with an error with no logger", () => {
         fsm = new FSMImpl(logger);
-        handler.fsmCancels = jest.fn(() => {
+        handler.fsmCancels = vi.fn(() => {
             throw new Error("crash provoked on cancel");
         });
         fsm.onStarting();
@@ -273,7 +273,7 @@ describe("using an FSM", () => {
     });
 
     test("that errors caught on cancel with not an error", () => {
-        handler.fsmCancels = jest.fn(() => {
+        handler.fsmCancels = vi.fn(() => {
             throw "yolo";
         });
         fsm.onStarting();
@@ -288,8 +288,8 @@ describe("using an FSM", () => {
     test("uninstall", () => {
         const s1 = fsm.addStdState("su");
         const subj = fsm.currentStateObservable as unknown as Subject<[OutputState, OutputState]>;
-        jest.spyOn(s1, "uninstall");
-        jest.spyOn(subj, "complete");
+        vi.spyOn(s1, "uninstall");
+        vi.spyOn(subj, "complete");
         fsm.addRemaningEventsToProcess(mock<Event>());
         fsm.uninstall();
 
@@ -381,7 +381,7 @@ describe("using an FSM", () => {
         });
 
         test("cancelOnStart", () => {
-            handler.fsmStarts = jest.fn(() => {
+            handler.fsmStarts = vi.fn(() => {
                 throw new CancelFSMError();
             });
             fsm.process(mock<Event>());
@@ -393,7 +393,7 @@ describe("using an FSM", () => {
         });
 
         test("cancelOnUpdate", () => {
-            handler.fsmUpdates = jest.fn(() => {
+            handler.fsmUpdates = vi.fn(() => {
                 throw new CancelFSMError();
             });
             fsm.process(mock<Event>());
@@ -405,7 +405,7 @@ describe("using an FSM", () => {
         });
 
         test("cancelOnEnd", () => {
-            handler.fsmStops = jest.fn(() => {
+            handler.fsmStops = vi.fn(() => {
                 throw new CancelFSMError();
             });
             fsm.process(mock<Event>());
@@ -576,8 +576,8 @@ describe("using an FSM", () => {
         let terminal: TerminalState;
 
         beforeEach(() => {
-            jest.clearAllTimers();
-            jest.useFakeTimers();
+            vi.clearAllTimers();
+            vi.useFakeTimers();
             fsm.addHandler(handler);
             fsm.log = true;
             std = fsm.addStdState("std");
@@ -592,7 +592,7 @@ describe("using an FSM", () => {
         test("timeoutChangeState", () => {
             fsm.log = true;
             fsm.process(mock<Event>());
-            jest.runOnlyPendingTimers();
+            vi.runOnlyPendingTimers();
             expect(fsm.currentState).toStrictEqual(std2);
         });
 
@@ -600,7 +600,7 @@ describe("using an FSM", () => {
             fsm.log = true;
             fsm.process(mock<Event>());
             fsm.process(mock<Event>());
-            jest.runOnlyPendingTimers();
+            vi.runOnlyPendingTimers();
             expect(fsm.currentState).toStrictEqual(fsm.initState);
         });
 
@@ -611,11 +611,11 @@ describe("using an FSM", () => {
         });
 
         test("timeoutChangeStateThenCancel", () => {
-            handler.fsmUpdates = jest.fn(() => {
+            handler.fsmUpdates = vi.fn(() => {
                 throw new CancelFSMError();
             });
             fsm.process(mock<Event>());
-            jest.runOnlyPendingTimers();
+            vi.runOnlyPendingTimers();
             expect(fsm.currentState).toStrictEqual(fsm.initState);
             expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
         });
@@ -630,7 +630,7 @@ describe("using an FSM", () => {
         let subC: CancellingState;
 
         beforeEach(() => {
-            jest.clearAllMocks();
+            vi.clearAllMocks();
             fsm = new FSMImpl(logger);
             mainfsm = new FSMImpl(logger);
             s1 = mainfsm.addStdState("s1");

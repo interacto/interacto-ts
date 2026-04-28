@@ -13,11 +13,11 @@
  */
 
 import {Scroll} from "../../../src/interacto";
-import {beforeEach, describe, expect, jest, test} from "@jest/globals";
+import {beforeEach, describe, expect, vi, test} from "vitest";
 import {robot} from "interacto-nono";
-import {mock} from "jest-mock-extended";
+import {mock} from "vitest-mock-extended";
 import type {FSMHandler, Logger} from "../../../src/interacto";
-import type {MockProxy} from "jest-mock-extended";
+import type {MockProxy} from "vitest-mock-extended";
 
 describe("using a scroll interaction", () => {
     let interaction: Scroll;
@@ -43,7 +43,7 @@ describe("using a scroll interaction", () => {
     test("scroll data", () => {
         let target: EventTarget | null = null;
         interaction.registerToNodes([canvas]);
-        handler.fsmStops = jest.fn(() => {
+        handler.fsmStops = vi.fn(() => {
             target = interaction.data.target;
         });
         robot(canvas).scroll();

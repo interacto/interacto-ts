@@ -13,7 +13,7 @@
  */
 import {BindingsContext, BindingsImpl, LinearHistoryImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
-import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
+import {afterEach, beforeEach, describe, expect, vi, test} from "vitest";
 import {robot} from "interacto-nono";
 import type {WidgetData, LinearHistoryBase, Bindings} from "../../src/interacto";
 
@@ -37,11 +37,11 @@ describe("using a date binder", () => {
 
     afterEach(() => {
         bindings.clear();
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     });
 
     test("commandExecutedOnSingleDateFunction", () => {
-        jest.spyOn(cmd, "execute");
+        vi.spyOn(cmd, "execute");
 
         bindings.dateBinder()
             .toProduce(_i => cmd)
@@ -65,7 +65,7 @@ describe("using a date binder", () => {
     });
 
     test("init1Executed", () => {
-        jest.spyOn(cmd, "execute");
+        vi.spyOn(cmd, "execute");
 
         bindings.dateBinder()
             .on(widget1)
@@ -82,7 +82,7 @@ describe("using a date binder", () => {
     });
 
     test("checkFalse", () => {
-        jest.spyOn(cmd, "execute");
+        vi.spyOn(cmd, "execute");
 
         bindings.dateBinder()
             .toProduce(_i => cmd)

@@ -13,11 +13,11 @@
  */
 
 import {HyperLinkClicked} from "../../../src/interacto";
-import {beforeEach, describe, expect, jest, test} from "@jest/globals";
+import {beforeEach, describe, expect, vi, test} from "vitest";
 import {robot} from "interacto-nono";
-import {mock} from "jest-mock-extended";
+import {mock} from "vitest-mock-extended";
 import type {FSMHandler, Logger} from "../../../src/interacto";
-import type {MockProxy} from "jest-mock-extended";
+import type {MockProxy} from "vitest-mock-extended";
 
 describe("using a hyper link interaction", () => {
     let interaction: HyperLinkClicked;
@@ -56,14 +56,14 @@ describe("using a hyper link interaction", () => {
 
     test("cannot register non hyperlink", () => {
         const w = document.createElement("input");
-        jest.spyOn(w, "addEventListener");
+        vi.spyOn(w, "addEventListener");
         interaction.onNewNodeRegistered(w);
         expect(w.addEventListener).not.toHaveBeenCalled();
     });
 
     test("cannot unregister non hyperlink", () => {
         const w = document.createElement("input");
-        jest.spyOn(w, "removeEventListener");
+        vi.spyOn(w, "removeEventListener");
         interaction.onNodeUnregistered(w);
         expect(w.removeEventListener).not.toHaveBeenCalled();
     });

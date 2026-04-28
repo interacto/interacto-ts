@@ -13,11 +13,11 @@
  */
 
 import {KeysDataImpl, KeysTyped} from "../../../src/interacto";
-import {beforeEach, describe, expect, jest, test} from "@jest/globals";
+import {beforeEach, describe, expect, vi, test} from "vitest";
 import {robot} from "interacto-nono";
-import {mock} from "jest-mock-extended";
+import {mock} from "vitest-mock-extended";
 import type {FSMHandler, KeyData, Logger} from "../../../src/interacto";
-import type {MockProxy} from "jest-mock-extended";
+import type {MockProxy} from "vitest-mock-extended";
 
 describe("using a keys typed interaction", () => {
     let interaction: KeysTyped;
@@ -27,7 +27,7 @@ describe("using a keys typed interaction", () => {
     let logger: Logger & MockProxy<Logger>;
 
     beforeEach(() => {
-        jest.useFakeTimers();
+        vi.useFakeTimers();
         data = new KeysDataImpl();
         handler = mock<FSMHandler>();
         logger = mock<Logger>();
@@ -42,7 +42,7 @@ describe("using a keys typed interaction", () => {
             .keepData()
             .keydown({"code": "b"})
             .keyup();
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmStops).toHaveBeenCalledTimes(1);
     });
@@ -54,7 +54,7 @@ describe("using a keys typed interaction", () => {
             .keepData()
             .keydown({"code": "b"})
             .keyup();
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
 
         expect(logger.logInteractionMsg).toHaveBeenCalledTimes(7);
     });
@@ -65,14 +65,14 @@ describe("using a keys typed interaction", () => {
             .keepData()
             .keydown({"code": "b"})
             .keyup();
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
 
         expect(logger.logInteractionMsg).not.toHaveBeenCalled();
     });
 
     test("type 'b' and wait for timeout stops the interaction: data", () => {
         const newHandler = mock<FSMHandler>();
-        newHandler.fsmStops = jest.fn(() => {
+        newHandler.fsmStops = vi.fn(() => {
             data.addKey(interaction.data.keys.at(-1) as KeyData);
         });
         interaction.fsm.addHandler(newHandler);
@@ -82,7 +82,7 @@ describe("using a keys typed interaction", () => {
             .keepData()
             .keydown({"code": "b"})
             .keyup();
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
         expect(data.keys).toHaveLength(1);
         expect(data.keys[0].code).toBe("b");
     });
@@ -97,7 +97,7 @@ describe("using a keys typed interaction", () => {
             .keyup()
             .keydown({"code": "a"})
             .keyup();
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
         expect(handler.fsmStops).toHaveBeenCalledTimes(1);
         expect(handler.fsmUpdates).toHaveBeenCalledTimes(3);
@@ -105,7 +105,7 @@ describe("using a keys typed interaction", () => {
 
     test("type text and wait for timeout stops the interaction: data", () => {
         const newHandler = mock<FSMHandler>();
-        newHandler.fsmStops = jest.fn(() => {
+        newHandler.fsmStops = vi.fn(() => {
             for (const k of interaction.data.keys) {
                 data.addKey(k);
             }
@@ -121,7 +121,7 @@ describe("using a keys typed interaction", () => {
             .keyup()
             .keydown({"code": "a"})
             .keyup();
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
         expect(data.keys).toHaveLength(3);
         expect(data.keys[0].code).toBe("b");
         expect(data.keys[1].code).toBe("c");
@@ -130,7 +130,7 @@ describe("using a keys typed interaction", () => {
 
     test("type 'b' does not stop the interaction", () => {
         const newHandler = mock<FSMHandler>();
-        newHandler.fsmUpdates = jest.fn(() => {
+        newHandler.fsmUpdates = vi.fn(() => {
             data.addKey(interaction.data.keys.at(-1) as KeyData);
         });
         interaction.fsm.addHandler(newHandler);
@@ -154,7 +154,7 @@ describe("using a keys typed interaction", () => {
             .keyup()
             .keydown({"code": "a"})
             .keyup();
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
 
         expect(handler.fsmReinit).toHaveBeenCalledTimes(1);
         expect(interaction.data.keys).toHaveLength(0);

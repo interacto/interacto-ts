@@ -14,7 +14,7 @@
  */
 
 import {AnonCmd} from "../../src/interacto";
-import {describe, expect, jest, test} from "@jest/globals";
+import {describe, expect, vi, test} from "vitest";
 
 describe("using an anon command", () => {
     let cmd: AnonCmd;
@@ -25,7 +25,7 @@ describe("using an anon command", () => {
     });
 
     test("execute", async () => {
-        const fn = jest.fn();
+        const fn = vi.fn();
         cmd = new AnonCmd(fn);
         await cmd.execute();
         expect(fn).toHaveBeenCalledTimes(1);

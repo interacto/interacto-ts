@@ -14,7 +14,7 @@
  */
 
 import {TransferArrayItem} from "../../../src/interacto";
-import {beforeEach, describe, expect, test} from "@jest/globals";
+import {beforeEach, describe, expect, test} from "vitest";
 
 describe("using a transfer array item command", () => {
     let cmd: TransferArrayItem<number>;

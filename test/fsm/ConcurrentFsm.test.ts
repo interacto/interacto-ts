@@ -18,8 +18,8 @@ import {
     FSMImpl, MouseTransition
 } from "../../src/interacto";
 import {createMouseEvent} from "../interaction/StubEvents";
-import {beforeEach, describe, expect, jest, test} from "@jest/globals";
-import {mock} from "jest-mock-extended";
+import {beforeEach, describe, expect, vi, test} from "vitest";
+import {mock} from "vitest-mock-extended";
 import type {FSMHandler, Logger} from "../../src/interacto";
 
 class StubTouchFSM extends FSMImpl {
@@ -49,7 +49,7 @@ describe("using a concurrent FSM", () => {
     let handler2: FSMHandler;
 
     beforeEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
         fsm1 = new StubTouchFSM(1);
         fsm2 = new StubTouchFSM(2);
         handler = mock<FSMHandler>();
@@ -196,24 +196,24 @@ describe("using a concurrent FSM", () => {
     });
 
     test("reinit", () => {
-        jest.spyOn(fsm1, "reinit");
-        jest.spyOn(fsm2, "reinit");
+        vi.spyOn(fsm1, "reinit");
+        vi.spyOn(fsm2, "reinit");
         fsm.reinit();
         expect(fsm1.reinit).not.toHaveBeenCalled();
         expect(fsm2.reinit).not.toHaveBeenCalled();
     });
 
     test("full reinit", () => {
-        jest.spyOn(fsm1, "fullReinit");
-        jest.spyOn(fsm2, "fullReinit");
+        vi.spyOn(fsm1, "fullReinit");
+        vi.spyOn(fsm2, "fullReinit");
         fsm.fullReinit();
         expect(fsm1.fullReinit).not.toHaveBeenCalled();
         expect(fsm2.fullReinit).not.toHaveBeenCalled();
     });
 
     test("uninstall", () => {
-        jest.spyOn(fsm1, "uninstall");
-        jest.spyOn(fsm2, "uninstall");
+        vi.spyOn(fsm1, "uninstall");
+        vi.spyOn(fsm2, "uninstall");
         fsm.uninstall();
         expect(fsm1.uninstall).toHaveBeenCalledTimes(1);
         expect(fsm2.uninstall).toHaveBeenCalledTimes(1);

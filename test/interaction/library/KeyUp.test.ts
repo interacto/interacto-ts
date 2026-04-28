@@ -13,11 +13,11 @@
  */
 
 import {KeyDataImpl, KeyUp} from "../../../src/interacto";
-import {beforeEach, describe, expect, jest, test} from "@jest/globals";
+import {beforeEach, describe, expect, vi, test} from "vitest";
 import {robot} from "interacto-nono";
-import {mock} from "jest-mock-extended";
+import {mock} from "vitest-mock-extended";
 import type {FSMHandler, Logger} from "../../../src/interacto";
-import type {MockProxy} from "jest-mock-extended";
+import type {MockProxy} from "vitest-mock-extended";
 
 describe("using a key up interaction", () => {
     let interaction: KeyUp;
@@ -59,7 +59,7 @@ describe("using a key up interaction", () => {
         const data = new KeyDataImpl();
         interaction.registerToNodes([text]);
         const newHandler = mock<FSMHandler>();
-        newHandler.fsmStops = jest.fn(() => {
+        newHandler.fsmStops = vi.fn(() => {
             data.copy(interaction.data);
         });
         interaction.fsm.addHandler(newHandler);

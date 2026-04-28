@@ -13,8 +13,8 @@
  */
 
 import {FSMImpl, StdState} from "../../src/interacto";
-import {beforeEach, describe, expect, test} from "@jest/globals";
-import {mock} from "jest-mock-extended";
+import {beforeEach, describe, expect, test} from "vitest";
+import {mock} from "vitest-mock-extended";
 import type {VisitorFSM} from "../../src/api/fsm/VisitorFSM";
 import type {Logger, StateBase, OutputState} from "../../src/interacto";
 

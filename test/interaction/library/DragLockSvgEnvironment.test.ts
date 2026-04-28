@@ -13,9 +13,9 @@
  */
 
 import {DragLock, SrcTgtPointsDataImpl} from "../../../src/interacto";
-import {beforeEach, describe, expect, jest, test} from "@jest/globals";
+import {beforeEach, describe, expect, vi, test} from "vitest";
 import {robot} from "interacto-nono";
-import {mock} from "jest-mock-extended";
+import {mock} from "vitest-mock-extended";
 import type {FSMHandler, Logger} from "../../../src/interacto";
 
 describe("using a drag lock interaction on SVG elements", () => {
@@ -55,7 +55,7 @@ describe("using a drag lock interaction on SVG elements", () => {
     test("dragLock data in a SVG environment", () => {
         const data = new SrcTgtPointsDataImpl();
         const newHandler = mock<FSMHandler>();
-        newHandler.fsmStops = jest.fn(() => {
+        newHandler.fsmStops = vi.fn(() => {
             data.copySrc(interaction.data.src);
             data.copyTgt(interaction.data.tgt);
         });

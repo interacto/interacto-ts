@@ -1,5 +1,5 @@
 import {getModifiableCmdAttributes, isCmdModifiable, Modifiable, modifyCmdAttributes} from "../../src/interacto";
-import {beforeEach, describe, expect, test} from "@jest/globals";
+import {beforeEach, describe, expect, test} from "vitest";
 import type {UndoableCommand} from "../../src/interacto";
 import {CmdModifiableDouble, CmdModifiableDouble2, CmdModifiableDouble3, ExampleUndoableCmd} from "./StubCmd";
 

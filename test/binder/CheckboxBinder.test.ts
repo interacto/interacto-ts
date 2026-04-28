@@ -13,7 +13,7 @@
  */
 import {BindingsContext, BindingsImpl, LinearHistoryImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
-import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
+import {afterEach, beforeEach, describe, expect, vi, test} from "vitest";
 import {robot} from "interacto-nono";
 import type {LinearHistoryBase, Bindings} from "../../src/interacto";
 
@@ -37,11 +37,11 @@ describe("using a checkbox binder", () => {
 
     afterEach(() => {
         bindings.clear();
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     });
 
     test("commandExecutedOnSingleButtonFunction", () => {
-        jest.spyOn(cmd, "execute");
+        vi.spyOn(cmd, "execute");
 
         bindings.checkboxBinder()
             .toProduce(_i => cmd)
@@ -53,7 +53,7 @@ describe("using a checkbox binder", () => {
     });
 
     test("commandExecutedOnSingleButtonSupplier", () => {
-        jest.spyOn(cmd, "execute");
+        vi.spyOn(cmd, "execute");
 
         bindings.checkboxBinder()
             .toProduce(() => cmd)
@@ -76,7 +76,7 @@ describe("using a checkbox binder", () => {
     });
 
     test("init1Executed", () => {
-        jest.spyOn(cmd, "execute");
+        vi.spyOn(cmd, "execute");
 
         bindings.checkboxBinder()
             .toProduce(_i => cmd)
@@ -92,7 +92,7 @@ describe("using a checkbox binder", () => {
     });
 
     test("init2Executed", () => {
-        jest.spyOn(cmd, "execute");
+        vi.spyOn(cmd, "execute");
 
         bindings.checkboxBinder()
             .toProduce(() => cmd)
@@ -108,7 +108,7 @@ describe("using a checkbox binder", () => {
     });
 
     test("checkFalse", () => {
-        jest.spyOn(cmd, "execute");
+        vi.spyOn(cmd, "execute");
 
         bindings.checkboxBinder()
             .on(widget1)

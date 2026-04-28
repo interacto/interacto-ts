@@ -13,21 +13,26 @@
  */
 
 import {LoggerImpl} from "../../src/interacto";
-import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
+import {afterEach, beforeEach, describe, expect, vi, test} from "vitest";
+
+type HttpReq = typeof globalThis.window.XMLHttpRequest;
 
 describe("using a logger", () => {
     let logger: LoggerImpl;
+    let oldHttpReq: HttpReq;
 
     beforeEach(() => {
-        jest.spyOn(performance, "now").mockReturnValueOnce(123);
+        vi.spyOn(performance, "now").mockReturnValueOnce(123);
         logger = new LoggerImpl();
-        jest.spyOn(console, "log");
+        vi.spyOn(console, "log");
+        oldHttpReq = globalThis.window.XMLHttpRequest;
     });
 
     afterEach(() => {
-        jest.clearAllMocks();
-        jest.spyOn(performance, "now").mockRestore();
-        jest.spyOn(console, "log").mockRestore();
+        vi.clearAllMocks();
+        vi.spyOn(performance, "now").mockRestore();
+        vi.spyOn(console, "log").mockRestore();
+        globalThis.window.XMLHttpRequest = oldHttpReq;
     });
 
     test("init ok", () => {
@@ -43,16 +48,16 @@ describe("using a logger", () => {
     });
 
     test("log cmd msg in console with no cmd name", () => {
-        jest.spyOn(performance, "now").mockRestore();
-        jest.spyOn(performance, "now").mockReturnValueOnce(10);
+        vi.spyOn(performance, "now").mockRestore();
+        vi.spyOn(performance, "now").mockReturnValueOnce(10);
         logger.logCmdMsg("mm");
         // eslint-disable-next-line no-console
         expect(console.log).toHaveBeenCalledWith(`INFO [${logger.sessionID}] [command:] at 10: 'mm'`);
     });
 
     test("log cmd msg in console with a cmd name", () => {
-        jest.spyOn(performance, "now").mockRestore();
-        jest.spyOn(performance, "now").mockReturnValueOnce(11);
+        vi.spyOn(performance, "now").mockRestore();
+        vi.spyOn(performance, "now").mockReturnValueOnce(11);
         logger.logCmdMsg("m2", "mycmd");
         // eslint-disable-next-line no-console
         expect(console.log).toHaveBeenCalledWith(`INFO [${logger.sessionID}] [command:mycmd] at 11: 'm2'`);
@@ -67,7 +72,7 @@ describe("using a logger", () => {
 
     test("no log cmd msg in console", () => {
         logger.writeConsole = false;
-        jest.spyOn(performance, "now").mockReturnValueOnce(11);
+        vi.spyOn(performance, "now").mockReturnValueOnce(11);
         logger.logCmdMsg("m2", "mycmd");
         // eslint-disable-next-line no-console
         expect(console.log).not.toHaveBeenCalled();
@@ -102,7 +107,7 @@ describe("using a logger", () => {
     test("log binding err in console no name with Error", () => {
         const err = new Error("Foo");
         logger.logBindingErr("c", err);
-        // eslint-disable-next-line no-console,jest/no-conditional-in-test
+        // eslint-disable-next-line no-console
         expect(console.log).toHaveBeenCalledWith(`ERR [${logger.sessionID}] [binding:] at 123: 'c', Foo ${err.stack ?? ""}`);
     });
 
@@ -115,7 +120,7 @@ describe("using a logger", () => {
     test("log cmd err in console no name with Error", () => {
         const err = new Error("AA");
         logger.logCmdErr("c", err);
-        // eslint-disable-next-line no-console,jest/no-conditional-in-test
+        // eslint-disable-next-line no-console
         expect(console.log).toHaveBeenCalledWith(`ERR [${logger.sessionID}] [command:] at 123: 'c', AA ${err.stack ?? ""}`);
     });
 
@@ -128,7 +133,7 @@ describe("using a logger", () => {
     test("log interaction err in console no name with Error", () => {
         const err = new Error("AA");
         logger.logInteractionErr("c", err);
-        // eslint-disable-next-line no-console,jest/no-conditional-in-test
+        // eslint-disable-next-line no-console
         expect(console.log).toHaveBeenCalledWith(`ERR [${logger.sessionID}] [interaction:] at 123: 'c', AA ${err.stack ?? ""}`);
     });
 
@@ -139,13 +144,23 @@ describe("using a logger", () => {
     });
 
     test("log interaction err REST", () => {
-        const xhrMock: Partial<XMLHttpRequest> = {
-            "open": jest.fn(),
-            "send": jest.fn(),
-            "setRequestHeader": jest.fn()
+        const open = vi.fn();
+        const setRequestHeader = vi.fn();
+        const send = vi.fn();
+
+        const mockXHR = {
+            open,
+            setRequestHeader,
+            send
         };
 
-        jest.spyOn(globalThis.window, "XMLHttpRequest").mockReturnValue(xhrMock as XMLHttpRequest);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any,func-names,@typescript-eslint/naming-convention
+        const XMLHttpRequestMock = vi.fn(function (this: any) {
+            Object.assign(this, mockXHR);
+        });
+
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-explicit-any
+        globalThis.window.XMLHttpRequest = XMLHttpRequestMock as any;
 
         logger.writeConsole = false;
         logger.serverAddress = "localhost";
@@ -153,8 +168,8 @@ describe("using a logger", () => {
         logger.logInteractionErr("c", "err");
         // eslint-disable-next-line no-console
         expect(console.log).not.toHaveBeenCalledWith();
-        expect(xhrMock.open).toHaveBeenCalledWith("POST", "localhost/api/err", true);
-        expect(xhrMock.send).toHaveBeenCalledWith(
+        expect(mockXHR.open).toHaveBeenCalledWith("POST", "localhost/api/err", true);
+        expect(mockXHR.send).toHaveBeenCalledWith(
             `{"name":"","sessionID":"${logger.sessionID}","date":123,"msg":"c","level":"interaction","type":"ERR","stack":"err"}`);
     });
 
@@ -171,7 +186,7 @@ describe("using a logger", () => {
 
     test("usage binding start and end same, cancelled", () => {
         logger.logBindingStart("foo");
-        jest.spyOn(performance, "now").mockReturnValueOnce(200);
+        vi.spyOn(performance, "now").mockReturnValueOnce(200);
         logger.logBindingEnd("foo", true);
         expect(logger.ongoingBindings).toHaveLength(0);
         // eslint-disable-next-line no-console
@@ -180,10 +195,10 @@ describe("using a logger", () => {
     });
 
     test("usage binding start and end same, not cancelled", () => {
-        jest.spyOn(performance, "now").mockRestore();
-        jest.spyOn(performance, "now").mockReturnValueOnce(100);
+        vi.spyOn(performance, "now").mockRestore();
+        vi.spyOn(performance, "now").mockReturnValueOnce(100);
         logger.logBindingStart("b1");
-        jest.spyOn(performance, "now").mockReturnValueOnce(300);
+        vi.spyOn(performance, "now").mockReturnValueOnce(300);
         logger.logBindingEnd("b1", false);
         expect(logger.ongoingBindings).toHaveLength(0);
         // eslint-disable-next-line no-console
@@ -193,7 +208,7 @@ describe("using a logger", () => {
 
     test("usage binding start and end but not same", () => {
         logger.logBindingStart("foo");
-        jest.spyOn(performance, "now").mockReturnValueOnce(200);
+        vi.spyOn(performance, "now").mockReturnValueOnce(200);
         logger.logBindingEnd("yoo", true);
         expect(logger.ongoingBindings).toHaveLength(1);
         expect(logger.ongoingBindings[0].name).toBe("foo");
@@ -203,7 +218,7 @@ describe("using a logger", () => {
 
     test("usage binding start and end start same", () => {
         logger.logBindingStart("binding1");
-        jest.spyOn(performance, "now").mockReturnValueOnce(300);
+        vi.spyOn(performance, "now").mockReturnValueOnce(300);
         logger.logBindingEnd("binding1:cmd1", false);
         expect(logger.ongoingBindings).toHaveLength(0);
         // eslint-disable-next-line no-console
@@ -214,7 +229,7 @@ describe("using a logger", () => {
     test("usage binding start and end start same with version", () => {
         logger = new LoggerImpl("2.3");
         logger.logBindingStart("binding1");
-        jest.spyOn(performance, "now").mockReturnValueOnce(300);
+        vi.spyOn(performance, "now").mockReturnValueOnce(300);
         logger.logBindingEnd("binding1:cmd1", false);
         expect(logger.ongoingBindings).toHaveLength(0);
         // eslint-disable-next-line no-console
@@ -225,7 +240,7 @@ describe("using a logger", () => {
     test("usage bindings start and, strange case, several matches at end", () => {
         logger.logBindingStart("binding2");
         logger.logBindingStart("binding2");
-        jest.spyOn(performance, "now").mockReturnValueOnce(400);
+        vi.spyOn(performance, "now").mockReturnValueOnce(400);
         logger.logBindingEnd("binding2:cmd2", true);
         expect(logger.ongoingBindings).toHaveLength(0);
         // eslint-disable-next-line no-console
@@ -234,9 +249,9 @@ describe("using a logger", () => {
 
     test("sevseral usage bindings start and one end", () => {
         logger.logBindingStart("binding2");
-        jest.spyOn(performance, "now").mockReturnValueOnce(1000);
+        vi.spyOn(performance, "now").mockReturnValueOnce(1000);
         logger.logBindingStart("binding3");
-        jest.spyOn(performance, "now").mockReturnValueOnce(1500);
+        vi.spyOn(performance, "now").mockReturnValueOnce(1500);
         logger.logBindingEnd("binding3:cmd2", true);
         expect(logger.ongoingBindings).toHaveLength(1);
         expect(logger.ongoingBindings[0].name).toBe("binding2");
@@ -246,23 +261,34 @@ describe("using a logger", () => {
     });
 
     test("usage binding start and end same, rest", () => {
-        const xhrMock: Partial<XMLHttpRequest> = {
-            "open": jest.fn(),
-            "send": jest.fn(),
-            "setRequestHeader": jest.fn()
+        const open = vi.fn();
+        const setRequestHeader = vi.fn();
+        const send = vi.fn();
+
+        const mockXHR = {
+            open,
+            setRequestHeader,
+            send
         };
 
-        jest.spyOn(globalThis.window, "XMLHttpRequest").mockReturnValue(xhrMock as XMLHttpRequest);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any,func-names,@typescript-eslint/naming-convention
+        const XMLHttpRequestMock = vi.fn(function (this: any) {
+            Object.assign(this, mockXHR);
+        });
+
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-explicit-any
+        globalThis.window.XMLHttpRequest = XMLHttpRequestMock as any;
+
         logger.writeConsole = false;
         logger.serverAddress = "yolo";
         logger.logBindingStart("foo3");
-        jest.spyOn(performance, "now").mockReturnValueOnce(200);
+        vi.spyOn(performance, "now").mockReturnValueOnce(200);
         logger.logBindingEnd("foo3", true);
         expect(logger.ongoingBindings).toHaveLength(0);
         // eslint-disable-next-line no-console
         expect(console.log).not.toHaveBeenCalled();
-        expect(xhrMock.open).toHaveBeenCalledWith("POST", "yolo/api/usage", true);
-        expect(xhrMock.send).toHaveBeenCalledWith(
+        expect(mockXHR.open).toHaveBeenCalledWith("POST", "yolo/api/usage", true);
+        expect(mockXHR.send).toHaveBeenCalledWith(
             `{"name":"foo3","sessionID":"${logger.sessionID}","date":123,"duration":77,"cancelled":true}`);
     });
 });

@@ -13,11 +13,11 @@
  */
 
 import {KeyDataImpl, KeyTyped} from "../../../src/interacto";
-import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
+import {afterEach, beforeEach, describe, expect, vi, test} from "vitest";
 import {robot} from "interacto-nono";
-import {mock} from "jest-mock-extended";
+import {mock} from "vitest-mock-extended";
 import type {FSMHandler, Logger} from "../../../src/interacto";
-import type {MockProxy} from "jest-mock-extended";
+import type {MockProxy} from "vitest-mock-extended";
 
 describe("using a key typed interaction", () => {
     let interaction: KeyTyped;
@@ -33,7 +33,7 @@ describe("using a key typed interaction", () => {
 
     afterEach(() => {
         interaction.uninstall();
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     });
 
     describe("without the key", () => {
@@ -89,7 +89,7 @@ describe("using a key typed interaction", () => {
         test("data is ok", () => {
             const data = new KeyDataImpl();
             const newHandler = mock<FSMHandler>();
-            newHandler.fsmStops = jest.fn(() => {
+            newHandler.fsmStops = vi.fn(() => {
                 data.copy(interaction.data);
             });
             interaction.fsm.addHandler(newHandler);

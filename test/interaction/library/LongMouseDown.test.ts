@@ -14,10 +14,10 @@
 
 import {LongMouseDown, PointDataImpl} from "../../../src/interacto";
 import {createMouseEvent, robot} from "../StubEvents";
-import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
-import {mock} from "jest-mock-extended";
+import {afterEach, beforeEach, describe, expect, vi, test} from "vitest";
+import {mock} from "vitest-mock-extended";
 import type {FSMHandler, Logger} from "../../../src/interacto";
-import type {MockProxy} from "jest-mock-extended";
+import type {MockProxy} from "vitest-mock-extended";
 
 describe("using a long mouse down interaction", () => {
     let interaction: LongMouseDown;
@@ -31,15 +31,15 @@ describe("using a long mouse down interaction", () => {
 
     describe("long mouse down test", () => {
         beforeEach(() => {
-            jest.useFakeTimers();
+            vi.useFakeTimers();
             handler = mock<FSMHandler>();
             canvas = document.createElement("canvas");
         });
 
         afterEach(() => {
             interaction.uninstall();
-            jest.clearAllMocks();
-            jest.clearAllTimers();
+            vi.clearAllMocks();
+            vi.clearAllTimers();
         });
 
         test("that reinit cleans data", () => {
@@ -61,7 +61,7 @@ describe("using a long mouse down interaction", () => {
                 const pressData = new PointDataImpl();
 
                 const newHandler = mock<FSMHandler>();
-                newHandler.fsmStarts = jest.fn(() => {
+                newHandler.fsmStarts = vi.fn(() => {
                     pressData.copy(interaction.data);
                 });
                 interaction.fsm.addHandler(newHandler);
@@ -88,7 +88,7 @@ describe("using a long mouse down interaction", () => {
             test("press, release with other button with timeout", () => {
                 interaction.processEvent(createMouseEvent("mousedown", canvas, 15, 20, 160, 21, 2));
                 interaction.processEvent(createMouseEvent("mouseup", canvas, 15, 20, 160, 21, 1));
-                jest.runOnlyPendingTimers();
+                vi.runOnlyPendingTimers();
                 expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
                 expect(handler.fsmStops).toHaveBeenCalledTimes(1);
                 expect(handler.fsmCancels).not.toHaveBeenCalled();
@@ -98,7 +98,7 @@ describe("using a long mouse down interaction", () => {
                 interaction.log(true);
                 interaction.processEvent(createMouseEvent("mousedown", canvas, 15, 20, 160, 21, 2));
                 interaction.processEvent(createMouseEvent("mouseup", canvas, 15, 20, 160, 21, 1));
-                jest.runOnlyPendingTimers();
+                vi.runOnlyPendingTimers();
 
                 expect(logger.logInteractionMsg).toHaveBeenCalledTimes(8);
             });
@@ -106,7 +106,7 @@ describe("using a long mouse down interaction", () => {
             test("no log interaction is ok", () => {
                 interaction.processEvent(createMouseEvent("mousedown", canvas, 15, 20, 160, 21, 2));
                 interaction.processEvent(createMouseEvent("mouseup", canvas, 15, 20, 160, 21, 1));
-                jest.runOnlyPendingTimers();
+                vi.runOnlyPendingTimers();
 
                 expect(logger.logInteractionMsg).not.toHaveBeenCalled();
             });
@@ -115,7 +115,7 @@ describe("using a long mouse down interaction", () => {
                 interaction.processEvent(createMouseEvent("mousedown", canvas, 15, 20, 160, 21, 2));
                 interaction.processEvent(createMouseEvent("mouseup", canvas, 15, 20, 160, 21, 2));
                 interaction.processEvent(createMouseEvent("mousedown", canvas, 15, 20, 160, 21, 1));
-                jest.runOnlyPendingTimers();
+                vi.runOnlyPendingTimers();
                 expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
                 expect(handler.fsmStops).toHaveBeenCalledTimes(1);
                 expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
@@ -134,7 +134,7 @@ describe("using a long mouse down interaction", () => {
             test("mouse move cancels the long pressure", () => {
                 interaction.processEvent(createMouseEvent("mousedown", canvas, 15, 20, 160, 21, 2));
                 interaction.processEvent(createMouseEvent("mousemove", canvas, 15, 21, 160, 22, 2));
-                jest.runOnlyPendingTimers();
+                vi.runOnlyPendingTimers();
                 expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
                 expect(handler.fsmStops).not.toHaveBeenCalled();
                 expect(handler.fsmCancels).toHaveBeenCalledTimes(1);

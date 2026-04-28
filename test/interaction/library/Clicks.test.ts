@@ -14,12 +14,12 @@
 
 import {Clicks} from "../../../src/impl/interaction/library/Clicks";
 import {createMouseEvent, robot} from "../StubEvents";
-import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
-import {mock} from "jest-mock-extended";
+import {afterEach, beforeEach, describe, expect, vi, test} from "vitest";
+import {mock} from "vitest-mock-extended";
 import type {FSMHandler} from "../../../src/api/fsm/FSMHandler";
 import type {Logger} from "../../../src/api/logging/Logger";
 import type {LoggerImpl} from "../../../src/impl/logging/LoggerImpl";
-import type {MockProxy} from "jest-mock-extended";
+import type {MockProxy} from "vitest-mock-extended";
 
 describe("using a clicks interaction", () => {
     let interaction: Clicks;
@@ -37,7 +37,7 @@ describe("using a clicks interaction", () => {
 
     describe.each([3, 4])("testing clicks with %s clicks", nb => {
         beforeEach(() => {
-            jest.useFakeTimers();
+            vi.useFakeTimers();
             handler = mock<FSMHandler>();
             logger = mock<Logger>();
             canvas = document.createElement("canvas");
@@ -48,8 +48,8 @@ describe("using a clicks interaction", () => {
 
         afterEach(() => {
             interaction.uninstall();
-            jest.clearAllMocks();
-            jest.clearAllTimers();
+            vi.clearAllMocks();
+            vi.clearAllTimers();
         });
 
         // slice(1) to remove 0
@@ -69,7 +69,7 @@ describe("using a clicks interaction", () => {
             for (let i = 0; i < nbClick; i++) {
                 interaction.processEvent(createMouseEvent("click", canvas, 15, 21, 160, 21, 3));
             }
-            jest.runAllTimers();
+            vi.runAllTimers();
 
             expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
             expect(handler.fsmUpdates).toHaveBeenCalledTimes(nbClick);
@@ -116,11 +116,11 @@ describe("using a clicks interaction", () => {
             for (let i = 0; i < nb; i++) {
                 interaction.processEvent(createMouseEvent("click", canvas, 15, 21, 160, 21, 3));
             }
-            jest.runAllTimers();
+            vi.runAllTimers();
             for (let i = 0; i < nb; i++) {
                 interaction.processEvent(createMouseEvent("click", canvas, 15, 21, 160, 21, 3));
             }
-            jest.runAllTimers();
+            vi.runAllTimers();
 
             expect(handler.fsmStarts).toHaveBeenCalledTimes(2);
             expect(handler.fsmCancels).not.toHaveBeenCalled();
@@ -180,7 +180,7 @@ describe("using a clicks interaction", () => {
             robot(canvas)
                 .click({"screenX": 1025, "screenY": 210, "clientX": 1040, "clientY": 1201, "button": 1})
                 .click({"screenX": 1250, "screenY": 201, "clientX": 1040, "clientY": 1021, "button": 1});
-            jest.runAllTimers();
+            vi.runAllTimers();
 
             expect(handler.fsmReinit).toHaveBeenCalledTimes(1);
             expect(interaction.data.points).toHaveLength(0);

@@ -13,7 +13,7 @@
  */
 import {BindingsContext, BindingsImpl, LinearHistoryImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
-import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
+import {afterEach, beforeEach, describe, expect, vi, test} from "vitest";
 import {robot} from "interacto-nono";
 import type {WidgetData, LinearHistoryBase, Bindings} from "../../src/interacto";
 
@@ -35,11 +35,11 @@ describe("using a combobox binder", () => {
 
     afterEach(() => {
         bindings.clear();
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     });
 
     test("commandExecutedOnSingleComboFunction", () => {
-        jest.spyOn(cmd, "execute");
+        vi.spyOn(cmd, "execute");
 
         bindings.comboBoxBinder()
             .toProduce(_i => cmd)
@@ -63,7 +63,7 @@ describe("using a combobox binder", () => {
     });
 
     test("init1Executed", () => {
-        jest.spyOn(cmd, "execute");
+        vi.spyOn(cmd, "execute");
 
         bindings.comboBoxBinder()
             .on(widget1)
@@ -80,7 +80,7 @@ describe("using a combobox binder", () => {
     });
 
     test("checkFalse", () => {
-        jest.spyOn(cmd, "execute");
+        vi.spyOn(cmd, "execute");
 
         bindings.comboBoxBinder()
             .toProduce(_i => cmd)

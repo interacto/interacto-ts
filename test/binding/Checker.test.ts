@@ -13,7 +13,7 @@
  */
 
 import {BindingsImpl, LinearHistoryImpl, CheckerImpl} from "../../src/interacto";
-import {afterEach, beforeEach, describe, expect, test} from "@jest/globals";
+import {afterEach, beforeEach, describe, expect, test} from "vitest";
 import type {Bindings, LinearHistory, Checker} from "../../src/interacto";
 
 describe("binding checker", () => {

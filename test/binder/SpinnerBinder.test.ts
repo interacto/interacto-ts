@@ -14,7 +14,7 @@
 
 import {BindingsContext, BindingsImpl, SpinnerChangedFSM, LinearHistoryImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
-import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
+import {afterEach, beforeEach, describe, expect, vi, test} from "vitest";
 import {robot} from "interacto-nono";
 import type {WidgetData, LinearHistoryBase, Bindings} from "../../src/interacto";
 
@@ -29,7 +29,7 @@ describe("using a spinner binder", () => {
         bindings = new BindingsImpl(new LinearHistoryImpl());
         ctx = new BindingsContext();
         bindings.setBindingObserver(ctx);
-        jest.useFakeTimers();
+        vi.useFakeTimers();
         widget1 = document.createElement("input");
         widget2 = document.createElement("input");
         widget1.type = "number";
@@ -38,12 +38,12 @@ describe("using a spinner binder", () => {
     });
 
     afterEach(() => {
-        jest.clearAllTimers();
+        vi.clearAllTimers();
         bindings.clear();
     });
 
     test("commandExecutedOnSingleSpinnerFunction", () => {
-        jest.spyOn(cmd, "execute");
+        vi.spyOn(cmd, "execute");
 
         bindings.spinnerBinder()
             .toProduce((_i: WidgetData<HTMLInputElement>) => cmd)
@@ -51,7 +51,7 @@ describe("using a spinner binder", () => {
             .bind();
 
         robot(widget1).input();
-        jest.runAllTimers();
+        vi.runAllTimers();
         expect(cmd.execute).toHaveBeenCalledTimes(1);
     });
 
@@ -62,15 +62,15 @@ describe("using a spinner binder", () => {
             .bind();
 
         robot(widget1).input();
-        jest.runAllTimers();
+        vi.runAllTimers();
         robot(widget2).input();
-        jest.runAllTimers();
+        vi.runAllTimers();
 
         expect(ctx.commands).toHaveLength(2);
     });
 
     test("init1Executed", () => {
-        jest.spyOn(cmd, "execute");
+        vi.spyOn(cmd, "execute");
 
         bindings.spinnerBinder()
             .on(widget1)
@@ -81,14 +81,14 @@ describe("using a spinner binder", () => {
             .bind();
 
         robot(widget1).input();
-        jest.runAllTimers();
+        vi.runAllTimers();
 
         expect(cmd.value).toBe(10);
         expect(cmd.execute).toHaveBeenCalledTimes(1);
     });
 
     test("checkFalse", () => {
-        jest.spyOn(cmd, "execute");
+        vi.spyOn(cmd, "execute");
 
         bindings.spinnerBinder()
             .toProduce(_i => cmd)
@@ -97,13 +97,13 @@ describe("using a spinner binder", () => {
             .bind();
 
         robot(widget1).input();
-        jest.runAllTimers();
+        vi.runAllTimers();
         expect(cmd.execute).not.toHaveBeenCalled();
     });
 
     test("endsOnThen", () => {
         let cpt = 0;
-        jest.spyOn(cmd, "execute");
+        vi.spyOn(cmd, "execute");
 
         bindings.spinnerBinder()
             .toProduce(_i => cmd)
@@ -117,7 +117,7 @@ describe("using a spinner binder", () => {
             .bind();
 
         robot(widget1).input();
-        jest.runAllTimers();
+        vi.runAllTimers();
 
         expect(cmd.value).toBe(10);
         expect(cmd.execute).toHaveBeenCalledTimes(1);
@@ -138,7 +138,7 @@ describe("using a spinner binder", () => {
         robot(widget1).input();
         robot(widget1).input();
         robot(widget1).input();
-        jest.runAllTimers();
+        vi.runAllTimers();
 
         expect(cpt).toBe(5);
     });
@@ -158,11 +158,11 @@ describe("using a spinner binder", () => {
 
         robot(widget1).input();
         robot(widget1).input();
-        jest.runAllTimers();
+        vi.runAllTimers();
 
         robot(widget1).input();
         robot(widget1).input();
-        jest.runAllTimers();
+        vi.runAllTimers();
 
         expect(cpt1).toBe(2);
         expect(cpt2).toBe(2);
