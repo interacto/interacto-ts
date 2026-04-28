@@ -13,16 +13,14 @@
  */
 
 import {LinearHistoryImpl} from "../../src/impl/history/LinearHistoryImpl";
-import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
-import {mock} from "jest-mock-extended";
+import {afterEach, beforeEach, describe, expect, vi, test} from "vitest";
+import {mock} from "vitest-mock-extended";
 import type {Undoable} from "../../src/api/history/Undoable";
 import type {LinearHistory} from "../../src/api/history/LinearHistory";
-import type {MockProxy} from "jest-mock-extended";
+import type {MockProxy} from "vitest-mock-extended";
 import {TestScheduler} from "rxjs/testing";
 
 describe("using an linear history", () => {
-    jest.mock("../../src/api/history/Undoable");
-
     let undoable: MockProxy<Undoable> & Undoable;
     let undoable2: MockProxy<Undoable> & Undoable;
     let history: LinearHistory;
@@ -529,7 +527,7 @@ describe("using an linear history", () => {
             // A *B C D
             void history.undo();
             void history.undo();
-            undoableC.equals = jest.fn(() => true);
+            undoableC.equals = vi.fn(() => true);
             history.add(undoableE);
 
             expect(history.getLastUndo()).toBe(undoableC);
@@ -540,7 +538,7 @@ describe("using an linear history", () => {
             // A *B C D
             void history.undo();
             void history.undo();
-            undoableC.equals = jest.fn(() => false);
+            undoableC.equals = vi.fn(() => false);
             history.add(undoableE);
 
             expect(history.getLastUndo()).toBe(undoableE);

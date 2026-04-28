@@ -12,7 +12,7 @@
  * along with Interacto. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {jest} from "@jest/globals";
+import {vi} from "vitest";
 import {NonoRobotImpl} from "interacto-nono";
 import type {EventType} from "../../src/api/fsm/EventType";
 import type {PointData} from "../../src/api/interaction/PointData";
@@ -27,12 +27,12 @@ export interface JestNonoRobot {
 
 class JestNonoRobotImpl extends NonoRobotImpl implements JestNonoRobot {
     public runOnlyPendingTimers(): this {
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
         return this;
     }
 
     public runAllTimers(): this {
-        jest.runAllTimers();
+        vi.runAllTimers();
         return this;
     }
 }

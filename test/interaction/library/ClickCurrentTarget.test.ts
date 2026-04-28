@@ -13,11 +13,11 @@
  */
 
 import {Click, PointDataImpl} from "../../../src/interacto";
-import {beforeEach, describe, expect, jest, test} from "@jest/globals";
+import {beforeEach, describe, expect, vi, test} from "vitest";
 import {robot} from "interacto-nono";
-import {mock} from "jest-mock-extended";
+import {mock} from "vitest-mock-extended";
 import type {FSMHandler, Logger} from "../../../src/interacto";
-import type {MockProxy} from "jest-mock-extended";
+import type {MockProxy} from "vitest-mock-extended";
 
 describe("using a click interaction with a currenttarget", () => {
     let interaction: Click;
@@ -38,7 +38,7 @@ describe("using a click interaction with a currenttarget", () => {
 
     test("current target with group tag", () => {
         const data = new PointDataImpl();
-        handler.fsmStops = jest.fn(() => {
+        handler.fsmStops = vi.fn(() => {
             data.copy(interaction.data);
         });
 

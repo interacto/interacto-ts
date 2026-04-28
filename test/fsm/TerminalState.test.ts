@@ -13,11 +13,11 @@
  */
 
 import {TerminalState} from "../../src/impl/fsm/TerminalState";
-import {beforeEach, describe, expect, test} from "@jest/globals";
-import {mock} from "jest-mock-extended";
+import {beforeEach, describe, expect, test} from "vitest";
+import {mock} from "vitest-mock-extended";
 import type {VisitorFSM} from "../../src/api/fsm/VisitorFSM";
 import type {FSMImpl} from "../../src/impl/fsm/FSMImpl";
-import type {MockProxy} from "jest-mock-extended";
+import type {MockProxy} from "vitest-mock-extended";
 
 describe("using a terminal state", () => {
     let state: TerminalState;

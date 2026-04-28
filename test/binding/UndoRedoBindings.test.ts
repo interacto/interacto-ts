@@ -14,21 +14,20 @@
 
 import {BindingsContext, BindingsImpl, Redo, Undo, LinearHistoryImpl} from "../../src/interacto";
 import {robot} from "../interaction/StubEvents";
-import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
-import {mock} from "jest-mock-extended";
+import {afterEach, beforeEach, describe, expect, vi, test, type Mock} from "vitest";
+import {mock, type MockProxy} from "vitest-mock-extended";
 import type {Bindings, Undoable, LinearHistoryBase} from "../../src/interacto";
-import type {MockProxy} from "jest-mock-extended";
 
 let bundo: HTMLButtonElement;
 let bredo: HTMLButtonElement;
 let ctx: BindingsContext;
 let bindings: Bindings<LinearHistoryBase>;
 let undoable: MockProxy<Undoable> & Undoable;
-let fn: jest.Mock;
+let fn: Mock;
 
 describe("test history redo bindings", () => {
     beforeEach(() => {
-        fn = jest.fn();
+        fn = vi.fn();
         bindings = new BindingsImpl(new LinearHistoryImpl());
         ctx = new BindingsContext();
         bindings.setBindingObserver(ctx);
@@ -39,7 +38,7 @@ describe("test history redo bindings", () => {
 
     afterEach(() => {
         bindings.clear();
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     });
 
     describe("test history bindings", () => {

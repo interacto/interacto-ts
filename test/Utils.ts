@@ -14,7 +14,7 @@
 
 // This files contains helper routines for testing the library.
 
-import {expect, jest} from "@jest/globals";
+import {expect, vi} from "vitest";
 import type {TouchData} from "../src/api/interaction/TouchData";
 
 /**
@@ -22,7 +22,7 @@ import type {TouchData} from "../src/api/interaction/TouchData";
  * @returns The promise to flush.
  */
 export async function flushPromises(): Promise<unknown> {
-    jest.useRealTimers();
+    vi.useRealTimers();
     return new Promise(resolve => {
         setTimeout(resolve);
     });

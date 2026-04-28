@@ -14,7 +14,7 @@
 
 import {StubCmd} from "./StubCmd";
 import {CommandBase} from "../../src/interacto";
-import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
+import {afterEach, beforeEach, describe, expect, vi, test} from "vitest";
 
 describe("using a command", () => {
     let cmd: StubCmd;
@@ -25,7 +25,7 @@ describe("using a command", () => {
     });
 
     afterEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     });
 
     test("cando default", () => {
@@ -156,25 +156,25 @@ describe("using a command", () => {
     });
 
     test("get timestamp when executed", () => {
-        jest.useFakeTimers();
-        jest.setSystemTime(100);
-        jest.advanceTimersByTime(123);
+        vi.useFakeTimers();
+        vi.setSystemTime(100);
+        vi.advanceTimersByTime(123);
         void cmd.execute();
         expect(cmd.getTimestamp()).toBe(223);
     });
 
     test("get timestamp when re-executed", () => {
-        jest.useFakeTimers();
-        jest.setSystemTime(100);
-        jest.advanceTimersByTime(123);
+        vi.useFakeTimers();
+        vi.setSystemTime(100);
+        vi.advanceTimersByTime(123);
         void cmd.execute();
-        jest.advanceTimersByTime(1000);
+        vi.advanceTimersByTime(1000);
         void cmd.execute();
         expect(cmd.getTimestamp()).toBe(1223);
     });
 
     test("executed Two Times", async () => {
-        jest.spyOn(cmd, "execute");
+        vi.spyOn(cmd, "execute");
         await cmd.execute();
         await cmd.execute();
         expect(cmd.execute).toHaveBeenCalledTimes(2);

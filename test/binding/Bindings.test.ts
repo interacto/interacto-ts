@@ -22,8 +22,8 @@ import {
 } from "../../src/interacto";
 import {StubCmd, StubUndoableCmd} from "../command/StubCmd";
 import {createMouseEvent, robot} from "../interaction/StubEvents";
-import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
-import {mock} from "jest-mock-extended";
+import {afterEach, beforeEach, describe, expect, vi, test} from "vitest";
+import {mock} from "vitest-mock-extended";
 import type {
     Binding,
     Bindings,
@@ -61,14 +61,14 @@ describe("using bindings", () => {
         bindings = new BindingsImpl(new LinearHistoryImpl(), logger);
         ctx = new BindingsContext();
         bindings.setBindingObserver(ctx);
-        jest.useFakeTimers();
+        vi.useFakeTimers();
         elt = document.createElement("div");
     });
 
     afterEach(() => {
         bindings.clear();
-        jest.clearAllTimers();
-        jest.clearAllMocks();
+        vi.clearAllTimers();
+        vi.clearAllMocks();
     });
 
     test("with specific history", () => {
@@ -109,7 +109,7 @@ describe("using bindings", () => {
     });
 
     test("toProduceAnon works", () => {
-        const fn = jest.fn();
+        const fn = vi.fn();
 
         bindings.mouseDownBinder()
             .on(elt)
@@ -124,7 +124,7 @@ describe("using bindings", () => {
     });
 
     test("crash in execute using toProduceAnon", () => {
-        const fn = jest.fn();
+        const fn = vi.fn();
 
         bindings.mouseDownBinder()
             .on(elt)
@@ -140,7 +140,7 @@ describe("using bindings", () => {
     });
 
     test("crash in execute", () => {
-        const fn = jest.fn();
+        const fn = vi.fn();
 
         bindings.mouseDownBinder()
             .on(elt)
@@ -271,7 +271,7 @@ describe("using bindings", () => {
     });
 
     test("click binder crashes in command", () => {
-        const fn = jest.fn();
+        const fn = vi.fn();
 
         bindings.clickBinder()
             .on(elt)
@@ -298,7 +298,7 @@ describe("using bindings", () => {
     });
 
     test("double click binder crashes in command", () => {
-        const fn = jest.fn();
+        const fn = vi.fn();
 
         bindings.dbleClickBinder()
             .on(elt)
@@ -364,7 +364,7 @@ describe("using bindings", () => {
     });
 
     test("drag lock binder crash in command", () => {
-        const fn = jest.fn();
+        const fn = vi.fn();
 
         bindings.dragLockBinder()
             .on(elt)
@@ -404,7 +404,7 @@ describe("using bindings", () => {
             .bind()
             .interaction
             .fsm;
-        jest.spyOn(fsm, "process");
+        vi.spyOn(fsm, "process");
 
         const evt1: MouseEventForTest = createMouseEvent("mousedown", elt, 1, 2) as MouseEventForTest;
         const evt2: MouseEventForTest = createMouseEvent("mousemove", elt, 3, 4) as MouseEventForTest;
@@ -422,19 +422,19 @@ describe("using bindings", () => {
         evt7.id = 7;
 
         elt.dispatchEvent(evt1);
-        jest.advanceTimersByTime(22);
+        vi.advanceTimersByTime(22);
         elt.dispatchEvent(evt2);
-        jest.advanceTimersByTime(21);
+        vi.advanceTimersByTime(21);
         elt.dispatchEvent(evt3);
-        jest.advanceTimersByTime(10);
+        vi.advanceTimersByTime(10);
         elt.dispatchEvent(evt4);
-        jest.advanceTimersByTime(2);
+        vi.advanceTimersByTime(2);
         elt.dispatchEvent(evt5);
-        jest.advanceTimersByTime(2);
+        vi.advanceTimersByTime(2);
         elt.dispatchEvent(evt6);
-        jest.advanceTimersByTime(21);
+        vi.advanceTimersByTime(21);
         elt.dispatchEvent(evt7);
-        jest.runAllTimers();
+        vi.runAllTimers();
 
         expect(ctx.commands).toHaveLength(1);
         expect(fsm.process).toHaveBeenNthCalledWith(1, evt1);
@@ -452,7 +452,7 @@ describe("using bindings", () => {
             .bind()
             .interaction
             .fsm;
-        jest.spyOn(fsm, "process");
+        vi.spyOn(fsm, "process");
 
         const evt1: MouseEventForTest = createMouseEvent("mousedown", elt, 1, 2) as MouseEventForTest;
         const evt2: MouseEventForTest = createMouseEvent("mousemove", elt, 3, 4) as MouseEventForTest;
@@ -470,19 +470,19 @@ describe("using bindings", () => {
         evt7.id = 7;
 
         elt.dispatchEvent(evt1);
-        jest.advanceTimersByTime(199);
+        vi.advanceTimersByTime(199);
         elt.dispatchEvent(evt2);
-        jest.advanceTimersByTime(199);
+        vi.advanceTimersByTime(199);
         elt.dispatchEvent(evt3);
-        jest.advanceTimersByTime(199);
+        vi.advanceTimersByTime(199);
         elt.dispatchEvent(evt4);
-        jest.advanceTimersByTime(200);
+        vi.advanceTimersByTime(200);
         elt.dispatchEvent(evt5);
-        jest.advanceTimersByTime(199);
+        vi.advanceTimersByTime(199);
         elt.dispatchEvent(evt6);
-        jest.advanceTimersByTime(200);
+        vi.advanceTimersByTime(200);
         elt.dispatchEvent(evt7);
-        jest.runAllTimers();
+        vi.runAllTimers();
 
         expect(ctx.commands).toHaveLength(1);
         expect(fsm.process).toHaveBeenNthCalledWith(1, evt1);
@@ -498,7 +498,7 @@ describe("using bindings", () => {
         handle.setAttribute("r", "50");
         const handleRef: EltRef<SVGCircleElement> = {"nativeElement": handle};
         const springRef: EltRef<SVGLineElement> = {"nativeElement": spring};
-        const cancel = jest.fn();
+        const cancel = vi.fn();
         elt.append(handle);
         elt.append(spring);
         handle.classList.add("ioDwellSpring");
@@ -527,13 +527,13 @@ describe("using bindings", () => {
         handle.setAttribute("r", "50");
         const handleRef: EltRef<SVGCircleElement> = {"nativeElement": handle};
         const springRef: EltRef<SVGLineElement> = {"nativeElement": spring};
-        const cancel = jest.fn();
+        const cancel = vi.fn();
         elt.append(handle);
         elt.append(spring);
         handle.classList.add("ioDwellSpring");
 
         // document.elementFromPoint is undefined
-        document.elementFromPoint = jest.fn<() => Element | null>().mockReturnValue(null);
+        document.elementFromPoint = vi.fn<() => Element | null>().mockReturnValue(null);
 
         bindings.reciprocalTouchDnDBinder(handleRef, springRef)
             .on(elt)
@@ -547,7 +547,7 @@ describe("using bindings", () => {
             .touchend()
             .touchstart()
             .touchmove();
-        document.elementFromPoint = jest.fn<() => Element | null>().mockReturnValue(handle);
+        document.elementFromPoint = vi.fn<() => Element | null>().mockReturnValue(handle);
         robot(handle)
             .touchend({}, [{"identifier": 1, "target": handle}]);
 
@@ -586,7 +586,7 @@ describe("using bindings", () => {
     });
 
     test("key type crashes in command", () => {
-        const fn = jest.fn();
+        const fn = vi.fn();
 
         bindings.keyTypeBinder()
             .on(elt)
@@ -610,7 +610,6 @@ describe("using bindings", () => {
         bindings.dragLockBinder()
             .on(elt)
             .toProduce((_i: SrcTgtPointsData<PointData>) => new StubCmd(true))
-            // eslint-disable-next-line jest/no-conditional-in-test
             .when(i => i.src.button === 2 && i.tgt.button === 2)
             .log("interaction")
             .bind();
@@ -642,10 +641,10 @@ describe("using bindings", () => {
     });
 
     test("drag lock: first then end", () => {
-        const first = jest.fn();
-        const end = jest.fn();
-        const then = jest.fn();
-        const endcancel = jest.fn();
+        const first = vi.fn();
+        const end = vi.fn();
+        const then = vi.fn();
+        const endcancel = vi.fn();
         bindings.dragLockBinder()
             .on(elt)
             .toProduce((_i: SrcTgtPointsData<PointData>) => new StubCmd(true))
@@ -719,7 +718,7 @@ describe("using bindings", () => {
             .bind();
 
         robot(elt).mousedown();
-        jest.runAllTimers();
+        vi.runAllTimers();
 
         expect(ctx.commands).toHaveLength(1);
     });
@@ -809,7 +808,7 @@ describe("using bindings", () => {
     });
 
     test("multi-touch binder with crash in command", () => {
-        const fn = jest.fn();
+        const fn = vi.fn();
 
         bindings.multiTouchBinder(2)
             .toProduce(() => new AnonCmd(() => {
@@ -859,7 +858,7 @@ describe("using bindings", () => {
     });
 
     test("that 'ifCannotExecute' is correctly called", () => {
-        const mockFn = jest.fn();
+        const mockFn = vi.fn();
         const cmd = new StubCmd(false);
         bindings.mouseDownBinder()
             .on(elt)
@@ -919,7 +918,7 @@ describe("using bindings", () => {
     });
 
     test("that 'when' is not called on the first event of a DnD", () => {
-        const when = jest.fn().mockReturnValue(false);
+        const when = vi.fn().mockReturnValue(false);
         bindings.dndBinder(false)
             .on(elt)
             .toProduce((_i: SrcTgtPointsData<PointData>) => new StubCmd(true))
@@ -962,7 +961,7 @@ describe("using bindings", () => {
         });
 
         test("when it crashes in 'first' with an error caught by 'catch'", () => {
-            const fn = jest.fn();
+            const fn = vi.fn();
             baseBinder
                 .first((_c: StubCmd, _i: SrcTgtPointsData<TouchData>) => {
                     throw err;
@@ -1057,7 +1056,7 @@ describe("using bindings", () => {
         });
 
         test("when it crashes in 'then' with an error caught by 'catch'", () => {
-            const fn = jest.fn();
+            const fn = vi.fn();
             baseBinder
                 .then(() => {
                     throw err;
@@ -1111,7 +1110,7 @@ describe("using bindings", () => {
         });
 
         test("when it crashes in 'end' with an error caught by 'catch'", () => {
-            const fn = jest.fn();
+            const fn = vi.fn();
             baseBinder
                 .end(() => {
                     throw err;
@@ -1165,7 +1164,7 @@ describe("using bindings", () => {
         });
 
         test("when it crashes in 'endOrCancel' with an error caught by 'catch'", () => {
-            const fn = jest.fn();
+            const fn = vi.fn();
             baseBinder
                 .catch(fn)
                 .endOrCancel(() => {
@@ -1220,7 +1219,7 @@ describe("using bindings", () => {
         });
 
         test("when it crashes in 'cancel' with an error caught by 'catch'", () => {
-            const fn = jest.fn();
+            const fn = vi.fn();
             bindings.dndBinder(true)
                 .toProduce(() => new StubCmd(true))
                 .on(elt)
@@ -1259,7 +1258,7 @@ describe("using bindings", () => {
         });
 
         test("when it crashes in 'ifHadNoEffect' with an error", () => {
-            jest.spyOn(cmd, "hadEffect").mockReturnValue(false);
+            vi.spyOn(cmd, "hadEffect").mockReturnValue(false);
             baseBinder
                 .ifHadNoEffect((_c, _i: SrcTgtPointsData<TouchData>) => {
                     throw err;
@@ -1277,8 +1276,8 @@ describe("using bindings", () => {
         });
 
         test("when it crashes in 'ifHadNoEffect' with an error caught by 'catch'", () => {
-            jest.spyOn(cmd, "hadEffect").mockReturnValue(false);
-            const fn = jest.fn();
+            vi.spyOn(cmd, "hadEffect").mockReturnValue(false);
+            const fn = vi.fn();
             baseBinder
                 .catch(fn)
                 .ifHadNoEffect(() => {
@@ -1298,7 +1297,7 @@ describe("using bindings", () => {
         });
 
         test("when it crashes in 'ifHadNoEffect' with not an error", () => {
-            jest.spyOn(cmd, "hadEffect").mockReturnValue(false);
+            vi.spyOn(cmd, "hadEffect").mockReturnValue(false);
             baseBinder
                 .ifHadNoEffect(() => {
                     throw 11;
@@ -1316,7 +1315,7 @@ describe("using bindings", () => {
         });
 
         test("when it crashes in 'ifHadEffect' with an error", () => {
-            jest.spyOn(cmd, "hadEffect").mockReturnValue(true);
+            vi.spyOn(cmd, "hadEffect").mockReturnValue(true);
             baseBinder
                 .ifHadEffects((_c, _i: SrcTgtPointsData<TouchData>) => {
                     throw err;
@@ -1334,8 +1333,8 @@ describe("using bindings", () => {
         });
 
         test("when it crashes in 'ifHadEffect' with an error caught by 'catch'", () => {
-            jest.spyOn(cmd, "hadEffect").mockReturnValue(true);
-            const fn = jest.fn();
+            vi.spyOn(cmd, "hadEffect").mockReturnValue(true);
+            const fn = vi.fn();
             baseBinder
                 .catch(fn)
                 .ifHadEffects(() => {
@@ -1355,7 +1354,7 @@ describe("using bindings", () => {
         });
 
         test("when it crashes in 'ifHadEffect' with not an error", () => {
-            jest.spyOn(cmd, "hadEffect").mockReturnValue(true);
+            vi.spyOn(cmd, "hadEffect").mockReturnValue(true);
             baseBinder
                 .ifHadEffects(() => {
                     throw "YOLO";
@@ -1390,7 +1389,7 @@ describe("using bindings", () => {
         });
 
         test("when it crashes in 'when' with an error caught by 'catch'", () => {
-            const fn = jest.fn();
+            const fn = vi.fn();
             baseBinder
                 .catch(fn)
                 .when(() => {
@@ -1456,7 +1455,7 @@ describe("using bindings", () => {
         });
 
         test("when it crashes in 'ifCannotExecute' with an error caught by 'catch'", () => {
-            const fn = jest.fn();
+            const fn = vi.fn();
             cmd = new StubCmd(false);
             baseBinder
                 .catch(fn)
@@ -1617,9 +1616,9 @@ describe("using bindings", () => {
             beforeEach(() => {
                 cmd = new StubCmd(true, true);
                 undoCmd = new StubUndoableCmd(true);
-                jest.spyOn(cmd, "cancel");
-                jest.spyOn(undoCmd, "cancel");
-                jest.spyOn(undoCmd, "undo");
+                vi.spyOn(cmd, "cancel");
+                vi.spyOn(undoCmd, "cancel");
+                vi.spyOn(undoCmd, "undo");
             });
 
             test("start strict", () => {

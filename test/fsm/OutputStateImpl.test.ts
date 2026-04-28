@@ -16,13 +16,13 @@ import {StubTransitionOK} from "./StubTransitionOk";
 import {isOutputStateType} from "../../src/api/fsm/OutputState";
 import {OutputStateBase} from "../../src/impl/fsm/OutputStateBase";
 import {StdState} from "../../src/impl/fsm/StdState";
-import {beforeEach, describe, expect, test} from "@jest/globals";
-import {mock} from "jest-mock-extended";
+import {beforeEach, describe, expect, test} from "vitest";
+import {mock} from "vitest-mock-extended";
 import type {InputState} from "../../src/api/fsm/InputState";
 import type {OutputState} from "../../src/api/fsm/OutputState";
 import type {Transition} from "../../src/api/fsm/Transition";
 import type {FSMImpl} from "../../src/impl/fsm/FSMImpl";
-import type {MockProxy} from "jest-mock-extended";
+import type {MockProxy} from "vitest-mock-extended";
 
 describe("using an output state", () => {
     let state: OutputStateBase;

@@ -13,7 +13,7 @@
  */
 
 import {KeyDataImpl} from "../../src/impl/interaction/KeyDataImpl";
-import {beforeEach, describe, expect, test} from "@jest/globals";
+import {beforeEach, describe, expect, test} from "vitest";
 import type {KeyData} from "../../src/api/interaction/KeyData";
 
 describe("using a key data", () => {

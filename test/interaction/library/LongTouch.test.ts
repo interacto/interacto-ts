@@ -15,10 +15,10 @@
 import {LongTouch, TouchDataImpl} from "../../../src/interacto";
 import {checkTouchPoint} from "../../Utils";
 import {createTouchEvent, robot} from "../StubEvents";
-import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
-import {mock} from "jest-mock-extended";
+import {afterEach, beforeEach, describe, expect, vi, test} from "vitest";
+import {mock} from "vitest-mock-extended";
 import type {FSMHandler, Logger} from "../../../src/interacto";
-import type {MockProxy} from "jest-mock-extended";
+import type {MockProxy} from "vitest-mock-extended";
 
 describe("using a long touch interaction", () => {
     let interaction: LongTouch;
@@ -32,15 +32,15 @@ describe("using a long touch interaction", () => {
 
     describe("long touch test", () => {
         beforeEach(() => {
-            jest.useFakeTimers();
+            vi.useFakeTimers();
             handler = mock<FSMHandler>();
             canvas = document.createElement("canvas");
         });
 
         afterEach(() => {
             interaction.uninstall();
-            jest.clearAllMocks();
-            jest.clearAllTimers();
+            vi.clearAllMocks();
+            vi.clearAllTimers();
         });
 
         describe.each([1000, 2000])("long touch %s", duration => {
@@ -54,7 +54,7 @@ describe("using a long touch interaction", () => {
             test("touch does not end", () => {
                 const touchData = new TouchDataImpl();
                 const newHandler = mock<FSMHandler>();
-                newHandler.fsmStarts = jest.fn(() => {
+                newHandler.fsmStarts = vi.fn(() => {
                     touchData.copy(interaction.data);
                 });
                 interaction.fsm.addHandler(newHandler);
@@ -80,7 +80,7 @@ describe("using a long touch interaction", () => {
 
             test("touch with timeout", () => {
                 interaction.processEvent(createTouchEvent("touchstart", 3, canvas));
-                jest.runOnlyPendingTimers();
+                vi.runOnlyPendingTimers();
                 expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
                 expect(handler.fsmStops).toHaveBeenCalledTimes(1);
                 expect(handler.fsmCancels).not.toHaveBeenCalled();
@@ -89,14 +89,14 @@ describe("using a long touch interaction", () => {
             test("log interaction is ok", () => {
                 interaction.log(true);
                 interaction.processEvent(createTouchEvent("touchstart", 3, canvas));
-                jest.runOnlyPendingTimers();
+                vi.runOnlyPendingTimers();
 
                 expect(logger.logInteractionMsg).toHaveBeenCalledTimes(7);
             });
 
             test("no log interaction is ok", () => {
                 interaction.processEvent(createTouchEvent("touchstart", 3, canvas));
-                jest.runOnlyPendingTimers();
+                vi.runOnlyPendingTimers();
 
                 expect(logger.logInteractionMsg).not.toHaveBeenCalled();
             });
@@ -104,7 +104,7 @@ describe("using a long touch interaction", () => {
             test("two taps then timeout", () => {
                 interaction.processEvent(createTouchEvent("touchstart", 3, canvas));
                 interaction.processEvent(createTouchEvent("touchend", 3, canvas));
-                jest.runOnlyPendingTimers();
+                vi.runOnlyPendingTimers();
                 expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
                 expect(handler.fsmStops).not.toHaveBeenCalled();
                 expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
@@ -121,7 +121,7 @@ describe("using a long touch interaction", () => {
             test("moving, not with the same ID does not cancel the touch", () => {
                 interaction.processEvent(createTouchEvent("touchstart", 10, canvas));
                 interaction.processEvent(createTouchEvent("touchmove", 5, canvas));
-                jest.runOnlyPendingTimers();
+                vi.runOnlyPendingTimers();
                 expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
                 expect(handler.fsmStops).toHaveBeenCalledTimes(1);
                 expect(handler.fsmCancels).not.toHaveBeenCalled();

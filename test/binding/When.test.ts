@@ -13,7 +13,7 @@
  */
 
 import {isWhenAtEnd, isWhenAtStart, isWhenAtThen, isWhenStrict} from "../../src/interacto";
-import {describe, expect, test} from "@jest/globals";
+import {describe, expect, test} from "vitest";
 
 describe("test WhenType", () => {
     test("isWhenAtStart", () => {

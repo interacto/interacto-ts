@@ -13,12 +13,12 @@
  */
 
 import {rightPan, Then} from "../../src/interacto";
-import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
+import {afterEach, beforeEach, describe, expect, vi, test} from "vitest";
 import {robot} from "interacto-nono";
-import {mock} from "jest-mock-extended";
+import {mock} from "vitest-mock-extended";
 import type {Logger} from "../../src/api/logging/Logger";
 import type {FSMHandler, SrcTgtPointsData, TouchData, TouchDnD} from "../../src/interacto";
-import type {MockProxy} from "jest-mock-extended";
+import type {MockProxy} from "vitest-mock-extended";
 
 describe("that then interaction works", () => {
     const theLogger: Logger & MockProxy<Logger> = mock<Logger>();
@@ -32,7 +32,7 @@ describe("that then interaction works", () => {
     beforeEach(() => {
         handler = mock<FSMHandler>();
         canvas = document.createElement("canvas");
-        jest.useFakeTimers();
+        vi.useFakeTimers();
         i1 = rightPan(theLogger, false, 10, 100)();
         i2 = rightPan(theLogger, false, 10, 100)();
         interaction = new Then<[TouchDnD, TouchDnD],
@@ -44,8 +44,8 @@ describe("that then interaction works", () => {
     });
 
     afterEach(() => {
-        jest.clearAllMocks();
-        jest.runOnlyPendingTimers();
+        vi.clearAllMocks();
+        vi.runOnlyPendingTimers();
         interaction.uninstall();
     });
 
@@ -67,9 +67,9 @@ describe("that then interaction works", () => {
     });
 
     test("once an interaction has stopped, it is reinit", () => {
-        jest.spyOn(i1, "reinitData");
-        jest.spyOn(i2, "reinitData");
-        jest.spyOn(interaction, "reinitData");
+        vi.spyOn(i1, "reinitData");
+        vi.spyOn(i2, "reinitData");
+        vi.spyOn(interaction, "reinitData");
         robot(canvas)
             .pan(1, 200, "right", {clientX: 0, clientY: 0})
             .pan(2, 200, "right", {clientX: 0, clientY: 0});

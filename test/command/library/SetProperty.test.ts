@@ -14,7 +14,7 @@
  */
 
 import {SetProperty} from "../../../src/interacto";
-import {beforeEach, describe, expect, test} from "@jest/globals";
+import {beforeEach, describe, expect, test} from "vitest";
 
 class SecondStubSetProp {
     public val: Array<number> = [];

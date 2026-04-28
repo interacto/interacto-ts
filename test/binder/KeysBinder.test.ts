@@ -20,9 +20,9 @@ import {
 } from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {createKeyEvent} from "../interaction/StubEvents";
-import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
+import {afterEach, beforeEach, describe, expect, vi, test} from "vitest";
 import {robot} from "interacto-nono";
-import {mock} from "jest-mock-extended";
+import {mock} from "vitest-mock-extended";
 import type {
     Binding,
     Bindings, BindingsObserver,
@@ -41,14 +41,14 @@ describe("using a key binder", () => {
         bindings = new BindingsImpl(new LinearHistoryImpl());
         ctx = new BindingsContext();
         bindings.setBindingObserver(ctx);
-        jest.useFakeTimers();
+        vi.useFakeTimers();
         elt = document.createElement("canvas");
     });
 
     afterEach(() => {
         bindings.clear();
-        jest.clearAllTimers();
-        jest.clearAllMocks();
+        vi.clearAllTimers();
+        vi.clearAllMocks();
     });
 
     test("that is crashes when calling bind without an interaction supplier", () => {
@@ -106,7 +106,7 @@ describe("using a key binder", () => {
             .toProduce(() => new StubCmd(true))
             .bind();
         const key = createKeyEvent("keydown", "Shift");
-        jest.spyOn(key, "shiftKey", "get").mockReturnValue(true);
+        vi.spyOn(key, "shiftKey", "get").mockReturnValue(true);
         elt.dispatchEvent(key);
         expect(ctx.commands).toHaveLength(0);
     });
@@ -117,7 +117,7 @@ describe("using a key binder", () => {
             .toProduce(() => new StubCmd(true))
             .bind();
         const key = createKeyEvent("keydown", "Shift");
-        jest.spyOn(key, "shiftKey", "get").mockReturnValue(true);
+        vi.spyOn(key, "shiftKey", "get").mockReturnValue(true);
         elt.dispatchEvent(key);
         expect(ctx.commands).toHaveLength(1);
     });
@@ -211,7 +211,7 @@ describe("using a key binder", () => {
             .toProduce(() => new StubCmd(true))
             .bind();
         const key = createKeyEvent("keydown", "Alt");
-        jest.spyOn(key, "altKey", "get").mockReturnValue(true);
+        vi.spyOn(key, "altKey", "get").mockReturnValue(true);
         elt.dispatchEvent(key);
         expect(ctx.commands).toHaveLength(1);
     });
@@ -223,14 +223,14 @@ describe("using a key binder", () => {
             .toProduce(() => new StubCmd(true))
             .bind();
         const key = createKeyEvent("keydown", "", "AltLeft");
-        jest.spyOn(key, "altKey", "get").mockReturnValue(true);
+        vi.spyOn(key, "altKey", "get").mockReturnValue(true);
         elt.dispatchEvent(key);
         expect(ctx.commands).toHaveLength(1);
     });
 
     test("key press first then end", () => {
-        const first = jest.fn();
-        const end = jest.fn();
+        const first = vi.fn();
+        const end = vi.fn();
         binding = bindings.keyDownBinder(false)
             .with(false, "f")
             .on(elt)
@@ -255,15 +255,15 @@ describe("using a key binder", () => {
             .keyup({"code": "x"})
             .keydown({"code": "y"})
             .keyup({"code": "y"});
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
         expect(ctx.commands).toHaveLength(1);
     });
 
     test("keys type first end", () => {
-        const first = jest.fn();
-        const end = jest.fn();
-        const then = jest.fn();
-        const endcancel = jest.fn();
+        const first = vi.fn();
+        const end = vi.fn();
+        const then = vi.fn();
+        const endcancel = vi.fn();
         binding = bindings.keysTypeBinder()
             .on(elt)
             .toProduce(() => new StubCmd(true))
@@ -280,7 +280,7 @@ describe("using a key binder", () => {
             .keyup({"code": "y"})
             .keydown({"code": "r"})
             .keyup({"code": "r"});
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
         expect(first).toHaveBeenCalledTimes(1);
         expect(end).toHaveBeenCalledTimes(1);
         expect(then).toHaveBeenCalledTimes(4);
@@ -302,7 +302,7 @@ describe("using a key binder", () => {
         elt.dispatchEvent(createKeyEvent("keyup", "a"));
         elt.dispatchEvent(createKeyEvent("keydown", "x"));
         elt.dispatchEvent(createKeyEvent("keyup", "x"));
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
         expect(ctx.commands).toHaveLength(0);
     });
 
@@ -321,7 +321,7 @@ describe("using a key binder", () => {
         elt.dispatchEvent(createKeyEvent("keyup", "a"));
         elt.dispatchEvent(createKeyEvent("keydown", "b"));
         elt.dispatchEvent(createKeyEvent("keyup", "b"));
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
         expect(ctx.commands).toHaveLength(0);
     });
 
@@ -336,7 +336,7 @@ describe("using a key binder", () => {
             .keyup({"key": "z"})
             .keydown({"key": "b"})
             .keyup({"key": "b"});
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
         expect(ctx.commands).toHaveLength(1);
     });
 
@@ -351,7 +351,7 @@ describe("using a key binder", () => {
             .keyup({"key": "b"})
             .keydown({"key": "z"})
             .keyup({"key": "z"});
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
         expect(ctx.commands).toHaveLength(1);
     });
 
@@ -364,7 +364,7 @@ describe("using a key binder", () => {
         robot(elt)
             .keydown({"key": "b"})
             .keyup({"key": "b"});
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
         expect(ctx.commands).toHaveLength(1);
     });
 
@@ -377,7 +377,7 @@ describe("using a key binder", () => {
         robot(elt)
             .keydown({"key": "b"})
             .keyup({"key": "b"});
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
         expect(ctx.commands).toHaveLength(1);
     });
 
@@ -392,7 +392,7 @@ describe("using a key binder", () => {
             .keydown({"key": "b"})
             .keyup({"key": "z"})
             .keyup({"key": "b"});
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
         expect(ctx.commands).toHaveLength(1);
     });
 
@@ -408,7 +408,7 @@ describe("using a key binder", () => {
             .keydown({"code": "y"})
             .keyup({"code": "g"})
             .keyup({"code": "y"});
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
 
         expect(ctx.commands).toHaveLength(0);
         expect(binding.interaction.isRunning()).toBeFalsy();
@@ -426,7 +426,7 @@ describe("using a key binder", () => {
             .keydown({"code": "y"})
             .keyup({"code": "g"})
             .keyup({"code": "y"});
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
 
         expect(ctx.commands).toHaveLength(1);
     });
@@ -468,7 +468,7 @@ describe("using a key binder", () => {
         robot(elt)
             .keydown({"code": "b"})
             .keyup({"code": "b"});
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
 
         expect(ctx.commands).toHaveLength(1);
     });
@@ -487,13 +487,13 @@ describe("using a key binder", () => {
         robot(elt)
             .keydown({"code": "a"})
             .keyup({"code": "a"});
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
 
         expect(ctx.commands).toHaveLength(1);
     });
 
     test("when it crashes in 'first' with an error caught by 'catch'", () => {
-        const fn = jest.fn();
+        const fn = vi.fn();
         const err = new Error("It crashed");
 
         binding = bindings.keysTypeBinder()
@@ -508,7 +508,7 @@ describe("using a key binder", () => {
         robot(elt)
             .keydown({"code": "a"})
             .keyup({"code": "a"});
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
 
         expect(ctx.commands).toHaveLength(1);
         expect(fn).toHaveBeenCalledTimes(1);
@@ -516,8 +516,8 @@ describe("using a key binder", () => {
     });
 
     test("ifHadEffects works", () => {
-        const fn1 = jest.fn();
-        const fn2 = jest.fn();
+        const fn1 = vi.fn();
+        const fn2 = vi.fn();
 
         binding = bindings.keysTypeBinder()
             .on(elt)
@@ -531,15 +531,15 @@ describe("using a key binder", () => {
             .keydown({"code": "y"})
             .keyup({"code": "g"})
             .keyup({"code": "y"});
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
 
         expect(fn1).toHaveBeenCalledTimes(1);
         expect(fn2).not.toHaveBeenCalled();
     });
 
     test("ifHadNoEffect works", () => {
-        const fn1 = jest.fn();
-        const fn2 = jest.fn();
+        const fn1 = vi.fn();
+        const fn2 = vi.fn();
 
         binding = bindings.keysTypeBinder()
             .on(elt)
@@ -553,14 +553,14 @@ describe("using a key binder", () => {
             .keydown({"code": "y"})
             .keyup({"code": "g"})
             .keyup({"code": "y"});
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
 
         expect(fn1).not.toHaveBeenCalled();
         expect(fn2).toHaveBeenCalledTimes(1);
     });
 
     test("ifCannotExecute works when cannot execute", () => {
-        const fn = jest.fn();
+        const fn = vi.fn();
 
         binding = bindings.keysTypeBinder()
             .on(elt)
@@ -573,13 +573,13 @@ describe("using a key binder", () => {
             .keydown({"code": "y"})
             .keyup({"code": "g"})
             .keyup({"code": "y"});
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
 
         expect(fn).toHaveBeenCalledTimes(1);
     });
 
     test("ifCannotExecute works when can execute", () => {
-        const fn = jest.fn();
+        const fn = vi.fn();
 
         binding = bindings.keysTypeBinder()
             .on(elt)
@@ -590,7 +590,7 @@ describe("using a key binder", () => {
         robot(elt)
             .keydown({"code": "y"})
             .keyup({"code": "y"});
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
 
         expect(fn).not.toHaveBeenCalled();
     });
@@ -629,7 +629,7 @@ describe("using a key binder", () => {
 
     test("keys type with continuous exec", () => {
         const cmd = new StubCmd(true);
-        jest.spyOn(cmd, "execute");
+        vi.spyOn(cmd, "execute");
         binding = bindings.keysTypeBinder()
             .on(elt)
             .continuousExecution()
@@ -643,13 +643,13 @@ describe("using a key binder", () => {
             .keyup({"code": "z"})
             .keyup({"code": "b"})
             .keyup({"code": "a"});
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
         // 4 since 3 keys typed = timeout
         expect(cmd.execute).toHaveBeenCalledTimes(4);
     });
 
     test("keys type with throttling", () => {
-        jest.useFakeTimers();
+        vi.useFakeTimers();
         const cmd = new StubCmd(true);
         let chars: Array<string> = [];
         binding = bindings.keysTypeBinder()
@@ -663,19 +663,19 @@ describe("using a key binder", () => {
 
         robot(elt)
             .keyup({"code": "z"})
-            .do(() => jest.advanceTimersByTime(1))
+            .do(() => vi.advanceTimersByTime(1))
             .keyup({"code": "a"})
-            .do(() => jest.advanceTimersByTime(5))
+            .do(() => vi.advanceTimersByTime(5))
             .keyup({"code": "b"})
-            .do(() => jest.advanceTimersByTime(6))
+            .do(() => vi.advanceTimersByTime(6))
             .keyup({"code": "c"})
-            .do(() => jest.advanceTimersByTime(15));
-        jest.runOnlyPendingTimers();
+            .do(() => vi.advanceTimersByTime(15));
+        vi.runOnlyPendingTimers();
         expect(chars).toStrictEqual(["c"]);
     });
 
     test("keys type with throttling 2", () => {
-        jest.useFakeTimers();
+        vi.useFakeTimers();
         const cmd = new StubCmd(true);
         let chars: Array<string> = [];
         binding = bindings.keysTypeBinder()
@@ -689,20 +689,20 @@ describe("using a key binder", () => {
 
         robot(elt)
             .keyup({"code": "z"})
-            .do(() => jest.advanceTimersByTime(1))
+            .do(() => vi.advanceTimersByTime(1))
             .keyup({"code": "a"})
-            .do(() => jest.advanceTimersByTime(14))
+            .do(() => vi.advanceTimersByTime(14))
             .keyup({"code": "b"})
-            .do(() => jest.advanceTimersByTime(15))
+            .do(() => vi.advanceTimersByTime(15))
             .keyup({"code": "c"})
-            .do(() => jest.advanceTimersByTime(10));
-        jest.runOnlyPendingTimers();
+            .do(() => vi.advanceTimersByTime(10));
+        vi.runOnlyPendingTimers();
         expect(chars).toStrictEqual(["a", "b", "c"]);
     });
 
     test("keys with cancel", () => {
-        jest.useFakeTimers();
-        const fn = jest.fn();
+        vi.useFakeTimers();
+        const fn = vi.fn();
         binding = bindings.keysTypeBinder()
             .toProduce(() => new StubCmd(true))
             .on(elt)
@@ -818,7 +818,7 @@ describe("using a key binder", () => {
         robot(elt)
             .keydown({"key": "b"})
             .keyup({"key": "b"});
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
         expect(ctx.commands).toHaveLength(1);
         expect(counter).toBe(4);
     });
@@ -848,7 +848,7 @@ describe("using a key binder", () => {
             .mousedown()
             .mousemove()
             .keydown({"code": "Escape"});
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
         expect(ctx.commands).toHaveLength(0);
         expect(counter).toBe(2);
     });
@@ -865,7 +865,7 @@ describe("using a key binder", () => {
             .mousedown()
             .mousemove()
             .keydown({"code": "Escape"});
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
         expect(ctx.commands).toHaveLength(0);
         expect(counter).toBe(2);
     });

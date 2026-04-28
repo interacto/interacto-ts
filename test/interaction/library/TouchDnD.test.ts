@@ -14,10 +14,10 @@
 
 import {TouchDataImpl, TouchDnD} from "../../../src/interacto";
 import {robot} from "../StubEvents";
-import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
-import {mock} from "jest-mock-extended";
+import {afterEach, beforeEach, describe, expect, vi, test} from "vitest";
+import {mock} from "vitest-mock-extended";
 import type {FSMHandler, Logger} from "../../../src/interacto";
-import type {MockProxy} from "jest-mock-extended";
+import type {MockProxy} from "vitest-mock-extended";
 
 describe("using a touch dnd interaction", () => {
     let interaction: TouchDnD;
@@ -36,13 +36,13 @@ describe("using a touch dnd interaction", () => {
         interaction.fsm.addHandler(handler);
         canvas = document.createElement("canvas");
         // document.elementFromPoint is undefined
-        document.elementFromPoint = jest.fn<() => Element | null>().mockReturnValue(null);
+        document.elementFromPoint = vi.fn<() => Element | null>().mockReturnValue(null);
         interaction.registerToNodes([canvas]);
     });
 
     afterEach(() => {
         interaction.uninstall();
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     });
 
     test("pressure does not start interaction", () => {
@@ -88,7 +88,7 @@ describe("using a touch dnd interaction", () => {
             .touchstart(canvas, [{"identifier": 2, "screenX": 11, "screenY": 23, "clientX": 12, "clientY": 25}]);
 
         const newHandler = mock<FSMHandler>();
-        newHandler.fsmUpdates = jest.fn(() => {
+        newHandler.fsmUpdates = vi.fn(() => {
             srcData.copy(interaction.data.src);
             tgtData.copy(interaction.data.tgt);
         });
@@ -178,7 +178,7 @@ describe("using a touch dnd interaction", () => {
             .touchmove({}, [{"identifier": 4, "screenX": 11, "screenY": 24, "clientX": 14, "clientY": 28}]);
 
         const newHandler = mock<FSMHandler>();
-        newHandler.fsmUpdates = jest.fn(() => {
+        newHandler.fsmUpdates = vi.fn(() => {
             srcData.copy(interaction.data.src);
             tgtData.copy(interaction.data.tgt);
         });
@@ -219,11 +219,11 @@ describe("using a touch dnd interaction", () => {
         const srcData2 = new TouchDataImpl();
         const tgtData2 = new TouchDataImpl();
         const newHandler = mock<FSMHandler>();
-        newHandler.fsmUpdates = jest.fn(() => {
+        newHandler.fsmUpdates = vi.fn(() => {
             srcData.copy(interaction.data.src);
             tgtData.copy(interaction.data.tgt);
         });
-        newHandler.fsmStops = jest.fn(() => {
+        newHandler.fsmStops = vi.fn(() => {
             srcData2.copy(interaction.data.src);
             tgtData2.copy(interaction.data.tgt);
         });
@@ -344,7 +344,7 @@ describe("using a touch dnd interaction", () => {
         canvas.append(div);
         div.classList.add("ioDwellSpring");
         interaction.registerToNodes([canvas, div]);
-        document.elementFromPoint = jest.fn<() => Element | null>().mockReturnValue(div);
+        document.elementFromPoint = vi.fn<() => Element | null>().mockReturnValue(div);
 
         robot(canvas)
             .keepData()
@@ -406,7 +406,7 @@ describe("using a touch dnd interaction", () => {
             interaction.fsm.addHandler(handler);
             canvas = document.createElement("canvas");
             // document.elementFromPoint is undefined
-            document.elementFromPoint = jest.fn<() => Element | null>().mockReturnValue(null);
+            document.elementFromPoint = vi.fn<() => Element | null>().mockReturnValue(null);
             interaction.registerToNodes([canvas]);
         });
 
@@ -441,7 +441,7 @@ describe("using a touch dnd interaction", () => {
             canvas.append(div);
             div.classList.add("ioDwellSpring");
             interaction.registerToNodes([canvas, div]);
-            document.elementFromPoint = jest.fn<() => Element | null>().mockReturnValue(div);
+            document.elementFromPoint = vi.fn<() => Element | null>().mockReturnValue(div);
 
             robot(canvas)
                 .keepData()

@@ -13,7 +13,7 @@
  */
 
 import {isEltRef} from "../../src/interacto";
-import {describe, expect, test} from "@jest/globals";
+import {describe, expect, test} from "vitest";
 
 describe("using a base binder builder", () => {
     test("undefined is not eltref", () => {

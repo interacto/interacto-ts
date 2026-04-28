@@ -13,11 +13,11 @@
  */
 
 import {DnD, KeyDown, Not} from "../../src/interacto";
-import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
+import {afterEach, beforeEach, describe, expect, vi, test} from "vitest";
 import {robot} from "interacto-nono";
-import {mock} from "jest-mock-extended";
+import {mock} from "vitest-mock-extended";
 import type {FSMHandler, Logger, PointData, SrcTgtPointsData, SrcTgtPointsDataImpl} from "../../src/interacto";
-import type {MockProxy} from "jest-mock-extended";
+import type {MockProxy} from "vitest-mock-extended";
 
 describe("testing a combining and cancelling interaction", () => {
     let canvas: HTMLElement;
@@ -38,7 +38,7 @@ describe("testing a combining and cancelling interaction", () => {
         handler2 = mock<FSMHandler>();
         logger = mock<Logger>();
         canvas = document.createElement("canvas");
-        jest.useFakeTimers();
+        vi.useFakeTimers();
         dnd.fsm.addHandler(handler1);
         key.fsm.addHandler(handler2);
         interaction.fsm.addHandler(handler);
@@ -46,8 +46,8 @@ describe("testing a combining and cancelling interaction", () => {
     });
 
     afterEach(() => {
-        jest.clearAllMocks();
-        jest.runOnlyPendingTimers();
+        vi.clearAllMocks();
+        vi.runOnlyPendingTimers();
         interaction.uninstall();
     });
 

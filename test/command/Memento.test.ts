@@ -14,7 +14,7 @@
 
 import {ExampleUndoableCmd} from "./StubCmd";
 import {Memento} from "../../src/interacto";
-import {beforeEach, describe, expect, test} from "@jest/globals";
+import {beforeEach, describe, expect, test} from "vitest";
 
 interface Data {
     text: string;

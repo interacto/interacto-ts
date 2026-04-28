@@ -15,10 +15,10 @@
 import {TimedTaps, TapsDataImpl, TouchDataImpl} from "../../../src/interacto";
 import {checkTouchPoint} from "../../Utils";
 import {robot} from "../StubEvents";
-import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
-import {mock} from "jest-mock-extended";
+import {afterEach, beforeEach, describe, expect, vi, test} from "vitest";
+import {mock} from "vitest-mock-extended";
 import type {FSMHandler, Logger} from "../../../src/interacto";
-import type {MockProxy} from "jest-mock-extended";
+import type {MockProxy} from "vitest-mock-extended";
 
 describe("using a timed taps interaction", () => {
     let interaction: TimedTaps;
@@ -27,15 +27,15 @@ describe("using a timed taps interaction", () => {
     let logger: Logger & MockProxy<Logger>;
 
     beforeEach(() => {
-        jest.useFakeTimers();
+        vi.useFakeTimers();
         handler = mock<FSMHandler>();
         canvas = document.createElement("canvas");
     });
 
     afterEach(() => {
         interaction.uninstall();
-        jest.clearAllMocks();
-        jest.clearAllTimers();
+        vi.clearAllMocks();
+        vi.clearAllTimers();
     });
 
     describe("tap 1", () => {
@@ -111,7 +111,7 @@ describe("using a timed taps interaction", () => {
         test("one touch data", () => {
             const touch = new TouchDataImpl();
             const newHandler = mock<FSMHandler>();
-            newHandler.fsmStarts = jest.fn(() => {
+            newHandler.fsmStarts = vi.fn(() => {
                 touch.copy(interaction.data.points[0]);
             });
             interaction.fsm.addHandler(newHandler);
@@ -172,7 +172,7 @@ describe("using a timed taps interaction", () => {
         test("one touch with timeout", () => {
             robot(canvas)
                 .touchstart({}, [{"identifier": 2}])
-                .do(() => jest.advanceTimersByTime(400));
+                .do(() => vi.advanceTimersByTime(400));
             expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
             expect(handler.fsmStops).not.toHaveBeenCalled();
             expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
@@ -181,7 +181,7 @@ describe("using a timed taps interaction", () => {
         test("one touch with delay but not timeout", () => {
             robot(canvas)
                 .touchstart({}, [{"identifier": 2}])
-                .do(() => jest.advanceTimersByTime(399));
+                .do(() => vi.advanceTimersByTime(399));
             expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
             expect(handler.fsmCancels).not.toHaveBeenCalled();
         });
@@ -240,7 +240,7 @@ describe("using a timed taps interaction", () => {
             const touch = new TapsDataImpl();
 
             const newHandler = mock<FSMHandler>();
-            newHandler.fsmStops = jest.fn(() => {
+            newHandler.fsmStops = vi.fn(() => {
                 for (const tap of interaction.data.points) {
                     touch.addPoint(tap);
                 }
@@ -333,7 +333,7 @@ describe("using a timed taps interaction", () => {
             const touch = new TapsDataImpl();
 
             const newHandler = mock<FSMHandler>();
-            newHandler.fsmStops = jest.fn(() => {
+            newHandler.fsmStops = vi.fn(() => {
                 for (const tap of interaction.data.points) {
                     touch.addPoint(tap);
                 }

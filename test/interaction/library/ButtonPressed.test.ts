@@ -13,11 +13,11 @@
  */
 
 import {ButtonPressed} from "../../../src/interacto";
-import {beforeEach, describe, expect, jest, test} from "@jest/globals";
+import {beforeEach, describe, expect, vi, test} from "vitest";
 import {robot} from "interacto-nono";
-import {mock} from "jest-mock-extended";
+import {mock} from "vitest-mock-extended";
 import type {FSMHandler, Logger} from "../../../src/interacto";
-import type {MockProxy} from "jest-mock-extended";
+import type {MockProxy} from "vitest-mock-extended";
 
 describe("using a button pressed interaction", () => {
     let interaction: ButtonPressed;
@@ -63,14 +63,14 @@ describe("using a button pressed interaction", () => {
 
     test("cannot register non button", () => {
         const w = document.createElement("a");
-        jest.spyOn(w, "addEventListener");
+        vi.spyOn(w, "addEventListener");
         interaction.onNewNodeRegistered(w);
         expect(w.addEventListener).not.toHaveBeenCalled();
     });
 
     test("cannot unregister non button", () => {
         const w = document.createElement("a");
-        jest.spyOn(w, "removeEventListener");
+        vi.spyOn(w, "removeEventListener");
         interaction.onNodeUnregistered(w);
         expect(w.removeEventListener).not.toHaveBeenCalled();
     });

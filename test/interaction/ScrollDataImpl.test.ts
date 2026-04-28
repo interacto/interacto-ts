@@ -13,7 +13,7 @@
  */
 
 import {ScrollDataImpl} from "../../src/impl/interaction/ScrollDataImpl";
-import {beforeEach, describe, expect, jest, test} from "@jest/globals";
+import {beforeEach, describe, expect, vi, test} from "vitest";
 
 describe("using a scroll data", () => {
     let data: ScrollDataImpl;
@@ -36,7 +36,7 @@ describe("using a scroll data", () => {
                 }
             }
         });
-        jest.spyOn(evt, "view", "get")
+        vi.spyOn(evt, "view", "get")
             .mockReturnValue(newWindow);
     });
 

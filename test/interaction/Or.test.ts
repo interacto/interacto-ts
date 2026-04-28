@@ -13,11 +13,11 @@
  */
 
 import {Clicks, KeysDataImpl, KeysTyped, PointsDataImpl, MouseDown, Or, TouchStart} from "../../src/interacto";
-import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
+import {afterEach, beforeEach, describe, expect, vi, test} from "vitest";
 import {robot} from "interacto-nono";
-import {mock} from "jest-mock-extended";
+import {mock} from "vitest-mock-extended";
 import type {FSMHandler, KeysData, Logger} from "../../src/interacto";
-import type {MockProxy} from "jest-mock-extended";
+import type {MockProxy} from "vitest-mock-extended";
 
 describe("testing an OR interaction", () => {
     let canvas: HTMLElement;
@@ -32,12 +32,12 @@ describe("testing an OR interaction", () => {
         handler2 = mock<FSMHandler>();
         logger = mock<Logger>();
         canvas = document.createElement("canvas");
-        jest.useFakeTimers();
+        vi.useFakeTimers();
     });
 
     afterEach(() => {
-        jest.clearAllMocks();
-        jest.runOnlyPendingTimers();
+        vi.clearAllMocks();
+        vi.runOnlyPendingTimers();
     });
 
     describe("that uses mousedown and touchstart", () => {
@@ -141,40 +141,40 @@ describe("testing an OR interaction", () => {
         });
 
         test("reinit", () => {
-            jest.spyOn(i1, "reinit");
-            jest.spyOn(i2, "reinit");
+            vi.spyOn(i1, "reinit");
+            vi.spyOn(i2, "reinit");
             interaction.reinit();
             expect(i1.reinit).toHaveBeenCalledTimes(1);
             expect(i2.reinit).toHaveBeenCalledTimes(1);
         });
 
         test("full reinit", () => {
-            jest.spyOn(i1, "fullReinit");
-            jest.spyOn(i2, "fullReinit");
+            vi.spyOn(i1, "fullReinit");
+            vi.spyOn(i2, "fullReinit");
             interaction.fullReinit();
             expect(i1.fullReinit).toHaveBeenCalledTimes(1);
             expect(i2.fullReinit).toHaveBeenCalledTimes(1);
         });
 
         test("uninstall", () => {
-            jest.spyOn(i1, "uninstall");
-            jest.spyOn(i2, "uninstall");
+            vi.spyOn(i1, "uninstall");
+            vi.spyOn(i2, "uninstall");
             interaction.uninstall();
             expect(i1.uninstall).toHaveBeenCalledTimes(1);
             expect(i2.uninstall).toHaveBeenCalledTimes(1);
         });
 
         test("reinitData", () => {
-            jest.spyOn(i1, "reinitData");
-            jest.spyOn(i2, "reinitData");
+            vi.spyOn(i1, "reinitData");
+            vi.spyOn(i2, "reinitData");
             interaction.reinitData();
             expect(i1.reinitData).toHaveBeenCalledTimes(1);
             expect(i2.reinitData).toHaveBeenCalledTimes(1);
         });
 
         test("once an interaction has stopped, it is reinit", () => {
-            jest.spyOn(i1, "reinitData");
-            jest.spyOn(i2, "reinitData");
+            vi.spyOn(i1, "reinitData");
+            vi.spyOn(i2, "reinitData");
             robot(canvas).click(undefined, 2);
             expect(i1.reinitData).toHaveBeenCalledTimes(2);
             expect(i2.reinitData).toHaveBeenCalledTimes(1);
@@ -200,7 +200,7 @@ describe("testing an OR interaction", () => {
         });
     });
 
-    // eslint-disable-next-line jest/no-commented-out-tests
+    // eslint-disable-next-line vitest/no-commented-out-tests
     // describe("that uses two interactions that start with the same event", () => {
     //     let i1: Clicks;
     //     let i2: Click;
@@ -215,7 +215,7 @@ describe("testing an OR interaction", () => {
     //         i2.uninstall();
     //     });
 
-    // eslint-disable-next-line jest/no-commented-out-tests
+    // eslint-disable-next-line vitest/no-commented-out-tests
     //     test("the XOR interaction cannot be created", () => {
     //         expect(() => new Or(i1, i2, logger)).toThrow("");
     //     });

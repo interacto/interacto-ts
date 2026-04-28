@@ -13,11 +13,11 @@
  */
 
 import {DnD} from "../../../src/interacto";
-import {beforeEach, describe, expect, jest, test} from "@jest/globals";
+import {beforeEach, describe, expect, vi, test} from "vitest";
 import {robot} from "interacto-nono";
-import {mock} from "jest-mock-extended";
+import {mock} from "vitest-mock-extended";
 import type {FSMHandler, Logger} from "../../../src/interacto";
-import type {MockProxy} from "jest-mock-extended";
+import type {MockProxy} from "vitest-mock-extended";
 
 describe("using a DnD interaction", () => {
     let interaction: DnD;
@@ -87,7 +87,7 @@ describe("using a DnD interaction", () => {
         interaction.registerToNodes([canvas]);
         robot(canvas).mousedown({"screenX": 1, "screenY": 2, "clientX": 15, "clientY": 20, "button": 0});
         const newHandler = mock<FSMHandler>();
-        newHandler.fsmUpdates = jest.fn(() => {
+        newHandler.fsmUpdates = vi.fn(() => {
             sx = interaction.data.src.clientX;
             sy = interaction.data.src.clientY;
             tx = interaction.data.tgt.clientX;

@@ -13,12 +13,12 @@
  */
 
 import {CancellingState} from "../../src/impl/fsm/CancellingState";
-import {beforeEach, describe, expect, jest, test} from "@jest/globals";
-import {mock} from "jest-mock-extended";
+import {beforeEach, describe, expect, vi, test} from "vitest";
+import {mock} from "vitest-mock-extended";
 import type {OutputState} from "../../src/api/fsm/OutputState";
 import type {VisitorFSM} from "../../src/api/fsm/VisitorFSM";
 import type {FSMImpl} from "../../src/impl/fsm/FSMImpl";
-import type {MockProxy} from "jest-mock-extended";
+import type {MockProxy} from "vitest-mock-extended";
 
 describe("using a cancelling state", () => {
     let state: CancellingState;
@@ -36,7 +36,7 @@ describe("using a cancelling state", () => {
 
     test("checkStartingState fsm started", () => {
         Object.defineProperty(fsm, "started", {
-            "get": jest.fn(() => true)
+            "get": vi.fn(() => true)
         });
 
         state.checkStartingState();
@@ -45,10 +45,10 @@ describe("using a cancelling state", () => {
 
     test("checkStartingState fsm not started but starting state not this state", () => {
         Object.defineProperty(fsm, "started", {
-            "get": jest.fn(() => false)
+            "get": vi.fn(() => false)
         });
         Object.defineProperty(fsm, "startingState", {
-            "get": jest.fn(() => mock<OutputState>())
+            "get": vi.fn(() => mock<OutputState>())
         });
 
         state.checkStartingState();
@@ -57,10 +57,10 @@ describe("using a cancelling state", () => {
 
     test("checkStartingState fsm not started and starting state is this state", () => {
         Object.defineProperty(fsm, "started", {
-            "get": jest.fn(() => false)
+            "get": vi.fn(() => false)
         });
         Object.defineProperty(fsm, "startingState", {
-            "get": jest.fn(() => state)
+            "get": vi.fn(() => state)
         });
         state.checkStartingState();
         expect(fsm.onStarting).toHaveBeenCalledTimes(1);

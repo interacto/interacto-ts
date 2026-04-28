@@ -13,11 +13,11 @@
  */
 
 import {TouchDataImpl, TouchStart} from "../../../src/interacto";
-import {beforeEach, describe, expect, jest, test} from "@jest/globals";
+import {beforeEach, describe, expect, vi, test} from "vitest";
 import {robot} from "interacto-nono";
-import {mock} from "jest-mock-extended";
+import {mock} from "vitest-mock-extended";
 import type {FSMHandler, Logger} from "../../../src/interacto";
-import type {MockProxy} from "jest-mock-extended";
+import type {MockProxy} from "vitest-mock-extended";
 
 describe("using a TouchStart interaction", () => {
     let interaction: TouchStart;
@@ -58,7 +58,7 @@ describe("using a TouchStart interaction", () => {
     test("data ok", () => {
         const touch = new TouchDataImpl();
         const newHandler = mock<FSMHandler>();
-        newHandler.fsmStarts = jest.fn(() => {
+        newHandler.fsmStarts = vi.fn(() => {
             touch.copy(interaction.data);
         });
         interaction.fsm.addHandler(newHandler);

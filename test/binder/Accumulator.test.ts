@@ -14,7 +14,7 @@
 
 import {BindingsContext, BindingsImpl, LinearHistoryImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
-import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
+import {afterEach, beforeEach, describe, expect, vi, test} from "vitest";
 import {robot} from "interacto-nono";
 import type {LinearHistoryBase, Bindings} from "../../src/interacto";
 
@@ -29,12 +29,12 @@ describe("testing an accumulator", () => {
         ctx = new BindingsContext();
         bindings.setBindingObserver(ctx);
         button1 = document.createElement("button");
-        jest.useFakeTimers();
+        vi.useFakeTimers();
     });
 
     afterEach(() => {
         bindings.clear();
-        jest.clearAllTimers();
+        vi.clearAllTimers();
     });
 
     describe("using a cmd having effects", () => {
@@ -140,7 +140,7 @@ describe("testing an accumulator", () => {
 
             elt.value = "q";
             robot(elt).input();
-            jest.runOnlyPendingTimers();
+            vi.runOnlyPendingTimers();
 
             expect(val).toBe(11);
         });
@@ -311,7 +311,7 @@ describe("testing an accumulator", () => {
             robot(elt).input();
             elt.value = "q";
             robot(elt).input();
-            jest.runOnlyPendingTimers();
+            vi.runOnlyPendingTimers();
 
             expect(val).toBe(4);
         });
@@ -448,7 +448,7 @@ describe("testing an accumulator", () => {
                 .keepData()
                 .touchstart({}, [{"identifier": 1}]);
 
-            jest.runOnlyPendingTimers();
+            vi.runOnlyPendingTimers();
 
             expect(val).toBe(2);
         });
@@ -534,7 +534,7 @@ describe("testing an accumulator", () => {
                 .bind();
 
             robot().mousedown(elt);
-            jest.runOnlyPendingTimers();
+            vi.runOnlyPendingTimers();
             expect(val).toBe(1);
         });
 
@@ -554,7 +554,7 @@ describe("testing an accumulator", () => {
                 .click()
                 .click()
                 .click();
-            jest.runOnlyPendingTimers();
+            vi.runOnlyPendingTimers();
             expect(val).toBe(3);
         });
     });

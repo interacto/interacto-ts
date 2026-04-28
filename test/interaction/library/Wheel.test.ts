@@ -14,11 +14,11 @@
 
 import {Wheel, WheelDataImpl} from "../../../src/interacto";
 import {createWheelEvent2} from "../StubEvents";
-import {beforeEach, describe, expect, jest, test} from "@jest/globals";
+import {beforeEach, describe, expect, vi, test} from "vitest";
 import {robot} from "interacto-nono";
-import {mock} from "jest-mock-extended";
+import {mock} from "vitest-mock-extended";
 import type {FSMHandler, Logger} from "../../../src/interacto";
-import type {MockProxy} from "jest-mock-extended";
+import type {MockProxy} from "vitest-mock-extended";
 
 describe("using a wheel interaction", () => {
     let interaction: Wheel;
@@ -92,7 +92,7 @@ describe("using a wheel interaction", () => {
             "deltaMode": 21
         });
 
-        handler.fsmStops = jest.fn(() => {
+        handler.fsmStops = vi.fn(() => {
             data.copy(interaction.data);
         });
         interaction.processEvent(createWheelEvent2("wheel", expected));
@@ -102,7 +102,7 @@ describe("using a wheel interaction", () => {
     test("wheel On Widget Data", () => {
         const data = new WheelDataImpl();
 
-        handler.fsmStops = jest.fn(() => {
+        handler.fsmStops = vi.fn(() => {
             data.copy(interaction.data);
         });
         interaction.registerToNodes([canvas]);

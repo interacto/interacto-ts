@@ -14,11 +14,11 @@
 
 import {MouseLeave, PointDataImpl} from "../../../src/interacto";
 import {createMouseEvent, createMouseEvent2} from "../StubEvents";
-import {beforeEach, describe, expect, jest, test} from "@jest/globals";
+import {beforeEach, describe, expect, vi, test} from "vitest";
 import {robot} from "interacto-nono";
-import {mock} from "jest-mock-extended";
+import {mock} from "vitest-mock-extended";
 import type {FSMHandler, Logger} from "../../../src/interacto";
-import type {MockProxy} from "jest-mock-extended";
+import type {MockProxy} from "vitest-mock-extended";
 
 describe("using a mouse leave interaction", () => {
     let interaction: MouseLeave;
@@ -151,7 +151,7 @@ describe("using a mouse leave interaction", () => {
             "timeStamp": 0
         });
 
-        handler.fsmStops = jest.fn(() => {
+        handler.fsmStops = vi.fn(() => {
             data.copy(interaction.data);
         });
         interaction.processEvent(createMouseEvent2("mouseout", expected));
@@ -161,7 +161,7 @@ describe("using a mouse leave interaction", () => {
     test("mouseout On Widget Data", () => {
         const data = new PointDataImpl();
 
-        handler.fsmStops = jest.fn(() => {
+        handler.fsmStops = vi.fn(() => {
             data.copy(interaction.data);
         });
         interaction.registerToNodes([canvas]);

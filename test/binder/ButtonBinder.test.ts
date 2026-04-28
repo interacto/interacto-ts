@@ -14,7 +14,7 @@
 
 import {BindingsContext, BindingsImpl, LinearHistoryImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
-import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
+import {afterEach, beforeEach, describe, expect, vi, test} from "vitest";
 import type {Binding, EltRef, Interaction, LinearHistoryBase, Bindings} from "../../src/interacto";
 
 let button1: HTMLButtonElement;
@@ -36,11 +36,11 @@ describe("using a button binder", () => {
 
     afterEach(() => {
         bindings.clear();
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     });
 
     test("commandExecutedOnSingleButtonConsumer", () => {
-        jest.spyOn(cmd, "execute");
+        vi.spyOn(cmd, "execute");
 
         binding = bindings.buttonBinder()
             .toProduce(() => cmd)
@@ -54,7 +54,7 @@ describe("using a button binder", () => {
     });
 
     test("commandExecutedOnSingleButtonConsumerConsumer", () => {
-        jest.spyOn(cmd, "execute");
+        vi.spyOn(cmd, "execute");
 
         binding = bindings.buttonBinder()
             .on(button1)
@@ -69,7 +69,7 @@ describe("using a button binder", () => {
         binding = bindings.buttonBinder()
             .toProduce(() => {
                 const c = new StubCmd(true);
-                jest.spyOn(c, "execute");
+                vi.spyOn(c, "execute");
                 return c;
             })
             .on(button1, button2)
@@ -167,9 +167,9 @@ describe("using a button binder", () => {
 
     test("check ifhadeffects", () => {
         cmd = new StubCmd(true);
-        jest.spyOn(cmd, "hadEffect").mockReturnValue(true);
-        const ifEffects = jest.fn();
-        const ifNoEffects = jest.fn();
+        vi.spyOn(cmd, "hadEffect").mockReturnValue(true);
+        const ifEffects = vi.fn();
+        const ifNoEffects = vi.fn();
         binding = bindings.buttonBinder()
             .toProduce(() => cmd)
             .on(button1)
@@ -185,9 +185,9 @@ describe("using a button binder", () => {
 
     test("check ifhadnoeffects", () => {
         cmd = new StubCmd(true);
-        jest.spyOn(cmd, "hadEffect").mockReturnValue(false);
-        const ifEffects = jest.fn();
-        const ifNoEffects = jest.fn();
+        vi.spyOn(cmd, "hadEffect").mockReturnValue(false);
+        const ifEffects = vi.fn();
+        const ifNoEffects = vi.fn();
         binding = bindings.buttonBinder()
             .toProduce(() => cmd)
             .on(button1)
@@ -202,7 +202,7 @@ describe("using a button binder", () => {
     });
 
     test("init1Executed", () => {
-        jest.spyOn(cmd, "execute");
+        vi.spyOn(cmd, "execute");
 
         binding = bindings.buttonBinder()
             .on(button1)
@@ -219,7 +219,7 @@ describe("using a button binder", () => {
     });
 
     test("init2Executed", () => {
-        jest.spyOn(cmd, "execute");
+        vi.spyOn(cmd, "execute");
 
         binding = bindings.buttonBinder()
             .toProduce(_i => cmd)
@@ -236,7 +236,7 @@ describe("using a button binder", () => {
     });
 
     test("checkFalse", () => {
-        jest.spyOn(cmd, "execute");
+        vi.spyOn(cmd, "execute");
 
         binding = bindings.buttonBinder()
             .toProduce(_i => cmd)
@@ -250,7 +250,7 @@ describe("using a button binder", () => {
     });
 
     test("commandExecutedOnTwoButtonsSame", () => {
-        jest.spyOn(cmd, "execute");
+        vi.spyOn(cmd, "execute");
 
         let cpt = 0;
         binding = bindings.buttonBinder()

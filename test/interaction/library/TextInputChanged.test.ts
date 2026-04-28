@@ -13,14 +13,14 @@
  */
 
 import {TextInputChanged} from "../../../src/interacto";
-import {beforeEach, describe, expect, jest, test} from "@jest/globals";
+import {beforeEach, describe, expect, vi, test} from "vitest";
 import {robot} from "interacto-nono";
-import {mock} from "jest-mock-extended";
+import {mock} from "vitest-mock-extended";
 import type {FSMHandler, Logger} from "../../../src/interacto";
-import type {MockProxy} from "jest-mock-extended";
+import type {MockProxy} from "vitest-mock-extended";
 
 describe("using a text input interaction", () => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
 
     let interaction: TextInputChanged;
     let textArea: HTMLElement;
@@ -38,7 +38,7 @@ describe("using a text input interaction", () => {
     test("type in a text area starts and stops the interaction", () => {
         interaction.registerToNodes([textArea]);
         robot(textArea).input();
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
         expect(handler.fsmStops).toHaveBeenCalledTimes(1);
         expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     });
@@ -47,7 +47,7 @@ describe("using a text input interaction", () => {
         interaction.log(true);
         interaction.registerToNodes([textArea]);
         robot(textArea).input();
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
 
         expect(logger.logInteractionMsg).toHaveBeenCalledTimes(7);
     });
@@ -55,7 +55,7 @@ describe("using a text input interaction", () => {
     test("no log interaction is ok", () => {
         interaction.registerToNodes([textArea]);
         robot(textArea).input();
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
 
         expect(logger.logInteractionMsg).not.toHaveBeenCalled();
     });
@@ -80,7 +80,7 @@ describe("using a text input interaction", () => {
     test("data clear ok", () => {
         interaction.registerToNodes([textArea]);
         robot(textArea).input();
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
 
         expect(handler.fsmReinit).toHaveBeenCalledTimes(1);
         expect(interaction.data.widget).toBeNull();

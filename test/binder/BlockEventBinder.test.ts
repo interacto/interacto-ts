@@ -14,8 +14,8 @@
 import {BindingsImpl, MouseDown, LinearHistoryImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
 import {createKeyEvent, createMouseEvent} from "../interaction/StubEvents";
-import {afterEach, beforeEach, describe, expect, test} from "@jest/globals";
-import {mock} from "jest-mock-extended";
+import {afterEach, beforeEach, describe, expect, test} from "vitest";
+import {mock} from "vitest-mock-extended";
 import type {Binding, Bindings, LinearHistoryBase, Logger} from "../../src/interacto";
 
 let canvas1: HTMLElement;

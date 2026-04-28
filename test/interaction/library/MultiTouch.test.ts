@@ -15,10 +15,10 @@
 import {MultiTouch, TouchDataImpl} from "../../../src/interacto";
 import {checkTouchPoint} from "../../Utils";
 import {robot} from "../StubEvents";
-import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
-import {mock} from "jest-mock-extended";
+import {afterEach, beforeEach, describe, expect, vi, test} from "vitest";
+import {mock} from "vitest-mock-extended";
 import type {FSMHandler, Logger} from "../../../src/interacto";
-import type {MockProxy} from "jest-mock-extended";
+import type {MockProxy} from "vitest-mock-extended";
 
 describe("using a multi touch interaction", () => {
     let interaction: MultiTouch;
@@ -36,7 +36,7 @@ describe("using a multi touch interaction", () => {
     });
 
     afterEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
         interaction.uninstall();
     });
 
@@ -324,7 +324,7 @@ describe("using a multi touch interaction", () => {
         interaction.registerToNodes([canvas]);
 
         const newHandler = mock<FSMHandler>();
-        newHandler.fsmStops = jest.fn(() => {
+        newHandler.fsmStops = vi.fn(() => {
             data1 = interaction.data.touches[0].tgt.clientX;
             data2 = interaction.data.touches[1].tgt.clientX;
             data3 = interaction.data.touches[2].tgt.clientX;
@@ -356,7 +356,7 @@ describe("using a multi touch interaction", () => {
             .touchstart({}, [{"identifier": 2, "screenX": 210, "screenY": 130, "clientX": 210, "clientY": 130}]);
 
         const newHandler = mock<FSMHandler>();
-        newHandler.fsmStops = jest.fn(() => {
+        newHandler.fsmStops = vi.fn(() => {
             data1s.copy(interaction.data.touches[0].src);
             data1t.copy(interaction.data.touches[0].tgt);
             data2s.copy(interaction.data.touches[1].src);

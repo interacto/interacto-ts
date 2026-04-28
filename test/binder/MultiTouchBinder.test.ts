@@ -13,7 +13,7 @@
  */
 import {BindingsContext, BindingsImpl, LinearHistoryImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
-import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
+import {afterEach, beforeEach, describe, expect, vi, test} from "vitest";
 import {robot} from "interacto-nono";
 import type {Binding, Interaction, InteractionBase, LinearHistoryBase, MultiTouch, Bindings, Flushable} from "../../src/interacto";
 
@@ -28,18 +28,18 @@ describe("using a multi touch binder", () => {
         bindings = new BindingsImpl(new LinearHistoryImpl());
         ctx = new BindingsContext();
         bindings.setBindingObserver(ctx);
-        jest.useFakeTimers();
+        vi.useFakeTimers();
         c1 = document.createElement("canvas");
         cmd = new StubCmd(true);
     });
 
     afterEach(() => {
         bindings.clear();
-        jest.clearAllTimers();
+        vi.clearAllTimers();
     });
 
     test("run multi-touch produces cmd", () => {
-        jest.spyOn(cmd, "execute");
+        vi.spyOn(cmd, "execute");
 
         bindings.multiTouchBinder(2)
             .toProduce(() => cmd)

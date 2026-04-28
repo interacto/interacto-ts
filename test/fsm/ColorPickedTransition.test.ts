@@ -14,11 +14,11 @@
 
 import {ColorPickedTransition} from "../../src/impl/fsm/ColorPickedTransition";
 import {createEventWithTarget} from "../interaction/StubEvents";
-import {beforeEach, describe, expect, test} from "@jest/globals";
-import {mock} from "jest-mock-extended";
+import {beforeEach, describe, expect, test} from "vitest";
+import {mock} from "vitest-mock-extended";
 import type {InputState} from "../../src/api/fsm/InputState";
 import type {OutputState} from "../../src/api/fsm/OutputState";
-import type {MockProxy} from "jest-mock-extended";
+import type {MockProxy} from "vitest-mock-extended";
 
 describe("using a color picked transition", () => {
     let tr: ColorPickedTransition;

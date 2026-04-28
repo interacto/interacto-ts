@@ -13,11 +13,11 @@
  */
 
 import {TreeHistoryImpl} from "../../src/impl/history/TreeHistoryImpl";
-import {afterEach, beforeEach, describe, expect, jest, test} from "@jest/globals";
-import {mock} from "jest-mock-extended";
+import {afterEach, beforeEach, describe, expect, vi, test} from "vitest";
+import {mock} from "vitest-mock-extended";
 import {TestScheduler} from "rxjs/testing";
 import type {UndoableCommand, TreeHistory, Undoable} from "../../src/interacto";
-import type {MockProxy} from "jest-mock-extended";
+import type {MockProxy} from "vitest-mock-extended";
 import {CmdModifiableDouble, CmdModifiableDouble3, StubUndoableCmd} from "../command/StubCmd";
 
 interface Undoable4Test extends Undoable {
@@ -45,7 +45,7 @@ describe("using a tree-based history", () => {
 
     afterEach(() => {
         history.clear();
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     });
 
     describe("using a standard tree history", () => {
@@ -158,7 +158,6 @@ describe("using a tree-based history", () => {
                     const {cold, expectObservable} = helpers;
                     cold("-a-b-c-d", {"a": undoable0, "b": undoable1, "c": undoable2, "d": 2})
                         .subscribe(v => {
-                            // eslint-disable-next-line jest/no-conditional-in-test
                             if (typeof v === "number") {
                                 history.goTo(v - 1);
                                 history.deleteFrom(v);
@@ -1059,7 +1058,7 @@ describe("using a tree-based history", () => {
             // A *B - C D
             //      \ F
             void history.undo();
-            undoableC.equals = jest.fn(() => true);
+            undoableC.equals = vi.fn(() => true);
             history.add(undoableE);
 
             expect(history.getLastUndo()).toBe(undoableC);
@@ -1076,7 +1075,7 @@ describe("using a tree-based history", () => {
             //      \ C D
             void history.undo();
             void history.undo();
-            undoableC.equals = jest.fn(() => true);
+            undoableC.equals = vi.fn(() => true);
             history.add(undoableE);
 
             expect(history.getLastUndo()).toBe(undoableC);
@@ -1179,8 +1178,8 @@ describe("using a tree-based history", () => {
         });
 
         test("inserts creates a branch if the parent node has children", () => {
-            jest.spyOn(cmd3, "done");
-            jest.spyOn(cmd3, "execute");
+            vi.spyOn(cmd3, "done");
+            vi.spyOn(cmd3, "execute");
             history.insertUndoable(cmd3, 0, 0);
             expect(history.size()).toBe(4);
             expect(history.root.children).toHaveLength(1);
@@ -1196,8 +1195,8 @@ describe("using a tree-based history", () => {
         });
 
         test("inserts does not create a branch if the parent has no child", () => {
-            jest.spyOn(cmd3, "done");
-            jest.spyOn(cmd3, "execute");
+            vi.spyOn(cmd3, "done");
+            vi.spyOn(cmd3, "execute");
             history.insertUndoable(cmd3, 1);
             expect(history.size()).toBe(3);
             expect(history.root.children).toHaveLength(1);
@@ -1219,7 +1218,7 @@ describe("using a tree-based history", () => {
 
         test("inserts and refresh if done", () => {
             cmd3.done();
-            jest.spyOn(cmd3, "refreshCache");
+            vi.spyOn(cmd3, "refreshCache");
             history.insertUndoable(cmd3, 1);
             expect(cmd3.refreshCache).toHaveBeenCalledTimes(1);
         });

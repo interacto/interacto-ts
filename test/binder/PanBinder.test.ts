@@ -13,7 +13,7 @@
  */
 import {BindingsContext, BindingsImpl, LinearHistoryImpl} from "../../src/interacto";
 import {StubCmd} from "../command/StubCmd";
-import {afterEach, beforeEach, describe, expect, test} from "@jest/globals";
+import {afterEach, beforeEach, describe, expect, test} from "vitest";
 import {robot} from "interacto-nono";
 import type {Binding, Interaction, LinearHistoryBase, Bindings} from "../../src/interacto";
 
