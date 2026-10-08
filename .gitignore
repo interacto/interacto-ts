@@ -4,7 +4,7 @@ node_modules/
 .tscache/
 .rpt2_cache/
 dist/
-docs/
+ts-docs/
 *.tgz
 .vscode
 out-test/
