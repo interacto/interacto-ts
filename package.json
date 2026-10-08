@@ -83,7 +83,7 @@
     "lint": "eslint src test",
     "lint-fix": "eslint src test --fix",
     "coverage": "vitest run --coverage",
-    "doc": "typedoc --out docs src/interacto.ts",
+    "doc": "typedoc --out ts-docs src/interacto.ts",
     "test-publish": "npm pack",
     "gen-changelog": "git log --pretty=\"* %s\" $(git describe --tags --abbrev=0 @^)..@ | sort > commits",
     "mutation": "npx stryker run",
