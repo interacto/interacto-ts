@@ -33,7 +33,6 @@ describe("using a key down interaction", () => {
 
     afterEach(() => {
         interaction.uninstall();
-        vi.clearAllMocks();
     });
 
     describe("without the key", () => {

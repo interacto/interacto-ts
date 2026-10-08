@@ -41,7 +41,6 @@ class OneTrFSM extends FSMImpl {
 describe("executing a binding", () => {
     beforeEach(() => {
         history = new LinearHistoryImpl();
-        vi.clearAllMocks();
         cmd = new StubCmd();
         cmd.candoValue = true;
         fsm = new OneTrFSM();

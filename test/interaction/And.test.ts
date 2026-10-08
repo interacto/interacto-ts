@@ -44,7 +44,6 @@ describe("that then interaction works", () => {
     });
 
     afterEach(() => {
-        vi.clearAllMocks();
         vi.runOnlyPendingTimers();
         interaction.uninstall();
     });

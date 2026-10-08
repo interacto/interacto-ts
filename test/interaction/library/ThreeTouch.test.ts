@@ -15,7 +15,7 @@
 import {ThreeTouchDnD} from "../../../src/interacto";
 import {checkTouchPoint} from "../../Utils";
 import {robot} from "../StubEvents";
-import {afterEach, beforeEach, describe, expect, vi, test} from "vitest";
+import {afterEach, beforeEach, describe, expect, test} from "vitest";
 import {mock} from "vitest-mock-extended";
 import type {FSMHandler, Logger} from "../../../src/interacto";
 import type {MockProxy} from "vitest-mock-extended";
@@ -36,7 +36,6 @@ describe("using a multi touch interaction", () => {
     });
 
     afterEach(() => {
-        vi.clearAllMocks();
         interaction.uninstall();
     });
 

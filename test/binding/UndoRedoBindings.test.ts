@@ -38,7 +38,6 @@ describe("test history redo bindings", () => {
 
     afterEach(() => {
         bindings.clear();
-        vi.clearAllMocks();
     });
 
     describe("test history bindings", () => {

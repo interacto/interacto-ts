@@ -46,7 +46,6 @@ describe("using a timeout transition", () => {
 
     afterEach(() => {
         vi.clearAllTimers();
-        vi.clearAllMocks();
     });
 
     test("guard OK after timeout", () => {

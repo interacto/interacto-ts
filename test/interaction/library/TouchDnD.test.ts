@@ -42,7 +42,6 @@ describe("using a touch dnd interaction", () => {
 
     afterEach(() => {
         interaction.uninstall();
-        vi.clearAllMocks();
     });
 
     test("pressure does not start interaction", () => {

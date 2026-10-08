@@ -37,7 +37,6 @@ describe("using a checkbox binder", () => {
 
     afterEach(() => {
         bindings.clear();
-        vi.clearAllMocks();
     });
 
     test("commandExecutedOnSingleButtonFunction", () => {

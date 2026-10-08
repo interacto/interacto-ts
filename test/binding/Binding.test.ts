@@ -87,7 +87,6 @@ describe("using a binding", () => {
 
     afterEach(() => {
         history.clear();
-        vi.clearAllMocks();
     });
 
     describe("nominal cases", () => {

@@ -33,7 +33,6 @@ describe("using a key typed interaction", () => {
 
     afterEach(() => {
         interaction.uninstall();
-        vi.clearAllMocks();
     });
 
     describe("without the key", () => {

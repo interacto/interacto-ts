@@ -36,7 +36,6 @@ describe("using a multi touch interaction", () => {
     });
 
     afterEach(() => {
-        vi.clearAllMocks();
         interaction.uninstall();
     });
 

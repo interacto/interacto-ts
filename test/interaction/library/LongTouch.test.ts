@@ -39,7 +39,6 @@ describe("using a long touch interaction", () => {
 
         afterEach(() => {
             interaction.uninstall();
-            vi.clearAllMocks();
             vi.clearAllTimers();
         });
 

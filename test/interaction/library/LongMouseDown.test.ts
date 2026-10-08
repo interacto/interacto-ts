@@ -38,7 +38,6 @@ describe("using a long mouse down interaction", () => {
 
         afterEach(() => {
             interaction.uninstall();
-            vi.clearAllMocks();
             vi.clearAllTimers();
         });
 

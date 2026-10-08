@@ -37,7 +37,6 @@ describe("using a date binder", () => {
 
     afterEach(() => {
         bindings.clear();
-        vi.clearAllMocks();
     });
 
     test("commandExecutedOnSingleDateFunction", () => {

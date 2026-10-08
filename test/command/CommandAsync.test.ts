@@ -84,7 +84,6 @@ describe("testing async commands and bindings", () => {
     afterEach(async () => {
         bindings.clear();
         vi.clearAllTimers();
-        vi.clearAllMocks();
         await flushPromises();
     });
 

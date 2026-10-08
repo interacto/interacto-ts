@@ -36,7 +36,6 @@ describe("using a timed click interaction", () => {
 
     afterEach(() => {
         vi.clearAllTimers();
-        vi.clearAllMocks();
     });
 
     test("click on a element starts and stops the interaction TimedClick", () => {

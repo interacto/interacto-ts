@@ -14,7 +14,7 @@
 
 import {StubCmd} from "./StubCmd";
 import {CommandBase} from "../../src/interacto";
-import {afterEach, beforeEach, describe, expect, vi, test} from "vitest";
+import {beforeEach, describe, expect, vi, test} from "vitest";
 
 describe("using a command", () => {
     let cmd: StubCmd;
@@ -22,10 +22,6 @@ describe("using a command", () => {
     beforeEach(() => {
         cmd = new StubCmd();
         cmd.candoValue = true;
-    });
-
-    afterEach(() => {
-        vi.clearAllMocks();
     });
 
     test("cando default", () => {

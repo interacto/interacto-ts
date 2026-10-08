@@ -35,7 +35,6 @@ let logger: Logger;
 describe("using an FSM", () => {
     beforeEach(() => {
         logger = mock<Logger>();
-        vi.clearAllMocks();
         fsm = new FSMImpl(logger);
         handler = mock<FSMHandler>();
     });
@@ -630,7 +629,6 @@ describe("using an FSM", () => {
         let subC: CancellingState;
 
         beforeEach(() => {
-            vi.clearAllMocks();
             fsm = new FSMImpl(logger);
             mainfsm = new FSMImpl(logger);
             s1 = mainfsm.addStdState("s1");

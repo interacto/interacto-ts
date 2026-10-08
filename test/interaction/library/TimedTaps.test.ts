@@ -34,7 +34,6 @@ describe("using a timed taps interaction", () => {
 
     afterEach(() => {
         interaction.uninstall();
-        vi.clearAllMocks();
         vi.clearAllTimers();
     });
 

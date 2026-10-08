@@ -46,7 +46,6 @@ describe("testing a combining and cancelling interaction", () => {
     });
 
     afterEach(() => {
-        vi.clearAllMocks();
         vi.runOnlyPendingTimers();
         interaction.uninstall();
     });

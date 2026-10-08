@@ -68,7 +68,6 @@ describe("using bindings", () => {
     afterEach(() => {
         bindings.clear();
         vi.clearAllTimers();
-        vi.clearAllMocks();
     });
 
     test("with specific history", () => {

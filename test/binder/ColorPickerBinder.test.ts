@@ -37,7 +37,6 @@ describe("using a color picker binder", () => {
 
     afterEach(() => {
         bindings.clear();
-        vi.clearAllMocks();
     });
 
     test("commandExecutedOnSinglePickerFunction", () => {

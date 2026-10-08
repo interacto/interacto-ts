@@ -65,10 +65,6 @@ class CmdEditParagraph2 extends ExampleUndoableCmd {
 }
 
 describe("using a selective command", () => {
-    afterEach(() => {
-        vi.clearAllMocks();
-    });
-
     test("does not work with a non-command object", () => {
         const logSpy = vi.spyOn(globalThis.console, "error");
         logSpy.mockReset();
