@@ -36,7 +36,6 @@ describe("testing an OR interaction", () => {
     });
 
     afterEach(() => {
-        vi.clearAllMocks();
         vi.runOnlyPendingTimers();
     });
 

@@ -13,7 +13,7 @@
  */
 
 import {LinearHistoryImpl, UpdateBinder, MouseDown} from "../../src/interacto";
-import {afterEach, beforeEach, describe, expect, test, vi} from "vitest";
+import {beforeEach, describe, expect, test} from "vitest";
 import {mock} from "vitest-mock-extended";
 import type {Command, Interaction, LinearHistory, Logger, BindingsObserver} from "../../src/interacto";
 
@@ -25,10 +25,6 @@ describe("using an update binder", () => {
     beforeEach(() => {
         history = new LinearHistoryImpl();
         binder = new UpdateBinder(history, mock<Logger>());
-    });
-
-    afterEach(() => {
-        vi.clearAllMocks();
     });
 
     test("that is crashes when calling bind without an interaction supplier", () => {

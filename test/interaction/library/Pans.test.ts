@@ -33,7 +33,6 @@ describe("using pan interactions", () => {
     });
 
     afterEach(() => {
-        vi.clearAllMocks();
         interaction.uninstall();
     });
 

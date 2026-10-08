@@ -48,7 +48,6 @@ describe("using a key binder", () => {
     afterEach(() => {
         bindings.clear();
         vi.clearAllTimers();
-        vi.clearAllMocks();
     });
 
     test("that is crashes when calling bind without an interaction supplier", () => {

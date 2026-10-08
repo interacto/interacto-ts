@@ -28,7 +28,6 @@ describe("using a sub fsm transition", () => {
     let subS: TerminalState;
 
     beforeEach(() => {
-        vi.clearAllMocks();
         fsm = new FSMImpl(mock<Logger>());
         mainfsm = new FSMImpl(mock<Logger>());
         s1 = mainfsm.addStdState("s1");

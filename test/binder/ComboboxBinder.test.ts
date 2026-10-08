@@ -35,7 +35,6 @@ describe("using a combobox binder", () => {
 
     afterEach(() => {
         bindings.clear();
-        vi.clearAllMocks();
     });
 
     test("commandExecutedOnSingleComboFunction", () => {

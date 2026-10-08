@@ -29,7 +29,6 @@ describe("using a logger", () => {
     });
 
     afterEach(() => {
-        vi.clearAllMocks();
         vi.spyOn(performance, "now").mockRestore();
         vi.spyOn(console, "log").mockRestore();
         globalThis.window.XMLHttpRequest = oldHttpReq;

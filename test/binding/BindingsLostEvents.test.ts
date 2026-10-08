@@ -36,7 +36,6 @@ describe("events lost by the browser do not block bindings", () => {
     afterEach(() => {
         bindings.clear();
         vi.clearAllTimers();
-        vi.clearAllMocks();
     });
 
     describe("with touch events", () => {

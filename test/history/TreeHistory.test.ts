@@ -45,7 +45,6 @@ describe("using a tree-based history", () => {
 
     afterEach(() => {
         history.clear();
-        vi.clearAllMocks();
     });
 
     describe("using a standard tree history", () => {

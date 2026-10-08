@@ -48,7 +48,6 @@ describe("using a clicks interaction", () => {
 
         afterEach(() => {
             interaction.uninstall();
-            vi.clearAllMocks();
             vi.clearAllTimers();
         });
 

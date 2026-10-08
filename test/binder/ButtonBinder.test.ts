@@ -36,7 +36,6 @@ describe("using a button binder", () => {
 
     afterEach(() => {
         bindings.clear();
-        vi.clearAllMocks();
     });
 
     test("commandExecutedOnSingleButtonConsumer", () => {

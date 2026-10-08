@@ -49,7 +49,6 @@ describe("using a concurrent FSM", () => {
     let handler2: FSMHandler;
 
     beforeEach(() => {
-        vi.clearAllMocks();
         fsm1 = new StubTouchFSM(1);
         fsm2 = new StubTouchFSM(2);
         handler = mock<FSMHandler>();
