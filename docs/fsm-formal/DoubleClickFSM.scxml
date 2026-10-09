@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scxml xmlns="http://www.w3.org/2005/07/scxml" version="1.0" name="DoubleClickFSM">
+  
+  <initial>
+    <transition target="waitingForFirstClick" />
+  </initial>
+  
+  <datamodel>
+    <data id="logger" expr="null" />
+    <data id="subAction" expr="null" />
+    <data id="toleranceMove" expr="null" />
+    <data id="checkButton" expr="undefined" />
+    <data id="firstX" expr="0" />
+    <data id="firstY" expr="0" />
+    <data id="doubleClickCompleted" expr="false" />
+    <data id="doubleClickCancelled" expr="false" />
+    <data id="firstClickFSM" expr="null" />
+    <data id="sndClickFSM" expr="null" />
+    <data id="timeoutTimer" expr="null" />
+    <data id="elapsedTimeSinceFirstClick" expr="0" />
+    <data id="displacementExceedsTolerance" expr="toleranceMove !== null &amp;&amp; (Math.abs(firstX - event.data.clientX) > toleranceMove || Math.abs(firstY - event.data.clientY) > toleranceMove)" />
+    <data id="withinTimeGap" expr="elapsedTimeSinceFirstClick &lt; 300" />
+  </datamodel>
+  
+  <state id="waitingForFirstClick">
+    <invoke type="scxml" src="ClickFSM.scxml" datamodel="ecmascript" 
+            onload="onFirstClickFSMLoad" onerror="onFirstClickFSMError" />
+    <onentry>
+      <send event="startFirstClick" />
+    </onentry>
+    <transition event="firstClickComplete" target="clicked">
+      <assign location="checkButton" expr="firstClickFSM.getCheckButton()" />
+      <assign location="firstX" expr="event.data.clientX" />
+      <assign location="firstY" expr="event.data.clientY" />
+    </transition>
+  </state>
+  
+  <state id="clicked">
+    <transition event="mousemove" target="cancelled" cond="displacementExceedsTolerance">
+      <assign location="doubleClickCancelled" expr="true" />
+    </transition>
+    
+    <transition event="timeout" target="cancelled" cond="withinTimeGap">
+      <assign location="doubleClickCancelled" expr="true" />
+    </transition>
+    
+    <transition event="secondClickComplete" target="dbleclicked">
+      <assign location="doubleClickCompleted" expr="true" />
+    </transition>
+    
+    <onentry>
+      <send event="startTimeout" delay="PT0.3S" />
+      <invoke type="scxml" src="ClickFSM.scxml" datamodel="ecmascript" 
+              onload="onSndClickFSMLoad" onerror="onSndClickFSMError" />
+    </onentry>
+    
+    <onexit>
+      <send event="cancelTimeout" />
+    </onexit>
+  </state>
+  
+  <final id="dbleclicked" />
+  <final id="cancelled" />
+  
+  <script>
+    function onFirstClickFSMLoad(invocation) {
+      firstClickFSM = invocation;
+      firstClickFSM.addEventListener('completion', function() {
+        send({ event: 'firstClickComplete' });
+      });
+    }
+    
+    function onFirstClickFSMError(invocation, error) {
+      send({ event: 'error', data: error });
+    }
+    
+    function onSndClickFSMLoad(invocation) {
+      sndClickFSM = invocation;
+      sndClickFSM.addEventListener('completion', function() {
+        send({ event: 'secondClickComplete' });
+      });
+    }
+    
+    function onSndClickFSMError(invocation, error) {
+      send({ event: 'error', data: error });
+    }
+  </script>
+  
+</scxml>
