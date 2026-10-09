@@ -10,7 +10,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
 import {SetProperties} from "../../../src/interacto";
@@ -21,14 +21,14 @@ class SecondStubSetProp {
 }
 
 class StubForSetProp {
+    private _foo2 = "";
+
     public foo = 0;
 
     public bar: SecondStubSetProp = new SecondStubSetProp();
 
     // eslint-disable-next-line @typescript-eslint/naming-convention
     public 5: number;
-
-    private _foo2 = "";
 
     public get foo2(): string {
         return this._foo2;

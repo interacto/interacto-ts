@@ -332,7 +332,9 @@ describe("using a tree-based history", () => {
 
             test("redo observation works", () => {
                 const toRedos = new Array<Undoable | undefined>();
-                const redosStream = history.redosObservable().subscribe((e: Undoable | undefined) => toRedos.push(e));
+                const redosStream = history.redosObservable().subscribe((e: Undoable | undefined) => {
+                    toRedos.push(e);
+                });
 
                 void history.undo();
                 redosStream.unsubscribe();
@@ -343,7 +345,9 @@ describe("using a tree-based history", () => {
 
             test("history observation works", () => {
                 const undos = new Array<Undoable | undefined>();
-                const undosStream = history.undosObservable().subscribe((e: Undoable | undefined) => undos.push(e));
+                const undosStream = history.undosObservable().subscribe((e: Undoable | undefined) => {
+                    undos.push(e);
+                });
 
                 history.add(undoable1);
                 undosStream.unsubscribe();
@@ -355,8 +359,12 @@ describe("using a tree-based history", () => {
             test("history and redo observation works on multiple operations", () => {
                 const undos = new Array<Undoable | undefined>();
                 const redos = new Array<Undoable | undefined>();
-                const undosStream = history.undosObservable().subscribe((e: Undoable | undefined) => undos.push(e));
-                const redosStream = history.redosObservable().subscribe((e: Undoable | undefined) => redos.push(e));
+                const undosStream = history.undosObservable().subscribe((e: Undoable | undefined) => {
+                    undos.push(e);
+                });
+                const redosStream = history.redosObservable().subscribe((e: Undoable | undefined) => {
+                    redos.push(e);
+                });
 
                 history.add(undoable1);
                 void history.undo();

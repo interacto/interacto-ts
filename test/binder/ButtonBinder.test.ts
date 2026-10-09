@@ -17,14 +17,14 @@ import {StubCmd} from "../command/StubCmd";
 import {afterEach, beforeEach, describe, expect, vi, test} from "vitest";
 import type {Binding, EltRef, Interaction, LinearHistoryBase, Bindings} from "../../src/interacto";
 
-let button1: HTMLButtonElement;
-let button2: HTMLButtonElement;
-let binding: Binding<StubCmd, Interaction<object>, unknown> | undefined;
-let cmd: StubCmd;
-let ctx: BindingsContext;
-let bindings: Bindings<LinearHistoryBase>;
-
 describe("using a button binder", () => {
+    let button1: HTMLButtonElement;
+    let button2: HTMLButtonElement;
+    let binding: Binding<StubCmd, Interaction<object>, unknown> | undefined;
+    let cmd: StubCmd;
+    let ctx: BindingsContext;
+    let bindings: Bindings<LinearHistoryBase>;
+
     beforeEach(() => {
         bindings = new BindingsImpl(new LinearHistoryImpl());
         ctx = new BindingsContext();

@@ -136,13 +136,12 @@ export class MultiTouch extends ConcurrentInteraction<MultiTouchData, MultiTouch
                     .filter(fsm => fsm.started)
                     .map(fsm => fsm.getTouchId()));
 
-                this.data
+                const datas = this.data
                     .touches
-                    .filter(data => !currentIDs.has(data.src.identifier))
-                    // eslint-disable-next-line unicorn/no-array-for-each
-                    .forEach(data => {
-                        multiData.removeTouchData(data.src.identifier);
-                    });
+                    .filter(data => !currentIDs.has(data.src.identifier));
+                for (const data of datas) {
+                    multiData.removeTouchData(data.src.identifier);
+                }
             }
         };
 

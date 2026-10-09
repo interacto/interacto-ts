@@ -122,16 +122,15 @@ export class CheckerImpl implements Checker {
     }
 
     private isWidgetSetsIntersecting(w1: ReadonlySet<unknown>, w2: ReadonlySet<unknown>): boolean {
-        return Array.from(w1.values()).some(widget => w2.has(widget));
+        return Array.from(w1).some(widget => w2.has(widget));
     }
 
     private printLinterMsg(severity: Severity, msg: string): void {
         if (severity === "err") {
             throw new Error(msg);
-        } else {
-            // eslint-disable-next-line no-console
-            console.warn(msg);
         }
+        // eslint-disable-next-line no-console
+        console.warn(msg);
     }
 
     private fillCacheIncluded(): void {

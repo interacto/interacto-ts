@@ -31,12 +31,12 @@ import type {
     LinearHistoryBase, Logger, KeysData, EltRef, LinearHistory, KeyInteractionCmdBinder, KeyData
 } from "../../src/interacto";
 
-let elt: HTMLElement;
-let binding: Binding<Command, Interaction<object>, unknown> | undefined;
-let ctx: BindingsContext;
-let bindings: Bindings<LinearHistoryBase>;
-
 describe("using a key binder", () => {
+    let elt: HTMLElement;
+    let binding: Binding<Command, Interaction<object>, unknown> | undefined;
+    let ctx: BindingsContext;
+    let bindings: Bindings<LinearHistoryBase>;
+
     beforeEach(() => {
         bindings = new BindingsImpl(new LinearHistoryImpl());
         ctx = new BindingsContext();

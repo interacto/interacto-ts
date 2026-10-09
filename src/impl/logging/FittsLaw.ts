@@ -103,8 +103,8 @@ export class FittsLaw {
                 const t1 = performance.now();
                 this.data.push(new FittsLawDataImpl(
                     t1 - t0,
-                    this._target?.clientWidth ?? Number.NaN,
-                    this._target?.clientHeight ?? Number.NaN,
+                    this._target?.clientWidth ?? NaN,
+                    this._target?.clientHeight ?? NaN,
                     this.computeD()));
                 obsTgt.unsubscribe();
                 document.body.removeEventListener("mousemove", this.handler);
@@ -114,7 +114,7 @@ export class FittsLaw {
 
     private computeD(): number {
         if (this._startX === undefined || this.providedTarget === undefined) {
-            return Number.NaN;
+            return NaN;
         }
 
         const a = this.providedTarget.clientLeft + this.providedTarget.clientWidth / 2 + this._startX;

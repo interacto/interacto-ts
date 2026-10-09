@@ -28,11 +28,11 @@ import type {FSMHandler, Logger, OutputState, CancellingState, TerminalState, Vi
 import type {MockProxy} from "vitest-mock-extended";
 import type {Subject} from "rxjs";
 
-let fsm: FSMImpl;
-let handler: FSMHandler & MockProxy<FSMHandler>;
-let logger: Logger;
-
 describe("using an FSM", () => {
+    let fsm: FSMImpl;
+    let handler: FSMHandler & MockProxy<FSMHandler>;
+    let logger: Logger;
+
     beforeEach(() => {
         logger = mock<Logger>();
         fsm = new FSMImpl(logger);
@@ -301,7 +301,9 @@ describe("using an FSM", () => {
     test("currentState Changed", () => {
         const changes: Array<[OutputState, OutputState]> = [];
         const newCurr = new StdState(fsm, "so");
-        fsm.currentStateObservable.subscribe(e => changes.push(e));
+        fsm.currentStateObservable.subscribe(e => {
+            changes.push(e);
+        });
         fsm.currentState = newCurr;
         expect(changes).toHaveLength(1);
         expect(changes[0][1]).toStrictEqual(newCurr);

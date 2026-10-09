@@ -190,7 +190,9 @@ describe("using an linear history", () => {
         const undos = new Array<Undoable | undefined>();
         history.setSizeMax(5);
         history.add(undoable);
-        const undosStream = history.undosObservable().subscribe((e: Undoable | undefined) => undos.push(e));
+        const undosStream = history.undosObservable().subscribe((e: Undoable | undefined) => {
+            undos.push(e);
+        });
         history.setSizeMax(0);
         undosStream.unsubscribe();
         expect(history.getLastUndo()).toBeUndefined();

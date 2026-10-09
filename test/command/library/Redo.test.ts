@@ -18,10 +18,10 @@ import {mock} from "vitest-mock-extended";
 import type {Undoable, LinearHistory} from "../../../src/interacto";
 import type {MockProxy} from "vitest-mock-extended";
 
-let cmd: Redo;
-let collector: MockProxy<LinearHistory> & LinearHistory;
-
 describe("base redo testing", () => {
+    let cmd: Redo;
+    let collector: MockProxy<LinearHistory> & LinearHistory;
+
     beforeEach(() => {
         collector = mock<LinearHistory>();
         cmd = new Redo(collector);

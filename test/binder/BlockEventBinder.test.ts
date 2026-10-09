@@ -18,13 +18,13 @@ import {afterEach, beforeEach, describe, expect, test} from "vitest";
 import {mock} from "vitest-mock-extended";
 import type {Binding, Bindings, LinearHistoryBase, Logger} from "../../src/interacto";
 
-let canvas1: HTMLElement;
-let canvas2: HTMLElement;
-let binding1: Binding<StubCmd, MouseDown, unknown>;
-let binding2: Binding<StubCmd, MouseDown, unknown>;
-let bindings: Bindings<LinearHistoryBase>;
-
 describe("using a block event binder", () => {
+    let canvas1: HTMLElement;
+    let canvas2: HTMLElement;
+    let binding1: Binding<StubCmd, MouseDown, unknown>;
+    let binding2: Binding<StubCmd, MouseDown, unknown>;
+    let bindings: Bindings<LinearHistoryBase>;
+
     beforeEach(() => {
         bindings = new BindingsImpl(new LinearHistoryImpl());
         document.documentElement.innerHTML = "<html><div><canvas id='c1'> <canvas id='c2'/> </canvas></html>";

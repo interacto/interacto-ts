@@ -97,7 +97,7 @@ export class LinearHistoryImpl extends LinearHistory {
             }
 
             const lastRedo = this.redos.at(-1);
-            if (this.considersEqualCmds && lastRedo !== undefined && lastRedo.equals(undoable)) {
+            if (lastRedo !== undefined && this.considersEqualCmds && lastRedo.equals(undoable)) {
                 // eslint-disable-next-line no-void
                 void this.redo();
             } else {

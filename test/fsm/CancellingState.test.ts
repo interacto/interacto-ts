@@ -44,11 +44,13 @@ describe("using a cancelling state", () => {
     });
 
     test("checkStartingState fsm not started but starting state not this state", () => {
-        Object.defineProperty(fsm, "started", {
-            "get": vi.fn(() => false)
-        });
-        Object.defineProperty(fsm, "startingState", {
-            "get": vi.fn(() => mock<OutputState>())
+        Object.defineProperties(fsm, {
+            started: {
+                "get": vi.fn(() => false)
+            },
+            startingState: {
+                "get": vi.fn(() => mock<OutputState>())
+            }
         });
 
         state.checkStartingState();
@@ -56,11 +58,13 @@ describe("using a cancelling state", () => {
     });
 
     test("checkStartingState fsm not started and starting state is this state", () => {
-        Object.defineProperty(fsm, "started", {
-            "get": vi.fn(() => false)
-        });
-        Object.defineProperty(fsm, "startingState", {
-            "get": vi.fn(() => state)
+        Object.defineProperties(fsm, {
+            started: {
+                "get": vi.fn(() => false)
+            },
+            startingState: {
+                "get": vi.fn(() => state)
+            }
         });
         state.checkStartingState();
         expect(fsm.onStarting).toHaveBeenCalledTimes(1);

@@ -17,12 +17,12 @@ import {robot} from "../interaction/StubEvents";
 import {afterEach, beforeEach, describe, expect, vi, test} from "vitest";
 import type {Binding, Interaction, InteractionBase, LinearHistoryBase, Bindings, Flushable} from "../../src/interacto";
 
-let binding: Binding<StubCmd, Interaction<object>, unknown> | undefined;
-let cmd: StubCmd;
-let ctx: BindingsContext;
-let bindings: Bindings<LinearHistoryBase>;
-
 describe("using a tap binder", () => {
+    let binding: Binding<StubCmd, Interaction<object>, unknown> | undefined;
+    let cmd: StubCmd;
+    let ctx: BindingsContext;
+    let bindings: Bindings<LinearHistoryBase>;
+
     beforeEach(() => {
         bindings = new BindingsImpl(new LinearHistoryImpl());
         ctx = new BindingsContext();

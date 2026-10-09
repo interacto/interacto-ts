@@ -52,11 +52,13 @@ describe("using a base interaction", () => {
         logger = mock<Logger>();
         currentStateObs = new Subject();
         fsm = mock<FSMImpl>();
-        Object.defineProperty(fsm, "currentStateObservable", {
-            "get": vi.fn(() => currentStateObs)
-        });
-        Object.defineProperty(fsm, "currentState", {
-            "get": vi.fn(() => currentState)
+        Object.defineProperties(fsm, {
+            currentStateObservable: {
+                "get": vi.fn(() => currentStateObs)
+            },
+            currentState: {
+                "get": vi.fn(() => currentState)
+            }
         });
         interaction = new InteractionStub(fsm, logger);
     });

@@ -17,12 +17,12 @@ import {StubCmd} from "../command/StubCmd";
 import {afterEach, beforeEach, describe, expect, vi, test} from "vitest";
 import type {LinearHistoryBase, Bindings} from "../../src/interacto";
 
-let txt1: HTMLInputElement | HTMLTextAreaElement;
-let cmd: StubCmd;
-let ctx: BindingsContext;
-let bindings: Bindings<LinearHistoryBase>;
-
 describe("using a text input binder", () => {
+    let txt1: HTMLInputElement | HTMLTextAreaElement;
+    let cmd: StubCmd;
+    let ctx: BindingsContext;
+    let bindings: Bindings<LinearHistoryBase>;
+
     beforeEach(() => {
         bindings = new BindingsImpl(new LinearHistoryImpl());
         ctx = new BindingsContext();

@@ -17,13 +17,13 @@ import {afterEach, beforeEach, describe, expect, vi, test} from "vitest";
 import {robot} from "interacto-nono";
 import type {WidgetData, LinearHistoryBase, Bindings} from "../../src/interacto";
 
-let widget1: HTMLSelectElement;
-let widget2: HTMLSelectElement;
-let cmd: StubCmd;
-let ctx: BindingsContext;
-let bindings: Bindings<LinearHistoryBase>;
-
 describe("using a combobox binder", () => {
+    let widget1: HTMLSelectElement;
+    let widget2: HTMLSelectElement;
+    let cmd: StubCmd;
+    let ctx: BindingsContext;
+    let bindings: Bindings<LinearHistoryBase>;
+
     beforeEach(() => {
         bindings = new BindingsImpl(new LinearHistoryImpl());
         ctx = new BindingsContext();
