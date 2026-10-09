@@ -18,11 +18,11 @@ import {robot} from "../interaction/StubEvents";
 import {afterEach, beforeEach, describe, expect, vi, test} from "vitest";
 import type {Bindings, LinearHistoryBase} from "../../src/interacto";
 
-let elt: HTMLElement;
-let bindings: Bindings<LinearHistoryBase>;
-let div2: HTMLElement;
-
 describe("events lost by the browser do not block bindings", () => {
+    let elt: HTMLElement;
+    let bindings: Bindings<LinearHistoryBase>;
+    let div2: HTMLElement;
+
     beforeEach(async () => {
         bindings = new BindingsImpl(new LinearHistoryImpl());
         vi.useFakeTimers();

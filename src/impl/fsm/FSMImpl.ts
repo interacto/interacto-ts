@@ -127,7 +127,7 @@ export class FSMImpl implements FSM {
 
         // Recycling events
         if (processed && isKeyDownEvent(event) && !(this._currentState instanceof InitState) &&
-          !this.eventsToProcess.some(evt => isKeyDownEvent(evt) && evt.code === event.code)) {
+          this.eventsToProcess.every(evt => !(isKeyDownEvent(evt) && evt.code === event.code))) {
             this.addRemaningEventsToProcess(event);
         }
 
@@ -173,7 +173,7 @@ export class FSMImpl implements FSM {
     private removeKeyEvent(key: string): void {
         let removed = false;
 
-        for (let i = 0, size = this.eventsToProcess.length; i < size && !removed; i++) {
+        for (let i = 0, size = this.eventsToProcess.length; !removed && i < size; i++) {
             const event = this.eventsToProcess[i];
 
             if (event instanceof KeyboardEvent && event.code === key) {

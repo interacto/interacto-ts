@@ -25,12 +25,6 @@ import {afterEach, beforeEach, describe, expect, vi, test} from "vitest";
 import {mock} from "vitest-mock-extended";
 import type {FSM, Logger, LinearHistory} from "../../src/interacto";
 
-let interaction: InteractionStub;
-let binding: BindingImpl<StubCmd, InteractionStub, unknown>;
-let fsm: FSM;
-let cmd: StubCmd;
-let history: LinearHistory;
-
 class OneTrFSM extends FSMImpl {
     public constructor() {
         super(mock<Logger>());
@@ -39,6 +33,12 @@ class OneTrFSM extends FSMImpl {
 }
 
 describe("executing a binding", () => {
+    let interaction: InteractionStub;
+    let binding: BindingImpl<StubCmd, InteractionStub, unknown>;
+    let fsm: FSM;
+    let cmd: StubCmd;
+    let history: LinearHistory;
+
     beforeEach(() => {
         history = new LinearHistoryImpl();
         cmd = new StubCmd();
@@ -131,7 +131,9 @@ describe("executing a binding", () => {
     test("produced None", () => {
         cmd.candoValue = false;
         const cmds = new Array<StubCmd>();
-        binding.produces.subscribe(elt => cmds.push(elt));
+        binding.produces.subscribe(elt => {
+            cmds.push(elt);
+        });
 
         fsm.process(createMouseEvent("click", document.createElement("button")));
         expect(cmds).toHaveLength(0);
@@ -139,7 +141,9 @@ describe("executing a binding", () => {
 
     test("produced One", () => {
         const cmds = new Array<StubCmd>();
-        binding.produces.subscribe(elt => cmds.push(elt));
+        binding.produces.subscribe(elt => {
+            cmds.push(elt);
+        });
 
         fsm.process(createMouseEvent("click", document.createElement("button")));
         expect(cmds).toHaveLength(1);
@@ -147,7 +151,9 @@ describe("executing a binding", () => {
 
     test("produced Two", () => {
         const cmds = new Array<StubCmd>();
-        binding.produces.subscribe(elt => cmds.push(elt));
+        binding.produces.subscribe(elt => {
+            cmds.push(elt);
+        });
 
         fsm.process(createMouseEvent("click", document.createElement("button")));
         cmd = new StubCmd();

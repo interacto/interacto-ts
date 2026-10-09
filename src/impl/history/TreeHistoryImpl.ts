@@ -141,17 +141,11 @@ export class TreeHistoryImpl extends TreeHistory {
         this.undoableNodes = [];
         this.idCounter = 0;
         this.root = new TreeHistoryNodeImpl({
-            getUndoName(): string {
-                return "";
-            },
-            getVisualSnapshot(): UndoableSnapshot {
-                return "root";
-            },
+            getUndoName: (): string => "",
+            getVisualSnapshot: (): UndoableSnapshot => "root",
             redo(): void {},
             undo(): void {},
-            equals(): boolean {
-                return false;
-            }
+            equals: (): boolean => false
         }, -1, undefined);
         this._currentNode = this.root;
         this.undoPublisher = new Subject();
@@ -200,7 +194,7 @@ export class TreeHistoryImpl extends TreeHistory {
         const node = this.undoableNodes[id];
 
         // Cannot delete if keeping path
-        if (this.keepPath || node === undefined) {
+        if (node === undefined || this.keepPath) {
             return;
         }
 
@@ -236,10 +230,7 @@ export class TreeHistoryImpl extends TreeHistory {
 
     public getModifiableAttributesOf(id: number): object {
         const node = this.undoableNodes.at(id);
-        if (node === undefined) {
-            return {};
-        }
-        return getModifiableCmdAttributes(node.undoable);
+        return node === undefined ? {} : getModifiableCmdAttributes(node.undoable);
     }
 
     public deleteNode(id: number): void {
@@ -248,7 +239,7 @@ export class TreeHistoryImpl extends TreeHistory {
 
         // Cannot delete if keeping path.
         // If the node to delete has no child, just a simple removal.
-        if (this.keepPath || parent === undefined || node === undefined || node.children.length === 0) {
+        if (parent === undefined || node === undefined || this.keepPath || node.children.length === 0) {
             return;
         }
 
@@ -278,7 +269,7 @@ export class TreeHistoryImpl extends TreeHistory {
         if (hasBeenChanged) {
             // If we have to check equal undoables, then checking the siblings
             const isNew = !this.considersEqualCmds ||
-              !parent.children.some(elt => cloneTree.undoable.equals(elt.undoable));
+              parent.children.every(elt => !cloneTree.undoable.equals(elt.undoable));
 
             if (isNew) {
                 // Moving to the parent of the modified item
@@ -400,7 +391,7 @@ export class TreeHistoryImpl extends TreeHistory {
     private gatherToRoot(node: TreeHistoryNode | undefined): Array<TreeHistoryNode> {
         const path: Array<TreeHistoryNode> = [];
         let currentNode = node;
-        while (currentNode !== this.root && currentNode !== undefined) {
+        while (currentNode !== undefined && currentNode !== this.root) {
             path.push(currentNode);
             currentNode = currentNode.parent;
         }
@@ -574,7 +565,8 @@ export class TreeHistoryImpl extends TreeHistory {
         const res = dtoHistory.roots.map(root => UndoableTreeNodeDTOImpl.toNode(root, fn, this.root));
         this.root.children.push(...res.map(currRoot => currRoot[0]));
 
-        for (const currNode of res.flatMap(currRoot => currRoot[1])) {
+        const nodes = res.flatMap(currRoot => currRoot[1]);
+        for (const currNode of nodes) {
             this.undoableNodes[currNode.id] = currNode;
         }
 

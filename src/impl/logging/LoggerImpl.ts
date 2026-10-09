@@ -127,10 +127,7 @@ export class LoggerImpl implements Logger {
     }
 
     private formatError(ex: unknown): string {
-        if (ex instanceof Error) {
-            return `${ex.message} ${ex.stack ?? ""}`;
-        }
-        return String(ex);
+        return ex instanceof Error ? `${ex.message} ${ex.stack ?? ""}` : String(ex);
     }
 
     public logBindingErr(msg: string, ex: unknown, bindingName = ""): void {

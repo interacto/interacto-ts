@@ -18,12 +18,12 @@ import {afterEach, beforeEach, describe, expect, vi, test} from "vitest";
 import {mock} from "vitest-mock-extended";
 import type {Binding, Bindings, FSMHandler, Interaction, SrcTgtPointsData, TouchData, LinearHistoryBase} from "../../src/interacto";
 
-let binding: Binding<StubCmd, Interaction<SrcTgtPointsData<TouchData>>, unknown> | undefined;
-let c1: HTMLElement;
-let ctx: BindingsContext;
-let bindings: Bindings<LinearHistoryBase>;
-
 describe("using a swipe binder", () => {
+    let binding: Binding<StubCmd, Interaction<SrcTgtPointsData<TouchData>>, unknown> | undefined;
+    let c1: HTMLElement;
+    let ctx: BindingsContext;
+    let bindings: Bindings<LinearHistoryBase>;
+
     beforeEach(() => {
         bindings = new BindingsImpl(new LinearHistoryImpl());
         ctx = new BindingsContext();

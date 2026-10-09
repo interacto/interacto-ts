@@ -1,12 +1,20 @@
 {
   "$schema": "./node_modules/@stryker-mutator/core/schema/stryker-schema.json",
+  "testRunner": "vitest",
+  "checkers": ["typescript"],
+  "tsconfigFile": "tsconfig.json",
+  "typescriptChecker": {
+    "prioritizePerformanceOverAccuracy": true
+  },
+  "vitest": {
+    "configFile": "./vitest.config.ts"
+  },
   "packageManager": "npm",
   "reporters": [
     "html",
     "clear-text",
     "progress"
   ],
-  "testRunner": "jest",
   "coverageAnalysis": "perTest",
   "mutator": { "plugins": ["classProperties"],
     "excludedMutations": ["ArithmeticOperator", "ArrayDeclaration", "AssignmentExpression",

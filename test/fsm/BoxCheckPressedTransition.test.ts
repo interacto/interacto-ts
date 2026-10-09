@@ -20,12 +20,12 @@ import type {InputState} from "../../src/api/fsm/InputState";
 import type {OutputState} from "../../src/api/fsm/OutputState";
 import type {MockProxy} from "vitest-mock-extended";
 
-let tr: BoxCheckPressedTransition;
-let src: MockProxy<OutputState> & OutputState;
-let tgt: InputState & MockProxy<InputState>;
-let evt: Event;
-
 describe("using a checkbox transition", () => {
+    let tr: BoxCheckPressedTransition;
+    let src: MockProxy<OutputState> & OutputState;
+    let tgt: InputState & MockProxy<InputState>;
+    let evt: Event;
+
     beforeEach(() => {
         src = mock<OutputState>();
         tgt = mock<InputState>();

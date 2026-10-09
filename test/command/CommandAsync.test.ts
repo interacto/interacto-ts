@@ -66,13 +66,14 @@ class StubAsyncCmd extends CommandBase {
     }
 }
 
-let cmd: StubAsyncCmd;
-let data: Model;
-let binding: Binding<StubAsyncCmd, Interaction<object>, unknown> | undefined;
-let ctx: BindingsContext;
-let bindings: Bindings<LinearHistoryBase>;
 
 describe("testing async commands and bindings", () => {
+    let cmd: StubAsyncCmd;
+    let data: Model;
+    let binding: Binding<StubAsyncCmd, Interaction<object>, unknown> | undefined;
+    let ctx: BindingsContext;
+    let bindings: Bindings<LinearHistoryBase>;
+
     beforeEach(() => {
         bindings = new BindingsImpl(new LinearHistoryImpl());
         ctx = new BindingsContext();

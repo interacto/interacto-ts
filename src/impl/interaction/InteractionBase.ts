@@ -53,10 +53,14 @@ export abstract class InteractionBase<D extends object, DImpl extends D & Flusha
 
     protected _log: boolean;
 
-    /** The current list of mutation observers. Used for listening changes in node lists. */
+    /**
+    The current list of mutation observers. Used for listening changes in node lists.
+     */
     protected readonly mutationObservers: Array<MutationObserver>;
 
-    /** The interaction data */
+    /**
+    The interaction data
+     */
     protected readonly _data: DImpl;
 
     protected readonly logger: Logger;
@@ -284,7 +288,7 @@ export abstract class InteractionBase<D extends object, DImpl extends D & Flusha
             return;
         }
 
-        if (mouseEventTypes.includes(eventType as MouseEventType) || eventType === ("wheel" satisfies EventType)) {
+        if (eventType === ("wheel" satisfies EventType) || mouseEventTypes.includes(eventType as MouseEventType)) {
             node.addEventListener(eventType, this.getMouseHandler());
             return;
         }
@@ -306,7 +310,7 @@ export abstract class InteractionBase<D extends object, DImpl extends D & Flusha
         if (!(node instanceof EventTarget)) {
             return;
         }
-        if (mouseEventTypes.includes(eventType as MouseEventType) || eventType === ("wheel" satisfies EventType)) {
+        if (eventType === ("wheel" satisfies EventType) || mouseEventTypes.includes(eventType as MouseEventType)) {
             node.removeEventListener(eventType, this.getMouseHandler());
             return;
         }

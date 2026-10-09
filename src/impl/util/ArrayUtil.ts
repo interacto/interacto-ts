@@ -35,8 +35,5 @@ export function remove<T>(array: Array<T>, elt: T): void {
  * @category Helper
  */
 export function removeAt<T>(array: Array<T>, index: number): T | undefined {
-    if (index > -1) {
-        return array.splice(index, 1)[0];
-    }
-    return undefined;
+    return index > -1 ? array.splice(index, 1)[0] : undefined;
 }

@@ -37,7 +37,7 @@ export class DwellSpringAnimation {
 
     public constructor(handle: Readonly<EltRef<SVGCircleElement>>, spring: Readonly<EltRef<SVGLineElement>>) {
         this.interval = undefined;
-        this.radius = Number.parseInt(handle.nativeElement.getAttribute("r") ?? "20", 10);
+        this.radius = Math.trunc(Number(handle.nativeElement.getAttribute("r") ?? "20"));
         this.handle = handle;
         this.spring = spring;
         this.positionSpring = {

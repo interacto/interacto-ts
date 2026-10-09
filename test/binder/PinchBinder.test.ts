@@ -17,12 +17,12 @@ import {robot} from "../interaction/StubEvents";
 import {afterEach, beforeEach, describe, expect, vi, test} from "vitest";
 import type {Binding, Interaction, LinearHistoryBase, Bindings} from "../../src/interacto";
 
-let binding: Binding<StubCmd, Interaction<object>, unknown> | undefined;
-let c1: HTMLElement;
-let ctx: BindingsContext;
-let bindings: Bindings<LinearHistoryBase>;
-
 describe("using a pinch binder", () => {
+    let binding: Binding<StubCmd, Interaction<object>, unknown> | undefined;
+    let c1: HTMLElement;
+    let ctx: BindingsContext;
+    let bindings: Bindings<LinearHistoryBase>;
+
     beforeEach(() => {
         bindings = new BindingsImpl(new LinearHistoryImpl());
         ctx = new BindingsContext();

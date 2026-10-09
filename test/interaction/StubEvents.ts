@@ -47,7 +47,7 @@ export interface MouseEventForTest extends MouseEvent {
 
 export function createTouchEvent(type: "touchend" | "touchmove" | "touchstart", id: number, target: EventTarget,
                                  screenX?: number, screenY?: number,
-                                 clientX?: number, clientY?: number, timeStamp?: number): TouchEvent {
+                                 clientX?: number, clientY?: number, timestamp?: number): TouchEvent {
     const screenXvalue = screenX ?? 0;
     const screenYvalue = screenY ?? 0;
     const clientXvalue = clientX ?? 0;
@@ -79,8 +79,8 @@ export function createTouchEvent(type: "touchend" | "touchmove" | "touchstart", 
         ]
     });
 
-    if (timeStamp !== undefined) {
-        Object.defineProperty(evt, "timeStamp", {"value": timeStamp});
+    if (timestamp !== undefined) {
+        Object.defineProperty(evt, "timeStamp", {"value": timestamp});
     }
 
     return evt;
@@ -90,16 +90,18 @@ export function createMouseEvent2(type: "auxclick" | "click" | "mousedown" | "mo
                                   data: Partial<PointData>): MouseEvent {
     const evt = new MouseEvent(type, data);
 
-    Object.defineProperty(evt, "offsetX", {"value": data.offsetX});
-    Object.defineProperty(evt, "offsetY", {"value": data.offsetY});
-    Object.defineProperty(evt, "screenX", {"value": data.screenX});
-    Object.defineProperty(evt, "screenY", {"value": data.screenY});
-    Object.defineProperty(evt, "movementX", {"value": data.movementX});
-    Object.defineProperty(evt, "movementY", {"value": data.movementY});
-    Object.defineProperty(evt, "target", {"value": data.target});
-    Object.defineProperty(evt, "currentTarget", {"value": data.currentTarget});
-    Object.defineProperty(evt, "pageX", {"value": data.pageX});
-    Object.defineProperty(evt, "pageY", {"value": data.pageY});
+    Object.defineProperties(evt, {
+        offsetX: {"value": data.offsetX},
+        offsetY: {"value": data.offsetY},
+        screenX: {"value": data.screenX},
+        screenY: {"value": data.screenY},
+        movementX: {"value": data.movementX},
+        movementY: {"value": data.movementY},
+        target: {"value": data.target},
+        currentTarget: {"value": data.currentTarget},
+        pageX: {"value": data.pageX},
+        pageY: {"value": data.pageY}
+    });
 
     if (data.timeStamp !== undefined) {
         Object.defineProperty(evt, "timeStamp", {"value": data.timeStamp});
@@ -112,20 +114,22 @@ export function createWheelEvent2(type: "wheel",
                                   data: Partial<WheelData>): WheelEvent {
     const evt = new WheelEvent(type, data);
 
-    Object.defineProperty(evt, "offsetX", {"value": data.offsetX});
-    Object.defineProperty(evt, "offsetY", {"value": data.offsetY});
-    Object.defineProperty(evt, "screenX", {"value": data.screenX});
-    Object.defineProperty(evt, "screenY", {"value": data.screenY});
-    Object.defineProperty(evt, "movementX", {"value": data.movementX});
-    Object.defineProperty(evt, "movementY", {"value": data.movementY});
-    Object.defineProperty(evt, "target", {"value": data.target});
-    Object.defineProperty(evt, "currentTarget", {"value": data.currentTarget});
-    Object.defineProperty(evt, "pageX", {"value": data.pageX});
-    Object.defineProperty(evt, "pageY", {"value": data.pageY});
-    Object.defineProperty(evt, "deltaX", {"value": data.deltaX});
-    Object.defineProperty(evt, "deltaY", {"value": data.deltaY});
-    Object.defineProperty(evt, "deltaZ", {"value": data.deltaZ});
-    Object.defineProperty(evt, "deltaMode", {"value": data.deltaMode});
+    Object.defineProperties(evt, {
+        offsetX: {"value": data.offsetX},
+        offsetY: {"value": data.offsetY},
+        screenX: {"value": data.screenX},
+        screenY: {"value": data.screenY},
+        movementX: {"value": data.movementX},
+        movementY: {"value": data.movementY},
+        target: {"value": data.target},
+        currentTarget: {"value": data.currentTarget},
+        pageX: {"value": data.pageX},
+        pageY: {"value": data.pageY},
+        deltaX: {"value": data.deltaX},
+        deltaY: {"value": data.deltaY},
+        deltaZ: {"value": data.deltaZ},
+        deltaMode: {"value": data.deltaMode}
+    });
 
     if (data.timeStamp !== undefined) {
         Object.defineProperty(evt, "timeStamp", {"value": data.timeStamp});

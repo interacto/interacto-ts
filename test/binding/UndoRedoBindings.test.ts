@@ -18,14 +18,14 @@ import {afterEach, beforeEach, describe, expect, vi, test, type Mock} from "vite
 import {mock, type MockProxy} from "vitest-mock-extended";
 import type {Bindings, Undoable, LinearHistoryBase} from "../../src/interacto";
 
-let bundo: HTMLButtonElement;
-let bredo: HTMLButtonElement;
-let ctx: BindingsContext;
-let bindings: Bindings<LinearHistoryBase>;
-let undoable: MockProxy<Undoable> & Undoable;
-let fn: Mock;
-
 describe("test history redo bindings", () => {
+    let bundo: HTMLButtonElement;
+    let bredo: HTMLButtonElement;
+    let ctx: BindingsContext;
+    let bindings: Bindings<LinearHistoryBase>;
+    let undoable: MockProxy<Undoable> & Undoable;
+    let fn: Mock;
+
     beforeEach(() => {
         fn = vi.fn();
         bindings = new BindingsImpl(new LinearHistoryImpl());

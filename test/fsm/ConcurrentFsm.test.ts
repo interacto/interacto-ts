@@ -25,8 +25,8 @@ import type {FSMHandler, Logger} from "../../src/interacto";
 class StubTouchFSM extends FSMImpl {
     public cpt: number;
 
-    public constructor(cpt: number, logger?: Logger) {
-        super(logger ?? mock<Logger>());
+    public constructor(cpt: number) {
+        super(mock<Logger>());
         this.cpt = cpt;
         const touched = this.addStdState("touched");
         const moved = this.addStdState("moved");

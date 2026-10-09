@@ -20,9 +20,9 @@ import type {OutputState} from "../../src/api/fsm/OutputState";
 export class StubTransitionOK<E extends Event> extends TransitionBase<E> {
     public _guard: boolean;
 
-    public constructor(srcState: OutputState, tgtState: InputState, guard?: boolean) {
+    public constructor(srcState: OutputState, tgtState: InputState, hasGuard = true) {
         super(srcState, tgtState, undefined, () => this._guard);
-        this._guard = guard ?? true;
+        this._guard = hasGuard;
     }
 
     public accept(_ignore: Event): _ignore is E {

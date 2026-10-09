@@ -18,12 +18,12 @@ import {afterEach, beforeEach, describe, expect, vi, test} from "vitest";
 import {robot} from "interacto-nono";
 import type {LinearHistoryBase, Bindings} from "../../src/interacto";
 
-let button1: HTMLButtonElement;
-let cmd: StubCmd;
-let ctx: BindingsContext;
-let bindings: Bindings<LinearHistoryBase>;
-
 describe("testing an accumulator", () => {
+    let button1: HTMLButtonElement;
+    let cmd: StubCmd;
+    let ctx: BindingsContext;
+    let bindings: Bindings<LinearHistoryBase>;
+
     beforeEach(() => {
         bindings = new BindingsImpl(new LinearHistoryImpl());
         ctx = new BindingsContext();

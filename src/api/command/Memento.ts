@@ -53,7 +53,7 @@ function getMementoProperties<T extends object>(obj: T): Partial<T> {
     const mementoProps: unknown = (obj.constructor as MementoMetadata)[INTERACTO_MEMENTO];
 
     if (mementoProps instanceof Map) {
-        for (const [key, value] of mementoProps.entries()) {
+        for (const [key, value] of mementoProps) {
             const tkey = key as keyof T;
             modifiableAttributes[tkey] = value as T[keyof T];
         }
@@ -67,6 +67,7 @@ function getMementoProperties<T extends object>(obj: T): Partial<T> {
  * @param obj - The object from which to restore the values using the stored memento properties.
  */
 export function restoreMementoProperties<T extends object>(obj: T): void {
+    // eslint-disable-next-line unicorn/no-unreadable-for-of-expression
     for (const [propName, propMementoValue] of Object.entries(getMementoProperties(obj))) {
         const typedPropName = propName as keyof T;
         obj[typedPropName] = propMementoValue as T[keyof T];

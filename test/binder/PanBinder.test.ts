@@ -17,12 +17,12 @@ import {afterEach, beforeEach, describe, expect, test} from "vitest";
 import {robot} from "interacto-nono";
 import type {Binding, Interaction, LinearHistoryBase, Bindings} from "../../src/interacto";
 
-let binding: Binding<StubCmd, Interaction<object>, unknown> | undefined;
-let c1: HTMLElement;
-let ctx: BindingsContext;
-let bindings: Bindings<LinearHistoryBase>;
-
 describe("using pan binders", () => {
+    let binding: Binding<StubCmd, Interaction<object>, unknown> | undefined;
+    let c1: HTMLElement;
+    let ctx: BindingsContext;
+    let bindings: Bindings<LinearHistoryBase>;
+
     beforeEach(() => {
         bindings = new BindingsImpl(new LinearHistoryImpl());
         ctx = new BindingsContext();

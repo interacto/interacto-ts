@@ -57,7 +57,7 @@ export function getSelectiveValue<T extends object>(obj: T): Partial<T> | undefi
     const keys: unknown = (obj.constructor as SelectiveMetadata)[INTERACTO_SELECTIVE];
 
     if (keys instanceof Set) {
-        const filteredKeys = [...keys.values()]
+        const filteredKeys = [...keys]
             // Removing the keys that are not part of the object.
             // Normally should never happen since they have the Selective decorator on them.
             .filter(key => (key in obj))
@@ -97,6 +97,6 @@ export function hasSelectiveValue<V extends object | number | string | bigint>(
     const res = getSelectiveValue(obj);
 
     return res !== undefined && Object
-        .entries(res)
-        .some(([, keyValue]) => eqFn(keyValue as V, value));
+        .values(res)
+        .some(keyValue => eqFn(keyValue as V, value));
 }

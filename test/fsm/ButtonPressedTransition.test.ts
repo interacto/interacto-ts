@@ -20,12 +20,12 @@ import type {InputState} from "../../src/api/fsm/InputState";
 import type {OutputState} from "../../src/api/fsm/OutputState";
 import type {MockProxy} from "vitest-mock-extended";
 
-let tr: ButtonPressedTransition;
-let src: MockProxy<OutputState> & OutputState;
-let tgt: InputState & MockProxy<InputState>;
-let evt: Event;
-
 describe("using a button pressed transition", () => {
+    let tr: ButtonPressedTransition;
+    let src: MockProxy<OutputState> & OutputState;
+    let tgt: InputState & MockProxy<InputState>;
+    let evt: Event;
+
     beforeEach(() => {
         src = mock<OutputState>();
         tgt = mock<InputState>();

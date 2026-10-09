@@ -26,14 +26,10 @@ describe("using a scroll data", () => {
         const newWindow = {...globalThis.window};
         Object.defineProperties(newWindow, {
             "scrollX": {
-                get(): number {
-                    return 14;
-                }
+                get: (): number => 14
             },
             "scrollY": {
-                get(): number {
-                    return 16;
-                }
+                get: (): number => 16
             }
         });
         vi.spyOn(evt, "view", "get")

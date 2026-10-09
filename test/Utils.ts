@@ -24,7 +24,7 @@ import type {TouchData} from "../src/api/interaction/TouchData";
 export async function flushPromises(): Promise<unknown> {
     vi.useRealTimers();
     return new Promise(resolve => {
-        setTimeout(resolve);
+        setTimeout(resolve, 0);
     });
 }
 

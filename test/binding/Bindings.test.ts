@@ -50,12 +50,12 @@ import type {
 } from "../../src/interacto";
 import type {MouseEventForTest} from "../interaction/StubEvents";
 
-let elt: HTMLElement;
-let ctx: BindingsContext;
-let bindings: Bindings<LinearHistoryBase>;
-let logger: Logger;
-
 describe("using bindings", () => {
+    let elt: HTMLElement;
+    let ctx: BindingsContext;
+    let bindings: Bindings<LinearHistoryBase>;
+    let logger: Logger;
+
     beforeEach(() => {
         logger = mock<Logger>();
         bindings = new BindingsImpl(new LinearHistoryImpl(), logger);

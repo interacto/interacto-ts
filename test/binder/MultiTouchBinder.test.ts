@@ -17,13 +17,13 @@ import {afterEach, beforeEach, describe, expect, vi, test} from "vitest";
 import {robot} from "interacto-nono";
 import type {Binding, Interaction, InteractionBase, LinearHistoryBase, MultiTouch, Bindings, Flushable} from "../../src/interacto";
 
-let c1: HTMLElement;
-let binding: Binding<StubCmd, Interaction<object>, unknown> | undefined;
-let cmd: StubCmd;
-let ctx: BindingsContext;
-let bindings: Bindings<LinearHistoryBase>;
-
 describe("using a multi touch binder", () => {
+    let c1: HTMLElement;
+    let binding: Binding<StubCmd, Interaction<object>, unknown> | undefined;
+    let cmd: StubCmd;
+    let ctx: BindingsContext;
+    let bindings: Bindings<LinearHistoryBase>;
+
     beforeEach(() => {
         bindings = new BindingsImpl(new LinearHistoryImpl());
         ctx = new BindingsContext();
