@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scxml xmlns="http://www.w3.org/2005/07/scxml" version="1.0" name="ClickFSM">
+  
+  <initial>
+    <transition target="idle" />
+  </initial>
+  
+  <datamodel>
+    <data id="logger" expr="null" />
+    <data id="action" expr="null" />
+    <data id="toleranceMove" expr="null" />
+    <data id="checkButton" expr="undefined" />
+    <data id="firstX" expr="0" />
+    <data id="firstY" expr="0" />
+    <data id="clickCompleted" expr="false" />
+    <data id="clickCancelled" expr="false" />
+    <data id="buttonMatch" expr="checkButton === undefined || event.data.button === checkButton" />
+    <data id="displacementExceedsTolerance" expr="toleranceMove !== null &amp;&amp; (Math.abs(firstX - event.data.clientX) > toleranceMove || Math.abs(firstY - event.data.clientY) > toleranceMove)" />
+  </datamodel>
+  
+  <state id="idle">
+    <transition event="mousedown" target="down">
+      <assign location="firstX" expr="event.data.clientX" />
+      <assign location="firstY" expr="event.data.clientY" />
+      <assign location="checkButton" expr="event.data.button" />
+    </transition>
+  </state>
+  
+  <state id="down">
+    <transition event="mouseup" target="clicked" cond="buttonMatch">
+      <assign location="clickCompleted" expr="true" />
+    </transition>
+    
+    <transition event="mousemove" target="moved" cond="displacementExceedsTolerance">
+      <assign location="clickCancelled" expr="true" />
+    </transition>
+  </state>
+  
+  <final id="clicked" />
+  <final id="moved" />
+  
+</scxml>
