@@ -18,7 +18,36 @@ import {mock} from "vitest-mock-extended";
 import type {Undoable} from "../../src/api/history/Undoable";
 import type {LinearHistory} from "../../src/api/history/LinearHistory";
 import type {MockProxy} from "vitest-mock-extended";
+import {flushPromises} from "../Utils";
 import {TestScheduler} from "rxjs/testing";
+
+/**
+ * Creates a promise together with its resolve function, so a test can control
+ * exactly when the promise settles.
+ * @returns The promise and its resolve function.
+ */
+function deferredPromise(): {promise: Promise<void>; resolve: (value: void | PromiseLike<void>) => void} {
+    let resolve: (value: void | PromiseLike<void>) => void = () => undefined;
+    // eslint-disable-next-line unicorn/prefer-promise-with-resolvers
+    const promise = new Promise<void>(res => {
+        resolve = res;
+    });
+    return {promise, resolve};
+}
+
+/**
+ * Returns a predicate reporting whether `promise` has settled yet.
+ * Used to assert that an asynchronous chain does not settle too early.
+ * @param {Promise<void>} promise - The asynchronous chain to observe.
+ * @returns A function that returns true once `promise` has settled.
+ */
+function isSettledAfter(promise: Promise<void>): () => boolean {
+    let settled = false;
+    void promise.then(() => {
+        settled = true;
+    });
+    return () => settled;
+}
 
 describe("using an linear history", () => {
     let undoable: MockProxy<Undoable> & Undoable;
@@ -116,6 +145,74 @@ describe("using an linear history", () => {
         expect(history.getLastRedo()).toBe(undoable2);
         expect(undoable2.redo).not.toHaveBeenCalled();
         expect(undoable.redo).toHaveBeenCalledTimes(1);
+    });
+
+    test("undoUpTo returns a chain awaiting the async undo of each undoable", async () => {
+        // The undos resolve out of order: undoable2 is undone first, then undoable.
+        const undo2 = deferredPromise();
+        const undo1 = deferredPromise();
+        undoable.undo.mockReturnValue(undo1.promise);
+        undoable2.undo.mockReturnValue(undo2.promise);
+        history.add(undoable);
+        history.add(undoable2);
+
+        // Undo everything up to index 0, then observe when the returned chain settles.
+        const chain = history.undoUpTo(0) as Promise<void>;
+        const chainSettled = isSettledAfter(chain);
+
+        // The chain must not settle before EVERY async undo has resolved.
+        await flushPromises();
+        expect(chainSettled()).toBe(false);
+
+        // undoable2 resolves first: the chain must still wait for undoable.
+        undo2.resolve();
+        await flushPromises();
+        expect(chainSettled()).toBe(false);
+
+        // Once the last async undo (undoable) resolves, the chain settles.
+        undo1.resolve();
+        await chain;
+        expect(chainSettled()).toBe(true);
+
+        // Each undoable was undone once and the undo stack is now empty.
+        expect(undoable.undo).toHaveBeenCalledTimes(1);
+        expect(undoable2.undo).toHaveBeenCalledTimes(1);
+        expect(history.getLastUndo()).toBeUndefined();
+    });
+
+    test("redoUpTo returns a chain awaiting the async redo of each undoable", async () => {
+        // The redos resolve out of order: undoable is redone first, then undoable2.
+        const redo1 = deferredPromise();
+        const redo2 = deferredPromise();
+        undoable.redo.mockReturnValue(redo1.promise);
+        undoable2.redo.mockReturnValue(redo2.promise);
+        history.add(undoable);
+        history.add(undoable2);
+        void history.undo();
+        void history.undo();
+
+        // Redo everything up to index 0, then observe when the returned chain settles.
+        const chain = history.redoUpTo(0) as Promise<void>;
+        const chainSettled = isSettledAfter(chain);
+
+        // The chain must not settle before EVERY async redo has resolved.
+        await flushPromises();
+        expect(chainSettled()).toBe(false);
+
+        // undoable2 resolves first: the chain must still wait for undoable.
+        redo2.resolve();
+        await flushPromises();
+        expect(chainSettled()).toBe(false);
+
+        // Once the last async redo (undoable) resolves, the chain settles.
+        redo1.resolve();
+        await chain;
+        expect(chainSettled()).toBe(true);
+
+        // Each undoable was redone once and the redo stack is now empty.
+        expect(undoable.redo).toHaveBeenCalledTimes(1);
+        expect(undoable2.redo).toHaveBeenCalledTimes(1);
+        expect(history.getLastRedo()).toBeUndefined();
     });
 
     test("size history", () => {
@@ -328,6 +425,13 @@ describe("using an linear history", () => {
         history.clear();
         expect(history.getLastRedo()).toBeUndefined();
         expect(history.getLastUndo()).toBeUndefined();
+    });
+
+    test("clear on empty history does nothing", () => {
+        history.clear();
+        expect(history.getLastUndo()).toBeUndefined();
+        expect(history.getLastRedo()).toBeUndefined();
+        expect(history.size()).toStrictEqual([0, 0]);
     });
 
     describe("using a test scheduler", () => {

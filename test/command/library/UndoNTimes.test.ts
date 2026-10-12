@@ -51,6 +51,23 @@ describe("base history testing", () => {
             expect(collector.undo).toHaveBeenCalledTimes(2);
         });
 
+        test("do when the undo returns a promise", async () => {
+            let appliedUndos = 0;
+            collector.undo.mockImplementation(async () => {
+                await new Promise<void>(resolve => {
+                    setTimeout(resolve, 10);
+                });
+                appliedUndos++;
+            });
+
+            const res = await cmd.execute();
+
+            expect(res).toBeTruthy();
+            expect(collector.undo).toHaveBeenCalledTimes(2);
+            // The chain must propagate each undo promise: no undo can be applied after it resolves.
+            expect(appliedUndos).toBe(2);
+        });
+
         test("hadEffects", () => {
             // eslint-disable-next-line @typescript-eslint/no-floating-promises
             cmd.execute();

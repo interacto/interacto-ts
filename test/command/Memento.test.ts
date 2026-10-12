@@ -13,8 +13,8 @@
  */
 
 import {ExampleUndoableCmd} from "./StubCmd";
-import {Memento} from "../../src/interacto";
-import {beforeEach, describe, expect, test} from "vitest";
+import {Memento, createMementoProperties, restoreMementoProperties} from "../../src/interacto";
+import {beforeEach, describe, expect, test, vi} from "vitest";
 
 interface Data {
     text: string;
@@ -127,5 +127,37 @@ describe("using a command that has a memento decorator on a getter", () => {
         void cmd1.execute();
         void cmd1.undo();
         expect(cmd1.data.text).toBe("foo");
+    });
+});
+
+class MementoFreeCmd extends ExampleUndoableCmd {
+    public foo = "bar";
+}
+
+describe("memento decorator on a non-object target", () => {
+    test("logs an error and returns without throwing", () => {
+        const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {
+            // noop
+        });
+        try {
+            // eslint-disable-next-line new-cap
+            expect(() => Memento("not an object", "x")).not.toThrow();
+        } finally {
+            errorSpy.mockRestore();
+        }
+    });
+});
+
+describe("memento property management on commands without any @Memento decorator", () => {
+    test("restoreMementoProperties does nothing when there is no memento map", () => {
+        const cmd = new MementoFreeCmd();
+        restoreMementoProperties(cmd);
+        expect(cmd.foo).toBe("bar");
+    });
+
+    test("createMementoProperties does nothing when there is no memento map", () => {
+        const cmd = new MementoFreeCmd();
+        createMementoProperties(cmd);
+        expect(cmd.foo).toBe("bar");
     });
 });

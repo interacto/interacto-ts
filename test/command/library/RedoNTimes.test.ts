@@ -51,6 +51,23 @@ describe("base redo testing", () => {
             expect(collector.redo).toHaveBeenCalledTimes(2);
         });
 
+        test("do when the redo returns a promise", async () => {
+            let appliedRedos = 0;
+            collector.redo.mockImplementation(async () => {
+                await new Promise<void>(resolve => {
+                    setTimeout(resolve, 10);
+                });
+                appliedRedos++;
+            });
+
+            const res = await cmd.execute();
+
+            expect(res).toBeTruthy();
+            expect(collector.redo).toHaveBeenCalledTimes(2);
+            // The chain must propagate each redo promise: no redo can be applied after it resolves.
+            expect(appliedRedos).toBe(2);
+        });
+
         test("hadEffects", () => {
             // eslint-disable-next-line @typescript-eslint/no-floating-promises
             cmd.execute();

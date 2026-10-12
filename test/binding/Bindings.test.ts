@@ -45,6 +45,7 @@ import type {
     TouchData,
     LinearHistory,
     LinearHistoryBase,
+    Undoable,
     VisitorBinding,
     WidgetData
 } from "../../src/interacto";
@@ -928,6 +929,272 @@ describe("using bindings", () => {
 
         expect(when).not.toHaveBeenCalled();
     });
+
+    test("set linter rules", () => {
+        const bim = new BindingsImpl(new LinearHistoryImpl());
+        bim.setBindingObserver(ctx);
+        const spy = vi.spyOn(ctx.checker, "setLinterRules");
+        bim.setLinterRules(["same-interactions", "err"]);
+        expect(spy).toHaveBeenCalledWith(["same-interactions", "err"]);
+    });
+
+    test("reciprocal mouse or touch DnD binder", () => {
+        const handle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        const spring = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        handle.setAttribute("r", "50");
+        const handleRef: EltRef<SVGCircleElement> = {"nativeElement": handle};
+        const springRef: EltRef<SVGLineElement> = {"nativeElement": spring};
+        const cancel = vi.fn();
+        elt.append(handle);
+        elt.append(spring);
+        handle.classList.add("ioDwellSpring");
+
+        bindings.reciprocalMouseOrTouchDnD(handleRef, springRef)
+            .on(elt)
+            .toProduce(() => new StubCmd(true))
+            .cancel(cancel)
+            .bind();
+        robot(elt)
+            .mousedown()
+            .mousemove()
+            .mouseup()
+            .mousedown()
+            .mousemove();
+        robot(handle)
+            .mouseup();
+
+        expect(ctx.commands).toHaveLength(1);
+        expect(cancel).toHaveBeenCalledTimes(1);
+    });
+
+    test("two touch binder works", () => {
+        bindings.twoTouchBinder()
+            .on(elt)
+            .toProduce(() => new StubCmd(true))
+            .bind();
+
+        robot(elt)
+            .touchstart({}, [{"identifier": 1}])
+            .touchstart({}, [{"identifier": 2}])
+            .touchmove({}, [{"identifier": 2}])
+            .touchend({}, [{"identifier": 2}]);
+
+        expect(ctx.commands).toHaveLength(1);
+    });
+
+    test("three touch binder works", () => {
+        bindings.threeTouchBinder()
+            .on(elt)
+            .toProduce(() => new StubCmd(true))
+            .bind();
+
+        robot(elt)
+            .touchstart({}, [{"identifier": 1}])
+            .touchstart({}, [{"identifier": 2}])
+            .touchstart({}, [{"identifier": 3}])
+            .touchmove({}, [{"identifier": 2}])
+            .touchend({}, [{"identifier": 2}]);
+
+        expect(ctx.commands).toHaveLength(1);
+    });
+
+    test("four touch binder works", () => {
+        bindings.fourTouchBinder()
+            .on(elt)
+            .toProduce(() => new StubCmd(true))
+            .bind();
+
+        robot(elt)
+            .touchstart({}, [{"identifier": 1}])
+            .touchstart({}, [{"identifier": 2}])
+            .touchstart({}, [{"identifier": 3}])
+            .touchstart({}, [{"identifier": 4}])
+            .touchmove({}, [{"identifier": 2}])
+            .touchend({}, [{"identifier": 2}]);
+
+        expect(ctx.commands).toHaveLength(1);
+    });
+
+    test("tap binder works", () => {
+        bindings.tapBinder()
+            .on(elt)
+            .toProduce(() => new StubCmd(true))
+            .bind();
+
+        robot(elt)
+            .keepData()
+            .touchstart({}, [{"identifier": 2}])
+            .touchend();
+
+        expect(ctx.commands).toHaveLength(1);
+    });
+
+    test("two pan vertical binder works", () => {
+        document.elementFromPoint = vi.fn<() => Element | null>().mockReturnValue(null);
+        bindings.twoPanVerticalBinder(10)
+            .on(elt)
+            .toProduce(() => new StubCmd(true))
+            .bind();
+
+        robot(elt)
+            .twoPan(1, 3, 10, "top");
+
+        expect(ctx.commands).toHaveLength(1);
+    });
+
+    test("two pan horizontal binder works", () => {
+        document.elementFromPoint = vi.fn<() => Element | null>().mockReturnValue(null);
+        bindings.twoPanHorizontalBinder(10)
+            .on(elt)
+            .toProduce(() => new StubCmd(true))
+            .bind();
+
+        robot(elt)
+            .twoPan(1, 3, 10, "left");
+
+        expect(ctx.commands).toHaveLength(1);
+    });
+
+    test("two pan left binder works", () => {
+        document.elementFromPoint = vi.fn<() => Element | null>().mockReturnValue(null);
+        bindings.twoPanLeftBinder(10)
+            .on(elt)
+            .toProduce(() => new StubCmd(true))
+            .bind();
+
+        robot(elt)
+            .twoPan(1, 3, 10, "left");
+
+        expect(ctx.commands).toHaveLength(1);
+    });
+
+
+    test("two pan right binder works", () => {
+        document.elementFromPoint = vi.fn<() => Element | null>().mockReturnValue(null);
+        bindings.twoPanRightBinder(10)
+            .on(elt)
+            .toProduce(() => new StubCmd(true))
+            .bind();
+
+        robot(elt)
+            .twoPan(1, 3, 10, "right");
+
+        expect(ctx.commands).toHaveLength(1);
+    });
+
+    test("two pan top binder works", () => {
+        document.elementFromPoint = vi.fn<() => Element | null>().mockReturnValue(null);
+        bindings.twoPanTopBinder(10)
+            .on(elt)
+            .toProduce(() => new StubCmd(true))
+            .bind();
+
+        robot(elt)
+            .twoPan(1, 3, 10, "top");
+
+        expect(ctx.commands).toHaveLength(1);
+    });
+
+    test("two pan bottom binder works", () => {
+        document.elementFromPoint = vi.fn<() => Element | null>().mockReturnValue(null);
+        bindings.twoPanBottomBinder(10)
+            .on(elt)
+            .toProduce(() => new StubCmd(true))
+            .bind();
+
+        robot(elt)
+            .twoPan(1, 3, 10, "bottom");
+
+        expect(ctx.commands).toHaveLength(1);
+    });
+
+    test("rotate binder works", () => {
+        bindings.rotateBinder(10)
+            .on(elt)
+            .toProduce(() => new StubCmd(true))
+            .bind();
+
+        robot(elt)
+            .touchstart({}, [{"screenX": 100, "screenY": 100, "clientX": 100, "clientY": 100, "identifier": 1}])
+            .touchstart({}, [{"screenX": 150, "screenY": 100, "clientX": 150, "clientY": 100, "identifier": 2}])
+            .touchmove({}, [{"screenX": 101, "screenY": 99, "clientX": 101, "clientY": 99, "identifier": 1}])
+            .touchmove({}, [{"screenX": 160, "screenY": 90, "clientX": 160, "clientY": 90, "identifier": 2}])
+            .touchend({}, [{"screenX": 160, "screenY": 90, "clientX": 160, "clientY": 90, "identifier": 2}]);
+
+        expect(ctx.commands).toHaveLength(1);
+    });
+
+    test("mouse down or touch start binder works", () => {
+        bindings.mouseDownOrTouchStartBinder()
+            .on(elt)
+            .toProduce(() => new StubCmd(true))
+            .bind();
+
+        robot(elt).mousedown();
+
+        expect(ctx.commands).toHaveLength(1);
+    });
+
+    test("taps or clicks binder works", () => {
+        bindings.tapsOrClicksBinder(2)
+            .on(elt)
+            .toProduce(() => new StubCmd(true))
+            .bind();
+
+        robot().click(elt, 2);
+
+        expect(ctx.commands).toHaveLength(1);
+    });
+
+    test("tap or click binder works", () => {
+        bindings.tapOrClickBinder()
+            .on(elt)
+            .toProduce(() => new StubCmd(true))
+            .bind();
+
+        robot().click(elt, 1, false);
+
+        expect(ctx.commands).toHaveLength(1);
+    });
+
+    test("longpress or touch binder works", () => {
+        bindings.longpressOrTouchBinder(100)
+            .on(elt)
+            .toProduce(() => new StubCmd(true))
+            .bind();
+
+        robot(elt).mousedown();
+        vi.runAllTimers();
+
+        expect(ctx.commands).toHaveLength(1);
+    });
+
+    test("undo redo binder without catch uses the default catch function", () => {
+        const undo = document.createElement("button");
+        const redo = document.createElement("button");
+
+        const result = bindings.undoRedoBinder(undo, redo);
+
+        expect(result).toHaveLength(2);
+        expect(bindings.cmdhistory.getLastUndo()).toBeUndefined();
+    });
+
+    test("undo redo binder default catch is invoked on command error", () => {
+        const undo = document.createElement("button");
+        const redo = document.createElement("button");
+        const undoable = mock<Undoable>();
+        undoable.undo.mockImplementation(() => {
+            throw new Error("err");
+        });
+        bindings.cmdhistory.add(undoable);
+
+        bindings.undoRedoBinder(undo, redo);
+        robot(undo).click();
+
+        expect(bindings.cmdhistory.getLastUndo()).toBeUndefined();
+        expect(bindings.cmdhistory.getLastRedo()).toBe(undoable);
+    });
+
 
     describe("check when it crashes in routines", () => {
         let baseBinder: InteractionCmdUpdateBinder<StubCmd, Interaction<SrcTgtPointsData<TouchData>>, unknown>;

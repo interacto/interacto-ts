@@ -332,6 +332,7 @@ export default [...[].concat(
             "default-param-last": "off",
             "require-await": "off",
 
+            "vitest/prefer-called-with": "off",
             "vitest/padding-around-all": "off",
             "vitest/padding-around-expect-groups": "off",
             "vitest/max-expects": "off",

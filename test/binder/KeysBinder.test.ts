@@ -923,4 +923,83 @@ describe("using a key binder", () => {
         expect(ctx.commands).toHaveLength(1);
         expect(counter).toBe(2);
     });
+
+    test("keys type with codes isCode true", () => {
+        binding = bindings.keysTypeBinder()
+            .on(elt)
+            .with(true, "KeyA", "KeyB")
+            .toProduce(() => new StubCmd(true))
+            .bind();
+
+        robot(elt)
+            .keydown({"code": "KeyA", "key": "KeyA"})
+            .keyup({"code": "KeyA", "key": "KeyA"})
+            .keydown({"code": "KeyB", "key": "KeyB"})
+            .keyup({"code": "KeyB", "key": "KeyB"});
+        vi.runOnlyPendingTimers();
+
+        expect(ctx.commands).toHaveLength(1);
+    });
+
+    test("key binding with invalid interaction key data and codes", () => {
+        binding = new KeysBinder(mock<LinearHistory>(), mock<Logger>(), ctx, undefined)
+            .usingInteraction(() => new MouseDown(mock<Logger>()))
+            .toProduce(() => new StubCmd(true))
+            .on(elt)
+            .with(true, "z")
+            .bind();
+
+        robot(elt).mousedown();
+
+        expect(ctx.commands).toHaveLength(0);
+        expect(binding.timesEnded).toBe(0);
+    });
+
+    test("configureRules returns a new keys binder", () => {
+        const binder = bindings.keyDownBinder(false);
+        const configured = binder.configureRules("same-interactions", "ignore");
+
+        expect(configured).toBeInstanceOf(KeysBinder);
+        expect(configured).not.toBe(binder);
+
+        binding = configured
+            .on(elt)
+            .toProduce(() => new StubCmd(true))
+            .bind();
+        robot(elt).keydown({"key": "a"});
+
+        expect(ctx.commands).toHaveLength(1);
+    });
+
+    test("toProduceAnon produces an anonymous command", () => {
+        const fn = vi.fn();
+
+        binding = bindings.keyDownBinder(false)
+            .on(elt)
+            .toProduceAnon(fn)
+            .bind();
+        robot(elt).keydown({"key": "p"});
+
+        expect(ctx.commands).toHaveLength(1);
+        expect(fn).toHaveBeenCalledTimes(1);
+    });
+
+    test("undefined keys list is treated as an empty keys list", () => {
+        // White-box test forcing the defensive branch of the constructor where
+        // keysOrCodes could be undefined (line "?: []" arm). Through the public
+        // API keysOrCodes is always initialised to [], so this branch is only
+        // reachable by assigning the private field explicitly.
+        binding = new KeysBinder(mock<LinearHistory>(), mock<Logger>(), ctx, {
+            "keysOrCodes": undefined
+        } as unknown as Partial<KeysBinder<Command, Interaction<object>, unknown>>)
+            .usingInteraction(() => new KeyDown(mock<Logger>(), false))
+            .toProduce(() => new StubCmd(true))
+            .on(elt)
+            .bind();
+
+        robot(elt).keydown({"key": "a"});
+
+        // An empty (or missing) keys list disables the key filtering: any key triggers the command.
+        expect(ctx.commands).toHaveLength(1);
+    });
 });

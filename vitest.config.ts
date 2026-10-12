@@ -14,8 +14,10 @@ export default defineConfig({
         include: ["./test/**/*.test.ts"],
         environment: 'jsdom',
         coverage: {
+            reporter: ["json", "html"],
             provider: 'v8',
             reportOnFailure: true,
+            include: ["src/**"],
             thresholds: {
                 branches: 80,
                 functions: 90,
